@@ -1616,7 +1616,7 @@ def get_packet_name(packets):
 
     extro='''  };
 
-  return (type >= 0 && type < PACKET_LAST ? names[type] : "unknown");
+  return (type < PACKET_LAST ? names[type] : "unknown");
 }
 
 '''
@@ -1649,7 +1649,7 @@ def get_packet_has_game_info_flag(packets):
 
     extro='''  };
 
-  return (type >= 0 && type < PACKET_LAST ? flag[type] : FALSE);
+  return (type < PACKET_LAST ? flag[type] : FALSE);
 }
 
 '''

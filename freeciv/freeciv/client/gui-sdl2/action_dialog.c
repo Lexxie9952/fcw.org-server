@@ -52,7 +52,7 @@ typedef int (*act_func)(struct widget *);
 struct diplomat_dialog {
   int actor_unit_id;
   int target_ids[ATK_COUNT];
-  int target_extra_id;
+  int sub_target_id[ASTK_COUNT];
   action_id act_id;
   struct ADVANCED_DLG *pdialog;
 };
@@ -181,397 +181,12 @@ static action_id get_production_targeted_action_id(action_id tgt_action_id)
 }
 
 /**********************************************************************//**
-  Get the targeted version of an action so it, if enabled, can hide the
-  non targeted action in the action selection dialog.
-**************************************************************************/
-static action_id get_targeted_action_id(action_id non_tgt_action_id)
-{
-  /* Don't add an action mapping here unless the non targeted version is
-   * selectable in the targeted version's target selection dialog. */
-  switch ((enum gen_action)non_tgt_action_id) {
-  case ACTION_SPY_SABOTAGE_CITY:
-    return ACTION_SPY_TARGETED_SABOTAGE_CITY;
-  case ACTION_SPY_SABOTAGE_CITY_ESC:
-    return ACTION_SPY_TARGETED_SABOTAGE_CITY_ESC;
-  case ACTION_SPY_STEAL_TECH:
-    return ACTION_SPY_TARGETED_STEAL_TECH;
-  case ACTION_SPY_STEAL_TECH_ESC:
-    return ACTION_SPY_TARGETED_STEAL_TECH_ESC;
-  default:
-    /* No targeted version found. */
-    return ACTION_NONE;
-  }
-}
-
-/* ====================================================================== */
-/* ============================ CARAVAN DIALOG ========================== */
-/* ====================================================================== */
-
-/**********************************************************************//**
-  User selected that caravan should enter marketplace.
-**************************************************************************/
-static int caravan_marketplace_callback(struct widget *pWidget)
-{
-  if (PRESSED_EVENT(Main.event)) {
-    if (NULL != game_city_by_number(
-          pDiplomat_Dlg->target_ids[ATK_CITY])
-        && NULL != game_unit_by_number(pDiplomat_Dlg->actor_unit_id)) {
-      request_do_action(ACTION_MARKETPLACE,
-                        pDiplomat_Dlg->actor_unit_id,
-                        pDiplomat_Dlg->target_ids[ATK_CITY],
-                        0, "");
-    }
-
-    popdown_diplomat_dialog();
-  }
-
-  return -1;
-}
-
-/**********************************************************************//**
-  User selected that caravan should establish traderoute.
-**************************************************************************/
-static int caravan_establish_trade_callback(struct widget *pWidget)
-{
-  if (PRESSED_EVENT(Main.event)) {
-    if (NULL != game_city_by_number(
-          pDiplomat_Dlg->target_ids[ATK_CITY])
-        && NULL != game_unit_by_number(pDiplomat_Dlg->actor_unit_id)) {
-      request_do_action(ACTION_TRADE_ROUTE,
-                        pDiplomat_Dlg->actor_unit_id,
-                        pDiplomat_Dlg->target_ids[ATK_CITY],
-                        0, "");
-    }
-
-    popdown_diplomat_dialog();
-  }
-
-  return -1;
-}
-
-/**********************************************************************//**
-  User selected that caravan should help in wonder building.
-**************************************************************************/
-static int caravan_help_build_wonder_callback(struct widget *pWidget)
-{
-  if (PRESSED_EVENT(Main.event)) {
-    if (NULL != game_city_by_number(
-          pDiplomat_Dlg->target_ids[ATK_CITY])
-        && NULL != game_unit_by_number(pDiplomat_Dlg->actor_unit_id)) {
-      request_do_action(ACTION_HELP_WONDER,
-                        pDiplomat_Dlg->actor_unit_id,
-                        pDiplomat_Dlg->target_ids[ATK_CITY],
-                        0, "");
-    }
-
-    popdown_diplomat_dialog();
-  }
-
-  return -1;
-}
-
-/**********************************************************************//**
-  User selected to Recycle Unit to help city production.
-**************************************************************************/
-static int unit_recycle_callback(struct widget *pWidget)
-{
-  if (PRESSED_EVENT(Main.event)) {
-    if (NULL != game_city_by_number(
-          pDiplomat_Dlg->target_ids[ATK_CITY])
-        && NULL != game_unit_by_number(pDiplomat_Dlg->actor_unit_id)) {
-      request_do_action(ACTION_RECYCLE_UNIT,
-                        pDiplomat_Dlg->actor_unit_id,
-                        pDiplomat_Dlg->target_ids[ATK_CITY],
-                        0, "");
-    }
-
-    popdown_diplomat_dialog();
-  }
-
-  return -1;
-}
-
-/* ====================================================================== */
-/* ============================ DIPLOMAT DIALOG ========================= */
-/* ====================================================================== */
-
-/**********************************************************************//**
   User interacted with diplomat dialog.
 **************************************************************************/
 static int diplomat_dlg_window_callback(struct widget *pWindow)
 {
   if (PRESSED_EVENT(Main.event)) {
     move_window_group(pDiplomat_Dlg->pdialog->pBeginWidgetList, pWindow);
-  }
-
-  return -1;
-}
-
-/**********************************************************************//**
-  User clicked "Establish Embassy"
-**************************************************************************/
-static int spy_embassy_callback(struct widget *pWidget)
-{
-  if (PRESSED_EVENT(Main.event)) {
-    if (NULL != game_city_by_number(
-          pDiplomat_Dlg->target_ids[ATK_CITY])
-        && NULL != game_unit_by_number(pDiplomat_Dlg->actor_unit_id)) {
-      request_do_action(ACTION_ESTABLISH_EMBASSY,
-                        pDiplomat_Dlg->actor_unit_id,
-                        pDiplomat_Dlg->target_ids[ATK_CITY],
-                        0, "");
-    }
-
-    popdown_diplomat_dialog();
-  }
-
-  return -1;
-}
-
-/**********************************************************************//**
-  User clicked "Establish Embassy"
-**************************************************************************/
-static int diplomat_embassy_callback(struct widget *pWidget)
-{
-  if (PRESSED_EVENT(Main.event)) {
-    if (NULL != game_city_by_number(
-          pDiplomat_Dlg->target_ids[ATK_CITY])
-        && NULL != game_unit_by_number(pDiplomat_Dlg->actor_unit_id)) {
-      request_do_action(ACTION_ESTABLISH_EMBASSY_STAY,
-                        pDiplomat_Dlg->actor_unit_id,
-                        pDiplomat_Dlg->target_ids[ATK_CITY],
-                        0, "");
-    }
-
-    popdown_diplomat_dialog();
-  }
-
-  return -1;
-}
-
-/**********************************************************************//**
-  User clicked "Investigate City"
-**************************************************************************/
-static int spy_investigate_callback(struct widget *pWidget)
-{
-  if (PRESSED_EVENT(Main.event)) {
-    if (NULL != game_unit_by_number(pDiplomat_Dlg->actor_unit_id)
-        && NULL != game_city_by_number(
-          pDiplomat_Dlg->target_ids[ATK_CITY])) {
-      request_do_action(ACTION_SPY_INVESTIGATE_CITY,
-                        pDiplomat_Dlg->actor_unit_id,
-                        pDiplomat_Dlg->target_ids[ATK_CITY],
-                        0, "");
-    }
-
-    /* FIXME: Wait for the city display in stead? */
-    popdown_diplomat_dialog();
-  }
-
-  return -1;
-}
-
-/**********************************************************************//**
-  User clicked "Investigate City (spends the unit)"
-**************************************************************************/
-static int diplomat_investigate_callback(struct widget *pWidget)
-{
-  if (PRESSED_EVENT(Main.event)) {
-    if (NULL != game_unit_by_number(pDiplomat_Dlg->actor_unit_id)
-        && NULL != game_city_by_number(
-          pDiplomat_Dlg->target_ids[ATK_CITY])) {
-      request_do_action(ACTION_INV_CITY_SPEND,
-                        pDiplomat_Dlg->actor_unit_id,
-                        pDiplomat_Dlg->target_ids[ATK_CITY],
-                        0, "");
-    }
-
-    /* FIXME: Wait for the city display in stead? */
-    popdown_diplomat_dialog();
-  }
-
-  return -1;
-}
-
-/**********************************************************************//**
-  User clicked "Poison City"
-**************************************************************************/
-static int spy_poison_callback(struct widget *pWidget)
-{
-  if (PRESSED_EVENT(Main.event)) {
-    if (NULL != game_unit_by_number(pDiplomat_Dlg->actor_unit_id)
-        && NULL != game_city_by_number(
-          pDiplomat_Dlg->target_ids[ATK_CITY])) {
-      request_do_action(ACTION_SPY_POISON, pDiplomat_Dlg->actor_unit_id,
-                        pDiplomat_Dlg->target_ids[ATK_CITY],
-                        0, "");
-    }
-
-    popdown_diplomat_dialog();
-  }
-
-  return -1;
-}
-
-/**********************************************************************//**
-  User clicked "Poison City Escape"
-**************************************************************************/
-static int spy_poison_esc_callback(struct widget *pWidget)
-{
-  if (PRESSED_EVENT(Main.event)) {
-    if (NULL != game_unit_by_number(pDiplomat_Dlg->actor_unit_id)
-        && NULL != game_city_by_number(
-          pDiplomat_Dlg->target_ids[ATK_CITY])) {
-      request_do_action(ACTION_SPY_POISON_ESC, pDiplomat_Dlg->actor_unit_id,
-                        pDiplomat_Dlg->target_ids[ATK_CITY],
-                        0, "");
-    }
-
-    popdown_diplomat_dialog();
-  }
-
-  return -1;
-}
-
-/**********************************************************************//**
-  User clicked "Suitcase Nuke"
-**************************************************************************/
-static int spy_nuke_city_callback(struct widget *pWidget)
-{
-  if (PRESSED_EVENT(Main.event)) {
-    if (NULL != game_unit_by_number(pDiplomat_Dlg->actor_unit_id)
-        && NULL != game_city_by_number(
-          pDiplomat_Dlg->target_ids[ATK_CITY])) {
-      request_do_action(ACTION_SPY_NUKE, pDiplomat_Dlg->actor_unit_id,
-                        pDiplomat_Dlg->target_ids[ATK_CITY],
-                        0, "");
-    }
-
-    popdown_diplomat_dialog();
-  }
-
-  return -1;
-}
-
-/**********************************************************************//**
-  User clicked "Suitcase Nuke Escape"
-**************************************************************************/
-static int spy_nuke_city_esc_callback(struct widget *pWidget)
-{
-  if (PRESSED_EVENT(Main.event)) {
-    if (NULL != game_unit_by_number(pDiplomat_Dlg->actor_unit_id)
-        && NULL != game_city_by_number(
-          pDiplomat_Dlg->target_ids[ATK_CITY])) {
-      request_do_action(ACTION_SPY_NUKE_ESC, pDiplomat_Dlg->actor_unit_id,
-                        pDiplomat_Dlg->target_ids[ATK_CITY],
-                        0, "");
-    }
-
-    popdown_diplomat_dialog();
-  }
-
-  return -1;
-}
-
-/**********************************************************************//**
-  User clicked "Destroy City"
-**************************************************************************/
-static int destroy_city_callback(struct widget *pWidget)
-{
-  if (PRESSED_EVENT(Main.event)) {
-    if (NULL != game_unit_by_number(pDiplomat_Dlg->actor_unit_id)
-        && NULL != game_city_by_number(
-          pDiplomat_Dlg->target_ids[ATK_CITY])) {
-      request_do_action(ACTION_DESTROY_CITY, pDiplomat_Dlg->actor_unit_id,
-                        pDiplomat_Dlg->target_ids[ATK_CITY],
-                        0, "");
-    }
-
-    popdown_diplomat_dialog();
-  }
-
-  return -1;
-}
-
-/**********************************************************************//**
-  User clicked "Steal Gold"
-**************************************************************************/
-static int spy_steal_gold_callback(struct widget *pWidget)
-{
-  if (PRESSED_EVENT(Main.event)) {
-    if (NULL != game_unit_by_number(pDiplomat_Dlg->actor_unit_id)
-        && NULL != game_city_by_number(
-          pDiplomat_Dlg->target_ids[ATK_CITY])) {
-      request_do_action(ACTION_SPY_STEAL_GOLD,
-                        pDiplomat_Dlg->actor_unit_id,
-                        pDiplomat_Dlg->target_ids[ATK_CITY],
-                        0, "");
-    }
-
-    popdown_diplomat_dialog();
-  }
-
-  return -1;
-}
-
-/**********************************************************************//**
-  User clicked "Steal Gold Escape"
-**************************************************************************/
-static int spy_steal_gold_esc_callback(struct widget *pWidget)
-{
-  if (PRESSED_EVENT(Main.event)) {
-    if (NULL != game_unit_by_number(pDiplomat_Dlg->actor_unit_id)
-        && NULL != game_city_by_number(
-          pDiplomat_Dlg->target_ids[ATK_CITY])) {
-      request_do_action(ACTION_SPY_STEAL_GOLD_ESC,
-                        pDiplomat_Dlg->actor_unit_id,
-                        pDiplomat_Dlg->target_ids[ATK_CITY],
-                        0, "");
-    }
-
-    popdown_diplomat_dialog();
-  }
-
-  return -1;
-}
-
-/**********************************************************************//**
-  User clicked "Steal Maps"
-**************************************************************************/
-static int spy_steal_maps_callback(struct widget *pWidget)
-{
-  if (PRESSED_EVENT(Main.event)) {
-    if (NULL != game_unit_by_number(pDiplomat_Dlg->actor_unit_id)
-        && NULL != game_city_by_number(
-          pDiplomat_Dlg->target_ids[ATK_CITY])) {
-      request_do_action(ACTION_STEAL_MAPS,
-                        pDiplomat_Dlg->actor_unit_id,
-                        pDiplomat_Dlg->target_ids[ATK_CITY],
-                        0, "");
-    }
-
-    popdown_diplomat_dialog();
-  }
-
-  return -1;
-}
-
-/**********************************************************************//**
-  User clicked "Steal Maps and Escape"
-**************************************************************************/
-static int spy_steal_maps_esc_callback(struct widget *pWidget)
-{
-  if (PRESSED_EVENT(Main.event)) {
-    if (NULL != game_unit_by_number(pDiplomat_Dlg->actor_unit_id)
-        && NULL != game_city_by_number(
-          pDiplomat_Dlg->target_ids[ATK_CITY])) {
-      request_do_action(ACTION_STEAL_MAPS_ESC,
-                        pDiplomat_Dlg->actor_unit_id,
-                        pDiplomat_Dlg->target_ids[ATK_CITY],
-                        0, "");
-    }
-
-    popdown_diplomat_dialog();
   }
 
   return -1;
@@ -635,48 +250,6 @@ static int spy_sabotage_esc_request(struct widget *pWidget)
     is_more_user_input_needed = TRUE;
     popdown_diplomat_dialog();
   } else {
-    popdown_diplomat_dialog();
-  }
-
-  return -1;
-}
-
-/**********************************************************************//**
-  User clicked "Sabotage City" for diplomat (not spy)
-**************************************************************************/
-static int diplomat_sabotage_callback(struct widget *pWidget)
-{
-  if (PRESSED_EVENT(Main.event)) {
-    if (NULL != game_unit_by_number(pDiplomat_Dlg->actor_unit_id)
-        && NULL != game_city_by_number(
-                pDiplomat_Dlg->target_ids[ATK_CITY])) {
-      request_do_action(ACTION_SPY_SABOTAGE_CITY,
-                        pDiplomat_Dlg->actor_unit_id,
-                        pDiplomat_Dlg->target_ids[ATK_CITY],
-                        B_LAST + 1, "");
-    }
-
-    popdown_diplomat_dialog();
-  }
-
-  return -1;
-}
-
-/**********************************************************************//**
-  User clicked "Sabotage City Escape" for diplomat (not spy)
-**************************************************************************/
-static int diplomat_sabotage_esc_callback(struct widget *pWidget)
-{
-  if (PRESSED_EVENT(Main.event)) {
-    if (NULL != game_unit_by_number(pDiplomat_Dlg->actor_unit_id)
-        && NULL != game_city_by_number(
-                pDiplomat_Dlg->target_ids[ATK_CITY])) {
-      request_do_action(ACTION_SPY_SABOTAGE_CITY_ESC,
-                        pDiplomat_Dlg->actor_unit_id,
-                        pDiplomat_Dlg->target_ids[ATK_CITY],
-                        B_LAST + 1, "");
-    }
-
     popdown_diplomat_dialog();
   }
 
@@ -756,7 +329,7 @@ static int spy_steal_popup_shared(struct widget *pWidget)
 {
   const struct research *presearch, *vresearch;
   struct city *pVcity = pWidget->data.city;
-  int id = MAX_ID - pWidget->ID;
+  int id = pDiplomat_Dlg->actor_unit_id;
   struct player *pVictim = NULL;
   struct CONTAINER *pCont;
   struct widget *pBuf = NULL;
@@ -1010,48 +583,6 @@ static int spy_steal_esc_popup(struct widget *pWidget)
 }
 
 /**********************************************************************//**
-  Technology stealing dialog, diplomat (not spy) version
-**************************************************************************/
-static int diplomat_steal_callback(struct widget *pWidget)
-{
-  if (PRESSED_EVENT(Main.event)) {
-    if (NULL != game_unit_by_number(pDiplomat_Dlg->actor_unit_id)
-        && NULL != game_city_by_number(
-                pDiplomat_Dlg->target_ids[ATK_CITY])) {
-      request_do_action(ACTION_SPY_STEAL_TECH,
-                        pDiplomat_Dlg->actor_unit_id,
-                        pDiplomat_Dlg->target_ids[ATK_CITY],
-                        A_UNSET, "");
-    }
-
-    popdown_diplomat_dialog();
-  }
-
-  return -1;
-}
-
-/**********************************************************************//**
-  User clicked "Steal Tech Escape Expected"
-**************************************************************************/
-static int diplomat_steal_esc_callback(struct widget *pWidget)
-{
-  if (PRESSED_EVENT(Main.event)) {
-    if (NULL != game_unit_by_number(pDiplomat_Dlg->actor_unit_id)
-        && NULL != game_city_by_number(
-                pDiplomat_Dlg->target_ids[ATK_CITY])) {
-      request_do_action(ACTION_SPY_STEAL_TECH_ESC,
-                        pDiplomat_Dlg->actor_unit_id,
-                        pDiplomat_Dlg->target_ids[ATK_CITY],
-                        A_UNSET, "");
-    }
-
-    popdown_diplomat_dialog();
-  }
-
-  return -1;
-}
-
-/**********************************************************************//**
   Ask the server how much the revolt is going to cost us
 **************************************************************************/
 static int diplomat_incite_callback(struct widget *pWidget)
@@ -1154,522 +685,16 @@ static int diplomat_bribe_callback(struct widget *pWidget)
 }
 
 /**********************************************************************//**
-  User clicked "Sabotage Unit"
-**************************************************************************/
-static int spy_sabotage_unit_callback(struct widget *pWidget)
-{
-  if (PRESSED_EVENT(Main.event)) {
-    int diplomat_id = MAX_ID - pWidget->ID;
-    int target_id = pWidget->data.unit->id;
-
-    popdown_diplomat_dialog();
-    request_do_action(ACTION_SPY_SABOTAGE_UNIT,
-                      diplomat_id, target_id, 0, "");
-  }
-
-  return -1;
-}
-
-/**********************************************************************//**
-  User clicked "Sabotage Unit Escape"
-**************************************************************************/
-static int spy_sabotage_unit_esc_callback(struct widget *pWidget)
-{
-  if (PRESSED_EVENT(Main.event)) {
-    int diplomat_id = MAX_ID - pWidget->ID;
-    int target_id = pWidget->data.unit->id;
-
-    popdown_diplomat_dialog();
-    request_do_action(ACTION_SPY_SABOTAGE_UNIT_ESC,
-                      diplomat_id, target_id, 0, "");
-  }
-
-  return -1;
-}
-
-/**********************************************************************//**
-  User clicked "Heal Unit"
-**************************************************************************/
-static int heal_unit_callback(struct widget *pWidget)
-{
-  if (PRESSED_EVENT(Main.event)) {
-    int actor_id = MAX_ID - pWidget->ID;
-    int target_id = pWidget->data.unit->id;
-
-    popdown_diplomat_dialog();
-    request_do_action(ACTION_HEAL_UNIT,
-                      actor_id, target_id, 0, "");
-  }
-
-  return -1;
-}
-
-/**********************************************************************//**
-  User clicked "Transport Embark"
-**************************************************************************/
-static int transport_embark_callback(struct widget *pWidget)
-{
-  if (PRESSED_EVENT(Main.event)) {
-    int actor_id = MAX_ID - pWidget->ID;
-    int target_id = pWidget->data.unit->id;
-
-    popdown_diplomat_dialog();
-    request_do_action(ACTION_TRANSPORT_EMBARK,
-                      actor_id, target_id, 0, "");
-  }
-
-  return -1;
-}
-
-/**********************************************************************//**
-  User clicked "Transport Board"
-**************************************************************************/
-static int transport_board_callback(struct widget *pWidget)
-{
-  if (PRESSED_EVENT(Main.event)) {
-    int actor_id = MAX_ID - pWidget->ID;
-    int target_id = pWidget->data.unit->id;
-
-    popdown_diplomat_dialog();
-    request_do_action(ACTION_TRANSPORT_BOARD,
-                      actor_id, target_id, 0, "");
-  }
-
-  return -1;
-}
-
-/**********************************************************************//**
-  User clicked "Transport Unload"
-**************************************************************************/
-static int transport_unload_callback(struct widget *pWidget)
-{
-  if (PRESSED_EVENT(Main.event)) {
-    int actor_id = MAX_ID - pWidget->ID;
-    int target_id = pWidget->data.unit->id;
-
-    popdown_diplomat_dialog();
-    request_do_action(ACTION_TRANSPORT_UNLOAD,
-                      actor_id, target_id, 0, "");
-  }
-
-  return -1;
-}
-
-/**********************************************************************//**
-  User clicked "Transport Deboard"
-**************************************************************************/
-static int transport_deboard_callback(struct widget *pWidget)
-{
-  if (PRESSED_EVENT(Main.event)) {
-    int actor_id = MAX_ID - pWidget->ID;
-    int target_id = pWidget->data.unit->id;
-
-    popdown_diplomat_dialog();
-    request_do_action(ACTION_TRANSPORT_DEBOARD,
-                      actor_id, target_id, 0, "");
-  }
-
-  return -1;
-}
-
-/**********************************************************************//**
-  User clicked "Transport Disembark"
-**************************************************************************/
-static int disembark1_callback(struct widget *pWidget)
-{
-  if (PRESSED_EVENT(Main.event)) {
-    int actor_id = MAX_ID - pWidget->ID;
-    int target_id = pWidget->data.tile->index;
-
-    popdown_diplomat_dialog();
-    request_do_action(ACTION_TRANSPORT_DISEMBARK1,
-                      actor_id, target_id, 0, "");
-  }
-
-  return -1;
-}
-
-/**********************************************************************//**
-  User clicked "Transport Disembark 2"
-**************************************************************************/
-static int disembark2_callback(struct widget *pWidget)
-{
-  if (PRESSED_EVENT(Main.event)) {
-    int actor_id = MAX_ID - pWidget->ID;
-    int target_id = pWidget->data.tile->index;
-
-    popdown_diplomat_dialog();
-    request_do_action(ACTION_TRANSPORT_DISEMBARK2,
-                      actor_id, target_id, 0, "");
-  }
-
-  return -1;
-}
-
-/**********************************************************************//**
-  User clicked "Capture Units"
-**************************************************************************/
-static int capture_units_callback(struct widget *pWidget)
-{
-  if (PRESSED_EVENT(Main.event)) {
-    int actor_id = MAX_ID - pWidget->ID;
-    int target_id = tile_index(pWidget->data.tile);
-
-    popdown_diplomat_dialog();
-    request_do_action(ACTION_CAPTURE_UNITS,
-                      actor_id, target_id, 0, "");
-  }
-
-  return -1;
-}
-
-/**********************************************************************//**
-  User clicked "Expel Unit"
-**************************************************************************/
-static int expel_unit_callback(struct widget *pWidget)
-{
-  if (PRESSED_EVENT(Main.event)) {
-    int actor_id = MAX_ID - pWidget->ID;
-    int target_id = pWidget->data.unit->id;
-
-    popdown_diplomat_dialog();
-    request_do_action(ACTION_EXPEL_UNIT,
-                      actor_id, target_id, 0, "");
-  }
-
-  return -1;
-}
-
-/**********************************************************************//**
-  User clicked "Bombard"
-**************************************************************************/
-static int bombard_callback(struct widget *pWidget)
-{
-  if (PRESSED_EVENT(Main.event)) {
-    int actor_id = MAX_ID - pWidget->ID;
-    int target_id = tile_index(pWidget->data.tile);
-
-    popdown_diplomat_dialog();
-    request_do_action(ACTION_BOMBARD,
-                      actor_id, target_id, 0, "");
-  }
-
-  return -1;
-}
-
-/**********************************************************************//**
-  User clicked "Join City"
-**************************************************************************/
-static int join_city_callback(struct widget *pWidget)
-{
-  if (PRESSED_EVENT(Main.event)) {
-    if (NULL != game_city_by_number(
-          pDiplomat_Dlg->target_ids[ATK_CITY])
-        && NULL != game_unit_by_number(pDiplomat_Dlg->actor_unit_id)) {
-      request_do_action(ACTION_JOIN_CITY,
-                        pDiplomat_Dlg->actor_unit_id,
-                        pDiplomat_Dlg->target_ids[ATK_CITY],
-                        0, "");
-    }
-
-    popdown_diplomat_dialog();
-  }
-
-  return -1;
-}
-
-/**********************************************************************//**
   User clicked "Found City"
 **************************************************************************/
 static int found_city_callback(struct widget *pWidget)
 {
   if (PRESSED_EVENT(Main.event)) {
-    int actor_id = MAX_ID - pWidget->ID;
+    int actor_id = pDiplomat_Dlg->actor_unit_id;
 
     popdown_diplomat_dialog();
     dsend_packet_city_name_suggestion_req(&client.conn,
                                           actor_id);
-  }
-
-  return -1;
-}
-
-/**********************************************************************//**
-  User clicked "Transform Terrain"
-**************************************************************************/
-static int transform_callback(struct widget *pWidget)
-{
-  if (PRESSED_EVENT(Main.event)) {
-    int actor_id = MAX_ID - pWidget->ID;
-    int target_id = pWidget->data.tile->index;
-
-    popdown_diplomat_dialog();
-    request_do_action(ACTION_TRANSFORM_TERRAIN,
-                      actor_id, target_id, 0, "");
-  }
-
-  return -1;
-}
-
-/**********************************************************************//**
-  User clicked "Cultivate"
-**************************************************************************/
-static int cultivate_callback(struct widget *pWidget)
-{
-  if (PRESSED_EVENT(Main.event)) {
-    int actor_id = MAX_ID - pWidget->ID;
-    int target_id = pWidget->data.tile->index;
-
-    popdown_diplomat_dialog();
-    request_do_action(ACTION_CULTIVATE,
-                      actor_id, target_id, 0, "");
-  }
-
-  return -1;
-}
-
-/**********************************************************************//**
-  User clicked "Plant"
-**************************************************************************/
-static int plant_callback(struct widget *pWidget)
-{
-  if (PRESSED_EVENT(Main.event)) {
-    int actor_id = MAX_ID - pWidget->ID;
-    int target_id = pWidget->data.tile->index;
-
-    popdown_diplomat_dialog();
-    request_do_action(ACTION_PLANT,
-                      actor_id, target_id, 0, "");
-  }
-
-  return -1;
-}
-
-/**********************************************************************//**
-  User clicked "Pillage"
-**************************************************************************/
-static int pillage_callback(struct widget *pWidget)
-{
-  if (PRESSED_EVENT(Main.event)) {
-    int actor_id = MAX_ID - pWidget->ID;
-    int target_id = pWidget->data.tile->index;
-    int sub_target_id = pDiplomat_Dlg->target_extra_id;
-
-    popdown_diplomat_dialog();
-    request_do_action(ACTION_PILLAGE, actor_id,
-                      target_id, sub_target_id, "");
-  }
-
-  return -1;
-}
-
-/**********************************************************************//**
-  User clicked "Build Road"
-**************************************************************************/
-static int road_callback(struct widget *pWidget)
-{
-  if (PRESSED_EVENT(Main.event)) {
-    int actor_id = MAX_ID - pWidget->ID;
-    int target_id = pWidget->data.tile->index;
-    int sub_target_id = pDiplomat_Dlg->target_extra_id;
-
-    popdown_diplomat_dialog();
-    request_do_action(ACTION_ROAD, actor_id,
-                      target_id, sub_target_id, "");
-  }
-
-  return -1;
-}
-
-/**********************************************************************//**
-  User clicked "Build Base"
-**************************************************************************/
-static int base_callback(struct widget *pWidget)
-{
-  if (PRESSED_EVENT(Main.event)) {
-    int actor_id = MAX_ID - pWidget->ID;
-    int target_id = pWidget->data.tile->index;
-    int sub_target_id = pDiplomat_Dlg->target_extra_id;
-
-    popdown_diplomat_dialog();
-    request_do_action(ACTION_BASE, actor_id,
-                      target_id, sub_target_id, "");
-  }
-
-  return -1;
-}
-
-/**********************************************************************//**
-  User clicked "Build Mine"
-**************************************************************************/
-static int mine_callback(struct widget *pWidget)
-{
-  if (PRESSED_EVENT(Main.event)) {
-    int actor_id = MAX_ID - pWidget->ID;
-    int target_id = pWidget->data.tile->index;
-    int sub_target_id = pDiplomat_Dlg->target_extra_id;
-
-    popdown_diplomat_dialog();
-    request_do_action(ACTION_MINE, actor_id,
-                      target_id, sub_target_id, "");
-  }
-
-  return -1;
-}
-
-/**********************************************************************//**
-  User clicked "Build Irrigation"
-**************************************************************************/
-static int irrigate_callback(struct widget *pWidget)
-{
-  if (PRESSED_EVENT(Main.event)) {
-    int actor_id = MAX_ID - pWidget->ID;
-    int target_id = pWidget->data.tile->index;
-    int sub_target_id = pDiplomat_Dlg->target_extra_id;
-
-    popdown_diplomat_dialog();
-    request_do_action(ACTION_IRRIGATE, actor_id,
-                      target_id, sub_target_id, "");
-  }
-
-  return -1;
-}
-
-/**********************************************************************//**
-  User clicked "Explode Nuclear"
-**************************************************************************/
-static int nuke_callback(struct widget *pWidget)
-{
-  if (PRESSED_EVENT(Main.event)) {
-    int actor_id = MAX_ID - pWidget->ID;
-    int target_id = pWidget->data.tile->index;
-
-    popdown_diplomat_dialog();
-    request_do_action(ACTION_NUKE,
-                      actor_id, target_id, 0, "");
-  }
-
-  return -1;
-}
-
-/**********************************************************************//**
-  User clicked "Attack"
-**************************************************************************/
-static int attack_callback(struct widget *pWidget)
-{
-  if (PRESSED_EVENT(Main.event)) {
-    int actor_id = MAX_ID - pWidget->ID;
-    int target_id = pWidget->data.tile->index;
-
-    popdown_diplomat_dialog();
-    request_do_action(ACTION_ATTACK,
-                      actor_id, target_id, 0, "");
-  }
-
-  return -1;
-}
-
-/**********************************************************************//**
-  User clicked "Suicide Attack"
-**************************************************************************/
-static int suicide_attack_callback(struct widget *pWidget)
-{
-  if (PRESSED_EVENT(Main.event)) {
-    int actor_id = MAX_ID - pWidget->ID;
-    int target_id = pWidget->data.tile->index;
-
-    popdown_diplomat_dialog();
-    request_do_action(ACTION_SUICIDE_ATTACK,
-                      actor_id, target_id, 0, "");
-  }
-
-  return -1;
-}
-
-/**********************************************************************//**
-  User clicked "Paradrop Unit"
-**************************************************************************/
-static int paradrop_callback(struct widget *pWidget)
-{
-  if (PRESSED_EVENT(Main.event)) {
-    int actor_id = MAX_ID - pWidget->ID;
-    int target_id = pWidget->data.tile->index;
-
-    popdown_diplomat_dialog();
-    request_do_action(ACTION_PARADROP,
-                      actor_id, target_id, 0, "");
-  }
-
-  return -1;
-}
-
-/**********************************************************************//**
-  User clicked "Disband Unit"
-**************************************************************************/
-static int disband_unit_callback(struct widget *pWidget)
-{
-  if (PRESSED_EVENT(Main.event)) {
-    int actor_id = MAX_ID - pWidget->ID;
-    int target_id = pWidget->data.unit->id;
-
-    popdown_diplomat_dialog();
-    request_do_action(ACTION_DISBAND_UNIT,
-                      actor_id, target_id, 0, "");
-  }
-
-  return -1;
-}
-
-/**********************************************************************//**
-  User clicked "Fortify"
-**************************************************************************/
-static int fortify_callback(struct widget *pWidget)
-{
-  if (PRESSED_EVENT(Main.event)) {
-    int actor_id = MAX_ID - pWidget->ID;
-    int target_id = pWidget->data.unit->id;
-
-    popdown_diplomat_dialog();
-    request_do_action(ACTION_FORTIFY,
-                      actor_id, target_id, 0, "");
-  }
-
-  return -1;
-}
-
-/**********************************************************************//**
-  User clicked "Convert Unit"
-**************************************************************************/
-static int convert_unit_callback(struct widget *pWidget)
-{
-  if (PRESSED_EVENT(Main.event)) {
-    int actor_id = MAX_ID - pWidget->ID;
-    int target_id = pWidget->data.unit->id;
-
-    popdown_diplomat_dialog();
-    request_do_action(ACTION_CONVERT,
-                      actor_id, target_id, 0, "");
-  }
-
-  return -1;
-}
-
-/**********************************************************************//**
-  User clicked "Set Home City"
-**************************************************************************/
-static int home_city_callback(struct widget *pWidget)
-{
-  if (PRESSED_EVENT(Main.event)) {
-    if (NULL != game_city_by_number(
-          pDiplomat_Dlg->target_ids[ATK_CITY])
-        && NULL != game_unit_by_number(pDiplomat_Dlg->actor_unit_id)) {
-      request_do_action(ACTION_HOME_CITY,
-                        pDiplomat_Dlg->actor_unit_id,
-                        pDiplomat_Dlg->target_ids[ATK_CITY],
-                        0, "");
-    }
-
-    popdown_diplomat_dialog();
   }
 
   return -1;
@@ -1696,65 +721,107 @@ static int upgrade_callback(struct widget *pWidget)
 }
 
 /**********************************************************************//**
-  User clicked "Airlift Unit"
+  User selected an action from the choice dialog and the action has no
+  special needs.
 **************************************************************************/
-static int airlift_callback(struct widget *pWidget)
+static int simple_action_callback(struct widget *pWidget)
 {
-  if (PRESSED_EVENT(Main.event)) {
-    if (NULL != game_city_by_number(
-          pDiplomat_Dlg->target_ids[ATK_CITY])
-        && NULL != game_unit_by_number(pDiplomat_Dlg->actor_unit_id)) {
-      request_do_action(ACTION_AIRLIFT,
-                        pDiplomat_Dlg->actor_unit_id,
-                        pDiplomat_Dlg->target_ids[ATK_CITY],
-                        0, "");
-    }
+  int actor_id, target_id, sub_target;
+  struct action *paction;
 
-    popdown_diplomat_dialog();
+  bool failed = FALSE;
+
+  if (!PRESSED_EVENT(Main.event)) {
+    return -1;
   }
 
-  return -1;
-}
+  /* Data */
+  paction = action_by_number(MAX_ID - pWidget->ID);
 
-/**********************************************************************//**
-  User clicked "Conquer City"
-**************************************************************************/
-static int conquer_city_callback(struct widget *pWidget)
-{
-  if (PRESSED_EVENT(Main.event)) {
-    if (NULL != game_city_by_number(
-          pDiplomat_Dlg->target_ids[ATK_CITY])
-        && NULL != game_unit_by_number(pDiplomat_Dlg->actor_unit_id)) {
-      request_do_action(ACTION_CONQUER_CITY,
-                        pDiplomat_Dlg->actor_unit_id,
-                        pDiplomat_Dlg->target_ids[ATK_CITY],
-                        0, "");
-    }
-
-    popdown_diplomat_dialog();
+  /* Actor */
+  fc_assert(action_get_actor_kind(paction) == AAK_UNIT);
+  actor_id = pDiplomat_Dlg->actor_unit_id;
+  if (NULL == game_unit_by_number(actor_id)) {
+    /* Probably dead. */
+    failed = TRUE;
   }
 
-  return -1;
-}
-
-/**********************************************************************//**
-  User clicked "Conquer City 2"
-**************************************************************************/
-static int conquer_city2_callback(struct widget *pWidget)
-{
-  if (PRESSED_EVENT(Main.event)) {
-    if (NULL != game_city_by_number(
-          pDiplomat_Dlg->target_ids[ATK_CITY])
-        && NULL != game_unit_by_number(pDiplomat_Dlg->actor_unit_id)) {
-      request_do_action(ACTION_CONQUER_CITY2,
-                        pDiplomat_Dlg->actor_unit_id,
-                        pDiplomat_Dlg->target_ids[ATK_CITY],
-                        0, "");
+  /* Target */
+  target_id = IDENTITY_NUMBER_ZERO;
+  switch (action_get_target_kind(paction)) {
+  case ATK_CITY:
+    target_id = pDiplomat_Dlg->target_ids[ATK_CITY];
+    if (NULL == game_city_by_number(target_id)) {
+      /* Probably destroyed. */
+      failed = TRUE;
     }
-
-    popdown_diplomat_dialog();
+    break;
+  case ATK_UNIT:
+    target_id = pDiplomat_Dlg->target_ids[ATK_UNIT];
+    if (NULL == game_unit_by_number(target_id)) {
+      /* Probably dead. */
+      failed = TRUE;
+    }
+    break;
+  case ATK_UNITS:
+  case ATK_TILE:
+    target_id = pDiplomat_Dlg->target_ids[ATK_TILE];
+    if (NULL == index_to_tile(&(wld.map), target_id)) {
+      /* TODO: Should this be possible at all? If not: add assertion. */
+      failed = TRUE;
+    }
+    break;
+  case ATK_SELF:
+    target_id = IDENTITY_NUMBER_ZERO;
+    break;
+  case ATK_COUNT:
+    fc_assert(action_get_target_kind(paction) != ATK_COUNT);
+    failed = TRUE;
   }
 
+  /* Sub target. */
+  sub_target = IDENTITY_NUMBER_ZERO;
+  if (paction->target_complexity != ACT_TGT_COMPL_SIMPLE) {
+    switch (action_get_sub_target_kind(paction)) {
+    case ASTK_BUILDING:
+      sub_target = pDiplomat_Dlg->sub_target_id[ASTK_BUILDING];
+      if (NULL == improvement_by_number(sub_target)) {
+        /* Did the ruleset change? */
+        failed = TRUE;
+      }
+      break;
+    case ASTK_TECH:
+      sub_target = pDiplomat_Dlg->sub_target_id[ASTK_TECH];
+      if (NULL == valid_advance_by_number(sub_target)) {
+        /* Did the ruleset change? */
+        failed = TRUE;
+      }
+      break;
+    case ASTK_EXTRA:
+    case ASTK_EXTRA_NOT_THERE:
+      /* TODO: validate if the extra is there? */
+      sub_target = pDiplomat_Dlg->sub_target_id[ASTK_EXTRA];
+      if (NULL == extra_by_number(sub_target)) {
+        /* Did the ruleset change? */
+        failed = TRUE;
+      }
+      break;
+    case ASTK_NONE:
+    case ASTK_COUNT:
+      /* Shouldn't happen. */
+      fc_assert(action_get_sub_target_kind(paction) != ASTK_NONE);
+      failed = TRUE;
+      break;
+    }
+  }
+
+  /* Send request. */
+  if (!failed) {
+    request_do_action(paction->id, actor_id, target_id, sub_target, "");
+  }
+
+  /* Clean up. */
+  popdown_diplomat_dialog();
   return -1;
 }
 
@@ -1793,77 +860,27 @@ void popdown_diplomat_dialog(void)
  * pushed. */
 static const act_func af_map[ACTION_COUNT] = {
   /* Unit acting against a city target. */
-  [ACTION_ESTABLISH_EMBASSY] = spy_embassy_callback,
-  [ACTION_ESTABLISH_EMBASSY_STAY] = diplomat_embassy_callback,
-  [ACTION_SPY_INVESTIGATE_CITY] = spy_investigate_callback,
-  [ACTION_INV_CITY_SPEND] = diplomat_investigate_callback,
-  [ACTION_SPY_POISON] = spy_poison_callback,
-  [ACTION_SPY_POISON_ESC] = spy_poison_esc_callback,
-  [ACTION_SPY_STEAL_GOLD] = spy_steal_gold_callback,
-  [ACTION_SPY_STEAL_GOLD_ESC] = spy_steal_gold_esc_callback,
-  [ACTION_STEAL_MAPS] = spy_steal_maps_callback,
-  [ACTION_STEAL_MAPS_ESC] = spy_steal_maps_esc_callback,
-  [ACTION_SPY_SABOTAGE_CITY] = diplomat_sabotage_callback,
-  [ACTION_SPY_SABOTAGE_CITY_ESC] = diplomat_sabotage_esc_callback,
   [ACTION_SPY_TARGETED_SABOTAGE_CITY] = spy_sabotage_request,
   [ACTION_SPY_TARGETED_SABOTAGE_CITY_ESC] = spy_sabotage_esc_request,
-  [ACTION_SPY_STEAL_TECH] = diplomat_steal_callback,
-  [ACTION_SPY_STEAL_TECH_ESC] = diplomat_steal_esc_callback,
   [ACTION_SPY_TARGETED_STEAL_TECH] = spy_steal_popup,
   [ACTION_SPY_TARGETED_STEAL_TECH_ESC] = spy_steal_esc_popup,
   [ACTION_SPY_INCITE_CITY] = diplomat_incite_callback,
   [ACTION_SPY_INCITE_CITY_ESC] = spy_incite_callback,
-  [ACTION_TRADE_ROUTE] = caravan_establish_trade_callback,
-  [ACTION_MARKETPLACE] = caravan_marketplace_callback,
-  [ACTION_HELP_WONDER] = caravan_help_build_wonder_callback,
-  [ACTION_JOIN_CITY] = join_city_callback,
-  [ACTION_SPY_NUKE] = spy_nuke_city_callback,
-  [ACTION_SPY_NUKE_ESC] = spy_nuke_city_esc_callback,
-  [ACTION_DESTROY_CITY] = destroy_city_callback,
-  [ACTION_RECYCLE_UNIT] = unit_recycle_callback,
-  [ACTION_HOME_CITY] = home_city_callback,
   [ACTION_UPGRADE_UNIT] = upgrade_callback,
-  [ACTION_AIRLIFT] = airlift_callback,
-  [ACTION_CONQUER_CITY] = conquer_city_callback,
-  [ACTION_CONQUER_CITY2] = conquer_city2_callback,
   [ACTION_STRIKE_BUILDING] = spy_strike_bld_request,
 
   /* Unit acting against a unit target. */
   [ACTION_SPY_BRIBE_UNIT] = diplomat_bribe_callback,
-  [ACTION_SPY_SABOTAGE_UNIT] = spy_sabotage_unit_callback,
-  [ACTION_SPY_SABOTAGE_UNIT_ESC] = spy_sabotage_unit_esc_callback,
-  [ACTION_HEAL_UNIT] = heal_unit_callback,
-  [ACTION_EXPEL_UNIT] = expel_unit_callback,
-  [ACTION_TRANSPORT_DEBOARD] = transport_deboard_callback,
-  [ACTION_TRANSPORT_UNLOAD] = transport_unload_callback,
-  [ACTION_TRANSPORT_BOARD] = transport_board_callback,
-  [ACTION_TRANSPORT_EMBARK] = transport_embark_callback,
 
   /* Unit acting against all units at a tile. */
-  [ACTION_CAPTURE_UNITS] = capture_units_callback,
-  [ACTION_BOMBARD] = bombard_callback,
+  /* No special callback functions needed for any unit stack targeted
+   * actions. */
 
   /* Unit acting against a tile. */
   [ACTION_FOUND_CITY] = found_city_callback,
-  [ACTION_NUKE] = nuke_callback,
-  [ACTION_PARADROP] = paradrop_callback,
-  [ACTION_ATTACK] = attack_callback,
-  [ACTION_SUICIDE_ATTACK] = suicide_attack_callback,
-  [ACTION_TRANSFORM_TERRAIN] = transform_callback,
-  [ACTION_CULTIVATE] = cultivate_callback,
-  [ACTION_PLANT] = plant_callback,
-  [ACTION_PILLAGE] = pillage_callback,
-  [ACTION_ROAD] = road_callback,
-  [ACTION_BASE] = base_callback,
-  [ACTION_MINE] = mine_callback,
-  [ACTION_IRRIGATE] = irrigate_callback,
-  [ACTION_TRANSPORT_DISEMBARK1] = disembark1_callback,
-  [ACTION_TRANSPORT_DISEMBARK2] = disembark2_callback,
 
   /* Unit acting with no target except itself. */
-  [ACTION_DISBAND_UNIT] = disband_unit_callback,
-  [ACTION_FORTIFY] = fortify_callback,
-  [ACTION_CONVERT] = convert_unit_callback,
+  /* No special callback functions needed for any self targeted actions. */
 };
 
 /**********************************************************************//**
@@ -1882,18 +899,14 @@ static void action_entry(const action_id act,
   struct widget *pBuf;
   utf8_str *pstr;
   const char *ui_name;
-
-  if (get_targeted_action_id(act) != ACTION_NONE
-      && action_prob_possible(act_probs[get_targeted_action_id(act)])) {
-    /* The player can select the untargeted version from the target
-     * selection dialog. */
-    return;
-  }
+  act_func cb;
 
   if (af_map[act] == NULL) {
-    /* This client doesn't support ordering this action from the
-     * action selection dialog. */
-    return;
+    /* No special call back function needed for this action. */
+    cb = simple_action_callback;
+  } else {
+    /* Special action specific callback function specified. */
+    cb = af_map[act];
   }
 
   /* Don't show disabled actions */
@@ -1905,7 +918,7 @@ static void action_entry(const action_id act,
                                    act_probs[act], custom);
 
   create_active_iconlabel(pBuf, pWindow->dst, pstr,
-                          ui_name, af_map[act]);
+                          ui_name, cb);
 
   switch (action_id_get_target_kind(act)) {
   case ATK_CITY:
@@ -1927,7 +940,7 @@ static void action_entry(const action_id act,
 
   set_wstate(pBuf, FC_WS_NORMAL);
 
-  add_to_gui_list(MAX_ID - act_unit->id, pBuf);
+  add_to_gui_list(MAX_ID - act, pBuf);
 
   area->w = MAX(area->w, pBuf->size.w);
   area->h += pBuf->size.h;
@@ -2060,12 +1073,20 @@ void popup_action_selection(struct unit *actor_unit,
     pDiplomat_Dlg->target_ids[ATK_UNIT] = IDENTITY_NUMBER_ZERO;
   }
 
+  pDiplomat_Dlg->target_ids[ATK_UNITS] = tile_index(target_tile);
   pDiplomat_Dlg->target_ids[ATK_TILE] = tile_index(target_tile);
 
+  /* No target building or target tech supplied. (Feb 2020) */
+  pDiplomat_Dlg->sub_target_id[ASTK_BUILDING] = B_LAST;
+  pDiplomat_Dlg->sub_target_id[ASTK_TECH] = A_UNSET;
+
   if (target_extra) {
-    pDiplomat_Dlg->target_extra_id = extra_number(target_extra);
+    pDiplomat_Dlg->sub_target_id[ASTK_EXTRA] = extra_number(target_extra);
+    pDiplomat_Dlg->sub_target_id[ASTK_EXTRA_NOT_THERE]
+        = extra_number(target_extra);
   } else {
-    pDiplomat_Dlg->target_extra_id = EXTRA_NONE;
+    pDiplomat_Dlg->sub_target_id[ASTK_EXTRA] = EXTRA_NONE;
+    pDiplomat_Dlg->sub_target_id[ASTK_EXTRA_NOT_THERE] = EXTRA_NONE;
   }
 
   pDiplomat_Dlg->target_ids[ATK_SELF] = actor_unit->id;
@@ -2280,7 +1301,7 @@ int action_selection_target_extra(void)
     return EXTRA_NONE;
   }
 
-  return pDiplomat_Dlg->target_extra_id;
+  return pDiplomat_Dlg->sub_target_id[ASTK_EXTRA];
 }
 
 /**********************************************************************//**

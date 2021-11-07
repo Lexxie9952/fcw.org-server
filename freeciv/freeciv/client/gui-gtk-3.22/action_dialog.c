@@ -234,29 +234,6 @@ static action_id get_production_targeted_action_id(action_id tgt_action_id)
 }
 
 /**********************************************************************//**
-  Get the targeted version of an action so it, if enabled, can hide the
-  non targeted action in the action selection dialog.
-**************************************************************************/
-static action_id get_targeted_action_id(action_id non_tgt_action_id)
-{
-  /* Don't add an action mapping here unless the non targeted version is
-   * selectable in the targeted version's target selection dialog. */
-  switch ((enum gen_action)non_tgt_action_id) {
-  case ACTION_SPY_SABOTAGE_CITY:
-    return ACTION_SPY_TARGETED_SABOTAGE_CITY;
-  case ACTION_SPY_SABOTAGE_CITY_ESC:
-    return ACTION_SPY_TARGETED_SABOTAGE_CITY_ESC;
-  case ACTION_SPY_STEAL_TECH:
-    return ACTION_SPY_TARGETED_STEAL_TECH;
-  case ACTION_SPY_STEAL_TECH_ESC:
-    return ACTION_SPY_TARGETED_STEAL_TECH_ESC;
-  default:
-    /* No targeted version found. */
-    return ACTION_NONE;
-  }
-}
-
-/**********************************************************************//**
   User selected an action from the choice dialog and the action has no
   special needs.
 **************************************************************************/
@@ -320,9 +297,7 @@ static void simple_action_callback(GtkWidget *w, gpointer data)
     switch (action_get_sub_target_kind(paction)) {
     case ASTK_BUILDING:
       sub_target = args->target_building_id;
-      /* sub_target encodes current production as -1 */
-      if ((sub_target - 1) != -1
-          && NULL == improvement_by_number(sub_target - 1)) {
+      if (NULL == improvement_by_number(sub_target)) {
         /* Did the ruleset change? */
         failed = TRUE;
       }
@@ -1348,14 +1323,6 @@ static void action_entry(GtkWidget *shl,
   const gchar *tooltip;
   GCallback cb;
 
-  if (get_targeted_action_id(act_id) != ACTION_NONE
-      && action_prob_possible(act_probs[
-                              get_targeted_action_id(act_id)])) {
-    /* The player can select the untargeted version from the target
-     * selection dialog. */
-    return;
-  }
-
   if (af_map[act_id] == NULL) {
     /* No special call back function needed for this action. */
     cb = (GCallback)simple_action_callback;
@@ -1438,7 +1405,7 @@ void popup_action_selection(struct unit *actor_unit,
                (target_unit) ? target_unit->id : IDENTITY_NUMBER_ZERO,
                (target_tile) ? target_tile->index : TILE_INDEX_NONE,
                /* No target_building or target_tech supplied. (Dec 2019) */
-               B_LAST + 1, A_UNSET,
+               B_LAST, A_UNSET,
                target_extra ? target_extra->id : EXTRA_NONE);
 
   /* Could be caused by the server failing to reply to a request for more

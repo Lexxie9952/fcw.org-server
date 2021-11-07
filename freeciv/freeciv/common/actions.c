@@ -29,9 +29,10 @@
 #include "game.h"
 #include "map.h"
 #include "movement.h"
-#include "unit.h"
 #include "research.h"
+#include "server_settings.h"
 #include "tile.h"
+#include "unit.h"
 
 /* Custom data type for obligatory hard action requirements. */
 struct obligatory_req {
@@ -4001,11 +4002,11 @@ static struct act_prob ap_diplomat_battle(const struct unit *pattacker,
 {
   fc_assert_ret_val(tgt_tile, ACTPROB_NOT_KNOWN);
 
-if (!can_player_see_hypotetic_units_at(unit_owner(pattacker),
-                                        tgt_tile)) {
-  /* Don't leak information about unseen defenders. */
-  return ACTPROB_NOT_KNOWN;
-}
+  if (!can_player_see_hypotetic_units_at(unit_owner(pattacker),
+                                         tgt_tile)) {
+    /* Don't leak information about unseen defenders. */
+    return ACTPROB_NOT_KNOWN;
+  }
 
   unit_list_iterate(tgt_tile->units, punit) {
     if (unit_owner(punit) == unit_owner(pattacker)) {
@@ -4132,12 +4133,9 @@ action_prob(const action_id wanted_action,
 
   switch (wanted_action) {
   case ACTION_SPY_POISON:
-    /* TODO */
-    break;
   case ACTION_SPY_POISON_ESC:
     /* All uncertainty comes from potential diplomatic battles. */
     chance = ap_diplomat_battle(actor_unit, NULL, target_tile);
-    chance = ACTPROB_NOT_IMPLEMENTED; // FCW doesn't want false prob of 100% shown.
     break;
   case ACTION_SPY_STEAL_GOLD:
     /* TODO */
@@ -4259,10 +4257,12 @@ action_prob(const action_id wanted_action,
     chance = ACTPROB_CERTAIN;
     break;
   case ACTION_SPY_NUKE:
-    /* TODO */
-    break;
   case ACTION_SPY_NUKE_ESC:
-    /* TODO */
+    /* TODO: not implemented yet because:
+     * - possible diplomatic battle could be handled with
+     *   ap_diplomat_battle() so not a problem.
+     * - dice roll diplchance * Action_Odds_Pct has no action probability
+     *   calculation function yet. */
     break;
   case ACTION_NUKE:
     /* TODO */
@@ -4369,13 +4369,13 @@ action_prob(const action_id wanted_action,
     chance = ACTPROB_CERTAIN;
     break;
   case ACTION_USER_ACTION1:
-    /* TODO */
-    break;
   case ACTION_USER_ACTION2:
-    /* TODO */
-    break;
   case ACTION_USER_ACTION3:
-    /* TODO */
+    /* Accommodate ruleset authors that wishes to roll the dice in Lua.
+     * Would be ACTPROB_CERTAIN if not for that. */
+    /* TODO: maybe allow the ruleset author to give a probability from
+     * Lua? */
+    chance = ACTPROB_NOT_IMPLEMENTED;
     break;
   case ACTION_COUNT:
     fc_assert(wanted_action != ACTION_COUNT);
@@ -5296,6 +5296,136 @@ struct act_prob action_prob_fall_back(const struct act_prob *ap1,
   out.max = MIN(out.max, ACTPROB_VAL_MAX);
 
   return out;
+}
+
+/**********************************************************************//**
+  Returns the odds of an action not failing its dice roll.
+**************************************************************************/
+int action_dice_roll_odds(const struct player *act_player,
+                          const struct unit *act_unit,
+                          const struct city *tgt_city,
+                          const struct player *tgt_player,
+                          const struct action *paction)
+{
+  int odds = 0;
+  float action_odds;
+
+  switch ((enum gen_action)paction->id) {
+  case ACTION_STRIKE_BUILDING:
+  case ACTION_STRIKE_PRODUCTION:
+    /* No initial odds. */
+    odds = 100;
+    break;
+  case ACTION_SPY_SPREAD_PLAGUE:
+  case ACTION_SPY_STEAL_TECH:
+  case ACTION_SPY_STEAL_TECH_ESC:
+  case ACTION_SPY_TARGETED_STEAL_TECH:
+  case ACTION_SPY_TARGETED_STEAL_TECH_ESC:
+  case ACTION_SPY_INCITE_CITY:
+  case ACTION_SPY_INCITE_CITY_ESC:
+  case ACTION_SPY_SABOTAGE_CITY:
+  case ACTION_SPY_SABOTAGE_CITY_ESC:
+  case ACTION_SPY_TARGETED_SABOTAGE_CITY:
+  case ACTION_SPY_TARGETED_SABOTAGE_CITY_ESC:
+  case ACTION_SPY_SABOTAGE_CITY_PRODUCTION:
+  case ACTION_SPY_SABOTAGE_CITY_PRODUCTION_ESC:
+  case ACTION_SPY_STEAL_GOLD:
+  case ACTION_SPY_STEAL_GOLD_ESC:
+  case ACTION_STEAL_MAPS:
+  case ACTION_STEAL_MAPS_ESC:
+  case ACTION_SPY_NUKE:
+  case ACTION_SPY_NUKE_ESC:
+    /* Take the odds from the diplchance setting. */
+    odds = server_setting_value_int_get(
+               server_setting_by_name("diplchance"));
+    break;
+  case ACTION_ESTABLISH_EMBASSY:
+  case ACTION_ESTABLISH_EMBASSY_STAY:
+  case ACTION_SPY_INVESTIGATE_CITY:
+  case ACTION_INV_CITY_SPEND:
+  case ACTION_SPY_POISON:
+  case ACTION_SPY_POISON_ESC:
+  case ACTION_TRADE_ROUTE:
+  case ACTION_MARKETPLACE:
+  case ACTION_HELP_WONDER:
+  case ACTION_SPY_BRIBE_UNIT:
+  case ACTION_SPY_SABOTAGE_UNIT:
+  case ACTION_SPY_SABOTAGE_UNIT_ESC:
+  case ACTION_CAPTURE_UNITS:
+  case ACTION_FOUND_CITY:
+  case ACTION_JOIN_CITY:
+  case ACTION_BOMBARD:
+  case ACTION_BOMBARD2:
+  case ACTION_BOMBARD3:
+  case ACTION_NUKE:
+  case ACTION_NUKE_CITY:
+  case ACTION_NUKE_UNITS:
+  case ACTION_DESTROY_CITY:
+  case ACTION_EXPEL_UNIT:
+  case ACTION_RECYCLE_UNIT:
+  case ACTION_DISBAND_UNIT:
+  case ACTION_HOME_CITY:
+  case ACTION_UPGRADE_UNIT:
+  case ACTION_PARADROP:
+  case ACTION_AIRLIFT:
+  case ACTION_ATTACK:
+  case ACTION_SUICIDE_ATTACK:
+  case ACTION_CONQUER_CITY:
+  case ACTION_CONQUER_CITY2:
+  case ACTION_HEAL_UNIT:
+  case ACTION_TRANSFORM_TERRAIN:
+  case ACTION_CULTIVATE:
+  case ACTION_PLANT:
+  case ACTION_PILLAGE:
+  case ACTION_CLEAN_POLLUTION:
+  case ACTION_CLEAN_FALLOUT:
+  case ACTION_FORTIFY:
+  case ACTION_ROAD:
+  case ACTION_CONVERT:
+  case ACTION_BASE:
+  case ACTION_MINE:
+  case ACTION_IRRIGATE:
+  case ACTION_TRANSPORT_DEBOARD:
+  case ACTION_TRANSPORT_UNLOAD:
+  case ACTION_TRANSPORT_DISEMBARK1:
+  case ACTION_TRANSPORT_DISEMBARK2:
+  case ACTION_TRANSPORT_BOARD:
+  case ACTION_TRANSPORT_EMBARK:
+  case ACTION_SPY_ATTACK:
+  case ACTION_USER_ACTION1:
+  case ACTION_USER_ACTION2:
+  case ACTION_USER_ACTION3:
+  case ACTION_COUNT:
+    /* No additional dice roll. */
+    odds = 0;
+    fc_assert(odds != 0);
+    break;
+  }
+
+  /* Let the Action_Odds_Pct effect modify the odds. The advantage of doing
+   * it this way in stead of rolling twice is that Action_Odds_Pct can
+   * increase the odds. */
+  action_odds = ((odds
+            * get_target_bonus_effects(NULL,
+                                       act_player, tgt_player,
+                                       tgt_city, NULL, NULL,
+                                       act_unit, unit_type_get(act_unit),
+                                       NULL, NULL, paction,
+                                       EFT_ACTION_ODDS_PCT))
+           / 100);
+
+  action_odds -= (((float)odds
+            * (float)get_target_bonus_effects(NULL,
+                                       tgt_player, act_player,
+                                       tgt_city, NULL, NULL,
+                                       act_unit, unit_type_get(act_unit),
+                                       NULL, NULL, paction,
+                                       EFT_ACTION_RESIST_PCT))
+           / 100);
+
+  odds += action_odds;
+
+  return odds;
 }
 
 /**********************************************************************//**

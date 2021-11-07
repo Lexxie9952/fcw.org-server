@@ -2011,48 +2011,16 @@ static bool diplomat_was_caught(struct player *act_player,
                                 struct player *tgt_player,
                                 const struct action *act)
 {
-  signed int odds;            // base odds 
-  float action_odds = 0; // bonus/penalties to base odds.
+  int odds = action_dice_roll_odds(act_player, act_unit,
+                                   tgt_city, tgt_player,
+                                   act);
+  int your_roll;
 
-  /* Take the odds from the diplchance setting. */
-  odds = game.server.diplchance;
+  /* fc_rand 100% of time gives opposite result if odds < 0
+  * report odds higher than 100 as simply 100 */
+  odds = CLIP(0, odds, 100);
 
-/* Former code, replaced by the 3 statements below. This only accounted
- * for EFT_ACTION_ODDS_PCT:
-  odds += ((odds
-            * get_target_bonus_effects(NULL,
-                                       act_player, tgt_player,
-                                       tgt_city, NULL, NULL,
-                                       act_unit, unit_type_get(act_unit),
-                                       NULL, NULL, act,
-                                       EFT_ACTION_ODDS_PCT)) / 100); */
-
-  /* The Action_Odds_Pct effect modifies the odds. */
-  action_odds += (((float)odds
-            * (float)get_target_bonus_effects(NULL,
-                                       act_player, tgt_player,
-                                       tgt_city, NULL, NULL,
-                                       act_unit, unit_type_get(act_unit),
-                                       NULL, NULL, act,
-                                       EFT_ACTION_ODDS_PCT))
-           / 100);
-  /* The Action_Resist_Pct effect modifies the odds. The advantage of using this
-   * WITH Action_Odds_Pct: the target player can also modify the odds.
-   * TODO: caller passes target unit so we can check that too ? */
-  action_odds -= (((float)odds
-            * (float)get_target_bonus_effects(NULL,
-                                       tgt_player, act_player,
-                                       tgt_city, NULL, NULL,
-                                       act_unit, unit_type_get(act_unit),
-                                       NULL, NULL, act,
-                                       EFT_ACTION_RESIST_PCT))
-           / 100);
-
-  odds += action_odds;
-
-  if (odds<0) odds=0;       /* fc_rand 100% of time gives opposite result if odds<0 */
-  if (odds>100) odds=100;   /* report odds higher than 100 as simply 100 */
-  int your_roll = (int)fc_rand(100);
+  your_roll = (int)fc_rand(100);
 
 /* DEBUG: For RNG/probability testing
   int counts = 0;
