@@ -274,7 +274,7 @@ ruler_female_title = _("Dictator %s")
 
 helptext = _("\
 Nationalism glorifies national supremacy over other peoples.\
- Zealous citizens and corporatations align under a dictator\
+ Citizens and corporatations align under a dictator\
  who rules over a unified populace, military, and isolationist economy. \n\
 "), _("\
 Content cities get a +1 trade bonus on Land tiles only.\
