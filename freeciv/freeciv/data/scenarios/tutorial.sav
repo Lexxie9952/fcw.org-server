@@ -29,15 +29,15 @@ specialists_size=3
 specialists_vector="elvis","scientist","taxman"
 trait_size=3
 trait_vector="Expansionist","Trader","Aggressive"
-extras_size=34
-extras_vector="Irrigation","Mine","Oil Well","Pollution","Hut","Farmland","Fallout","Fortress","Airbase","Buoy","Ruins","Road","Railroad","River","Gold","Iron","Game","Furs","Coal","Fish","Fruit","Gems","Buffalo","Wheat","Oasis","Peat","Pheasant","Resources","Ivory","Silk","Spice","Whales","Wine","Oil"
+extras_size=38
+extras_vector="Irrigation","Mine","Oil Well","Oil Platform","Pollution","Hut","Farmland","Fallout","Fort","Fortress","Airstrip","Airbase","Buoy","Ruins","Road","Railroad","Maglev","River","Gold","Iron","Game","Furs","Coal","Fish","Fruit","Gems","Buffalo","Wheat","Oasis","Peat","Pheasant","Resources","Ivory","Silk","Spice","Whales","Wine","Oil"
 multipliers_size=0
 diplstate_type_size=7
 diplstate_type_vector="Armistice","War","Cease-fire","Peace","Alliance","Never met","Team"
 city_options_size=3
 city_options_vector="Disband","Sci_Specialists","Tax_Specialists"
-action_size=38
-action_vector="Establish Embassy","Establish Embassy Stay","Investigate City","Investigate City Spend Unit","Poison City","Steal Gold","Steal Gold Escape","Sabotage City","Targeted Sabotage City","Steal Tech","Targeted Steal Tech","Incite City","Incite City Escape","Establish Trade Route","Enter Marketplace","Help Wonder","Bribe Unit","Sabotage Unit","Capture Units","Found City","Join City","Steal Maps","Steal Maps Escape","Bombard","Suitcase Nuke","Suitcase Nuke Escape","Explode Nuclear","Destroy City","Expel Unit","Recycle Unit","Disband Unit","Home City","Upgrade Unit","Paradrop Unit","Airlift Unit","Attack","Conquer City","Heal Unit"
+action_size=44
+action_vector="Establish Embassy","Establish Embassy Stay","Investigate City","Investigate City Spend Unit","Poison City","Poison City Escape","Steal Gold","Steal Gold Escape","Sabotage City","Sabotage City Escape","Targeted Sabotage City","Targeted Sabotage City Escape","Steal Tech","Steal Tech Escape Expected","Targeted Steal Tech","Targeted Steal Tech Escape Expected","Incite City","Incite City Escape","Establish Trade Route","Enter Marketplace","Help Wonder","Bribe Unit","Sabotage Unit","Sabotage Unit Escape","Capture Units","Found City","Join City","Steal Maps","Steal Maps Escape","Bombard","Suitcase Nuke","Suitcase Nuke Escape","Explode Nuclear","Destroy City","Expel Unit","Recycle Unit","Disband Unit","Home City","Upgrade Unit","Paradrop Unit","Airlift Unit","Attack","Conquer City","Heal Unit"
 action_decision_size=3
 action_decision_vector="nothing","passive","active"
 terrident={"name","identifier"
@@ -82,7 +82,7 @@ warminglevel=3
 nuclearwinter=0
 cooling=0
 coolinglevel=3
-random_seed=1499835058
+random_seed=1586960583
 global_advances="1000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
 save_players=FALSE
 
@@ -126,11 +126,7 @@ function check_stacks(tile, player)
     -- formation: civilian plus bodyguard
     if n_our_units >= 3 then
       notify.event(player, tile, E.SCRIPT,
-_("Outside of a city, if a 'stack' of units on a single tile is\n\
-attacked, the strongest unit defends; and if that unit is defeated,\n\
-ALL of the units on the tile are killed.  Therefore, it's often a\n\
-good idea to spread units out, avoiding 'stacks' of units like this,\n\
-particularly on land."))
+_("Outside of a city, if a 'stack' of units on a single tile is\nattacked, the strongest unit defends; and if that unit is defeated,\nALL of the units on the tile are killed.  Therefore, it's often a\ngood idea to spread units out, avoiding 'stacks' of units like this,\nparticularly on land."))
       vuln_stack_warning = true
     end
   end
@@ -290,14 +286,7 @@ _("You have built your first military unit!  Military units have two\nbasic purp
     -- will not survive long enough to reach Submarine/Carrier
     if boatsbuilt == 0 then
       notify.event(unit.owner, unit.tile, E.SCRIPT,
-_("You have built your first waterborne unit.  These can transport\n\
-other units across water, allowing you to explore and settle new\n\
-lands.  You can load land units onto your boat in one of two ways.\n\
-When your boat and the unit you want to transport are in the same\n\
-city, select the latter and press L to load the unit; or if the boat\n\
-is adjacent to a land tile, you can move the unit from there onto the\n\
-boat.  When you want to disembark, select the transported unit and\n\
-press U, or move it onto a land tile."))
+_("You have built your first waterborne unit.  These can transport\nother units across water, allowing you to explore and settle new\nlands.  You can load land units onto your boat in one of two ways.\nWhen your boat and the unit you want to transport are in the same\ncity, select the latter and press L to load the unit; or if the boat\nis adjacent to a land tile, you can move the unit from there onto the\nboat.  When you want to disembark, select the transported unit and\npress U, or move it onto a land tile."))
     end
     boatsbuilt = boatsbuilt + 1
   end
@@ -382,9 +371,12 @@ gamestart_valid=TRUE
 [ruledata]
 government={"name","changes"
 "Anarchy",0
+"Tribal",0
 "Despotism",0
 "Monarchy",0
 "Communism",0
+"Fundamentalism",0
+"Federation",0
 "Republic",0
 "Democracy",0
 }
