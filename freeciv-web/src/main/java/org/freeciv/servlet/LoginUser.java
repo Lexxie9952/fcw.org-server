@@ -17,6 +17,8 @@
  *******************************************************************************/
 package org.freeciv.servlet;
 
+import org.apache.commons.codec.digest.Crypt;
+
 import java.io.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -26,7 +28,6 @@ import javax.sql.*;
 import javax.naming.*;
 
 import org.freeciv.persistence.DbManager;
-import org.apache.commons.codec.digest.DigestUtils;
 import org.freeciv.services.Validation;
 import org.freeciv.util.Constants;
 
@@ -76,8 +77,7 @@ public class LoginUser extends HttpServlet {
 				response.getOutputStream().print("Failed");
 			} else {
 				String hashedPasswordFromDB = rs1.getString(1);
-				if (hashedPasswordFromDB != null &&
-						hashedPasswordFromDB.equals(DigestUtils.sha256Hex(secure_password))) {
+				if (hashedPasswordFromDB != null && hashedPasswordFromDB.equals(Crypt.crypt(secure_password, hashedPasswordFromDB))) {
 					// Login OK!
 					response.getOutputStream().print("OK");
 				} else {
