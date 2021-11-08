@@ -1261,10 +1261,6 @@ bool action_failed_dice_roll(const struct player *act_player,
                                    paction);
   int your_roll;
 
-  /* fc_rand 100% of time gives opposite result if odds < 0
-  * report odds higher than 100 as simply 100 */
-  odds = CLIP(0, odds, 100);
-
   your_roll = (int)fc_rand(100);
 
 /* DEBUG: For RNG/probability testing
