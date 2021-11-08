@@ -4053,9 +4053,9 @@ value	= 2
 ; ....
 ; A Solar Plant combines with Recycling Center to eliminate 90%
 ; pollution. A Fusion Reactor saves 80% instead of 66%, in which case
-; we prefer the Fuction Reactor's bonus. A Fusion reactor supercedes
+; we prefer the Fuction Reactor's bonus. A Fusion reactor supersedes
 ; the Solar Plant's 75% bonus but doesn't get the combination bonus, so
-; has to "unsupercede" in the case of Recycling and Solar both present:
+; has to "unsupersede" in the case of Recycling and Solar both present:
 ; ....
 ; Case 1:  neither SP or FR is present. Highest in food chain, full 66%:
 [effect_recycling_center_1] 
@@ -4079,11 +4079,11 @@ reqs	=
       "Building", "Solar Plant", "City",      TRUE
     }
 ; Case 3: SP and Fusion Reactor both present and higher on food chain.
-; Solar Plant "wakes up" from being superceded by Fusion Reactor to
+; Solar Plant "wakes up" from being superseded by Fusion Reactor to
 ; deliver its promised 90% combinatorial bonus with Recycling Center:
 [effect_recycling_center_3] 
 type    = "Pollu_Prod_Pct"
-value	= -10 ; Fusion reactor superceded to -80%. -10 = -90%
+value	= -10 ; Fusion reactor superseded to -80%. -10 = -90%
 reqs	=
     { "type", "name", "range", "present"
       "Building", "Recycling Center", "City", TRUE
