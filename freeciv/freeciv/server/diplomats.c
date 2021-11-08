@@ -67,11 +67,6 @@ static bool diplomat_infiltrate_tile(struct player *pplayer,
                                      struct unit *pvictim,
                                      struct tile *ptile,
                                      struct player **defender_owner);
-static bool diplomat_was_caught(struct player *act_player,
-                                struct unit *act_unit,
-                                struct city *tgt_city,
-                                struct player *tgt_player,
-                                const struct action *act);
 static void diplomat_escape(struct player *pplayer,
                             struct player *victim_player,
                             struct unit *pdiplomat,
@@ -132,8 +127,8 @@ bool spy_poison(struct player *pplayer, struct unit *pdiplomat,
   log_debug("poison: infiltrated");
 
     /* Check if the Diplomat/Spy succeeds with his/her task. */
-  if (diplomat_was_caught(pplayer, pdiplomat, pcity, cplayer,
-                          paction)) {
+  if (action_failed_dice_roll(pplayer, pdiplomat, pcity, cplayer,
+                              paction)) {
     notify_player(pplayer, ctile, E_MY_DIPLOMAT_FAILED, ftc_server,
                   _(" ⚠️ Your %s %s was caught trying to"
                     " poison %s's water!"),
@@ -251,8 +246,8 @@ bool spy_spread_plague(struct player *act_player, struct unit *act_unit,
 
   /* The infector may get caught while trying to spread a plague in the
    * city. */
-  if (diplomat_was_caught(act_player, act_unit, tgt_city, tgt_player,
-                          paction)) {
+  if (action_failed_dice_roll(act_player, act_unit, tgt_city, tgt_player,
+                              paction)) {
     notify_player(act_player, tgt_tile, E_MY_DIPLOMAT_FAILED, ftc_server,
                   /* TRANS: unit, action */
                   _("Your %s was caught attempting to do %s!"),
@@ -394,8 +389,8 @@ bool diplomat_investigate(struct player *pplayer, struct unit *pdiplomat,
       }
     }
     // Finally: Check if the Diplomat/Spy succeeds Investigating City:
-    if (diplomat_was_caught(pplayer, pdiplomat, pcity, cplayer,
-                            paction)) {
+    if (action_failed_dice_roll(pplayer, pdiplomat, pcity, cplayer,
+                                paction)) {
       notify_player(pplayer, city_tile(pcity), E_MY_DIPLOMAT_FAILED, ftc_server,
                     _(" ⚠️ Your %s %s %s captured trying to "
                       " investigate %s!"),
@@ -1060,8 +1055,8 @@ bool diplomat_get_tech(struct player *pplayer, struct unit *pdiplomat,
     log_debug("steal-tech: difficulty: %d", count);
     /* Determine success or failure. */
     while (count > 0) {
-      if (diplomat_was_caught(pplayer, pdiplomat, pcity, cplayer,
-                              paction)) {
+      if (action_failed_dice_roll(pplayer, pdiplomat, pcity, cplayer,
+                                  paction)) {
         break;
       }
       count--;
@@ -1259,8 +1254,8 @@ bool diplomat_incite(struct player *pplayer, struct unit *pdiplomat,
   log_debug("incite: infiltrated");
 
   /* Check if the Diplomat/Spy succeeds with his/her task. */
-  if (diplomat_was_caught(pplayer, pdiplomat, pcity, cplayer,
-                          paction)) {
+  if (action_failed_dice_roll(pplayer, pdiplomat, pcity, cplayer,
+                              paction)) {
     notify_player(pplayer, ctile, E_MY_DIPLOMAT_FAILED, ftc_server,
                   _(" ⚠️ Your %s %s was captured trying"
                     " to incite a revolt!"),
@@ -1385,8 +1380,8 @@ bool diplomat_sabotage(struct player *pplayer, struct unit *pdiplomat,
   log_debug("sabotage: infiltrated");
 
   /* Check if the Diplomat/Spy succeeds with his/her task. */
-  if (diplomat_was_caught(pplayer, pdiplomat, pcity, cplayer,
-                          paction)) {
+  if (action_failed_dice_roll(pplayer, pdiplomat, pcity, cplayer,
+                              paction)) {
     notify_player(pplayer, city_tile(pcity),
                   E_MY_DIPLOMAT_FAILED, ftc_server,
                   _(" ⚠️ Your %s %s was caught attempting"
@@ -1699,8 +1694,8 @@ bool spy_steal_gold(struct player *act_player, struct unit *act_unit,
   log_debug("steal gold: infiltrated");
 
   /* The thief may get caught while trying to steal the gold. */
-  if (diplomat_was_caught(act_player, act_unit, tgt_city, tgt_player,
-                          paction)) {
+  if (action_failed_dice_roll(act_player, act_unit, tgt_city, tgt_player,
+                              paction)) {
     notify_player(act_player, tgt_tile, E_MY_DIPLOMAT_FAILED, ftc_server,
                   _(" ⚠️ Your %s %s was caught trying to steal gold!"),
                   unit_tile_link(act_unit), UNIT_EMOJI(act_unit));
@@ -1835,8 +1830,8 @@ bool spy_steal_some_maps(struct player *act_player, struct unit *act_unit,
   log_debug("steal some maps: infiltrated");
 
   /* Try to steal the map. */
-  if (diplomat_was_caught(act_player, act_unit, tgt_city, tgt_player,
-                          paction)) {
+  if (action_failed_dice_roll(act_player, act_unit, tgt_city, tgt_player,
+                              paction)) {
     notify_player(act_player, tgt_tile, E_MY_DIPLOMAT_FAILED, ftc_server,
                   _(" ⚠️ Your %s %s was captured trying to"
                     " steal %s maps!"),
@@ -1939,8 +1934,8 @@ bool spy_nuke_city(struct player *act_player, struct unit *act_unit,
   log_debug("suitcase nuke: infiltrated");
 
   /* Try to hide the nuke. */
-  if (diplomat_was_caught(act_player, act_unit, tgt_city, tgt_player,
-                          paction)) {
+  if (action_failed_dice_roll(act_player, act_unit, tgt_city, tgt_player,
+                              paction)) {
     notify_player(act_player, tgt_tile, E_MY_DIPLOMAT_FAILED, ftc_server,
                   _(" ⚠️ Your %s %s was captured trying to"
                     " hide a nuke in %s!"),
@@ -1999,65 +1994,6 @@ bool spy_nuke_city(struct player *act_player, struct unit *act_unit,
                              tgt_player, tgt_tile, tgt_city_link);
 
   return TRUE;
-}
-
-/************************************************************************//**
-  Returns TRUE iff the spy/diplomat was caught outside of a diplomatic
-  battle.
-****************************************************************************/
-static bool diplomat_was_caught(struct player *act_player,
-                                struct unit *act_unit,
-                                struct city *tgt_city,
-                                struct player *tgt_player,
-                                const struct action *act)
-{
-  int odds = action_dice_roll_odds(act_player, act_unit,
-                                   tgt_city, tgt_player,
-                                   act);
-  int your_roll;
-
-  /* fc_rand 100% of time gives opposite result if odds < 0
-  * report odds higher than 100 as simply 100 */
-  odds = CLIP(0, odds, 100);
-
-  your_roll = (int)fc_rand(100);
-
-/* DEBUG: For RNG/probability testing
-  int counts = 0;
-  for (int i=0;i<100;i++) {
-    your_roll = (int)fc_rand(100);
-    notify_player(act_player, NULL, E_UNIT_ACTION_TARGET_OTHER, ftc_server,
-                  _("<font color='#C0C0C0'><u>Operation Odds</u>: %d%%. (%d) %s</font>"),
-                  odds, your_roll, (your_roll < odds ? "<font color='#30D050'><b>SUCCESS!</b></font>"
-                                    : "<font color='#E04040'><b>FAILED!</b></font>"));
-
-    if (your_roll < odds) counts++;
-  }
-  notify_player(act_player, NULL, E_UNIT_ACTION_TARGET_OTHER, ftc_server,
-                _("%d successes."),
-                counts);
-*/
-  /* Notify players of odds to provide transparency of what's going on!
-   * Siege rams don't get "caught", but progress to next stage of sabotage resistance checking */
-  if (strcmp(utype_name_translation(unit_type_get(act_unit)), "Siege Ram")!=0) {
-
-    notify_player(act_player, NULL, E_UNIT_ACTION_TARGET_OTHER, ftc_server,
-                  _("<font color='#C0C0C0'><u>Operation Odds</u>: %d%%. %s</font>"),
-                  odds, (your_roll < odds ? "<font color='#30D050'><b>SUCCESS!</b></font>"
-                                          : "<font color='#E04040'><b>FAILED!</b></font>"));
-    /* Don't report "Investigate City" to defender if someone succeeds at it, because 
-     * they may have slipped past detection. If they didn't slip past detection, 
-       you'll know the result by whether you foil the action or not. */                                  
-    if ((act->id != ACTION_SPY_INVESTIGATE_CITY && act->id != ACTION_INV_CITY_SPEND)
-        || (your_roll >=odds)) {
-      notify_player(tgt_player, NULL, E_UNIT_ACTION_TARGET_OTHER, ftc_server,
-                  _("<font color='#C0C0C0'><u>Defense Odds</u> vs %s: %d%%. %s</font>"),
-                  action_name_translation(act),
-                  100-odds, (your_roll >= odds ? "<font color='#30D050'><b>SUCCESS!</b></font>"
-                                               : "<font color='#E04040'><b>FAILED!</b></font>"));
-    }
-  }
-  return your_roll >= odds;
 }
 
 /************************************************************************//**
