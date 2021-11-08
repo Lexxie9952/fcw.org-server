@@ -91,6 +91,8 @@
 
 #include "citytools.h"
 
+/* Var for counting accumulated loot from multiple sources used to generate it */
+static int total_loot = 0;
 
 /* Queue for pending auto_arrange_workers() */
 static struct city_list *arrange_workers_queue = NULL;
@@ -912,8 +914,9 @@ struct city *find_closest_city(const struct tile *ptile,
   always palace) with game.server.razechance% chance, barbarians destroy more
   set the city's shield stock to 0
 ****************************************************************************/
-static void raze_city(struct city *pcity)
+static int raze_city(struct city *pcity)
 {
+  int loot_gold = 0;
   int razechance = game.server.razechance;
   bool city_remains = TRUE;
 
@@ -927,10 +930,14 @@ static void raze_city(struct city *pcity)
      * transfer_city() (with 100% probability). */
     fc_assert(!is_small_wonder(pimprove));
     if (is_improvement(pimprove) && (fc_rand(100) < razechance)) {
-      /* FIXME: Should maybe have conquering unit instead of NULL as destoryer */
+      /* FIXME: Should maybe have conquering unit instead of NULL as destroyer */
       city_remains = building_removed(pcity, pimprove, "razed", NULL);
       if (!city_remains) {
         break;
+      }
+      /* LOOT_TRADE_AND_PROPERTY: loot also includes value of destroyed buildings */
+      if (game.server.lootstyle == LOOT_TRADE_AND_PROPERTY) {
+        loot_gold += impr_sell_gold(pimprove);
       }
     }
   } city_built_iterate_end;
@@ -939,6 +946,7 @@ static void raze_city(struct city *pcity)
     nullify_prechange_production(pcity);
     pcity->shield_stock = 0;
   }
+  return loot_gold;
 }
 
 /************************************************************************//**
@@ -1126,6 +1134,10 @@ bool transfer_city(struct player *ptaker, struct city *pcity,
   BV_CLR_ALL(had_small_wonders);
   city_built_iterate(pcity, pimprove) {
     if (is_small_wonder(pimprove)) {
+      /* LOOT_TRADE_AND_PROPERTY augments loot with value of lost improvements */
+      if (raze && game.server.lootstyle == LOOT_TRADE_AND_PROPERTY) {
+        total_loot += impr_sell_gold(pimprove);
+      }
       /* Small wonders are really removed (not restored later). */
       building_removed(pcity, pimprove, "conquered", NULL);
       BV_SET(had_small_wonders, improvement_index(pimprove));
@@ -1133,6 +1145,10 @@ bool transfer_city(struct player *ptaker, struct city *pcity,
       city_remove_improvement(pcity, pimprove);
       if (is_great_wonder(pimprove)) {
         had_great_wonders = TRUE;
+        /* LOOT_TRADE_AND_PROPERTY augments loot with value of lost improvements */
+        if (raze && game.server.lootstyle == LOOT_TRADE_AND_PROPERTY) {
+          total_loot += impr_sell_gold(pimprove);
+        }
       }
       /* note: internal turn here, next city_built_iterate(). */
       pcity->built[improvement_index(pimprove)].turn = game.info.turn; /*I_ACTIVE*/
@@ -1230,7 +1246,7 @@ bool transfer_city(struct player *ptaker, struct city *pcity,
     struct extra_type *upgradet;
 
     if (raze) {
-      raze_city(pcity);
+      total_loot += raze_city(pcity);
     }
 
     if (taker_had_no_cities) {
@@ -1891,9 +1907,13 @@ bool unit_conquer_city(struct unit *punit, struct city *pcity)
 {
   bool try_civil_war = FALSE;
   bool city_remains;
-  int coins;
   struct player *pplayer = unit_owner(punit);
   struct player *cplayer = city_owner(pcity);
+
+  /* Var for accumulated loot is global so that multiple functions
+     in different locations can accumulate loot through the many 
+     phases of conquering and transferring a city. */
+  total_loot = 0; /* starts at 0, at beginning of conquest */
 
   /* If not at war, may peacefully enter city. */
   fc_assert_ret_val_msg(pplayers_at_war(pplayer, cplayer), FALSE,
@@ -1957,42 +1977,53 @@ bool unit_conquer_city(struct unit *punit, struct city *pcity)
     return TRUE;
   }
 
-  /* Calculate the loot! */
+  /* Calculate phase one base loot, accumulated from the conquest. */
   switch (game.server.lootstyle) {
     case LOOT_OFF:
-      coins = 0;
+      total_loot = 0;
       break;
     case LOOT_BASE_TRADE:
-      coins = MIN(cplayer->economic.gold,
+    case LOOT_TRADE_AND_PROPERTY:
+      total_loot = MIN(cplayer->economic.gold,
                   pcity->surplus[O_TRADE]);
       break;
     default: /* case LOOT_CLASSIC:*/
-      coins = cplayer->economic.gold;
-      coins = MIN(coins,
-                  fc_rand((coins / 20) + 1)
-                  + (coins * (city_size_get(pcity))) / 200);
+      total_loot = cplayer->economic.gold;
+      total_loot = MIN(total_loot,
+                  fc_rand((total_loot / 20) + 1)
+                  + (total_loot * (city_size_get(pcity))) / 200);
   }
-  pplayer->economic.gold += coins;
-  cplayer->economic.gold -= coins;
+  /* Remove base loot from conquered player's treasury. NOTE: Anything added to
+     total_loot from beyond this point is not taken from the treasury of the player,
+     but from looted buildings, property, etc., inside an already lost city */ 
+  cplayer->economic.gold -= total_loot;
+  int treasury_loot = total_loot;
+
+  /* We transfer the city first so that it is in a consistent state when the size is
+     reduced. If game.server.lootstyle, this also augments the total_loot var */
+  city_remains = transfer_city(pplayer, pcity, 0, TRUE, TRUE, TRUE,
+                               !is_barbarian(pplayer));
+
+  /* Complete the looting process 
+  -----------------------------------------------------------------------------*/
+  pplayer->economic.gold += total_loot;
   send_player_info_c(pplayer, pplayer->connections);
   send_player_info_c(cplayer, cplayer->connections);
   if (pcity->original != pplayer) {
-    if (coins > 0) {
+    if (total_loot > 0) {
       notify_player(pplayer, city_tile(pcity), E_UNIT_WIN_ATT, ftc_server,
-		    PL_("💥 You conquer %s; [`gold`] your lootings accumulate"
-			" to %d gold!",
-			"💥 You conquer %s; [`gold`] your lootings accumulate"
-			" to %d gold!", coins), 
+		    PL_("💥 You conquer %s; [`gold`] your lootings total %d gold!",
+			"💥 You conquer %s; [`gold`] your lootings total %d gold!", total_loot), 
 		    city_link(pcity),
-		    coins);
+		    total_loot);
       notify_player(cplayer, city_tile(pcity), E_CITY_LOST, ftc_server,
-		    PL_("⚠️ %s conquered %s and looted %d gold"
-			" from the city.",
-			"⚠️ %s conquered %s and looted %d gold"
-			" from the city.", coins),
+		    PL_("⚠️ %s conquered %s, looting %d gold"
+			" from your treasury.",
+			"⚠️ %s conquered %s, looting %d gold"
+			" from your treasury.", treasury_loot),
 		    player_name(pplayer),
 		    city_link(pcity),
-		    coins);
+        treasury_loot);
     } else {
       notify_player(pplayer, city_tile(pcity), E_UNIT_WIN_ATT, ftc_server,
 		    _("💥 You conquer %s."),
@@ -2003,22 +2034,20 @@ bool unit_conquer_city(struct unit *punit, struct city *pcity)
 		    city_link(pcity));
     }
   } else {
-    if (coins > 0) {
+    if (total_loot > 0) {
       notify_player(pplayer, city_tile(pcity), E_UNIT_WIN_ATT, ftc_server,
 		    PL_("💥 You have liberated %s!"
 			" [`gold`] Lootings accumulate to %d gold.",
 			"💥 You have liberated %s!"
-			" [`gold`] Lootings accumulate to %d gold.", coins),
+			" [`gold`] Lootings accumulate to %d gold.", total_loot),
 		    city_link(pcity),
-		    coins);
+		    total_loot);
       notify_player(cplayer, city_tile(pcity), E_CITY_LOST, ftc_server,
-		    PL_("⚠️ %s liberated %s and looted %d gold"
-			" from the city.",
-			"⚠️ %s liberated %s and looted %d gold"
-			" from the city.", coins),
+		    PL_("⚠️ %s liberated %s, looting %d gold from your treasury.",
+			"⚠️ %s liberated %s, looting %d gold from your treasury", treasury_loot),
 		    player_name(pplayer),
 		    city_link(pcity),
-		    coins);
+        treasury_loot);
     } else {
       notify_player(pplayer, city_tile(pcity), E_UNIT_WIN_ATT, ftc_server,
 		    _("💥 You have liberated %s!"),
@@ -2029,18 +2058,15 @@ bool unit_conquer_city(struct unit *punit, struct city *pcity)
 		    city_link(pcity));
     }
   }
+  /* Paranoid safety: instantly zero the global var so it's always clean */
+  total_loot = 0;
+  /* Concludes the looting process 
+  -----------------------------------------------------------------------------*/
 
   if (fc_rand(100) <  get_unit_bonus(punit, EFT_CONQUEST_TECH_PCT)) {
     /* Just try to steal. Ignore failures to get tech */
     steal_a_tech(pplayer, cplayer, A_UNSET);
   }
-
-  /* We transfer the city first so that it is in a consistent state when
-   * the size is reduced. */
-  /* FIXME: maybe it should be a ruleset option whether barbarians get
-   * free buildings such as palaces? */
-  city_remains = transfer_city(pplayer, pcity, 0, TRUE, TRUE, TRUE,
-                               !is_barbarian(pplayer));
 
   /* Conquered cities are SUPPOSED to be in Disorder. We will start like the 
      older freeciv and just hard-code in the proper behaviour, then allow people

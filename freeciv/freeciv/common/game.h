@@ -58,7 +58,8 @@ enum barbarians_rate {
 enum loot_style {
   LOOT_CLASSIC = 0,
   LOOT_OFF,
-  LOOT_BASE_TRADE
+  LOOT_BASE_TRADE,
+  LOOT_TRADE_AND_PROPERTY
 };
 
 enum autosave_type {

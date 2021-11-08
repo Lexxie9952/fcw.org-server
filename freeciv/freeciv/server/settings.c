@@ -480,9 +480,13 @@ static const struct sset_val_name *barbarians_name(int barbarians)
 static const struct sset_val_name *lootstyle_name(int looting)
 {
   switch (looting) {
-  NAME_CASE(LOOT_CLASSIC, "CLASSIC", N_("Classic loot formula"));
+  NAME_CASE(LOOT_CLASSIC, "CLASSIC", 
+    N_("Classic loot formula, based on treasury of conquered city's nation"));
   NAME_CASE(LOOT_OFF, "OFF", N_("Cities yield no loot"));
-  NAME_CASE(LOOT_BASE_TRADE, "BASE_TRADE", N_("Proportional to Base Trade"));
+  NAME_CASE(LOOT_BASE_TRADE, "BASE_TRADE", 
+    N_("Proportional to Base Trade of city."));
+  NAME_CASE(LOOT_TRADE_AND_PROPERTY, "PROPERTY", 
+    N_("Base Trade stolen from treasury, plus value of razed buildings."));
   }
   return NULL;
 }
@@ -2080,11 +2084,14 @@ static struct setting settings[] = {
 
   GEN_BOOL("multiresearch", game.server.multiresearch,
           SSET_RULES_FLEXIBLE, SSET_SCIENCE, SSET_RARE, ALLOW_NONE, ALLOW_CTRL,
-          N_("Allow researching multiple technologies"),
-          N_("Allows switching to any technology without wasting old "
-             "research. Bulbs are never transfered to new technology. "
-             "Techpenalty options are ineffective after enabling that "
-             "option."), NULL, NULL,
+          N_("Allow research to invest bulbs in multiple technologies"),
+          N_("With this setting on, accumulated bulbs in an undiscovered "
+             "technology can never transfer to new technology. Instead, "
+             "each bulb that was researched in any specific technology, is "
+             "permanently assigned to that specific technology.\n\n "
+             "The techpenalty setting is made useless if this option is "
+             "enabled, since no bulbs are ever transferred from one tech "
+             "to another tech."), NULL, NULL,
           GAME_DEFAULT_MULTIRESEARCH)
 
   GEN_INT("techpenalty", game.server.techpenalty,
@@ -2493,7 +2500,7 @@ static struct setting settings[] = {
           "incidents will simply refresh it to this value; or, if it is already "
           "this value or greater, add an additional turn to the length. NOTE: "
           "any new non-aggression treaty made after casus belli, is considered "
-          "to supercede violations of past treaties, and eliminate casus belli. "
+          "to supersede violations of past treaties, and eliminate casus belli. "
           "Thus, players may re-affirm a treaty that has casus belli on it, and "
           "eliminate the casus belli status of that treaty."),
           NULL, NULL, NULL, 
@@ -2853,8 +2860,8 @@ static struct setting settings[] = {
              "first Turn Change AFTER a new unit's creation.\n"
              "\n2. Strict WYSIWYG: The same as WYSIWYG except ALL unit and building "
              "upkeep is uniformly deferred and deducted on the first Turn Change "
-             "AFTER creation. The means buildings get free bonus effects on the "
-             "first turn of existence.\n"),
+             "AFTER creation. The means buildings get bonus effects on the first "
+             "turn of existence, with no upkeep on that turn.\n"),
               NULL, NULL, NULL, GAME_MIN_CITY_OUTPUT_STYLE, 
           GAME_MAX_CITY_OUTPUT_STYLE, GAME_DEFAULT_CITY_OUTPUT_STYLE)
 
@@ -2946,7 +2953,7 @@ static struct setting settings[] = {
               "flag later but for now it works in rulesets which use S2G "
               "as the balancing factor to encourage higher population of "
               "certain units (such as infantry), vis-a-vis the game's "
-              "aritificial scarcity of City_Build_Slots."),
+              "artificial scarcity of City_Build_Slots."),
            NULL, NULL, GAME_DEFAULT_SLOT_CONTROL)
 
   GEN_INT("slot_control_style", game.server.slot_control_style,
