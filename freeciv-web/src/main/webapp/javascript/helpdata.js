@@ -123,6 +123,10 @@ function show_help_intro()
 {
   $.get( "/docs/help_intro.txt", function( data ) {
       $("#help_info_page").html(data);
+      var help_banner = "/static/images/fcw-front-page"
+      + Math.ceil(Math.random()*61) + ".png";
+    
+      $("#help_banner").prop("src",help_banner);
   });
 }
 
