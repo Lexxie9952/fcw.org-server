@@ -3403,6 +3403,7 @@ Like most ancient sea units, when it initiates combat there will be 15 rounds of
   • Does not get defense bonuses from terrain.
   • Not subject to zones of control.
   • Slowed down while damaged.
+➤ Can enter foreign territory regardless of peace treaty.
 ➤ Can help build a Wonder in any non-hostile city.
 ➤ Unable to attack air units.
 ➤ Can carry and refuel up to 2 Land, LandNoKill, or LandAirSea units.
@@ -3506,6 +3507,7 @@ Like most early sea units, when it initiates an attack, there will be 15 rounds 
   • Does not get defense bonuses from terrain.
   • Not subject to zones of control.
   • Slowed down while damaged.
+➤ Can enter foreign territory regardless of peace treaty.
 ➤ Can help build a Wonder in any non-hostile city.
 ➤ Unable to attack air units.
 ➤ Can carry and refuel up to 2 Land, LandNoKill, or LandAirSea units.
@@ -3653,6 +3655,7 @@ Like most early sea units, when it initiates an attack, there will be 15 rounds 
   • Slowed down while damaged.
   • Can attack units on non-native tiles.
   • Can launch attack from non-native tiles.
+➤ Can enter foreign territory regardless of peace treaty.
 ➤ Unable to attack air units.
 ➤ Can carry and refuel up to 3 Land, LandNoKill, or LandAirSea units.
 ➤ <b style="color:#9aa">PORT PENALTY</b>: If attacked in a city, firepower is set to 1 and firepower of attacker is doubled.
@@ -3709,6 +3712,7 @@ Galleons can Stack-Escape: a 60% chance to escape a killed stack if they have mo
   • Slowed down while damaged.
   • Can attack units on non-native tiles.
   • Can launch attack from non-native tiles.
+➤ Can enter foreign territory regardless of peace treaty.
 ➤ <b style="color:#9aa">STACK ESCAPE</b>: 60% odds to escape if stack defender loses, if it has more moves left than attacker.
 ➤ Unable to attack air units.
 ➤ Can carry and refuel up to 4 Land, LandNoKill, LandAirSea, or Balloon units.
@@ -4821,10 +4825,6 @@ Electricity and Combustion each give Trains an additional +1 move.</b>
   • Some cargo cannot be loaded/unloaded except in a City.
 ➤ Never imposes a zone of control.
 ➤ Not subject to zones of control imposed by other units.
-➤ Can <b style="color:#9aa">Help Build Wonder</b>
-  • is done in friendly cities. Contributes the unit's shield cost to current production
-  • uses up the Truck.
-  • adds 35 production.
 ➤ A non-military unit:
   • Cannot attack.
   • Doesn't impose martial law.
@@ -4859,10 +4859,9 @@ Electricity and Combustion each give Trains an additional +1 move.</b>
 <pre class='firepower'>Firepower: 1</pre>
 <pre class='hitpoints'>Hitpoints: 1</pre>
 <pre class='obsolete'>Obsolete by: Freight</pre>
-<pre class='helptext'><b class='unit_desc' style='line-height:115%;font-size:115%;'>Goods are commodities. The cargo containers of the ancient world were amphorae, which carried for trade goods.
-Goods can be used to establish Trade Route or Enter Marketplace. They can be carried by Commerce units, allowing you to establish multiple trade routes in one voyage. Also, Goods can Recycle Production with only a 15% penalty, rendering 17 shields into a city production target.
+<pre class='helptext'><b class='unit_desc'>Goods are used to establish Trade Routes, Help Build Wonders, and contribute to city production. Recycle Production has a penalty of only 3 shields, yielding 17 shields into a city’s production target. 
 </b>
-<b class='unit_desc' style='line-height:115%;font-size:115%;'>By themselves, Goods can only move onto tiles with a City, Quay, Fortress, or Naval Base. Commerce units, Tribesmen, and Galleons may carry them as cargo. If adjacent to a foreign city, use the D command (D) for Commerce functions.</b>
+<b class='unit_desc'>Goods can only move to tiles with a City, Quay, Fortress, or Naval Base. Otherwise they must be transported. If adjacent to a foreign city, use the Do command (D) for Commerce functions.</b>
 <hr style='border-top: 1px solid #000'>➤ Belongs to Cargo unit class.
   • Is <b>NOT</b> a unit. It is goods and materials for production and commerce. 
   • Only able to move onto Cities, Quays, Fortresses, and Naval Bases.
@@ -4872,6 +4871,10 @@ Goods can be used to establish Trade Route or Enter Marketplace. They can be car
   • Can't Fortify.
   • Can be carried by any Commerce Unit, and Galleons.
 ➤ Never imposes a zone of control.
+➤ Can <b style="color:#9aa">Help Build Wonder</b>
+  • is done in friendly cities. Contributes the unit's shield cost to current production
+  • uses up the Goods.
+  • adds 20 production.
 ➤ A non-military unit:
   • Cannot attack.
   • Doesn't impose martial law.
@@ -4912,11 +4915,6 @@ Goods can be used to establish Trade Route or Enter Marketplace. They can be car
   • Can't Fortify.
   • Can be carried by Train, Truck, Cargo Ship, Transport.
 ➤ Never imposes a zone of control.
-➤ Not subject to zones of control imposed by other units.
-➤ Can <b style="color:#9aa">Help Build Wonder</b>
-  • is done in friendly cities. Contributes the unit's shield cost to current production
-  • uses up the Freight.
-  • adds 35 production.
 ➤ A non-military unit:
   • Cannot attack.
   • Doesn't impose martial law.
@@ -4932,7 +4930,7 @@ Goods can be used to establish Trade Route or Enter Marketplace. They can be car
 ➤ Can <b style="color:#9aa">Help Build Wonder</b>
   • is done in friendly cities. Contributes the unit's shield cost to current production
   • uses up the Freight.
-  • adds 50 production.
+  • adds 25 production.
 ➤ <b style="color:#9aa">Capturable</b>: can be captured if conditions allow it.
   • does not count as an extra unit on tile to prevent capture. 
 </pre>

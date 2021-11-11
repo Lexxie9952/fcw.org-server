@@ -26,12 +26,11 @@ game.
 ============================================================
 2. Mountain Goats (3 1 0) & Hippopotami (3 1 0)
 ============================================================
-3. Goods available with Pottery and cost 20. 25% recycle
-penalty changed to -15%. Besides giving starting Tribesmen
-and Caravan something to carry, and being more realistic,
-it brings to life the original purpose of this virtual unit
-for the early game. The cheaper cost makes this unit more
-favorable to early game economics.
+3. Goods available with Pottery and cost 20. Can now help
+build wonders. Recycle penalty reduced to 3 shields. 
+The tech, cost, wonder, and recycle changes bring this unit
+to life and fulfill the purpose of enhancing early game
+depth and richness. 
 ============================================================
 4. "Advisor" for buildings suggests an order similar to 
    an experienced player, instead of alphabetic.

@@ -5123,20 +5123,16 @@ uk_happy      = 0
 uk_shield     = 0
 uk_food       = 0
 uk_gold       = 0
-flags         = "TradeRoute", "NonMil", "HasNoZOC", "Capturable", "Cant_Fortify", "NoVeteran", "Cant_Pillage"
+flags         = "HelpWonder", "TradeRoute", "NonMil", "HasNoZOC", "Capturable", "Cant_Fortify", "NoVeteran", "Cant_Pillage"
 roles         = ""
 helptext      = _("\
-Goods are commodities.\
- The cargo containers of the ancient world were amphorae, which carried\
- trade goods. \n\
-Goods can be used to establish Trade Routes or Enter Marketplace. They can\
- be carried by Commerce units, allowing you to establish multiple\
- trade routes in one voyage. Also, Goods can Recycle Production with only\
- a 15% penalty, rendering 17 shields into a city production target. \n\
+Goods are used to establish Trade Routes, Help Build Wonders, and contribute to\
+ city production. Recycle Production has a penalty of only 3 shields,\
+ yielding 17 shields into a city’s production target. \n\
 "), _("\
-By themselves, Goods can only move onto tiles with a City, Quay, Fortress,\
- or Naval Base. Commerce units, Tribesmen, and Galleons must carry them as cargo.\
- If adjacent to a foreign city, use the Do command (D) for Commerce functions.\
+Goods can only move to tiles with a City, Quay, Fortress, or Naval Base. Otherwise\
+ they must be transported. If adjacent to a foreign city, use the Do\
+ command (D) for Commerce functions.\
 ")
 
 [unit_freight]
