@@ -1,6 +1,6 @@
-As of 07-Nov-21,
+As of 08-Nov-21,
 current baseline of the https://github.com/freeciv/freeciv used by FCW is commit
-9351ca9f40bb9def9ee5718a4ae050bd7617fd89
+739cdf93e02b77b7ffc3bfdc36920fdd9d1f1e6d
 
 ------------------------------------------------------------------------------
 

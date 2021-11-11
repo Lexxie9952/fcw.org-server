@@ -15,6 +15,9 @@
 #include <fc_config.h>
 #endif
 
+/* utility */
+#include "rand.h"
+
 /* common */
 #include "actions.h"
 #include "map.h"
@@ -1241,4 +1244,61 @@ action_auto_perf_unit_prob(const enum action_auto_perf_cause cause,
   } action_auto_perf_actions_iterate_end;
 
   return out;
+}
+
+/************************************************************************//**
+  Returns TRUE iff the spy/diplomat was caught outside of a diplomatic
+  battle.
+****************************************************************************/
+bool action_failed_dice_roll(const struct player *act_player,
+                             const struct unit *act_unit,
+                             const struct city *tgt_city,
+                             const struct player *tgt_player,
+                             const struct action *paction)
+{
+  int odds = action_dice_roll_odds(act_player, act_unit,
+                                   tgt_city, tgt_player,
+                                   paction);
+  int your_roll;
+
+  your_roll = (int)fc_rand(100);
+
+/* DEBUG: For RNG/probability testing
+  int counts = 0;
+  for (int i=0;i<100;i++) {
+    your_roll = (int)fc_rand(100);
+    notify_player(act_player, NULL, E_UNIT_ACTION_TARGET_OTHER, ftc_server,
+                  _("<font color='#C0C0C0'><u>Operation Odds</u>: %d%%. (%d) %s</font>"),
+                  odds, your_roll, (your_roll < odds ? "<font color='#30D050'><b>SUCCESS!</b></font>"
+                                    : "<font color='#E04040'><b>FAILED!</b></font>"));
+
+    if (your_roll < odds) counts++;
+  }
+  notify_player(act_player, NULL, E_UNIT_ACTION_TARGET_OTHER, ftc_server,
+                _("%d successes."),
+                counts);
+*/
+  /* Notify players of odds to provide transparency of what's going on!
+   * Siege rams don't get "caught", but progress to next stage of sabotage resistance checking */
+  /* FIXME: Don't have rules depending on the name of the unit, and even *translated* one
+   *        in that: a rule the depends on what is the language of the user! */
+  if (strcmp(utype_name_translation(unit_type_get(act_unit)), "Siege Ram") != 0) {
+    notify_player(act_player, NULL, E_UNIT_ACTION_TARGET_OTHER, ftc_server,
+                  _("<font color='#C0C0C0'><u>Operation Odds</u>: %d%%. %s</font>"),
+                  odds, (your_roll < odds ? "<font color='#30D050'><b>SUCCESS!</b></font>"
+                                          : "<font color='#E04040'><b>FAILED!</b></font>"));
+    /* Don't report "Investigate City" to defender if someone succeeds at it, because
+     * they may have slipped past detection. If they didn't slip past detection,
+       you'll know the result by whether you foil the action or not. */
+    if ((paction->id != ACTION_SPY_INVESTIGATE_CITY && paction->id != ACTION_INV_CITY_SPEND)
+        || (your_roll >= odds)) {
+      notify_player(tgt_player, NULL, E_UNIT_ACTION_TARGET_OTHER, ftc_server,
+                    _("<font color='#C0C0C0'><u>Defense Odds</u> vs %s: %d%%. %s</font>"),
+                    action_name_translation(paction),
+                    100 - odds, (your_roll >= odds ? "<font color='#30D050'><b>SUCCESS!</b></font>"
+                                               : "<font color='#E04040'><b>FAILED!</b></font>"));
+    }
+  }
+
+  return your_roll >= odds;
 }

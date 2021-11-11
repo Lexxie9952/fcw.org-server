@@ -25,6 +25,7 @@
 
 /* common */
 #include "base.h"
+#include "combat.h"
 #include "events.h"
 #include "game.h"
 #include "government.h"
@@ -67,11 +68,6 @@ static bool diplomat_infiltrate_tile(struct player *pplayer,
                                      struct unit *pvictim,
                                      struct tile *ptile,
                                      struct player **defender_owner);
-static bool diplomat_was_caught(struct player *act_player,
-                                struct unit *act_unit,
-                                struct city *tgt_city,
-                                struct player *tgt_player,
-                                const struct action *act);
 static void diplomat_escape(struct player *pplayer,
                             struct player *victim_player,
                             struct unit *pdiplomat,
@@ -132,8 +128,8 @@ bool spy_poison(struct player *pplayer, struct unit *pdiplomat,
   log_debug("poison: infiltrated");
 
     /* Check if the Diplomat/Spy succeeds with his/her task. */
-  if (diplomat_was_caught(pplayer, pdiplomat, pcity, cplayer,
-                          paction)) {
+  if (action_failed_dice_roll(pplayer, pdiplomat, pcity, cplayer,
+                              paction)) {
     notify_player(pplayer, ctile, E_MY_DIPLOMAT_FAILED, ftc_server,
                   _(" ⚠️ Your %s %s was caught trying to"
                     " poison %s's water!"),
@@ -251,8 +247,8 @@ bool spy_spread_plague(struct player *act_player, struct unit *act_unit,
 
   /* The infector may get caught while trying to spread a plague in the
    * city. */
-  if (diplomat_was_caught(act_player, act_unit, tgt_city, tgt_player,
-                          paction)) {
+  if (action_failed_dice_roll(act_player, act_unit, tgt_city, tgt_player,
+                              paction)) {
     notify_player(act_player, tgt_tile, E_MY_DIPLOMAT_FAILED, ftc_server,
                   /* TRANS: unit, action */
                   _("Your %s was caught attempting to do %s!"),
@@ -394,8 +390,8 @@ bool diplomat_investigate(struct player *pplayer, struct unit *pdiplomat,
       }
     }
     // Finally: Check if the Diplomat/Spy succeeds Investigating City:
-    if (diplomat_was_caught(pplayer, pdiplomat, pcity, cplayer,
-                            paction)) {
+    if (action_failed_dice_roll(pplayer, pdiplomat, pcity, cplayer,
+                                paction)) {
       notify_player(pplayer, city_tile(pcity), E_MY_DIPLOMAT_FAILED, ftc_server,
                     _(" ⚠️ Your %s %s %s captured trying to "
                       " investigate %s!"),
@@ -1060,8 +1056,8 @@ bool diplomat_get_tech(struct player *pplayer, struct unit *pdiplomat,
     log_debug("steal-tech: difficulty: %d", count);
     /* Determine success or failure. */
     while (count > 0) {
-      if (diplomat_was_caught(pplayer, pdiplomat, pcity, cplayer,
-                              paction)) {
+      if (action_failed_dice_roll(pplayer, pdiplomat, pcity, cplayer,
+                                  paction)) {
         break;
       }
       count--;
@@ -1259,8 +1255,8 @@ bool diplomat_incite(struct player *pplayer, struct unit *pdiplomat,
   log_debug("incite: infiltrated");
 
   /* Check if the Diplomat/Spy succeeds with his/her task. */
-  if (diplomat_was_caught(pplayer, pdiplomat, pcity, cplayer,
-                          paction)) {
+  if (action_failed_dice_roll(pplayer, pdiplomat, pcity, cplayer,
+                              paction)) {
     notify_player(pplayer, ctile, E_MY_DIPLOMAT_FAILED, ftc_server,
                   _(" ⚠️ Your %s %s was captured trying"
                     " to incite a revolt!"),
@@ -1385,8 +1381,8 @@ bool diplomat_sabotage(struct player *pplayer, struct unit *pdiplomat,
   log_debug("sabotage: infiltrated");
 
   /* Check if the Diplomat/Spy succeeds with his/her task. */
-  if (diplomat_was_caught(pplayer, pdiplomat, pcity, cplayer,
-                          paction)) {
+  if (action_failed_dice_roll(pplayer, pdiplomat, pcity, cplayer,
+                              paction)) {
     notify_player(pplayer, city_tile(pcity),
                   E_MY_DIPLOMAT_FAILED, ftc_server,
                   _(" ⚠️ Your %s %s was caught attempting"
@@ -1699,8 +1695,8 @@ bool spy_steal_gold(struct player *act_player, struct unit *act_unit,
   log_debug("steal gold: infiltrated");
 
   /* The thief may get caught while trying to steal the gold. */
-  if (diplomat_was_caught(act_player, act_unit, tgt_city, tgt_player,
-                          paction)) {
+  if (action_failed_dice_roll(act_player, act_unit, tgt_city, tgt_player,
+                              paction)) {
     notify_player(act_player, tgt_tile, E_MY_DIPLOMAT_FAILED, ftc_server,
                   _(" ⚠️ Your %s %s was caught trying to steal gold!"),
                   unit_tile_link(act_unit), UNIT_EMOJI(act_unit));
@@ -1835,8 +1831,8 @@ bool spy_steal_some_maps(struct player *act_player, struct unit *act_unit,
   log_debug("steal some maps: infiltrated");
 
   /* Try to steal the map. */
-  if (diplomat_was_caught(act_player, act_unit, tgt_city, tgt_player,
-                          paction)) {
+  if (action_failed_dice_roll(act_player, act_unit, tgt_city, tgt_player,
+                              paction)) {
     notify_player(act_player, tgt_tile, E_MY_DIPLOMAT_FAILED, ftc_server,
                   _(" ⚠️ Your %s %s was captured trying to"
                     " steal %s maps!"),
@@ -1939,8 +1935,8 @@ bool spy_nuke_city(struct player *act_player, struct unit *act_unit,
   log_debug("suitcase nuke: infiltrated");
 
   /* Try to hide the nuke. */
-  if (diplomat_was_caught(act_player, act_unit, tgt_city, tgt_player,
-                          paction)) {
+  if (action_failed_dice_roll(act_player, act_unit, tgt_city, tgt_player,
+                              paction)) {
     notify_player(act_player, tgt_tile, E_MY_DIPLOMAT_FAILED, ftc_server,
                   _(" ⚠️ Your %s %s was captured trying to"
                     " hide a nuke in %s!"),
@@ -1999,65 +1995,6 @@ bool spy_nuke_city(struct player *act_player, struct unit *act_unit,
                              tgt_player, tgt_tile, tgt_city_link);
 
   return TRUE;
-}
-
-/************************************************************************//**
-  Returns TRUE iff the spy/diplomat was caught outside of a diplomatic
-  battle.
-****************************************************************************/
-static bool diplomat_was_caught(struct player *act_player,
-                                struct unit *act_unit,
-                                struct city *tgt_city,
-                                struct player *tgt_player,
-                                const struct action *act)
-{
-  int odds = action_dice_roll_odds(act_player, act_unit,
-                                   tgt_city, tgt_player,
-                                   act);
-  int your_roll;
-
-  /* fc_rand 100% of time gives opposite result if odds < 0
-  * report odds higher than 100 as simply 100 */
-  odds = CLIP(0, odds, 100);
-
-  your_roll = (int)fc_rand(100);
-
-/* DEBUG: For RNG/probability testing
-  int counts = 0;
-  for (int i=0;i<100;i++) {
-    your_roll = (int)fc_rand(100);
-    notify_player(act_player, NULL, E_UNIT_ACTION_TARGET_OTHER, ftc_server,
-                  _("<font color='#C0C0C0'><u>Operation Odds</u>: %d%%. (%d) %s</font>"),
-                  odds, your_roll, (your_roll < odds ? "<font color='#30D050'><b>SUCCESS!</b></font>"
-                                    : "<font color='#E04040'><b>FAILED!</b></font>"));
-
-    if (your_roll < odds) counts++;
-  }
-  notify_player(act_player, NULL, E_UNIT_ACTION_TARGET_OTHER, ftc_server,
-                _("%d successes."),
-                counts);
-*/
-  /* Notify players of odds to provide transparency of what's going on!
-   * Siege rams don't get "caught", but progress to next stage of sabotage resistance checking */
-  if (strcmp(utype_name_translation(unit_type_get(act_unit)), "Siege Ram")!=0) {
-
-    notify_player(act_player, NULL, E_UNIT_ACTION_TARGET_OTHER, ftc_server,
-                  _("<font color='#C0C0C0'><u>Operation Odds</u>: %d%%. %s</font>"),
-                  odds, (your_roll < odds ? "<font color='#30D050'><b>SUCCESS!</b></font>"
-                                          : "<font color='#E04040'><b>FAILED!</b></font>"));
-    /* Don't report "Investigate City" to defender if someone succeeds at it, because 
-     * they may have slipped past detection. If they didn't slip past detection, 
-       you'll know the result by whether you foil the action or not. */                                  
-    if ((act->id != ACTION_SPY_INVESTIGATE_CITY && act->id != ACTION_INV_CITY_SPEND)
-        || (your_roll >=odds)) {
-      notify_player(tgt_player, NULL, E_UNIT_ACTION_TARGET_OTHER, ftc_server,
-                  _("<font color='#C0C0C0'><u>Defense Odds</u> vs %s: %d%%. %s</font>"),
-                  action_name_translation(act),
-                  100-odds, (your_roll >= odds ? "<font color='#30D050'><b>SUCCESS!</b></font>"
-                                               : "<font color='#E04040'><b>FAILED!</b></font>"));
-    }
-  }
-  return your_roll >= odds;
 }
 
 /************************************************************************//**
@@ -2164,6 +2101,7 @@ static bool diplomat_infiltrate_tile(struct player *pplayer,
                                      struct tile *ptile,
                                      struct player **defender_owner)
 {
+  struct unit *punit;
   char link_city[MAX_LEN_LINK] = "";
   char link_diplomat[MAX_LEN_LINK];
   char link_unit[MAX_LEN_LINK];
@@ -2211,218 +2149,219 @@ static bool diplomat_infiltrate_tile(struct player *pplayer,
     } unit_list_iterate_end;
   } /******************************************************************************************************************* */
 
-  /* We don't need a _safe iterate since no transporters should be
-   * destroyed. */
-  unit_list_iterate(ptile->units, punit) {
+  if ((punit = get_diplomatic_defender(pdiplomat, pvictim, ptile))) {
     struct player *uplayer = unit_owner(punit);
 
-    /* I can't confirm if we won't deny that we weren't involved. */
-    if (uplayer == pplayer) {
-      continue;
+    if (defender_owner != NULL) {
+      /* Some action performers may want to know defender player. */
+      *defender_owner = uplayer;
     }
 
-    if (punit == pvictim
-        && !unit_has_type_flag(punit, UTYF_SUPERSPY)) {
-      /* The victim unit is defenseless unless it's a SuperSpy.
-       * Rationalization: A regular diplomat don't mind being bribed. A
-       * SuperSpy is high enough up the chain that accepting a bribe is
-       * against his own interests. */
-      continue;
-    }
+    if (diplomat_success_vs_defender(pdiplomat, punit, ptile)) {
+      /* Defending Spy/Diplomat dies. */
 
-    if (unit_has_type_flag(punit, UTYF_DIPLOMAT)
-        || unit_has_type_flag(punit, UTYF_SUPERSPY)) {
-      /* A UTYF_SUPERSPY unit may not actually be a spy, but a superboss
-       * which we cannot allow puny diplomats from getting the better
-       * of. UTYF_SUPERSPY vs UTYF_SUPERSPY in a diplomatic contest always
-       * kills the attacker. */
+      char pdiplomat_emoji[MAX_LEN_LINK];
 
-      // If "defender" is Siege Ram, pass over it to the next candidate for diplomatic combat.
-      if (punit) {
-        if (strcmp(utype_name_translation(unit_type_get(punit)), "Siege Ram")==0) {
-          continue; // skip to next unit in the list: Siege Rams don't engage in diplomatic combat.
+      /* N.B.: *_link() always returns the same pointer. */
+      sz_strlcpy(link_unit, unit_tile_link(punit));
+      sz_strlcpy(link_diplomat, unit_link(pdiplomat));
+
+      sprintf(pdiplomat_emoji, "%s", UNIT_EMOJI(pdiplomat));
+
+      notify_player(pplayer, ptile, E_ENEMY_DIPLOMAT_FAILED, ftc_server,
+                    /* TRANS: [A] Persian Spy has been eliminated by your Spy. */
+                    _(" 💥 %s %s %s %s has been eliminated by your %s %s."),
+                    (is_unit_plural(punit) ? "" : indefinite_article_for_word(nation_adjective_for_player(uplayer),true)),
+                    nation_adjective_for_player(uplayer),
+                    link_unit, UNIT_EMOJI(punit),
+                    pdiplomat_emoji, link_diplomat);
+
+      if (pcity) {
+        if (uplayer == cplayer || cplayer == NULL) {
+          notify_player(uplayer, ptile, E_MY_DIPLOMAT_FAILED, ftc_server,
+                        /* TRANS: <unit> ... <city> ... <diplomat> */
+                        _(" ⚠️ Your %s %s has been eliminated defending %s"
+                          " against %s %s %s %s."), link_unit, UNIT_EMOJI(punit),
+                        link_city,
+                        indefinite_article_for_word(nation_adjective_for_player(pplayer),false),
+                        nation_adjective_for_player(pplayer),
+                        pdiplomat_emoji, link_diplomat);
+        } else {
+          notify_player(cplayer, ptile, E_MY_DIPLOMAT_FAILED, ftc_server,
+                        /* TRANS: <nation adj> <unit> ... <city>
+                         * TRANS: ... <diplomat> */
+                        _(" ⚠️ %s %s %s %s has been eliminated defending %s against %s %s %s %s."),
+                        indefinite_article_for_word(nation_adjective_for_player(uplayer),true),
+                        nation_adjective_for_player(uplayer),
+                        link_unit, UNIT_EMOJI(punit),
+                        link_city,
+                        indefinite_article_for_word(nation_adjective_for_player(pplayer),false),
+                        nation_adjective_for_player(pplayer),
+                        pdiplomat_emoji, link_diplomat);
+          notify_player(uplayer, ptile, E_MY_DIPLOMAT_FAILED, ftc_server,
+                        /* TRANS: ... <unit> ... <nation adj> <city>
+                         * TRANS: ... <diplomat> */
+                        _(" ⚠️ Your %s %s has been eliminated in the %s city of %s "
+                          "by %s %s %s %s."), link_unit, UNIT_EMOJI(punit),
+                        nation_adjective_for_player(cplayer),
+                        link_city,
+                        indefinite_article_for_word(nation_adjective_for_player(pplayer),false),
+                        nation_adjective_for_player(pplayer),
+                        pdiplomat_emoji, link_diplomat);
+        }
+      } else {
+        if (uplayer == cplayer || cplayer == NULL) {
+          notify_player(uplayer, ptile, E_MY_DIPLOMAT_FAILED, ftc_server,
+                        /* TRANS: <unit> ... <diplomat> */
+                        _(" ⚠️ Your %s %s has been eliminated defending "
+                          "against %s %s %s %s."), link_unit, UNIT_EMOJI(punit),
+                        indefinite_article_for_word(nation_adjective_for_player(pplayer),false),
+                        nation_adjective_for_player(pplayer),
+                        pdiplomat_emoji, link_diplomat);
+        } else {
+          notify_player(cplayer, ptile, E_MY_DIPLOMAT_FAILED, ftc_server,
+                        /* TRANS: <nation adj> <unit> ... <diplomat> */
+                        _("A %s %s has been eliminated defending "
+                          "against a %s."),
+                        nation_adjective_for_player(uplayer),
+                        link_unit, link_diplomat);
+          notify_player(uplayer, ptile, E_MY_DIPLOMAT_FAILED, ftc_server,
+                        /* TRANS: <unit> ... <diplomat> */
+                        _(" ⚠️ Your %s %s has been eliminated defending "
+                          "against %s %s %s %s."), link_unit, UNIT_EMOJI(punit),
+                        indefinite_article_for_word(nation_adjective_for_player(pplayer),false),
+                        nation_adjective_for_player(pplayer),
+                        pdiplomat_emoji, link_diplomat);
         }
       }
 
-      if (defender_owner != NULL) {
-        /* Some action performers may want to know defender player. */
-        *defender_owner = uplayer;
+      pdiplomat->moves_left = MAX(0, pdiplomat->moves_left - SINGLE_MOVE);
+
+      /* Attacking unit became more experienced? */
+      if (maybe_make_veteran(pdiplomat)) {
+        notify_unit_experience(pdiplomat);
+      }
+      send_unit_info(NULL, pdiplomat);
+      wipe_unit(punit, ULR_ELIMINATED, pplayer);
+
+      /* Added, Dec 2020: client city info wasn't updating itself to the loss
+       * of the unit inside. */
+      if (pcity) {
+        city_refresh(pcity);
+        send_city_info(NULL, pcity);
       }
 
-      if (diplomat_success_vs_defender(pdiplomat, punit, ptile)) {
-        /* Defending Spy/Diplomat dies. */
+      return FALSE;
+    } else {
+      /* Attacking Spy/Diplomat dies. */
 
-        /* N.B.: *_link() always returns the same pointer. */
-        sz_strlcpy(link_unit, unit_tile_link(punit)); // victim
-        sz_strlcpy(link_diplomat, unit_link(pdiplomat)); // actor
-        char pdiplomat_emoji[MAX_LEN_LINK];
-        sprintf(pdiplomat_emoji, "%s", UNIT_EMOJI(pdiplomat));
+      const char *victim_link;
+      char pdiplomat_emoji[MAX_LEN_LINK];
 
-        notify_player(pplayer, ptile, E_ENEMY_DIPLOMAT_FAILED, ftc_server,
-                      /* TRANS: [A] Persian Spy has been eliminated by your Spy. */
-                      _(" 💥 %s %s %s %s has been eliminated by your %s %s."),
-                      (is_unit_plural(punit) ? "" : indefinite_article_for_word(nation_adjective_for_player(uplayer),true)),
-                      nation_adjective_for_player(uplayer),
-                      link_unit, UNIT_EMOJI(punit), 
-                      pdiplomat_emoji, link_diplomat);
+      /* N.B.: *_link() always returns the same pointer. */
+      sz_strlcpy(link_unit, unit_link(punit));
+      sz_strlcpy(link_diplomat, unit_tile_link(pdiplomat));
 
-        if (pcity) {  // pplayer succeeded in eliminating a spy from cplayer's city.
-          if (uplayer == cplayer || cplayer == NULL) {
-            notify_player(uplayer, ptile, E_MY_DIPLOMAT_FAILED, ftc_server,
-                          /* TRANS: <unit> ... <city> ... <diplomat> */
-                          _(" ⚠️ Your %s %s has been eliminated defending %s"
-                            " against %s %s %s %s."), link_unit, UNIT_EMOJI(punit),
-                          link_city,
-                          indefinite_article_for_word(nation_adjective_for_player(pplayer),false),
-                          nation_adjective_for_player(pplayer),
-                          pdiplomat_emoji, link_diplomat);
-          } else {
-            notify_player(cplayer, ptile, E_MY_DIPLOMAT_FAILED, ftc_server,
-                          /* TRANS: <nation adj> <unit> ... <city>
-                           * TRANS: ... <diplomat> */
-                          _(" ⚠️ %s %s %s %s has been eliminated defending %s against %s %s %s %s."),
-                          indefinite_article_for_word(nation_adjective_for_player(uplayer),true),
-                          nation_adjective_for_player(uplayer),
-                          link_unit, UNIT_EMOJI(punit),
-                          link_city,
-                          indefinite_article_for_word(nation_adjective_for_player(pplayer),false),
-                          nation_adjective_for_player(pplayer),                          
-                          pdiplomat_emoji, link_diplomat);
-            notify_player(uplayer, ptile, E_MY_DIPLOMAT_FAILED, ftc_server,
-                          /* TRANS: ... <unit> ... <nation adj> <city>
-                           * TRANS: ... <diplomat> */
-                          _(" ⚠️ Your %s %s has been eliminated in the %s city of %s "
-                            "by %s %s %s %s."), link_unit, UNIT_EMOJI(punit),
-                          nation_adjective_for_player(cplayer),
-                          link_city, 
-                          indefinite_article_for_word(nation_adjective_for_player(pplayer),false),
-                          nation_adjective_for_player(pplayer),
-                          pdiplomat_emoji, link_diplomat);
-          }
-        } 
-        else {   // pplayer succeeded in eliminating uplayer's spy. there is no city or cplayer(?)
-            notify_player(uplayer, ptile, E_MY_DIPLOMAT_FAILED, ftc_server,
-                          /* TRANS: <unit> ... <diplomat> */
-                          _(" ⚠️ Your %s %s has been eliminated defending "
-                            "against %s %s %s %s."), link_unit, UNIT_EMOJI(punit),
-                            indefinite_article_for_word(nation_adjective_for_player(pplayer),false),
-                            nation_adjective_for_player(pplayer),
-                            pdiplomat_emoji, link_diplomat);
-        }  
-        
-        pdiplomat->moves_left = MAX(0, pdiplomat->moves_left - SINGLE_MOVE);
+      sprintf(pdiplomat_emoji, "%s", UNIT_EMOJI(pdiplomat));
 
-        /* Attacking unit became more experienced? */
-        if (maybe_make_veteran(pdiplomat)) {
-          notify_unit_experience(pdiplomat);
+      notify_player(pplayer, ptile, E_MY_DIPLOMAT_FAILED, ftc_server,
+                    _(" ⚠️ Your %s %s %s eliminated by a defending %s %s %s."),
+                    link_diplomat, pdiplomat_emoji,
+                    (is_unit_plural(pdiplomat) ? "were" : "was"),
+                    nation_adjective_for_player(uplayer),
+                    UNIT_EMOJI(punit), link_unit);
+
+      if (pcity) {
+        if (uplayer == cplayer || cplayer == NULL) {
+          notify_player(uplayer, ptile, E_ENEMY_DIPLOMAT_FAILED, ftc_server,
+                        _(" 💥 Your %s %s eliminated %s %s %s %s who attacked %s."),
+                        UNIT_EMOJI(punit), link_unit,
+                        indefinite_article_for_word(nation_adjective_for_player(pplayer),false),
+                        nation_adjective_for_player(pplayer),
+                        link_diplomat, pdiplomat_emoji, link_city);
+        } else {
+          notify_player(cplayer, ptile, E_ENEMY_DIPLOMAT_FAILED, ftc_server,
+                        _(" 💥 %s %s %s %s eliminated %s %s %s %s who attacked %s."),
+                        indefinite_article_for_word(nation_adjective_for_player(uplayer),true),
+                        nation_adjective_for_player(uplayer),
+                        UNIT_EMOJI(punit), link_unit,
+                        indefinite_article_for_word(nation_adjective_for_player(pplayer),false),
+                        nation_adjective_for_player(pplayer),
+                        link_diplomat, pdiplomat_emoji, link_city);
+          notify_player(uplayer, ptile, E_ENEMY_DIPLOMAT_FAILED, ftc_server,
+                        _(" 💥 Your %s %s eliminated %s %s %s %s who attacked %s."),
+                        UNIT_EMOJI(punit), link_unit,
+                        indefinite_article_for_word(nation_adjective_for_player(pplayer),false),
+                        nation_adjective_for_player(pplayer),
+                        link_diplomat, pdiplomat_emoji, link_city);
         }
-        send_unit_info(NULL, pdiplomat);
-        wipe_unit(punit, ULR_ELIMINATED, pplayer);
-        // Added, Dec 2020: client city info wasn't updating itself to the loss of the unit inside.
-        if (pcity) {
-          city_refresh (pcity);
-          send_city_info(NULL, pcity);
+      } else {
+        if (uplayer == cplayer || cplayer == NULL) {
+          notify_player(uplayer, ptile, E_ENEMY_DIPLOMAT_FAILED, ftc_server,
+                        _(" 💥 Your %s %s killed an attacking %s %s %s in the open field."),
+                        UNIT_EMOJI(punit), link_unit,
+                        /* indefinite_article_for_word(nation_adjective_for_player(pplayer),false), */
+                        nation_adjective_for_player(pplayer),
+                        link_diplomat, pdiplomat_emoji);
+        } else {
+          notify_player(cplayer, ptile, E_ENEMY_DIPLOMAT_FAILED, ftc_server,
+                        _("A %s %s eliminated a %s %s while infiltrating our "
+                          "troops."), nation_adjective_for_player(uplayer),
+                        link_unit, nation_adjective_for_player(pplayer),
+                        link_diplomat);
+          notify_player(uplayer, ptile, E_ENEMY_DIPLOMAT_FAILED, ftc_server,
+                        _(" 💥 Your %s %s killed an attacking %s %s %s in the open field."),
+                        UNIT_EMOJI(punit), link_unit,
+                        /* indefinite_article_for_word(nation_adjective_for_player(pplayer),false), */
+                        nation_adjective_for_player(pplayer),
+                        link_diplomat, pdiplomat_emoji);
         }
+      }
 
-        return FALSE;
-      } else { // pplayer failed and lost the pdiplomat unit
-        /* Attacking Spy/Diplomat dies. */
+      /* Defending unit became more experienced? */
+      if (maybe_make_veteran(punit)) {
+        notify_unit_experience(punit);
+      }
 
-        const char *victim_link;
+      victim_link = NULL;
 
-        /* N.B.: *_link() always returns the same pointer. */
-        sz_strlcpy(link_unit, unit_link(punit)); //defender
-        sz_strlcpy(link_diplomat, unit_tile_link(pdiplomat)); //actor
-        char pdiplomat_emoji[MAX_LEN_LINK];
-        sprintf(pdiplomat_emoji, "%s", UNIT_EMOJI(pdiplomat));
+      switch (action_get_target_kind(paction)) {
+      case ATK_CITY:
+        victim_link = city_link(pcity);
+        break;
+      case ATK_UNIT:
+      case ATK_UNITS:
+        victim_link = pvictim ? unit_tile_link(pvictim)
+                              : (punit ? unit_tile_link(punit) : tile_link(ptile));
+        break;
+      case ATK_TILE:
+        victim_link = tile_link(ptile);
+        break;
+      case ATK_SELF:
+        /* How did a self targeted action end up here? */
+        fc_assert(action_get_target_kind(paction) != ATK_SELF);
+        break;
+      case ATK_COUNT:
+        break;
+      }
 
-        notify_player(pplayer, ptile, E_MY_DIPLOMAT_FAILED, ftc_server,
-                      _(" ⚠️ Your %s %s %s eliminated by a defending %s %s %s."),
-                      link_diplomat, pdiplomat_emoji, 
-                      (is_unit_plural(pdiplomat) ? "were" : "was"),
-                      nation_adjective_for_player(uplayer),
-                      UNIT_EMOJI(punit), link_unit);
+      fc_assert(victim_link != NULL);
 
-        if (pcity) {
-          if (uplayer == cplayer || cplayer == NULL) {
-            notify_player(uplayer, ptile, E_ENEMY_DIPLOMAT_FAILED, ftc_server,
-                          _(" 💥 Your %s %s eliminated %s %s %s %s who attacked %s."),
-                          UNIT_EMOJI(punit), link_unit,
-                          indefinite_article_for_word(nation_adjective_for_player(pplayer),false),
-                          nation_adjective_for_player(pplayer),
-                          link_diplomat, pdiplomat_emoji, link_city);
-          } else {
-            notify_player(cplayer, ptile, E_ENEMY_DIPLOMAT_FAILED, ftc_server,
-                          _(" 💥 %s %s %s %s eliminated %s %s %s %s who attacked %s."),
-                          indefinite_article_for_word(nation_adjective_for_player(uplayer),true),   
-                          nation_adjective_for_player(uplayer),
-                          UNIT_EMOJI(punit), link_unit,
-                          indefinite_article_for_word(nation_adjective_for_player(pplayer),false),   
-                          nation_adjective_for_player(pplayer),
-                          link_diplomat, pdiplomat_emoji, link_city);
-            notify_player(uplayer, ptile, E_ENEMY_DIPLOMAT_FAILED, ftc_server,
-                          _(" 💥 Your %s %s eliminated %s %s %s %s who attacked %s."),
-                          UNIT_EMOJI(punit), link_unit,
-                          indefinite_article_for_word(nation_adjective_for_player(pplayer),false),
-                          nation_adjective_for_player(pplayer),
-                          link_diplomat, pdiplomat_emoji, link_city);
-          }
-        } 
-        else { // pplayer failed in the open field, there is no city or cplayer?
-           
-            notify_player(uplayer, ptile, E_ENEMY_DIPLOMAT_FAILED, ftc_server,
-                          _(" 💥 Your %s %s killed an attacking %s %s %s in the open field."),
-                          UNIT_EMOJI(punit), link_unit,
-                          //indefinite_article_for_word(nation_adjective_for_player(pplayer),false),
-                          nation_adjective_for_player(pplayer),
-                          link_diplomat, pdiplomat_emoji);
-        }
+      /* Caught trying to kill the specific uplayer's unit. This
+       * means war ! */
+      action_consequence_caught(paction, pplayer, act_utype, uplayer,
+                                ptile, victim_link);
 
-	/* Defending unit became more experienced? */
-	if (maybe_make_veteran(punit)) {
-	  notify_unit_experience(punit);
-	}
-
-        victim_link = NULL;
-
-        switch (action_get_target_kind(paction)) {
-        case ATK_CITY:
-          victim_link = city_link(pcity);
-          break;
-        case ATK_UNIT:
-        case ATK_UNITS:
-          victim_link = pvictim ? unit_tile_link(pvictim)
-                                : (punit ? unit_tile_link(punit) : tile_link(ptile));
-          break;
-        case ATK_TILE:
-          victim_link = tile_link(ptile);
-          break;
-        case ATK_SELF:
-          /* How did a self targeted action end up here? */
-          fc_assert(action_get_target_kind(paction) != ATK_SELF);
-          break;
-        case ATK_COUNT:
-          break;
-        }
-
-        fc_assert(victim_link != NULL);
-
-        // Caught trying to kill the specific uplayer's unit. This
-        // means war !
-        action_consequence_caught(paction, pplayer, act_utype, uplayer,
+      /* If action took place in a city not belonging to the victim unit, then
+       * the city owner also gets a casus belli for this outrageous incident: */
+      if (pcity && (cplayer != uplayer)) {
+        action_consequence_caught(paction, pplayer, act_utype, cplayer,
                                   ptile, victim_link);
-
-        // If action took place in a city not belonging to the victim unit, then
-        // the city owner also gets a casus belli for this outrageous incident:
-        if (pcity && (cplayer != uplayer)) {
-          action_consequence_caught(paction, pplayer, act_utype, cplayer,
-                                    ptile, victim_link);
-        }
-        wipe_unit(pdiplomat, ULR_ELIMINATED, uplayer);
-        return FALSE;
       }
+      wipe_unit(pdiplomat, ULR_ELIMINATED, uplayer);
+      return FALSE;
     }
-  } unit_list_iterate_end;
+  }
 
   return TRUE;
 }

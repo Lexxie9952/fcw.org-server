@@ -4000,6 +4000,8 @@ static struct act_prob ap_diplomat_battle(const struct unit *pattacker,
                                           const struct unit *pvictim,
                                           const struct tile *tgt_tile)
 {
+  struct unit *pdefender;
+
   fc_assert_ret_val(tgt_tile, ACTPROB_NOT_KNOWN);
 
   if (!can_player_see_hypotetic_units_at(unit_owner(pattacker),
@@ -4008,30 +4010,12 @@ static struct act_prob ap_diplomat_battle(const struct unit *pattacker,
     return ACTPROB_NOT_KNOWN;
   }
 
-  unit_list_iterate(tgt_tile->units, punit) {
-    if (unit_owner(punit) == unit_owner(pattacker)) {
-      /* Won't defend against its owner. */
-      continue;
-    }
+  pdefender = get_diplomatic_defender(pattacker, pvictim, tgt_tile);
 
-    if (punit == pvictim
-        && !unit_has_type_flag(punit, UTYF_SUPERSPY)) {
-      /* The victim unit is defenseless unless it's a SuperSpy.
-       * Rationalization: A regular diplomat don't mind being bribed. A
-       * SuperSpy is high enough up the chain that accepting a bribe is
-       * against his own interests. */
-      continue;
-    }
-
-    if (!(unit_has_type_flag(punit, UTYF_DIPLOMAT)
-          || unit_has_type_flag(punit, UTYF_SUPERSPY))) {
-      /* The unit can't defend. */
-      continue;
-    }
-
+  if (pdefender) {
     /* There will be a diplomatic battle in stead of an action. */
-    return ap_dipl_battle_win(pattacker, punit);
-  } unit_list_iterate_end;
+    return ap_dipl_battle_win(pattacker, pdefender);
+  };
 
   /* No diplomatic battle will occur. */
   return ACTPROB_CERTAIN;
@@ -4297,7 +4281,8 @@ action_prob(const action_id wanted_action,
     /* TODO */
     break;
   case ACTION_AIRLIFT:
-    /* TODO */
+    /* Possible when not blocked by is_action_possible() */
+    chance = ACTPROB_CERTAIN;
     break;
   case ACTION_ATTACK:
   case ACTION_SUICIDE_ATTACK:
@@ -5425,7 +5410,8 @@ int action_dice_roll_odds(const struct player *act_player,
 
   odds += action_odds;
 
-  return odds;
+  /* Odds are between 0% and 100%. */
+  return CLIP(0, odds, 100);
 }
 
 /**********************************************************************//**

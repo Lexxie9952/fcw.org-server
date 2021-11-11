@@ -648,10 +648,13 @@ void hud_units::update_actions(unit_list *punits)
                                       " (Selected %1 units)", n))
                .arg(n);
   } else if (num > 1) {
+    QByteArray ut_bytes;
+
+    ut_bytes = snum.toLocal8Bit();
     /* TRANS: preserve leading space */
     text_str = text_str + QString(PL_(" +%1 unit",
                                       " +%1 units", num-1))
-                                  .arg(snum.toLocal8Bit().data());
+                                  .arg(ut_bytes.data());
   }
   text_label.setTextFormat(Qt::PlainText);
   text_label.setText(text_str);
@@ -1659,6 +1662,7 @@ void show_new_turn_info()
   QList<hud_text *> close_list;
   struct research *research;
   int i;
+  char buf[25];
 
   if (!client_has_player()
       || !gui()->qt_settings.show_new_turn_text) {
@@ -1684,9 +1688,14 @@ void show_new_turn_info()
         + QString::number(research->client.researching_cost) + ")";
   }
   s = s + "\n" + science_dialog_text() + "\n";
-  s = s + QString(_("Gold: %1 (+%2)"))
+
+  /* Can't use QString().sprintf() as msys libintl.h defines sprintf() as a macro */
+  fc_snprintf(buf, sizeof(buf), "%+d", player_get_expected_income(client.conn.playing));
+
+  /* TRANS: current gold, then loss/gain per turn */
+  s = s + QString(_("Gold: %1 (%2)"))
       .arg(client.conn.playing->economic.gold)
-      .arg(player_get_expected_income(client.conn.playing));
+      .arg(buf);
   ht = new hud_text(s, 5, gui()->mapview_wdg);
   ht->show_me();
 }
