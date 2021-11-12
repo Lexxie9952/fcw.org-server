@@ -2475,6 +2475,7 @@ void package_city(struct city *pcity, struct packet_city_info *packet,
   packet->buy_cost = city_production_buy_gold_cost(pcity);
   packet->hangry = pcity->hangry;
   packet->anarchy = pcity->anarchy;
+  packet->rapture_status = pcity->rapture_status;
 
   if (packet->size != ppl) {
     static bool recursion = FALSE;

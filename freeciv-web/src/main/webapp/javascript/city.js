@@ -895,8 +895,19 @@ function show_city_dialog(pcity)
   $('#rapture_status').attr('title', get_city_state_description(get_city_state(pcity),next_state));
   
   $('#rapture_food').html(rapture_food_status_html);
-   
-  $('#rapture_status').html("<div class='"+rapture_status_class+"' style='font-weight:bold;padding-bottom:9px;'>"+get_city_state(pcity)+"</div>");
+  
+  var rapture_status_icon = "";
+  switch (pcity.rapture_status) {
+    case 1:
+      rapture_status_icon = "<img id='rstatus_icon' class='v' src='/images/e/comet.png' title='rapture paused'>"
+      break;
+    case 2:
+    case 3:
+      rapture_status_icon = "<img id='rstatus_icon' class='v' src='/images/e/star2.png' title='can continue rapture'>"
+      break;
+  }
+  $('#rapture_status').html("<div>"+ rapture_status_icon + "<span class='"+rapture_status_class+"' style='font-weight:bold;padding-bottom:9px;'>"
+    + get_city_state(pcity)+"</span></div>");
   $('#rapture_status').tooltip({
     tooltipClass: "wider-tooltip" , position: { my:"center bottom", at: "center top-3"},
     show: { delay:200, effect:"none", duration: 0 }, hide: {delay:120, effect:"none", duration: 0}
