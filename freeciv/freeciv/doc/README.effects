@@ -509,6 +509,14 @@ Pollu_Prod_Pct
 Rapture_Grow
     Can rapture grow cities.
 
+Rapture_Rate_Pm
+    The turn frequency rate at which a city raptures (under rapturedelay==1)
+    1000: Every turn
+    667:  Two out of three turns.
+    500:  Half the turns, etc.
+    NOTE: for backward compat, a rate of 0 is treated as the formerly 
+    hard-coded assumption that the rate is 1000pm.
+
 Retire_Pct
     The chance that unit gets retired (removed) when turn changes.
     Retirement only happens if there are no enemy units or cities within

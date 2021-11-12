@@ -370,7 +370,8 @@ struct city {
 
   int anarchy;                  /* anarchy rounds count */
   int hangry;                   /* hangry rounds count */
-  int rapture;                  /* rapture rounds count */ 
+  int rapture;                  /* rapture rounds count */
+  int rapture_status;           /* reason/timing code for rapture status/delay */
   int turn_founded;
   int turn_last_built;
 
@@ -565,6 +566,8 @@ bool city_happy(const struct city *pcity);  /* generally use celebrating instead
 bool city_unhappy(const struct city *pcity);                /* anarchy??? */
 bool base_city_celebrating(const struct city *pcity);
 bool city_celebrating(const struct city *pcity);            /* love the king ??? */
+bool is_rapture_turn(const struct city *pcity, int idx2);   /* rapturedelay, EFT_RAPTURE_RATE_PM */
+int city_would_rapture(const struct city *pcity);           /* reason/timing code for (non)rapture */
 bool city_rapture_grow(const struct city *pcity);
 bool city_is_occupied(const struct city *pcity);
 

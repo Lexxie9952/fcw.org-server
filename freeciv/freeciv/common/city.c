@@ -1790,15 +1790,79 @@ bool city_celebrating(const struct city *pcity)
 }
 
 /**********************************************************************//**
+The turns on which a city can rapture are altered by:
+(1) EFT_RAPTURE_RATE_PM (e.g., 500 is half of turns, 1000 is every turn),
+(2) game.info.rapturedelay == x, further slows all rapture to 1/x speed
+**************************************************************************/
+bool is_rapture_turn(const struct city *pcity, int idx)
+{
+  int idx2 = idx-1;
+
+  float rate;
+  int rate_pm = get_city_bonus(pcity, EFT_RAPTURE_RATE_PM);
+
+  if (rate_pm) {
+    rate = rate_pm;
+  } else {
+    /* ruleset compat: default to 1000 ‰ if not set */
+    rate = 1000;
+  }
+
+  rate /= (game.info.rapturedelay*1000);
+
+  /* Each time +=rate crosses a whole number boundary,
+     we qualify for another turn of rapture. */
+  return (int)(idx*rate) != (int)(idx2*rate);
+}
+
+/**********************************************************************//**
+Returns bitcode helping us notify the user about rapture timing.
+  code & 1 = Qualifies to rapture and WILL rapture NOW.
+  code & 2 = Qualifies to rapture BUT is DELAYED, CAN rapture NEXT TURN.
+i.e.:
+0 = Doesn't qualify, OR is delayed this turn AND next turn.  
+1 = Raptured now but can't next turn, due to rate delay or rapturedelay.
+2 = Delayed now but can rapture next turn.
+3 = Raptured now and can rapture next turn.
+**************************************************************************/
+int city_would_rapture(const struct city *pcity)
+{
+  int code = 0;
+
+  if (pcity->rapture > 0 && pcity->surplus[O_FOOD] > 0
+      && get_city_bonus(pcity, EFT_RAPTURE_GROW) > 0) {
+
+    bool now  = is_rapture_turn(pcity, pcity->rapture);
+    bool next = is_rapture_turn(pcity, pcity->rapture+1);
+
+    if (now)  code |= 1;
+    if (next) code |= 2;
+  }
+
+  return code;
+} 
+
+
+/**********************************************************************//**
   Returns whether city is growing by rapture.
 **************************************************************************/
 bool city_rapture_grow(const struct city *pcity)
 {
   /* .rapture is checked instead of city_celebrating() because this
      function is called after .was_happy was updated. */
+
+  if (pcity->rapture > 0 && pcity->surplus[O_FOOD] > 0
+      && get_city_bonus(pcity, EFT_RAPTURE_GROW) > 0) {
+
+    return is_rapture_turn(pcity, pcity->rapture);
+  }
+
+  return false;
+/* old code that does not use is_rapture_turn(..):
   return (pcity->rapture > 0 && pcity->surplus[O_FOOD] > 0
 	  && (pcity->rapture % game.info.rapturedelay) == 0
           && get_city_bonus(pcity, EFT_RAPTURE_GROW) > 0);
+*/
 }
 
 /**********************************************************************//**

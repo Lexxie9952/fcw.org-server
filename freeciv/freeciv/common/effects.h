@@ -343,6 +343,10 @@ extern "C" {
 /* Adds raw value bonus to final defense bonus of the terrain (not multiply.) */
 #define SPECENUM_VALUE134 EFT_TERRAIN_DEFEND_ADD_BONUS
 #define SPECENUM_VALUE134NAME "Terrain_Defend_Add_Bonus"
+/* The rate of rapture (at rapturedelay=1). 1000 == every turn; 800 == 4 out of 5 turns, etc.
+   If not set, the game uses the formerly hard-coded rate of 1000 (for ruleset compat.) */
+#define SPECENUM_VALUE135 EFT_RAPTURE_RATE_PM
+#define SPECENUM_VALUE135NAME "Rapture_Rate_Pm"
 
 /* FCW does not have /common and needs to hard code any changes or re-ordering of the above in effects.js */
 /********************************************************************************************************~*/

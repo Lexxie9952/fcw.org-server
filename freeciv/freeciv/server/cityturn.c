@@ -1104,8 +1104,10 @@ static bool city_increase_size(struct city *pcity, struct player *nationality)
   } trade_partners_iterate_end;
 
   notify_player(powner, city_tile(pcity), E_CITY_GROWTH, ftc_server,
-                _("➕ %s grows to size %d."),
-                city_link(pcity), city_size_get(pcity));
+                _("➕ %s %s to size %d."),
+                city_link(pcity), 
+                (rapture_grow ? "rapture grows" : "grows"),
+                city_size_get(pcity));
 
   /* Deprecated signal. Connect your lua functions to "city_size_change" that's
    * emitted from calling functions which know the 'reason' of the increase. */
@@ -1258,7 +1260,7 @@ static bool city_populate(struct city *pcity, struct player *nationality)
         if (gulag) {
           notify_player(city_owner(pcity), city_tile(pcity),
                         E_CITY_FAMINE, ftc_server,
-                        _("Martial law force of %d not enough to suppress famine disorder in %s."),
+                        _("Martial force of %d not enough to suppress famine disorder in %s."),
                          gulag_force, city_link(pcity));          
         }
         return true; // indicates city is hangry from starvation
@@ -3568,11 +3570,37 @@ static void update_city_activity(struct city *pcity)
 
     /* City population updated here, after the rapture stuff above. --Jing */
     saved_id = pcity->id;
+    pcity->rapture_status = city_would_rapture(pcity);
     city_is_hangry = city_populate(pcity, pplayer);
     if (NULL == player_city_by_number(pplayer, saved_id)) {
       return;
     }
-  
+
+    /* Reason/timing codes for any contexts where rapture gets delayed. */
+    /* 1 = Raptured now but can't next turn because rapture_rate and/or rapturedelay */
+    if (pcity->rapture_status == 1) {
+      notify_player(pplayer, city_tile(pcity), E_CITY_NORMAL, ftc_server,
+                    _("[`comet`]%s will pause rapture this turn."),
+                    city_link(pcity));
+    }
+    /* 2 = Delayed now but can rapture next turn */
+    else if (pcity->rapture_status == 2) {
+        notify_player(pplayer, city_tile(pcity), E_CITY_NORMAL, ftc_server,
+                      _("[`comet`]%s paused rapture."),
+                      city_link(pcity));
+    }
+    /* 3 = Raptured now and can rapture next turn. */
+    if (pcity->rapture_status & 2) { /* status of 2||3 may notify */
+      /* If/when rapture is never delayed, this message is redundant. */
+      int rrate = get_city_bonus(pcity, EFT_RAPTURE_RATE_PM);   
+      bool redundant = game.info.rapturedelay == 1 && (rrate == 0 || rrate == 1000);
+      if (!redundant) {
+        notify_player(pplayer, city_tile(pcity), E_CITY_NORMAL, ftc_server,
+                      _("[`star2`]%s can rapture this turn."),
+                      city_link(pcity));
+      }
+    }
+
     pcity->did_sell = FALSE;
     pcity->did_buy = FALSE;
     pcity->airlift = city_airlift_max(pcity);
