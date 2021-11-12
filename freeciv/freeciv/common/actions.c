@@ -5349,15 +5349,15 @@ int action_dice_roll_initial_odds(const struct action *paction)
   case ACTION_STEAL_MAPS_ESC:
   case ACTION_SPY_NUKE:
   case ACTION_SPY_NUKE_ESC:
+  case ACTION_SPY_INVESTIGATE_CITY:
+  case ACTION_INV_CITY_SPEND:
+  case ACTION_SPY_POISON:
+  case ACTION_SPY_POISON_ESC:
     /* Take the initial odds from the diplchance setting. */
     return server_setting_value_int_get(
                server_setting_by_name("diplchance"));
   case ACTION_ESTABLISH_EMBASSY:
   case ACTION_ESTABLISH_EMBASSY_STAY:
-  case ACTION_SPY_INVESTIGATE_CITY:
-  case ACTION_INV_CITY_SPEND:
-  case ACTION_SPY_POISON:
-  case ACTION_SPY_POISON_ESC:
   case ACTION_TRADE_ROUTE:
   case ACTION_MARKETPLACE:
   case ACTION_HELP_WONDER:
