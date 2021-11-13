@@ -827,6 +827,8 @@ static struct player *need_war_player_hlp(const struct unit *actor,
                                           const struct city *target_city,
                                           const struct unit *target_unit)
 {
+  struct player *actor_player = unit_owner(actor);
+
   if (action_id_get_actor_kind(act) != AAK_UNIT) {
     /* No unit can ever do this action so it isn't relevant. */
     return NULL;
@@ -862,6 +864,26 @@ static struct player *need_war_player_hlp(const struct unit *actor,
     }
     break;
 
+  case ACTION_PARADROP:
+    /* Target is a tile but a city or unit can block it. */
+    if (target_tile
+        && map_is_known_and_seen(target_tile, actor_player, V_MAIN)) {
+      /* Seen tile unit savers */
+
+      struct city *tcity;
+
+      if ((tcity = is_non_attack_city_tile(target_tile, actor_player))) {
+        return city_owner(tcity);
+      }
+
+      unit_list_iterate(target_tile->units, pother) {
+        if (can_player_see_unit(actor_player, pother)
+            && pplayers_non_attack(actor_player, unit_owner(pother))) {
+          return unit_owner(pother);
+        }
+      } unit_list_iterate_end;
+    }
+    break;
   case ACTION_ESTABLISH_EMBASSY:
   case ACTION_ESTABLISH_EMBASSY_STAY:
   case ACTION_SPY_INVESTIGATE_CITY:
@@ -905,7 +927,6 @@ static struct player *need_war_player_hlp(const struct unit *actor,
   case ACTION_DISBAND_UNIT:
   case ACTION_HOME_CITY:
   case ACTION_UPGRADE_UNIT:
-  case ACTION_PARADROP:
   case ACTION_AIRLIFT:
   case ACTION_HEAL_UNIT:
   case ACTION_STRIKE_BUILDING:
@@ -1311,6 +1332,15 @@ static struct ane_expl *expl_act_not_enabl(struct unit *punit,
              && target_tile
              && terrain_has_flag(tile_terrain(target_tile),
                                  TER_NO_CITIES)) {
+    explnat->kind = ANEK_BAD_TERRAIN_TGT;
+    explnat->no_act_terrain = tile_terrain(target_tile);
+  } else if (action_id_has_result_safe(act_id, ACTION_PARADROP)
+             && target_tile
+             && map_is_known_and_seen(target_tile, unit_owner(punit),
+                                      V_MAIN)
+             && (!can_unit_exist_at_tile(&(wld.map), punit, target_tile)
+                 && (!game.info.paradrop_to_transport
+                     || !unit_could_load_at(punit, target_tile)))) {
     explnat->kind = ANEK_BAD_TERRAIN_TGT;
     explnat->no_act_terrain = tile_terrain(target_tile);
   } else if (target_tile

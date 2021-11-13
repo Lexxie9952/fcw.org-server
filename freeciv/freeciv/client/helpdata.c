@@ -2588,6 +2588,18 @@ char *helptext_unit(char *buf, size_t bufsz, struct player *pplayer,
       }
 
       {
+        int odds = action_dice_roll_initial_odds(paction);
+
+        if (odds != ACTION_ODDS_PCT_DICE_ROLL_NA) {
+          /* TODO: try to detect that the odds always will be 100% because
+           * of the Action_Odds_Pct effect. */
+          cat_snprintf(buf, bufsz,
+                       _("  %s may fail because of a dice throw.\n"),
+                       BULLET);
+        }
+      }
+
+      {
         struct universal req_pattern[] = {
           { .kind = VUT_ACTION, .value.action = paction },
           { .kind = VUT_UTYPE,  .value.utype = utype },
@@ -2595,6 +2607,9 @@ char *helptext_unit(char *buf, size_t bufsz, struct player *pplayer,
         int success_move_frag_cost = effect_value_from_universals(
             EFT_ACTION_SUCCESS_MOVE_COST,
             req_pattern, ARRAY_SIZE(req_pattern));
+
+        success_move_frag_cost += utype_pays_mp_for_action_base(paction,
+                                                                utype);
 
         /* Can't print the exact amount of move fragments. It isn't known.
          * The action performer function may subtract some movement itself
@@ -2821,11 +2836,6 @@ char *helptext_unit(char *buf, size_t bufsz, struct player *pplayer,
                        _("  %s weaker when tired. If performed with less "
                          "than a single move point left the attack power "
                          "is reduced accordingly.\n"), BULLET);
-        }
-        if (action_has_result(paction, ACTION_ATTACK)
-            && utype_has_flag(utype, UTYF_ONEATTACK)) {
-          cat_snprintf(buf, bufsz,
-                       _("  %s ends this unit's turn.\n"), BULLET);
         }
         break;
       case ACTION_CONVERT:

@@ -16,6 +16,8 @@ AC_CANONICAL_HOST
 AC_USE_SYSTEM_EXTENSIONS
 AC_C_BIGENDIAN
 
+FC_EMSCRIPTEN
+
 BUG_URL="$PACKAGE_BUGREPORT"
 WIKI_URL="http://www.freeciv.org/"
 MAIL_ADDRESS="freeciv-dev AT freelists.org"
@@ -123,7 +125,15 @@ AC_ARG_ENABLE([fcdb],
   AS_HELP_STRING([--enable-fcdb[=no/all/mysql/odbc/postgres/sqlite3]],
                  [database backends [sqlite3](no, or list)]),
 [databases=${enableval}],
-[databases=sqlite3])
+[if test "x$emscripten" != "xyes" ; then
+  databases=sqlite3
+else
+  databases=no
+fi])
+
+if test "x$emscripten" = "xyes" && test "x$databases" != "xno" ; then
+  AC_MSG_ERROR([fcdb not supported with emscripten])
+fi
 
 for db in $(echo $databases | $SED 's/,/ /g') ; do
   if test "x$db" = "xall" ; then
@@ -597,10 +607,13 @@ PKG_PROG_PKG_CONFIG
 if test "x$PKG_CONFIG" = "x" ; then
   AC_MSG_ERROR([pkg-config not found])
 fi
-PKG_CHECK_MODULES([CURL], [libcurl >= 7.15.4],,
-    [AC_MSG_ERROR([libcurl development files required])])
-UTILITY_CFLAGS="${UTILITY_CFLAGS} ${CURL_CFLAGS}"
-UTILITY_LIBS="${UTILITY_LIBS} ${CURL_LIBS}"
+
+if test "x$emscripten" != "xyes" ; then
+  PKG_CHECK_MODULES([CURL], [libcurl >= 7.15.4],,
+      [AC_MSG_ERROR([libcurl development files required])])
+  UTILITY_CFLAGS="${UTILITY_CFLAGS} ${CURL_CFLAGS}"
+  UTILITY_LIBS="${UTILITY_LIBS} ${CURL_LIBS}"
+fi
 
 AC_ARG_ENABLE([xml-registry],
   AS_HELP_STRING([--enable-xml-registry], [build xml-backend for registry (WIP)]),
@@ -1063,13 +1076,21 @@ dnl freeciv-modpack checks
 AC_ARG_ENABLE([fcmp],
   AS_HELP_STRING([--enable-fcmp=no/yes/gtk3/gtk3x/qt/cli/all/auto], [build freeciv-modpack-program [auto]]),
 [fc_mp=${enableval}],
-[fc_mp=auto])
+[if test "x$emscripten" = "xyes" ; then
+  fc_mp=no
+else
+  fc_mp=auto
+fi])
 
 fcmp_cli=no
 fcmp_gtk3=no
 fcmp_gtk3x=no
 fcmp_qt=no
 fcmp_list=
+
+if test "x$fc_mp" != "xno" && test "x$emscripten" = "xyes" ; then
+  AC_MSG_ERROR([fcmp not supported with emscripten])
+fi
 
 if test "x$fc_mp" = "xcli" ; then
   dnl Only cli requested -> no gui needed
@@ -1130,7 +1151,7 @@ fi
 
 if test "x$req_fcmp_gtk3x" = "xyes" ||
    test "x$modinst" = "xall" || test "x$modinst" = "xauto" ; then
-  PKG_CHECK_MODULES([GTK3X_MP], [gtk4 >= 3.96.0],
+  PKG_CHECK_MODULES([GTK3X_MP], [gtk4 >= 3.98.1],
 [
   GTK3X_MP_CFLAGS="$GTK3X_MP_CFLAGS -DGDK_VERSION_MIN_REQUIRED=GDK_VERSION_3_94"
   GTK3X_MP_CFLAGS="$GTK3X_MP_CFLAGS -DGLIB_VERSION_MIN_REQUIRED=GLIB_VERSION_2_60"

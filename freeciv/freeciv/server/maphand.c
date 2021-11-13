@@ -541,6 +541,9 @@ void send_tile_info(struct conn_list *dest, struct tile *ptile,
       info.placing = (NULL != ptile->placing)
                       ? extra_number(ptile->placing)
                       : -1;
+      info.place_turn = (NULL != ptile->placing)
+                         ? game.info.turn + ptile->infra_turns
+                         : 0;
 
       if (pplayer != NULL) {
 	info.extras = map_get_player_tile(ptile, pplayer)->extras;
@@ -579,6 +582,7 @@ void send_tile_info(struct conn_list *dest, struct tile *ptile,
                        ? extra_number(plrtile->resource)
                        : MAX_EXTRA_TYPES;
       info.placing = -1;
+      info.place_turn = 0;
 
       info.extras = plrtile->extras;
 
@@ -602,6 +606,7 @@ void send_tile_info(struct conn_list *dest, struct tile *ptile,
                       : terrain_count();
       info.resource = MAX_EXTRA_TYPES;
       info.placing = -1;
+      info.place_turn = 0;
 
       if (!is_longturn()) {info.extras = ptile->extras; } else {BV_CLR_ALL(info.extras); } //WebGL client needs to know which tiles are rivers on game start.
 

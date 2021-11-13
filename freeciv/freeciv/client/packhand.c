@@ -132,6 +132,8 @@ static struct {
 
 extern const char forced_tileset_name[];
 
+static int last_turn = 0;
+
 /************************************************************************//**
   Called below, and by client/client_main.c client_game_free()
 ****************************************************************************/
@@ -1266,6 +1268,11 @@ void handle_new_year(int year, int fragments, int turn)
   }
 
   agents_new_turn();
+
+  if (last_turn != turn) {
+    start_turn();
+    last_turn = turn;
+  }
 }
 
 /************************************************************************//**
@@ -2934,14 +2941,17 @@ void handle_tile_info(const struct packet_tile_info *packet)
     if (ptile->placing != NULL) {
       tile_changed = TRUE;
       ptile->placing = NULL;
+      ptile->infra_turns = 0;
     }
   } else {
     struct extra_type *old = ptile->placing;
 
     ptile->placing = extra_by_number(packet->placing);
-    if (ptile->placing != old) {
+    if (ptile->placing != old
+        || ptile->infra_turns != packet->place_turn - game.info.turn) {
       tile_changed = TRUE;
     }
+    ptile->infra_turns = packet->place_turn - game.info.turn;
   }
 
   if (NULL == tile_worked(ptile)

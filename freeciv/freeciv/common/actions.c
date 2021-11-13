@@ -34,14 +34,23 @@
 #include "tile.h"
 #include "unit.h"
 
-/* Custom data type for obligatory hard action requirements. */
-struct obligatory_req {
+/* Custom data types for obligatory hard action requirements. */
+
+/* A contradiction to an obligatory hard requirement. */
+struct action_enabler_contradiction {
   /* A requirement that contradicts the obligatory hard requirement. */
-  struct requirement contradiction;
+  struct requirement req;
 
   /* Is the obligatory hard requirement in the action enabler's target
    * requirement vector? If FALSE it is in its actor requirement vector. */
   bool is_target;
+};
+
+/* An obligatory hard action requirement */
+struct obligatory_req {
+  /* The requirement is fulfilled if the action enabler doesn't contradict
+   * this. */
+  struct action_enabler_contradiction contra;
 
   /* The error message to show when the hard obligatory requirement is
    * missing. Must be there. */
@@ -142,8 +151,8 @@ static void oblig_hard_req_register(struct requirement contradiction,
   fc_assert_ret(error_message);
 
   /* Pack the obligatory hard requirement. */
-  oreq.contradiction = contradiction;
-  oreq.is_target = is_target;
+  oreq.contra.req = contradiction;
+  oreq.contra.is_target = is_target;
   oreq.error_msg = error_message;
 
   /* Add the obligatory hard requirement to each action it applies to. */
@@ -1755,10 +1764,10 @@ action_enabler_obligatory_reqs_missing(struct action_enabler *enabler)
     struct requirement_vector *ae_vec;
 
     /* Select action enabler requirement vector. */
-    ae_vec = (obreq->is_target ? &enabler->target_reqs :
-                                 &enabler->actor_reqs);
+    ae_vec = (obreq->contra.is_target ? &enabler->target_reqs :
+                                        &enabler->actor_reqs);
 
-    if (!does_req_contradicts_reqs(&obreq->contradiction, ae_vec)) {
+    if (!does_req_contradicts_reqs(&obreq->contra.req, ae_vec)) {
       /* Sanity check: doesn't return NULL when a problem is detected. */
       fc_assert_ret_val(obreq->error_msg,
                         "Missing obligatory hard requirement for %s.");
@@ -1794,19 +1803,19 @@ bool action_enabler_obligatory_reqs_add(struct action_enabler *enabler)
     struct requirement_vector *ae_vec;
 
     /* Select action enabler requirement vector. */
-    ae_vec = (obreq->is_target ? &enabler->target_reqs :
-                                 &enabler->actor_reqs);
+    ae_vec = (obreq->contra.is_target ? &enabler->target_reqs :
+                                        &enabler->actor_reqs);
 
-    if (!does_req_contradicts_reqs(&obreq->contradiction, ae_vec)) {
+    if (!does_req_contradicts_reqs(&obreq->contra.req, ae_vec)) {
       struct requirement missing;
 
       /* Change the requirement from what should conflict to what is
        * wanted. */
-      missing.present = !obreq->contradiction.present;
-      missing.source = obreq->contradiction.source;
-      missing.range = obreq->contradiction.range;
-      missing.survives = obreq->contradiction.survives;
-      missing.quiet = obreq->contradiction.quiet;
+      missing.present = !obreq->contra.req.present;
+      missing.source = obreq->contra.req.source;
+      missing.range = obreq->contra.req.range;
+      missing.survives = obreq->contra.req.survives;
+      missing.quiet = obreq->contra.req.quiet;
 
       /* Insert the missing requirement. */
       requirement_vector_append(ae_vec, missing);
@@ -2842,6 +2851,34 @@ is_action_possible(const action_id wanted_action,
     /* Info leak: The player knows if he knows the target tile. */
     if (!plr_knows_tile(actor_player, target_tile)) {
       return TRI_NO;
+    }
+
+    if (plr_sees_tile(actor_player, target_tile)) {
+      /* Check for seen stuff that may kill the actor unit. */
+
+      /* Reason: Keep the old rules. Be merciful. */
+      /* Info leak: The player sees the target tile. */
+      if (!can_unit_exist_at_tile(&(wld.map), actor_unit, target_tile)
+          && (!game.info.paradrop_to_transport
+              || !unit_could_load_at(actor_unit, target_tile))) {
+        return TRI_NO;
+      }
+
+      /* Reason: Keep the old rules. Be merciful. */
+      /* Info leak: The player sees the target tile. */
+      if (is_non_attack_city_tile(target_tile, actor_player)) {
+        return TRI_NO;
+      }
+
+      /* Reason: Keep the old rules. Be merciful. */
+      /* Info leak: The player sees all units checked. Invisible units are
+       * igonered. */
+      unit_list_iterate(target_tile->units, pother) {
+        if (can_player_see_unit(actor_player, pother)
+            && pplayers_non_attack(actor_player, unit_owner(pother))) {
+          return TRI_NO;
+        }
+      } unit_list_iterate_end;
     }
 
     /* Reason: Keep paratroopers_range working. */
@@ -5284,23 +5321,15 @@ struct act_prob action_prob_fall_back(const struct act_prob *ap1,
 }
 
 /**********************************************************************//**
-  Returns the odds of an action not failing its dice roll.
+  Returns the initial odds of an action not failing its dice roll.
 **************************************************************************/
-int action_dice_roll_odds(const struct player *act_player,
-                          const struct unit *act_unit,
-                          const struct city *tgt_city,
-                          const struct player *tgt_player,
-                          const struct action *paction)
+int action_dice_roll_initial_odds(const struct action *paction)
 {
-  int odds = 0;
-  float action_odds;
-
   switch ((enum gen_action)paction->id) {
   case ACTION_STRIKE_BUILDING:
   case ACTION_STRIKE_PRODUCTION:
     /* No initial odds. */
-    odds = 100;
-    break;
+    return 100;
   case ACTION_SPY_SPREAD_PLAGUE:
   case ACTION_SPY_STEAL_TECH:
   case ACTION_SPY_STEAL_TECH_ESC:
@@ -5320,16 +5349,15 @@ int action_dice_roll_odds(const struct player *act_player,
   case ACTION_STEAL_MAPS_ESC:
   case ACTION_SPY_NUKE:
   case ACTION_SPY_NUKE_ESC:
-    /* Take the odds from the diplchance setting. */
-    odds = server_setting_value_int_get(
-               server_setting_by_name("diplchance"));
-    break;
-  case ACTION_ESTABLISH_EMBASSY:
-  case ACTION_ESTABLISH_EMBASSY_STAY:
   case ACTION_SPY_INVESTIGATE_CITY:
   case ACTION_INV_CITY_SPEND:
   case ACTION_SPY_POISON:
   case ACTION_SPY_POISON_ESC:
+    /* Take the initial odds from the diplchance setting. */
+    return server_setting_value_int_get(
+               server_setting_by_name("diplchance"));
+  case ACTION_ESTABLISH_EMBASSY:
+  case ACTION_ESTABLISH_EMBASSY_STAY:
   case ACTION_TRADE_ROUTE:
   case ACTION_MARKETPLACE:
   case ACTION_HELP_WONDER:
@@ -5382,10 +5410,31 @@ int action_dice_roll_odds(const struct player *act_player,
   case ACTION_USER_ACTION3:
   case ACTION_COUNT:
     /* No additional dice roll. */
-    odds = 0;
-    fc_assert(odds != 0);
     break;
   }
+
+  /* The odds of the action not being stopped by its dice roll when the dice
+   * isn't thrown is 100%. ACTION_ODDS_PCT_DICE_ROLL_NA is above 100% */
+  return ACTION_ODDS_PCT_DICE_ROLL_NA;
+}
+
+/**********************************************************************//**
+  Returns the odds of an action not failing its dice roll.
+**************************************************************************/
+int action_dice_roll_odds(const struct player *act_player,
+                          const struct unit *act_unit,
+                          const struct city *tgt_city,
+                          const struct player *tgt_player,
+                          const struct action *paction)
+{
+  int odds = action_dice_roll_initial_odds(paction);
+  float action_odds;
+
+  fc_assert_action_msg(odds >= 0 && odds <= 100,
+                       odds = 100,
+                       "Bad initial odds for action number %d."
+                       " Does it roll the dice at all?",
+                       paction->id);
 
   /* Let the Action_Odds_Pct effect modify the odds. The advantage of doing
    * it this way in stead of rolling twice is that Action_Odds_Pct can

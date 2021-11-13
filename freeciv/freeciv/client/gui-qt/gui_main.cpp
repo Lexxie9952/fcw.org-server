@@ -70,7 +70,6 @@ static fc_client *freeciv_qt;
 static QApplication *qapp = nullptr;
 
 void reset_unit_table(void);
-static void apply_city_font(struct option *poption);
 static void apply_font(struct option *poption);
 static void apply_help_font(struct option *poption);
 static void apply_notify_font(struct option *poption);
@@ -209,13 +208,7 @@ void qtg_options_extra_init()
                           apply_font);
   option_var_set_callback(gui_qt_font_default,
                           apply_font);
-  option_var_set_callback(gui_qt_font_city_label,
-                          apply_city_font);
-  option_var_set_callback(gui_qt_font_help_label,
-                          apply_help_font);
   option_var_set_callback(gui_qt_font_help_text,
-                          apply_help_font);
-  option_var_set_callback(gui_qt_font_help_title,
                           apply_help_font);
   option_var_set_callback(gui_qt_font_chatline,
                           apply_font);
@@ -395,6 +388,7 @@ static void apply_font(struct option *poption)
     real_science_report_dialog_update(nullptr);
     fc_font::instance()->get_mapfont_size();
   }
+  apply_help_font(poption);
 }
 
 /**********************************************************************//**
@@ -427,13 +421,6 @@ static void apply_notify_font(struct option *poption)
     qtg_gui_update_font("notify_label", option_font_get(poption));
     restart_notify_dialogs();
   }
-}
-
-/**********************************************************************//**
-  Changes city label font
-**************************************************************************/
-void apply_city_font(option *poption)
-{
   if (gui() && qtg_get_current_client_page() == PAGE_GAME) {
     qtg_gui_update_font("city_label", option_font_get(poption));
     city_font_update();
@@ -517,27 +504,21 @@ void reset_unit_table(void)
 **************************************************************************/
 void popup_quit_dialog()
 {
-  hud_message_box ask(gui()->central_wdg);
-  int ret;
+  hud_message_box *ask = new hud_message_box(gui()->central_wdg);
 
-  ask.setStandardButtons(QMessageBox::Cancel | QMessageBox::Ok);
-  ask.setDefaultButton(QMessageBox::Cancel);
-  ask.set_text_title(_("Are you sure you want to quit?"),  _("Quit?"));
-  ret = ask.exec();
-
-  switch (ret) {
-  case QMessageBox::Cancel:
-    return;
-    break;
-  case QMessageBox::Ok:
+  ask->setStandardButtons(QMessageBox::Cancel | QMessageBox::Ok);
+  ask->setDefaultButton(QMessageBox::Cancel);
+  ask->set_text_title(_("Are you sure you want to quit?"),  _("Quit?"));
+  ask->setAttribute(Qt::WA_DeleteOnClose);
+  QObject::connect(ask, &hud_message_box::accepted, [=]() {
     start_quitting();
     if (client.conn.used) {
       disconnect_from_server();
     }
     gui()->write_settings();
     qapp->quit();
-    break;
-  }
+  });
+  ask->show();
 }
 
 /**********************************************************************//**

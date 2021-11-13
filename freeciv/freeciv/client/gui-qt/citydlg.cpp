@@ -588,17 +588,19 @@ void impr_item::wheelEvent(QWheelEvent *event)
 ****************************************************************************/
 void impr_item::mouseDoubleClickEvent(QMouseEvent *event)
 {
-  hud_message_box ask(city_dlg);
+  hud_message_box *ask;
   QString s;
   char buf[256];
   int price;
-  int ret;
+  const int impr_id = improvement_number(impr);
+  const int city_id = pcity->id;
 
   if (!can_client_issue_orders()) {
     return;
   }
 
   if (event->button() == Qt::LeftButton) {
+    ask = new hud_message_box(city_dlg);
     if (test_player_sell_building_now(client.conn.playing, pcity,
                                       impr) != TR_SUCCESS) {
       return;
@@ -610,19 +612,17 @@ void impr_item::mouseDoubleClickEvent(QMouseEvent *event)
                     "Sell %s for %d gold?", price),
                 city_improvement_name_translation(pcity, impr), price);
 
-    s = QString(buf);
-    ask.set_text_title(s, (_("Sell improvement?")));
-    ask.setStandardButtons(QMessageBox::Cancel | QMessageBox::Ok);
-    ret = ask.exec();
-
-    switch (ret) {
-    case QMessageBox::Cancel:
-      return;
-
-    case QMessageBox::Ok:
-      city_sell_improvement(pcity, improvement_number(impr));
-      break;
-    }
+    ask->set_text_title(buf, (_("Sell improvement?")));
+    ask->setStandardButtons(QMessageBox::Cancel | QMessageBox::Ok);
+    ask->setAttribute(Qt::WA_DeleteOnClose);
+    connect(ask, &hud_message_box::accepted, [=]() {
+      struct city *pcity = game_city_by_number(city_id);
+      if (!pcity) {
+        return;
+      }
+      city_sell_improvement(pcity, impr_id);
+    });
+    ask->show();
   }
 }
 
@@ -1304,23 +1304,21 @@ void city_map::mousePressEvent(QMouseEvent *event)
 void city_map::context_menu(QPoint point)
 {
   int canvas_x, canvas_y, city_x, city_y;
-  QAction *act;
-  QAction con_clear(_("Clear"), this);
-  QAction con_irrig_tf(_("Irrigate"), this);
-  QAction con_irrig(_("Irrigate"), this);
-  QAction con_mine_tf(_("Plant"), this);
-  QAction con_mine(_("Mine"), this);
-  QAction con_road(_("Road"), this);
-  QAction con_trfrm(_("Transform"), this);
-  QAction con_pollution(_("Clean Pollution"), this);
-  QAction con_fallout(_("Clean Fallout"), this);
-  QMenu con_menu(this);
+  QAction *con_irrig_tf = nullptr;
+  QAction *con_irrig = nullptr;
+  QAction *con_mine_tf = nullptr;
+  QAction *con_mine = nullptr;
+  QAction *con_road = nullptr;
+  QAction *con_trfrm = nullptr;
+  QAction *con_pollution = nullptr;
+  QAction *con_fallout = nullptr;
+  QMenu *con_menu;
   QWidgetAction *wid_act;
-  struct packet_worker_task task;
   struct terrain *pterr;
   struct tile *ptile;
   struct universal for_terr;
   struct worker_task *ptask;
+  int city_id = mcity->id;
 
   if (!can_client_issue_orders()) {
     return;
@@ -1336,7 +1334,6 @@ void city_map::context_menu(QPoint point)
 
   ptile = city_map_to_tile(mcity->tile, city_map_radius_sq_get(mcity),
                            city_x, city_y);
-  task.city_id = mcity->id;
   pterr = tile_terrain(ptile);
   for_terr.kind = VUT_TERRAIN;
   for_terr.value.terrain = pterr;
@@ -1344,71 +1341,79 @@ void city_map::context_menu(QPoint point)
 
   wid_act = new QWidgetAction(this);
   wid_act->setDefaultWidget(new QLabel(_("Autosettler activity:")));
-  con_menu.addAction(wid_act);
+
+  con_menu = new QMenu(this);
+  con_menu->addAction(wid_act);
 
   if (pterr->mining_result != pterr && pterr->mining_result != NULL
       && univs_have_action_enabler(ACTION_PLANT, NULL, &for_terr)) {
-    con_menu.addAction(&con_mine_tf);
+    con_menu->addAction(_("Plant"));
   } else if (pterr->mining_result == pterr
              && univs_have_action_enabler(ACTION_MINE, NULL, &for_terr)) {
-    con_menu.addAction(&con_mine);
+    con_menu->addAction(_("Mine"));
   }
 
   if (pterr->irrigation_result != pterr && pterr->irrigation_result != NULL
       && univs_have_action_enabler(ACTION_CULTIVATE, NULL, &for_terr)) {
-    con_menu.addAction(&con_irrig_tf);
+    con_menu->addAction(_("Irrigate"));
   } else if (pterr->irrigation_result == pterr
              && univs_have_action_enabler(ACTION_IRRIGATE, NULL, &for_terr)) {
-    con_menu.addAction(&con_irrig);
+    con_menu->addAction(_("Irrigate"));
   }
 
   if (pterr->transform_result != pterr && pterr->transform_result != NULL
       && univs_have_action_enabler(ACTION_TRANSFORM_TERRAIN, NULL, &for_terr)) {
-    con_menu.addAction(&con_trfrm);
+    con_menu->addAction(_("Transform"));
   }
 
   if (next_extra_for_tile(ptile, EC_ROAD, city_owner(mcity), NULL) != NULL) {
-    con_menu.addAction(&con_road);
+    con_menu->addAction(_("Road"));
   }
 
   if (prev_extra_in_tile(ptile, ERM_CLEANPOLLUTION,
                          city_owner(mcity), NULL) != NULL) {
-    con_menu.addAction(&con_pollution);
+    con_menu->addAction(_("Clean Pollution"));
   }
 
   if (prev_extra_in_tile(ptile, ERM_CLEANFALLOUT,
                          city_owner(mcity), NULL) != NULL) {
-    con_menu.addAction(&con_fallout);
+    con_fallout = con_menu->addAction(_("Clean Fallout"));
   }
 
   if (ptask != NULL) {
-    con_menu.addAction(&con_clear);
+    con_menu->addAction(_("Clear"));
   }
 
-  act = con_menu.exec(mapToGlobal(point));
+  con_menu->setAttribute(Qt::WA_DeleteOnClose);
+  connect(con_menu, &QMenu::triggered, [=](QAction *act) {
+    bool target = false;
+    struct packet_worker_task task;
 
-  if (act) {
-    bool target = FALSE;
+    if (!act) {
+      return;
+    }
 
-    if (act == &con_road) {
+    task.city_id = city_id;
+
+    if (act == con_road) {
       task.activity = ACTIVITY_GEN_ROAD;
       target = TRUE;
-    } else if (act == &con_mine) {
+    } else if (act == con_mine) {
       task.activity = ACTIVITY_MINE;
       target = TRUE;
-    } else if (act == &con_mine_tf) {
+    } else if (act == con_mine_tf) {
       task.activity = ACTIVITY_MINE;
-    } else if (act == &con_irrig) {
+    } else if (act == con_irrig) {
       task.activity = ACTIVITY_IRRIGATE;
       target = TRUE;
-    } else if (act == &con_irrig_tf) {
+    } else if (act == con_irrig_tf) {
       task.activity = ACTIVITY_IRRIGATE;
-    } else if (act == &con_trfrm) {
+    } else if (act == con_trfrm) {
       task.activity = ACTIVITY_TRANSFORM;
-    } else if (act == &con_pollution) {
+    } else if (act == con_pollution) {
       task.activity = ACTIVITY_POLLUTION;
       target = TRUE;
-    } else if (act == &con_fallout) {
+    } else if (act == con_fallout) {
       task.activity = ACTIVITY_FALLOUT;
       target = TRUE;
     }
@@ -1439,7 +1444,9 @@ void city_map::context_menu(QPoint point)
 
     task.tile_id = ptile->index;
     send_packet_worker_task(&client.conn, &task);
-  }
+  });
+
+  con_menu->popup(mapToGlobal(point));
 }
 
 /************************************************************************//**
@@ -1471,7 +1478,7 @@ city_dialog::city_dialog(QWidget *parent): qfc_dialog(parent)
           *supp_unit_wdg,  *curr_impr_wdg;;
 
   int h = 2 * fm.height() + 2;
-  small_font = fc_font::instance()->get_font(fonts::city_label);
+  small_font = fc_font::instance()->get_font(fonts::notify_label);
   zoom = 1.0;
 
   happines_shown = false;
@@ -1515,11 +1522,11 @@ city_dialog::city_dialog(QWidget *parent): qfc_dialog(parent)
   for (iter = 0; iter < info_nr; iter++) {
     ql = new QLabel(info_list[iter], info_wdg);
     ql->setFont(*small_font);
-    ql->setProperty(fonts::city_label, "true");
+    ql->setProperty(fonts::notify_label, "true");
     info_grid_layout->addWidget(ql, iter, 0);
     qlt[iter] = new QLabel(info_wdg);
     qlt[iter]->setFont(*small_font);
-    qlt[iter]->setProperty(fonts::city_label, "true");
+    qlt[iter]->setProperty(fonts::notify_label, "true");
     info_grid_layout->addWidget(qlt[iter], iter, 1);
     info_grid_layout->setRowStretch(iter, 0);
   }
@@ -1818,7 +1825,7 @@ city_dialog::city_dialog(QWidget *parent): qfc_dialog(parent)
     gridl->addWidget(lab_table[i], i, 1, 1, 1);
     lab2 = new QLabel(this);
     lab2->setFont(*small_font);
-    lab2->setProperty(fonts::city_label, "true");
+    lab2->setProperty(fonts::notify_label, "true");
     lab2->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     lab2->setText(info_list.at(i));
     gridl->addWidget(lab2, i, 0, 1, 1);
@@ -1878,11 +1885,11 @@ city_dialog::city_dialog(QWidget *parent): qfc_dialog(parent)
   str_list << _("Food") << _("Shield") << _("Trade") << _("Gold")
            << _("Luxury") << _("Science") << _("Celebrate");
   some_label = new QLabel(_("Minimal Surplus"));
-  some_label->setFont(*fc_font::instance()->get_font(fonts::city_label));
+  some_label->setFont(*fc_font::instance()->get_font(fonts::notify_label));
   some_label->setAlignment(Qt::AlignRight);
   slider_grid->addWidget(some_label, 0, 0, 1, 3);
   some_label = new QLabel(_("Priority"));
-  some_label->setFont(*fc_font::instance()->get_font(fonts::city_label));
+  some_label->setFont(*fc_font::instance()->get_font(fonts::notify_label));
   some_label->setAlignment(Qt::AlignCenter);
   slider_grid->addWidget(some_label, 0, 3, 1, 2);
 
@@ -2244,20 +2251,29 @@ bool city_dialog::eventFilter(QObject *obj, QEvent *event)
 ****************************************************************************/
 void city_dialog::city_rename()
 {
-  hud_input_box ask(gui()->central_wdg);
+  hud_input_box *ask;
+  const int city_id = pcity->id;
 
   if (!can_client_issue_orders()) {
     return;
   }
 
-  ask.set_text_title_definput(_("What should we rename the city to?"),
-                              _("Rename City"), city_name_get(pcity));
-  if (ask.exec() == QDialog::Accepted) {
+  ask = new hud_input_box(gui()->central_wdg);
+  ask->set_text_title_definput(_("What should we rename the city to?"),
+                               _("Rename City"), city_name_get(pcity));
+  ask->setAttribute(Qt::WA_DeleteOnClose);
+  connect(ask, &hud_message_box::accepted, this, [=]() {
+    struct city *pcity = game_city_by_number(city_id);
     QByteArray ask_bytes;
 
-    ask_bytes = ask.input_edit.text().toLocal8Bit();
+    if (!pcity) {
+      return;
+    }
+
+    ask_bytes = ask->input_edit.text().toLocal8Bit();
     ::city_rename(pcity, ask_bytes.data());
-  }
+  });
+  ask->show();
 }
 
 /************************************************************************//**
@@ -2291,18 +2307,16 @@ void city_dialog::zoom_out()
 ****************************************************************************/
 void city_dialog::save_cma()
 {
-  struct cm_parameter param;
-  QString text;
-  hud_input_box ask(gui()->central_wdg);
+  hud_input_box *ask = new hud_input_box(gui()->central_wdg);
 
-  ask.set_text_title_definput(_("What should we name the preset?"),
-                              _("Name new preset"),
-                              _("new preset"));
-  if (ask.exec() == QDialog::Accepted) {
-    QByteArray ask_bytes;
-
-    ask_bytes = ask.input_edit.text().toLocal8Bit();
-    text = ask_bytes.data();
+  ask->set_text_title_definput(_("What should we name the preset?"),
+                               _("Name new preset"),
+                               _("new preset"));
+  ask->setAttribute(Qt::WA_DeleteOnClose);
+  connect(ask, &hud_message_box::accepted, this, [=]() {
+    struct cm_parameter param;
+    QByteArray ask_bytes = ask->input_edit.text().toLocal8Bit();
+    QString text = ask_bytes.data();
     if (!text.isEmpty()) {
       param.allow_disorder = false;
       param.allow_specialists = true;
@@ -2318,7 +2332,8 @@ void city_dialog::save_cma()
       cmafec_preset_add(ask_bytes.data(), &param);
       update_cma_tab();
     }
-  }
+  });
+  ask->show();
 }
 
 /************************************************************************//**
@@ -2526,8 +2541,7 @@ void city_dialog::update_cma_tab()
 void city_dialog::cma_remove()
 {
   int i;
-  hud_message_box ask(city_dlg);
-  int ret;
+  hud_message_box *ask;
 
   i = cma_table->currentRow();
 
@@ -2535,20 +2549,16 @@ void city_dialog::cma_remove()
     return;
   }
 
-  ask.set_text_title(_("Remove this preset?"), cmafec_preset_get_descr(i));
-  ask.setStandardButtons(QMessageBox::Cancel | QMessageBox::Ok);
-  ask.setDefaultButton(QMessageBox::Cancel);
-  ret = ask.exec();
-
-  switch (ret) {
-  case QMessageBox::Cancel:
-    return;
-
-  case QMessageBox::Ok:
+  ask = new hud_message_box(city_dlg);
+  ask->set_text_title(_("Remove this preset?"), cmafec_preset_get_descr(i));
+  ask->setStandardButtons(QMessageBox::Cancel | QMessageBox::Ok);
+  ask->setDefaultButton(QMessageBox::Cancel);
+  ask->setAttribute(Qt::WA_DeleteOnClose);
+  connect(ask, &hud_message_box::accepted, this, [=]() {
     cmafec_preset_remove(i);
     update_cma_tab();
-    break;
-  }
+  });
+  ask->show();
 }
 
 /************************************************************************//**
@@ -2590,15 +2600,15 @@ void city_dialog::cma_slider(int value)
 /************************************************************************//**
   Received signal about changed qcheckbox - allow disbanding city
 ****************************************************************************/
-void city_dialog::disband_state_changed(int state)
+void city_dialog::disband_state_changed(bool allow_disband)
 {
   bv_city_options new_options;
 
   BV_CLR_ALL(new_options);
 
-  if (state == Qt::Checked) {
+  if (allow_disband) {
     BV_SET(new_options, CITYO_DISBAND);
-  } else if (state == Qt::Unchecked) {
+  } else {
     BV_CLR(new_options, CITYO_DISBAND);
   }
 
@@ -2612,17 +2622,18 @@ void city_dialog::disband_state_changed(int state)
 ****************************************************************************/
 void city_dialog::cma_context_menu(const QPoint &p)
 {
-  QMenu cma_menu(this);
+  QMenu *cma_menu = new QMenu(this);
   QAction *cma_del_item;
-  QAction *act;
 
-  cma_del_item = cma_menu.addAction(_("Remove Governor"));
-  act = cma_menu.exec(QCursor::pos());
+  cma_menu->setAttribute(Qt::WA_DeleteOnClose);
+  cma_del_item = cma_menu->addAction(_("Remove Governor"));
+  connect(cma_menu, &QMenu::triggered, this, [=](QAction *act) {
+    if (act == cma_del_item) {
+      cma_remove();
+    }
+  });
 
-  if (act == cma_del_item) {
-    cma_remove();
-  }
-
+  cma_menu->popup(QCursor::pos());
 }
 
 /************************************************************************//**
@@ -2630,31 +2641,27 @@ void city_dialog::cma_context_menu(const QPoint &p)
 ****************************************************************************/
 void city_dialog::display_worklist_menu(const QPoint &p)
 {
-  bool worklist_defined = true;
-  cid c_id;
-  int which_menu;
-  QAction *act;
   QAction *action;
   QAction *disband;
   QAction *wl_save;
-  QAction wl_clear(_("Clear"), 0);
-  QAction wl_empty(_("(no worklists defined)"), 0);
+  QAction *wl_clear;
+  QAction *wl_empty;
   QMap<QString, cid> list;
   QMap<QString, cid>::const_iterator map_iter;
-  QMenu *add_menu;
+  QMenu *change_menu;
   QMenu *insert_menu;
-  QMenu list_menu(this);
+  QMenu *list_menu;
   QMenu *options_menu;
-  QVariant qvar;
+  int city_id = pcity->id;
 
   if (!can_client_issue_orders()) {
     return;
   }
-
-  add_menu = list_menu.addMenu(_("Change worklist"));
-  insert_menu = list_menu.addMenu(_("Insert worklist"));
-  connect(&wl_clear, &QAction::triggered, this, &city_dialog::clear_worklist);
-  list_menu.addAction(&wl_clear);
+  list_menu = new QMenu(this);
+  change_menu = list_menu->addMenu(_("Change worklist"));
+  insert_menu = list_menu->addMenu(_("Insert worklist"));
+  wl_clear = list_menu->addAction(_("Clear"));
+  connect(wl_clear, &QAction::triggered, this, &city_dialog::clear_worklist);
   list.clear();
 
   global_worklists_iterate(pgwl) {
@@ -2662,69 +2669,60 @@ void city_dialog::display_worklist_menu(const QPoint &p)
   } global_worklists_iterate_end;
 
   if (list.count() == 0) {
-    add_menu->addAction(&wl_empty);
-    insert_menu->addAction(&wl_empty);
-    worklist_defined = false;
+    wl_empty = change_menu->addAction(_("(no worklists defined)"));
+    insert_menu->addAction(wl_empty);
   }
 
   map_iter = list.constBegin();
 
   while (map_iter != list.constEnd()) {
-    action = add_menu->addAction(map_iter.key());
+    action = change_menu->addAction(map_iter.key());
     action->setData(map_iter.value());
-    action->setProperty("FC", 1);
+
     action = insert_menu->addAction(map_iter.key());
     action->setData(map_iter.value());
-    action->setProperty("FC", 2);
+
     map_iter++;
   }
 
-  wl_save = list_menu.addAction(_("Save worklist"));
-  options_menu = list_menu.addMenu(_("Options"));
+  wl_save = list_menu->addAction(_("Save worklist"));
+  connect(wl_save, &QAction::triggered, this, &city_dialog::save_worklist);
+  options_menu = list_menu->addMenu(_("Options"));
   disband = options_menu->addAction(_("Allow disbanding city"));
   disband->setCheckable(true);
   disband->setChecked(is_city_option_set(pcity, CITYO_DISBAND));
+  connect(disband, &QAction::triggered, this,
+          &city_dialog::disband_state_changed);
 
-  act = 0;
-  act = list_menu.exec(QCursor::pos());
+  connect(change_menu, &QMenu::triggered, this, [=](QAction *act) {
+    QVariant id = act->data();
+    struct city *pcity = game_city_by_number(city_id);
+    const struct worklist *worklist;
 
-  if (act) {
-    if (act == disband) {
-      int state;
-
-      if (disband->isChecked()) {
-        state = Qt::Checked;
-      } else {
-        state = Qt::Unchecked;
-      }
-
-      disband_state_changed(state);
-    }
-    if (act == wl_save) {
-      save_worklist();
-      return;
-    }
-    qvar = act->property("FC");
-
-    if (!qvar.isValid() || qvar.isNull() || !worklist_defined) {
+    if (!pcity) {
       return;
     }
 
-    which_menu = qvar.toInt();
-    qvar = act->data();
-    c_id = qvar.toInt();
+    fc_assert_ret(id.type() == QVariant::Int);
+    worklist = global_worklist_get(global_worklist_by_id(id.toInt()));
+    city_set_queue(pcity, worklist);
+  });
 
-    if (which_menu == 1) { /* Change Worklist */
-      city_set_queue(pcity,
-                     global_worklist_get(global_worklist_by_id(c_id)));
-    } else if (which_menu == 2) { /* Insert Worklist */
-      if (worklist_defined) {
-        city_queue_insert_worklist(pcity, selected_row_p + 1,
-                                   global_worklist_get(global_worklist_by_id(
-                                         c_id)));
-      }
+  connect(insert_menu, &QMenu::triggered, this, [=](QAction *act) {
+    QVariant id = act->data();
+    struct city *pcity = game_city_by_number(city_id);
+    const struct worklist *worklist;
+
+    if (!pcity) {
+      return;
     }
-  }
+
+    fc_assert_ret(id.type() == QVariant::Int);
+    worklist = global_worklist_get(global_worklist_by_id(id.toInt()));
+    city_queue_insert_worklist(pcity, selected_row_p + 1, worklist);
+  });
+
+  list_menu->popup(QCursor::pos());
 }
 
 /************************************************************************//**
@@ -3272,15 +3270,16 @@ void city_dialog::update_building()
 void city_dialog::buy()
 {
   char buf[1024], buf2[1024];
-  int ret;
   const char *name = city_production_name_translation(pcity);
   int value = pcity->client.buy_cost;
-  hud_message_box ask(city_dlg);
+  hud_message_box *ask;
+  int city_id = pcity->id;
 
   if (!can_client_issue_orders()) {
     return;
   }
 
+  ask = new hud_message_box(city_dlg);
   fc_snprintf(buf2, ARRAY_SIZE(buf2), PL_("Treasury contains %d gold.",
                                         "Treasury contains %d gold.",
                                         client_player()->economic.gold),
@@ -3288,20 +3287,20 @@ void city_dialog::buy()
   fc_snprintf(buf, ARRAY_SIZE(buf), PL_("Buy %s for %d gold?",
                                         "Buy %s for %d gold?", value),
               name, value);
-  ask.set_text_title(QString(buf), QString(buf2));
-  ask.setStandardButtons(QMessageBox::Cancel | QMessageBox::Ok);
-  ask.setDefaultButton(QMessageBox::Cancel);
-  ret = ask.exec();
+  ask->set_text_title(buf, buf2);
+  ask->setStandardButtons(QMessageBox::Cancel | QMessageBox::Ok);
+  ask->setDefaultButton(QMessageBox::Cancel);
+  ask->setAttribute(Qt::WA_DeleteOnClose);
+  connect(ask, &hud_message_box::accepted, this, [=]() {
+    struct city *pcity = game_city_by_number(city_id);
 
-  switch (ret) {
-  case QMessageBox::Cancel:
-    return;
-    break;
+    if (!pcity) {
+      return;
+    }
 
-  case QMessageBox::Ok:
     city_buy_production(pcity);
-    break;
-  }
+  });
+  ask->show();
 }
 
 /************************************************************************//**
@@ -3553,18 +3552,21 @@ void city_dialog::worklist_down()
 ****************************************************************************/
 void city_dialog::save_worklist()
 {
-  struct worklist queue;
-  struct global_worklist *gw;
-  QString text;
-  hud_input_box ask(gui()->central_wdg);
+  hud_input_box *ask = new hud_input_box(gui()->central_wdg);
+  int city_id = pcity->id;
 
-  ask.set_text_title_definput(_("What should we name new worklist?"),
-                              _("Save current worklist"),
-                              _("New worklist"));
-  if (ask.exec() == QDialog::Accepted) {
+  ask->set_text_title_definput(_("What should we name new worklist?"),
+                               _("Save current worklist"),
+                               _("New worklist"));
+  ask->setAttribute(Qt::WA_DeleteOnClose);
+  connect(ask, &hud_message_box::accepted, [=]() {
+    struct global_worklist *gw;
+    struct worklist queue;
     QByteArray ask_bytes;
+    QString text;
+    struct city *pcity = game_city_by_number(city_id);
 
-    ask_bytes = ask.input_edit.text().toLocal8Bit();
+    ask_bytes = ask->input_edit.text().toLocal8Bit();
     text = ask_bytes.data();
     if (!text.isEmpty()) {
       ask_bytes = text.toLocal8Bit();
@@ -3572,7 +3574,8 @@ void city_dialog::save_worklist()
       city_get_queue(pcity, &queue);
       global_worklist_set(gw, &queue);
     }
-  }
+  });
+  ask->show();
 }
 
 /************************************************************************//**
@@ -3684,10 +3687,10 @@ void city_font_update()
 
   l = city_dlg->findChildren<QLabel *>();
 
-  f = fc_font::instance()->get_font(fonts::city_label);
+  f = fc_font::instance()->get_font(fonts::notify_label);
 
   for (int i = 0; i < l.size(); ++i) {
-    if (l.at(i)->property(fonts::city_label).isValid()) {
+    if (l.at(i)->property(fonts::notify_label).isValid()) {
       l.at(i)->setFont(*f);
     }
   }
@@ -3788,7 +3791,7 @@ QString get_tooltip_improvement(impr_type *building, struct city *pcity,
   QString s1, s2, str;
   const char *req = skip_intl_qualifier_prefix(_("?tech:None"));
 
-  if (pcity !=  nullptr) {
+  if (pcity != nullptr) {
     upkeep = QString::number(city_improvement_upkeep(pcity, building));
   } else {
     upkeep = QString::number(building->upkeep);
@@ -3805,9 +3808,17 @@ QString get_tooltip_improvement(impr_type *building, struct city *pcity,
   def_str = "<p style='white-space:pre'><b>"
             + QString(improvement_name_translation(building)).toHtmlEscaped()
             + "</b>\n";
-  def_str += QString(_("Cost: %1, Upkeep: %2\n"))
-             .arg(impr_build_shield_cost(pcity,building))
-             .arg(upkeep).toHtmlEscaped();
+  if (pcity != nullptr) {
+    def_str += QString(_("Cost: %1, Upkeep: %2\n"))
+               .arg(impr_build_shield_cost(pcity, building))
+               .arg(upkeep).toHtmlEscaped();
+  } else {
+    int base_cost = MAX(building->build_cost * game.info.shieldbox / 100, 1);
+
+    def_str += QString(_("Base Cost: %1, Upkeep: %2\n"))
+               .arg(base_cost)
+               .arg(upkeep).toHtmlEscaped();
+  }
   if (s1.compare(s2) != 0) {
     def_str = def_str + str.toHtmlEscaped() + "\n";
   }
