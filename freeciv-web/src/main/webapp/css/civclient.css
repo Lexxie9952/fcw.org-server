@@ -1871,7 +1871,15 @@ a:focus { outline: thin dotted; border:none;}
   color:#8db2ff;
   text-shadow: 2px 1px #00af;
 }
+.highlight_cultivate {
+  color:#8db2ff;
+  text-shadow: 2px 1px #00af;
+}
 .highlight_mining {
+  color:#e76879;
+  text-shadow: 2px 1px #500f;
+}
+.highlight_plant {
   color:#e76879;
   text-shadow: 2px 1px #500f;
 }
