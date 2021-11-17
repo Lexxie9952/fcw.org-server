@@ -98,8 +98,8 @@
     <b>What information does FCW create or collect?</b><br>
     Computers by their nature create information during digital interactions. Information is created:<br>
     1. When you register on our site, the information you used to register with.<br>
-    2. When you register on our Discord, the information and messages that are created in those acts.<br>
-    3. When you register on our mailing list, the information you submit to that list.<br>
+    2. If you register on our Discord, the information and messages that are created in those acts.<br>
+    3. If you register on our mailing list, the information you submit to that list.<br>
     4. Any data that is created in the act of you playing the game.<br>
     </div>
 <br>
@@ -145,7 +145,7 @@
     <br>
     <div>
     <b>Does FCW disclose any information to outside parties?</b><br>
-    1. FCW enforces policies against users supplying any information or commmunications you share within our sphere of services, to outside parties.<br>
+    1. FCW enforces policies against users supplying any information or communications you share within our sphere of services, to outside parties.<br>
     2. We do not sell, trade, or otherwise transfer to outside parties your personally identifiable information.<br> 
     3. This does not include trusted third parties whose services integrate to our site for the purpose of operating our site, conducting our business, or servicing you, so long as the policies of those parties do not violate our own privacy policies.<br>
     4. For example, your email address is used during Google_Auth logins that use your gmail account.<br>
@@ -176,7 +176,7 @@
     <div>
     <b>User Privacy Obligations</b><br>
     Community members (Users) who partake in the private gathering of FCW are bound by the Terms of Service which contain restrictions on what actions users may take with respect to each other's privacy.<br>
-    Please review the Terms of Service for further informmation on user privacy obligations.<br>
+    Please review the Terms of Service for further information on user privacy obligations.<br>
     </div>
 <br>
     <div>
