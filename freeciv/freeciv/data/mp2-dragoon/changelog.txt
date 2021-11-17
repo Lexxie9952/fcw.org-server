@@ -121,7 +121,7 @@ depth and richness.
    all other units, off classic price, but was overpriced in 
    classic. should be 36 or 37 with 20% reduction giving 29-30
    in cost. Legion's extra abilities worth +1 shield from
-   that.
+   that. also, Ironworking 70 (was 80).
 =============================================================
 21. Hideouts  
    temporary patch requirement for unit to be alone

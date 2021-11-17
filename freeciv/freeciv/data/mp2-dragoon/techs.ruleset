@@ -489,6 +489,7 @@ req2     = "Warrior Code"
 flags    = ""
 graphic     = "a.iron_working"
 graphic_alt = "-"
+cost = 70
 
 [advance_labor_union]
 name     = _("Labor Union")
