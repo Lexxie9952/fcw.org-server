@@ -1832,11 +1832,15 @@ int city_would_rapture(const struct city *pcity)
   if (pcity->rapture > 0 && pcity->surplus[O_FOOD] > 0
       && get_city_bonus(pcity, EFT_RAPTURE_GROW) > 0) {
 
-    bool now  = is_rapture_turn(pcity, pcity->rapture);
-    bool next = is_rapture_turn(pcity, pcity->rapture+1);
-
+    bool now   = is_rapture_turn(pcity, pcity->rapture);
+    bool next  = is_rapture_turn(pcity, pcity->rapture+1);
+    bool next2 = is_rapture_turn(pcity, pcity->rapture+2);
+    bool next3 = is_rapture_turn(pcity, pcity->rapture+3);
+    
     if (now)  code |= 1;
     if (next) code |= 2;
+    if (next2) code |= 4;
+    if (next3) code |= 8;
   }
 
   return code;

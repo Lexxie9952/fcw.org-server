@@ -897,13 +897,42 @@ function show_city_dialog(pcity)
   $('#rapture_food').html(rapture_food_status_html);
   
   var rapture_status_icon = "";
+  /* 4-bit code. BIT values:       
+      1 = raptured this turn
+      2 = raptures next turn.  (pause this turn)
+      4 = raptures in 2 turns. (pause next turn)  
+      8 = raptures in 3 turns. (pause 2 turns)
+   */
+  const RLAST = 1,
+        RNOW = 2,
+        R2 = 4,
+        R3 = 8;
   switch (pcity.rapture_status) {
-    case 1:
-      rapture_status_icon = "<img id='rstatus_icon' class='v' src='/images/e/comet.png' title='rapture paused'>"
+    case RLAST:
+      rapture_status_icon = "<img id='rstatus_icon' class='v' src='/images/e/3.png'><img id='rstatus_icon' class='v' src='/images/e/comet.png' title='rapture paused'>"
       break;
-    case 2:
-    case 3:
+    /* all possibilities of bit 2 being on, i.e., can rapture this turn*/  
+    case RNOW:   
+    case RNOW+RLAST:
+    case RNOW+R2:
+    case RNOW+RLAST+R2:
+    case RNOW+R3:
+    case RNOW+R3+RLAST:
+    case RNOW+R2+R3:
+    case RNOW+RLAST+R2+R3:
       rapture_status_icon = "<img id='rstatus_icon' class='v' src='/images/e/star2.png' title='can continue rapture'>"
+      break;
+    /* bit 4, can rapture next turn BUT NOT this turn */
+    case R2:
+    case R2+RLAST:
+    case R2+R3:
+    case R2+R3+RLAST:
+      rapture_status_icon = "<img id='rstatus_icon' class='v' src='/images/e/comet.png' title='rapture paused, can rapture next turn'>"
+      break;
+    /* bit 8 can rapture in 2 turns BUT NOT this turn or next turn */
+    case R3:
+    case R3+RLAST:
+      rapture_status_icon = "<img id='rstatus_icon' class='v' src='/images/e/2.png'><img id='rstatus_icon' class='v' src='/images/e/comet.png' title='rapture paused, can rapture in 2 turns'>"
       break;
   }
   $('#rapture_status').html("<div>"+ rapture_status_icon + "<span class='"+rapture_status_class+"' style='font-weight:bold;padding-bottom:9px;'>"

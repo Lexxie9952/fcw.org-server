@@ -3576,15 +3576,14 @@ static void update_city_activity(struct city *pcity)
       return;
     }
 
-    /* Reason/timing codes for any contexts where rapture gets delayed. */
-    /* 1 = Raptured now but can't next turn because rapture_rate and/or rapturedelay */
-    if (pcity->rapture_status == 1) {
-      notify_player(pplayer, city_tile(pcity), E_CITY_NORMAL, ftc_server,
-                    _("[`comet`]%s will pause rapture this turn."),
-                    city_link(pcity));
-    }
-    /* 2 = Delayed now but can rapture next turn */
-    else if (pcity->rapture_status == 2) {
+    /* Reason/timing bit codes for any contexts where rapture gets delayed. 
+      1 = raptured this turn
+      2 = can rapture next turn.  (pauses this turn)
+      4 = can rapture in 2 turns. (pauses next turn)  
+      8 = can rapture in 3 turns. (pauses 2 turns) */
+
+    /* !1 = Rapture qualifying city who paused rapture this turn. */
+    if (pcity->rapture_status && (!pcity->rapture_status & 1)) {
         notify_player(pplayer, city_tile(pcity), E_CITY_NORMAL, ftc_server,
                       _("[`comet`]%s paused rapture."),
                       city_link(pcity));
@@ -3597,6 +3596,17 @@ static void update_city_activity(struct city *pcity)
       if (!redundant) {
         notify_player(pplayer, city_tile(pcity), E_CITY_NORMAL, ftc_server,
                       _("[`star2`]%s can rapture this turn."),
+                      city_link(pcity));
+      }
+    } else /*(!(pcity->rapture_status & 2)) - Can't rapture this turn*/ {
+      if (pcity->rapture_status & 4) {
+        notify_player(pplayer, city_tile(pcity), E_CITY_NORMAL, ftc_server,
+                      _("[`comet`]%s will pause rapture this turn."),
+                      city_link(pcity));
+      }
+      else if (pcity->rapture_status & 8) {
+        notify_player(pplayer, city_tile(pcity), E_CITY_NORMAL, ftc_server,
+                      _("[`comet`]%s will pause rapture for 2 turns."),
                       city_link(pcity));
       }
     }
