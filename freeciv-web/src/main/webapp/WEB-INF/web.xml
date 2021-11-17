@@ -138,6 +138,18 @@
 		<url-pattern>/rules</url-pattern>
 	</servlet-mapping>
 
+	<!-- /PrivacyPolicy -->
+	<servlet>
+		<servlet-name>PrivacyPolicy</servlet-name>
+		<servlet-class>org.freeciv.servlet.PrivacyPolicy</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>PrivacyPolicy</servlet-name>
+		<url-pattern>/privacy</url-pattern>
+	</servlet-mapping>
+
+
 	<!-- /civclientlauncher (game launcher servlet) -->
 	<servlet>
 		<servlet-name>CivclientLauncher</servlet-name>
