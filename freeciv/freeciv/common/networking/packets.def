@@ -815,6 +815,7 @@ end
 PACKET_CITY_MAKE_SPECIALIST = 37; cs, dsend
   CITY city_id;
   TILE tile_id;
+  SPECIALIST specialist_to;
 end
 
 PACKET_CITY_MAKE_WORKER = 38; cs, dsend

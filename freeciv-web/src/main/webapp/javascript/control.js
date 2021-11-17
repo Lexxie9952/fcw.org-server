@@ -2763,7 +2763,9 @@ function worked_tile_click(ptile)
   if (ptile['worked'] != 0) {
     packet = {"pid"     : packet_city_make_specialist,
               "city_id" : work_city_id,
-              "tile_id" : ptile['index']};
+              "tile_id" : ptile['index'],
+              "specialist_to": -1
+             };
   } else {
     packet = {"pid"     : packet_city_make_worker,
               "city_id" : selector_city,

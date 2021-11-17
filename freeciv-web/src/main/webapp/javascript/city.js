@@ -1574,24 +1574,13 @@ function close_city_dialog()
 **************************************************************************/
 function do_city_map_click(ptile)
 {
-  // updated==if cityhand.c:handle_city_specialist() looks at
-  // the top 3 bits in city_id for the type of specialst to make:
-  var updated = true; 
-
   var packet = null;
   var city_id = active_city['id'];
   if (ptile['worked'] == city_id) {
-    // Server defaults to make tile-worker into an entertainer.
-    // Override it if user has a selected_specialist type:
-    if (updated) { // only run this feature on updated server
-      var s = selected_specialist;
-      if (s >= 4) {city_id += 32768; s-= 4;}
-      if (s >= 2) {city_id += 16384; s-= 2;}
-      if (s >= 1) {city_id +=  8192;       }
-    }
     packet = {"pid"     : packet_city_make_specialist,
               "city_id" : city_id,
-              "tile_id" : ptile['index']
+              "tile_id" : ptile['index'],
+              "specialist_to": (selected_specialist ? selected_specialist : 0)
              };
   } else {
     packet = {"pid"     : packet_city_make_worker,
@@ -4096,7 +4085,8 @@ function cma_clipboard_macro(event, called_by_CMA)
         // Emulates clicking the city centre, causing auto-arrange tiles:
         var packet = {"pid"     : packet_city_make_specialist,
                       "city_id" : parseInt(city_id),
-                      "tile_id" : city_tile(cities[city_id]).index
+                      "tile_id" : city_tile(cities[city_id]).index,
+                      "specialist_to": -1
                      };
         send_request(JSON.stringify(packet));
         city_checkbox_states[city_id] = true;

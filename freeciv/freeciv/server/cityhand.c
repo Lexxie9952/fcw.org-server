@@ -144,10 +144,15 @@ void handle_city_change_specialist(struct player *pplayer, int city_id,
   Handle request to change city worker in to specialist.
 **************************************************************************/
 void handle_city_make_specialist(struct player *pplayer,
-                                 int city_id, int tile_id)
+                                 int city_id, int tile_id, 
+                                 Specialist_type_id specialist_to)
 {
-  int specalist_to = DEFAULT_SPECIALIST;
+  if (specialist_to < 0) specialist_to = DEFAULT_SPECIALIST;
 
+/* This was a former method of packing selected specialist in the unused
+   bits of the city_id (to keep protocol compat). However, in large games
+   city_id surpassed 8192. This block may be deleted several months after 
+   15Nov2021, assuming the new method works fine.
 #ifdef FREECIV_WEB
   // FCW uses top 3 bits to represent default specialist, thus city_id is really
   // a 12-bit number. Perhaps later we should just send a specalist_to param
@@ -157,10 +162,10 @@ void handle_city_make_specialist(struct player *pplayer,
   if (city_id > 16384) {city_id -= 16384; specalist_to += 2;}
   if (city_id >  8192) {city_id -=  8192; specalist_to += 1;}
 #endif
+*/
 
   struct tile *ptile = index_to_tile(&(wld.map), tile_id);
   struct city *pcity = player_city_by_number(pplayer, city_id);
-
 
   if (NULL == pcity) {
     /* Probably lost. */
@@ -184,7 +189,7 @@ void handle_city_make_specialist(struct player *pplayer,
     auto_arrange_workers(pcity);
   } else if (tile_worked(ptile) == pcity) {
     city_map_update_empty(pcity, ptile);
-    pcity->specialists[specalist_to]++;
+    pcity->specialists[specialist_to]++;
   } else {
     log_verbose("handle_city_make_specialist() not working (%d, %d) "
                 "\"%s\".", TILE_XY(ptile), city_name_get(pcity));
