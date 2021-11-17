@@ -303,6 +303,87 @@ Random randomValue=new Random();
 		</div> <!-- end game launcher -->
 
 
+		<br>
+		
+		<div id="game-launcher" class="row">
+
+			<div class="" style="width:80%; max-width:80%; text-align:center; margin:0 auto;">
+				<div class="game-type">
+					<div class="header">
+						<span class="name">Notify Me</span>
+					</div>
+
+						<div class="">
+							Sign up to be alerted about new Longturn games directly in your inbox.
+						</div>
+
+
+<!--Zoho Campaigns Web-Optin Form Starts Here-->
+<div id="customForm">
+	<div class="quick_form_9_css" name="SIGNUP_BODY">
+		<div>
+			<div style="position:relative;">
+				<div id="Zc_SignupSuccess" style="display:none;position:absolute;margin-left:4%;width:90%;background-color: rgb(240, 232, 232); padding: 3px; border: 3px solid rgb(0, 0, 0);  margin-top: 10px;margin-bottom:10px;word-break:break-all ">
+					<table width="100%" cellpadding="0" cellspacing="0" border="0">
+						<tbody>
+							<tr>
+								<td width="10%">
+									<img class="successicon" src="https://zc1.maillist-manage.eu/images/challangeiconenable.jpg" align="absmiddle">
+								</td>
+								<td>
+									<span id="signupSuccessMsg" style="color: rgb(73, 140, 132); font-family: sans-serif; font-size: 14px;word-break:break-word">&nbsp;&nbsp;Thank you for Signing Up</span>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<form method="POST" id="zcampaignOptinForm" action="https://maillist-manage.eu/weboptin.zc" target="_zcSignup">
+				<div id="errorMsgDiv"></div>
+				<div class="SIGNUP_FLD" style="margin: 0 auto;width:80%; text-align:center">
+					<input type="text" style="display: block; margin : 0 auto;" placeholder="Email" changeitem="SIGNUP_FORM_FIELD" name="CONTACT_EMAIL" id="EMBED_FORM_EMAIL_LABEL">
+				</div>
+				<div style="margin: 0 auto;width:80%; text-align:center">
+					<input type="submit" class="btn" id="zcWebOptin" value="Sign up now">
+				</div>
+				<input type="hidden" id="fieldBorder" value="">
+				<input type="hidden" id="submitType" name="submitType" value="optinCustomView">
+				<input type="hidden" id="emailReportId" name="emailReportId" value="">
+				<input type="hidden" id="formType" name="formType" value="QuickForm">
+				<input type="hidden" name="zx" id="cmpZuid" value="14acd2fa94">
+				<input type="hidden" name="zcvers" value="2.0">
+				<input type="hidden" name="oldListIds" id="allCheckedListIds" value="">
+				<input type="hidden" id="mode" name="mode" value="OptinCreateView">
+				<input type="hidden" id="zcld" name="zcld" value="114297f01ae57ab0">
+				<input type="hidden" id="zctd" name="zctd" value="114297f01ae57abe">
+				<input type="hidden" id="document_domain" value="">
+				<input type="hidden" id="zc_Url" value="zc1.maillist-manage.eu">
+				<input type="hidden" id="new_optin_response_in" value="0">
+				<input type="hidden" id="duplicate_optin_response_in" value="0">
+				<input type="hidden" name="zc_trackCode" id="zc_trackCode" value="ZCFORMVIEW">
+				<input type="hidden" id="zc_formIx" name="zc_formIx" value="3zcb79ad521f1f401176f39555bc0f0484184f206d9625d75b4acd5979f63828b7">
+				<input type="hidden" id="viewFrom" value="URL_ACTION">
+				<input type="hidden" id="scriptless" name="scriptless" value="yes">
+			</form>
+		</div>
+	</div>
+</div>
+<div id="zcOptinOverLay" oncontextmenu="return false" style="display:none;text-align: center; background-color: rgb(0, 0, 0); opacity: 0.5; z-index: 100; position: fixed; width: 100%; top: 0px; left: 0px; height: 988px;"></div>
+<div id="zcOptinSuccessPopup" style="display:none;z-index: 9999;width: 800px; height: 40%;top: 84px;position: fixed; left: 26%;background-color: #FFFFFF;border-color: #E6E6E6; border-style: solid; border-width: 1px;  box-shadow: 0 1px 10px #424242;padding: 35px;">
+	<span style="position: absolute;top: -16px;right:-14px;z-index:99999;cursor: pointer;" id="closeSuccess">
+		<img src="https://zc1.maillist-manage.eu/images/videoclose.png">
+	</span>
+	<div id="zcOptinSuccessPanel"></div>
+</div>
+<!--Zoho Campaigns Web-Optin Form Ends Here-->
+
+					
+				</div>
+			</div>
+	</div>
+<br>
+
+
 		<c:if test="${default_lang}">
 			<div id="statistics" class="row">
 				<div class="col-md-12">
