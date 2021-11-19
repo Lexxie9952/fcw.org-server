@@ -891,6 +891,9 @@ function get_unit_city_info(punit, plaintext)
       case ACTIVITY_FORTIFIED:
         result += "\nActivity: FORTIFIED";
         break;
+      case ACTIVITY_VIGIL:
+        result += "\nActivity: VIGIL";
+        break;
       case ACTIVITY_FORTIFYING:
         result += "\nActivity: FORTIFYING";
         break;
