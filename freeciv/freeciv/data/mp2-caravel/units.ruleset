@@ -3234,7 +3234,7 @@ Jet Fighters upgrade the Fighter with improved attack, defense, and range.\
 INTERCEPTOR：the Vigil order lets Jet Fighters auto-attack adjacent Air units if they\
  have better attack odds. This unit can Vigil if it uses 3 move points or less. \n\
 "), _("
-Helicopters can Stack-Escape：a 60% chance to escape a killed stack if they have more remaining moves than the attacker.\
+Jet Fighters can Stack-Escape：a 60% chance to escape a killed stack if they have more remaining moves than the attacker.\
  NOTE：GOTO disallows unit loss from lack of fuel. You can override this by ordering moves to adjacent tiles.\
 ")
 
