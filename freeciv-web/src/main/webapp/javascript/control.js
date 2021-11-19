@@ -5895,6 +5895,7 @@ function unit_can_vigil(punit)
   var name = ptype['name'];
   var moves_used = (parseFloat(ptype['move_rate']) / parseFloat(SINGLE_MOVE))
                  - (parseFloat(punit['movesleft']) / parseFloat(SINGLE_MOVE));
+  var fuel = punit['fuel'];
 
   // For now Vigil is only for these server settings:
   if (server_settings["autoattack"]["val"] != true) return false;
@@ -5913,10 +5914,14 @@ function unit_can_vigil(punit)
         if (moves_used <= 3)
           return true;
         break;
+      case "Multi-Fighter":
+        if (fuel > 1)
+          return true;
+        break;
       case "Stealth Fighter":
         if (moves_used <= 4)
           return true;
-        break;
+      break;
     }
   return false;
 }
@@ -5963,7 +5968,6 @@ function can_build_maglev(punit, ptile)
   return ((typeof EXTRA_MAGLEV !== "undefined")
       &&  (punit != null && ptile != null)
       &&  (!tile_has_extra(ptile, EXTRA_MAGLEV))
-      &&  (tile_has_extra(ptile, EXTRA_RAIL))
       &&  (unit_can_do_action(punit, ACTION_ROAD))
       &&  tech_known('Superconductors')
          );
