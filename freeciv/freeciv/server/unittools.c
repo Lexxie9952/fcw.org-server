@@ -2663,7 +2663,7 @@ void kill_unit(struct unit *pkiller, struct unit *punit, bool vet)
       num_escaped[i] = 0;
     }
 
-    /* count killed units */
+    /* count killed units after letting some units (possibly) escape */
     unit_list_iterate(ptile->units, vunit) {
       struct player *vplayer = unit_owner(vunit);
 
@@ -2887,9 +2887,9 @@ void kill_unit(struct unit *pkiller, struct unit *punit, bool vet)
                         E_UNIT_LOST_DEF, ftc_server,
                         // TRANS: "Horsemen🏇 and 3 other units lost to an attack from [a] Polish 🏇Horsemen."
                         PL_("⚠️%s %s %s and %d other unit lost to "
-                            "%s %s %s %s:",
+                            "%s %s %s %s.",
                             "⚠️%s %s %s and %d other units lost to "
-                            "%s %s %s %s:", others),
+                            "%s %s %s %s.", others),
                         (pcity ? city_link(pcity) : ""),
                         punit_link, punit_emoji,
                         others,
@@ -2903,97 +2903,107 @@ void kill_unit(struct unit *pkiller, struct unit *punit, bool vet)
             char dead_units_str[1024];
             char killed_unit_str[512];
             char plural_string[32];
+            int others = num_killed[i]-1;
 
             plural_string[0] = 0;
             memset(dead_units_str, '\0', sizeof(dead_units_str));
+            int my_killed_count = 0; // used for punctuation by adding "," and ", and" into the string, based on index
             for (int k = 0; k < kill_counter; k++) {
                /* 1. Don't show primary stack defender as secondary casualty
-                  2. Only show casualties belonging to this player to this player */
-              if (unit_owner(&killed_units[k])==player_by_number(i) && killed_units[k].id != punit->id) { 
+                  2. Only show casualties belonging to this player */
+              if (unit_owner(&killed_units[k])==player_by_number(i) && killed_units[k].id != punit->id) {
+                my_killed_count++;
                 // Concatenate the result string for secondary casualties
                 sz_strlcpy(casualty_type_name, unit_name_translation(&killed_units[k]));
                 sprintf(killed_unit_str, " ◽%s %s", casualty_type_name, UNIT_EMOJI(&killed_units[k]));
                 strcat(dead_units_str, killed_unit_str);
-                if (k<kill_counter-1) { // not the last unit in list: penultimate list item or before
-                  strcat(dead_units_str, (k==kill_counter-2 ? ", and" : ","));
-                } else if (k==kill_counter-1) {
-                  strcat(dead_units_str, ""); // possible terminating text.
+                if (my_killed_count < others) {
+                  strcat(dead_units_str, ",");
+                }
+                if (my_killed_count == others-1) {
+                  strcat(dead_units_str, " and");
                 }
               }
             }
-            if (num_killed[i]-1 > 1) sprintf(plural_string, "<b>%d</b>", num_killed[i]);
-            notify_player(player_by_number(i), unit_tile(pkiller), E_UNIT_LOST_DEF, ftc_server,
-                  // TRANS: "Horsemen🏇 and Horsemen🏇 lost to [a] Polish Horsemen🏇."
-                  //    or: "Horsemen🏇, Horsemen🏇, and Horsemen🏇 lost to [a] Polish Horsemen🏇. (3 units)"
-                  PL_("⚠️%s %s %s and %s lost to %s %s %s %s.%s",  // last %s is null for singular situations
-                      "⚠️%s %s %s, %s lost to %s %s %s %s. (%s units)", num_killed[i] - 1),
+            if (num_killed[i]-1 > 1) {
+              sprintf(plural_string, "<b>%d</b>", num_killed[i]-1);
+            }
+            /* if 2 units were killed then we don't need to break up two message packets */
+            if (num_killed[i]-1 == 1) {
+              notify_player(player_by_number(i), unit_tile(pkiller), E_UNIT_LOST_DEF, ftc_server,
+                    // TRANS: "Horsemen🏇 and Horsemen🏇 lost to [a] Polish Horsemen🏇."
+                    "⚠️%s %s %s and %s lost to %s %s %s %s.",  // last %s is null for singular situations
+                    (pcity ? city_link(pcity) : ""),
+                    punit_link, punit_emoji,
+                    dead_units_str,
+                    is_unit_plural(pkiller) ? "" : indefinite_article_for_word(nation_adjective_for_player(pvictor), false),
+                    nation_adjective_for_player(pvictor),
+                    pkiller_emoji, pkiller_link);
+            } else {
+            /* otherwise, we need to break into two messages so we don't overflow packet length */
+              notify_player(player_by_number(i), unit_tile(pkiller), E_UNIT_LOST_DEF, ftc_server,
+                    /* TRANS: "[a] Viking 🏇 Horsemen killed our London Horsemen🏇 and 2 other units:  */
+                    _("⚠️%s %s %s %s killed our %s %s %s and %s other units:"),
+                    is_unit_plural(pkiller) ? "" : indefinite_article_for_word(nation_adjective_for_player(pvictor), true),
+                    nation_adjective_for_player(pvictor),
+                    pkiller_emoji, pkiller_link,
+                    (pcity ? city_link(pcity) : ""),
+                    punit_link, punit_emoji,
+                    plural_string);
+              notify_player(player_by_number(i), unit_tile(pkiller), E_UNIT_LOST_DEF, ftc_server,
+                    /*   Horsemen🏇, and Horsemen🏇." */
+                    _("%s"), dead_units_str);
+            }
+          }
+        } // </end> case handling for casualty report for owner of the killed stack defender unit
+
+        // Player had secondary casualties but was NOT THE STACK DEFENDER:
+        else {
+          bool too_many_casualties = (num_killed[i] > MAX_SECONDARY_CASUALTIES_TO_REPORT
+                   || kill_counter > MAX_KILLED_UNITS_TO_REPORT_TO_ALL_PLAYERS);
+          bool incoming_list = !too_many_casualties;
+
+          /* In the case of not being the stack defender, we ALWAYS get a report of #n unit(s) lost
+             when the Attacker killed the [allied] stack defender. If the number of casualties is
+             too long to list, we stop there; otherwise we insert a colon at the end of that string
+             to prompt the later notification which lists the casualties: */                 
+          notify_player(player_by_number(i), ptile,
+                  E_UNIT_LOST_DEF, ftc_server,
+                  /* TRANS: "2 units lost when [an] Italian 🏇Horsemen attacked [a] German Horsemen🏇:" */
+                  PL_("⚠️ %d %s unit lost when %s %s %s %s attacked %s %s %s%s",
+                      "⚠️ %d %s units lost when %s %s %s %s attacked %s %s %s%s", num_killed[i]),
+                  num_killed[i],
                   (pcity ? city_link(pcity) : ""),
-                  punit_link, punit_emoji,
-                  dead_units_str,
                   is_unit_plural(pkiller) ? "" : indefinite_article_for_word(nation_adjective_for_player(pvictor), false),
                   nation_adjective_for_player(pvictor),
                   pkiller_emoji, pkiller_link,
-                  plural_string);
-            }
-        } // </end> case handling for casualty report for owner of the killed stack defender unit
+                  is_unit_plural(punit) ? "" : indefinite_article_for_word(nation_adjective_for_player(pvictim), false),
+                  nation_adjective_for_player(pvictim),
+                  punit_link,
+                  (incoming_list ? ":" : "."));
 
-        // Player had secondary casualties but was not the stack defender.
-        // CASE HANDLING: player had too secondary casualties to report them all:
-        else {
-          if (num_killed[i]-1 > MAX_SECONDARY_CASUALTIES_TO_REPORT
-                   || kill_counter > MAX_KILLED_UNITS_TO_REPORT_TO_ALL_PLAYERS) {
-                
-              notify_player(player_by_number(i), ptile,
-                      E_UNIT_LOST_DEF, ftc_server,
-                      /* TRANS: "2 units lost when [an] Italian 🏇Horsemen attacked the German Horsemen🏇." */
-                      PL_("⚠️ %d %s unit lost when %s %s %s %s attacked the %s %s %s",
-                          "⚠️ %d %s units lost when %s %s %s %s attacked the %s %s %s",
-                          num_killed[i]),
-                      num_killed[i],
-                      (pcity ? city_link(pcity) : ""),
-                      is_unit_plural(pkiller) ? "" : indefinite_article_for_word(nation_adjective_for_player(pvictor), false),
-                      nation_adjective_for_player(pvictor),
-                      pkiller_emoji, pkiller_link,
-                      nation_adjective_for_player(pvictim),
-                      punit_link, punit_emoji);
-            } 
-            /* CASE HANDLING: player's secondary casualties less than MAX_SECONDARY_CASUALTIES_TO_REPORT,
-               so report them all */
-            else if (num_killed[i]-1 <= MAX_SECONDARY_CASUALTIES_TO_REPORT
-                   && kill_counter <= MAX_KILLED_UNITS_TO_REPORT_TO_ALL_PLAYERS) 
-            {
+            /* Player's secondary casualties not more than MAX_SECONDARY_CASUALTIES_TO_REPORT,
+               so we report them: */
+            if (!too_many_casualties) {
               char dead_units_str[1024];
               char killed_unit_str[512];
-              char plural_string[32];
-
-              plural_string[0] = 0;
+              
               memset(dead_units_str, '\0', sizeof(dead_units_str));
               for (int k = 0; k < kill_counter; k++) {
-                   /* Only show casualties belonging to this player */
+                /* Only show casualties belonging to this player */
                 if (unit_owner(&killed_units[k])==player_by_number(i)) { 
                   // Concatenate the result string for secondary casualties
                   sz_strlcpy(casualty_type_name, unit_name_translation(&killed_units[k]));
                   sprintf(killed_unit_str, " ◽%s %s", casualty_type_name, UNIT_EMOJI(&killed_units[k]));
                   strcat(dead_units_str, killed_unit_str);
-                  if (k<kill_counter-1) { // not the last unit in list: penultimate list item or before
-                    strcat(dead_units_str, (k==kill_counter-2 ? ", and" : ","));
-                  } else if (k==kill_counter-1) {
-                    strcat(dead_units_str, ""); // possible terminating text.
-                  }
                 }
               }
-              if (num_killed[i]-1 > 0) sprintf(plural_string, "<b>%d</b>", num_killed[i]);
-              notify_player(player_by_number(i), unit_tile(pkiller), E_UNIT_LOST_DEF, ftc_server,
-                    /* TRANS: "Horsemen🏇 lost to [an] Italian 🏇Horsemen." 
-                              "Horsemen🏇, Horsemen🏇, and Horsemen🏇 lost to [an] Italian 🏇Horsemen. (3 units)"  */
-                    PL_("⚠️%s %s lost to %s %s %s %s.%s",  // last %s is null for singular situations
-                        "⚠️%s %s lost to %s %s %s %s. (%s units)", num_killed[i]),
+              //if (num_killed[i]-1 > 0) sprintf(plural_string, "<b>%d</b>", num_killed[i]);
+              notify_player(player_by_number(i), ptile, E_UNIT_LOST_DEF, ftc_server,
+                    /* TRANS: "Horsemen🏇, Horsemen🏇, and Horsemen🏇"  */
+                    _("%s %s."),
                     (pcity ? city_link(pcity) : ""),
-                    dead_units_str,
-                    is_unit_plural(pkiller) ? "" : indefinite_article_for_word(nation_adjective_for_player(pvictor), false),
-                    nation_adjective_for_player(pvictor),
-                    pkiller_emoji, pkiller_link,
-                    plural_string);
+                    dead_units_str);
             }
         } // </end> case handling for player with secondary casualties who did not own the stack defender.
       } // </end> case handling for each player who lost more than one unit 
