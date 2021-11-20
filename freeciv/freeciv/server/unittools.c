@@ -2689,8 +2689,8 @@ void kill_unit(struct unit *pkiller, struct unit *punit, bool vet)
                                            NULL,
                                            action_by_number(ACTION_ATTACK),
                                            EFT_STACK_ESCAPE_PCT);
-          // Charm the dice a tiny % based on who has more moves:                                 
-          escape_chance += (vunit->moves_left - pkiller->moves_left); 
+          // Escape Charm. +1% odds for each move point more the defender has over attacker:                                 
+          escape_chance += ((vunit->moves_left - pkiller->moves_left) / SINGLE_MOVE); 
           // Roll the dice:
           if (fc_rand(100)<escape_chance) {
             // Successful roll: vunit will escape iff there is legal tile to escape.
