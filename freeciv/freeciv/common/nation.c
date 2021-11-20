@@ -203,6 +203,9 @@ bool is_word_plural(const char *word)
   if (strcmp(&word[len-2], "ss") == 0) return false; // -ss are singular
   if (word[len-1] == 's') return true;
   if (strcmp(&word[len-3], "men") == 0) return true;  // Pikemen, Riflemen, etc.
+  if (strcmp(&word[len-7], "nfantry") == 0) return true;  // infantry
+  if (strcmp(&word[len-8], "rtillery") == 0) return true;  // artillery
+  
   return false;
 
   /* Exceptions I, currently commented because they don't come up:
