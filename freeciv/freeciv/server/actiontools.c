@@ -168,7 +168,8 @@ static void action_give_casus_belli(struct player *offender,
 
   /* Server setting game.server.casusbelli_allies gives casus belli to
      the victim's allies also: */ 
-  if (game.server.casusbelli_allies) {
+  if (victim_player && offender!= victim_player //pillage your own tile = no casus belli
+      && game.server.casusbelli_allies) {
     action_give_casus_belli_to_allies(offender, victim_player);
   }
 
