@@ -16,6 +16,7 @@
 <a href="https://freecivweb.fandom.com/wiki/Special_Unit_Attacks#Special_Unit_Defense" target="_blank">Special Unit Defense</a>
 <a href="https://freeciv.fandom.com/wiki/Defense_bonus_chart.mp2" target="_blank">Terrain+Base Defense Bonus Quick-Reference</a>
 <a href="https://freeciv.fandom.com/wiki/Diplomatic_Action_Chart.mp2" target="_blank">Diplomatic Odds Charts</a>
+<a href="https://freeciv.fandom.com/wiki/Vigil_engagement_chart.mp2c" target="_blank">Vigil Engagement Chart</a>
 <a href="https://freeciv.fandom.com/wiki/Hotkeys.mp" target="_blank">Hotkeys and Mouse Control</a>
 <br>
 The MP2-Caravel ruleset is a modernized ruleset to take advantage of cutting-edge advancements in Freeciv Server development. 
