@@ -5771,10 +5771,10 @@ type    = "Output_Bonus_2"
 value	= 8  
 reqs    =
     { "type",       "name",        "range", "present"
-;      "Building",   "Medici Bank", "Player", TRUE   ;G33 Integrity Patch; remove after G33 
+      "Building",   "Medici Bank", "Player", TRUE
       "Building",   "Bank",        "City",   TRUE
-;      "OutputType", "Gold",        "Local",  TRUE   ;G33 Integrity Patch; remove after G33
-;      "Gov",        "Communism",   "Player", FALSE  ;G33 Integrity Patch; remove after G33
+      "OutputType", "Gold",        "Local",  TRUE
+      "Gov",        "Communism",   "Player", FALSE
     }
 ;************************************************************************ Michelangelo
 [effect_michelangelos_chapel]
