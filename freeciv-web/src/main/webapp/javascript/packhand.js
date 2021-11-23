@@ -16,18 +16,18 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 ***********************************************************************/
-var DEBUG_LOG_PACKETS = false;   // verbose packet logging
-var DEBUG_SHORT_PACKETS = true;  // show terse packet log
-var DEBUG_EXPAND_PACKETS = false; // log expandable packet under short info
-var DEBUG_ACTION_PACKETS = false;// for debugging outgoing actions only 
+var DEBUG_LOG_PACKETS = false;    // verbose packet logging
+var DEBUG_SHORT_PACKETS = false;  // show terse packet log
+var DEBUG_EXPAND_PACKETS = true;  // log expandable packet under terse packet
+var DEBUG_ACTION_PACKETS = false; // for debugging outgoing actions only 
 //
-var DEBUG_PICK_NATION = true;    // temporary for figuring out pick nation bug
-var DEBUG_UNITS = false;         // console log tools for debugging unit issues
-var DEBUG_FOCUS = false;         // for debugging advancing unit focus glitches
+var DEBUG_PICK_NATION = false;    // for debugging longturn pick nation issues
+var DEBUG_UNITS = false;          // console log tools for debugging unit issues
+var DEBUG_FOCUS = false;          // for debugging advancing unit focus glitches
 //
 /* Commenting out a key/value pair will result in packets of that type
-   not being logged when DEBUG_SHORT_PACKETS is set true. That is, it's
-   helpful for narrowing your packet analysis during debugging. */
+   not being logged in DEBUG_SHORT_PACKETS mode. That is, it's helpful
+   for screening your packet analysis during debugging. */
 const packet_names = {
   "PROCESSING_STARTED": 0,
   "PROCESSING_FINISHED": 1,

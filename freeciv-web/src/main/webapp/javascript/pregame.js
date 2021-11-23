@@ -407,9 +407,8 @@ function pick_nation(player_id)
         }
     }
     if (Object.keys(players).length == Object.keys(player_nations).length) {
-      if (DEBUG_PICK_NATION) console.log("Unable to pick nation because we think the game is full.");
-       add_client_message("Unable to join the game, it is full.");
-       return;
+      add_client_message("Unable to join the game, it is full ... Please ignore this message if you were the first to join.");
+      return;
     }
   }
 
