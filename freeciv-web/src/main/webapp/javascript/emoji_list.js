@@ -571,6 +571,7 @@ var freemoji = [
 'divebomber',
 'escortfighter',
 'jetfighter',
+"multi-fighter",
 'groundstrikefighter',
 'stealthfighter',
 'mediumbomber',
