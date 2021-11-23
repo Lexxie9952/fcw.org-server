@@ -310,7 +310,7 @@ Random randomValue=new Random();
 			<div class="" style="width:80%; max-width:80%; text-align:center; margin:0 auto;">
 				<div class="game-type">
 					<div class="header">
-						<span class="name">Notify Me</span>
+						<span class="name"><i class="fa fa-envelope"></i> Notify Me</span>
 					</div>
 
 						<div class="">
