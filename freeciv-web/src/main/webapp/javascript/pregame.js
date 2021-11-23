@@ -35,6 +35,9 @@ var google_user_token = null;
 ****************************************************************************/
 function pregame_start_game()
 {
+  if (DEBUG_PICK_NATION) {
+    console.log("pregame_start_game called by "+pregame_start_game.caller)
+  }
   // Successfully prevents the keyboard from popping up on Mobile; which also
   // force-exits from Fullscreen on Firefox Mobile and some other browsers:
   if (is_touch_device()) $("#game_text_input").hide();
@@ -340,8 +343,28 @@ function pick_nation_ongoing_longturn()
     $("#pick_nation_button").hide();
     if (!is_loaded_game()) {
       $("#start_game_button").hide();
+      if (DEBUG_PICK_NATION) console.log("is_loaded_game()==false triggers player to pick nation")
       pick_nation(null);
+    } else {
+      if (DEBUG_PICK_NATION) console.log("is_loaded_game()==true disallows player to pick nation")
     }
+}
+
+/**********************************************************************//**
+  Returns the # of turns idle a player has to be, at this point in the 
+  game, to be taken over by a latejoiner player. Keep this code 
+  identical with connecthand.c:can_take_idler_turns() ********* !!!
+**************************************************************************/
+function can_take_idler_turns()
+{
+  // Keep this code identical with connecthand.c.:can_take_idler_turns() !!!
+  /* Turns 1-12: replace idle 3. T12+ increase idle cutoff until max cutoff of 10 */
+  var threshold = 3;
+  if (game_info.turn > 12) threshold += (game_info.turn - 12);
+  if (threshold > 10) threshold = 10;
+  // </end identical code notes>
+
+  return threshold;
 }
 
 /****************************************************************************
@@ -355,25 +378,36 @@ function pick_nation(player_id)
   var pplayer = players[player_id]; 
   var player_nations = {};    
 
-  if (pplayer == null && !is_ongoing_longturn()) return;
+  if (pplayer == null && !is_ongoing_longturn()) {
+    if (DEBUG_PICK_NATION) console.log("Unable to pick nation because pplayer==null && !is_ongoing_longturn()");
+    return;
+  }
   choosing_player = player_id;
 
   var player_name = !is_ongoing_longturn() ? pplayer['name'] : simpleStorage.get("username", "");
 
   if (is_ongoing_longturn()) { 
-    /* We only show the nations that are not already taken by human players */ 
+    /* If player took an idler they can't change the nation of it: */
+    var idle_cutoff = can_take_idler_turns();
+    if (pplayer && pplayer['nturns_idle'] !== undefined && pplayer['nturns_idle'] >= idle_cutoff) {
+      if (DEBUG_PICK_NATION) console.log("Unable to pick nation it's assumed we took an idler.");
+      return;
+    }
+    /* We only show the nations that are not already taken by human players */
     for (id in players) {
         if (players[id]['name'].indexOf("NewAvailablePlayer") == -1) {
-            // Keep this code identical with connecthand.c:can_take_idler_turns() ********* !!!
-            var idle_cutoff = 3;
-            if (game_info.turn > 12) idle_cutoff += (game.info.turn - 12);
-            if (idle_cutoff > 10) idle_cutoff = 10;
-            // </end identical code notes>
-            if (players[id]['nturns_idle'] >= idle_cutoff) return; /* The joining player would have taken over an idler, don't show the dialog */
-            else player_nations[players[id]['nation']] = true;
+          /* 22Nov2021 We no longer can rely on the existence of an idler to mean that
+             the player was assigned an idler; we actually try to assign non-idlers
+             first ....
+            if (players[id]['nturns_idle'] >= idle_cutoff) return;
+            else 
+            // The joining player would have taken over an idler, don't show the dialog
+          */
+            player_nations[players[id]['nation']] = true;
         }
     }
     if (Object.keys(players).length == Object.keys(player_nations).length) {
+      if (DEBUG_PICK_NATION) console.log("Unable to pick nation because we think the game is full.");
        add_client_message("Unable to join the game, it is full.");
        return;
     }

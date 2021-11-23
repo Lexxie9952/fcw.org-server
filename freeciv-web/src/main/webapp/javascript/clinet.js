@@ -106,8 +106,20 @@ function websocket_init()
   ws.onmessage = function (event) {
      if (typeof client_handle_packet !== 'undefined') {
        client_handle_packet(JSON.parse(event.data));
-       if (DEBUG_LOG_PACKETS) 
-         console.log("*** INCOMING PACKET>>>>>"+event.data);
+       if (DEBUG_LOG_PACKETS) {
+        console.log("*** INCOMING PACKET>>>>>"+event.data);
+      } else if (DEBUG_SHORT_PACKETS) {
+        var pid = jQuery.parseJSON(event.data)[0]['pid']
+        var ptitle = getKeyByValue(packet_names, pid);
+        // Only print infos from packet pids we defined in packhand.js:packet_names
+        if (pid>1 && ptitle) {
+          console.log("****** IN (%s): %s", pid, ptitle);
+          if (DEBUG_EXPAND_PACKETS && pid>1) {
+            var my_obj = JSON.parse(event.data);
+            console.log(my_obj);
+          }
+        }
+      }
         
      } else {
        console.error("Error, freeciv-web not compiled correctly. Please "
@@ -164,6 +176,7 @@ function check_websocket_ready()
       sha_password = encodeURIComponent(shaObj.getHash("HEX"));
     }
 
+    /* LOCAL HOST ONLY: comment out this block to allow testing longturn without using google_auth */
     if (is_longturn() && google_user_token == null) {
       swal("Login failed.");
       setSwalTheme();
@@ -249,13 +262,25 @@ function send_request(packet_payload)
 
   if (DEBUG_LOG_PACKETS || DEBUG_ACTION_PACKETS) 
     console.log("OUTGOING PACKET>>>>>"+packet_payload);
-
+  
   if (debug_active) {
     clinet_last_send = new Date().getTime();
   }
   // User actions use send_request. Track user activity/inactivity here:
   // 2 types of outgoing messages are false positive for user action:
   var packet_type = jQuery.parseJSON("["+packet_payload+"]")[0]['pid'];
+  if (DEBUG_SHORT_PACKETS) {
+    var ptitle = getKeyByValue(packet_names, packet_type);
+    // Only print infos from packet pids we defined in packhand.js:packet_names
+    if (ptitle) {
+      console.log("***** OUT (%d): %s",packet_type, ptitle);
+      if (DEBUG_EXPAND_PACKETS && packet_type>1) {
+        var my_obj = jQuery.parseJSON("["+packet_payload+"]");
+        console.log(my_obj);
+      }
+    }
+  }
+
   // ping answer and update_metamessage_game_running_status():
   if (packet_type==packet_conn_pong || packet_type==packet_chat_msg_req) 
     return;

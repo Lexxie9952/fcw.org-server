@@ -464,6 +464,8 @@ function wait_for_text(text, runnable)
 {
   var chatbox_text = get_chatbox_text();
   if (chatbox_text != null && chatbox_text.indexOf(text) != -1) {
+    if (DEBUG_PICK_NATION)
+      console.log("wait_for_text("+text+") engaged.");
     runnable();
   } else {
     setTimeout(function () {

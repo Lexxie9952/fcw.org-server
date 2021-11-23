@@ -40,9 +40,6 @@ const GOTO_CLICK_COOLDOWN = 475; // Cooldown period before that tile can be clic
 var keyboard_input = true;
 var unitpanel_active = false;
 var allow_right_click = false;
-var DEBUG_UNITS = false;  // console log tools for debugging unit issues
-var DEBUG_FOCUS = false;
-var DEBUG_ACTION_PACKETS = false;
 
 // performance: is_touch_device() was being called many times per second
 var touch_device = null; // TO DO: replace all is_touch_device() function calls
@@ -6466,7 +6463,6 @@ function request_new_unit_activity(punit, activity, target)
   action_decision_clear_want(punit['id']);
   var packet = {"pid" : packet_unit_change_activity, "unit_id" : punit['id'],
                 "activity" : activity, "target" : target };
-  //if (DEBUG_LOG_PACKETS) console.log("Sending action request: "+JSON.stringify(packet));
   send_request(JSON.stringify(packet));
 }
 

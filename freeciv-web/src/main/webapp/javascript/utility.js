@@ -345,6 +345,13 @@ function getHash(input){
 }
 
 /**************************************************************************
+  Reverse lookup: get an object key by its value
+**************************************************************************/
+function getKeyByValue(object, value) {
+  return Object.keys(object).find(key => object[key] === value);
+}
+
+/**************************************************************************
    Force execution to delay by x milliseconds.
 **************************************************************************/
 function wait(ms) 

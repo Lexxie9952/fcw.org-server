@@ -16,6 +16,232 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 ***********************************************************************/
+var DEBUG_LOG_PACKETS = false;   // verbose packet logging
+var DEBUG_SHORT_PACKETS = true;  // show terse packet log
+var DEBUG_EXPAND_PACKETS = false; // log expandable packet under short info
+var DEBUG_ACTION_PACKETS = false;// for debugging outgoing actions only 
+//
+var DEBUG_PICK_NATION = true;    // temporary for figuring out pick nation bug
+var DEBUG_UNITS = false;         // console log tools for debugging unit issues
+var DEBUG_FOCUS = false;         // for debugging advancing unit focus glitches
+//
+/* Commenting out a key/value pair will result in packets of that type
+   not being logged when DEBUG_SHORT_PACKETS is set true. That is, it's
+   helpful for narrowing your packet analysis during debugging. */
+const packet_names = {
+  "PROCESSING_STARTED": 0,
+  "PROCESSING_FINISHED": 1,
+  "SERVER_JOIN_REQ": 4,
+  "SERVER_JOIN_REPLY": 5, 
+  "AUTHENTICATION_REQ": 6,
+  "AUTHENTICATION_REPLY": 7,
+  "SERVER_SHUTDOWN": 8,
+  "NATION_SELECT_REQ": 10,
+  "PLAYER_READY": 11,
+  "ENDGAME_REPORT": 12,   
+  "ENDGAME_PLAYER": 223,
+  /* 
+  "TILE_INFO": 15,
+  */
+  "GAME_INFO": 16,
+  "CALENDAR_INFO": 255,
+  "TIMEOUT_INFO": 244,
+  "MAP_INFO": 17,
+  "NUKE_TILE_INFO": 18,
+  /*
+  "TEAM_NAME_INFO": 19,
+  */
+  "ACHIEVEMENT_INFO": 238,
+  "CHAT_MSG": 25,
+  "EARLY_CHAT_MSG": 28,
+  "CHAT_MSG_REQ": 26,
+  "CONNECT_MSG": 27,
+  "SERVER_INFO": 29,
+  "CITY_REMOVE": 30,
+  "CITY_INFO": 31,
+  "CITY_SHORT_INFO": 32,
+  "TRADEROUTE_INFO": 249,
+  "CITY_SELL": 33,
+  "CITY_BUY": 34,
+  "CITY_CHANGE": 35,
+  "CITY_WORKLIST": 36,
+  "CITY_MAKE_SPECIALIST": 37,
+  "CITY_MAKE_WORKER": 38,
+  "CITY_CHANGE_SPECIALIST": 39,
+  "CITY_RENAME": 40,
+  "CITY_OPTIONS_REQ": 41,
+  "CITY_REFRESH": 42,
+  "CITY_NAME_SUGGESTION_REQ": 43,
+  "CITY_NAME_SUGGESTION_INFO": 44,
+  "CITY_SABOTAGE_LIST": 45,
+  "CITY_MANAGER": 139,
+  "CITY_RALLY_POINT": 138,
+  "WORKER_TASK": 241,
+  "PLAYER_REMOVE": 50,
+  "PLAYER_INFO": 51,
+  "PLAYER_PHASE_DONE": 52,
+  "PLAYER_RATES": 53,
+  "PLAYER_CHANGE_GOVERNMENT": 54,
+  "PLAYER_PLACE_INFRA": 61,
+  "PLAYER_ATTRIBUTE_BLOCK": 57,
+  "PLAYER_ATTRIBUTE_CHUNK": 58,
+  /*
+  "PLAYER_DIPLSTATE": 59,
+  */
+  "PLAYER_MULTIPLIER": 242,
+  "RESEARCH_INFO": 60,
+  "PLAYER_TECH_GOAL": 56,
+  "UNIT_REMOVE": 62,
+  "UNIT_INFO": 63,
+  "UNIT_SHORT_INFO": 64,
+  "UNIT_COMBAT_INFO": 65,
+  "UNIT_SSCS_SET": 71,
+  "UNIT_ORDERS": 73,
+  "UNIT_AUTOSETTLERS": 74,
+  "UNIT_ACTION_QUERY": 82,
+  "UNIT_TYPE_UPGRADE": 83,
+  "UNIT_DO_ACTION": 84,
+  "UNIT_ACTION_ANSWER": 85,
+  "UNIT_GET_ACTIONS": 87,
+  "UNIT_ACTIONS": 90,
+  "UNIT_CHANGE_ACTIVITY": 222,
+  "DIPLOMACY_INIT_MEETING_REQ": 95,
+  "DIPLOMACY_INIT_MEETING": 96,
+  "DIPLOMACY_CANCEL_MEETING_REQ": 97,
+  "DIPLOMACY_CANCEL_MEETING": 98,
+  "DIPLOMACY_CREATE_CLAUSE_REQ": 99,
+  "DIPLOMACY_CREATE_CLAUSE": 100,
+  "DIPLOMACY_REMOVE_CLAUSE_REQ": 101,
+  "DIPLOMACY_REMOVE_CLAUSE": 102,
+  "DIPLOMACY_ACCEPT_TREATY_REQ": 103,
+  "DIPLOMACY_ACCEPT_TREATY": 104,
+  "DIPLOMACY_CANCEL_PACT": 105,
+  "PAGE_MSG": 110,
+  "PAGE_MSG_PART": 250,
+  "REPORT_REQ": 111,
+  "CONN_INFO": 115,
+  /*
+  "CONN_PING_INFO": 116,
+  "CONN_PING": 88,
+  "CONN_PONG": 89,
+  */
+  "CLIENT_HEARTBEAT": 254,
+  "CLIENT_INFO": 119,
+  "END_PHASE": 125,
+  "START_PHASE": 126,
+  "NEW_YEAR": 127,
+  "BEGIN_TURN": 128,
+  "END_TURN": 129,
+  "FREEZE_CLIENT": 130,
+  "THAW_CLIENT": 131,
+  "SPACESHIP_LAUNCH": 135,
+  "SPACESHIP_PLACE": 136,
+  /*
+  "SPACESHIP_INFO": 137,
+  */
+  /* commenting out packets lets us turn off reporting of them
+  "RULESET_UNIT": 140,
+  "RULESET_UNIT_BONUS": 228,
+  "RULESET_UNIT_FLAG": 229,
+  "RULESET_UNIT_CLASS_FLAG": 230,
+  "RULESET_GAME": 141,
+  "RULESET_SPECIALIST": 142,
+  "RULESET_GOVERNMENT_RULER_TITLE": 143,
+  "RULESET_TECH": 144,
+  "RULESET_TECH_CLASS": 9,
+  "RULESET_TECH_FLAG": 234,
+  "RULESET_GOVERNMENT": 145,
+  "RULESET_TERRAIN_CONTROL": 146,
+  "RULESETS_READY": 225,
+  "RULESET_NATION_SETS": 236,
+  "RULESET_NATION_GROUPS": 147,
+  "RULESET_NATION": 148,
+  "NATION_AVAILABILITY": 237,
+  "RULESET_STYLE": 239,
+  "RULESET_CITY": 149,
+  "RULESET_BUILDING": 150,
+  "RULESET_TERRAIN": 151,
+  "RULESET_TERRAIN_FLAG": 231,
+  "RULESET_UNIT_CLASS": 152,
+  "RULESET_EXTRA": 232,
+  "RULESET_EXTRA_FLAG": 226,
+  "RULESET_BASE": 153,
+  "RULESET_ROAD": 220,
+  "RULESET_GOODS": 248,
+  "RULESET_DISASTER": 224,
+  "RULESET_ACHIEVEMENT": 233,
+  "RULESET_TRADE": 227,
+  "RULESET_ACTION": 246,
+  "RULESET_ACTION_ENABLER": 235,
+  "RULESET_ACTION_AUTO": 252,
+  "RULESET_MUSIC": 240,
+  "RULESET_MULTIPLIER": 243,
+  "RULESET_EFFECT": 175,
+  "RULESET_RESOURCE": 177,
+  "RULESET_CLAUSE": 512,*/
+  "RULESET_CONTROL": 155,
+  /*
+  "RULESET_SUMMARY": 251,
+  "RULESET_DESCRIPTION_PART": 247,
+  */
+  "SINGLE_WANT_HACK_REQ": 160,
+  "SINGLE_WANT_HACK_REPLY": 161,
+  "RULESET_CHOICES": 162,
+  "GAME_LOAD": 163,
+  "SERVER_SETTING_CONTROL": 164,
+  /*
+  "SERVER_SETTING_CONST": 165,
+  "SERVER_SETTING_BOOL": 166,
+  "SERVER_SETTING_INT": 167,
+  "SERVER_SETTING_STR": 168,
+  "SERVER_SETTING_ENUM": 169,
+  "SERVER_SETTING_BITWISE": 170,
+  */
+  "SET_TOPOLOGY": 253,
+  "SCENARIO_INFO": 180,
+  "SCENARIO_DESCRIPTION": 13,
+  "SAVE_SCENARIO": 181,
+  "VOTE_NEW": 185,
+  "VOTE_UPDATE": 186,
+  "VOTE_REMOVE": 187,
+  "VOTE_RESOLVE": 188,
+  "VOTE_SUBMIT": 189,
+  "EDIT_MODE": 190,
+  "EDIT_RECALCULATE_BORDERS": 197,
+  "EDIT_CHECK_TILES": 198,
+  "EDIT_TOGGLE_FOGOFWAR": 199,
+  "EDIT_TILE_TERRAIN": 200,
+  "EDIT_TILE_EXTRA": 202,
+  "EDIT_STARTPOS": 204,
+  "EDIT_STARTPOS_FULL": 205,
+  "EDIT_TILE": 206,
+  "EDIT_UNIT_CREATE": 207,
+  "EDIT_UNIT_REMOVE": 208,
+  "EDIT_UNIT_REMOVE_BY_ID": 209,
+  "EDIT_UNIT": 210,
+  "EDIT_CITY_CREATE": 211,
+  "EDIT_CITY_REMOVE": 212,
+  "EDIT_CITY": 213,
+  "EDIT_PLAYER_CREATE": 214,
+  "EDIT_PLAYER_REMOVE": 215,
+  "EDIT_PLAYER": 216,
+  "EDIT_PLAYER_VISION": 217,
+  "EDIT_GAME": 218,
+  "EDIT_SCENARIO_DESC": 14,
+  "EDIT_OBJECT_CREATED": 219,
+  "PLAY_MUSIC": 245,
+  "WEB_CITY_INFO_ADDITION": 256,
+  /*
+  "WEB_PLAYER_INFO_ADDITION": 257,
+  "WEB_RULESET_UNIT_ADDITION": 258,
+  */
+  "GOTO_PATH_REQ": 287,
+  "GOTO_PATH": 288,
+  "INFO_TEXT_REQ": 289,
+  "INFO_TEXT_MESSAGE": 290,
+  "ONGOING_LONGTURN_NATION_SELECT_REQ": 291,
+  "RALLY_PATH_REQ": 292
+  };
 
 const auto_attack_actions = [
   ACTION_ATTACK, ACTION_SUICIDE_ATTACK,
@@ -32,9 +258,6 @@ var last_ground_attack_time = 0;
 /* Freeciv Web Client.
    This file contains the handling-code for packets from the civserver.
 */
-
-var DEBUG_LOG_PACKETS = false;
-
 
 function handle_processing_started(packet)
 {
@@ -678,7 +901,15 @@ function handle_map_info(packet)
 function handle_game_info(packet)
 {
   game_info = packet;
-  if (is_ongoing_longturn() && C_S_PREPARING == client_state()) wait_for_text("You are logged in as", pick_nation_ongoing_longturn);
+  if (is_ongoing_longturn() && C_S_PREPARING == client_state()) {
+    if (DEBUG_PICK_NATION) {
+      console.log("handle_game_info is doing wait_for_text in order to pick nation");
+    }
+    wait_for_text("You are logged in as", pick_nation_ongoing_longturn);
+  } else {
+    if (DEBUG_PICK_NATION)
+      console.log("handle_game_info won't pick nation: (is_ongoing_longturn() && C_S_PREPARING == client_state()) == false");
+  }
 }
 
 /**************************************************************************

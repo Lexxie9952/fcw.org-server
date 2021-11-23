@@ -650,7 +650,7 @@ void send_conn_info_remove(struct conn_list *src, struct conn_list *dest)
 **************************************************************************/
 static int can_take_idler_turns()
 {
-  // Keep this code identical with pregame.js:pick_nation() **************************** !!!
+  // Keep this code identical with pregame.js:can_take_idler_turns() **************************** !!!
   /* Turns 1-12: replace idle 3. T12+ increase idle cutoff until max cutoff of 10 */
   int threshold = 3;
   if (game.info.turn > 12) threshold += (game.info.turn - 12);
