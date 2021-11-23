@@ -219,6 +219,7 @@ Improvements that appease unhappy citizens add +1 base gold in tithes for each\
  military units may impose martial law, affecting one citizen each. Pilgrims\
  can be made to migrate and grow cities. \n\
 "), _("\
+Celebrating cities rapture 2 out of 5 turns (with a Cathedral. 1 out of 2).\
 No citizens are made unhappy by each aggressive unit. \n\
 2% Base corruption in cities\n\
 2% Extra corruption per each tile in distance from capital\n\

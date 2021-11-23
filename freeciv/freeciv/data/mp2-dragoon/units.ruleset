@@ -2657,7 +2657,7 @@ Fighters can Stack-Escape：a 60% chance to escape a killed stack if they have m
 name          = _("Escort Fighter")
 class         = "AirProtect"
 tech_req      = "Radio"
-obsolete_by   = "Jet Fighter"
+obsolete_by   = "Multi-Fighter"
 graphic       = "u.escort_fighter"
 graphic_alt   = "-"
 sound_move    = "m_escort_fighter"
@@ -3248,8 +3248,8 @@ sound_fight   = "f_jet_fighter"
 sound_fight_alt = "f_stealth_fighter"
 build_cost    = 70
 pop_cost      = 0
-attack        = 6
-defense       = 5
+attack        = 7
+defense       = 6
 hitpoints     = 20
 firepower     = 2
 move_rate     = 24
@@ -3284,7 +3284,64 @@ Jet Fighters upgrade the Fighter with improved attack, defense, and range.\
 INTERCEPTOR：the Vigil order lets Jet Fighters auto-attack adjacent Air units if they\
  have better attack odds. This unit can Vigil if it uses 3 move points or less. \n\
 "), _("
-Helicopters can Stack-Escape：a 60% chance to escape a killed stack if they have more remaining moves than the attacker.\
+Jet Fighters can Stack-Escape：a 60% chance to escape a killed stack if they have more remaining moves than the attacker.\
+ NOTE：GOTO disallows unit loss from lack of fuel. You can override this by ordering moves to adjacent tiles.\
+")
+
+[unit_multi_fighter]
+name          = _("Multi-Fighter")
+class         = "AirProtect"
+tech_req      = "Avionics"
+obsolete_by   = "None"
+graphic       = "u.multifighter"
+graphic_alt   = "-"
+sound_move    = "m_jet_fighter"
+sound_move_alt = "m_stealth_fighter"
+sound_fight   = "f_jet_fighter"
+sound_fight_alt = "f_stealth_fighter"
+build_cost    = 90
+pop_cost      = 0
+attack        = 6
+defense       = 7
+hitpoints     = 20
+firepower     = 2
+move_rate     = 22
+vision_radius_sq = 12
+transport_cap = 0
+fuel          = 2
+uk_happy      = 0
+uk_shield     = 1
+uk_food       = 0
+uk_gold       = 0
+targets       = "Air", "AirProtect", "Air_High_Altitude", "Missile", "Balloon", "Helicopter", "LandRail", "Zeppelin"
+bonuses       =
+   { "flag", "type", "value"
+   }
+flags         = "AirAttacker", "Unbribable", "HasNoZOC", "CanEscape", "AirProtector", "Provoking"
+veteran_names =
+  _("?vet_rank:green"),
+  _("?vet_rank:veteran"),
+  _("?vet_rank:hardened"),
+  _("?vet_rank:elite"),
+  _("?vet_rank:crack"),
+  _("?vet_rank:ace"),
+  _("?vet_rank:top gun")
+veteran_base_raise_chance = 40, 25, 16, 10, 10, 10, 0
+veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
+veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
+veteran_move_bonus = 0, 0, 0, 0, 9, 9, 9
+roles         = ""
+helptext      = _("\
+Multi-Fighters are fitted for mission versatility.\
+ They are sturdy, defend better, and have two turns of fuel. They are\
+ good for escorting bombers, pursuing enemy bombers on long range\
+ missions, defensive ground support, naval missions, reconnaissance,\
+ and interception. A Multi-Fighter can vigil at any range.\
+"), _("
+INTERCEPTOR：the Vigil order lets Multi-Fighters auto-attack adjacent Air units if they\
+ have better attack odds. This unit can Vigil if it has 1 turn of fuel or more. \n\
+"), _("
+Multi-Fighters can Stack-Escape：a 60% chance to escape a killed stack if they have more remaining moves than the attacker.\
  NOTE：GOTO disallows unit loss from lack of fuel. You can override this by ordering moves to adjacent tiles.\
 ")
 
@@ -3301,8 +3358,8 @@ sound_fight   = "f_fighter"
 sound_fight_alt = "Ground Strike"
 build_cost    = 80
 pop_cost      = 0
-attack        = 7
-defense       = 4
+attack        = 8
+defense       = 5
 hitpoints     = 20
 firepower     = 2
 move_rate     = 21
@@ -3413,10 +3470,10 @@ sound_move    = "m_stealth_fighter"
 sound_move_alt = "m_generic"
 sound_fight   = "f_stealth_fighter"
 sound_fight_alt = "f_generic"
-build_cost    = 80
+build_cost    = 85
 pop_cost      = 0
-attack        = 8
-defense       = 4
+attack        = 9
+defense       = 6
 hitpoints     = 20
 firepower     = 2
 move_rate     = 28 

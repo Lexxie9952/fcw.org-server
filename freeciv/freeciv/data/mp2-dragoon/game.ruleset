@@ -3409,7 +3409,7 @@ set =
       "latejoin_gold", 14, FALSE          ; gold per turn of absence when late joining
       "latejoin_gold_max", 900, FALSE     ; maximum amount of (inherited gold + latejoin gold) when taking a nation.
       "landmass", 63, FALSE
-      "looting", "BASE_TRADE", FALSE
+      "looting", "PROPERTY", FALSE
       "minplayers", 0, FALSE
       "move_bonus_in_frags", "ENABLED", TRUE   ;locked
       "multiresearch", "ENABLED", FALSE

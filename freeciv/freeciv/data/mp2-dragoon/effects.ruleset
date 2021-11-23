@@ -1871,36 +1871,118 @@ reqs	=
 ;********************************************* RAPTURE
 [effect_rapture_grow_magna_carta]
 type    = "Rapture_Grow"
-value   = 3
+value   = 1
 reqs	=
     { "type",       "name",            "range", "present"
-      "CityStatus", "OwnedByOriginal", "City",   TRUE
       "Building",   "Magna Carta",     "Player", TRUE
       "Gov",        "Monarchy",        "Player", TRUE
     }
+[effect_rapture_rate_magna_carta_not_founded]
+type    = "Rapture_Rate_Pm"
+value   = 250  ; 25% (1 out of 4)
+reqs	=
+    { "type",       "name",            "range", "present"
+      "Building",   "Magna Carta",     "Player", TRUE
+      "Gov",        "Monarchy",        "Player", TRUE
+      "CityStatus", "OwnedByOriginal", "City",   FALSE
+    }
+[effect_rapture_rate_magna_carta_not_founded_no_nationals]
+type    = "Rapture_Rate_Pm"
+value   = 350   ; 250+350 = 600 = 60% (3 out of 5)
+reqs	=
+    { "type",       "name",            "range", "present"
+      "Building",   "Magna Carta",     "Player", TRUE
+      "Gov",        "Monarchy",        "Player", TRUE
+      "CityStatus", "OwnedByOriginal", "City",   FALSE
+      "MinForeignPct", "1",            "City",   FALSE
+    }
+
 [effect_rapture_grow_republic]
 type    = "Rapture_Grow"
-value   = 3
+value   = 1
 reqs	=
     { "type", "name",     "range"
       "Gov",  "Republic", "Player"
     }
+
 [effect_rapture_grow_democracy]
 type    = "Rapture_Grow"
-value   = 3
+value   = 1
 reqs	=
     { "type",          "name",      "range", "present"
       "Gov",           "Democracy", "Player", TRUE
       "MinForeignPct", "9",         "City",   FALSE
     }
+[effect_rapture_rate_democracy_foreigners]
+type    = "Rapture_Grow"
+value   = 500  ; 50%
+reqs	=
+    { "type",          "name",      "range", "present"
+      "Gov",           "Democracy", "Player", TRUE
+      "MinForeignPct", "9",         "City",   TRUE
+    }
+[effect_rapture_grow_theocracy]
+type    = "Rapture_Grow"
+value   = 1
+reqs	=
+    { "type", "name",     "range"
+      "Gov",  "Theocracy", "Player"
+    }
+[effect_rapture_rate_theocracy1]
+type    = "Rapture_Rate_Pm"
+value   = 400
+reqs	=
+    { "type",     "name",       "range",  "present"
+      "Gov",      "Theocracy",  "Player", TRUE
+    }
+[effect_rapture_rate_theocracy2]
+type    = "Rapture_Rate_Pm"
+value   = 100
+reqs	=
+    { "type",     "name",       "range",  "present"
+      "Gov",      "Theocracy",  "Player", TRUE
+      "Building", "Cathedral",  "City",   TRUE
+    }
+
+[effect_rapture_grow_communism]
+type    = "Rapture_Grow"
+value   = 1
+reqs	=
+    { "type", "name",     "range"
+      "Gov",  "Communism", "Player"
+    }
+[effect_rapture_rate_communism1]
+type    = "Rapture_Rate_Pm"
+value   = 400  ; 2 out of 5
+reqs	=
+    { "type",     "name",       "range",  "present"
+      "Gov",      "Communism",  "Player", TRUE
+    }
+
 [effect_rapture_grow_nationalism]
 type    = "Rapture_Grow"
-value   = 3
+value   = 1
 reqs	=
     { "type",       "name",            "range"
       "Gov",        "Nationalism",     "Player"
-      "CityStatus", "OwnedByOriginal", "City"
     }
+[effect_rapture_rate_nationalism_not_founded]
+type    = "Rapture_Rate_Pm"
+value   = 334  ; 1 out of 3
+reqs	=
+    { "type",       "name",            "range",  "present"
+      "Gov",        "Nationalism",     "Player", TRUE
+      "CityStatus", "OwnedByOriginal", "City",   FALSE
+    }
+[effect_rapture_rate_nationalism_not_founded_no_foreign]
+type    = "Rapture_Rate_Pm"
+value   = 333   ; 333+334 = 667 = 67% (2 out of 3)
+reqs	=
+    { "type",       "name",            "range", "present"
+      "Gov",        "Nationalism",     "Player", TRUE
+      "CityStatus", "OwnedByOriginal", "City",   FALSE
+      "MinForeignPct", "1",            "City",   FALSE
+    }   
 
 ;********************************************** GOVERNMENT VET BONUSES
 [effect_communist_spy_vets]

@@ -623,7 +623,8 @@ helptext	= _("\
 A Cathedral makes 3 unhappy citizens content, but does not affect citizens\
  made unhappy by military activity. Theology increases the effect by +1.\
  Communist government decreases the effect by -1. (Michelangelo’s Chapel enhances\
- the effect of Cathedrals by +1 happy citizen and +1 forced content citizen.)\
+ the effect of Cathedrals by +1 happy citizen and +1 forced content citizen.)\n\
+Under Theocracy, increases the city rapture rate to 1 out of 2 turns.\
 ")
 
 [building_airport]

@@ -11,26 +11,25 @@ Focus goals for MP2-Dragoon
 MP2C:  20  30  40  50  60  70  70  70  70...
 MP2D:  16  23  31  40  50  60  70  71  72...
 This speeds the early game with a tightly controlled 
-mathematical solution: a needle in a haystack of infinite 
-other ways to accelerate the foodbox that all have bad side
-effects, and skew the proportional balance of all other game 
-elements. Speeding up the game with foodbox changes has 
-been done by others for a long time, but these all had
-"mathematically diseased side effects". Finally, the
-perfect solution is here, with the magic formula! 
+mathematical solution: a sweet spot to accelerate the foodbox
+without bad side effects on the proportional balance of other
+game elements. Speeding up the foodbox has been tried by
+others for a long time, but with "mathematically diseased side
+effects". This simple solution is a magic formula for 
+preserving the magic of the original classical balance. 
 This change does more than just that. It simultaneously
-cures 2 other flaws in the Discrete Mathematics of the foodbox
-system. Those flaws heavily discouraged size 3 cities under
-Despotism AND discouraged new cities for the last 40% of the
-game.
+improves 2 flaws in the Discrete Mathematics of the system.
+Those flaws heavily discouraged size 3 cities under Despotism,
+and discouraged making new cities for the last 40%
+of the game. Those phenomena are now softened.
 ============================================================
 2. Mountain Goats (3 1 0) & Hippopotami (3 1 0)
 ============================================================
-3. Goods available with Pottery and cost 20. Can now help
-build wonders. Recycle penalty reduced to 3 shields. 
-The tech, cost, wonder, and recycle changes bring this unit
-to life and fulfill the purpose of enhancing early game
-depth and richness. 
+3. Goods are now available with Pottery and cost 20. Can now
+help build wonders. Recycle penalty reduced to 3 shields. 
+The tech, cost, wonder, and recycle changes allow Goods to
+to fulfill their purpose of enhancing early game depth and
+richness.
 ============================================================
 4. "Advisor" for buildings suggests an order similar to 
    an experienced player, instead of alphabetic.
@@ -150,7 +149,49 @@ depth and richness.
    Marine corps land/air/sea. Thus, have gold upkeep not 
    shield upkeep.
 =============================================================
-28. Zepplein 5 turns of fuel: more realistic and provides 
+28. Zeppelin 5 turns of fuel: more realistic and provides 
    more possible use for this special unit.
 =============================================================
+29. Fixed bug (also mp2c) where Airplane was not counted 
+   as non-military and couldn't do diplomatic missions 
+   to nations with whom you're at peace.
+=============================================================
+30. Jet aircraft upgrades
+Were underpowered relative to other units.
+
+A/D jets/mech inf is now only slightly less than
+A/D fighters/alpines (was substantially less, at a time when
+    SAM Battery becomes available to make it even worse.)
+
+Stealth Fighter
+   A9 D6 Cost:85 was A8 D4.
+Jet Fighter
+   A7 D6, was A6 D5. (better defender than escort fighter)
+Ground Strike Fighter
+   A8 D5, was A7 D4
+
+Multirole Fighter, upgrades Escort Fighter
+   A6 D7 two turns fuel. Cost: 90
+   Range fighter
+=============================================================
+31. Rapture Rate is here. Allows govs to participate in
+   it at different rates; which allows finer balancing of 
+   the govs to make them more usable and interesting.
+
+Cons.Monarchy - Raptures cities not founded by you 
+   1 out of 4 turns until they have no foreigners, 
+   at which point it becomes 3 out of 5 turns.
+
+Democracy - Cities with 10%+ foreigners rapture at 50%
+
+Communism - Cities rapture 2 out of 5 turns
+
+Theocracy - Raptures 2 out of 5 turns;
+  building a Cathedral changes rate to 1 out of 2 turns.
+
+Nationalism - Foreign cities rapture 1 out of 3 turns
+   until no longer foreign, then at 2 out of 3 turns.
+
+
+
 
