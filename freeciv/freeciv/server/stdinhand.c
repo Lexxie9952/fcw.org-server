@@ -6991,7 +6991,7 @@ void show_players(struct connection *caller)
   } else {
     players_iterate(pplayer) {
       char buf[MAX_LEN_CONSOLE_LINE];
-      int n;
+      char player_type[40];
 
       /* Low access level callers don't get to see barbarians in list: */
       if (is_barbarian(pplayer) && caller
@@ -6999,89 +6999,54 @@ void show_players(struct connection *caller)
         continue;
       }
 
-      /* The output for each player looks like:
-       *
-       * <Player name> [color]: Team[, Nation][, Username][, Status]
-       *   AI/Barbarian/Human[, AI type, skill level][, Connections]
-       *     [Details for each connection]
-       */
-
-      /* '<Player name> [color]: [Nation][, Username][, Status]' */
       buf[0] = '\0';
+      player_type[0] = '\0';
 
-      if (caller->supercow || DEBUG_CONNS) {
-        // Player: [u:username o:orig_username] d-->delegates_to (is_delegate_active)
-        cat_snprintf(buf, sizeof(buf), "%s [user:%s orig:%s] delegate-->%s (%s)",
-                     player_name(pplayer),
-                     pplayer->username,
-                     pplayer->server.orig_username,
-                     pplayer->server.delegate_to,
-                     player_delegation_active(pplayer) ? _(" (active)") : "(untaken)");
+      if (is_barbarian(pplayer)) {
+        sz_strlcat(player_type, _("Barbarian"));
+      } else if (is_ai(pplayer)) {
+        sz_strlcat(player_type, _("AI"));
       } else {
-        cat_snprintf(buf, sizeof(buf), "%s: ", player_name(pplayer));
+        sz_strlcat(player_type, _("Human"));
+      }
+      if (is_ai(pplayer)) {
+        cat_snprintf(player_type, sizeof(player_type), _(", %s"), ai_name(pplayer->ai));
+        cat_snprintf(player_type, sizeof(player_type), _(", difficulty level %s"),
+                    ai_level_translated_name(pplayer->ai_common.skill_level));
+      }
+
+      if (S_S_INITIAL != server_state() && (caller->supercow || DEBUG_CONNS)) {
+        // Name:[Nationality] User:s ([Orig.User]) Human/AI [Delegate: -- (active/untaken)]
+        cat_snprintf(buf, sizeof(buf), "%s:%s User:%s(%s) %s %s%s %s",
+                     player_name(pplayer),
+                     (!game.info.is_new_game ? nation_adjective_for_player(pplayer) : ""),
+                     pplayer->username,
+                     (pplayer->server.orig_username ? pplayer->server.orig_username : ""),
+                     player_type,
+                     (strlen(pplayer->server.delegate_to)>0 ? "Delegate:" : ""),
+                     (pplayer->server.delegate_to ? pplayer->server.delegate_to : ""),
+                     (strlen(pplayer->server.delegate_to)>0 
+                       ? (player_delegation_active(pplayer) ? _("(active)") : "(untaken)")
+                       : "")
+                     );
+      } else if (strcmp(pplayer->username, "Unassigned")!=0) {
+        cat_snprintf(buf, sizeof(buf), "%s: %s", player_name(pplayer), player_type);
         if (!game.info.is_new_game) {
-          cat_snprintf(buf, sizeof(buf), "%s",
+          cat_snprintf(buf, sizeof(buf), ", %s",
                       nation_adjective_for_player(pplayer));
         }
-        if (caller->supercow && strlen(pplayer->username) > 0
-            && strcmp(pplayer->username, "nouser") != 0) {
-          cat_snprintf(buf, sizeof(buf), _(", user %s"), pplayer->username);
+        if (!pplayer->is_alive) {
+          sz_strlcat(buf, _(" ** Dead **"));
         }
         if (S_S_INITIAL == server_state() && pplayer->is_connected) {
           if (pplayer->is_ready) {
-            sz_strlcat(buf, _(", ready"));
+            sz_strlcat(buf, _(", READY!"));
           } else {
-            /* Emphasizes this */
-            n = strlen(buf);
-            featured_text_apply_tag(_(", not ready"),
-                                    buf + n, sizeof(buf) - n,
-                                    TTT_COLOR, 1, FT_OFFSET_UNSET,
-                                    ftc_changed);
+            sz_strlcat(buf, _(", <span class='negative_text'>NOT READY</span>"));
           }
-        } else if (!pplayer->is_alive) {
-          sz_strlcat(buf, _(", Dead"));
         }
       }
-      cmd_reply(CMD_LIST, caller, C_COMMENT, "%s", buf);
-
-      /* '  AI/Barbarian/Human[, skill level][, Connections]' */
-      buf[0] = '\0';
-      if (!DEBUG_CONNS) {
-        if (is_barbarian(pplayer)) {
-          sz_strlcat(buf, _("Barbarian"));
-        } else if (is_ai(pplayer)) {
-          sz_strlcat(buf, _("AI"));
-        } else {
-          sz_strlcat(buf, _("Human"));
-        }
-        if (is_ai(pplayer)) {
-          cat_snprintf(buf, sizeof(buf), _(", %s"), ai_name(pplayer->ai));
-          cat_snprintf(buf, sizeof(buf), _(", difficulty level %s"),
-                      ai_level_translated_name(pplayer->ai_common.skill_level));
-        }
-        n = conn_list_size(pplayer->connections);
-        if (n > 0) {
-          cat_snprintf(buf, sizeof(buf), 
-                      PL_(", %d connection:", ", %d connections:", n), n);
-        }
-        cmd_reply(CMD_LIST, caller, C_COMMENT, "  %s", buf);
-
-        /* '    [Details for each connection]' */
-        if (caller->supercow) {
-          conn_list_iterate(pplayer->connections, pconn) {
-            fc_snprintf(buf, sizeof(buf),
-                        _("%s from %s (command access level %s), "
-                          "bufsize=%dkb"), pconn->username, pconn->addr,
-                        cmdlevel_name(pconn->access_level),
-                        (pconn->send_buffer->nsize >> 10));
-            if (pconn->observer) {
-              /* TRANS: preserve leading space */
-              sz_strlcat(buf, _(" (observer mode)"));
-            }
-            cmd_reply(CMD_LIST, caller, C_COMMENT, "    %s", buf);
-          } conn_list_iterate_end;
-        }
-      }
+      if (strlen(buf)) cmd_reply(CMD_LIST, caller, C_COMMENT, "%s", buf);
     } players_iterate_end;
   }
   cmd_reply(CMD_LIST, caller, C_COMMENT, horiz_line);
