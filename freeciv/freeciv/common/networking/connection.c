@@ -498,9 +498,12 @@ const char *conn_description(const struct connection *pconn)
     cat_snprintf(buffer, sizeof(buffer), _(" (player %s)"),
                  player_name(pconn->playing));
   }
-  if (pconn->observer) {
+  if (pconn->supercow) {
     /* TRANS: preserve leading space. */
-    sz_strlcat(buffer, _(" (observer)"));
+    sz_strlcat(buffer, _(" (admin) "));
+  } else if (pconn->observer) {
+    /* TRANS: preserve leading space. */
+    sz_strlcat(buffer, _(" (observer) "));
   }
 
   return buffer;

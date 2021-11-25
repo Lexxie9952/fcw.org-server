@@ -1086,7 +1086,7 @@ void connection_detach(struct connection *pconn, bool remove_unused_player)
 }
 
 /**********************************************************************//**
-  Use a delegation to get control over another player.
+  Use a delegation to get control over another player. 
 **************************************************************************/
 bool connection_delegate_take(struct connection *pconn,
                               struct player *dplayer)
@@ -1114,9 +1114,9 @@ bool connection_delegate_take(struct connection *pconn,
   fc_assert_ret_val(strlen(dplayer->server.orig_username) == 0, FALSE);
   sz_strlcpy(dplayer->server.orig_username, dplayer->username);
   // Preserve the delegated player's name so we don't lose the alias:
-  sz_strlcpy(&dplayer_name[0], dplayer->name);
+  sz_strlcpy(dplayer_name, dplayer->name);
   // Preserve the taking player's name so that we don't lose the alias:
-  sz_strlcpy(&oplayer_name[0], player_name(conn_get_player(pconn)));
+  sz_strlcpy(oplayer_name, player_name(conn_get_player(pconn)));
 
   /* Detach the current connection. */
   if (NULL != pconn->playing || pconn->observer) {
@@ -1147,8 +1147,8 @@ bool connection_delegate_take(struct connection *pconn,
 
   /* Paranoid safety: restore players' names because 
    * name != username - at very least, capitalised; but maybe an alias*/
-  sz_strlcpy(dplayer->name, &dplayer_name[0]);
-  sz_strlcpy(oplayer->name, &oplayer_name[0]);
+  sz_strlcpy(dplayer->name, dplayer_name);
+  sz_strlcpy(oplayer->name, oplayer_name);
   /* Only FCW has to do this here because connection_attach was modified 
      to NOT override playername with username in some connection_attach
      events, because FCW has to worry about idlers, NewAvailablePlayers,
@@ -1175,7 +1175,7 @@ bool connection_delegate_restore(struct connection *pconn)
   /* Preserve names so we don't lose aliases */
   //char dplayer_name[MAX_LEN_NAME];
   ///char oplayer_name[MAX_LEN_NAME];
-  ///sz_strlcpy(&oplayer_name[0], pconn->server.delegation.playing->name);
+  ///sz_strlcpy(oplayer_name, pconn->server.delegation.playing->name);
 
   if (pconn->server.delegation.playing
       && !pconn->server.delegation.observer) {

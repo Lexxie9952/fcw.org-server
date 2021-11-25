@@ -5646,7 +5646,7 @@ static bool delegate_command(struct connection *caller, char *arg,
     fc_assert_ret_val(caller, FALSE);
     char oplayer_name[MAX_LEN_NAME];
     // Remember the taking player's name before it changes to the dplayer
-    sz_strlcpy(&oplayer_name[0], player_name(conn_get_player(caller)));
+    sz_strlcpy(oplayer_name, player_name(conn_get_player(caller)));
 
     if (caller->server.delegation.status) {
       cmd_reply(CMD_DELEGATE, caller, C_FAIL,
@@ -6844,23 +6844,57 @@ static void show_connections(struct connection *caller)
     cmd_reply(CMD_LIST, caller, C_COMMENT, _("<no connections>"));
   } else {
     conn_list_iterate(game.all_connections, pconn) {
+      /**** CONNECTION INFO displayed for: (supercow/admin) Gamemasters: */
       if (caller->supercow || DEBUG_CONNS) {
-        sz_strlcpy(buf, "conn.user: ");
-        cat_snprintf(buf, sizeof(buf), 
-        "%s\n playing.name: %s\n playing.orig: %s\n del_to: %s",
-        pconn->username,
-        (pconn->playing ? pconn->playing->name : "null"),
-        (pconn->playing->server.orig_username ? pconn->playing->server.orig_username : "null"),
-        (pconn->playing->server.delegate_to ? pconn->playing->server.delegate_to : "null"));
-      } else if (caller->supercow) {
-        sz_strlcpy(buf, conn_description(pconn));
-      } else {
-        sz_strlcpy(buf, player_name(player_by_user(pconn->username)));
+          /* Info line for players (!observers, !supercows) */
+          if (pconn->playing && !pconn->supercow) {
+            sz_strlcpy(buf, "Username: ");
+            cat_snprintf(buf, sizeof(buf), 
+            "%s\nPlaying as: <b>%s</b> %s\n",
+            pconn->username,
+            (pconn->playing->name ? pconn->playing->name : "same"),
+            (pconn->playing->server.orig_username && strlen(pconn->playing->server.orig_username) > 1
+               ? " * (delegated)" : ""));
+            /* This portion of Info Line only shows if player being controlled by delegation: */ 
+            if (pconn->playing->server.orig_username) {
+              if (strlen(pconn->playing->server.orig_username) > 1) {
+                cat_snprintf(buf, sizeof(buf), 
+                "Original User: <b>%s</b>\n",
+                pconn->playing->server.orig_username);
+              }
+            }
+            /* This portion of Info Line only shows if player has assigned a delegation: */ 
+            if (pconn->playing->server.delegate_to) {
+              if (strlen(pconn->playing->server.delegate_to) > 1) {
+                cat_snprintf(buf, sizeof(buf), 
+                "Delegates to: %s\n",
+                (pconn->playing->server.delegate_to ? pconn->playing->server.delegate_to : "null"));
+              }
+            }
+          }
+          /* Info line for Observers and Admins is the old "legacy" conn_description */
+          else sz_strlcpy(buf, conn_description(pconn));
       }
-      if (pconn->established && caller->supercow) {
-        cat_snprintf(buf, sizeof(buf), " level:%s",
+      /**** CONNECTION INFO displayed for: regular Players: */
+      else {
+        /* Info line for regular Players */
+        if (!pconn->observer) {
+          sz_strlcpy(buf, player_name(player_by_user(pconn->username)));
+        }
+        /* Info line for observers */
+        else if (!pconn->supercow) {
+          sz_strlcpy(buf, pconn->username);
+          cat_snprintf(buf, sizeof(buf), " (observer)");
+        }
+        /* Info line for admins: not shown. */
+        else sz_strlcpy(buf, "");
+      }
+      /* Access level appended only for admins to see */
+      if (pconn->established && caller->supercow && pconn->access_level > ALLOW_BASIC) {
+        cat_snprintf(buf, sizeof(buf), " Level: %s",
                      cmdlevel_name(pconn->access_level));
       }
+      if (caller->supercow) cat_snprintf(buf, sizeof(buf), "—————————————————————————————————");
       cmd_reply(CMD_LIST, caller, C_COMMENT, "%s", buf);
     } conn_list_iterate_end;
   }
@@ -6977,7 +7011,7 @@ void show_players(struct connection *caller)
 
       if (caller->supercow || DEBUG_CONNS) {
         // Player: [u:username o:orig_username] d-->delegates_to (is_delegate_active)
-        cat_snprintf(buf, sizeof(buf), "%s [u:%s o:%s] d-->%s (%s)",
+        cat_snprintf(buf, sizeof(buf), "%s [user:%s orig:%s] delegate-->%s (%s)",
                      player_name(pplayer),
                      pplayer->username,
                      pplayer->server.orig_username,
