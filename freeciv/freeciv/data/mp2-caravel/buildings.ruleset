@@ -2768,7 +2768,6 @@ reqs	=
       "Tech",     "Masonry",  "Player",  TRUE,      FALSE
       "Building", "Ziggurat", "Player",  FALSE,     TRUE
       "Gov",      "Despotism","Player",  TRUE,      FALSE
-      "Extra",    "River",    "Adjacent",TRUE,      FALSE
     }
 graphic	= "b.ziggurat"
 graphic_alt	= "-"
@@ -2789,7 +2788,6 @@ The Ziggurat gathers all ruling functions of early civilization into one\
  without Walls or Fortifications, it gives a defense bonus similar to\
  Fortifications, but gives a guaranteed 1.75× defense, regardless of attacker\
  or terrain type. \n\
-The Ziggurat must be built adjacent to a river. \n\
 Obsolete by：Monarchy or switching from Despotism.\
 ")
 
