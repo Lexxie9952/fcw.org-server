@@ -5141,7 +5141,7 @@ uk_shield     = 0
 uk_food       = 0
 uk_gold       = 0
 cargo         = "Land", "LandAirSea", "Bomb", "Cargo"
-flags         = "HelpWonder", "TradeRoute", "IgZOC", "NonMil", "HasNoZOC", "Capturable", "Expellable", "NoVeteran", "Cant_Pillage"
+flags         = "HelpWonder", "TradeRoute", "NonMil", "HasNoZOC", "Capturable", "Expellable", "NoVeteran", "Cant_Pillage"
 roles         = ""
 helptext      = _("\
 The Truck replaces the Caravan as the basic Commerce unit on Land. It moves at\
@@ -5218,7 +5218,7 @@ uk_shield     = 0
 uk_food       = 0
 uk_gold       = 0
 disembarks    = "Air", "LandRoad", "LandRail", "Sea", "RiverShip"
-flags         = "HelpWonder", "TradeRoute", "NonMil", "HasNoZOC", "Capturable", "Cant_Fortify", "NoVeteran", "Cant_Pillage"
+flags         = "HelpWonder", "TradeRoute", "IgZOC", "NonMil", "HasNoZOC", "Capturable", "Cant_Fortify", "NoVeteran", "Cant_Pillage"
 roles         = ""
 helptext      = _("\
 The methodical logistics of modern shipping render the Freight unit：a cargo\
