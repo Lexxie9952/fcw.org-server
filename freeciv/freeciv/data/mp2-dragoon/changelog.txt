@@ -191,6 +191,9 @@ Theocracy - Raptures 2 out of 5 turns;
 
 Nationalism - Foreign cities rapture 1 out of 3 turns
    until no longer foreign, then at 2 out of 3 turns.
+=============================================================
+32. Terrain Walls
+=============================================================
 
 
 

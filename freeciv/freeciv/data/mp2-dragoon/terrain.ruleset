@@ -1994,7 +1994,7 @@ City center tiles with roads are automatically upgraded to railroads\
 name           = _("Maglev")
 category       = "Infra"
 causes         = "Road"
-rmcauses       = "Pillage"
+rmcauses       = "Pillage", "Disappear"
 graphic        = "road.maglev"
 graphic_alt    = "road.rail"
 activity_gfx   = "unit.maglev"
@@ -2002,13 +2002,17 @@ act_gfx_alt    = "unit.road"
 act_gfx_alt2   = "-"
 rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
+;For now this is how we disallow MagLev on ocean: it disappears if you make it.
+disappearance_chance    = 10000
+disappearance_reqs = 
+    { "type",         "name",      "range", "present"
+      "TerrainClass", "Oceanic",   "Local", TRUE
+      "Extra",        "Sea Bridge","Local", FALSE
+    }
 reqs           =
     { "type", "name", "range", "present", "quiet"
       "Tech", "Superconductors", "Player", TRUE, FALSE
-;      "Extra", "Railroad", "Local", TRUE, FALSE           
       "UnitFlag", "CanRoad", "Local", TRUE, FALSE        
-;      "UnitClass", "Sea", "Local", FALSE, TRUE
-;      "TerrainClass", "Land", "Local", TRUE, FALSE
     }
 build_time     = 3
 removal_time   = 0
@@ -2125,6 +2129,7 @@ reqs           =
       "DiplRel",       "Peace",      "Local",     FALSE
       "DiplRel",       "Armistice",  "Local",     FALSE
       "DiplRel",       "Cease-fire", "Local",     FALSE
+; commented out for testing ***********
 ;      "Tech",          "Machine Tools", "World",  FALSE
     }
 build_time     = 2
@@ -2906,7 +2911,7 @@ trade_incr     = 1
 food_bonus     = 0
 shield_bonus   = 0
 trade_bonus    = 0
-integrates     = "Quay", "Sea Bridge", "Quay​",  ; "Quay"+0-width space = quay on city
+integrates     = "Quay", "Sea Bridge", "Maglev", "Quay​",  ; "Quay"+0-width space = quay on city
                  "Walls" ; causes ReverseRestrictInfra IntegrateCostUp effect: i.e., lose all moves exiting/leaving
 compat_special = "Road"
 flags          = "UnrestrictedInfra"
@@ -2944,7 +2949,7 @@ trade_incr     = 0
 food_bonus     = 0
 shield_bonus   = 50
 trade_bonus    = 0
-integrates     = "Sea Bridge", "Walls" ; causes ReverseRestrictInfra IntegrateCostUp effect: i.e., lose all moves exiting/leaving
+integrates     = "Sea Bridge", "Maglev", "Walls" ; causes ReverseRestrictInfra IntegrateCostUp effect: i.e., lose all moves exiting/leaving
 compat_special = "Railroad"
 
 [road_maglev]
@@ -2956,6 +2961,7 @@ trade_incr     = 0
 food_bonus     = 0
 shield_bonus   = 0
 trade_bonus    = 0
+integrates     = "Sea Bridge", "Road", "Railroad"
 
 [road_river]
 extra          = "River"
@@ -2974,7 +2980,7 @@ trade_incr     = 0
 food_bonus     = 0
 shield_bonus   = 0
 trade_bonus    = 0
-integrates     = "Road", "Railroad"
+integrates     = "Road", "Railroad", "Maglev"
 flags          = "UnrestrictedInfra"
 
 [road_walls]

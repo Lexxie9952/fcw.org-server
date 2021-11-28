@@ -2395,7 +2395,7 @@ actor_reqs    =
       "UnitFlag",      "Settlers",     "Local",   TRUE
       "UnitFlag",      "CanHide",      "Local",   FALSE
       "UnitFlag",      "CanClaim",     "Local",   FALSE
-      "Tech",          "Explosives",   "Player",  TRUE
+      "Tech",          "Steel",        "Player",  TRUE
       "UnitType",      "Proletarians", "Local",   FALSE
       "UnitType",      "Tribesmen",    "Local",   FALSE
     }

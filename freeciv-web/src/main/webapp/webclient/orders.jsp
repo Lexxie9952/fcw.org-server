@@ -56,7 +56,7 @@
   </div>
 
   <div id="order_maglev" class="order_button" title="Build maglev (R)">
-    <span style="cursor:pointer" onclick="key_unit_road();"><img src="/images/orders/maglev.png" name="maglev_button" alt="" border="0" width="30" height="30"></span>
+    <span style="cursor:pointer" onclick="key_unit_maglev();"><img src="/images/orders/maglev.png" name="maglev_button" alt="" border="0" width="30" height="30"></span>
   </div>
 
   <div id="order_irrigate" class="order_button" title="Create irrigation (I)" >

@@ -1782,20 +1782,20 @@ function update_unit_order_commands()
             unit_actions["road"] = {name: "Road (R)"};
           }
         }
-      } else if (tech_known('Railroad')
+      }
+      if (tech_known('Railroad')
                  && (tile_has_extra(ptile, EXTRA_ROAD) || (client_rules_flag[CRF_SEABRIDGE] && tile_has_extra(ptile, EXTRA_SEABRIDGE)))
                  && !tile_has_extra(ptile, EXTRA_RAIL)) {
         $("#order_road").hide();
         $("#order_railroad").show();
 	      unit_actions['railroad'] = {name: "Railroad (R)"};
-      } else if (can_build_maglev(punit, ptile)) {
-        $("#order_road").hide();
-        $("#order_railroad").hide();
+      }
+      if (can_build_maglev(punit, ptile)) {
         $("#order_maglev").show();
-        unit_actions['maglev'] = {name: "MagLev (R)"};
-      } else {
-        $("#order_road").hide();
-        $("#order_railroad").hide();
+        var maglev_hotkey = "";
+        if ($("#order_road").is(":hidden") && $("#order_railroad").is(":hidden"))
+          maglev_hotkey = " (R)";
+        unit_actions['maglev'] = {name: "MagLev"+maglev_hotkey};
       }
       if (can_build_sea_bridge(punit, ptile)) {
           unit_actions["road"] = {name: "Sea Bridge (R)"};
@@ -4147,7 +4147,7 @@ function handle_context_menu_callback(key)
       break;
 
     case "maglev":
-      key_unit_road();
+      key_unit_maglev();
       break;
 
     case "quay":
@@ -5965,6 +5965,11 @@ function can_build_maglev(punit, ptile)
   return ((typeof EXTRA_MAGLEV !== "undefined")
       &&  (punit != null && ptile != null)
       &&  (!tile_has_extra(ptile, EXTRA_MAGLEV))
+
+      && (!is_ocean_tile(ptile) 
+          || (typeof EXTRA_SEABRIDGE !== "undefined" && tile_has_extra(ptile, EXTRA_SEABRIDGE))
+         )
+
       &&  (unit_can_do_action(punit, ACTION_ROAD))
       &&  tech_known('Superconductors')
          );
@@ -6294,7 +6299,32 @@ function key_unit_road()
   deactivate_goto(false);
   setTimeout(update_unit_focus, update_focus_delay);
 }
+/**************************************************************************
+ Tell the units in focus to build maglev. Separated from key_unit_road
+ because it's possible to build MagLev without road/rail in some 
+ rulesets.
+**************************************************************************/
+function key_unit_maglev()
+{
+  var funits = get_units_in_focus();
+  for (var i = 0; i < funits.length; i++) {
+    var punit = funits[i];
+    var ptile = index_to_tile(punit['tile']);
 
+    // On ocean, MagLev requires a SeaBridge (if ruleset has seabridge.)
+    if (is_ocean_tile(ptile)) {
+      if (typeof EXTRA_SEABRIDGE !== "undefined" && !tile_has_extra(ptile, EXTRA_SEABRIDGE)) {
+        return;
+      }
+    }
+    if (can_build_maglev(punit, ptile)) {
+      request_new_unit_activity(punit, ACTIVITY_GEN_ROAD, extras['Maglev']['id']);
+      remove_unit_id_from_waiting_list(punit['id']); // Unit received orders, don't ask orders later
+    }
+  }
+  deactivate_goto(false);
+  setTimeout(update_unit_focus, update_focus_delay);
+}
 
 /**************************************************************************
  Tell the units in focus to build a quay
