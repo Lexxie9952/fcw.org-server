@@ -78,19 +78,6 @@ var ANIM_STEPS = 8;
 var anim_units_max = 30;
 var anim_units_count = 0;
 
-/* The unit_orders enum from unit.h */
-var ORDER_MOVE = 0;
-var ORDER_ACTIVITY = 1;
-var ORDER_FULL_MP = 2;
-var ORDER_ACTION_MOVE = 3;
-var ORDER_PERFORM_ACTION = 4;
-var ORDER_LAST = 5;
-
-/* The unit_ss_data_type enum from unit.h */
-var USSDT_QUEUE = 0;
-var USSDT_UNQUEUE = 1;
-var USSDT_BATTLE_GROUP = 2;
-
 /****************************************************************************
  ...
 ****************************************************************************/
