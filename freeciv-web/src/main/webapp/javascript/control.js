@@ -2634,6 +2634,10 @@ function order_wants_direction(order, act_id, ptile) {
       /* Always illegal to perform to a target on a neighbor tile. */
       return false;
     }
+    // FIXME: The 2 cases below fell through cracks and returned false, so now we hack
+    // them in. (These actions would work sans hack, if they had min_distance == 1)
+    if (act_id = ACTION_EXPEL_UNIT) return true;
+    if (act_id = ACTION_CAPTURE_UNITS) return true;
 
     /* FIXME: allied units and cities shouldn't always make actions be
      * performed from the neighbor tile. */

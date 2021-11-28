@@ -28,11 +28,16 @@ var did_not_decide = false;
 
 
 var action_images = {
-//   2: "e/gold",                          // investigate city
+   2: "e/eyes",                          // investigate city
+   4: "e/snake",                         // poison city
+   5: "e/snake",                         // poison city escape
   20: "e/gold",                          // trade route
   21: "e/marketplace",                   // enter marketplace
-  22: "e/camel24",                      // build wonder
+  22: "e/camel24",                       // build wonder
   23: "corrupt",                         // bribe unit
+  24: "e/bomb",                          // sabotage enemy units
+  25: "e/bomb",                          // sabotage enemy units and escape
+  26: "orders/capture",                  // capture unit
   27: "orders/build_city_default",
   28: "city_user_row",                   // join city
   29: "e/earth",                         // steal maps
@@ -43,7 +48,8 @@ var action_images = {
   36: "e/nuclearexplosion",
   37: "e/nuclearexplosion",
   38: "e/nuclearexplosion",
-  39: "orders/pillage",            // destroy city
+  39: "orders/pillage",                  // destroy city
+  40: "orders/expel",                    // expel units
   41: "orders/disband_recycle",
   42: "orders/disband_default",
   43: "orders/rehome_default",           // home city
@@ -78,6 +84,8 @@ var action_images = {
   "targetextra": "e/targetextra",
   "autoattack": "e/redexclamations",
   "Airbase": "orders/airbase",
+  "Canal, coastal": "orders/canal",
+  "Canal, inland": "orders/canal",
   "Canal": "orders/canal",
   "Waterway": "orders/canal",
   "Buoy": "orders/buoy",
@@ -101,6 +109,8 @@ var action_images = {
   "Farmland": "orders/irrigation",
   "Mine": "orders/mine_default",
   "Pollution": "orders/pollution",
+  "Vigil": "orders/vigil",
+  "Sentry": "orders/sentry",
   "Walls": "e/greatwall"
 };
 
@@ -404,9 +414,9 @@ function act_sel_click_function(parent_id,
 /**************************************************************************
   Puts an icon into a button image.
 **************************************************************************/
-function render_action_image_into_button(text, action_id, sub_tgt)
+function render_action_image_into_button(text, action_id, sub_tgt, order, activity)
 {
-  //console.log("Render action %d:%s sub_tgt=%d",action_id,text,sub_tgt)
+  //console.log("Render action %d:%s sub_tgt=%s",action_id,text,sub_tgt)
   if (action_images[action_id]) {
     var key = action_id;
     //console.log("  Key starts at %s",key);
@@ -423,6 +433,27 @@ function render_action_image_into_button(text, action_id, sub_tgt)
         }
       }
     };
+
+    /* ACTION_COUNT could mean 1. NO ACTION, or, 2. a new ACTIVITY instead
+       of an ACTION performance: */
+    if (key == ACTION_COUNT) {
+      if (order && order == ORDER_ACTIVITY && activity) {
+        switch (activity) {
+          case ACTIVITY_SENTRY:
+            key = "Sentry";
+            break;
+          case ACTIVITY_FALLOUT:
+            key = "Fallout";
+            break;
+          case ACTIVITY_POLLUTION:
+            key = "Pollution";
+            break;
+          case ACTIVITY_VIGIL:
+            key = "Vigil";
+            break;
+        }
+      }
+    }
 
     text = "<img style='max-height:24px; position:absolute; left:2px;top:4px;' "
         + "src='/images/" + action_images[key] + ".png'" + ">&emsp;" 
@@ -1680,9 +1711,7 @@ function select_last_action()
 
 /* TODO:
 =========================================================================================================
-    make non-working //commented-out actions to work
-    expel and capture units trying to do to same tile instead of next one.
-      order_wants_direction() isn't working somehow?    */
+    make non-working //commented-out actions to work   */
 
 //function add_action_last_button(buttons, action_id,   override_name, order,                activity,        target, subtarget)
   buttons = add_action_last_button(buttons, ACTION_ATTACK);
@@ -1701,13 +1730,18 @@ function select_last_action()
     buttons = add_action_last_button(buttons, ACTION_BASE, "Build Fort", ORDER_PERFORM_ACTION, null, null, EXTRA_FORT);
   if (tech_known('Construction'))
     buttons = add_action_last_button(buttons, ACTION_BASE, "Build Fortress", ORDER_PERFORM_ACTION, null, null, EXTRA_FORTRESS);
+  if (client_rules_flag[CRF_EXTRA_HIDEOUT] && server_settings.hideouts.val && tech_known('Warrior Code'))
+    buttons = add_action_last_button(buttons, ACTION_BASE, "Build Hideout", ORDER_PERFORM_ACTION, null, null, EXTRA_);
+
   if (client_rules_flag[CRF_CANALS] && tech_known('Engineering')) {
     buttons = add_action_last_button(buttons, ACTION_ROAD, "Canal, coastal", ORDER_PERFORM_ACTION, null, null, EXTRA_CANAL);
     buttons = add_action_last_button(buttons, ACTION_ROAD, "Canal, inland", ORDER_PERFORM_ACTION, null, null, EXTRA_WATERWAY);
   }
-//  buttons = add_action_last_button(buttons, ACTION_CAPTURE_UNITS); // acts on wrong tile, as do the below:
-//  buttons = add_action_last_button(buttons, ACTION_CLEAN_POLLUTION, "Clean Pollution", ORDER_PERFORM_ACTION, ACTIVITY_CLEAN_POLLUTION, EXTRA_POLLUTION, EXTRA_POLLUTION);
-//  buttons = add_action_last_button(buttons, ACTION_CLEAN_FALLOUT, "Clean Fallout", ORDER_PERFORM_ACTION, null, null, EXTRA_FALLOUT);
+  buttons = add_action_last_button(buttons, ACTION_CAPTURE_UNITS, "Capture Unit"); 
+
+  buttons = add_action_last_button(buttons, ACTION_COUNT, "Clean Pollution", ORDER_ACTIVITY, ACTIVITY_POLLUTION, null, EXTRA_POLLUTION);
+  buttons = add_action_last_button(buttons, ACTION_COUNT, "Clean Fallout", ORDER_ACTIVITY, ACTIVITY_FALLOUT, null, EXTRA_FALLOUT);
+
   buttons = add_action_last_button(buttons, ACTION_CONQUER_CITY);    
   buttons = add_action_last_button(buttons, ACTION_CONVERT);
   buttons = add_action_last_button(buttons, ACTION_CULTIVATE);
@@ -1716,6 +1750,7 @@ function select_last_action()
   buttons = add_action_last_button(buttons, ACTION_NUKE, "Detonate Nuke");
   buttons = add_action_last_button(buttons, ACTION_TRANSPORT_EMBARK, "Embark");
   buttons = add_action_last_button(buttons, ACTION_TRADE_ROUTE);
+  buttons = add_action_last_button(buttons, ACTION_EXPEL_UNIT);
   buttons = add_action_last_button(buttons, ACTION_FORTIFY);
   buttons = add_action_last_button(buttons, ACTION_HELP_WONDER);
   buttons = add_action_last_button(buttons, ACTION_HOME_CITY, "Home City");
@@ -1738,21 +1773,22 @@ function select_last_action()
   buttons = add_action_last_button(buttons, ACTION_ROAD, "Road", ORDER_PERFORM_ACTION, null, null, EXTRA_ROAD);
   
   buttons = add_action_last_button(buttons, ACTION_RECYCLE_UNIT);
-  buttons = add_action_last_button(buttons, ACTION_SPY_SABOTAGE_UNIT_ESC);
+  buttons = add_action_last_button(buttons, ACTION_SPY_SABOTAGE_UNIT_ESC, "Sabotage Unit");
+  buttons = add_action_last_button(buttons, ACTION_COUNT, "Sentry", ORDER_ACTIVITY, ACTIVITY_SENTRY, null, -1);  
   buttons = add_action_last_button(buttons, ACTION_SPY_ATTACK, "Spy vs. Spy");
-  buttons = add_action_last_button(buttons, ACTION_STEAL_MAPS);
-  buttons = add_action_last_button(buttons, ACTION_STEAL_MAPS_ESC);
+  buttons = add_action_last_button(buttons, ACTION_STEAL_MAPS, "Steal Map");
+  buttons = add_action_last_button(buttons, ACTION_STEAL_MAPS_ESC, "Steal Map Escape");
   buttons = add_action_last_button(buttons, ACTION_TRANSFORM_TERRAIN);
- //   buttons = add_action_last_button(buttons, ACTION_EXPEL_UNIT);    act on wrong tile
 
  /* Currently disallowed until actionenablers can guarantee this is legal at the server level.
    TODO: when ruleset has actionenablers regulating ACTION_TRANSPORT_UNLOAD legality, this button can return.
   buttons = add_action_last_button(buttons, ACTION_TRANSPORT_UNLOAD);
 */
   buttons = add_action_last_button(buttons, ACTION_UPGRADE_UNIT);
+  buttons = add_action_last_button(buttons, ACTION_COUNT, "Vigil", ORDER_ACTIVITY, ACTIVITY_VIGIL, null, -1);
   buttons = add_action_last_button(buttons, ACTION_COUNT, "NO ACTION", ORDER_LAST);
   var close_button = {
-    html: render_action_image_into_button("Cancel (𝗪)", "cancel"), 
+    html: render_action_image_into_button("Cancel (𝗪)", "cancel"),
     click: function() {
       remove_active_dialog(id);
       deactivate_goto(false);
@@ -1799,7 +1835,7 @@ function add_action_last_button(buttons, action_id, override_name, order, activi
   if (!override_name) override_name = actions[action_id]['ui_name'].replace("%s", "").replace("%s","");
   var new_button = create_action_last_button(override_name, action_id, order, activity, target, subtarget);
 
-  new_button.html = render_action_image_into_button(new_button.html, action_id);
+  new_button.html = render_action_image_into_button(new_button.html, action_id, subtarget, order, activity);
 
   buttons.push(new_button);
   return buttons;
