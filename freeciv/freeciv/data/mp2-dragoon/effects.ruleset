@@ -4030,6 +4030,14 @@ reqs	=
       "Building", "Solar Plant",     "City",   FALSE
       "Building", "Fusion Reactor",  "Player", FALSE
     }
+[effect_hoover_dam_city_3]
+type    = "Pollu_Prod_Pct" ;-25 for factory, -25 for mfg_plant
+value	= -80
+reqs	=
+    { "type",     "name",            "range", "present"
+      "Building", "Hoover Dam",      "City",   TRUE
+      "Building", "Fusion Reactor",  "Player", TRUE
+    }
 ; _ _ _ Bonuses for Hydro Plants in other cities: _ _ _
 [effect_hoover_hydro_plant_bonus_1]
 type    = "Output_Bonus"
@@ -4147,6 +4155,17 @@ reqs	=
     { "type",       "name",           "range", "present"
       "Building",   "Fusion Reactor", "Player", TRUE
       "Building",   "Mfg. Plant",     "City",   TRUE
+      "OutputType", "Shield",         "Local",  TRUE
+    }
+[effect_fusion_reactor_1a_hoover]
+type    = "Output_Bonus"
+value	= 80
+reqs	=
+    { "type",       "name",           "range", "present"
+      "Building",   "Fusion Reactor", "Player", TRUE
+      "Building",   "Hoover Dam",     "City",   TRUE
+      "Building",   "Mfg. Plant",     "City",   FALSE
+      "Building",   "Factory",        "City",   FALSE
       "OutputType", "Shield",         "Local",  TRUE
     }
 [effect_fusion_reactor_2]
