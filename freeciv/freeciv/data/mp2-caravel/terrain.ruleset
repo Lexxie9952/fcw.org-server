@@ -1666,7 +1666,7 @@ reqs           =
       "CityTile", "Center", "Local", FALSE, TRUE
 ;      "Extra", "River", "Local", FALSE, FALSE
     }
-build_time     = 21
+build_time     = 11
 removal_time   = 0
 unit_seen      = "Hidden"
 native_to      = "Land", "LandAirSea", "LandNoKill", "LandRoad", "Cargo", "Helicopter", "Balloon", "Zeppelin"
