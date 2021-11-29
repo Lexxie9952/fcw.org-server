@@ -1,3 +1,4 @@
+;：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：’ ×
 ; Modifying this file:
 ; You should not modify this file except to make bugfixes or
 ; for other "maintenance".  If you want to make custom changes,
@@ -11,8 +12,9 @@
 ; the first available (not obsolete) such unit, or by picking the last
 ; such unit directly. When determining starting units, the first 
 ; unit with the relevant role that the player can build will be chosen.
-; If no such unit can be found (eg Explorers that require Seafaring),
+; If no such unit can be found (eg Explorers that require Map Making),
 ; then the first unit with this role will be chosen.
+;：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：’ ×
 
 [datafile]
 description="Unit definitions for the Avant-garde ruleset."
@@ -64,14 +66,11 @@ flags =
     _("FortBuster"), _("Defending Forts get no bonus. +33% attack bonus vs. the 2× defense of a Fortress.")
     _("FortressBuster"), _("Defending Fortresses get no bonus.")
     _("AntiAir"), _("Anti-Air bonus of this unit is less effective against Stealth, which has a 25% bonus against this unit.")
-;;;   _("NeverProtects"), _("Does not protect other units on its tile.")   ; UNCOMMENT THIS IF NOT USING SCL'S PATCH FOR THIS FLAG
 ;;;   _("NeverBlocked"), _("Bypasses unreachable units when attacking a tile.")   ; UNCOMMENT THIS IF NOT USING LEXXIE'S PATCH FOR THIS FLAG
-    _("MultiSlot"), _("Cities with proper requirements can produce more than one of these per turn.") ;uncomment if you don't have slot_control patch
+;;;    _("MultiSlot"), _("Cities with proper requirements can produce more than one of these per turn.") ;uncomment if you don't have slot_control patch
     _("CanHide"), _("In appropriate terrain, this unit can make a Hideout, which will conceal all land units on the tile.")
     _("WillNever")
-;;; The following flag MUST be #34 position to work with hack in movement.c which allows transported AAA to defend on non-native:
-;;; this comment can be removed when we have some smarter way for unit_can_defend_here(..) to get ruleset control.
-    _("TransportDefender"), _("Can defend while transported on non-native tiles.")
+;;;    _("TransportDefender"), _("Can defend while transported on non-native tiles.") ;uncomment if you don't have TransportDefender patch
     _("NonMilAttack"), _("Has military capacity but for peaceful purposes, can enter territories with whom you are at Peace")
     _("Cant_Pillage"), _("Unable to pillage tiles.")
   }
@@ -151,7 +150,6 @@ veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
 ; "TerrainDefense"    = Unit Class gains defense bonus from terrain
 ; "DamageSlows"       = Damaged units are slowed down
 ; "CanOccupyCity"     = Military units of this class can occupy enemy cities
-; "Missile"           = Unit Class is destroyed when it attacks
 ; "BuildAnywhere"     = Unit Class can be built even in the middle of non-native terrain
 ; "Unreachable"       = Unit Class can be attacked only by units explicitly listing this
 ;                       class in its 'targets', unless on a city or native base.
@@ -163,7 +161,6 @@ veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
 ;                       override this
 ; "CanFortify"        = Unit can fortify at land tiles. Unit type flag
 ;                       "Cant_Fortify" can override this
-; "CanPillage"        = Unit Class can pillage tile infrastructure
 ; "DoesntOccupyTile"  = Even if this class of enemy unit is on tile, cities can
 ;                       still work that tile
 ; "AttackNonNative"   = Unit Class can attack units on non-native tiles. Unit type
@@ -176,19 +173,17 @@ veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
 ; "KillCitizen"       = Upon successful attack against a city, unit kills one
 ;                       citizen. The effect "Unit_No_Lose_Pop" and the server
 ;                       setting 'killcitizen' can disable this.
-
-; "Airliftable"       = This Unit Class may be airlifted
+;
 ; */ <-- avoid gettext warnings
 
 
 ; **********************************************************************************
 ; **********************************************************************************
-; WARNING: ANY CHANGES TO WHAT TYPES OR CLASSES CAN LOAD ONTO WHICH TRANSPORTS MAY 
+; WARNING：ANY CHANGES TO WHAT TYPES OR CLASSES CAN LOAD ONTO WHICH TRANSPORTS MAY 
 ; REQUIRE CHANGES TO FCW function unit_could_possibly_load() in unit.js
 ; **********************************************************************************
 ; **********************************************************************************
 [unitclass_missile]
-; /* TRANS: Unit class: used adjectivally */
 name          = _("?unitclass:Missile")
 min_speed     = 1
 hp_loss_pct   = 0
@@ -201,10 +196,12 @@ name          = _("?unitclass:Bomb")
 min_speed     = 1
 hp_loss_pct   = 0
 hut_behavior  = "Frighten"
-flags         = "Unreachable", "DoesntOccupyTile", "Airliftable" 
+flags         = "Unreachable", "DoesntOccupyTile", "Airliftable"
+helptext      = _("\
+  • Can be airlifted from a suitable city.\
+")
 
 [unitclass_land]
-; /* TRANS: Unit class: used adjectivally */
 name          = _("?unitclass:Land")
 min_speed     = 1
 hp_loss_pct   = 0
@@ -243,31 +240,28 @@ helptext      = _("\
 ")
 
 [unitclass_sea]
-; /* TRANS: Unit class: used adjectivally */
 name          = _("?unitclass:Sea")
 min_speed     = 3
 hp_loss_pct   = 0
 flags         = "DamageSlows", "AttackNonNative", "AttFromNonNative", "CanPillage"
 helptext      = _("\
-  • Crew Repair: each turn, regardless of movement, recovers 8% of its hit points (rounded down).\
+  • Crew Repair：each turn, regardless of movement, recovers 8% of its hit points (rounded down).\
 ")
 
 ; Separating the Submarine class finally allows it to be unreachable by Air. The old Submarine was 
 ; far too offensively overpowered while simultaneously almost useless from ultra-vulnerability to Air units.
 ; Because it is now Unreachable, any unit able to attack it needs this class in its targets.
 [unitclass_submarine]
-; /* TRANS: Unit class: used adjectivally */
 name          = _("?unitclass:Submarine")
 min_speed     = 3
 hp_loss_pct   = 0
 flags         = "DamageSlows", "AttackNonNative", "AttFromNonNative", "CanPillage", "Unreachable"
 helptext      = _("\
-  • Visibility bonus: not visible to other players unless they have a unit or city adjacent to it.\n\
-  • Crew Repair: each turn, regardless of movement, recovers 2 hit points.\
+  • Visibility bonus：not visible to other players unless they have a unit or city adjacent to it.\n\
+  • Crew Repair：each turn, regardless of movement, recovers 2 hit points.\
 ")
 
 [unitclass_trireme]
-; /* TRANS: Unit class: used adjectivally */
 name          = _("?unitclass:Trireme")
 min_speed     = 2
 hp_loss_pct   = 0
@@ -281,7 +275,6 @@ hp_loss_pct   = 0
 flags         = "DamageSlows", "AttackNonNative", "AttFromNonNative"
 
 [unitclass_heli]
-; /* TRANS: Unit class: used adjectivally */
 name          = _("?unitclass:Helicopter")
 min_speed     = 1
 hp_loss_pct   = 5
@@ -289,7 +282,6 @@ flags         = "Unreachable", "CanOccupyCity", "CollectRansom", "Airliftable"
 
 ; This class is for air units that are unreachable but do not protect a stack.
 [unitclass_air]
-; /* TRANS: Unit class: used adjectivally */
 name          = _("?unitclass:Air")
 min_speed     = 1
 hp_loss_pct   = 0
@@ -298,7 +290,6 @@ flags         = "Unreachable", "DoesntOccupyTile", "Airliftable"
 
 ; This class is for air units that can pillage terrain (i.e. Jet Bomber)
 [unitclass_airpillage]
-; /* TRANS: Unit class: used adjectivally */
 name          = _("?unitclass:AirPillage")
 min_speed     = 1
 hp_loss_pct   = 0
@@ -306,22 +297,20 @@ hut_behavior  = "Frighten"
 flags         = "Unreachable", "DoesntOccupyTile", "Airliftable", "CanPillage"
 
 ; This class is for air units that can also protect a stack.
-; (Fighters) -- technically a separate AirProtect class is not needed, but
+; (Fighters) — technically a separate AirProtect class is not needed, but
 ; Fighters also have Border Police abilities, and a separate class
 ; facilitates future adjustments and balancing in an isolated class.
 [unitclass_air_protect]
-; /* TRANS: Unit class: used adjectivally */
 name          = _("?unitclass:AirProtect")
 min_speed     = 1
 hp_loss_pct   = 0
 hut_behavior  = "Frighten"
 flags         = "Unreachable", "DoesntOccupyTile", "Airliftable", "BorderPolice"
 helptext      = _("\
-  • INTERCEPTOR: can be given the Vigil order to auto-attack adjacent Air units.\n\
-  • AIR COVER: Most units who cannot attack this unit also cannot attack other units on the tile.\
+  • INTERCEPTOR：can be given the Vigil order to auto-attack adjacent Air units.\n\
+  • AIR COVER：Most units who cannot attack this unit also cannot attack other units on the tile.\
 ")
 [unitclass_balloon]
-; /* TRANS: Unit class: used adjectivally */
 name          = _("?unitclass:Balloon")
 min_speed     = 1
 hp_loss_pct   = 0
@@ -331,13 +320,13 @@ flags         = "Unreachable", "DoesntOccupyTile", "Airliftable"
 
 ; /* <-- avoid gettext warnings
 ;
-; Below: The individual unit types, one per section.
+; Below：The individual unit types, one per section.
 ;
 ; The number can be variable, up to 200.
 ; However for the "official" rulesets, units should not be removed
 ; because that would break backward compatability with savegames.
 ;
-; The order here matters: later units are considered "better" for
+; The order here matters：later units are considered "better" for
 ; a given flag or role.
 ;
 ; The actual tag used (the * in [unit_*]) does not matter, except
@@ -370,7 +359,7 @@ flags         = "Unreachable", "DoesntOccupyTile", "Airliftable"
 ; hitpoints     = how much damage unit can withstand
 ; firepower     = number of hitpoints removed per round of combat; at least 1
 ; move_rate     = base move rate (whole movement points)
-; vision_radius_sq = base vision of unit: unit can see tile up to the square
+; vision_radius_sq = base vision of unit：unit can see tile up to the square
 ;                 root of this value away
 ; convert_to    = can be converted to another type of unit by name
 ; convert_time  = number of movement points it takes to convert to
@@ -441,9 +430,9 @@ flags         = "Unreachable", "DoesntOccupyTile", "Airliftable"
 ; "DefenseDivider"    = Divide defense value with (1 + 'value').
 ;                       Bonus is defined in attackers entry.
 ; "DefenseDividerPct" = Divide defense value by 1 + (value / 100).
-;                       Value of 100 means division by 2, (2x for attacker)
-;                       value of 50 means division by 1.5, (1.5x for attacker)
-;                       i.e.: Effectively increases *attack* by value percent.
+;                       Value of 100 means division by 2, (2× for attacker)
+;                       value of 50 means division by 1.5, (1.5× for attacker)
+;                       i.e.：Effectively increases *attack* by value percent.
 ; "FirePower1"        = Defender firepower is reduced to value 1 when
 ;                       ever this has non-zero value.
 ;                       Bonus is defined in attackers entry.  
@@ -452,20 +441,20 @@ flags         = "Unreachable", "DoesntOccupyTile", "Airliftable"
 ;
 ; "IgZOC"       = ignore Zones of Control (ZOC) even if unit class has
 ;                 "ZOC" flag
-; "HasNoZOC"	= unit has no Zone of Control (ZOC), thus any unit can move
-;		  around it freely
-; "NonMil"	= a non-military unit: no attacks; no martial law; can enter
+; "HasNoZOC"	  = unit has no Zone of Control (ZOC), thus any unit can move
+;		              around it freely
+; "NonMil"	    = a non-military unit：no martial law; can enter
 ;                 peaceful borders; DoesntOccupyTile
 ; "IgTer"       = use constant move cost defined in igter_cost (terrain.ruleset)
 ;                 rather than terrain/road etc cost, unless terrain cost is
 ;                 less
-; "OneAttack"	= can only make a single attack, regardless of movement points
-; "FieldUnit"	= cause unhappiness even when not being aggressive
+; "OneAttack"	  = can only make a single attack, regardless of movement points
+; "FieldUnit"	  = cause unhappiness even when not being aggressive
 ; "BeachLander" = won't lose all its movement when moving from non-native
 ;                 terrain to native terrain even if slow_invasions is on.
-; "Settlers"	= "can irrigate and build roads" but really seems to be a required flag for 
-;                any tile improvement at all.
-; "Diplomat"	= can defend against diplomat actions (see diplchance
+; "Settlers"	  = "can irrigate and build roads" but really seems to be a required flag for 
+;                 any tile improvement at all.
+; "Diplomat"	  = can defend against diplomat actions (see diplchance
 ;                 server option)
 ; "Spy"         = strong in diplomatic battles. _Must_ be "Diplomat" also
 ; "CoastStrict" = (sea only) cannot leave coast
@@ -473,38 +462,36 @@ flags         = "Unreachable", "DoesntOccupyTile", "Airliftable"
 ;                 to regularly end turn on coast
 ; "Only_Native_Attack" = cannot attack targets on non-native tiles even if
 ;                 unit class can
-; "Cant_Fortify" =  cannot fortify even if unit class has "CanFortify" flag
-; "Fanatic"	= can only be built by governments that allow them
-;		  (see civ2/governments.ruleset, Fundamentalism government)
-; "Unique"	= a player can only have one of these units in the game at
-;		  the same time; barbarians cannot use this at present
-; "GameLoss"	= losing one of these units means you lose the game, but it
-;		  is produced without homecity and upkeep
-; "EvacuateFirst" = the game will try to rescue units with this flag before
+; "Cant_Fortify"= cannot fortify even if unit class has "CanFortify" flag
+; "Fanatic"	    = can only be built by governments that allow them
+;		              (see civ2/governments.ruleset, Fvndamentalist government)
+; "Unique"	    = a player can only have one of these units in the game at
+;		              the same time; barbarians cannot use this at present
+; "GameLoss"	  = losing one of these units means you lose the game, but it
+;		              is produced without homecity and upkeep
+; "EvacuateFirst"=the game will try to rescue units with this flag before
 ;                 it tries to rescue units without it when their transport
 ;                 is destroyed. Think of the Birkenhead drill ("women and
 ;                 children first"). Replace "women and children" with
 ;                 "units with the EvacuateFirst unit type flag".
-; "SuperSpy"	= this unit always wins diplomatic contests, that is, unless
-;		  it encounters another SuperSpy, in which case defender wins;
-;		  can also be used on non-diplomat units, in which case it can
-;		  protect cities from diplomats; also 100% spy survival chance
-; "NoHome"	= this unit has no homecity and will be free of all upkeep, and
-;		  therefore will not revolt along with its city of origin should
-;		  it be incited
+; "SuperSpy"	  = this unit always wins diplomatic contests, that is, unless
+;		              it encounters another SuperSpy, in which case defender wins;
+;		              can also be used on non-diplomat units, in which case it can
+;		              protect cities from diplomats; also 100% spy survival chance
+; "NoHome"	    = this unit has no homecity and will be free of all upkeep, and
+;		              therefore will not revolt along with its city of origin should
+;		              it be incited
 ; "NoVeteran"   = this unit cannot gain veteran levels through experience
 ;                 (as if both raise_chance and work_raise_chance were zero);
 ;                 it can still gain veterancy through Veteran_Build, etc
 ; "CityBuster"  = this unit has double firepower against cities
 ; "NoBuild"     = this unit cannot be built
-; "BadWallAttacker"	= the firepower of this unit is set to 1 if
-;                 attacking a city
-;		  defended by a city wall (or other city building defense)
-; "BadCityDefender"	= if attacked while in a city, firepower is set to 1
-;		  and firepower of attacker is doubled (the Pearl Harbour
-;                 rule)
+; "BadWallAttacker"=the firepower of this unit is set to 1 if attacking a city
+;		              defended by a city wall (or other city building defense)
+; "BadCityDefender"=if attacked while in a city, firepower is set to 1
+;		              and firepower of attacker is doubled (the Pearl Harbour rule)
 ; "BarbarianOnly" = only barbarians can build this unit
-; "Shield2Gold" = Switch from shield upkeep to gold upkeep possible
+; "Shield2Gold" = Switch from shield upkeep to gold upkeep possible.
 ; "NewCityGamesOnly" = unit can't be built on scenarios where founding new cities
 ;                 is not allowed. Give this flag to units that would make no sense
 ;                 to have in a game with such a scenario
@@ -532,14 +519,22 @@ flags         = "Unreachable", "DoesntOccupyTile", "Airliftable"
 ;                  is enabled and the unit class is unreachable
 ; "MultiSlot"    = if server setting slot_control is ON, only unit types with this
 ;                  flag can use extra city_build_slots
-;
+; "TransportDefender" = Unit can always defend while transported, even on non-native
+;                  terrain.
+; "SentryAlways" = This unit always reports sentry-type information; give this flag to 
+;                  reconnaissance/scouting type units who can't sentry because they are 
+;                  fuel-type units (which can only sentry on refueling tiles.)
+; "Reserved1"
+; "Reserved2"
+; "Reserved3"     = reserved for future use.
+; -------------------------------------------
 ; Following actions require extra fields:
-;  "Attack"
+;  "Attack" and "Suicide Attack"
 ;   attack = base attack strength
 ;  "Bombard"
 ;   attack       = base attack strength
 ;   bombard_rate = the number of shots fired at enemy units when attacking
-;       FOR NUKES: the amount to add to the default radius of 1 tile
+;       FOR NUKES：the amount to add to the default radius of 1 tile
 ;  "Join City"
 ;   pop_cost = the number of population added to the target city
 ;  "Paradrop Unit"
@@ -562,9 +557,9 @@ flags         = "Unreachable", "DoesntOccupyTile", "Airliftable"
 ; "HutTech"               = can be found in a hut, but its techs required
 ; "Partisan"              = can be created as a partisan (only one unit can have this
 ;                           flag), see end of this file for its tech requirements option
-; "DefendOk"              = AI hint: ok for defending with
-; "DefendGood"            = AI hint: good for defending with
-; "Ferryboat"             = AI hint: useful for ferrying
+; "DefendOk"              = AI hint：ok for defending with
+; "DefendGood"            = AI hint：good for defending with
+; "Ferryboat"             = AI hint：useful for ferrying
 ; "Barbarian"             = can be created as land barbarian
 ; "BarbarianTech"         = can be created as land barbarian, if someone has
 ;                           researched its tech requirements
@@ -577,7 +572,7 @@ flags         = "Unreachable", "DoesntOccupyTile", "Airliftable"
 ; "BarbarianSeaTech"      = can be created as a barbarian that disembarks from a barbarian boat
 ;                           if someone has researched its tech requirements
 ; "Settlers"              = can irrigate and build roads
-; "Hunter"                = AI hint: good for hunting other units
+; "Hunter"                = AI hint：good for hunting other units
 ; "CitiesStartUnit"       = Gets granted as 'c' startunit
 ; "WorkerStartUnit"       = Gets granted as 'w' startunit
 ; "ExplorerStartUnit"     = Gets granted as 'x' startunit
@@ -588,8 +583,11 @@ flags         = "Unreachable", "DoesntOccupyTile", "Airliftable"
 ; "DefendGoodStartUnit"   = Gets granted as 'D' startunit
 ; "AttackFastStartUnit"   = Gets granted as 'a' startunit
 ; "AttackStrongStartUnit" = Gets granted as 'A' startunit
-;
-; */ <-- avoid gettext warnings
+ 
+; "UserType1Startunit"    = Gets granted as 'u' startunit
+; "UserType2Startunit"    = Gets granted as 'U' startunit
+; "UserType3Startunit"    = Gets granted as 'z' startunit
+; "TradeStartUnit"        = Gets granted as 't' startunit
 
 [unit_settlers]
 name          = _("Settlers")
@@ -1155,7 +1153,6 @@ disembarks    = "Helicopter"
 targets       = "Balloon", "Helicopter"
 flags         = "MultiSlot", "IgTer", "IgZOC", "NoHome", "FootSoldier", "Capturer", "CantReachAir",
                 "Shield2Gold", "Settlers", "CanHide", "WillNever"
-;yes Partisan has 0 upkeep so Shield2Gold is meaningless, but currently used to substitute MultiSlot inaccessible in c-server
 roles         = "DefendGood", "DefendGoodStartUnit", "Partisan", "BarbarianTech"
 helptext      = _("\
 Partisans are guerilla fighters who can use the terrain to their advantage.  Like the Explorer\
@@ -3936,7 +3933,7 @@ uk_food       = 0
 uk_gold       = 0
 embarks       = "Helicopter"    ; transport helicopter only
 disembarks    = "Helicopter"
-flags         = "HelpWonder", "TradeRoute", "IgZOC", "NonMil", "HasNoZOC", "Capturable", "Expellable", "Shield2Gold"
+flags         = "HelpWonder", "TradeRoute", "IgZOC", "NonMil", "HasNoZOC", "Capturable", "Expellable", "MultiSlot"
 roles         = "AttackStrongStartUnit"  ;note: MP2 doesn't start games with ASSU's so has co-opted this for caravan start unit.
 helptext      = _("\
 Caravans are Commerce units. Commerce units can help build Wonders in any city with whom\
