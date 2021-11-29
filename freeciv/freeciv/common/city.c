@@ -748,7 +748,7 @@ bool city_production_build_units(const struct city *pcity,
    * slot_control_style server setting to regulate how slot_control will then operate:
    * 1. "SC_MIXED": A maximum of one non-MSU can be made. Any extra slots must be used
    *    by MSU's. e.g., If you have 3 slots, you can make up to 3 units, only one of
-   *    which can (optionally) be a MSU. "SC_MIXED" is the default setting.
+   *    which can (optionally) be a non-MSU. "SC_MIXED" is the default setting.
    * 2. "SC_SEGREGATED": Multiple slots can be used so long as they only units ever made
    *    are MSU's. Production halts the moment it would result in a non-MSU unit being 
    *    bundled in a batch of multiple units. In other words, you can't use extra slots
