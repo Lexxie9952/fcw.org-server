@@ -742,30 +742,23 @@ bool city_production_build_units(const struct city *pcity,
   int shields_left = pcity->shield_stock;
   int unit_shield_cost, i;
 
-  /* When game.server.slot_control gives rulesets control over city_build_slots,
-   * then some units can be made multiple times, and other types can only be
-   * made once. The differentiator is the Shield2Gold flag, since
-   * (a) many rulesets don't use it, (b) rulesets who use it for some units and
-   * not others, tend to use it as a dynamic to encourage those unit types, (c)
-   * freeciv doesn't yet have a built-in unit-flag for differentiating (but when it
-   * does we will just change the UTYF_SHIELD2GOLD in a few lines below and we're 
-   * good to go!)
-   * There are three potential values that can be put in a the slot_control_style server 
-   * setting to regulate the style of this:
-   * 1. SC_MIXED: A non-multi-slot unit doesn't PREVENT multi-slot units from using up their 
-   *    intended ability to use free slots. Simply, more than one non-multi-slot unit
-   *    cannot be made. That is, if you have 3 slots, you can make a max. of one 
-   *    non-multi-slot unit and up to two multi-slot units. For MANY reasons this
-   *    option usually makes the most sense, which is why it's default. SC_MIXED
-   * 2. SC_SEGREGATED: Any multi-slot unit (msu) can be made with any other msu, and
-   *    production halts the moment multiple slots attempt to be occupied, where a
-   *    new slot being filled would result in a non-multi-slot unit being made in a
-   *    batch that has more than 1 unit made. SC_SEGREGATED.
-   * 3. SC_SAME_TYPE: Only the same type of unit can be made multiple times. This is the legacy
-   *    (kinda crappy) option. SC_SAME_TYPE.
+  /* When game.server.slot_control is on, then MULTISLOT UNITS ("MSU") can be made
+   *  multiple times, and other types can only be made once. An "MSU" is any unit with
+   * that UTYF_MULTISLOT flag. There are three potential values that can be put in the
+   * slot_control_style server setting to regulate how slot_control will then operate:
+   * 1. "SC_MIXED": A maximum of one non-MSU can be made. Any extra slots must be used
+   *    by MSU's. e.g., If you have 3 slots, you can make up to 3 units, only one of
+   *    which can (optionally) be a MSU. "SC_MIXED" is the default setting.
+   * 2. "SC_SEGREGATED": Multiple slots can be used so long as they only units ever made
+   *    are MSU's. Production halts the moment it would result in a non-MSU unit being 
+   *    bundled in a batch of multiple units. In other words, you can't use extra slots
+   *    whenever a non-MSU is in the batch.
+   * 3. "SC_SAME_TYPE": Only the same type of unit can be made multiple times. This was 
+   *    the old, unpopular, and unrealistic legacy behaviour.
    * 
-   * If game.server.slot_control is OFF, option 1 and 2 allow units of different
-   * types to mix. Option 3 disallows it.
+   * If game.server.slot_control is OFF, things are much simpler. Option 1 and 2 are 
+   * identical and allow units of different types to mix. Option 3 disallows it and
+   * keeps the old legacy behaviour.
    */ 
   bool utype_is_slotblocker = false;
   int slotblockers = 0; // slotblockers is a count of units from the group of which more
@@ -783,33 +776,28 @@ bool city_production_build_units(const struct city *pcity,
 
   /* Can't use multiple city_build_slots:
      ➤ Unique units: restricts any second unit.
-     ➤ Units without utypeflag "Shield2Gold" IF game.server.slot_control==TRUE
-       Later, a custom flag "MultiSlot" should be used.   
-     ➤ Pop units: restricts any second unit. 
-       Can't think of WHY, this nerfs Migrants too much by wiping out a whole production-turn-slot. */
+     ➤ Units without utypeflag "UTYF_MULTISLOT" IF game.server.slot_control==TRUE */
   if (/*utype_pop_value(utype) != 0 || */utype_has_flag(utype, UTYF_UNIQUE) ) {
-    /* Pop_cost unit or Unique_unit: means ONLY this unit can be built */
+    /* Unique_unit: ONLY this unit can be built */
     (*num_units)++; // = 1
     return FALSE;
   }
 
   if ( game.server.slot_control 
-       && !(utype_has_flag(utype, UTYF_SHIELD2GOLD)) 
+       && !(utype_has_flag(utype, UTYF_MULTISLOT)) 
       && game.server.slot_control_style == SC_MIXED )   { 
 
         utype_is_slotblocker = true;
 
   }  else if ( game.server.slot_control
               && game.server.slot_control_style == SC_SEGREGATED
-              && !(utype_has_flag(utype, UTYF_SHIELD2GOLD))) {
+              && !(utype_has_flag(utype, UTYF_MULTISLOT))) {
   
         (*num_units)++; 
         return FALSE;
   }
 
   if (add_production) {
-    //TODO: test, shouldn't this be pcity->surplus[O_SHIELD] instead? if we are crediting shields
-    //prior to upkeep, there could be a case where a unit gets made without sufficient shields?
     shields_left += pcity->prod[O_SHIELD];
   }
   unit_shield_cost = utype_build_shield_cost(pcity, utype);
@@ -854,12 +842,7 @@ bool city_production_build_units(const struct city *pcity,
                   return FALSE; // ILLEGAL, go home
               }
               // STEP 2. Flag this unit if "a maximum of one unit from this category can be made"
-              // TODO: this is arbitrarily using UTYF_SHIELD2GOLD only because 1) I couldn't add new flag
-                    // UTYF_MULTI_SLOT without it breaking the manual generator's fc_assertion at 
-                    //  [unittype.c::1347]: assertion 'id >= UTYF_USER_FLAG_1 && id <= UTYF_LAST_USER_FLAG' failed.
-                    // and 2) Shield2Gold flag is often never used AND when it is used, tends to favour higher 
-                    // quantities of those types of units (probably for a good reason.)
-              if (game.server.slot_control && !(utype_has_flag(target.value.utype, UTYF_SHIELD2GOLD))) {
+              if (game.server.slot_control && !(utype_has_flag(target.value.utype, UTYF_MULTISLOT))) {
                 utype_is_slotblocker = true;
               } else utype_is_slotblocker = false;
             }
@@ -884,7 +867,7 @@ bool city_production_build_units(const struct city *pcity,
           shields_left -= unit_shield_cost;
 
           /* If there is another item in the worklist, then:
-            ➤ check if it's legal for shield2gold (later multislot) production and exit if not,
+            ➤ check if it's legal for MultiSlot production and exit if not,
             ➤ otherwise if it's legal, adjust the shield cost to the new item
             ➤ so the loop will begin again with the right info to check. */ 
           if (worklist_length(&pcity->worklist) > i) {
@@ -904,11 +887,7 @@ bool city_production_build_units(const struct city *pcity,
               // STEP ONE. Check again if it it's legal to make >1 of this
               if (/*utype_pop_value(target.value.utype) != 0 
                     || */ utype_has_flag(target.value.utype, UTYF_UNIQUE)
-                    // to do: this is arbitrarily using UTYF_SHIELD2GOLD only because 1) I couldn't add new flag
-                    // UTYF_MULTI_SLOT without it breaking the manual generator's assertion of 
-                    //  [unittype.c::1347]: assertion 'id >= UTYF_USER_FLAG_1 && id <= UTYF_LAST_USER_FLAG' failed.
-                    // and 2) it just so happens that every unit I was adding MultiSlot to in MP2 was Shield2Gold flag.
-                    || (game.server.slot_control && !(utype_has_flag(target.value.utype, UTYF_SHIELD2GOLD))) ) {
+                    || (game.server.slot_control && !(utype_has_flag(target.value.utype, UTYF_MULTISLOT))) ) {
                   return FALSE; // not legal, go home
               }
 
