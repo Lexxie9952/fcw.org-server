@@ -1936,8 +1936,12 @@ char *helptext_unit(char *buf, size_t bufsz, struct player *pplayer,
       _("%s Can bypass unreachable units and attack reachable "
         "units on the same tile.\n"), BULLET_BIG);
   }
+  if (utype_has_flag(utype, UTYF_TRANSPORTDEFENDER)) {
+    CATLSTR(buf, bufsz,
+      _("%s Can always defend while transported, even on non-native terrain.\n"), BULLET_BIG);
+  }
   if (utype_has_flag(utype, UTYF_CANESCAPE)) {
-    CATLSTR(buf, bufsz, _("%s Has 50%% chance to escape once stack defender is lost, if it has more moves left than attacker.\n"),
+    CATLSTR(buf, bufsz, _("%s Has a chance to escape once stack defender is lost, if it has more moves left than attacker.\n"),
             BULLET_BIG);
   }
   if (utype_has_flag(utype, UTYF_CANKILLESCAPING)) {
@@ -1947,6 +1951,10 @@ char *helptext_unit(char *buf, size_t bufsz, struct player *pplayer,
 
   if (utype_has_flag(utype, UTYF_NOBUILD)) {
     CATLSTR(buf, bufsz, _("%s May not be built in cities.\n"), BULLET_BIG);
+  }
+  if (utype_has_flag(utype, UTYF_MULTISLOT)) {
+    CATLSTR(buf, bufsz, _("%s May use extra build slots: in some cases, cities "
+                          "may produce more than one of these per turn.\n"), BULLET_BIG);
   }
   if (utype_has_flag(utype, UTYF_BARBARIAN_ONLY)) {
     CATLSTR(buf, bufsz, _("%s Only barbarians may build this.\n"), BULLET_BIG);
@@ -2010,6 +2018,9 @@ char *helptext_unit(char *buf, size_t bufsz, struct player *pplayer,
   }
   if (utype_has_flag(utype, UTYF_NOHOME)) {
     CATLSTR(buf, bufsz, _("%s Never has a home city.\n"), BULLET_BIG);
+  }
+  if (utype_has_flag(utype, UTYF_SENTRYALWAYS)) {
+    CATLSTR(buf, bufsz, _("%s Always on Sentry: reports all enemy movement it sees.\n"), BULLET_BIG);
   }
   if (utype_has_flag(utype, UTYF_GAMELOSS)) {
     CATLSTR(buf, bufsz, _("%s Losing this unit will lose you the game!\n"),
