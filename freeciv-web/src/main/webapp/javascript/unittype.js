@@ -90,45 +90,61 @@ const UTYF_NEWCITY_GAMES_ONLY = 29;       /* Unit can't be built in scenarios wh
 const UTYF_CANESCAPE = 30;                /* 50% chance to escape when killstack occours if more moves remaining than attacker */
 const UTYF_CANKILLESCAPING = 31;          /* Can kill escaping units */
 const UTYF_NEVER_BLOCKED = 32;            /* Overrides unreachable_protects server setting for attacker */
-                                          /* some of these USER_FLAG may be mis-aligned, some of these may have hard-coded behaviour*/
-const UTYF_USER_FLAG_1 = 33;              /* Reserved for replacing Shield2Gold as flag for using multiple city_build_slots */
-const UTYF_USER_FLAG_2 = 34;              /* Can make hideouts */
-const UTYF_USER_FLAG_3 = 35;              /* Will never autoattack */
-const UTYF_USER_FLAG_4 = 36;              /* Transport Defender: will defend stack as cargo even on non-native tiles FLAG=34 on server */ 
-const UTYF_USER_FLAG_5 = 37;              /* Non-Mil Attack - as NonMil can enter Peace tiles, but if not at Peace, can attack e.g., Trireme */
-const UTYF_USER_FLAG_6 = 38;
-const UTYF_USER_FLAG_7 = 39;
-const UTYF_USER_FLAG_8 = 40;
-const UTYF_USER_FLAG_9 = 41;
-const UTYF_USER_FLAG_10 = 42;
-const UTYF_USER_FLAG_11 = 43;
-const UTYF_USER_FLAG_12 = 44;
-const UTYF_USER_FLAG_13 = 45;
-const UTYF_USER_FLAG_14 = 46;
-const UTYF_USER_FLAG_15 = 47;
-const UTYF_USER_FLAG_16 = 48;
-const UTYF_USER_FLAG_17 = 49;
-const UTYF_USER_FLAG_18 = 50;
-const UTYF_USER_FLAG_19 = 51;
-const UTYF_USER_FLAG_20 = 52;
-const UTYF_USER_FLAG_21 = 53;
-const UTYF_USER_FLAG_22 = 54;
-const UTYF_USER_FLAG_23 = 55;
-const UTYF_USER_FLAG_24 = 56;
-const UTYF_USER_FLAG_25 = 57;
-const UTYF_USER_FLAG_26 = 58;
-const UTYF_USER_FLAG_27 = 59;
-const UTYF_USER_FLAG_28 = 60;
-const UTYF_USER_FLAG_29 = 61;
-const UTYF_USER_FLAG_30 = 62;
-const UTYF_USER_FLAG_31 = 63;
-const UTYF_USER_FLAG_32 = 64;
-const UTYF_USER_FLAG_33 = 65;
-const UTYF_USER_FLAG_34 = 66;
-const UTYF_USER_FLAG_35 = 67;
-const UTYF_USER_FLAG_36 = 68;
-const UTYF_USER_FLAG_37 = 69;
-const UTYF_USER_FLAG_38 = 70;
+const UTYF_MULTISLOT = 33;                /* if server setting slot_control is ON, unit types with this flag can use extra city_build_slots*/
+const UTYF_TRANSPORTDEFENDER = 34;        /* Unit can always defend while transported, even on non-native terrain  */
+const UTYF_SENTRYALWAYS = 35;             /* These units always behave as sentry (e.g. fortified snipers, air reconnaissance units who
+                                             can't sentry because !refuel tile, etc.) */     
+const UTYF_RESERVED1 = 36;
+const UTYF_RESERVED2 = 37;                /* RESERVED for future use */
+const UTYF_RESERVED3 = 38;
+
+
+const UTYF_USER_FLAG_1 = 39;              // Airbase: can build airbases  
+const UTYF_USER_FLAG_2 = 40;              // Transform: can transform terrain
+const UTYF_USER_FLAG_3 = 41;              // CanRoad: Able to build roads
+const UTYF_USER_FLAG_4 = 42;              // CanFortress: can build forts/fortresses
+const UTYF_USER_FLAG_5 = 43;              // Bombarder (SUA) 
+const UTYF_USER_FLAG_6 = 44;              // AirAttacker
+const UTYF_USER_FLAG_7 = 45;              // Horse
+const UTYF_USER_FLAG_8 = 46;              // FootSoldier
+const UTYF_USER_FLAG_9 = 47;              // Helicopter
+const UTYF_USER_FLAG_10 = 48;             // Submarine
+const UTYF_USER_FLAG_11 = 49;             // Unbribable
+const UTYF_USER_FLAG_12 = 50;             // Traderoute 
+const UTYF_USER_FLAG_13 = 51;             // HelpWonder
+const UTYF_USER_FLAG_14 = 52;             // Capturer
+const UTYF_USER_FLAG_15 = 53;             // Capturable
+const UTYF_USER_FLAG_16 = 54;             // Cities - can found cities
+const UTYF_USER_FLAG_17 = 55;             // AddToCity - can add pop to city
+const UTYF_USER_FLAG_18 = 56;             // Nuclear
+const UTYF_USER_FLAG_19 = 57;             // Missile
+const UTYF_USER_FLAG_20 = 58;             // Well-Digger
+const UTYF_USER_FLAG_21 = 59;             // Infra
+const UTYF_USER_FLAG_22 = 60;             // Proletarian
+const UTYF_USER_FLAG_23 = 61;             // Paratroopers
+const UTYF_USER_FLAG_24 = 62;             // Marines
+const UTYF_USER_FLAG_25 = 63;             // Expellable
+const UTYF_USER_FLAG_26 = 64;             // AirProtector - unreachable and can protect its tile from units unable to reach it
+const UTYF_USER_FLAG_27 = 65;             // CantReachAir - unable to attack air units
+const UTYF_USER_FLAG_28 = 66;             // FortBuster - defending forts get no bonus, 33% attack bonus vs. Fortress
+const UTYF_USER_FLAG_29 = 67;             // FortressBuster - defending fortresses get no bonus
+const UTYF_USER_FLAG_30 = 68;             // AntiAir - Anti-Air bonus vs air, less effective vs Stealth
+const UTYF_USER_FLAG_31 = 69;             // CanHide - can make Hideouts
+const UTYF_USER_FLAG_32 = 70;             // WillNever 
+const UTYF_USER_FLAG_33 = 71;             // NonMilAttack - has military capacity but can enter territories with whom you're at peace
+const UTYF_USER_FLAG_34 = 72;             // Cant_Pillage 
+const UTYF_USER_FLAG_35 = 73;             // CanClaim - can make a Tile Claim
+const UTYF_USER_FLAG_36 = 74;
+const UTYF_USER_FLAG_37 = 75;
+const UTYF_USER_FLAG_38 = 76;
+const UTYF_USER_FLAG_39 = 77;
+const UTYF_USER_FLAG_40 = 78;             // unused , reserved for future use .....
+const UTYF_USER_FLAG_41 = 79;
+const UTYF_USER_FLAG_42 = 80;
+const UTYF_USER_FLAG_43 = 81;
+const UTYF_USER_FLAG_44 = 82;
+const UTYF_USER_FLAG_45 = 83;
+
 // ^^ ...these can be continued up to const UTYF_USER_FLAG_44 = 76;
 
 // Custom unit flags (MP2 sequence/order; TO DO: universalize/uniform order in other rules)
@@ -162,10 +178,11 @@ const UTYF_CANT_REACH_AIR = UTYF_USER_FLAG_27 // Unable to attack air units.
 const UTYF_FORTBUSTER = UTYF_USER_FLAG_28     // Defending Forts get no bonus. Has (33%) attack bonus vs. Fortresses
 const UTYF_FORTRESSBUSTER = UTYF_USER_FLAG_29 // Defending Fortresses get no bonus.
 const UTYF_ANTIAIR = UTYF_USER_FLAG_30;       // Anti-Air unit. e.g., AEGIS, AAA, Mobile SAM
-const UTYF_MULTISLOT = UTYF_USER_FLAG_31;     /* Reserved for replacing Shield2Gold as flag for using multiple city_build_slots */
-const UTYF_CANHIDE = UTYF_USER_FLAG_32;       /* Can make hideouts */
-const UTYF_WILLNEVER = UTYF_USER_FLAG_33;     // Doesn't auto-attack.
-const UTYF_TRANSPORTDEFENDER = UTYF_USER_FLAG_34 // Can defend while transported on non-native tiles //
+const UTYF_CANHIDE = UTYF_USER_FLAG_31;       /* Can make hideouts */
+const UTYF_WILLNEVER = UTYF_USER_FLAG_32;     // Doesn't auto-attack.
+const UTYF_NONMILATTACK = UTYF_USER_FLAG_33;  // NonMilAttack - can attack and enter peace waters/territory
+const UTYF_CANT_PILLAGE = UTYF_USER_FLAG_34;  // CantPillage - unable to pillage tiles
+const UTYF_CAN_CLAIM = UTYF_USER_FLAG_35;     // CanClaim - able to make Tile Claims
 /**********************************************************************//**
   Return true iff units of the given type can do the specified generalized
   (ruleset defined) action enabler controlled action.
