@@ -1645,7 +1645,7 @@ embarks       = "Helicopter", "Land", "Sea", "LandRoad", "LandRail"
 disembarks    = "Helicopter", "Land", "Sea", "LandRoad", "LandRail"
 targets       = "Sea", "Balloon", "Helicopter", "LandRail", "Zeppelin"
 flags         = "MultiSlot", "Shield2Gold", "Marines", "FootSoldier", "BeachLander", "Capturer",
-                "NeverBlocked", "Settlers", "CanHide", "WillNever"
+                "NeverBlocked", "Settlers", "CanHide", "WillNever",
                 "Airbase", "CanFortress", "Bombarder"; can Fort only, actually.
 veteran_names =
   _("?vet_rank:green"),
