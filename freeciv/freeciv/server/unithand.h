@@ -103,6 +103,8 @@ void unit_change_homecity_handling(struct unit *punit, struct city *new_pcity,
 
 bool unit_move_handling(struct unit *punit, struct tile *pdesttile,
                         bool igzoc, bool move_diplomat_city);
+bool unit_move_handling_real(struct unit *punit, struct tile *pdesttile,
+                        bool igzoc, bool move_do_not_act, bool first_move);
 
 void unit_do_action(struct player *pplayer,
                     const int actor_id,

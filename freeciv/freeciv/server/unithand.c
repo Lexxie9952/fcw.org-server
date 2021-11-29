@@ -5064,6 +5064,18 @@ static bool can_unit_move_to_tile_with_notify(struct unit *punit,
 }
 
 /**********************************************************************//**
+ Wrapper function for unit_move_handling_real. This handles all
+ unit_move_handling cases that aren't on a GOTO looping through a 
+ multi-tile voyage. See unit_move_handling_real for further explanation.
+**************************************************************************/
+bool unit_move_handling(struct unit *punit, struct tile *pdesttile,
+                        bool igzoc, bool move_do_not_act)
+{
+  return unit_move_handling_real(punit, pdesttile, 
+                                 igzoc, move_do_not_act, TRUE);
+}
+
+/**********************************************************************//**
   Will try to move to/attack the tile dest_x,dest_y.  Returns TRUE if this
   was done, FALSE if it wasn't for some reason. Even if this returns TRUE,
   the unit may have died upon arrival to new tile.
@@ -5080,14 +5092,25 @@ static bool can_unit_move_to_tile_with_notify(struct unit *punit,
   it can't and punit is unable to move (or perform another non enabler
   controlled action) to pdesttile the game will try to explain why.
 
+  'first_move' - indicates whether the unit is on a GOTO departing from
+  its first tile. This serves two purposes (1) A big increase to 
+  performance: wakeup_neighbor_sentries() can now get called n+1 times
+  on a path of n tiles instead of 2*(n-1)+1 times. (2) For servers which
+  use sentry waking as a useful intel function to report movemments to
+  the console, this reduces doubling of sentry intel messages which were
+  appearing when a unit arrived on a tile AND when the unit left the tile.   
+
   FIXME: This function needs a good cleaning.
 **************************************************************************/
-bool unit_move_handling(struct unit *punit, struct tile *pdesttile,
-                        bool igzoc, bool move_do_not_act)
+bool unit_move_handling_real(struct unit *punit, struct tile *pdesttile,
+                        bool igzoc, bool move_do_not_act, bool first_move)
 {
   struct player *pplayer = unit_owner(punit);
   struct unit *ptrans;
   struct city *pcity = tile_city(pdesttile);
+
+ /* DEBUG:notify_conn(game.est_connections, unit_tile(punit), E_UNIT_LOST_MISC, ftc_server,
+              _("arrived in unit_move_handling()")); */
 
   /*** Phase 1: Basic checks ***/
 
@@ -5237,11 +5260,15 @@ bool unit_move_handling(struct unit *punit, struct tile *pdesttile,
                                tile_owner(pdesttile),
                                pdesttile, tile_link(pdesttile));
 
-    unit_move(punit, pdesttile, move_cost,
+    /* DEBUG:notify_conn(game.est_connections, unit_tile(punit), E_UNIT_LOST_MISC, ftc_server,
+              _("about to call unit_move_real()"));  */
+    unit_move_real(punit, pdesttile, move_cost,
               /* Don't override "Transport Embark" */
               NULL, FALSE,
               /* Don't override "Conquer City" */
-              FALSE);
+              FALSE,
+              /* Whether this is the first move on a GOTO path */
+              first_move);
 
     return TRUE;
   } else {

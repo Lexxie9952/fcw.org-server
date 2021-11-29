@@ -4043,15 +4043,18 @@ static void wakeup_neighbor_sentries(struct unit *punit)
 
   /* There may be sentried units with a sightrange > 3, but we don't
      wake them up if the punit is farther away than 3. */
-  square_iterate(&(wld.map), unit_tile(punit), 3, ptile) {
-    int num_wakings = 0; /// used to limit spam of wake-up messages
-    unit_list_iterate(ptile->units, penemy) {
+  int num_wakings[MAX_NUM_PLAYERS] = {0}; // used to limit spam of wake-up messages
 
+  square_iterate(&(wld.map), unit_tile(punit), 3, ptile) {
+    unit_list_iterate(ptile->units, penemy) {
+      // don't notify the same player twice for movement to this tile
+      int enemy_playerno = player_number(unit_owner(penemy));
       int distance_sq = sq_map_distance(unit_tile(punit), ptile);
       int radius_sq = get_unit_vision_at(penemy, unit_tile(penemy), V_MAIN);
 
       if (!pplayers_allied(unit_owner(punit), unit_owner(penemy))
-          && penemy->activity == ACTIVITY_SENTRY
+          && (penemy->activity == ACTIVITY_SENTRY
+             || unit_has_type_flag(penemy, UTYF_SENTRYALWAYS))
           && radius_sq >= distance_sq
           /* If the unit moved on a city, and the unit is alone, consider
            * it is visible. */
@@ -4059,11 +4062,16 @@ static void wakeup_neighbor_sentries(struct unit *punit)
               || can_player_see_unit(unit_owner(penemy), punit))
           /* on board transport; don't awaken */
           && can_unit_exist_at_tile(&(wld.map), penemy, unit_tile(penemy))) {
-        set_unit_activity(penemy, ACTIVITY_IDLE);
+
+        /* ACTIVITY_SENTRY units wake to be idle/ready for orders.
+           (Units not on sentry with AlwaysSentry flag, however, do not): */    
+        if (penemy->activity == ACTIVITY_SENTRY) {
+          set_unit_activity(penemy, ACTIVITY_IDLE);
+        }
         send_unit_info(NULL, penemy);
 
         if (true /*is_longturn()*/) {
-          if (++num_wakings <2) {
+          if (++num_wakings[enemy_playerno] < 2) {
               index_to_map_pos(&stile_x, &stile_y, tile_index(ptile));
               index_to_map_pos(&mtile_x, &mtile_y, tile_index(unit_tile(punit)) );
 
@@ -4072,11 +4080,12 @@ static void wakeup_neighbor_sentries(struct unit *punit)
 
               notify_player(unit_owner(penemy), unit_tile(punit),
                     E_UNIT_ORDERS, ftc_server,
-                    _("👁️ %s (%d,%d) saw %s %s %s moving at (%d,%d)"),
+                    _("👁️ %s (%d,%d) saw %s %s %s#%d moving at (%d,%d)"),
                     unit_link(penemy),
                     stile_x, stile_y, 
                     nation_rule_name(nation_of_unit(punit)), 
                     unit_name_translation(punit), punit_emoji,
+                    punit->id,
                     mtile_x, mtile_y );
           }
         }
@@ -4095,7 +4104,7 @@ static void wakeup_neighbor_sentries(struct unit *punit)
 	  cancel_orders(ppatrol, "  stopping because of nearby enemy");
           notify_player(unit_owner(ppatrol), unit_tile(ppatrol),
                         E_UNIT_ORDERS, ftc_server,
-                        _("Orders for %s %s aborted after enemy movement was "
+                        _("Patrol for %s %s aborted when enemy movement was "
                           "spotted."), UNIT_EMOJI(ppatrol), unit_link(ppatrol));
         }
       }
@@ -4357,19 +4366,41 @@ static void unit_move_data_unref(struct unit_move_data *pdata)
 }
 
 /**********************************************************************//**
-  Moves a unit. No checks whatsoever! This is meant as a practical
-  function for other functions, like do_airline, which do the checking
-  themselves.
-
-  If you move a unit you should always use this function, as it also sets
-  the transport status of the unit correctly. Note that the source tile (the
-  current tile of the unit) and pdesttile need not be adjacent.
-
-  Returns TRUE iff unit still alive.
+ Wrapper function for unit_move_real. This handles all unit_move cases
+ that aren't on a GOTO looping through a multi-tile voyage. See 
+ unit_move_real for further explanation.
 **************************************************************************/
 bool unit_move(struct unit *punit, struct tile *pdesttile, int move_cost,
                struct unit *embark_to, bool find_embark_target,
                bool conquer_city_allowed)
+{
+  return unit_move_real(punit, pdesttile, move_cost, embark_to, 
+                find_embark_target, conquer_city_allowed, TRUE);
+}
+
+/**********************************************************************//**
+  Moves a unit. No checks whatsoever! This is meant as a practical
+  function for other functions, like do_airline, which do the checking
+  themselves.
+
+  If you move a unit you should always use this function or the wrapper
+  function above, as it also sets the transport status of the unit
+  correctly. Note that the source tile (the current tile of the unit) and
+  pdesttile need not be adjacent.
+
+  'first_move' - indicates whether the unit is on a GOTO departing from
+  its first tile. This serves two purposes: (1) A big increase to 
+  performance: wakeup_neighbor_sentries() can now get called n+1 times
+  on a path of n tiles instead of 2*(n-1)+1 times; (2) For servers which
+  use sentry waking as a useful intel function to report movemments to
+  the console, this reduces doubling of sentry intel messages which were
+  appearing when a unit arrived on a tile AND when the unit left the tile.
+
+  Returns TRUE iff unit still alive.
+**************************************************************************/
+bool unit_move_real(struct unit *punit, struct tile *pdesttile, int move_cost,
+               struct unit *embark_to, bool find_embark_target,
+               bool conquer_city_allowed, bool first_move)
 {
   struct player *pplayer;
   struct tile *psrctile;
@@ -4407,8 +4438,11 @@ bool unit_move(struct unit *punit, struct tile *pdesttile, int move_cost,
     send_unit_info(NULL, ptransporter);
   }
 
-  /* Wakup units next to us before we move. */
-  wakeup_neighbor_sentries(punit);
+  /* Wakup units next to us before we move. Only called on the first
+     move to avoid duplicate arrival/departure wakings + spam */
+  if (first_move) {
+    wakeup_neighbor_sentries(punit);
+  }
 
   /* Make info packets at 'psrctile'. */
   if (adj) {
@@ -5081,8 +5115,12 @@ bool execute_orders(struct unit *punit, const bool fresh)
       }
 
       log_debug("  moving to %d,%d", TILE_XY(dst_tile));
-      res = unit_move_handling(punit, dst_tile, FALSE,
-                               order.order != ORDER_ACTION_MOVE);
+
+/* DEBUG:notify_conn(game.est_connections, unit_tile(punit), E_UNIT_LOST_MISC, ftc_server,
+              _("about to call unit_move_handling() with %d moves_made"),moves_made);*/
+
+      res = unit_move_handling_real(punit, dst_tile, FALSE,
+                               order.order != ORDER_ACTION_MOVE, moves_made == 1);
       if (!player_unit_by_number(pplayer, unitid)) {
         log_debug("  unit died while moving.");
         /* A player notification should already have been sent. */
