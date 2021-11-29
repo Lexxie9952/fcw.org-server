@@ -173,20 +173,9 @@ bool unit_can_defend_here(const struct civ_map *nmap, const struct unit *punit)
 {
   struct unit *ptrans = unit_transport_get(punit);
 
-/* Hack - There was no way for ruleset utype flags to set a unit to defend
-   while transported on non-native tiles. This uses UTYF_USER_FLAG_34 to 
-   do so IFF using AG or MP2 rulesetdir. TODO: Switch from user flag.
-   Make a new standard utype flag, UTYF_TRANSPORT_DEFEND. Remove the whole
-   #ifdef block and replace with this single line:
-   if (unit_has_type_flag(punit, UTYF_TRANSPORT_DEFENDER)) return true;
-*/
-#ifdef FREECIV_WEB
-// some units always defend while transported, regardless of terrain type:
-if (strcmp(game.server.rulesetdir, "ag") == 0
- || strcmp(game.server.rulesetdir, "mp2") == 0) {
-    if (unit_has_type_flag(punit, UTYF_USER_FLAG_34)) return true;
- }
-#endif
+/* Some units can always defend while transported, regardless of terrain
+   nativity. This means they can _always_ defend: */
+  if (unit_has_type_flag(punit, UTYF_TRANSPORTDEFENDER)) return true;
 
   /* Do not just check if unit is transported.
    * Even transported units may step out from transport to fight,
