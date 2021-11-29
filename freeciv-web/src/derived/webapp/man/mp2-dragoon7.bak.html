@@ -1020,6 +1020,7 @@ Veteran Levels for Zealots are the standard ruleset default:
   • <b style="color:#9aa">AIRLIFT</b>: Can be airlifted if it has remaining moves.
   • Can't attack as Cargo. Must first unload.
 ➤ Never has a home city.
+➤ <b style="color:#9aa">Reconnaissance:</b> reports visible enemy movement even if not sentried.
 ➤ Unable to attack air units.
 ➤ May load onto and disembark from Trains or Transport Helicopters even when underway.
 ➤ Ignores terrain effects (moving costs at most 1/3 MP per tile).
@@ -2399,6 +2400,7 @@ NOTE: GOTO disallows unit loss from lack of fuel. You can override this by order
   • Can enter foreign territory regardless of peace treaty.
   • Doesn't prevent enemy cities from working the tile it's on.
 ➤ Never imposes a zone of control.
+➤ <b style="color:#9aa">Reconnaissance:</b> reports visible enemy movement even if not sentried.
 ➤ Unit must be in a City, Fort, Fortress, Naval Base, Airbase; or on a Galleon, Cargo Ship, Transport, or Carrier, after 2 turns.
 ➤ <b style="color:#9aa">Can't be bribed</b>.
 ➤ <b style="color:#9aa">Can't be sabotaged</b>.
@@ -2433,6 +2435,7 @@ NOTE: GOTO disallows unit loss from lack of fuel. You can override this by order
     • A maximum of <b>1</b> unit can be killed.
     • Can be done to Cities, Forts, Fortresses, Naval Bases, Land Tiles, and Oceanic Tiles.
 ➤ Never imposes a zone of control.
+➤ <b style="color:#9aa">Reconnaissance:</b> reports visible enemy movement even if not sentried.
 ➤ <b style="color:#9aa">INTERCEPTED</b> by Fighter types on Vigil: they auto-attack if they have better odds attacking than defending.
 ➤ Unit has to be in a City, Fortress, Naval Base, Airbase; or on a Carrier, Transport, or Train, after 3 turns.
 ➤ Can <b style="color:#9aa">Attack</b>
@@ -2581,6 +2584,7 @@ This aircraft can Stack-Escape：a 60% chance to escape a killed stack if it has
 ➤ <b style="color:#9aa">STACK ESCAPE</b>: 60% odds to escape if stack defender loses, if it has more moves left than attacker.
 ➤ Anti-Air units have bonuses against this unit.
 ➤ Never imposes a zone of control.
+➤ <b style="color:#9aa">Reconnaissance:</b> reports visible enemy movement even if not sentried.
 ➤ <b style="color:#9aa">INTERCEPTED</b> by Fighter types on Vigil: they auto-attack if they have better odds attacking than defending.
 ➤ Can attack against Missile units, which are usually not reachable.
 ➤ Can attack against Helicopter units, which are usually not reachable.
@@ -2870,6 +2874,7 @@ AWACS can Stack-Escape：a 60% chance to escape a killed stack if they have more
   • <b style="color:#9aa">AIRLIFT</b>: Can be airlifted if it has remaining moves.
 ➤ <b style="color:#9aa">STACK ESCAPE</b>: 60% odds to escape if stack defender loses, if it has more moves left than attacker.
 ➤ Never imposes a zone of control.
+➤ <b style="color:#9aa">Reconnaissance:</b> reports visible enemy movement even if not sentried.
 ➤ <b style="color:#9aa">INTERCEPTED</b> by Fighter types on Vigil: they auto-attack if they have better odds attacking than defending.
 ➤ Unit must be in a City, Airbase, or on a Carrier after 2 turns.
 ➤ <b style="color:#9aa">Can't be bribed</b>.
@@ -2907,6 +2912,7 @@ NOTE: GOTO disallows unit loss from lack of fuel. You can override this by order
 ➤ <b style="color:#9aa">STACK ESCAPE</b>: 60% odds to escape if stack defender loses, if it has more moves left than attacker.
 ➤ Is invisible except when next to an enemy unit or city.
 ➤ Never imposes a zone of control.
+➤ <b style="color:#9aa">Reconnaissance:</b> reports visible enemy movement even if not sentried.
 ➤ <b style="color:#9aa">INTERCEPTED</b> by Fighter types on Vigil: they auto-attack if they have better odds attacking than defending.
 ➤ Unit has to be in a City, Airbase, or on a Carrier after 2 turns.
 ➤ <b style="color:#9aa">Can't be bribed</b>.
@@ -2941,6 +2947,7 @@ NOTE:  Due to game mechanics, Satellites block terrestrial movement over a tile.
 ➤ <b style="color:#9aa">STACK ESCAPE</b>: 100% odds to escape if stack defender loses, if it has more moves left than attacker.
 ➤ Is invisible except when next to an enemy unit or city.
 ➤ Never imposes a zone of control.
+➤ <b style="color:#9aa">Reconnaissance:</b> reports visible enemy movement even if not sentried.
 ➤ <b style="color:#9aa">Can't be bribed</b>.
 ➤ <b style="color:#9aa">Can't be sabotaged</b>.
 ➤ Will never achieve veteran status.
@@ -3145,9 +3152,9 @@ Multi-Fighters can Stack-Escape：a 60% chance to escape a killed stack if they 
 ➤ <b style="color:#9aa">STACK ESCAPE</b>: 60% odds to escape if stack defender loses, if it has more moves left than attacker.
 ➤ Anti-Air units have bonuses against this unit.
 ➤ Never imposes a zone of control.
+➤ <b style="color:#9aa">Reconnaissance:</b> reports visible enemy movement even if not sentried.
 ➤ <b style="color:#9aa">INTERCEPTED</b> by Fighter types on Vigil: they auto-attack if they have better odds attacking than defending.
-➤ Can attack against Missile units, which are usually not reachable.
-➤ Can attack against Helicopter units, which are usually not reachable.
+>➤ Can attack against Helicopter units, which are usually not reachable.
 ➤ Can attack against Air units, which are usually not reachable.
 ➤ Can attack against Air_High_Altitude units, which are usually not reachable.
 ➤ Can attack against AirProtect units, which are usually not reachable.
@@ -4755,7 +4762,6 @@ All Commerce units can carry Goods as cargo.</b>
 ➤ Can carry up to 2 Cargo units.
 ➤ Never imposes a zone of control.
 ➤ Not subject to zones of control imposed by other units.
-➤ Under certain conditions, <b>cities can make more than one of this unit per turn, plus one of any other unit type.</b>
 ➤ A non-military unit:
   • Cannot attack.
   • Doesn't impose martial law.
@@ -5037,6 +5043,7 @@ Electricity and Combustion each give Trains an additional +1 move.</b>
 ➤ <b style="color:#9aa">Map Making</b> gives +2/3 moves, giving a range of +2 tiles.
 ➤ Never imposes a zone of control.
 ➤ Not subject to zones of control imposed by other units.
+➤ <b style="color:#9aa">Reconnaissance:</b> reports visible enemy movement even if not sentried.
 ➤ A non-military unit:
   • Cannot attack.
   • Doesn't impose martial law.

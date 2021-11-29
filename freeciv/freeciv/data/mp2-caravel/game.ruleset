@@ -3392,7 +3392,7 @@ set =
       "huts", 10, FALSE
       "killcitizen_pct", 50, FALSE        ; regulates % chance of pop kill by city pop-killer units
       "landmass", 63, FALSE
-      "looting", "BASE_TRADE", FALSE
+      "looting", "PROPERTY", FALSE
       "minplayers", 0, FALSE
       "move_bonus_in_frags", "ENABLED", TRUE   ;locked
       "multiresearch", "ENABLED", FALSE

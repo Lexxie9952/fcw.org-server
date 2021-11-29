@@ -145,7 +145,7 @@ richness.
 26. Nationalism is +20% sci in original cities
     balances that -15% is global for lux 
 =============================================================
-27. Clarification: AAA are infantry as considered part of 
+27. Clarification: AAA are considered as part of 
    Marine corps land/air/sea. Thus, have gold upkeep not 
    shield upkeep.
 =============================================================
@@ -194,6 +194,11 @@ Nationalism - Foreign cities rapture 1 out of 3 turns
 =============================================================
 32. Terrain Walls
 =============================================================
+33. SentryAlways 
+		scout, balloon, zeppelin, e.fighter, m.fighter, 
+      partisan, awacs, spy plane, satellite
+=============================================================
+
 
 
 

@@ -66,14 +66,11 @@ flags =
     _("FortBuster"), _("Defending Forts get no bonus. +33% attack bonus vs. the 2× defense of a Fortress.")
     _("FortressBuster"), _("Defending Fortresses get no bonus.")
     _("AntiAir"), _("Anti-Air bonus of this unit is less effective against Stealth, which has a 25% bonus against this unit.")
-;;;   _("NeverProtects"), _("Does not protect other units on its tile.")   ; UNCOMMENT THIS IF NOT USING SCL'S PATCH FOR THIS FLAG
 ;;;   _("NeverBlocked"), _("Bypasses unreachable units when attacking a tile.")   ; UNCOMMENT THIS IF NOT USING LEXXIE'S PATCH FOR THIS FLAG
-    _("MultiSlot"), _("Cities with proper requirements can produce more than one of these per turn.") ;uncomment if you don't have slot_control patch
+;;;    _("MultiSlot"), _("Cities with proper requirements can produce more than one of these per turn.") ;uncomment if you don't have slot_control patch
     _("CanHide"), _("In appropriate terrain, this unit can make a Hideout, which will conceal all land units on the tile.")
     _("WillNever")
-;;; The following flag MUST be #34 position to work with hack in movement.c which allows transported AAA to defend on non-native:
-;;; this comment can be removed when we have some smarter way for unit_can_defend_here(..) to get ruleset control.
-    _("TransportDefender"), _("Can defend while transported on non-native tiles.")
+;;;    _("TransportDefender"), _("Can defend while transported on non-native tiles.") ;uncomment if you don't have TransportDefender patch
     _("NonMilAttack"), _("Has military capacity but for peaceful purposes, can enter territories with whom you are at Peace")
     _("Cant_Pillage"), _("Unable to pillage tiles.")
     _("CanClaim"), _("Is able to claim sovereignty of foreign tiles bordering domestic territory.")
@@ -501,20 +498,20 @@ flags         = "Unreachable", "DoesntOccupyTile"
 ;
 ; "IgZOC"       = ignore Zones of Control (ZOC) even if unit class has
 ;                 "ZOC" flag
-; "HasNoZOC"	= unit has no Zone of Control (ZOC), thus any unit can move
-;		  around it freely
-; "NonMil"	= a non-military unit：no martial law; can enter
+; "HasNoZOC"	  = unit has no Zone of Control (ZOC), thus any unit can move
+;		              around it freely
+; "NonMil"	    = a non-military unit：no martial law; can enter
 ;                 peaceful borders; DoesntOccupyTile
 ; "IgTer"       = use constant move cost defined in igter_cost (terrain.ruleset)
 ;                 rather than terrain/road etc cost, unless terrain cost is
 ;                 less
-; "OneAttack"	= can only make a single attack, regardless of movement points
-; "FieldUnit"	= cause unhappiness even when not being aggressive
+; "OneAttack"	  = can only make a single attack, regardless of movement points
+; "FieldUnit"	  = cause unhappiness even when not being aggressive
 ; "BeachLander" = won't lose all its movement when moving from non-native
 ;                 terrain to native terrain even if slow_invasions is on.
-; "Settlers"	= "can irrigate and build roads" but really seems to be a required flag for 
-;                any tile improvement at all.
-; "Diplomat"	= can defend against diplomat actions (see diplchance
+; "Settlers"	  = "can irrigate and build roads" but really seems to be a required flag for 
+;                 any tile improvement at all.
+; "Diplomat"	  = can defend against diplomat actions (see diplchance
 ;                 server option)
 ; "Spy"         = strong in diplomatic battles. _Must_ be "Diplomat" also
 ; "CoastStrict" = (sea only) cannot leave coast
@@ -522,40 +519,36 @@ flags         = "Unreachable", "DoesntOccupyTile"
 ;                 to regularly end turn on coast
 ; "Only_Native_Attack" = cannot attack targets on non-native tiles even if
 ;                 unit class can
-; "Cant_Fortify" =  cannot fortify even if unit class has "CanFortify" flag
-; "Fanatic"	= can only be built by governments that allow them
-;		  (see civ2/governments.ruleset, Fvndamentalist government)
-; "Unique"	= a player can only have one of these units in the game at
-;		  the same time; barbarians cannot use this at present
-; "GameLoss"	= losing one of these units means you lose the game, but it
-;		  is produced without homecity and upkeep
-; "EvacuateFirst" = the game will try to rescue units with this flag before
+; "Cant_Fortify"= cannot fortify even if unit class has "CanFortify" flag
+; "Fanatic"	    = can only be built by governments that allow them
+;		              (see civ2/governments.ruleset, Fvndamentalist government)
+; "Unique"	    = a player can only have one of these units in the game at
+;		              the same time; barbarians cannot use this at present
+; "GameLoss"	  = losing one of these units means you lose the game, but it
+;		              is produced without homecity and upkeep
+; "EvacuateFirst"=the game will try to rescue units with this flag before
 ;                 it tries to rescue units without it when their transport
 ;                 is destroyed. Think of the Birkenhead drill ("women and
 ;                 children first"). Replace "women and children" with
 ;                 "units with the EvacuateFirst unit type flag".
-; "SuperSpy"	= this unit always wins diplomatic contests, that is, unless
-;		  it encounters another SuperSpy, in which case defender wins;
-;		  can also be used on non-diplomat units, in which case it can
-;		  protect cities from diplomats; also 100% spy survival chance
-; "NoHome"	= this unit has no homecity and will be free of all upkeep, and
-;		  therefore will not revolt along with its city of origin should
-;		  it be incited
+; "SuperSpy"	  = this unit always wins diplomatic contests, that is, unless
+;		              it encounters another SuperSpy, in which case defender wins;
+;		              can also be used on non-diplomat units, in which case it can
+;		              protect cities from diplomats; also 100% spy survival chance
+; "NoHome"	    = this unit has no homecity and will be free of all upkeep, and
+;		              therefore will not revolt along with its city of origin should
+;		              it be incited
 ; "NoVeteran"   = this unit cannot gain veteran levels through experience
 ;                 (as if both raise_chance and work_raise_chance were zero);
 ;                 it can still gain veterancy through Veteran_Build, etc
 ; "CityBuster"  = this unit has double firepower against cities
 ; "NoBuild"     = this unit cannot be built
-; "BadWallAttacker"	= the firepower of this unit is set to 1 if
-;                 attacking a city
-;		  defended by a city wall (or other city building defense)
-; "BadCityDefender"	= if attacked while in a city, firepower is set to 1
-;		  and firepower of attacker is doubled (the Pearl Harbour
-;                 rule)
+; "BadWallAttacker"=the firepower of this unit is set to 1 if attacking a city
+;		              defended by a city wall (or other city building defense)
+; "BadCityDefender"=if attacked while in a city, firepower is set to 1
+;		              and firepower of attacker is doubled (the Pearl Harbour rule)
 ; "BarbarianOnly" = only barbarians can build this unit
 ; "Shield2Gold" = Switch from shield upkeep to gold upkeep possible.
-;                 Also, currently substitutes for "MultiSlot" flag due to inability
-;                 to add another UTYF flag to the server.
 ; "NewCityGamesOnly" = unit can't be built on scenarios where founding new cities
 ;                 is not allowed. Give this flag to units that would make no sense
 ;                 to have in a game with such a scenario
@@ -583,7 +576,15 @@ flags         = "Unreachable", "DoesntOccupyTile"
 ;                  is enabled and the unit class is unreachable
 ; "MultiSlot"    = if server setting slot_control is ON, only unit types with this
 ;                  flag can use extra city_build_slots
-;                  TO DO：make this a server UTYF flag that's used instead of Shield2Gold
+; "TransportDefender" = Unit can always defend while transported, even on non-native
+;                  terrain.
+; "SentryAlways" = This unit always reports sentry-type information; give this flag to 
+;                  reconnaissance/scouting type units who can't sentry because they are 
+;                  fuel-type units (which can only sentry on refueling tiles.)
+; "Reserved1"
+; "Reserved2"
+; "Reserved3"     = reserved for future use.
+; ------------------------------------------
 ; Following actions require extra fields:
 ;  "Attack" and "Suicide Attack"
 ;   attack = base attack strength
@@ -1403,7 +1404,8 @@ bonuses       =
      ;********* requires hard-coding fix to packhand.js:handle_non_integer_combat_scores() if changed：******************************
      "WillNever", "DefenseMultiplierPct", -50 ;The way to change general defense score on everyone without using integer defense score. 
    }
-flags         = "FootSoldier", "Capturer", "CantReachAir", "Settlers", "CanHide", "MultiSlot", "WillNever", "Shield2Gold"
+flags         =  "MultiSlot", "Shield2Gold", "FootSoldier", "Capturer",
+                 "CantReachAir", "Settlers", "CanHide", "WillNever"
 roles         = "DefendGood", "DefendGoodStartUnit", "FirstBuild"
 veteran_names =
   _("?vet_rank:green"),
@@ -1463,7 +1465,7 @@ embarks       = "LandRoad", "LandRail", "Helicopter"    ; transport helicopter o
 disembarks    = "LandRoad", "LandRail", "Helicopter"
 targets       = "Balloon", "Helicopter", "LandRail"
 flags         = "Fanatic", "FootSoldier", "Capturer", "CantReachAir", "Unbribable", "Bombarder",
-                "Settlers", "CanHide", "MultiSlot", "WillNever", "Shield2Gold"
+                "Settlers", "CanHide", "MultiSlot", "Shield2Gold", "WillNever"
 roles         = "DefendGood", "DefendGoodStartUnit", "FirstBuild"
 helptext      = _("\
 Zealots are warriors devoted to a higher cause. Their faith\
@@ -1511,9 +1513,8 @@ uk_gold       = 0
 embarks       = "LandRoad", "LandRail", "Helicopter"    ; transport helicopter only
 disembarks    = "LandRoad", "LandRail", "Helicopter"
 targets       = "Balloon", "Helicopter", "LandRail"
-flags         = "MultiSlot", "IgTer", "IgZOC", "NoHome", "FootSoldier", "Capturer", "CantReachAir",
-                "Shield2Gold", "Settlers", "CanHide", "WillNever"
-;yes Partisan has 0 upkeep so Shield2Gold is meaningless, but currently used to substitute MultiSlot inaccessible in c-server
+flags         = "MultiSlot", "Shield2Gold", "IgTer", "IgZOC", "NoHome", "FootSoldier", "Capturer",
+                "CantReachAir", "Settlers", "CanHide", "WillNever", "SentryAlways"
 roles         = "DefendGood", "DefendGoodStartUnit", "Partisan", "BarbarianTech"
 helptext      = _("\
 Partisans are guerilla fighters who can use the terrain to their advantage. Like the Scout\
@@ -1561,7 +1562,8 @@ uk_gold       = 0
 embarks       = "LandRoad", "LandRail", "Helicopter"    ; transport helicopter only
 disembarks    = "LandRoad", "LandRail", "Helicopter"
 targets       = "Balloon", "Helicopter", "LandRail"
-flags         = "MultiSlot", "FootSoldier", "Capturer", "CantReachAir", "Shield2Gold", "Settlers", "CanHide", "WillNever"
+flags         = "MultiSlot", "Shield2Gold", "FootSoldier", "Capturer", 
+                "CantReachAir", "Settlers", "CanHide", "WillNever"
 roles         = "DefendGood", "DefendGoodStartUnit", "FirstBuild"
 helptext      = _("\
 Riflemen are World War-era infantry. They are good at defending cities and\
@@ -1601,8 +1603,8 @@ uk_gold       = 0
 embarks       = "LandRoad", "LandRail", "Helicopter"    ; transport helicopter only
 disembarks    = "LandRoad", "LandRail", "Helicopter"
 targets       = "Balloon", "Helicopter", "LandRail"
-flags         = "MultiSlot", "IgTer", "FootSoldier", "Capturer", "CantReachAir", "Shield2Gold",
-                "Settlers", "CanHide", "WillNever"
+flags         = "MultiSlot",  "Shield2Gold", "IgTer", "FootSoldier", "Capturer",
+                "CantReachAir", "Settlers", "CanHide", "WillNever"
 roles         = "DefendGood", "DefendGoodStartUnit"
 helptext      = _("\
 Alpine Troops are highly mobile units and\
@@ -1643,8 +1645,8 @@ uk_gold       = 0
 embarks       = "Helicopter", "Land", "Sea", "LandRoad", "LandRail"
 disembarks    = "Helicopter", "Land", "Sea", "LandRoad", "LandRail"
 targets       = "Sea", "Balloon", "Helicopter", "LandRail", "Zeppelin"
-flags         = "MultiSlot", "Marines", "FootSoldier", "BeachLander", "Capturer",
-                "NeverBlocked", "Shield2Gold", "Settlers", "CanHide", "WillNever",
+flags         = "MultiSlot", "Shield2Gold", "Marines", "FootSoldier", "BeachLander",
+                "Capturer", "NeverBlocked",  "Settlers", "CanHide", "WillNever",
                 "Airbase", "CanFortress", "Bombarder"; can Fort only, actually.
 veteran_names =
   _("?vet_rank:green"),
@@ -1708,7 +1710,8 @@ uk_gold       = 0
 embarks       = "LandRoad", "LandRail", "Helicopter"    ; transport helicopter only
 disembarks    = "LandRoad", "LandRail", "Helicopter"
 targets       = "Balloon", "Helicopter", "LandRail", "Zeppelin"
-flags         = "FootSoldier", "Capturer", "CantReachAir", "Shield2Gold", "MultiSlot", "Settlers", "CanHide", "WillNever"
+flags         = "MultiSlot", "Shield2Gold", "FootSoldier", "Capturer",
+                "CantReachAir", "Settlers", "CanHide", "WillNever"
 roles         = "DefendOk", "DefendOkStartUnit"
 veteran_names =
   _("?vet_rank:green"),
@@ -1757,8 +1760,8 @@ uk_gold       = 0
 embarks       = "LandRoad", "LandRail", "Helicopter"    ; transport helicopter only
 disembarks    = "LandRoad", "LandRail", "Helicopter"
 targets       = "Balloon", "Helicopter", "LandRail", "Zeppelin"
-flags         = "Paratroopers", "FootSoldier", "Capturer", "CantReachAir", "Provoking",
-                "Shield2Gold", "MultiSlot", "Settlers", "CanHide", "WillNever"
+flags         = "MultiSlot", "Shield2Gold", "Paratroopers", "FootSoldier", "Capturer",
+                "CantReachAir", "Provoking", "Settlers", "CanHide", "WillNever"
 roles         = "DefendOk", "DefendOkStartUnit"
 helptext      = _("\
 Paratroopers are experts at airborne attacks.\
@@ -1804,7 +1807,7 @@ uk_gold       = 0
 embarks       = "Helicopter"    ; transport helicopter only
 ;disembarks    = "Helicopter"
 targets       = "Balloon", "Helicopter", "LandRail", "Zeppelin"
-flags         = "CantReachAir", "Shield2Gold", "MultiSlot", "WillNever"
+flags         = "MultiSlot", "Shield2Gold", "CantReachAir", "WillNever"
 roles         = "DefendGood", "DefendGoodStartUnit"
 helptext      = _("\
 Mechanized Infantry have the strongest general defense strength of any land unit.\
@@ -2475,7 +2478,7 @@ uk_happy      = 0
 uk_shield     = 0
 uk_food       = 0
 uk_gold       = 0
-flags         = "Unbribable", "HasNoZOC", "NeverProtects", "NonMil", "NoVeteran"
+flags         = "Unbribable", "HasNoZOC", "NeverProtects", "NonMil", "NoVeteran", "SentryAlways"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
 veteran_base_raise_chance = 0
@@ -2521,7 +2524,7 @@ uk_happy      = 0
 uk_shield     = 0
 uk_food       = 0
 uk_gold       = 0
-flags         = "Unbribable", "AirAttacker", "HasNoZOC", "NeverProtects", "Bombarder", "Provoking"
+flags         = "Unbribable", "AirAttacker", "HasNoZOC", "NeverProtects", "Bombarder", "Provoking", "SentryAlways"
 veteran_names =
   _("?vet_rank:green"),
   _("?vet_rank:veteran"),
@@ -2688,7 +2691,7 @@ bonuses       =
      "AirAttacker",  "DefenseDividerPct", 17   ; Aircraft (including Bombers)
      "FieldUnit",    "DefenseDividerPct", -17  ; Cancel overlapped doubled bonus on Bombers.
    }
-flags         = "AirAttacker", "Unbribable", "HasNoZOC", "CanEscape", "AirProtector", "Provoking"
+flags         = "AirAttacker", "Unbribable", "HasNoZOC", "CanEscape", "AirProtector", "Provoking", "SentryAlways"
 veteran_names =
   _("?vet_rank:green"),
   _("?vet_rank:veteran"),
@@ -2989,7 +2992,7 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-flags         = "HasNoZOC", "NoVeteran", "Unbribable", "Expellable", "NeverProtects", "CanEscape", "Provoking"
+flags         = "HasNoZOC", "NoVeteran", "Unbribable", "Expellable", "NeverProtects", "CanEscape", "Provoking", "SentryAlways"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
 veteran_base_raise_chance = 0
@@ -3032,7 +3035,7 @@ uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
 vision_layer  = "Stealth"
-flags         = "HasNoZOC", "NoVeteran", "Unbribable", "NeverProtects", "CanEscape", "Provoking", "WillNever"
+flags         = "HasNoZOC", "NoVeteran", "Unbribable", "NeverProtects", "CanEscape", "Provoking", "WillNever", "SentryAlways"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
 veteran_base_raise_chance = 0
@@ -3077,7 +3080,7 @@ uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
 vision_layer  = "Stealth"
-flags         = "Unique", "HasNoZOC", "NonMil", "NoVeteran", "Unbribable", "NeverProtects", "CanEscape", "WillNever"
+flags         = "Unique", "HasNoZOC", "NonMil", "NoVeteran", "Unbribable", "NeverProtects", "CanEscape", "WillNever", "SentryAlways"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
 veteran_base_raise_chance = 0
@@ -3317,7 +3320,7 @@ targets       = "Air", "AirProtect", "Air_High_Altitude", "Missile", "Balloon", 
 bonuses       =
    { "flag", "type", "value"
    }
-flags         = "AirAttacker", "Unbribable", "HasNoZOC", "CanEscape", "AirProtector", "Provoking"
+flags         = "AirAttacker", "Unbribable", "HasNoZOC", "CanEscape", "AirProtector", "Provoking", "SentryAlways"
 veteran_names =
   _("?vet_rank:green"),
   _("?vet_rank:veteran"),
@@ -5049,7 +5052,7 @@ uk_shield     = 0
 uk_food       = 0
 uk_gold       = 0
 cargo         = "Land", "Cargo", "LandAirSea"
-flags         = "HelpWonder", "TradeRoute", "Cant_Fortify", "NonMil", "HasNoZOC", "Capturable", "Expellable", "Shield2Gold", "NoVeteran"
+flags         = "HelpWonder", "TradeRoute", "Cant_Fortify", "NonMil", "HasNoZOC", "Capturable", "Expellable", "NoVeteran"
 roles         = ""
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
@@ -5261,7 +5264,7 @@ uk_food       = 0
 uk_gold       = 0
 embarks       = "LandRoad", "Helicopter"    ; transport helicopter only
 disembarks    = "LandRoad", "Helicopter"
-flags         = "IgTer", "IgZOC", "NonMil", "HasNoZOC", "Capturable", "Expellable", "Cant_Pillage", "NoHome"
+flags         = "IgTer", "IgZOC", "NonMil", "HasNoZOC", "Capturable", "Expellable", "Cant_Pillage", "NoHome", "SentryAlways"
 roles         = "Explorer", "ExplorerStartUnit"
 veteran_names =
   _("?vet_rank:green"),
@@ -5449,7 +5452,8 @@ uk_food       = 0
 uk_gold       = 0
 embarks       = "LandRoad", "LandRail", "Helicopter"    ; transport helicopter only
 disembarks    = "LandRoad", "LandRail", "Helicopter"
-flags         = "Cant_Fortify", "NonMil", "HasNoZOC", "AddToCity", "Capturable", "Expellable", "Cant_Pillage", "Shield2Gold"
+flags         = "MultiSlot", "Cant_Fortify", "NonMil", "HasNoZOC", "AddToCity", 
+                "Capturable", "Expellable", "Cant_Pillage"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
 veteran_base_raise_chance = 0
@@ -5501,7 +5505,7 @@ Peasants can only be made in one city, but you can make more than one per\
 ;vision_layer  = "Subsurface"
 ;embarks       = "Sea"
 ;disembarks    = "Sea"
-;flags         = "IgZOC", "IgTer", "NonMil", "HasNoZOC", "Unbribable", "WillNever", "NoHome", "NoVeteran", "Shield2Gold"
+;flags         = "IgZOC", "IgTer", "NonMil", "HasNoZOC", "Unbribable", "WillNever", "NoHome", "NoVeteran", "MultiSlot"
 ;helptext      = _("\
 ;A Sonar Ping represents active focusing of ship sonar on a\
 ; specific area. Destroyer class and AEGIS Cruisers may take\
