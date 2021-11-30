@@ -1499,6 +1499,22 @@ void place_partisans(struct tile *pcenter, struct player *powner,
   struct tile *ptile = NULL;
   struct unit_type *u_type = get_role_unit(L_PARTISAN, 0);
 
+#ifdef FREECIV_WEB
+  /* FCW uses bitwise trickery to specify the unit_type. TODO: this function
+     should be rewritten to let LUA specify the unit_type to generate, as it
+     would generalize a lot more game events than only partisan spawning. */
+  if (count > 255) {
+    int utype_idx = count;
+    /* First 8 bits are # of partisans */
+    count &= 255;
+    /* utype index is everything past the first 8 bits */
+    utype_idx -= count;
+    utype_idx = utype_idx >> 8;
+    u_type = utype_by_number((Unit_type_id)utype_idx);
+    if (!u_type) return;
+  }
+#endif
+
   while (count-- > 0
          && find_a_good_partisan_spot(pcenter, powner, u_type,
                                       sq_radius, &ptile)) {
