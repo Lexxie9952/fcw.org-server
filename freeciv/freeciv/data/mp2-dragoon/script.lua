@@ -308,7 +308,7 @@ function action_started_unit_city_callback(action, actor, city)
       local migrant_utype = 6
 
       notify.event(NIL, city.tile, E.CITY_NUKED,
-      _("[`events/citydestroy`]<br>[`redexclamation`]<font color=#ffef50> The %s massacred %s—slaying everyone who couldn't escape!</font>"),
+      _("[`events/citydestroy`]<br>[`redexclamation`]<font color=#ffef50> The %s massacred %s—slaying all who didn't escape!</font>"),
       dplayer.nation:plural_translation(), city.name )
 
       -- City annihilation spawns Partisans and refugee Migrants  

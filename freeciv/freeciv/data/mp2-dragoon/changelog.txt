@@ -197,12 +197,12 @@ Nationalism - Foreign cities rapture 1 out of 3 turns
 		scout, balloon, zeppelin, e.fighter, m.fighter, 
       partisan, awacs, spy plane, satellite
 =============================================================
-34. Destroy City - Foreign: mustn't be Demo, Theo;
-2 units on tile, requires a unit who can capture, cities
-size 2-8;
-Domestic: only avail to Despo, Commie;
-2 units on tile, requires a unit who can capture, 
-15% foreign, must use (D)o command.
+34. Destroy City - Massacre a city (gives global casus belli)
+Requires 2 units on til, actor must be capturer-type.
+Foreign city: Foreign: mustn't be Demo, Theo; city
+size 2-8; 
+Domestic city: only avail to Despo, Commie;
+15% foreign, must use (D)o command. size 1-8;
 ==============================================================
 
 
