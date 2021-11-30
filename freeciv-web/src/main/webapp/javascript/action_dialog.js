@@ -480,8 +480,10 @@ function create_act_sel_button(parent_id,
   // Fix inaccurate "Conquer City" to "Raze City" for size 1 city:
   if (button_text.includes("Conquer")) {
     var pcity = cities[tgt_id];
-    if (pcity && pcity['size']==1)
+    if (pcity && pcity['size']==1 
+        && unit_has_class_flag(units[actor_unit_id], UCF_KILLCITIZEN)) {
       button_text = button_text.replace("Conquer", "Raze");
+    }
   }
 
   if (action_id == ACTION_BASE && button_text.includes("Base")) {
