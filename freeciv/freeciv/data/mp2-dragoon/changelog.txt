@@ -65,7 +65,7 @@ richness.
    NOW:
       * shield output has no tile penalties
       * +1 food on city centre, Settlers have no food upkeep
-      *no longer requires river
+      * no longer requires river
 =============================================================
 10. Riflemen and Alpines upgrade to Ground Troops
       * cost is only 4 gold.
@@ -76,9 +76,8 @@ richness.
      same as a temple.
 =============================================================
 12. Hills Vision
-   like mountains, hills give half the vision bonus of mountains;
-   a smaller bonus that fills out corners of radius rather than
-   extend a full tile. (sees 4 more tiles instead of 8)
+   hills give half the vision bonus of mountains;
+   (sees 4 more tiles instead of 8 [corner tiles]
 =============================================================
 13. Agoge reduces Phalanx price 3 shields.
    Counts as a Barracks in its home city. 

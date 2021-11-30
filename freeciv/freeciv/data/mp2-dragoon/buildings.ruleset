@@ -2830,15 +2830,16 @@ sound_alt	= "w_generic"
 helptext	= _("\
 The Ziggurat gathers all ruling functions of early civilization into one\
  wondrous building: \n\n\
-1. If your Palace is in another city: the Ziggurat receives +1 happy citizen;\
- reduces corruption in nearby cities; and RELOCATES the capital production bonus\
- to its city.\n\
-2. Shield output suffers no tile penalties. \n\
-3. The food capacity of the Ziggurat is legendary: it counts as a Granary,\
+1. Shield output suffers no tile penalties. \n\
+2. The food capacity of the Ziggurat is legendary: it counts as a Granary,\
  and receives an additional +1 food on the city center. All Settlers in your nation\
  have no food upkeep. \n\
-4. The Ziggurat acts as a Temple and a Barracks. \n\
-5. The Ziggurat gives 1.75× defense vs. all attacks, regardless of terrain or attacker. \n\n\
+3. The Ziggurat acts as a Temple and a Barracks. \n\
+4. The Ziggurat gives 1.75× defense vs. all attacks, regardless of terrain or attacker. \n\
+5. If your Palace is in another city:\n
+ a. The Ziggurat receives +1 happy citizen;\n\
+ b. Reduces corruption in nearby cities;\n\
+ c. RELOCATES the capital production bonus to its city.\n\n\
 The construction of a Granary, Temple, Barracks, Fortifications, or City Walls\
  will replace the corresponding Ziggurat effects. \n\n\
 Obsolete by：Monarchy or switching from Despotism.\
