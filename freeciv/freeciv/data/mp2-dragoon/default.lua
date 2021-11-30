@@ -206,9 +206,9 @@ function _deflua_make_partisans_callback(city, loser, winner, reason)
   partisan_spawns = partisan_spawns + 1
   if partisan_spawns < 5 then
     notify.event(loser, city.tile, E.CITY_LOST,
-        _("[`events/partisans`]<br>[`partisan`] The loss of %s has inspired %d partisans!"), partisans, city.name)
+    _("[`events/partisans`]<br>[`partisan`] The loss of %s inspires %d Partisans!"), city.name, partisans)
     notify.event(winner, city.tile, E.UNIT_WIN_ATT,
-        _("[`events/partisans`]<br>[`partisan`] The loss of %s has inspired %d partisans!"), partisans, city.name)
+    _("[`events/partisans`]<br>[`partisan`] The loss of %s inspires %d Partisans!"), city.name, partisans)
   end
 end
 

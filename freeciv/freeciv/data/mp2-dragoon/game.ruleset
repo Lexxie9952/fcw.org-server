@@ -1588,34 +1588,51 @@ target_reqs=
       "CityTile", "Center", "Local", FALSE
     }
 
-;DESTROY CITY
-; The GameLoss unit requirement makes sending units on a suicide mission to
-; capture and destroy cities deep inside enemy terrain national suicide.
-; The risk of moving a GameLoss unit to the target city increases the cost
-; of the action. Rationalization for the requirement: the physical presence
-; of the Leader makes it easier to comply with the order to destroy the
-; city. (See the "orders by phone" Milgram experiment variation)
-;
-; The domestic city requirement forces the player to invade a city before
-; he can destroy it. If this limit is weakened by allowing the destruction
-; of undefended (MaxUnitsOnTile) foreign cities during war it will lead to
-; situations where a player can destroy a city but is unable to occupy it.
-; Rationalization: the resistance must be crushed before the destruction.
-;
-; TODO: create an international incident (set the Casus_Belli_Success
-; effect value to 1000) if "Destroy City" still is overpowered.
-[actionenabler_scorched_earth]
+;DESTROY CITY;
+[actionenabler_destroy_foreign_city]
 action = "Destroy City"
 actor_reqs    =
     { "type",         "name",          "range", "present"
-      "UnitFlag",     "GameLoss",      "Local", TRUE
-      "DiplRel",      "Foreign",    "Local", FALSE
-      "MinMoveFrags", "1",             "Local", TRUE
-      "UnitState",    "OnLivableTile", "Local", TRUE
+      "Gov",          "Democracy",     "Player", FALSE ; Despotism, Monarchy, Republic, Nationalism, Communism can do it.
+      "Gov",          "Theocracy",     "Player", FALSE
+      "Gov",          "Anarchy",       "Player", FALSE
+      ;-------------------------------------------------
+      "UnitFlag",     "Capturer",      "Local",  TRUE
+      "MinMoveFrags", "1",             "Local",  TRUE
+      "UnitState",    "OnLivableTile", "Local",  TRUE
+      "MaxUnitsOnTile","1",            "Local",  FALSE ; At least 2 units needed for genocidal operation
+      ;-------------------------------------------------
+      "DiplRel",      "Foreign",       "Local",  TRUE  ; Must be at war and foreign city
+      "DiplRel",      "War",           "Local",  TRUE   
     }
 target_reqs =
-    {  "type",         "name",          "range", "present"
-       "MaxUnitsonTile","0",            "Local", TRUE
+    {  "type",         "name",         "range", "present"
+       "MinSize",      "2",            "City",   TRUE  ; sizes 2 through 8
+       "MinSize",      "9",            "City",   FALSE ;
+       "MaxUnitsonTile","0",           "Local",  TRUE  ; must defeat defenders first
+    }
+[actionenabler_destroy_domestic_city]
+action = "Destroy City"
+actor_reqs    =
+    { "type",         "name",          "range", "present"
+      "Gov",          "Anarchy",       "Player", FALSE
+      "Gov",          "Monarchy",      "Player", FALSE
+      "Gov",          "Democracy",     "Player", FALSE ; Despotism, Communism can do it
+      "Gov",          "Theocracy",     "Player", FALSE
+      "Gov",          "Republic",      "Player", FALSE
+      "Gov",          "Nationalism",   "Player", FALSE
+      ;-------------------------------------------------
+      "UnitFlag",     "Capturer",      "Local",  TRUE
+      "MinMoveFrags", "1",             "Local",  TRUE
+      "UnitState",    "OnLivableTile", "Local",  TRUE
+      "MaxUnitsOnTile","1",            "Local",  FALSE ; At least 2 units needed for genocidal operation
+      ;-------------------------------------------------
+      "DiplRel",      "Foreign",       "Local",  FALSE  ; Must be at war and foreign city
+    }
+target_reqs =
+    {  "type",         "name",         "range", "present"
+       "MinSize",      "9",            "City",   FALSE ; sizes 1 through 8
+       "MinForeignPct","14",           "City",   TRUE
     }
 
 ;ATTACKS every enabler below has 2 more duplicates in sections below, to

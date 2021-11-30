@@ -296,5 +296,64 @@ end
 
 signal.connect("building_built", "building_built_callback")
 
+function action_started_unit_city_callback(action, actor, city)
+
+  -- Destroy City script (action.id==39)  
+    if action.id == 39 then
+      local dplayer = actor.owner
+      local city_owner = city.owner
+      local action_id = action.id
+      local do_partisan_message = 0
+      local partisan_utype = 17
+      local migrant_utype = 6
+
+      notify.event(NIL, city.tile, E.CITY_NUKED,
+      _("[`events/citydestroy`]<br>[`redexclamation`]<font color=#ffef50> The %s massacred %s—slaying everyone who couldn't escape!</font>"),
+      dplayer.nation:plural_translation(), city.name )
+
+      -- City annihilation spawns Partisans and refugee Migrants  
+      local partisans = random(0, 0 + (city.size + 1) / 2) + 1
+      local migrants = random(1, 0 + (city.size + 1) / 2) + 1
+      if partisans > 5 then
+        partisans = 5
+      end
+      if migrants > 5 then
+        migrants = 5
+      end
+      if migrants + partisans > 8 then
+        migrants = migrants - 1
+        partisans = partisans - 1
+      end
+
+      if city:inspire_partisans(city_owner) > 0 then
+        do_partisan_message = 1
+        city.tile:place_partisans(city_owner, partisans + (partisan_utype*256), city:map_sq_radius())
+      end
+
+      if do_partisan_message == 1 then
+        notify.event(city_owner, city.tile, E.CITY_LOST,
+        _("[`partisan`][`migrants`] The sack of %s releases %d Partisans and %d refugee Migrants!"), city.name, partisans, migrants)
+        notify.event(dplayer, city.tile, E.UNIT_WIN_ATT,
+        _("[`partisan`][`migrants`] The sack of %s releases %d Partisans and %d refugee Migrants!"), city.name, partisans, migrants)
+      else
+        notify.event(city_owner, city.tile, E.CITY_LOST,
+        _("[`migrants`] The sack of %s releases %d refugee Migrants!"), city.name, migrants)
+        notify.event(dplayer, city.tile, E.UNIT_WIN_ATT,
+        _("[`migrants`] The sack of %s releases %d refugee Migrants!"), city.name, migrants)  
+      end
+
+      -- map_sq_radius: 5 + 10 = 15 (everything < 4 tiles away)
+      city.tile:place_partisans(city_owner, migrants + (migrant_utype*256), city:map_sq_radius()+10)
+
+      -- Looting
+      local gold = random(0, city.size * 20) + city.size
+      notify.event(dplayer, city.tile, E.UNIT_WIN_ATT, _("[`gold`] Plundering <u>%s</u> yields <b>%d gold</b>!"), city.name, gold)
+      dplayer:change_gold(gold)
+    end
+  -- continue processing
+  return false
+end
+
+signal.connect("action_started_unit_city", "action_started_unit_city_callback")
 
 

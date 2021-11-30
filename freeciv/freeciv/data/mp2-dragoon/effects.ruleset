@@ -7314,6 +7314,13 @@ reqs	=
 
 ;CASUS BELLI INCIDENTS
 ;********************************************************
+[effect_incident_destroy_city]
+type	= "Casus_Belli_Success"
+value	= 1000
+reqs	=
+    { "type",    "name",         "range", "present"
+      "Action",  "Destroy City", "Local", TRUE
+    }
 [effect_incident_caught_spying_on_city]
 type	= "Casus_Belli_Caught"
 value	= 1
