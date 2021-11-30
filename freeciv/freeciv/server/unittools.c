@@ -156,6 +156,8 @@ static void wipe_unit_full(struct unit *punit, bool transported,
                            enum unit_loss_reason reason,
                            struct player *killer);
 
+static char *unit_scrambled_id(int id);
+
 /* Cycling index used by uwt scrambler.*/
 int unit_wait_cycle = -1;        
 
@@ -233,6 +235,32 @@ char *get_web_unit_icon(const struct unit *punit, char *emoji_str)
 #endif 
 
   return emoji_str; // returning the parameter assists macro syntax.
+}
+
+/*************************************************************************
+  Makes a unit->id into a base-26 string using letters, which is further
+  scrambled by inversion. This allows uniquely identifying units
+  to players in a shorter form that doesn't reveal intel about the age of
+  the unit, how many units are in the game, etc.
+**************************************************************************/
+static char *unit_scrambled_id(int n)
+{
+  static char result[MAX_LEN_NAME] = {0};
+  int digit;
+
+  if (n>250000) return "NaN";
+
+  n--;
+  if (n>=0) {
+    digit = n % 26;
+    if (n<26) {
+      sprintf(result, "%c", 90-digit);
+    } else {
+      sprintf(result, "%s%c", unit_scrambled_id(n/26), 90-digit);
+    }
+  }
+
+  return result;
 }
 
 /**********************************************************************//**
@@ -4096,12 +4124,12 @@ static void wakeup_neighbor_sentries(struct unit *punit)
 
               notify_player(unit_owner(penemy), unit_tile(punit),
                     E_UNIT_ORDERS, ftc_server,
-                    _("👁️ %s (%d,%d) saw %s %s %s#%d moving at (%d,%d)"),
+                    _("👁️ %s (%d,%d) saw %s %s %s#%s moving at (%d,%d)"),
                     unit_link(penemy),
                     stile_x, stile_y, 
                     nation_rule_name(nation_of_unit(punit)), 
                     unit_name_translation(punit), punit_emoji,
-                    punit->id,
+                    unit_scrambled_id(punit->id),
                     mtile_x, mtile_y );
           }
         }
