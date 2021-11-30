@@ -654,10 +654,17 @@ function popup_action_selection(actor_unit, action_probabilities,
         }
         //  if (action_id == ACTION_TRANSPORT_LOAD) {}  action not backported yet
         //------------------------------------------------------------------------------------ 
-        buttons.push(create_act_sel_button(id, actor_unit['id'],
-                                           tgt_id, sub_tgt_id, action_id,
-                                           action_probabilities));
-        if (action_id==ACTION_ATTACK) focus_button = "act_sel_"+ACTION_ATTACK+"_"+actor_unit['id'];
+
+        if (action_id==ACTION_ATTACK || action_id==ACTION_CONQUER_CITY) {
+          // Attack and Conquer should always be first on menu to avoid
+          // regrettable misclick issues...
+          focus_button = "act_sel_"+action_id+"_"+actor_unit['id'];
+          buttons.unshift(create_act_sel_button(id, actor_unit['id'],
+            tgt_id, sub_tgt_id, action_id, action_probabilities));
+        } else {
+          buttons.push(create_act_sel_button(id, actor_unit['id'],
+            tgt_id, sub_tgt_id, action_id, action_probabilities));
+        }
       }
     }
   }
