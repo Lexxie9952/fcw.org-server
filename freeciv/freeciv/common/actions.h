@@ -140,7 +140,7 @@ extern "C" {
 #define SPECENUM_VALUE37NAME "Nuke City"
 #define SPECENUM_VALUE38 ACTION_NUKE_UNITS
 #define SPECENUM_VALUE38NAME "Nuke Units"
-#define SPECENUM_VALUE39 ACTION_DESTROY_CITY
+#define SPECENUM_VALUE39 ACTION_DESTROY_CITY /* if this changes from 39, script.lua must be changed in MP2D and onward */
 #define SPECENUM_VALUE39NAME "Destroy City"
 #define SPECENUM_VALUE40 ACTION_EXPEL_UNIT
 #define SPECENUM_VALUE40NAME "Expel Unit"
