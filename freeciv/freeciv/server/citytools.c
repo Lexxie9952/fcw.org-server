@@ -1888,6 +1888,51 @@ void remove_city(struct city *pcity)
 }
 
 /************************************************************************//**
+  Whether the conquered city loses population from the act of conquest,
+  and how much. TODO: This function is for allowing future expansion
+  for mechanics to be specified by game settings and/or rulesets.
+  Currently, this function emulates hard-coded legacy behaviour,
+  so that it keeps compatibility for upstream integration.
+****************************************************************************/
+static int conquered_city_loses_pop(struct city *pcity, struct unit *punit)
+{
+  bool killer = true;   /* default to legacy hard-coded behaviour */
+  int num_killed = 1;   /* default to legacy hard-coded behaviour */
+  
+#ifdef FREECIV_WEB
+  killer = uclass_has_flag(unit_class_get(punit), UCF_KILLCITIZEN);
+#endif
+  /* TODO: pop. loss for city should be controlled by bit-field
+     game.info.conquer_pop_reduce, whose values tune when/how pop loss
+     happens:
+
+     int BITS = game.info.conquer_pop_reduce; 
+     bool killer = false;
+     killer |= (KILL_ALWAYS & BITS);
+     killer |= (KILL_IF_ATTACKER_KILLS & BITS) && kills_citizen_after_attack(punit);
+     killer |= (KILL_IF_KILLER & BITS) && uclass_has_flag(unit_class_get(punit), UCF_KILLCITIZEN);
+     killer |= (KILL_SIZE1_ALWAYS & BITS) && city_size_get(pcity) <= 1;                
+  */
+
+  /* TODO:  changes in how much pop. to kill go here; this is where rulesets can
+     further tune or override certain behaviours ...
+
+  if (killer) {
+     num_killed += get_unit_bonus(punit, EFT_???));
+     num_killed -= get_city_bonus(pcity, EFT_???)
+    ... etc...
+  } else num_killed = 0;
+
+  return num_killed;
+  */
+
+  if (killer) {
+    return num_killed;
+  }
+  return 0;
+}
+
+/************************************************************************//**
   Handle unit conquering a city.
     - Can't conquer a city when not at war. (Enters cities peacefully
       during peace. At the moment this can happen to domestic, allied and
@@ -1907,6 +1952,8 @@ bool unit_conquer_city(struct unit *punit, struct city *pcity)
 {
   bool try_civil_war = FALSE;
   bool city_remains;
+  int num_killed = conquered_city_loses_pop(pcity, punit);
+
   struct player *pplayer = unit_owner(punit);
   struct player *cplayer = city_owner(pcity);
 
@@ -1955,7 +2002,7 @@ bool unit_conquer_city(struct unit *punit, struct city *pcity)
    * We later remove a citizen. Lets check if we can save this since
    * the city will be destroyed.
    */
-  if (city_size_get(pcity) <= 1) {
+  if (city_size_get(pcity) <= num_killed) {
     int saved_id = pcity->id;
 
     notify_player(pplayer, city_tile(pcity), E_UNIT_WIN_ATT, ftc_server,
@@ -2083,7 +2130,7 @@ bool unit_conquer_city(struct unit *punit, struct city *pcity)
   if (city_remains) {
     /* reduce size should not destroy this city */
     fc_assert(city_size_get(pcity) > 1);
-    city_reduce_size(pcity, 1, pplayer, "conquest");
+    city_reduce_size(pcity, num_killed, pplayer, "conquest");
   }
 
   if (try_civil_war) {
