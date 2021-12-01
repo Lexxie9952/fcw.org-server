@@ -329,6 +329,41 @@ void handle_player_rates(struct player *pplayer,
 }
 
 /**********************************************************************//**
+  Returns whether a play can immediately transition to new governments.   
+**************************************************************************/
+static bool immediate_revolution(struct player *pplayer)
+{
+  /* whether transition to new gov is instant or (may) require turn delays: 
+   * EFT_NO_ANARCHY (1..9): instant.  EFT_NO_ANARCHY (10+): not instant:
+                                      but transitional gov = current gov */
+  /* TODO: logic/mechanics for when immediacy happens can be expanded
+           out of this semi-hard-coded logic to more ruleset fluid logic */                                    
+  return get_player_bonus(pplayer, EFT_NO_ANARCHY) >= 1
+             && get_player_bonus(pplayer, EFT_NO_ANARCHY) < 10;
+}
+/**********************************************************************//**
+  Returns the transition government a player must have during their
+  revolution period of switching governments.   
+**************************************************************************/
+static struct government *revolution_government(struct player *pplayer) {
+  /* Start with the default revolution gov: */ 
+  struct government *plr_revo_gov = game.government_during_revolution;
+
+  /* whether Anarchy gov is needed to transition */
+  bool anarchy = get_player_bonus(pplayer, EFT_NO_ANARCHY) <= 0;
+  bool immediacy = immediate_revolution(pplayer);
+
+  /* if Anarchy gov is not required as transitional government, BUT
+     the revolution is not immediate, then the player's transitional
+     government is the same government they have now. */
+  if (!anarchy && !immediacy) {
+    plr_revo_gov = pplayer->government;
+  }
+
+  return plr_revo_gov;
+}
+
+/**********************************************************************//**
   Finish the revolution and set the player's government.  Call this as soon
   as the player has set a target_government and the revolution_finishes
   turn has arrived.
@@ -340,7 +375,7 @@ void government_change(struct player *pplayer, struct government *gov,
 
   if (revolution_finished) {
     fc_assert_ret(pplayer->target_government
-                  != game.government_during_revolution
+                  != revolution_government(pplayer)
                   && NULL != pplayer->target_government);
     fc_assert_ret(pplayer->revolution_finishes <= game.info.turn);
 
@@ -406,10 +441,15 @@ void government_change(struct player *pplayer, struct government *gov,
 **************************************************************************/
 int revolution_length(struct government *gov, struct player *plr)
 {
+  struct government *rev_gov = revolution_government(plr);
   int turns;
 
-  if (!untargeted_revolution_allowed()
-      && gov == game.government_during_revolution) {
+  /* [A] REVOLEN_QUICKENING, REVOLEN_RANDQUICK alter revo-time so can't
+     be targetless. [B] (revo-time && !anarchy) can't be targetless
+     because its raison d'être is avoiding "SuperGovs" that can exploit
+     the bonuses of every Gov in a single turn: */
+  if (gov==rev_gov && (!untargeted_revolution_allowed() /*[A]*/
+              /*[B]*/  || rev_gov != game.government_during_revolution)) {
     /* Targetless revolution not acceptable */
     notify_player(plr, NULL, E_REVOLT_DONE, ftc_server,
                   _("You can't revolt without selecting target government."));
@@ -444,9 +484,10 @@ void handle_player_change_government(struct player *pplayer,
                                      Government_type_id government)
 {
   int turns;
+  struct government *plr_revo_gov = revolution_government(pplayer);
   struct government *gov = government_by_number(government);
-  bool anarchy;
-
+  bool anarchy;   /* whether transitions need an "anarchy/revolution gov" */
+  bool immediacy; /* whether the transition to new gov is immediate */ 
   if (!gov || !can_change_to_government(pplayer, gov)) {
     return;
   }
@@ -458,6 +499,7 @@ void handle_player_change_government(struct player *pplayer,
             pplayer->revolution_finishes, game.info.turn);
 
   anarchy = get_player_bonus(pplayer, EFT_NO_ANARCHY) <= 0;
+  immediacy = immediate_revolution(pplayer);
 
   /* Set revolution_finishes value. */
   if (pplayer->revolution_finishes > 0) {
@@ -468,8 +510,9 @@ void handle_player_change_government(struct player *pplayer,
      * a government). */
     turns = pplayer->revolution_finishes - game.info.turn;
   } else if ((is_ai(pplayer) && !has_handicap(pplayer, H_REVOLUTION))
-	     || !anarchy) {
-    /* AI players without the H_REVOLUTION handicap can skip anarchy */
+	     || (!anarchy && immediacy)) {
+    /* AI players without the H_REVOLUTION handicap, and Human players with 
+          immediacy of transition (&& no anarchy) can skip anarchy */
     turns = 0;
   } else {
     turns = revolution_length(gov, pplayer);
@@ -479,7 +522,7 @@ void handle_player_change_government(struct player *pplayer,
   }
 
   if (anarchy && turns <= 0
-      && pplayer->government != game.government_during_revolution) {
+      && pplayer->government != plr_revo_gov) {
     /* Multiple changes attempted after single anarchy period */
     if (game.info.revolentype == REVOLEN_QUICKENING) {
       notify_player(pplayer, NULL, E_REVOLT_DONE, ftc_server,
@@ -488,7 +531,7 @@ void handle_player_change_government(struct player *pplayer,
     }
   }
 
-  pplayer->government = game.government_during_revolution;
+  pplayer->government = plr_revo_gov;
   pplayer->target_government = gov;
   pplayer->revolution_finishes = game.info.turn + turns;
 
@@ -498,8 +541,7 @@ void handle_player_change_government(struct player *pplayer,
             pplayer->revolution_finishes, game.info.turn);
 
   /* Now see if the revolution is instantaneous. */
-  if (turns <= 0
-      && pplayer->target_government != game.government_during_revolution) {
+  if (turns <= 0 && pplayer->target_government != plr_revo_gov) {
     government_change(pplayer, pplayer->target_government, TRUE);
     return;
   } else if (turns > 0) {
@@ -507,19 +549,21 @@ void handle_player_change_government(struct player *pplayer,
                   /* TRANS: this is a message event so don't make it
                    * too long. */
                   PL_("The %s have incited a revolt! "
-                      "%d turn of anarchy will ensue! "
+                      "%d turn of %s will ensue! "
                       "Target government is %s.",
                       "The %s have incited a revolt! "
-                      "%d turns of anarchy will ensue! "
+                      "%d turns of %s will ensue! "
                       "Target government is %s.",
                       turns),
                   nation_plural_for_player(pplayer),
                   turns,
+                  government_name_translation(plr_revo_gov),
                   government_name_translation(pplayer->target_government));
   } else {
-    fc_assert(pplayer->target_government == game.government_during_revolution);
+    fc_assert(pplayer->target_government == plr_revo_gov);
     notify_player(pplayer, NULL, E_REVOLT_START, ftc_server,
-                  _("Revolution: returning to anarchy."));
+                  _("Revolution: returning to %s."),
+                  government_name_translation(plr_revo_gov));
   }
 
   check_player_max_rates(pplayer);
@@ -540,6 +584,7 @@ void handle_player_change_government(struct player *pplayer,
 void update_revolution(struct player *pplayer)
 {
   struct government *current_gov;
+  struct government *plr_revo_gov = revolution_government(pplayer);
 
   /* The player's revolution counter is stored in the revolution_finishes
    * field.  This value has the following meanings:
@@ -559,6 +604,9 @@ void update_revolution(struct player *pplayer)
    *       and the player can leave the revolution at any time.  The value
    *       is reset at the end of any turn when a non-anarchy government is
    *       chosen.
+   *     * If the player has non-immediate revolution without transitional 
+   *       anarchy/revolutionary gov, then we're forced to end the revolution
+   *       immediately after achieving the new gov (avoids legacy logic mess).
    */
   log_debug("Update revolution for %s. Current government %s, "
             "target %s, revofin %d, turn %d.", player_name(pplayer),
@@ -569,13 +617,19 @@ void update_revolution(struct player *pplayer)
 
   current_gov = government_of_player(pplayer);
 
-  if (current_gov == game.government_during_revolution
+  if (current_gov == plr_revo_gov
+      && -1 < pplayer->revolution_finishes
       && pplayer->revolution_finishes <= game.info.turn) {
-    if (pplayer->target_government != game.government_during_revolution) {
+    if (pplayer->target_government != plr_revo_gov) {
       /* If the revolution is over and a target government is set, go into
        * the new government. */
       log_debug("Update: finishing revolution for %s.", player_name(pplayer));
       government_change(pplayer, pplayer->target_government, TRUE);
+      /* (!anarchy && !immediate) == no infinite twiddling of govs after revo */
+      if (plr_revo_gov != game.government_during_revolution 
+          && pplayer->revolution_finishes <= game.info.turn) {
+        pplayer->revolution_finishes = -1;
+      }
     } else {
       /* If the revolution is over but there's no target government set,
        * alert the player. */
@@ -583,9 +637,12 @@ void update_revolution(struct player *pplayer)
                     _("You should choose a new government from the "
                       "government menu."));
     }
-  } else if (government_of_player(pplayer) != game.government_during_revolution
-	     && pplayer->revolution_finishes < game.info.turn) {
-    /* Reset the revolution counter.  If the player has another revolution
+  } else if ( (government_of_player(pplayer) != plr_revo_gov 
+               && pplayer->revolution_finishes < game.info.turn)
+              || /* !immediate && !anarchy == can't change constantly */
+              (plr_revo_gov != game.government_during_revolution 
+               && pplayer->revolution_finishes < game.info.turn) )
+  { /* Reset the revolution counter.  If the player has another revolution
      * they'll have to re-enter anarchy. */
     log_debug("Update: resetting revofin for %s.", player_name(pplayer));
     pplayer->revolution_finishes = -1;
