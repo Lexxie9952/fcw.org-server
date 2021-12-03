@@ -5946,7 +5946,7 @@ reqs	=
     }
 [effect_statue_of_liberty_1]
 type    = "No_Anarchy"
-value	= 1
+value	= 11    ; (val >= 10) means, no anarchy but switch is NOT immediate
 reqs	=
     { "type", "name", "range"
       "Building", "Statue of Liberty", "Player"

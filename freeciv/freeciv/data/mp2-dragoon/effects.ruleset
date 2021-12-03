@@ -5528,8 +5528,13 @@ reqs    =
 type    = "Upgrade_Unit"
 value	= 2
 reqs	=
-    { "type", "name", "range"
-      "Building", "Leonardo's Workshop", "Player"
+    { "type",     "name",                "range",  "present"
+      "Building", "Leonardo's Workshop", "Player", TRUE
+; Prevent CONVERT from bypassing its actionenabler by getting upgrade midstream:
+; NOTE: Activity reqs currently always evaluate false and is waiting for a fix.
+; Fix was made to server unit.cc::unit_upgrade_test to disallow upgrades on converting
+; units.
+;    "Activity", "Convert",             "Local",  FALSE 
     }
 ;************************************************************************ Genghis Khan
 [effect_genghis_khans_equestrian_school]
@@ -6277,7 +6282,7 @@ reqs	=
     }
 [effect_statue_of_liberty_1]
 type    = "No_Anarchy"
-value	= 1
+value	= 11    ; (val >= 10) means, no anarchy but switch is NOT immediate
 reqs	=
     { "type", "name", "range"
       "Building", "Statue of Liberty", "Player"
