@@ -32,6 +32,7 @@ var cma_enabled = false;
 // current implementation allowed starving, with food min_surplus of 20,
 // even when positive food was available:
 var cma_max_growth = false;
+var MIN_SURPLUS_MAX = 150;  // How far up the min surplus sliders will go
 
 // Governor Clipboard for copy/paste:
 var _cma_val_sliders = [1,0,0,0,0,0];
@@ -159,9 +160,9 @@ function create_cma_sliders() {
 
     $("#cma-val-slider-"+name).slider({ value: cma_val_sliders[i], min:0, max:25 });
     $("#cma-val-slider-"+name).slider("enable");
-    $("#cma-min-slider-"+name).slider({ value: cma_min_sliders[i], min:-20, max:20 });
+    $("#cma-min-slider-"+name).slider({ value: cma_min_sliders[i], min:-20, max:MIN_SURPLUS_MAX });
     $("#cma-min-slider-"+name).slider("enable");
-    $("#cma-val-slider-"+name).css("width", 160); 
+    $("#cma-val-slider-"+name).css("width", 160);
     $("#cma-min-slider-"+name).css("width", 160); 
 
     $("#cma-val-slider-"+name).slider({"slide": cma_user_slide, "change": cma_user_input});
