@@ -837,6 +837,13 @@ function handle_web_player_info_addition(packet)
   if (client.conn.playing != null) {
     if (packet['playerno'] == client.conn.playing['playerno']) {
       client.conn.playing = players[packet['playerno']];
+
+      /* Force update of bulbs_researched which doesn't get server update
+      after LUA Player:give_bulbs(..). TODO: Remove after upstream fixes
+      this bug: */
+      var cur_tech = client.conn.playing['researching'];
+      client.conn.playing['bulbs_researched'] = client.conn.playing.advance_saved_bulbs[cur_tech];
+
       update_game_status_panel();
       update_net_income();
       income_needs_refresh = false;
