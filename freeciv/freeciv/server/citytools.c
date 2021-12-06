@@ -2123,8 +2123,15 @@ bool unit_conquer_city(struct unit *punit, struct city *pcity)
      See sentence #3 at https://civilization.fandom.com/wiki/Civil_disorder_(Civ2) */
   // For now, allow rulesets to specifically turn it off with EFT_GULAG:
   //if (!game.server.disorder_in_conquered && !get_city_bonus(pcity, EFT_???) {
-    if (game.server.fulldisorder)
-      pcity->anarchy++;
+    if (game.server.fulldisorder) {
+      if (punit->owner != pcity->original) {
+        /* Conquered city starts with 1 turn lawless/disorder (not more) */
+        pcity->anarchy=1;
+      } else {
+        /* Liberated cities don't get disorder */
+        pcity->anarchy=0;
+      }
+    }
   //}
 
   if (city_remains) {
