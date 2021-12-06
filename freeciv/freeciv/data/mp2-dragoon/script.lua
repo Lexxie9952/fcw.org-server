@@ -21,9 +21,38 @@ game_turn = 0
 first_horse_warning = 0
 first_womens_suffrage = 0
 
---Give players custom messages on certain years.  Currently at 1600 AD (T85), Philosophy expires. Let them know.
+--Handle events that happen on certain turns in history
 function history_turn_notifications(turn, year)
   game_turn = turn
+
+  -- Bulbs for Nomads in the first 5 turns (given at TC going to next turn)
+  if turn >= 2 and turn <= 6 then
+    for p in players_iterate() do
+      local has_city = 0
+      
+      -- Each Settler type gets 1 bulb in first 5 turns
+      for u in p:units_iterate() do
+        local uname = u.utype:rule_name() 
+        if uname == "Settlers" or uname == "Founders" then
+          p:give_bulbs(1)
+        end
+      end
+
+      -- Alternative Example: giving bulbs if no city founded yet
+      --[[
+      for c in p:cities_iterate() do 
+        if c:has_building(find.building_type("Palace")) then
+          has_city = 1
+          break         
+        end
+      end
+      if has_city == 0 then
+        p:give_bulbs(3)
+      end
+      ]]--
+
+    end
+  end
 
   if turn > 78 and turn < 85 then
     notify.all("Philosophy will no longer award a bonus tech after turn 85.")

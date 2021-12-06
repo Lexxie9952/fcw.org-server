@@ -115,11 +115,9 @@ richness.
    upgrade, which now makes this wonder less OP and no
    longer justifying the cost increase.
 =============================================================
-20. Legion price adjust 31 (was 32) - got 10% discount like 
-   all other units, off classic price, but was overpriced in 
-   classic. should be 36 or 37 with 20% reduction giving 29-30
-   in cost. Legion's extra abilities worth +1 shield from
-   that. also, Ironworking 70 (was 80).
+20. Legion price adjust 31 (was 32) - got 20% discount like 
+   all other foot units, off the classic price, but it was
+   overpriced in classic. Also, Ironworking 70 (was 80).
 =============================================================
 21. Hideouts  
    temporary patch requirement for unit to be alone
@@ -158,8 +156,8 @@ richness.
 30. Jet aircraft upgrades
 Were underpowered relative to other units.
 
-A/D jets/mech inf is now only slightly less than
-A/D fighters/alpines (was substantially less, at a time when
+A:D ratio of jets:mech.inf is now only slightly less than
+A:D fighters:alpines (was substantially less, at a time when
     SAM Battery becomes available to make it even worse.)
 
 Stealth Fighter
@@ -204,7 +202,18 @@ size 2-8;
 Domestic city: only avail to Despo, Commie;
 15% foreign, must use (D)o command. size 1-8;
 ==============================================================
-
+35. Huts can now also give small bulb awards (1-5 bulbs).
+NOTE: tech tab will update your bulb count only if you 
+  visit that tab and click on your current research.
+==============================================================
+36. Nomadism / Early game balance bonuses 
+During the first 5 turns, each Settler gets 1 bulb/turn; this
+represents the fact that nomads can learn things too, and
+causes less penalty for players in bad starting position 
+who must migrate to decent starting position.
+==============================================================
+37. 
+==============================================================
 
 
 
