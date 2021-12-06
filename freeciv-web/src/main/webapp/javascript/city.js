@@ -737,11 +737,11 @@ function show_city_dialog(pcity)
     var trade_txt2 = pcity['surplus'][O_TRADE]==pcity['prod'][O_TRADE] ? "" : "(" + pcity['prod'][O_TRADE] + ")";
     if (pcity.traderoute_count) {
       trade_txt2 += 
-      "<span style='cursor:help' title='trade route revenue'>"
+      "<span style='cursor:help' title='Trade Route Revenue' onclick='$(\"#ct2\").click();'>"
       + "<img style='margin-bottom:-7px; margin-top:-4px; margin-left:1px; padding:0px' src='/images/e/caravan.png'>"
       + "<b class='trade_text'>" + get_city_traderoute_revenue(pcity['id'])+"</b></span>";
     }
-     
+
     var gold_txt = "";
     if (pcity['surplus'][O_GOLD] > 0) gold_txt += "+<b class='gold_text'>";
     else gold_txt += "<b>";
@@ -2286,10 +2286,17 @@ function show_city_traderoutes()
 
     tcity = cities[tcity_id];
     if (tcity == null) continue;
-    //msg += good['name'] + " trade with " + tcity['name'];
-    //msg += " gives +" + routes[i]['value'] + " base trade each turn." + "<br>";
-    msg += "Trade Route to " + tcity['name'] +": ";
-    msg += "+<b class='trade_text'>" + routes[i]['value'] + "</b> base trade each turn." + "<br>";
+    var city_flag_tag = nations[players[tcity['owner']]['nation']]['graphic_str'];
+    var city_flag_url = "/images/flags/" + city_flag_tag + "-web" + get_tileset_file_extention();
+    var city_flag = "<div title='Leader: "+players[tcity['owner']].name
+                      + "' style='background: transparent url(" + city_flag_url 
+                      + "); background-size:contain; width:21px; height:14px; float:left; '></div>";
+    var city_link = "<span title = 'View on map' style='cursor:pointer; color:#99ccff' "
+                  + "onclick='close_city_dialog_trigger(); chatbox_scroll_to_bottom(false); center_tile_id_click("
+                  + tcity.tile +")'><u>" + tcity.name+"</u></span>";
+    msg += city_flag + " <div>&nbsp;Trade Route to the " + nations[players[tcity.owner].nation].adjective 
+        + " city of " + city_link + ": ";
+    msg += "+<b class='trade_text'>" + routes[i]['value'] + "</b> base trade each turn." + "<br></div>";
   }
 
   if (msg == "") {
