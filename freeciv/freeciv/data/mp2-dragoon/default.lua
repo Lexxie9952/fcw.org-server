@@ -35,6 +35,16 @@ function _deflua_hut_get_gold(unit, gold)
 
 end
 
+-- Get bulbs from entering a hut.
+function _deflua_hut_get_bulbs(unit, bulbs)
+  local owner = unit.owner
+
+    notify.event(owner, unit.tile, E.HUT_GOLD, PL_("[`bulb`] You found ancient tablets worth %d bulbs.",
+                                                  "[`bulb`] You found ancient tablets worth %d bulbs.", bulbs),
+                bulbs)
+    owner:give_bulbs(bulbs)
+end
+
 -- Default if intended hut behavior wasn`t possible.
 function _deflua_hut_consolation_prize(unit)
   _deflua_hut_get_gold(unit, 2)
@@ -139,7 +149,7 @@ end
 
 -- Randomly choose a hut event
 function _deflua_hut_enter_callback(unit)
-  local chance = random(0, 6)
+  local chance = random(0, 9)
   local alive = true
 
   if chance == 0 or chance == 1 then
@@ -151,10 +161,16 @@ function _deflua_hut_enter_callback(unit)
   elseif chance == 5 then
     _deflua_hut_get_gold(unit, 10)
   elseif chance == 6 then
+    _deflua_hut_get_bulbs(unit, 1)
+  elseif chance == 7 then
+    _deflua_hut_get_bulbs(unit, 2)
+  elseif chance == 8 then
+    _deflua_hut_get_bulbs(unit, 5)
+  elseif chance == 9 then
     if not _deflua_hut_get_mercenaries(unit) then
       _deflua_hut_consolation_prize(unit)
     end
-  elseif chance == 7 then
+  elseif chance == 10 then
     alive = _deflua_hut_get_barbarians(unit)
   end
 

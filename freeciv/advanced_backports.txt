@@ -24,3 +24,4 @@ c67cb82f51ef5034cc361738ab8ae74946374262 2020-06-13 11:43:44 Unchanged and compl
 d8a54ddb6a5ac083c400411a3dd456267d0ac17f 2021-05-13          Adjusted, but complete
 cedd5f7a5af8a10445f01b09bd91794e0126101d 2021-07-04 09:41:02 Unchanged and complete
 PATCH https://osdn.net/projects/freeciv/ticket/42600 - 2021-09-22 . Couldn't find commit for it yet
+8ba9f30e04b06a162ffb7d9a487ca478080a443c 2021-11-27 ?        Lua: Add Player:give_bulbs() method; copied verbatim.
