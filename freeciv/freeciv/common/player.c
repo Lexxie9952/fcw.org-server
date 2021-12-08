@@ -195,6 +195,8 @@ enum dipl_reason pplayer_can_make_treaty(const struct player *p1,
     else return DIPL_ERROR;
   }
   if (treaty == DS_ALLIANCE) {
+    /* Existing alliance with casus belli clears the casus belli: */
+    if (existing == DS_ALLIANCE && casus_belli) return DIPL_OK;
     if (!is_valid_alliance(p1, p2)) {
       /* Our war with a third party prevents entry to alliance. */
       return DIPL_ALLIANCE_PROBLEM_US;
