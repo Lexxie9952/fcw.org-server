@@ -242,9 +242,41 @@ function client_diplomacy_clause_string(counterpart, giver, type, value)
   var pplayer = players[giver];
   var nation = nations[pplayer['nation']]['adjective'];
 
+  /* FIXME: server sends out giver and counterpart as the same player when
+     it offers a dipl_state clause to the counterpart (i.e., to the 
+     receiver/non-giver). This hack fixes it. TODO: fix the server @
+     diplhand.c::handle_diplomacy_create_clause_req */
+  if (counterpart == giver && value == 1) {
+    counterpart = client.conn.playing.playerno;
+  }
+
   var cb1 = players[counterpart].diplstates[giver]['has_reason_to_cancel'];
   var cb2 = players[giver].diplstates[counterpart]['has_reason_to_cancel'];  
   const casus_belli = cb1 || cb2;
+  const giver_state = players[giver].diplstates[counterpart].state;
+  const counterpart_state = players[counterpart].diplstates[giver].state;
+  /* giver and counterpart diplstate should always be the same but the info
+     for one or the other may not be known. OR'ing them together always
+     results in the correct dipl_state: */
+  const dipl_state = giver_state | counterpart_state;
+  const new_clause_is_old_state = 
+    (type == CLAUSE_CEASEFIRE && dipl_state == DS_CEASEFIRE) 
+    || (type == CLAUSE_PEACE && dipl_state == DS_ARMISTICE)
+    || (type == CLAUSE_PEACE && dipl_state == DS_PEACE)
+    || (type == CLAUSE_ALLIANCE && dipl_state == DS_ALLIANCE);
+  const re_affirm = new_clause_is_old_state;
+
+  /* DEBUG
+  console.log("--------DIPL LANGUAGE DEBUG----------")
+  console.log("cprt, giver, type, value = %d,%d,%d,%d",counterpart,giver,type,value);
+  console.log("giver_state       "+giver_state);
+  console.log("counterpart_state "+counterpart_state);
+  console.log("dipl_state        "+dipl_state);
+  console.log("new_clause_is_old "+new_clause_is_old_state);
+  console.log("casus_belli       "+casus_belli);
+  console.log("re_affirm         "+re_affirm);
+  console.log("--------------------------------------")
+  */
 
   switch (type) {
   case CLAUSE_ADVANCE:
@@ -271,11 +303,23 @@ function client_diplomacy_clause_string(counterpart, giver, type, value)
   case CLAUSE_SEAMAP:
     return "The " + nation + " give their seamap";
   case CLAUSE_CEASEFIRE:
-    return casus_belli ? "The parties re-affirm cease-fire." : "The parties agree on a cease-fire";
+    if (re_affirm && casus_belli) return "The parties re-affirm cease-fire and clear casus belli.";
+    // The case below occurs when cease-fire will expire in <3 turns and a renewal is offered:
+    if (re_affirm) return "The parties renew and extend the cease-fire.";
+    if (casus_belli) return "The parties agree on a cease-fire and clear casus belli.";
+    return "The parties agree on a cease-fire."
   case CLAUSE_PEACE:
-    return casus_belli ? "The parties re-affirm peace" : "The parties agree on a peace";
+    if (re_affirm && casus_belli) return "The parties re-affirm peace and clear casus belli.";
+    // The case below shouldn't happen, but could happen when server gets limited duration peace pacts:
+    if (re_affirm) return "The parties renew and extend the peace.";
+    if (casus_belli) return "The parties agree on a peace and clear casus belli.";
+    return "The parties agree on a peace."
   case CLAUSE_ALLIANCE:
-    return casus_belli ? "The parties re-affirm the alliance" : "The parties create an alliance";
+    if (re_affirm && casus_belli) return "The parties re-affirm the alliance and clear casus belli.";
+    // The case below shouldn't happen, but could happen when server gets limited duration alliances:
+    if (re_affirm) return "The parties renew and extend the alliance.";
+    if (casus_belli) return "The parties create an alliance and clear casus belli.";
+    return "The parties create an alliance.";
   case CLAUSE_VISION:
     return "The " + nation + " give shared vision";
   case CLAUSE_EMBASSY:
