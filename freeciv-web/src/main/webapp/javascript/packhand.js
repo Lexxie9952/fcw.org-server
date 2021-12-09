@@ -24,7 +24,7 @@
    handle_processing_finished() call which 'thaws' things for a UI update: */  
 var ui_update_nations_info = false; // Nations tab and Empire tab (for now)
 var ui_update_cities_info = false;  // Cities tab
-
+var ui_update_bulbs_info = false;   // Bulb information
 //
 var DEBUG_LOG_PACKETS = false;    // verbose packet logging
 var DEBUG_SHORT_PACKETS = false;  // show terse packet log
@@ -294,6 +294,10 @@ function update_ui_after_thaw() {
     ui_update_cities_info = false;
     var active_tab = $("#tabs").tabs("option", "active"); 
     if (active_tab == TAB_CITIES) city_screen_updater.update();
+  }
+  if (ui_update_bulbs_info) {
+    ui_update_bulbs_info = false;
+    bulbs_output_updater.update();
   }
 }
 
@@ -699,7 +703,7 @@ function handle_early_chat_msg(packet)
 
 /***************************************************************************
   The city_info packet is used when the player has full information about a
-  city, including it's internals.
+  city, including its internals.
 
   It is followed by web_city_info_addition that gives additional
   information only needed by Freeciv-web. Its processing will therefore
@@ -740,7 +744,7 @@ function handle_city_info(packet)
   The web_city_info_addition packet is a follow up packet to
   city_info packet. It gives some information the C clients calculates on
   their own. It is used when the player has full information about a city,
-  including it's internals.
+  including its internals.
 ***************************************************************************/
 function handle_web_city_info_addition(packet)
 {
@@ -771,7 +775,7 @@ function handle_web_city_info_addition(packet)
     city_worklist_dialog(active_city);
   }
   /* Update active tabs affected by this info */
-  bulbs_output_updater.update();
+  ui_update_bulbs_info = true;
   var active_tab = $("#tabs").tabs("option", "active"); 
   if (active_tab == TAB_CITIES) {
     ui_update_cities_info = true;
@@ -798,7 +802,7 @@ function handle_city_short_info(packet)
   }
 
   /* Update active tabs affected by this info */
-  bulbs_output_updater.update();
+  ui_update_bulbs_info = true;
   var active_tab = $("#tabs").tabs("option", "active"); 
   if (active_tab == TAB_CITIES) {
     ui_update_cities_info = true;
@@ -2538,7 +2542,7 @@ function handle_research_info(packet)
   }
 
   if (is_tech_tree_init && tech_dialog_active) update_tech_screen();
-  bulbs_output_updater.update();
+  ui_update_bulbs_info = true;
 }
 
 function handle_worker_task(packet)
