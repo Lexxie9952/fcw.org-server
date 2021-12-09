@@ -2728,7 +2728,6 @@ actor_reqs    =
       "UnitFlag",      "Settlers",     "Local", TRUE
       "UnitFlag",      "CanHide",      "Local", FALSE
       "UnitFlag",      "CanClaim",     "Local", FALSE
-      "Tech",          "Monarchy",     "Player",FALSE
       "Building",      "Chand Baori",  "Player",TRUE
     }
 target_reqs    =
