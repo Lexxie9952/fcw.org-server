@@ -16,6 +16,14 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 ***********************************************************************/
+//
+/* Many packets of same type may come sequentially, for which we don't
+   want to update the UI until they are all completed and
+   handle_processing_finished() is called. These global vars keep track
+   whether certain UI data will get a refresh on the next
+   handle_processing_finished() call which 'thaws' things for a UI update: */  
+var ui_update_nations_info = false;   
+//
 var DEBUG_LOG_PACKETS = false;    // verbose packet logging
 var DEBUG_SHORT_PACKETS = false;  // show terse packet log
 var DEBUG_EXPAND_PACKETS = true;  // log expandable packet under terse packet
@@ -267,6 +275,19 @@ function handle_processing_started(packet)
 function handle_processing_finished(packet)
 {
   client_frozen = false;
+  if (ui_update_nations_info) {
+    ui_update_nations_info = false;
+
+    /* Update relevant active tabs with altered players/nations info: */
+    var active_tab = $("#tabs").tabs("option", "active"); 
+
+    if (active_tab == TAB_EMPIRE) {  
+      empire_screen_updater.update();
+    }
+    else if (active_tab = TAB_NATIONS) {
+      update_nation_screen();
+    }
+  }
 }
 
 function handle_freeze_hint(packet)
@@ -747,7 +768,7 @@ function handle_web_city_info_addition(packet)
   if (active_tab == TAB_CITIES) {
     city_screen_updater.update();
   } else if (active_tab == TAB_EMPIRE) {  
-    empire_screen_updater.update();  // TEST:is this the right way to update empire screen?
+    ui_update_nations_info = true;
   }
   income_needs_refresh = true;
 }
@@ -774,7 +795,7 @@ function handle_city_short_info(packet)
   if (active_tab == TAB_CITIES) {
     city_screen_updater.update();
   } else if (active_tab == TAB_EMPIRE) {  
-    empire_screen_updater.update();  // TEST:is this the right way to update empire screen?
+    ui_update_nations_info = true;
   }
   income_needs_refresh = true;
 }
@@ -817,11 +838,8 @@ function handle_player_info(packet)
           nations[pplayer['nation']]['color'] = pcolor;
     } 
   } */
-
-  /* Update active tabs affected by this info */
-  var active_tab = $("#tabs").tabs("option", "active"); 
-  if (active_tab == TAB_EMPIRE) {  
-    empire_screen_updater.update();  // TEST:is this the right way to update empire screen?
+  if (C_S_RUNNING == client_state()) {
+    ui_update_nations_info = true;
   }
 }
 
@@ -844,6 +862,8 @@ function handle_web_player_info_addition(packet)
       var cur_tech = client.conn.playing['researching'];
       client.conn.playing['bulbs_researched'] = client.conn.playing.advance_saved_bulbs[cur_tech];
 
+      // TODO: should this be handled only once in handle_processing_finished() which is flagged
+      // to be processed there by setting ui_update_nations_info = true (similar to func above?)
       update_game_status_panel();
       update_net_income();
       income_needs_refresh = false;
@@ -1321,7 +1341,7 @@ function handle_unit_info(packet)
   /* Update active tabs affected by this info */
   var active_tab = $("#tabs").tabs("option", "active"); 
   if (active_tab == TAB_EMPIRE) {  
-    empire_screen_updater.update();  // TEST:is this the right way to update empire screen?
+    ui_update_nations_info = true;
   }
 }
 
@@ -1331,8 +1351,8 @@ function handle_unit_short_info(packet)
   handle_unit_packet_common(packet);
   /* Update active tabs affected by this info */
   var active_tab = $("#tabs").tabs("option", "active"); 
-  if (active_tab == TAB_EMPIRE) {  
-    empire_screen_updater.update();  // TEST:is this the right way to update empire screen?
+  if (active_tab == TAB_EMPIRE) {
+    ui_update_nations_info = true;
   }
 }
 

@@ -132,8 +132,12 @@ function update_nation_screen()
     var their_cb = !observer ? players[player_id].diplstates[client.conn.playing['playerno']]['has_reason_to_cancel'] : 0;  
     var contact_time=0;
     if (!observer && client.conn.playing != null && diplstates[player_id] != null && player_id != client.conn.playing['playerno']) {
-      contact_time = pplayer.diplstates[client.conn.playing.playerno].contact_turns_left; //set this here because it needs the same 'if'
-      
+      /* Former way: we checked the other player's contact turns with us instead of ours with them; yet we are not always privvy
+         to that and don't get real-time updates for that...
+      contact_time = pplayer.diplstates[client.conn.playing.playerno].contact_turns_left; */
+      /* Current way: check our own contact turns with the player instead of theirs with us: */
+      contact_time = players[client.conn.playing.playerno].diplstates[player_id].contact_turns_left;
+
       var pact_time = !observer ? pplayer.diplstates[client.conn.playing.playerno].turns_left : 0;
       var dstate = get_diplstate_text(diplstates[player_id]);
       if (dstate == "None") dstate = "<span style='font-size:1%; color:rgba(0,0,0,0);'>+</span>" + dstate; // sorting hack
