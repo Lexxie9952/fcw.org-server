@@ -22,7 +22,9 @@
    handle_processing_finished() is called. These global vars keep track
    whether certain UI data will get a refresh on the next
    handle_processing_finished() call which 'thaws' things for a UI update: */  
-var ui_update_nations_info = false;   
+var ui_update_nations_info = false; // Nations tab and Empire tab (for now)
+var ui_update_cities_info = false;  // Cities tab
+
 //
 var DEBUG_LOG_PACKETS = false;    // verbose packet logging
 var DEBUG_SHORT_PACKETS = false;  // show terse packet log
@@ -275,18 +277,23 @@ function handle_processing_started(packet)
 function handle_processing_finished(packet)
 {
   client_frozen = false;
+  update_ui_after_thaw();
+}
+
+/* Called after "thaw" or "processing_finished", to process queued UI 
+   updates (prevents refreshing UI more times than needed.) */
+function update_ui_after_thaw() {
   if (ui_update_nations_info) {
     ui_update_nations_info = false;
-
     /* Update relevant active tabs with altered players/nations info: */
     var active_tab = $("#tabs").tabs("option", "active"); 
-
-    if (active_tab == TAB_EMPIRE) {  
-      empire_screen_updater.update();
-    }
-    else if (active_tab = TAB_NATIONS) {
-      update_nation_screen();
-    }
+    if (active_tab == TAB_EMPIRE) empire_screen_updater.update();
+    else if (active_tab = TAB_NATIONS) update_nation_screen();
+  }
+  if (ui_update_cities_info) {
+    ui_update_cities_info = false;
+    var active_tab = $("#tabs").tabs("option", "active"); 
+    if (active_tab == TAB_CITIES) city_screen_updater.update();
   }
 }
 
@@ -298,6 +305,7 @@ function handle_freeze_hint(packet)
 function handle_thaw_hint(packet)
 {
   client_frozen = false;
+  update_ui_after_thaw();
 }
 
 /* 100% */
@@ -766,7 +774,7 @@ function handle_web_city_info_addition(packet)
   bulbs_output_updater.update();
   var active_tab = $("#tabs").tabs("option", "active"); 
   if (active_tab == TAB_CITIES) {
-    city_screen_updater.update();
+    ui_update_cities_info = true;
   } else if (active_tab == TAB_EMPIRE) {  
     ui_update_nations_info = true;
   }
@@ -793,7 +801,7 @@ function handle_city_short_info(packet)
   bulbs_output_updater.update();
   var active_tab = $("#tabs").tabs("option", "active"); 
   if (active_tab == TAB_CITIES) {
-    city_screen_updater.update();
+    ui_update_cities_info = true;
   } else if (active_tab == TAB_EMPIRE) {  
     ui_update_nations_info = true;
   }
@@ -1946,6 +1954,7 @@ function handle_freeze_client(packet)
 function handle_thaw_client(packet)
 {
   client_frozen = false;
+  update_ui_after_thaw();
 }
 
 function handle_spaceship_info(packet)
