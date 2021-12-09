@@ -2376,6 +2376,9 @@ function handle_player_diplstate(packet)
     contact_turns_left: packet['contact_turns_left'],
     has_reason_to_cancel: packet['has_reason_to_cancel']
   };
+
+  // Update Nations tab with incoming changed state (if it's active)
+  ui_update_nations_info = true;
 }
 
 /**************************************************************************
