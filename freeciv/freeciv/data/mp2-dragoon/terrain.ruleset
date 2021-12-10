@@ -2113,7 +2113,7 @@ reqs           =
       "TerrainClass",  "Land",       "Local",     TRUE
       "Terrain",       "Mountains",  "Local",     FALSE
       "Terrain",       "Swamp",      "Local",     FALSE
-; commented out for testing ***********      "Building",      "Great Wall"  "Player",    TRUE
+      "Building",      "Great Wall", "Player",    TRUE
       "TerrainClass",  "Land",       "CAdjacent", TRUE
       "UnitFlag",      "CanRoad",    "Local",     TRUE
       "CityTile",      "Center",     "Local",     FALSE
@@ -2129,22 +2129,21 @@ reqs           =
       "DiplRel",       "Peace",      "Local",     FALSE
       "DiplRel",       "Armistice",  "Local",     FALSE
       "DiplRel",       "Cease-fire", "Local",     FALSE
-; commented out for testing ***********
-;      "Tech",          "Machine Tools", "World",  FALSE
+      "Tech",          "Machine Tools", "World",  FALSE
     }
 build_time     = 2
-removal_time   = 12
+removal_time   = 8
 conflicts      = "Fortress", "Naval Base", "Castle", "Bunker", "Airbase", "River", "Canal", "Waterway"
 defense_bonus  = 0
 native_to      = "Land", "LandNoKill", "LandAirSea", "LandRoad"
 flags          = "NativeTile"
 helptext          = _("\
-Walls can be built on land not held by a foreign nation. Walls can’t be built\
- on Mountains, Swamp, Rivers. Except for Forts, Walls also can’t be built on a\
- tile with a Base. \n\
-Allied units who fortify on your Walls get a double-fortify-bonus of 2.25x. \n\ 
-Non-allied land units lose all moves when entering or exiting a tile occupied by\
- your Walls. Also, their attack and defense strength suffers a -33% penalty. \n\
+If you own the Great Wall, Walls can be built on land not held by a foreign
+ nation. Walls can’t be built on Mountains, Swamp, Rivers, or Bases. \n\n\
+ Domestic units who fortify on your Walls get a doubled fortify-bonus of 2.25x. \n\ 
+ Foreign units caught on Walls with no move points are considered vulnerable from\
+ climbing and scaling, and suffer a -50% defense penalty. Non-allied land units\
+ lose all moves when entering or exiting a tile occupied by Walls.\
 ")
 
 [extra_canal]
@@ -2899,6 +2898,13 @@ flags          = "NoAggressive"
 ;                           if this flag is not used:
 ;                              move_cost will be that of the destination road: 
 ;                              i.e., asymmetric move_cost for A-to-B and B-to-A
+;  - "ReverseRestrictInfra"= The move cost of this road is only triggered when 
+;                            RestrictInfra is active for a unit. That is, the move cost
+;                            for this road is only incurred by unfriendly invader units.
+;                            This flag allows you to create "terrain obstacle" extras that 
+;                            slow enemy movement (including IGTER units) when the extra
+;                            is encountered by an unfriendly unit on non-allied foreign
+;                            territory.  
 
 ; */ <-- avoid gettext warnings
 
@@ -2911,8 +2917,7 @@ trade_incr     = 1
 food_bonus     = 0
 shield_bonus   = 0
 trade_bonus    = 0
-integrates     = "Quay", "Sea Bridge", "Maglev", "Quay​",  ; "Quay"+0-width space = quay on city
-                 "Walls" ; causes ReverseRestrictInfra IntegrateCostUp effect: i.e., lose all moves exiting/leaving
+integrates     = "Quay", "Sea Bridge", "Maglev", "Quay​"  ; "Quay"+0-width space = quay on city
 compat_special = "Road"
 flags          = "UnrestrictedInfra"
 
@@ -2949,7 +2954,7 @@ trade_incr     = 0
 food_bonus     = 0
 shield_bonus   = 50
 trade_bonus    = 0
-integrates     = "Sea Bridge", "Maglev", "Walls" ; causes ReverseRestrictInfra IntegrateCostUp effect: i.e., lose all moves exiting/leaving
+integrates     = "Sea Bridge", "Maglev"
 compat_special = "Railroad"
 
 [road_maglev]
@@ -2969,7 +2974,7 @@ move_cost      = 3
 move_mode      = "Cardinal"
 trade_incr_const = 1
 compat_special = "River"
-integrates     = "Canal", "Waterway", "Walls" ; causes ReverseRestrictInfra IntegrateCostUp effect: i.e., lose all moves exiting/leaving
+integrates     = "Canal", "Waterway"
 flags          = "River", "UnrestrictedInfra"
 
 [road_sea_bridge]
@@ -2990,19 +2995,19 @@ trade_incr     = 0
 food_bonus     = 0
 shield_bonus   = 0
 trade_bonus    = 0
-integrates     = "Road", "Railroad", "River", "Canal", "Waterway"
-flags          = "IntegrateCostUp"; "ReverseRestrictInfra" (allied units ignore presence, non-allied pay move_cost)
+;integrates     = "Road", "Railroad", "River", "Canal", "Waterway"
+flags          = "IntegrateCostUp", "ReverseRestrictInfra" ;(allied units ignore move cost, non-allied pay move_cost)
 
 [road_canal]
 extra             = "Canal"
 move_cost         = 9
 move_mode         = "Cardinal"
-integrates        = "River", "Waterway", "Walls" ; causes ReverseRestrictInfra IntegrateCostUp effect: i.e., lose all moves exiting/leaving
+integrates        = "River", "Waterway"
 compat_special    = "None"
 
 [road_waterway]
 extra             = "Waterway"
 move_cost         = 9
 move_mode         = "Cardinal"
-integrates        = "River", "Canal", "Walls" ; causes ReverseRestrictInfra IntegrateCostUp effect: i.e., lose all moves exiting/leaving
+integrates        = "River", "Canal"
 compat_special    = "None"

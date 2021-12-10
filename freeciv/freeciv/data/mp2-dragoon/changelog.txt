@@ -220,7 +220,15 @@ who must migrate to decent starting position.
 37. Boats 8hp - Triremes and Warriors can beat them; similar
    to what was done with Workers/Tribesmen.
 ==============================================================
-38. 
+38. Terrain Walls are available to be made for any nation 
+ who owns The Great Wall. To build them you must select 
+ Tile Target with the (D)o command. Features: non-allied 
+ units lose all moves when entering or exiting a tile with
+ walls. Domestic units get a free fortify bonus on walls,
+ which stacks with real fortification. Foreign units who 
+ are caught on walls with no move points left get a -50%
+ defense penalty. Can't be built on Mountains, Rivers, Bases.
+ Be careful, pillage time is 4 turns. 
 ==============================================================
 
 

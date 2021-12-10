@@ -777,6 +777,27 @@ reqs    =
       "Activity", "Fortified", "Local"
     }
 
+[effect_free_fortify_on_walls]
+type    = "Fortify_Defense_Bonus"
+value   = 50
+reqs    =
+    { "type",      "name",           "range"
+      "Extra",     "Walls",          "Local"
+      "UnitState", "OnDomesticTile", "Local" ;TODO: Bring in ability to check DiplRel on tile and change to Alliance
+    }
+
+;Enemies who moved onto walls and lost all moves are considered as scaling
+;and messing around, and get -50% penalty.
+[effect_climbing_enemy_walls]
+type    = "Fortify_Defense_Bonus"
+value   = -50
+reqs    =
+    { "type", "name", "range", "present"
+      "Extra", "Walls", "Local", TRUE
+      "UnitState", "OnDomesticTile", "Local", FALSE ;;TODO: Bring in ability to check DiplRel on tile and change to Alliance
+      "MinMoveFrags", "1", "Local", FALSE
+    }
+
 [effect_city_fortified]
 type    = "Fortify_Defense_Bonus"
 value   = 50
@@ -1911,16 +1932,24 @@ value   = 1
 reqs	=
     { "type",          "name",      "range", "present"
       "Gov",           "Democracy", "Player", TRUE
-      "MinForeignPct", "9",         "City",   FALSE
     }
 [effect_rapture_rate_democracy_foreigners]
-type    = "Rapture_Grow"
+type    = "Rapture_Rate_Pm"
 value   = 500  ; 50%
 reqs	=
     { "type",          "name",      "range", "present"
       "Gov",           "Democracy", "Player", TRUE
-      "MinForeignPct", "9",         "City",   TRUE
+      "MinForeignPct", "20",         "City",  TRUE
     }
+[effect_rapture_rate_democracy_foreigners2]
+type    = "Rapture_Rate_Pm"
+value   = -250  ; 500 - 250 = 25%
+reqs	=
+    { "type",          "name",      "range", "present"
+      "Gov",           "Democracy", "Player", TRUE
+      "MinForeignPct", "33",         "City",   TRUE
+    }
+
 [effect_rapture_grow_theocracy]
 type    = "Rapture_Grow"
 value   = 1
