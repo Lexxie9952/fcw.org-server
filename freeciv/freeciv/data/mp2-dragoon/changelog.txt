@@ -175,11 +175,15 @@ Multirole Fighter, upgrades Escort Fighter
    it at different rates; which allows finer balancing of 
    the govs to make them more usable and interesting.
 
-Cons.Monarchy - Raptures cities not founded by you 
-   1 out of 4 turns until they have no foreigners, 
-   at which point it becomes 3 out of 5 turns.
+Cn.Monarchy - Non-original cities rapture at 25% 
+   Non-original cities with no foreigners rapture at 60%
 
-Democracy - Cities with 10%+ foreigners rapture at 50%
+Republic - Always raptures
+           <Foreign rapture at 80%>
+
+Democracy - Cities with 30%+ foreigners rapture at 25% 
+            Cities with 20%+ foreigners rapture at 50%
+            Cities under 20% foreign rapture at 100%
 
 Communism - Cities rapture 2 out of 5 turns
 
@@ -202,9 +206,10 @@ size 2-8;
 Domestic city: only avail to Despo, Commie;
 15% foreign, must use (D)o command. size 1-8;
 ==============================================================
-35. Huts can now also give small bulb awards (1-5 bulbs).
-NOTE: tech tab will update your bulb count only if you 
-  visit that tab and click on your current research.
+35. Huts can now also give:
+  * Small bulb awards (1-5 bulbs).
+  * a Boat (if on a river)
+  * Goods (if discovered by a unit who can carry Goods)
 ==============================================================
 36. Nomadism / Early game balance bonuses 
 During the first 5 turns, each Settler gets 1 bulb/turn; this
@@ -212,9 +217,11 @@ represents the fact that nomads can learn things too, and
 causes less penalty for players in bad starting position 
 who must migrate to decent starting position.
 ==============================================================
-37. 
+37. Boats 8hp - Triremes and Warriors can beat them; similar
+   to what was done with Workers/Tribesmen.
 ==============================================================
-
+38. 
+==============================================================
 
 
 

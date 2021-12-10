@@ -90,11 +90,67 @@ function _deflua_hut_get_mercenaries(unit)
   if utype then
     notify.event(owner, unit.tile, E.HUT_MERC,
                  _("[`warriors`] A band of friendly mercenaries joins your cause."))
-    owner:create_unit(unit.tile, utype, 0, unit:get_homecity(), -1)
+    owner:create_unit(unit.tile, utype, 0, nil, -1)
     return true
-  else
+  end
+
+  return false
+end
+
+-- Get a boat from entering a hut on a river.
+function _deflua_hut_get_boat(unit)
+  if not unit.tile:has_extra("River") then
     return false
   end
+
+  local owner = unit.owner
+  local utype = find.unit_type('Goods')
+  local board = find.action('Transport Board')
+  local capital = nil
+
+  for c in owner:cities_iterate() do 
+    if c:has_building(find.building_type("Palace")) then
+      capital = c
+      break         
+    end
+  end
+
+  if owner:create_unit(unit.tile, find.unit_type("Boat"), 0, capital, -1) then
+    notify.event(owner, unit.tile, E.HUT_GOLD,
+                _("[`boat`] You found a boat!"))
+    return true
+  end
+
+  return false
+end
+
+-- Get Goods from entering a hut.
+function _deflua_hut_get_goods(unit)
+  local owner = unit.owner
+  local utype = find.unit_type('Goods')
+  local board = find.action('Transport Board')
+  local capital = nil
+
+  for c in owner:cities_iterate() do 
+    if c:has_building(find.building_type("Palace")) then
+      capital = c
+      break         
+    end
+  end
+
+  -- if there is a capital set home city to it (otherwise nil=no_home)
+  if edit.create_unit_full(owner, unit.tile, utype, 0, capital, 1, 1, unit) then
+    notify.event(owner, unit.tile, E.HUT_GOLD,
+                  _("[`goods`] You found a stash of exotic goods."))
+    return true
+  end
+
+  -- What a shame, can't get Goods... possible consolation to get a Boat instead
+  if unit.tile:has_extra("River") then
+    return _deflua_hut_get_boat(unit)
+  end
+
+  return false
 end
 
 -- Get new city from hut, or settlers (nomads) if terrain is poor.
@@ -149,7 +205,7 @@ end
 
 -- Randomly choose a hut event
 function _deflua_hut_enter_callback(unit)
-  local chance = random(0, 9)
+  local chance = random(0, 11)
   local alive = true
 
   if chance == 0 or chance == 1 then
@@ -167,10 +223,22 @@ function _deflua_hut_enter_callback(unit)
   elseif chance == 8 then
     _deflua_hut_get_bulbs(unit, 5)
   elseif chance == 9 then
-    if not _deflua_hut_get_mercenaries(unit) then
+    if unit.tile:has_extra("River") then
+      if not _deflua_hut_get_boat(unit) then
+        _deflua_hut_consolation_prize(unit)
+      end
+    else
       _deflua_hut_consolation_prize(unit)
     end
   elseif chance == 10 then
+    if not _deflua_hut_get_goods(unit) then
+      _deflua_hut_consolation_prize(unit)
+    end
+  elseif chance == 11 then
+    if not _deflua_hut_get_mercenaries(unit) then
+      _deflua_hut_consolation_prize(unit)
+    end
+  elseif chance == 12 then
     alive = _deflua_hut_get_barbarians(unit)
   end
 
