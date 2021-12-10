@@ -867,6 +867,33 @@ int tile_move_cost_ptrs(const struct civ_map *nmap,
 
   cost = tile_terrain(t2)->movement_cost * SINGLE_MOVE;
   ri = restrict_infra(pplayer, t1, t2);
+  bool rri_active = false; // if ReverseRestrictInfra is in effect
+
+  /* If ri is active, then rri on the source_tile or dest_tile may
+     trigger a movement penalty cost: */
+  if (ri) {
+    extra_type_list_iterate(pclass->cache.bonus_roads, pextra) {
+      bool src_has_road  = tile_has_extra(t1, pextra);
+      bool dest_has_road = tile_has_extra(t2, pextra);
+
+      if ( (src_has_road || dest_has_road)
+            && is_native_extra_to_uclass(pextra, pclass)) {
+
+        struct road_type *proad = extra_road_get(pextra);
+        bool rri = road_has_flag(proad, RF_REVERSE_RESTRICT_INFRA);
+
+        if (rri) {
+          rri_active |= rri;
+          if (dest_has_road || (src_has_road && road_has_flag(proad, RF_INTEGRATE_COST_UP))) {
+            if (cost < proad->move_cost) {
+              cost = proad->move_cost;
+            }
+          }
+        }
+      }
+    } extra_type_list_iterate_end;
+  }
+  if (rri_active) goto finish; /* skip extra processing and revoke IGTER */
 
   extra_type_list_iterate(pclass->cache.bonus_roads, pextra) {
     struct road_type *proad = extra_road_get(pextra);
@@ -931,6 +958,7 @@ int tile_move_cost_ptrs(const struct civ_map *nmap,
                   } cardinal_between_iterate_end;
                 }
                 break;
+              /* TODO: this code should never be reached. Remove it. */
               case RMM_FAST_ALWAYS:
                 fc_assert(proad->move_mode != RMM_FAST_ALWAYS); /* Already handled above */
                 cost = proad->move_cost;
@@ -951,6 +979,8 @@ int tile_move_cost_ptrs(const struct civ_map *nmap,
   if (utype_has_flag(punittype, UTYF_IGTER) && MOVE_COST_IGTER < cost) {
     cost = MOVE_COST_IGTER;
   }
+
+  finish:
 
   if (terrain_control.pythagorean_diagonal) {
     if (!cardinality_checked) {

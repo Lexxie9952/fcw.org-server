@@ -31,6 +31,11 @@ extern "C" {
 #define SPECENUM_VALUE3NAME N_("JumpTo")
 #define SPECENUM_VALUE4 RF_INTEGRATE_COST_UP
 #define SPECENUM_VALUE4NAME N_("IntegrateCostUp")
+/* Has the reverse effect of RestrictInfra: Allies don't pay this road's
+   move cost. (Used for obstacle road_extras with high mp meant to slow
+   enemy movement. [chevaux de frise,walls,ditches, etc.] */
+#define SPECENUM_VALUE5 RF_REVERSE_RESTRICT_INFRA
+#define SPECENUM_VALUE5NAME N_("ReverseRestrictInfra")
 #define SPECENUM_COUNT RF_COUNT
 #define SPECENUM_BITVECTOR bv_road_flags
 #include "specenum_gen.h"
