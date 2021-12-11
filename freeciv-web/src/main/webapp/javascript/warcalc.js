@@ -480,6 +480,8 @@ function warcalc_set_tooltips()
           $("#wca200").prop("title", bl+"Veteran-3 ('Elite')"+nbl+"AAA/Mobile SAM vs. Aircraft");
         }
         if (client_rules_flag[CRF_MP2_C]) {
+          $("#wc133").prop("title", "Swamp"+nbl+"Forest"+nbl+"Land/Heli in Fort vs. Land/Sea/Missile (not Armor)"+nbl+"Fighter over Fort/Fortress vs. Land/Sea/Missile (not Armor)"
+          +nbl+"Dive Bomber, Ground Strike Fighter vs. Anti-Air");
           $("#wc175").prop("title", bl+"Veteran-2 ('Hardened')");
           $("#wc150").prop("title", bl+"Veteran-1 ('Veteran')"+nbl+"Jungle"+nbl+"Land unit Fortified OR inside city"
           +nbl+"Helicopter vs. Foot or Mounted units"+nbl+"In city with Fortifications vs Land (not Ballistic)");
