@@ -188,6 +188,9 @@ module edit {
   void api_edit_player_add_history
     @ add_player_history(lua_State *L, Player *self, int amount);
 
+  void api_edit_city_give_food
+    @ give_food(lua_State *L, City *self, int amount);
+
   void api_edit_player_give_bulbs
     @ give_bulbs(lua_State *L, Player *self, int amount);
 }
@@ -334,6 +337,10 @@ end
 -- Server functions for City module
 function City:add_history(amount)
   edit.add_city_history(self, amount)
+end
+
+function City:give_food(amount)
+  edit.give_food(self, amount)
 end
 
 -- Server functions for Unit module

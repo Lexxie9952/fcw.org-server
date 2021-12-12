@@ -645,6 +645,18 @@ void api_edit_city_add_history(lua_State *L, City *pcity, int amount)
 }
 
 /*************************************************************************//**
+  Add food to city food_stock
+*****************************************************************************/
+void api_edit_city_give_food(lua_State *L, City *pcity, int amount)
+{
+  LUASCRIPT_CHECK_STATE(L);
+  LUASCRIPT_CHECK_SELF(L, pcity);
+
+  pcity->food_stock += amount;
+  send_city_info(pcity->owner, pcity);
+}
+
+/*************************************************************************//**
   Add history to a player
 *****************************************************************************/
 void api_edit_player_add_history(lua_State *L, Player *pplayer, int amount)
