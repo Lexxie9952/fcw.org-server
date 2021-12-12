@@ -614,6 +614,7 @@ function decode_user_hyperlinks(message)
 
       var freemoji_name = message.substring(message.indexOf("[`") + 2, message.indexOf("`]"));
       var replace_me = "[`"+freemoji_name+"`]";
+      freemoji_name = freemoji_name.replace("[","-").replace("]","-"); // replace [] with - in animal emoji names
 
       var element = html_emoji_from_universal(freemoji_name);
       message = message.replace( replace_me, (element) );
