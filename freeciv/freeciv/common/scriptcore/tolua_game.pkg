@@ -43,6 +43,7 @@ struct City {
   const char *name;
   Player *owner;
   Player *original;
+  int food_stock;
 
   const int id;
 };
