@@ -282,17 +282,26 @@ function _deflua_make_partisans_callback(city, loser, winner, reason)
     return
   end
 
+  local partisan_utype = 17
+  local partisan_name = "Partisans"
   local partisans = random(0, 1 + (city.size + 1) / 2) + 1
   if partisans > 8 then
     partisans = 8
   end
-  city.tile:place_partisans(loser, partisans, city:map_sq_radius())
+
+  if loser.government:rule_name() == "Theocracy" then
+    partisan_name = "Zealots"
+    partisan_utype = 16
+  end
+
+  city.tile:place_partisans(loser, partisans + (partisan_utype*256), city:map_sq_radius())
+
   partisan_spawns = partisan_spawns + 1
   if partisan_spawns < 5 then
     notify.event(loser, city.tile, E.CITY_LOST,
-    _("[`events/partisans`]<br>[`partisan`] The loss of %s inspires %d Partisans!"), city.name, partisans)
+    _("[`events/partisans`]<br>[`partisan`] The loss of %s inspires %d %s!"), city.name, partisans, partisan_name)
     notify.event(winner, city.tile, E.UNIT_WIN_ATT,
-    _("[`events/partisans`]<br>[`partisan`] The loss of %s inspires %d Partisans!"), city.name, partisans)
+    _("[`events/partisans`]<br>[`partisan`] The loss of %s inspires %d %s!"), city.name, partisans, partisan_name)
   end
 end
 

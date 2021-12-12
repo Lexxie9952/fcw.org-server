@@ -200,9 +200,9 @@ Nationalism - Foreign cities rapture 1 out of 3 turns
       partisan, awacs, spy plane, satellite
 =============================================================
 34. Destroy City - Massacre a city (gives global casus belli)
-Requires 2 units on til, actor must be capturer-type.
-Foreign city: Foreign: mustn't be Demo, Theo; city
-size 2-8; 
+Requires 2 units on tile, actor must be capturer-type.
+Foreign city: desroyer gov mustn't be Demo, Theo; 
+city size 2-8; 
 Domestic city: only avail to Despo, Commie;
 15% foreign, must use (D)o command. size 1-8;
 ==============================================================
@@ -230,6 +230,14 @@ who must migrate to decent starting position.
  defense penalty. Can't be built on Mountains, Rivers, Bases.
  Be careful, pillage time is 4 turns. 
 ==============================================================
+39. Theocracy spawns Zealots instead of Partisans 
+==============================================================
+40. Wild Animal hunting now gives food (for edible types).
+/set animals >0
+==============================================================
+41.
+==============================================================
+42.
 
 
 

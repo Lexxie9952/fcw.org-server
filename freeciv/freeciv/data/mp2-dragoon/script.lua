@@ -246,9 +246,16 @@ end
 
 signal.connect('turn_begin', 'turn_callback')
 
+-- Currently this is only used for calculating bounty from hunt kills:
 function unit_lost_callback(unit, loser, reason)
-  num_owners = 0
-  owner = ""
+  local num_owners = 0
+  local owner = ""
+  local killed_utype_name = unit.utype:rule_name()
+  local fur_name = "furs"
+  local gold = 2
+  local food = 0
+  local culture = 1
+
   if reason == "killed" then
     nation = loser.nation:name_translation()
     if nation == "Animal Kingdom" then
@@ -265,14 +272,89 @@ function unit_lost_callback(unit, loser, reason)
       end
     end
 
+    -- Killed an animal:
     if num_owners == 1 then
-      gold = 3
-      culture = 1
-      edit.change_gold(owner, gold)
+      -- remove [] from name of animal 
+      killed_utype_name = killed_utype_name:sub(2, #killed_utype_name - 1) 
+
+      -- Hunt reward values:
+      if killed_utype_name == "Wolf" then
+        gold = 1
+      elseif killed_utype_name == "Leopard" then
+        gold = 3
+      elseif killed_utype_name == "Tiger" then
+        gold = 3
+      elseif killed_utype_name == "Lion" then
+        food = 1
+      elseif killed_utype_name == "Bear" then
+        food = 1
+        gold = 3
+        fur_name = "hides"
+      elseif killed_utype_name == "Crocodile" then
+        food = 2
+        gold = 3
+        fur_name = "skins"
+      elseif killed_utype_name == "Hippo" then
+        food = 5
+        fur_name = "tusks"
+      elseif killed_utype_name == "Rhino" then
+        gold = 3
+        food = 3
+        fur_name = "ivory"
+      elseif killed_utype_name == "Polar Bear" then
+        gold = 4
+      elseif killed_utype_name == "Giant Squid" then
+        food = 5
+        fur_name = "ink"
+      else
+        notify.player(owner,"%s false", killed_utype_name)
+      end
+
+      -- If food was obtained then find nearest city that collects it:
+      if food > 0 then
+        nearest_city = nil
+        nc_dist_sq = 0
+
+        for c in owner:cities_iterate() do
+          if nearest_city == nil then
+            nearest_city = c
+            local nc_dx = math.abs(unit.tile.x - c.tile.x)
+            local nc_dy = math.abs(unit.tile.y - c.tile.y)
+            nc_dist_sq = nc_dx * nc_dx + nc_dy * nc_dy
+          end
+          local dx = math.abs(unit.tile.x - c.tile.x)
+          local dy = math.abs(unit.tile.y - c.tile.y)
+          local c_dist_sq = dx * dx + dy * dy
+          if c_dist_sq < nc_dist_sq then
+            nearest_city = c
+            nc_dist_sq = c_dist_sq
+          end
+        end
+
+      end
+
+      -- culture award
       edit.add_player_history(owner, 1)
-      if owner:is_human() then
-        notify.player(owner,
-                    "Wild animal killed, furs and meats are worth %d gold", gold)
+
+      if gold > 0 or food > 0 then
+        edit.change_gold(owner, gold)
+        
+        if nearest_city then
+          nearest_city:give_food(food)
+        else
+          food = 0
+        end
+
+        if owner:is_human() then
+          if food > 0 then 
+            notify.event(owner, unit.tile, E.UNIT_WIN_ATT,
+            _("%s gets %d meat from the %s hunt, and %d gold from %s!"), 
+               nearest_city.name, food, killed_utype_name, gold, fur_name)
+          else
+            notify.event(owner, unit.tile, E.UNIT_WIN_ATT,
+            _("The %s hunt gives %d gold from %s!"), killed_utype_name, gold, fur_name)
+          end
+        end
       end
     end
   end
