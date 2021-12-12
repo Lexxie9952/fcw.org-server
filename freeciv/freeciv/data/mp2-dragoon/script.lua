@@ -249,12 +249,12 @@ signal.connect('turn_begin', 'turn_callback')
 -- Currently this is only used for calculating bounty from hunt kills:
 function unit_lost_callback(unit, loser, reason)
   local num_owners = 0
-  local owner = ""
+  local owner = nil
   local killed_utype_name = unit.utype:rule_name()
   local fur_name = "furs"
   local gold = 2
   local food = 0
-  local culture = 1
+  local culture = 0
 
   if reason == "killed" then
     nation = loser.nation:name_translation()
@@ -286,6 +286,7 @@ function unit_lost_callback(unit, loser, reason)
         gold = 3
       elseif killed_utype_name == "Lion" then
         food = 1
+        culture = 1
       elseif killed_utype_name == "Bear" then
         food = 1
         gold = 3
@@ -305,6 +306,7 @@ function unit_lost_callback(unit, loser, reason)
         gold = 4
       elseif killed_utype_name == "Giant Squid" then
         food = 5
+        culture = 1
         fur_name = "ink"
       else
         notify.player(owner,"%s false", killed_utype_name)
@@ -314,27 +316,21 @@ function unit_lost_callback(unit, loser, reason)
       if food > 0 then
         nearest_city = nil
         nc_dist_sq = 0
-
         for c in owner:cities_iterate() do
           if nearest_city == nil then
             nearest_city = c
-            local nc_dx = math.abs(unit.tile.x - c.tile.x)
-            local nc_dy = math.abs(unit.tile.y - c.tile.y)
-            nc_dist_sq = nc_dx * nc_dx + nc_dy * nc_dy
+            nc_dist_sq = unit.tile:sq_distance(c.tile)
           end
-          local dx = math.abs(unit.tile.x - c.tile.x)
-          local dy = math.abs(unit.tile.y - c.tile.y)
-          local c_dist_sq = dx * dx + dy * dy
+          c_dist_sq = unit.tile:sq_distance(c.tile)
           if c_dist_sq < nc_dist_sq then
             nearest_city = c
             nc_dist_sq = c_dist_sq
           end
         end
-
       end
 
       -- culture award
-      edit.add_player_history(owner, 1)
+      edit.add_player_history(owner, culture)
 
       if gold > 0 or food > 0 then
         edit.change_gold(owner, gold)
