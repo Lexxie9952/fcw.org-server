@@ -26,3 +26,4 @@ cedd5f7a5af8a10445f01b09bd91794e0126101d 2021-07-04 09:41:02 Unchanged and compl
 PATCH https://osdn.net/projects/freeciv/ticket/42600 - 2021-09-22 . Couldn't find commit for it yet
 8ba9f30e04b06a162ffb7d9a487ca478080a443c 2021-11-27 ?        Lua: Add Player:give_bulbs() method; copied verbatim.
 91c7b0deb6db7af4e11bf5a446521aa3b58bd6e2 2021-07-02 ?        identity_number can go > 64k
+1673a1244ebd084fa288c66da661b36bfa70964e 2021-12-11	     Lua: Add government information to Player object
