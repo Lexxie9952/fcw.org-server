@@ -124,7 +124,7 @@ function tech_researched_handler(tech, player, how)
           notify.event(NIL, c.tile, E.TECH_GAIN,
           _("[`events/wildbeasts`]<br><font color=#ffff00>🐎 Travellers tell of the %s, who ride horses near %s! (%i,%i)</font>"),
           player.nation:plural_translation(), c.name, c.tile.x, c.tile.y )
-          notify.all( _("🐎 A tribe has learned to ride wild beasts near %s (%i,%i)"), c.name, c.tile.x, c.tile.y)          
+          notify.all( _("🐎 A tribe has learned to ride wild horses near %s (%i,%i)"), c.name, c.tile.x, c.tile.y)          
         end
       end  
     end
@@ -256,6 +256,9 @@ function unit_lost_callback(unit, loser, reason)
   local food = 0
   local culture = 0
 
+  -- Heuristic to find who killed the animal. Look for owners of units on
+  -- adjacent tiles. If there is only one nationality for all the adjacent
+  -- unit(s), then we know 100% for sure who killed the animal.
   if reason == "killed" then
     nation = loser.nation:name_translation()
     if nation == "Animal Kingdom" then
@@ -272,7 +275,7 @@ function unit_lost_callback(unit, loser, reason)
       end
     end
 
-    -- Killed an animal:
+    -- We know for certain an animal was killed and who killed it:
     if num_owners == 1 then
       -- remove [] from name of animal 
       killed_utype_name = killed_utype_name:sub(2, #killed_utype_name - 1) 
@@ -409,7 +412,6 @@ function action_started_unit_city_callback(action, actor, city)
     if action.id == 39 then
       local dplayer = actor.owner
       local city_owner = city.owner
-      local action_id = action.id
       local do_partisan_message = 0
       local partisan_utype = 17
       local migrant_utype = 6
