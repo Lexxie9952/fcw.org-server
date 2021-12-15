@@ -3375,10 +3375,6 @@ names =
 
 ; RESTRICTINFRA ENABLED ONLY RESTRICTS ENEMY RAILS TO FUNCTION AS ROADS
 [settings]
-;      TO DISABLE SPACERACE INCLUDE THESE LINES BELOW:
-;      "endspaceship", DISABLED, FALSE 
-;      "victories", "ALLIED", FALSE
-
 set =
     { "name", "value", "lock"
       "mapsize", "PLAYER", FALSE
@@ -3409,7 +3405,7 @@ set =
       "diplgoldcost", 5, FALSE
       "diplbulbcost", 0, FALSE           ; tech trades are overridden by blueprint %; if blueprints are off, there is no tax on theft/conquest.
       "dispersion", 0, FALSE
-      "endspaceship", "ENABLED", FALSE 
+      "endspaceship", "DISABLED", FALSE  ; prevent game to instantly be over.
       "foggedborders", TRUE, FALSE
       "fixedlength", "ENABLED", TRUE      ; Turn done doesn't advance turn if there is a timeout.
       "freecost", 1, FALSE                ; 0 would get overridden by the 'blueprints' setting: 1 gives 99% of the bulbs of the tech awarded by Philosophy.
