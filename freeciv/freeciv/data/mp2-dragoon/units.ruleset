@@ -1515,7 +1515,7 @@ disembarks    = "LandRoad", "LandRail", "Helicopter"
 targets       = "Balloon", "Helicopter", "LandRail"
 flags         = "MultiSlot", "Shield2Gold", "IgTer", "IgZOC", "NoHome", "FootSoldier", "Capturer",
                 "CantReachAir", "Settlers", "CanHide", "WillNever", "SentryAlways"
-roles         = "DefendGood", "DefendGoodStartUnit", "Partisan", "BarbarianTech"
+roles         = "DefendGood", "Partisan", "BarbarianTech"
 helptext      = _("\
 Partisans are guerilla fighters who can use the terrain to their advantage. Like the Scout\
  that they upgrade, they can slip through ZOC and live off the land with no upkeep. \
