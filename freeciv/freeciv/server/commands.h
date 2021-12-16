@@ -101,6 +101,7 @@ enum command_id {
 
   /* undocumented */
   CMD_RFCSTYLE,
+  CMD_LABEL,
   CMD_SRVID,
 
   /* pseudo-commands: */

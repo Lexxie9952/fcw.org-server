@@ -732,6 +732,13 @@ static struct command commands[] = {
    N_("Switch server output between 'RFC-style' and normal style."), NULL, NULL,
    CMD_ECHO_ADMINS, VCF_NONE, 0
   },
+  {"label", ALLOW_HACK,
+   N_("label x y labelname\n"),
+   N_("Set a label on the map at the tile coordinates"),
+   N_("Requires cmdlevel 'hack'"),
+   NULL,
+   CMD_ECHO_ADMINS, VCF_NONE, 0
+  },
   {"serverid",	ALLOW_INFO,
    /* no translatable parameters */
    SYN_ORIG_("serverid"),

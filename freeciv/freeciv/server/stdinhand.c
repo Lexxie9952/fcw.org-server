@@ -170,6 +170,8 @@ static bool playernation_command(struct connection *caller,
                                  char *str, bool check);
 static bool alias_command(struct connection *caller,
                                  char *str, bool check);
+static bool label_command(struct connection *caller,
+                                 char *str, bool check);
 static bool mapimg_command(struct connection *caller, char *arg, bool check);
 static const char *mapimg_accessor(int i);
 
@@ -4485,6 +4487,59 @@ static bool alias_command(struct connection *caller, char *str, bool check)
 }
 
 /**********************************************************************//**
+  /alias command handler.
+**************************************************************************/
+static bool label_command(struct connection *caller, char *str, bool check)
+{
+  int ntokens = 0;
+  char *token[3];
+  struct tile *ptile = NULL;
+  int nat_x, nat_y;
+  bool succeeded = false;
+
+  ntokens = get_tokens(str, token, 3, TOKEN_DELIMITERS);
+
+  if (ntokens != 3) {
+    goto finish;
+  }
+
+  str_to_int(token[0], &nat_x);
+  str_to_int(token[1], &nat_y);
+  
+  ptile = native_pos_to_tile(&(wld.map), nat_x, nat_y);
+
+  if (!ptile) {
+    goto finish;
+  }
+
+  size_t len = strlen(token[2]);
+  if (len < 1 || len > MAX_LEN_CITYNAME) goto finish;
+
+  /* Replace _ with space: allows a whole string as one arg */
+  for (int i=0; i<len; i++) {
+    if (token[2][i] == (char)95) token[2][i] = (char)32;
+  }
+
+  if (tile_set_label(ptile, token[2])) {
+    send_tile_info(NULL, ptile, FALSE);
+    succeeded = true;
+  }
+
+finish:
+  if (succeeded) {
+    notify_conn(caller->self, NULL, E_SETTING, ftc_any,
+                        _("Tile <b>(%d,%d)</b> labelled as: '<b>%s</b>'."),
+                        nat_x, nat_y, token[2]);            
+  } else {
+    cmd_reply(CMD_LABEL, caller, C_SYNTAX,
+          _("Error.<br>Usage: <b>/label x y label_with_underscores_instead_of_spaces</b>"));
+  }
+
+  free_tokens(token, ntokens);
+  return succeeded;
+}
+
+/**********************************************************************//**
   Handle quit command
 **************************************************************************/
 static bool quit_game(struct connection *caller, bool check)
@@ -4834,6 +4889,8 @@ static bool handle_stdin_input_real(struct connection *caller, char *str,
     return playernation_command(caller, arg, check);
   case CMD_ALIAS:
     return alias_command(caller, arg, check);
+  case CMD_LABEL:
+    return label_command(caller, arg, check);
   case CMD_NUM:
   case CMD_UNRECOGNIZED:
   case CMD_AMBIGUOUS:
