@@ -4487,20 +4487,33 @@ static bool alias_command(struct connection *caller, char *str, bool check)
 }
 
 /**********************************************************************//**
-  /alias command handler.
+  /label command handler:  puts text label on a map tile
 **************************************************************************/
 static bool label_command(struct connection *caller, char *str, bool check)
 {
   int ntokens = 0;
-  char *token[3];
+  const int MAX_TOKEN_WORDS = 30;
+  char *token[MAX_TOKEN_WORDS];
+  char label[MAX_LEN_MAP_LABEL];
+  char temp[MAX_LEN_MAP_LABEL];
   struct tile *ptile = NULL;
   int nat_x, nat_y;
   bool succeeded = false;
 
-  ntokens = get_tokens(str, token, 3, TOKEN_DELIMITERS);
+  ntokens = get_tokens(str, token, MAX_TOKEN_WORDS, TOKEN_DELIMITERS);
 
-  if (ntokens != 3) {
+  if (ntokens < 3) {
     goto finish;
+  } 
+
+  fc_snprintf(label, sizeof(label), "%s", token[2]);
+
+  /* Concatenate args #(4...last) as extra words appended to the 3rd arg: */
+  if (ntokens > 3) {
+    for (int extra_arg=3; extra_arg<ntokens; extra_arg++) {
+      strcpy(temp, label);
+      fc_snprintf(label, sizeof(label), "%s %s", temp, token[extra_arg]);
+    }
   }
 
   str_to_int(token[0], &nat_x);
@@ -4512,15 +4525,10 @@ static bool label_command(struct connection *caller, char *str, bool check)
     goto finish;
   }
 
-  size_t len = strlen(token[2]);
-  if (len < 1 || len > MAX_LEN_CITYNAME) goto finish;
+  size_t len = strlen(label);
+  if (len < 1 || len >= MAX_LEN_MAP_LABEL) goto finish;
 
-  /* Replace _ with space: allows a whole string as one arg */
-  for (int i=0; i<len; i++) {
-    if (token[2][i] == (char)95) token[2][i] = (char)32;
-  }
-
-  if (tile_set_label(ptile, token[2])) {
+  if (tile_set_label(ptile, label)) {
     send_tile_info(NULL, ptile, FALSE);
     succeeded = true;
   }
@@ -4528,11 +4536,11 @@ static bool label_command(struct connection *caller, char *str, bool check)
 finish:
   if (succeeded) {
     notify_conn(caller->self, NULL, E_SETTING, ftc_any,
-                        _("Tile <b>(%d,%d)</b> labelled as: '<b>%s</b>'."),
-                        nat_x, nat_y, token[2]);            
+                _("Tile <b>(%d,%d)</b> labeled as: '<b>%s</b>'."),
+                nat_x, nat_y, label);            
   } else {
     cmd_reply(CMD_LABEL, caller, C_SYNTAX,
-          _("Error.<br>Usage: <b>/label x y label_with_underscores_instead_of_spaces</b>"));
+          _("Error.<br>Usage: <b>/label x,y <i>Label Description for Tile</i></b>"));
   }
 
   free_tokens(token, ntokens);
