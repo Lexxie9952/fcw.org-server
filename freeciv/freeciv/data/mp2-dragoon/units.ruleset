@@ -1981,7 +1981,8 @@ roles         = "AttackFastStartUnit", "BarbarianTech",
 helptext      = _("\
 Knights are heavily armored mounted warriors. They defend at D:3 against mounted units.\
  They defend at D:2 against foot units. They defend at D:1 against everything else.\
- Their noble status allows them to attack cities without population reduction.\
+ Their noble status allows them to attack cities without population reduction, and\
+ conquer a size 1 city without destroying it.\
 ")
 
 [unit_dragoons]
@@ -2491,8 +2492,9 @@ helptext      = _("\
 Balloons gather intel on potential battle areas. They have great vision and\
  are unreachable by units prior to Riflemen and Ironclads. They can stay in\
  the air for one Turn Change before landing in a City, Base, Quay, or transport\
- unit with cargo capacity of 4+. Balloons do not block units under\
- them from being attacked, and can’t fly over mountains.\
+ unit with cargo capacity of 4+. Balloons give sentry reports of nearby unit\
+ movements even when not on sentry. Balloons do not block units under them\
+ from being attacked, and can’t fly over mountains.\
 "), _("
 NOTE：GOTO disallows unit loss from lack of fuel. You\
  can override this by ordering moves to adjacent tiles.\
@@ -2547,7 +2549,8 @@ As new technology inspires the upgrade of Balloons, the Zeppelin appears.\
  for two Turn Changes before landing in a City, Quay, Fortress, Naval Base,\
  Airbase, or transport with 6+ capacity. \n\
 Zeppelins have great vision and are unreachable by units prior to Marines and\
- Destroyers. Zeppelins do not block units under them from being attacked. Unlike\
+ Destroyers. Zeppelins do not block units under them from being attacked. Zeppelins\
+ give sentry reports of nearby unit movements even when not on sentry. Unlike\
  Balloons, they can fly over Mountains.\
 "), _("
 NOTE：GOTO disallows unit loss from lack of fuel. You\
