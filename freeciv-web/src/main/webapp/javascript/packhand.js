@@ -531,6 +531,15 @@ function handle_chat_msg(packet)
     case E_CHAT_MSG_PRIVATE_RCVD:
       if (!suppress_event_sound()) play_sound("iphone1.ogg");
       break;
+    case E_ENEMY_DIPLOMAT_SABOTAGE:
+      play_sound("e_demolition.ogg");
+      break;
+    case E_MY_DIPLOMAT_SABOTAGE:
+      if (!suppress_event_sound()) {
+        if (message.includes("destroyed the City Walls")) play_sound("e_destroy_walls.ogg");
+        else play_sound("e_demolition.ogg");
+      } 
+      break;
     //case E_CHAT_MSG_PRIVATE_SENT:
     //  break;
   }
