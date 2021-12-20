@@ -1185,6 +1185,27 @@ static void begin_turn(bool is_new_turn)
   send_game_info(NULL);
 
   if (is_new_turn) {
+    /* Extra (dis)appearance is usually handled at end-turn. However, the end-turn
+       that happens after God creates the world is never called. Thus, random extras
+       that the ruleset wants to appear at game start, would go here:
+    if (game.info.turn == 1) {
+      extra_type_by_cause_iterate(EC_APPEARANCE, pextra) {
+        whole_map_iterate(&(wld.map), ptile) {
+          if (!tile_has_extra(ptile, pextra)
+              && fc_rand(10000) < pextra->appearance_chance
+              && can_extra_appear(pextra, ptile)) {
+
+            tile_extra_apply(ptile, pextra);
+            update_tile_knowledge(ptile);
+          }
+        } whole_map_iterate_end;
+      } extra_type_by_cause_iterate_end;
+    }
+    2021.December.20 - This is tested and works. One time game-start resource
+    appearance can be handled by putting appearance req as:
+    "MinYear", "-4000",    "World",   FALSE 
+    */
+
     script_server_signal_emit("turn_begin", game.info.turn, game.info.year);
     script_server_signal_emit("turn_started",
                               game.info.turn > 0 ? game.info.turn - 1

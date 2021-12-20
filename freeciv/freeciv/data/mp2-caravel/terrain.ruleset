@@ -2137,6 +2137,8 @@ appearance_chance = 1000   ; +10% if no adjacent resource
 appearance_reqs = 
     { "type",    "name",     "range",   "present"
       "Terrain", "Mountains","Local",    TRUE
+;if server places resources on T1 then the one line below replaces the two lines below it:
+;     "MinYear", "-4000",    "World",   FALSE
       "MinYear", "-4000",    "World",    TRUE
       "MinYear", "-3900",    "World",    FALSE
       "Extra",   "Gold",     "Adjacent", FALSE
@@ -2163,6 +2165,8 @@ appearance_chance = 1100   ; +11% if no adjacent resource
 appearance_reqs = 
     { "type",    "name",     "range",   "present"
       "Terrain", "Tundra",   "Local",    TRUE
+;if server places resources on T1 then the one line below replaces the two lines below it:
+;     "MinYear", "-4000",    "World",   FALSE
       "MinYear", "-4000",    "World",    TRUE
       "MinYear", "-3900",    "World",    FALSE
       "Extra",   "Elk",      "Adjacent", FALSE
@@ -2199,6 +2203,8 @@ appearance_reqs =
       "Terrain", "Swamp",    "Local",    FALSE
       "Terrain", "Plains",   "Local",    FALSE 
       "TerrainClass","Oceanic","Local",  FALSE
+;if server places resources on T1 then the one line below replaces the two lines below it:
+;     "MinYear", "-4000",    "World",   FALSE
       "MinYear", "-4000",    "World",    TRUE
       "MinYear", "-3900",    "World",    FALSE
       "Extra",   "Elk",      "Adjacent", FALSE
@@ -2264,6 +2270,8 @@ appearance_chance = 200   ; +2% if no adjacent resource
 appearance_reqs = 
     { "type",    "name",     "range",   "present"
       "Terrain", "Jungle",   "Local",    TRUE
+;if server places resources on T1 then the one line below replaces the two lines below it:
+;     "MinYear", "-4000",    "World",   FALSE
       "MinYear", "-4000",    "World",    TRUE
       "MinYear", "-3900",    "World",    FALSE
       "Extra",   "Rubber",   "Adjacent", FALSE
@@ -2291,6 +2299,8 @@ appearance_chance = 300   ; +3% if no adjacent resource
 appearance_reqs = 
     { "type",    "name",     "range",   "present"
       "Terrain", "Jungle",   "Local",    TRUE
+;if server places resources on T1 then the one line below replaces the two lines below it:
+;     "MinYear", "-4000",    "World",   FALSE
       "MinYear", "-4000",    "World",    TRUE
       "MinYear", "-3900",    "World",    FALSE
       "Extra",   "Rubber",   "Adjacent", FALSE
@@ -2344,6 +2354,8 @@ appearance_chance = 400   ; +4% if no adjacent resource
 appearance_reqs = 
     { "type",    "name",     "range",   "present"
       "Terrain", "Desert",   "Local",    TRUE
+;if server places resources on T1 then the one line below replaces the two lines below it:
+;     "MinYear", "-4000",    "World",   FALSE
       "MinYear", "-4000",    "World",    TRUE
       "MinYear", "-3900",    "World",    FALSE
       "Extra",   "Oasis",    "Adjacent", FALSE
@@ -2370,6 +2382,8 @@ appearance_chance = 2280   ; +22.8% if no adjacent resource
 appearance_reqs = 
     { "type",    "name",     "range",   "present"
       "Terrain", "Swamp",    "Local",    TRUE
+;if server places resources on T1 then the one line below replaces the two lines below it:
+;     "MinYear", "-4000",    "World",   FALSE
       "MinYear", "-4000",    "World",    TRUE
       "MinYear", "-3900",    "World",    FALSE
       "Extra",   "Spice",    "Adjacent", FALSE
@@ -2422,6 +2436,8 @@ appearance_reqs =
     { "type",    "name",     "range",   "present"
       "Terrain", "Glacier",   "Local",    TRUE
       "TerrainClass","Oceanic","Adjacent",TRUE
+;if server places resources on T1 then the one line below replaces the two lines below it:
+;     "MinYear", "-4000",    "World",   FALSE
       "MinYear", "-4000",    "World",    TRUE
       "MinYear", "-3900",    "World",    FALSE
       "Extra",   "Ivory",    "CAdjacent",FALSE
@@ -2458,6 +2474,8 @@ appearance_chance = 2420 ;+24.2% extra chance if non-adjacent extra
 appearance_reqs = 
     { "type",    "name",     "range",   "present"
       "Terrain", "Swamp",    "Local",    TRUE
+;if server places resources on T1 then the one line below replaces the two lines below it:
+;     "MinYear", "-4000",    "World",   FALSE
       "MinYear", "-4000",    "World",    TRUE
       "MinYear", "-3900",    "World",    FALSE
       "Extra",   "Spice",    "Adjacent", FALSE
@@ -2533,6 +2551,8 @@ appearance_chance = 700   ; +7% iff no adjacent rivers or resources i.e., far le
 appearance_reqs = 
     { "type",    "name",     "range",   "present"
       "Terrain", "Forest",   "Local",    TRUE
+;if server places resources on T1 then the one line below replaces the two lines below it:
+;     "MinYear", "-4000",    "World",   FALSE
       "MinYear", "-4000",    "World",    TRUE
       "MinYear", "-3900",    "World",    FALSE
       "Extra",   "Berries",  "Adjacent", FALSE
