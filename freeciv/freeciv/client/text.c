@@ -157,7 +157,6 @@ const char *popup_info_text(struct tile *ptile)
   char nation[2 * MAX_LEN_NAME + 32];
   int tile_x, tile_y, nat_x, nat_y;
   bool first;
-  int dummy;
 
   astr_clear(&str);
   index_to_map_pos(&tile_x, &tile_y, tile_index(ptile));
@@ -333,7 +332,7 @@ const char *popup_info_text(struct tile *ptile)
       astr_add_line(&str, _("Infrastructure: %s"), infratext);
     }
   }
-  activity_text = concat_tile_activity_text(ptile, &dummy);
+  activity_text = concat_tile_activity_text(ptile);
   if (strlen(activity_text) > 0) {
     astr_add_line(&str, _("Activity: %s"), activity_text);
   }

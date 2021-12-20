@@ -2697,7 +2697,6 @@ static const char *popup_info_text(struct tile *ptile, struct player *pplayer,
     vision_type = TILE_UNKNOWN;
   }
   const char *activity_text;
-  int dummy=0; // int * param needed to fetch turns remaining for work
 
   if (ptile == NULL || !ptile || !pplayer || pplayer == NULL) return NULL; 
   struct city *pcity = tile_city(ptile);
@@ -2863,7 +2862,7 @@ static const char *popup_info_text(struct tile *ptile, struct player *pplayer,
       astr_add_line(&str, _("Infrastructure: %s%s%s"), bold, infratext, unbold);
     }
   }
-  activity_text = concat_tile_activity_text(ptile, &dummy);
+  activity_text = concat_tile_activity_text(ptile);
   if (strlen(activity_text) > 0) {
     astr_add_line(&str, _("Activity: %s%s%s"), bold, activity_text, unbold);
   }

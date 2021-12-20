@@ -1289,7 +1289,7 @@ static void update_unit_activity(struct unit *punit, time_t now)
         } else {
           /* Only report activities that will be finished THIS TURN after the UWT. */
           int turns = 0;
-          const char *activity_text = concat_tile_activity_text(unit_tile(punit), &turns);
+          const char *activity_text = unit_tile_activity_text(punit, &turns);
           if (turns<=1) { /* UWT reports are only for activities that finish this turn */
             notify_player(punit->owner, unit_tile(punit), E_UNIT_ORDERS, ftc_server,
                     _("  ⏳ %s %s doing %s will finish in %s."),
