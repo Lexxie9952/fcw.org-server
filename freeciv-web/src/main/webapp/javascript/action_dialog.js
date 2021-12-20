@@ -647,11 +647,11 @@ function popup_action_selection(actor_unit, action_probabilities,
           }
         }
         if (action_id == ACTION_TRANSPORT_DEBOARD) {
-          if (!unit_can_do_unload(actor_unit))
+          if (!unit_can_deboard(actor_unit))
             continue;
         }
         if (action_id == ACTION_TRANSPORT_UNLOAD) {
-          if (!unit_can_do_unload(target_unit))
+          if (!unit_can_deboard(target_unit))
           continue;
         }
         //  if (action_id == ACTION_TRANSPORT_LOAD) {}  action not backported yet
