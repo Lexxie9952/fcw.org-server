@@ -5268,7 +5268,7 @@ uk_food       = 0
 uk_gold       = 0
 embarks       = "LandRoad", "Helicopter"    ; transport helicopter only
 disembarks    = "LandRoad", "Helicopter"
-flags         = "IgTer", "IgZOC", "NonMil", "HasNoZOC", "Capturable", "Expellable", "Cant_Pillage", "NoHome", "SentryAlways"
+flags         = "IgTer", "IgZOC", "NonMil", "HasNoZOC", "Capturable", "Expellable", "Cant_Pillage", "NoHome", "Horse", "SentryAlways"
 roles         = "Explorer", "ExplorerStartUnit"
 veteran_names =
   _("?vet_rank:green"),
