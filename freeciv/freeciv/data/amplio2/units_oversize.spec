@@ -6,27 +6,13 @@ options = "+Freeciv-spec-Devel-2015-Mar-25"
 
 [info]
 
-;84 x 48 images give an extra 20 horizontal pixels for "oversize" images.
+;84 x 60 images give an extra 20 horizontal pixels and 12 vertical pixels for "oversize" images.
 
 artists = "
-    Lexxie9952 [Lexxie]
-    Alex Mor [Alex]
-    Allard H.S. Höfelt [AHS]
-    Bebro [BB]
-    Captain Nemo [Nemo][MHN]
-    CapTVK [CT] <thomas@worldonline.nl>
-    Curt Sibling [CS]
-    Erwan [EW]
-    Fairline [GB]
-    GoPostal [GP]
-    Oprisan Sorin [Sor]
-    Tanelorn [T]
-    Paul Klein Lankhorst / GukGuk [GG]
-    Andrew ''Panda´´ Livings [APL]
-    Vodvakov
-    J. W. Bjerk / Eleazar <www.jwbjerk.com>
-    qwm
-    FiftyNine
+    Fairline     [GB]
+    Lexxie9952   [Lexxie]
+    Captain Nemo [Nemo]
+    Tanelorn     [T]
 "
 
 [file]
@@ -54,5 +40,5 @@ tiles = { "row", "column", "tag"
   1,  0, "u.zeppelin"                 ; Lexxie
   1,  1, "u.founder_o"                ; Lexxie
   1,  2, "u.phalanx_o"                ; Lexxie
-  1,  3, "u.pikemen_o"                ; Lexxie
+  1,  3, "u.pikemen_o"                ; Lexxie, Tanelorn
 }
