@@ -2057,7 +2057,7 @@ function update_unit_order_commands()
     // Deboard transport ----------------------------------------
     if (unit_can_do_action(punit, ACTION_TRANSPORT_DEBOARD)) {
       if (punit.transported_by) {
-        if (unit_can_do_unload(punit)) {
+        if (unit_can_deboard(punit)) {
           let ttitle = "Deboard from "+unit_type(units[punit.transported_by]).name
                      + " (shift-T)";
           unit_actions["unit_deboard"] = {name: ttitle};
@@ -2101,7 +2101,7 @@ function update_unit_order_commands()
         for (var r = 0; r < units_on_tile.length; r++) {
           let tunit = units_on_tile[r];
           if (tunit['transported'] && tunit['transported_by'] == punit.id) {
-            if (unit_can_do_unload(tunit)) {
+            if (unit_can_deboard(tunit)) {
               unloadable ++;
               tcandidate = tunit.id;
               if (utype_has_flag(unit_types[tunit['type']], UTYF_MARINES)) show_cargo = true;
@@ -4843,7 +4843,7 @@ function key_unit_deboard()
 
   for (var i = 0; i < funits.length; i++) {
     var punit = funits[i];
-    if (unit_can_do_unload(punit)) {
+    if (unit_can_deboard(punit)) {
       request_unit_do_action(ACTION_TRANSPORT_DEBOARD, punit['id'], punit['transported_by']);
       unloaded++;
       deboard_list += " [`" + freemoji_name_from_universal(unit_type(punit).name) + "`]";
@@ -4903,7 +4903,7 @@ function key_unit_unload()
 
         // If iterated tile unit is being transported by selected unit, then UNLOAD it!
         if (punit['transported'] && punit['transported_by'] == sunits[s]['id']) {
-          if (unit_can_do_unload(punit)) {
+          if (unit_can_deboard(punit)) {
             request_unit_do_action(ACTION_TRANSPORT_UNLOAD, punit['transported_by'], punit['id']);
             unloaded++;             // Total number of all unloadings from all selected units.
             this_unit_unloaded++;   // Number of unloadings just from this transport.
@@ -4917,7 +4917,7 @@ function key_unit_unload()
     // command, but we know what you wanted. So fine, we'll let you do it.  
     if (sunits[s] && this_unit_unloaded==0 && sunits[s]['transported']) { 
       //console.log("  sunit[i] is cargo)");
-      if (unit_can_do_unload(sunits[s])) {
+      if (unit_can_deboard(sunits[s])) {
         request_unit_do_action(ACTION_TRANSPORT_DEBOARD, sunits[s]['id'], sunits[s]['transported_by']);
         deboarded++;
         deboard_list += " [`" + freemoji_name_from_universal(unit_type(sunits[s]).name) + "`] "

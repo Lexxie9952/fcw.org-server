@@ -257,8 +257,7 @@ function unit_has_cargo_room(punit) {
 }
 
 /**************************************************************************
- * Return true if this unit can DEBOARD. TODO: needs renaming since
- * "unload" now means "transporter ejecting its cargo"
+ * Return true if this unit can DEBOARD.
  * 
  * This function is currently hard-coded as a placeholder for proper 
  * ruleset actionenablers, but has dual use as logic of when to show
@@ -266,7 +265,7 @@ function unit_has_cargo_room(punit) {
  * are in all rulesets AND 2) client can somehow test the actionenabler
  * legality itself.
 **************************************************************************/
-function unit_can_do_unload(punit)
+function unit_can_deboard(punit)
 {
   if (!punit) return false;
   var rules = ruleset_control['name'];
@@ -301,6 +300,10 @@ function unit_can_do_unload(punit)
   if (pclass == "Balloon") return true;
   if (pclass == "Helicopter") return true;
   if (pclass == "Missile") return true;
+
+  if (pclass.startsWith("Land")) {
+    if (is_ocean_tile(ptile)) return false;
+  }
 
   // currently decided it can unload in airbase also, below. 
   //if (pclass == "Bomb") return false; // only allowed in city, handled above.
@@ -363,7 +366,7 @@ function unit_could_possibly_load(punit, ptype, ttype, tclass)
 
     // Can "transport swap" where 1) unloading then loading again is legal anyway (cities, naval bases, quays) ...
     if (tile_city(ptile)) can_load = true;
-    else if (unit_can_do_unload(punit)) can_load = true; // Whenever unloading is already legal, don't force micro-managing an extra step to unload.
+    else if (unit_can_deboard(punit)) can_load = true; // When deboarding is legal, don't force micro-managing an extra step to unload.
     //commented out: e.g., Riflemen can't necessarily get off a Heli on a Quay.
     //else if (typeof EXTRA_NAVALBASE !== undefined && tile_has_extra(EXTRA_NAVALBASE)) can_load = true;
     //else if (client_rules_flag[CRF_EXTRA_QUAY] && tile_has_extra(EXTRA_QUAY)) can_load=true;    
