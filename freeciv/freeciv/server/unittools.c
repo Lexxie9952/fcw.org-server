@@ -1290,7 +1290,7 @@ static void update_unit_activity(struct unit *punit, time_t now)
           /* Only report activities that will be finished THIS TURN after the UWT. */
           int turns = 0;
           const char *activity_text = concat_tile_activity_text(unit_tile(punit), &turns);
-          if (turns<=1) { // e.g., no uwt report for Mine finished in 3 more turns.
+          if (turns<=1) { /* UWT reports are only for activities that finish this turn */
             notify_player(punit->owner, unit_tile(punit), E_UNIT_ORDERS, ftc_server,
                     _("  ⏳ %s %s doing %s will finish in %s."),
                     UNIT_EMOJI(punit), unit_link(punit), activity_text, buf);
@@ -1332,7 +1332,7 @@ void finish_unit_wait(struct unit *punit, int activity_count)
          sprintf(buf,"%s",_("converting"));
          break;
       case ACTIVITY_POLLUTION:
-         sprintf(buf,"%s",_("cleaning pollution"));
+         sprintf(buf,"%s",_("cleaning Pollution"));
          break;
       case ACTIVITY_MINE:
          sprintf(buf,"%s",_("mining"));
@@ -1341,19 +1341,23 @@ void finish_unit_wait(struct unit *punit, int activity_count)
          sprintf(buf,"%s",_("irrigating"));
          break;
       case ACTIVITY_PILLAGE:
-         sprintf(buf,"%s",_("pillaging"));
+         sprintf(buf,"%s %s",_("pillaging"),
+                 punit->activity_target ? extra_name_translation(punit->activity_target)
+                 : "");
          break;
       case ACTIVITY_TRANSFORM:
          sprintf(buf,"%s",_("transforming terrain"));
          break;
       case ACTIVITY_FALLOUT:
-         sprintf(buf,"%s",_("cleaning fallout"));
+         sprintf(buf,"%s",_("cleaning Fallout"));
          break;
       case ACTIVITY_BASE:
-         sprintf(buf,"%s",_("building base"));
+         sprintf(buf,"%s %s",_("building"),extra_name_translation(punit->activity_target));
          break;
-      case ACTIVITY_GEN_ROAD:   
-         sprintf(buf,"%s",_("making road"));
+      case ACTIVITY_GEN_ROAD:
+         if (punit->activity_target == extra_type_by_rule_name("River")) {
+           sprintf(buf,"%s",_("digging Well"));
+         } else sprintf(buf,"%s %s",_("building"),extra_name_translation(punit->activity_target));
          break;
       default:
          sprintf(buf,"%s",_("moving"));
