@@ -3857,13 +3857,18 @@ void handle_unit_change_activity(struct player *pplayer, int unit_id,
                                  int target_id)
 {
   struct extra_type *activity_target;
+  struct unit *punit = player_unit_by_number(pplayer, unit_id);
+  if (NULL == punit) {
+    /* Probably died or bribed. */
+    log_verbose("handle_unit_change_activity() invalid unit %d", unit_id);
+    return;
+  }
 
   if (activity == ACTIVITY_PILLAGE) {
-    struct unit *punit = player_unit_by_number(pplayer, unit_id);
     if (target_id >= ACTIVITY_IPILLAGE_OVERRIDE_FLAG) {  // & causes 'true' for target_id == -1
       // Client requests to override default iPillage with standard Pillage.
       target_id -= ACTIVITY_IPILLAGE_OVERRIDE_FLAG; // convert target_id to valid again.
-      if (punit) punit->server.iPillage_no = true;
+      punit->server.iPillage_no = true;
     } 
     else punit->server.iPillage_no = false;
   }
@@ -3880,9 +3885,10 @@ void handle_unit_change_activity(struct player *pplayer, int unit_id,
     struct unit *punit = player_unit_by_number(pplayer, unit_id);
     bool required = TRUE;
 
+    /* no longer necessary because checked at beginning
     if (punit == NULL) {
       return;
-    }
+    } */
 
     if (activity == ACTIVITY_IRRIGATE) {
       struct tile *ptile = unit_tile(punit);
