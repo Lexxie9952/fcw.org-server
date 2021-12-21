@@ -799,7 +799,7 @@ input[type='number'] {
 
 #nation_table {
   cursor: pointer;
-  padding-bottom: 400px;
+  padding-bottom: 5px;
 }
 
 #nations_button_div {
