@@ -325,11 +325,11 @@ function get_invalid_username_reason(username)
   if (username == "pbem") {
     return "not available";
   } 
-  /*else if (username.search(/^[a-z][a-z0-9]*$/g) != 0) {
-    return "invalid: only English letters and numbers are allowed, and must start with a letter";
-  } */
+  else if (!is_alphabetic(username.charAt(0))) {
+    return "invalid: the FIRST letter of a username must start with an unaccented Latin alphabetic letter";
+  }
   else if (username != alphanumeric_cleaner(username)) {
-    return "invalid: only alphabetic letters and numbers are allowed, and must start with a letter";  
+    return "invalid: only alphabetic letters, numbers, and nominal punctuation allowed; and must start with an unaccented Latin letter";  
   }
   else if (!check_text_with_banlist_exact(username)) {
     return "banned";

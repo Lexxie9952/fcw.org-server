@@ -242,6 +242,21 @@ function copy_string_to_clipboard (str) {
 }
 
 /**************************************************************************
+ Comes back false (null) if it is not an unaccented lower or upper case
+ character in the Latin alphabet.
+**************************************************************************/
+function is_alphabetic(text)
+{
+    var regex = /([\u0041-\u005A\u0061-\u007A]+)/g;
+    var result = text.match(regex);
+
+    // If there are illegal characters, they become separators and result comes back as an array
+    if (result == null || result.length>1) return null;
+
+    return result;
+}
+
+/**************************************************************************
  Returns original string iff it is composed of legal alphanumeric characters  
   and/or basic ASCII spaces and punctuation. Otherwise returns null.
   Accepts most accented characters, such as: é,ç,ä etc.
