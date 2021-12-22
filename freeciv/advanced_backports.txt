@@ -33,3 +33,4 @@ cedd5f7a5af8a10445f01b09bd91794e0126101d 2021-07-04 09:41:02 Unchanged and compl
    ...But it did not.
 aacd4ab7b4e3d28b67eb77eb243054a722fa13c8 2021-10-05 ?        Adjusted and complete    "Free rally point when the city is destroyed."
                                                              (also sets dest_tile to -1 flag; FCW uses dest_tile so client can report coordinates of rally points.)
+3799001c7630b926ea1cc1693c2958077f082ea8 2021-10-19          Unchanged and complete   "Clear rally point on city transfer"
