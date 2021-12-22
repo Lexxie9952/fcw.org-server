@@ -3915,7 +3915,10 @@ function update_city_screen()
     $("#city_table").html("You have no cities. Build new cities with the Settlers unit.");
   }
 
-  $('#cities_scroll').css("height", $(window).height() - 200);
+  /* old method : assume 200px above the element to safely fit it (works but doesn't use all real estate)
+  $('#cities_scroll').css("height", $(window).height() - 200); */
+  // New method: Try to calculate height to use all vertical real estate on the screen:
+  $('#cities_scroll').css("height", $(window).height() - $("#cities_scroll").offset().top-3); 
 
   $("#city_table").tablesorter({theme:"dark", sortList: sortList});
 

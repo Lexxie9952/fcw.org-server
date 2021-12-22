@@ -763,6 +763,10 @@ input[type='number'] {
   font-size: 18px;
 }
 
+.tablesorter-header {
+  z-index: 2;
+}
+
 .tablesorter-dark {
   font: 115% sans-serif;
   background: url("/images/bg-dark.jpg") repeat scroll 0 0 ; 
@@ -771,6 +775,8 @@ input[type='number'] {
 
 .tablesorter-dark thead th {
   font: 110% sans-serif;
+  position: sticky;
+  top: 0;
 }
 
 .tablesorter-dark thead td {
@@ -797,10 +803,20 @@ input[type='number'] {
   margin-right: -5px;
 }
 
+#nations_list {
+  overflow:auto;
+  height:99%;
+}
+
 #nation_table {
   cursor: pointer;
   padding-bottom: 5px;
 }
+/*
+#nation_table thead th {
+  position: sticky;
+  top: 0;
+}*/
 
 #nations_button_div {
   padding-bottom: 15px;
