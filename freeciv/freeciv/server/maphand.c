@@ -2911,29 +2911,44 @@ static const char *popup_info_text(struct tile *ptile, struct player *pplayer,
 
     // Info reserved for unit's owner: UWT and exact bribe cost:
     if (unit_owner(punit) == pplayer) {
-      /* Show bribe cost for own units and UWT for own units. */
-      ///////////UWT GOES HERE:
+      /* Show UWT for own units: */
       if (game.server.unitwaittime > 0) {
         if (punit->server.action_timestamp > 0) {
           int dt = time(NULL) - punit->server.action_timestamp;
           if (dt < game.server.unitwaittime) {
             char uwt_msg[64];
+            char time_release[64];
             format_time_duration(game.server.unitwaittime - dt, uwt_msg, sizeof(uwt_msg));
+
+            struct packet_timeout_info tinfo;
+            tinfo = game.tinfo;
+            tinfo.seconds_to_phasedone = game.tinfo.seconds_to_phasedone
+              - timer_read_seconds(game.server.phase_timer)
+              - game.server.additional_phase_seconds;
+            
+            /* This unit has non-expired UWT on this turn: */
             if (punit->server.action_turn == game.info.turn - 1) {
               astr_add_line(&str, _("Wait Time left this turn: %s%s%s"), bold, uwt_msg, unbold);
             }
-            else { // assume order was given this turn
-              astr_add_line(&str, _("Wait Time left this turn:   %sNone.%s"),bold,unbold);
-              astr_add_line(&str, _("Wait for next turn expires: %s%s%s"), bold, uwt_msg, unbold);
+            else { /* This unit's UWT comes from an order given this turn: */
+              if (game.server.unitwaittime - dt > tinfo.seconds_to_phasedone + 2 /* 0m2s cushion */) {
+                format_time_duration((game.server.unitwaittime - dt) - tinfo.seconds_to_phasedone, 
+                                     time_release, sizeof(time_release));
+                astr_add_line(&str, _("Wait Time next turn ends in %s%s%s"),
+                                       bold, uwt_msg, unbold);
+                astr_add_line(&str, _(" ... %s%s%s after turn change"),
+                                       bold, time_release, unbold);
+              }
             }
           }
         }
       }
+      /* Show bribe cost for own units: */
       astr_add_line(&str, _("Bribe cost: %s%d%s"), bold, unit_bribe_cost(punit, pplayer), unbold);
     } 
     else {
-         /* We can only give an (lower) boundary for units of other players. */
-         astr_add_line(&str, _("Estimated bribe cost: > %s%d%s"),
+         /* We can only give a (lower) boundary for units of other players. */
+         astr_add_line(&str, _("Estimated bribe cost: ≥ %s%d%s gold"),
                        bold, unit_bribe_cost(punit, pplayer), unbold);
     }
 
