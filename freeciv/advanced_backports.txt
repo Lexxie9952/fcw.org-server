@@ -27,3 +27,7 @@ PATCH https://osdn.net/projects/freeciv/ticket/42600 - 2021-09-22 . Couldn't fin
 8ba9f30e04b06a162ffb7d9a487ca478080a443c 2021-11-27 ?        Lua: Add Player:give_bulbs() method; copied verbatim.
 91c7b0deb6db7af4e11bf5a446521aa3b58bd6e2 2021-07-02 ?        identity_number can go > 64k
 1673a1244ebd084fa288c66da661b36bfa70964e 2021-12-11	     Lua: Add government information to Player object
+9cf91898a7fb1a1f048539ee15791d41d56070f3 2021-04-10 ?	     Unchanged and complete: Wait until city is in sane state before sending info packets
+   Hoped this would fix cityturn.c lines 967 and 1126 constantly throwing       1: in city_increase_size() [../../freeciv/server/cityturn.c::1126]: assertion 'pcity->server.needs_arrange == CNA_NOT' failed.
+   , but it did not.
+
