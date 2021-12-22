@@ -7117,12 +7117,12 @@ function popit_req(ptile, goto_only)
 
   if (ptile == null) return;
 
-  let supercow = is_supercow();
+  let GM_supercow = is_supercow() && observing;
   // copies tile string to clipboard for later pasting
   // %%% instead of %% puts it in a format that will send the message privately
   // to oneself
 
-  if (supercow) {
+  if (GM_supercow) {
     copy_string_to_clipboard("/label "+ptile.x+","+ptile.y+" ");
   } else {
     copy_string_to_clipboard("%%%"+"tile"+ptile['index']+"~%");
@@ -7136,7 +7136,7 @@ function popit_req(ptile, goto_only)
     return;
    // Let server give us tile info. OPTIONAL TODO: reconstruct some more based on our
    // own last known knowledge of the tile. Server only sends Terrain and that's it.
-  } else*/ if (supercow || (!goto_only && tile_get_known(ptile) == TILE_UNKNOWN)) {
+  } else*/ if (GM_supercow || (!goto_only && tile_get_known(ptile) == TILE_UNKNOWN)) {
     show_dialog_message("Tile info", "Location: x:" + ptile['x'] + " y:" + ptile['y']);
 
     return;
