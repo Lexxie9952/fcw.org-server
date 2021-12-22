@@ -115,11 +115,12 @@ class WSHandler(websocket.WebSocketHandler):
 
     def on_close(self):
         if hasattr(self, 'civcom') and self.civcom is not None:
-            self.civcom.stopped = True
-            self.civcom.close_connection()
-            if self.civcom.key in list(civcoms.keys()):
-                del civcoms[self.civcom.key]
+            mycivcom = self.civcom
             del(self.civcom)
+            mycivcom.stopped = True
+            mycivcom.close_connection()
+            if mycivcom.key in list(civcoms.keys()):
+                del civcoms[mycivcom.key]
             gc.collect()
 
     # Check user authentication
@@ -196,8 +197,8 @@ class WSHandler(websocket.WebSocketHandler):
             if (int(civserverport) < 5000):
                 return None
             civcom = CivCom(username, int(civserverport), key, self)
-            civcom.start()
             civcoms[key] = civcom
+            civcom.start()
 
             return civcom
         else:

@@ -59,6 +59,7 @@ class CivCom(Thread):
             self.send_error_to_client(
                 "Proxy unable to connect to civserver. Error: %s" %
                 (reason))
+            self.close_connection()
             return
 
         # send initial login packet to civserver
@@ -126,8 +127,13 @@ class CivCom(Thread):
                 "Server connection closed. Removing civcom thread for " +
                 self.username)
 
-        if (hasattr(self.civwebserver, "civcoms") and self.key in list(self.civwebserver.civcoms.keys())):
-            del self.civwebserver.civcoms[self.key]
+        # Flush buffers
+        self.send_packets_to_client()
+        self.send_packets_to_civserver()
+
+        if self.civwebserver is not None:
+            conn = self.civwebserver
+            conn.io_loop.add_callback(lambda: conn.close())
 
         if (self.socket is not None):
             self.socket.close()
@@ -154,7 +160,8 @@ class CivCom(Thread):
         packet = self.get_client_result_string()
         if (packet is not None and self.civwebserver is not None):
             # Calls the write_message callback on the next Tornado I/O loop iteration (thread safely).
-            self.civwebserver.io_loop.add_callback(lambda: self.civwebserver.write_message(packet))
+            conn = self.civwebserver
+            conn.io_loop.add_callback(lambda: conn.write_message(packet))
 
     def get_client_result_string(self):
         result = ""
