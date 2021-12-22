@@ -23,11 +23,13 @@ c67cb82f51ef5034cc361738ab8ae74946374262 2020-06-13 11:43:44 Unchanged and compl
 5f5aad1b8cc6d2fea720e260f8c47944b696f32e 2020-06-13 11:43:44 Unchanged and complete
 d8a54ddb6a5ac083c400411a3dd456267d0ac17f 2021-05-13          Adjusted, but complete
 cedd5f7a5af8a10445f01b09bd91794e0126101d 2021-07-04 09:41:02 Unchanged and complete
-PATCH https://osdn.net/projects/freeciv/ticket/42600 - 2021-09-22 . Couldn't find commit for it yet
-8ba9f30e04b06a162ffb7d9a487ca478080a443c 2021-11-27 ?        Lua: Add Player:give_bulbs() method; copied verbatim.
-91c7b0deb6db7af4e11bf5a446521aa3b58bd6e2 2021-07-02 ?        identity_number can go > 64k
-1673a1244ebd084fa288c66da661b36bfa70964e 2021-12-11	     Lua: Add government information to Player object
-9cf91898a7fb1a1f048539ee15791d41d56070f3 2021-04-10 ?	     Unchanged and complete: Wait until city is in sane state before sending info packets
-   Hoped this would fix cityturn.c lines 967 and 1126 constantly throwing       1: in city_increase_size() [../../freeciv/server/cityturn.c::1126]: assertion 'pcity->server.needs_arrange == CNA_NOT' failed.
-   , but it did not.
-
+487302f4292c25f781e28d1ca7ff8c6b1e108e54 2021-09-28          Unchanged and complete   "Allow moving CoastStrict unit to ocean city, or city in 1x1 island"
+8ba9f30e04b06a162ffb7d9a487ca478080a443c 2021-11-27          Unchanged and complete   "Lua: Add Player:give_bulbs() method"
+91c7b0deb6db7af4e11bf5a446521aa3b58bd6e2 2021-07-02          identity_number can go > 64k
+1673a1244ebd084fa288c66da661b36bfa70964e 2021-12-11	         Lua: Add government information to Player object
+9cf91898a7fb1a1f048539ee15791d41d56070f3 2021-04-10  	       Unchanged and complete: Wait until city is in sane state before sending info packets
+   Hoped this would fix cityturn.c lines 967 and 1126 constantly throwing
+   1: in city_increase_size() [../../freeciv/server/cityturn.c::1126]: assertion 'pcity->server.needs_arrange == CNA_NOT' failed.
+   ...But it did not.
+aacd4ab7b4e3d28b67eb77eb243054a722fa13c8 2021-10-05 ?        Adjusted and complete    "Free rally point when the city is destroyed."
+                                                             (also sets dest_tile to -1 flag; FCW uses dest_tile so client can report coordinates of rally points.)
