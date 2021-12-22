@@ -559,10 +559,10 @@ void fc_assert_fail(const char *file, const char *function, int line,
             message, args);
     va_end(args);
   }
-
+  /* Reduce gigabyte log files by about 33% by suppressing this line
   do_log(file, function, line, FALSE, level,
-         /* TRANS: No full stop after the URL, could cause confusion. */
          _("Please report this message at %s"), BUG_URL);
+  */
 
   if (0 <= fc_fatal_assertions) {
     /* Emit a signal. */
