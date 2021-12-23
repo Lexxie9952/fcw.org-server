@@ -145,10 +145,17 @@ table.terrain_chart td {
   overflow: hidden;
 }
 
+/*scrambled unit identifier*/
+.sc
+{
+  color: #c1d6fc;
+  vertical-align: middle;
+  font-size:70%;
+}
+
 #unit_text_details {
   float:left;
   width: 135px;
-
 }
 
 #end_game_turn_panel {
@@ -1519,15 +1526,6 @@ li.tech-both00::before { /*  we both have the tech and neither has blueprints */
   position: absolute;
   left: 1em;
 }
-
-
-.e_next_year {
-  border-top: 2px #555555 groove;
-  margin-top: 0.5em;
-  padding-bottom: 0.5em;
-}
-
-
 #chat_context_dialog {
   overflow-y: auto;
 }
@@ -1960,6 +1958,23 @@ input[type="email" i], #email {
   padding: 5px 0;
 }
 
+/* prevent game message area from having thick unused 60px margin between it and its scrollbar */
+.mCSB_container {
+  margin-right: 0px;
+}
+.mCSB_inside>.mCSB_container {
+  margin-right: 0px;
+}
+.mCSB_scrollTools .mCSB_draggerContainer {
+  margin-left: 0px;
+  margin-right: -12px;
+  padding: 0px;
+}
+.mCSB_dragger_bar {
+  width: 6px !important;
+  background: rgb(136,119,102) !important;
+}
+/**************************************************************************************************/
 #game_message_area {
   padding-top: 12px;
   padding-left: 0px;
@@ -2132,7 +2147,14 @@ input[type="email" i], #email {
   color: #f1f12f;
 }
 .e_next_year {
-  color: #d5d2d0;
+  color: #edc;
+  font-weight:bold;
+  border-top: 3px #876 double;
+  border-bottom: 1px #654 dashed;
+  margin-top: 1.2em;
+  margin-bottom: 0.5em;
+  text-align: center;
+  background: #1c1410;
 }
 .e_new_government {
   color: #ffffff;
@@ -2203,7 +2225,7 @@ input[type="email" i], #email {
   color: #f1efef;
 }
 .e_beginner_help {
-  font-size: 70%;
+  font-size: 80%;
   color: #ddcec4
 }
 .e_unit_illegal_action {
