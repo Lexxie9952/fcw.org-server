@@ -107,7 +107,7 @@ void global_warming(int effect)
 
   // It can take a while so notify first.
   notify_player(NULL, NULL, E_GLOBAL_ECO, ftc_server,
-                _("[`events/globalwarming`]<br>🌞 Global warming is occurring! "
+                _("[`events/globalwarming`]<br>[`sun2`] Global warming is occurring! "
                   "Coastlines are flooding. Hotter climate is "
                   "affecting vegetation."));
 
@@ -123,7 +123,7 @@ void nuclear_winter(int effect)
 {
   // It can take a while so notify first.                
   notify_player(NULL, NULL, E_GLOBAL_ECO, ftc_server,
-                _("[`events/nuclearwinter`]<br>⚠️ Nuclear winter is happening!<br>"
+                _("[`events/nuclearwinter`]<br>[`snow`] Nuclear winter is happening!<br>"
                   "Wetlands are drying. Ranges of plains and "
                   "Grassland may become tundra."));
 
@@ -312,14 +312,14 @@ void upgrade_all_city_extras(struct player *pplayer, bool discovery)
     if (discovery) {
       if (percent >= 75) {
         notify_player(pplayer, NULL, E_TECH_GAIN, ftc_server,
-                      _("💡 New hope sweeps like fire through the country as "
+                      _("[`bulb`] New hope sweeps like fire through the country as "
                         "the discovery of new infrastructure building technology "
                         "is announced."));
       }
     } else {
       if (percent >= 75) {
         notify_player(pplayer, NULL, E_TECH_GAIN, ftc_server,
-                      _("💡 The people are pleased to hear that your "
+                      _("[`bulb`] The people are pleased to hear that your "
                         "scientists finally know about new infrastructure building "
                         "technology."));
       }
@@ -327,11 +327,11 @@ void upgrade_all_city_extras(struct player *pplayer, bool discovery)
 
     if (multiple_types) {
       notify_player(pplayer, NULL, E_TECH_GAIN, ftc_server,
-                    _("💡 With new tech, Workers upgrade appropriate "
+                    _("[`bulb`] With new tech, Workers upgrade appropriate "
                       "cities with better infrastructure."));
     } else {
       notify_player(pplayer, NULL, E_TECH_GAIN, ftc_server,
-                    _("💡 With new tech, Workers upgrade appropriate "
+                    _("[`bulb`] With new tech, Workers upgrade appropriate "
                       "cities with %s."), extra_name_translation(upgradet));
     }
   }
@@ -1785,7 +1785,7 @@ static void check_units_single_tile(struct tile *ptile)
                     unit_rule_name(punit), TILE_XY(unit_tile(punit)));
         notify_player(unit_owner(punit), unit_tile(punit),
                       E_UNIT_LOST_MISC, ftc_server,
-                      _("⚠️ Disbanded your %s due to changing terrain."),
+                      _("[`warning`] Disbanded your %s due to changing terrain."),
                       unit_tile_link(punit));
         wipe_unit(punit, ULR_NONNATIVE_TERR, NULL);
       }

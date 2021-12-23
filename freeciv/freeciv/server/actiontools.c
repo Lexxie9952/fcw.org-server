@@ -121,7 +121,7 @@ void action_give_casus_belli_to_allies(struct player *offender,
         if (player_diplstate_get(ally, offender)->has_reason_to_cancel==0) {
               notify_player(ally, NULL,
                   E_DIPLOMATIC_INCIDENT, ftc_server,
-                  _("⚠️ The %s gave our %s allies casus belli. We now have "
+                  _("[`warning`] The %s gave our %s allies casus belli. We now have "
                     " casus belli also."),
                   nation_plural_for_player(offender),
                   nation_adjective_for_player(victim_player));
@@ -367,7 +367,7 @@ static void notify_actor_caught(struct player *receiver,
     notify_player(receiver, victim_tile,
                   E_DIPLOMATIC_INCIDENT, ftc_server,
                   /* TRANS: Suitcase Nuke ... Copenhagen */
-                  _("⚠️ You caused an incident "
+                  _("[`warning`] You caused an incident "
                     " trying to %s at %s"),
                   action_name_translation(paction),
                   victim_link);
@@ -377,7 +377,7 @@ static void notify_actor_caught(struct player *receiver,
     notify_player(receiver, victim_tile,
                   E_DIPLOMATIC_INCIDENT, ftc_server,
                   /* TRANS: Bribe Enemy Unit ... Danish */
-                  _("⚠️ You caused an incident "
+                  _("[`warning`] You caused an incident "
                     " trying to %s against the %s."),
                   action_name_translation(paction),
                   victim_link);
@@ -388,7 +388,7 @@ static void notify_actor_caught(struct player *receiver,
     notify_player(receiver, victim_tile,
                   E_DIPLOMATIC_INCIDENT, ftc_server,
                   /* TRANS: Explode Nuclear ... Danish */
-                  _("⚠️ You caused an incident "
+                  _("[`warning`] You caused an incident "
                     " trying to %s against the %s at"
                     "<font style='text-decoration: underline;' color='#1FDFFF'>"
                     "{%d,%d}</font>"),
@@ -429,7 +429,7 @@ static void notify_victim_caught(struct player *receiver,
     notify_player(receiver, victim_tile,
                   E_DIPLOMATIC_INCIDENT, ftc_server,
                   /* TRANS: Europeans ... Suitcase Nuke ... San Francisco */
-                  _("⚠️ The %s caused an incident trying to"
+                  _("[`warning`] The %s caused an incident trying to"
                     " %s at %s."),
                   nation_plural_for_player(offender),
                   action_name_translation(paction),
@@ -440,7 +440,7 @@ static void notify_victim_caught(struct player *receiver,
     notify_player(receiver, victim_tile,
                   E_DIPLOMATIC_INCIDENT, ftc_server,
                   /* TRANS: Europeans ... Bribe Enemy Unit ... Partisan */
-                  _("⚠️ The %s caused an incident trying to"
+                  _("[`warning`] The %s caused an incident trying to"
                     " %s to your %s."),
                   nation_plural_for_player(offender),
                   action_name_translation(paction),
@@ -452,7 +452,7 @@ static void notify_victim_caught(struct player *receiver,
     notify_player(receiver, victim_tile,
                   E_DIPLOMATIC_INCIDENT, ftc_server,
                   /* TRANS: Europeans ... Explode Nuclear ... (54, 26) */
-                  _("⚠️ The %s caused an incident trying to "
+                  _("[`warning`] The %s caused an incident trying to "
                     " %s at "
                     "<font style='text-decoration: underline;' color='#1FDFFF'>"
                     "{%d,%d}</font>"),
@@ -484,14 +484,14 @@ static void notify_global_caught(struct player *receiver,
     notify_player(receiver, victim_tile,
                   E_DIPLOMATIC_INCIDENT, ftc_server,
                   /* TRANS: Suitcase Nuke */
-                  _("⚠️ Getting caught trying to do %s gives "
+                  _("[`warning`] Getting caught trying to do %s gives "
                     "everyone casus belli against you."),
                   action_name_translation(paction));
   } else if (receiver == victim_player) {
     notify_player(receiver, victim_tile,
                   E_DIPLOMATIC_INCIDENT, ftc_server,
                   /* TRANS: Suitcase Nuke ... Europeans */
-                  _("👮‍♂️ Getting caught trying to do %s to you gives "
+                  _("[`earth`] Getting caught trying to do %s to you gives "
                     "everyone casus belli against the %s."),
                   action_name_translation(paction),
                   nation_plural_for_player(offender));
@@ -499,7 +499,7 @@ static void notify_global_caught(struct player *receiver,
     notify_player(receiver, victim_tile,
                   E_DIPLOMATIC_INCIDENT, ftc_server,
                   /* TRANS: Europeans ... Suitcase Nuke */
-                  _("👮‍♂️ You now have casus belli against the %s. "
+                  _("[`earth`] You now have casus belli against the %s. "
                     "They got caught trying to do %s."),
                   nation_plural_for_player(offender),
                   action_name_translation(paction));
@@ -507,7 +507,7 @@ static void notify_global_caught(struct player *receiver,
     notify_player(receiver, victim_tile,
                   E_DIPLOMATIC_INCIDENT, ftc_server,
                   /* TRANS: Europeans ... Suitcase Nuke ... Americans */
-                  _("👮‍♂️ You now have casus belli against the %s. "
+                  _("[`earth`] You now have casus belli against the %s. "
                     "They got caught trying to do %s to the %s."),
                   nation_plural_for_player(offender),
                   action_name_translation(paction),
@@ -559,7 +559,7 @@ static void notify_actor_success(struct player *receiver,
     /* Ugly hack for the lack of "Unit Move" */
     notify_player(receiver, victim_tile,
                   E_DIPLOMATIC_INCIDENT, ftc_server,
-                  _("⚠️ Invading %s territory has caused an incident."),
+                  _("[`warning`] Invading %s territory has caused an incident."),
                   nation_adjective_for_player(victim_player));
     return;
   }
@@ -570,7 +570,7 @@ static void notify_actor_success(struct player *receiver,
     notify_player(receiver, victim_tile,
                   E_DIPLOMATIC_INCIDENT, ftc_server,
                   /* TRANS: Suitcase Nuke ... San Francisco */
-                  _("⚠️ You caused an incident doing %s to the %s."),
+                  _("[`warning`] You caused an incident doing %s to the %s."),
                   action_name_translation(paction),
                   nation_adjective_for_player(victim_player));
     break;
@@ -579,7 +579,7 @@ static void notify_actor_success(struct player *receiver,
     notify_player(receiver, victim_tile,
                   E_DIPLOMATIC_INCIDENT, ftc_server,
                   /* TRAND: Bribe Enemy Unit ... American ... Partisan */
-                  _("⚠️ You caused an incident doing %s to the %s."),
+                  _("[`warning`] You caused an incident doing %s to the %s."),
                   action_name_translation(paction),
                   nation_adjective_for_player(victim_player));
     break;
@@ -589,7 +589,7 @@ static void notify_actor_success(struct player *receiver,
     notify_player(receiver, victim_tile,
                   E_DIPLOMATIC_INCIDENT, ftc_server,
                   /* TRANS: Explode Nuclear ... (54, 26) */
-                  _("⚠️ You caused an incident doing %s"
+                  _("[`warning`] You caused an incident doing %s"
                     " at <font style='text-decoration: underline;' color='#1FDFFF'>"
                     "{%d,%d}</font>."),
                     action_name_translation(paction), i_x, i_y);
@@ -627,7 +627,7 @@ static void notify_victim_success(struct player *receiver,
     /* Ugly hack for the lack of "Unit Move" */
     notify_player(receiver, victim_tile,
                   E_DIPLOMATIC_INCIDENT, ftc_server,
-                  _("⚠️ The %s invaded your territory, giving you casus belli."),
+                  _("[`warning`] The %s invaded your territory, giving you casus belli."),
                   nation_plural_for_player(offender));
     return;
   }
@@ -638,7 +638,7 @@ static void notify_victim_success(struct player *receiver,
     notify_player(receiver, victim_tile,
                   E_DIPLOMATIC_INCIDENT, ftc_server,
                   /* TRANS: Europeans ... Suitcase Nuke ... Copenhagen */
-                  _("⚠️ The %s caused an incident doing %s to %s!"),
+                  _("[`warning`] The %s caused an incident doing %s to %s!"),
                   nation_plural_for_player(offender),
                   action_name_translation(paction),
                   victim_link);
@@ -648,7 +648,7 @@ static void notify_victim_success(struct player *receiver,
     notify_player(receiver, victim_tile,
                   E_DIPLOMATIC_INCIDENT, ftc_server,
                   /* TRANS: Europeans ... Bribe Enemy Unit ... Partisan */
-                  _("⚠️ The %s caused an incident doing "
+                  _("[`warning`] The %s caused an incident doing "
                     "%s to %s!"),
                   nation_plural_for_player(offender),
                   action_name_translation(paction),
@@ -660,7 +660,7 @@ static void notify_victim_success(struct player *receiver,
     notify_player(receiver, victim_tile,
                   E_DIPLOMATIC_INCIDENT, ftc_server,
                   /* TRANS: Europeans ... Explode Nuclear ... (54, 26) */
-                  _("⚠️ The %s caused an incident doing %s"
+                  _("[`warning`] The %s caused an incident doing %s"
                     " at <font style='text-decoration: underline;' color='#1FDFFF'>"
                     "{%d,%d}</font>"),
                   nation_plural_for_player(offender),
@@ -691,7 +691,7 @@ static void notify_global_success(struct player *receiver,
       /* Ugly hack for the lack of "Unit Move" */
       notify_player(receiver, victim_tile,
                     E_DIPLOMATIC_INCIDENT, ftc_server,
-                    _("[`unitednations`]⚠️ Invading the %s gives the world casus belli against you!"),
+                    _("[`unitednations`][`warning`] Invading the %s gives the world casus belli against you!"),
                     nation_plural_for_player(victim_player));
       return;
     }
@@ -699,14 +699,14 @@ static void notify_global_success(struct player *receiver,
     notify_player(receiver, victim_tile,
                   E_DIPLOMATIC_INCIDENT, ftc_server,
                   /* TRANS: Suitcase Nuke */
-                  _("⚠️ Doing %s gives everyone casus belli against you."),
+                  _("[`warning`] Doing %s gives everyone casus belli against you."),
                   action_name_translation(paction));
   } else if (receiver == victim_player) {
     if (paction == NULL) {
     /* Ugly hack for the lack of "Unit Move" */
     notify_player(receiver, victim_tile,
                   E_DIPLOMATIC_INCIDENT, ftc_server,
-                  _("[`unitednations`]⚠️ The %s invasion of your territory gives the world casus belli against "
+                  _("[`unitednations`][`warning`] The %s invasion of your territory gives the world casus belli against "
                     "the %s!"), 
                   nation_adjective_for_player(offender),
                   nation_plural_for_player(offender));
@@ -715,7 +715,7 @@ static void notify_global_success(struct player *receiver,
     notify_player(receiver, victim_tile,
                   E_DIPLOMATIC_INCIDENT, ftc_server,
                   /* TRANS: Suitcase Nuke ... Europeans */
-                  _("👮‍♂️ Doing %s to you gives everyone casus belli against "
+                  _("[`earth`] Doing %s to you gives everyone casus belli against "
                     "the %s."),
                   action_name_translation(paction),
                   nation_plural_for_player(offender));
@@ -724,7 +724,7 @@ static void notify_global_success(struct player *receiver,
       /* Ugly hack for the lack of "Unit Move" */
       notify_player(receiver, victim_tile,
                     E_DIPLOMATIC_INCIDENT, ftc_server,
-                    _("[`unitednations`]⚠️ You now have casus belli against the %s. "
+                    _("[`unitednations`][`warning`] You now have casus belli against the %s. "
                       "They invaded."),
                     nation_plural_for_player(offender));
       return;
@@ -732,7 +732,7 @@ static void notify_global_success(struct player *receiver,
     notify_player(receiver, victim_tile,
                   E_DIPLOMATIC_INCIDENT, ftc_server,
                   /* TRANS: Europeans ... Suitcase Nuke */
-                  _("👮‍♂️ You now have casus belli against the %s. "
+                  _("[`earth`] You now have casus belli against the %s. "
                     "They did %s."),
                   nation_plural_for_player(offender),
                   action_name_translation(paction));
@@ -741,7 +741,7 @@ static void notify_global_success(struct player *receiver,
       /* Ugly hack for the lack of "Unit Move" */
       notify_player(receiver, victim_tile,
                     E_DIPLOMATIC_INCIDENT, ftc_server,
-                    _("[`unitednations`]⚠️ All nations have casus belli against the %s. "
+                    _("[`unitednations`][`warning`] All nations have casus belli against the %s. "
                       "Their invasion of the %s violated their treaty!"),
                     nation_plural_for_player(offender),
                     nation_plural_for_player(victim_player));
@@ -750,7 +750,7 @@ static void notify_global_success(struct player *receiver,
     notify_player(receiver, victim_tile,
                   E_DIPLOMATIC_INCIDENT, ftc_server,
                   /* TRANS: Europeans ... Suitcase Nuke ... Americans */
-                  _("👮‍♂️ You now have casus belli against the %s. "
+                  _("[`earth`] You now have casus belli against the %s. "
                     "They did %s to the %s."),
                   nation_plural_for_player(offender),
                   action_name_translation(paction),

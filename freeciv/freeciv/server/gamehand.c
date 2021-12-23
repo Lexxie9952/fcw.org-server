@@ -867,7 +867,7 @@ void send_year_to_clients(void)
 
   /* Hmm, clients could add this themselves based on above packet? */
   notify_conn(game.est_connections, NULL, E_NEXT_YEAR, ftc_any,
-              _("✨✨Year: %s✨✨"), calendar_text());
+              _(" [`sparkle`] [`sparkle`] Year: %s [`sparkle`] [`sparkle`] "), calendar_text());
 
   // Pax Dei counter is something players should know:
   if (game.server.pax_dei_set && game.server.pax_dei_counter>0) {
@@ -876,7 +876,7 @@ void send_year_to_clients(void)
                   _("[`paxdei`] %d turns remain in the era of Pax Dei."),
                   game.server.pax_dei_counter);
     } else notify_player(NULL, NULL, E_DIPLOMACY, ftc_server,
-                  _("⚠️[`paxdei`] This is the final turn of Pax Dei.⚠️"));
+                  _("[`warning`][`paxdei`] This is the final turn of Pax Dei.[`warning`]"));
   }
 }
 

@@ -163,7 +163,7 @@ void kill_player(struct player *pplayer)
 
   if (!is_barbarian(pplayer)) {
     notify_player(NULL, NULL, E_DESTROYED, ftc_server,
-                  _("💀 The %s are no more!"),
+                  _("[`skull`] The %s are no more!"),
                   nation_plural_for_player(pplayer));
   }
 
@@ -789,7 +789,7 @@ void handle_diplomacy_cancel_pact(struct player *pplayer,
     }
     remove_shared_vision(pplayer, pplayer2);
     notify_player(pplayer2, NULL, E_TREATY_BROKEN, ftc_server,
-                  _("⚠️ %s no longer gives us shared vision!"),
+                  _("[`warning`] %s no longer gives us shared vision!"),
                   player_name(pplayer));
     return;
   }
@@ -803,7 +803,7 @@ void handle_diplomacy_cancel_pact(struct player *pplayer,
   if (diplcheck == DIPL_SENATE_BLOCKING) {
     if (game.server.pax_dei_set && game.server.pax_dei_counter > 0) {
       notify_player(NULL, NULL, E_TREATY_BROKEN, ftc_server,
-                    _("❗[`paxdei`]📜 The Pax Dei movement declares global shame on the "
+                    _("[`redexclamation`][`paxdei`][`scroll`] The Pax Dei movement declares global shame on the "
                     "%s for their unjustified request to %s %s. Pax Dei rejects their "
                     "unrighteous petition and calls for confession!"),
                     nation_plural_for_player(pplayer),
@@ -812,7 +812,7 @@ void handle_diplomacy_cancel_pact(struct player *pplayer,
     }
     else {
       notify_player(pplayer, NULL, E_TREATY_BROKEN, ftc_server,
-                    _("❗📜 The senate will not allow you to break treaty "
+                    _("[`redexclamation`][`scroll`] The senate will not allow you to break treaty "
                       "with the %s. You must either dissolve the senate "
                       "or wait until a more timely moment."),
                     nation_plural_for_player(pplayer2));
@@ -870,7 +870,7 @@ void handle_diplomacy_cancel_pact(struct player *pplayer,
     if (ds_plrplr2->has_reason_to_cancel > 0) {
       if (game.server.pax_dei_set && game.server.pax_dei_counter > 0) {
           notify_player(NULL, NULL, E_TREATY_BROKEN, ftc_server,
-                        _("✅[`paxdei`]📜 The Pax Dei movement declares the "
+                        _("[`check`][`paxdei`][`scroll`] The Pax Dei movement declares the "
                           "%s request to %s as righteous. They were shamefully provoked by "
                           "the sinful deeds of the %s!"),
                           nation_adjective_for_player(pplayer),
@@ -879,7 +879,7 @@ void handle_diplomacy_cancel_pact(struct player *pplayer,
       }
       else {
           notify_player(pplayer, NULL, E_TREATY_BROKEN, ftc_server,
-                        _("✅📜 The senate passes your bill because of the "
+                        _("[`check`][`scroll`] The senate passes your bill because of the "
                           "constant provocations of the %s."),
                           nation_plural_for_player(pplayer2));
       }
@@ -887,14 +887,14 @@ void handle_diplomacy_cancel_pact(struct player *pplayer,
     else if (new_type == DS_WAR) {
       if (game.server.pax_dei_set && game.server.pax_dei_counter > 0) {
           notify_player(NULL, NULL, E_TREATY_BROKEN, ftc_server,
-                        _("⚠️[`paxdei`]📜 The Pax Dei movement declares global shame on the %s "
+                        _("[`warning`][`paxdei`][`scroll`] The Pax Dei movement declares global shame on the %s "
                           "for breaking their treaty to declare war on the %s. The %s must confess their crimes!"),
                           nation_adjective_for_player(pplayer),
                           nation_plural_for_player(pplayer2),
                           nation_adjective_for_player(pplayer));
       }
       notify_player(pplayer, NULL, E_TREATY_BROKEN, ftc_server,
-                _("✅📜 Your senate refuses to break treaty with the %s, "
+                _("[`check`][`scroll`] Your senate refuses to break treaty with the %s, "
                   "but you have no trouble finding a new senate."),
                 nation_plural_for_player(pplayer2));
     }
@@ -918,14 +918,14 @@ void handle_diplomacy_cancel_pact(struct player *pplayer,
   sync_cities();
 
   notify_player(pplayer, NULL, E_TREATY_BROKEN, ftc_server,
-                _("📜[`%s`] The diplomatic state between the %s "
+                _("[`scroll`][`%s`] The diplomatic state between the %s "
                   "and the %s is now %s."),
                 diplstate_type_translated_name(new_type),
                 nation_plural_for_player(pplayer),
                 nation_plural_for_player(pplayer2),
                 diplstate_type_translated_name(new_type));
   notify_player(pplayer2, NULL, E_TREATY_BROKEN, ftc_server,
-                _("⚠️📜 %s canceled the diplomatic agreement! "
+                _("[`warning`][`scroll`] %s canceled the diplomatic agreement! "
                   "The diplomatic state between the %s and the %s "
                   "is now %s."),
                 player_name(pplayer),
@@ -943,7 +943,7 @@ void handle_diplomacy_cancel_pact(struct player *pplayer,
          * to the aggressor. This prevents in-alliance wars, which are not
          * permitted. */
         notify_player(other, NULL, E_TREATY_BROKEN, ftc_server,
-                      _("⚠️📜 %s has attacked your ally %s! "
+                      _("[`warning`][`scroll`] %s has attacked your ally %s! "
                         "You cancel your alliance to the aggressor."),
                       player_name(pplayer),
                       player_name(pplayer2));
@@ -956,7 +956,7 @@ void handle_diplomacy_cancel_pact(struct player *pplayer,
          * alliance with him. We trust our team mate and break alliance
          * with the attacked player */
         notify_player(other, NULL, E_TREATY_BROKEN, ftc_server,
-                      _("⚠️📜 Your team-mate %s declared war on %s. "
+                      _("[`warning`][`scroll`] Your team-mate %s declared war on %s. "
                         "You are obligated to cancel alliance with %s."),
                       player_name(pplayer),
                       nation_plural_for_player(pplayer2),
@@ -2968,11 +2968,11 @@ struct player *civil_war(struct player *pplayer)
               nation_rule_name(nation_of_player(pplayer)),
               nation_rule_name(nation_of_player(cplayer)));
   notify_player(pplayer, NULL, E_CIVIL_WAR, ftc_server,
-                _("⚠️ Your nation is thrust into civil war."));
+                _("[`warning`] Your nation is thrust into civil war."));
 
   notify_player(pplayer, NULL, E_FIRST_CONTACT, ftc_server,
                 /* TRANS: <leader> ... the Poles. */
-                _("&#8203;[`flag/%s`][`raisedfist`] %s is the rebellious leader of the %s."),
+                _("[`flag/%s`][`raisedfist`] %s is the rebellious leader of the %s."),
                 nation_of_player(cplayer)->flag_graphic_str,
                 player_name(cplayer),        /* [`small_flags/%s:nation_of_player(cplayer)%/_web`] */
                 nation_plural_for_player(cplayer));
@@ -2995,7 +2995,7 @@ struct player *civil_war(struct player *pplayer)
                     nation_rule_name(nation_of_player(cplayer)));
         notify_player(pplayer, pcity->tile, E_CITY_LOST, ftc_server,
                       /* TRANS: <city> ... the Poles. */
-                      _("&#8203;[`raisedfist`] %s declares allegiance to the %s."),
+                      _("[`raisedfist`] %s declares allegiance to the %s."),
                       city_link(pcity),
                       nation_plural_for_player(cplayer));
         script_server_signal_emit("city_transferred", pcity, pplayer,
@@ -3020,9 +3020,9 @@ struct player *civil_war(struct player *pplayer)
 
   notify_player(NULL, NULL, E_CIVIL_WAR, ftc_server,
                 /* TRANS: ... Danes ... Poles ... <7> cities. */
-                PL_("[`flag/%s`][`events/civilwar`]<br>⚔️ Civil war partitions the %s;"
+                PL_("[`flag/%s`][`events/civilwar`]<br>[`swords`] Civil war partitions the %s;"
                     " the %s now hold %d city [`flag/%s`]",
-                    "[`flag/%s`][`events/civilwar`]<br>⚔️ Civil war partitions the %s;"
+                    "[`flag/%s`][`events/civilwar`]<br>[`swords`] Civil war partitions the %s;"
                     " the %s now hold %d cities [`flag/%s`]",
                     i),
                 nation_of_player(pplayer)->flag_graphic_str,

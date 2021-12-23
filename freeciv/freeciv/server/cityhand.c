@@ -351,13 +351,13 @@ void really_handle_city_buy(struct player *pplayer, struct city *pcity)
 
   if (VUT_UTYPE == pcity->production.kind && pcity->anarchy != 0 && pcity->hangry != 0) {
     notify_player(pplayer, pcity->tile, E_BAD_COMMAND, ftc_server,
-                  _("😡 Can't buy units when city is in disorder."));
+                  _("[`mad`] Can't buy units when city is in disorder."));
     return;
   }
   if (game.server.fulldisorder && VUT_IMPROVEMENT == pcity->production.kind 
       && pcity->anarchy != 0 && pcity->hangry != 0) {
     notify_player(pplayer, pcity->tile, E_BAD_COMMAND, ftc_server,
-                  _("😡 Can't buy buildings when city is in disorder."));
+                  _("[`mad`] Can't buy buildings when city is in disorder."));
     return;
   }
 
@@ -604,7 +604,7 @@ void handle_city_manager(struct player *pplayer, int city_id, bool enabled,
         send_city_info(pplayer, pcity);
         notify_player(city_owner(pcity), city_tile(pcity),
               E_CITY_CMA_RELEASE, ftc_server,
-              _("🔹 Retired the Governor in %s."),
+              _("[`bluediamond`] Retired the Governor in %s."),
               city_link(pcity));
       }
       return;
@@ -620,7 +620,7 @@ void handle_city_manager(struct player *pplayer, int city_id, bool enabled,
     if (pcity->cm_parameter) { // notify only if successful.
       notify_player(city_owner(pcity), city_tile(pcity),
                 E_CITY_CMA_RELEASE, ftc_server,
-                _("🔹 Governor successfully assigned to %s."),
+                _("[`bluediamond`] Governor successfully assigned to %s."),
                 city_link(pcity));
     }
     return;
@@ -658,7 +658,7 @@ void handle_city_manager(struct player *pplayer, int city_id, bool enabled,
           send_city_info(pplayer, pcity);
           notify_player(city_owner(pcity), city_tile(pcity),
                       E_CITY_CMA_RELEASE, ftc_server,
-                      _("🔹 %s, which has no Governor, has accepted your interim orders."),
+                      _("[`bluediamond`] %s, which has no Governor, has accepted your interim orders."),
                       city_link(pcity));
           return;
         }
@@ -668,7 +668,7 @@ void handle_city_manager(struct player *pplayer, int city_id, bool enabled,
           send_city_info(pplayer, pcity);
           notify_player(city_owner(pcity), city_tile(pcity),
                       E_CITY_CMA_RELEASE, ftc_server,
-                      _("🔹 (Interim Orders for %s were not attainable.)"),
+                      _("[`bluediamond`] (Interim Orders for %s were not attainable.)"),
                       city_link(pcity));
           return;
         }
@@ -685,7 +685,7 @@ void handle_city_manager(struct player *pplayer, int city_id, bool enabled,
           send_city_info(pplayer, pcity);
           notify_player(city_owner(pcity), city_tile(pcity),
                       E_CITY_CMA_RELEASE, ftc_server,
-                      _("🔹 Interim orders accepted by the Governor of %s."),
+                      _("[`bluediamond`] Interim orders accepted by the Governor of %s."),
                       city_link(pcity));
           return;
         }
@@ -704,7 +704,7 @@ void handle_city_manager(struct player *pplayer, int city_id, bool enabled,
             send_city_info(pplayer, pcity);
             notify_player(city_owner(pcity), city_tile(pcity),
                       E_CITY_CMA_RELEASE, ftc_server,
-                      _("🔹 Failed interim orders means the old Governor of %s was re-hired."),
+                      _("[`bluediamond`] Failed interim orders means the old Governor of %s was re-hired."),
                       city_link(pcity));
             return;
         }
