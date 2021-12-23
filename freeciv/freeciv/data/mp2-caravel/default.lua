@@ -47,16 +47,16 @@ function _deflua_hut_get_tech(unit)
 
   if tech then
     notify.event(owner, unit.tile, E.HUT_TECH,
-                 _("💡 You found %s in ancient scrolls of wisdom."),
+                 _("[`bulb`] You found %s in ancient scrolls of wisdom."),
                  tech:name_translation())
     notify.research(owner, false, E.TECH_GAIN,
                  -- /* TRANS: One player got tech for the whole team. */
-                 _("💡 The %s found %s in ancient scrolls of wisdom for you."),
+                 _("[`bulb`] The %s found %s in ancient scrolls of wisdom for you."),
                  owner.nation:plural_translation(),
                  tech:name_translation())
     notify.research_embassies(owner, E.TECH_EMBASSY,
                  -- /* TRANS: first %s is leader or team name */
-                 _("💡 The %s have acquired %s from ancient scrolls of wisdom."),
+                 _("[`bulb`] The %s have acquired %s from ancient scrolls of wisdom."),
                  owner:research_name_translation(),
                  tech:name_translation())
     return true
@@ -128,10 +128,10 @@ function _deflua_hut_get_barbarians(unit)
   local alive = tile:unleash_barbarians()
   if alive then
     notify.event(owner, tile, E.HUT_BARB,
-                  _("⚠️ You have unleashed a horde of barbarians!"));
+                  _("[`warning`] You have unleashed a horde of barbarians!"));
   else
     notify.event(owner, tile, E.HUT_BARB_KILLED,
-                  _("⚠️ Your %s has been killed by barbarians!"),
+                  _("[`warning`] Your %s has been killed by barbarians!"),
                   utype:name_translation());
   end
   return alive
