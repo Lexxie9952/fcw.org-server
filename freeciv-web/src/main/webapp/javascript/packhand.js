@@ -519,6 +519,17 @@ function handle_chat_msg(packet)
 
   /* Event interceptions... used to trigger client processing */
   switch (event) {
+    case E_CITY_LOST:
+      /* play_sound(soundset["e_conquer"] 
+         OFF FOR NOW: rethink how historical logged messages of conquest cause PTSD that a conquest is a new one in R/T
+      */
+      break;
+    case E_UNIT_WIN_ATT:
+      if (!suppress_event_sound()) {
+        if (message.includes("liberated")) play_sound(soundset["e_liberate"]);  
+        else if (message.includes("looting")) play_sound(soundset["e_victor"]);
+      }
+      break;
     case E_UNIT_ACTION_TARGET_HOSTILE:
       handle_iPillage_event(message, tile_id);
       break;
@@ -567,19 +578,7 @@ function handle_chat_msg(packet)
 
   packet['message'] = message;
   add_chatbox_text(packet);
-
-  // Do sounds for special messages
-  //console.log("Event type = "+packet['event']);
-  // TODO: these can now go into event interceptor above by looking at event class instead of here.
-  if (packet['event']==1 || packet['event']==77) /* 1==E_CITY_LOST, 77==E_UNIT_WIN_ATT, there are in events.h and are the two
-  types of event that come back for cities being conquered by someone.*/
-  {
-    if (message.includes(" your lootings accumulate to ")) play_sound(soundset["e_victor"]);
-    else if (message.includes("You have liberated ")) play_sound(soundset["e_liberate"]);
-    else if (message.includes(" gold from the city.")) play_sound(soundset["e_conquer"]);
-  }
 }
-
 
 /**************************************************************************
   Recenter the map to a tile and mark it with an explosion
