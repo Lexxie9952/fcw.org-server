@@ -3754,6 +3754,7 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
+cargo         = "Land", "LandNoKill", "LandAirSea", "LandRoad", "Cargo"
 flags         = "BadCityDefender", "CantReachAir", "Only_Native_Attack", "WillNever"
 veteran_names =
   _("?vet_rank:green"),
