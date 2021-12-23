@@ -1187,8 +1187,9 @@ helptext	= _("\
 Gives two luxury to a city. In small tribal settlements, this can\
  be more effective than a Temple for aiding celebration. \n\
 The process of building a Totem Pole is sometimes more useful than\
- finishing it. It keeps your tribe productive by storing shields for\
- completing a building after an upcoming scientific discovery. \n\
+ finishing it. It keeps your tribe productive by storing shields that\
+ can transfer into a building made available by a future scientific\
+ discovery. \n\
 Obsolete by：Temple, Ceremonial Burial.\
 ")
 
