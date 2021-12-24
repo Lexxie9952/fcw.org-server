@@ -867,7 +867,8 @@ void send_year_to_clients(void)
 
   /* Hmm, clients could add this themselves based on above packet? */
   notify_conn(game.est_connections, NULL, E_NEXT_YEAR, ftc_any,
-              _(" [`sparkle`] [`sparkle`] Year: %s [`sparkle`] [`sparkle`] "), calendar_text());
+              _(" [`sparkle`] [`sparkle`] Year: %s [`earth`] Turn: %d [`sparkle`] [`sparkle`]"),
+              calendar_text(), game.info.turn);
 
   // Pax Dei counter is something players should know:
   if (game.server.pax_dei_set && game.server.pax_dei_counter>0) {
