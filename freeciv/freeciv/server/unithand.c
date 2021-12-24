@@ -2489,6 +2489,8 @@ static void illegal_action(struct player *pplayer,
                            bool disturb_player,
                            const enum action_requester requester)
 {
+  if (!actor) return;
+
   int punishment_mp;
 
   /* Why didn't the game check before trying something illegal? Did a good
