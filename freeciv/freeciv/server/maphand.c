@@ -880,7 +880,7 @@ bool map_is_known_and_seen(const struct tile *ptile,
                            const struct player *pplayer,
                            enum vision_layer vlayer)
 {
-  return (map_is_known(ptile, pplayer)
+  return (ptile && pplayer && map_is_known(ptile, pplayer)
           && 0 < map_get_seen(pplayer, ptile, vlayer));
 }
 
