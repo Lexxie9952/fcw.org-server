@@ -763,13 +763,44 @@ void send_pending_events(struct connection *pconn, bool include_public)
   event_cache_iterate(pdata) {
     if (event_cache_match(pdata, pplayer,
                           is_global_observer, include_public)) {
+      pcm = pdata->packet;
+
       if (game.server.event_cache.info) {
-        /* add turn and time to the message */
-        strftime(timestr, sizeof(timestr), "%H:%M:%S",
-                 localtime(&pdata->timestamp));
-        pcm = pdata->packet;
-        fc_snprintf(pcm.message, sizeof(pcm.message), "(T%d - %s) %s",
-                    pdata->packet.turn, timestr, pdata->packet.message);
+        /* Add turn and time to game critical events where the time is important.
+           (Not stuff that was manually initiated like changing prod, or what 
+           happens every turn change) */
+        switch (pcm.event) {
+          case E_CITY_LOST:
+          case E_CITY_NUKED:
+          case E_CITY_TRANSFER:
+          case E_CIVIL_WAR:
+          case E_FIRST_CONTACT:
+          case E_DIPLOMATIC_INCIDENT:
+          case E_ENEMY_DIPLOMAT_BRIBE:
+          case E_ENEMY_DIPLOMAT_EMBASSY:
+          case E_ENEMY_DIPLOMAT_FAILED:
+          case E_ENEMY_DIPLOMAT_INCITE:
+          case E_ENEMY_DIPLOMAT_POISON:
+          case E_ENEMY_DIPLOMAT_SABOTAGE:
+          case E_ENEMY_DIPLOMAT_THEFT:
+          case E_CARAVAN_ACTION:
+          case E_DESTROYED:
+          case E_NUKE:
+          case E_TREATY_BROKEN:
+          case E_UNIT_LOST_ATT:
+          case E_UNIT_WIN_ATT:
+          case E_UNIT_LOST_DEF:
+          case E_UNIT_WIN_DEF:
+          case E_UNIT_ORDERS:  /* sentry reports */
+          case E_DIPLOMACY:
+            strftime(timestr, sizeof(timestr), "%H:%M",
+                    localtime(&pdata->timestamp));
+            fc_snprintf(pcm.message, sizeof(pcm.message), "%s <span class='ts'>%s</span>",
+                        pdata->packet.message, timestr);
+          break;
+          default:
+          break;
+        }
         notify_conn_packet(pconn->self, &pcm, FALSE);
       } else {
         notify_conn_packet(pconn->self, &pdata->packet, FALSE);

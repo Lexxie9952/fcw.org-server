@@ -1968,10 +1968,10 @@ static struct setting settings[] = {
   GEN_BOOL("ec_info", game.server.event_cache.info,
            SSET_META, SSET_INTERNAL, SSET_SITUATIONAL,
            ALLOW_NONE, ALLOW_BASIC,
-           N_("Print turn and time for each cached event"),
+           N_("Print turn and time for critical events in the event cache"),
            /* TRANS: Don't translate the text between single quotes. */
-           N_("If turned on, all cached events will be marked by the turn "
-              "and time of the event like '(T2 - 15:29:52)'."),
+           N_("If turned on, time critical events will be marked by the turn "
+              "and time of the event, like: 'T2 - 15:29'"),
            NULL, NULL, GAME_DEFAULT_EVENT_CACHE_INFO)
 
   /* Game initialization parameters (only affect the first start of the game,
