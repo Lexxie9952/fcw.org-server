@@ -3882,13 +3882,7 @@ void handle_unit_change_activity(struct player *pplayer, int unit_id,
 #ifdef FREECIV_WEB
   /* Web-client is not capable of selecting target, so we do it server side */
   if (activity_target == NULL) {
-    struct unit *punit = player_unit_by_number(pplayer, unit_id);
     bool required = TRUE;
-
-    /* no longer necessary because checked at beginning
-    if (punit == NULL) {
-      return;
-    } */
 
     if (activity == ACTIVITY_IRRIGATE) {
       struct tile *ptile = unit_tile(punit);
