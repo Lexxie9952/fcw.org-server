@@ -149,9 +149,11 @@ table.terrain_chart td {
 .ts {
   color: #d7eeeb;
   font-size:80%;
+  white-space: nowrap;
 }
 .ts::before {
-  content: "⌚"
+  content: "⌚";
+  white-space: nowrap;
 }
 
 /*scrambled unit identifier*/
