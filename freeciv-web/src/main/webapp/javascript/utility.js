@@ -242,6 +242,33 @@ function copy_string_to_clipboard (str) {
 }
 
 /**************************************************************************
+ Allows changing the properties of a css class itself, instead of just 
+ changing properties of existing elements with that class. This is useful
+ when you want the class itself to have the new property, so that it will
+ universally affect all instances of that class which appear in the future,
+ instead of changing only currently existing elements with that class.
+**************************************************************************/
+function changeCss(className, classValue) {
+  // we need invisible container to store additional css definitions
+  var cssMainContainer = $('#css-modifier-container');
+  if (cssMainContainer.length == 0) {
+      var cssMainContainer = $('<div id="css-modifier-container"></div>');
+      cssMainContainer.hide();
+      cssMainContainer.appendTo($('body'));
+  }
+
+  // and we need one div for each class
+  classContainer = cssMainContainer.find('div[data-class="' + className + '"]');
+  if (classContainer.length == 0) {
+      classContainer = $('<div data-class="' + className + '"></div>');
+      classContainer.appendTo(cssMainContainer);
+  }
+
+  // append additional style
+  classContainer.html('<style>' + className + ' {' + classValue + '}</style>');
+}
+
+/**************************************************************************
  Comes back false (null) if it is not an unaccented lower or upper case
  character in the Latin alphabet.
 **************************************************************************/

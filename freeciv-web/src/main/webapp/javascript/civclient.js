@@ -280,6 +280,14 @@ function civclient_init()
     play_music = is_longturn(); // singleplayer defaults off for server bandwidth savings
   }
 
+  show_timestamps = simpleStorage.get('tstamps');
+  if (show_timestamps == null) {
+    show_timestamps = is_longturn() | server_settings.ec_info.val;  // singleplayer defaults to ec_info = "DISABLED"
+  }
+  if (!show_timestamps) {
+    changeCss(".ts", "display:none");
+  }
+
   audio_initialize();
 
   //------------------------------------------------------------------------------------------------

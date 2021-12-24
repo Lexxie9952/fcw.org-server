@@ -101,6 +101,7 @@ var save_options_on_exit = true;
 var fullscreen_mode = false;
 var replace_capital_i = null; // option to fix bad capital I in some default sans fonts
 var play_music = true;
+var show_timestamps = false;  // show ec_info timestamps on critical events that occurred while not logged in (useful in longturn only)
 
 /** Local Options: **/
 var scroll_narrow_x = false;  // wider scrollable table rows for mobile to see more info
@@ -426,6 +427,21 @@ function init_options_dialog()
       if (show_compass) $("#compass").show();
       else $("#compass").hide();
     });
+
+    $('#show_timestamps').prop('checked', show_timestamps);
+    $('#show_timestamps').change(function() {
+      show_timestamps = this.checked;
+      simpleStorage.set('tstamps', show_timestamps);
+      if (show_timestamps) {
+        $(".ts").show();
+        $(".ts").css("display", "inline");
+      }
+      else {
+        $(".ts").hide();
+        $(".ts").css("display", "none");
+      }
+    });
+    
    // Graphic Theme
    graphic_theme_path = simpleStorage.get('grtheme');
    if (!graphic_theme_path) graphic_theme_path = "themes/greek/";

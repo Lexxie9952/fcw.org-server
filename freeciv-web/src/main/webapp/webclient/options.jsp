@@ -216,6 +216,17 @@
 
 <tr class="options_row">
   <td>
+    <div title="Show timestamps for critical events that occurred while logged off (Longturn)" class="main_menu_buttons">
+        <input type='checkbox' class="css-checkbox" name='show_timestamps' id='show_timestamps' checked>
+        <label for="show_timestamps" name="show_timestamps_lbl" class="css-label dark-check-green"><font color="#e8f8e0">Show timestamps</font></label>
+    </div>
+  </td>
+  <td>
+  </td>
+</tr>
+
+<tr class="options_row">
+  <td>
     <div style="margin-top:15px" class="main_menu_buttons">
       <b style='color:white'>Tabs:</b>
     </div>
