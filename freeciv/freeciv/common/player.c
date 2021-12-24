@@ -1048,6 +1048,8 @@ bool can_player_see_unit_at(const struct player *pplayer,
 bool can_player_see_unit(const struct player *pplayer,
 			 const struct unit *punit)
 {
+  if (!punit) return false;
+  
   return can_player_see_unit_at(pplayer, punit, unit_tile(punit),
                                 unit_transported(punit));
 }
