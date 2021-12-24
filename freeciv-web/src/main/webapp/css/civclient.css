@@ -145,6 +145,15 @@ table.terrain_chart td {
   overflow: hidden;
 }
 
+/*event time stamps*/
+.ts {
+  color: #d7eeeb;
+  font-size:80%;
+}
+.ts::before {
+  content: "⌚"
+}
+
 /*scrambled unit identifier*/
 .sc
 {
