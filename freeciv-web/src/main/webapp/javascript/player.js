@@ -324,7 +324,10 @@ function get_invalid_username_reason(username)
   username = username.toLowerCase();
   if (username == "pbem") {
     return "not available";
-  } 
+  }
+  else if (username.includes(" ")) {
+    return "invalid: name cannot have spaces";
+  }
   else if (!is_alphabetic(username.charAt(0))) {
     return "invalid: the FIRST letter of a username must start with an unaccented Latin alphabetic letter";
   }
