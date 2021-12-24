@@ -504,7 +504,7 @@ function handle_city_governor_event(message)
 function handle_chat_msg(packet)
 {  
   var message = packet['message'];
-  var event = packet['event'];
+  var event   = packet['event'];
   var conn_id = packet['conn_id'];
   var tile_id = packet['tile'];
 
@@ -517,11 +517,13 @@ function handle_chat_msg(packet)
     packet['event'] = E_UNDEFINED;
   }
 
+  /* Localize event timestamps */
+  if (message.includes("class='ts'")) message = time_localize(message);
+
   /* Event interceptions... used to trigger client processing */
   switch (event) {
     case E_CITY_LOST:
       /* play_sound(soundset["e_conquer"] 
-         OFF FOR NOW: rethink how historical logged messages of conquest cause PTSD that a conquest is a new one in R/T
       */
       break;
     case E_UNIT_WIN_ATT:

@@ -269,6 +269,39 @@ function changeCss(className, classValue) {
 }
 
 /**************************************************************************
+ Finds a time string in a message that has a class .ts timestamp and then
+ localizes the time from GMT to the browser's local time zone, and returns
+ the original message with local time in it instead of GMT.
+**************************************************************************/
+function time_localize(message) {
+  const t_start = message.indexOf("class='ts'") + 11;
+  const t_end = message.indexOf("class='ts'") + 16;
+
+  const GMT = message.substring(t_start, t_end);
+  const GMT_hour = parseInt(GMT.substring(0,2));
+  const GMT_minute = GMT.substring(3,5);
+
+  const date = new Date()
+  const minutes_offset = date.getTimezoneOffset();
+  const hours_offset = minutes_offset / 60;
+
+  var local_hour = GMT_hour - hours_offset;
+
+  if (local_hour < 0) {
+    local_hour = 24 + local_hour;
+  }
+  else if (local_hour >= 24) {
+    local_hour -= 24;
+  }
+
+  const local_hour_string = "" + (local_hour < 10 ? "0" : "") + local_hour.toString();
+  const zone = date.toLocaleTimeString(undefined,{timeZoneName:'short'}).split(' ')[2]
+  const local_time = local_hour_string + ":" + GMT_minute + "&nbsp;" + zone;
+
+  return message.replace(GMT, local_time);
+}
+
+/**************************************************************************
  Comes back false (null) if it is not an unaccented lower or upper case
  character in the Latin alphabet.
 **************************************************************************/
