@@ -793,6 +793,10 @@ void send_pending_events(struct connection *pconn, bool include_public)
           case E_UNIT_WIN_DEF:
           case E_UNIT_ORDERS:  /* sentry reports */
           case E_DIPLOMACY:
+          case E_CHAT_MSG_PUBLIC:
+          case E_CHAT_MSG_PRIVATE_SENT:
+          case E_CHAT_MSG_PRIVATE_RCVD:
+          case E_CHAT_MSG_ALLY:
             strftime(timestr, sizeof(timestr), "%H:%M",
                     localtime(&pdata->timestamp));
             fc_snprintf(pcm.message, sizeof(pcm.message), "%s <span class='ts'>%s</span>",
