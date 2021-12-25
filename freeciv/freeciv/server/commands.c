@@ -122,6 +122,13 @@ static struct command commands[] = {
    N_("Quit the game and shutdown the server."), NULL, NULL,
    CMD_ECHO_ALL, VCF_NONE, 0
   },
+  {"password", ALLOW_ADMIN,
+   N_("password codephrase\n"),
+   N_("Sets the password required to connect to the game."),
+   N_("Requires cmdlevel 'admin'"),
+   NULL,
+   CMD_ECHO_ADMINS, VCF_NONE, 0
+  },
   {"cut",	ALLOW_CTRL,
    /* TRANS: translate text between <> only */
    N_("cut <connection-name>"),

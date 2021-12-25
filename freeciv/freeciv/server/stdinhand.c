@@ -59,6 +59,7 @@
 
 /* server */
 #include "aiiface.h"
+#include "auth.h"
 #include "citytools.h"
 #include "connecthand.h"
 #include "diplhand.h"
@@ -118,6 +119,8 @@ static struct kick_hash *kick_table_by_user = NULL;
 
 
 static bool cut_client_connection(struct connection *caller, char *name,
+                                  bool check);
+static bool set_password(struct connection *caller, char *password,
                                   bool check);
 static bool show_help(struct connection *caller, char *arg);
 static bool show_list(struct connection *caller, char *arg);
@@ -4560,6 +4563,15 @@ static bool quit_game(struct connection *caller, bool check)
 }
 
 /**********************************************************************//**
+  Handle password command
+**************************************************************************/
+static bool set_password(struct connection *caller, char *password,
+                         bool check)
+{
+  return auth_handle_reply(caller, password);
+}
+
+/**********************************************************************//**
   Main entry point for "command input".
 **************************************************************************/
 bool handle_stdin_input(struct connection *caller, char *str)
@@ -4826,6 +4838,8 @@ static bool handle_stdin_input_real(struct connection *caller, char *str,
     return set_ai_level_named(caller, arg, command_name_by_number(cmd), check);
   case CMD_QUIT:
     return quit_game(caller, check);
+  case CMD_PASSWORD:
+    return set_password(caller, arg, check);
   case CMD_CUT:
     return cut_client_connection(caller, arg, check);
   case CMD_SHOW:

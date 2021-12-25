@@ -37,6 +37,7 @@ enum command_id {
   CMD_HELP,
   CMD_LIST,
   CMD_QUIT,
+  CMD_PASSWORD,
   CMD_CUT,
 
   /* completely non-harmful: */
