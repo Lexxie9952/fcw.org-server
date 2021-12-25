@@ -2593,7 +2593,7 @@ veteran_move_bonus = 0
 roles         = ""
 cargo         = "Land", "Cargo"
 helptext      = _("\
-Airplanes can carry a single diplomatic unit or single Freight unit. They can land in any domestic\
+Airplanes can carry a diplomatic unit or a Freight unit. They can land in any domestic\
  or allied city. For diplomatic missions to non-allied nations, an empty Airbase must be available for landing.\
  Airplanes have two turns of fuel. Each new aviation tech upgrades range by +2 moves per turn. \n\
 "), _("
