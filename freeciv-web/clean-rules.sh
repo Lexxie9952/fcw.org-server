@@ -1,7 +1,7 @@
 #!/bin/bash
 # builds Freeciv-web, copies the war file to Tomcat and builds the selected rulesets.
 
-RULESETS=(classic civ2civ3 maptest multiplayer mpplus mp2sandbox mp2 ag ag2 mp2-brava mp2-caravel mp2-dragoon)
+RULESETS=(classic civ2civ3 maptest multiplayer mpplus mp2sandbox mp2 ag mp2-ag mp2-brava mp2-caravel mp2-dragoon)
 TOPDIR="$( cd ../"$( dirname "${BASH_SOURCE[0]}" )" > /dev/null && pwd )"
 
 printf "\n./clean-rules.sh: DEPLOYED SERVER VERSION. Use ./vclean-rules.sh for vagrant installations.\n"
@@ -16,6 +16,7 @@ printf "************************************************************************
 
 printf "\nOverwriting auto-generated manual with release-version: MP2-Avant Garde"
    cp  ~/freeciv-web/freeciv-web/src/derived/webapp/man/ag7.bak.html ~/freeciv-web/freeciv-web/src/derived/webapp/man/ag7.html
+   cp  ~/freeciv-web/freeciv-web/src/derived/webapp/man/ag7.bak.html ~/freeciv-web/freeciv-web/src/derived/webapp/man/mp2-ag7.html
 printf "\nOverwriting auto-generated manual with release-version: MP2-Brava"
    cp ~/freeciv-web/freeciv-web/src/derived/webapp/man/mp2-brava7.bak.html ~/freeciv-web/freeciv-web/src/derived/webapp/man/mp2-brava7.html
 printf "\nOverwriting auto-generated manual with release-version: MP2-Caravel"

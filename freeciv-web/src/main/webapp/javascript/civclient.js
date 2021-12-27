@@ -431,7 +431,7 @@ function init_common_intro_dialog() {
      "<b>NOTE:</b> Rulesets named 'Multiplayer' are simply the more modern rulesets that work well with any number of players.<br>"+
      "You can play Singleplayer with a Multiplayer ruleset if you wish to improve for multiplayer games with other humans.<br>"+
      "&nbsp;&bull; If you do this, try: &nbsp; <b>/set sciencebox 80</b> &nbsp; (or similar) to set a singleplayer research pace. <b>/help sciencebox</b> for more info.<br>"
-     : "<b>WARNING:</b> Default rules for Multiplayer are Multiplayer+.</b><br><br>"   ) +
+     : "Default rules for multiplayer games are: <b>Multiplayer II Evolution Avant-garde.</b> (mp2-ag)<br><br>"   ) +
   
   "Click <b>Game</b> button to select Game Version (ruleset).<br><br>"+
   "Advanced: You can tune more settings with the command line.<br>"+
