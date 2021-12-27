@@ -998,7 +998,7 @@ static void reestablish_city_trade_routes(struct city *pcity)
 
     /* Give the new owner infos about the city which has a trade route
      * with the transferred city. */
-    reality_check_city(city_owner(pcity), partner->tile);
+    map_show_tile(city_owner(pcity), partner->tile);
     update_dumb_city(city_owner(pcity), partner);
     send_city_info(city_owner(pcity), partner);
   } trade_routes_iterate_safe_end;
@@ -2308,7 +2308,7 @@ void send_all_known_cities(struct conn_list *dest)
     }
     whole_map_iterate(&(wld.map), ptile) {
       if (!pplayer || NULL != map_get_player_site(ptile, pplayer)) {
-	send_city_info_at_tile(pplayer, pconn->self, NULL, ptile);
+        send_city_info_at_tile(pplayer, pconn->self, NULL, ptile);
       }
     } whole_map_iterate_end;
   }
@@ -2401,7 +2401,7 @@ void send_city_info_at_tile(struct player *pviewer, struct conn_list *dest,
   if (!pcity) {
     pcity = tile_city(ptile);
   }
-  if (pcity->server.needs_arrange != CNA_NOT) {
+  if (pcity != NULL && pcity->server.needs_arrange != CNA_NOT) {
     pcity->server.needs_arrange = CNA_BROADCAST_PENDING;
 
     return;
