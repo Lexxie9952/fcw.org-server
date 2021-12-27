@@ -212,6 +212,7 @@ struct civ_game {
       char start_units[MAX_LEN_STARTUNIT];
       bool start_city;
       int start_year;
+      char supercows[MAX_NUM_SUPERCOWS][MAX_LEN_NAME]; /* admins/Gamemasters/supercows for this game */
       int techloss_restore;
       int techlost_donor;
       int techlost_recv;

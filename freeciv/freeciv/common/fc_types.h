@@ -34,6 +34,7 @@ extern "C" {
                                   * in savegame2.c needs to be changed */
 #define MAX_NUM_BARBARIANS   12  /* 3, but slots reserved for future use. */
 #define MAX_NUM_PLAYERS      MAX_NUM_PLAYER_SLOTS - MAX_NUM_BARBARIANS
+#define MAX_NUM_SUPERCOWS    10
 /* Used in the network protocol. */
 #define MAX_NUM_CONNECTIONS (2 * (MAX_NUM_PLAYER_SLOTS))
 /* e.g. unit_types. Used in the network protocol. */

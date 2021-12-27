@@ -447,6 +447,9 @@ static void game_defaults(bool keep_ruleset_value)
     game.server.slot_control_style = GAME_DEFAULT_SLOT_CONTROL_STYLE;
     game.server.spaceship_travel_time = GAME_DEFAULT_SPACESHIP_TRAVEL_TIME;
     game.server.start_year        = GAME_START_YEAR;
+    for (i = 0; i < MAX_NUM_SUPERCOWS; i++) {
+      game.server.supercows[i][0] = '\0';
+    }
     game.server.tcptimeout        = GAME_DEFAULT_TCPTIMEOUT;
     game.server.techlost_donor    = GAME_DEFAULT_TECHLOST_DONOR;
     game.server.techlost_recv     = GAME_DEFAULT_TECHLOST_RECV;

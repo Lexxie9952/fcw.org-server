@@ -733,6 +733,16 @@ static struct command commands[] = {
    NULL, mapimg_help,
    CMD_ECHO_ADMINS, VCF_NONE, 50
   },
+  {"supercows",   ALLOW_BASIC, /* ALLOW_BASIC = show, ALLOW_HACK = to assign */
+   /* TRANS: translate text between <> only */
+   N_("\nSHOW supercows. Access: Players. Usage:\n/supercows\n"
+      "\nASSIGN supercows. Access: Admin. Usage:\n/supercows user1 user2 ... user10\n"),
+   N_("\nShows or assigns the admins for the current game.\n"
+      "Use up to 10 parameters to set non-player admins for the game."),
+   N_("To assign admins, you must be an admin and specify non-players by username."),
+   NULL,
+   CMD_ECHO_NONE, VCF_NONE, 0
+  },
   {"rfcstyle",	ALLOW_HACK,
    /* no translatable parameters */
    SYN_ORIG_("rfcstyle"),

@@ -99,6 +99,7 @@ enum command_id {
   CMD_AICMD,
   CMD_FCDB,
   CMD_MAPIMG,
+  CMD_SUPERCOWS,
 
   /* undocumented */
   CMD_RFCSTYLE,

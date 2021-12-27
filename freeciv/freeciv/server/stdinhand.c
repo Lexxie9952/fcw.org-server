@@ -141,6 +141,8 @@ static void show_settings_one(struct connection *caller, enum command_id cmd,
 static void show_ruleset_info(struct connection *caller, enum command_id cmd,
                               bool check, int read_recursion);
 static void show_mapimg(struct connection *caller, enum command_id cmd);
+
+static bool set_supercows(struct connection *caller, char *arg, bool check);
 static bool set_command(struct connection *caller, char *str, bool check);
 
 static bool create_command(struct connection *caller, const char *str,
@@ -3478,7 +3480,7 @@ bool observe_command(struct connection *caller, char *str, bool check)
     }
   }
 
-  end:;
+  end:
   /* free our args */
   for (i = 0; i < ntokens; i++) {
     free(arg[i]);
@@ -4884,6 +4886,8 @@ static bool handle_stdin_input_real(struct connection *caller, char *str,
     return fcdb_command(caller, arg, check);
   case CMD_MAPIMG:
     return mapimg_command(caller, arg, check);
+  case CMD_SUPERCOWS:
+    return set_supercows(caller, arg, check);
   case CMD_RFCSTYLE:	/* see console.h for an explanation */
     if (!check) {
       con_set_style(!con_get_style());
@@ -6106,6 +6110,89 @@ static bool mapimg_command(struct connection *caller, char *arg, bool check)
 
   free_tokens(token, ntokens);
 
+  return ret;
+}
+
+/**********************************************************************//**
+  Handle supercows command. Returns true if it set new supercows.
+**************************************************************************/
+static bool set_supercows(struct connection *caller, char *arg, bool check)
+{
+  int ntokens;
+  bool ret=true;
+  char *token[MAX_NUM_SUPERCOWS]; /* max 10 supercows */
+
+  ntokens = get_tokens(arg, token, MAX_NUM_SUPERCOWS, TOKEN_DELIMITERS);
+
+  /* Supercow names all get stored as lowercase: */
+  for (int i=0; i<ntokens; i++) {
+    for(int j = 0; token[i][j]; j++){
+      token[i][j] = fc_tolower(token[i][j]);
+    }
+  }
+
+  /* If names were passed, assign them to the supercows list: */
+  if (ntokens > 0 && ntokens <= MAX_NUM_SUPERCOWS 
+      && 
+      /* command must come from .serv file... */
+      (!caller
+          ||  /* ...or a human who is a supercow */ 
+      (caller && caller->access_level == ALLOW_HACK))) {
+    
+    for (int i=0; i<MAX_NUM_SUPERCOWS; i++) {
+      if (i<ntokens) {
+        if (!is_valid_username(token[i])) {
+          cmd_reply(CMD_SUPERCOWS, caller, C_FAIL,
+                _("FAIL: %s is not a legal username."), token[i]);
+          return false;
+        } else {
+          /* Make sure we're not assigning supercow to an active player
+          TODO: connections in pregame were getting counted as players, needs
+          a more distinguishing check for a "real" player who has a nation:
+          char temp_name[MAX_LEN_NAME];
+          players_iterate(plr) {
+            strcpy(temp_name, plr->username);
+            for (int j=0; plr->username[j]; j++) {
+              temp_name[j] = fc_tolower(temp_name[j]);
+            }
+            if (strcmp(temp_name, token[i]) == 0) {
+              cmd_reply(CMD_SUPERCOWS, caller, C_FAIL,
+                    _("FAIL: %s is player %s! Players can't be supercows."),
+                    token[i], plr->name);
+              return false;
+            }
+          } players_iterate_end; */
+        }
+        fc_snprintf(game.server.supercows[i], sizeof(game.server.supercows[i]),
+                    _("%s"), token[i]);
+        cmd_reply(CMD_SUPERCOWS, caller, C_OK, "%s assigned as Admin/Gamemaster #%d",
+                  game.server.supercows[i], i+1);
+      } else {
+        /* Clears the rest of the supercow spots in the list: */
+        memset(game.server.supercows[i], 0, sizeof(game.server.supercows[i]));
+      }
+    }
+  }
+  /* No parameters is a simple request to find out identity of your Gamemaster(s): */
+  else if (caller) {
+    for (int i=0; i<MAX_NUM_SUPERCOWS; i++) {
+      if (game.server.supercows[i][0]) {
+          notify_conn(caller->self, NULL, E_SETTING, ftc_any,
+                      _("Admin/Gamemaster #%d: %s"),
+                      i+1, game.server.supercows[i]);
+        /* Supercow access required to see non-primary supercows */
+        if (i == 0 && caller && caller->access_level != ALLOW_HACK) {
+          break;
+        }
+      } else if (i==0) {
+        notify_conn(caller->self, NULL, E_SETTING, ftc_any,
+                    _("The game has no assigned Admin/Gamemaster."));
+      } else {
+        break;
+      }
+    }
+    ret = false;
+  }
   return ret;
 }
 

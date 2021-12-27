@@ -3886,21 +3886,35 @@ bool is_supercow(struct connection * caller)
     char *pos;
     int port;
 
+    /* Players don't get to be supercows: */
     if (caller->playing && 0 != server_state()) {
       return FALSE;
     }
 
+    /* Convert a temp caller_name to lowercase in order to compare with
+       the (already) lowercase supercows list: */
+    strcpy(caller_name, caller->username);
+    for(int i = 0; caller_name[i]; i++){
+       caller_name[i] = fc_tolower(caller_name[i]);
+    }
+
+    /* See if our player is in the server-stored list of supercows that were
+       assigned by the /supercows command (from .serv file or manually): */
+    for (int i = 0; i<MAX_NUM_SUPERCOWS; i++) {
+      if (strcmp(caller_name, game.server.supercows[i]) == 0) {
+        return true;
+      }
+    }     
+
+    /* Our conn wasn't in the server supercow list. Now, look in the legacy
+       file for an override supercow. Reason: if a supercow was not assigned
+       or mis-assigned, we need a way to manually patch one, to avoid the 
+       catch-22 that the /supercows command requires you to be a supercow: */
     supercow_list = fopen("supercows.txt", "r");
     if (!supercow_list) {
       return FALSE;
     }
     
-    strcpy(caller_name, caller->username);
-
-    for(int i = 0; caller_name[i]; i++){
-       *caller_name = fc_tolower(*caller_name);
-    }
-
     while (fgets(line, 1000, supercow_list)) {
       if ((pos=strchr(line, '#')) != NULL) {
         continue;
@@ -3915,7 +3929,7 @@ bool is_supercow(struct connection * caller)
       supercow_list_name = split_line;
 
       for(int i = 0; supercow_list_name[i]; i++){
-        *supercow_list_name = fc_tolower(*supercow_list_name);
+        supercow_list_name[i] = fc_tolower(supercow_list_name[i]);
       }
 
       split_line = strtok(NULL, ":");
