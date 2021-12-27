@@ -5421,7 +5421,7 @@ reqs    =
     }
 [effect_colossus_goods_discount]
 type    = "Unit_Build_Cost_Pct"
-value	  = -25     ;20-5 = 15 = -25%
+value	  = -14     ;20-5 = 15 = -25%
 reqs    =
     {
       "type", "name", "range","present"
