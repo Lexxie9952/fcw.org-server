@@ -31,6 +31,9 @@ cedd5f7a5af8a10445f01b09bd91794e0126101d 2021-07-04 09:41:02 Unchanged and compl
    Hoped this would fix cityturn.c lines 967 and 1126 constantly throwing
    1: in city_increase_size() [../../freeciv/server/cityturn.c::1126]: assertion 'pcity->server.needs_arrange == CNA_NOT' failed.
    ...But it did not.
+   + 9ffc624fd11f02acbec27f42df921cf796ccbe99 "Fix send_city_info_at_tile() crash when the tile has no city"
 aacd4ab7b4e3d28b67eb77eb243054a722fa13c8 2021-10-05 ?        Adjusted and complete    "Free rally point when the city is destroyed."
                                                              (also sets dest_tile to -1 flag; FCW uses dest_tile so client can report coordinates of rally points.)
 3799001c7630b926ea1cc1693c2958077f082ea8 2021-10-19          Unchanged and complete   "Clear rally point on city transfer"
+3f4d25ff3019e252f377c123ed4464276c476d30 2021-10-12          Unchanged and complete: Fix revealing trade partner to destination owner when trade route established
+
