@@ -1,34 +1,38 @@
 cmdlevel ctrl first
-rulesetdir mpplus
-set topology WRAPX
+rulesetdir mp2-ag
+
+#server
 set nationset all
 set compresstype xz
-set maxplayers 32
 set allowtake H1Ah1adOo
 set autotoggle enabled
-set timeout 120
 set netwait 15
+set timeout 120
 set nettimeout 120
 set pingtime 30
 set pingtimeout 120
 set maxconnectionsperhost 256
 set threaded_save enabled
 set scorelog enabled
-set size 4
-set landm 50
-set minp 2
-set generator FAIR
+#players
+set minplayers 2
+set maxplayers 30 
 
 #economic
 set gold 100
 
 #geological
-set landmass 66
+set size 4
+set topology WRAPX
+set generator FAIR
+set startpos DEFAULT
+set landmass 50
 set specials 350 
-set alltemperate "ENABLED"
-set separatepoles "ENABLED"
 set tinyisles "DISABLED"
-set huts 0
+set alltemperate "DISABLED"
+set separatepoles "DISABLED"
+set polarstrip disabled
+set huts 1
 
 #sociological
 set startunits=cccwwwxx
@@ -37,20 +41,48 @@ set trading_city enabled
 set rapturedelay 1
 set revolentype FIXED
 set revolen 1
-set contactturns 0
-set barbarians DISABLED
+set contactturns 10
+set barbarians "disabled"
 set onsetbarbs 30
 
-#military
-set borders "SEE_INSIDE"
-set diplomacy "HUMAN"
-set foggedborders enabled
-set airliftingstyle "FROM_ALLIES|TO_ALLIES"
-set victories ALLIED
-set restrictinfra "ENABLED"
-
 #scientific
-set endspaceship ENABLED 
+set diplbulbcost 0 		; Bulbcost in % of tech traded through the diplomacy window. 
+set techlevel 0
+set freecost 0			; Bulbcost in % of tech through stealing (with diplomat/spy)
+set conquercost 0 		; Bulbcost in % of tech acquired through conquest. 
+#set sciencebox 100		; Used to reduce or increase tech cost. Default is 100. Tech cost in ruleset is multiplicated with this number as %.  
+#set team_pooled_research "DISABLED"
+
+set techleak 50			;
+set techlossforgiveness 200 	; How much bulb-debth you can be in before you will lose tech in percent of current tech you are researching. Note: If tech leak is enabled, this can cause naught behaviour when a tech costs goes down, sending some player into more tech debt. 
+set techlossrestore 0		; How many bulbs in percent you get back if you lose tech from being in tech-debt
+
+#victory-conditions
+set victories ALLIED
+set endspaceship ENABLED
+
+#military
+set airliftdestdivisor 3
+set airliftingstyle "FROM_ALLIES|TO_ALLIES"
+set borders "SEE_INSIDE"       ; "ENABLED" only gives vision on tiles city can use, not inside all border. Depending on ruleset, certain techs might change this. 
+set diplomacy "HUMAN"		; Disabled disables the diplomacywindow
+set foggedborders enabled
+set nuclearwinter_percent 20   
+set restrictinfra "ENABLED"    ; non-allied rails only serve as roads
+set universal_unload "ENABLED" ; unloading from ships has universal consistency regardless of ocean or river
+
+
+#MP2-AG. Disable this if playing other rulesets.
+#set hideouts enabled
+#set zoc_purity, enabled        ; igZOC units don't lift ZOC for units subject to ZOC
+#set autoattack enabled         ; Required for Vigil on fighter types
+#set autoattack_style 1         ; Required for Vigil on fighters only
+#set nukes_minor enabled
+#set nukes_major disabled
+
+#compatibility
+set move_bonus_in_frags "ENABLED"   ; MP2 may give move bonuses <1 full move point
+
 
 metaconnection persistent
 metamessage New Freeciv-web Multiplayer Game
