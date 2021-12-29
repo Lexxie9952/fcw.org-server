@@ -4923,7 +4923,7 @@ type    = "Veteran_Build"
 value	= 1
 reqs	=
     { "type",      "name",            "range", "present"
-      "Building",  "Agōgē of Sparta", "Player", TRUE
+      "Building",  "Agōgē of Sparta", "City",   TRUE
       "Building",  "Barracks",        "City",   FALSE
       "UnitClass", "Land",            "Local",  TRUE
       "UnitFlag",  "NonMil",          "Local",  FALSE
@@ -4940,6 +4940,15 @@ reqs	=
       "UnitFlag",  "NonMil",          "Local",  FALSE
       "UnitFlag",  "NoVeteran",       "Local",  FALSE
     }
+[effect_agoge_barracks_a]
+type    = "HP_Regen"
+value	= 100
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Ziggurat",  "City",  TRUE
+      "UnitClass", "Land", "Local", TRUE
+    }
+
 ; -------------------------------------------------------------
 ; This can't be done properly as fortified attack bonus because
 ; attacking resets fortified state right before it happens. This
@@ -6816,6 +6825,14 @@ reqs	=
       "UnitClass","Land",      "Local", TRUE
       "UnitFlag", "NonMil",    "Local", FALSE
       "UnitFlag", "NoVeteran", "Local", FALSE
+    }
+[effect_ziggurat_barracks_a]
+type    = "HP_Regen"
+value	= 100
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Ziggurat",  "City",  TRUE
+      "UnitClass", "Land", "Local", TRUE
     }
 [effect_ziggurat_temple]
 type    = "Make_Content"
