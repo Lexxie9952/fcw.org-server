@@ -656,7 +656,7 @@ function show_city_dialog(pcity)
               "<div class='game_unit_list_item' title='" + nations[players[punit['owner']]['nation']]['adjective'] 
                   + "' style='cursor:pointer;cursor:hand; background: transparent url("
                   + civ_flag_url 
-                  + "); background-size:contain; width:21px; height:14px; float:left; ' "
+                  + "); background-size:contain; background-repeat:no-repeat; width:22px; height:14px; float:left; ' "
                   + "onclick='city_dialog_activate_unit(units[" + punit['id'] + "]);'"
                   +"></div>";
               
