@@ -43,7 +43,7 @@ var loaded_images = 0;
 
 var sprites_init = false;
 
-var canvas_text_font = "16px Helvetica, sans serif"; // with canvas text support
+var canvas_text_font = "16px Candara, sans serif"; // with canvas text support
 
 var fullfog = [];
 
@@ -545,36 +545,38 @@ function mapview_put_city_bar(pcanvas, city, canvas_x, canvas_y) {
   var txt_measure = pcanvas.measureText(text);
 
   var size_measure = pcanvas.measureText(size);
-  pcanvas.globalAlpha = 0.7;
-  pcanvas.fillStyle = "rgba(0, 0, 0, 0.55)";
+  pcanvas.globalAlpha = 0.72;
+  pcanvas.fillStyle = "rgba(0, 0, 0, 0.40)";
   pcanvas.fillRect (canvas_x - Math.floor(txt_measure.width / 2) - 14, canvas_y - 17,
                     txt_measure.width + 20, 20);
 
+                    
   pcanvas.fillStyle = color;
-  pcanvas.fillRect(canvas_x + Math.floor(txt_measure.width / 2) + 5, canvas_y - 19,
-               (prod_type != null) ? size_measure.width + 35 : size_measure.width + 8, 24);
+  pcanvas.fillRect(canvas_x + Math.floor(txt_measure.width / 2) + 5, canvas_y - 17,
+               (prod_type != null) ? size_measure.width + 35 : size_measure.width + 8, 20);
 
   var city_flag = get_city_flag_sprite(city);
+  pcanvas.globalAlpha = 0.77;
   pcanvas.drawImage(sprites[city_flag['key']],
-              canvas_x - Math.floor(txt_measure.width / 2) - 45, canvas_y - 17);
+              canvas_x - Math.floor(txt_measure.width / 2) - 44, canvas_y - 17);
 
   pcanvas.drawImage(sprites[get_city_occupied_sprite(city)],
-              canvas_x - Math.floor(txt_measure.width / 2) - 14, canvas_y - 16);
-
+              canvas_x - Math.floor(txt_measure.width / 2) - 12, canvas_y - 16);
+/*
   pcanvas.strokeStyle = color;
-  pcanvas.lineWidth = 1.5;
+  pcanvas.lineWidth = 1;
   pcanvas.beginPath();
-  pcanvas.moveTo(canvas_x - Math.floor(txt_measure.width / 2) - 46, canvas_y - 18);
-  pcanvas.lineTo(canvas_x + Math.floor(txt_measure.width / 2) + size_measure.width + 13,
+  pcanvas.moveTo(canvas_x - Math.floor(txt_measure.width / 2) - 47, canvas_y - 18);
+  pcanvas.lineTo(canvas_x + Math.floor(txt_measure.width / 2) + size_measure.width + 14,
                  canvas_y - 18);
-  pcanvas.moveTo(canvas_x + Math.floor(txt_measure.width / 2) + size_measure.width + 13,
+  pcanvas.moveTo(canvas_x + Math.floor(txt_measure.width / 2) + size_measure.width + 14,
                  canvas_y + 4);
-  pcanvas.lineTo(canvas_x - Math.floor(txt_measure.width / 2) - 46, canvas_y + 4);
-  pcanvas.lineTo(canvas_x - Math.floor(txt_measure.width / 2) - 46, canvas_y - 18);
+  pcanvas.lineTo(canvas_x - Math.floor(txt_measure.width / 2) - 47, canvas_y + 4);
+  pcanvas.lineTo(canvas_x - Math.floor(txt_measure.width / 2) - 47, canvas_y - 18);
   pcanvas.moveTo(canvas_x - Math.floor(txt_measure.width / 2) - 15, canvas_y - 17);
   pcanvas.lineTo(canvas_x - Math.floor(txt_measure.width / 2) - 15, canvas_y + 3);
   pcanvas.stroke();
-
+*/
   pcanvas.globalAlpha = 1.0;
 
   if (prod_type != null) {
@@ -583,7 +585,7 @@ function mapview_put_city_bar(pcanvas, city, canvas_x, canvas_y) {
     if (tag == null) return;
     pcanvas.drawImage(sprites[tag],
               canvas_x + Math.floor(txt_measure.width / 2) + size_measure.width + 13,
-              canvas_y - 19, 28, 24);
+              canvas_y - 17, 27, 20);
   }
 
   var shadow_offset_fix = (lose_celeb || city_map_display_mode) ? 1 : 0; //shadow offsets of 2 only look good under white
