@@ -321,18 +321,25 @@ function get_invalid_username_reason(username)
   else if (username.length >= 32) {
     return "too long";
   }
-  username = username.toLowerCase();
-  if (username == "pbem") {
+  if (username.toLowerCase() == "pbem") {
     return "not available";
   }
   else if (username.includes(" ")) {
     return "invalid: name cannot have spaces";
   }
   else if (!is_alphabetic(username.charAt(0))) {
-    return "invalid: the FIRST letter of a username must start with an unaccented Latin alphabetic letter";
+    return "invalid: the first symbol must be an unaccented Latin letter";
+  }
+  else if (username.includes("'")     || username.includes('&')
+           || username.includes('@')  || username.includes('!')
+           || username.includes('(')  || username.includes(')')
+           || username.includes('+')  || username.includes('*')
+           || username.includes('/')  || username.includes(',')
+           || username.includes('#')  || username.includes(';') ) {
+    return "disallowed. Illegal symbols: \" ' \\ & ^ % : $ ! ~ + / * = ? , etc."
   }
   else if (username != alphanumeric_cleaner(username)) {
-    return "invalid: only alphabetic letters, numbers, and nominal punctuation allowed; and must start with an unaccented Latin letter";  
+    return "invalid: only alphanumeric and hyphenation allowed";  
   }
   else if (!check_text_with_banlist_exact(username)) {
     return "banned";
