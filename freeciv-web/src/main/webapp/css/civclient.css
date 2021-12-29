@@ -2251,7 +2251,7 @@ input[type="email" i], #email {
 .e_bad_command {
   color: #aba5a5;
 }
-/* Prevent dev/debug messages from text-walling GMs. CTRL-E toggles in-game. */
+/* Prevent dev/debug messages from text-walling GMs. CTRL-SHIFT-E toggles in-game. */
 .e_log_error {
   display: none;
   font-size: 70%;

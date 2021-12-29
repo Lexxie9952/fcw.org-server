@@ -804,7 +804,7 @@ function check_text_input(event,chatboxtextarea) {
     send_text_input(chatboxtextarea);
   }
   // allows ctrl-E hotkey while inside text input area.
-  if (event.ctrlKey && String.fromCharCode(event.keyCode) == 'E') {
+  if (event.ctrlKey && !event.shiftKey && String.fromCharCode(event.keyCode) == 'E') {
     event.preventDefault();     // override possible browser shortcut
     emoji_popup();
   }
@@ -3651,6 +3651,7 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
         the_event.preventDefault(); // override possible browser shortcut
         // show/hide the dev/debug messages sent from server to supercow users
         $(".e_log_error").toggle();
+        add_client_message("Error logging set to " + $(".e_log_error").is(":visible"));
       }
       else if (ctrl && !shift && !alt) {
         the_event.preventDefault(); // override possible browser shortcut
