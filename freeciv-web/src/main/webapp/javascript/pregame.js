@@ -233,7 +233,7 @@ function update_player_info_pregame_real()
       var nation_text = "";
       if (player['nation'] in nations) {
         nation_text = " - " + nations[player['nation']]['adjective'];
-        var flag_html = $("<canvas id='pregame_nation_flags_" + id + "' width='45' height='30' class='pregame_flags'></canvas>");
+        var flag_html = $("<canvas id='pregame_nation_flags_" + id + "' width='50' height='32' class='pregame_flags'></canvas>");
         $("#pregame_plr_"+id).prepend(flag_html);
         var flag_canvas = document.getElementById('pregame_nation_flags_' + id);
         if (flag_canvas == null) continue;
