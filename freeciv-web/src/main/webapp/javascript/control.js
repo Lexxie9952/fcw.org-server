@@ -803,10 +803,17 @@ function check_text_input(event,chatboxtextarea) {
   if (event.keyCode == 13 && event.shiftKey == 0)  {
     send_text_input(chatboxtextarea);
   }
-  // allows ctrl-E hotkey while inside text input area.
-  if (event.ctrlKey && !event.shiftKey && String.fromCharCode(event.keyCode) == 'E') {
-    event.preventDefault();     // override possible browser shortcut
-    emoji_popup();
+  if (event.ctrlKey && !event.shiftKey) {
+    // allow ctrl-E hotkey while inside text input area.
+    if (String.fromCharCode(event.keyCode) == 'E') {
+      event.preventDefault();
+      emoji_popup();
+    }
+    // allow ctrl-S hotkey while inside text input area (prevents page-save):
+    else if (String.fromCharCode(event.keyCode) == 'S') {
+      event.preventDefault();
+      quicksave();
+    } 
   }
 }
 /**********************************************************************//**
