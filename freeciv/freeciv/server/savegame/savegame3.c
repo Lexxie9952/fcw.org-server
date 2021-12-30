@@ -510,6 +510,13 @@ static void savegame3_save_real(struct section_file *file,
 {
   struct savedata *saving;
 
+  /* 29 December 2021 - LIVE PRODUCTION SERVER DEBUG EMERGENCY. All notify_conn
+     calls are for temporary debugging. This code should have been removed.
+     Please report if you can read this, so we can remove it. Thanks! */
+
+      notify_conn(NULL, NULL, E_LOG_ERROR, ftc_server,
+              _("SAVEGAME1 s3sr. Reason: %s "),save_reason);
+
   /* initialise loading */
   saving = savedata_new(file, save_reason, scenario);
   sg_success = TRUE;
@@ -517,39 +524,105 @@ static void savegame3_save_real(struct section_file *file,
   /* [scenario] */
   /* This should be first section so scanning through all scenarios just for
    * names and descriptions would go faster. */
+         notify_conn(NULL, NULL, E_LOG_ERROR, ftc_server,
+              _("SAVEGAME2 scenario."));
+
   sg_save_scenario(saving);
+
+         notify_conn(NULL, NULL, E_LOG_ERROR, ftc_server,
+              _("SAVEGAME3 savefile."));
   /* [savefile] */
   sg_save_savefile(saving);
+
+           notify_conn(NULL, NULL, E_LOG_ERROR, ftc_server,
+              _("SAVEGAME4 game."));
+
   /* [game] */
   sg_save_game(saving);
+
+           notify_conn(NULL, NULL, E_LOG_ERROR, ftc_server,
+              _("SAVEGAME5 random."));
+
   /* [random] */
   sg_save_random(saving);
+
+           notify_conn(NULL, NULL, E_LOG_ERROR, ftc_server,
+              _("SAVEGAME6 script."));
+
   /* [script] */
   sg_save_script(saving);
+
+           notify_conn(NULL, NULL, E_LOG_ERROR, ftc_server,
+              _("SAVEGAME7 settings."));
+
   /* [settings] */
   sg_save_settings(saving);
+
+           notify_conn(NULL, NULL, E_LOG_ERROR, ftc_server,
+              _("SAVEGAME8 ruledata."));
+
   /* [ruledata] */
   sg_save_ruledata(saving);
+
+           notify_conn(NULL, NULL, E_LOG_ERROR, ftc_server,
+              _("SAVEGAME9 map."));
+
   /* [map] */
   sg_save_map(saving);
+
+           notify_conn(NULL, NULL, E_LOG_ERROR, ftc_server,
+              _("SAVEGAME10 player<i>."));
+
   /* [player<i>] */
   sg_save_players(saving);
+
+           notify_conn(NULL, NULL, E_LOG_ERROR, ftc_server,
+              _("SAVEGAME11 research."));
+
   /* [research] */
   sg_save_researches(saving);
+
+           notify_conn(NULL, NULL, E_LOG_ERROR, ftc_server,
+              _("SAVEGAME12 ec."));
+
   /* [event_cache] */
   sg_save_event_cache(saving);
+
+           notify_conn(NULL, NULL, E_LOG_ERROR, ftc_server,
+              _("SAVEGAME13 treaty."));
+
   /* [treaty<i>] */
   sg_save_treaties(saving);
+
+           notify_conn(NULL, NULL, E_LOG_ERROR, ftc_server,
+              _("SAVEGAME14 history."));
+
   /* [history] */
   sg_save_history(saving);
+
+           notify_conn(NULL, NULL, E_LOG_ERROR, ftc_server,
+              _("SAVEGAME15 mapimg."));
+
   /* [mapimg] */
   sg_save_mapimg(saving);
+
+           notify_conn(NULL, NULL, E_LOG_ERROR, ftc_server,
+              _("SAVEGAME16 sanity."));
+
 
   /* Sanity checks for the saved game. */
   sg_save_sanitycheck(saving);
 
+           notify_conn(NULL, NULL, E_LOG_ERROR, ftc_server,
+              _("SAVEGAME17 destroy."));
+
+
   /* deinitialise saving */
   savedata_destroy(saving);
+
+           notify_conn(NULL, NULL, E_LOG_ERROR, ftc_server,
+              _("SAVEGAME18 complete."));
+
 
   if (!sg_success) {
     log_error("Failure saving savegame!");
