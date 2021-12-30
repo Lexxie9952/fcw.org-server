@@ -262,6 +262,7 @@ var freemoji = [
 'castle',
 'check',
 'cityscape',
+'village',
 'cloud',
 'cookie',
 'crown',
