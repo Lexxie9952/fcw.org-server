@@ -4465,14 +4465,14 @@ static bool unit_do_destroy_city(struct player *act_player,
   /* Let the actor know. */
   notify_player(act_player, city_tile(tgt_city),
                 E_UNIT_WIN_ATT, ftc_server,
-                _("[`boom`]You destroy %s completely."),
+                _("[`skull`] You destroy %s completely."),
                 city_tile_link(tgt_city));
 
   if (tgt_player != act_player) {
     /* This was done to a foreign city. Inform the victim player. */
     notify_player(tgt_player, city_tile(tgt_city),
                   E_CITY_LOST, ftc_server,
-                  _("[`warning`]%s has been destroyed by %s."),
+                  _("[`skull`] %s has been destroyed by %s."),
                   city_tile_link(tgt_city),
                   player_name(act_player));
   }
