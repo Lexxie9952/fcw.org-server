@@ -569,11 +569,11 @@ void handle_diplomacy_accept_treaty_req(struct player *pplayer,
 	  }
 
           notify_player(pdest, city_tile(pcity), E_CITY_TRANSFER, ftc_server,
-                        _("[`castle`] You receive the city of %s from %s."),
+                        _("[`village`] You receive the city of %s from %s."),
                         city_link(pcity), player_name(pgiver));
 
           notify_player(pgiver, city_tile(pcity), E_CITY_LOST, ftc_server,
-                        _("[`castle`] You give the city of %s to %s."),
+                        _("[`village`] You give the city of %s to %s."),
                         city_link(pcity), player_name(pdest));
 
           if (transfer_city(pdest, pcity, -1, TRUE, TRUE, FALSE,
