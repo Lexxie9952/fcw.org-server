@@ -958,7 +958,7 @@ flags    = ""
 graphic     = "a.warrior_code"
 graphic_alt = "-"
 cost = 24
-helptext = _("Foot soldiers may make Hideouts, if enabled.")
+helptext = _("Foot soldiers may make Hideouts.")
 
 [advance_writing]
 name     = _("Writing")
