@@ -479,7 +479,7 @@ function mapview_put_city_bar(pcanvas, city, canvas_x, canvas_y) {
             mood_text = celeb;
             break;
         }
-        if (happy_people >= city['size']*0.4999 && unhappy_angry_people==0 && city['size']>2)  {
+        if (happy_people >= city['size']*0.4999 && unhappy_angry_people==0 && city['size']>=city_celebrate_size(city))  {
           // case handling: city is going to celebrate next turn. 
           if (mood_text == peace) start_celeb = true;
         }

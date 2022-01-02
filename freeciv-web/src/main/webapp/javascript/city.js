@@ -876,7 +876,7 @@ function show_city_dialog(pcity)
   var happy_people   = pcity['ppl_happy'][FEELING_FINAL];
   var unhappy_angry_people = pcity['ppl_unhappy'][FEELING_FINAL]+pcity['ppl_angry'][FEELING_FINAL];
   // Color code for upcoming state under current configuration of tiles/luxury rate/improvements/deployed units:
-  if (happy_people >= pcity['size']*0.4999 && unhappy_angry_people==0 && pcity['size']>2) {
+  if (happy_people >= pcity['size']*0.4999 && unhappy_angry_people==0 && pcity['size']>=city_celebrate_size(pcity)) {
     next_state = "Celebrating"; $('#rapture_status').attr('title', "Celebration next turn");
     if (!pissed) {
       rapture_status_class = "city_dialog_celeb";
@@ -1027,6 +1027,21 @@ function show_city_dialog(pcity)
 **************************************************************************/
 function city_change_tab(tab_num) {
   city_tab_index = tab_num;
+}
+
+/**************************************************************************
+ The size at which a city can celebrate.
+**************************************************************************/
+function city_celebrate_size(pcity) {
+  var csize = game_info.celebratesize;
+
+  // TODO: evaluate effects[137] (EFT_CELEBRATE_SIZE_ADD) instead of hard-coded:
+  if (client_rules_flag[CRF_MP2_D]) {
+    if (player_has_wonder(players[pcity.owner].playerno, improvement_id_by_name(B_ANGKOR_WAT))) { 
+      csize -= 1;
+    }
+  }
+  return csize;
 }
 
 /**************************************************************************
@@ -3695,7 +3710,7 @@ function update_city_screen()
         let pissed = pcity['hangry'] || (server_settings.fulldisorder.val && pcity['anarchy']);
      
         // Color code for upcoming state under current configuration of tiles/luxury rate/improvements/deployed units:
-        if (happy_people >= pcity['size']*0.4999 && unhappy_angry_people==0 && pcity['size']>2) { 
+        if (happy_people >= pcity['size']*0.4999 && unhappy_angry_people==0 && pcity['size']>=city_celebrate_size(pcity)) { 
           next_state = "Celebrating";
           if (!pissed)
             city_state_span = "id='city_state"+pcity.id+"' class='redux_centre mobile_centre hint_of_green' style='cursor:help; text-align:center;'>"+city_state;    // half or more happy, no unhappy = city will (continue to) celebrate, green code.
@@ -4274,7 +4289,7 @@ function get_city_state(pcity)
 {
   if (pcity == null) return;
 
-  if (pcity['was_happy'] && pcity['size'] >= 3) {
+  if (pcity['was_happy'] && pcity['size'] >= city_celebrate_size(pcity)) {
     return "Celebrating";
   } else if (pcity['hangry']) {
     return "Famine";
