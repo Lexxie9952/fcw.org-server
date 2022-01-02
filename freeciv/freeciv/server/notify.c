@@ -783,6 +783,9 @@ void send_pending_events(struct connection *pconn, bool include_public)
           case E_ENEMY_DIPLOMAT_POISON:
           case E_ENEMY_DIPLOMAT_SABOTAGE:
           case E_ENEMY_DIPLOMAT_THEFT:
+          case E_ENEMY_SPY_STEAL_GOLD:
+          case E_ENEMY_SPY_STEAL_MAP:
+          case E_ENEMY_SPY_NUKE:
           case E_CARAVAN_ACTION:
           case E_DESTROYED:
           case E_NUKE:
@@ -792,6 +795,8 @@ void send_pending_events(struct connection *pconn, bool include_public)
           case E_UNIT_LOST_DEF:
           case E_UNIT_WIN_DEF:
           case E_UNIT_ORDERS:  /* sentry reports */
+          case E_UNIT_WAS_EXPELLED:
+          case E_UNIT_ESCAPED:
           case E_DIPLOMACY:
           case E_CHAT_MSG_PUBLIC:
           case E_CHAT_MSG_PRIVATE_SENT:
