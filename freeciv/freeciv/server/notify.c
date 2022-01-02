@@ -794,7 +794,7 @@ void send_pending_events(struct connection *pconn, bool include_public)
           case E_UNIT_WIN_ATT:
           case E_UNIT_LOST_DEF:
           case E_UNIT_WIN_DEF:
-          case E_UNIT_ORDERS:  /* sentry reports */
+          case E_UNIT_SENTRY_WAKE:  /* sentry reports */
           case E_UNIT_WAS_EXPELLED:
           case E_UNIT_ESCAPED:
           case E_DIPLOMACY:

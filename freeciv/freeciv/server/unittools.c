@@ -4127,7 +4127,7 @@ static void wakeup_neighbor_sentries(struct unit *punit)
               sprintf(penemy_emoji, "%s", UNIT_EMOJI(penemy));
 
               notify_player(unit_owner(penemy), unit_tile(punit),
-                    E_UNIT_ORDERS, ftc_server,
+                    E_UNIT_SENTRY_WAKE, ftc_server,
                     _("[`eye`] %s (%d,%d) saw %s %s %s<span class='sc'>%s</span> moving at (%d,%d)"),
                     unit_link(penemy),
                     stile_x, stile_y, 

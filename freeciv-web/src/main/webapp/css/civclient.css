@@ -2093,6 +2093,7 @@ input[type="email" i], #email {
 .e_enemy_spy_steal_map {
   color: #b88f8f;
 }
+.e_unit_sentry_wake,
 .e_unit_orders { /* sentry saw a unit*/
 /*  color: #d5e9a7; */
   color: #7caaff;
