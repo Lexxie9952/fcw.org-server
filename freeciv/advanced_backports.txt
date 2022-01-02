@@ -36,4 +36,5 @@ aacd4ab7b4e3d28b67eb77eb243054a722fa13c8 2021-10-05 ?        Adjusted and comple
                                                              (also sets dest_tile to -1 flag; FCW uses dest_tile so client can report coordinates of rally points.)
 3799001c7630b926ea1cc1693c2958077f082ea8 2021-10-19          Unchanged and complete   "Clear rally point on city transfer"
 3f4d25ff3019e252f377c123ed4464276c476d30 2021-10-12          Unchanged and complete: Fix revealing trade partner to destination owner when trade route established
-
+aa5cc416df38aa7baa8ae113f0b7ed4eb9f5dcd6 2021-10-17          Unchanged and complete: Lua: Add Tile:show() and Tile:hide() methods
+569d5e61ef026a887f4c2667fddf75fea7f09b3b 2021-10-21          Unchanged and complete: default.lua: Add a chance that a map is found from a hut

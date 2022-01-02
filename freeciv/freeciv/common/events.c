@@ -223,6 +223,7 @@ static struct {
   GEN_EV(E_UNIT_ACTION_ACTOR_FAILURE,  E_S_UNIT, N_("Your unit failed")),
   GEN_EV(E_UNIT_ACTION_TARGET_OTHER,   E_S_UNIT, N_("Unit did")),
   GEN_EV(E_UNIT_ACTION_TARGET_HOSTILE, E_S_UNIT, N_("Unit did to you")),
+  GEN_EV(E_HUT_MAP,             E_S_HUT,         N_("Map found from a hut")),
   /* Chat events for client to know how to render class of message */
   GEN_EV(E_CHAT_MSG_PUBLIC,	      E_S_XYZZY,	N_("Public chat messages")),
   GEN_EV(E_CHAT_MSG_PRIVATE_SENT,	E_S_XYZZY,	N_("Private chat messages sent")),
