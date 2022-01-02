@@ -222,6 +222,12 @@ Casus_Belli_Success
     A value of 1000 or higher is international outrage. International outrage
     gives every other player a casus belli against the actor.
 
+Celebrate_Size_Add
+    Add this value to the base size at which cities may celebrate. For example,
+    if cities.ruleset has celebrate_size_limit = 3, then a negative value will
+    lower the limit and a positive value will raise the limit, when this effect's 
+    requirements are triggered. 
+
 City_Image
     The index for the city image of the given city style.
 
@@ -516,6 +522,20 @@ Rapture_Rate_Pm
     500:  Half the turns, etc.
     NOTE: for backward compat, a rate of 0 is treated as the formerly 
     hard-coded assumption that the rate is 1000pm.
+
+Rehome_Pct
+    Units who would disband after their homecity is conquered, have this 
+    value's percent chance to rehome to the nearest legal domestic city,
+    instead of disbanding. Use 0 for never, 100 for always, and 1-99 to set
+    random odds.
+    _Req scopes_:
+        Player: the owner of the unit (victim player). (Can test govs, not wonders.)
+    _Local scopes_:
+        Unit:   the unit who will be disbanded or re-homed.
+        Tile:   the tile the unit is currently on.
+    _Illegal scopes_:
+        "City" - City scope is not tested due to the states of flux on unit
+            homecity, city survival, and city ownership.
 
 Retire_Pct
     The chance that unit gets retired (removed) when turn changes.

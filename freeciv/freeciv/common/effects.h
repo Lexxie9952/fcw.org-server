@@ -347,6 +347,13 @@ extern "C" {
    If not set, the game uses the formerly hard-coded rate of 1000 (for ruleset compat.) */
 #define SPECENUM_VALUE135 EFT_RAPTURE_RATE_PM
 #define SPECENUM_VALUE135NAME "Rapture_Rate_Pm"
+/* The percent chance a unit that would normally disband after its homecity is conquered,
+   will rehome to nearest legal city instead: */
+#define SPECENUM_VALUE136 EFT_REHOME_PCT
+#define SPECENUM_VALUE136NAME "Rehome_Pct"
+/* Bonus/Penalty adjustment to the size at which a city celebrates: */
+#define SPECENUM_VALUE137 EFT_CELEBRATE_SIZE_ADD
+#define SPECENUM_VALUE137NAME "Celebrate_Size_Add"
 
 /* FCW does not have /common and needs to hard code any changes or re-ordering of the above in effects.js */
 /********************************************************************************************************~*/

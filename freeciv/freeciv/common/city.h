@@ -571,6 +571,7 @@ int city_unit_unhappiness(struct unit *punit, int *free_unhappy);
 bool city_happy(const struct city *pcity);  /* generally use celebrating instead */
 bool city_unhappy(const struct city *pcity);                /* anarchy??? */
 bool base_city_celebrating(const struct city *pcity);
+int city_celebrate_size(const struct city *pcity);
 bool city_celebrating(const struct city *pcity);            /* love the king ??? */
 bool is_rapture_turn(const struct city *pcity, int idx2);   /* rapturedelay, EFT_RAPTURE_RATE_PM */
 int city_would_rapture(const struct city *pcity);           /* reason/timing code for (non)rapture */

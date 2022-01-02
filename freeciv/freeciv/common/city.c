@@ -1734,7 +1734,7 @@ bool city_got_defense_effect(const struct city *pcity,
 **************************************************************************/
 bool city_happy(const struct city *pcity)
 {
-  return (city_size_get(pcity) >= game.info.celebratesize
+  return (city_size_get(pcity) >= city_celebrate_size(pcity)
 	  && pcity->feel[CITIZEN_ANGRY][FEELING_FINAL] == 0
 	  && pcity->feel[CITIZEN_UNHAPPY][FEELING_FINAL] == 0
 	  && pcity->feel[CITIZEN_HAPPY][FEELING_FINAL] >= (city_size_get(pcity) + 1) / 2);
@@ -1757,7 +1757,18 @@ bool city_unhappy(const struct city *pcity)
 **************************************************************************/
 bool base_city_celebrating(const struct city *pcity)
 {
-  return (city_size_get(pcity) >= game.info.celebratesize && pcity->was_happy);
+  return (city_size_get(pcity) >= city_celebrate_size(pcity) && pcity->was_happy);
+}
+
+/**********************************************************************//**
+  The minimum size at which a city may celebrate.
+**************************************************************************/
+int city_celebrate_size(const struct city *pcity)
+{
+  return game.info.celebratesize +
+    get_target_bonus_effects(NULL, city_owner(pcity), NULL, pcity, NULL,
+                             city_tile(pcity), NULL, NULL, NULL, NULL, NULL,
+                             EFT_CELEBRATE_SIZE_ADD);
 }
 
 /**********************************************************************//**

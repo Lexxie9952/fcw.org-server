@@ -561,6 +561,7 @@ adv_want dai_effect_value(struct player *pplayer, struct government *gov,
   case EFT_NOT_TECH_SOURCE:
   case EFT_OUTPUT_PENALTY_TILE:
   case EFT_OUTPUT_INC_TILE_CELEBRATE:
+  case EFT_CELEBRATE_SIZE_ADD:
   case EFT_TRADE_REVENUE_BONUS:
   case EFT_TILE_WORKABLE:
   case EFT_COMBAT_ROUNDS:
@@ -571,6 +572,7 @@ adv_want dai_effect_value(struct player *pplayer, struct government *gov,
   case EFT_BORDER_VISION:
   case EFT_STEALINGS_IGNORE:
   case EFT_UNIT_SHIELD_VALUE_PCT:
+  case EFT_REHOME_PCT:
     break;
     /* This has no effect for AI */
   case EFT_VISIBLE_WALLS:

@@ -601,8 +601,9 @@ static void transfer_unit(struct unit *punit, struct city *tocity,
     if (verbose) {
       notify_player(from_player, unit_tile(punit),
                     E_UNIT_RELOCATED, ftc_server,
-		    _("Changed homecity of %s to %s."),
-		    unit_link(punit),
+		    _("[`home`]%s Changed homecity of %s to %s."),
+		    UNIT_EMOJI(punit),
+        unit_link(punit),
 		    city_link(tocity));
     }
   } else {
@@ -773,6 +774,7 @@ void transfer_city_units(struct player *pplayer, struct player *pvictim,
      cities or maybe destroyed */
   unit_list_iterate_safe(units, vunit) {
     struct city *new_home_city = tile_city(unit_tile(vunit));
+    struct city *relocate_city = NULL;
 
     if (vunit->server.dying) {
       /* Don't transfer or destroy a dying unit. It will soon be gone
@@ -799,18 +801,30 @@ void transfer_city_units(struct player *pplayer, struct player *pvictim,
         bounce_unit(vunit, TRUE);
       }
     } else {
-      /* The unit is lost.  Call notify_player (in all other cases it is
-       * called automatically). */
-      log_verbose("Lost %s %s at (%d,%d) when %s was lost.",
-                  nation_rule_name(nation_of_unit(vunit)),
-                  unit_rule_name(vunit), TILE_XY(unit_tile(vunit)), name);
-      if (verbose) {
-        notify_player(unit_owner(vunit), unit_tile(vunit),
-                      E_UNIT_LOST_MISC, ftc_server,
-                      _("[`warning`] %s lost along with control of %s."),
-                      unit_tile_link(vunit), name);
+      int rehome_pct = get_target_bonus_effects(NULL,unit_owner(vunit),pplayer,NULL,NULL,
+                        unit_tile(vunit),vunit,unit_type_get(vunit),NULL,NULL,NULL,EFT_REHOME_PCT);
+/*       notify_player(unit_owner(vunit), unit_tile(vunit),E_UNIT_LOST_MISC,ftc_server,
+                   _("[`dice`] Rehome probability = %d%%"),rehome_pct);*/
+      if (rehome_pct>0 && fc_rand(100) < rehome_pct) {
+          relocate_city = find_closest_city(unit_tile(vunit),NULL,unit_owner(vunit),
+                                false,false,true,true,false, unit_class_get(vunit));
       }
-      wipe_unit(vunit, ULR_CITY_LOST, NULL);
+      if (relocate_city) { 
+        transfer_unit(vunit, relocate_city, TRUE, verbose);
+      } else {
+        /* The unit is lost.  Call notify_player (in all other cases it is
+        * called automatically). */
+        log_verbose("Lost %s %s at (%d,%d) when %s was lost.",
+                    nation_rule_name(nation_of_unit(vunit)),
+                    unit_rule_name(vunit), TILE_XY(unit_tile(vunit)), name);
+        if (verbose) {
+          notify_player(unit_owner(vunit), unit_tile(vunit),
+                        E_UNIT_LOST_MISC, ftc_server,
+                        _("[`warning`]%s %s lost along with control of %s."),
+                        UNIT_EMOJI(vunit), unit_tile_link(vunit), name);
+        }
+        wipe_unit(vunit, ULR_CITY_LOST, NULL);
+      }
     }
   } unit_list_iterate_safe_end;
 
@@ -1613,7 +1627,7 @@ void create_city(struct player *pplayer, struct tile *ptile,
   sync_cities(); /* Will also send pwork. */
 
   notify_player(pplayer, ptile, E_CITY_BUILD, ftc_server,
-		_("[`castle`] You have founded %s."),
+		_("[`village`] You have founded %s."),
 		city_link(pcity));
   maybe_make_contact(ptile, city_owner(pcity));
 
@@ -1678,12 +1692,19 @@ void remove_city(struct city *pcity)
   /* Rehome units in other cities */
   unit_list_iterate_safe(pcity->units_supported, punit) {
     struct city *new_home_city = tile_city(unit_tile(punit));
-
-    if (new_home_city
-	&& new_home_city != pcity
+    int rehome_pct = get_target_bonus_effects(NULL,unit_owner(punit),NULL,NULL,
+                        NULL,unit_tile(punit),punit,unit_type_get(punit),NULL,NULL,NULL,EFT_REHOME_PCT);
+    if (rehome_pct>0 && fc_rand(100) < rehome_pct) { // Handle case where EFT_REHOME_PCT allows a re-home 
+        new_home_city = find_closest_city(unit_tile(punit),game_city_by_number(punit->homecity),unit_owner(punit),
+                              false,false,true,true,false,unit_class_get(punit));
+      if (new_home_city) transfer_unit(punit, new_home_city, TRUE, TRUE);
+    } else if (new_home_city && new_home_city != pcity /* Otherwise re-home if in another domestic city */
         && city_owner(new_home_city) == powner
         && !punit->server.dying) {
-      transfer_unit(punit, new_home_city, TRUE, TRUE);
+          transfer_unit(punit, new_home_city, TRUE, TRUE);
+    } else {
+        notify_player(unit_owner(punit), unit_tile(punit),E_UNIT_LOST_MISC, ftc_server,
+         _("[`warning`]%s %s lost when %s was razed."),UNIT_EMOJI(punit),unit_tile_link(punit),city_name_get(pcity));
     }
   } unit_list_iterate_safe_end;
 
@@ -2012,10 +2033,10 @@ bool unit_conquer_city(struct unit *punit, struct city *pcity)
     int saved_id = pcity->id;
 
     notify_player(pplayer, city_tile(pcity), E_UNIT_WIN_ATT, ftc_server,
-                  _("[`boom`] You destroy %s completely."),
+                  _("[`skull`] You destroy %s completely."),
                   city_tile_link(pcity));
     notify_player(cplayer, city_tile(pcity), E_CITY_LOST, ftc_server,
-                  _("[`warning`] %s has been destroyed by %s."), 
+                  _("[`skull`] %s has been destroyed by %s."), 
                   city_tile_link(pcity), player_name(pplayer));
     script_server_signal_emit("city_destroyed", pcity, cplayer, pplayer);
 
