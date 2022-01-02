@@ -240,9 +240,13 @@ who must migrate to decent starting position.
 ==============================================================
 42. Armor II bonus vs. CM cut to 50% was (100% i.e. 2x)
 ==============================================================
-43.
+43. EFT_REHOME_PCT alters the likelihood of units disbanding
+    from conquered/razed cities based on gov type.
+    Despotism:15,Monarchy:30,CM/Comm:45,Repub/Natl:60,
+    Demo:75,Theo:90
 ==============================================================
-44.
+44. Angkor Wat reduces city celebrate size by -1 to 2, and 
+  bonus begins at S2.
 ==============================================================
 45.
 ==============================================================

@@ -1795,6 +1795,64 @@ reqs	=
     { "type", "name",        "range"
       "Gov",  "Nationalism", "Player"
     }
+;********************************************** REHOME PROBABILITIES, governments
+[effect_rehome_pct_despotism]
+type    = "Rehome_Pct"
+value	= 15
+reqs	=
+    { "type", "name", "range"
+      "Gov", "Despotism", "Player"
+    }
+[effect_rehome_pct_monarchy]
+type    = "Rehome_Pct"
+value	= 30
+reqs	=
+    { "type", "name", "range"
+      "Gov", "Monarchy", "Player"
+    }
+[effect_rehome_pct_const_monarchy]
+type    = "Rehome_Pct"
+value	= 15  ; 45 %
+reqs	=
+    { "type", "name", "range"
+      "Gov", "Monarchy", "Player"
+      "Building", "Magna Carta", "Player"
+    }
+[effect_rehome_pct_communism]
+type    = "Rehome_Pct"
+value	= 45
+reqs	=
+    { "type", "name", "range"
+      "Gov", "Communism", "Player"
+    }
+[effect_rehome_pct_republic]
+type    = "Rehome_Pct"
+value	= 60
+reqs	=
+    { "type", "name", "range"
+      "Gov", "Republic", "Player"
+    }
+[effect_rehome_pct_nationalism]
+type    = "Rehome_Pct"
+value	= 60
+reqs	=
+    { "type", "name", "range"
+      "Gov", "Nationalism", "Player"
+    }
+[effect_rehome_pct_democracy]
+type    = "Rehome_Pct"
+value	= 75
+reqs	=
+    { "type", "name", "range"
+      "Gov", "Democracy", "Player"
+    }
+[effect_rehome_pct_theocracy]
+type    = "Rehome_Pct"
+value	= 90
+reqs	=
+    { "type", "name", "range"
+      "Gov", "Theocracy", "Player"
+    }
 ;********************************************** MARTIAL LAW, governments
 [effect_martial_law_each_anarchy]
 type    = "Martial_Law_Each"
@@ -4977,16 +5035,15 @@ reqs	=
       "Building",   "Angkor Wat", "Player"
       "Gov",        "Monarchy",   "Player"
       "OutputType", "Trade",      "Local"
-      "MinSize",    "3",          "City"
+      "MinSize",    "2",          "City"
     }
-[effect_angkor_wat_free_tile_bonus_despotism] ;free celebration tile output
+[effect_angkor_wat_free_tile_bonus] ;simulates celebration for anarchy/despotism
 type    = "Output_Penalty_Tile" 
 value   = 100
 reqs	=
     { "type",       "name",       "range"
       "Building",   "Angkor Wat", "Player"
-      "Gov",        "Despotism",  "Player"
-      "MinSize",    "3",          "City"
+      "MinSize",    "2",          "City"
     }
 [effect_angkor_wat_happy]
 type    = "Make_Happy"
@@ -5009,7 +5066,6 @@ reqs =
       "Gov",      "Theocracy",     "Player", FALSE 
       "Gov",      "Communism",     "Player", FALSE 
       "Gov",      "Nationalism",   "Player", FALSE 
-;      "Activity", "Irrigate",      "Local", TRUE  ; all work is 50% bonus
       "UnitFlag", "Infra",         "Local", TRUE
       "Terrain",  "Grassland",     "Local", FALSE ; exclude everything but Swamp/Jungle.
       "Terrain",  "Plains",        "Local", FALSE
@@ -5041,6 +5097,17 @@ value	= 2
 reqs	=
     { "type", "name", "range", "present"
       "Building", "Angkor Wat", "City", TRUE
+    }
+[effect_angkor_wat_celebrate_size]
+type = "Celebrate_Size_Add"
+value = -1
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Angkor Wat", "Player", TRUE
+      "Gov",      "Democracy",  "Player", FALSE
+      "Gov",      "Theocracy",  "Player", FALSE
+      "Gov",      "Communism",  "Player", FALSE
+      "Gov",      "Nationalism","Player", FALSE
     }
 ;************************************************************************ Apollo Program
 [effect_apollo_program]

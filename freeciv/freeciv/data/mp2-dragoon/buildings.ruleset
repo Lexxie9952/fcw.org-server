@@ -1460,15 +1460,15 @@ sabotage	= 0
 sound		= "w_angkor"
 sound_alt	= "w_generic"
 helptext	= _("\
-Angkor Wat gives you the glorious ancient city of\
- splendor and culture. In Despotism and Monarchy,\
- cities of size 3+ get the tile celebration bonus even if not celebrating.\
- All cities gain +1 happy citizen. Work done on Jungle and Swamp tiles\
- is 2× faster. In addition, the cost of Elephants is reduced by 5\
- shields. \n\
+Angkor Wat is a glorious ancient city of culture.\
+ All your cities gain +1 happy citizen, and can begin\
+ celebration at size 2. Additionally, all cities of size 2 or\
+ more get the tile celebration bonus even if not celebrating.\
+ Work done on Jungle and Swamp tiles is 2× faster. The cost of\
+ Elephants is reduced by 5 shields. \n\
 "), _("
-This Wonder is never obsolete, but it only has an effect in\
- Despotism, Monarchies, and Republic. \ 
+This Wonder is never obsolete, but has no effect in Democracy,
+ Theocracy, and all later governments.\ 
 "), _("
 Angkor Wat is a Civil Wonder. You can build only one Civil Wonder.\
 ")
