@@ -282,7 +282,7 @@ function civclient_init()
 
   show_timestamps = simpleStorage.get('tstamps');
   if (show_timestamps == null) {
-    show_timestamps = is_longturn() | server_settings && server_settings.ec_info.val;  // singleplayer defaults to ec_info = "DISABLED"
+    show_timestamps = is_longturn();
   }
   if (!show_timestamps) {
     changeCss(".ts", "display:none");
