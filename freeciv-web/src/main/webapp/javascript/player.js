@@ -321,7 +321,10 @@ function get_invalid_username_reason(username)
   else if (username.length >= 32) {
     return "too long";
   }
-  if (username.toLowerCase() == "pbem") {
+  if (username.toLowerCase() == "pbem" 
+   || username.toLowerCase() == "kickedplayer"
+   || username.toLowerCase().startsWith("newavailableplayer")
+   ) {
     return "not available";
   }
   else if (username.includes(" ")) {
