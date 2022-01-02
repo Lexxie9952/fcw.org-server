@@ -803,18 +803,32 @@ function check_text_input(event,chatboxtextarea) {
   if (event.keyCode == 13 && event.shiftKey == 0)  {
     send_text_input(chatboxtextarea);
   }
-  if (event.ctrlKey && !event.shiftKey) {
-    // allow ctrl-E hotkey while inside text input area.
-    if (String.fromCharCode(event.keyCode) == 'E') {
+  if (event.ctrlKey) {
+    // allow ctrl-E hotkey to pop-up emoji selector, when inside chat text input: 
+    if (!event.shiftKey && !event.altKey && String.fromCharCode(event.keyCode) == 'E') {
       event.preventDefault();
       emoji_popup();
     }
-    // allow ctrl-S hotkey while inside text input area (prevents page-save):
-    else if (String.fromCharCode(event.keyCode) == 'S') {
+    // allow ctrl-shift-E hotkey for error logging, when inside chat text input: 
+    else if (event.shiftKey && !event.altKey && String.fromCharCode(event.keyCode) == 'E') {
+      event.preventDefault();
+      toggle_error_logging();
+    }
+    // allow ctrl-S hotkey while inside text input area (prevents annoying page-save):
+    else if (!event.shiftKey && !event.altKey && String.fromCharCode(event.keyCode) == 'S') {
       event.preventDefault();
       quicksave();
     } 
   }
+}
+/****************************************************************************
+  Toggles the visual display of the server's error log events:
+****************************************************************************/
+function toggle_error_logging()
+{
+  $(".e_log_error").toggle();
+  add_client_message("Error logging is now " 
+   + ($(".e_log_error").is(":visible") ? "ON." : "OFF.") );  
 }
 /**********************************************************************//**
    Attempts to send content of chatbox. See function above.
@@ -3654,11 +3668,10 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
       if (shift && !ctrl && !alt) {
         key_unit_airbase();
       }
-      else if (ctrl && shift) {
+      else if (ctrl && shift && !alt) {
         the_event.preventDefault(); // override possible browser shortcut
         // show/hide the dev/debug messages sent from server to supercow users
-        $(".e_log_error").toggle();
-        add_client_message("Error logging set to " + $(".e_log_error").is(":visible"));
+        toggle_error_logging();
       }
       else if (ctrl && !shift && !alt) {
         the_event.preventDefault(); // override possible browser shortcut
