@@ -210,6 +210,7 @@ Domestic city: only avail to Despo, Commie;
   * Small bulb awards (1-5 bulbs).
   * a Boat (if on a river)
   * Goods (if discovered by a unit who can carry Goods)
+  * A map of the surrounding area
 ==============================================================
 36. Nomadism / Early game balance bonuses 
 During the first 5 turns, each Settler gets 1 bulb/turn; this

@@ -216,12 +216,12 @@ end
 
 -- Randomly choose a hut event
 function _deflua_hut_enter_callback(unit)
-  local chance = random(0, 130)
+  local chance = random(0, 13)
   local alive = true
 
-  if chance == 0 or chance == 1 then
+  if chance == 0 then
     _deflua_hut_get_gold(unit, 1)
-  elseif chance == 2 or chance == 3 then
+  elseif chance >= 1 and chance <= 3 then
     _deflua_hut_get_gold(unit, 2)
   elseif chance == 4 then
     _deflua_hut_get_gold(unit, 5)
@@ -249,10 +249,8 @@ function _deflua_hut_enter_callback(unit)
     if not _deflua_hut_get_mercenaries(unit) then
       _deflua_hut_consolation_prize(unit)
     end
-  elseif chance > 12 or chance == 13 then
+  elseif chance == 12 or chance == 13 then
     _deflua_hut_reveal_map(unit)
-  elseif chance == 999 then
-    alive = _deflua_hut_get_barbarians(unit)
   end
 
   -- continue processing if unit is alive
