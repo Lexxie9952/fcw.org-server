@@ -2436,7 +2436,11 @@ static void handle_observer_ready(struct connection *pconn)
   if (pconn->access_level == ALLOW_HACK) {
     players_iterate(plr) {
       if (is_human(plr)) {
+#ifndef FREECIV_WEB
         return;
+#else /* FCW allows a GM to restart a game. */
+   break;
+#endif
       }
     } players_iterate_end;
 
@@ -2483,6 +2487,10 @@ void handle_player_ready(struct player *requestor,
 	}
       }
     } players_iterate_end;
+
+    /* Prevent longturn restarts being locked by pre-game campers: */
+    if (is_longturn() && game.info.turn > 1) num_unready = 0; 
+
     if (num_unready > 0) {
       notify_conn(NULL, NULL, E_SETTING, ftc_server,
                   _("Waiting to start game: %d out of %d players "
