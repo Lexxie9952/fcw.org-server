@@ -179,9 +179,8 @@ function turn_callback(turn, year)
   if turn == 1 then
     notify.event(nil, nil, E.SCRIPT,
 _("<b>Welcome to the MP2 Avant-garde ruleset!</b>\n\
-This developmental version of MP2 has features which are not\
-documented in the MP2 game manual. In-game helptext is accurate.\
-Inquire on Discord for the list of new features. Have fun!\n\
+This ruleset has features which are \
+documented in the MP2 game manual. Have fun!\n\
 "))
   end
 end
