@@ -1989,6 +1989,7 @@ input[type="email" i], #email {
 #game_message_area {
   padding-top: 12px;
   padding-left: 0px;
+  padding-right: 4px;
   box-sizing: border-box;
   border: 1px solid #111111;
   color: rgb(247, 241, 241);
@@ -2043,8 +2044,20 @@ input[type="email" i], #email {
 .cht_you {
   color: #c888ff;
 }
-.cht_arw {
-  color: #ffffff;
+/* chat arrows */
+.arwl,
+.arwr {
+  padding: 3px;
+}
+.arwl::before {
+  content: url(/images/e/a_left.png);
+  vertical-align: text-top;
+  white-space: nowrap;
+}
+.arwr::before {
+  content: url(/images/e/a_rght.png);
+  vertical-align: text-top;
+  white-space: nowrap;
 }
 
 

@@ -185,12 +185,12 @@ static void chat_msg_to_conn(struct connection *sender,
 
   /* Repeat the message for the sender. */
   send_chat_msg(sender, sender, ftc_any, E_CHAT_MSG_PRIVATE_SENT,
-                "%s<span class='cht_arw'>🠄</span>%s<br>%s",
+                "%s<span class='arwl'></span>%s<br>%s",
                  dest_name, sender_flag, msg);
 
   if (sender != dest) {
     send_chat_msg(dest, sender, ftc_any, E_CHAT_MSG_PRIVATE_RCVD,
-                  "<span class='cht_prv_sndr'>%s %s</span>🠆<br>%s",
+                  "<span class='cht_prv_sndr'>%s %s</span><span class='arwr'></span><br>%s",
                    sender_flag, sender_name, msg);
   }
 }
@@ -232,19 +232,19 @@ static void chat_msg_to_player(struct connection *sender,
 
   /* Repeat the message for the sender. */
   send_chat_msg(sender, sender, ftc_any, E_CHAT_MSG_PRIVATE_SENT,
-                "%s<span class='cht_arw'>🠄</span>%s<br>%s",
+                "%s<span class='arwl'></span>%s<br>%s",
                  player_name(pdest), sender_flag, msg);
 
   /* Send the message to destination. */
   if (NULL != dest && dest != sender) {
     send_chat_msg(dest, sender, ftc_any, E_CHAT_MSG_PRIVATE_RCVD,
-                  "<span class='cht_prv_sndr'>%s %s</span><span class='cht_arw'>🠆</span><br>%s",
+                  "<span class='cht_prv_sndr'>%s %s</span><span class='arwr'></span><br>%s",
                    sender_flag, sender_name, msg);
   }//color="#caa3b3"
 
   /* Send the message to player observers. */
   package_chat_msg(&packet, sender, ftc_any, E_CHAT_MSG_PRIVATE_RCVD, 
-                   "%s %s<span class='cht_arw'>🠆</span>%s %s:<br>%s", sender_flag, sender_name,
+                   "%s %s<span class='arwr'></span>%s %s:<br>%s", sender_flag, sender_name,
                     player_name(pdest), dest_flag, msg);
   conn_list_iterate(pdest->connections, pconn) {
     if (pconn != dest
@@ -285,7 +285,7 @@ static void chat_msg_to_allies(struct connection *sender, char *msg)
   form_chat_flag(sender, sender_flag, sizeof(sender_flag));
 
   package_chat_msg(&packet, sender, ftc_any, E_CHAT_MSG_ALLY,
-                   _("<span class='cht_ally_sndr'>%s %s<span class='cht_arw'>🠆</span>allies:</span><br>%s"),
+                   _("<span class='cht_ally_sndr'>%s %s<span class='arwr'></span>allies:</span><br>%s"),
                     sender_flag, sender_name, msg);
 
   players_iterate(aplayer) {
