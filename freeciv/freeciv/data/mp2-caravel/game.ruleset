@@ -2245,17 +2245,25 @@ actor_reqs    =
       "Terrain",   "Grassland", "Local", FALSE
     }
 
-[actionenabler_irrigate_tf]
+[actionenabler_cultivate]
 action        = "Cultivate"
 actor_reqs    =
     { "type",          "name",         "range", "present"
       "UnitFlag",      "Settlers",     "Local", TRUE
       "UnitFlag",      "CanHide",      "Local", FALSE
       "UnitFlag",      "CanClaim",     "Local", FALSE
-;      "UnitType",      "Legion",       "Local", FALSE
+      "UnitType",      "Tribesmen",    "Local", FALSE
       "UnitType",      "Proletarians", "Local", FALSE
     }
-[actionenabler_irrigate_tf_prole]
+[actionenabler_cultivate_tribesmen]
+action        = "Cultivate"
+actor_reqs    =
+    { "type",          "name",         "range", "present"
+      "UnitFlag",      "Settlers",     "Local", TRUE
+      "UnitType",      "Tribesmen",    "Local", TRUE
+      "MinYear",       "-2000",        "World", FALSE   ; they get old
+    }
+[actionenabler_cultivate_prole]
 action        = "Cultivate"
 actor_reqs    =
     { "type",          "name",         "range", "present"
@@ -2264,19 +2272,28 @@ actor_reqs    =
       "Gov",           "Communism",    "Player", TRUE
     }
 
-[actionenabler_mine_tf_outside_city]
+[actionenabler_plant_outside_city]
 action        = "Plant"
 actor_reqs    =
     { "type",          "name",        "range", "present"
       "UnitFlag",      "Settlers",    "Local", TRUE
-      "UnitFlag",      "CanHide",      "Local", FALSE
-      "UnitFlag",      "CanClaim",     "Local", FALSE
-;      "UnitType",      "Legion",      "Local", FALSE 
+      "UnitFlag",      "CanHide",     "Local", FALSE
+      "UnitFlag",      "CanClaim",    "Local", FALSE
+      "UnitType",      "Tribesmen",   "Local", FALSE 
       "UnitType",      "Proletarians","Local", FALSE
-      "UnitFlag",      "Well-Digger",  "Local", FALSE
+      "UnitFlag",      "Well-Digger", "Local", FALSE
       "CityTile",      "Center",      "Local", FALSE
     }
-[actionenabler_mine_tf_outside_city_prole]
+[actionenabler_plant_outside_city_tribesmen]
+action        = "Plant"
+actor_reqs    =
+    { "type",          "name",        "range", "present"
+      "UnitFlag",      "Settlers",    "Local", TRUE
+      "UnitType",      "Tribesmen",   "Local", TRUE 
+      "CityTile",      "Center",      "Local", FALSE
+      "MinYear",       "-2000",       "World", FALSE   ; they get old
+    }
+[actionenabler_plant_outside_city_prole]
 action        = "Plant"
 actor_reqs    =
     { "type",          "name",        "range",  "present"
@@ -2285,19 +2302,18 @@ actor_reqs    =
       "Gov",           "Communism",   "Player", TRUE
       "CityTile",      "Center",      "Local",  FALSE
     }
-[actionenabler_mine_tf_inside_city] ;you can't plant a forest in an existing city
+[actionenabler_plant_inside_city] ;you can't plant a forest in an existing city
 action        = "Plant"
 actor_reqs    =
-    { "type",          "name",      "range", "present"
-      "UnitFlag",      "Settlers",  "Local", TRUE
-;      "UnitType",      "Legion",    "Local", FALSE
-      "UnitFlag",      "CanHide",      "Local", FALSE
-      "UnitFlag",      "CanClaim",     "Local", FALSE
-      "UnitFlag",      "Well-Digger",  "Local", FALSE
-      "UnitType",      "Proletarians", "Local", FALSE
-      "CityTile",      "Center",    "Local", TRUE
-      "Terrain",       "Grassland", "Local", FALSE
-      "Terrain",       "Plains",    "Local", FALSE
+    { "type",          "name",        "range", "present"
+      "UnitFlag",      "Settlers",    "Local", TRUE
+      "UnitFlag",      "CanHide",     "Local", FALSE
+      "UnitFlag",      "CanClaim",    "Local", FALSE
+      "UnitFlag",      "Well-Digger", "Local", FALSE
+      "UnitType",      "Proletarians","Local", FALSE
+      "CityTile",      "Center",      "Local", TRUE
+      "Terrain",       "Grassland",   "Local", FALSE
+      "Terrain",       "Plains",      "Local", FALSE
     }
 
 [actionenabler_pillage]
