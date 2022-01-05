@@ -68,9 +68,10 @@ static void con_handle_log(enum log_level level, const char *message,
     } conn_list_iterate_end;
 
     notify_conn(NULL, NULL, E_LOG_FATAL, ftc_warning, "%s", message);
+    /* Reduce size of log files.
     notify_conn(NULL, NULL, E_LOG_FATAL, ftc_warning,
                 _("Please report this message at %s"),
-                BUG_URL);
+                BUG_URL); */
   }
 
   /* Write debug/verbose message to console only when not written to file. */
