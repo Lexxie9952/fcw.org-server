@@ -1333,26 +1333,27 @@ function show_intro_dialog(title, message) {
 **************************************************************************/
 function show_longturn_intro_dialog() {
 
-  var title = "Welcome to Freeciv-web: One Turn per Day!";
+  var title = "Welcome to Freeciv-web Longturn!";
 
-  var message = "<br>This is a Freeciv-web: One Turn per Day game, which is a Freeciv multiplayer game "+
-        "where the turns are 23 hours each, so players logs in once every day to do their turn. This format allows for more players to "+
-        "play at once, more time to strategize, more time to coordinate with other players, and less rushing to get things done, which can "+
-        "occur in a standard multi-player Freeciv game. It takes a lot longer to play a game, about 2 to 6 months, but you can play it just a "+
-        "little bit every day. <br><br> "+
-        "Please be polite to the other players and don't cheat. "+
-        "You will get to play for turn immediately after signing up, and your next turn tomorrow. Please join the game only if you are interested in playing one turn every day. " +
-        "Players who are idle for more than 12 turns can be replaced by new players. This means that idle players will continually be replaced by new players.<br><br>" +
-        "Joining this game requires signing in with a player name and validated Google Account."+
+  var message = "This is a Freeciv-Web Longturn game. "+
+        "Turns are 23 hours: &nbsp;one turn per day.<br>There are more players, "+
+        "and more time for strategy and cooperation.<br>"+
+        "Games last 3-4 months. You play a little bit every day. <br><br>"+
+        "Please join only if you are interested in playing one turn every day.<br>" +
+        "Players who are idle can be replaced by new players.<br><br><b><u>Important</u>:</b><br>" +
+        "1. A Google Gmail account is needed to sign in. <br>2. You must access this page with \"www.\" in the address bar.<br>"+
+        "3. Disable your ad-blocker so Google can do a sign-in pop-up.<br>"
         "<br><br><br><table><tr><td>Player name:</td><td><input id='username_req' type='text' size='25' maxlength='31'></td></tr></table>" +
         " <br><br><span id='username_validation_result' style='display:none;'></span><br>" +
-        "<div id='fc-signin2'></div><br><br><br><small>(Please disable adblockers, then reload the page, for Google login button to work)</small>";
+        "<div title='To sign in, disable adblock and make sure the web address includes www.' id='fc-signin2'></div><br><br><br><small>(Please disable adblockers, then reload the page using <b>www.</b> address, for Google login to work)</small>";
 
   if (is_small_screen()) {
-    message = "Welcome to this Freeciv-web: One Turn per Day game! Enter your player name:"+
+    title = "Freeciv-Web Longturn Game"
+    message = "This is a Freeciv-Web Longturn game. Turns are 23 hours, with more players and time for strategy. "+
+      "To sign in, use a gmail account, disable ad-block, and put <b>www.</b> in the <a href='https://www.freecivweb.org'>url</a>."
       "<br><br><table><tr><td>Player name:</td><td><input id='username_req' type='text' size='25' maxlength='31'></td></tr></table>" +
       " <br><br><span id='username_validation_result' style='display:none;'></span><br><br>" +
-      "<div id='fc-signin2'></div><br>";
+      "<div title='To sign in, disable pop-up adblock and make sure the web address includes www.' id='fc-signin2'></div><br>";
   }
 
   // reset dialog page.
