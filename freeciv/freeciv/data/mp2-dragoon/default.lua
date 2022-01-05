@@ -294,14 +294,14 @@ function _deflua_make_partisans_callback(city, loser, winner, reason)
   end
 
   local partisan_utype = 17
-  local partisan_name = "Partisans"
+  local partisan_name = "Partisan"
   local partisans = random(0, 1 + (city.size + 1) / 2) + 1
   if partisans > 8 then
     partisans = 8
   end
 
   if loser.government:rule_name() == "Theocracy" then
-    partisan_name = "Zealots"
+    partisan_name = "Zealot"
     partisan_utype = 16
   end
 
@@ -310,9 +310,13 @@ function _deflua_make_partisans_callback(city, loser, winner, reason)
   partisan_spawns = partisan_spawns + 1
   if partisan_spawns < 5 then
     notify.event(loser, city.tile, E.CITY_LOST,
-    _("[`events/partisans`]<br>[`partisan`] The loss of %s inspires %d %s!"), city.name, partisans, partisan_name)
+      PL_("[`events/partisans`]<br>[`partisan`] The loss of %s inspires %d %s!", 
+      "[`events/partisans`]<br>[`partisan`] The loss of %s inspires %d %ss!", partisans),
+      city.name, partisans, partisan_name)
     notify.event(winner, city.tile, E.UNIT_WIN_ATT,
-    _("[`events/partisans`]<br>[`partisan`] The loss of %s inspires %d %s!"), city.name, partisans, partisan_name)
+      PL_("[`events/partisans`]<br>[`partisan`] The loss of %s inspires %d %s!",
+      "[`events/partisans`]<br>[`partisan`] The loss of %s inspires %d %ss!", partisans),
+      city.name, partisans, partisan_name)
   end
 end
 
