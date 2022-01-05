@@ -152,7 +152,10 @@ table.terrain_chart td {
   white-space: nowrap;
 }
 .ts::before {
-  content: "⌚";
+/*  content: "⌚"; */
+  content: url(/images/e/ts.png);
+  vertical-align:middle;
+  padding: 1px;
   white-space: nowrap;
 }
 
