@@ -4837,6 +4837,11 @@ function key_unit_load(scoop_units)
         boarded ++;
         boarded_list += " [`" + freemoji_name_from_universal(unit_type(punit).name) + "`] ";
         boarded_on[punit.id] = tunit.id;
+        /* This line and the and the one under the commented out line below seem to fix an edge
+           case that happens when giving a non-boardable cargo unit an order to board wherein
+           boarded_on[punit.id] is undefined; we keep track of the LAST transport that was 
+           successfully boarded on by having reached this code. */
+        var last_successful_transport = boarded_on[punit.id];
       }
     }
   }
@@ -4844,7 +4849,9 @@ function key_unit_load(scoop_units)
     add_client_message("Boarding " + pluralize("unit", boarded)
     + ". " + boarded_list 
     + (tunit ? "&#8594; [`" 
-             + freemoji_name_from_universal(unit_type(units[boarded_on[punit.id]]).name) +"`] " : "") );
+//             + freemoji_name_from_universal(unit_type(units[boarded_on[punit.id]]).name) +"`] " : "") );
+             + freemoji_name_from_universal(unit_type(units[last_successful_transport]).name) +"`] " : "") );
+
     setTimeout(update_active_units_dialog, update_focus_delay);
   }
   // Don't advance focus if more than one dialog open, it would reset our focus units
@@ -4859,26 +4866,51 @@ function key_unit_load(scoop_units)
 function key_unit_deboard()
 {
   var funits = get_units_in_focus();
-  var unloaded = 0;
+  var deboarded = 0;
+  var deboarders_ready=0;
+  var untransported=0;
+  var unable_to_deboard=0;
+  var unable_list = "";
   var deboard_list = "";
 
   for (var i = 0; i < funits.length; i++) {
     var punit = funits[i];
     if (unit_can_deboard(punit)) {
       request_unit_do_action(ACTION_TRANSPORT_DEBOARD, punit['id'], punit['transported_by']);
-      unloaded++;
+      deboarded++;
+      deboarders_ready += punit.movesleft;
       deboard_list += " [`" + freemoji_name_from_universal(unit_type(punit).name) + "`]";
+    } else if (punit.transported) {
+      unable_to_deboard++;
+      unable_list += " [`" + freemoji_name_from_universal(unit_type(punit).name) + "`]";
+    } else {
+      untransported++;
     }
   }
 
   deactivate_goto(false);
 
-  if (unloaded) {
-    add_client_message("Deboarding "+unloaded+" unit"+ (unloaded>1 ? "s. " : ". ")
+  // Indicate units that we (strongly believe) the server will let us successfully deboard:
+  if (deboarded) {
+    add_client_message("Deboarding "+deboarded+" unit"+ (deboarded>1 ? "s: " : ": ")
                        +deboard_list);
-    setTimeout(function() {advance_unit_focus(false)}, update_focus_delay);
+  }
+  // Indicate units that we know can't deboard (because we didn't ask the server):
+  if (unable_to_deboard) {
+    add_client_message("<b>Unable</b> to deboard "+unable_to_deboard+" unit"+ (unable_to_deboard>1 ? "s: " : ": ")
+                       +unable_list, "e_unit_illegal_action");    
+  }
+  // Deboard command given to untransported unit AND no one else was transported/deboarding:
+  if (untransported && !deboarded && !unable_to_deboard) {
+    add_client_message("Only transported units can deboard.", "e_unit_illegal_action");    
+  } 
+  /* If we deboarded units AND none have moves left AND no one was disallowed to deboard, 
+     advance unit focus: */
+  if (deboarded && deboarders_ready==0 && unable_to_deboard==0) {
+    setTimeout(function() {advance_unit_focus(false)}, update_focus_delay+250);
   }
 }
+
 /*******************************************************************************
  V3: (1) If Transport is selected unit: try to "Unload cargo"
      (2) If Passenger is selected unit AND couldn't unload cargo, deboard it.
@@ -4891,8 +4923,10 @@ function key_unit_deboard()
 *******************************************************************************/
 function key_unit_unload()
 {
-  var unloaded =0;   // counter for unloaded units
-  var deboarded=0;  // counter for deboarded units
+  var unloaded =0;             // counter for unloaded units
+  var deboarded=0;             // counter for deboarded units
+  var unloaded_cargo_ready=0;  // unloaded cargo that can move
+  var deboarders_ready=0;      // deboarded cargo that can move
   var unload_list = "";
   var deboard_list = "";
 
@@ -4918,7 +4952,7 @@ function key_unit_unload()
     let this_unit_unloaded = 0;
     // Selected Unit is: selected and has transport capacity. Therefore, check
     // each unit on tile to see if it's on this transporter, and unload it.
-    if (sunits[s] && stype.transport_capacity>0) { //console.log("  sunit[i] has a transport capacity. attempting unload cargo");
+    if (sunits[s] && stype.transport_capacity>0) { //console.log("  sunits[i] has a transport capacity. attempting unload cargo");
       for (var i = 0; i < units_on_tile.length; i++) {
         var punit = units_on_tile[i];  //console.log("punit["+i+"]");
 
@@ -4928,6 +4962,7 @@ function key_unit_unload()
             request_unit_do_action(ACTION_TRANSPORT_UNLOAD, punit['transported_by'], punit['id']);
             unloaded++;             // Total number of all unloadings from all selected units.
             this_unit_unloaded++;   // Number of unloadings just from this transport.
+            unloaded_cargo_ready += punit.movesleft;
             unload_list += " [`" + freemoji_name_from_universal(unit_type(punit).name) + "`]"
           }  
         }
@@ -4941,6 +4976,7 @@ function key_unit_unload()
       if (unit_can_deboard(sunits[s])) {
         request_unit_do_action(ACTION_TRANSPORT_DEBOARD, sunits[s]['id'], sunits[s]['transported_by']);
         deboarded++;
+        deboarders_ready += sunits[s].movesleft;
         deboard_list += " [`" + freemoji_name_from_universal(unit_type(sunits[s]).name) + "`] "
       }
     }
@@ -4951,24 +4987,37 @@ function key_unit_unload()
 
   // Show # of units who successfully unloaded and/or deboarded:
   if (unloaded) {
-    add_client_message("Unloading "+unloaded+" unit"+ (unloaded>1 ? "s. " : ". ") 
+    add_client_message("Unloading "+unloaded+" unit"+ (unloaded>1 ? "s: " : ": ") 
                        + unload_list);
   }
   if (deboarded) {
-    add_client_message("Deboarding "+deboarded+" unit"+ (deboarded>1 ? "s. " : ". ")
+    add_client_message("Deboarding "+deboarded+" unit"+ (deboarded>1 ? "s: " : ": ")
                        + deboard_list );
   }
   else if (!unloaded && !deboarded) {
     if (sunits.length == 1) {
-      add_client_message(unit_type(sunits[0]).rule_name+" couldn't unload cargo here.")
+      add_client_message(unit_type(sunits[0]).rule_name+" couldn't unload here.", "e_unit_illegal_action")
     }
-    else if (!deboarded) { 
-      add_client_message("Can't unload cargo here.");
+    else { 
+      add_client_message("Can't unload cargo here.", "e_unit_illegal_action");
     }
     return; // avoid advancing unit focus after failed command.
   }
 
-  setTimeout(function() {advance_unit_focus(false)}, update_focus_delay);
+  /* OPTIONAL heuristics:
+     1. Don't advance focus on an unloading transport that has moves 
+     left if it's unloading cargo who doesn't have moves left: */
+  if (unloaded && sunit.movesleft && !unloaded_cargo_ready) {
+    return;
+  }
+  /* 2. If we deboarded only (without an unloader-transport also
+     active), AND any deboarders had move left, don't advance focus: */
+  if (deboarded && !unloaded && deboarders_ready) {
+    return;
+  }
+  /* 3. Give a little extra time for server to unsentry unloaded cargo so we 
+     will advance focus to it */
+  setTimeout(function() {advance_unit_focus(false)}, update_focus_delay+250);
 }
 
 /**************************************************************************
