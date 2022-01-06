@@ -230,9 +230,6 @@ static struct {
   GEN_EV(E_CHAT_MSG_PRIVATE_SENT,	E_S_XYZZY,	N_("Private chat messages sent")),
   GEN_EV(E_CHAT_MSG_PRIVATE_RCVD,	E_S_XYZZY,	N_("Private chat messages rcvd")),
   GEN_EV(E_CHAT_MSG_ALLY,	       	E_S_XYZZY,	N_("Ally chat messages")),
-  GEN_EV(E_CHAT_PRIVATE,	       	E_S_XYZZY,	N_("Private chat")),
-  GEN_EV(E_CHAT_ALLIES,	       	E_S_XYZZY,	N_("Allied chat")),
-  GEN_EV(E_CHAT_OBSERVER,	       	E_S_XYZZY,	N_("Observer chat")),
 
   /* The sound system also generates "e_game_quit", although there's no
    * corresponding identifier E_GAME_QUIT. */

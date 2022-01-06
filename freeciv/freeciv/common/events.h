@@ -177,9 +177,7 @@ extern "C" {
 #define SPECENUM_VALUE138 E_CHAT_MSG_PRIVATE_SENT
 #define SPECENUM_VALUE139 E_CHAT_MSG_PRIVATE_RCVD
 #define SPECENUM_VALUE140 E_CHAT_MSG_ALLY
-#define SPECENUM_VALUE141 E_CHAT_PRIVATE
-#define SPECENUM_VALUE142 E_CHAT_ALLIES
-#define SPECENUM_VALUE143 E_CHAT_OBSERVER
+// DO NOT INCLUDE "synthetic events" E_CHAT_PRIVATE, E_CHAT_ALLIES, E_CHAT_OBSERVER
 /*
  * Note: If you add a new event, make sure you make a similar change
  * to the events array in "common/events.c" using GEN_EV, to

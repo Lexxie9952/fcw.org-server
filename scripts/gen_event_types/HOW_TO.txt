@@ -1,0 +1,5 @@
+VAGRANT:
+./gen_event_types -f /vagrant/freeciv/freeciv -o /vagrant/freeciv-web/src/derived/webapp
+
+OTHERS:
+./gen_event_types -f /freecivpath -o /fcw_path/freeciv-web/src/derived/webapp
