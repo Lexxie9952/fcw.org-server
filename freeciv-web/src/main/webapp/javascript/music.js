@@ -93,10 +93,11 @@ function pick_next_track() {
       dj_approved = true;
     } else { // Not a break track, pick a main selection at random
         if      (game_info.turn <= 12 && !tech_known("Alphabet"))        category = "tribal";
-        else if (!tech_known("Feudalism") && !tech_known("Monotheism"))  category = "ancient";
+        else if (!tech_known("Feudalism") && !tech_known("Navigation") // catch all paths to gunpowder || magnetism
+              && !tech_known("Philosophy") && !tech_known("Invention"))  category = "ancient";
         else if (!tech_known("Gunpowder") && !tech_known("Magnetism"))   category = "middle";
         else if (!tech_known("Industrialization") || !tech_known("Conscription")) category = "colonial"; // need both to leave colonial
-        else if (!tech_known("Rocketry") && !tech_known("Robotics")) category = "industrial";
+        else if (!tech_known("Rocketry") && !tech_known("Robotics"))     category = "industrial";
         else category = "modern";
 
         // Pick a random track with the approved qualities for the game context:

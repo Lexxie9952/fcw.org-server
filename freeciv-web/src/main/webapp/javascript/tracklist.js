@@ -263,7 +263,30 @@ from the project and be non-essential to the function of the Instance.
       "tribal/Humani",
       "tribal/Origins",
       "tribal/Echolalia",
-      "tribal/MotherTongue"
+      "tribal/MotherTongue",
+      "tribal/MossCarpetSkyBlanket",
+      "tribal/ProfligateEarth",
+      "tribal/Raku",
+      "tribal/VoiceOfRust",
+      "tribal/SoftRainsFall",
+      "tribal/Transpiration",
+      "tribal/CorvidCollections",
+      "tribal/AerialOnWarmSeas",
+      "tribal/NeverHunger",
+      "tribal/WhatWeLeftBehind",
+      "tribal/SeekingEden",
+      "tribal/TheGateIsOpen",
+      "tribal/UndulatingTerrain",
+      "tribal/Artifacts",
+      "tribal/ClayWoodBoneDirt",
+      "tribal/InTheEyesOfTheSpirit",
+      "tribal/TheFaceInTheFire",
+      "tribal/Hunter",
+      "tribal/ErodingColumns",
+      "tribal/FlowStone",
+      "tribal/SuonoIpogeo",
+      "tribal/UnderwaterFields",
+      "tribal/EtherealAbyss"
     ],
   "ancient":
     [
@@ -342,7 +365,15 @@ from the project and be non-essential to the function of the Instance.
       "ancient/TombHorus",
       "ancient/TombOsiris",
       "ancient/TombIsis",
-      "ancient/TombAnubis"
+      "ancient/TombAnubis",
+      "ancient/SongOfSophia",
+      "ancient/RebirthsPortalUnveiled",
+      "ancient/Saraghaz",
+      "ancient/BeamOfSunlight",
+      "ancient/Bija",
+      "ancient/EnteringIntimateFragranceOfBeatitude",
+      "ancient/IntroDiAde",
+      "ancient/RoadToWirikuta"
     ],
   "middle":
     [
@@ -420,6 +451,10 @@ from the project and be non-essential to the function of the Instance.
       "middle/OldTree",
       "middle/Summertide",
       "middle/TimberTown",
+      "middle/RaptureRecall",
+      "middle/Promentory",
+      "middle/SpanishDance2",
+      "middle/TearsOfMuses"
     ],
   "colonial":
     [
@@ -475,7 +510,19 @@ from the project and be non-essential to the function of the Instance.
       "industrial/Coronation",
       "industrial/Esther",
       "industrial/Judea",
-      "industrial/Eventide"
+      "industrial/Eventide",
+      "colonial/LaCatedral2",
+      "colonial/HesAPriate",
+      "colonial/HighlandSpirit",
+      "colonial/HiddenFalls",
+      "colonial/SongOfTimeAndStorms",
+      "colonial/Wilderness",
+      "colonial/Brothers",
+      "colonial/YradierLaPaloma",
+      "colonial/ChoroDaSaudade",
+      "colonial/LegendaryGuardian",
+      "colonial/lArpeggiata",
+      "colonial/Elegie"
     ],
   "industrial":
     [
@@ -524,7 +571,11 @@ from the project and be non-essential to the function of the Instance.
       "industrial/Nightfall",
       "industrial/SolentVW",
       "industrial/Tallis1VW",
-      "industrial/Tallis2VW"
+      "industrial/Tallis2VW",
+      "industrial/GenerosityOfSolitude1",
+      "industrial/NorthCountrySketchesWinter",
+      "industrial/NorthCountrySketches3",
+      "industrial/NorthCountrySketches1"
     ],
   "modern":
     [
@@ -539,6 +590,7 @@ from the project and be non-essential to the function of the Instance.
       "tribal/CeremonyStrata",
       "tribal/Mammoth",
       "tribal/LunaStrata",
+      "tribal/UnderwaterFields",
       "ancient/SeaDragon",
       "modern/Stellar",
       "modern/Chevaliers",
@@ -645,7 +697,17 @@ from the project and be non-essential to the function of the Instance.
       "modern/HeartOffense",
       "modern/Mauvais",
       "modern/ScaredDark",
-      "modern/TwoRun"
+      "modern/TwoRun",
+      "modern/Rhizome",
+      "modern/AfterUs",
+      "modern/MeetingFaceToFace",
+      "modern/GlassMishimaQuartet",
+      "modern/MemoriesOfWandering2",
+      "modern/MemoriesOfHome",
+      "modern/Erinacea",
+      "modern/Flatlands",
+      "modern/OutOfSource",
+      "modern/DistantTraveler"
     ]
   };
   

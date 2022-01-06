@@ -1194,7 +1194,7 @@ function update_unit_focus()
 }
 
 /**************************************************************************
- This function may be called from packhand.c, via update_unit_focus(),
+ This function may be called from packhand.js, via update_unit_focus(),
  as a result of packets indicating change in activity for a unit. Also
  called when user press the "Wait" command.
 
