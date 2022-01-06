@@ -1342,7 +1342,7 @@ function show_longturn_intro_dialog() {
         "Please join only if you are interested in playing one turn every day.<br>" +
         "Players who are idle can be replaced by new players.<br><br><b><u>Important</u>:</b><br>" +
         "1. A Google Gmail account is needed to sign in. <br>2. You must access this page with \"www.\" in the address bar.<br>"+
-        "3. Disable your ad-blocker so Google can do a sign-in pop-up.<br>"
+        "3. Disable your ad-blocker so Google can do a sign-in pop-up.<br>" +
         "<br><br><br><table><tr><td>Player name:</td><td><input id='username_req' type='text' size='25' maxlength='31'></td></tr></table>" +
         " <br><br><span id='username_validation_result' style='display:none;'></span><br>" +
         "<div title='To sign in, disable adblock and make sure the web address includes www.' id='fc-signin2'></div><br><br><br><small>(Please disable adblockers, then reload the page using <b>www.</b> address, for Google login to work)</small>";
@@ -1350,7 +1350,7 @@ function show_longturn_intro_dialog() {
   if (is_small_screen()) {
     title = "Freeciv-Web Longturn Game"
     message = "This is a Freeciv-Web Longturn game. Turns are 23 hours, with more players and time for strategy. "+
-      "To sign in, use a gmail account, disable ad-block, and put <b>www.</b> in the <a href='https://www.freecivweb.org'>url</a>."
+      "To sign in, use a gmail account, disable ad-block, and put <b>www.</b> in the <a href='https://www.freecivweb.org'>url</a>."+
       "<br><br><table><tr><td>Player name:</td><td><input id='username_req' type='text' size='25' maxlength='31'></td></tr></table>" +
       " <br><br><span id='username_validation_result' style='display:none;'></span><br><br>" +
       "<div title='To sign in, disable pop-up adblock and make sure the web address includes www.' id='fc-signin2'></div><br>";
