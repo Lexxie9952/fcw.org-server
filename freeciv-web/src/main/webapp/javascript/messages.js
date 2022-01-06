@@ -277,10 +277,11 @@ function reclassify_chat_message(text)
  to produce messages independently of incoming packets (e.g., notifying
   of changes to prefs, etc.)
 **************************************************************************/
-function add_client_message(message)
+function add_client_message(message, ev_class)
 {
+  var msg_event = ev_class ? ev_class : "e_client_msg";
   if (message.includes("%%") || message.includes("[`")) message = decode_user_hyperlinks(message);
-  var fake_packet = {"message": "<span class='e_client_msg'>"+message+"</span>"};
+  var fake_packet = {"message": "<span class='"+msg_event+"'>"+message+"</span>"};
   fake_packet.event = E_CHAT_MSG;
   add_chatbox_text(fake_packet);
 }
