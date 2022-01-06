@@ -2473,7 +2473,7 @@ static bool city_build_building(struct player *pplayer, struct city *pcity)
     // Round to nearest int with 0.5 randomly decided up or down:
     coinage = (coinage / 1000) + (double)(499.000000001+fc_rand(2))/1000; 
     notify_player(pplayer, city_tile(pcity), E_IMP_BUILD, ftc_server,
-              _("[`shield`][`arrowright`][`gold`] %s %s renders %d shields to %d gold."),
+              _("[`shield`][`a_rght`][`gold`] %s %s renders %d shields to %d gold."),
               city_link(pcity), city_improvement_name_translation(pcity, pimprove),
               pcity->before_change_shields, (int)coinage);  
     pplayer->economic.gold += (int)coinage;
