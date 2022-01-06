@@ -247,7 +247,7 @@ who must migrate to decent starting position.
     Demo:75,Theo:90
 ==============================================================
 44. Angkor Wat reduces city celebrate size by -1 to 2, and 
-  bonus begins at S2.
+  bonus begins at S2; also works in Theocracy.
 ==============================================================
 45.
 ==============================================================
