@@ -1210,6 +1210,11 @@ body:not(.mobile) .ui-dialog.unit_dialog {
   vertical-align: middle;
 }
 
+.sb 
+{
+  vertical-align: sub;
+}
+
 .flag_self {
   float: left;
   width: 140px;

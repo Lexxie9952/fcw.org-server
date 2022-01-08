@@ -173,8 +173,8 @@ function update_game_status_panel() {
     if (!is_small_screen()) status_html += "<span style='cursor:pointer;' title='Total Citizens in all Cities.&#013;&#010;&#013;&#010;Click = Demographics Report' onclick='javascript:request_report(2)'>"; // type 2 is demographics
     if (!is_small_screen()) status_html += "&nbsp; <i style='color:#ffc8c0' class='fa fa-child' aria-hidden='true'></i> ";
     if (!is_small_screen()) status_html += "<b>" + city_size_sum(client.conn.playing.playerno) + "</b>  &nbsp;&nbsp;";
-    if (!is_small_screen()) status_html += "<i style='color:#d8dff0' class='fa fa-clock-o' aria-hidden='true' title='Year (turn)&#013;&#010;&#013;&#010;Click = Demographics Report'></i> <b title='Year (turn)&#013;&#010;&#013;&#010;Click = Demographics Report'>" + get_year_string() + "</b> &nbsp;&nbsp;</span>";
-    status_html += "<i style='color:#89c06a' class='fa fa-money' aria-hidden='true' title='Treasury'></i> ";
+    if (!is_small_screen()) status_html += "<i style='color:#d8dff0' class='fa fa-clock-o' aria-hidden='true' title='Year &mdash; Turn&#013;&#010;&#013;&#010;Click = Demographics Report'></i> <b title='Year &mdash; Turn&#013;&#010;&#013;&#010;Click = Demographics Report'>" + get_year_string() + "</b> &nbsp;&nbsp;</span>";
+    status_html += "<img class='v' height='21px' width='24px' style='margin-right:-4px; margin-bottom:3px' src='/images/e/coinage.png' title='Treasury'> ";
    
     var income_color = "<b";
     // colour for positive/zero/negative income
@@ -184,12 +184,12 @@ function update_game_status_panel() {
     
     status_html += "<b style='color:#ffde80; cursor:default;' title='Gold reserves'>"+pplayer['gold'] 
     + "</b> "+income_color+" style='cursor:default;'>" + net_income + "</b>"+"  &nbsp;&nbsp;";
-    status_html += "<span style='cursor:pointer;' onclick='javascript:show_tax_rates_dialog();'><i style='color:#ebb445' class='fa fa-btc' aria-hidden='true' title='Tax rate'></i> <b title='Tax rate' style='color:#fff0d1'>" 
-    + tax + "</b><span title='Tax rate' style='color:#bcbcbc'>%</span> &nbsp;";
-    status_html += "<i style='color:#b087c5;' class='fa fa-music' aria-hidden='true' title='Luxury rate'></i> <b title='Luxury rate' style='color:#f5e8ff'>" + lux + "</b><span title='Luxury rate' style='color:#bcbcbc'>%</span> &nbsp;";
+    status_html += "<span style='cursor:pointer;' onclick='javascript:show_tax_rates_dialog();'><img class='sb' height='18px' style='margin-right:-4px' src='/images/e/gold.png' title='Gold Tax rate'> <b title='Gold Tax rate' style='color:#fff0d1'>" 
+    + tax + "</b><span title='Gold Tax rate' style='color:#bcbcbc'>%</span> &nbsp;";
+    status_html += "<img class='sb' height='17px' width='16px' style='margin-right:-1px' src='/images/e/quavers.png' title='Luxury rate'> <b title='Luxury rate' style='color:#f5e4ff'>" + lux + "</b><span title='Luxury rate' style='color:#bcbcbc'>%</span> &nbsp;";
     const sci_title = "Science:\n"+(techs[client.conn.playing['researching']]===undefined ? "" : techs[client.conn.playing['researching']]['name']) +"\n"
-                    + client.conn.playing['bulbs_researched'] + " / " + client.conn.playing['researching_cost'] +"\n" + bulb_output_text;             
-    status_html += "<i style='color:#a8ccd7;'class='fa fa-flask' aria-hidden='true' title='"+sci_title+"'></i> <b title='"+sci_title+"' style='color:#ebfaff'>" + sci + "</b><span title='"+sci_title+"' style='color:#bcbcbc'>%</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> ";
+                    + client.conn.playing['bulbs_researched'] + " / " + client.conn.playing['researching_cost'] +" bulbs\n" + bulb_output_text;             
+    status_html += "<img class='sb' height='17px' style='margin-right:-2px' src='/images/e/sci.png' title='"+sci_title+"'> <b title='"+sci_title+"' style='color:#ebfaff'>" + sci + "</b><span title='"+sci_title+"' style='color:#bcbcbc'>%</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> ";
   
   } else if (server_settings != null && server_settings['metamessage'] != null) {    // Status message for gamemasters/admins/supercows:
     status_html += "Observing - Turn <b>" + game_info['turn'] + "</b> -";
