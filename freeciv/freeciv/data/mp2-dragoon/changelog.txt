@@ -249,7 +249,9 @@ who must migrate to decent starting position.
 44. Angkor Wat reduces city celebrate size by -1 to 2, and 
   bonus begins at S2; also works in Theocracy.
 ==============================================================
-45.
+45.Lighthouse never obsolete, but must be built before 
+   Electricity. Movement bonus reduces to +1 when combined
+   with Nuclear Power bonus. 
 ==============================================================
 46.
 ==============================================================

@@ -2079,6 +2079,7 @@ genus		= "SmallWonder"
 reqs	=
     { "type",         "name",       "range",    "present", "quiet"
       "Tech",         "Map Making", "Player",   TRUE,      FALSE
+      "Tech",         "Electricity","Player",   FALSE,     FALSE
       "TerrainClass", "Oceanic",    "Adjacent", TRUE,      FALSE
       "Building",     "Lighthouse", "Player",   FALSE,     TRUE
     }
@@ -2086,7 +2087,6 @@ graphic	= "b.lighthouse"
 graphic_alt	= "-"
 obsolete_by	=
     { "type", "name", "range"
-      "Tech", "Miniaturization", "Player"
     }
 build_cost	= 170
 upkeep		= 0
@@ -2094,9 +2094,13 @@ sabotage	= 0
 sound		= "w_lighthouse"
 sound_alt	= "w_generic"
 helptext	= _("\
-Gives all your sea units 2 additional movement points,\
- while increasing their vision. Must be built adjacent\
- to Ocean. Obsolete by：Miniaturization.\
+The Lighthouse gives all your sea units +2 movement points\
+ and increases their vision. It must be built in a city adjacent\
+ to Ocean before the discovery of Electricity.\n\n\
+The Lighthouse movement bonus reduces to +1 when combined with\
+ any bonus from Nuclear Power technology, for a total bonus of +3\
+ movement points.\n\n\ 
+The Lighthouse is never obsolete.\
 ")
 
 [building_magellans_expedition]

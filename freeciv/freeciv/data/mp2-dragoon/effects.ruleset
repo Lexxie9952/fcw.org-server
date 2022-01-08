@@ -1249,23 +1249,40 @@ reqs	=
       "CityTile", "Center", "Local"
     }
 
-; Nuclear power gives +1 moves to sea units (+2 under 2x)
-[effect_nuclear_powered_boats]
+; Nuclear power gives +2 moves to modern sea units (+1 if Lighthouse in effect)
+[effect_nuclear_powered_ships]
 type    = "Move_Bonus"
-value	= 18
+value	= 9
 reqs	=
-    { "type", "name", "range"
-      "Tech", "Nuclear Power", "Player"
-      "UnitClass", "Sea", "Local"
+    { "type",      "name",          "range"
+      "Tech",      "Nuclear Power", "Player"
+      "UnitClass", "Sea",           "Local"
     }
-; Nuclear power gives +1 moves to sea units (+2 under 2x)
+[effect_nuclear_powered_ships2]
+type    = "Move_Bonus"
+value	= 9
+reqs	=
+    { "type",      "name",          "range", "present"
+      "Tech",      "Nuclear Power", "Player", TRUE
+      "Building",  "Lighthouse",    "Player", FALSE
+      "UnitClass", "Sea",           "Local",  TRUE
+    }
 [effect_nuclear_powered_subs]
 type    = "Move_Bonus"
-value	= 18
+value	= 9
 reqs	=
-    { "type", "name", "range"
-      "Tech", "Nuclear Power", "Player"
-      "UnitClass", "Submarine", "Local"
+    { "type",      "name",          "range"
+      "Tech",      "Nuclear Power", "Player"
+      "UnitClass", "Submarine",     "Local"
+    }
+[effect_nuclear_powered_subs2]
+type    = "Move_Bonus"
+value	= 9
+reqs	=
+    { "type",      "name",          "range", "present"
+      "Tech",      "Nuclear Power", "Player", TRUE
+      "Building",  "Lighthouse",    "Player", FALSE
+      "UnitClass", "Submarine",     "Local",  TRUE
     }
 
 ;************************************* GOVERNMENT CORRUPTION
