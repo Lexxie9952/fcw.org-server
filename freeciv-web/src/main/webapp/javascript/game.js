@@ -112,7 +112,8 @@ function update_game_status_panel() {
   // unread message counter with toggle message window
 
   status_html = "<span onclick='toggle_msgbox();' style='cursor: pointer;' title='"+msg_title_prefix
-              + "Show/hide message window.'><img src='/images/e/chat.png' height='16px'>"
+              + (current_message_dialog_state == "minimized" ? "Show" : "Hide")
+              + " message window'><img src='/images/e/chat.png' height='16px'>"
               + "<font color='#ff8080'>&nbsp;<b>"
               + ((unread_messages>0) ? unread_messages : "")
               +"</b>&nbsp;&nbsp;&nbsp;</font></span>";
@@ -128,7 +129,7 @@ function update_game_status_panel() {
     var net_income = pplayer['expected_income'].toString();
     var income_str = (net_income.slice(-2) == ".5") ? (net_income.substring(0, net_income.length - 2) + "</b>&#189<b>") : net_income;
 
-    if (pplayer['expected_income'] > 0) {
+    if (pplayer['expected_income'] >= 0) {
       net_income = "+" + income_str;
     } else net_income = income_str;
 
@@ -179,8 +180,13 @@ function update_game_status_panel() {
     var income_color = "<b";
     // colour for positive/zero/negative income
     if (pplayer['expected_income'] < 0) income_color += " class='negative_net_income' title='Deficit'";
-    else if (pplayer['expected_income'] > 0) income_color += income_calculated_by_client 
-       ? " style='color:#89c06a' title='Income'" : " style='color:#a2b095' title='Income'" // slight hint whether accurate client calc or from server.
+    else if (pplayer['expected_income'] > 0) { 
+      income_color += income_calculated_by_client 
+       ? " style='color:#89c06a; cursor:default' title='Income'" : " style='color:#a2b095; cursor:default' title='Income'";
+    }
+    else { income_color += income_calculated_by_client 
+       ? " style='color:#919191; cursor:default' title='No Income'" : " style='color:#a2a2a2; cursor:default' title='No Income'"
+    }
     
     status_html += "<b style='color:#ffde80; cursor:default;' title='Gold reserves'>"+pplayer['gold'] 
     + "</b> "+income_color+" style='cursor:default;'>" + net_income + "</b>"+"  &nbsp;&nbsp;";
