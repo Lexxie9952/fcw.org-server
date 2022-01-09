@@ -2746,6 +2746,18 @@ target_reqs    =
     { "type",        "name",     "range", "present"
       "TerrainClass", "Oceanic", "CAdjacent", TRUE
     }
+[actionenabler_irrigate_src_ocean_tribesmen_chand_baori]
+action        = "Build Irrigation"
+actor_reqs    =
+    { "type",          "name",         "range", "present"
+      "Building",      "Chand Baori",  "Player", TRUE
+      "UnitFlag",      "Settlers",     "Local", TRUE
+      "UnitType",      "Tribesmen",    "Local", TRUE
+    }
+target_reqs    =
+    { "type",        "name",     "range", "present"
+      "TerrainClass", "Oceanic", "CAdjacent", TRUE
+    }
 [actionenabler_irrigate_src_ocean_prole]
 action        = "Build Irrigation"
 actor_reqs    =
