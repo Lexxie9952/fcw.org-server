@@ -1159,6 +1159,34 @@ body:not(.mobile) .ui-dialog.unit_dialog {
   margin-bottom:-5px;
 }
 
+/* Government Docs table showing content/unhappy citizens per empire size */
+.gov_city_happy_table {
+  width: 100%;
+  border-collapse: collapse;
+  cursor: default !important;
+}
+.gov_city_happy_table th {
+  text-align: center;
+  border: 1px solid black;
+  color: #000;
+  background: #aaa;
+}
+.gov_city_happy_table th:nth-child(2n+1) {
+  background: #bbb;
+}
+.gov_city_happy_table td {
+  text-align: center;
+  border: 2px solid black;
+  color:#fff;
+  background: #777;
+  font-weight: bold;
+  text-shadow: 2px 1px #555;
+}
+.gov_city_happy_table tr:nth-child(2) td {
+  color:#fcb;
+  text-shadow: 2px 1px #650;
+}
+
 #governments {
   text-align: center;
 }
