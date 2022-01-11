@@ -1662,8 +1662,8 @@ sound		= "w_colossus"
 sound_alt	= "w_generic"
 helptext	= _("\
 In the coastal city where this wonder is built, +1 trade is added to every\
- tile worked. The city center tile gets an additional +1 trade on\
- top of the first bonus. Until you discover Steam Engine, the\
+ tile that makes trade. The city center tile gets an additional +1 trade.\
+ Until you discover Steam Engine, the\
  Colossus city receives a discount on all maritime Commerce units：\n\
  Boat：            7 shields. \n\
  Trireme：        15 shields. \n\
@@ -1737,9 +1737,9 @@ obsolete_by	=
     }
 build_cost	= 700
 upkeep		= 0
-sabotage	= 100
-sound		= "b_fusion_reactor_wonder"
-sound_alt	= "b_generic"
+sabotage	= 0
+sound		= "w_fusion_reactor_wonder"
+sound_alt	= "w_generic"
 helptext	= _("\
 Replaces Power Plants with Fusion Reactor power in all your\
  cities. This boosts the +50% bonus of a Factory or Mfg. Plant to +90%. \n\
