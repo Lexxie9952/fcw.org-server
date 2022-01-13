@@ -399,6 +399,7 @@ from the project and be non-essential to the function of the Instance.
       "ancient/TheologyCivilization",
       "ancient/TowerOfSet2",
       "ancient/WarmWelcome",
+      "ancient/TowerOfSetSnakeAttack",
       "ancient/WelcomeToKostantiniyye",
       "ancient/WolfWitch",
       "ancient/RohanSuite",
@@ -519,6 +520,7 @@ from the project and be non-essential to the function of the Instance.
       "middle/SpanishDance2",
       "middle/TearsOfMuses",
       "middle/Tavern",
+      "middle/Tavern2",
       "middle/SilverSword",
       "middle/CantigasDeSantaMaria2",
       "middle/CantigasDeSantaMaria3",
@@ -597,7 +599,8 @@ from the project and be non-essential to the function of the Instance.
       "colonial/lArpeggiata",
       "colonial/Elegie",
       "colonial/TheLeavingTheSearch",
-      "colonial/CanariosKapsberger"
+      "colonial/CanariosKapsberger",
+      "colonial/DreamQuest"
     ],
   "industrial":
     [
@@ -656,7 +659,8 @@ from the project and be non-essential to the function of the Instance.
       "industrial/OrphansOfDoomAwakening",
       "industrial/TheSnakeInfidels",
       "industrial/TreeOfWoeRecovery",
-      "industrial/Wifeing"
+      "industrial/Wifeing",
+      "industrial/DuelingWizards"
     ],
   "modern":
     [
@@ -789,7 +793,8 @@ from the project and be non-essential to the function of the Instance.
       "modern/Flatlands",
       "modern/OutOfSource",
       "modern/DistantTraveler",
-      "modern/BattleOfTheMounds3"
+      "modern/BattleOfTheMounds3",
+      "modern/BattleOfTheMounds3Original"
     ]
   };
   
