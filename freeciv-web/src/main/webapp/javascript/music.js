@@ -75,7 +75,7 @@ function pick_next_track() {
   // based on YEAR, civilization style, turn #, etc., and use more special
   // "DJ tag logic" to pick a song.
   if (client_is_observer()) {
-    if      (game_info.turn <= 12) category = "tribal"
+    if      (game_info.turn <= 17) category = "tribal"
     else if (game_info.turn < 45)  category = "ancient"
     else if (game_info.turn < 70)  category = "middle"
     else if (game_info.turn < 85)  category = "colonial"
@@ -92,7 +92,7 @@ function pick_next_track() {
       track_name = music_list[category][Math.floor(Math.random() * music_list[category].length)]+ ".mp3";
       dj_approved = true;
     } else { // Not a break track, pick a main selection at random
-        if      (game_info.turn <= 12 && !tech_known("Alphabet"))        category = "tribal";
+        if (game_info.turn <= 17 && !tech_known("Alphabet"))             category = "tribal";
         else if (!tech_known("Feudalism") && !tech_known("Navigation") // catch all paths to gunpowder || magnetism
               && !tech_known("Philosophy") && !tech_known("Invention"))  category = "ancient";
         else if (!tech_known("Gunpowder") && !tech_known("Magnetism"))   category = "middle";

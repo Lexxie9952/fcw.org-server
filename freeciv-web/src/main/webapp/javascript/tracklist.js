@@ -89,7 +89,9 @@ from the project and be non-essential to the function of the Instance.
       "breaks/BoysEye",
       "breaks/30secondbreak",
       "breaks/30secondbreak",
-      "breaks/ColdWindBreak"
+      "breaks/ColdWindBreak",
+      "breaks/StreetOfDeviants",
+      "breaks/DeeperSilence45s"
     ],
   "brk_style2": // classical *
     [
@@ -115,7 +117,9 @@ from the project and be non-essential to the function of the Instance.
       "breaks/BoysEye",
       "breaks/30secondbreak",
       "breaks/30secondbreak",
-      "breaks/ColdWindBreak"
+      "breaks/ColdWindBreak",
+      "breaks/StreetOfDeviants",
+      "breaks/DeeperSilence45s"
     ],
   "brk_style3": // tropical *
     [
@@ -138,7 +142,9 @@ from the project and be non-essential to the function of the Instance.
       "breaks/BoysEye",
       "breaks/30secondbreak",
       "breaks/30secondbreak",
-      "breaks/ColdWindBreak"
+      "breaks/ColdWindBreak",
+      "breaks/StreetOfDeviants",
+      "breaks/DeeperSilence45s"
     ],
   "brk_style4": // asian *
     [
@@ -164,7 +170,9 @@ from the project and be non-essential to the function of the Instance.
       "breaks/BoysEye",
       "breaks/30secondbreak",
       "breaks/30secondbreak",
-      "breaks/ColdWindBreak"
+      "breaks/ColdWindBreak",
+      "breaks/StreetOfDeviants",
+      "breaks/DeeperSilence45s"
     ],
   "brk_style5": // babylonian *
     [
@@ -188,7 +196,10 @@ from the project and be non-essential to the function of the Instance.
       "breaks/30secondbreak",
       "breaks/30secondbreak",
       "breaks/ColdWindBreak",
-      "middle/AlKadir"
+      "middle/AlKadir",
+      "breaks/StreetOfDeviants",
+      "breaks/DeeperSilence45s",
+      "breaks/Homayoun"
     ],
   "brk_style6": // celtic *
     [
@@ -210,7 +221,9 @@ from the project and be non-essential to the function of the Instance.
       "breaks/BoysEye",
       "breaks/30secondbreak",
       "breaks/30secondbreak",
-      "breaks/ColdWindBreak"
+      "breaks/ColdWindBreak",
+      "breaks/StreetOfDeviants",
+      "breaks/DeeperSilence45s"
     ],
     "tribal":
     [
@@ -286,11 +299,13 @@ from the project and be non-essential to the function of the Instance.
       "tribal/FlowStone",
       "tribal/SuonoIpogeo",
       "tribal/UnderwaterFields",
-      "tribal/EtherealAbyss"
+      "tribal/EtherealAbyss",
+      "tribal/TowerOfSet1",
+      "tribal/FromPastToPresent",
+      "tribal/Hunter2"
     ],
   "ancient":
     [
-      "tribal/anvildrumintro",
       "tribal/Foreigner",
       "ancient/Intro1",
       "ancient/Intro3",
@@ -323,7 +338,6 @@ from the project and be non-essential to the function of the Instance.
       "ancient/xMusic15",
       "ancient/xwon",
       "ancient/xwon2",
-      "ancient/scrolls",
       "ancient/SeaDragon",
       "ancient/xwon3",
       "ancient/WarDrums_Early",
@@ -331,7 +345,6 @@ from the project and be non-essential to the function of the Instance.
       "ancient/AncientSoundtrack1",
       "ancient/AncientSoundtrack3",
       "ancient/AncientSoundtrack4",
-      "ancient/TowerOfSet",
       "ancient/Hovern",
       "ancient/Walrus",
       "ancient/Attila",
@@ -359,7 +372,36 @@ from the project and be non-essential to the function of the Instance.
       "ancient/HouseHur",
       "ancient/EnterJerusalem",
       "ancient/ArriusParty",
+      "tribal/anvildrumintro",
+      "ancient/scrolls",
       "ancient/Orgy",
+      "ancient/TowerOfSet",
+      "ancient/AnvilOfCrom", //
+      "ancient/AtlanteanSword",
+      "ancient/BattleOfTheMounds1",
+      "ancient/BattleOfTheMounds2",
+      "ancient/Byzantium",
+      "ancient/Capture",
+      "ancient/Cleopatra",
+      "ancient/ColumnOfSadnessWheelOfPain",
+      "ancient/Defilers",
+      "ancient/DisciplineOfSteelFreedomCouncil",
+      "ancient/EchoesOfRomanRuins",
+      "ancient/FuneralPyre",
+      "ancient/GiftOfFury1",
+      "ancient/HallOfKingOsric",
+      "ancient/Indulgence",
+      "ancient/Kitchen1",
+      "ancient/MountainOfPowerProcession",
+      "ancient/Orgy1",
+      "ancient/PitFights",
+      "ancient/RiddleOfSteelRidersOfDoom",
+      "ancient/TheologyCivilization",
+      "ancient/TowerOfSet2",
+      "ancient/WarmWelcome",
+      "ancient/WelcomeToKostantiniyye",
+      "ancient/WolfWitch",
+      "ancient/RohanSuite",
       "ancient/Hector",
       "ancient/Sakura",
       "ancient/TombHorus",
@@ -370,10 +412,31 @@ from the project and be non-essential to the function of the Instance.
       "ancient/RebirthsPortalUnveiled",
       "ancient/Saraghaz",
       "ancient/BeamOfSunlight",
-      "ancient/Bija",
-      "ancient/EnteringIntimateFragranceOfBeatitude",
       "ancient/IntroDiAde",
-      "ancient/RoadToWirikuta"
+      "ancient/EnteringIntimateFragranceOfBeatitude",
+      "ancient/Bija",
+      "ancient/Bija2",
+      "ancient/RoadToWirikuta",
+      "ancient/SpiritSword",
+      "ancient/DoYouRemember",
+      "ancient/Cantiga384AlfonsoX",
+      "ancient/CantigasDeSantaMaria1",
+      "ancient/CantigasDeSantaMaria4",
+      "ancient/ChachanehTsaghadzoreh",
+      "ancient/Ecstasy",
+      "ancient/FoliadaAlfonsoX",
+      "ancient/Ghamangiz",
+      "ancient/Jamedaran",
+      "ancient/Kord-E-Bayat",
+      "ancient/LamentoDiTristano",
+      "ancient/SoloUd",
+      "ancient/LyreOfMegiddo",
+      "ancient/VasnMeroPerkutian",
+      "ancient/PansisAncientGreekLyreRuiFuBendir",
+      "ancient/Illyricum",
+      "ancient/CarthageIntroRomeTW_OST",
+      "ancient/AetasRomana",
+      "ancient/EasternIntroRomeTW_OST"
     ],
   "middle":
     [
@@ -454,7 +517,17 @@ from the project and be non-essential to the function of the Instance.
       "middle/RaptureRecall",
       "middle/Promentory",
       "middle/SpanishDance2",
-      "middle/TearsOfMuses"
+      "middle/TearsOfMuses",
+      "middle/Tavern",
+      "middle/SilverSword",
+      "middle/CantigasDeSantaMaria2",
+      "middle/CantigasDeSantaMaria3",
+      "middle/FoliasGalegasMurcia",
+      "middle/PraetoriusDancesTerpsichore",
+      "middle/MiguelRinconViseeKapsberger",
+      "middle/OmwoldonSamhain",
+      "middle/PlayfordDance",
+      "middle/RaghseChoupani"
     ],
   "colonial":
     [
@@ -522,10 +595,13 @@ from the project and be non-essential to the function of the Instance.
       "colonial/ChoroDaSaudade",
       "colonial/LegendaryGuardian",
       "colonial/lArpeggiata",
-      "colonial/Elegie"
+      "colonial/Elegie",
+      "colonial/TheLeavingTheSearch",
+      "colonial/CanariosKapsberger"
     ],
   "industrial":
     [
+      "ancient/FuneralPyre",
       "colonial/SerenadeVW",
       "colonial/DarkeFantasy",
       "industrial/into_the_shadows",      // GPL in AGPL
@@ -575,7 +651,12 @@ from the project and be non-essential to the function of the Instance.
       "industrial/GenerosityOfSolitude1",
       "industrial/NorthCountrySketchesWinter",
       "industrial/NorthCountrySketches3",
-      "industrial/NorthCountrySketches1"
+      "industrial/NorthCountrySketches1",
+      "industrial/HeadChop",
+      "industrial/OrphansOfDoomAwakening",
+      "industrial/TheSnakeInfidels",
+      "industrial/TreeOfWoeRecovery",
+      "industrial/Wifeing"
     ],
   "modern":
     [
@@ -707,7 +788,8 @@ from the project and be non-essential to the function of the Instance.
       "modern/Erinacea",
       "modern/Flatlands",
       "modern/OutOfSource",
-      "modern/DistantTraveler"
+      "modern/DistantTraveler",
+      "modern/BattleOfTheMounds3"
     ]
   };
   
