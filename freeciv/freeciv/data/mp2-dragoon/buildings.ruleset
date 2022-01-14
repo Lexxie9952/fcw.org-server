@@ -1547,7 +1547,7 @@ graphic_alt	= "-"
 obsolete_by	=
     { "type", "name", "range"
     }
-build_cost	= 80
+build_cost	= 65
 upkeep		= 0
 sabotage	= 0
 sound		= "w_chand_baori"

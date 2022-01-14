@@ -148,7 +148,7 @@ req2     = "Mathematics"
 flags    = ""
 graphic     = "a.astronomy"
 graphic_alt = "-"
-cost = 146
+cost = 145
 
 [advance_atomic_theory]
 name     = _("Atomic Theory")
@@ -186,7 +186,7 @@ flags    = ""
 graphic     = "a.banking"
 graphic_alt = "-"
 helptext = _("Infantry upkeep: 1 gold. Blocks Philosophy bonus. Globally expires capital trade route bonus.")
-cost = 364
+cost = 450
 
 [advance_bridge_building]
 name     = _("Bridge Building")
@@ -196,6 +196,7 @@ flags    = "Bridge"
 graphic     = "a.bridge_building"
 graphic_alt = "-"
 helptext = _("Allows roads on rivers.")
+cost = 225
 
 [advance_bronze_working]
 name     = _("Bronze Working")
@@ -222,7 +223,7 @@ req2     = "Medicine"
 flags    = ""
 graphic     = "a.chemistry"
 graphic_alt = "-"
-cost = 800
+cost = 900
 
 [advance_chivalry]
 name     = _("Chivalry")
@@ -232,7 +233,7 @@ flags    = ""
 graphic     = "a.chivalry"
 graphic_alt = "-"
 helptext = _("Obsoletes Horsemen, Chariots.")
-cost = 226
+cost = 225
 
 [advance_code_of_laws]
 name     = _("Code of Laws")
@@ -241,6 +242,7 @@ req2     = "None"
 flags    = ""
 graphic     = "a.code_of_laws"
 graphic_alt = "-"
+cost = 50
 
 [advance_combined_arms]
 name     = _("Combined Arms")
@@ -269,6 +271,7 @@ flags    = ""
 graphic     = "a.communism"
 graphic_alt = "-"
 helptext = _("Allows government Communism.")
+cost = 1650
 
 [advance_computers]
 name     = _("Computers")
@@ -298,6 +301,7 @@ flags    = ""
 graphic     = "a.construction"
 graphic_alt = "-"
 helptext = _("Allows Fortresses, Oil Wells.")
+cost = 110
 
 [advance_currency]
 name     = _("Currency")
@@ -306,6 +310,7 @@ req2     = "None"
 flags    = ""
 graphic     = "a.currency"
 graphic_alt = "-"
+cost = 50
 
 [advance_democracy]
 name     = _("Democracy")
@@ -315,7 +320,7 @@ flags    = ""
 graphic     = "a.democracy"
 graphic_alt = "-"
 helptext = _("Obsoletes Code of Hammurabi. Allows government Democracy.")
-cost = 875
+cost = 950
 
 [advance_economics]
 name     = _("Economics")
@@ -353,6 +358,7 @@ flags    = ""
 graphic     = "a.engineering"
 graphic_alt = "-"
 helptext = _("Allows Canals and Naval Bases.")
+cost = 225
 
 [advance_environmentalism]
 name     = _("Environmentalism")
@@ -391,7 +397,7 @@ req2     = "Monarchy"
 flags    = ""
 graphic     = "a.feudalism"
 graphic_alt = "-"
-cost = 146
+cost = 145
 helptext = _("Allows Castles (with Construction).")
 
 
@@ -413,7 +419,7 @@ flags    = ""
 graphic     = "a.theocracy"
 graphic_alt = "-"
 helptext = _("Obsoletes Pax Dei. Allows government Theocracy.")
-cost = 725
+cost = 525
 
 [advance_fusion_power]
 name     = _("Fusion Power")
@@ -451,7 +457,7 @@ req2     = "Iron Working"
 flags    = ""
 graphic     = "a.gunpowder"
 graphic_alt = "-"
-cost = 800
+cost = 950
 helptext = _("Obsoletes Castle, Agōgē of Sparta, Barracks, earlier foot soldiers.")
 
 [advance_horseback_riding]
@@ -481,6 +487,7 @@ flags    = ""
 graphic     = "a.invention"
 graphic_alt = "-"
 helptext = _("Extra vision in Fortress, Naval Base, Castle. Blocks Philosophy bonus.")
+cost = 490
 
 [advance_iron_working]
 name     = _("Iron Working")
@@ -489,7 +496,7 @@ req2     = "Warrior Code"
 flags    = ""
 graphic     = "a.iron_working"
 graphic_alt = "-"
-cost = 70
+cost = 65
 
 [advance_labor_union]
 name     = _("Labor Union")
@@ -527,6 +534,7 @@ req2     = "Code of Laws"
 flags    = ""
 graphic     = "a.literacy"
 graphic_alt = "-"
+cost = 110
 
 [advance_machine_tools]
 name     = _("Machine Tools")
@@ -558,7 +566,7 @@ flags    = ""
 graphic     = "a.map_making"
 graphic_alt = "-"
 helptext = _("Scouts can move +2 tiles per turn")
-cost = 51
+cost = 50
 
 [advance_masonry]
 name     = _("Masonry")
@@ -586,6 +594,7 @@ req2     = "Masonry"
 flags    = ""
 graphic     = "a.mathematics"
 graphic_alt = "-"
+cost = 80
 
 [advance_medicine]
 name     = _("Medicine")
@@ -594,7 +603,7 @@ req2     = "Trade"
 flags    = ""
 graphic     = "a.medicine"
 graphic_alt = "-"
-cost = 468
+cost = 475
 
 [advance_metallurgy]
 name     = _("Metallurgy")
@@ -634,6 +643,7 @@ flags    = ""
 graphic     = "a.monarchy"
 graphic_alt = "-"
 helptext = _("Obsoletes Chand Baori, Ziggurat. Allows government Monarchy.")
+cost = 110
 
 [advance_monotheism]
 name     = _("Monotheism")
@@ -643,7 +653,7 @@ flags    = ""
 graphic     = "a.monotheism"
 helptext = _("Obsoletes Elephants.")
 graphic_alt = "-"
-cost = 384
+cost = 315
 
 [advance_mysticism]
 name     = _("Mysticism")
@@ -653,6 +663,7 @@ flags    = ""
 graphic     = "a.mysticism"
 graphic_alt = "-"
 helptext = _("Doubles the effect of Temples.")
+cost = 50
 
 [advance_navigation]
 name     = _("Navigation")
@@ -662,7 +673,7 @@ flags    = ""
 graphic     = "a.navigation"
 graphic_alt = "-"
 helptext = _("Obsoletes Galley, Longboat, War Galley, Ram Ship.")
-cost = 486
+cost = 485
 
 [advance_nuclear_fission]
 name     = _("Nuclear Fission")
@@ -691,7 +702,7 @@ flags    = ""
 graphic     = "a.philosophy"
 graphic_alt = "-"
 helptext = _("Obsoletes Sphinx. Bonus tech before 1600AD if no next tier techs are possessed.")
-cost = 276
+cost = 325
 
 [advance_physics]
 name     = _("Physics")
@@ -701,6 +712,7 @@ flags    = ""
 graphic     = "a.physics"
 graphic_alt = "-"
 helptext = _("Increases unit vision. Prevents Philosophy bonus.")
+cost = 580
 
 [advance_plastics]
 name     = _("Plastics")
@@ -718,6 +730,7 @@ req2     = "Ceremonial Burial"
 flags    = ""
 graphic     = "a.polytheism"
 graphic_alt = "-"
+cost = 80
 
 [advance_pottery]
 name     = _("Pottery")
@@ -827,6 +840,7 @@ flags    = ""
 graphic     = "a.seafaring"
 helptext = _("Obsoletes Trireme.")
 graphic_alt = "-"
+cost = 110
 
 [advance_space_flight]
 name     = _("Space Flight")
@@ -907,6 +921,7 @@ flags    = ""
 graphic     = "a.the_republic"
 graphic_alt = "-"
 helptext = _("Allows government Republic.")
+cost = 150
 
 [advance_the_wheel]
 name     = _("The Wheel")
@@ -915,6 +930,7 @@ req2     = "None"
 flags    = ""
 graphic     = "a.the_wheel"
 graphic_alt = "-"
+cost = 50
 
 [advance_theology]
 name     = _("Theology")
@@ -924,7 +940,7 @@ flags    = ""
 graphic     = "a.theology"
 graphic_alt = "-"
 helptext = _("Obsoletes Oracle. +1 Effect on Cathedral, Michelangelos Chapel.")
-cost = 600
+cost = 400
 
 [advance_theory_of_gravity]
 name     = _("Theory of Gravity")
@@ -933,7 +949,7 @@ req2     = "University"
 flags    = ""
 graphic     = "a.theory_of_gravity"
 graphic_alt = "-"
-cost = 585
+cost = 600
 
 [advance_trade]
 name     = _("Trade")
@@ -942,6 +958,7 @@ req2     = "Code of Laws"
 flags    = ""
 graphic     = "a.trade"
 graphic_alt = "-"
+cost = 145
 
 [advance_university]
 name     = _("University")
@@ -969,6 +986,7 @@ req2     = "None"
 flags    = ""
 graphic     = "a.writing"
 graphic_alt = "-"
+cost = 50
 
 [advance_nationalism]
 name     = _("Nationalism")

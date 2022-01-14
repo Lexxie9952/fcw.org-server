@@ -38,7 +38,7 @@ richness.
    unhappiness. (Units with 0 Attack do not cause unhappy)
 ============================================================
 6. Under Despotism, All new cities get +2 food when
-   founded (+4 for capital).
+   founded (+4 for capital). Stacks with Pyramids.
    ...
    Scarcity and hard survivalism both under despotism and 
    resourcefulness of nomadic ways, resulted in people
@@ -84,9 +84,13 @@ richness.
    increases chance of veteran promotion 50% for phalanxes
    (this is not +50% odds, it's +50% frequency)
 =============================================================
-14. New cities get a +2 nomad food bonus in Despotism. Stacks
-    with Pyramids. Capital city gets 2x nomad food bonus on
-    founding. (+4)
+14. Techs and Costs:
+   Monotheism 315 (384), Theology 400 (600), Theocracy 525 (725)
+   Invention 490 (468), Democracy 950 (875), Banking 450 (364)
+   Medicine 475 (468) Ironworking 65 (80). Philosophy 325 (276)
+   Chemistry 900 (800)
+   Misc techs rounded to clean numbers.
+   Philosophy now gives a blueprint instead of a full tech.
 =============================================================
 15. Explorer renamed to Scout. Available with Horseback Riding,
    moves 4 tiles (6 with Map Making, which then makes it identical
@@ -117,7 +121,7 @@ richness.
 =============================================================
 20. Legion price adjust 31 (was 32) - got 20% discount like 
    all other foot units, off the classic price, but it was
-   overpriced in classic. Also, Ironworking 70 (was 80).
+   overpriced in classic.
 =============================================================
 21. Hideouts  
    temporary patch requirement for unit to be alone
@@ -131,8 +135,9 @@ richness.
    Conflict where Tile Claim can't be made in a base, was 
       fixed.
 =============================================================
-23. New tech tiers allow making Magnetism a pre-req for 
-   Steam Engine ..... FINALLY !!!!
+23. University Pre-req for Steam Engine changed to
+   Magnetism. In most cases this will mean Frigates now
+   come two techs before Ironclads.
 =============================================================
 24. No sea commerce units cause unhappiness, for consistency
    and simplification.
@@ -153,7 +158,7 @@ richness.
    as non-military and couldn't do diplomatic missions 
    to nations with whom you're at peace.
 =============================================================
-30. Jet aircraft upgrades
+30. Jet fighter types, upgrades
 Were underpowered relative to other units.
 
 A:D ratio of jets:mech.inf is now only slightly less than
@@ -253,9 +258,25 @@ who must migrate to decent starting position.
    Electricity. Movement bonus reduces to +1 when combined
    with Nuclear Power bonus. 
 ==============================================================
-46.
+46. Citadel of Aleppo - 3x defense impervious to ballistic
+   units and siege ram. Currently worthless because
+   disallows fortifications so you're better off making 
+   city walls + fortifications. Needs to be changed perhaps
+   or is pending adjustments to city walls and fortification
+   bonuses.
 ==============================================================
-
+47. Ballista
+==============================================================
+48. Chand Baori - cost 65 (was 80)
+==============================================================
+49. 
+==============================================================
+50. 
+==============================================================
+51. 
+==============================================================
+52. 
+==============================================================
 
 
 
