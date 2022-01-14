@@ -17,6 +17,9 @@
 
 ***********************************************************************/
 
+// Server's Local Time relative to GMT. e.g., London 0, Paris 1, SF -8
+const SERVER_GMT_OFFSET = 1;  // helps localize timestamps to client's time zone
+
 /* The server will send information about its settings. It is stored here.
  * You can look up a setting by its name or by its id number. */
 var server_settings = {};

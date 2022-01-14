@@ -285,7 +285,7 @@ function time_localize(message) {
   const minutes_offset = date.getTimezoneOffset();
   const hours_offset = minutes_offset / 60;
 
-  var local_hour = GMT_hour - hours_offset;
+  var local_hour = GMT_hour - hours_offset - SERVER_GMT_OFFSET;
 
   if (local_hour < 0) {
     local_hour = 24 + local_hour;
