@@ -6433,7 +6433,7 @@ function key_unit_homecity()
     var pcity = tile_city(ptile);
 
     if (pcity != null) {
-      request_unit_do_action(ACTION_HOME_CITY, punit['id'], pcity['id']);
+      request_unit_do_action(ACTION_HOME_CITY, punit['id'], pcity['id'], -1);
       $("#order_change_homecity").hide();
     }
   }
