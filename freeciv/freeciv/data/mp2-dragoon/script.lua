@@ -188,7 +188,7 @@ function tech_researched_handler(tech, player, how)
         return
       end
   
-    -- Give the player a free advance.
+    -- Give the player free blueprints
     -- This will give a free advance for each player that shares research.
     gained = player:give_tech(nil, -1, false, "researched")
 
