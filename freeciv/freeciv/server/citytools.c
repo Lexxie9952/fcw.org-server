@@ -872,9 +872,13 @@ struct city *find_closest_city(const struct tile *ptile,
   int best_dist = -1;
 
   fc_assert_ret_val(ptile != NULL, NULL);
+  if (only_known || only_player || only_enemy) {
+    log_error("FIXME: find_closest_city to a player but player is NULL!");
+    fc_assert_ret_val(pplayer != NULL, NULL);
+  }
 
   if (pplayer != NULL && only_player && only_enemy) {
-    log_error("Non of my own cities will be at war with me!");
+    log_error("None of my own cities will be at war with me!");
     return NULL;
   }
 
