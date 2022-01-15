@@ -995,6 +995,15 @@ bool can_player_see_unit_at(const struct player *pplayer,
                             const struct tile *ptile,
                             bool is_transported)
 {
+  /* attempt to catch segfault */
+  if (!pplayer || !punit || !ptile) {
+    log_verbose("can_player_see_unit_at called with a nullptr:");
+    if (!pplayer) log_verbose("pplayer is null!");
+    if (!punit) log_verbose("punit is null!");
+    if (!ptile) log_verbose("ptile is null!");
+    return FALSE;
+  }
+
   struct city *pcity;
 
   /* If the player can't even see the tile... */
@@ -1048,8 +1057,7 @@ bool can_player_see_unit_at(const struct player *pplayer,
 bool can_player_see_unit(const struct player *pplayer,
 			 const struct unit *punit)
 {
-  if (!punit) return false;
-  
+  /* was segfaulting from this call below, attempted fix in that func */
   return can_player_see_unit_at(pplayer, punit, unit_tile(punit),
                                 unit_transported(punit));
 }
