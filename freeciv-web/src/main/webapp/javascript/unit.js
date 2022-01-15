@@ -40,7 +40,8 @@ var unit_bombard_attack_names = {
   "Zealots":    "Skirmish Assault",
   "Marines":    "Bazooka Attack",
   "Zeppelin":   "Bomb",
-  "Battleship": "Bombard"
+  "Battleship": "Bombard",
+  "Ballista":   "Ranged Attack"
 };
 
 // Determines if victory by this unit shows crossed swords or gunpowder explosion.
@@ -55,7 +56,9 @@ var units_pregunpowder = [
 "Elephants",
 "Knights",
 "Crusaders",
-"Catapult",
+//"Catapult", // explosion looks better since it's non-melee
+//"Ballista",
+"Scout",
 "Explorer",
 "Tribesmen",
 "Well-Digger",

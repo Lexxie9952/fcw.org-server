@@ -1201,6 +1201,7 @@ actor_reqs    =
     { "type",         "name",         "range", "present"
       "UnitFlag",     "Bombarder",    "Local", TRUE
       "UnitType",     "Archers",      "Local", TRUE
+      "UnitState",    "Transported",  "Local", TRUE
       "MinMoveFrags", "1",            "Local", TRUE
       "DiplRel",      "War",          "Local", TRUE
    }
@@ -1287,6 +1288,25 @@ target_reqs    =
       "Extra",    "Fort",         "Local", FALSE
       "Extra",    "Naval Base",   "Local", FALSE
       "TerrainClass", "Oceanic",  "Local", FALSE
+    }
+;Legions can do Pilum assault
+[actionenabler_ballista_ranged_attack]
+action = "Bombard"
+actor_reqs    =
+    { "type",         "name",         "range", "present"
+      "UnitFlag",     "Bombarder",    "Local", TRUE
+      "UnitType",     "Ballista",     "Local", TRUE
+;     "UnitState",    "Transported",  "Local", FALSE
+      "MinMoveFrags", "18",           "Local", TRUE
+      "DiplRel",      "War",          "Local", TRUE
+   }
+target_reqs    =
+    { "type",   "name", "range",  "present"
+      "CityTile", "Center",       "Local", FALSE
+      "Extra",    "Fortress",     "Local", FALSE
+;      "Extra",    "Fort",         "Local", FALSE
+      "Extra",    "Naval Base",   "Local", FALSE
+;      "TerrainClass", "Oceanic",  "Local", FALSE
     }
 ;Siege Rams can assault Fortress Perimeter
 [actionenabler_siege_ram_fortress_assault]
@@ -1392,6 +1412,7 @@ actor_reqs    =
     { "type",         "name",         "range", "present"
       "UnitFlag",     "Bombarder",    "Local", TRUE
       "UnitType",     "Marines",      "Local", TRUE
+      "UnitState",    "Transported",  "Local", TRUE
       "MinMoveFrags", "1",            "Local", TRUE
       "DiplRel",      "War",          "Local", TRUE
       "MinVeteran",   "2",            "Local", TRUE
@@ -1664,7 +1685,8 @@ actor_reqs    =
       "UnitState",    "OnNativeTile",   "Local", TRUE
       "UnitClassFlag", "TerrainSpeed",  "Local", TRUE
       "DiplRel",      "War",            "Local", TRUE
-      "UnitClassFlag", "Missile",      "Local", FALSE
+      "UnitClassFlag", "Missile",       "Local", FALSE
+      "UnitFlag", "CantAttack",         "Local", FALSE
       ;...
       "Building",     "Pax Dei",        "World", FALSE
     }
@@ -1679,7 +1701,8 @@ actor_reqs    =
       "UnitState",    "OnNativeTile",   "Local", TRUE
       "UnitClassFlag", "TerrainSpeed",  "Local", FALSE
       "DiplRel",      "War",            "Local", TRUE
-      "UnitClassFlag", "Missile",      "Local", FALSE
+      "UnitClassFlag", "Missile",       "Local", FALSE
+      "UnitFlag", "CantAttack",         "Local", FALSE
       ;...
       "Building",     "Pax Dei",        "World", FALSE
     }
@@ -1699,7 +1722,8 @@ actor_reqs    =
       "UnitState",    "Transported",    "Local", FALSE
       "UnitClassFlag","TerrainSpeed",   "Local", TRUE
       "DiplRel",      "War",            "Local", TRUE
-      "UnitClassFlag", "Missile",      "Local", FALSE
+      "UnitClassFlag", "Missile",       "Local", FALSE
+      "UnitFlag", "CantAttack",         "Local", FALSE
       ;...
       "Building",     "Pax Dei",        "World", FALSE
     }
@@ -1715,7 +1739,8 @@ actor_reqs    =
       "UnitState",    "Transported",    "Local", FALSE
       "UnitClassFlag", "TerrainSpeed",  "Local", FALSE
       "DiplRel",      "War",            "Local", TRUE
-      "UnitClassFlag", "Missile",      "Local", FALSE
+      "UnitClassFlag", "Missile",       "Local", FALSE
+      "UnitFlag", "CantAttack",         "Local", FALSE
       ;...
       "Building",     "Pax Dei",        "World", FALSE
     }
@@ -1745,7 +1770,8 @@ actor_reqs    =
       "UnitClassFlag", "AttFromNonNative", "Local", TRUE
       "UnitClassFlag", "TerrainSpeed",     "Local", TRUE
       "DiplRel",       "War",              "Local", TRUE
-      "UnitClassFlag", "Missile",      "Local", FALSE
+      "UnitClassFlag", "Missile",          "Local", FALSE
+      "UnitFlag", "CantAttack",            "Local", FALSE
       ;...
       "Building",     "Pax Dei",        "World", FALSE
     }
@@ -1758,7 +1784,8 @@ actor_reqs    =
       "UnitClassFlag", "AttFromNonNative", "Local", TRUE
       "UnitClassFlag", "TerrainSpeed",     "Local", FALSE
       "DiplRel",       "War",              "Local", TRUE
-      "UnitClassFlag", "Missile",      "Local", FALSE
+      "UnitClassFlag", "Missile",          "Local", FALSE
+      "UnitFlag", "CantAttack",            "Local", FALSE
       ;...
       "Building",     "Pax Dei",        "World", FALSE
     }
@@ -1778,7 +1805,8 @@ actor_reqs    =
       "MinMoveFrags", "1",              "Local", TRUE
       "UnitState",    "OnNativeTile",   "Local", TRUE
       "DiplRel",      "War",            "Local", TRUE
-      "UnitClassFlag", "Missile",      "Local", FALSE
+      "UnitClassFlag", "Missile",       "Local", FALSE
+      "UnitFlag", "CantAttack",         "Local", FALSE
       ;...
       "Building",     "Pax Dei",        "World", FALSE
     }
@@ -1794,7 +1822,8 @@ actor_reqs    =
       "MinMoveFrags",  "1",                "Local", TRUE
       "UnitClassFlag", "AttFromNonNative", "Local", TRUE
       "DiplRel",       "War",              "Local", TRUE
-      "UnitClassFlag", "Missile",      "Local", FALSE
+      "UnitClassFlag", "Missile",          "Local", FALSE
+      "UnitFlag", "CantAttack",            "Local", FALSE
       ;...
       "Building",     "Pax Dei",        "World", FALSE
     }
@@ -1827,7 +1856,8 @@ actor_reqs    =
       "UnitState",    "OnNativeTile",   "Local", TRUE
       "UnitClassFlag", "TerrainSpeed",  "Local", TRUE
       "DiplRel",      "War",            "Local", TRUE
-      "UnitClassFlag", "Missile",      "Local", FALSE
+      "UnitClassFlag", "Missile",       "Local", FALSE
+      "UnitFlag", "CantAttack",         "Local", FALSE
       ;...
       "Building",     "Pax Dei",        "World", TRUE
       "Tech",         "Monotheism",     "Player",FALSE
@@ -1843,7 +1873,8 @@ actor_reqs    =
       "UnitState",    "OnNativeTile",   "Local", TRUE
       "UnitClassFlag", "TerrainSpeed",  "Local", FALSE
       "DiplRel",      "War",            "Local", TRUE
-      "UnitClassFlag", "Missile",      "Local", FALSE
+      "UnitClassFlag", "Missile",       "Local", FALSE
+      "UnitFlag", "CantAttack",         "Local", FALSE
       ;...
       "Building",     "Pax Dei",        "World", TRUE
       "Tech",         "Monotheism",     "Player",FALSE
@@ -1864,7 +1895,8 @@ actor_reqs    =
       "UnitState",    "Transported",    "Local", FALSE
       "UnitClassFlag","TerrainSpeed",   "Local", TRUE
       "DiplRel",      "War",            "Local", TRUE
-      "UnitClassFlag", "Missile",      "Local", FALSE
+      "UnitClassFlag", "Missile",       "Local", FALSE
+      "UnitFlag", "CantAttack",         "Local", FALSE
       ;...
       "Building",     "Pax Dei",        "World", TRUE
       "Tech",         "Monotheism",     "Player",FALSE
@@ -1881,7 +1913,8 @@ actor_reqs    =
       "UnitState",    "Transported",    "Local", FALSE
       "UnitClassFlag", "TerrainSpeed",  "Local", FALSE
       "DiplRel",      "War",            "Local", TRUE
-      "UnitClassFlag", "Missile",      "Local", FALSE
+      "UnitClassFlag", "Missile",       "Local", FALSE
+      "UnitFlag", "CantAttack",         "Local", FALSE
       ;...
       "Building",     "Pax Dei",        "World", TRUE
       "Tech",         "Monotheism",     "Player",FALSE
@@ -1913,7 +1946,8 @@ actor_reqs    =
       "UnitClassFlag", "AttFromNonNative", "Local", TRUE
       "UnitClassFlag", "TerrainSpeed",     "Local", TRUE
       "DiplRel",       "War",              "Local", TRUE
-      "UnitClassFlag", "Missile",      "Local", FALSE
+      "UnitClassFlag", "Missile",          "Local", FALSE
+      "UnitFlag", "CantAttack",            "Local", FALSE
       ;...
       "Building",     "Pax Dei",        "World", TRUE
       "Tech",         "Monotheism",     "Player",FALSE
@@ -1927,7 +1961,8 @@ actor_reqs    =
       "UnitClassFlag", "AttFromNonNative", "Local", TRUE
       "UnitClassFlag", "TerrainSpeed",     "Local", FALSE
       "DiplRel",       "War",              "Local", TRUE
-      "UnitClassFlag", "Missile",      "Local", FALSE
+      "UnitClassFlag", "Missile",          "Local", FALSE
+      "UnitFlag", "CantAttack",            "Local", FALSE
       ;...
       "Building",     "Pax Dei",        "World", TRUE
       "Tech",         "Monotheism",     "Player",FALSE
@@ -1948,7 +1983,8 @@ actor_reqs    =
       "MinMoveFrags", "1",              "Local", TRUE
       "UnitState",    "OnNativeTile",   "Local", TRUE
       "DiplRel",      "War",            "Local", TRUE
-      "UnitClassFlag", "Missile",      "Local", FALSE
+      "UnitClassFlag", "Missile",       "Local", FALSE
+      "UnitFlag", "CantAttack",         "Local", FALSE
       ;...
       "Building",     "Pax Dei",        "World", TRUE
       "Tech",         "Monotheism",     "Player",FALSE
@@ -1965,7 +2001,8 @@ actor_reqs    =
       "MinMoveFrags",  "1",                "Local", TRUE
       "UnitClassFlag", "AttFromNonNative", "Local", TRUE
       "DiplRel",       "War",              "Local", TRUE
-      "UnitClassFlag", "Missile",      "Local", FALSE
+      "UnitClassFlag", "Missile",          "Local", FALSE
+      "UnitFlag", "CantAttack",            "Local", FALSE
       ;...
       "Building",     "Pax Dei",        "World", TRUE
       "Tech",         "Monotheism",     "Player",FALSE
@@ -1988,7 +2025,8 @@ actor_reqs    =
       "UnitState",    "OnNativeTile",   "Local", TRUE
       "UnitClassFlag", "TerrainSpeed",  "Local", TRUE
       "DiplRel",      "War",            "Local", TRUE
-      "UnitClassFlag", "Missile",      "Local", FALSE
+      "UnitClassFlag", "Missile",       "Local", FALSE
+      "UnitFlag", "CantAttack",         "Local", FALSE
       ;...
       "Building",     "Pax Dei",        "World", TRUE
       "UnitState",    "OnDomesticTile", "Local", TRUE
@@ -2004,7 +2042,8 @@ actor_reqs    =
       "UnitState",    "OnNativeTile",   "Local", TRUE
       "UnitClassFlag", "TerrainSpeed",  "Local", FALSE
       "DiplRel",      "War",            "Local", TRUE
-      "UnitClassFlag", "Missile",      "Local", FALSE
+      "UnitClassFlag", "Missile",       "Local", FALSE
+      "UnitFlag", "CantAttack",         "Local", FALSE
       ;...
       "Building",     "Pax Dei",        "World", TRUE
       "UnitState",    "OnDomesticTile", "Local", TRUE
@@ -2025,7 +2064,8 @@ actor_reqs    =
       "UnitState",    "Transported",    "Local", FALSE
       "UnitClassFlag","TerrainSpeed",   "Local", TRUE
       "DiplRel",      "War",            "Local", TRUE
-      "UnitClassFlag", "Missile",      "Local", FALSE
+      "UnitClassFlag", "Missile",       "Local", FALSE
+      "UnitFlag", "CantAttack",         "Local", FALSE
       ;...
       "Building",     "Pax Dei",        "World", TRUE
       "UnitState",    "OnDomesticTile", "Local", TRUE
@@ -2042,7 +2082,8 @@ actor_reqs    =
       "UnitState",    "Transported",    "Local", FALSE
       "UnitClassFlag", "TerrainSpeed",  "Local", FALSE
       "DiplRel",      "War",            "Local", TRUE
-      "UnitClassFlag", "Missile",      "Local", FALSE
+      "UnitClassFlag", "Missile",       "Local", FALSE
+      "UnitFlag", "CantAttack",         "Local", FALSE
       ;...
       "Building",     "Pax Dei",        "World", TRUE
       "UnitState",    "OnDomesticTile", "Local", TRUE
@@ -2074,7 +2115,8 @@ actor_reqs    =
       "UnitClassFlag", "AttFromNonNative", "Local", TRUE
       "UnitClassFlag", "TerrainSpeed",     "Local", TRUE
       "DiplRel",       "War",              "Local", TRUE
-      "UnitClassFlag", "Missile",      "Local", FALSE
+      "UnitClassFlag", "Missile",          "Local", FALSE
+      "UnitFlag", "CantAttack",            "Local", FALSE
       ;...
       "Building",     "Pax Dei",        "World", TRUE
       "UnitState",    "OnDomesticTile", "Local", TRUE
@@ -2088,7 +2130,8 @@ actor_reqs    =
       "UnitClassFlag", "AttFromNonNative", "Local", TRUE
       "UnitClassFlag", "TerrainSpeed",     "Local", FALSE
       "DiplRel",       "War",              "Local", TRUE
-      "UnitClassFlag", "Missile",      "Local", FALSE
+      "UnitClassFlag", "Missile",          "Local", FALSE
+      "UnitFlag", "CantAttack",            "Local", FALSE
       ;...
       "Building",     "Pax Dei",        "World", TRUE
       "UnitState",    "OnDomesticTile", "Local", TRUE
@@ -2109,7 +2152,8 @@ actor_reqs    =
       "MinMoveFrags", "1",              "Local", TRUE
       "UnitState",    "OnNativeTile",   "Local", TRUE
       "DiplRel",      "War",            "Local", TRUE
-      "UnitClassFlag", "Missile",      "Local", FALSE
+      "UnitClassFlag", "Missile",       "Local", FALSE
+      "UnitFlag", "CantAttack",         "Local", FALSE
       ;...
       "Building",     "Pax Dei",        "World", TRUE
       "UnitState",    "OnDomesticTile", "Local", TRUE
@@ -2126,7 +2170,8 @@ actor_reqs    =
       "MinMoveFrags",  "1",                "Local", TRUE
       "UnitClassFlag", "AttFromNonNative", "Local", TRUE
       "DiplRel",       "War",              "Local", TRUE
-      "UnitClassFlag", "Missile",      "Local", FALSE
+      "UnitClassFlag", "Missile",          "Local", FALSE
+      "UnitFlag", "CantAttack",            "Local", FALSE
       ;...
       "Building",     "Pax Dei",        "World", TRUE
       "UnitState",    "OnDomesticTile", "Local", TRUE

@@ -74,6 +74,7 @@ flags =
     _("NonMilAttack"), _("Has military capacity but for peaceful purposes, can enter territories with whom you are at Peace")
     _("Cant_Pillage"), _("Unable to pillage tiles.")
     _("CanClaim"), _("Is able to claim sovereignty of foreign tiles bordering domestic territory.")
+    _("CantAttack"), _("Cannot do conventional combat attacks.")
   }
 
 ; Names for custom unit class flags. There can be up to 12 of these.
@@ -1233,7 +1234,6 @@ Archers fight with bows and arrows. They have good offense and decent defense.\
 ")
 bombard_rate = 2
 
-
 [unit_legion]
 name          = _("Legion")
 class         = "Land"
@@ -2228,6 +2228,59 @@ Siege Rams need an escort for protection. They need a minimum of\
  The discovery of Metallurgy by any nation incapacitates Siege Rams.\
 ")
 bombard_rate = 4
+
+[unit_ballista]
+name          = _("Ballista")
+class         = "Land"
+tech_req      = "Engineering"
+obsolete_by   = "Cannon"
+graphic       = "u.ballista_o"
+graphic_alt   = "-"
+sound_move    = "m_catapult"
+sound_move_alt = "m_generic"
+sound_fight   = "f_ballista"
+sound_fight_alt = "f_generic"
+build_cost    = 45
+pop_cost      = 0
+attack        = 1
+defense       = 1
+hitpoints     = 10
+firepower     = 5
+move_rate     = 2
+vision_radius_sq = 4
+transport_cap = 0
+fuel          = 0
+city_size     = 4680        ; 000000,010,010,010010,00 = atk_bonus=0, max_kills=2, targets=2, move_cost=18 frags, stay_fortfy=0, reserved = 0
+paratroopers_mr_sub = 10240 ; 00101,00,0000,000,0,0 - bbd_retal_rate=5, iPill_rand_tgts=0, iPill_odds=0, iPill_moves=0, iPillage=0, ATK_Stay_Fortified=0
+uk_happy      = 1
+uk_shield     = 1
+uk_food       = 0
+uk_gold       = 0
+flags         = "CantReachAir", "WillNever", "Bombarder", "CantAttack"
+bonuses       =
+   { "flag", "type", "value"
+     "Horse",       "DefenseMultiplierPct", -80
+     "FootSoldier", "DefenseMultiplierPct", -80
+   }
+roles         = ""
+helptext      = _("\
+Ballistae fire massive bolts through enemy formations.\
+ Slow reload prevents them from doing conventional attacks.\
+ Ballistae do 5 rounds of Ranged Attack on two units without\
+ retaliation. Accuracy is poor (A1). Damage is 5x more than normal.\
+ To do Ranged Attack, Ballistae must have used no move points.\n\n\
+Ballistae defend at (D1) with an 80% defense penalty vs.\
+ foot soliders and mounted units. However, the defensive role\
+ gives Ballistae the chance to reload and fire until one of the combatants\
+ dies in conventional combat.\n\n\
+Baliistae are capable of Special Unit Defense against ranged attacks. They retalite\
+ with their own ranged attack.\n\n\  
+A Ballista's best offensive role is to soften forts and fortified positions.\
+ Defensively, they deter attacks from catapults and special attacks from ranged\
+ units. Ballistae can do ranged attacks from and on sea units.\
+")
+bombard_rate = 5
+
 
 [unit_cannon]
 name          = _("Cannon")
