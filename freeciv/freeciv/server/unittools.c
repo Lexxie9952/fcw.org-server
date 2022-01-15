@@ -156,7 +156,7 @@ static void wipe_unit_full(struct unit *punit, bool transported,
                            enum unit_loss_reason reason,
                            struct player *killer);
 
-static char *unit_scrambled_id(int id);
+static char unit_scrambled_id(int id);
 
 /* Cycling index used by uwt scrambler.*/
 int unit_wait_cycle = -1;        
@@ -238,29 +238,16 @@ char *get_web_unit_icon(const struct unit *punit, char *emoji_str)
 }
 
 /*************************************************************************
-  Makes a unit->id into a base-26 string using letters, which is further
-  scrambled by inversion. This allows uniquely identifying units
-  to players in a shorter form that doesn't reveal intel about the age of
-  the unit, how many units are in the game, etc.
+  Makes a unit->id into a single base-26 alphabetic letter. This allows
+  semi-uniquely identifying units to players in a short form that doesn't
+  reveal intel about the age of the unit, how many units are in the game,
+  etc. There is a 1/26 chance of confusing two different units as the same,
+  but who says that never happened in real life?
 **************************************************************************/
-static char *unit_scrambled_id(int n)
+static char unit_scrambled_id(int n)
 {
-  static char result[MAX_LEN_NAME] = {0};
-  int digit;
-
-  if (n>250000) return "NaN";
-
-  n--;
-  if (n>=0) {
-    digit = n % 26;
-    if (n<26) {
-      sprintf(result, "%c", 90-digit);
-    } else {
-      sprintf(result, "%s%c", unit_scrambled_id(n/26), 90-digit);
-    }
-  }
-
-  return result;
+  char identifer = (char)(90-(n % 26));
+  return identifer;
 }
 
 /**********************************************************************//**
@@ -4128,7 +4115,7 @@ static void wakeup_neighbor_sentries(struct unit *punit)
 
               notify_player(unit_owner(penemy), unit_tile(punit),
                     E_UNIT_SENTRY_WAKE, ftc_server,
-                    _("[`eye`] %s (%d,%d) saw %s %s %s<span class='sc'>%s</span> moving at (%d,%d)"),
+                    _("[`eye`] %s (%d,%d) saw %s %s %s<span class='sc'>%c</span> moving at (%d,%d)"),
                     unit_link(penemy),
                     stile_x, stile_y, 
                     nation_rule_name(nation_of_unit(punit)), 
