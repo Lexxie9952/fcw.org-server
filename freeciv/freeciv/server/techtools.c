@@ -490,6 +490,7 @@ void found_new_tech(struct research *presearch, Tech_type_id tech_found,
     had_embassies[i] = get_player_bonus(aplayer, EFT_HAVE_EMBASSIES);
 
     if (presearch != research_get(aplayer)) {
+      could_switch[i][government_index(pgov)] = false;
       continue;
     }
 

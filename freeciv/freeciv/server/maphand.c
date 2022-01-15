@@ -2305,6 +2305,12 @@ void map_claim_base(struct tile *ptile, struct extra_type *pextra,
   pbase = extra_base_get(pextra);
 
   fc_assert_ret(pbase != NULL);
+  /* the above line would leave without freeing could_see_unit?
+  if (pbase == NULL) {
+    log_error("map_claim_base: pextra is not a base");
+    if (could_see_unit) FC_FREE(could_see_unit);
+    return;
+  } */
 
   /* Transfer base provided vision to new owner */
   if (powner != NULL) {
