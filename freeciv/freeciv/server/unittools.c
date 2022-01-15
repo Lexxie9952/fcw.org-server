@@ -3226,7 +3226,18 @@ void send_unit_info(struct conn_list *dest, struct unit *punit)
     dest = game.est_connections;
   }
 
-  CHECK_UNIT(punit);
+  //CHECK_UNIT(punit);
+  // Segfault hunting
+  if (!punit 
+     || !unit_type_get(punit)
+     || !unit_owner(punit)            
+     || player_by_number(player_index(unit_owner(punit)))
+            != unit_owner(punit)                 
+     || !game_unit_by_number(punit->id) {
+       
+    log_error("send_unit_info attempted on non-existent unit or player");
+    return;
+  }
 
   powner = unit_owner(punit);
   package_unit(punit, &info);

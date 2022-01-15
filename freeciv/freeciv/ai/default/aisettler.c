@@ -1054,7 +1054,7 @@ BUILD_CITY:
           dai_unit_new_task(ait, punit, AIUNIT_NONE, NULL);
           /* Only known way to end in here is that hut turned in to a city
            * when settler entered tile. So this is not going to lead in any
-           * serious recursion. */
+           * serious recursion. FAMOUS LAST WORDS, it's causing segfault.*/
           dai_auto_settler_run(ait, pplayer, punit, state);
 
           return;
