@@ -513,9 +513,9 @@ static void savegame3_save_real(struct section_file *file,
   /* 29 December 2021 - LIVE PRODUCTION SERVER DEBUG EMERGENCY. All notify_conn
      calls are for temporary debugging. This code should have been removed.
      Please report if you can read this, so we can remove it. Thanks! */
-
-      notify_conn(NULL, NULL, E_LOG_ERROR, ftc_server,
-              _("SAVEGAME1 s3sr. Reason: %s "),save_reason);
+   if (is_longturn())
+      notify_conn(NULL, NULL, E_BEGINNER_HELP, ftc_server,
+              _("Savegame. Reason: %s\nReport immediately if step 18 not reached:"),save_reason);
 
   /* initialise loading */
   saving = savedata_new(file, save_reason, scenario);
@@ -524,104 +524,121 @@ static void savegame3_save_real(struct section_file *file,
   /* [scenario] */
   /* This should be first section so scanning through all scenarios just for
    * names and descriptions would go faster. */
-         notify_conn(NULL, NULL, E_LOG_ERROR, ftc_server,
-              _("SAVEGAME2 scenario."));
+   if (is_longturn())
+         notify_conn(NULL, NULL, E_BEGINNER_HELP, ftc_server,
+              _("2scen"));
 
   sg_save_scenario(saving);
 
-         notify_conn(NULL, NULL, E_LOG_ERROR, ftc_server,
-              _("SAVEGAME3 savefile."));
+   if (is_longturn())
+         notify_conn(NULL, NULL, E_BEGINNER_HELP, ftc_server,
+              _("3savefile"));
   /* [savefile] */
   sg_save_savefile(saving);
 
-           notify_conn(NULL, NULL, E_LOG_ERROR, ftc_server,
-              _("SAVEGAME4 game."));
+   if (is_longturn())
+           notify_conn(NULL, NULL, E_BEGINNER_HELP, ftc_server,
+              _("4game"));
 
   /* [game] */
   sg_save_game(saving);
 
-           notify_conn(NULL, NULL, E_LOG_ERROR, ftc_server,
-              _("SAVEGAME5 random."));
+   if (is_longturn())
+           notify_conn(NULL, NULL, E_BEGINNER_HELP, ftc_server,
+              _("5rand"));
 
   /* [random] */
   sg_save_random(saving);
 
-           notify_conn(NULL, NULL, E_LOG_ERROR, ftc_server,
-              _("SAVEGAME6 script."));
+   if (is_longturn())
+           notify_conn(NULL, NULL, E_BEGINNER_HELP, ftc_server,
+              _("6scrpt"));
 
   /* [script] */
   sg_save_script(saving);
 
-           notify_conn(NULL, NULL, E_LOG_ERROR, ftc_server,
-              _("SAVEGAME7 settings."));
+   if (is_longturn())
+           notify_conn(NULL, NULL, E_BEGINNER_HELP, ftc_server,
+              _("7sttng"));
 
   /* [settings] */
   sg_save_settings(saving);
 
-           notify_conn(NULL, NULL, E_LOG_ERROR, ftc_server,
-              _("SAVEGAME8 ruledata."));
+   if (is_longturn())
+           notify_conn(NULL, NULL, E_BEGINNER_HELP, ftc_server,
+              _("8rdata"));
 
   /* [ruledata] */
   sg_save_ruledata(saving);
 
-           notify_conn(NULL, NULL, E_LOG_ERROR, ftc_server,
-              _("SAVEGAME9 map."));
+   if (is_longturn())
+           notify_conn(NULL, NULL, E_BEGINNER_HELP, ftc_server,
+              _("9map"));
 
   /* [map] */
   sg_save_map(saving);
 
-           notify_conn(NULL, NULL, E_LOG_ERROR, ftc_server,
-              _("SAVEGAME10 player<i>."));
+   if (is_longturn())
+           notify_conn(NULL, NULL, E_BEGINNER_HELP, ftc_server,
+              _("10plr"));
 
   /* [player<i>] */
   sg_save_players(saving);
 
-           notify_conn(NULL, NULL, E_LOG_ERROR, ftc_server,
-              _("SAVEGAME11 research."));
+   if (is_longturn())
+           notify_conn(NULL, NULL, E_BEGINNER_HELP, ftc_server,
+              _("11rsrch"));
 
   /* [research] */
   sg_save_researches(saving);
 
-           notify_conn(NULL, NULL, E_LOG_ERROR, ftc_server,
-              _("SAVEGAME12 ec."));
+   if (is_longturn())
+           notify_conn(NULL, NULL, E_BEGINNER_HELP, ftc_server,
+              _("12events"));
 
   /* [event_cache] */
   sg_save_event_cache(saving);
 
-           notify_conn(NULL, NULL, E_LOG_ERROR, ftc_server,
-              _("SAVEGAME13 treaty."));
+   if (is_longturn())
+           notify_conn(NULL, NULL, E_BEGINNER_HELP, ftc_server,
+              _("13trty"));
 
   /* [treaty<i>] */
   sg_save_treaties(saving);
 
-           notify_conn(NULL, NULL, E_LOG_ERROR, ftc_server,
-              _("SAVEGAME14 history."));
+   if (is_longturn())
+           notify_conn(NULL, NULL, E_BEGINNER_HELP, ftc_server,
+              _("14hst"));
 
   /* [history] */
   sg_save_history(saving);
 
-           notify_conn(NULL, NULL, E_LOG_ERROR, ftc_server,
-              _("SAVEGAME15 mapimg."));
+   if (is_longturn())
+           notify_conn(NULL, NULL, E_BEGINNER_HELP, ftc_server,
+              _("15mpimg"));
 
   /* [mapimg] */
   sg_save_mapimg(saving);
 
-           notify_conn(NULL, NULL, E_LOG_ERROR, ftc_server,
-              _("SAVEGAME16 sanity."));
+   if (is_longturn())
+           notify_conn(NULL, NULL, E_BEGINNER_HELP, ftc_server,
+              _("16sane"));
 
 
   /* Sanity checks for the saved game. */
   sg_save_sanitycheck(saving);
 
-           notify_conn(NULL, NULL, E_LOG_ERROR, ftc_server,
-              _("SAVEGAME17 destroy."));
+   if (is_longturn())
+           notify_conn(NULL, NULL, E_BEGINNER_HELP, ftc_server,
+              _("17dstry"));
 
 
   /* deinitialise saving */
   savedata_destroy(saving);
 
-           notify_conn(NULL, NULL, E_LOG_ERROR, ftc_server,
-              _("SAVEGAME18 complete."));
+   if (is_longturn())
+           notify_conn(NULL, NULL, E_BEGINNER_HELP, ftc_server,
+              _("18complete"));
 
 
   if (!sg_success) {
