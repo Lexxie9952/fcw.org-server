@@ -814,7 +814,7 @@ function popup_action_selection(actor_unit, action_probabilities,
                                   + "units (up to 40%/turn): emulating damage reduction to the\n"
                                   + "Fortress defense bonus. HP healing of units (up to 40%/turn),\n"
                                   + "emulates resistance and repairing Fortress damage over the\n"
-                                  + "course of a long siege.\n"
+                                  + "course of a long siege."
         }
         else if (buttons[button_id].html.includes("Targeted Sabotage")) {
           buttons[button_id].html = "Attack City Walls ([25%, 50%])"
@@ -824,6 +824,20 @@ function popup_action_selection(actor_unit, action_probabilities,
                                   + "Min. moves:          1 move\n"
                                   + "Attacks the City Walls, resulting in destruction\n"
                                   + "of the City Walls or the loss of the Siege Ram."
+        }
+      } break;
+      case "Ballista":  for (button_id in buttons) {
+        if (buttons[button_id].html.includes("Special Attack")) {
+          buttons[button_id].html = buttons[button_id].html.replace("Special Attack", utype_get_bombard_name(ptype))
+          buttons[button_id].title = "Odds of survival:  100%\n"
+                                  + "Combat:                5 rounds\n"
+                                  + "Targets:                 2 units\n"
+                                  + "Move cost:            2 moves\n"
+                                  + "Min. moves:          hasn't moved\n"
+                                  + "Max. casualties:     2\n"
+                                  + "\nPoor accuracy but deadly firepower is represented by\n"
+                                  + "5 rounds at 5x firepower vs up to 2 units. Targets\n"
+                                  + "will either be missed, badly damaged, or killed."
         }
       } break;
       case "Phalanx":  for (button_id in buttons) {
@@ -837,7 +851,7 @@ function popup_action_selection(actor_unit, action_probabilities,
                                   + "Casualties:             --\n"
                                   + "\nA 3 round rumble against one unit on the target tile\n"
                                   + "represents the Phalanx safely pushing from a held\n"
-                                  + "position vs. a weak defender who comes too close.\n"
+                                  + "position vs. a weak defender who comes too close."
         }
       } break;
       case "Archers":  for (button_id in buttons) {
@@ -904,7 +918,7 @@ function popup_action_selection(actor_unit, action_probabilities,
                                   + "Move cost:            1 5/9 moves\n"
                                   + "Max. casualties:     1\n"        
                                   + "\nHardened Marines use agility/mobility over terrain features for hit-and-run\n"
-                                  + "ballistic attacks: 3 rounds of combat on up to 4 occupants of a tile.\n"
+                                  + "ballistic attacks: 3 rounds of combat on up to 4 occupants of a tile."
         }
       } break;
       case "Battleship":  for (button_id in buttons) {
@@ -916,7 +930,7 @@ function popup_action_selection(actor_unit, action_probabilities,
                                   + "Move cost:            5 moves\n"
                                   + "Max. casualties:     1\n"
                                   + "\nUses the range advantage of massive large guns to safely\n" 
-                                  + "shell and degrade up to 4 distant targets on a tile or city.\n"
+                                  + "shell and degrade up to 4 distant targets on a tile or city."
         }
       } break;
       case "Zeppelin":  for (button_id in buttons) {
@@ -928,7 +942,7 @@ function popup_action_selection(actor_unit, action_probabilities,
                                   + "Move cost:            2 moves\n"
                                   + "Max. casualties:     1\n"
                                   + "\nDrops shrapnel bombs in the vicinity of enemies,\n" 
-                                  + "affecting up to 2 units and possibly killing one.\n"
+                                  + "affecting up to 2 units and possibly killing one."
         }
       } break;
     }
