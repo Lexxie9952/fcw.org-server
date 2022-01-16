@@ -1296,7 +1296,6 @@ actor_reqs    =
     { "type",         "name",         "range", "present"
       "UnitFlag",     "Bombarder",    "Local", TRUE
       "UnitType",     "Ballista",     "Local", TRUE
-;     "UnitState",    "Transported",  "Local", FALSE
       "MinMoveFrags", "18",           "Local", TRUE
       "DiplRel",      "War",          "Local", TRUE
    }
@@ -1304,7 +1303,6 @@ target_reqs    =
     { "type",   "name", "range",  "present"
       "CityTile", "Center",       "Local", FALSE
       "Extra",    "Fortress",     "Local", FALSE
-;      "Extra",    "Fort",         "Local", FALSE
       "Extra",    "Naval Base",   "Local", FALSE
 ;      "TerrainClass", "Oceanic",  "Local", FALSE
     }
