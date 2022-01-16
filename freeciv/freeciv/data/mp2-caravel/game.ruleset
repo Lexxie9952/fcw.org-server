@@ -1015,19 +1015,22 @@ actor_reqs    =
       "UnitState", "HasHomeCity", "Local", TRUE
     }
 
-[actionenabler_marketplace]
-action = "Enter Marketplace"
-actor_reqs    =
-    { "type",   "name", "range", "present"
-      "UnitFlag", "TradeRoute", "Local", TRUE
-      "UnitState", "Transporting", "Local", FALSE ; avoids bug where land cargo "drowns" even on land terrain
-      "MinMoveFrags", "1", "Local", TRUE
-      "DiplRel", "War", "Local", FALSE
-    }
-target_reqs  =
-    { "type",     "name",        "range"
-      "Building", "Marketplace", "City"
-    }
+;S12 cities with colossus giving 486 gold from a wagon; this has to be turned OFF until if/when
+;we balance it or make a whole new formula for that stuff, based on simple value of the 
+;commerce unit times a simple multiplier.
+;[actionenabler_marketplace]
+;action = "Enter Marketplace"
+;actor_reqs    =
+;    { "type",   "name", "range", "present"
+;      "UnitFlag", "TradeRoute", "Local", TRUE
+;      "UnitState", "Transporting", "Local", FALSE ; avoids bug where land cargo "drowns" even on land terrain
+;      "MinMoveFrags", "1", "Local", TRUE
+;      "DiplRel", "War", "Local", FALSE
+;    }
+;target_reqs  =
+;    { "type",     "name",        "range"
+;      "Building", "Marketplace", "City"
+;    }
 
 [actionenabler_help_build_great_wonder]
 action = "Help Wonder"
