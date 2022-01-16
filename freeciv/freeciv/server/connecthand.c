@@ -648,7 +648,7 @@ void send_conn_info_remove(struct conn_list *src, struct conn_list *dest)
   Returns the # of turns idle a player has to be, at this point in the 
   game, to be taken over by a latejoiner player.
 **************************************************************************/
-static int can_take_idler_turns()
+int can_take_idler_turns()
 {
   // Keep this code identical with pregame.js:can_take_idler_turns() **************************** !!!
   /* Turns 1-12: replace idle 3. T12+ increase idle cutoff until max cutoff of 10 */
