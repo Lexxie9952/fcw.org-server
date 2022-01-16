@@ -604,7 +604,7 @@ void handle_city_manager(struct player *pplayer, int city_id, bool enabled,
         send_city_info(pplayer, pcity);
         notify_player(city_owner(pcity), city_tile(pcity),
               E_CITY_CMA_RELEASE, ftc_server,
-              _("[`bluediamond`] Retired the Governor in %s."),
+              _("<img class='v' src='/images/e/bluediamond.png'> Retired the Governor in %s."),
               city_link(pcity));
       }
       return;
@@ -620,7 +620,7 @@ void handle_city_manager(struct player *pplayer, int city_id, bool enabled,
     if (pcity->cm_parameter) { // notify only if successful.
       notify_player(city_owner(pcity), city_tile(pcity),
                 E_CITY_CMA_RELEASE, ftc_server,
-                _("[`bluediamond`] Governor successfully assigned to %s."),
+                _("<img class='v' src='/images/e/bluediamond.png'> Governor successfully assigned to %s."),
                 city_link(pcity));
     }
     return;
@@ -658,7 +658,7 @@ void handle_city_manager(struct player *pplayer, int city_id, bool enabled,
           send_city_info(pplayer, pcity);
           notify_player(city_owner(pcity), city_tile(pcity),
                       E_CITY_CMA_RELEASE, ftc_server,
-                      _("[`bluediamond`] %s, which has no Governor, has accepted your interim orders."),
+                      _("<img class='v' src='/images/e/bluediamond.png'> %s, which has no Governor, has accepted your interim orders."),
                       city_link(pcity));
           return;
         }
@@ -668,7 +668,7 @@ void handle_city_manager(struct player *pplayer, int city_id, bool enabled,
           send_city_info(pplayer, pcity);
           notify_player(city_owner(pcity), city_tile(pcity),
                       E_CITY_CMA_RELEASE, ftc_server,
-                      _("[`bluediamond`] (Interim Orders for %s were not attainable.)"),
+                      _("<img class='v' src='/images/e/bluediamond.png'> (Interim Orders for %s were not attainable.)"),
                       city_link(pcity));
           return;
         }
@@ -685,7 +685,7 @@ void handle_city_manager(struct player *pplayer, int city_id, bool enabled,
           send_city_info(pplayer, pcity);
           notify_player(city_owner(pcity), city_tile(pcity),
                       E_CITY_CMA_RELEASE, ftc_server,
-                      _("[`bluediamond`] Interim orders accepted by the Governor of %s."),
+                      _("<img class='v' src='/images/e/bluediamond.png'> Interim orders accepted by the Governor of %s."),
                       city_link(pcity));
           return;
         }
@@ -704,7 +704,7 @@ void handle_city_manager(struct player *pplayer, int city_id, bool enabled,
             send_city_info(pplayer, pcity);
             notify_player(city_owner(pcity), city_tile(pcity),
                       E_CITY_CMA_RELEASE, ftc_server,
-                      _("[`bluediamond`] Failed interim orders means the old Governor of %s was re-hired."),
+                      _("<img class='v' src='/images/e/bluediamond.png'> Failed interim orders means the old Governor of %s was re-hired."),
                       city_link(pcity));
             return;
         }
