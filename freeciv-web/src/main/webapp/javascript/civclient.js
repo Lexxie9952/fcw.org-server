@@ -756,6 +756,18 @@ function is_supercow()
 {
   return (client.conn["access_level"] >= 5);
 }
+/**************************************************************************
+ Gamemaster can temporarily toggle Supercow-Interaction-Lock mode with
+ with this console command. Allows GM to (/take player) to click on
+ cities, click to investigate unit stacks, and/or other investigative
+ or debugging measures.
+**************************************************************************/
+function flip_supercow()
+{
+  client.conn.access_level = 5-client.conn.access_level;
+  observing = !observing;
+  add_client_message("Supercow Lock turned "+(observing?"ON":"OFF"));
+}
 
 /**************************************************************************
  Is this an ongoing LongTurn game?

@@ -258,3 +258,10 @@ The current and complete list of Freeciv-web controls can be found here:<br>
 <br>
 <br>
 <br>
+<h2>Admin only:</h2><table class="ctrls_tbl"><tr><td><span class="hotkey">Ctrl-Shift-E</span></td><td>          Toggle Debug Log Messages</td></tr>
+<tr><td><span class="hotkey">Ctrl-Alt-Shift-S Toggle Supercow Interaction Lock</span></td>
+</table>
+<br>
+<br>
+<br>
+<br>

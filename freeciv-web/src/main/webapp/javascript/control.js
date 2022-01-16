@@ -137,6 +137,10 @@ var end_turn_info_message_shown = false;
 var action_selection_in_progress_for = 0; /* before IDENTITY_NUMBER_ZERO */
 var is_more_user_input_needed = false;
 
+/* If a supercow leaves that mode with CTRL-ALT-SHIFT S, this var will 
+   keep track of the fact that they were one, so they can toggle back */
+var was_supercow = false;
+
 /****************************************************************************
 ...
 ****************************************************************************/
@@ -3517,9 +3521,14 @@ function civclient_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_even
         the_event.preventDefault(); // override possible browser shortcut
         quicksave();
       }
-      else if (alt) {
+      else if (!ctrl && !shift && alt) {
         the_event.preventDefault(); // override possible browser shortcut
         show_fullscreen_window();
+      } else if (ctrl && shift && alt) {
+        if (is_supercow() || was_supercow) {
+          flip_supercow();
+          was_supercow = true;
+        }
       }
     break;
 
