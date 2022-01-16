@@ -1054,8 +1054,17 @@ BUILD_CITY:
           dai_unit_new_task(ait, punit, AIUNIT_NONE, NULL);
           /* Only known way to end in here is that hut turned in to a city
            * when settler entered tile. So this is not going to lead in any
-           * serious recursion. FAMOUS LAST WORDS, it's causing segfault.*/
+           * serious recursion. FAMOUS LAST WORDS, it's causing segfault.
+
+          See OSDN https://osdn.net//projects/freeciv/ticket/43630
+
+          FIXME: getting stuck in recursion because actionenabler req
+          for unit not being transported is segfaulting. If this is still
+          here after March 2022, tap upstream again for solution or do the 
+          'nuclear option' and change all rulesets to allow Settlers
+          to be transported, when founding cities.
           dai_auto_settler_run(ait, pplayer, punit, state);
+          */
 
           return;
        } else {
