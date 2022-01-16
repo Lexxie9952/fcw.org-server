@@ -2145,7 +2145,7 @@ input[type="email" i], #email {
 .e_unit_sentry_wake,
 .e_unit_orders { /* sentry saw a unit*/
 /*  color: #d5e9a7; */
-  color: #7caaff;
+  color: #7cb4ff;
  }
  .e_imp_build,
 .e_unit_built {
@@ -2198,7 +2198,8 @@ input[type="email" i], #email {
   color:#7cffdc;
 }
 .e_city_cma_release {
-  color:#5d72ff;
+  color:#7494ff;
+  text-shadow: 1px 1px #0000ff;
 }
 .e_spaceship
 {
