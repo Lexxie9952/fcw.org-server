@@ -3233,7 +3233,7 @@ void send_unit_info(struct conn_list *dest, struct unit *punit)
      || !unit_owner(punit)            
      || player_by_number(player_index(unit_owner(punit)))
             != unit_owner(punit)                 
-     || !game_unit_by_number(punit->id) {
+     || !game_unit_by_number(punit->id)) {
        
     log_error("send_unit_info attempted on non-existent unit or player");
     return;
