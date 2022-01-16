@@ -104,8 +104,11 @@ function city_size_sum(playerno) {
   ...
 **************************************************************************/
 function update_game_status_panel() {
-
-  if (C_S_RUNNING != client_state() ) return;
+  if (C_S_RUNNING != client_state() 
+      || (was_supercow && client.conn.playing.playerno == -1)) {
+    // Game not running || supercow is a fake player to turn off Supercow Lock    
+    return;
+  } 
 
   var status_html = "";
   var msg_title_prefix = unread_messages > 0 ? "Unread messages.&#013;&#010;&#013;&#010;Click = " : ""

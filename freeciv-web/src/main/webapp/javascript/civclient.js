@@ -767,6 +767,11 @@ function flip_supercow()
   client.conn.access_level = 5-client.conn.access_level;
   observing = !observing;
   client.conn['observer'] = observing;
+  if (observing) {
+    client.conn.playing = null;
+  } else {
+    client.conn.playing = {playerno: -1};   
+  }
   add_client_message("Supercow Lock turned "+(observing?"ON":"OFF"));
 }
 
