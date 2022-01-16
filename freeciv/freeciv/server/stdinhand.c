@@ -684,6 +684,11 @@ static bool show_serverid(struct connection *caller, char *arg)
 static bool save_command(struct connection *caller, char *arg, bool check)
 {
   if (!check) {
+    if (is_longturn() && is_supercow(caller)) {
+      /* supercow can force timed save into auto-reload dir;
+         thus letting supercow do a save before game restart */ 
+      save_game_auto("Timer", AS_TIMER);
+    }
     save_game(arg, "User request", FALSE);
   }
   return TRUE;
