@@ -4720,15 +4720,15 @@ static bool do_attack(struct unit *punit, struct tile *def_tile,
               nation_rule_name(nation_of_unit(pdefender)),
               unit_rule_name(pdefender));
 
-    const char *adj = get_battle_survivor_adjective(pdefender);
+    const char *adjective = get_battle_survivor_adjective(pdefender);
     notify_player(unit_owner(pwinner), unit_tile(pwinner),
                   E_UNIT_WIN_DEF, ftc_server,
                   /* TRANS: "Your Cannon ... the Polish Destroyer." */
                   _("[`boom`] Your %s %s %s survived %s %s attack by %s %s [`%s`] %s."),
                   (pcity ? city_link(pcity) : ""),
                   winner_link, UNIT_EMOJI(pwinner),
-                  indefinite_article_for_word(adj, false),
-                  adj,
+                  indefinite_article_for_word(adjective, false),
+                  adjective,
                   (is_unit_plural(punit) ? "" : indefinite_article_for_word(nation_adjective_for_player(unit_owner(ploser)),false)),
                   nation_adjective_for_player(unit_owner(ploser)),
                   ploser_name,
