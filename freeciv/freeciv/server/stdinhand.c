@@ -3680,8 +3680,8 @@ static bool take_command(struct connection *caller, char *str, bool check)
         is_barbarian(pplayer) ? _("Barbarian") : is_ai(pplayer) ? _("AI")
         : _("Human"), pplayer->is_alive ? _("Alive") : _("Dead"));
 
-        conn_list_iterate(game.est_connections, pconn) {
-          send_packet_chat_msg(pconn, &packet);
+        conn_list_iterate(game.est_connections, pconn2) {
+          send_packet_chat_msg(pconn2, &packet);
         } conn_list_iterate_end;
         event_cache_add_for_all(&packet);
     }
