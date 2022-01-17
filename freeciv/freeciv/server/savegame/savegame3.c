@@ -518,7 +518,7 @@ static void savegame3_save_real(struct section_file *file,
      Please report if you can read this, so we can remove it. Thanks! */
    if (debug_save)
       notify_conn(NULL, NULL, E_BEGINNER_HELP, ftc_server,
-              _("Savegame. Reason: %s\nReport immediately if step 18 not reached:"),save_reason);
+              _("Savegame: %s. Report if step 18 not reached:"),save_reason);
 
   /* initialise loading */
   saving = savedata_new(file, save_reason, scenario);
