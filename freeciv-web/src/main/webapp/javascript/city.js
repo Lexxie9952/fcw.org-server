@@ -1592,17 +1592,33 @@ function do_city_map_click(ptile)
   var packet = null;
   var city_id = active_city['id'];
   if (ptile['worked'] == city_id) {
+
+    // Disallow attempting specialist if clicking someone else's worked tile:
+    if (ptile.owner != client.conn.playing.playerno
+      && ptile.owner != UNCLAIMED_LAND) {
+      play_sound("click_illegal.ogg");
+      return;
+    } 
+
     packet = {"pid"     : packet_city_make_specialist,
               "city_id" : city_id,
               "tile_id" : ptile['index'],
               "specialist_to": (selected_specialist ? selected_specialist : 0)
              };
   } else {
+    // Disallow attempting to work a tile not in the city's workable map:
+    if (!city_map_includes_tile(ptile, cities[selector_city])) {
+      play_sound("click_illegal.ogg");
+      return;
+    }
+  
     packet = {"pid"     : packet_city_make_worker,
               "city_id" : city_id,
               "tile_id" : ptile['index']};
   }
+
   send_request(JSON.stringify(packet));
+  //play_sound("click_legal.ogg");
 }
 
 /**************************************************************************
@@ -1973,6 +1989,33 @@ function get_city_tile_map_for_pos(x, y)
   }
 
   return get_city_tile_map_for_pos(x, y);
+}
+
+/**************************************************************************
+  Returns true if a tile is legally workable by a city
+**************************************************************************/
+function city_map_includes_tile(ptile, pcity)
+{
+  if (!ptile || !pcity) return false;
+
+  var radius = pcity.city_radius_sq;
+  var ctile = city_tile(pcity);
+  var dist = sq_map_distance(ptile, ctile);
+
+  /* To be in the workable city map, a tile must be:
+     1. ...in the city's workable city_radius_sq
+     2. ...not owned by a player other than city's owner */
+  if (dist > radius) {
+    return false;
+  }
+  else if (ptile.owner == UNCLAIMED_LAND) {
+    return true;
+  }
+  else if (ptile.owner != pcity.owner) {
+    return false;
+  }
+
+  return true;
 }
 
 /**************************************************************************

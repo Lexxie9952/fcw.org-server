@@ -2773,13 +2773,20 @@ function paste_tile_target_for_prod(canvas_x, canvas_y)
 **************************************************************************/
 function worked_tile_click(ptile)
 {
+  if (observing) return;
+
   var work_city_id = ptile['worked'];
 
   /* This is how selector_city gets set, when you click on a worked tile,
    * the city working it becomes the new selector_city: */
-  if (work_city_id) selector_city = work_city_id;
+  if (work_city_id) {
+    // Abort if the city owning the tile is foreign:
+    if (cities[work_city_id].owner != client.conn.playing.playerno) return;
+    // Sets operative city when clicking any new tiles to work or unwork:
+    selector_city = work_city_id;
+  }
 
-  // Unworked tile and no selector_city = no action can be specified here.
+  // Unworked tile and no selector_city = no action can be specified here:
   if (!selector_city) return;
 
   draw_city_output = true; // failsafe insurance: this mode should be on
@@ -2787,17 +2794,29 @@ function worked_tile_click(ptile)
   var packet = null;
 
   if (ptile['worked'] != 0) {
+    // Disallow attempting specialist if clicking someone else's worked tile:
+    if (ptile.owner != client.conn.playing.playerno
+        && ptile.owner != UNCLAIMED_LAND) {
+      play_sound("click_illegal.ogg");
+      return;
+    }
     packet = {"pid"     : packet_city_make_specialist,
               "city_id" : work_city_id,
               "tile_id" : ptile['index'],
               "specialist_to": -1
              };
   } else {
+    // Disallow attempting to work a tile not in the city's workable map:
+    if (!city_map_includes_tile(ptile, cities[selector_city])) {
+      play_sound("click_illegal.ogg");
+      return;
+    }
     packet = {"pid"     : packet_city_make_worker,
               "city_id" : selector_city,
               "tile_id" : ptile['index']};
   }
   send_request(JSON.stringify(packet));
+  //play_sound("click_legal.ogg");
 }
 
 /**************************************************************************
