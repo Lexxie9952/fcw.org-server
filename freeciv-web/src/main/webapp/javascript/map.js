@@ -270,6 +270,19 @@ function MAP_TO_NATURAL_POS(map_x, map_y)
     return {'nat_y' : pnat_y, 'nat_x' : pnat_x};
 }
 
+/*******************************************************************//**
+  Return squared distance between two tiles.
+***********************************************************************/
+function sq_map_distance(tile0, tile1)
+{
+  /* We assume map_distance_vector gives us the vector with the
+     minimum squared distance. Right now this is true. */
+  var vector = map_distance_vector(tile0, tile1);
+  var dx = vector[0], dy = vector[1];
+
+  return map_vector_to_sq_distance(dx, dy);
+}
+
 /****************************************************************************
   Return the squared distance for a map vector
 ****************************************************************************/
