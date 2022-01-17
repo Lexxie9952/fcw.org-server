@@ -1607,7 +1607,7 @@ function do_city_map_click(ptile)
              };
   } else {
     // Disallow attempting to work a tile not in the city's workable map:
-    if (!city_map_includes_tile(ptile, cities[selector_city])) {
+    if (!city_map_includes_tile(ptile, active_city)) {
       play_sound("click_illegal.ogg");
       return;
     }
