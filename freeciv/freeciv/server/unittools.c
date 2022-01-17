@@ -2542,7 +2542,7 @@ void kill_unit(struct unit *pkiller, struct unit *punit, bool vet)
      "x other units." */
   const int MAX_SECONDARY_CASUALTIES_TO_REPORT = 6;
   const int MAX_KILLED_UNITS_TO_REPORT_TO_ALL_PLAYERS = 128;
-
+  int others = 0;
 
   sz_strlcpy(pkiller_link, unit_link(pkiller));
   sz_strlcpy(punit_link, unit_tile_link(punit));
@@ -2897,7 +2897,7 @@ void kill_unit(struct unit *pkiller, struct unit *punit, bool vet)
       else if (num_killed[i] > 1) {
         // REPORT for SAME PLAYER as the primary stack defender
         if (i == player_index(pvictim)) {
-          int others = num_killed[i] - 1;
+          others = num_killed[i] - 1;
           /* Used to have two separate blocks for whether you had one or more than one secondary casualty:
              This block is no longer necessary but kept around for reference history
           if (others == 1) {  // 2 units lost, meaning one secondary casualty to list 
@@ -2938,7 +2938,7 @@ void kill_unit(struct unit *pkiller, struct unit *punit, bool vet)
             char dead_units_str[1024];
             char killed_unit_str[512];
             char plural_string[32];
-            int others = num_killed[i]-1;
+            others = num_killed[i]-1;
 
             plural_string[0] = 0;
             memset(dead_units_str, '\0', sizeof(dead_units_str));
