@@ -511,14 +511,10 @@ static void savegame3_save_real(struct section_file *file,
   struct savedata *saving;
   /* trademindist is not used in mp2c so it's a hack to allow GM to turn off
      savegame debug logging by setting it to e.g., 14 */
-  bool debug_save = is_longturn() && (game.info.trademindist==15);
 
   /* 29 December 2021 - LIVE PRODUCTION SERVER DEBUG EMERGENCY. All notify_conn
      calls are for temporary debugging. This code should have been removed.
      Please report if you can read this, so we can remove it. Thanks! */
-   if (debug_save)
-      notify_conn(NULL, NULL, E_BEGINNER_HELP, ftc_server,
-              _("Savegame: %s. Report if step 18 not reached:"),save_reason);
 
   /* initialise loading */
   saving = savedata_new(file, save_reason, scenario);
@@ -527,122 +523,53 @@ static void savegame3_save_real(struct section_file *file,
   /* [scenario] */
   /* This should be first section so scanning through all scenarios just for
    * names and descriptions would go faster. */
-   if (debug_save)
-         notify_conn(NULL, NULL, E_BEGINNER_HELP, ftc_server,
-              _("2scen"));
 
   sg_save_scenario(saving);
 
-   if (debug_save)
-         notify_conn(NULL, NULL, E_BEGINNER_HELP, ftc_server,
-              _("3savefile"));
   /* [savefile] */
   sg_save_savefile(saving);
-
-   if (debug_save)
-           notify_conn(NULL, NULL, E_BEGINNER_HELP, ftc_server,
-              _("4game"));
 
   /* [game] */
   sg_save_game(saving);
 
-   if (debug_save)
-           notify_conn(NULL, NULL, E_BEGINNER_HELP, ftc_server,
-              _("5rand"));
-
   /* [random] */
   sg_save_random(saving);
-
-   if (debug_save)
-           notify_conn(NULL, NULL, E_BEGINNER_HELP, ftc_server,
-              _("6scrpt"));
 
   /* [script] */
   sg_save_script(saving);
 
-   if (debug_save)
-           notify_conn(NULL, NULL, E_BEGINNER_HELP, ftc_server,
-              _("7sttng"));
-
   /* [settings] */
   sg_save_settings(saving);
-
-   if (debug_save)
-           notify_conn(NULL, NULL, E_BEGINNER_HELP, ftc_server,
-              _("8rdata"));
 
   /* [ruledata] */
   sg_save_ruledata(saving);
 
-   if (debug_save)
-           notify_conn(NULL, NULL, E_BEGINNER_HELP, ftc_server,
-              _("9map"));
-
   /* [map] */
   sg_save_map(saving);
-
-   if (debug_save)
-           notify_conn(NULL, NULL, E_BEGINNER_HELP, ftc_server,
-              _("10plr"));
 
   /* [player<i>] */
   sg_save_players(saving);
 
-   if (debug_save)
-           notify_conn(NULL, NULL, E_BEGINNER_HELP, ftc_server,
-              _("11rsrch"));
-
   /* [research] */
   sg_save_researches(saving);
-
-   if (debug_save)
-           notify_conn(NULL, NULL, E_BEGINNER_HELP, ftc_server,
-              _("12events"));
 
   /* [event_cache] */
   sg_save_event_cache(saving);
 
-   if (debug_save)
-           notify_conn(NULL, NULL, E_BEGINNER_HELP, ftc_server,
-              _("13trty"));
-
   /* [treaty<i>] */
   sg_save_treaties(saving);
-
-   if (debug_save)
-           notify_conn(NULL, NULL, E_BEGINNER_HELP, ftc_server,
-              _("14hst"));
 
   /* [history] */
   sg_save_history(saving);
 
-   if (debug_save)
-           notify_conn(NULL, NULL, E_BEGINNER_HELP, ftc_server,
-              _("15mpimg"));
-
   /* [mapimg] */
   sg_save_mapimg(saving);
-
-   if (debug_save)
-           notify_conn(NULL, NULL, E_BEGINNER_HELP, ftc_server,
-              _("16sane"));
-
 
   /* Sanity checks for the saved game. */
   sg_save_sanitycheck(saving);
 
-   if (debug_save)
-           notify_conn(NULL, NULL, E_BEGINNER_HELP, ftc_server,
-              _("17dstry"));
-
-
   /* deinitialise saving */
   savedata_destroy(saving);
-
-   if (debug_save)
-           notify_conn(NULL, NULL, E_BEGINNER_HELP, ftc_server,
-              _("18complete"));
-
 
   if (!sg_success) {
     log_error("Failure saving savegame!");
