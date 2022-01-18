@@ -159,7 +159,7 @@ void attach_longturn_player(struct connection *pc, struct player *pplayer)
       Tech_type_id alphabet_id = 2;
       research->researching = alphabet_id;
       research->bulbs_researched = join_bulbs;
-      research->researching_saved = join_bulbs;
+      research->researching_saved = alphabet_id;
       research->inventions[alphabet_id].bulbs_researched_saved += join_bulbs;
     }
 
