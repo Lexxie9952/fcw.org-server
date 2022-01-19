@@ -202,18 +202,17 @@ bool is_word_plural(const char *word)
   if (len<3) return false;
   if (strcmp(&word[len-2], "ss") == 0) return false; // -ss are singular
   if (word[len-1] == 's') return true;
+  if (strcmp(&word[len-4], "s II") == 0)  return true;  // Workers II, Barracks II
   if (strcmp(&word[len-3], "men") == 0) return true;  // Pikemen, Riflemen, etc.
   if (strcmp(&word[len-7], "nfantry") == 0) return true;  // infantry
   if (strcmp(&word[len-8], "rtillery") == 0) return true;  // artillery
   
   return false;
-
   /* Exceptions I, currently commented because they don't come up:
   if (strcmp(word, "AWACS") == 0) return false; // names end in small 's'
   if (strcmp(word, "JTIDS") == 0) return false; // names end in small 's'
   if (strcmp(word, "United Nations") == 0) return false; // debatable ;)*/
   /* Exceptions II, currently not needed / unimportant.  if (len>=5) {
-  if (strcmp(&word[len-4], "s II") == 0)  return true;  // Barracks II, et similia
   if (strcmp(&word[len-5], "s III") == 0) return true;  // Barracks III, et similia
   if (strcmp(&word[len-5], "solos") == 0) return false; // Mausoleum of Mausolos
   if (strcmp(&word[len-5], "temis") == 0) return false; // Temple of Artemis
