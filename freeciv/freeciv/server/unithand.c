@@ -3409,7 +3409,9 @@ static bool unit_do_help_build(struct player *pplayer,
 
   act_utype = unit_type_get(punit);
 
-  shields = unit_shield_value(punit, unit_type_get(punit), paction);
+  shields = unit_shield_value(punit, unit_type_get(punit), paction,
+          /* NULL == we don't want player price/bonus discounts in this calc.*/
+                              NULL);
 
   bool double_contributor = (shields >= unit_type_get(punit)->build_cost * 2) 
                           ? true : false;

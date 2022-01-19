@@ -220,16 +220,19 @@ bool unit_has_orders(const struct unit *punit)
   @param punit     the unit. Can be NULL if punittype is set.
   @param punittype the unit's type. Can be NULL iff punit is set.
   @param paction   the action the unit does when valued.
+  @param pplayer   the player who would do the upgrade. Can be NULL but
+                      would then miss government/tech/wonder bonuses.
   @return the unit's value in shields.
 **************************************************************************/
 int unit_shield_value(const struct unit *punit,
                       const struct unit_type *punittype,
-                      const struct action *paction)
+                      const struct action *paction,
+                      const struct player *act_player)
 {
   int value;
 
   bool has_unit;
-  const struct player *act_player;
+  //const struct player *act_player;
 
   has_unit = punit != NULL;
 
@@ -241,7 +244,9 @@ int unit_shield_value(const struct unit *punit,
   fc_assert(punit == NULL || unit_type_get(punit) == punittype);
   fc_assert_ret_val(paction != NULL, 0);
 
-  act_player = has_unit ? unit_owner(punit) : NULL;
+  if (!act_player) {
+    act_player = has_unit ? unit_owner(punit) : NULL;
+  }
   /* TODO: determine if tile and city should be where the unit currently is
    * located or the target city. Those two may differ. Wait for ruleset
    * author feed back. */

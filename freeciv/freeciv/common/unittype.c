@@ -1337,9 +1337,14 @@ const struct unit_type *can_upgrade_unittype(const struct player *pplayer,
 
 /**********************************************************************//**
   Return the cost (gold) of upgrading a single unit of the specified type
-  to the new type.  This price could (but currently does not) depend on
-  other attributes (like nation or government type) of the player the unit
-  belongs to.
+  to the new type.  
+  FORMERLY:
+  "This price could (but currently does not) depend on other attributes
+  (like nation or government type) of the player the unit belongs to."
+  2022.Jan.19:
+  This price may depend on other attributes like nation or government
+  type of the player the unit belongs to THEREFORE needs to send 
+  *pplayer to unit_shield_value
 **************************************************************************/
 int unit_upgrade_price(const struct player *pplayer,
                        const struct unit_type *from,
@@ -1350,7 +1355,7 @@ int unit_upgrade_price(const struct player *pplayer,
    * before generalized actions appears. */
   const struct action *paction = action_by_number(ACTION_UPGRADE_UNIT);
   int missing = (utype_build_shield_cost_base(to)
-                 - unit_shield_value(NULL, from, paction));
+                 - unit_shield_value(NULL, from, paction, pplayer));
   int base_cost = 2 * missing + (missing * missing) / 20;
 
   return base_cost
