@@ -507,9 +507,8 @@ static void do_upgrade_effects(struct player *pplayer)
 
     transform_unit(punit, type_to, TRUE);
     notify_player(pplayer, unit_tile(punit), E_UNIT_UPGRADED, ftc_server,
-                  _("[`ribbon`] %s %s %s upgraded for free to %s %s."),
+                  _("[`ribbon`] %s %s upgraded for free to %s %s."),
                   old_unit_emoji, utype_name_translation(type_from),
-                  (is_unit_plural(punit) ? "were" : "was"),
                   unit_link(punit), UNIT_EMOJI(punit));
     unit_list_remove(candidates, punit);
     upgrades--;
