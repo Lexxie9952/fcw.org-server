@@ -1753,7 +1753,7 @@ reqs           =
     }
 build_time     = 3
 removal_time   = 0
-native_to      = "Air", "Balloon", "Zeppelin", "Helicopter", "Missile", "Bomb", "AirProtect", "Air_High_Altitude"
+native_to      = "Air", "Balloon", "Zeppelin", "Helicopter", "Missile", "Bomb", "AirProtect", "Air_High_Altitude", "Cargo"
 conflicts      = "Castle", "Bunker"
 flags          = "Refuel", "NoStackDeath"
 helptext       = _("\
