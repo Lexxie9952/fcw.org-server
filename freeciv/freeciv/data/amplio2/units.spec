@@ -133,7 +133,7 @@ tiles = { "row", "column", "tag"
   4,  3, "u.train"            ; [Lexxie]
   4,  4, "u.t_helicopter"     ; [Lexxie]
   4,  5, "u.airplane"         ; [Lexxie]
- ; 4,  6, "u." ; **************************** available blank spot
+  4,  6, "u.emissary"         ; [Lexxie] & [GB][*m]
   4,  7, "u.siege_ram"        ; [Lexxie]
   4,  8, "u.satellite"        ; [Lexxie]
   4,  9, "u.falconeers"       ; [Lexxie] & [GB][*m]
@@ -142,4 +142,5 @@ tiles = { "row", "column", "tag"
   4, 12, "u.groundtroops"     ; [Lexxie]
   4, 13, "u.scout"            ; [Lexxie]
   4, 14, "u.multifighter"     ; [Lexxie]
+  4, 15, "u.worker2"          ; [Lexxie]
 }
