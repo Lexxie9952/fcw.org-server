@@ -644,6 +644,7 @@ actor_reqs    =
       "UnitState",    "OnLivableTile", "Local", TRUE
       "MinMoveFrags", "1",             "Local", TRUE
       "UnitFlag",     "Spy",           "Local", FALSE
+      "UnitType",     "Emissary",      "Local", FALSE
     }
 
 [actionenabler_sabotage_city_spy]
@@ -703,6 +704,7 @@ actor_reqs    =
       "MinMoveFrags", "1",             "Local", TRUE
       "DiplRel",      "Foreign",       "Local", TRUE
       "UnitFlag",     "Spy",           "Local", FALSE
+      "UnitType",     "Emissary",      "Local", TRUE
       "DiplRel",      "War",           "Local", FALSE 
     }
 target_reqs  =
@@ -720,6 +722,7 @@ actor_reqs    =
       "MinMoveFrags", "1",             "Local", TRUE
       "DiplRel",      "Foreign",       "Local", TRUE
       "UnitFlag",     "Spy",           "Local", FALSE
+      "UnitType",     "Emissary",      "Local", TRUE
       "DiplRel",      "War",           "Local", TRUE 
     }
 target_reqs  =
@@ -732,12 +735,12 @@ target_reqs  =
     }
 
 ; SPY: normal establish embassy--if not at war 
-[actionenabler_establish_embassy_spy]
+[actionenabler_establish_embassy_spy_diplomat]
 action       = "Establish Embassy"
 actor_reqs    =
     { "type",         "name",          "range", "present"
-      "UnitFlag",     "Spy",           "Local", TRUE
-      "UnitType",     "Siege Ram",     "Local", FALSE
+      "UnitFlag",     "Diplomat",      "Local", TRUE
+      "UnitType",     "Diplomat",      "Local", TRUE
       "UnitState",    "OnLivableTile", "Local", TRUE
       "UnitState",    "Transported",   "Local", FALSE
       "MinMoveFrags", "1",             "Local", TRUE
@@ -749,12 +752,12 @@ target_reqs  =
       "NationGroup", "Barbarian", "Player", FALSE
     }
 ;if at war, police station or fundie will block embassy: do a cease-fire first!
-[actionenabler_establish_embassy_spy_war]
+[actionenabler_establish_embassy_spy_diplomat_war]
 action       = "Establish Embassy"
 actor_reqs    =
     { "type",         "name",          "range", "present"
-      "UnitFlag",     "Spy",           "Local", TRUE
-      "UnitType",     "Siege Ram",     "Local", FALSE
+      "UnitFlag",     "Diplomat",      "Local", TRUE
+      "UnitType",     "Diplomat",      "Local", TRUE
       "UnitState",    "OnLivableTile", "Local", TRUE
       "UnitState",    "Transported",   "Local", FALSE
       "MinMoveFrags", "1",             "Local", TRUE

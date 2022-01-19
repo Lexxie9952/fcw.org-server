@@ -269,7 +269,25 @@ who must migrate to decent starting position.
 ==============================================================
 48. Chand Baori - cost 65 (was 80)
 ==============================================================
-49. 
+49. Diplomatic Units 
+   Emissary - early diplomat, costs 24 (was 26), cannot sabotage cities, moves 3
+   Diplomat - req:Economics, costs 30 (was 26), can establish embassy without spent
+   Spy - can no longer establish embassy
+
+   Results:
+   (1) Reduced cost with less speed and ability to sabotage,
+       is more appreciated for early game use and balance.
+   (2) Siege Ram needed for taking out city walls, makes the
+       unit more purposeful.
+   (3) Ability to establish multiple embassies for slightly
+       higher cost, is more appreciated around the time the
+       Diplomat now becomes availiable; improves globalness
+       of the game.
+   (4) Inability for Spy to make hostile embassy (especially
+       having 6 moves), repurposes the unit better for
+       espionage, decreases OPness, and increases game
+       depth and intrigue in having multiple types of 
+       diplomatic units.
 ==============================================================
 50. 
 ==============================================================
