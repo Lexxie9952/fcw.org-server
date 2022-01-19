@@ -4916,18 +4916,73 @@ If you have Fusion Power and the Manhattan Project was built, a Tactical Nuke\
 ")
 bombard_rate = -2   ; 2 - 2 = 0：only nukes target tile.
 
+[unit_emissary]
+name          = _("Emissary")
+class         = "Land"
+tech_req      = "Writing"
+obsolete_by   = "Diplomat"
+graphic       = "u.emissary"
+graphic_alt   = "-"
+sound_move    = "m_diplomat"
+sound_move_alt = "m_generic"
+sound_fight   = "f_diplomat"
+sound_fight_alt = "f_generic"
+build_cost    = 24
+pop_cost      = 0
+attack        = 0
+defense       = 0
+hitpoints     = 8
+firepower     = 1
+move_rate     = 3
+vision_radius_sq = 4
+transport_cap = 0
+fuel          = 0
+uk_happy      = 0
+uk_shield     = 0
+uk_food       = 0
+uk_gold       = 0
+embarks       = "LandRail", "Helicopter"    ; transport helicopter only
+disembarks    = "LandRail", "Helicopter"
+flags         = "Diplomat", "IgZOC", "NonMil", "HasNoZOC", "Expellable", "Cant_Pillage", "CanClaim", "Settlers"
+veteran_names =
+  _("?diplomatic_rank:courier"),
+  _("?diplomatic_rank:messenger"),
+  _("?diplomatic_rank:envoy"),
+  _("?diplomatic_rank:legate"),
+  _("?diplomatic_rank:consul"),
+  _("?diplomatic_rank:minister"),
+  _("?diplomatic_rank:manus regis")
+
+veteran_base_raise_chance = 60, 50, 40, 30, 20, 15, 0
+veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
+veteran_power_fact = 100, 110, 115, 120, 125, 130, 135
+veteran_move_bonus = 0, 0, 0, 0, 3, 3, 3
+roles         = "DiplomatStartUnit"
+helptext      = _("\
+An Emissary performs official or covert actions. Covert actions make incidents\
+ which let Senates break treaties. Emissaries in cities may defend such acts with\
+ diplomatic combat. Emissaries can • Bribe a lone unit • Establish embassy • Investigate City\
+ • Steal tech • Steal maps • Incite city revolt. \n\
+Except for Bribing and Investigate City, diplomatic actions will spend the Emissary,\
+ making him unavailable for further use. Emissaries may claim a tile for your nation\
+ if adjacent to a tile claim made inside your own national border. Foreign tile claims require\
+ the Emissary to be accompanied by another unit. \
+"), _("\
+Full rules for Emissaries are in the Manual.\
+")
+
 [unit_diplomat]
 name          = _("Diplomat")
 class         = "Land"
-tech_req      = "Writing"
-obsolete_by   = "Spy"
+tech_req      = "Economics"
+obsolete_by   = "None"
 graphic       = "u.diplomat"
 graphic_alt   = "-"
 sound_move    = "m_diplomat"
 sound_move_alt = "m_generic"
 sound_fight   = "f_diplomat"
 sound_fight_alt = "f_generic"
-build_cost    = 26
+build_cost    = 30
 pop_cost      = 0
 attack        = 0
 defense       = 0
@@ -4949,8 +5004,8 @@ veteran_names =
   _("?diplomatic_rank:secretary"),
   _("?diplomatic_rank:envoy"),
   _("?diplomatic_rank:ambassador"),
-  _("?diplomatic_rank:emissary"),
-  _("?diplomatic_rank:statesman"),
+  _("?diplomatic_rank:statesmen"),
+  _("?diplomatic_rank:premier"),
   _("?diplomatic_rank:plenipotentiary")
 
 veteran_base_raise_chance = 60, 50, 40, 30, 20, 15, 0
@@ -4960,13 +5015,13 @@ veteran_move_bonus = 0, 0, 0, 0, 3, 3, 3
 roles         = "DiplomatStartUnit"
 helptext      = _("\
 A Diplomat performs official or covert actions. Covert actions make incidents\
- which let Senates break treaties. Diplomats in cities may defend such acts with\
- diplomatic combat. Diplomats can • Bribe a lone unit • Establish embassy • Investigate City\
- • Sabotage random production or buildings • Steal tech • Steal maps • Incite city revolt. \n\
-Except for Bribing and Investigate City, diplomatic actions will spend the Diplomat,\
- making it unavailable for further use. Diplomats may claim a tile for your nation\
- if adjacent to a tile claim made inside your own national border. Foreign tile claims require\
- the Diplomat be accompanied by another unit.\
+ which let Senates break treaties. Diplomats can do what Emissaries can, and also:\
+ • Move faster • Establish Embassy without spending unit\
+ • Sabotage random production or buildings. \n\
+Except for Bribing, Establishing Embassy, and Investigate City, diplomatic actions will\
+ spend the Diplomat, making him unavailable for further use. Diplomats may claim a tile for\
+ your nation if adjacent to a tile claim made inside your own national border. Foreign tile\
+ claims require the Diplomat to be accompanied by another unit. \
 "), _("\
 Full rules for Diplomats are in the Manual.\
 ")
@@ -5014,7 +5069,7 @@ veteran_power_fact = 100, 110, 115, 120, 125, 130, 135
 veteran_move_bonus = 0, 0, 0, 0, 3, 3, 3
 roles         = "DiplomatStartUnit"
 helptext      = _("\
-Spies can do what a Diplomat can, and also：• Survive ops\
+Except for establishing an embassy, Spies can do what a Diplomat can, and also：• Survive ops\
  • Sabotage lone units • Poison city water • Steal specific tech\
  • Steal tech from cities more than once • Sabotage specific targets in cities. \
 "), _("\
@@ -5022,7 +5077,7 @@ Spies who survive ops escape to the nearest friendly city. Spies have\
  a 25% advantage over Diplomats in combat：a base 75% chance to win.\
  Spies may claim a tile for your nation if adjacent to a tile claim made\
  inside your own national border. Tile claims require the Spy to be accompanied\
- by a military unit.\
+ by another unit.\
  Full rules are in the Manual.\
 ")
 
@@ -5248,10 +5303,10 @@ Goods are used to establish Trade Routes, Help Build Wonders, and contribute to\
  city production. Recycle Production has a penalty of only 3 shields,\
  yielding 17 shields into a city’s production target. \n\
 "), _("\
-Goods can only move to tiles with a City, Quay, Fortress, or Naval Base. Otherwise\
+Goods can only move to tiles with a City, Quay, Fortress, Airbase, or Naval Base. Otherwise\
  they must be transported. If adjacent to a foreign city, use the Do\
  command (D) for Commerce functions.\
-")
+")-
 
 [unit_freight]
 name          = _("Freight")
@@ -5285,12 +5340,12 @@ helptext      = _("\
 The methodical logistics of modern shipping render the Freight unit：a cargo\
  container separate from the transport vehicle. Freight brings benefits of\
  organized efficiency. Like all Commerce units, it can Help Build\
- Wonders, and Establish Trade Route or Enter Marketplace (with a lower unit cost.)\
+ Wonders, and Establish Trade Route.\
  Unlike other Commerce units, it can Disband to Recycle Production with\
  no net loss in shields. This gives Freight a variety of creative industrial uses. \n\
 "), _("\
 By itself, Freight is only able to move to tiles with loading infrastructure:\
- Cities, Quays, Fortresses, and Naval Bases. To be transported, it must be carried\
+ Cities, Quays, Fortresses, Airbases, and Naval Bases. To be transported, it must be carried\
  by Train, Truck, Airplane, or ship. If adjacent to a foreign city, use the D key to\
  do Commerce functions.\
 ")
