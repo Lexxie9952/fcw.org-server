@@ -797,4 +797,3 @@ from the project and be non-essential to the function of the Instance.
       "modern/BattleOfTheMounds3Original"
     ]
   };
-  
