@@ -739,7 +739,8 @@ actor_reqs    =
 action = "Upgrade Unit"
 actor_reqs    =
     { "type",    "name",       "range", "present"
-      "DiplRel", "Foreign", "Local", FALSE
+      "DiplRel", "Foreign",    "Local", FALSE
+      "CityTile", "Center",    "Local", TRUE
     }
 
 [actionenabler_airlift_unit]
