@@ -849,7 +849,7 @@ reqs    =
       "UnitType", "Tribesmen",    "Local", TRUE
       "MinYear",  "-2000",        "World", FALSE
     }
-
+; ****************************** CHEAPER UPGRADES **************************
 [effect_unit_shield_value_in_upgrade_price_calc]
 type    = "Unit_Shield_Value_Pct"
 value   = -50
@@ -876,7 +876,15 @@ reqs    =
       "Action",   "Upgrade Unit", "Local", TRUE
       "UnitType", "Alpine Troops","Local", TRUE
     }
-
+[effect_free_workers_ii]
+type    = "Unit_Shield_Value_Pct"
+value	= 50
+reqs	=
+    { "type",      "name",                "range",  "present"
+      "Action",    "Upgrade Unit",        "Local",  TRUE
+      "Tech",      "Explosives",          "Player", FALSE
+      "UnitType",  "Workers",             "Local",  TRUE
+    }
 ; *********************************** BASES *******************************
 
 ; **** FORT *****

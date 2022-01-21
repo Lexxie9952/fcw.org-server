@@ -997,18 +997,18 @@ Migrants are citizens under Nationalist governments who are encouraged to\
  be used to increase national population growth.\
 ")
 
-[unit_worker]
+[unit_workers]
 name          = _("?unit:Workers")
 class         = "Land"
 tech_req      = "Pottery"
-obsolete_by   = "Engineers"
+obsolete_by   = "Workers II"
 graphic       = "u.worker"
 graphic_alt   = "-"
 sound_move    = "m_worker"
 sound_move_alt = "m_generic"
 sound_fight   = "f_worker"
 sound_fight_alt = "Pillage"
-build_cost    = 30
+build_cost    = 30 ; adjusting this means recalibrating [effect_free_workers_ii] is needed also
 pop_cost      = 0
 attack        = 0
 defense       = 1
@@ -1029,10 +1029,10 @@ disembarks    = "LandRoad", "LandRail", "Helicopter"
 flags         = "Settlers", "Infra", "CanRoad", "CanFortress", "NonMil", "HasNoZOC", "Airbase", "Cant_Fortify", "Capturable", "Expellable"
 ; No veteran levels (level name is never displayed)
 veteran_names =
-  _("?vet_rank:green"),
-  _("?vet_rank:army worker"),
-  _("?vet_rank:army engineer"),
-  _("?vet_rank:chief engineer")
+  _("?vet_rank:apprentice"),
+  _("?vet_rank:journeyman"),
+  _("?vet_rank:foreman"),
+  _("?vet_rank:master workman")
 veteran_base_raise_chance = 0, 0, 0, 0
 veteran_work_raise_chance = 0, 0, 0, 0
 veteran_power_fact = 100, 100, 100, 100
@@ -1046,8 +1046,69 @@ Masonry lets Workers build Forts. Construction lets them build Fortresses and\
  Construction lets them build Castles. Steel lets them build Bunkers and Sea\
  Bridges. Radio lets them build Airbases and Buoys, which Settlers cannot. Workers\
  must be on a ship to build Buoys. \
+")
+
+[unit_workers2]
+name          = _("Workers II")
+class         = "Land"
+tech_req      = "Democracy"
+obsolete_by   = "Engineers"
+graphic       = "u.worker2"
+graphic_alt   = "-"
+sound_move    = "m_worker"
+sound_move_alt = "m_generic"
+sound_fight   = "f_worker"
+sound_fight_alt = "Pillage"
+build_cost    = 30 ; adjusting this means recalibrating [effect_free_workers_ii] is needed also
+pop_cost      = 0
+attack        = 0
+defense       = 1
+hitpoints     = 8
+firepower     = 1
+move_rate     = 2
+vision_radius_sq = 4
+convert_to    = "Riflemen"
+convert_time  = 2
+transport_cap = 0
+fuel          = 0
+uk_happy      = 0
+uk_shield     = 1
+uk_food       = 0
+uk_gold       = 0
+embarks       = "LandRoad", "LandRail", "Helicopter"    ; transport helicopter only
+disembarks    = "LandRoad", "LandRail", "Helicopter"
+flags         = "Settlers", "Infra", "CanRoad", "CanFortress", "NonMil", "HasNoZOC", "Airbase", "Cant_Fortify", "Capturable", "Expellable"
+; No veteran levels (level name is never displayed)
+veteran_names =
+  _("?vet_rank:apprentice"),
+  _("?vet_rank:journeyman"),
+  _("?vet_rank:foreman"),
+  _("?vet_rank:master workman")
+veteran_base_raise_chance = 0, 0, 0, 0
+veteran_work_raise_chance = 7, 5, 3, 0
+veteran_power_fact = 100, 120, 125, 133
+veteran_move_bonus = 0, 1, 1, 1
+roles         = "Settlers", "WorkerStartUnit"
+helptext      = _("\
+As civilization progresses, socioeconomic trends improve education, efficiency and\
+ methods： for each turn of work completed, Workers II gain a small chance of promotion. \n\
+• v1 do 6 turns of work in 5 turns (Journeyman); \n\
+• v2 do 5 turns of work in 4 turns (Foreman); \n\
+• v3 do 4 turns of work in 3 turns (Master Workman). \n\
+These bonuses stack with other work rate bonuses. \n
+In other respects, this unit is identical to Workers I. \n\
 "), _("\
-Communism tech allows Communist governments to conscript Workers into Riflemen via the\
+Masonry lets Workers build Forts. Construction lets them build Fortresses and\
+ Oil Wells. Engineering lets them build Canals and Naval Bases. Feudalism with\
+ Construction lets them build Castles. Steel lets them build Bunkers and Sea\
+ Bridges. Radio lets them build Airbases and Buoys, which Settlers cannot. Workers\
+ must be on a ship to build Buoys. \
+"), _("\
+Until the discovery of Explosives, Workers will immediately upgrade for free\
+ to Workers II. No moves are spent, no city is needed, and the current job\
+ is not interrupted.\
+"), _("\
+Communism tech allows Communist governments to conscript Workers II into Riflemen via the\
  Convert order. And vice versa.\
 ")
 
@@ -1548,7 +1609,7 @@ hitpoints     = 20
 firepower     = 1
 move_rate     = 2
 vision_radius_sq = 4
-convert_to    = "Workers"
+convert_to    = "Workers II"
 convert_time  = 2
 transport_cap = 0
 fuel          = 0
@@ -1570,7 +1631,7 @@ Riflemen are World War-era infantry. They are good at defending cities and\
  strategic Fortresses. They also have good attack capability. \ 
 "), _("\
 Under Communism this unit costs 5 less. Also, Communism tech allows Communist\
- governments to de-commission Riflemen into Workers via the Convert order. And vice versa. \
+ governments to de-commission Riflemen into Workers II via the Convert order. And vice versa. \
 "), _("\
 \nThe discovery of Banking changes upkeep from shields to gold.\
 ")
@@ -5131,9 +5192,6 @@ Commerce units can help build Wonders in any city with whom\
  you are not at war. In foreign cities 15+ tiles distant, they can create Trade Routes,\
  increasing net trade in both cities relative to their combined trade. Routes are inactive\
  during war and (re)activate during peace. \n\
-Commerce units can enter the Marketplace of non-hostile foreign cities to sell their
- wares：revenue derives from total trade in both cities. This is only profitable between
- cities with very high trade. \n\
 Commerce units can build any Wonders for which you have the tech requirement. To use them\
  for a Trade Route, they need to have given a Home City. \n\
 All Commerce units can carry Goods as cargo.\
@@ -5306,7 +5364,7 @@ Goods are used to establish Trade Routes, Help Build Wonders, and contribute to\
 Goods can only move to tiles with a City, Quay, Fortress, Airbase, or Naval Base. Otherwise\
  they must be transported. If adjacent to a foreign city, use the Do\
  command (D) for Commerce functions.\
-")-
+")
 
 [unit_freight]
 name          = _("Freight")

@@ -131,6 +131,12 @@ function tech_researched_handler(tech, player, how)
       end  
     end
   end
+--------------------------------
+  -- Inform of free Workers II upgrade upon discovering Democracy
+  if id == find.tech_type("Democracy").id then
+    notify.event(player, NIL, E.TECH_GAIN,
+    _("[`events/democracy`]<br><font color=#ffff90><b>Discovery of Democracy sparks educational socioeconomic trends.<br>All Workers upgrade everywhere to Workers II for free.</b></font>"))
+  end
 -------------------------
   if id == find.tech_type("Philosophy").id and how == "researched" then
 

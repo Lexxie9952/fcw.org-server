@@ -585,6 +585,16 @@ actor_reqs    =
       "Tech",     "Conscription", "Player"
       "UnitState","OnDomesticTile","Local"
     }
+[actionenabler_communist_plows_to_rifles_ii]
+action = "Convert Unit"
+actor_reqs    =
+    { "type",     "name",         "range"
+      "UnitType", "Workers II",      "Local"
+      "Gov",      "Communism",    "Player"
+      "Tech",     "Communism",    "Player"
+      "Tech",     "Conscription", "Player"
+      "UnitState","OnDomesticTile","Local"
+    }
 ;**Mobile SAM is an upgrade to AAA but does not obsolete it,
 ;  since AAA retains special uses. Instead, AAA can convert
 ;  to Mobile SAM under special conditions.
@@ -2298,7 +2308,22 @@ actor_reqs    =
 action = "Upgrade Unit"
 actor_reqs    =
     { "type",    "name",       "range", "present"
-      "DiplRel", "Foreign", "Local", FALSE
+      "DiplRel", "Foreign",    "Local", FALSE
+      "CityTile", "Center",    "Local", TRUE
+    }
+
+;Workers can upgrade to Workers II for free, anywhere on the map
+;but not if player knows Explosives because that would be free 
+;Engineers. In such a case they can try the convert order to go
+;to Workers II but the truth is, Workers II are obsolete if you
+;have explosives, so, too bad. Should have done it earlier.
+[actionenabler_upgrade_to_Workers_II]
+action = "Upgrade Unit"
+actor_reqs    =
+    { "type",     "name",         "range",  "present"
+      "Tech",     "Democracy",    "Player", TRUE
+      "Tech",     "Explosives",   "Player", FALSE
+      "UnitType", "Workers",      "Local",  TRUE
     }
 
 [actionenabler_airlift_unit]
