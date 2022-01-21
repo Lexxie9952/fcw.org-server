@@ -214,14 +214,20 @@ static void hard_code_oblig_hard_reqs(void)
                           ACTION_ATTACK,
                           ACTION_SUICIDE_ATTACK, ACTION_NONE);
 
-  /* Why this is a hard requirement: Keep the old rules. Need to work
-   * out corner cases. */
+  /* Why this used to be a hard requirement: Keep the old rules. Need to work
+   * out corner cases...
+   * Why this is NO LONGER a hard requirement... this totally handicaps the
+     upgrade command with something the ruleset actionenabler should be 
+     responsible for doing by itself. For "old rules" compatibility just
+     make sure UNIT_UPGRADE actionenablers in all rulesets add the req:
+     "CityTile", "Center",    "Local", TRUE
   oblig_hard_req_register(req_from_values(VUT_DIPLREL, REQ_RANGE_LOCAL,
                                           FALSE, TRUE, TRUE, DRO_FOREIGN),
                           FALSE,
                           "All action enablers for %s must require a "
                           "domestic target.",
                           ACTION_UPGRADE_UNIT, ACTION_NONE);
+  */
 
   /* Why this is a hard requirement: The code expects that only domestic and
    * allied transports can be boarded. */
@@ -747,7 +753,7 @@ static void hard_code_actions(void)
                   * keep the rules exactly as they were for now. */
                  0, 0, FALSE);
   actions[ACTION_UPGRADE_UNIT] =
-      action_new(ACTION_UPGRADE_UNIT, ATK_CITY, ASTK_NONE,
+      action_new(ACTION_UPGRADE_UNIT, ATK_TILE, ASTK_NONE,
                  FALSE, ACT_TGT_COMPL_SIMPLE, TRUE, TRUE,
                  /* Illegal to perform to a target on another tile to
                   * keep the rules exactly as they were for now. */

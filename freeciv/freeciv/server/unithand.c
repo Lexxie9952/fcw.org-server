@@ -253,10 +253,10 @@ void handle_unit_type_upgrade(struct player *pplayer, Unit_type_id uti)
   conn_list_do_buffer(pplayer->connections);
   unit_list_iterate(pplayer->units, punit) {
     if (unit_type_get(punit) == from_unittype) {
-      struct city *pcity = tile_city(unit_tile(punit));
 
-      if (is_action_enabled_unit_on_city(paction->id, punit, pcity)
-          && unit_perform_action(pplayer, punit->id, pcity->id, 0, "",
+      if (is_action_enabled_unit_on_tile(paction->id, punit, unit_tile(punit), NULL)
+
+          && unit_perform_action(pplayer, punit->id, unit_tile(punit)->index, 0, "",
                                  paction->id, ACT_REQ_SS_AGENT)) {
         number_of_upgraded_units++;
       } else if (UU_NO_MONEY == unit_upgrade_test(punit, FALSE)) {
@@ -269,18 +269,26 @@ void handle_unit_type_upgrade(struct player *pplayer, Unit_type_id uti)
   /* Alert the player about what happened. */
   if (number_of_upgraded_units > 0) {
     const int cost = unit_upgrade_price(pplayer, from_unittype, to_unittype);
-    notify_player(pplayer, NULL, E_UNIT_UPGRADED, ftc_server,
-                  /* FIXME: plurality of number_of_upgraded_units ignored!
-                   * (Plurality of unit names is messed up anyway.) */
-                  /* TRANS: "2 Musketeers upgraded to Riflemen for 100 gold."
-                   * Plurality is in gold (second %d), not units. */
-                  PL_("[`gold`] %d %s upgraded to %s for %d gold.",
-                      "[`gold`] %d %s upgraded to %s for %d gold.",
-                      cost * number_of_upgraded_units),
-                  number_of_upgraded_units,
-                  utype_name_translation(from_unittype),
-                  utype_name_translation(to_unittype),
-                  cost * number_of_upgraded_units);
+    if (cost==0) {
+      notify_player(pplayer, NULL, E_UNIT_UPGRADED, ftc_server,
+                    _("[`gift`] %d %s upgraded to %s for free!"),
+                    number_of_upgraded_units,
+                    utype_name_translation(from_unittype),
+                    utype_name_translation(to_unittype));
+    } else {
+      notify_player(pplayer, NULL, E_UNIT_UPGRADED, ftc_server,
+                    /* FIXME: plurality of number_of_upgraded_units ignored!
+                    * (Plurality of unit names is messed up anyway.) */
+                    /* TRANS: "2 Musketeers upgraded to Riflemen for 100 gold."
+                    * Plurality is in gold (second %d), not units. */
+                    PL_("[`gold`] %d %s upgraded to %s for %d gold.",
+                        "[`gold`] %d %s upgraded to %s for %d gold.",
+                        cost * number_of_upgraded_units),
+                    number_of_upgraded_units,
+                    utype_name_translation(from_unittype),
+                    utype_name_translation(to_unittype),
+                    cost * number_of_upgraded_units);
+    }
     send_player_info_c(pplayer, pplayer->connections);
   } else {
     notify_player(pplayer, NULL, E_UNIT_UPGRADED, ftc_server,
@@ -307,12 +315,19 @@ static bool do_unit_upgrade(struct player *pplayer,
   if (ordered_by == ACT_REQ_PLAYER) {
     int cost = unit_upgrade_price(pplayer, from_unit, to_unit);
 
-    notify_player(pplayer, unit_tile(punit), E_UNIT_UPGRADED, ftc_server,
-                  PL_("[`gold`] %s upgraded to %s for %d gold.",
-                      "[`gold`] %s upgraded to %s for %d gold.", cost),
-                  utype_name_translation(from_unit),
-                  unit_link(punit),
-                  cost);
+    if (cost==0) {
+      notify_player(pplayer, unit_tile(punit), E_UNIT_UPGRADED, ftc_server,
+                    "[`gift`] %s upgraded to %s for free.",
+                    utype_name_translation(from_unit),
+                    unit_link(punit));
+    } else {
+      notify_player(pplayer, unit_tile(punit), E_UNIT_UPGRADED, ftc_server,
+                    PL_("[`gold`] %s upgraded to %s for %d gold.",
+                        "[`gold`] %s upgraded to %s for %d gold.", cost),
+                    utype_name_translation(from_unit),
+                    unit_link(punit),
+                    cost);
+    }
   }
 
   return TRUE;
@@ -2629,14 +2644,13 @@ void handle_unit_action_query(struct connection *pc,
     }
     break;
   case ACTION_UPGRADE_UNIT:
-    if (pcity
-        && is_action_enabled_unit_on_city(action_type,
-                                          pactor, pcity)) {
+    if (is_action_enabled_unit_on_tile(action_type,
+                                          pactor, unit_tile(pactor), NULL)) {
       const struct unit_type *tgt_utype;
       int upgr_cost;
 
       tgt_utype = can_upgrade_unittype(pplayer, unit_type_get(pactor));
-      /* Already checked via is_action_enabled_unit_on_city() */
+      /* Already checked via is_action_enabled_unit_on_tile() */
       fc_assert_ret(tgt_utype);
       upgr_cost = unit_upgrade_price(pplayer,
                                       unit_type_get(pactor), tgt_utype);
@@ -2647,8 +2661,8 @@ void handle_unit_action_query(struct connection *pc,
                                       disturb_player);
     } else {
       illegal_action(pplayer, pactor, action_type,
-                     pcity ? city_owner(pcity) : NULL,
-                     NULL, pcity, NULL, disturb_player, ACT_REQ_PLAYER);
+                     tile_owner(unit_tile(pactor)),
+                     unit_tile(pactor), NULL, NULL, disturb_player, ACT_REQ_PLAYER);
       unit_query_impossible(pc, actor_id, target_id, disturb_player);
       return;
     }
@@ -3076,9 +3090,10 @@ bool unit_perform_action(struct player *pplayer,
                              do_unit_change_homecity(actor_unit, pcity));
     break;
   case ACTION_UPGRADE_UNIT:
-    ACTION_STARTED_UNIT_CITY(action_type, actor_unit, pcity,
+    target_tile = unit_tile(actor_unit);
+    ACTION_STARTED_UNIT_TILE(action_type, actor_unit, target_tile,
                              do_unit_upgrade(pplayer, actor_unit,
-                                             pcity, requester));
+                                             tile_city(unit_tile(actor_unit)), requester));
     break;
   case ACTION_CONQUER_CITY:
   case ACTION_CONQUER_CITY2:

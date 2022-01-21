@@ -2065,7 +2065,6 @@ enum unit_upgrade_result unit_upgrade_test(const struct unit *punit,
   struct player *pplayer = unit_owner(punit);
   const struct unit_type *to_unittype = can_upgrade_unittype(pplayer,
                                                        unit_type_get(punit));
-  struct city *pcity;
   int cost;
 
   if (punit->activity == ACTIVITY_CONVERT) {
@@ -2087,14 +2086,17 @@ enum unit_upgrade_result unit_upgrade_test(const struct unit *punit,
       return UU_NO_MONEY;
     }
 
-    pcity = tile_city(unit_tile(punit));
+    /*THESE REQS ARE NOW SOFT-CODED IN RULESET ACTIONENABLER, not HARD-CODED HERE
+    struct city *pcity = tile_city(unit_tile(punit));
     if (!pcity) {
       return UU_NOT_IN_CITY;
     }
     if (city_owner(pcity) != pplayer) {
-      /* TODO: should upgrades in allied cities be possible? */
+      // TODO: should upgrades in allied cities be possible?
+      // ANSWER: LET THE ACTIONENABLER DECIDE !
       return UU_NOT_CITY_OWNER;
     }
+    */
   }
 
   if (!can_type_transport_units_cargo(to_unittype, punit)) {
