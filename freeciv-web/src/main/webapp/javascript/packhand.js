@@ -553,6 +553,18 @@ function handle_chat_msg(packet)
         else play_sound("e_demolition.ogg");
       } 
       break;
+    case E_TECH_GAIN:
+      /* in MP2D, discovery of democracy upgrades all workers to workers II */
+      if (client_rules_flag[CRF_MP2_D] && !client_is_observer() && message.includes("Democracy")
+          && tech_known('Democracy')) {        
+        let upgrade_type = utype_id_by_name("Workers");
+        let upgrade_packet = {
+          "pid" : packet_unit_type_upgrade,
+          "type" : upgrade_type
+        };
+        setTimeout(send_request(JSON.stringify(upgrade_packet),1000));
+      }
+      break;
     //case E_CHAT_MSG_PRIVATE_SENT:
     //  break;
   }
@@ -1707,12 +1719,12 @@ function handle_unit_action_answer(packet)
       return;
     }
   } else if (action_type == ACTION_UPGRADE_UNIT) {
-    if (target_city == null) {
+    /*if (target_city == null) {                   // Target city no longer required.
       console.log("Bad target city (" + target_id
                   + ") in unit action answer.");
       act_sel_queue_done(diplomat_id);
       return;
-    } else {
+    } else */ {
       popup_unit_upgrade_dlg(actor_unit, target_city, cost, action_type);
       return;
     }
