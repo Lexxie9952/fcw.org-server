@@ -2325,7 +2325,8 @@ bonuses       =
    }
 roles         = ""
 helptext      = _("\
-Ballistae fire massive bolts through enemy formations.\
+Ballistae fire massive bolts through enemy formations. They can\
+ do this from any time to any tile.\
  Slow reload prevents them from doing conventional attacks.\
  Ballistae do 5 rounds of Ranged Attack on two units without\
  retaliation. Accuracy is poor (A1). Damage is 5x more than normal.\

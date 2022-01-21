@@ -1305,7 +1305,7 @@ target_reqs    =
       "Extra",    "Naval Base",   "Local", FALSE
       "TerrainClass", "Oceanic",  "Local", FALSE
     }
-;Legions can do Pilum assault
+;Ballistae can do Ranged attack.
 [actionenabler_ballista_ranged_attack]
 action = "Bombard"
 actor_reqs    =
