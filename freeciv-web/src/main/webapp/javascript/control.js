@@ -1566,7 +1566,7 @@ function update_unit_order_commands()
           ptype['name']=="Leader" || ptype['name']=="Queen"
           // Workers/Riflemen can convert between each other in Communism:
           || ((governments[client.conn.playing['government']]['name']=="Communism"
-               && ((ptype['name']=="Workers") || ptype['name']=="Riflemen"))
+               && (ptype['name'].startsWith("Workers") || ptype['name']=="Riflemen"))
                && tech_known('Communism'))
           // AAA can convert to Mobile SAM under qualifying conditions:
           || ( ptype['name']=="Anti-Aircraft Artillery"
