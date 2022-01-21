@@ -197,19 +197,19 @@ function improve_tile_info_dialog(message)
       added_text += "<span class='highlight_irrigation'>Irrigate:<b>" + Math.ceil(ttype['irrigation_time']/wt)+"</b></span>"
       if (ttype['irrigation_food_incr']) added_text+= " (+"+ttype['irrigation_food_incr']+")";
     }
-    if (ttype['irrigation_result'] && ttype['irrigation_result'] != tindex && ttype['irrigation_result'] != tinvalid) 
+    if (ttype['irrigation_result'] != null && ttype['irrigation_result'] != tindex && ttype['irrigation_result'] != tinvalid) 
       added_text+="&#10145;"+terrains[ttype['irrigation_result']]['name']
 
     if (ttype['mining_time']) {
       added_text += "&nbsp;&nbsp; <span class='highlight_mining'>Mine:<b>" + Math.ceil(ttype['mining_time']/wt)+"</b></span>";
       if (ttype['mining_shield_incr']) added_text+= " (+"+ttype['mining_shield_incr']+")";
     }
-    if (ttype['mining_result'] && ttype['mining_result'] != tindex && ttype['mining_result'] != tinvalid)
+    if (ttype['mining_result'] != null && ttype['mining_result'] != tindex && ttype['mining_result'] != tinvalid)
       added_text+="&#10145;"+terrains[ttype['mining_result']]['name']
 
     if (ttype['transform_time'])
       added_text += "&nbsp;&nbsp; <span class='highlight_transforming'>Transform:<b>" + Math.ceil(ttype['transform_time']/wt)+"</b></span>";
-    if (ttype['transform_result'] && ttype['transform_result'] != tindex && ttype['transform_result'] != tinvalid)
+    if (ttype['transform_result'] != null && ttype['transform_result'] != tindex && ttype['transform_result'] != tinvalid)
       added_text+="&#10145;"+terrains[ttype['transform_result']]['name']
 
     if (ttype['road_time'])
