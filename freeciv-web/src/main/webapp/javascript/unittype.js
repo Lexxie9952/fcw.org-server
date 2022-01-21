@@ -231,6 +231,20 @@ function utype_build_shield_cost(pcity, punittype)
 return MAX(base * game.info.shieldbox / 100, 1);
 }*/
 
+
+/**************************************************************************
+Fetch the unit type id by the matching name. Returns NULL if doesn't exist
+**************************************************************************/
+function utype_id_by_name(name)
+{
+  var utype = Object.entries(unit_types).filter(abc => {
+    return abc[1].name == name
+  })
+  if (utype.length == 1) {  /* found it */
+    return parseInt(utype[0][0]);
+  }
+  return null;
+}
 /**************************************************************************
 Whether player can build given unit somewhere,
 ignoring whether unit is obsolete and assuming the
