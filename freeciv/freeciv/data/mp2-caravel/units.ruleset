@@ -4912,9 +4912,6 @@ Commerce units can help build Wonders in any city with whom\
  you are not at war. In foreign cities 15+ tiles distant, they can create Trade Routes,\
  increasing net trade in both cities relative to their combined trade. Routes are inactive\
  during war and (re)activate during peace. \n\
-Commerce units can enter the Marketplace of non-hostile foreign cities to sell their
- wares：revenue derives from total trade in both cities. This is only profitable between
- cities with very high trade. \n\
 Commerce units can build any Wonders for which you have the tech requirement. To use them\
  for a Trade Route, they need to have given a Home City. \n\
 All Commerce units can carry Goods as cargo.\
