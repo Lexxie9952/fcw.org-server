@@ -1982,12 +1982,15 @@ function update_unit_order_commands()
     }
 
     // Upgrade unit: 1. Check if possible, 2. Check if upgrade unit can itself be upgraded. 3. Calculate upgrade cost. 4. Display orders with cost included.
-    if (pcity != null && ptype != null 
-        && unit_types[ptype['obsoleted_by']]
-        && (can_player_build_unit_direct(client.conn.playing, unit_types[ptype['obsoleted_by']])
-            // handle the case of "can updade to type after next"; e.g., warriors to musketeers without having feudalism:
-            || can_player_build_unit_direct(client.conn.playing, unit_types[unit_types[ptype['obsoleted_by']]['obsoleted_by']])) 
-        ) {
+    if (ptype != null &&
+          (             // unit is in a city and player is allowed to build the type to which it obsoletes: this means the unit can upgrade:
+            (pcity != null && unit_types[ptype['obsoleted_by']] && can_player_build_unit_direct(client.conn.playing, unit_types[ptype['obsoleted_by']]))
+                ||      // the case where it "can upgrade to type after next"; e.g., warriors to musketeers without having feudalism:        
+            (pcity != null && can_player_build_unit_direct(client.conn.playing, unit_types[unit_types[ptype['obsoleted_by']]['obsoleted_by']]))
+                ||      // MP2D Workers can upgrade to Workers II anywhere at all    
+            (client_rules_flag[CRF_MP2_D] && ptype.name == "Workers" && can_player_build_unit_direct(client.conn.playing, unit_types[ptype['obsoleted_by']]) && !tech_known("Explosives"))
+          )
+    ) {
       //console.log(ptype['name']+" is allowed AT LEAST ONE upgrade. Beginning loop to check for higher upgrades.");
       var upgrade_type = unit_types[ptype['obsoleted_by']];
 
@@ -2034,6 +2037,9 @@ function update_unit_order_commands()
       if (client_rules_flag[CRF_MP2_D]) {
         if (ptype.name == 'Alpine Troops' || ptype.name == 'Riflemen') {
           upgrade_cost = 4;
+        }
+        else if (upgrade_name == "Workers II") {
+          upgrade_cost = "free";
         }
       }
       /* *********************************************************************************************** */
