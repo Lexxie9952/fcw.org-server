@@ -135,7 +135,7 @@ const UTYF_USER_FLAG_33 = 71;             // NonMilAttack - has military capacit
 const UTYF_USER_FLAG_34 = 72;             // Cant_Pillage 
 const UTYF_USER_FLAG_35 = 73;             // CanClaim - can make a Tile Claim
 const UTYF_USER_FLAG_36 = 74;             // CantAttack - can't do conventional attacks (usually means bombard only)
-const UTYF_USER_FLAG_37 = 75;
+const UTYF_USER_FLAG_37 = 75;             // Workers - lets ruleset target Workers and Workers II with a single effect or actionenabler 
 const UTYF_USER_FLAG_38 = 76;
 const UTYF_USER_FLAG_39 = 77;
 const UTYF_USER_FLAG_40 = 78;             // unused , reserved for future use .....
@@ -184,6 +184,7 @@ const UTYF_NONMILATTACK = UTYF_USER_FLAG_33;  // NonMilAttack - can attack and e
 const UTYF_CANT_PILLAGE = UTYF_USER_FLAG_34;  // CantPillage - unable to pillage tiles
 const UTYF_CAN_CLAIM = UTYF_USER_FLAG_35;     // CanClaim - able to make Tile Claims
 const UTYF_CANT_ATTACK = UTYF_USER_FLAG_36;   // CantAttack - unable to do conventional attacks (usually bombard only)
+const UTYF_WORKERS = UTYF_USER_FLAG_37;       // Workers - allows manipulating Workers and Workers II with single effect or actionenabler
 /**********************************************************************//**
   Return true iff units of the given type can do the specified generalized
   (ruleset defined) action enabler controlled action.

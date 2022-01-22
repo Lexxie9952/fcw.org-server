@@ -196,7 +196,7 @@ function tech_researched_handler(tech, player, how)
   
     -- Give the player free blueprints
     -- This will give a free advance for each player that shares research.
-    gained = player:give_tech(nil, -1, false, "researched")
+    gained = player:give_tech(nil, 70, false, "researched")
 
       -- Notify the player. Include the tech names in a way that makes it
       -- look natural no matter if each tech is announced or not.

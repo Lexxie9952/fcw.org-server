@@ -5247,7 +5247,7 @@ value   = 3
 reqs =
     { "type",     "name",          "range","present"
       "Building", "Appian Way",    "Player",TRUE
-      "UnitType", "Workers",       "Local", TRUE
+      "UnitFlag", "Workers",       "Local", TRUE
       "Extra",    "Fallout",       "Local", FALSE ; UnitState tile check will segfault without a tile target in the reqs list.
       "UnitState", "OnDomesticTile","Local",TRUE
     }

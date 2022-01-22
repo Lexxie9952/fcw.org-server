@@ -75,6 +75,7 @@ flags =
     _("Cant_Pillage"), _("Unable to pillage tiles.")
     _("CanClaim"), _("Is able to claim sovereignty of foreign tiles bordering domestic territory.")
     _("CantAttack"), _("Cannot do conventional combat attacks.")
+    _("Workers")
   }
 
 ; Names for custom unit class flags. There can be up to 12 of these.
@@ -1026,7 +1027,8 @@ uk_food       = 0
 uk_gold       = 0
 embarks       = "LandRoad", "LandRail", "Helicopter"    ; transport helicopter only
 disembarks    = "LandRoad", "LandRail", "Helicopter"
-flags         = "Settlers", "Infra", "CanRoad", "CanFortress", "NonMil", "HasNoZOC", "Airbase", "Cant_Fortify", "Capturable", "Expellable"
+flags         = "Settlers", "Infra", "CanRoad", "CanFortress", "NonMil", "HasNoZOC", "Airbase", "Cant_Fortify", "Capturable",
+                "Expellable", "Workers"
 ; No veteran levels (level name is never displayed)
 veteran_names =
   _("?vet_rank:apprentice"),
@@ -1077,7 +1079,8 @@ uk_food       = 0
 uk_gold       = 0
 embarks       = "LandRoad", "LandRail", "Helicopter"    ; transport helicopter only
 disembarks    = "LandRoad", "LandRail", "Helicopter"
-flags         = "Settlers", "Infra", "CanRoad", "CanFortress", "NonMil", "HasNoZOC", "Airbase", "Cant_Fortify", "Capturable", "Expellable"
+flags         = "Settlers", "Infra", "CanRoad", "CanFortress", "NonMil", "HasNoZOC", "Airbase", "Cant_Fortify", "Capturable",
+                "Expellable", "Workers"
 ; No veteran levels (level name is never displayed)
 veteran_names =
   _("?vet_rank:apprentice"),

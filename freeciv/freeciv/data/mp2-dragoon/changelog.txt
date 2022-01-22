@@ -90,7 +90,7 @@ richness.
    Medicine 475 (468) Ironworking 65 (80). Philosophy 325 (276)
    Chemistry 900 (800)
    Misc techs rounded to clean numbers.
-   Philosophy now gives a blueprint instead of a full tech.
+   Philosophy now gives a 70% blueprint instead of a full tech.
 =============================================================
 15. Explorer renamed to Scout. Available with Horseback Riding,
    moves 4 tiles (6 with Map Making, which then makes it identical
