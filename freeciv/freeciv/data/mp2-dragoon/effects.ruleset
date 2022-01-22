@@ -1987,6 +1987,7 @@ value   = 250  ; 25% (1 out of 4)
 reqs	=
     { "type",       "name",            "range", "present"
       "Building",   "Magna Carta",     "Player", TRUE
+      "Building",   "Pyramids",        "City",   FALSE
       "Gov",        "Monarchy",        "Player", TRUE
       "CityStatus", "OwnedByOriginal", "City",   FALSE
     }
@@ -1996,6 +1997,7 @@ value   = 350   ; 250+350 = 600 = 60% (3 out of 5)
 reqs	=
     { "type",       "name",            "range", "present"
       "Building",   "Magna Carta",     "Player", TRUE
+      "Building",   "Pyramids",        "City",   FALSE
       "Gov",        "Monarchy",        "Player", TRUE
       "CityStatus", "OwnedByOriginal", "City",   FALSE
       "MinForeignPct", "1",            "City",   FALSE
@@ -2022,6 +2024,7 @@ value   = 500  ; 50%
 reqs	=
     { "type",          "name",      "range", "present"
       "Gov",           "Democracy", "Player", TRUE
+      "Building",   "Pyramids",        "City",   FALSE
       "MinForeignPct", "20",         "City",  TRUE
     }
 [effect_rapture_rate_democracy_foreigners2]
@@ -2030,6 +2033,7 @@ value   = -250  ; 500 - 250 = 25%
 reqs	=
     { "type",          "name",      "range", "present"
       "Gov",           "Democracy", "Player", TRUE
+      "Building",   "Pyramids",        "City",   FALSE
       "MinForeignPct", "33",         "City",   TRUE
     }
 
@@ -2046,6 +2050,7 @@ value   = 400
 reqs	=
     { "type",     "name",       "range",  "present"
       "Gov",      "Theocracy",  "Player", TRUE
+      "Building",   "Pyramids", "City",   FALSE
     }
 [effect_rapture_rate_theocracy2]
 type    = "Rapture_Rate_Pm"
@@ -2053,6 +2058,7 @@ value   = 100
 reqs	=
     { "type",     "name",       "range",  "present"
       "Gov",      "Theocracy",  "Player", TRUE
+      "Building", "Pyramids",   "City",   FALSE
       "Building", "Cathedral",  "City",   TRUE
     }
 
@@ -2069,6 +2075,7 @@ value   = 400  ; 2 out of 5
 reqs	=
     { "type",     "name",       "range",  "present"
       "Gov",      "Communism",  "Player", TRUE
+      "Building",   "Pyramids",        "City",   FALSE
     }
 
 [effect_rapture_grow_nationalism]
@@ -2084,6 +2091,7 @@ value   = 334  ; 1 out of 3
 reqs	=
     { "type",       "name",            "range",  "present"
       "Gov",        "Nationalism",     "Player", TRUE
+      "Building",   "Pyramids",        "City",   FALSE
       "CityStatus", "OwnedByOriginal", "City",   FALSE
     }
 [effect_rapture_rate_nationalism_not_founded_no_foreign]
@@ -2092,6 +2100,7 @@ value   = 333   ; 333+334 = 667 = 67% (2 out of 3)
 reqs	=
     { "type",       "name",            "range", "present"
       "Gov",        "Nationalism",     "Player", TRUE
+      "Building",   "Pyramids",        "City",   FALSE
       "CityStatus", "OwnedByOriginal", "City",   FALSE
       "MinForeignPct", "1",            "City",   FALSE
     }   

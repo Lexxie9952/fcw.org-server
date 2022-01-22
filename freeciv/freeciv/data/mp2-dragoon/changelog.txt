@@ -55,6 +55,8 @@ richness.
    non-conformist, rare, and more of a commitment, but also
    more interesting. Pyramids must be built before 
    discovering Democracy.
+   Cost: 180 (was 200)
+   Gives its city a rapture rate of 100% regardless of gov.
 ============================================================
 8. Partisans can investigate conquered cities not owned 
    by the original owner.

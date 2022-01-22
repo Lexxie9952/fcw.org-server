@@ -2436,7 +2436,7 @@ graphic_alt	= "-"
 obsolete_by	=
     { "type", "name", "range"
     }
-build_cost	= 200
+build_cost	= 180
 upkeep		= 0
 sabotage	= 0
 sound		= "w_pyramids"
@@ -2444,7 +2444,7 @@ sound_alt	= "w_generic"
 helptext	= _("\
 Every city will gain +25% to its food storage when the city grows\
  or starves. Newly founded cities start with +6 food. In addition,\
- the city with the Pyramids can rapture when celebrating. \n\
+ the city with the Pyramids can rapture every turn when celebrating. \n\
 This Wonder is never obsolete, but can only be built before you\
  discover Democracy.\
 ")
