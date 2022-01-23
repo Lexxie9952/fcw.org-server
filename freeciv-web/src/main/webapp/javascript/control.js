@@ -1986,7 +1986,7 @@ function update_unit_order_commands()
           (             // unit is in a city and player is allowed to build the type to which it obsoletes: this means the unit can upgrade:
             (pcity != null && unit_types[ptype['obsoleted_by']] && can_player_build_unit_direct(client.conn.playing, unit_types[ptype['obsoleted_by']]))
                 ||      // the case where it "can upgrade to type after next"; e.g., warriors to musketeers without having feudalism:        
-            (pcity != null && can_player_build_unit_direct(client.conn.playing, unit_types[unit_types[ptype['obsoleted_by']]['obsoleted_by']]))
+            (pcity != null && ptype.obsoleted_by < getLength(unit_types) && can_player_build_unit_direct(client.conn.playing, unit_types[unit_types[ptype['obsoleted_by']]['obsoleted_by']]))
                 ||      // MP2D Workers can upgrade to Workers II anywhere at all    
             (client_rules_flag[CRF_MP2_D] && ptype.name == "Workers" && can_player_build_unit_direct(client.conn.playing, unit_types[ptype['obsoleted_by']]) && !tech_known("Explosives"))
           )
@@ -2038,7 +2038,7 @@ function update_unit_order_commands()
         if (ptype.name == 'Alpine Troops' || ptype.name == 'Riflemen') {
           upgrade_cost = 4;
         }
-        else if (upgrade_name == "Workers II") {
+        else if (upgrade_name == "Workers II" || upgrade_name == "Diplomat") {
           upgrade_cost = "free";
         }
       }
