@@ -743,13 +743,11 @@ void update_city_activities(struct player *pplayer)
       
       /* Accumulate score elements which must be done prior to tile re-arrange */
       pplayer->score.mfg += cities[r]->surplus[O_SHIELD];
-      /* These are calculated here IFF (game.server.city_output_style == WYSIWYG) */
+      /* Specialists are calculated before re-arrange IFF (game.server.city_output_style == WYSIWYG) */
       if (game.server.city_output_style) {
         specialist_type_iterate(sp) {
           pplayer->score.specialists[sp] += cities[r]->specialists[sp];
         } specialist_type_iterate_end;      
-        pplayer->score.bnp += cities[r]->surplus[O_TRADE];
-        pplayer->score.techout += cities[r]->prod[O_SCIENCE];
       }
 
       // 27August2021:
@@ -3621,6 +3619,16 @@ static void update_city_activity(struct city *pcity)
     pcity->did_buy = FALSE;
     pcity->airlift = city_airlift_max(pcity);
     update_bulbs(pplayer, pcity->prod[O_SCIENCE], FALSE);
+
+    /* For WYSIWYG output, tally demographics for Science and Net Trade
+       when they are counted in each city. This ensures that trade- 
+       and science-boosting improvements are tallied right when city
+       output is accumulated: i.e., between the code blocks where bulbs
+       and gold are literally given to the player. */
+    if (game.server.city_output_style) {     
+      pplayer->score.bnp += pcity->surplus[O_TRADE];
+      pplayer->score.techout += pcity->prod[O_SCIENCE];
+    }
 
     /* Update the treasury. */
     pplayer->economic.gold += pcity->prod[O_GOLD];
