@@ -274,7 +274,7 @@ who must migrate to decent starting position.
 49. Diplomatic Units 
    Emissary - early diplomat, costs 24 (was 26), cannot sabotage cities, moves 3
    Diplomat - req:Economics, costs 30 (was 26), can establish embassy without spent
-   Spy - can no longer establish embassy
+   Spy - can no longer establish embassy. Emissaries upgrade to Diplomats for free.
 
    Results:
    (1) Reduced cost with less speed and ability to sabotage,

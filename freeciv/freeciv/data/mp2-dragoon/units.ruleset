@@ -1032,9 +1032,9 @@ flags         = "Settlers", "Infra", "CanRoad", "CanFortress", "NonMil", "HasNoZ
 ; No veteran levels (level name is never displayed)
 veteran_names =
   _("?vet_rank:apprentice"),
-  _("?vet_rank:journeyman"),
-  _("?vet_rank:foreman"),
-  _("?vet_rank:master workman")
+  _("?vet_rank:journeymen"),
+  _("?vet_rank:foremen"),
+  _("?vet_rank:master workmen")
 veteran_base_raise_chance = 0, 0, 0, 0
 veteran_work_raise_chance = 0, 0, 0, 0
 veteran_power_fact = 100, 100, 100, 100
@@ -1084,9 +1084,9 @@ flags         = "Settlers", "Infra", "CanRoad", "CanFortress", "NonMil", "HasNoZ
 ; No veteran levels (level name is never displayed)
 veteran_names =
   _("?vet_rank:apprentice"),
-  _("?vet_rank:journeyman"),
-  _("?vet_rank:foreman"),
-  _("?vet_rank:master workman")
+  _("?vet_rank:journeymen"),
+  _("?vet_rank:foremen"),
+  _("?vet_rank:master workmen")
 veteran_base_raise_chance = 0, 0, 0, 0
 veteran_work_raise_chance = 7, 5, 3, 0
 veteran_power_fact = 100, 120, 125, 133
@@ -5033,7 +5033,7 @@ Except for Bribing and Investigate City, diplomatic actions will spend the Emiss
  if adjacent to a tile claim made inside your own national border. Foreign tile claims require\
  the Emissary to be accompanied by another unit. \
 "), _("\
-Full rules for Emissaries are in the Manual.\
+Emissaries have no upgrade cost. Full rules for Emissaries are in the Manual.\
 ")
 
 [unit_diplomat]
@@ -5088,7 +5088,7 @@ Except for Bribing, Establishing Embassy, and Investigate City, diplomatic actio
  your nation if adjacent to a tile claim made inside your own national border. Foreign tile\
  claims require the Diplomat to be accompanied by another unit. \
 "), _("\
-Full rules for Diplomats are in the Manual.\
+Diplomats can be upgraded from Emissaries for free. Full rules for Diplomats are in the Manual.\
 ")
 
 [unit_spy]

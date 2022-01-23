@@ -885,6 +885,14 @@ reqs	=
       "Tech",      "Explosives",          "Player", FALSE
       "UnitType",  "Workers",             "Local",  TRUE
     }
+[effect_free_diplomats]
+type    = "Unit_Shield_Value_Pct"
+value	= 75
+reqs	=
+    { "type",      "name",                "range",  "present"
+      "Action",    "Upgrade Unit",        "Local",  TRUE
+      "UnitType",  "Emissary",            "Local",  TRUE
+    }
 ; *********************************** BASES *******************************
 
 ; **** FORT *****
