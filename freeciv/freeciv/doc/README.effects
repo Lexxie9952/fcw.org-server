@@ -480,6 +480,15 @@ Output_Waste
 Output_Waste_Pct
     Reduce waste by amount percent.
 
+Output_Waste_Min_Reduce
+    The raw minimum value by which to reduce Output Waste (if Output_Waste_Pct
+    doesn't reduce by more than this value, it will be reduced by this amount
+    instead.)
+
+Output_Waste_Reduce
+    A raw value by which to reduce Output Waste. It will stack with Output_Waste_Pct
+    but together will never reduce the waste to below 0.
+
 Output_Waste_By_Distance
     For each tile in real distance that a city is from nearest
     Government Center, it gets amount / 100 of extra waste.

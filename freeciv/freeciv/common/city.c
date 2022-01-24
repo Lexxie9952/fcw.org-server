@@ -3468,16 +3468,29 @@ int city_waste(const struct city *pcity, Output_type_id otype, int total,
   if (waste_all) {
     penalty_waste = total_eft;
   } else {
+    /* Percentage to reduce penalty_waste by */
     int waste_pct = get_city_output_bonus(pcity, get_output_type(otype),
                                           EFT_OUTPUT_WASTE_PCT);
+    /* The minimum amount to reduce from penalty_waste, i.e., if waste_pct
+       doesn't reduce more than this, this amount is reduced. */
+    int min_waste_reduction = get_city_output_bonus(pcity, get_output_type(otype),
+                                          EFT_OUTPUT_WASTE_MIN_REDUCE);
+    /* An absolute amount to reduce from penalty_waste, as a raw subtractive value */
+    int bonus_waste_reduction = get_city_output_bonus(pcity, get_output_type(otype),
+                                          EFT_OUTPUT_WASTE_REDUCE);
 
     /* corruption/waste calculated only for the actually produced amount */
     if (waste_level > 0) {
       penalty_waste = total_eft * waste_level / 100;
     }
 
+    int original_penalty_waste = penalty_waste;
     /* bonus calculated only for the actually produced amount */
     penalty_waste -= penalty_waste * waste_pct / 100;
+    penalty_waste -= bonus_waste_reduction;
+    if (original_penalty_waste - penalty_waste < min_waste_reduction) {
+      penalty_waste = original_penalty_waste - min_waste_reduction;
+    }
 
     /* Clip */
     penalty_waste = MIN(MAX(penalty_waste, 0), total_eft);

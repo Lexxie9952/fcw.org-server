@@ -354,6 +354,12 @@ extern "C" {
 /* Bonus/Penalty adjustment to the size at which a city celebrates: */
 #define SPECENUM_VALUE137 EFT_CELEBRATE_SIZE_ADD
 #define SPECENUM_VALUE137NAME "Celebrate_Size_Add"
+/* The raw minimum value by which to reduce Output Waste (if Output_Waste_Pct doesn't reduce by more) */
+#define SPECENUM_VALUE138 EFT_OUTPUT_WASTE_MIN_REDUCE
+#define SPECENUM_VALUE138NAME "Output_Waste_Min_Reduce"
+/* A raw value by which to reduce Output Waste (rather than the percentage reduction of Output_Waste_Pct) */
+#define SPECENUM_VALUE139 EFT_OUTPUT_WASTE_REDUCE
+#define SPECENUM_VALUE139NAME "Output_Waste_Reduce"
 
 /* FCW does not have /common and needs to hard code any changes or re-ordering of the above in effects.js */
 /********************************************************************************************************~*/
