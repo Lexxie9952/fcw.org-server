@@ -3287,6 +3287,15 @@ reqs	=
       "Building", "Courthouse", "City", TRUE
       "OutputType", "Trade", "Local", TRUE
     }
+; If there is corruption, a Courthouse is never worthless: it will always reduce at least 1 corruption.
+[effect_courthouse_corruption2]
+type    = "Output_Waste_Min_Reduce"
+value	= 1
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Courthouse", "City", TRUE
+      "OutputType", "Trade", "Local", TRUE
+    }
 ; Removes output penalties (Despotism/Anarchy) for cities with courthouses
 [effect_courthouse_tile_corruption]
 type    = "Output_Penalty_Tile"
@@ -3633,6 +3642,15 @@ reqs	=
       "Building", "Palace", "City"
       "OutputType", "Trade", "Local"
     }
+; If there is corruption, a Palace is never worthless: it will always reduce at least 1 corruption.
+[effect_palace_corruption_reduction2]
+type    = "Output_Waste_Min_Reduce"
+value	= 1
+reqs	=
+    { "type", "name", "range"
+      "Building", "Palace", "City"
+      "OutputType", "Trade", "Local"
+    }
 [effect_palace_sabotage]
 type    = "Building_Saboteur_Resistant"
 value	= 50
@@ -3704,6 +3722,15 @@ reqs    =
 [effect_ecclesiastical_palace]
 type    = "Output_Waste_Pct"
 value   = 60
+reqs    =
+    { "type", "name", "range", "present"
+      "Building", "Ecclesiastical Palace", "City", TRUE
+      "OutputType", "Trade", "Local", TRUE
+    }
+; If there is corruption, an Ecc. Palace is never worthless: it will always reduce at least 1 corruption.
+[effect_ecclesiastical_palace_1]
+type    = "Output_Waste_Min_Reduce"
+value	= 1
 reqs    =
     { "type", "name", "range", "present"
       "Building", "Ecclesiastical Palace", "City", TRUE
@@ -6123,7 +6150,17 @@ reqs	=
     }
 [effect_mausoleum_of_mausolos_half_courthouse_corruption]
 type    = "Output_Waste_Pct"
-value	= 34    ; makes cities with 3 corruption lose 1 corruption; also compensates for cities with <=2 corruption getting no effect
+value	= 34    ; best simulation of "half a courthouse" given trunc rounding dynamics
+ reqs	=
+    { "type",       "name",                   "range", "present"
+      "Building",   "Mausoleum of Mausolos",  "Player", TRUE
+      "Building",   "Supreme Court",          "Player", FALSE
+      "Building",   "Courthouse",             "City",   FALSE
+      "OutputType", "Trade",                  "Local",  TRUE
+    }
+[effect_mausoleum_of_mausolos_half_courthouse_corruption1]
+type    = "Output_Waste_Min_Reduce"
+value	= 1    ; cities with <=2 corruption reduce corruption by 1 as a min.floor
  reqs	=
     { "type",       "name",                   "range", "present"
       "Building",   "Mausoleum of Mausolos",  "Player", TRUE
@@ -6404,6 +6441,14 @@ reqs	=
       "Building",   "The Sphinx", "City" 
       "OutputType", "Trade",      "Local" 
     }
+[effect_sphinx_corruption1]
+type    = "Output_Waste_Min_Reduce"
+value	= 1    ; if there is corruption, then at least 1 corruption will be removed
+reqs	=
+    { "type",       "name",       "range" 
+      "Building",   "The Sphinx", "City" 
+      "OutputType", "Trade",      "Local" 
+    }
 ;************************************************************************ Shakespeare
 [effect_shakespeares_theatre]
 type    = "No_Unhappy"
@@ -6529,6 +6574,14 @@ reqs	=
 [effect_supreme_court_corruption1]
 type    = "Output_Waste_Pct"
 value	= 60
+ reqs	=
+    { "type", "name", "range"
+      "Building", "Supreme Court", "Player"
+      "OutputType", "Trade", "Local"
+    }
+[effect_supreme_court_corruption2]
+type    = "Output_Waste_Min_Reduce"
+value	= 1 ; reduce at least 1 corruption, if there is any
  reqs	=
     { "type", "name", "range"
       "Building", "Supreme Court", "Player"
@@ -7005,6 +7058,16 @@ reqs	=
 [effect_ziggurat_palace_corruption]
 type    = "Output_Waste_Pct"
 value	= 60
+reqs	=
+    { "type",      "name",    "range","present"
+      "Building",  "Ziggurat","City",  TRUE
+      "Gov",      "Despotism","Player",TRUE
+      "Building",  "Palace",  "City",  FALSE
+      "OutputType","Trade",   "Local", TRUE
+    }
+[effect_ziggurat_palace_corruption1]
+type    = "Output_Waste_Min_Reduce"
+value	= 1
 reqs	=
     { "type",      "name",    "range","present"
       "Building",  "Ziggurat","City",  TRUE

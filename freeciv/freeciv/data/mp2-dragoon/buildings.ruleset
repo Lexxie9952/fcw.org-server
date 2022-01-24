@@ -337,8 +337,9 @@ sabotage	= 100
 sound		= "b_courthouse"
 sound_alt	= "b_generic"
 helptext	= _("\
-Courthouses reduce corruption by half, eliminate\
- tile output penalties for Anarchy and Despotism, and\
+Courthouses reduce corruption by half. (If there is any\
+ corruption at all, it’s reduced by a minimum of 1.) Courthouses\
+ eliminate tile output penalties for Anarchy and Despotism, and\
  give +1 shield of free unit upkeep.\
 "), _("\
  Diplomatic combat gets a bonus of ¼ of base odds. (At general base odds\
@@ -2248,6 +2249,7 @@ The Mausoleum brings prudence to your nation. \n\
    • Having both also adds +1 happy citizen. \n\
 ➤ Acts like half a Courthouse in cities with no Courthouse: \n\
    • 30% corruption reduction \n\
+   • If there is any corruption at all, it’s reduced by a minimum of 1. \n\
    • Tile output penalty lifted +1 in Anarchy, Despotism \n\
    • 10% bonus vs hostile diplomats \n\
 ➤ Your units cost 35% more to bribe. \n\
@@ -2525,7 +2527,8 @@ helptext	= _("\
 The Sphinx is said to watch over all citizens to ensure they are good.\
  The result is loss of tile corruption penalties on all worked tiles in\
  the city it’s built. As a shared work of community art and culture, it\
- adds +1 luxury. In addition, it reduces corruption in the city by half. \n\
+ adds +1 luxury. In addition, it reduces corruption in the city by half.\
+ (If there is any corruption at all, it’s reduced by a minimum of 1.) \n\
 Obsolete by：Philosophy.\
 ")
 

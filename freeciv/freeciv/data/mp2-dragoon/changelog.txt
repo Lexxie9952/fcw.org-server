@@ -208,7 +208,7 @@ Nationalism - Foreign cities rapture 1 out of 3 turns
 =============================================================
 34. Destroy City - Massacre a city (gives global casus belli)
 Requires 2 units on tile, actor must be capturer-type.
-Foreign city: desroyer gov mustn't be Demo, Theo; 
+Foreign city: destroyer gov mustn't be Demo, Theo; 
 city size 2-8; 
 Domestic city: only avail to Despo, Commie;
 15% foreign, must use (D)o command. size 1-8;
@@ -291,7 +291,18 @@ who must migrate to decent starting position.
        depth and intrigue in having multiple types of 
        diplomatic units.
 ==============================================================
-50. 
+50. Corruption reducing buildings and wonders will always be
+guaranteed to reduce at least 1 corruption (if there is any).
+This finally solves an age-old freeciv problem the came from
+"double-truncation-rounding" error, which made corruption
+reduction nearly worthless in small despotism cities
+or medium monarchy cities; yet these are the exact contexts
+when corruption loss as a percentage of GDP are at their 
+worst and when the game can greatly benefit by an improvement
+to help with corruption. 
+Courthouse, Palace, Ecclesiastical Palace, Sphinx, Ziggurat,
+Supreme Court, and Mausoleum of Mausolos will all reduce
+a minimum of 1 corruption, if there is any corruption.
 ==============================================================
 51. 
 ==============================================================
