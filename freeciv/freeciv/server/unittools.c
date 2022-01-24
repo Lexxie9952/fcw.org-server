@@ -1352,23 +1352,39 @@ void finish_unit_wait(struct unit *punit, int activity_count)
 /* DEBUG LEFTOVER
   notify_player(punit->owner, unit_tile(punit), E_UNIT_RELOCATED, ftc_server,
         _("fuw.%s #%d getting a uac call to execute."),unit_link(punit),punit->id); */
- 
+
+  /* Save id some info in case the unit doesn't exist after doing its action: */
+  int saved_id = punit->id;
+  const struct unit_type *saved_type = unit_type_get(punit);
+  const struct player *saved_player = unit_owner(punit);
+  const struct tile *saved_tile = unit_tile(punit);
+
   /* Call the function for finishing activities: */
   unit_activity_complete(punit);
 
-  /* Send a message if legitimate activity completed */
+  /* Unit may have joined a city, established embassy, got auto-attacked, etc. */
+  bool is_dead = !unit_is_alive(saved_id); 
 
-  /* If unit had orders but not anymore, then unit is no longer doing activity */
-  orders_finished = had_orders && !punit->has_orders;
-  
-  /* Catch false movement cases, bogus orders, etc.: don't print message for these */
-  if (possibly_moved==true && (original_tile == punit->tile))
-    orders_finished = false; 
-                      
-  /* Report activity is finished: */
-  if (orders_finished && punit->activity==ACTIVITY_IDLE)  
-      notify_player(unit_owner(punit), unit_tile(punit), E_UNIT_ORDERS, ftc_server,
-                    _(" [`clock`] %s %s finished %s."), unit_link(punit), UNIT_EMOJI(punit), buf); 
+  /* Send a message if legitimate activity completed */
+  if (!is_dead) {
+    /* If unit had orders but not anymore, then unit is no longer doing activity */
+    orders_finished = had_orders && !punit->has_orders;
+    
+    /* Catch false movement cases, bogus orders, etc.: don't print message for these */
+    if (possibly_moved==true && (original_tile == punit->tile))
+      orders_finished = false; 
+                        
+    /* Report activity is finished: */
+    if (orders_finished && punit->activity==ACTIVITY_IDLE)  
+        notify_player(unit_owner(punit), unit_tile(punit), E_UNIT_ORDERS, ftc_server,
+                      _(" [`clock`] %s %s finished %s."), unit_link(punit), UNIT_EMOJI(punit), buf);
+  } else {
+    /* Unit no longer exists after unit_activity_complete() */
+    notify_player(saved_player, saved_tile, E_UNIT_ORDERS, ftc_server,
+                      _(" [`clock`] %s %s finished."), 
+                      utype_name_translation(saved_type),
+                      (is_word_plural(utype_name_translation(saved_type)) ? "are" : "is"));
+  }
 }
 
 /**********************************************************************//**
