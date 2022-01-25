@@ -1392,7 +1392,7 @@ In all your cities, Buildings with upkeep of 1 gold become free.\
   * Each Merchant produces 1 gold and 2 trade points per turn.\
  Trade is then distributed by your national tax rates. \
 "), _("
-  * Each Farmer provides 1 food for their city per turn; \
+  * Each Farmer provides 1 food for their city per turn. \n\
 "), _("
  This wonder is never obsolete.\
 ")
