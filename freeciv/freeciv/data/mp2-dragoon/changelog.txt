@@ -307,7 +307,7 @@ Courthouse, Palace, Ecclesiastical Palace, Sphinx, Ziggurat,
 Supreme Court, and Mausoleum of Mausolos will all reduce
 a minimum of 1 corruption, if there is any corruption.
 ==============================================================
-51. 
+51. JTIDS cost 275 (was 230).
 ==============================================================
 52. 
 ==============================================================

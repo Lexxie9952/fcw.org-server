@@ -1384,13 +1384,14 @@ sabotage	= 0
 sound		= "w_asmiths_trading_co"
 sound_alt	= "w_generic"
 helptext	= _("\
-In all your cities, Buildings with upkeep of 1 gold become free.\
- This Wonder also allows three new specialists：\
+Adam Smith’s Trading Company increases your nation’s knowledge of\
+ economics. In all your cities, Buildings with upkeep of 1 gold become\
+ free. This Wonder enables three new specialists：\n\
 "), _("
-  * Each Laborer produces 1 production point for their city per turn; \
+  * Each Laborer produces 1 production point for their city per turn; \n\
 "), _("
   * Each Merchant produces 1 gold and 2 trade points per turn.\
- Trade is then distributed by your national tax rates. \
+ Trade is then distributed by your national tax rates. \n\
 "), _("
   * Each Farmer provides 1 food for their city per turn. \n\
 "), _("
