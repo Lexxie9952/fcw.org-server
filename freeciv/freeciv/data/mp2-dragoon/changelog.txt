@@ -197,7 +197,10 @@ Communism - Cities rapture 2 out of 5 turns
 Theocracy - Raptures 2 out of 5 turns;
   building a Cathedral changes rate to 1 out of 2 turns.
 
-Nationalism - Foreign cities rapture 1 out of 3 turns
+Nationalism - 
+Domestic cities rapture at ... ?
+Foreign cities rapture 1 out of 3 turns
+Non-original cities rapture at ... ?
    until no longer foreign, then at 2 out of 3 turns.
 =============================================================
 32. Terrain Walls
@@ -253,8 +256,8 @@ who must migrate to decent starting position.
     Despotism:15,Monarchy:30,CM/Comm:45,Repub/Natl:60,
     Demo:75,Theo:90
 ==============================================================
-44. Angkor Wat reduces city celebrate size by -1 to 2, and 
-  bonus begins at S2; also works in Theocracy.
+44. Angkor Wat reduces city celebration from 3 to 2.
+    Angkor Wat now also works for Theocracy government.
 ==============================================================
 45.Lighthouse never obsolete, but must be built before 
    Electricity. Movement bonus reduces to +1 when combined
