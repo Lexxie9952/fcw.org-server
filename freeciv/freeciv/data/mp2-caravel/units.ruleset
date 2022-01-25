@@ -2312,7 +2312,7 @@ Anti-Aircraft Artillery (AAA) can attack almost anything from anywhere. AAA get 
  or Jet Bombers.)\
 "), _("
 After Space Flight and 10 turns of service, AAA can be retrofitted to\
- Mobile SAM. The Convert order must be done in your capital, and takes 4 turns.\
+ Mobile SAM. The Convert order must be done in a capital, and takes 4 turns.\
 ")
 
 [unit_mobile_sam]

@@ -597,7 +597,7 @@ actor_reqs    =
       "CityTile", "Center",           "Local"
       "Building", "Palace",           "City"
       "Tech",     "Space Flight",     "Player"
-      "Age",      "10",               "Local"
+      "Age",      "9",                "Local"
     }
 [actionenabler_convert_AAA_in_capital_2]
 action = "Convert Unit"
@@ -608,7 +608,7 @@ actor_reqs    =
       "CityTile", "Center",           "Local"
       "Building", "Ecclesiastical Palace", "City"
       "Tech",     "Space Flight",     "Player"
-      "Age",      "10",               "Local"
+      "Age",      "9",                "Local"
     }
 [actionenabler_foot_to_musket] ;;old foot units become muskets with Conscription
 action = "Convert Unit"
