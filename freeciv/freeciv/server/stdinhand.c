@@ -1830,6 +1830,10 @@ static void show_help_option_list(struct connection *caller,
 {
   cmd_reply(help_cmd, caller, C_COMMENT, horiz_line);
   cmd_reply(help_cmd, caller, C_COMMENT,
+   _("CTRL-Click link below for a full list and server settings and options:"));
+  notify_conn(caller->self, NULL, E_SETTING, ftc_any,
+              _("<a href='https://freecivweb.fandom.com/wiki/Game_Server_Settings'>Settings</a>"));
+  cmd_reply(help_cmd, caller, C_COMMENT,
 	    _("Explanations are available for the following server options:"));
   cmd_reply(help_cmd, caller, C_COMMENT, horiz_line);
   if (!caller && con_get_style()) {
@@ -6835,6 +6839,10 @@ static void show_help_command_list(struct connection *caller,
   enum command_id i;
 
   cmd_reply(help_cmd, caller, C_COMMENT, horiz_line);
+  cmd_reply(help_cmd, caller, C_COMMENT,
+   _("CTRL-Click link below for a full list and description of server commands:"));
+  notify_conn(caller->self, NULL, E_SETTING, ftc_any,
+              _("<a href='https://freecivweb.fandom.com/wiki/Server_commands'>Command list</a>"));
   cmd_reply(help_cmd, caller, C_COMMENT,
             _("The following server commands are available:"));
   cmd_reply(help_cmd, caller, C_COMMENT, horiz_line);

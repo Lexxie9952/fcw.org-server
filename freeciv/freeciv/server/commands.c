@@ -123,9 +123,10 @@ static struct command commands[] = {
    CMD_ECHO_ALL, VCF_NONE, 0
   },
   {"password", ALLOW_ADMIN,
-   N_("password codephrase\n"),
+   N_("password <codephrase>\n"),
    N_("Sets the password required to connect to the game."),
-   N_("Requires cmdlevel 'admin'"),
+   N_("Requires cmdlevel 'admin'. Click 'GAME' button from "
+      "pre-launch to set password as a standard user."),
    NULL,
    CMD_ECHO_ADMINS, VCF_NONE, 0
   },
@@ -136,7 +137,8 @@ static struct command commands[] = {
    N_("Cut specified client's connection to the server, removing that client "
       "from the game. If the game has not yet started that client's player "
       "is removed from the game, otherwise there is no effect on the player. "
-      "Note that this command now takes connection names, not player names."),
+      "Note that this command now takes connection names, not player names. "
+      "See also: kick, remove."),
    NULL,
    CMD_ECHO_ALL, VCF_NONE, 50
   },
@@ -239,21 +241,25 @@ static struct command commands[] = {
   {"team",	ALLOW_CTRL,
    /* TRANS: translate text between <> only */
    N_("team <player> <team>"),
-   N_("Change a player's team affiliation."),
-   N_("A team is a group of players that start out allied, with shared "
-      "vision and embassies, and fight together to achieve team victory "
-      "with averaged individual scores. Each player is always a member "
-      "of a team (possibly the only member). This command changes which "
-      "team a player is a member of. Use \"\" if names contain whitespace."),
+   N_("Change, add, or remove a player's team affiliation."),
+   N_("Can not be done during PBEM. Sets a player as member of a team. "
+      "If no team specified, the player is set teamless. Use \"\" if names "
+      "contain whitespace. A team is a group of players that start out allied, "
+      "with shared vision and embassies, and fight together to achieve team "
+      "victory with averaged individual scores. "
+      "Each player is always a member of a team (possibly the only member). "
+      "This command changes which team a player is a member of."),
    NULL,
    CMD_ECHO_ALL, VCF_NONE, 50
   },
   {"name",	ALLOW_ADMIN,
    /* TRANS: translate text between <> only */
    N_("name <player> <new_name>"),
-   N_("Change a player's name."),
+   N_("Change the username and playername of a player."),
    N_("Change the name of a player. Can assist Gamemaster in arranging "
-      "team game starting positions."),
+      "team game starting positions. Note: this will change both the "
+      "username (account login) and the playing-as playername. See /alias "
+      "for changing playername only"),
    NULL,
    CMD_ECHO_ALL, VCF_NONE, 50
   },
@@ -336,8 +342,8 @@ static struct command commands[] = {
    /* TRANS: translate text between <> only */
    N_("detach <connection-name>"),
    N_("Detach from a player."),
-   N_("Only the console and connections with cmdlevel 'hack' can force "
-      "other connections to detach from a player."), NULL,
+   N_("Can not be done during PBEM. Only the console and connections with "
+      "cmdlevel 'hack' can force other connections to detach from a player."), NULL,
    CMD_ECHO_ADMINS, VCF_NONE, 0
   },
   {"create",	ALLOW_CTRL,
@@ -565,7 +571,7 @@ static struct command commands[] = {
   {"endgame",	ALLOW_ADMIN,
    /* no translatable parameters */
    SYN_ORIG_("endgame"),
-   N_("End the game immediately in a draw."), NULL, NULL,
+   N_("End the game immediately."), NULL, NULL,
    CMD_ECHO_ALL, VCF_NONE, 0
   },
   {"surrender",	ALLOW_BASIC,
@@ -582,7 +588,7 @@ static struct command commands[] = {
    N_("remove <player-name>"),
    N_("Fully remove player from game."),
    N_("This *completely* removes a player from the game, including "
-      "all cities and units etc. Use with care!"), NULL,
+      "all cities and units etc. Use with care! See also: cut, kick."), NULL,
    CMD_ECHO_ALL, VCF_NONE, 50
   },
   {"save",	ALLOW_CTRL,
@@ -671,11 +677,12 @@ static struct command commands[] = {
   },
   {"kick", ALLOW_CTRL,
    /* TRANS: translate text between <> */
-    N_("kick <user>"),
+    N_("kick <username>"),
     N_("Cut a connection and disallow reconnect."),
-    N_("The connection given by the 'user' argument will be cut from the "
+    N_("The connection given by the 'username' argument will be cut from the "
        "server and not allowed to reconnect. The time the user wouldn't be "
-       "able to reconnect is controlled by the 'kicktime' setting."), NULL,
+       "able to reconnect is controlled by the 'kicktime' setting. See also: "
+       "cut, remove."), NULL,
    CMD_ECHO_ADMINS, VCF_NOPASSALONE, 50
   },
   {"delegate", ALLOW_BASIC,
