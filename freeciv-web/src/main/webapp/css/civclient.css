@@ -2053,6 +2053,11 @@ input[type="email" i], #email {
 .e_setting {
  color: #777c79;
 }
+.e_setting a {
+  target: new;
+  target-name:new;
+  target-new:tab;
+}
 .e_chat_msg {
   color: #dbd5c0
 }
