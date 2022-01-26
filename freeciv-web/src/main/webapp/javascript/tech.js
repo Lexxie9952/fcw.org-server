@@ -491,6 +491,8 @@ function update_tech_screen()
 {
 
   if (client_is_observer() || client.conn.playing == null) {
+    $("#technologies").width($(window).width() - 20);
+    $("#technologies").height($(window).height() - $("#technologies").offset().top - 15);
     show_observer_tech_dialog();
     return;
   }
@@ -1095,7 +1097,7 @@ function show_observer_tech_dialog()
 {
   $("#tech_info_box").hide();
   $("#tech_canvas").hide();
-  var msg = "<h2>Research</h2>";
+  var msg = "<h2>Global Technology Report</h2>";
   msg += "<table class='tech_report'><tr><th>Name</th><th>Nation</th><th>Highest</th><th>Research</th><th>Bulb Sum</th></tr>"
   for (var player_id in players) {
     let pplayer = players[player_id];
