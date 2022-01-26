@@ -1146,7 +1146,7 @@ function show_observer_tech_dialog()
 
     // Bulb sum
     if (pplayer.bulbs_researched) bulb_sum += pplayer.bulbs_researched;
-    msg += "<td>"+bulb_sum+"</td>"
+    msg += "<td>"+Math.round(bulb_sum)+"</td>"
     // End Player row
     msg += "</tr>";
   }
