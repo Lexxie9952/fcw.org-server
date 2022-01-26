@@ -1141,7 +1141,7 @@ function show_observer_tech_dialog()
       if (techs[researching].name)  { // A legitimate tech
         msg += "<td class='nopad'><img src='/images/e/techs/"+techs[researching].name.toLowerCase().replace(/\s+/g, '') + ".png' title='"
             + techs[researching].name+" ("+(pplayer.bulbs_researched ? pplayer.bulbs_researched : "?")
-            +"/"+techs[researching].cost+")'></td>" 
+            +"/"+Math.trunc(techs[researching].cost)+")'></td>" 
       } else {
         msg += "<td class='nopad'><img src='/images/e/techs/unknown.png'></td>"
       }  
@@ -1149,7 +1149,7 @@ function show_observer_tech_dialog()
 
     // Bulb sum
     if (pplayer.bulbs_researched) bulb_sum += pplayer.bulbs_researched;
-    msg += "<td>"+Math.round(bulb_sum)+"</td>"
+    msg += "<td>"+Math.trunc(bulb_sum)+"</td>"
     // End Player row
     msg += "</tr>";
   }
