@@ -1123,7 +1123,8 @@ function show_observer_tech_dialog()
     }
     if (highest_tech_name) {
       msg += "<td class='nopad'><img src='/images/e/techs/"
-          + highest_tech_name.toLowerCase().replace(/\s+/g, '') + ".png'></td>";
+          + highest_tech_name.toLowerCase().replace(/\s+/g, '') + ".png' title='"
+          + highest_tech_name + "'></td>";
     } else {
       msg += "<td class='nopad'><img src='/images/e/techs/unknown.png'></td>"
     }
@@ -1138,7 +1139,8 @@ function show_observer_tech_dialog()
       }
     } else {
       if (techs[researching].name)  { // A legitimate tech
-        msg += "<td class='nopad'><img src='/images/e/techs/"+techs[researching].name.toLowerCase().replace(/\s+/g, '') + ".png'></td>" 
+        msg += "<td class='nopad'><img src='/images/e/techs/"+techs[researching].name.toLowerCase().replace(/\s+/g, '') + ".png' title='"
+            + techs[researching].name+" ("+(pplayer.bulbs_researched ? pplayer.bulbs_researched : "?")+"'></td>" 
       } else {
         msg += "<td class='nopad'><img src='/images/e/techs/unknown.png'></td>"
       }  
