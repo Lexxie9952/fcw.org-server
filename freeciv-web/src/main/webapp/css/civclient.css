@@ -999,6 +999,25 @@ input[type='number'] {
   background-image: url("images/ui-icons_cb672b_256x240.png");
 }
 
+/* tech report table */
+.tech_report {
+  margin:0px;
+  padding:0px;
+  border-spacing:0px;
+}
+.tech_report td {
+  text-align: center;
+  height: 48px;
+  border: 1px solid #ffc3;
+  margin: 0px;
+  background-color: #0004;
+  padding: 0px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+.nopad {
+  padding: 0px 0px 0px 0px !important;
+}
 /* vet level charts in online manual */
 .vet_level {
   border-spacing: 12px 0px;

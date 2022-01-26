@@ -1096,16 +1096,59 @@ function show_observer_tech_dialog()
   $("#tech_info_box").hide();
   $("#tech_canvas").hide();
   var msg = "<h2>Research</h2>";
+  msg += "<table class='tech_report'><tr><th>Name</th><th>Nation</th><th>Highest</th><th>Research</th><th>Bulb Sum</th></tr>"
   for (var player_id in players) {
-    var pplayer = players[player_id];
-    var pname = pplayer['name'];
-    var pr = research_get(pplayer);
-    if (pr == null) continue;
-
-    var researching = pr['researching'];
-    if (techs[researching] != null)  {
-      msg += pname + ": " + techs[researching]['name'] + "<br>";
+    let pplayer = players[player_id];
+    if (!pplayer.is_alive) continue;
+    let bulb_sum = 0;
+    // Start Player row
+    msg += "<tr>";
+    // Name
+    msg += "<td>"+pplayer.name+"</td>";
+    // Nation
+    msg += "<td style='text-align:left'><img src='/images/e/flag/"+nations[pplayer['nation']]['graphic_str']+".png'> &nbsp;"
+        + nations[pplayer['nation']]['adjective']+"</td>";
+    
+    // Most advanced tech
+    let highest_tech_name = null;
+    let highest_tech_cost = 0;
+    for (var tech_id in techs) {
+      if (player_invention_state(pplayer, tech_id) == TECH_KNOWN) {
+        if (techs[tech_id].cost > highest_tech_cost) {
+          highest_tech_name = techs[tech_id].name;
+          highest_tech_cost = techs[tech_id].cost;
+        }
+        if (techs[tech_id].cost > 0) bulb_sum += techs[tech_id].cost;
+      }
     }
+    if (highest_tech_name) {
+      msg += "<td class='nopad'><img src='/images/e/techs/"
+          + highest_tech_name.toLowerCase().replace(/\s+/g, '') + ".png'></td>";
+    } else {
+      msg += "<td class='nopad'><img src='/images/e/techs/unknown.png'></td>"
+    }
+    
+    // Current research
+    let researching = pplayer.researching;
+    if (!techs[researching]) {
+      if (techs[pplayer['tech_goal']] && techs[pplayer['tech_goal']].name) { // No current research but has a real future goal
+        msg += "<td class='nopad'><img src='/images/e/techs/"+techs[pplayer['tech_goal']].name.toLowerCase().replace(/\s+/g, '') + ".png'></td>"
+      } else {
+        msg += "<td class='nopad'><img src='/images/e/techs/unknown.png'></td>"
+      }
+    } else {
+      if (techs[researching].name)  { // A legitimate tech
+        msg += "<td class='nopad'><img src='/images/e/techs/"+techs[researching].name.toLowerCase().replace(/\s+/g, '') + ".png'></td>" 
+      } else {
+        msg += "<td class='nopad'><img src='/images/e/techs/unknown.png'></td>"
+      }  
+    }
+
+    // Bulb sum
+    if (pplayer.bulbs_researched) bulb_sum += pplayer.bulbs_researched;
+    msg += "<td>"+bulb_sum+"</td>"
+    // End Player row
+    msg += "</tr>";
   }
   $("#technologies").html(msg);
   $("#technologies").css("color", "#dcb");
