@@ -18,7 +18,7 @@ body
 body, html, div {
 /* ***************** Scrollbars *****************/
 /* Firefox scrollbar */
-  scrollbar-color: #393812 #000 !important;
+  scrollbar-color: #4d4632 #000 !important;
   scrollbar-width: thin !important;
 }
 ::-webkit-scrollbar {
@@ -27,7 +27,7 @@ body, html, div {
   background: #000;
 }
 ::-webkit-scrollbar-thumb {
-  background: #393812;
+  background: #4d4632;
 /*	-webkit-border-radius:4px; */
   -webkit-border-radius: 1ex;
   -webkit-box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.75);
