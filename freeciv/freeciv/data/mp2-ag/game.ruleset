@@ -19,7 +19,7 @@ format_version=20
 [ruledit]
 
 ; Which file to read description in from.
-description_file = "ag/README.ag"
+description_file = "mp2-ag/README.ag"
 
 [about]
 ; Ruleset name
@@ -36,7 +36,7 @@ summary = _("")
 
 ; Detailed description
 ; When updating this, update also desciption_file in [ruledit] section to match
-description = *ag/README.ag*
+description = *mp2-ag/README.ag*
 
 ; What capabilities ruleset provides for the scenarios.
 ; mimimum-default-sets - Default units, terrains, buildings, etc
