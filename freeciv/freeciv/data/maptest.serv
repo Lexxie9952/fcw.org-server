@@ -1,6 +1,0 @@
-# Server commands to make multiplayer-evo Freeciv rules
-#
-
-rulesetdir maptest
-
-# changed game settings are defined in game.ruleset
