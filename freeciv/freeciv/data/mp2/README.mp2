@@ -17,12 +17,19 @@ LINKS:
 <a href="https://freeciv.fandom.com/wiki/Hotkeys.mp" target="_blank">Hotkeys and Mouse Control</a>
 
 
+Multiplayer-Evolution II rulesets are a project to modernize the original Multiplayer 1.0 ruleset by taking advantage of cutting-edge advancements in
+Freeciv Server development. For those unfamiliar with the original Multiplayer project, it aimed to take a Civ 2 type of gameplay into a format that
+balanced and accomodate to massive multiplayer play.
 
-The Multiplayer-Evolution ruleset is a fully modernized ruleset to take advantage of cutting-edge advancements in Freeciv Server development. 
-Compared to original Multiplayer, the most notable changes will be new early-game sea units, new late-game air units, and the wholescale improvement
-of balance and tactical possibility in late-game Air and Sea units. A large number of contributors over an almost two year period helped add and
-balance many other changes whose aim was to increase playability, strategic depth and creativity, realism, and overall richness.
-Enjoy!
+The "/ruleset mp2" is the first release and first iteration of the MP2 project. This version is preserved for historical reasons.
+MP2 Avant-garde ("/ruleset mp2-ag") is the successful release that completed all the goals of this first historic release. 
+
+Compared to original Multiplayer 1.0, the most notable changes in early MP2 are to early-game sea units, new late-game air units, and wholescale
+improvement of balance and tactical possibility in late-game Air and Sea units. Numerous smaller fixes to the original Multiplayer 1.0 ruleset
+are also logged below.
+
+A large number of contributors over an almost two year period helped add and balance many other changes whose aim was to increase playability,
+strategic depth and creativity, realism, and overall richness. Enjoy!
 
 -----------------------------
 Changes from Multiplayer 1.0:
@@ -186,7 +193,6 @@ NEW FEATURES / GAME MECHANICS
 19. Naval Base added. Layers over Fortress. Gives 1.33x defense and +20% HP regeneration for ships.
 20. Timeline changed to match technological pace of the game. No cannons in 100 BC !
 21. Incite cost changed. Goes from impossibly high to extremely high (but theoretically possible: e.g., 120000 might go to 4500)
-
 
 
 END.

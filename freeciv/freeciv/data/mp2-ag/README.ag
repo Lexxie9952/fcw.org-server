@@ -4,6 +4,8 @@ LINKS:
 <a href="https://freeciv.fandom.com/wiki/Multiplayer_II_Game_Manual" target="_blank">Full Game Manual</a>
 <a href="https://freeciv.fandom.com/wiki/Multiplayer_II_Summary" target="_blank">Multiplayer II Summary</a>
 <a href="https://freeciv.fandom.com/wiki/Design_Log.mp2" target="_blank">Design Log</a>
+Click link for: <a href="https://freecivweb.fandom.com/wiki/Strategy_Guide" target='_blank'>Multiplayer Strategy Guide</a><br>
+
 ...
 <a href="https://freeciv.fandom.com/wiki/Terrain.mp2#Terrain_Chart" target="_blank">Terrain</a>
 <a href="https://freecivweb.fandom.com/wiki/Bases.ag" target="_blank">Bases</a>
@@ -16,15 +18,26 @@ LINKS:
 <a href="https://freeciv.fandom.com/wiki/Defense_bonus_chart.mp2" target="_blank">Terrain+Base Defense Bonus Quick-Reference</a>
 <a href="https://freeciv.fandom.com/wiki/Hotkeys.mp" target="_blank">Hotkeys and Mouse Control</a>
 
-The MP2 Avant-garde ruleset is a modernized ruleset to take advantage of cutting-edge advancements in Freeciv Server development. 
-It is more advanced than the previous MP-branch rulesets. It imports features, improvements, and novel ideas from all other versions
+
+The MP2 Avant-garde ruleset is the first official release of the Multiplayer-Evolution II ruleset.
+
+Multiplayer-Evolution II rulesets are a project to modernize the original Multiplayer ruleset by taking advantage of cutting-edge advancements in
+Freeciv Server development. For those unfamiliar with the original Multiplayer project, it aims to take a Civ 2 type of gameplay into a format that
+can be balanced to accomodate massive multiplayer play.
+
+Multiplayer II is more advanced than the previous MP-branch rulesets. It imports features, improvements, and novel ideas from all other versions
 of Freeciv, later versions of the commercial series, and original ideas from top-tier players.
 
-This ruleset began using multiplayer as its base and evolved from it. Enjoy!
+Compared to original Multiplayer 1.0, the most notable changes in early MP2 are to early-game sea units, new late-game air units, and wholescale
+improvement of balance and tactical possibility in late-game Air and Sea units. Numerous smaller fixes to the original Multiplayer 1.0 ruleset
+are also logged below.
+
+A large number of contributors over an almost two year period helped add and balance many other changes whose aim was to increase playability,
+strategic depth and creativity, realism, and overall richness. Enjoy!
 
 ---------------------------------
-Changes from multiplayer ruleset:
+Changes from Multiplayer 1.0:
 ---------------------------------
-<a href="https://freeciv.fandom.com/wiki/Multiplayer_II_Summary#Avant-Garde_MP2" target="_blank">Multiplayer II Summary</a>
+<a href="freeciv.fandom.com/wiki/Multiplayer_II_Summary" target="_blank">Multiplayer II Summary</a>
 
 END.

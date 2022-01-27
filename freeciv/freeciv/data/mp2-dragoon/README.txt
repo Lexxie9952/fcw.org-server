@@ -14,13 +14,42 @@
 <a href="https://freeciv.fandom.com/wiki/Government.mp2c#Government_Chart" target="_blank">Governments</a>
 <a href="https://freecivweb.fandom.com/wiki/Special_Unit_Attacks#MP2_Units_with_Special_Unit_Attacks" target="_blank">Special Unit Attacks</a>
 <a href="https://freecivweb.fandom.com/wiki/Special_Unit_Attacks#Special_Unit_Defense" target="_blank">Special Unit Defense</a>
-<a href="https://freeciv.fandom.com/wiki/Defense_bonus_chart.mp2" target="_blank">Terrain+Base Defense Bonus Quick-Reference</a>
+<a href="https://freeciv.fandom.com/wiki/Defense_bonus_chart.mp2c" target="_blank">Terrain+Base Defense Bonus Quick-Reference</a>
 <a href="https://freeciv.fandom.com/wiki/Diplomatic_Action_Chart.mp2" target="_blank">Diplomatic Odds Charts</a>
 <a href="https://freeciv.fandom.com/wiki/Vigil_engagement_chart.mp2c" target="_blank">Vigil Engagement Chart</a>
 <a href="https://freeciv.fandom.com/wiki/Hotkeys.mp" target="_blank">Hotkeys and Mouse Control</a>
 <br>
-The MP2-Dragoon ruleset is a modernized ruleset to take advantage of cutting-edge advancements in Freeciv Server development. 
-This ruleset is an evolutionary step in the multiplayer-branch. Enjoy!
+The MP2 Dragoon ruleset is the fourth official release of the Multiplayer-Evolution II ruleset.
+Multiplayer II Evolution rulesets are modernized rulesets to take advantage of cutting-edge advancements in Freeciv Server development. 
+
+Earlier versions are closer to a version of Civ 2 that has been perfected for massive multiplayer game balance.
+
+Later versions evolve to import features, improvements, and novel ideas from all other versions of Freeciv, later versions of the
+commercial series, as well as original ideas from experienced players.
+
+<u>Major changes to MP2-Dragoon include</u>:
+• Foodbox tuning to mildly accelerate early game and soften in-built penalties discouraging size 3 cities in the early game.
+—— MP2C:  20  30  40  50  60  70  70  70  70...
+—— MP2D:  16  23  31  40  50  60  70  71  72...
+• Rapture is possible for all modern governments, but with different speeds and qualifying conditions. The final step toward balance and realism.
+• Improved corruption reduction dynamics which excessively penalized corruption reduction improvements in small and mid- size cities.
+• The "Goods" unit was enhanced broaden the mechanics and possibilities for ancient economics.
+• Under Despotism, all new cities get +2 food when founded (+4 for capital).
+• Partisans can investigated conquered cities.
+• Hills now get half the vision bonus of mountains.
+• Quay now has a uniform bi-directional 2/3 move cost.
+• Magnetism/Frigates now finally a pre-requirement for Steam Engine/Ironclads
+• No sea commerce units cause unhappiness, for consistency and simplification.
+• Re-balance of late game air units
+—— all jet-propelled Fighter types re-balanced to have similar air/ground strength ratios to fighters, for their tech tier
+—— Multirole Fighter type introduced as upgrade of Escort Fighter to better complete portfolio and representation of modern air support tactics.
+• Re-balance anti-Air/anti-Missile defenses for Mobile SAM and Armor II
+• New wonders
+• Tuning, smoothing, and re-balance improvement for new wonders introduced in MP2 Caravel
+• New units
+• Numerous other fixes and improvements.
+For more, see links below.
+
 <br>
 <u>Changelog for MP2-Dragoon</u>:
 <a href="https://freeciv.fandom.com/wiki/Multiplayer_II_Dragoon_Summary" target="_blank">MP2 Dragoon changelog</a>
