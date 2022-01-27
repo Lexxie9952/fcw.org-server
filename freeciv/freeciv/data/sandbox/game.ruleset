@@ -2065,7 +2065,7 @@ set =
     { "name", "value"
       "aifill", 12
       "generator", "FRACTAL"
-      "topology", "WRAPX|WRAPY|ISO"
+      "topology", "WRAPX"
       "mapsize", "PLAYER"
       "tilesperplayer", 100
       "tinyisles", "ENABLED"
