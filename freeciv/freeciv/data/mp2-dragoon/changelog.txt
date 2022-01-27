@@ -121,7 +121,7 @@ richness.
    upgrade, which now makes this wonder less OP and no
    longer justifying the cost increase.
 =============================================================
-20. Legion price adjust 31 (was 32) - got 20% discount like 
+20. Legion price adjust 30 (was 32) - got 20% discount like 
    all other foot units, off the classic price, but it was
    overpriced in classic.
 =============================================================
