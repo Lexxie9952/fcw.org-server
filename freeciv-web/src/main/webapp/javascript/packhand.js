@@ -16,7 +16,6 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 ***********************************************************************/
-//
 /* Many packets of same type may come sequentially, for which we don't
    want to update the UI until they are all completed and
    handle_processing_finished() is called. These global vars keep track
@@ -34,6 +33,10 @@ var DEBUG_ACTION_PACKETS = false; // for debugging outgoing actions only
 var DEBUG_PICK_NATION = false;    // for debugging longturn pick nation issues
 var DEBUG_UNITS = false;          // console log tools for debugging unit issues
 var DEBUG_FOCUS = false;          // for debugging advancing unit focus glitches
+//
+/* Prevent hard-coded checking of extras from failing in rulesets 
+   which don't have those extras: */
+   const EXTRA_NOT_EXIST = 65535;
 //
 /* Commenting out a key/value pair will result in packets of that type
    not being logged in DEBUG_SHORT_PACKETS mode. That is, it's helpful
@@ -1156,6 +1159,7 @@ function handle_ruleset_control(packet)
     }
   }
   extras = {};
+  set_blank_extras();
 
   /* Reset legal diplomatic clauses. */
   clause_infos = {};
@@ -2442,6 +2446,29 @@ function handle_ruleset_extra(packet)
   if (packet['name'] == "Bunker") window["EXTRA_BUNKER"] = packet['id'];
   if (packet['name'] == "Tile Claim") window["EXTRA_TILE_CLAIM"] = packet['id'];
   if (packet['name'] == "Walls") window["EXTRA_WALLS"] = packet['id'];
+}
+
+/**************************************************************************
+  Much of FCW was hard-coded expecting certain rulesets which all share
+  specific extras. This made problems if rulesets lack those Extras.
+  This HACK is a bandage for bad hard-coding that fails because of 
+  those hard-coded expectations. TODO: make this function do nothing, find
+  where those rulesets crash, then alter that hard-coding to not assume
+  those certain extras exist. 
+**************************************************************************/
+function set_blank_extras()
+{
+  window["EXTRA_IRRIGATION"] = EXTRA_NOT_EXIST;
+  window["EXTRA_RIVER"] = EXTRA_NOT_EXIST;
+  window["EXTRA_FORTRESS"] = EXTRA_NOT_EXIST;
+  window["EXTRA_HUT"] = EXTRA_NOT_EXIST;
+  window["EXTRA_RAILROAD"] = EXTRA_NOT_EXIST;
+  window["EXTRA_RAIL"] = EXTRA_NOT_EXIST;
+  window["EXTRA_OIL_WELL"] = EXTRA_NOT_EXIST;
+  window["EXTRA_FALLOUT"] = EXTRA_NOT_EXIST;
+  window["EXTRA_AIRBASE"] = EXTRA_NOT_EXIST;
+  window["EXTRA_BUOY"] = EXTRA_NOT_EXIST;
+  window["EXTRA_RUINS"] = EXTRA_NOT_EXIST;
 }
 
 /**************************************************************************
