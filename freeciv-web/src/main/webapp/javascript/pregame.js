@@ -748,8 +748,8 @@ function pregame_settings()
       + "<option value='multiplayer'>Multiplayer 1.0 (old)</option>"
       + "<option value='civ2civ3'>Civ2Civ3</option>"
       + "<option value='classic'>Classic</option>"
-//      + "<option value='civ2'>Civilization II</option>"
-//      + "<option value='civ1'>Civilization I</option>"
+      + "<option value='civ2'>Civilisation II</option>"
+      + "<option value='civ1'>Civilisation I</option>"
       + "</select><a id='ruleset_description'></a></td></tr>"
       + "<tr title='Set metaserver info line'><td>Game title:</td>" +
     "<td><input type='text' name='metamessage' id='metamessage' size='28' maxlength='42'></td></tr>" +
