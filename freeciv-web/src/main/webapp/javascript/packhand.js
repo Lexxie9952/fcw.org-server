@@ -1021,7 +1021,6 @@ function handle_ruleset_control(packet)
   // Legacy rules block:
   switch (rules) {
     case "MP2":
-    case "Avant-garde 2":
     case "Avant-garde":
       client_rules_flag[CRF_MP2_A]=true;
       client_rules_flag[CRF_RADAR_TOWER]=true;
