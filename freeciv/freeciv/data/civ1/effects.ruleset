@@ -610,7 +610,7 @@ reqs	=
 ; fortified-behind-city-walls-bonus gets special reqs that check for:
 ; City Walls || Great Wall == TRUE, Bomber || Artillery attacking == TRUE, Defender Activity == FORTIFIED
 ; ...
-[effect_city_walls]
+[effect_city_walls_3]
 type    = "Defend_Bonus"
 value	= 50
 reqs	=
@@ -620,7 +620,7 @@ reqs	=
       "Building", "Great Wall", "Player", FALSE
     }
 ;see note in above effect
-[effect_city_walls]
+[effect_city_walls_4]
 type    = "Defend_Bonus"
 value	= 50
 reqs	=
@@ -1042,7 +1042,7 @@ reqs	=
 ; fortified-behind-city-walls-bonus gets special reqs that check for:
 ; City Walls || Great Wall == TRUE, Bomber || Artillery attacking == TRUE, Defender Activity == FORTIFIED
 ; ...
-[effect_great_wall2]
+[effect_great_wall_2]
 type    = "Defend_Bonus"
 value	= 50
 reqs	=
@@ -1052,7 +1052,7 @@ reqs	=
       "UnitType", "Bomber",     "Local",  TRUE
     }
 ;see note in effect above
-[effect_great_wall3]
+[effect_great_wall_3]
 type    = "Defend_Bonus"
 value	= 50
 reqs	=
