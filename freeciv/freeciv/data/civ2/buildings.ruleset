@@ -265,11 +265,13 @@ sabotage	= 50
 sound		= "b_city_walls"
 sound_alt	= "b_generic"
 helptext	= _("\
-City Walls make it easier to defend a city.  They triple the defense\
- strength of units within the city against land and helicopter\
- units.  They are ineffective against airborne and sea units as well\
- as Howitzers.  City Walls also prevent the loss of population which\
- occurs when a defending unit is destroyed by a land unit.\
+City Walls make it easier to defend a city. They double the defense\
+ strength of units within the city against land and helicopter units.\
+ (Defending land units who can fortify get an automatic +50% bonus when\
+ inside cities, making a total defense bonus of 3x for such units.)\
+ City Walls are ineffective against airborne and sea units as well as\
+ Howitzers.  City Walls also prevent the loss of population which occurs\
+ when a defending unit is destroyed by a land unit.\
 ")
 
 [building_coastal_defense]

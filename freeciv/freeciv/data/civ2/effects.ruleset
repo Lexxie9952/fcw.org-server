@@ -1070,7 +1070,7 @@ reqs	=
 
 [effect_city_walls]
 type    = "Defend_Bonus"
-value	= 200
+value	= 100  ; Civ2 effect for unit in city walls is 2x plus fortify is 3x. This was wrongly put as 3x + fortify = 4.5x
 reqs	=
     { "type", "name", "range", "present"
       "Building", "City Walls", "City", TRUE
@@ -1081,7 +1081,7 @@ reqs	=
 
 [effect_city_walls_0]
 type    = "Defend_Bonus"
-value	= 200
+value	= 100  ; Civ2 effect for unit in city walls is 2x plus fortify is 3x. This was wrongly put as 3x + fortify = 4.5x
 reqs	=
     { "type", "name", "range", "present"
       "Building", "City Walls", "City", TRUE
@@ -1797,7 +1797,7 @@ reqs	=
 
 [effect_great_wall]
 type    = "Defend_Bonus"
-value	= 200
+value	= 100  ; Civ2 effect for unit in city walls is 2x plus fortify is 3x. This was wrongly put as 3x + fortify = 4.5x
 reqs	=
     { "type", "name", "range", "present"
       "Building", "Great Wall", "Player", TRUE
@@ -1808,7 +1808,7 @@ reqs	=
 
 [effect_great_wall_0]
 type    = "Defend_Bonus"
-value	= 200
+value	= 100  ; Civ2 effect for unit in city walls is 2x plus fortify is 3x. This was wrongly put as 3x + fortify = 4.5x
 reqs	=
     { "type", "name", "range"
       "Building", "Great Wall", "Player"
