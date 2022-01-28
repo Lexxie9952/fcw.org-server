@@ -679,7 +679,7 @@ function ruledir_from_ruleset_name(ruleset_name, fall_back_dir)
     case "Multiplayer-Evolution ruleset":
       return "mp2";
     case "Avant-garde":
-      return "ag";
+      return "mp2-ag";
     default:
       /* Prevent the need of hardcoding this client function for every new ruleset, by 
         making a way for fall_back_dir to match the name of the ruleset automatically:
@@ -718,7 +718,7 @@ function show_ruleset_description_full() {
                  },
                  height  : $("#pregame_settings").dialog("option",
                                                          "height"),
-                 width   : "80%"
+                 width   : ($(window).width<800?"95%":800)
                });
   $(id).css("color", default_dialog_text_color);        
 }
@@ -746,8 +746,10 @@ function pregame_settings()
       + "<option value='mp2-ag'>Multiplayer 2.1 Avant-garde</option>"
       + "<option value='mpplus'>Multiplayer+ 1.1</option>"
       + "<option value='multiplayer'>Multiplayer 1.0 (old)</option>"
-      + "<option value='classic'>Classic</option>"
       + "<option value='civ2civ3'>Civ2Civ3</option>"
+      + "<option value='classic'>Classic</option>"
+//      + "<option value='civ2'>Civilization II</option>"
+//      + "<option value='civ1'>Civilization I</option>"
       + "</select><a id='ruleset_description'></a></td></tr>"
       + "<tr title='Set metaserver info line'><td>Game title:</td>" +
     "<td><input type='text' name='metamessage' id='metamessage' size='28' maxlength='42'></td></tr>" +
