@@ -767,7 +767,7 @@ Together with a Library, a University increases the science\
 
 [building_apollo_program]
 name		= _("Apollo Program")
-genus           = "GreatWonder"
+genus   = "GreatWonder"
 reqs	=
     { "type", "name", "range"
       "Tech", "Space Flight", "Player"
@@ -780,6 +780,8 @@ obsolete_by	=
 build_cost	= 600
 upkeep		= 0
 sabotage	= 0
+sound		= "w_apollo_program"
+sound_alt	= "w_generic"
 helptext	= _("\
 All cities on the map become visible for the player who owns it --\
  the player always has up-to-date knowledge of all tiles with cities\
