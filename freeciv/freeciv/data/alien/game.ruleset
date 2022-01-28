@@ -13,7 +13,7 @@
 
 [datafile]
 description="Alien World game rules for Freeciv"
-options="+Freeciv-ruleset-Devel-2017.Jan.02"
+options="+Freeciv-ruleset-Devel-2017.Jan.02 web-compatible"
 format_version=20
 
 ; This section contains meta information for freeciv-ruledit to recreate the ruleset
@@ -1315,7 +1315,7 @@ colorlist =
 ; freeciv game settings for the alien ruleset
 set =
    { "name", "value", "lock"
-     "topology",       "WRAPX|WRAPY|ISO|HEX",   FALSE
+     "topology",       "WRAPX",                 FALSE
      "mapsize",        "PLAYER",                FALSE
      "tilesperplayer", 300,                     FALSE
      "aifill",         7,                       FALSE
