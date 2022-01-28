@@ -2458,6 +2458,7 @@ function handle_ruleset_extra(packet)
 **************************************************************************/
 function set_blank_extras()
 {
+  window["EXTRA_FARMLAND"] = EXTRA_NOT_EXIST;
   window["EXTRA_IRRIGATION"] = EXTRA_NOT_EXIST;
   window["EXTRA_RIVER"] = EXTRA_NOT_EXIST;
   window["EXTRA_FORTRESS"] = EXTRA_NOT_EXIST;
