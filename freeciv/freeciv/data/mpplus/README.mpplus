@@ -1,30 +1,22 @@
-The Multiplayer ruleset aimed to fix Classic ruleset balance for multi-player games. Multiplayer+ rectifies more issues that
-were discovered from years of playing massive multi-player games.
+The Multiplayer ruleset aimed to fix Classic ruleset balance for multi-player games. Multiplayer+ rectifies issues that were discovered from years of playing massive multi-player games. This is now the best example for Multiplayer I rules.
 
-LINKS
-<a href="https://freeciv.fandom.com/wiki/Multiplayer%2B_Overview" target="_blank">MP+ Overview</a>
+<b><a href="https://freeciv.fandom.com/wiki/Multiplayer_Game_Manual" target="_blank">Multiplayer Game Manual</a></b>
+<a href="https://freeciv.fandom.com/wiki/Multiplayer%2B_Overview" target="_blank">MP+ Overview</a> (has small list of MP+ changes)
 <a href="https://freeciv.fandom.com/wiki/Multiplayer%2B_Design_Log" target="_blank">Detailed Changelog</a>
 Click link for: <a href="https://freecivweb.fandom.com/wiki/Strategy_Guide" target='_blank'>Multiplayer Strategy Guide</a><br>
-
 <a href="https://freeciv.fandom.com/wiki/Terrain.mp#Terrain_Chart" target="_blank">Terrain</a>
 <a href="https://freeciv.fandom.com/wiki/Combat.mp" target="_blank">Combat</a>
 <a href="https://freeciv.fandom.com/wiki/Government.mp" target="_blank">Governments</a>
 <a href="https://freeciv.fandom.com/wiki/Economy.mp" target="_blank">Economy</a>
 <a href="https://freeciv.fandom.com/wiki/Diplomacy.mp" target="_blank">Diplomacy</a>
-
 <a href="https://freeciv.fandom.com/wiki/Hotkeys.mp" target="_blank">Hotkeys and Mouse Control</a>
 
-The link below is a 100% accurate Game Manual EXCEPT for the changes listed immediately below it.
-<a href="https://freeciv.fandom.com/wiki/Multiplayer_Game_Manual" target="_blank">Multiplayer Game Manual</a>
-
-Changes from original Multiplayer rules:
-
-TECH
+<u>Changes from original Multiplayer rules:</u>
+TECH:
 1. Tech costs equalize pace of discovery for all game stages.
 2. No Philosophy bonus after Conscription, Industrialization, Electricity, or T85.
 3. Darwin's Voyage is now similar to Colossus.
-
-UNITS 
+UNITS:
 1. Land units on Mountains get +1 vision.
 2. Illegal Action movement penalty removed.
 3. No bribe/sabotage on Air and Missile units.
@@ -34,20 +26,16 @@ UNITS
  ... b. OneAttack Flag deprecated in Bomber types and Helicopters.
 6. Restrictinfra=ON makes enemy rails act only like roads.
 7. Non-military Bribe cost fixed to work on all non-military units. 
-8. Submarine attack was incorrectly set as a Battleship. Restored to classic
- ... Civ I/II strength. (A9 - was A12).
+8. Submarine attack was incorrectly set as a Battleship. Restored to classic Civ I/II strength. (A9 - was A12).
 9. Battleship:Cruisers:Destroyer movement set to 10:11:12.
-
-WONDERS
+WONDERS:
 1. Lighthouse: +2 moves, +1 vision, obsolete by Miniaturization. Cost: 170 (was 200)
 2. Pyramid restored to Classic effect. +25% grain store in all cities when population changes. Cost: 160 (was 200)
 3. Copernicus' Observatory now costs 100 shields (was 200.)
-
-BUILDINGS
+BUILDINGS:
 1. Mass Transit: Cost:60 +2 Trade. Upkeep:0 (was 4)
 2. Recycling Center: Cost:70 +2 Porduction. Upkeep:1 (was 4)
+TERRAIN:
+1. Swamp Transform reduced to 12 worker-turns. (Was 36): Promotes fairness for naval participation in continental games.
 
-TERRAIN
-1. Swamp Transform reduced to 12 worker-turns. (Was 36): Promotes fairness for naval participation
- ... in continental games. 
-
+<img style="margin-left:auto;margin-right:auto;display:block" src='/images/chapter_mark.png'>
