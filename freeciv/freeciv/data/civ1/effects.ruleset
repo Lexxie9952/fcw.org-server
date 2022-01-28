@@ -592,6 +592,43 @@ reqs	=
       "UnitType", "Bomber",     "Local",  FALSE
       "Building", "Great Wall", "Player", FALSE
     }
+; "Being fortified behind City Walls has no effect unless the attacking unit is a Bomber or Artillery unit."
+; -- Civ1 Manual
+; Fortified inside City Walls ONLY works when attacked by Bombers or Artillery; see official manual.
+; For now we have to assume it's a unit qualified to fortify (which ~80% will be), and that it's fortified. 
+; (Civ1 doesn't give free-fortified-in-cities). This handling is substantially better than being massively
+; wrong 100% of the time, but leaves two "lesser evil" false reproductions of the rules: 1. Units who can fortify
+; but didn't actually fortify, will get a free bonus of being fortified vs Bomber & Artillery IFF they are in 
+; a city with City Walls (a mistake the old effects made anyway); and 2. A slight minority of units who can't
+; fortify will get a 1.5x City Walls bonus vs Bomber and Artillery IFF inside cities with Walls. Compare to the
+; former effect handling errors: 1. Every unit who can fortify gets a 4.5x bonus in city walls instead of 3x
+; 100% of the time, and every unit who isn't fortified gets a false bonus for being fortified 100% of the time,
+; instead of the new effects' rare case of getting a false fortify bonus only when unfortified in a city with
+; Walls and only when being attacked by a Bomber or Artillery. 
+; ...
+; FIXME: when Fortify_Defense_Bonus can check attacker type or Defend_Bonus can check target unit, then...
+; fortified-behind-city-walls-bonus gets special reqs that check for:
+; City Walls || Great Wall == TRUE, Bomber || Artillery attacking == TRUE, Defender Activity == FORTIFIED
+; ...
+[effect_city_walls]
+type    = "Defend_Bonus"
+value	= 50
+reqs	=
+    { "type",     "name",       "range",  "present"
+      "Building", "City Walls", "City",   TRUE
+      "UnitType", "Artillery",  "Local",  TRUE
+      "Building", "Great Wall", "Player", FALSE
+    }
+;see note in above effect
+[effect_city_walls]
+type    = "Defend_Bonus"
+value	= 50
+reqs	=
+    { "type",     "name",       "range",  "present"
+      "Building", "City Walls", "City",   TRUE
+      "UnitType", "Bomber",     "Local",  TRUE
+      "Building", "Great Wall", "Player", FALSE
+    }
 
 [effect_city_walls_2]
 type    = "Unit_No_Lose_Pop"
@@ -987,6 +1024,43 @@ reqs	=
       "UnitType", "Artillery",  "Local",  FALSE
       "UnitType", "Bomber",     "Local",  FALSE
     }
+; "Being fortified behind City Walls has no effect unless the attacking unit is a Bomber or Artillery unit."
+; -- Civ1 Manual
+; Fortified inside City Walls ONLY works when attacked by Bombers or Artillery; see official manual.
+; For now we have to assume it's a unit qualified to fortify (which ~80% will be), and that it's fortified. 
+; (Civ1 doesn't give free-fortified-in-cities). This handling is substantially better than being massively
+; wrong 100% of the time, but leaves two "lesser evil" false reproductions of the rules: 1. Units who can fortify
+; but didn't actually fortify, will get a free bonus of being fortified vs Bomber & Artillery IFF they are in 
+; a city with City Walls (a mistake the old effects made anyway); and 2. A slight minority of units who can't
+; fortify will get a 1.5x City Walls bonus vs Bomber and Artillery IFF inside cities with Walls. Compare to the
+; former effect handling errors: 1. Every unit who can fortify gets a 4.5x bonus in city walls instead of 3x
+; 100% of the time, and every unit who isn't fortified gets a false bonus for being fortified 100% of the time,
+; instead of the new effects' rare case of getting a false fortify bonus only when unfortified in a city with
+; Walls and only when being attacked by a Bomber or Artillery. 
+; ...
+; FIXME: when Fortify_Defense_Bonus can check attacker type or Defend_Bonus can check target unit, then...
+; fortified-behind-city-walls-bonus gets special reqs that check for:
+; City Walls || Great Wall == TRUE, Bomber || Artillery attacking == TRUE, Defender Activity == FORTIFIED
+; ...
+[effect_great_wall2]
+type    = "Defend_Bonus"
+value	= 50
+reqs	=
+    { "type",     "name",       "range", "present"
+      "Building", "Great Wall", "Player", TRUE
+      "CityTile", "Center",     "Local",  TRUE
+      "UnitType", "Bomber",     "Local",  TRUE
+    }
+;see note in effect above
+[effect_great_wall3]
+type    = "Defend_Bonus"
+value	= 50
+reqs	=
+    { "type",     "name",       "range", "present"
+      "Building", "Great Wall", "Player", TRUE
+      "CityTile", "Center",     "Local",  TRUE
+      "UnitType", "Artillery",  "Local",  TRUE
+    }
 
 [effect_great_wall_protect_pop]
 type    = "Unit_No_Lose_Pop"
@@ -1200,23 +1274,36 @@ type	= "Trade_Revenue_Bonus"
 value	= 1585
 
 ; *************************** Ruleset Fortify Bonus *********************** 
+; From Civ1 Manual:  For example, if a chariot (attack factor 4) attacks a phalanx 
+; (defense factor 2), the Chariot has a 67% chance of winning (4 out of 6) and the
+; Phalanx 33% (2 out of 6). If both units were veterans, the odds are 6 to 3. If both
+; are veterans and the Phalanx was behind City Walls (which triples the defense factor), 
+; the odds are 6 to 9.
 [effect_fortified]
 type    = "Fortify_Defense_Bonus"
 value   = 50
 reqs    =
-    { "type", "name", "range"
-      "Activity", "Fortified", "Local"
+    { "type",     "name",      "range", "present"
+      "Activity", "Fortified", "Local",  TRUE
+      "CityTile", "Center",    "Local",  FALSE ; To get fortify bonus behind City Walls has special reqs, see below and also [effect_city_walls]
     }
 
+; No auto-fortify-in-city bonus in Civ1, see the manual!
+; Also, actively fortified in a city gives no bonus IFF there are City Walls
+; ... (unless attacked by Artillery or Bomber)
 [effect_city_fortified]
 type    = "Fortify_Defense_Bonus"
 value   = 50
 reqs    =
-    { "type",          "name",         "range", "present"
-      "CityTile",      "Center",       "Local", TRUE
-      "Activity",     "Fortified",    "Local", FALSE
-      "UnitClassFlag", "CanFortify",   "Local", TRUE
-      "UnitFlag",      "Cant_Fortify", "Local", FALSE
+    { "type",          "name",         "range",  "present"
+      "CityTile",      "Center",       "Local",  TRUE
+      "Activity",     "Fortified",     "Local",  TRUE
+; if attacked by Artillery or Bomber the city walls==FALSE req isn't true, so we moved
+; +50% bonus for fortified-behind-walls to an effect that can check the attacker type.
+      "Building",     "City Walls",    "City",   FALSE
+      "Building",     "Great Wall",    "Player", FALSE
+      "UnitClassFlag","CanFortify",    "Local",  TRUE
+      "UnitFlag",     "Cant_Fortify",  "Local",  FALSE
     }
 
 ; ****************************** RECYCLE SHIELDS **************************

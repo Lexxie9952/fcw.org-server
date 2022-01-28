@@ -232,11 +232,17 @@ sabotage	= 50
 sound		= "b_city_walls"
 sound_alt	= "b_generic"
 helptext	= _("\
-City Walls make it easier to defend a city.  They triple the defense\
- strength of units within the city. They are ineffective against\
- Artillery and Bombers.\
- City Walls also prevent the loss of population which\
- occurs when a defending unit is destroyed by a land unit.\
+City Walls make it easier to defend a city. They triple the defense\
+ strength of units within the city, but part of this bonus considers\
+ the units as fortified -- that is, there is no fortified bonus\
+ behind City Walls because the City Walls bonus already considered\
+ to give fortified status to all units of every type, for free. \n\
+City Walls are not effective against Artillery and Bombers, in\
+ which case being fortified gives the normal 50% bonus. (Note:\
+ currently, ALL units get a 1.5x bonus instead of 3x bonus, if inside\
+ City Walls and attacked by Bomber or Artillery.) \n\
+ City Walls prevent the loss of population which occurs when a defending\
+ unit is destroyed by a land unit.\
 "), _("\
 For cities near rivers, City Walls also eliminate the risk of population\
  loss from flooding.\
