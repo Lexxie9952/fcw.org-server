@@ -858,7 +858,16 @@ static int total_activity(struct tile *ptile, enum unit_activity act,
   bool tgt_matters = activity_requires_target(act);
 
   unit_list_iterate(ptile->units, punit) {
-    if (punit->activity == act
+    if (unit_is_alive(punit) && punit->activity == act
+/* 28Jan2022 added unit_is_alive() && ... to hunt segfault. REMOVE
+   if it ends up being some other problem: 
+signal SIGSEGV, Segmentation fault:
+#0  total_activity (ptile=0x55dc95922d10, tgt=0x0, act=ACTIVITY_MINE)
+    at ../../freeciv/server/unittools.c:861
+861         if (punit->activity == act
+[Current thread is 1 (Thread 0x7fb43c04a800 (LWP 26250))]
+#0  total_activity (ptile=0x55dc95922d10, tgt=0x0, act=ACTIVITY_MINE)
+    at ../../freeciv/server/unittools.c:861 */
         && (!tgt_matters || punit->activity_target == tgt)) {
       total += punit->activity_count;
     }
