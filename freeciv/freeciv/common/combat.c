@@ -576,12 +576,7 @@ static int defense_multiplication(const struct unit_type *att_type,
 
   defensepower +=
     defensepower * tile_extras_defense_bonus(ptile, def_type) / 100;
-  /* //+++
-  if ((pcity || def->activity == ACTIVITY_FORTIFIED)
-      && uclass_has_flag(utype_class(def_type), UCF_CAN_FORTIFY)
-      && !utype_has_flag(def_type, UTYF_CANT_FORTIFY)) {
-    defensepower = (defensepower * 3) / 2;
-  }*/ // old hard coded 0.5 bonus for fortified or in city, now uses:
+
   defensepower = defensepower
   * (100
       + get_target_bonus_effects(NULL, unit_owner(def), NULL,
