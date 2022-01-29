@@ -718,7 +718,7 @@ function show_ruleset_description_full() {
                  },
                  height  : $("#pregame_settings").dialog("option",
                                                          "height"),
-                 width   : ($(window).width<800?"95%":800)
+                 width   : ($(window).width<900?"95%":856)
                });
   $(id).css("color", default_dialog_text_color);        
 }
@@ -745,7 +745,7 @@ function pregame_settings()
       + "<option value='mp2-brava'>Multiplayer 2.2 Brava</option>"
       + "<option value='mp2-ag'>Multiplayer 2.1 Avant-garde</option>"
       + "<option value='mpplus'>Multiplayer+ 1.1</option>"
-      + "<option value='multiplayer'>Multiplayer 1.0 (old)</option>"
+      + "<option value='multiplayer'>Multiplayer 1.0</option>"
       + "<option value='civ2civ3'>Civ2Civ3</option>"
       + "<option value='classic'>Classic</option>"
       + "<option value='civ2'>Civilisation II</option>"
