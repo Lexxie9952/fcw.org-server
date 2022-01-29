@@ -951,7 +951,8 @@ Pilgrims are wayfaring migrants from Theocratic nations. Like Zealots,\
  they have no upkeep if under a Theocratic government. Heeding the call\
  of ecclesiastic authority, Pilgrims can be guided from one city to another in\
  order to transfer population from city to city. Pilgrims have no population\
- cost, so can be thought of as rapture for the price of 10 shields.\
+ cost, so can be thought of as geographically controled rapture for the price\
+ of 10 shields.\
 ")
 
 [unit_migrants]
