@@ -1,0 +1,117 @@
+Civ2 ruleset is intended to be the closest approximation to Civilization II that Freeciv can implement.
+Compared to Classic rules, Classic rules are a conservative but substantially significant improvement in smoothing and modernizing the Civilization II rules. The experience is quite close, but arguably smoother, more fluid, and better functioning.
+
+<b><a href="https://fdocuments.net/document/civ-ii-manual.html" target="_blank">Civilization II Manual</a></b>
+<b><a href="https://www.civfanatics.com/civ2/strategy/combatguide" target="_blank">Civilization II Combat Guide</a></b>
+<b><a href="https://www.civfanatics.com/civ2/strategy/" target="_blank">Civilization II War Academy</a></b>
+
+<b>Differences from Classic ruleset:
+<u>Units</u></b>
+• The game starts with two Settlers only
+• There are no Workers units; only Settlers and Engineers 
+• Settlers can make Airbases
+• Settlers are obsolete by Engineers.
+• Engineers can build new cities. 
+• Engineers cost 1 population and have 1 food upkeep
+• Military units have 1 veteran level instead of 3.
+• All units have Zone of Control. Classic has ZOC for specific military units only.
+• Has Elephants, Crusaders, and Fanatics. Classic does not.
+• Stealth aircraft are visible like all conventional units.
+• Stealth Bomber attacks at 14, not 18.
+• Trireme has 1 turn of fuel - must end its turn on coast.
+• Submarines cost 60, move 3, and attack at 10. Classic: (50/5/12)
+• Carriers suffer no Pearl Harbor Effect (BadyCityDefender)
+• Diplomats can't be promoted from field operations. Only Communist government makes them vet.
+• Vet Diplomat power factor is 110%. Classic: 105%
+• Spies power factor is 110%. Classic: 105%. (Spies can be promoted in both rulesets.)
+• No AWACS unit
+• Bribe costs are different
+• Upgraded units lose veteran status
+• Disembarking from sea to land does not use all moves. (slow_invasions = FALSE)
+• Units have tired attack. Attacking with < 1 move_point gives (move_points / 1) attack strength %.
+• Hostile diplomatic actions do not require the diplomatic unit to act from a land tile. 
+• Can't embark from a transport to an adjacent transport inside a city. 
+
+<u><b>Tech</u></b>
+• Tech costs are not static but rise with each tech already discovered.
+• Freely acquired techs are completely random, not based on tech goal.
+• Stealth requires Superconductors and Robotics (Classic: Superconductors and Advanced Flight)
+• Invention does not give Fortress vision bonus.
+
+<u><b>Misc</u></b>
+• No disasters: therefore, no bonus effects to prevent them.
+• Suitcase Nukes enabled.
+• Trade Routes are Bidirectional, i.e. equal revenue in all cases
+• There is no clause or diplomatic state for Alliance
+• Barbarian cities can't produce
+• AI does not have random traits but are all uniformly moderate (50%)
+• Has a finite subset of nations like the original game. Classic has over 500.
+• Calendar uses legacy BC/AD rather then politically corrected CE/BCE
+
+<u><b>Terrain</u></b>
+• Rivers add +0.50 to the terrain's natural defense. (Classic: multiplies all other bonuses by 1.5x)
+• Oil Wells are not in the game. 
+• Glacier oil is +4 shields (Classic: +3, +4 after Refining)
+• Ocean tiles cannot be reclaimed as land by transformation.
+• Swamp tiles cannot be dredged to be Lake or Ocean. It transforms to Plains.
+• Forest terrain can't transform from "Plant" into Swamp terrain.
+• Cities get bridges on the city center, even without Bridge Building tech.
+• Airbases hide the units inside (Hangar effect)
+• There is no Deep Ocean terrain
+• There is no Nuclear Fallout.
+• No buoys or ruins.
+
+<u><b>Buildings</u></b>
+• Almost all buildings cost more: 4/3 more usually; some are 3/2 more.
+• City Walls defend at 3x but supercede fortify bonus. (Classic: 3x + Fortified = 4.5x)
+• Solar Plant does flat -100% production pollution. (Classic -50% for Factory, -50% for Mfg. Plant)
+• Libraries increases science +50%. (Classic: +100%)
+• Research Labs increase science +50%. (Classic: +100% for each library and university)
+• Universities increase science +50%. (Classic: +150% for each Library)
+• Note that Police Station nullifies the unhappy effects of two aggressive military units. Original Civ2 reduces the unhappy effect by -1 for each unit.
+• Hydro and Nuclear Plants do a flat -50% producion pollution. (Classic -25% for Factory, -25 for Mfg. Plant)
+
+<u><b>Wonders</u></b>
+• Hoover Dam same as Hydro Plant above.
+• Copernicus increases science +50%. (Classic: +100%)
+• King Richard's Crusade obsolete by Industrialization (Classic: Robotics)
+• Eiffel Tower twice as strong as Classic.
+• Oracle: for each temple, makes +1 content and additional +1 for Mysticism. (Classic: +1 only.) 
+• Pyramids count as Granary in every city. (Classic: Pyramids add +25% food and stack with +50% from Granary)
+• Sun Tzu's War Academy: chance of promotion increased to 100% (Classic: increased 50%: e.g., 50%+(50%*50%)=75%)
+• Isaac Newton's College +100% science for city (Classic: +100% for all cities with University)
+• Seti Program gives +50% science for each Library (Classic: +100% for each Research Lab)
+
+<u><b>Government and Nation</u></b>
+• No capital production bonus for Palace city.
+• Scientists and Taxmen require a minimum size city of 5 before they can be assigned.
+• Cities cannot reveal unexplored tiles, only maintain vision of what was explored.
+• No nationality of citizens is accounted in any city; thus, no foreign nationality effects either.
+• City Unhappy Size starts at 4. See Manual above for more info.
+• No scientist or taxman specialists.
+• Government base corruption differences:
+--------------Civ2 - Classic
+ •• ..Anarchy: 37% --- 25%
+ •• Despotism: 30% --- 37%
+ •• .Monarchy: 25% --- 15%
+ •• .Republic: 18% --- 15%
+ •• Fundament:  2%
+ 
+• Empire base size differences:
+-------------Civ2 - Classic
+ •• .Republic: 14 --- 13
+ •• Communism: 14 --- 12
+ •• Democracy: 17 --- 14
+• Empire step size differences:
+-------------Civ2 - Classic
+ •• Despotism: 06 --- 10
+ •• .Monarchy: 09 --- 12
+ •• .Republic: 12 --- 14
+ •• Communism: 12 --- none
+ •• Democracy: 12 --- 16
+• Has government type Fundamentalism
+• Fundamentalism 10 units upkeep free per city.
+• -50% science for Fundamentalism
+
+
+
