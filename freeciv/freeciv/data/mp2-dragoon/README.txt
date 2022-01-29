@@ -21,12 +21,12 @@ The MP2 Dragoon ruleset is the fourth official release of the Multiplayer-Evolut
 <u>Major changes to MP2-Dragoon include</u>:
 • Food to grow cities, tuned to accelerate the game and soften in-built penalties discouraging size 3 cities in the early game.
 — MP2C:  20  30  40  50  60  70  70  70  70...
-— MP2D:  16  23  31  40  50  60  70  71  72...
+— MP2D:  16  23  30  40  50  60  70  70  70... 
 • Rapture is possible in all modern governments with different rates and conditions
 • Corruption reduction from buildings/wonders improved for small-, mid-size cities
 • "Goods" unit enhanced to broaden the flexibility of ancient economies
 • Under Despotism, all new cities get +2 food when founded (+4 for capital)
-• Partisans can investigated conquered cities
+• Partisans can investigate conquered cities
 • Hills now get half the vision bonus of mountains
 • Quay now has a uniform bi-directional 2/3 move cost
 • Magnetism/Frigates now finally a pre-requirement for Steam Engine/Ironclads
