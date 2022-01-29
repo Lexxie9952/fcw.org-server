@@ -46,6 +46,7 @@ class_flags =
   { "name", "helptxt"
     _("Missile")
     _("CanPillage")
+    _("IgnoresWalls")
   }
 
 [veteran_system]
@@ -134,7 +135,7 @@ name          = _("?unitclass:Missile")
 min_speed     = 1
 hp_loss_pct   = 0
 hut_behavior  = "Frighten"
-flags         = "Missile", "Unreachable", "DoesntOccupyTile"
+flags         = "Missile", "Unreachable", "DoesntOccupyTile", "IgnoresWalls"
 
 [unitclass_land]
 ; /* TRANS: Unit class: used adjectivally */
@@ -153,17 +154,20 @@ helptext      = _("\
 name          = _("?unitclass:Sea")
 min_speed     = 2
 hp_loss_pct   = 0
-flags         = "DamageSlows", "AttackNonNative"
+flags         = "DamageSlows", "AttackNonNative", "IgnoresWalls"
 helptext      = _("\
 Can launch attack from non-native tiles.\
 ")
 
+; See: https://civilization.fandom.com/wiki/Helicopter_(Civ2)
+; "Helicopters ignore city walls when attacking cities."
 [unitclass_heli]
 ; /* TRANS: Unit class: used adjectivally */
 name          = _("?unitclass:Helicopter")
 min_speed     = 1
 hp_loss_pct   = 10
-flags         = "CanOccupyCity", "CollectRansom"
+flags         = "CanOccupyCity", "CollectRansom", "IgnoresWalls"
+;TODO:  Can see Subsurface layer
 
 [unitclass_air]
 ; /* TRANS: Unit class: used adjectivally */
@@ -171,7 +175,7 @@ name          = _("?unitclass:Air")
 min_speed     = 1
 hp_loss_pct   = 0
 hut_behavior  = "Frighten"
-flags         = "Unreachable", "DoesntOccupyTile"
+flags         = "Unreachable", "DoesntOccupyTile", "IgnoresWalls"
 
 ; /* <-- avoid gettext warnings
 ;
@@ -1232,8 +1236,8 @@ name          = _("Howitzer")
 class         = "Land"
 tech_req      = "Robotics"
 obsolete_by   = "None"
-graphic       = "u.howitzer"
-graphic_alt   = "-"
+graphic       = "u.howitzer_o"
+graphic_alt   = "u.howitzer"
 sound_move    = "m_howitzer"
 sound_move_alt = "m_generic"
 sound_fight   = "f_howitzer"
@@ -1303,8 +1307,8 @@ name          = _("Bomber")
 class         = "Air"
 tech_req      = "Advanced Flight"
 obsolete_by   = "Stealth Bomber"
-graphic       = "u.bomber"
-graphic_alt   = "-"
+graphic       = "u.heavy_bomber_o"
+graphic_alt   = "u.bomber"
 sound_move    = "m_bomber"
 sound_move_alt = "m_generic"
 sound_fight   = "f_bomber"
@@ -1410,8 +1414,8 @@ name          = _("Stealth Bomber")
 class         = "Air"
 tech_req      = "Stealth"
 obsolete_by   = "None"
-graphic       = "u.stealth_bomber"
-graphic_alt   = "-"
+graphic       = "u.stealth_bomber_o"
+graphic_alt   = "u.stealth_bomber"
 sound_move    = "m_stealth_bomber"
 sound_move_alt = "m_generic"
 sound_fight   = "f_stealth_bomber"
