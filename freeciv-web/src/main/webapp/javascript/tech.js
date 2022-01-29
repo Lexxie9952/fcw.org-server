@@ -161,7 +161,8 @@ function init_tech_screen()
   if (ruleset_control['name'] == "Multiplayer-Evolution ruleset") reqtree = reqtree_mpplus;
   if (ruleset_control['name'].startsWith("Avant-garde")) reqtree = reqtree_avantgarde;
   if (ruleset_control['name'].startsWith("MP2")) reqtree = reqtree_avantgarde;   // from MP2 Brava onward all MP2 rules start with "MP2"
-  if (ruleset_control['name'] == "Civ1 ruleset") reqtree = reqtree_civ1;
+  if (ruleset_control['name'] == "Civ I ruleset" 
+   || ruleset_control['name'] == "Civ1 ruleset") reqtree = reqtree_civ1;  // include legacy name just in case
   if (client_rules_flag[CRF_MP2_C]) reqtree = reqtree_mp2c;
   if (client_rules_flag[CRF_MP2_D]) reqtree = reqtree_mp2d;
 
