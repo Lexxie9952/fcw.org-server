@@ -405,16 +405,6 @@ graphic_alt = "-"
 helptext = _("Traderoutes give less first time revenue.")
 cost = 4680
 
-[advance_theocracy]
-name     = _("Theocracy")
-req1     = "Theology"
-req2     = "None"
-flags    = ""
-graphic     = "a.theocracy"
-graphic_alt = "-"
-helptext = _("Obsoletes Pax Dei. Allows government Theocracy.")
-cost = 725
-
 [advance_fusion_power]
 name     = _("Fusion Power")
 req1     = "Superconductors"
@@ -913,6 +903,16 @@ req2     = "None"
 flags    = ""
 graphic     = "a.the_wheel"
 graphic_alt = "-"
+
+[advance_theocracy]
+name     = _("Theocracy")
+req1     = "Theology"
+req2     = "None"
+flags    = ""
+graphic     = "a.theocracy"
+graphic_alt = "-"
+helptext = _("Obsoletes Pax Dei. Allows government Theocracy.")
+cost = 725
 
 [advance_theology]
 name     = _("Theology")
