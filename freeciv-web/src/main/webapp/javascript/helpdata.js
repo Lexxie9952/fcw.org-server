@@ -433,6 +433,7 @@ function generate_help_text(key)
         num_resources = 1;
         if (client_rules_flag[CRF_MP2_B]) num_resources++;
         break;
+      case "Glacier":
       case "Arctic":
         num_resources = 2;
         if (client_rules_flag[CRF_MP2_B]) num_resources++;
@@ -464,11 +465,32 @@ function generate_help_text(key)
         break;
       }
     if (num_resources) msg += "<br>Special resources:<br>";
-    for (let r=1; r <= num_resources; r++) {
-      msg += "<img style='cursor:help' title='"
-          + (client_rules_flag[CRF_MP2] ? terrain_help[terrain.name+r] : "")
-          + "' src='/images/terrain/"+terrain.name.toLowerCase().replace(" ","")+r+".png'>"
+    // MP2 rulesets.
+    if (client_rules_flag[CRF_MP2]) {
+      for (let r=1; r <= num_resources; r++) {
+        msg += "<img style='cursor:help' title='"
+            + (client_rules_flag[CRF_MP2] ? terrain_help[terrain.name+r] : "")
+            + "' src='/images/terrain/"+terrain.name.toLowerCase().replace(" ","")+r+".png'>"
+      }
     }
+    // General construction of terrain help for other rulesets: TODO: when we can extract an extra sprite and put into a 
+    // <img> element with position:absolute; left:r*96, then helptext_pane class gets property position:relative, we can
+    // put pretty images like the mp2 stuff above (and remove all hardcoding too)
+    else {
+      msg += "<table><tr>"
+      for (let r=0; r < terrain.resources.length; r++) {
+        msg += "<td>"
+        var extra_name = extras[terrain.resources[r]].name;
+        if (extra_name.startsWith("?")) extra_name = extra_name.split(":")[1]; // chops out first part of "?animals:Game"
+        msg += extra_name +":</td><td>"
+        + "<span title='Base Food Output' style='cursor: help; font-size:120%; font-family: Arial; color:#000; background-color:#40ff40'>&hairsp;"+ (terrain.output[0] + resources[terrain.resources[r]].output[0]) + "&hairsp;</span>"
+        + "<span title='Base Shield Output' style='cursor: help; font-size:120%; font-family: Arial; color:#000; background-color:#f0f0f0'>&hairsp;"+ (terrain.output[1] + resources[terrain.resources[r]].output[1]) + "&hairsp;</span>"
+        + "<span title='Base Trade Output' style='cursor: help; font-size:120%; font-family: Arial; color:#000; background-color:#f8f020'>&hairsp;"+ (terrain.output[2] + resources[terrain.resources[r]].output[2]) + "&hairsp;</span>"
+        msg += "</td>"
+      }
+      msg += "</tr></table>"
+    }
+
     msg += "</div>";
   } else if (key.indexOf("help_gen_improvements") != -1 || key.indexOf("help_gen_wonders") != -1) {
     var improvement = improvements[parseInt(key.replace("help_gen_wonders_", "").replace("help_gen_improvements_", ""))];
