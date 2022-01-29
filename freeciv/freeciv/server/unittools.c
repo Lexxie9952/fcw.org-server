@@ -858,7 +858,7 @@ static int total_activity(struct tile *ptile, enum unit_activity act,
   bool tgt_matters = activity_requires_target(act);
 
   unit_list_iterate(ptile->units, punit) {
-    if (unit_is_alive(punit) && punit->activity == act
+    if (unit_is_alive(punit->id) && punit->activity == act
 /* 28Jan2022 added unit_is_alive() && ... to hunt segfault. REMOVE
    if it ends up being some other problem: 
 signal SIGSEGV, Segmentation fault:
