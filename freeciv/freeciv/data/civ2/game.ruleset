@@ -19,11 +19,11 @@ format_version=20
 [ruledit]
 
 ; Which file to read description in from.
-;description_file = ""
+description_file = "civ2/README.civ2"
 
 [about]
 ; Ruleset name
-name = _("Civ2 ruleset")
+name = _("Civ II ruleset")
 
 ; There`s no separate versioning in rulesets part of main freeciv distribution
 ;version = ""
@@ -35,15 +35,11 @@ name = _("Civ2 ruleset")
 ;alt_dir = ""
 
 ; Summary of the ruleset
-summary = _("\
-You are playing with civ2 style rules. These are\
- quite close to classic (old default) Freeciv rules,\
- but with some additions.\
-")
+summary = _("")
 
 ; Detailed description
 ; When updating this, update also desciption_file in [ruledit] section to match
-; description = ""
+description = *civ2/README.civ2*
 
 ; What capabilities ruleset provides for the scenarios.
 ; See doc/README.rulesets for definitions of official capabilities
@@ -963,22 +959,20 @@ actor_reqs    =
     { "type",          "name",         "range"
       "UnitClassFlag", "CanPillage",   "Local"
     }
-
 [actionenabler_clean_pollution]
 action        = "Clean Pollution"
 actor_reqs    =
     { "type",          "name",         "range", "present"
       "UnitFlag",      "Settlers",     "Local", TRUE
       "UnitFlag",      "NonMil",       "Local", TRUE
-      ;NonMil = don't let ability to do Hideouts 'cause' ability to clean pollution
     }
+
 [actionenabler_clean_fallout]
 action        = "Clean Fallout"
 actor_reqs    =
     { "type",          "name",         "range", "present"
       "UnitFlag",      "Settlers",     "Local", TRUE
       "UnitFlag",      "NonMil",       "Local", TRUE
-      ;NonMil = don't let ability to do Hideouts 'cause' ability to clean fallout
     }
 
 [actionenabler_fortify]
