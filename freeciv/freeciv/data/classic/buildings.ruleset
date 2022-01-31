@@ -939,7 +939,8 @@ Space Components can be differentiated into Propulsion and Fuel\
  time.  You can build up to 8 pairs.\
 "), _("\
 Before you can build any spaceship parts, the Apollo Program wonder\
- must have been built by any player.\
+ must have been built by any player. A factory is required in the city\
+ that makes space components.\
 ")
 
 [building_space_module]
@@ -975,7 +976,8 @@ Space Modules are the most expensive parts of spaceships.  There\
 You can build up to 4 Space Modules of each kind.\
 "), _("\
 Before you can build any spaceship parts, the Apollo Program wonder\
- must have been built by any player.\
+ must have been built by any player. A factory is required in the city\
+ that makes space modules.\
 ")
 
 [building_space_structural]
@@ -1002,7 +1004,8 @@ Space Structurals form the base of your spaceship.  All other\
  function.  You can build up to 32 Space Structurals.\
 "), _("\
 Before you can build any spaceship parts, the Apollo Program wonder\
- must have been built by any player.\
+ must have been built by any player. A factory is required in the city\
+ that makes space structurals.\
 ")
 
 [building_stock_exchange]
