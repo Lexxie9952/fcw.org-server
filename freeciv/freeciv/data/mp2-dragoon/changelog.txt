@@ -262,7 +262,7 @@ who must migrate to decent starting position.
 45.Lighthouse never obsolete, but must be built before 
    Electricity. Movement bonus reduces to +1 when combined
    with Nuclear Power bonus. Magellan gives +1 move to 
-   nations who don't have Lighthouse.
+   nations who don't have Lighthouse. 
 ==============================================================
 46. Citadel of Aleppo - 3x defense impervious to ballistic
    units and siege ram. Currently worthless because

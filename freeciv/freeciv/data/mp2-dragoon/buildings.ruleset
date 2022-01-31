@@ -2107,8 +2107,7 @@ The Lighthouse gives all your sea units +2 movement points\
  and increases their vision. It must be built in a city adjacent\
  to Ocean before the discovery of Electricity.\n\n\
 The Lighthouse movement bonus reduces to +1 when combined with\
- any bonus from Nuclear Power technology, for a total bonus of +3\
- movement points.\n\n\ 
+ any bonus from Magellan or Nuclear Power technology.\n\n\ 
 The Lighthouse is never obsolete.\
 ")
 
@@ -2134,7 +2133,8 @@ sound_alt	= "w_generic"
 helptext	= _("\
 All your new sea units built in cities in your nation start with an\
  additional veteran level (this is cumulative with any Port Facility.)\
- Must be built in a coastal city. This wonder is never obsolete.\
+ Must be built in a coastal city. Gives +1 move bonus to sea vessels\
+ (but does not add to Lighthouse.) This wonder is never obsolete.\
 ")
 
 [building_magna_carta]

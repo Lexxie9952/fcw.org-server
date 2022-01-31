@@ -51,9 +51,13 @@ const UCF_USER_FLAG_10 = 21;
 const UCF_USER_FLAG_11 = 22;
 const UCF_USER_FLAG_12 = 23;
 // Custom unit class flags (MP2 sequence/order; TO DO: universalize/uniform order in other rules)
-const UCF_AIRLIFTABLE = UCF_USER_FLAG_1;
-const UCF_BORDERPOLICE = UCF_USER_FLAG_2;
-const UCF_ATTACK_FROM_NON_NATIVE = UCF_USER_FLAG_3;
+const UCF_ATTACK_FROM_NON_NATIVE = UCF_USER_FLAG_1;
+const UCF_MISSILE = UCF_USER_FLAG_2;
+const UCF_CANPILLAGE = UCF_USER_FLAG_3
+const UCF_AIRLIFTABLE = UCF_USER_FLAG_4;
+const UCF_BORDERPOLICE = UCF_USER_FLAG_5;
+const UCF_CARGO_RESTRAINED = UCF_USER_FLAG_6;
+const UCF_WATER_VESSEL = UCF_USER_FLAG_7;
 
 // Unit flags
 const UTYF_CANT_FORTIFY = 0;              /* Unable to Fortify */

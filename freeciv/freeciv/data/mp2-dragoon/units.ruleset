@@ -92,6 +92,7 @@ class_flags =
     _("Airliftable"), _("Can be airlifted if it has remaining moves.")
     _("BorderPolice"), _("Military units from this class can peacefully expel certain foreign units.")
     _("CargoRestrained"), _("Can't attack as Cargo. Must first unload.")
+    _("WaterVessel")
   }
 
 [veteran_system]
@@ -270,7 +271,7 @@ helptext      = _("\
 name          = _("?unitclass:Sea")
 min_speed     = 3
 hp_loss_pct   = 0
-flags         = "DamageSlows", "AttackNonNative", "AttFromNonNative", "CanPillage"
+flags         = "DamageSlows", "AttackNonNative", "AttFromNonNative", "CanPillage", "WaterVessel"
 helptext      = _("\
   • Crew Repair：each turn, regardless of movement, recovers 8% of its hit points (rounded down).\
 ")
@@ -282,7 +283,7 @@ helptext      = _("\
 name          = _("?unitclass:Submarine")
 min_speed     = 4
 hp_loss_pct   = 0
-flags         = "DamageSlows", "AttackNonNative", "AttFromNonNative", "CanPillage", "Unreachable"
+flags         = "DamageSlows", "AttackNonNative", "AttFromNonNative", "CanPillage", "Unreachable", "WaterVessel"
 helptext      = _("\
   • Visibility bonus：not visible to other players unless they have a unit or city adjacent to it.\n\
   • Crew Repair：each turn, regardless of movement, recovers 2 hit points.\
@@ -292,14 +293,14 @@ helptext      = _("\
 name          = _("?unitclass:Trireme")
 min_speed     = 2
 hp_loss_pct   = 0
-flags         = "DamageSlows", "AttFromNonNative"
+flags         = "DamageSlows", "AttFromNonNative", "WaterVessel"
 
 [unitclass_rivership]
 ; /* Extra class providing ability to travel rivers */
 name          = _("?unitclass:RiverShip")
 min_speed     = 2
 hp_loss_pct   = 0
-flags         = "DamageSlows", "AttackNonNative", "AttFromNonNative"
+flags         = "DamageSlows", "AttackNonNative", "AttFromNonNative", "WaterVessel"
 
 [unitclass_heli]
 name          = _("?unitclass:Helicopter")

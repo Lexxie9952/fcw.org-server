@@ -654,23 +654,9 @@ reqs    =
 ;value   = 8   
 ;reqs    =
 ;    { "type", "name", "range"
-;      "UnitClass", "Sea", "Local"
+;      "UnitClassFlag", "WaterVessel", "Local"
 ;    }
-;[effect_sub_hp_regen]
-;type    = "Unit_Recover_Pct"
-;value   = 8   
-;reqs    =
-;    { "type", "name", "range"
-;      "UnitClass", "Submarine", "Local"
-;    }
-;[effect_rivership_hp_regen]
-;type    = "Unit_Recover_Pct"
-;value   = 8   
-;reqs    =
-;    { "type", "name", "range"
-;      "UnitClass", "RiverShip", "Local"
-;    }
-; The effects above replace the effects below after Unit_Recover_Pct is up
+; The effect above replaces the effects below after Unit_Recover_Pct is up
 ; The effects below substitute if Unit_Recover_Pct is missing from server
 [effect_sea_hp_regen]
 type    = "Unit_Recover" ;30 hp units get + 2
@@ -1138,61 +1124,19 @@ reqs    =
 type    = "Unit_Vision_Radius_Sq"
 value   = 8   
 reqs    =
-    { "type", "name", "range"
-      "Extra", "Naval Base", "tile"
-      "Tech", "Invention", "Player"
-      "UnitClass", "Trireme", "Local"
-    }
-[effect_navbase_vision1]
-type    = "Unit_Vision_Radius_Sq"
-value   = 8   
-reqs    =
-    { "type", "name", "range"
-      "Extra", "Naval Base", "tile"
-      "Tech", "Invention", "Player"
-      "UnitClass", "RiverShip", "Local"
-    }
-[effect_navbase_vision2]
-type    = "Unit_Vision_Radius_Sq"
-value   = 8   
-reqs    =
-    { "type", "name", "range"
-      "Extra", "Naval Base", "tile"
-      "Tech", "Invention", "Player"
-      "UnitClass", "Sea", "Local"
+    { "type",          "name",        "range"
+      "Extra",         "Naval Base",  "tile"
+      "Tech",          "Invention",   "Player"
+      "UnitClassFlag", "WaterVessel", "Local"
     }
 ; Naval Base HP regen
 [effect_navbase_hp_regen]
 type    = "HP_Regen"
 value   = 20
 reqs    =
-    { "type", "name", "range"
-      "Extra", "Naval Base", "Tile"
-      "UnitClass", "Sea", "Local"
-    }
-[effect_navbase_hp_regen_1]
-type    = "HP_Regen"
-value   = 20
-reqs    =
-    { "type", "name", "range"
-      "Extra", "Naval Base", "Tile"
-      "UnitClass", "RiverShip", "Local"
-    }
-[effect_navbase_hp_regen_2]
-type    = "HP_Regen"
-value   = 20
-reqs    =
-    { "type", "name", "range"
-      "Extra", "Naval Base", "Tile"
-      "UnitClass", "Trireme", "Local"
-    }
-[effect_navbase_hp_regen_3]
-type    = "HP_Regen"
-value   = 20
-reqs    =
-    { "type", "name", "range"
-      "Extra", "Naval Base", "Tile"
-      "UnitClass", "Submarine", "Local"
+    { "type",          "name",        "range"
+      "Extra",         "Naval Base",  "Tile"
+      "UnitClassFlag", "WaterVessel", "Local"
     }
 ; ***********************************************************
 
@@ -1265,40 +1209,23 @@ reqs	=
       "CityTile", "Center", "Local"
     }
 
-; Nuclear power gives +2 moves to modern sea units (+1 if Lighthouse in effect)
+; Nuclear power gives +2 moves to sea units (+1 if Lighthouse in effect)
 [effect_nuclear_powered_ships]
 type    = "Move_Bonus"
 value	= 9
 reqs	=
-    { "type",      "name",          "range"
-      "Tech",      "Nuclear Power", "Player"
-      "UnitClass", "Sea",           "Local"
+    { "type",          "name",          "range"
+      "Tech",          "Nuclear Power", "Player"
+      "UnitClassFlag", "WaterVessel",   "Local"
     }
 [effect_nuclear_powered_ships2]
 type    = "Move_Bonus"
 value	= 9
 reqs	=
-    { "type",      "name",          "range", "present"
-      "Tech",      "Nuclear Power", "Player", TRUE
-      "Building",  "Lighthouse",    "Player", FALSE
-      "UnitClass", "Sea",           "Local",  TRUE
-    }
-[effect_nuclear_powered_subs]
-type    = "Move_Bonus"
-value	= 9
-reqs	=
-    { "type",      "name",          "range"
-      "Tech",      "Nuclear Power", "Player"
-      "UnitClass", "Submarine",     "Local"
-    }
-[effect_nuclear_powered_subs2]
-type    = "Move_Bonus"
-value	= 9
-reqs	=
-    { "type",      "name",          "range", "present"
-      "Tech",      "Nuclear Power", "Player", TRUE
-      "Building",  "Lighthouse",    "Player", FALSE
-      "UnitClass", "Submarine",     "Local",  TRUE
+    { "type",          "name",          "range", "present"
+      "Tech",          "Nuclear Power", "Player", TRUE
+      "Building",      "Lighthouse",    "Player", FALSE
+      "UnitClassFlag", "WaterVessel",   "Local",  TRUE
     }
 
 ;************************************* GOVERNMENT CORRUPTION
@@ -3130,33 +3057,9 @@ reqs	=
 type    = "Defend_Bonus"
 value	= 100
 reqs	=
-    { "type", "name", "range"
-      "Building", "Coastal Defense", "City"
-      "UnitClass", "Sea", "Local"
-    }
-[effect_coastal_defense_1]
-type    = "Defend_Bonus"
-value	= 100
-reqs	=
-    { "type", "name", "range"
-      "Building", "Coastal Defense", "City"
-      "UnitClass", "RiverShip", "Local"
-    }
-[effect_coastal_defense_2]
-type    = "Defend_Bonus"
-value	= 100
-reqs	=
-    { "type", "name", "range"
-      "Building", "Coastal Defense", "City"
-      "UnitClass", "Submarine", "Local"
-    }
-[effect_coastal_defense_trireme]
-type    = "Defend_Bonus"
-value	= 100
-reqs	=
-    { "type", "name", "range"
-      "Building", "Coastal Defense", "City"
-      "UnitClass", "Trireme", "Local"
+    { "type",          "name",            "range"
+      "Building",      "Coastal Defense", "City"
+      "UnitClassFlag", "WaterVessel",     "Local"
     }
 [effect_coastal_defense_visible]
 type    = "Visible_Walls"
@@ -3170,77 +3073,20 @@ reqs	=
 type    = "Defend_Bonus"
 value	= 100
 reqs	=
-    { "type",     "name",               "range", "present"
-      "Building", "Gibraltar Fortress", "City",   TRUE
-      "Building", "Coastal Defense",    "City",   TRUE
-      "UnitClass", "Sea", "Local"
-    }
-[effect_gibraltar_fortress_city_1]
-type    = "Defend_Bonus"
-value	= 100
-reqs	=
-    { "type",     "name",               "range", "present"
-      "Building", "Gibraltar Fortress", "City",   TRUE
-      "Building", "Coastal Defense",    "City",   TRUE
-      "UnitClass", "RiverShip", "Local"
-    }
-[effect_gibraltar_fortress_city_2]
-type    = "Defend_Bonus"
-value	= 100
-reqs	=
-    { "type",     "name",               "range", "present"
-      "Building", "Gibraltar Fortress", "City",   TRUE
-      "Building", "Coastal Defense",    "City",   TRUE
-      "UnitClass", "Submarine", "Local"
-    }
-[effect_gibraltar_fortress_city_trireme]
-type    = "Defend_Bonus"
-value	= 100
-reqs	=
-    { "type",     "name",               "range", "present"
-      "Building", "Gibraltar Fortress", "City",   TRUE
-      "Building", "Coastal Defense",    "City",   TRUE
-      "UnitClass", "Trireme", "Local"
+    { "type",          "name",               "range", "present"
+      "Building",      "Gibraltar Fortress", "City",   TRUE
+      "Building",      "Coastal Defense",    "City",   TRUE
+      "UnitClassFlag", "WaterVessel",        "Local",  TRUE
     }
 [effect_gibraltar_fortress]
 type    = "Defend_Bonus"
 value	= 25
 reqs	=
-    { "type",     "name",               "range", "present"
-      "Building", "Gibraltar Fortress", "Player", TRUE
-      "Building", "Gibraltar Fortress", "City",   FALSE
-      "Building", "Coastal Defense",    "City",   TRUE
-      "UnitClass", "Sea", "Local"
-    }
-[effect_gibraltar_fortress_1]
-type    = "Defend_Bonus"
-value	= 25
-reqs	=
-    { "type",     "name",               "range", "present"
-      "Building", "Gibraltar Fortress", "Player", TRUE
-      "Building", "Gibraltar Fortress", "City",   FALSE
-      "Building", "Coastal Defense",    "City",   TRUE
-      "UnitClass", "RiverShip", "Local"
-    }
-[effect_gibraltar_fortress_2]
-type    = "Defend_Bonus"
-value	= 25
-reqs	=
-    { "type",     "name",               "range", "present"
-      "Building", "Gibraltar Fortress", "Player", TRUE
-      "Building", "Gibraltar Fortress", "City",   FALSE
-      "Building", "Coastal Defense",    "City",   TRUE
-      "UnitClass", "Submarine", "Local"
-    }
-[effect_gibraltar_fortress_trireme]
-type    = "Defend_Bonus"
-value	= 25
-reqs	=
-    { "type",     "name",               "range", "present"
-      "Building", "Gibraltar Fortress", "Player", TRUE
-      "Building", "Gibraltar Fortress", "City",   FALSE
-      "Building", "Coastal Defense",    "City",   TRUE
-      "UnitClass", "Trireme", "Local"
+    { "type",          "name",               "range", "present"
+      "Building",      "Gibraltar Fortress", "Player", TRUE
+      "Building",      "Gibraltar Fortress", "City",   FALSE
+      "Building",      "Coastal Defense",    "City",   TRUE
+      "UnitClassFlag", "WaterVessel",        "Local",  TRUE
     }
 [effect_gibraltar_fortress_coastal_defense_discount]
 type    = "Building_Build_Cost_Pct"
@@ -3995,73 +3841,19 @@ reqs	=
 type    = "Veteran_Build"
 value	= 1
 reqs	=
-    { "type", "name", "range", "present"
-      "Building", "Port Facility", "City", TRUE
-      "UnitClass", "Sea", "Local", TRUE
-      "UnitFlag", "NonMil", "Local", FALSE
-      "UnitFlag", "NoVeteran", "Local", FALSE
-    }
-[effect_port_facility_a]
-type    = "Veteran_Build"
-value	= 1
-reqs	=
-    { "type", "name", "range", "present"
-      "Building", "Port Facility", "City", TRUE
-      "UnitClass", "RiverShip", "Local", TRUE
-      "UnitFlag", "NonMil", "Local", FALSE
-      "UnitFlag", "NoVeteran", "Local", FALSE
-    }
-[effect_port_facility_b]
-type    = "Veteran_Build"
-value	= 1
-reqs	=
-    { "type", "name", "range", "present"
-      "Building", "Port Facility", "City", TRUE
-      "UnitClass", "Submarine", "Local", TRUE
-      "UnitFlag", "NonMil", "Local", FALSE
-      "UnitFlag", "NoVeteran", "Local", FALSE
+    { "type",          "name",          "range", "present"
+      "Building",      "Port Facility", "City",  TRUE
+      "UnitClassFlag", "WaterVessel",   "Local", TRUE
+      "UnitFlag",      "NonMil",        "Local", FALSE
+      "UnitFlag",      "NoVeteran",    "Local", FALSE
     }
 [effect_port_facility_1]
 type    = "HP_Regen"
 value	= 100
 reqs	=
-    { "type", "name", "range"
-      "Building", "Port Facility", "City"
-      "UnitClass", "Sea", "Local"
-    }
-[effect_port_facility_1a]
-type    = "HP_Regen"
-value	= 100
-reqs	=
-    { "type", "name", "range"
-      "Building", "Port Facility", "City"
-      "UnitClass", "RiverShip", "Local"
-    }
-[effect_port_facility_1b]
-type    = "HP_Regen"
-value	= 100
-reqs	=
-    { "type", "name", "range"
-      "Building", "Port Facility", "City"
-      "UnitClass", "Submarine", "Local"
-    }
-[effect_port_facility_trireme]
-type    = "Veteran_Build"
-value	= 1
-reqs	=
-    { "type", "name", "range", "present"
-      "Building", "Port Facility", "City", TRUE
-      "UnitClass", "Trireme", "Local", TRUE
-      "UnitFlag", "NonMil", "Local", FALSE
-      "UnitFlag", "NoVeteran", "Local", FALSE
-    }
-[effect_port_facility_trireme_1]
-type    = "HP_Regen"
-value	= 100
-reqs	=
-    { "type", "name", "range"
-      "Building", "Port Facility", "City"
-      "UnitClass", "Trireme", "Local"
+    { "type",          "name",          "range"
+      "Building",      "Port Facility", "City"
+      "UnitClassFlag", "WaterVessel",   "Local"
     }
 ;************************************************************************** POWER PLANTS
 [effect_coal_plant]
@@ -4867,17 +4659,9 @@ reqs    =
 type    = "Unit_Vision_Radius_Sq"
 value   = 7
 reqs    =
-    { "type",      "name",      "range"
-      "Tech", "Space Flight",   "Player"
-      "UnitClass", "Sea",      "Local"
-    }
-[effect_satellite_vision_2a]  ;Vision benefit from satellite communication to sea units
-type    = "Unit_Vision_Radius_Sq"
-value   = 7
-reqs    =
-    { "type",      "name",      "range"
-      "Tech", "Space Flight",   "Player"
-      "UnitClass", "Submarine",      "Local"
+    { "type",          "name",         "range"
+      "Tech",          "Space Flight", "Player"
+      "UnitClassFlag", "WaterVessel",  "Local"
     }
 [effect_satellite_vision_3]  ;Vision benefit from satellite communication to sea units
 type    = "Unit_Vision_Radius_Sq"
@@ -5727,91 +5511,35 @@ value	= 18
 reqs	=
     { "type", "name", "range"
       "Building", "Lighthouse", "Player"
-      "UnitClass", "Sea", "Local"
-    }
-[effect_lighthouse_a]
-type    = "Move_Bonus"
-value	= 18
-reqs	=
-    { "type", "name", "range"
-      "Building", "Lighthouse", "Player"
-      "UnitClass", "Submarine", "Local"
-    }
-[effect_lighthouse_1]
-type    = "Move_Bonus"
-value	= 18
-reqs	=
-    { "type", "name", "range"
-      "Building", "Lighthouse", "Player"
-      "UnitClass", "Trireme", "Local"
+      "UnitClassFlag", "WaterVessel", "Local"
     }
 [effect_lighthouse_2]
-type    = "Move_Bonus"
-value	= 18
-reqs	=
-    { "type", "name", "range"
-      "Building", "Lighthouse", "Player"
-      "UnitClass", "RiverShip", "Local"
-    }
-[effect_lighthouse_3]
 type    = "Unit_Vision_Radius_Sq"
 value	= 6
 reqs	=
     { "type", "name", "range"
       "Building", "Lighthouse", "Player"
-      "UnitClass", "Sea", "Local"
-    }
-[effect_lighthouse_3a]
-type    = "Unit_Vision_Radius_Sq"
-value	= 6
-reqs	=
-    { "type", "name", "range"
-      "Building", "Lighthouse", "Player"
-      "UnitClass", "Submarine", "Local"
-    }
-[effect_lighthouse_4]
-type    = "Unit_Vision_Radius_Sq"
-value	= 6
-reqs	=
-    { "type", "name", "range"
-      "Building", "Lighthouse", "Player"
-      "UnitClass", "Trireme", "Local"
-    }
-[effect_lighthouse_5]
-type    = "Unit_Vision_Radius_Sq"
-value	= 6
-reqs	=
-    { "type", "name", "range"
-      "Building", "Lighthouse", "Player"
-      "UnitClass", "RiverShip", "Local"
+      "UnitClassFlag", "WaterVessel", "Local"
     }
 ;************************************************************************ Magellan
 [effect_magellans_expedition]
 type    = "Veteran_Build"
 value	= 1
 reqs	=
-    { "type", "name", "range", "present"
-      "Building", "Magellan's Expedition", "Player", TRUE
-      "UnitClass", "Sea", "Local", TRUE
-      "UnitFlag", "NoVeteran", "Local", FALSE
+    { "type",          "name",                  "range", "present"
+      "Building",      "Magellan's Expedition", "Player", TRUE
+      "UnitClassFlag", "WaterVessel",           "Local",  TRUE
+      "UnitFlag",      "NoVeteran",             "Local",  FALSE
     }
-[effect_magellans_expedition_a]
-type    = "Veteran_Build"
-value	= 1
+;Magellan gives +1 move to nations without Lighthouse
+[effect_magellan_minor_lighthouse_effect]
+type    = "Move_Bonus"
+value	= 9
 reqs	=
-    { "type", "name", "range", "present"
-      "Building", "Magellan's Expedition", "Player", TRUE
-      "UnitClass", "RiverShip", "Local", TRUE
-      "UnitFlag", "NoVeteran", "Local", FALSE
-    }
-[effect_magellans_expedition_b]
-type    = "Veteran_Build"
-value	= 1
-reqs	=
-    { "type", "name", "range", "present"
-      "Building", "Magellan's Expedition", "Player", TRUE
-      "UnitClass", "Submarine", "Local", TRUE
-      "UnitFlag", "NoVeteran", "Local", FALSE
+    { "type",      "name",                  "range", "present"
+      "Building",  "Magellan's Expedition", "Player", TRUE
+      "Building",  "Lighthouse",            "Player", FALSE
+      "UnitClassFlag", "WaterVessel",       "Local",  TRUE
     }
 ;************************************************************************ Manhattan
 [effect_manhattan_project]
