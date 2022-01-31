@@ -361,6 +361,14 @@ function act_sel_click_function(parent_id,
       };
       send_request(JSON.stringify(packet));
       is_more_user_input_needed = true;
+      /* Siege Rams do targeted sabotage but do NOT select their target:
+         Only City Walls are the only allowed target. We must set 
+         is_more_user_input_needed = false to avoid the UI getting stuck */
+      if (action_id == ACTION_SPY_TARGETED_SABOTAGE_CITY_ESC
+          && client_rules_flag[CRF_MP2_C]
+          && unit_type(units[actor_unit_id]).name == "Siege Ram") {
+            is_more_user_input_needed = false;
+      }
       remove_action_selection_dialog(parent_id, actor_unit_id, true);
     };
   case ACTION_FOUND_CITY:
