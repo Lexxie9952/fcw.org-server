@@ -209,7 +209,7 @@ function _deflua_hut_reveal_map(unit)
 
   notify.event(owner, unit.tile, E.HUT_MAP,
                _("You find a map of the surrounding terrain."))
-  for revealtile in unit.tile:circle_iterate(36) do
+  for revealtile in unit.tile:circle_iterate(63) do
     revealtile:show(owner)
   end
 end
