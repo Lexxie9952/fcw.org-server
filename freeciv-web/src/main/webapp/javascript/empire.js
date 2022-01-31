@@ -218,7 +218,7 @@ function empire_unit_homecity_screen(wide_screen,narrow_screen,small_screen,
     //console.log("MODE: Small Narrow")
   }
   // First row for totals
-  empire_list_html += "<tr class='cities_row;' style='height:"+rheight+"px;'>"
+  empire_list_html += "<tr class='cities_row' style='height:"+rheight+"px;'>"
     + "<td style='font-size:85%; color:#d0d0d0; text-align:right; padding-right:10px;'>"
     + "<span style='font-size:1%; color: rgba(0, 0, 0, 0);'>!</span>"  // tiny invisible ! will sort it to top of list
     + "TOTAL UPKEEP</td>"
@@ -288,7 +288,7 @@ function empire_unit_homecity_screen(wide_screen,narrow_screen,small_screen,
     //TO DO, we can only adjust height later after we add a unit_count tally then would have to do a $().css("height",rheight)
     
     var rheight = 28 * Math.ceil( (/*unit_count*/11*40) /  ($(window).width()-140) );
-    unit_row_html = "<tr class='cities_row;' style='height:"+rheight+"px;'>";
+    unit_row_html = "<tr class='cities_row' style='height:"+rheight+"px;'>";
     unit_row_html += "<td style='cursor:pointer; font-size:85%; text-align:right; padding-right:10px;' onclick='javascript:show_city_dialog_by_id(" + pcity['id']+")' id='citycell"+city_id+"'>"+pcity['name']+"</td>";
     unit_row_html += "<td class='food_upkeep_column'   style='font-size:95%; font-weight:520; text-align:right; padding-right:10px; color:#ced434;' id='f_upkeep"+city_id+"'> </td>";
     unit_row_html += "<td class='gold_upkeep_column'   style='font-size:95%; font-weight:520; text-align:right; padding-right:10px; color:#ffd52c;' id='g_upkeep"+city_id+"'> </td>";
@@ -537,7 +537,7 @@ function empire_unitcity_screen(wide_screen,narrow_screen,small_screen,
 
     //TO DO, we can only adjust height later after we add a unit_count tally then would have to do a $().css("height",rheight)
     var rheight = 28 * Math.ceil( (/*unit_count*/11*40) /  ($(window).width()-140) );
-    unit_row_html = "<tr class='cities_row;' style='height:"+rheight+"px;'>";
+    unit_row_html = "<tr class='cities_row' style='height:"+rheight+"px;'>";
     unit_row_html += "<td style='cursor:default; font-size:95%; font-weight:520; text-align:right; padding-right:10px; color:#a8a8a8;' id='sumHPD"+city_id+"'> </td>";
     unit_row_html += "<td style='cursor:pointer; font-size:85%; text-align:right; padding-right:10px;' onclick='javascript:show_city_dialog_by_id(" + pcity['id']+")' id='citycell"+city_id+"'>"+pcity['name']+"</td>";
     unit_row_html += "<td style='padding-left:10px;' id='u"+city_id+"'>";
@@ -789,7 +789,7 @@ function empire_econ_improvements_screen(wide_screen,narrow_screen,small_screen,
     
     //TO DO, we can only adjust height later after we add a unit_count tally then would have to do a $().css("height",rheight)
     var rheight = 28 * Math.ceil( (/*col_count*/22*40) / ($(window).width()-140) );
-    improvements_html = "<tr class='cities_row;' style='border-bottom: 3px solid #000; height:"+rheight+"px;'>";
+    improvements_html = "<tr class='cities_row' style='border-bottom: 3px solid #000; height:"+rheight+"px;'>";
     improvements_html += "<td style='cursor:pointer; font-size:85%; text-align:right; padding-right:10px;' onclick='javascript:show_city_dialog_by_id(" 
                       + pcity['id']+")' id='citycell"+city_id+"'>"+pcity['name']+"</td>";
     improvements_html += "<td style='padding-left:10px;' id='u"+city_id+"'>";
@@ -970,7 +970,7 @@ function empire_econ_upkeep_screen(wide_screen,narrow_screen,small_screen,
         + "</thead><tbody>";
   }
   // First row for total
-  empire_list_html += "<tr class='cities_row;' style='height:"+rheight+"px;'>"
+  empire_list_html += "<tr class='cities_row' style='height:"+rheight+"px;'>"
   + "<td style='font-size:85%; color:#d0d0d0; text-align:right; padding-right:10px;'>"
   + "<span style='font-size:1%; color: rgba(0, 0, 0, 0);'>!</span>"  // tiny invisible ! will sort it to top of list
   + "TOTAL UPKEEP</td>"
@@ -995,7 +995,7 @@ function empire_econ_upkeep_screen(wide_screen,narrow_screen,small_screen,
 
     //TO DO, we can only adjust height later after we add a unit_count tally then would have to do a $().css("height",rheight)
     var rheight = 28 * Math.ceil( (/*col_count*/22*40) / ($(window).width()-140) );
-    improvements_html = "<tr class='cities_row;' style='border-bottom: 3px solid #000; height:"+rheight+"px;'>";
+    improvements_html = "<tr class='cities_row' style='border-bottom: 3px solid #000; height:"+rheight+"px;'>";
     improvements_html += "<td style='cursor:pointer; font-size:85%; text-align:right; padding-right:10px;' onclick='javascript:show_city_dialog_by_id(" 
                       + pcity['id']+")' id='citycell"+city_id+"'>"+pcity['name']+"</td>";
     improvements_html += "<td class='gold_upkeep_column' font-size:85%; style='text-align:right; padding-right:10px; color:#ffd52c; font-weight:520;' id='g_upkeep_total"+city_id+"'> </td>"
@@ -1229,7 +1229,7 @@ function empire_econ_worklists_screen(wide_screen,narrow_screen,small_screen,
     var empty_row_click = is_small_screen() 
                         ? " onclick='tap_empty_production_row(event, "+city_id+")'"
                         : " title='CLICK: paste worklist\nCTRL-CLICK: clear worklist\nSHIFT-CLICK: copy worklist' onclick='tap_empty_production_row(event, "+city_id+")'";
-    queue_html = "<tr class='cities_row;' style='border-bottom: 3px solid #000; height:"+rheight+"px;'>";
+    queue_html = "<tr class='cities_row' style='border-bottom: 3px solid #000; height:"+rheight+"px;'>";
     queue_html += "<td style='cursor:pointer; font-size:85%; text-align:right; padding-right:10px;' onclick='javascript:show_city_dialog_by_id(" 
                       + pcity['id']+")' id='citycell"+city_id+"'>"+pcity['name']+"</td>";
     queue_html += "<td style='padding-left:10px;' id='WL"+city_id+"'"+empty_row_click+">";
@@ -1889,7 +1889,7 @@ function empire_unittype_screen(wide_screen,narrow_screen,small_screen,
     count[unit_type_id] = 0; 
 
     var rheight = 28 * Math.ceil( (units_sorted_by_type[unit_type_id].length*40) /  ($(window).width()-140) );
-    unit_row_html = "<tr class='cities_row;' style='height:"+rheight+"px;'>";
+    unit_row_html = "<tr class='cities_row' style='height:"+rheight+"px;'>";
     unit_row_html += "<td style='font-size:85%; text-align:right;' id='ucount"+unit_type_id+"'></td>";
     unit_row_html += "<td style='padding-left:10px; padding-right:10px; font-size:85%; color:#d0d0d0'>"+unit_types[unit_type_id]['name']+"</td>";
     unit_row_html += "<td style='padding-left:10px;' id='u"+unit_type_id+"'>";

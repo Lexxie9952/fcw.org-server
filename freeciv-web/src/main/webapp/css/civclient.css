@@ -1299,6 +1299,11 @@ body:not(.mobile) .ui-dialog.unit_dialog {
   cursor:pointer;
 }
 
+/* Clip units_oversize images in the Empire panel so they don't disrupt the layout */
+#empire_mode_panel div span {
+  max-height:48px; /* 48px is normal height for improvements and units */
+}
+
 /* city tabs will be on the bottom of the dialog. */
 #city_tabs .ui-tabs-nav { 
     position: absolute; 
@@ -1405,6 +1410,15 @@ body:not(.mobile) .ui-dialog.unit_dialog {
 .cities_row td {
     padding-left: 20px;
     padding-left: 0px;        /* added by Lexxie to experiment */ 
+}
+
+/* Empire -> all tabs -> cities_row of images:
+   clip units_oversize to 48px high to keep layout clean. NB: This should also
+   target images in normal cities list which uses this class; but it shouldn't
+   matter because units_oversize get scaled in that one. */
+.cities_row td div,
+.cities_row td div span {
+  max-height:48px;
 }
 
 #wiki_dialog {
