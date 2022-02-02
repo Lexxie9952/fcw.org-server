@@ -152,6 +152,13 @@ Action_Resist_Pct
     instead of the actor, and the value is subtracted rather than added.
     NOTE: unit ranges still pertain to actor, not target.
 
+Actor_Bribe_Cost_Pct
+    Increases the actor player's cost of bribing units by this amount percent.
+    Use negative numbers to decrease the bribe cost. Note: Unit_Bribe_Cost_Pct
+    is the cost modifier based on the type of victim unit and who is the victim
+    player, while with Actor_Bribe_Cost_Pct, the Player and Unit reqs refer to
+    the actor player and unit. 
+
 Airlift
     Allow airlift to/from a city.
 

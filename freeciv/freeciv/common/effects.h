@@ -360,6 +360,9 @@ extern "C" {
 /* A raw value by which to reduce Output Waste (rather than the percentage reduction of Output_Waste_Pct) */
 #define SPECENUM_VALUE139 EFT_OUTPUT_WASTE_REDUCE
 #define SPECENUM_VALUE139NAME "Output_Waste_Reduce"
+/* Similar to unit_bribe_cost_pct but alters the cost based on actor player and actor unit (not target) */
+#define SPECENUM_VALUE140 EFT_ACTOR_BRIBE_COST_PCT
+#define SPECENUM_VALUE140NAME "Actor_Bribe_Cost_Pct"
 
 /* FCW does not have /common and needs to hard code any changes or re-ordering of the above in effects.js */
 /********************************************************************************************************~*/

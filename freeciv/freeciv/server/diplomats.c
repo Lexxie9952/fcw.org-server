@@ -25,6 +25,7 @@
 
 /* common */
 #include "base.h"
+#include "effects.h"
 #include "events.h"
 #include "game.h"
 #include "government.h"
@@ -738,6 +739,22 @@ bool diplomat_bribe(struct player *pplayer, struct unit *pdiplomat,
 
   /* Get bribe cost, ignoring any previously saved value. */
   bribe_cost = unit_bribe_cost(pvictim, pplayer);
+
+  /* Actor cost mod. Target cost mod is in unit_bribe_cost(..) */
+  bribe_cost += (bribe_cost
+           * get_target_bonus_effects(NULL,
+                                      unit_owner(pdiplomat),
+                                      unit_owner(pvictim),
+                                      game_city_by_number(pdiplomat->homecity),
+                                      NULL,
+                                      unit_tile(pvictim),
+                                      pdiplomat,
+                                      unit_type_get(pdiplomat),
+                                      NULL,
+                                      NULL,
+                                      paction,
+                                      EFT_ACTOR_BRIBE_COST_PCT))
+       / 100;
 
   /* If player doesn't have enough gold, can't bribe. */
   if (pplayer->economic.gold < bribe_cost) {

@@ -456,6 +456,10 @@ adv_want dai_effect_value(struct player *pplayer, struct government *gov,
       v += ai->stats.units.upgradeable * 4;
     }
     break;
+  case EFT_ACTOR_BRIBE_COST_PCT:
+    /* Negative amounts are desirable */
+    v -= amount / 5; 
+    break;
   case EFT_UNIT_BRIBE_COST_PCT:
     num = num_affected_units(peffect, ai);
     v += ((2 * c + num) * amount) / 400;

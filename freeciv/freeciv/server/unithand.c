@@ -2614,9 +2614,15 @@ void handle_unit_action_query(struct connection *pc,
     if (punit
         && is_action_enabled_unit_on_unit(action_type,
                                           pactor, punit)) {
+      int cost = unit_bribe_cost(punit,pplayer);
+      cost += (cost * get_target_bonus_effects(NULL, unit_owner(pactor),
+                                      unit_owner(punit), game_city_by_number(pactor->homecity),
+                                      NULL,  unit_tile(punit), pactor, unit_type_get(pactor),
+                                      NULL, NULL, action_by_number(ACTION_SPY_BRIBE_UNIT),
+                                      EFT_ACTOR_BRIBE_COST_PCT)) / 100;
       dsend_packet_unit_action_answer(pc,
                                       actor_id, target_id,
-                                      unit_bribe_cost(punit, pplayer),
+                                      cost,
                                       action_type, disturb_player);
     } else {
       illegal_action(pplayer, pactor, action_type,
