@@ -3017,10 +3017,12 @@ function do_map_click(ptile, qtype, first_time_called)
         if (  Math.abs(tile_dx)<=1 && Math.abs(tile_dy) <=1     // adjacent
               && goto_last_action == ACTION_COUNT               // not an appended Go...And command
               && !connect_active                                // not in connect mode to make multiple roads/irrigation
-              && (true_goto_path_length <= 1)   // don't override path>=2 which has better legal way to get to adjacent tile
-          )                                    // "illegal" adjacent goto attempts render goto_path.length == undefined (true_goto_path_length will then be 0)
+              && (true_goto_path_length <= 1) // don't override path>=2 which has better legal way to get to adjacent tile.  "illegal" adjacent
+                                              // goto attemps render goto_path.length == undefined (true_goto_path_length will then be 0)
+              && !mouse_click_mod_key['shiftKey'] // shift gives player a way to circumvent override; this allows a delayed GOTO if there's UWT                                
+           )
         {
-          console.log("GO TO overridden because adjacent tile.")
+          console.log("GOTO changed to MOVE because adjacent tile.\nShift-click tile to force GOTO instead of MOVE.")
           switch (tile_dy)
           {
             case 0: // neither north nor south:
@@ -3225,8 +3227,9 @@ function do_map_click(ptile, qtype, first_time_called)
           var ptype = unit_type(punit);
           message_log.update({
             event: E_BAD_COMMAND,
-            message: (is_longturn() ? ptype['name'] + " has no moves left."
-                                    : ptype['name'] + " has no moves left. Press turn done for the next turn.")
+            message: (  delayed_goto_active ? (ptype['name'] + " will move at turn change.") :
+                        (is_longturn() ? ptype['name'] + " has no moves left."
+                                       : ptype['name'] + " has no moves left. Press turn done for the next turn."))
           });
         }
 
