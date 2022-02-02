@@ -5653,6 +5653,48 @@ Peasants can only be made in one city, but you can make more than one per\
  to make more of them if it doesn’t have a worklist. So be careful!\
 ")
 
+[unit_patriarch]
+name          = _("Patriarch")
+class         = "Land"
+tech_req      = "Theocracy"
+impr_req      = "Ecclesiastical Palace"
+gov_req       = "Theocracy"
+obsolete_by   = "None"
+graphic       = "u.patriarch_o"
+graphic_alt   = "u.emissary"
+sound_move    = "m_diplomat"
+sound_move_alt = "m_generic"
+sound_fight   = "f_diplomat"
+sound_fight_alt = "f_generic"
+build_cost    = 50
+pop_cost      = 0
+attack        = 0
+defense       = 0
+hitpoints     = 8
+firepower     = 1
+move_rate     = 4
+vision_radius_sq = 4
+transport_cap = 0
+fuel          = 0
+uk_happy      = 0
+uk_shield     = 0
+uk_food       = 0
+uk_gold       = 0
+embarks       = "LandRail", "Helicopter"    ; transport helicopter only
+disembarks    = "LandRail", "Helicopter"
+flags         = "Unique", "Diplomat", "IgZOC", "NonMil", "HasNoZOC", "Expellable", "Cant_Pillage", "CanClaim", "Settlers", "NoVeteran"
+helptext      = _("\
+The Patriarch is a unique unit. He can only be created with Theocracy in a city with\
+ an Ecclesiastical Palace. The Patriarch can do whatever Diplomats can do. Bribing, however,\
+ is a different function for the Patriarch. He can convert units to your side at only 1/3 the\
+ cost of a normal Bribe action. Patriarchs can only do such conversions while you are\
+ a Theocracy. \n\
+Except for Bribing, Establishing Embassy, and Investigate City, other diplomatic actions will\
+ spend the Patriarch, making him unavailable for further use. A Patriarch may claim a tile for\
+ your nation if adjacent to a tile claim made inside your own national border. Foreign tile\
+ claims require the Patriarch to be accompanied by another unit. \
+")
+
 ;*** This unit can be turned on by uncommenting this, the Virtual class above, and adding "Virtual" as native to oceanic tiles
 ;*** in terrain.ruleset.
 ;[unit_sonar]

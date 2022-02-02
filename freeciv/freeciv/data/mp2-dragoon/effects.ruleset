@@ -5869,6 +5869,24 @@ reqs    =
       "Building", "Mausoleum of Mausolos","Player", TRUE
     }
 ;-----------------------------------------------
+[effect_patriarch_conversion]
+type    = "Actor_Bribe_Cost_Pct"
+value	= -67
+reqs	=
+    { "type",     "name",       "range"
+      "Action",   "Bribe Unit", "Local"
+      "Gov",      "Theocracy",  "Player"
+      "UnitType", "Patriarch",  "Local"
+    }
+;[effect_patriarch_incite]  ; needs actor multiplier instead of target multiplier
+;type    = "Actor_Incite_Cost_Pct"
+;value	= -67
+;reqs	=
+;    { "type",     "name",     "range"
+;      "Action", "Bribe Unit", "Local"
+;      "Gov",    "Theocracy",  "Player"
+;    }
+
 [effect_mausoleum_of_mausolos_bribe]
 type    = "Unit_Bribe_Cost_Pct"
 value	= 35

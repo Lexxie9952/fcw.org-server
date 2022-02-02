@@ -94,7 +94,7 @@ richness.
    Chemistry 900 (800)
    Astronomy, Feudalism, Trade, Republic 150 (145)
 
-   Misc techs rounded to clean numbers.
+   Misc techs rounded to clean numbers. 
    Philosophy now gives a 70% blueprint instead of a full tech.
 =============================================================
 15. Explorer renamed to Scout. Available with Horseback Riding,
@@ -323,7 +323,7 @@ bronze working go to 20.
 ==============================================================
 54. Theology gives blueprints for Theocracy.
 ==============================================================
-55.
+55. Theocracies can make the Patriarch unit.
 ==============================================================
 56.
 ==============================================================
