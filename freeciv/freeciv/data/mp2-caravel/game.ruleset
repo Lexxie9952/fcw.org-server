@@ -3395,7 +3395,7 @@ set =
       "autoattack", "enabled", FALSE
       "autoattack_style", 1, FALSE
       "barbarians", "DISABLED", FALSE
-      "blueprints", 80, FALSE
+      "blueprints", 70, FALSE
       "borders", "SEE_INSIDE", FALSE
       "casusbelli_allies", 1, FALSE      ; casus belli on one, is casus belli on all (allies).
       "casusbelliturns", 12, FALSE       ; how many turns casus belli lasts after an incident, if not reset. will go +1 higher for further incidents. will be reset by any new non-aggression pact.
