@@ -502,7 +502,10 @@ function create_act_sel_button(parent_id,
     //console.log("\nmaking target=%d subtarget=%d",tgt_id, sub_tgt_id);
     button_text = button_text.replace("Road", extras[sub_tgt_id]['name'])
     sub_target_override = sub_tgt_id;
-  } 
+  } else if (action_id == ACTION_SPY_BRIBE_UNIT) {
+    if (unit_type(units[actor_unit_id])['name'] == "Patriarch")
+      button_text = button_text.replace("Bribe Enemy", "Convert");
+  }
 
   if (action_images[action_id]) {
     button_text = render_action_image_into_button(button_text, action_id, sub_target_override);
@@ -988,10 +991,12 @@ function popup_bribe_dialog(actor_unit, target_unit, cost, act_id)
       .appendTo("div#game_page");
 
   dhtml += "Treasury contains " + unit_owner(actor_unit)['gold'] + " gold. ";
-  dhtml += "The price of bribing "
-              + nations[unit_owner(target_unit)['nation']]['adjective']
-              + " " + unit_types[target_unit['type']]['name']
-           + " is " + cost + ". ";
+
+  dhtml += "The cost of " 
+            + (unit_type(actor_unit)['name'] == "Patriarch" ? "converting " : "bribing ")
+            + nations[unit_owner(target_unit)['nation']]['adjective']
+            + " " + unit_types[target_unit['type']]['name']
+            + " is " + cost + ". ";
 
   bribe_possible = cost <= unit_owner(actor_unit)['gold'];
 
