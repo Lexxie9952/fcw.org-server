@@ -88,9 +88,12 @@ richness.
 =============================================================
 14. Techs and Costs:
    Monotheism 300 (384), Theology 400 (600), Theocracy 500 (725)
-   Invention 490 (468), Democracy 950 (875), Banking 450 (364)
+   Invention 490 (468), Democracy 950 (875), Banking 475 (364)
    Medicine 475 (468) Ironworking 65 (80). Philosophy 325 (276)
+   Navigation 500 (485). University 450 (415). 
    Chemistry 900 (800)
+   Astronomy, Feudalism, Trade, Republic 150 (145)
+
    Misc techs rounded to clean numbers.
    Philosophy now gives a 70% blueprint instead of a full tech.
 =============================================================

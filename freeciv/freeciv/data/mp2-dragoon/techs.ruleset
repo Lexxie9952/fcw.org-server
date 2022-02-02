@@ -148,7 +148,7 @@ req2     = "Mathematics"
 flags    = ""
 graphic     = "a.astronomy"
 graphic_alt = "-"
-cost = 145
+cost = 150
 
 [advance_atomic_theory]
 name     = _("Atomic Theory")
@@ -186,7 +186,7 @@ flags    = ""
 graphic     = "a.banking"
 graphic_alt = "-"
 helptext = _("Infantry upkeep: 1 gold. Blocks Philosophy bonus. Globally expires capital trade route bonus.")
-cost = 450
+cost = 475
 
 [advance_bridge_building]
 name     = _("Bridge Building")
@@ -397,7 +397,7 @@ req2     = "Monarchy"
 flags    = ""
 graphic     = "a.feudalism"
 graphic_alt = "-"
-cost = 145
+cost = 150
 helptext = _("Allows Castles (with Construction).")
 
 
@@ -663,7 +663,7 @@ flags    = ""
 graphic     = "a.navigation"
 graphic_alt = "-"
 helptext = _("Obsoletes Galley, Longboat, War Galley, Ram Ship.")
-cost = 485
+cost = 500
 
 [advance_nuclear_fission]
 name     = _("Nuclear Fission")
@@ -958,7 +958,7 @@ req2     = "Code of Laws"
 flags    = ""
 graphic     = "a.trade"
 graphic_alt = "-"
-cost = 145
+cost = 150
 
 [advance_university]
 name     = _("University")
@@ -967,7 +967,7 @@ req2     = "Philosophy"
 flags    = ""
 graphic     = "a.university"
 graphic_alt = "-"
-cost = 415
+cost = 450
 
 [advance_warrior_code]
 name     = _("Warrior Code")
