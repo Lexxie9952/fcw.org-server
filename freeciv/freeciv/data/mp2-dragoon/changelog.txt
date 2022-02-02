@@ -87,7 +87,7 @@ richness.
    (this is not +50% odds, it's +50% frequency)
 =============================================================
 14. Techs and Costs:
-   Monotheism 315 (384), Theology 400 (600), Theocracy 525 (725)
+   Monotheism 300 (384), Theology 400 (600), Theocracy 500 (725)
    Invention 490 (468), Democracy 950 (875), Banking 450 (364)
    Medicine 475 (468) Ironworking 65 (80). Philosophy 325 (276)
    Chemistry 900 (800)
@@ -151,7 +151,7 @@ richness.
 =============================================================
 27. Clarification: AAA are considered as part of 
    Marine corps land/air/sea. Thus, have gold upkeep not 
-   shield upkeep.
+   shield upkeep; and get Infantry build slot bonus.
 =============================================================
 28. Zeppelin 5 turns of fuel: more realistic and provides 
    more possible use for this special unit.
@@ -313,9 +313,12 @@ a minimum of 1 corruption, if there is any corruption.
 52. AAA need 9 turns of service + 3 turns to convert to M.Sam
     (was 10 + 4).
 ==============================================================
-53. 
+53. Small balance adjust to early starting techs, gives micro-
+expansion of early bronze age strategic pathways, decreases
+new-gov rush slightly. Most techs go to 22, masonry and
+bronze working go to 20.
 ==============================================================
-54.
+54. Theology gives blueprints for Theocracy.
 ==============================================================
 55.
 ==============================================================

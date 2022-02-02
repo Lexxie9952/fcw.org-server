@@ -137,6 +137,13 @@ function tech_researched_handler(tech, player, how)
     notify.event(player, NIL, E.TECH_GAIN,
     _("[`events/democracy`]<br><font color=#ffff90><b>Discovery of Democracy sparks educational socioeconomic trends.<br>All Workers everywhere can upgrade to Workers II for free.</b></font>"))
   end
+--------------------------------
+  -- Inform of Theocracy blueprints upon discovering Theology
+  if id == find.tech_type("Theology").id then
+    gained = player:give_tech(find.tech_type("Theocracy"), 30, false, "researched")
+    notify.event(player, NIL, E.TECH_GAIN,
+    _("[`events/theology`]<br><font color=#ffff90><b>Theology shows the way to divine laws and new forms of rule. <br>Priests give you blueprints for Theocracy.</b></font>"))
+  end
 -------------------------
   if id == find.tech_type("Philosophy").id and how == "researched" then
 
@@ -196,7 +203,7 @@ function tech_researched_handler(tech, player, how)
   
     -- Give the player free blueprints
     -- This will give a free advance for each player that shares research.
-    gained = player:give_tech(nil, 70, false, "researched")
+    gained = player:give_tech(nil, 30, false, "researched")
 
       -- Notify the player. Include the tech names in a way that makes it
       -- look natural no matter if each tech is announced or not.

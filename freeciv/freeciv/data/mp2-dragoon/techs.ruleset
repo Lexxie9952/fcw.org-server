@@ -129,7 +129,7 @@ req2     = "None"
 flags    = ""
 graphic     = "a.alphabet"
 graphic_alt = "-"
-cost = 24
+cost = 22
 helptext = _("Obsoletes Boat.")
 
 [advance_amphibious_warfare]
@@ -205,7 +205,7 @@ req2     = "None"
 flags    = ""
 graphic     = "a.bronze_working"
 graphic_alt = "-"
-cost = 24
+cost = 20
 
 [advance_ceremonial_burial]
 name     = _("Ceremonial Burial")
@@ -214,7 +214,7 @@ req2     = "None"
 flags    = ""
 graphic     = "a.ceremonial_burial"
 graphic_alt = "-"
-cost = 24
+cost = 22
 
 [advance_chemistry]
 name     = _("Chemistry")
@@ -566,7 +566,7 @@ flags    = ""
 graphic     = "a.masonry"
 graphic_alt = "-"
 helptext = _("Allows Forts.")
-cost = 24
+cost = 20
 
 [advance_mass_production]
 name     = _("Mass Production")
@@ -643,7 +643,7 @@ flags    = ""
 graphic     = "a.monotheism"
 helptext = _("Obsoletes Elephants.")
 graphic_alt = "-"
-cost = 315
+cost = 300
 
 [advance_mysticism]
 name     = _("Mysticism")
@@ -730,7 +730,7 @@ flags    = ""
 graphic     = "a.pottery"
 graphic_alt = "-"
 helptext = _("Allows Quays.")
-cost = 24
+cost = 22
 
 [advance_radar]
 name     = _("Radar")
@@ -930,7 +930,7 @@ flags    = ""
 graphic     = "a.theocracy"
 graphic_alt = "-"
 helptext = _("Obsoletes Pax Dei. Allows government Theocracy.")
-cost = 525
+cost = 500
 
 [advance_theology]
 name     = _("Theology")
@@ -939,7 +939,7 @@ req2     = "Monotheism"
 flags    = ""
 graphic     = "a.theology"
 graphic_alt = "-"
-helptext = _("Obsoletes Oracle. +1 Effect on Cathedral, Michelangelos Chapel.")
+helptext = _("Obsoletes Oracle. +1 Effect for Cathedral/Michelangelo. Gives Theocracy blueprints.")
 cost = 400
 
 [advance_theory_of_gravity]
@@ -976,7 +976,7 @@ req2     = "None"
 flags    = ""
 graphic     = "a.warrior_code"
 graphic_alt = "-"
-cost = 24
+cost = 22
 helptext = _("Foot soldiers may make Hideouts.")
 
 [advance_writing]

@@ -2473,13 +2473,14 @@ bonuses       =
      "AirAttacker", "DefenseDivider", 1
      "AirAttacker", "DefenseMultiplier", 1
    }
-flags         = "NeverBlocked", "AntiAir", "Marines", "WillNever", "TransportDefender"
+flags         = "NeverBlocked", "AntiAir", "Marines", "WillNever", "TransportDefender", "MultiSlot"
 roles         = ""
 helptext      = _("\
 Anti-Aircraft Artillery (AAA) can attack almost anything from anywhere. AAA get a\
  2× bonus against Air units. AAA qualify as weaponry for Marines and have the same\
  abilities：they can be transported on any unit that carries Marines, can attack from\
- or to non-native tiles, and do not lose a turn when unloading. Transported AAA can\
+ or to non-native tiles, do not lose a turn when unloading, and can use extra build\
+ slots. Transported AAA can\
  defend their tile on both Land and Sea. (AAA can’t attack Submarines, Missiles,\
  or Jet Bombers.)\
 "), _("
