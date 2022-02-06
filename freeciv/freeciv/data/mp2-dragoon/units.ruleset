@@ -1541,13 +1541,16 @@ Theocratic nations can maintain Zealots without paying\
  their steep upkeep. (Zealots are unhappy if not under Theocracy,\
  requiring high upkeep to stay content.) Zealots\
  produced in a city with Ecclesiastical Palace are inspired by\
- fervorous faith to +1 higher veteran level. \
+ fervorous faith to +1 higher veteran level. \n\
 "), _("\
 Zealots fervently defend their homeland, and can do surprise skirmish\
  assaults to snipe and injure foreign occupants：Up to 4 invaders\
  on the tile will endure three combat rounds without defense. Skirmish\
  assaults can also be done to foreign occupied cities if they have\
- a remaining Foreign National population.\
+ a remaining Foreign National population. \n\
+"), _("\
+Zealots can Estabish Home City in any allied city that is Theocracy,\
+ allowing control to pass between nations who share the same faith.\
 ")
 bombard_rate = 3
 

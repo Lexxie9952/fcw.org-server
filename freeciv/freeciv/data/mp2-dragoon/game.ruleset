@@ -2264,6 +2264,19 @@ actor_reqs    =
 ; REMOVE LINE BELOW TO ALLOW GIVING UNITS TO ALLIES THROUGH HOME CITY COMMAND
       "DiplRel",   "Foreign",  "Local", FALSE
     }
+[actionenabler_change_ally_home_city_zealot_caliphate]
+action = "Home City"
+actor_reqs    =
+    { "type",      "name",        "range", "present"
+      "UnitFlag",  "NoHome",      "Local", FALSE
+      "UnitState", "HasHomeCity", "Local", TRUE
+      "UnitType",  "Zealots",     "Local", TRUE
+    }
+target_reqs    =
+    { "type", "name",      "range", "present"
+      "Gov",  "Theocracy", "Player", TRUE
+    }
+
 ; Allow no-home caravans to be "homed" so they can be used for a Trade Route:
 [actionenabler_change_home_commerce]
 action = "Home City"

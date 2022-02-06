@@ -6283,11 +6283,9 @@ value	= 34  ; [50,33,20,15,15,15] → [67,44,26,20,20,20]
 reqs	=
     { "type",     "name",            "range", "present"
       "Building", "Statue of Zeus",  "Player", TRUE
-      "Gov",     "Republic",         "Player", FALSE
-      "Gov",     "Democracy",        "Player", FALSE
-      "Gov",     "Theocracy",        "Player", FALSE
-      "Gov",     "Communism",        "Player", FALSE
-      "Gov",     "Nationalism",      "Player", FALSE
+      "Tech",    "Tactics",          "Player", FALSE
+      "Tech",    "Monotheism",       "Player", FALSE
+      "Tech",    "Communism",        "Player", FALSE
     }
 ;************************************************************************ Sun Tzu
 [effect_sun_tzus_war_academy]

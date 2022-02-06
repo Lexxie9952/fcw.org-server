@@ -112,12 +112,10 @@ richness.
 =============================================================
 17. Ecclesiastical Palace, cost:70 (was 90). (same as Palace)
 =============================================================
-18. Zeus promotion bonus simplified: instead of The Republic
-   tech turning it off, it's having Republic government 
-   (or any later government) that turns off the bonus.
-   This would allows monarchies and despotism to pursue 
-   Banking without the Statue losing its "pre-Republic bonus
-   effect."
+18. Zeus promotion bonus changed: instead of The Republic
+   tech turning it off, it's Monotheism or Communism that
+   turns off the bonus. The two different "make content"
+   bonuses were clarified.
 =============================================================
 19. Adam Smith wonder adjusted back to 300 gold; the former 
    cost increase had been implemented before the WYSIWYG 
@@ -325,7 +323,12 @@ bronze working go to 20.
 ==============================================================
 55. Theocracies can make the Patriarch unit.
 ==============================================================
-56.
+56. Zealots can change home city to a foreign ally who is 
+ Theocratic. This allows more fluid strategies of bringing 
+ all Zealots to fight together under the same command, and
+ even for former Theocracies to re-home Zealots into allied
+ Theocracies in order to avoid the double-unhappiness
+ upkeep which Zealots suffer when not under Theocracy.
 ==============================================================
 57.
 ==============================================================

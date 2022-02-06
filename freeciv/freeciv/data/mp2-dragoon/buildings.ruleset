@@ -2590,11 +2590,11 @@ sound_alt	= "w_generic"
 helptext	= _("\
 The powerful Zeus gives order and organization to both city and nation.\
  In every city in your nation, this Wonder neutralizes one unhappy\
- citizen caused by military units. (For governments who do not experience\
- discontent from military activity, it simply makes one citizen content.) \n\
+ citizen caused by military units. In Monarchies and non-representative\
+ government, the Statue of Zeus makes one citizen content. \n\
 "), _("
-Before Republic and later governments, the Statue of Zeus increases promotion\
- frequency by one third:\
+Before the discovery of Monotheism or Communism, the Statue of Zeus increases\
+ veteran promotion frequency by one third:\
  [50,33,20,15]% → [67,44,26,20]% \n\
 "), _("
 In the city the statue is located, it makes one citizen happy and provides\
