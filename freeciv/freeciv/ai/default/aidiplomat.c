@@ -686,6 +686,11 @@ static bool dai_diplomat_bribe_nearby(struct ai_type *ait,
 
     /* Should we make the expense? */
     cost = unit_bribe_cost(pvictim, pplayer);
+    cost += (cost * get_target_bonus_effects(NULL, unit_owner(punit),
+                                      unit_owner(pvictim), game_city_by_number(punit->homecity),
+                                      NULL,  unit_tile(pvictim), punit, unit_type_get(punit),
+                                      NULL, NULL, action_by_number(ACTION_SPY_BRIBE_UNIT),
+                                      EFT_ACTOR_BRIBE_COST_PCT)) / 100;
     if (!threat) {
       /* Don't empty our treasure without good reason! */
       gold_avail = pplayer->economic.gold - dai_gold_reserve(pplayer);
