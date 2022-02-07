@@ -321,7 +321,8 @@ bronze working go to 20.
 ==============================================================
 54. Theology gives blueprints for Theocracy.
 ==============================================================
-55. Theocracies can make the Patriarch unit.
+55. Theocracies can make the Patriarch unit, which is a
+diplomatic unit that bribes and incites at 1/3 the cost.
 ==============================================================
 56. Zealots can change home city to a foreign ally who is 
  Theocratic. This allows more fluid strategies of bringing 
@@ -330,9 +331,9 @@ bronze working go to 20.
  Theocracies in order to avoid the double-unhappiness
  upkeep which Zealots suffer when not under Theocracy.
 ==============================================================
-57.
+57. Theocracy can incite other cities at a 33% discount.
 ==============================================================
-58.
+58. 
 ==============================================================
 59.
 ==============================================================

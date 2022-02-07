@@ -5878,14 +5878,15 @@ reqs	=
       "Gov",      "Theocracy",  "Player"
       "UnitType", "Patriarch",  "Local"
     }
-;[effect_patriarch_incite]  ; needs actor multiplier instead of target multiplier
-;type    = "Actor_Incite_Cost_Pct"
-;value	= -67
-;reqs	=
-;    { "type",     "name",     "range"
-;      "Action", "Bribe Unit", "Local"
-;      "Gov",    "Theocracy",  "Player"
-;    }
+[effect_patriarch_incite]
+type    = "Actor_Incite_Cost_Pct"
+value	= -34
+reqs	=
+    { "type",     "name",               "range"
+      "Action",   "Incite City Escape", "Local"
+      "Gov",      "Theocracy",          "Player"
+      "UnitType", "Patriarch",          "Local"
+    }
 
 [effect_mausoleum_of_mausolos_bribe]
 type    = "Unit_Bribe_Cost_Pct"
@@ -7235,6 +7236,14 @@ reqs	=
     { "type", "name", "range", "present"
       "Gov", "Theocracy", "Player", TRUE
     }
+[effect_cheaper_incite_theocracy]
+type    = "Actor_Incite_Cost_Pct"
+value	= -33
+reqs	=
+    { "type",     "name",               "range"
+      "Gov",      "Theocracy",          "Player"
+    }
+
 [effect_incite_democracy]
 type    = "Incite_Cost_Pct"
 value	= 200

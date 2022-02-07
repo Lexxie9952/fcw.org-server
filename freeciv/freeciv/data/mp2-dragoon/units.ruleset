@@ -5668,7 +5668,7 @@ sound_move    = "m_diplomat"
 sound_move_alt = "m_generic"
 sound_fight   = "f_diplomat"
 sound_fight_alt = "f_generic"
-build_cost    = 50
+build_cost    = 55
 pop_cost      = 0
 attack        = 0
 defense       = 0
@@ -5684,17 +5684,26 @@ uk_food       = 0
 uk_gold       = 0
 embarks       = "LandRail", "Helicopter"    ; transport helicopter only
 disembarks    = "LandRail", "Helicopter"
-flags         = "Unique", "Diplomat", "IgZOC", "NonMil", "HasNoZOC", "Expellable", "Cant_Pillage", "CanClaim", "Settlers", "NoVeteran"
+flags         = "Unique", "Diplomat", "Unbribable", "IgZOC", "NonMil", "HasNoZOC", "Expellable", "Cant_Pillage", "CanClaim", "Settlers", "NoVeteran"
+; No veteran levels (level name is never displayed)
+veteran_names = _("chosen one")
+veteran_base_raise_chance = 0
+veteran_work_raise_chance = 0
+veteran_power_fact = 125
+veteran_move_bonus = 0
 helptext      = _("\
-The Patriarch is a unique unit. He can only be created with Theocracy in a city with\
- an Ecclesiastical Palace. The Patriarch can do whatever Diplomats can do. Bribing, however,\
- is a different function for the Patriarch. He can convert units to your side at only 1/3 the\
- cost of a normal Bribe action. Patriarchs can only do such discounted conversions while you are\
- a Theocracy. \n\
-Except for Converting units, Establishing Embassy, and Investigate City, other diplomatic actions will\
- spend the Patriarch, making him unavailable for further use. A Patriarch may claim a tile for\
- your nation if adjacent to a tile claim made inside your own national border. Foreign tile\
- claims require the Patriarch to be accompanied by another unit. \
+The Patriarch is unique—you can make only one, and only with Theocracy in a\
+ city with an Ecclesiastical Palace. He can do what Diplomats can do, with extra\
+ powers of persuasion. Under Theocracy, the Patriarch converts units to join your\
+ side at 1/3 the cost of a normal Bribe; and incites cities to become yours at\
+ one third the normal cost. \n\
+Investigating, Converting, Establishing Embassy, and Inciting can be done multiple times if\
+ successful. Other actions spend the Patriarch, allowing no further use. A Patriarch may\
+ claim a tile for your nation if adjacent to a tile claim made inside your own national border.\
+ Foreign tile claims require the Patriarch to be accompanied by another unit. \n\
+"), _("\
+In diplomatic contests, the wiles, power, and influence of the Patriarch make him equal\
+ to a Spy in strength.\
 ")
 
 ;*** This unit can be turned on by uncommenting this, the Virtual class above, and adding "Virtual" as native to oceanic tiles

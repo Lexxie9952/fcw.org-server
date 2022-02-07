@@ -210,8 +210,9 @@ Theocracy is formed on religious beliefs which are the law of the land. \
 "), _("\
 The people are devoted and often willing to die for their faith. Cities very\
  near a capital have very low corruption. Cost for enemies to incite cities or\
- bribe units is 2x, but Zealots cannot be bribed. Enemies cannot establish\
- embassies without first making Ceasefire or Peace. \
+ bribe units is 2x, but Zealots cannot be bribed. Cost to incite foreign cities\
+ is reduced by a third. Enemies cannot establish embassies without first making\
+ Ceasefire or Peace. \
 "), _("\
 Improvements that appease unhappy citizens add +1 base gold in tithes for each\
  citizen appeased. Tithes also boost gold income by +20%, but science output\

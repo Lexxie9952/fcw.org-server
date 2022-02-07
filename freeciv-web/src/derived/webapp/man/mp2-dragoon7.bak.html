@@ -4869,8 +4869,6 @@ Except for Bribing, Establishing Embassy, and Investigate City, diplomatic actio
   • does not use up the Diplomat.
   • is done to foreign individual units alone on a tile.
   * '<b style="color:#9aa">Bribe Enemy Unit</b>' (does not spend the unit)
-➤ Can <b style="color:#9aa">Upgrade</b>
-  • upgrades to Spy.
 ➤ Can <b style="color:#9aa">Fortify</b>. Only makes the Diplomat stay put.
 ➤ <b style="color:#9aa">Expellable</b>: can be expelled from foreign tiles.
 ➤ May acquire veteran status.
@@ -5431,19 +5429,22 @@ Peasants can only be made in one city, but you can make more than one per turn u
 </pre>
 </div>
 <div class='item' id='utype101'>
-  <h3 class='section'>Patriarch</h3>
-  
-  <pre class='cost'>Cost: 50 shields</pre>
-  <pre class='upkeep'>Upkeep: 0</pre>
-  <pre class='moves'>Moves: 4</pre>
-  <pre class='vision'>Vision: 2.00 tiles</pre>
-  <pre class='attack'>Attack: 0</pre>
-  <pre class='defense'>Defense: 0</pre>
-  <pre class='firepower'>Firepower: 1</pre>
-  <pre class='hitpoints'>Hitpoints: 8</pre>
-  <pre class='obsolete'>Obsolete by: None</pre>
-  <pre class='helptext'><b class='unit_desc'>The Patriarch is a unique unit. He can only be manifested under Theocracies in a city with the Ecclesiastical Palace. The Patriarch can do whatever Diplomats can do. Bribing, however, is a different function for the Patriarch. He can convert units to your side at only 1/3 the cost of a normal Bribe action. Patriarchs can only do such discounted conversions while you are a Theocracy. Except for Converting units, Establishing Embassy, and Investigate City, other diplomatic actions will spend the Patriarch, making him unavailable for further use. A Patriarch may claim a tile for your nation if adjacent to a tile claim made inside your own national border. Foreign tile claims require the Patriarch to be accompanied by another unit.</b>
-  <hr style='border-top: 1px solid #000'>➤ Belongs to Land unit class.
+<h3 class='section'>Patriarch</h3>
+
+<pre class='cost'>Cost: 55 shields</pre>
+<pre class='upkeep'>Upkeep: 0</pre>
+<pre class='moves'>Moves: 4</pre>
+<pre class='vision'>Vision: 2.00 tiles</pre>
+<pre class='attack'>Attack: 0</pre>
+<pre class='defense'>Defense: 0</pre>
+<pre class='firepower'>Firepower: 1</pre>
+<pre class='hitpoints'>Hitpoints: 8</pre>
+<pre class='obsolete'>Obsolete by: None</pre>
+<pre class='helptext'><b class='unit_desc'>The Patriarch is unique—you can make only one, and only with Theocracy in a city with an Ecclesiastical Palace. He can do what Diplomats can do, with extra powers of persuasion. Under Theocracy, the Patriarch converts units to join your side at 1/3 the cost of a normal Bribe; and incites cities to become yours at one third the normal cost. 
+Investigating, Converting, Establishing Embassy, and Inciting can be done multiple times if successful. Other actions spend the Patriarch, allowing no further use. A Patriarch may claim a tile for your nation if adjacent to a tile claim made inside your own national border. Foreign tile claims require the Patriarch to be accompanied by another unit. 
+</b>
+<b class='unit_desc'>In diplomatic contests, the wiles, power, and influence of the Patriarch make him equal to a Spy in strength.</b>
+<hr style='border-top: 1px solid #000'>➤ Belongs to Land unit class.
   • Slowed down while damaged.
   • <b style="color:#9aa">AIRLIFT</b>: Can be airlifted if it has remaining moves.
   • Can't do actions as Cargo. Must first unload.
@@ -5462,24 +5463,32 @@ Peasants can only be made in one city, but you can make more than one per turn u
       · can't be done at War if city is Theocratic or has Police Station.
       * getting caught before performing this action during Armistice, Cease-fire, or Peace gives the victim Casus Belli against you.
   * '<b style="color:#9aa">Investigate City</b>' (does not spend the unit)
+➤ Can '<b style="color:#9aa">Incite a Revolt and Escape</b>':
+  • Is 1/3 the cost if done with Theocracy government.
+  • does not spend the Patriarch.
+  • is done to foreign cities.
+  • can lead to a diplomatic battle against a defender.
 ➤ Can do Hostile Diplomatic Operations:
-  • uses up the Diplomat.
+  • uses up the Patriarch.
   • is done to foreign cities.
   • can lead to a diplomatic battle against a defender.
   * '<b style="color:#9aa">Sabotage City</b>' selects random building or production.
   * '<b style="color:#9aa">Steal Technology</b>'
-  * '<b style="color:#9aa">Incite a Revolt</b>'
   * '<b style="color:#9aa">Steal Map Fragments</b>'
 ➤ Can do Field Operations:
-  • does not use up the Diplomat.
+  • does not use up the Patriarch.
   • is done to foreign individual units alone on a tile.
   * '<b style="color:#9aa">Convert Unit</b>' (does not spend the unit)
     * Is 1/3 the cost of 'Bribe Enemy Unit' if done with Theocracy government.
-➤ Can <b style="color:#9aa">Upgrade</b>
-  • upgrades to Spy.
-➤ Can <b style="color:#9aa">Fortify</b>. Only makes the Diplomat stay put.
+➤ Can <b style="color:#9aa">Fortify</b>. Only makes the Patriarch stay put.
 ➤ <b style="color:#9aa">Expellable</b>: can be expelled from foreign tiles.
 ➤ Will never achieve veteran status.
+
+The Patriarch has his own veteran level:
+<table class="vet_level">
+<tr><th>Veteran level</th><th>Power factor</th><th>Promotion odds</th><th>Move bonus</th></tr>
+<tr><hr style="border-top: 1px solid #000"></tr>
+<tr><td style='color: #f68'>chosen one</td><td>125%</td><td>0%</td> <td>-</td></tr>
 </pre>
 </div>
 

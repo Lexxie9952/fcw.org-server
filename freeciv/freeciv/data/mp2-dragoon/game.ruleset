@@ -734,12 +734,13 @@ target_reqs  =
     }
 
 ; SPY: normal establish embassy--if not at war 
-[actionenabler_establish_embassy_spy_diplomat]
+[actionenabler_establish_embassy_spy_diplomat_patriarch]
 action       = "Establish Embassy"
 actor_reqs    =
     { "type",         "name",          "range", "present"
       "UnitFlag",     "Diplomat",      "Local", TRUE
-      "UnitType",     "Diplomat",      "Local", TRUE
+      "UnitType",     "Emissary",      "Local", FALSE
+      "UnitType",     "Siege Ram",     "Local", FALSE
       "UnitState",    "OnLivableTile", "Local", TRUE
       "UnitState",    "Transported",   "Local", FALSE
       "MinMoveFrags", "1",             "Local", TRUE
@@ -751,12 +752,13 @@ target_reqs  =
       "NationGroup", "Barbarian", "Player", FALSE
     }
 ;if at war, police station or fundie will block embassy: do a cease-fire first!
-[actionenabler_establish_embassy_spy_diplomat_war]
+[actionenabler_establish_embassy_spy_diplomat_patriarch_diplomat_war]
 action       = "Establish Embassy"
 actor_reqs    =
     { "type",         "name",          "range", "present"
       "UnitFlag",     "Diplomat",      "Local", TRUE
-      "UnitType",     "Diplomat",      "Local", TRUE
+      "UnitType",     "Emissary",      "Local", FALSE
+      "UnitType",     "Siege Ram",     "Local", FALSE
       "UnitState",    "OnLivableTile", "Local", TRUE
       "UnitState",    "Transported",   "Local", FALSE
       "MinMoveFrags", "1",             "Local", TRUE
@@ -931,6 +933,7 @@ action = "Incite City"
 actor_reqs    =
     { "type",         "name",          "range", "present"
       "UnitFlag",     "Diplomat",      "Local", TRUE
+      "UnitType",     "Patriarch",     "Local", FALSE
       "DiplRel",      "Alliance",      "Local", FALSE
       "DiplRel",      "Team",          "Local", FALSE
       "UnitState",    "OnLivableTile", "Local", TRUE
@@ -950,8 +953,10 @@ target_reqs  =
 action = "Incite City Escape"
 actor_reqs    =
     { "type",         "name",          "range", "present"
-      "UnitFlag",     "Spy",           "Local", TRUE
+      "UnitFlag",     "Diplomat",      "Local", TRUE
       "UnitType",     "Siege Ram",     "Local", FALSE
+      "UnitType",     "Diplomat",      "Local", FALSE
+      "UnitType",     "Emissary",      "Local", FALSE
       "DiplRel",      "Alliance",      "Local", FALSE
       "DiplRel",      "Team",          "Local", FALSE
       "UnitState",    "OnLivableTile", "Local", TRUE
