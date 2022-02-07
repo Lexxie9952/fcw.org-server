@@ -128,7 +128,7 @@ richness.
 =============================================================
 21. Hideouts  
    temporary patch requirement for unit to be alone
-   was fixed after a bug fig no longer requires this.
+   was fixed after a bug fix no longer requires this.
 =============================================================
 22. Tile Claims 
    Fixed a bug where tile claims were only cardinally adjacent
@@ -140,7 +140,8 @@ richness.
 =============================================================
 23. University Pre-req for Steam Engine changed to
    Magnetism. In most cases this will mean Frigates now
-   come two techs before Ironclads.
+   come two techs before Ironclads; rather than possibly
+   after.
 =============================================================
 24. No sea commerce units cause unhappiness, for consistency
    and simplification.
@@ -333,7 +334,9 @@ diplomatic unit that bribes and incites at 1/3 the cost.
 ==============================================================
 57. Theocracy can incite other cities at a 33% discount.
 ==============================================================
-58. 
+58. Crew Repair simplified: every type of ship gets 10% repair
+effectively +1 over previous, slight buff to ship durability
+and usability.
 ==============================================================
 59.
 ==============================================================
