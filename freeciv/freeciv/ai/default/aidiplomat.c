@@ -201,14 +201,31 @@ void dai_choose_diplomat_offensive(struct ai_type *ait,
     find_city_to_diplomat(pplayer, punit, &acity, &time_to_dest, pfm);
 
     pf_map_destroy(pfm);
-    unit_virtual_destroy(punit);
 
     if (acity == NULL
 	|| BV_ISSET(ai->stats.diplomat_reservations, acity->id)) {
       /* Found no target or city already considered */
+      unit_virtual_destroy(punit);
       return;
     }
     incite_cost = city_incite_cost(pplayer, acity);
+    /* Actor cost mod. Target cost mod is in city_incite_cost(..) */
+    incite_cost += (incite_cost
+           * get_target_bonus_effects(NULL,
+                                      unit_owner(punit),
+                                      city_owner(acity),
+                                      game_city_by_number(punit->homecity),
+                                      NULL,
+                                      city_tile(acity),
+                                      punit,
+                                      ut,
+                                      NULL,
+                                      NULL,
+                                      action_by_number(ACTION_SPY_INCITE_CITY),
+                                      EFT_ACTOR_INCITE_COST_PCT))
+       / 100;
+    incite_cost = MAX(0, incite_cost);
+    unit_virtual_destroy(punit);
     if (POTENTIALLY_HOSTILE_PLAYER(ait, pplayer, city_owner(acity))
         && (is_action_possible_on_city(ACTION_SPY_INCITE_CITY,
                                        pplayer, acity)
@@ -511,6 +528,22 @@ static void find_city_to_diplomat(struct player *pplayer, struct unit *punit,
     }
 
     incite_cost = city_incite_cost(pplayer, acity);
+    /* Actor cost mod. Target cost mod is in city_incite_cost(..) */
+    incite_cost += (incite_cost
+           * get_target_bonus_effects(NULL,
+                                      unit_owner(punit),
+                                      aplayer,
+                                      game_city_by_number(punit->homecity),
+                                      NULL,
+                                      city_tile(acity),
+                                      punit,
+                                      unit_type_get(punit),
+                                      NULL,
+                                      NULL,
+                                      action_by_number(ACTION_SPY_INCITE_CITY),
+                                      EFT_ACTOR_INCITE_COST_PCT))
+       / 100;
+    incite_cost = MAX(0, incite_cost);
     can_incite = (incite_cost < INCITE_IMPOSSIBLE_COST)
         && (is_action_possible_on_city(ACTION_SPY_INCITE_CITY,
                                        pplayer, acity)

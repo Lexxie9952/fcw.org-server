@@ -3356,7 +3356,9 @@ static void check_pollution(struct city *pcity)
   the number of happy, unhappy and angry citizens, whether it is
   celebrating, how close it is to the capital, how many units it has and
   upkeeps, presence of courthouse, its buildings and wonders, and who
-  originally built it.
+  originally built it. NOTE: this is the "actorless" incite cost in a 
+  vacuum, before we know who is the actor player, actor unit, and any 
+  bonus effects tied to those. 
 **************************************************************************/
 int city_incite_cost(struct player *pplayer, struct city *pcity)
 {

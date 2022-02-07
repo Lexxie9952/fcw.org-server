@@ -460,6 +460,10 @@ adv_want dai_effect_value(struct player *pplayer, struct government *gov,
     /* Negative amounts are desirable */
     v -= amount / 5; 
     break;
+  case EFT_ACTOR_INCITE_COST_PCT:
+    /* Negative amounts are desirable */
+    v -= amount / 5; 
+    break;
   case EFT_UNIT_BRIBE_COST_PCT:
     num = num_affected_units(peffect, ai);
     v += ((2 * c + num) * amount) / 400;

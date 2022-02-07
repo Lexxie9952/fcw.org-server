@@ -1249,7 +1249,22 @@ bool diplomat_incite(struct player *pplayer, struct unit *pdiplomat,
 
   /* Get incite cost, ignoring any previously saved value. */
   revolt_cost = city_incite_cost(pplayer, pcity);
-
+  /* Actor cost mod. Target cost mod is in city_incite_cost(..) */
+  revolt_cost += (revolt_cost
+           * get_target_bonus_effects(NULL,
+                                      unit_owner(pdiplomat),
+                                      cplayer,
+                                      game_city_by_number(pdiplomat->homecity),
+                                      NULL,
+                                      ctile,
+                                      pdiplomat,
+                                      unit_type_get(pdiplomat),
+                                      NULL,
+                                      NULL,
+                                      paction,
+                                      EFT_ACTOR_INCITE_COST_PCT))
+       / 100;
+  revolt_cost = MAX(0, revolt_cost);
   /* If player doesn't have enough gold, can't incite a revolt. */
   if (pplayer->economic.gold < revolt_cost) {
     notify_player(pplayer, ctile, E_MY_DIPLOMAT_FAILED, ftc_server,

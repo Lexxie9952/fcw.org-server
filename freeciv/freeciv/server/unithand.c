@@ -2637,9 +2637,18 @@ void handle_unit_action_query(struct connection *pc,
     if (pcity
         && is_action_enabled_unit_on_city(action_type,
                                           pactor, pcity)) {
+      int incite_cost = city_incite_cost(pplayer, pcity);
+      /* Actor cost mod. Target cost mod is in city_incite_cost(..) */
+      incite_cost += (incite_cost
+              * get_target_bonus_effects(NULL, unit_owner(pactor),
+                                          city_owner(pcity), game_city_by_number(pactor->homecity),
+                                          NULL, city_tile(pcity), pactor, unit_type_get(pactor),
+                                          NULL, NULL, action_by_number(action_type),
+                                          EFT_ACTOR_INCITE_COST_PCT)) / 100;
+      incite_cost = MAX(0, incite_cost);   
       dsend_packet_unit_action_answer(pc,
                                       actor_id, target_id,
-                                      city_incite_cost(pplayer, pcity),
+                                      incite_cost,
                                       action_type, disturb_player);
     } else {
       illegal_action(pplayer, pactor, action_type,

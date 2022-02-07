@@ -154,10 +154,19 @@ Action_Resist_Pct
 
 Actor_Bribe_Cost_Pct
     Increases the actor player's cost of bribing units by this amount percent.
-    Use negative numbers to decrease the bribe cost. Note: Unit_Bribe_Cost_Pct
-    is the cost modifier based on the type of victim unit and who is the victim
-    player, while with Actor_Bribe_Cost_Pct, the Player and Unit reqs refer to
-    the actor player and unit. 
+    Use negative numbers to decrease the bribe cost. Note: "Unit_Bribe_Cost_Pct"
+    is the cost modifier based on the victim unit and the victim player.
+    With "Actor_Bribe_Cost_Pct", the Player and Unit reqs refer to
+    the actor player and unit. The city req refers to the home city of the
+    actor unit.
+
+Actor_Incite_Cost_Pct
+    Increases the actor player's cost of inciting cities by this amount percent.
+    Use negative numbers to decrease the incite cost. Note: "Incite_Cost_Pct"
+    is the cost modifier based on the player and city who are the victim of 
+    the incite action. With "Actor_Incite_Cost_Pct", the Player and Unit reqs
+    refer to the actor player and unit. The city req refers to the home city 
+    of the actor unit.
 
 Airlift
     Allow airlift to/from a city.
@@ -361,7 +370,8 @@ Improvement_Sale_Pct
     to gold when the building is sold.
 
 Incite_Cost_Pct
-    Increases revolt cost by amount percent.
+    Increases revolt cost by amount percent. Reqs refer to the scope of the 
+    victim player and city. See also, "Actor_Incite_Cost_Pct".
 
 Inspire_Partisans
     Partisan units (defined in units.ruleset) may spring up when this player's 
@@ -677,7 +687,8 @@ Unit_Buy_Cost_Pct
 
 Unit_Bribe_Cost_Pct
     Increases unit bribe cost by amount percent. Requirements are from the
-    point of view of the target unit, not the briber.
+    point of view of the target unit, not the briber. See also,
+    "Actor_Bribe_Cost_Pct".
 
 Unit_No_Lose_Pop
     No population lost when a city's defender is lost.

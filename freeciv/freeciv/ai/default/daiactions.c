@@ -157,6 +157,22 @@ adv_want dai_action_value_unit_vs_city(struct action *paction,
     int incite_cost, expenses;
 
     incite_cost = city_incite_cost(actor_player, target_city);
+    /* Actor cost mod. Target cost mod is in city_incite_cost(..) */
+    incite_cost += (incite_cost
+           * get_target_bonus_effects(NULL,
+                                      actor_player,
+                                      target_player,
+                                      game_city_by_number(actor_unit->homecity),
+                                      NULL,
+                                      city_tile(target_city),
+                                      actor_unit,
+                                      unit_type_get(actor_unit),
+                                      NULL,
+                                      NULL,
+                                      action_by_number(ACTION_SPY_INCITE_CITY),
+                                      EFT_ACTOR_INCITE_COST_PCT))
+       / 100;
+    incite_cost = MAX(0, incite_cost);
     dai_calc_data(actor_player, NULL, &expenses, NULL);
 
     if (incite_cost <= actor_player->economic.gold - 2 * expenses) {

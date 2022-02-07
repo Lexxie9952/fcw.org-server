@@ -363,6 +363,9 @@ extern "C" {
 /* Similar to unit_bribe_cost_pct but alters the cost based on actor player and actor unit (not target) */
 #define SPECENUM_VALUE140 EFT_ACTOR_BRIBE_COST_PCT
 #define SPECENUM_VALUE140NAME "Actor_Bribe_Cost_Pct"
+/* Similar to incite_cost_pct but alters the cost based on actor player (not target player) */
+#define SPECENUM_VALUE141 EFT_ACTOR_INCITE_COST_PCT
+#define SPECENUM_VALUE141NAME "Actor_Incite_Cost_Pct"
 
 /* FCW does not have /common and needs to hard code any changes or re-ordering of the above in effects.js */
 /********************************************************************************************************~*/
