@@ -85,7 +85,14 @@ food_cost        = 2
 ;   if city_size > num_inis;
 ;     city_granary_size = (granary_food_ini[num_inis] +
 ;        granary_food_inc * (city_size - num_inis)) * foodbox / 100
-granary_food_ini  = 16, 23, 30, 40, 50, 60, 70
+;                   S2  S3  S4  S5  S6  S7  S8 
+;granary_food_ini = 20, 30, 40, 50, 60, 70, 70     ;MP2A-C
+;granary_food_ini = 16, 23, 30, 40, 50, 60, 70     ;MP2D alpha, 3 turns shaved off s1-s2 growth.
+;granary_food_ini = 16, 22, 27, 33, 40, 50, 60     ;MP2D EX1 - mild acceleration
+granary_food_ini  = 15, 20, 25, 31, 37, 45, 53, 60 ;MP2D EX2 - moderate "
+;granary_food_ini = 14, 18, 23, 29, 35, 42, 49, 56, 57, 58, 59, 60 ;MP2D EX3 - fast "
+;granary_food_ini = 13, 16, 19, 23, 28, 33, 39, 45, 51, 52, 53, 54 ;MP2D EX4 - fastest "
+
 granary_food_inc = 0
 
 ; City center minimum outputs

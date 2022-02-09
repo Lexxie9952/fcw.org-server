@@ -6128,7 +6128,7 @@ reqs	=
     }
 [effect_pyramids_1]
 type    = "Growth_Food"
-value	= 13
+value	= 9 ; 9+25 = 34% = 5/15 = 33.3% 
 reqs	=
     { "type",     "name",     "range",  "present"
       "Building", "Pyramids", "Player", TRUE
@@ -7781,7 +7781,7 @@ reqs    =
 
 [effect_despotism_city_founding_nomad_food_bonus]
 type    = "Growth_Food"
-value	= 13 ; 13% of 16 = +2
+value	= 15 ; 15% of 15 = +2
 reqs	=
     { "type",     "name",      "range", "present"
       "Gov",      "Despotism", "Player", TRUE
@@ -7790,7 +7790,7 @@ reqs	=
     }
 [effect_despotism_capital_founding_nomad_food_bonus]
 type    = "Growth_Food"
-value	= 12  ; 12+13=25% of 16 = +4
+value	= 15  ; 15+15=30% of 15 = +4
 reqs	=
     { "type",     "name",      "range", "present"
       "Gov",      "Despotism", "Player", TRUE
