@@ -652,7 +652,7 @@ var reqtree_mp2c = {
 8 egyptian blue
 7 medium teal-blue
 6 olive / ochre
-5 wine
+5 wine / red
 4 bright sky
 3 bronze sea spray (strong green-cyan)
 2 periwinkle
@@ -673,7 +673,7 @@ var reqtree_mp2c = {
         8: {x: 1420, y: 1},   // Banking
         9:  {x: 918, y: 361, col:6},  // Bridge Building
         10: {x: 0, y: 582},   // Bronze Working
-        11: {x: 0, y: 174},   // Ceremonial Burial
+        11: {x: 0, y: 174, col:2}, // Ceremonial Burial
         12: {x: 2086, y: 108, col:4},// Chemistry
         13: {x: 1169, y: 706},// Chivalry
         14: {x: 416, y: 87, col:7},  // Code of Laws
@@ -695,65 +695,65 @@ var reqtree_mp2c = {
         30: {x: 918, y: 583, col:5}, // Feudalism
         31: {x: 3700, y: 341},// Flight
         32: {x: 5440, y: 340},// Fusion Power
-        33: {x: 3230, y: 1},  // Microbiology
-        34: {x: 3230, y: 512, col:5},// Guerilla Warfare
-        35: {x: 1753, y: 500, col:5},// Gunpowder
-        36: {x: 0, y: 446},   // Horseback Riding
-        37: {x: 2680, y: 327},// Industrialization
-        38: {x: 1420, y: 434, col:9},// Invention
-        39: {x: 416, y: 706, col:6}, // Iron Working
-        40: {x: 4202, y: 312},// Labor Union
-        41: {x: 4950, y: 398, col:1},// Laser
-        42: {x: 2419, y: 703, col:0},// Leadership
-        43: {x: 667, y: 1},   // Literacy
-        44: {x: 3230, y: 594, col:9},// Machine Tools
-        45: {x: 1753, y: 596, col:8},// Magnetism
-        46: {x: 416, y: 347, col:8}, // Map Making
-        47: {x: 0, y: 347},   // Masonry
-        48: {x: 3951, y: 181},// Mass Production
-        49: {x: 416, y: 258, col:7}, // Mathematics 
-        50: {x: 1420, y: 86, col:6}, // Medicine 
-        51: {x: 2419, y: 392},// Metallurgy
+        33: {x: 3230, y: 512, col:5},// Guerilla Warfare
+        34: {x: 1753, y: 500, col:5},// Gunpowder
+        35: {x: 0, y: 446},   // Horseback Riding
+        36: {x: 2680, y: 327},// Industrialization
+        37: {x: 1420, y: 434, col:9},// Invention
+        38: {x: 416, y: 706, col:5}, // Iron Working
+        39: {x: 4202, y: 312},// Labor Union
+        40: {x: 4950, y: 398, col:1},// Laser
+        41: {x: 2419, y: 703, col:0},// Leadership
+        42: {x: 667, y: 1},   // Literacy
+        43: {x: 3230, y: 594, col:9},// Machine Tools
+        44: {x: 1753, y: 596, col:8},// Magnetism
+        45: {x: 416, y: 347, col:8}, // Map Making
+        46: {x: 0, y: 347},   // Masonry
+        47: {x: 3951, y: 181},// Mass Production
+        48: {x: 416, y: 258, col:7}, // Mathematics 
+        49: {x: 1420, y: 86, col:6}, // Medicine 
+        50: {x: 2419, y: 392},// Metallurgy
+        51: {x: 3230, y: 1},  // Microbiology
         52: {x: 3488, y: 523, col:4},// Miniaturization
         53: {x: 3951, y: 486, col:0},// Mobile Warfare
         54: {x: 667, y: 197, col:2}, // Monarchy
         55: {x: 1420, y: 586, col:2},// Monotheism
         56: {x: 416, y: 151, col:4}, // Mysticism
-        57: {x: 1169, y: 461, col:7}, // Navigation
-        58: {x: 4202, y: 89, col:4}, // Nuclear Fission
-        59: {x: 4454, y: 208, col:4},// Nuclear Power
-        60: {x: 1169, y: 145, col:9}, // Philosophy
-        61: {x: 1420, y: 354, col:7},// Physics
-        62: {x: 5202, y: 286},// Plastics
-        63: {x: 416, y: 426}, // Polytheism
-        64: {x: 0, y: 248},   // Pottery
-        65: {x: 4454, y: 706},// Radar
-        66: {x: 3951, y: 640, col:7},// Radio
-        67: {x: 2419, y: 484, col:6},// Railroad
-        68: {x: 4202, y: 1, col:6},  // Recycling
-        69: {x: 3230, y: 116},// Refining
-        70: {x: 2958, y: 475},// Refrigeration
-        71: {x: 4700, y: 390, col:0},// Robotics
-        72: {x: 4700, y: 529, col:8},// Rocketry
-        73: {x: 1753, y: 386, col:6},// Sanitation
-        74: {x: 667, y: 408, col:7}, // Seafaring
-        75: {x: 4950, y: 241, col:4},// Space Flight
-        76: {x: 5440, y: 456},// Stealth
-        77: {x: 2086, y: 333, col:8},// Steam Engine
-        78: {x: 2958, y: 327, col:8},// Steel
-        79: {x: 5202, y: 395},// Superconductors
-        80: {x: 2958, y: 706, col:0},// Tactics
-        81: {x: 2958, y: 37, col:3}, // The Corporation
-        82: {x: 918, y: 1, col:0},   // The Republic
-        83: {x: 416, y: 524}, // The Wheel
-        84: {x: 2086, y: 666},// Theocracy
-        85: {x: 1753, y: 666, col:9},// Theology
-        86: {x: 2086, y: 176},// Theory of Gravity
-        87: {x: 667, y: 106}, // Trade
-        88: {x: 1420, y: 192, col:1},// University
-        89: {x: 0, y: 708},   // Warrior Code
-        90: {x: 416, y: 0, col:1},   // Writing
-        91: {x: 3230, y: 429} // Nationalism
+        57: {x: 3230, y: 429}, // Nationalism
+        58: {x: 1169, y: 461, col:7}, // Navigation
+        59: {x: 4202, y: 89, col:4}, // Nuclear Fission
+        60: {x: 4454, y: 208, col:4},// Nuclear Power
+        61: {x: 1169, y: 145, col:9}, // Philosophy
+        62: {x: 1420, y: 354, col:7},// Physics
+        63: {x: 5202, y: 286},// Plastics
+        64: {x: 416, y: 426}, // Polytheism
+        65: {x: 0, y: 248},   // Pottery
+        66: {x: 4454, y: 706},// Radar
+        67: {x: 3951, y: 640, col:7},// Radio
+        68: {x: 2419, y: 484, col:6},// Railroad
+        69: {x: 4202, y: 1, col:6},  // Recycling
+        70: {x: 3230, y: 116},// Refining
+        71: {x: 2958, y: 475},// Refrigeration
+        72: {x: 4700, y: 390, col:0},// Robotics
+        73: {x: 4700, y: 529, col:8},// Rocketry
+        74: {x: 1753, y: 386, col:6},// Sanitation
+        75: {x: 667, y: 408, col:7}, // Seafaring
+        76: {x: 4950, y: 241, col:4},// Space Flight
+        77: {x: 5440, y: 456},// Stealth
+        78: {x: 2086, y: 333, col:8},// Steam Engine
+        79: {x: 2958, y: 327, col:8},// Steel
+        80: {x: 5202, y: 395},// Superconductors
+        81: {x: 2958, y: 706, col:0},// Tactics
+        82: {x: 2958, y: 37, col:3}, // The Corporation
+        83: {x: 918, y: 1, col:0},   // The Republic
+        84: {x: 416, y: 524, col:6}, // The Wheel
+        85: {x: 2086, y: 666},// Theocracy
+        86: {x: 1753, y: 666, col:2},// Theology
+        87: {x: 2086, y: 176},// Theory of Gravity
+        88: {x: 667, y: 106}, // Trade
+        89: {x: 1420, y: 192, col:1},// University
+        90: {x: 0, y: 708},   // Warrior Code
+        91: {x: 416, y: 0, col:1}   // Writing
     };
 
     /*

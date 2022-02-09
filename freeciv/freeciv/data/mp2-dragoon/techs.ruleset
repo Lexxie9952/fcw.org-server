@@ -392,7 +392,7 @@ cost = 1560
 
 [advance_feudalism]
 name     = _("Feudalism")
-req1     = "Warrior Code"
+req1     = "Iron Working"
 req2     = "Monarchy"
 flags    = ""
 graphic     = "a.feudalism"
@@ -421,15 +421,6 @@ graphic_alt = "-"
 helptext = _("Obsoletes Medici Bank.")
 cost = 8040
 
-[advance_microbiology]
-name     = _("Microbiology")
-req1     = "Medicine"
-req2     = "The Corporation"
-flags    = ""
-graphic     = "a.microbiology"
-graphic_alt = "-"
-cost = 3150
-
 [advance_guerilla_warfare]
 name     = _("Guerilla Warfare")
 req1     = "Communism"
@@ -443,7 +434,7 @@ cost = 3985
 [advance_gunpowder]
 name     = _("Gunpowder")
 req1     = "Invention"
-req2     = "Iron Working"
+req2     = "Feudalism"
 flags    = ""
 graphic     = "a.gunpowder"
 graphic_alt = "-"
@@ -605,6 +596,15 @@ graphic_alt = "-"
 helptext = _("Obsoletes Catapult, all Siege Rams. City Walls cost +10.")
 cost = 1340
 
+[advance_microbiology]
+name     = _("Microbiology")
+req1     = "Medicine"
+req2     = "The Corporation"
+flags    = ""
+graphic     = "a.microbiology"
+graphic_alt = "-"
+cost = 3150
+
 [advance_miniaturization]
 name     = _("Miniaturization")
 req1     = "Machine Tools"
@@ -654,6 +654,16 @@ graphic     = "a.mysticism"
 graphic_alt = "-"
 helptext = _("Doubles the effect of Temples.")
 cost = 50
+
+[advance_nationalism]
+name     = _("Nationalism")
+req1     = "The Corporation"
+req2     = "Communism"
+flags    = ""
+graphic     = "a.nationalism"
+graphic_alt = "-"
+helptext = _("Allows government Nationalism.")
+cost = 2775
 
 [advance_navigation]
 name     = _("Navigation")
@@ -987,16 +997,6 @@ flags    = ""
 graphic     = "a.writing"
 graphic_alt = "-"
 cost = 50
-
-[advance_nationalism]
-name     = _("Nationalism")
-req1     = "The Corporation"
-req2     = "Communism"
-flags    = ""
-graphic     = "a.nationalism"
-graphic_alt = "-"
-helptext = _("Allows government Nationalism.")
-cost = 2775
 
 ;[advance_agricultural]
 ;name     = _("Agricultural")
