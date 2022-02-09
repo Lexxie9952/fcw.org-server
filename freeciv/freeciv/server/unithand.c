@@ -2472,7 +2472,10 @@ void illegal_action_msg(struct player *pplayer,
                   _("Your %s can't do %s when %s is legal."),
                   unit_name_translation(actor),
                   action_id_name_translation(stopped_action),
-                  action_id_name_translation(explnat->blocker->id));
+            /* FCW 8Feb2022: action_id_name_translation(explnat->blocker->id) says,
+             * "Your Caravan can't do Recycle unit when Recycle unit is legal"
+             * for blocker->id == ACTION_HELP_WONDER. Use rule_name for now */
+                  action_id_rule_name(explnat->blocker->id));
     break;
   case ANEK_UNKNOWN:
     notify_player(pplayer, unit_tile(actor),
