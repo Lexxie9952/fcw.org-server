@@ -999,7 +999,7 @@ function empire_econ_upkeep_screen(wide_screen,narrow_screen,small_screen,
     improvements_html += "<td style='cursor:pointer; font-size:85%; text-align:right; padding-right:10px;' onclick='javascript:show_city_dialog_by_id(" 
                       + pcity['id']+")' id='citycell"+city_id+"'>"+pcity['name']+"</td>";
     improvements_html += "<td class='gold_upkeep_column' font-size:85%; style='text-align:right; padding-right:10px; color:#ffd52c; font-weight:520;' id='g_upkeep_total"+city_id+"'> </td>"
-    improvements_html += "<td style='padding-left:10px;' id='u"+city_id+"'>";
+    improvements_html += "<td style='padding-left:10px; padding-bottom:18px' id='u"+city_id+"'>";
 
     // Go through the improvements one at a time and determine whether to show it
     for (var z = 0; z < ruleset_control.num_impr_types-1 /*-1 don't show coinage*/; z ++) {
