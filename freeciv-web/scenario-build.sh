@@ -21,7 +21,7 @@ printf "\n**********************************************************************
 printf "This refreshes only the SCENARIOS marked for rebuild inside this script.\n"
 printf "****************************************************************************\n"
 
-SCENARIOS=(europe.sav europe-new-positions.sav tutorial.sav)
+SCENARIOS=(europe.sav europe-new-positions.sav tutorial.sav riverland.sav)
 TOPDIR="$( cd ../"$( dirname "${BASH_SOURCE[0]}" )" > /dev/null && pwd )"
 
 printf "\nUpdating scenarios...\n"
