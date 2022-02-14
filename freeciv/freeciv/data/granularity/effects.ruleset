@@ -95,3 +95,11 @@ reqs	=
     { "type", "name", "range"
       "Tech", "Government", "Player"
     }
+
+[effect_irrigation]
+type    = "Irrigation_Pct"
+value   = 100
+reqs    =
+    { "type", "name", "range"
+      "Extra", "Irrigation", "Local"
+    }

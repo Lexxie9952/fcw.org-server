@@ -383,28 +383,28 @@ function generate_help_text(key)
          + "<img style='margin-top:-5px;margin-bottom:-5px' src='/images/e/trade.png'></td><td>"  
          + terrain.road_time/divisor + " worker-turns</td></tr>") : "")
 
-    + (terrain.irrigation_time && terrain.irrigation_result == terrain.id 
+    + (terrain.irrigation_time
         ? ("<tr><td>Irrigation:</td><td>"
            + "+" + terrain.irrigation_food_incr
            + "<img style='margin-top:-5px;margin-bottom:-5px' src='/images/e/food.png'>" + "</td><td>"
            + terrain.irrigation_time/divisor + " worker-turns") + "</td></tr>"
         : "")
 
-    + (terrain.irrigation_time && terrain.irrigation_result != terrain.id ? ("<tr><td>Cultivation creates:</td><td>"
+    + (terrain.cultivate_time && terrain.irrigation_result != terrain.id ? ("<tr><td>Cultivation creates:</td><td>"
         + "<img style='margin-bottom:-5px;margin-top:-5px' src='/images/e/"
         + terrains[terrain.irrigation_result].name.toLowerCase().replace(" ","")+".png'> &nbsp;" 
         + terrains[terrain.irrigation_result].name + "</td><td>"
         + terrain.irrigation_time/divisor + " worker-turns"
         + "</td></tr>") : "")
 
-    + (terrain.mining_time && terrain.mining_result == terrain.id 
+    + (terrain.mining_time
         ? ("<tr><td>Mining:</td><td>"
            + "+" + terrain.mining_shield_incr
            + "<img style='margin-top:-5px;margin-bottom:-5px' src='/images/e/shield.png'>" + "</td><td>"
            + terrain.mining_time/divisor + " worker-turns") + "</td></tr>"
         : "")
 
-    + (terrain.mining_time && terrain.mining_result != terrain.id ? ("<tr><td>Planting creates:</td><td>"
+    + (terrain.plant_time && terrain.mining_result != terrain.id ? ("<tr><td>Planting creates:</td><td>"
         + "<img style='margin-bottom:-5px;margin-top:-5px' src='/images/e/"
         + terrains[terrain.mining_result].name.toLowerCase().replace(" ","")+".png'> &nbsp;"
         + terrains[terrain.mining_result].name + "</td><td>" 
