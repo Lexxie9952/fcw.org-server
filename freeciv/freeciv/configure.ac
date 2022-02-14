@@ -106,7 +106,10 @@ if test "x$fc_cv_malloc_zero_ok" = "xtrue" ; then
   AC_DEFINE([MALLOC_ZERO_OK], [1], [It's ok to call malloc() for zero bytes])
 fi
 
-FC_CHECK_SQLITE3([], [AC_MSG_ERROR([sqlite3 not found])])
+if test "x$emscripten" != "xyes" ; then
+  dnl Not needed in emscripten build as both users - fcdb and fcmp - are disabled
+  FC_CHECK_SQLITE3([], [AC_MSG_ERROR([sqlite3 not found])])
+fi
 
 dnl set default values
 fcdb_all=no
@@ -631,10 +634,15 @@ if test "x$XMLREGISTRY" = "xyes" ; then
   AC_DEFINE([FREECIV_HAVE_XML_REGISTRY], [1], [Build xml-backend for registry])
 fi
 
-PKG_CHECK_MODULES([ICU], [icu-uc],,
-    [AC_MSG_ERROR([icu development files required])])
-UTILITY_CFLAGS="${UTILITY_CFLAGS} ${ICU_CFLAGS}"
-UTILITY_LIBS="${UTILITY_LIBS} ${ICU_LIBS}"
+if test "x$emscripten" != "xyes" ; then
+  PKG_CHECK_MODULES([ICU], [icu-uc],,
+      [AC_MSG_ERROR([icu development files required])])
+  UTILITY_CFLAGS="${UTILITY_CFLAGS} ${ICU_CFLAGS}"
+  UTILITY_LIBS="${UTILITY_LIBS} ${ICU_LIBS}"
+else
+  CFLAGS="$CFLAGS -s USE_ICU=1"
+  CXXFLAGS="$CXXFLAGS -s USE_ICU=1"
+fi
 
 dnl Set debug flags supported by compiler
 EXTRA_DEBUG_CFLAGS=""
@@ -808,7 +816,8 @@ dnl Should we build experimental versions of Qt programs
 AC_ARG_WITH([qt5x],
   AS_HELP_STRING([--with-qt5x], [build experimental versions of Qt programs]),
 [case "${withval}" in
- yes) qt_ver="Qt5x" ;;
+ yes) qt_ver="Qt5x"
+      AC_DEFINE([FC_QT6_MODE], [1], [this is Qt5x based build]) ;;
  *)   qt_ver="Qt5" ;;
 esac], [qt_ver="Qt5"])
 

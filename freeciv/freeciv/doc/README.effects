@@ -353,6 +353,10 @@ Improvement_Sale_Pct
 Incite_Cost_Pct
     Increases revolt cost by amount percent.
 
+Infra_Points
+    City increases owner's infra points by value each turn. If overall points
+    are negative after all cities have been processed, they are set to 0.
+
 Inspire_Partisans
     Partisan units (defined in units.ruleset) may spring up when this player's 
     cities are taken.
