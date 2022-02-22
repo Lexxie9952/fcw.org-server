@@ -13,28 +13,20 @@ Communism        40%
 Not original 
 -----------------<foreign: 70  60  50  40  30  20  10  00>
 C.Monarchy                 25  25  25  25  25  25  25  60     
-Republic                   80  80  80  80  80  80  80  90  
+Republic                   33  33  33  33  33  33  33  80  
 Democracy                  25  25  25  25  25  50 100 100
 Nationalism                33  33  33  33  33  33  33  67 
-Theocracy                  40  40  40  40  40  40  40  40    * (50 with cathedral)             
+Theocracy                  40  40  40  40  40  40  40  40    * (57.2% with cathedral)             
 Communism                  40  40  40  40  40  40  40  40
 
 Original w/ Foreign
 -----------------<foreign: 70  60  50  40  30  20  10  00>
-C.Monarchy                 25  25  25  25  25  25  25  60     
+C.Monarchy                 80  80  80  80  80  80  80  80     
 Republic                   90  90  90  90  90  90  90  90  
-Democracy                 100 100 100 100 100 100 100 100
-Nationalism                33  33  33  33  33  33  33  67 
-Theocracy                  40  40  40  40  40  40  40  40    * (50 with cathedral)             
+Democracy                  25  25  25  25  25  50 100 100
+Nationalism                50  50  50  50  50  50  50 100 
+Theocracy                  40  40  40  40  40  40  40  40    * (57.2% with cathedral)             
 Communism                  40  40  40  40  40  40  40  40
-
-other effects?
-C.Monarchy
-Republic
-Democracy         +7% luxury     Supermarkets discount
-Nationalism                                                 +1 vet level ground troops / alpines also?
-Theocracy
-Communism         foodbox?
 
 FORMERLY **************************************************************************
 

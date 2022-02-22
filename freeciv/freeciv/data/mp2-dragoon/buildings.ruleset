@@ -633,7 +633,8 @@ A Cathedral makes 3 unhappy citizens content, but does not affect citizens\
  made unhappy by military activity. Theology increases the effect by +1.\
  Communist government decreases the effect by -1. (Michelangelo’s Chapel enhances\
  the effect of Cathedrals by +1 happy citizen and +1 forced content citizen.)\n\
-Under Theocracy, increases the city rapture rate to 1 out of 2 turns.\
+Under Theocracy, the rapture rate increases to 4 out of 7 turns when the\
+ Cathedral improvement is physically present inside the city.\
 ")
 
 [building_airport]
@@ -1450,7 +1451,6 @@ reqs	=
       "Tech",     "Code of Laws",        "Player", TRUE,    FALSE,  FALSE
       "Building", "Angkor Wat",          "Player", FALSE,   TRUE,   FALSE
       "Gov", "Democracy",                "Player", FALSE,   TRUE,   FALSE
-      "Gov", "Theocracy",                "Player", FALSE,   TRUE,   FALSE
       "Gov", "Communism",                "Player", FALSE,   TRUE,   FALSE
       "Gov", "Nationalism",              "Player", FALSE,   TRUE,   FALSE
 ;requires 23Sept2021 changes to requirements.c, so obsolete wonders don't re-enable others
@@ -1476,7 +1476,7 @@ Angkor Wat is a glorious ancient city of culture.\
  Work done on Jungle and Swamp tiles is 2× faster. The cost of\
  Elephants is reduced by 5 shields. \n\
 "), _("
-This Wonder is never obsolete, but has no effect in Democracy,
+This Wonder is never obsolete, but has no effect in Democracy,\
  Communism, or Nationalism.\
 "), _("
 Angkor Wat is a Civil Wonder. You can build only one Civil Wonder.\
@@ -2314,7 +2314,7 @@ sabotage	= 0
 sound		= "w_michelangelos_chapel"
 sound_alt	= "w_generic"
 helptext	= _("\
-This Wonder counts as a Cathedral in all cities which lack one.\
+This Wonder gives the primary effect of a Cathedral to all cities which lack one.\
  That is, it makes 3 unhappy citizens content in each city,\
  but does not affect citizens unhappy about military activity.\
  (Theology increases the effect by +1. Communist government\

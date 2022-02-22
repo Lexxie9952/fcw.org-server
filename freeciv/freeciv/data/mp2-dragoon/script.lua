@@ -173,31 +173,43 @@ function tech_researched_handler(tech, player, how)
   
       local forbidden_tech = find.tech_type("Banking")
       if researcher:knows_tech(forbidden_tech) then
+        notify.event(player, NIL, E.TECH_GAIN,
+          _("<font color=#ffdf90><b>The knowledge of Banking prevents a free bonus tech from the discovery of Philosophy.</b></font>"))
         return
       end
   
       forbidden_tech = find.tech_type("Medicine")
       if researcher:knows_tech(forbidden_tech) then
+        notify.event(player, NIL, E.TECH_GAIN,
+          _("<font color=#ffdf90><b>The knowledge of Medicine prevents a free bonus tech from the discovery of Philosophy.</b></font>"))
         return
       end
   
       forbidden_tech = find.tech_type("University")
       if researcher:knows_tech(forbidden_tech) then
+        notify.event(player, NIL, E.TECH_GAIN,
+          _("<font color=#ffdf90><b>The knowledge of University prevents a free bonus tech from the discovery of Philosophy.</b></font>"))
         return
       end
   
       forbidden_tech = find.tech_type("Invention")
       if researcher:knows_tech(forbidden_tech) then
+        notify.event(player, NIL, E.TECH_GAIN,
+          _("<font color=#ffdf90><b>The knowledge of Invention prevents a free bonus tech from the discovery of Philosophy.</b></font>"))
         return
       end
   
       forbidden_tech = find.tech_type("Physics")
       if researcher:knows_tech(forbidden_tech) then
+        notify.event(player, NIL, E.TECH_GAIN,
+          _("<font color=#ffdf90><b>The knowledge of Physics prevents a free bonus tech from the discovery of Philosophy.</b></font>"))
         return
       end
   
       forbidden_tech = find.tech_type("Monotheism")
       if researcher:knows_tech(forbidden_tech) then
+        notify.event(player, NIL, E.TECH_GAIN,
+          _("<font color=#ffdf90><b>The knowledge of Monotheism prevents a free bonus tech from the discovery of Philosophy.</b></font>"))
         return
       end
   

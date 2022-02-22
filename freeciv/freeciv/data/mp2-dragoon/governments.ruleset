@@ -208,7 +208,8 @@ ruler_female_title = _("High Priestess %s")
 helptext = _("\
 Theocracy is formed on religious beliefs which are the law of the land. \
 "), _("\
-The people are devoted and often willing to die for their faith. Cities very\
+The people are devoted and often willing to die for their faith. Each city\
+ has +1 happy citizen. Cities very\
  near a capital have very low corruption. Cost for enemies to incite cities or\
  bribe units is 2x, but Zealots cannot be bribed. Cost to incite foreign cities\
  is reduced by a third. Enemies cannot establish embassies without first making\
@@ -222,8 +223,8 @@ Improvements that appease unhappy citizens add +1 base gold in tithes for each\
 "), _("\
 Celebrating cities rapture 2 out of 5 turns (with a Cathedral. 1 out of 2).\
 No citizens are made unhappy by each aggressive unit. \n\
-2% Base corruption in cities\n\
-2% Extra corruption per each tile in distance from capital\n\
+0% Base corruption in cities\n\
+1% Extra corruption per each tile in distance from capital\n\
 ")
 
 ;------------------------------------------------------------------------

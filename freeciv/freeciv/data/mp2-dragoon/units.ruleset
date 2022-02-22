@@ -1107,11 +1107,11 @@ Masonry lets Workers build Forts. Construction lets them build Fortresses and\
  Oil Wells. Engineering lets them build Canals and Naval Bases. Feudalism with\
  Construction lets them build Castles. Steel lets them build Bunkers and Sea\
  Bridges. Radio lets them build Airbases and Buoys, which Settlers cannot. Workers\
- must be on a ship to build Buoys. \
+ must be on a ship to build Buoys. \n\
 "), _("\
 Until the discovery of Explosives, Workers will immediately upgrade for free\
  to Workers II. No moves are spent, no city is needed, and the current job\
- is not interrupted.\
+ is not interrupted. \n\
 "), _("\
 Communism tech allows Communist governments to conscript Workers II into Riflemen via the\
  Convert order. And vice versa.\

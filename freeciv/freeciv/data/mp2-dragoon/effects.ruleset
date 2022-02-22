@@ -1321,7 +1321,7 @@ reqs	=
 
 [effect_corruption_theocracy_2]
 type    = "Output_Waste"
-value   = 2
+value   = 0
 reqs    =
     { "type", "name", "range"
       "Gov", "Theocracy", "Player"
@@ -1329,7 +1329,7 @@ reqs    =
     }
 [effect_corruption_theocracy1]
 type    = "Output_Waste_By_Distance"
-value   = 200
+value   = 100
 reqs    =
     { "type",       "name",      "range"
       "Gov",        "Theocracy", "Player"
@@ -1621,16 +1621,6 @@ reqs	=
     { "type",       "name",      "range"
       "Gov", "Monarchy", "Player"
     }
-;Replaced by [effect_empire_size_base_constitutional_monarchy] in order to make the Happy Tab more "accurately"
-;portray the cause as the 'government' constitutional monarchy rather than caused by the 'building'    
-;[effect_23_12_empire_base_step_magna_carta]
-;type    = "Make_Content"
-;value   = 1     ; One extra content creates a 23/12 base/step
-;reqs  =
-;    { "type",     "name",        "range", "present"
-;      "Gov",      "Monarchy",    "Player", TRUE 
-;      "Building", "Magna Carta", "Player", TRUE 
-;    }
 [effect_empire_size_base_republic]
 type    = "Empire_Size_Base"
 value   = 13
@@ -1907,7 +1897,7 @@ reqs	=
       "Gov", "Nationalism", "Player"
     }
 ;********************************************* RAPTURE
-[effect_rapture_grow_magna_carta]
+[effect_rapture_grow_constitutional_monarchy]
 type    = "Rapture_Grow"
 value   = 1
 reqs	=
@@ -1915,9 +1905,18 @@ reqs	=
       "Building",   "Magna Carta",     "Player", TRUE
       "Gov",        "Monarchy",        "Player", TRUE
     }
-[effect_rapture_rate_magna_carta_not_founded]
+[effect_rapture_rate_constitutional_monarchy]
 type    = "Rapture_Rate_Pm"
-value   = 250  ; 25% (1 out of 4)
+value   = 800  ; 80% (4 out of 5)
+reqs	=
+    { "type",       "name",            "range", "present"
+      "Building",   "Magna Carta",     "Player", TRUE
+      "Building",   "Pyramids",        "City",   FALSE
+      "Gov",        "Monarchy",        "Player", TRUE
+    }
+[effect_rapture_rate_constitutional_monarchy_not_founded]
+type    = "Rapture_Rate_Pm"
+value   = -550  ; 800-550 = 25% (1 out of 4)
 reqs	=
     { "type",       "name",            "range", "present"
       "Building",   "Magna Carta",     "Player", TRUE
@@ -1925,7 +1924,7 @@ reqs	=
       "Gov",        "Monarchy",        "Player", TRUE
       "CityStatus", "OwnedByOriginal", "City",   FALSE
     }
-[effect_rapture_rate_magna_carta_not_founded_no_nationals]
+[effect_rapture_rate_constitutional_monarchy_not_founded_no_nationals]
 type    = "Rapture_Rate_Pm"
 value   = 350   ; 250+350 = 600 = 60% (3 out of 5)
 reqs	=
@@ -1944,6 +1943,33 @@ reqs	=
     { "type", "name",     "range"
       "Gov",  "Republic", "Player"
     }
+[effect_rapture_rate_republic]
+type    = "Rapture_Rate_Pm"
+value   = 900  ; 90% (9 out of 10)
+reqs	=
+    { "type",       "name",            "range", "present"
+      "Building",   "Pyramids",        "City",   FALSE
+      "Gov",        "Republic",        "Player", TRUE
+    }
+[effect_rapture_rate_republic_not_founded]
+type    = "Rapture_Rate_Pm"
+value   = -566  ; 900-566 = 334 = 33% (1 out of 3)
+reqs	=
+    { "type",       "name",            "range", "present"
+      "Building",   "Pyramids",        "City",   FALSE
+      "Gov",        "Republic",        "Player", TRUE
+      "CityStatus", "OwnedByOriginal", "City",   FALSE
+    }
+[effect_rapture_rate_republic_not_founded_no_nationals]
+type    = "Rapture_Rate_Pm"
+value   = 466   ; 334+466 = 800 = 80% (8 out of 10)
+reqs	=
+    { "type",       "name",            "range", "present"
+      "Building",   "Pyramids",        "City",   FALSE
+      "Gov",        "Republic",        "Player", TRUE
+      "CityStatus", "OwnedByOriginal", "City",   FALSE
+      "MinForeignPct", "1",            "City",   FALSE
+    }
 
 [effect_rapture_grow_democracy]
 type    = "Rapture_Grow"
@@ -1956,19 +1982,19 @@ reqs	=
 type    = "Rapture_Rate_Pm"
 value   = 500  ; 50%
 reqs	=
-    { "type",          "name",      "range", "present"
-      "Gov",           "Democracy", "Player", TRUE
-      "Building",   "Pyramids",        "City",   FALSE
-      "MinForeignPct", "20",         "City",  TRUE
+    { "type",          "name",            "range", "present"
+      "Building",      "Pyramids",        "City",   FALSE
+      "Gov",           "Democracy",       "Player", TRUE
+      "MinForeignPct", "20",              "City",   TRUE
     }
 [effect_rapture_rate_democracy_foreigners2]
 type    = "Rapture_Rate_Pm"
 value   = -250  ; 500 - 250 = 25%
 reqs	=
-    { "type",          "name",      "range", "present"
-      "Gov",           "Democracy", "Player", TRUE
-      "Building",   "Pyramids",        "City",   FALSE
-      "MinForeignPct", "33",         "City",   TRUE
+    { "type",          "name",            "range", "present"
+      "Building",      "Pyramids",        "City",   FALSE
+      "Gov",           "Democracy",       "Player", TRUE
+      "MinForeignPct", "33",              "City",   TRUE
     }
 
 [effect_rapture_grow_theocracy]
@@ -1983,16 +2009,16 @@ type    = "Rapture_Rate_Pm"
 value   = 400
 reqs	=
     { "type",     "name",       "range",  "present"
+      "Building", "Pyramids",   "City",   FALSE
       "Gov",      "Theocracy",  "Player", TRUE
-      "Building",   "Pyramids", "City",   FALSE
     }
 [effect_rapture_rate_theocracy2]
 type    = "Rapture_Rate_Pm"
-value   = 100
+value   = 172   ; 400 + 172 = 57.2% (4 out of 7)
 reqs	=
     { "type",     "name",       "range",  "present"
-      "Gov",      "Theocracy",  "Player", TRUE
       "Building", "Pyramids",   "City",   FALSE
+      "Gov",      "Theocracy",  "Player", TRUE
       "Building", "Cathedral",  "City",   TRUE
     }
 
@@ -2008,8 +2034,8 @@ type    = "Rapture_Rate_Pm"
 value   = 400  ; 2 out of 5
 reqs	=
     { "type",     "name",       "range",  "present"
+      "Building", "Pyramids",   "City",   FALSE
       "Gov",      "Communism",  "Player", TRUE
-      "Building",   "Pyramids",        "City",   FALSE
     }
 
 [effect_rapture_grow_nationalism]
@@ -2019,13 +2045,23 @@ reqs	=
     { "type",       "name",            "range"
       "Gov",        "Nationalism",     "Player"
     }
+[effect_rapture_rate_nationalism_original_with_foreign]
+type    = "Rapture_Rate_Pm"
+value   = 500  ; 1 out of 3
+reqs	=
+    { "type",       "name",            "range",  "present"
+      "Building",   "Pyramids",        "City",   FALSE
+      "Gov",        "Nationalism",     "Player", TRUE
+      "CityStatus", "OwnedByOriginal", "City",   TRUE
+      "MinForeignPct", "1",            "City",   TRUE
+    }
 [effect_rapture_rate_nationalism_not_founded]
 type    = "Rapture_Rate_Pm"
 value   = 334  ; 1 out of 3
 reqs	=
     { "type",       "name",            "range",  "present"
-      "Gov",        "Nationalism",     "Player", TRUE
       "Building",   "Pyramids",        "City",   FALSE
+      "Gov",        "Nationalism",     "Player", TRUE
       "CityStatus", "OwnedByOriginal", "City",   FALSE
     }
 [effect_rapture_rate_nationalism_not_founded_no_foreign]
@@ -2033,11 +2069,11 @@ type    = "Rapture_Rate_Pm"
 value   = 333   ; 333+334 = 667 = 67% (2 out of 3)
 reqs	=
     { "type",       "name",            "range", "present"
-      "Gov",        "Nationalism",     "Player", TRUE
       "Building",   "Pyramids",        "City",   FALSE
+      "Gov",        "Nationalism",     "Player", TRUE
       "CityStatus", "OwnedByOriginal", "City",   FALSE
       "MinForeignPct", "1",            "City",   FALSE
-    }   
+    }
 
 ;********************************************** GOVERNMENT VET BONUSES
 [effect_communist_spy_vets]
@@ -2142,32 +2178,34 @@ type    = "Output_Inc_Tile"
 value   = 1
 reqs	=
     { "type",       "name",      "range"
-      "Gov", "Republic", "Player"
-      "OutputType", "Trade", "Local"
+      "Gov",        "Republic",  "Player"
+      "OutputType", "Trade",     "Local"
     }
 [effect_gov_tile_bonus_democracy]
 type    = "Output_Inc_Tile"
 value   = 1
 reqs	=
     { "type",       "name",      "range"
-      "Gov", "Democracy", "Player"
-      "OutputType", "Trade", "Local"
+      "Gov",        "Democracy", "Player"
+      "OutputType", "Trade",     "Local"
     }
 [effect_gov_tile_bonus_theocracy]
 type    = "Output_Inc_Tile_Celebrate"
 value   = 1
 reqs  =
-    { "type",       "name",      "range"
-      "Gov", "Theocracy", "Player"
-      "OutputType", "Trade", "Local"
+    { "type",       "name",        "range", "present"
+      "Gov",        "Theocracy",   "Player", TRUE
+      "Building",   "Angkor Wat",  "Player", FALSE ;handled separately by the wonder
+      "OutputType", "Trade",       "Local",  TRUE
     }
+
 [effect_gov_tile_bonus_communism]
 type    = "Output_Inc_Tile_Celebrate"
 value   = 1
 reqs	=
     { "type",       "name",      "range"
-      "OutputType", "Trade", "Local"
-      "Gov", "Communism", "Player"
+      "OutputType", "Trade",     "Local"
+      "Gov",        "Communism", "Player"
     }
 ; Nationalism gets trade bonus only on Land tiles unless celebrating.
 [effect_gov_tile_bonus_7] 
@@ -2283,6 +2321,13 @@ reqs    =
     { "type", "name", "range"
       "Gov", "Theocracy", "Player"
       "OutputType", "Gold", "local"
+    }
+[effect_happy_believers_theocracy]
+type = "Make_Happy"
+value = 1
+reqs    =
+    { "type", "name", "range"
+      "Gov", "Theocracy", "Player"
     }
 [effect_bad_lux_nationalism]
 type    = "Output_Bonus_2"
