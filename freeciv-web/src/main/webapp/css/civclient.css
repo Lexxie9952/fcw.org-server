@@ -1179,21 +1179,25 @@ body:not(.mobile) .ui-dialog.unit_dialog {
 }
 
 /* Government Docs table showing content/unhappy citizens per empire size */
-.gov_city_happy_table {
+.gov_city_happy_table, 
+.gov_city_rapture_table {
   width: 100%;
   border-collapse: collapse;
   cursor: default !important;
 }
-.gov_city_happy_table th {
+.gov_city_happy_table th,
+.gov_city_rapture_table th {
   text-align: center;
   border: 1px solid black;
   color: #000;
   background: #aaa;
 }
-.gov_city_happy_table th:nth-child(2n+1) {
+.gov_city_happy_table th:nth-child(2n+1),
+.gov_city_rapture_table th:nth-child(2n+1) {
   background: #bbb;
 }
-.gov_city_happy_table td {
+.gov_city_happy_table td,
+.gov_city_rapture_table td {
   text-align: center;
   border: 2px solid black;
   color:#fff;
@@ -1204,6 +1208,15 @@ body:not(.mobile) .ui-dialog.unit_dialog {
 .gov_city_happy_table tr:nth-child(2) td {
   color:#fcb;
   text-shadow: 2px 1px #650;
+}
+/* Government Docs table showing rapture rates */
+.gov_city_rapture_table tr:nth-child(2) td {
+  color:rgb(187, 219, 255);
+  text-shadow: 2px 1px rgb(0, 15, 102);
+}
+.gov_city_rapture_table tr:nth-child(3) td {
+  color:rgb(245, 200, 182);
+  text-shadow: 2px 1px rgb(102, 0, 0);
 }
 
 #governments {
