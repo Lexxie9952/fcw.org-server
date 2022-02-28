@@ -3225,11 +3225,12 @@ function do_map_click(ptile, qtype, first_time_called)
         } else if (!has_movesleft_warning_been_shown) {
           has_movesleft_warning_been_shown = true;
           var ptype = unit_type(punit);
+          var has = is_word_plural(ptype['name']) ? "have" : "has";   
           message_log.update({
             event: E_BAD_COMMAND,
             message: (  delayed_goto_active ? (ptype['name'] + " will move at turn change.") :
-                        (is_longturn() ? ptype['name'] + " has no moves left."
-                                       : ptype['name'] + " has no moves left. Press turn done for the next turn."))
+                        (is_longturn() ? ptype['name'] + " " + has + " no moves left."
+                                       : ptype['name'] + " " + has + " no moves left. Press turn done for the next turn."))
           });
         }
 
