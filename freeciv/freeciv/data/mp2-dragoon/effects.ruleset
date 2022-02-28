@@ -3732,14 +3732,22 @@ reqs	=
       "Gov", "Democracy", "Player", TRUE
       "Building", "Police Station", "City", TRUE
     }
-[effect_police_station_nationalism]
-type    = "Make_Content_Mil"
-value	= 1   ;  2+1 = 3 effect for police station
+[effect_police_station_authoritarian]
+type    = "Force_Content"
+value	= 2
 reqs	=
     { "type", "name", "range", "present"
       "Building", "Police Station", "City", TRUE
-      "Gov", "Nationalism", "Player", TRUE
-    }    
+      "Gov", "Anarchy",     "Player", FALSE
+;     "Gov", "Despotism",   "Player", FALSE
+      "Gov", "Monarchy",    "Player", FALSE
+      "Gov", "Republic",    "Player", FALSE
+      "Gov", "Democracy",   "Player", FALSE
+      "Gov", "Theocracy",   "Player", FALSE
+;     "Gov", "Communism",   "Player", FALSE
+;     "Gov", "Nationalism", "Player", FALSE
+    }
+
 [effect_police_station_vet_diplo]
 type    = "Veteran_Build"
 value	= 1

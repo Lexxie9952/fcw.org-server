@@ -358,7 +358,8 @@ issues with tech tree flow.
 ==============================================================
 61. Theocracy gets a free +1 happy per city.
 ==============================================================
-62.
+62. Police Station does +2 forced content under authoritarian
+    govs. No longer does +1 make_content_mil under nationalism
 ==============================================================
 63.
 ==============================================================

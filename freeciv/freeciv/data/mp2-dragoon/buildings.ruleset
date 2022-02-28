@@ -781,9 +781,10 @@ sound		= "b_police_station"
 sound_alt	= "b_generic"
 helptext	= _("\
 Police Stations neutralize the unhappiness caused by two military units or two\
- unhappy Foreign Nationals. Under Nationalism the effect is +1, affecting three\
- citizens. Police Stations prevent Establishing Embassy without first agreeing to\
- Cease-Fire or Peace. They also half the odds to Investigate City under all governments\
+ unhappy Foreign Nationals. Under authoritarian government, they also force\
+ two additional citizens to be content (Despotism, Communism, and Nationalism.)\
+ Police Stations prevent Establishing Embassy without first agreeing to Cease-Fire\
+ or Peace. They also half the odds to Investigate City under all governments\
  except Democracy.\
 "), _("\
  Diplomatic combat gets a bonus of ¼ of base odds. (At general base odds\
