@@ -590,7 +590,7 @@ from the project and be non-essential to the function of the Instance.
       "colonial/HesAPriate",
       "colonial/HighlandSpirit",
       "colonial/HiddenFalls",
-      "colonial/SongOfTimeAndStorms",
+      "colonial/SongOfTimeAndStore",
       "colonial/Wilderness",
       "colonial/Brothers",
       "colonial/YradierLaPaloma",
