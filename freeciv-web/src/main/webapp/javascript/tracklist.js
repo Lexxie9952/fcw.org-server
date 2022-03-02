@@ -587,7 +587,7 @@ from the project and be non-essential to the function of the Instance.
       "industrial/Judea",
       "industrial/Eventide",
       "colonial/LaCatedral2",
-      "colonial/HesAPriate",
+      "colonial/HesAPirate",
       "colonial/HighlandSpirit",
       "colonial/HiddenFalls",
       "colonial/SongOfTimeAndStore",
