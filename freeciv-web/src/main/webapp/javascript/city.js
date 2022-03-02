@@ -3824,9 +3824,15 @@ function update_city_screen()
               + "<span style='color:#999'>" + pcity['turn_founded'] +"</span>" +  "</td>";
             break;
           case CURV_FOREIGNERS:
+            /* Determine which position in the national populations array is the current owner */
+            let owner_idx = 0; 
+            for (let nat in pcity.nation_id) {
+              if (pcity.nation_id[nat] == pcity.owner)
+               owner_idx = parseInt(nat);
+            }
             city_user = "<td class='non_priority' style='text-align:right; padding-right:32px' onclick='javascript:change_city_user_row(" + pcity['id'] + ");'>"
               + "<span style='color:#F92'>" + 
-              (pcity['nationalities_count'] < 2 ? " " : (pcity['size'] - pcity['nation_citizens'][0/*0=current owner*/]) +"</span>" +  "</td>");
+              (pcity['nationalities_count'] < 2 ? " " : (pcity['size'] - pcity['nation_citizens'][owner_idx]) +"</span>" +  "</td>");
             break;
           default:
             city_user = "<td class='non_priority' style='text-align:right; padding-right:32px' onclick='javascript:change_city_user_row(" + pcity['id'] + ");'>"
