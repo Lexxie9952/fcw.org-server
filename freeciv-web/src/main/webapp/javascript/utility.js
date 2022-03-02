@@ -295,7 +295,8 @@ function time_localize(message) {
   }
 
   const local_hour_string = "" + (local_hour < 10 ? "0" : "") + local_hour.toString();
-  const zone = date.toLocaleTimeString(undefined,{timeZoneName:'short'}).split(' ')[2]
+  var zone = date.toLocaleTimeString(undefined,{timeZoneName:'short'}).split(' ')[2];
+  if (!zone) zone = "";
   const local_time = local_hour_string + ":" + GMT_minute + "&nbsp;" + zone;
 
   return message.replace(GMT, local_time);
