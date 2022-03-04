@@ -364,7 +364,7 @@ issues with tech tree flow.
 63. No stack death takes place on ruins. Undocumented effect 
  that hideouts don't disappear in ruins is now documented.
 ==============================================================
-64.
+64. Homeland Security prevents Poison City from taking place.
 ==============================================================
 65.
 ==============================================================

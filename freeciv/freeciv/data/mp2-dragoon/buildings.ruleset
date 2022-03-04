@@ -928,8 +928,9 @@ sound		= "b_homeland_security"
 sound_alt	= "b_generic"
 helptext	= _("\
 You can build Homeland Security offices if you own the Supreme Court. Homeland Security\
- gives the same bonus as a Courthouse vs. hostile diplomatic acts. As a ministry of the\
- Supreme Court, it has no upkeep and cannot be sabotaged.\
+ gives the same bonus as a Courthouse vs. hostile diplomatic acts. In addition, it\
+ prevents its city from being poisoned by spies. As a ministry of the Supreme Court,\
+ it has no upkeep and cannot be sabotaged.\
 ")
 
 [building_super_highways]

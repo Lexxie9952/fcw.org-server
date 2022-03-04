@@ -849,7 +849,8 @@ actor_reqs    =
       "MinMoveFrags", "1", "Local", TRUE
     }
 target_reqs    =
-    { "type",   "name", "range"
+    { "type",     "name",               "range",  "present"
+       "Building", "Homeland Security", "City",   FALSE
 ;      "MinSize", "2", "City"  ;; use poison to stop colonialism
     }
 
