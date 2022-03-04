@@ -1839,9 +1839,10 @@ reqs           =
     }
 buildable      = FALSE
 removal_time   = 0
-flags          = "TerrChangeRemoves"
+flags          = "TerrChangeRemoves", "NoStackDeath"
 helptext       = _("\
-Ruins mark the former site of a city that was destroyed or abandoned.\
+Ruins mark the former site of a city that was destroyed or abandoned. Units in Ruins\
+ do not experience Stack-Kill. Also, Hideouts made in Ruins will never disappear.\
 ")
 
 [extra_quay]

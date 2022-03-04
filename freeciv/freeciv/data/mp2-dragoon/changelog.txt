@@ -361,7 +361,8 @@ issues with tech tree flow.
 62. Police Station does +2 forced content under authoritarian
     govs. No longer does +1 make_content_mil under nationalism
 ==============================================================
-63.
+63. No stack death takes place on ruins. Undocumented effect 
+ that hideouts don't disappear in ruins is now documented.
 ==============================================================
 64.
 ==============================================================

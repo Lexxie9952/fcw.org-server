@@ -97,6 +97,8 @@ value   = 45
 
 ; The above is rounded down, so use y=mx+b to get a better algorithm:
 ; Unhappy = (0.45 * of Foreign citizens) + 1
+; Note this actually makes the Make_Content effects of buildigs one less
+; and should eventually be replaced by "Enemy_Citizen_Unhappy_Add", val=1
 [effect_angry_conquered_2]
 type    = "Make_Content"
 value	= -1
@@ -6345,13 +6347,6 @@ reqs	=
       "Gov", "Democracy", "Player", FALSE
     }
 
-;[effect_foreign_national_tuner]
-;type = "Enemy_Citizen_Unhappy_Pct"
-;value = 50
-;reqs = 
-;    {
-;
-;    }
 ;************************************************************************ Voyage of Darwin
 ; There are nasty hard-coded things to the original Wonder, so it had
 ; to be given a name change (Voyage of Darwin) to avoid messy problems. 
