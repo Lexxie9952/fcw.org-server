@@ -4844,10 +4844,11 @@ reqs	=
     }
 [effect_agoge_move_bonus_2]
 type    = "Move_Bonus"
-value	= 9    ; 3/9 + 6/9 = 1
+value	= 6    ; 3/9 + 6/9 = 1
 reqs	=
     { "type", "name", "range", "present"
-      "Building", "Agōgē of Sparta", "City", TRUE
+      "Building", "Agōgē of Sparta", "Player", TRUE
+      "CityTile", "Center", "Local", TRUE
       "UnitFlag", "FootSoldier", "Local", TRUE 
     }
 [effect_agoge_phalanx]
@@ -4891,9 +4892,20 @@ reqs	=
       "Building",  "Agōgē of Sparta", "City",   TRUE
       "Building",  "Barracks",        "City",   FALSE
       "UnitClass", "Land",            "Local",  TRUE
+      "UnitType",  "Phalanx",         "Local",  FALSE
       "UnitFlag",  "NonMil",          "Local",  FALSE
       "UnitFlag",  "NoVeteran",       "Local",  FALSE
     }
+[effect_agoge_veteran_build_phalanx]
+type    = "Veteran_Build"
+value	= 1
+reqs	=
+    { "type",      "name",            "range", "present"
+      "Building",  "Agōgē of Sparta", "City",   TRUE
+      "UnitType",  "Phalanx",         "Local",  TRUE
+      "UnitFlag",  "NonMil",          "Local",  FALSE
+      "UnitFlag",  "NoVeteran",       "Local",  FALSE
+    }    
 [effect_agoge_veteran_build2]
 type    = "Veteran_Build"
 value	= 1
@@ -4909,9 +4921,9 @@ reqs	=
 type    = "HP_Regen"
 value	= 100
 reqs	=
-    { "type", "name", "range", "present"
-      "Building", "Ziggurat",  "City",  TRUE
-      "UnitClass", "Land", "Local", TRUE
+    { "type",     "name",             "range", "present"
+      "Building", "Agōgē of Sparta",  "City",  TRUE
+      "UnitClass", "Land",            "Local", TRUE
     }
 
 ; -------------------------------------------------------------

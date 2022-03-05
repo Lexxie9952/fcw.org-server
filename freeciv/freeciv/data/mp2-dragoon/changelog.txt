@@ -96,9 +96,13 @@ richness.
    (sees 4 more tiles instead of 8 [corner tiles]
 =============================================================
 13. Agoge reduces Phalanx price 3 shields.
-   Counts as a Barracks in its home city. 
-   increases chance of veteran promotion 50% for phalanxes
-   (this is not +50% odds, it's +50% frequency)
+   Counts as a Barracks in its home city.
+   +1 move bonus for starting turn in city now applies to
+      all cities, not just Agoge city. 
+   Increases chance of veteran promotion 50% for phalanxes
+   (this is not +50% odds, it's +50% frequency), i.e:
+   50 33 20 15 becomes 75 50 30 22
+   Agoge + Barracks in a city allows making hardened Phalanxes
 =============================================================
 14. Techs and Costs:
    Monotheism 300 (384), Theology 400 (600), Theocracy 500 (725)
