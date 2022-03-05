@@ -3409,7 +3409,7 @@ set =
       "dispersion", 0, FALSE
       "endspaceship", "DISABLED", FALSE  ; prevent game from instantly ending
       "foggedborders", TRUE, FALSE
-      "fixedlength", "ENABLED", TRUE      ; Turn done doesn't advance turn if there is a timeout.
+      "fixedlength", "ENABLED", FALSE     ; Turn done doesn't advance turn if there is a timeout.
       "freecost", 1, FALSE                ; 0 would get overridden by the 'blueprints' setting: 1 gives 99% of the bulbs of the tech awarded by Philosophy.
       "fulldisorder", "ENABLED", FALSE    ; disorder fully halts one turn of production or buying in a city: closes lots of complex time-consuming micromanaged exploits one would feel obligated to do to be competitive
       "generator", "RANDOM", FALSE
