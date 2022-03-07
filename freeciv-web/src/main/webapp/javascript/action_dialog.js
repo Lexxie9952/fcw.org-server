@@ -932,6 +932,58 @@ function popup_action_selection(actor_unit, action_probabilities,
                                   + "ballistic attacks: 3 rounds of combat on up to 4 occupants of a tile."
         }
       } break;
+      case "Catapult":  for (button_id in buttons) {
+        if (buttons[button_id].html.includes("Special Attack")) {
+          buttons[button_id].html = buttons[button_id].html.replace("Special Attack", utype_get_bombard_name(ptype))
+          buttons[button_id].title = "Odds of survival:  100%\n"
+                                  + "Combat:                4 rounds\n"
+                                  + "Targets:                 1 unit\n"
+                                  + "Move cost:            2 moves\n"
+                                  + "Min. moves:          hasn't moved\n"
+                                  + "Max. casualties:     1\n"        
+                                  + "\nHurls rocks on 1 unit on the target tile for\n"
+                                  + "4 rounds. Can't be done to Fortress or City."
+        }
+      } break;
+      case "Cannon":  for (button_id in buttons) {
+        if (buttons[button_id].html.includes("Special Attack")) {
+          buttons[button_id].html = buttons[button_id].html.replace("Special Attack", utype_get_bombard_name(ptype))
+          buttons[button_id].title = "Odds of survival:  100%\n"
+                                  + "Combat:                5 rounds\n"
+                                  + "Targets:                 2 units\n"
+                                  + "Move cost:            2 moves\n"
+                                  + "Min. moves:          hasn't moved\n"
+                                  + "Max. casualties:     1\n"        
+                                  + "\nBombards up to 2 units on the target tile for\n"
+                                  + "5 rounds. Can't be done to Fortress or City."
+        }
+      } break;
+      case "Artillery":  for (button_id in buttons) {
+        if (buttons[button_id].html.includes("Special Attack")) {
+          buttons[button_id].html = buttons[button_id].html.replace("Special Attack", utype_get_bombard_name(ptype))
+          buttons[button_id].title = "Odds of survival:  100%\n"
+                                  + "Combat:                6 rounds\n"
+                                  + "Targets:                 3 units\n"
+                                  + "Move cost:            2 moves\n"
+                                  + "Min. moves:          hasn't moved\n"
+                                  + "Max. casualties:     1\n"        
+                                  + "\nBombards up to 3 units on the target tile for\n"
+                                  + "6 rounds. Can't be done to Fortress or City."
+        }
+      } break;
+      case "Howitzer":  for (button_id in buttons) {
+        if (buttons[button_id].html.includes("Special Attack")) {
+          buttons[button_id].html = buttons[button_id].html.replace("Special Attack", utype_get_bombard_name(ptype))
+          buttons[button_id].title = "Odds of survival:  100%\n"
+                                  + "Combat:                7 rounds\n"
+                                  + "Targets:                 4 units\n"
+                                  + "Move cost:            4 moves\n"
+                                  + "Min. moves:          hasn't moved\n"
+                                  + "Max. casualties:     1\n"        
+                                  + "\nBombards up to 4 units on the target tile for\n"
+                                  + "7 rounds. Can't be done to Fortress or City."
+        }
+      } break;
       case "Battleship":  for (button_id in buttons) {
         if (buttons[button_id].html.includes("Special Attack")) {
           buttons[button_id].html = buttons[button_id].html.replace("Special Attack", utype_get_bombard_name(ptype))

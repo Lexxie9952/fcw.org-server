@@ -41,7 +41,11 @@ var unit_bombard_attack_names = {
   "Marines":    "Bazooka Attack",
   "Zeppelin":   "Bomb",
   "Battleship": "Bombard",
-  "Ballista":   "Ranged Attack"
+  "Ballista":   "Ranged Attack",
+  "Catapult":   "Bombard",
+  "Cannon":   "Bombard",
+  "Artillery":   "Bombard",
+  "Howitzer":   "Bombard"
 };
 
 // Determines if victory by this unit shows crossed swords or gunpowder explosion.
