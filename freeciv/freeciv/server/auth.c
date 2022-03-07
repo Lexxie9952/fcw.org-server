@@ -178,7 +178,8 @@ bool auth_handle_reply(struct connection *pconn, char *password)
       // Change existing password:
       sz_strlcpy(srvarg.server_password, password);
       // Remove password if a null password is sent:
-      if (strlen(password)==0) { 
+      if (strlen(password)==0 
+          || strncmp(password, "empty", MAX_LEN_PASSWORD) == 0) { 
        srvarg.server_password_enabled = FALSE;
        notify_conn(NULL, NULL, E_SETTING, ftc_server, 
                   _("Server password removed."));

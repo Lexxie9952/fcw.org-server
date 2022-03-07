@@ -125,8 +125,8 @@ static struct command commands[] = {
   {"password", ALLOW_ADMIN,
    N_("password <codephrase>\n"),
    N_("Sets the password required to connect to the game."),
-   N_("Requires cmdlevel 'admin'. Click 'GAME' button from "
-      "pre-launch to set password as a standard user."),
+   N_("Click 'GAME' button from pre-launch to set password as a standard user. "
+      "\nTo remove existing password, use: <b>/password empty</b>"),
    NULL,
    CMD_ECHO_ADMINS, VCF_NONE, 0
   },
