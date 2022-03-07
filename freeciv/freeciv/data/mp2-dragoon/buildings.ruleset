@@ -384,7 +384,8 @@ sabotage	= 50
 sound		= "b_city_walls"
 sound_alt	= "b_generic"
 helptext	= _("\
-City Walls give a 3× bonus to every unit in a City against Land unit attacks.\
+City Walls give a 2× bonus to every unit in a City against Land unit attacks.\
+ (For land units with free-fortify bonus, this results in a 3× total bonus.)\
  City Walls are useless against Air, Sea, and Missile units; and the bonus is\
  reduced when attacked by Catapults, Cannons, Artillery, and Howitzers.\n\
  "), _("\
@@ -2446,7 +2447,6 @@ genus		= "SmallWonder"
 reqs	=
     { "type",     "name",        "range",  "present", "quiet"
       "Tech",     "Mathematics", "Player", TRUE,      FALSE
-      "Tech",     "Democracy",   "Player", FALSE,     FALSE
       "Building", "Pyramids",    "Player", FALSE,     TRUE
     }
 graphic	= "b.pyramids"
@@ -2463,8 +2463,7 @@ helptext	= _("\
 Every city will gain +25% to its food storage when the city grows\
  or starves. Newly founded cities start with +6 food. In addition,\
  the city with the Pyramids can rapture every turn when celebrating. \n\
-This Wonder is never obsolete, but can only be built before you\
- discover Democracy.\
+This Wonder is never obsolete.\
 ")
 
 [building_roman_colosseum]

@@ -2209,6 +2209,17 @@ reqs	=
       "OutputType", "Trade",     "Local"
       "Gov",        "Communism", "Player"
     }
+[effect_gov_city_center_food_bonus_communism]
+type    = "Output_Inc_Tile_Celebrate"
+value   = 1
+reqs	=
+    { "type",       "name",        "range", "present"
+      "Gov",        "Communism",   "Player", TRUE
+      "CityTile",   "Center",      "Local",  TRUE
+      "Building",   "Granary",     "City",   TRUE 
+      "OutputType", "Food",        "Local",  TRUE
+    }
+
 ; Nationalism gets trade bonus only on Land tiles unless celebrating.
 [effect_gov_tile_bonus_7] 
 type    = "Output_Inc_Tile"
@@ -2716,7 +2727,7 @@ reqs	=
 ;==============================================================
 [effect_city_walls_vs_Land]
 type    = "Defend_Bonus"
-value	= 200 ; 3x vs most Land
+value	= 100 ; 3x vs most Land
 reqs	=
     { "type", "name", "range", "present"
       "Building", "City Walls", "City", TRUE
@@ -2728,7 +2739,7 @@ reqs	=
     }
 [effect_city_walls_vs_Catapult_25pct_bonus]
 type    = "Defend_Bonus"
-value	= 175 ; 2.75x vs Catapult
+value	= 75 ; 1.75x vs Catapult
 reqs	=
     { "type", "name", "range", "present"
       "Building", "City Walls", "City", TRUE
@@ -2736,7 +2747,7 @@ reqs	=
     }
 [effect_city_walls_vs_Cannon_50pct_bonus]
 type    = "Defend_Bonus"
-value	= 150 ; 2.5x vs Cannon
+value	= 50 ; 1.5x vs Cannon
 reqs	=
     { "type", "name", "range", "present"
       "Building", "City Walls", "City", TRUE
@@ -2744,7 +2755,7 @@ reqs	=
     }
 [effect_city_walls_vs_Artillery_75pct_bonus]
 type    = "Defend_Bonus"
-value	= 125 ; 2.25x vs Artillery
+value	= 25 ; 1.25x vs Artillery
 reqs	=
     { "type", "name", "range", "present"
       "Building", "City Walls", "City", TRUE
@@ -2752,7 +2763,7 @@ reqs	=
     }
 [effect_city_walls_vs_Land_2]
 type    = "Defend_Bonus"
-value	= 200
+value	= 100
 reqs	=
     { "type", "name", "range", "present"
       "Building", "City Walls", "City", TRUE
@@ -2760,7 +2771,7 @@ reqs	=
    }
 [effect_city_walls_vs_Land_3]
 type    = "Defend_Bonus"
-value	= 200
+value	= 100
 reqs	=
     { "type", "name", "range", "present"
       "Building", "City Walls", "City", TRUE
@@ -2890,7 +2901,7 @@ reqs  =
 ;--------------------------------------------------------
 [effect_great_wall_0_vs_Land_original]
 type    = "Defend_Bonus"
-value	= 200 ; 3x vs most Land
+value	= 100 ; 2x vs most Land
 reqs	=
     { "type", "name", "range", "present"
       "Building", "Great Wall", "Player", TRUE
@@ -2908,7 +2919,7 @@ reqs	=
     }
 [effect_great_wall_0_vs_Catapult25pct_bonus_original]
 type    = "Defend_Bonus"
-value	= 175 ; 2.75x vs Catapult
+value	= 75 ; 1.75x vs Catapult
 reqs	=
     { "type", "name", "range", "present"
       "Building", "Great Wall", "Player", TRUE
@@ -2922,7 +2933,7 @@ reqs	=
     }
 [effect_great_wall_0_vs_Cannon50pct_bonus_original]
 type    = "Defend_Bonus"
-value	= 150 ; 2.5x vs Cannon
+value	= 50 ; 1.5x vs Cannon
 reqs	=
     { "type", "name", "range", "present"
       "Building", "Great Wall", "Player", TRUE
@@ -2939,7 +2950,7 @@ reqs	=
 
 [effect_great_wall_0_assimilated]
 type    = "Defend_Bonus"
-value	= 200 ; 3x vs most Land
+value	= 100 ; 2x vs most Land
 reqs	=
     { "type", "name", "range", "present"
       "Building", "Great Wall", "Player", TRUE
@@ -2958,7 +2969,7 @@ reqs	=
     }
 [effect_great_wall_0_vs_Catapult25pct_bonus_assimilated]
 type    = "Defend_Bonus"
-value	= 175 ; 2.75x vs Catapult
+value	= 75 ; 1.75x vs Catapult
 reqs	=
     { "type", "name", "range", "present"
       "Building", "Great Wall", "Player", TRUE
@@ -2973,7 +2984,7 @@ reqs	=
     }
 [effect_great_wall_0_vs_Cannon50pct_bonus_assimilated]
 type    = "Defend_Bonus"
-value	= 150 ; 2.5x vs. Cannon
+value	= 50 ; 1.5x vs. Cannon
 reqs	=
     { "type", "name", "range", "present"
       "Building", "Great Wall", "Player", TRUE
@@ -2991,7 +3002,7 @@ reqs	=
 
 [effect_great_wall_1_original]
 type    = "Defend_Bonus"
-value	= 200
+value	= 100
 reqs	=
     { "type", "name", "range", "present"
       "Building", "Great Wall", "Player", TRUE
@@ -3005,7 +3016,7 @@ reqs	=
     }
 [effect_great_wall_1_assimilated]
 type    = "Defend_Bonus"
-value	= 200
+value	= 100
 reqs	=
     { "type", "name", "range", "present"
       "Building", "Great Wall", "Player", TRUE
@@ -3020,7 +3031,7 @@ reqs	=
     }
 [effect_great_wall_3_original]
 type    = "Defend_Bonus"
-value	= 200
+value	= 100
 reqs	=
     { "type", "name", "range", "present"
       "Building", "Great Wall", "Player", TRUE
@@ -3034,7 +3045,7 @@ reqs	=
     }
 [effect_great_wall_3_assimilated]
 type    = "Defend_Bonus"
-value	= 200
+value	= 100
 reqs	=
     { "type", "name", "range", "present"
       "Building", "Great Wall", "Player", TRUE

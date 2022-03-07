@@ -67,8 +67,7 @@ richness.
    compensates the increase in cost and
    science requirements. Pyramid strategies will be more
    non-conformist, rare, and more of a commitment, but also
-   more interesting. Pyramids must be built before 
-   discovering Democracy.
+   more interesting.
    Cost: 180 (was 200)
    Gives its city a rapture rate of 100% regardless of gov.
 ============================================================
@@ -370,9 +369,28 @@ issues with tech tree flow.
 ==============================================================
 64. Homeland Security prevents Poison City from taking place.
 ==============================================================
-65.
+65. Communism: celebrating cities with granaries get +1 food
+to city tile.
 ==============================================================
-66.
+66. City Walls are 2x defense like all other defense-types.
+Fixes a confusion where 3x was attributed because the 1.5x
+free fortify then double added to create 4.5x. This made
+land conquest significantly penalised compared to sea or
+air and disrupted tactical integrity of the game.
 ==============================================================
-67.
+68. All Ballistic type units can now SUA iff they haven't 
+moved; are also able to SUA against oceanic tiles (if not
+trasported.) 
+==============================================================
+69.
+==============================================================
+70.
+==============================================================
+71.
+==============================================================
+72.
+==============================================================
+73.
+==============================================================
+74.
 
