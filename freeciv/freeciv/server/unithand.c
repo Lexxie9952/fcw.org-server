@@ -4341,15 +4341,23 @@ static bool unit_bombard(struct unit *punit, struct tile *ptile,
     unit_list_iterate_safe(ptile->units, pdefender) {
       struct extra_unit_stats rstats;
       unit_get_extra_stats(&rstats, pdefender);
-
-      if (rstats.bombard_retaliate_rounds   // a retaliator recursively fights back...
-       && pdefender->moves_left > 0) {      // ... if it has moves_left:
+      
+      // Retaliators get a chance to 'recursively' fight back */
+      // ... if defender has bombard retaliation capability:
+      if (rstats.bombard_retaliate_rounds   
+       // ... and if attacker is reachable:
+       && is_unit_reachable_at(punit, pdefender, unit_tile(punit))
+       /* ... and ACTION_BOMBARD is possible on the attacker's tile ...
+       && is_action_enabled_unit_on_tile(ACTION_BOMBARD, pdefender, 
+                                         unit_tile(punit), NULL) TODO: commented out because wrongly returns FALSE */
+       // ... and if defender has moves_left: 
+       && pdefender->moves_left > 0) { 
         
           unit_bombard(pdefender,        // Defender is now Attacker
                       unit_tile(punit),  // Attacker tile is now Defender tile
                       paction,           // (still Bombardment, but will be unused)
                       true);             // is_retaliation==true, ...    
-      }                                  // ... (so no further recursion)
+      }                                  // ... (to avoid recursion)
     } unit_list_iterate_safe_end;
   }
 
