@@ -664,7 +664,7 @@ Veteran Levels for Phalanx are the standard ruleset default:
 <pre class='firepower'>Firepower: 1</pre>
 <pre class='hitpoints'>Hitpoints: 10</pre>
 <pre class='obsolete'>Obsolete by: Musketeers</pre>
-<pre class='helptext'><b class='unit_desc'>Archers fight with bows and arrows. They have good offense and decent defense. Rather than fight to the death, Archers can also do a ranged Volley Attack which avoids hand-to-hand retaliation: two volleys of arrows are fired on up to 7 enemy units on the tile, causing 1-2hp of damage to any units who are hit. This includes Oceanic tiles if not transported. This is useful for softening enemies prior to battle, or for deterring an approach to a strategic location. (Volley Attack is not possible on Cities or Fortresses.) Archers can do a retaliatory Volley attack against any unit which does a Special Unit Attack on them.
+<pre class='helptext'><b class='unit_desc'>Archers fight with bows and arrows. They have good offense and decent defense. Rather than fight to the death, Archers can also do a ranged Volley Attack which avoids hand-to-hand retaliation: two volleys of arrows are fired on up to 3 enemy units on the tile, causing 1-2hp of damage to any units who are hit. This includes Oceanic tiles if not transported. This is useful for softening enemies prior to battle, or for deterring an approach to a strategic location. (Volley Attack is not possible on Cities or Fortresses.) Archers can do a retaliatory Volley attack against any unit which does a Special Unit Attack on them.
 
 With the discovery of Conscription, Archers can convert to Musketeers in any domestic city.</b>
 
@@ -2060,15 +2060,14 @@ Veteran Levels for Armor II are the standard ruleset default:
 <pre class='firepower'>Firepower: 1</pre>
 <pre class='hitpoints'>Hitpoints: 10</pre>
 <pre class='obsolete'>Obsolete by: Cannon</pre>
-<pre class='helptext'><b class='unit_desc'>Catapults are large rock-throwing war machines. The ballistic delivery of massive stones diminishes the defense bonus vs. land attacks by Fortifications and City Walls by -25%, yielding a 1.25× and 1.75× bonus, respectively. 
+<pre class='helptext'><b class='unit_desc'>Catapults are rock-throwing war machines. Massive stones diminish the defense bonus of City Walls by -25%, down to 1.75×. 
 </b>
 <b class='unit_desc'>If they haven't moved, Catapults can do 4 rounds of Bombardment on a single unit, which may possibly be killed. When special attacked from range or rammed in a Fortress, they can retaliate with the same type of Bombardment. 
   
 Catapults are weak defenders, and need an escort to be effective.</b>
 <hr style='border-top: 1px solid #000'>➤ Belongs to Land unit class, Ballistic sub-class.
-  • 25% is subtracted from the bonus of City defense improvements against Land attacks:
-    • Fortifications are reduced from 1.5× to 1.25×
-    • City Walls are reduced from 3× to 2.75×
+  • 25% is subtracted from the bonus of City Walls:
+    • Bonus reduced from 2× to 1.75×
   • Can occupy empty enemy cities.
   • Subject to zones of control.
   • Slowed down while damaged.
@@ -2172,7 +2171,7 @@ The discovery of Metallurgy by any nation incapacitates Siege Rams.</b>
 <pre class='firepower'>Firepower: 5</pre>
 <pre class='hitpoints'>Hitpoints: 10</pre>
 <pre class='obsolete'>Obsolete by: Cannon</pre>
-<pre class='helptext'><b class='unit_desc'>Ballistae fire massive bolts through enemy formations. They can do this from any tile to any tile. Slow reload prevents them from doing conventional attacks. Ballistae do 5 rounds of Ranged Attack on two units without retaliation. Accuracy is poor (A1). Damage is 5x more than normal. To do Ranged Attack, Ballistae must have used no move points.
+<pre class='helptext'><b class='unit_desc'>Ballistae fire massive bolts through enemy formations. They can do this from any tile to any tile. Slow reload prevents them from doing conventional attacks. Ballistae do 5 rounds of Ranged Attack on two units without retaliation. Accuracy is poor (A1). Damage is 5× more than normal. To do Ranged Attack, Ballistae must have used no move points.
 
 Ballistae defend at (D1) with an 80% defense penalty vs. foot soliders and mounted units. However, the defensive role gives Ballistae the chance to reload and fire until one of the combatants dies in conventional combat.
 
@@ -2230,13 +2229,12 @@ A Ballista's best offensive role is to soften forts and fortified positions. Def
 <pre class='firepower'>Firepower: 1</pre>
 <pre class='hitpoints'>Hitpoints: 20</pre>
 <pre class='obsolete'>Obsolete by: Artillery</pre>
-<pre class='helptext'><b class='unit_desc'>Cannons are huge guns that use gunpowder to fire massive metallic projectiles much faster and more accurately than earlier ballistic weapons. The aerial delivery of high speed massive metal gives an edge against Fortifications and City Walls. The defense bonuses vs. land attacks from those are reduced by -50%. This leaves Fortifications only with their terrain bonus, and reduces City walls to 1.5x. 
+<pre class='helptext'><b class='unit_desc'>Cannons are guns that fire massive metallic projectiles faster and more accurately than earlier ballistic weapons. This reduces the defense bonuses of City Walls in half, down to 1.5×. 
 </b>
 <b class='unit_desc'>If they haven't moved, Cannons can do 5 rounds of Bombardment on two units, with one possible fatality. When special attacked from range or rammed in a Fortress, they can retaliate with the same type of Bombardment.</b>
 <hr style='border-top: 1px solid #000'>➤ Belongs to Land unit class, Ballistic sub-class.
-  • 50% is subtracted from the bonus of City defense improvements against Land attacks:
-    • Fortifications are reduced to terrain bonus only.
-    • City Walls are reduced from 3× to 2.5×
+  • 50% is subtracted from the bonus of City Walls:
+    • Bonus reduced from 2× to 1.5×
   • Can occupy empty enemy cities.
   • Subject to zones of control.
   • Slowed down while damaged.
@@ -2292,13 +2290,12 @@ Veteran Levels for Siege Rams are the standard ruleset default:
 <pre class='firepower'>Firepower: 2</pre>
 <pre class='hitpoints'>Hitpoints: 20</pre>
 <pre class='obsolete'>Obsolete by: Howitzer</pre>
-<pre class='helptext'><b class='unit_desc'>Artillery are a major upgrade to Cannons, with doubled firepower. Accuracy and projectile speed go to a whole new level. Thus, they have an even greater bonus than their predecessors against Fortifications and City Walls. Such bonuses are reduced -75%. This leaves Fortifications only with their terrain bonus, and reduces the bonus from Walls down to 1.25x. 
+<pre class='helptext'><b class='unit_desc'>Artillery are a major upgrade to Cannons, with doubled firepower. Accuracy and projectile speed go to a whole new level. They have a greater bonus against City Walls than their predecessors. The bonus of City Walls is reduced -75% down to 1.25×. 
 </b>
 <b class='unit_desc'>If they haven't moved, Artillery can do 6 rounds of Bombardment on three units, with one possible fatality. When special attacked from range, they can retaliate with the same type of Bombardment.</b>
 <hr style='border-top: 1px solid #000'>➤ Belongs to Land unit class, Ballistic sub-class.
-  • 75% is subtracted from the bonus of City defense improvements against Land attacks:
-    • Fortifications are reduced to terrain bonus only.
-    • City Walls are reduced from 3× to 2.25×.
+  • 75% is subtracted from the bonus of City Walls:
+    • Bonus reduced from 2× to 1.25×.
   • Can occupy empty enemy cities.
   • Subject to zones of control.
   • Slowed down while damaged.
@@ -2468,11 +2465,10 @@ Veteran Levels for AAA are the default for all other military units:
 <pre class='firepower'>Firepower: 2</pre>
 <pre class='hitpoints'>Hitpoints: 30</pre>
 <pre class='obsolete'>Obsolete by: None</pre>
-<pre class='helptext'><b class='unit_desc'>Howitzers are upgraded Artillery with a terrifying increase to mobility and attack strength. Fortifications get no bonus except their terrain bonus, and City Walls are completely ineffective against Howitzers. 
+<pre class='helptext'><b class='unit_desc'>Howitzers are upgraded Artillery with a terrifying increase to mobility and attack strength. City Walls are completely ineffective against Howitzers. 
 </b>
-<b class='unit_desc'>If they haven't moved, Artillery can do 7 rounds of Bombardment on four units, with one possible fatality. When special attacked from range, they can retaliate with the same type of Bombardment. This is a strong deterrent.</b>
+<b class='unit_desc'>If they haven't moved, Howitzers can do 7 rounds of Bombardment on four units, with one possible fatality. When special attacked from range, they can retaliate with the same type of Bombardment. This is a strong deterrent.</b>
 <hr style='border-top: 1px solid #000'>➤ Belongs to Land unit class, Ballistic sub-class.
-  • Fortifications are reduced to terrain bonus only.
   • City Walls get no bonus against this unit.
   • Can occupy empty enemy cities.
   • Subject to zones of control.

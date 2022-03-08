@@ -373,18 +373,42 @@ issues with tech tree flow.
 to city tile.
 ==============================================================
 66. City Walls are 2x defense like all other defense-types.
-Fixes a confusion where 3x was attributed because the 1.5x
-free fortify then double added to create 4.5x. This made
-land conquest significantly penalised compared to sea or
-air and disrupted tactical integrity of the game.
+Fixes a confusion where 3x was wrongly attributed because it
+was customary to consider City Walls as 3x because the free-
+fortify bonus of 1.5x means the total bonus of defenders in
+cities with walls was 3x. However, this resulted in the 
+free-fortify bonus being multiplied twice for units in 
+cities with walls, creating 4.5x. The result of this mistake
+made some dramatic changes to gameplay:
+-the ability to rapid-buy walls in an emergency for chokepoint
+cities for 4.5x instead of 3x meant the game become much more 
+skewed to not needing to buy as many military units and thus 
+more heavily economic until heavy post-gunpowder offensive 
+weaponry was discovered.
+-greatly force-multiplied the strategic dynamics of
+"playing sim city while gunpowder rushing"
+-took away from bronze age and iron age warfare
+-made the game heavily "aerocentric" since SAM Batteries 
+are only 2x defense (instead of 4.5x); this resulted in:
+-"flight rushing" being force multiplied more than it should
+-the "chess tactics" of ground warfare, zoc, positional
+warfare, etc., being greatly reduced.
+-land conquest and control of non-city terrestrial positions
+and borders were greatly reduced and replaced with a game of
+"city pounding"
+-disrupted tactical integrity of the game.
+==============================================================
+67. City Fortifications changed/simplified. Simply adds +0.33
+to the terrain defense bonus (+0.50 for Flatland). All other
+complexities removed.
 ==============================================================
 68. All Ballistic type units can now SUA iff they haven't 
 moved; are also able to SUA against oceanic tiles (if not
 trasported.) 
 ==============================================================
-69.
+69. 
 ==============================================================
-70.
+70. 
 ==============================================================
 71.
 ==============================================================
