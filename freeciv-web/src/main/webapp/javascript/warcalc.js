@@ -75,14 +75,14 @@ function warcalc_update_titles()
     $("#wcamsg").prop("title", "Your "+unit_types[units[my_uid]['type']]['name']+" is set as attacker.\n\nOnly Veteran bonus is auto-calculated");
     $("#wcamsg").html("A:&#11088;"+unit_types[units[my_uid]['type']]['name']);
  
-    $("#wcdmsg").prop("title", "Foreign "+unit_types[units[their_uid]['type']]['name']+" is set as defender.\n\nVeteran, Terrain, and Fortify bonuses are included.\n\nNot included:\n Base, Unit-type bonus, City modifiers");
+    $("#wcdmsg").prop("title", "Foreign "+unit_types[units[their_uid]['type']]['name']+" is set as defender.\n\nOnly Veteran, Terrain, and Fortify bonuses are included.");
     $("#wcdmsg").html("D:"+unit_types[units[their_uid]['type']]['name']);
   }
   else if (warcalc_role_mode == WARCALC_DEFENDING) {// swapped role
     $("#wcamsg").prop("title", "Foreign "+unit_types[units[their_uid]['type']]['name']+" is set as attacker.\n\nOnly Veteran bonus is auto-calculated");
     $("#wcamsg").html("A:"+unit_types[units[their_uid]['type']]['name']);
  
-    $("#wcdmsg").prop("title", "Your "+unit_types[units[my_uid]['type']]['name']+" is set as defender.\n\nVeteran, Terrain, and Fortify bonuses are included.\n\nNot included:\n Base, Unit-type bonus, City modifiers");
+    $("#wcdmsg").prop("title", "Your "+unit_types[units[my_uid]['type']]['name']+" is set as defender.\n\nOnly Veteran, Terrain, and Fortify bonuses are included.");
     $("#wcdmsg").html("D:&#11088;"+unit_types[units[my_uid]['type']]['name']);
   }
 }
@@ -433,27 +433,27 @@ function warcalc_set_tooltips()
         }
         // DEFEND BUTTONS
         $("#wc500").hide(); // no 5x bonus in MP2/AG
-        $("#wc125").prop("title", bl+"In city with SAM Battery vs. Stealth Aircraft");
-        $("#wc133").prop("title", bl+"River"+nbl+"Swamp"+nbl+"Forest"+nbl+"Land/Heli in Fort vs. Land/Sea/Missile (not Armor)"+nbl+"Fighter over Fort/Fortress vs. Land/Sea/Missile (not Armor)"+nbl+"Sea unit in Naval base");
+        $("#wc125").prop("title", bl+"In city with SAM Battery dvs Stealth Aircraft");
+        $("#wc133").prop("title", bl+"River"+nbl+"Swamp"+nbl+"Forest"+nbl+"Land/Heli in Fort dvs Land/Sea/Missile (not Armor)"+nbl+"Fighter over Fort/Fortress dvs Land/Sea/Missile (not Armor)"+nbl+"Sea unit in Naval base");
         $("#wc150").prop("title", bl+"Veteran-1 ('Veteran')"+nbl+"Jungle"+nbl+"Land unit Fortified OR inside city");
-        $("#wc167").prop("title", bl+"Land/Heli in Fortress vs Armor/Aircraft"+nbl+"Land/Heli in Naval Base vs Armor/Aircraft");
+        $("#wc167").prop("title", bl+"Land/Heli in Fortress dvs Armor/Aircraft"+nbl+"Land/Heli in Naval Base dvs Armor/Aircraft");
         $("#wc175").prop("title", bl+"Veteran-2 ('Hardened')");
-        $("#wc200").prop("title", bl+"Veteran-3 ('Elite')"+nbl+"Hills"+nbl+"Land/Heli in Fortress vs. Land/Sea/Missile"+nbl+"In city with Coastal Defense vs. Sea"+nbl
-          + "In city with SAM Battery vs. Air (not Stealth)"+nbl+"In city with SDI vs. Missile"+nbl+"Pikemen vs Horse (not Cavalry)"+nbl+"Knight vs. Foot soldier"+nbl
-          + "Cruiser,Battleship,M.Destroyer,AEGIS vs Submarine"+nbl+"Sea unit vs. Marines"+nbl+"AAA/Mobile SAM vs. Aircraft"+nbl+"Missile Destroyer vs. Air/Missile"+nbl+"Armor II vs. Missile");
+        $("#wc200").prop("title", bl+"Veteran-3 ('Elite')"+nbl+"Hills"+nbl+"Land/Heli in Fortress dvs Land/Sea/Missile"+nbl+"In city with Coastal Defense dvs Sea"+nbl
+          + "In city with SAM Battery dvs Air (not Stealth)"+nbl+"In city with SDI dvs Missile"+nbl+"Pikemen dvs Horse (not Cavalry)"+nbl+"Knight dvs Foot soldier"+nbl
+          + "Cruiser,Battleship,M.Destroyer,AEGIS dvs Submarine"+nbl+"Sea unit dvs Marines"+nbl+"AAA/Mobile SAM dvs Aircraft"+nbl+"Missile Destroyer dvs Air/Missile"+nbl+"Armor II dvs Missile");
         $("#wc210").prop("title", bl+"Veteran-4 ('Crack')");
         $("#wc220").prop("title", bl+"Veteran-5 ('Master')");
         $("#wc230").prop("title", bl+"Veteran-6 ('Champion')");
-        $("#wc300").prop("title", bl+"Mountains"+nbl+"In city with City Walls vs Land (not Howitzer)"+nbl+"Knight vs. Horse (not Cavalry)"+nbl+"AEGIS vs. Air/Missile");
-        $("#wc400").prop("title", bl+"Destroyer vs. Submarine");
+        $("#wc300").prop("title", bl+"Mountains"+nbl+"In city with City Walls dvs Land (not Howitzer)"+nbl+"Knight dvs Horse (not Cavalry)"+nbl+"AEGIS dvs Air/Missile");
+        $("#wc400").prop("title", bl+"Destroyer dvs Submarine");
         // ATTACK BUTTONS
         $("#wca133").hide(); // unused except for table alignment
         $("#wca167").hide(); //   "      "     "    "      "
 
-        $("#wca125").prop("title", bl+"Stealth Aircraft vs. AAA/Mobile SAM/AEGIS Cruiser");
+        $("#wca125").prop("title", bl+"Stealth Aircraft avs AAA/Mobile SAM/AEGIS Cruiser");
         $("#wca150").prop("title", bl+"Veteran-1 ('Veteran')"+nbl+"Phalanx/Pikemen + Agoge of Sparta");
         $("#wca175").prop("title", bl+"Veteran-2 ('Hardened')");
-        $("#wca200").prop("title", bl+"Veteran-3 ('Elite')"+nbl+"AAA/Mobile SAM vs. Aircraft"+nbl+"Fighter vs Heli (also: Heli FP=1)")+nbl+"Any unit vs Ship in a city: Defend FP1, Attack FP x2";
+        $("#wca200").prop("title", bl+"Veteran-3 ('Elite')"+nbl+"AAA/Mobile SAM avs Aircraft"+nbl+"Fighter dvs Heli (also: Heli FP=1)")+nbl+"Any unit avs Ship in a city: Defend FP1, Attack FP x2";
         $("#wca210").prop("title", bl+"Veteran-4 ('Crack')");
         $("#wca220").prop("title", bl+"Veteran-5 ('Master')");
         $("#wca230").prop("title", bl+"Veteran-6 ('Champion')");
@@ -466,30 +466,42 @@ function warcalc_set_tooltips()
 
         if (ruleset_control['name'].startsWith("Avant-garde")
            || ruleset_control['name'].startsWith("MP2")) //MP2 Brava onward starts with "MP2"
-        {  // AG distinctions
-          $("#wc133").prop("title", bl+"River"+nbl+"Swamp"+nbl+"Forest"+nbl+"Land/Heli in Fort vs. Land/Sea/Missile (not Armor)"+nbl+"Fighter over Fort/Fortress vs. Land/Sea/Missile (not Armor)"
-             +nbl+"Dive Bomber, Ground Strike Fighter vs. Anti-Air");
+        {
+          $("#wc133").prop("title", bl+"River"+nbl+"Swamp"+nbl+"Forest"+nbl+"Land/Heli in Fort dvs Land/Sea/Missile (not Armor)"+nbl+"Fighter over Fort/Fortress dvs Land/Sea/Missile (not Armor)"
+             +nbl+"Dive Bomber, Ground Strike Fighter dvs Anti-Air");
           $("#wc150").prop("title", bl+"Veteran-1 ('Veteran')"+nbl+"Jungle"+nbl+"Land unit Fortified OR inside city"
-             +nbl+"Helicopter vs. Foot or Mounted units");
-          $("#wc167").prop("title", bl+"Land/Heli in Fortress vs Armor/Aircraft"+nbl+"Land/Heli/Sea in Naval Base vs Armor/Aircraft");
-          $("#wc200").prop("title", bl+"Veteran-3 ('Elite')"+nbl+"Hills"+nbl+"Land/Heli in Fortress vs. Land/Sea/Missile"+nbl+"Land/Heli/Sea in Naval Base vs. Land/Sea/Missile"+nbl+"In city with Coastal Defense vs. Sea"+nbl
-          + "In city with SAM Battery vs. Air/Heli (not Stealth)"+nbl+"In city with SDI vs. Missile"+nbl+"Pikemen vs Horse (not Cavalry)"+nbl+"Knight vs. Foot soldier"+nbl
-          + "Cruiser,Battleship,M.Destroyer,AEGIS vs Submarine"+nbl+"Sea unit vs. Marines"+nbl+"AAA/Mobile SAM vs. Aircraft"+nbl+"Missile Destroyer vs. Air/Missile"+nbl+"Armor II vs. Missile");
+             +nbl+"Helicopter dvs Foot or Mounted units");
+          $("#wc167").prop("title", bl+"Land/Heli in Fortress dvs Armor/Aircraft"+nbl+"Land/Heli/Sea in Naval Base dvs Armor/Aircraft");
+          $("#wc200").prop("title", bl+"Veteran-3 ('Elite')"+nbl+"Hills"+nbl+"Land/Heli in Fortress dvs Land/Sea/Missile"+nbl+"Land/Heli/Sea in Naval Base dvs Land/Sea/Missile"+nbl+"In city with Coastal Defense dvs Sea"+nbl
+          + "In city with SAM Battery dvs Air/Heli (not Stealth)"+nbl+"In city with SDI dvs Missile"+nbl+"Pikemen dvs Horse (not Cavalry)"+nbl+"Knight dvs Foot soldier"+nbl
+          + "Cruiser,Battleship,M.Destroyer,AEGIS dvs Submarine"+nbl+"Sea unit dvs Marines"+nbl+"AAA/Mobile SAM dvs Aircraft"+nbl+"Missile Destroyer dvs Air/Missile"+nbl+"Armor II dvs Missile");
 
-          $("#wca150").prop("title", bl+"Veteran-1 ('Veteran')"+nbl+"Phalanx/Pikemen + Agoge of Sparta"+nbl+"Dive Bomber vs. Land or Sea");
-          $("#wca200").prop("title", bl+"Veteran-3 ('Elite')"+nbl+"AAA/Mobile SAM vs. Aircraft");
+          $("#wca150").prop("title", bl+"Veteran-1 ('Veteran')"+nbl+"Phalanx/Pikemen + Agoge of Sparta"+nbl+"Dive Bomber avs Land or Sea");
+          $("#wca200").prop("title", bl+"Veteran-3 ('Elite')"+nbl+"AAA/Mobile SAM avs Aircraft");
         }
         if (client_rules_flag[CRF_MP2_C]) {
-          $("#wc133").prop("title", "Swamp"+nbl+"Forest"+nbl+"Land/Heli in Fort vs. Land/Sea/Missile (not Armor)"+nbl+"Fighter over Fort/Fortress vs. Land/Sea/Missile (not Armor)"
-          +nbl+"Dive Bomber, Ground Strike Fighter vs. Anti-Air");
+          $("#wc133").prop("title", bl+"Swamp"+nbl+"Forest"+nbl+"Land/Heli in Fort dvs Land/Sea/Missile (not Armor)"+nbl+"Fighter over Fort/Fortress dvs Land/Sea/Missile (not Armor)"
+          +nbl+"Dive Bomber, Ground Strike Fighter dvs Anti-Air");
           $("#wc175").prop("title", bl+"Veteran-2 ('Hardened')");
           $("#wc150").prop("title", bl+"Veteran-1 ('Veteran')"+nbl+"Jungle"+nbl+"Land unit Fortified OR inside city"
-          +nbl+"Helicopter vs. Foot or Mounted units"+nbl+"In city with Fortifications vs Land (not Ballistic)");
-          $("#wc167").prop("title", bl+"Land/Heli in Fortress vs Armor/Aircraft"+nbl+"Land/Heli/Sea in Naval Base vs Armor/Aircraft"+nbl+"Jungle in city with Fortifications");
-          $("#wc125").prop("title", bl+"In city with Fortifications vs Catapult"+nbl+"In city with SAM Battery vs. Stealth Aircraft");
-          $("#wca125").prop("title", bl+"Stealth Aircraft vs. AAA/Mobile SAM/AEGIS Cruiser");
-          $("#wca150").prop("title", bl+"Veteran-1 ('Veteran')"+nbl+"Phalanx/Pikemen + Agoge of Sparta"+nbl+"Dive Bomber vs. Land or Sea");
-          $("#wca175").prop("title", bl+"Veteran-2 ('Hardened')"+nbl+"Artillery vs City Walls");
+          +nbl+"Helicopter dvs Foot or Mounted units"+nbl+"In city with Fortifications dvs Land (not Ballistic)");
+          $("#wc167").prop("title", bl+"Land/Heli in Fortress dvs Armor/Aircraft"+nbl+"Land/Heli/Sea in Naval Base dvs Armor/Aircraft"+nbl+"Jungle in city with Fortifications");
+          $("#wc125").prop("title", bl+"In city with Fortifications dvs Catapult"+nbl+"In city with SAM Battery dvs Stealth Aircraft");
+          $("#wca125").prop("title", bl+"Stealth Aircraft avs AAA/Mobile SAM/AEGIS Cruiser");
+          $("#wca150").prop("title", bl+"Veteran-1 ('Veteran')"+nbl+"Phalanx/Pikemen + Agoge of Sparta"+nbl+"Dive Bomber avs Land or Sea");
+          $("#wca175").prop("title", bl+"Veteran-2 ('Hardened')");
+        }
+        if (client_rules_flag[CRF_MP2_D]) {
+          $("#wc125").prop("title", bl+"In city with City Walls dvs Artillery"+nbl+"In city with SAM Battery dvs Stealth Aircraft");
+          $("#wc150").prop("title", bl+"Veteran-1 ('Veteran')"+nbl+"Jungle"+nbl+"Flatland terrain in city with Fortifications"+nbl+"Land unit Fortified OR inside city"+nbl+"In city with City Walls dvs Cannon"
+          +nbl+"Helicopter dvs Foot or Mounted units"+nbl+"Armor II dvs Missile" );
+          $("#wc167").prop("title", bl+"Swamp in city with Fortifications"+nbl+"Forest in city with Fortifications"+nbl+"Land/Heli in Fortress dvs Armor/Aircraft"+nbl+"Land/Heli/Sea in Naval Base dvs Armor/Aircraft");
+          $("#wc175").prop("title", bl+"Veteran-2 ('Hardened')"+nbl+"In city with City Walls dvs Catapult");
+          $("#wc300").prop("title", bl+"Mountains"+nbl+"Knight dvs Horse (not Cavalry)"+nbl+"AEGIS dvs Air/Missile");
+          $("#wc200").prop("title", bl+"Veteran-3 ('Elite')"+nbl+"Hills"+nbl+"In city with City Walls dvs Land (not Ballistic class)"+nbl+"In city with Coastal Defense dvs Sea"
+          +nbl+"In city with SAM Battery dvs Air/Heli (not Stealth)"+nbl+"In city with SDI dvs Missile"+nbl+"Land/Heli in Fortress dvs Land/Sea/Missile"+nbl+"Land/Heli/Sea in Naval Base dvs Land/Sea/Missile"
+          +nbl+"Pikemen dvs Horse (not Cavalry)"+nbl+"Knight dvs Foot soldier"
+          +nbl+"Cruiser,Battleship,M.Destroyer,AEGIS dvs Submarine"+nbl+"Sea unit dvs Marines"+nbl+"AAA/Mobile SAM dvs Aircraft"+nbl+"Mobile SAM dvs Missile"+nbl+"Missile Destroyer dvs Air/Missile");
         }
         return;
   }
@@ -507,13 +519,13 @@ function warcalc_set_tooltips()
 
     $("#wc150").prop("title", bl+"Veteran-1 ('Veteran')"+nbl+"River"+nbl+"Swamp"+nbl+"Forest"+nbl+"Jungle"+nbl+"Land unit Fortified OR inside city");
     $("#wc175").prop("title", bl+"Veteran-2 ('Hardened')");
-    $("#wc200").prop("title", bl+"Veteran-3 ('Elite')"+nbl+"Hills"+nbl+"Land/Heli in Fortress vs. Land/Sea units"+nbl+"Pikemen vs. Horse (not Cavalry)"+nbl+"In city with Coastal Defense vs. Sea"+nbl+"In city with SAM Battery vs. Aircraft"+nbl+"In city with SDI vs. Missile");
-    $("#wc300").prop("title", bl+"Mountains"+nbl+"In city with City Walls vs Land/Heli (not Howitzer)");
-    $("#wc500").prop("title", bl+"AEGIS vs. Air/Missile");
+    $("#wc200").prop("title", bl+"Veteran-3 ('Elite')"+nbl+"Hills"+nbl+"Land/Heli in Fortress dvs Land/Sea units"+nbl+"Pikemen dvs Horse (not Cavalry)"+nbl+"In city with Coastal Defense dvs Sea"+nbl+"In city with SAM Battery dvs Aircraft"+nbl+"In city with SDI dvs Missile");
+    $("#wc300").prop("title", bl+"Mountains"+nbl+"In city with City Walls dvs Land/Heli (not Howitzer)");
+    $("#wc500").prop("title", bl+"AEGIS dvs Air/Missile");
     // ATTACK BUTTONS
     $("#wca150").prop("title", bl+"Veteran-1 ('Veteran')");
     $("#wca175").prop("title", bl+"Veteran-2 ('Hardened')");
-    $("#wca200").prop("title", bl+"Veteran-3 ('Elite')"+nbl+"Fighter vs Heli (also: Heli FP=1)");
+    $("#wca200").prop("title", bl+"Veteran-3 ('Elite')"+nbl+"Fighter avs Heli (also: Heli FP=1)");
     // TOOLTIPS NEEDING MORE SPACE
     $("#wc200").tooltip({open: function (event, ui) {ui.tooltip.css("max-width", "400px");}});
     $("#wc300").tooltip({open: function (event, ui) {ui.tooltip.css("max-width", "400px");}});
@@ -524,13 +536,13 @@ function warcalc_set_tooltips()
     // DEFEND BUTTONS
     $("#wc300").hide(); // unused
     $("#wc125").prop("title", bl+"River"+nbl+"Swamp"+nbl+"Forest"+nbl+"Jungle");
-    $("#wc150").prop("title", bl+"Veteran-1 ('Veteran')"+nbl+"Hills"+nbl+"Land unit Fortified OR inside city"+nbl+"Sea unit inside city"+nbl+"Land unit in Fort vs. Land/Sea"+nbl
-      + "On Airstrip vs. Aircraft"+nbl+"In Airbase vs. Land/Sea"+nbl+"In city and Nation has Great Wall");
+    $("#wc150").prop("title", bl+"Veteran-1 ('Veteran')"+nbl+"Hills"+nbl+"Land unit Fortified OR inside city"+nbl+"Sea unit inside city"+nbl+"Land unit in Fort dvs Land/Sea"+nbl
+      + "On Airstrip dvs Aircraft"+nbl+"In Airbase dvs Land/Sea"+nbl+"In city and Nation has Great Wall");
     $("#wc175").prop("title", bl+"Veteran-2 ('Hardened')");
-    $("#wc200").prop("title", bl+"Veteran-3 ('Elite')"+nbl+"Mountains"+nbl+"Destroyer vs. Submarine"+nbl+""
-      + "Land unit in Fortress vs. Land/Sea"+nbl+"In Airbase vs. Aircraft"+nbl+"In city with City Walls vs Land unit"+nbl+"In city with Coastal Defense vs. Sea"+nbl
-      + "In city with SAM Battery vs. Air/Heli"+nbl+"In city with SDI vs. Missile" );
-    $("#wc500").prop("title", bl+"AEGIS vs. Air/Missile");
+    $("#wc200").prop("title", bl+"Veteran-3 ('Elite')"+nbl+"Mountains"+nbl+"Destroyer dvs Submarine"+nbl+""
+      + "Land unit in Fortress dvs Land/Sea"+nbl+"In Airbase dvs Aircraft"+nbl+"In city with City Walls dvs Land unit"+nbl+"In city with Coastal Defense dvs Sea"+nbl
+      + "In city with SAM Battery dvs Air/Heli"+nbl+"In city with SDI dvs Missile" );
+    $("#wc500").prop("title", bl+"AEGIS dvs Air/Missile");
     // ATTACK BUTTONS
     $("#wca150").prop("title", bl+"Veteran-1 ('Veteran')");
     $("#wca175").prop("title", bl+"Veteran-2 ('Hardened')");

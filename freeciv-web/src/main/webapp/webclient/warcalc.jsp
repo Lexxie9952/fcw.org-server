@@ -84,6 +84,7 @@
         <p id="exp_hp" style="text-align:center;">&nbsp;<br><br>&nbsp;<br>&nbsp;</p>
         
         <p id="wc_done_btn" style="text-align:center;"><input class="button" type="button" value="done" onClick="warcalc_done();"></p>
+        <p style="text-align:center"><br><br>ABBREVIATIONS:<br><small style="color:#888"><b>avs</b> = attacks vs.<br><b>dvs</b> = defends vs.<br></small></p>
     </div>
 </div>
     
