@@ -2810,76 +2810,22 @@ reqs	=
     { "type", "name", "range"
       "Building", "Fortifications", "City"
     }
-[effect_fortifications_in_lowlands_bonus]
+
+[effect_fortifications_bonus]
 type    = "Terrain_Defend_Add_Bonus"
-value = 17
+value = 33    ; +0.33 added to base terrain bonus
 reqs  =
-    { "type", "name", "range", "present"
-      "Building", "Fortifications", "City", TRUE
-      "Terrain", "Mountains", "Local", FALSE
-      "Terrain", "Hills",     "Local", FALSE
+    { "type",     "name",           "range", "present"
+      "Building", "Fortifications", "City",  TRUE
+      "Terrain",  "Mountains",      "Local", FALSE
     }
-[effect_fortifications_vs_Land]
-type    = "Defend_Bonus"
-value	= 50  ; 1.50x vs most Land; (1.5 * 1.17= 1.755; WAS: 75,1.75 on lowlands)
-reqs	=
-    { "type", "name", "range", "present"
-      "Building", "Fortifications", "City", TRUE
-      "Building", "City Walls", "City", FALSE
-      "Building", "Great Wall", "Player", FALSE
-      "UnitClass", "Land", "Local", TRUE
-      "UnitType", "Catapult", "Local", FALSE
-      "UnitType", "Cannon", "Local", FALSE
-      "UnitType", "Artillery", "Local", FALSE
-      "UnitType", "Howitzer", "Local", FALSE
-    }
-[effect_fortifications_vs_Catapult]
-type    = "Defend_Bonus"
-value	= 25 ; 1.25x vs Catapult's 25% bonus hills,lowlands: 1.25,1.4625; WAS: 1.50,1.50 hills @50%
-reqs	=
-    { "type", "name", "range", "present"
-      "Building", "Fortifications", "City", TRUE
-      "Building", "City Walls", "City", FALSE
-      "Building", "Great Wall", "Player", FALSE
-      "UnitType", "Catapult", "Local", TRUE
-    }
-
-;NOTE: -50% from Cannon nullifies +50% bonus:
-;[effect_fortifications_vs_Cannon]
-;type    = "Defend_Bonus"
-;value	= 0 ; 1.00x vs Cannon's 50% bonus hills,lowlands: 1.00,1.17; WAS: 1.25,1.25 @ 25%
-;reqs	=
-;    { "type", "name", "range", "present"
-;      "Building", "Fortifications", "City", TRUE
-;      "Building", "City Walls", "City", FALSE
-;      "Building", "Great Wall", "Player", FALSE
-;      "UnitType", "Cannon", "Local", TRUE
-;    }
-
-;-75% from Artillery nullifies +50% bonus:  1.00,1.17; WAS: 1.00,1.00 @0%
-;no need for an effect, therefore.
-
-; HOWITZER nullifies bonus:                       1.00,1.17; WAS: 1.00,1.00 @0%
-
-[effect_fortifications_vs_Land_2]
-type    = "Defend_Bonus"
-value	= 50
-reqs	=
-    { "type", "name", "range", "present"
-      "Building", "Fortifications", "City", TRUE
-      "Building", "City Walls", "City", FALSE
-      "Building", "Great Wall", "Player", FALSE
-      "UnitClass", "LandAirSea", "Local", TRUE
-   }
-[effect_fortifications_vs_Land_3]
-type    = "Defend_Bonus"
-value	= 50
-reqs	=
-    { "type", "name", "range", "present"
-      "Building", "Fortifications", "City", TRUE
-      "Building", "City Walls", "City", FALSE
-      "Building", "Great Wall", "Player", FALSE
-      "UnitClass", "LandNoKill", "Local", TRUE
+[effect_fortifications_bonus2]
+type    = "Terrain_Defend_Add_Bonus"
+value = 17 ;Grass,Plains,Desert,Tundra get extra +0.17 = +0.50
+reqs  =
+    { "type",        "name",           "range", "present"
+      "Building",    "Fortifications", "City",  TRUE
+      "TerrainFlag", "Flat Land",      "Local", TRUE
     }
 [effect_fortifications_1]
 type    = "Unit_No_Lose_Pop"
@@ -5261,33 +5207,30 @@ reqs =
 ;************************************************************************ Citadel of Aleppo
 [effect_citadel_vs_Land]
 type    = "Defend_Bonus"
-value	= 200 ; 3x vs most Land
+value	= 200 ; 3x vs Land
 reqs	=
     { "type",      "name",              "range", "present"
       "Building",  "Citadel of Aleppo", "City",  TRUE
       "Building",  "City Walls",        "City",  FALSE          ;shouldn't happen
-      "Building",  "Fortifications",    "City",  FALSE          ;shouldn't happen
       "UnitClass", "Land",              "Local", TRUE
     }
 [effect_citadel_vs_Land2]
 type    = "Defend_Bonus"
-value	= 200 ; 3x vs most Land
+value	= 200 ; 3x vs Land
 reqs	=
     { "type",      "name",              "range", "present"
       "Building",  "Citadel of Aleppo", "City",  TRUE
       "Building",  "City Walls",        "City",  FALSE          ;shouldn't happen
-      "Building",  "Fortifications",    "City",  FALSE          ;shouldn't happen
-      "UnitClass", "Land",              "Local", TRUE
+      "UnitClass", "LandNoKill",        "Local", TRUE
     }
 [effect_citadel_vs_Land3]
 type    = "Defend_Bonus"
-value	= 200 ; 3x vs most Land
+value	= 200 ; 3x vs Land
 reqs	=
     { "type",      "name",              "range", "present"
       "Building",  "Citadel of Aleppo", "City",  TRUE
       "Building",  "City Walls",        "City",  FALSE          ;shouldn't happen
-      "Building",  "Fortifications",    "City",  FALSE          ;shouldn't happen
-      "UnitClass", "Land",              "Local", TRUE
+      "UnitClass", "LandAirSea",        "Local", TRUE
     }
 [effect_citadel_visible]
 type    = "Visible_Walls"
@@ -6849,16 +6792,18 @@ reqs =
       "Gov",      "Despotism","Player", TRUE
       "OutputType", "Food",  "Local", TRUE
     }
-[effect_ziggurat_fortifications]
+[effect_ziggurat_defense]
 type    = "Defend_Bonus"
 value	= 75  ; 1.75x vs everything
 reqs	=
-    { "type",     "name",           "range","present"
-      "Building", "Ziggurat",       "City",  TRUE
-      "Gov",      "Despotism",      "Player",TRUE
-      "Building", "Fortifications", "City",  FALSE
-      "Building", "City Walls",     "City",  FALSE
-      "Building", "Great Wall",     "Player",FALSE
+    { "type",     "name",             "range","present"
+      "Building", "Ziggurat",         "City",  TRUE
+      "Gov",      "Despotism",        "Player",TRUE
+      "Building", "Fortifications",   "City",  FALSE
+      "Building", "City Walls",       "City",  FALSE
+      "Building", "Great Wall",       "Player",FALSE
+      "Building", "Citadel of Aleppo","Player",FALSE
+      ;if this wonder is later made to not expire, need to add SAM Battery, Coastal Defense, SDI.
     }
 ;Ziggurat semi-relocation of capital effects--------------------------
 [effect_ziggurat_palace_gov_center]
