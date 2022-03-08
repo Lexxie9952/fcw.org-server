@@ -1273,7 +1273,7 @@ convert_to    = "Musketeers"
 convert_time  = 2
 transport_cap = 0
 fuel          = 0
-city_size     = 1850 ; 000000,000,111,001110,1,0 = atk_bonus=0, max_kills=0, targets=7, move_cost=14 frags, stay_fortfy=1, reserved = 0
+city_size     = 826 ; 000000,000,011,001110,1,0 = atk_bonus=0, max_kills=0, targets=3, move_cost=14 frags, stay_fortfy=1, reserved = 0
 paratroopers_mr_sub = 4096 ; 00010,00,0000,000,0,0 - bbd_retal_rate=2, iPill_rand_tgts=0, iPill_odds=0, iPill_moves=0, iPillage=0, ATK_Stay_Fortified=0
 ;NOTE：iPillage changes in rules require client_rules_flag and get_what_can_unit_pillage_from() changes.
 uk_happy      = 1
@@ -1288,7 +1288,7 @@ roles         = "DefendOk", "DefendOkStartUnit"
 helptext      = _("\
 Archers fight with bows and arrows. They have good offense and decent defense.\
  Rather than fight to the death, Archers can also do a ranged Volley Attack which\
- avoids hand-to-hand retaliation：two volleys of arrows are fired on up to 7 enemy units on the tile,\
+ avoids hand-to-hand retaliation：two volleys of arrows are fired on up to 3 enemy units on the tile,\
  causing 1-2hp of damage to any units who are hit. This includes Oceanic tiles if not\
  transported. This is useful for softening enemies prior to battle, or for deterring an\
  approach to a strategic location. (Volley Attack is not possible on Cities or Fortresses.)\
@@ -2239,10 +2239,8 @@ uk_gold       = 0
 flags         = "CantReachAir", "WillNever", "Bombarder"
 roles         = ""
 helptext      = _("\
-Catapults are large rock-throwing war machines.\
- The ballistic delivery of massive\
- stones diminishes the defense bonus vs. land attacks by Fortifications and\
- City Walls by -25%, yielding a 1.25× and 1.75× bonus, respectively. \n\
+Catapults are rock-throwing war machines. Massive stones diminish\
+ the defense bonus of City Walls by -25%, down to 1.75×. \n\
 "), _("
 If they haven't moved, Catapults can do 4 rounds of Bombardment\
  on a single unit, which may possibly be killed. When special\
@@ -2273,7 +2271,7 @@ move_rate     = 2
 vision_radius_sq = 4
 transport_cap = 1
 fuel          = 0
-city_size     = 507960  ; 011111,000,000,001110,00 = atk_bonus=8.75x, max_kills=0, targets=all, move_cost=14 frags, stay_fortfy=0, reserved = 0
+city_size     = 507960  ; 011111,000,000,001110,00 = atk_bonus=8.75×, max_kills=0, targets=all, move_cost=14 frags, stay_fortfy=0, reserved = 0
 uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
@@ -2339,7 +2337,7 @@ Ballistae fire massive bolts through enemy formations. They can\
  do this from any time to any tile.\
  Slow reload prevents them from doing conventional attacks.\
  Ballistae do 5 rounds of Ranged Attack on two units without\
- retaliation. Accuracy is poor (A1). Damage is 5x more than normal.\
+ retaliation. Accuracy is poor (A1). Damage is 5× more than normal.\
  To do Ranged Attack, Ballistae must have used no move points.\n\n\
 Ballistae defend at (D1) with an 80% defense penalty vs.\
  foot soliders and mounted units. However, the defensive role\
@@ -2387,12 +2385,9 @@ targets       = "LandRail"
 flags         = "CantReachAir", "WillNever", "Bombarder"
 roles         = "BarbarianTech", "BarbarianBuildTech"
 helptext      = _("\
-Cannons are huge guns that use gunpowder to fire massive metallic projectiles\
- much faster and more accurately than earlier ballistic weapons. The\
- aerial delivery of high speed massive metal gives an edge against\
- Fortifications and City Walls. The defense bonuses vs. land attacks from those\
- are reduced by -50%. This leaves Fortifications only with their terrain bonus,\
- and reduces City walls to 1.5x. \n\
+Cannons are guns that fire massive metallic projectiles faster and\
+ more accurately than earlier ballistic weapons. This reduces the\
+ defense bonuses of City Walls in half, down to 1.5×. \n\
 "), _("
 If they haven't moved, Cannons can do 5 rounds of Bombardment\
  on two units, with one possible fatality. When special attacked\
@@ -2435,10 +2430,9 @@ flags         = "CantReachAir", "WillNever", "Bombarder"
 roles         = ""
 helptext      = _("\
 Artillery are a major upgrade to Cannons, with doubled firepower. Accuracy\
- and projectile speed go to a whole new level. Thus, they have an\
- even greater bonus than their predecessors against Fortifications\
- and City Walls. Such bonuses are reduced -75%. This leaves Fortifications\
- only with their terrain bonus, and reduces the bonus from Walls down to 1.25x. \n\
+ and projectile speed go to a whole new level. They have a greater bonus\
+ against City Walls than their predecessors. The bonus of City Walls\
+ is reduced -75% down to 1.25×. \n\
 "), _("
 If they haven't moved, Artillery can do 6 rounds of Bombardment\
  on three units, with one possible fatality. When special attacked\
@@ -2577,10 +2571,9 @@ flags         = "CantReachAir", "WillNever", "Bombarder"
 roles         = ""
 helptext      = _("\
 Howitzers are upgraded Artillery with a terrifying increase to mobility and attack\
- strength. Fortifications get no bonus except their terrain bonus, and City Walls\
- are completely ineffective against Howitzers. \n\
+ strength. City Walls are completely ineffective against Howitzers. \n\
 "), _("
-If they haven't moved, Artillery can do 7 rounds of Bombardment\
+If they haven't moved, Howitzers can do 7 rounds of Bombardment\
  on four units, with one possible fatality. When special attacked\
  from range, they can retaliate with the same type of Bombardment.\
  This is a strong deterrent.\
