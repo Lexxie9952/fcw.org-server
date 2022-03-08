@@ -216,7 +216,7 @@ flags		= "VisibleByOthers"
 reqs	=
     { "type",     "name",              "range", "present"
       "Tech",     "Masonry",           "Player", TRUE
-      "Building", "Citadel of Aleppo", "City",   FALSE
+      "Terrain",  "Mountains",         "Local",  FALSE
     }
 graphic	= "b.fortifications"
 graphic_alt	= "b.city_walls"
@@ -229,20 +229,19 @@ sabotage	= 50
 sound		= "b_fortifications"
 sound_alt	= "b_generic"
 helptext	= _("\
-Fortifications give 1.5× defense to every unit in a City vs. attacks by Land.\
- This bonus is reduced if attacked by Catapult or the units to which it upgrades.\
- Fortifications prevent population loss when a defending unit is killed. \n\
+Fortifications are modifications to the natural terrain which increase\
+ its defense. Fortifications raise the defense bonus of Flatland\
+ by +0.50, and other land by +0.33. (Flatland: 1.5×. Forest and Swamp: 1.66×,\
+ Jungle: 1.83×, Hills: 2.33×.) \n\n NOTE: Terrain Bonuses give defending\
+ Land units extra defense against attacks from units of all types. \n\n\
 "), _("\
-Fortifications raise the terrain bonus of Lowlands tiles by +17%.\
- (Flatland is 1.17×, Forest and Swamp are 1.5×, and Jungle is 1.67×.)\
- A terrain bonus helps defending Land units against attacks from units\
- of all types. \n\
+Fortifications prevent population loss when a defending unit is killed. \n\
 "), _("\
 Fortifications are unassailable by Siege Rams.\
  If an enemy attempts sabotage, odds of success are halved. \n\
 "), _("\
-➤ Except for any possible terrain bonus, this improvement offers no bonus when\
- City Walls are in place. \n\
+➤ Fortifications may combine with other defense improvements in the city.\
+ Fortifications cannot be made on mountains.\n\
 ➤ AFTER making City Walls, you can sell Fortifications with a full return of gold\
  cost.\
 ")
@@ -385,15 +384,14 @@ sound		= "b_city_walls"
 sound_alt	= "b_generic"
 helptext	= _("\
 City Walls give a 2× bonus to every unit in a City against Land unit attacks.\
- (For land units with free-fortify bonus, this results in a 3× total bonus.)\
+ (For defending land units with free-fortify bonus, this results in a 3× total bonus.)\
  City Walls are useless against Air, Sea, and Missile units; and the bonus is\
  reduced when attacked by Catapults, Cannons, Artillery, and Howitzers.\n\
  "), _("\
 City Walls prevent population loss when a defending unit is killed. If an enemy\
- attempts to sabotage City Walls, the odds of success are halved. In a city with\
- Fortifications, only the terrain bonus adds to the City Wall bonus. \n\
+ attempts to sabotage City Walls, the odds of success are halved. \n\
  "), _("\
- Discovery of Metallurgy increases cost to 75 shields.\
+Discovery of Metallurgy increases cost to 75 shields.\
 ")
 
 [building_stock_exchange]
@@ -1595,7 +1593,6 @@ reqs	=
       "Tech",         "Gunpowder",         "Player",  FALSE,     FALSE
       "Building",     "Citadel of Aleppo", "Player",  FALSE,     TRUE
       "Building",     "City Walls",        "City",    FALSE,     TRUE
-      "Building",     "Fortifications",    "City",    FALSE,     TRUE
     }
 graphic	= "b.citadel_aleppo"
 graphic_alt	= "-"
@@ -1609,13 +1606,11 @@ sound		= "w_citadel_aleppo"
 sound_alt	= "w_generic"
 helptext	= _("\
 The great Citadel of Aleppo turns an entire city into a formidable fortress.\
-  It must be built before Gunpowder is discovered. It provides 3x defense\
-  against all Land attacks: the thick walls are impervious to any bonuses\
-  from Ballistic units such as Catapults, Cannons, and Howitzers. Siege\
-  Rams are ineffective against it. \n\
-The Citadel of Aleppo cannot be made in a city that has City Walls or\
- Fortifications, but it is possible to sell those in order to allow for\
- the Citadel.\
+  It must be built before Gunpowder is discovered. It provides 3× defense\
+  against all Land attacks: the thick walls are impervious to sabotage, Siege
+  Rams, and any bonuses from Catapults, Cannons, Artillery, and Howitzers. \n\
+The Citadel of Aleppo cannot be made in a city that has City Walls,\
+ but it is possible to sell those in order to allow for the Citadel.\
 ")
 
 [building_code_of_hammurabi]
