@@ -1206,7 +1206,7 @@ convert_to    = "Musketeers"
 convert_time  = 2
 transport_cap = 0
 fuel          = 0
-city_size     = 1850 ; 000000,000,111,001110,1,0 = atk_bonus=0, max_kills=0, targets=7, move_cost=14 frags, stay_fortfy=1, reserved = 0
+city_size     = 826 ; 000000,000,011,001110,1,0 = atk_bonus=0, max_kills=0, targets=3, move_cost=14 frags, stay_fortfy=1, reserved = 0
 paratroopers_mr_sub = 4096 ; 00010,00,0000,000,0,0 - bbd_retal_rate=2, iPill_rand_tgts=0, iPill_odds=0, iPill_moves=0, iPillage=0, ATK_Stay_Fortified=0
 ;NOTE：iPillage changes in rules require client_rules_flag and get_what_can_unit_pillage_from() changes.
 uk_happy      = 1
@@ -1221,7 +1221,7 @@ roles         = "DefendOk", "DefendOkStartUnit"
 helptext      = _("\
 Archers fight with bows and arrows. They have good offense and decent defense.\
  Rather than fight to the death, Archers can also do a ranged Volley Attack which\
- avoids hand-to-hand retaliation：two volleys of arrows are fired on up to 7 enemy units on the tile,\
+ avoids hand-to-hand retaliation：two volleys of arrows are fired on up to 3 enemy units on the tile,\
  causing 1-2hp of damage to any units who are hit. This includes Oceanic tiles if not\
  transported. This is useful for softening enemies prior to battle, or for deterring an\
  approach to a strategic location. (Volley Attack is not possible on Cities or Fortresses.)\
