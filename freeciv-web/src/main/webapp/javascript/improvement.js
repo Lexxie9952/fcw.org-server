@@ -208,6 +208,13 @@ function get_universal_discount_price(ptype, pcity)
             return ptype['build_cost'] - 5;
     }
   }
+  if (client_rules_flag[CRF_MP2_D]) {
+    if (ptype['name'] == "Fortifications"
+        && (player_invention_state(players[playerno], tech_id_by_name('Metallurgy')) == TECH_KNOWN)) {
+            return ptype['build_cost'] + 10;
+    }
+  } 
+
   // MP2 discounts for having Colossus
   if (pcity && client_rules_flag[CRF_COLOSSUS_DISCOUNT]
     && player_invention_state(players[playerno], tech_id_by_name('Steam Engine')) != TECH_KNOWN
