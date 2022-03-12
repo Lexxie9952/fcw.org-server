@@ -160,16 +160,16 @@ function empire_unit_homecity_screen(wide_screen,narrow_screen,small_screen,
   panel_html += "<button id='button_sortvet' type='button' class='button ui-button ui-corner-all ui-widget' onclick='empire_sort_vet();'"
   + "title='Sort unit rows by Vet level' style='padding:5px; margin-bottom:2px;'>&#x2943Vet</button>";
   panel_html += "&nbsp;&nbsp;&nbsp;&nbsp; show upkeep: &nbsp;"
-                  + "<input type='checkbox' class='css-checkbox' id='show_food' title='Show food upkeep' name='cbFU' value='false' onclick='toggle_empire_show_upkeep(\"food\");'>"
-                  + "<label for='show_food' name='show_food_lbl' class='css-label dark-check-green'>Food</label>&ensp;"
-                  + "<input type='checkbox' class='css-checkbox' id='show_gold' title='Show gold upkeep' name='cbGU' value='false' onclick='toggle_empire_show_upkeep(\"gold\");'>"
-                  + "<label for='show_gold' name='show_gold_lbl' class='css-label dark-check-orange'>Gold</label>&ensp;"
-                  + "<input type='checkbox' class='css-checkbox' id='show_shield' title='Show shield upkeep' name='cbSU' value='false' onclick='toggle_empire_show_upkeep(\"shields\");'>"
-                  + "<label for='show_shield' name='show_shield_lbl' class='css-label dark-check-red'>Shield</label>&ensp;";
-  panel_html += "<input type='checkbox' class='css-checkbox' id='show_free' title='Show upkeep units who are receiving free upkeep' name='cbFR' value='false' onclick='toggle_empire_show_upkeep(\"free\");'>"
-                  + "<label for='show_free' name='show_free_lbl' class='css-label dark-check-white'>Free</label>&ensp;";
-  panel_html += "<input type='checkbox' class='css-checkbox' id='show_zero' title='Show unit types with zero upkeep' name='cbZR' value='false' onclick='toggle_empire_show_upkeep(\"zero\");'>"
-                  + "<label for='show_zero' name='show_zero_lbl' class='css-label dark-check-cyan'>Zero</label>";
+                  + "<input type='checkbox' class='css-checkbox' id='show_food' name='cbFU' value='false' onclick='toggle_empire_show_upkeep(\"food\");'>"
+                  + "<label for='show_food' name='show_food_lbl' title='Show units with food upkeep' class='css-label dark-check-green'>Food</label>&ensp;"
+                  + "<input type='checkbox' class='css-checkbox' id='show_gold' name='cbGU' value='false' onclick='toggle_empire_show_upkeep(\"gold\");'>"
+                  + "<label for='show_gold' name='show_gold_lbl' title='Show units with gold upkeep' class='css-label dark-check-orange'>Gold</label>&ensp;"
+                  + "<input type='checkbox' class='css-checkbox' id='show_shield' name='cbSU' value='false' onclick='toggle_empire_show_upkeep(\"shields\");'>"
+                  + "<label for='show_shield' name='show_shield_lbl' title='Show units with shield upkeep' class='css-label dark-check-red'>Shield</label>&ensp;";
+  panel_html += "<input type='checkbox' class='css-checkbox' id='show_free' name='cbFR' value='false' onclick='toggle_empire_show_upkeep(\"free\");'>"
+                  + "<label for='show_free' name='show_free_lbl' title='Show units with upkeep cost who are receiving free bonus upkeep' class='css-label dark-check-white'>Free</label>&ensp;";
+  panel_html += "<input type='checkbox' class='css-checkbox' id='show_zero' name='cbZR' value='false' onclick='toggle_empire_show_upkeep(\"zero\");'>"
+                  + "<label for='show_zero' name='show_zero_lbl' title='Show unit types who never pay upkeep' class='css-label dark-check-cyan'>Zero</label>";
 
   $("#empire_mode_panel").html(panel_html);
   $("#show_hp").prop("checked", empire_show_hitpoints);
