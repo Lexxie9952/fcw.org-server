@@ -55,6 +55,7 @@ var empire_upkeep_show_food    = true;
 var empire_upkeep_show_gold    = true;
 var empire_upkeep_show_shields = true;
 var empire_upkeep_show_free    = true;
+var empire_upkeep_show_zero    = true;
 
 
 empire_screen_updater = new EventAggregator(update_empire_screen, 250, EventAggregator.DP_NONE, 250, 3, 250);
@@ -165,8 +166,10 @@ function empire_unit_homecity_screen(wide_screen,narrow_screen,small_screen,
                   + "<label for='show_gold' name='show_gold_lbl' class='css-label dark-check-orange'>Gold</label>&ensp;"
                   + "<input type='checkbox' class='css-checkbox' id='show_shield' title='Show shield upkeep' name='cbSU' value='false' onclick='toggle_empire_show_upkeep(\"shields\");'>"
                   + "<label for='show_shield' name='show_shield_lbl' class='css-label dark-check-red'>Shield</label>&ensp;";
-  panel_html += "<input type='checkbox' class='css-checkbox' id='show_free' title='Show units with no upkeep' name='cbFR' value='false' onclick='toggle_empire_show_upkeep(\"free\");'>"
-                  + "<label for='show_free' name='show_free_lbl' class='css-label dark-check-white'>Free</label>";
+  panel_html += "<input type='checkbox' class='css-checkbox' id='show_free' title='Show upkeep units who are receiving free upkeep' name='cbFR' value='false' onclick='toggle_empire_show_upkeep(\"free\");'>"
+                  + "<label for='show_free' name='show_free_lbl' class='css-label dark-check-white'>Free</label>&ensp;";
+  panel_html += "<input type='checkbox' class='css-checkbox' id='show_zero' title='Show unit types with zero upkeep' name='cbZR' value='false' onclick='toggle_empire_show_upkeep(\"zero\");'>"
+                  + "<label for='show_zero' name='show_zero_lbl' class='css-label dark-check-cyan'>Zero</label>";
 
   $("#empire_mode_panel").html(panel_html);
   $("#show_hp").prop("checked", empire_show_hitpoints);
@@ -175,6 +178,7 @@ function empire_unit_homecity_screen(wide_screen,narrow_screen,small_screen,
   $("#show_gold").prop("checked", empire_upkeep_show_gold);
   $("#show_shield").prop("checked", empire_upkeep_show_shields);
   $("#show_free").prop("checked", empire_upkeep_show_free);
+  $("#show_zero").prop("checked", empire_upkeep_show_zero);
 
 
   $('#empire_scroll').css({"height": $(window).height()-160, "overflow-y":"scroll", "overflow-x":"hidden" });
@@ -244,9 +248,17 @@ function empire_unit_homecity_screen(wide_screen,narrow_screen,small_screen,
     }
     for (var unit_id in units) {  // pre-sort units belonging to player, by type, into this array
       var sunit = units[unit_id];
+      var stype = unit_types[sunit.type];
       if (client.conn.playing != null && unit_owner(sunit).playerno == client.conn.playing.playerno) {
         // See if unit qualifies to be displayed based on upkeep types desired to be shown
         var show_unit = false;
+        var f1,g1,s1,z=false;
+        if (stype['upkeep'] != null) {
+          s1 = parseInt(stype['upkeep'][O_SHIELD],10);
+          f1 = parseInt(stype['upkeep'][O_FOOD],10);
+          g1 = parseInt(stype['upkeep'][O_GOLD],10);
+          if (f1+g1+s1 == 0) z = true;
+        }
         var f,g,s,l;
         if (sunit['upkeep'] != null) {
           s = parseInt(sunit['upkeep'][O_SHIELD],10);
@@ -258,6 +270,7 @@ function empire_unit_homecity_screen(wide_screen,narrow_screen,small_screen,
           else if (empire_upkeep_show_gold && g>0) show_unit=true;
           else if (empire_upkeep_show_free && l==0) show_unit=true;
         } else if (empire_upkeep_show_free) show_unit=true;
+        if (!empire_upkeep_show_zero && z==true) show_unit=false;
         if (show_unit) {
           units_sorted_by_type[sunit['type']].push(sunit);
         }
@@ -1632,6 +1645,10 @@ function toggle_empire_show_upkeep(upkeep_type)
     case "free":
       empire_upkeep_show_free = !empire_upkeep_show_free;
       $("#show_free").prop("checked", empire_upkeep_show_free);
+      break;
+    case "zero":
+      empire_upkeep_show_zero = !empire_upkeep_show_zero;
+      $("#show_zero").prop("checked", empire_upkeep_show_zero);
       break;
   }
   empire_sort_mode = SORT_NONE;
