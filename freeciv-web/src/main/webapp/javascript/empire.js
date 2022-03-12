@@ -55,7 +55,7 @@ var empire_upkeep_show_food    = true;
 var empire_upkeep_show_gold    = true;
 var empire_upkeep_show_shields = true;
 var empire_upkeep_show_free    = true;
-var empire_upkeep_show_zero    = true;
+var empire_upkeep_show_zero    = false;  // Default to not show zero-upkeep units
 
 
 empire_screen_updater = new EventAggregator(update_empire_screen, 250, EventAggregator.DP_NONE, 250, 3, 250);
