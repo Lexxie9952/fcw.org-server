@@ -1289,11 +1289,9 @@ Marines built in a city with an Airport, Port Facility, and Barracks III receive
   • Can occupy empty enemy cities.
   • Subject to zones of control.
   • Slowed down while damaged.
-  • Can attack units on non-native tiles.
   • <b style="color:#9aa">AIRLIFT</b>: Can be airlifted if it has remaining moves.
-  • Can launch attack from non-native tiles.
+  • <b style="color:#9aa">Can launch attack from non-native tiles and while transported.</b>
 ➤ <b style="color:#9aa">Unblockable</b>: unreachable units can't block its attacks on reachable units.
-➤ Can launch attack from non-native tiles and while transported.
 ➤ Can safely conduct <b style="color:#9aa">Bazooka Attacks</b>. (Ranged Attack)
   • Gives <b>3</b> free rounds of combat against up to <b>2</b> units in an enemy stack.
   • Uses <b>1<sup>5</sup>&frasl;<sub>9</sub></b> movement points.
@@ -2359,13 +2357,11 @@ Veteran Levels for Artillery are the standard ruleset default:
   • Can occupy empty enemy cities.
   • Subject to zones of control.
   • Slowed down while damaged.
-  • Can attack units on non-native tiles.
+  • <b style="color:#9aa">Can attack from non-native tiles and while transported.</b>
   • <b style="color:#9aa">AIRLIFT</b>: Can be airlifted if it has remaining moves.
-➤ Can launch attack from non-native tiles and while transported.
 ➤ <b style="color:#9aa">2× attack bonus</b> when attacking Fighter, Escort Fighter, Dive Bomber, Medium Bomber, Heavy Bomber, Strategic Bomber, Helicopter, Jet Fighter, Ground Strike Fighter, Stealth Fighter, or Stealth Bomber.
 ➤ <b style="color:#9aa">2× defense bonus</b> if attacked by Fighter, Escort Fighter, Dive Bomber, Medium Bomber, Heavy Bomber, Strategic Bomber, Helicopter, Jet Fighter, Ground Strike Fighter, Jet Bomber, Stealth Fighter, or Stealth Bomber.
 ➤ <b style="color:#9aa">Unblockable</b>: unreachable units can't block its attacks on reachable units.
-➤ Can launch attack from non-native tiles.
 ➤ Can defend while transported on non-native tiles.
 ➤ Anti-Air bonus of this unit is less effective against Stealth, which has a 25% bonus against this unit.
 ➤ May load and unload from Trains and Helicopters even when underway.
@@ -3554,7 +3550,7 @@ Veteran Levels for Stealth Bombers are the default for offensive Air units:
 
 <pre class='cost'>Cost: 10 shields</pre>
 <pre class='upkeep'>Upkeep: 0</pre>
-<pre class='moves'>Moves: 4</pre>
+<pre class='moves'>Moves: 5</pre>
 <pre class='vision'>Vision: 2.00 tiles</pre>
 <pre class='attack'>Attack: 0</pre>
 <pre class='defense'>Defense: 1</pre>
@@ -3629,6 +3625,8 @@ Veteran Levels for Boats:
 ➤ Can help build a Wonder in any non-hostile city.
 ➤ Unable to attack air units.
 ➤ Can carry and refuel up to 2 Land, LandNoKill, or LandAirSea units.
+➤ Can only attack units on native tiles.
+  • Battle will last 15 combat rounds, which may or may not result in a victor.
 ➤ <b style="color:#9aa">PORT PENALTY</b>: If attacked in a city, firepower is set to 1 and firepower of attacker is doubled.
 ➤ May impose a zone of control on its adjacent tiles.
   • <b style="color:#9aa">Doesn't prevent enemy cities from working the tile it's on.</b>
@@ -3680,10 +3678,10 @@ Veteran Levels for Triremes:
   • Does not get defense bonuses from terrain.
   • Not subject to zones of control.
   • Slowed down while damaged.
-  • Can attack units on non-native tiles.
-  • Can launch attack from non-native tiles.
 ➤ Unable to attack air units.
 ➤ Can carry and refuel 1 Land, LandNoKill, or LandAirSea unit.
+➤ <b style="color:#9aa">Can Attack reachable targets on land tiles.</b>
+  • Battle will last 15 combat rounds, which may or may not result in a victor.
 ➤ <b style="color:#9aa">PORT PENALTY</b>: If attacked in a city, firepower is set to 1 and firepower of attacker is doubled.
 ➤ May impose a zone of control on its adjacent tiles.
   • <b style="color:#9aa">Prevents enemy cities from working the tile it's on.</b>
@@ -3711,7 +3709,7 @@ Veteran Levels for Longboat:
 
 <pre class='cost'>Cost: 30 shields</pre>
 <pre class='upkeep'>Upkeep: 1 Shield</pre>
-<pre class='moves'>Moves: 6</pre>
+<pre class='moves'>Moves: 7</pre>
 <pre class='vision'>Vision: 2.00 tiles</pre>
 <pre class='attack'>Attack: 2</pre>
 <pre class='defense'>Defense: 2</pre>
@@ -3731,6 +3729,7 @@ Veteran Levels for Longboat:
 ➤ Unable to attack air units.
 ➤ Can carry and refuel up to 2 Land, LandNoKill, or LandAirSea units.
 ➤ Can only attack units on native tiles.
+  • Battle will last 15 combat rounds, which may or may not result in a victor.
 ➤ <b style="color:#9aa">PORT PENALTY</b>: If attacked in a city, firepower is set to 1 and firepower of attacker is doubled.
 ➤ May impose a zone of control on its adjacent tiles.
   • <b style="color:#9aa">Doesn't prevent enemy cities from working the tile it's on.</b>
@@ -3766,7 +3765,7 @@ Veteran Levels for Galleys:
 
 <pre class='cost'>Cost: 40 shields</pre>
 <pre class='upkeep'>Upkeep: 1 Shield, 1 Unhappy</pre>
-<pre class='moves'>Moves: 6</pre>
+<pre class='moves'>Moves: 7</pre>
 <pre class='vision'>Vision: 2.00 tiles</pre>
 <pre class='attack'>Attack: 3</pre>
 <pre class='defense'>Defense: 3</pre>
@@ -3781,10 +3780,10 @@ Veteran Levels for Galleys:
   • Does not get defense bonuses from terrain.
   • Not subject to zones of control.
   • Slowed down while damaged.
-  • Can attack units on non-native tiles.
-  • Can launch attack from non-native tiles.
 ➤ Unable to attack air units.
 ➤ Can carry and refuel up to 3 Land, LandNoKill, or LandAirSea units.
+➤ <b style="color:#9aa">Can Attack reachable targets on land tiles.</b>
+  • Battle will last 15 combat rounds, which may or may not result in a victor.
 ➤ <b style="color:#9aa">PORT PENALTY</b>: If attacked in a city, firepower is set to 1 and firepower of attacker is doubled.
 ➤ May impose a zone of control on its adjacent tiles.
   • <b style="color:#9aa">Prevents enemy cities from working the tile it's on.</b>
@@ -3827,6 +3826,7 @@ Veteran Levels for War Galleys:
   • Slowed down while damaged.
 ➤ Unable to attack air units.
 ➤ Can only attack units on native tiles.
+  • Battle will result in a victor.
 ➤ <b style="color:#9aa">PORT PENALTY</b>: If attacked in a city, firepower is set to 1 and firepower of attacker is doubled.
 ➤ May impose a zone of control on its adjacent tiles.
   • <b style="color:#9aa">Prevents enemy cities from working the tile it's on.</b>
@@ -3855,7 +3855,7 @@ Veteran Levels for Ram Ships:
 
 <pre class='cost'>Cost: 40 shields</pre>
 <pre class='upkeep'>Upkeep: 1 Shield</pre>
-<pre class='moves'>Moves: 7</pre>
+<pre class='moves'>Moves: 8</pre>
 <pre class='vision'>Vision: 2.00 tiles</pre>
 <pre class='attack'>Attack: 4</pre>
 <pre class='defense'>Defense: 4</pre>
@@ -3870,11 +3870,11 @@ Veteran Levels for Ram Ships:
   • Does not get defense bonuses from terrain.
   • Not subject to zones of control.
   • Slowed down while damaged.
-  • Can attack units on non-native tiles.
-  • Can launch attack from non-native tiles.
 ➤ Can enter foreign territory regardless of peace treaty.
 ➤ Unable to attack air units.
 ➤ Can carry and refuel up to 3 Land, LandNoKill, or LandAirSea units.
+➤ <b style="color:#9aa">Can Attack reachable targets on land tiles.</b>
+  • Battle will last 15 combat rounds, which may or may not result in a victor.
 ➤ <b style="color:#9aa">PORT PENALTY</b>: If attacked in a city, firepower is set to 1 and firepower of attacker is doubled.
 ➤ May impose a zone of control on its adjacent tiles.
   • <b style="color:#9aa">Doesn't prevent enemy cities from working the tile it's on.</b>
@@ -3906,7 +3906,7 @@ Veteran Levels for Caravels:
 
 <pre class='cost'>Cost: 40 shields</pre>
 <pre class='upkeep'>Upkeep: 1 Shield</pre>
-<pre class='moves'>Moves: 8</pre>
+<pre class='moves'>Moves: 9</pre>
 <pre class='vision'>Vision: 2.00 tiles</pre>
 <pre class='attack'>Attack: 2</pre>
 <pre class='defense'>Defense: 3</pre>
@@ -3923,12 +3923,12 @@ Veteran Levels for Caravels:
   • Does not get defense bonuses from terrain.
   • Not subject to zones of control.
   • Slowed down while damaged.
-  • Can attack units on non-native tiles.
-  • Can launch attack from non-native tiles.
 ➤ Can enter foreign territory regardless of peace treaty.
 ➤ <b style="color:#9aa">STACK ESCAPE</b>: 60% odds to escape if stack defender loses, if it has more moves left than attacker.
 ➤ Unable to attack air units.
 ➤ Can carry and refuel up to 4 Land, LandNoKill, LandAirSea, or Balloon units.
+➤ <b style="color:#9aa">Can Attack reachable targets on land tiles.</b>
+  • Battle will last 15 combat rounds, which may or may not result in a victor.
 ➤ <b style="color:#9aa">PORT PENALTY</b>: If attacked in a city, firepower is set to 1 and firepower of attacker is doubled.
 ➤ May impose a zone of control on its adjacent tiles.
   • <b style="color:#9aa">Doesn't prevent enemy cities from working the tile it's on.</b>
@@ -3957,7 +3957,7 @@ Veteran Levels for Galleons:
 
 <pre class='cost'>Cost: 50 shields</pre>
 <pre class='upkeep'>Upkeep: 1 Shield, 1 Unhappy</pre>
-<pre class='moves'>Moves: 8</pre>
+<pre class='moves'>Moves: 10</pre>
 <pre class='vision'>Vision: 2.00 tiles</pre>
 <pre class='attack'>Attack: 4</pre>
 <pre class='defense'>Defense: 3</pre>
@@ -3972,12 +3972,12 @@ Veteran Levels for Galleons:
   • Does not get defense bonuses from terrain.
   • Not subject to zones of control.
   • Slowed down while damaged.
-  • Can attack units on non-native tiles.
-  • Can launch attack from non-native tiles.
 ➤ <b>2× defense bonus</b> if attacked by Marines or Anti-Aircraft Artillery.
 ➤ <b style="color:#9aa">STACK ESCAPE</b>: 60% odds to escape if stack defender loses, if it has more moves left than attacker.
 ➤ Unable to attack air units.
 ➤ Can carry and refuel up to 2 Land, LandNoKill, or LandAirSea units.
+➤ <b style="color:#9aa">Can Attack reachable targets on land tiles.</b>
+  • Battle will result in a victor.
 ➤ <b style="color:#9aa">PORT PENALTY</b>: If attacked in a city, firepower is set to 1 and firepower of attacker is doubled.
 ➤ May impose a zone of control on its adjacent tiles.
   • <b style="color:#9aa">Prevents enemy cities from working the tile it's on.</b>
@@ -4006,7 +4006,7 @@ Veteran Levels for Frigates:
 
 <pre class='cost'>Cost: 45 shields</pre>
 <pre class='upkeep'>Upkeep: 0</pre>
-<pre class='moves'>Moves: 7</pre>
+<pre class='moves'>Moves: 8</pre>
 <pre class='vision'>Vision: 2.00 tiles</pre>
 <pre class='attack'>Attack: 0</pre>
 <pre class='defense'>Defense: 1</pre>
@@ -4019,7 +4019,6 @@ Veteran Levels for Frigates:
   • Does not get defense bonuses from terrain.
   • Not subject to zones of control.
   • Slowed down while damaged.
-  • Can launch attack from non-native tiles.
 ➤ Can help build a Wonder in any non-hostile city.
 ➤ Can carry and refuel up to 4 Land, LandNoKill, LandAirSea, or Balloon units.
 ➤ <b style="color:#9aa">PORT PENALTY</b>: If attacked in a city, firepower is set to 1 and firepower of attacker is doubled.
@@ -4045,7 +4044,7 @@ Veteran Levels for Frigates:
 
 <pre class='cost'>Cost: 50 shields</pre>
 <pre class='upkeep'>Upkeep: 1 Shield</pre>
-<pre class='moves'>Moves: 10</pre>
+<pre class='moves'>Moves: 11</pre>
 <pre class='vision'>Vision: 3.46 tiles</pre>
 <pre class='attack'>Attack: 0</pre>
 <pre class='defense'>Defense: 3</pre>
@@ -4087,7 +4086,7 @@ Veteran Levels for Transports:
 
 <pre class='cost'>Cost: 60 shields</pre>
 <pre class='upkeep'>Upkeep: 1 Shield, 1 Unhappy</pre>
-<pre class='moves'>Moves: 8</pre>
+<pre class='moves'>Moves: 9</pre>
 <pre class='vision'>Vision: 2.83 tiles</pre>
 <pre class='attack'>Attack: 4</pre>
 <pre class='defense'>Defense: 4</pre>
@@ -4103,11 +4102,12 @@ Veteran Levels for Transports:
   • Does not get defense bonuses from terrain.
   • Not subject to zones of control.
   • Slowed down while damaged.
-  • Can attack units on non-native tiles.
-  • Can launch attack from non-native tiles.
 ➤ <b>2× defense bonus</b> if attacked by Marines or Anti-Aircraft Artillery.
 ➤ <b style="color:#9aa">STACK ESCAPE</b>: 60% odds to escape if stack defender loses, if it has more moves left than attacker.
 ➤ <b>Unable to attack air units.</b>
+➤ <b style="color:#9aa">Can Attack reachable targets on land tiles.</b>
+  • Battle will last 20 combat rounds, which may or may not result in a victor.
+  • Chance of attacker promotion is half frequency: 2 battles required for same chance of promotion as 1 sea battle.
 ➤ <b style="color:#9aa">PORT PENALTY</b>: If attacked in a city, firepower is set to 1 and firepower of attacker is doubled.
 ➤ May impose a zone of control on its adjacent tiles.
   • <b style="color:#9aa">Prevents enemy cities from working the tile it's on.</b>
@@ -4138,7 +4138,7 @@ Veteran Levels for Ironclads:
 
 <pre class='cost'>Cost: 60 shields</pre>
 <pre class='upkeep'>Upkeep: 1 Shield, 1 Unhappy</pre>
-<pre class='moves'>Moves: 12</pre>
+<pre class='moves'>Moves: 13</pre>
 <pre class='vision'>Vision: 3.87 tiles</pre>
 <pre class='attack'>Attack: 5</pre>
 <pre class='defense'>Defense: 5</pre>
@@ -4153,12 +4153,13 @@ Destroyers can Stack-Escape：a 67% chance to escape a killed stack if they have
   • Does not get defense bonuses from terrain.
   • Not subject to zones of control.
   • Slowed down while damaged.
-  • Can attack units on non-native tiles.
-  • Can launch attack from non-native tiles.
 ➤ <b>4× defense bonus</b> if attacked by Submarine.
 ➤ <b>2× defense bonus</b> if attacked by Marines or Anti-Aircraft Artillery.
 ➤ <b style="color:#9aa">STACK ESCAPE</b>: 67% odds to escape if stack defender loses, if it has more moves left than attacker.
 ➤ <b>Unable to attack air units.</b>
+➤ <b style="color:#9aa">Can Attack reachable targets on land tiles.</b>
+  • Battle will last 20 combat rounds, which may or may not result in a victor.
+  • Chance of attacker promotion is half frequency: 2 battles required for same chance of promotion as 1 sea battle.
 ➤ <b style="color:#9aa">PORT PENALTY</b>: If attacked in a city, firepower is set to 1 and firepower of attacker is doubled.
 ➤ May impose a zone of control on its adjacent tiles.
   • <b style="color:#9aa">Prevents enemy cities from working the tile it's on.</b>
@@ -4189,7 +4190,7 @@ Veteran Levels for Destroyers:
 
 <pre class='cost'>Cost: 80 shields</pre>
 <pre class='upkeep'>Upkeep: 1 Shield, 1 Unhappy</pre>
-<pre class='moves'>Moves: 11</pre>
+<pre class='moves'>Moves: 12</pre>
 <pre class='vision'>Vision: 3.61 tiles</pre>
 <pre class='attack'>Attack: 6</pre>
 <pre class='defense'>Defense: 6</pre>
@@ -4204,12 +4205,15 @@ Veteran Levels for Destroyers:
   • Does not get defense bonuses from terrain.
   • Not subject to zones of control.
   • Slowed down while damaged.
-  • Can attack units on non-native tiles.
-  • Can launch attack from non-native tiles.
 ➤ <b>2× defense bonus</b> if attacked by Submarine.
 ➤ <b>2× defense bonus</b> if attacked by Marines or Anti-Aircraft Artillery.
 ➤ <b style="color:#9aa">STACK ESCAPE</b>: 60% odds to escape if stack defender loses, if it has more moves left than attacker.
 ➤ <b>Unable to attack air units.</b>
+➤ <b style="color:#9aa">Can Attack reachable targets on land tiles.</b>
+  • Battle will last 20 combat rounds, which may or may not result in a victor.
+  • Chance of attacker promotion is half frequency: 2 battles required for same chance of promotion as 1 sea battle. 
+  • Firepower is reduced to 1. Attack strength is increased +33%
+    * Overall effect is -33% reduction in attack strength.
 ➤ <b style="color:#9aa">PORT PENALTY</b>: If attacked in a city, firepower is set to 1 and firepower of attacker is doubled.
 ➤ May impose a zone of control on its adjacent tiles.
   • <b style="color:#9aa">Prevents enemy cities from working the tile it's on.</b>
@@ -4240,7 +4244,7 @@ Veteran Levels for Cruisers:
 
 <pre class='cost'>Cost: 60 shields</pre>
 <pre class='upkeep'>Upkeep: 1 Shield, 1 Unhappy</pre>
-<pre class='moves'>Moves: 12</pre>
+<pre class='moves'>Moves: 13</pre>
 <pre class='vision'>Vision: 4.00 tiles</pre>
 <pre class='attack'>Attack: 5</pre>
 <pre class='defense'>Defense: 5</pre>
@@ -4255,14 +4259,17 @@ Missile Destroyers can Stack-Escape：a 67% chance to escape a killed stack if t
   • Does not get defense bonuses from terrain.
   • Not subject to zones of control.
   • Slowed down while damaged.
-  • Can attack units on non-native tiles.
-  • Can launch attack from non-native tiles.
 ➤ <b>2× defense bonus</b> if attacked by Submarine.
 ➤ <b>2× defense bonus</b> if attacked by Marines or Anti-Aircraft Artillery.
 ➤ <b>2× defense bonus</b> if attacked by Aircraft, Helicopter, or Cruise Missile.
 ➤ <b style="color:#9aa">STACK ESCAPE</b>: 67% odds to escape if stack defender loses, if it has more moves left than attacker.
 ➤ <b>Unable to attack air units.</b>
 ➤ Can carry and refuel 1 Missile unit.
+➤ <b style="color:#9aa">Can Attack reachable targets on land tiles.</b>
+  • Battle will last 20 combat rounds, which may or may not result in a victor.
+  • Chance of attacker promotion is half frequency: 2 battles required for same chance of promotion as 1 sea battle. 
+  • Firepower is reduced to 1. Attack strength is increased +33%
+    * Overall effect is -33% reduction in attack strength.
 ➤ <b style="color:#9aa">PORT PENALTY</b>: If attacked in a city, firepower is set to 1 and firepower of attacker is doubled.
 ➤ May impose a zone of control on its adjacent tiles.
   • <b style="color:#9aa">Prevents enemy cities from working the tile it's on.</b>
@@ -4291,7 +4298,7 @@ Veteran Levels for Missile Destroyers:
 
 <pre class='cost'>Cost: 100 shields</pre>
 <pre class='upkeep'>Upkeep: 1 Shield, 1 Unhappy</pre>
-<pre class='moves'>Moves: 11</pre>
+<pre class='moves'>Moves: 12</pre>
 <pre class='vision'>Vision: 4.36 tiles</pre>
 <pre class='attack'>Attack: 8</pre>
 <pre class='defense'>Defense: 8</pre>
@@ -4306,14 +4313,17 @@ Veteran Levels for Missile Destroyers:
   • Does not get defense bonuses from terrain.
   • Not subject to zones of control.
   • Slowed down while damaged.
-  • Can attack units on non-native tiles.
-  • Can launch attack from non-native tiles.
 ➤ <b style="color:#9aa">3× defense bonus</b> if attacked by Aircraft, Helicopter, or Cruise Missile.
 ➤ <b>2× defense bonus</b> if attacked by Submarine.
 ➤ <b>2× defense bonus</b> if attacked by Marines or Anti-Aircraft Artillery.
 ➤ <b style="color:#9aa">STACK ESCAPE</b>: 60% odds to escape if stack defender loses, if it has more moves left than attacker.
 ➤ Anti-Air bonus of this unit is less effective against Stealth, which has a 25% bonus against this unit.
 ➤ Can carry and refuel up to 2 Missile units.
+➤ <b style="color:#9aa">Can Attack reachable targets on land tiles.</b>
+  • Battle will last 20 combat rounds, which may or may not result in a victor.
+  • Chance of attacker promotion is half frequency: 2 battles required for same chance of promotion as 1 sea battle. 
+  • Firepower is reduced to 1. Attack strength is increased +33%
+    * Overall effect is -33% reduction in attack strength.
 ➤ <b style="color:#9aa">PORT PENALTY</b>: If attacked in a city, firepower is set to 1 and firepower of attacker is doubled.
 ➤ May impose a zone of control on its adjacent tiles.
   • <b style="color:#9aa">Prevents enemy cities from working the tile it's on.</b>
@@ -4342,7 +4352,7 @@ Veteran Levels for AEGIS Cruisers:
 
 <pre class='cost'>Cost: 160 shields</pre>
 <pre class='upkeep'>Upkeep: 1 Shield, 1 Unhappy</pre>
-<pre class='moves'>Moves: 10</pre>
+<pre class='moves'>Moves: 11</pre>
 <pre class='vision'>Vision: 3.46 tiles</pre>
 <pre class='attack'>Attack: 12</pre>
 <pre class='defense'>Defense: 12</pre>
@@ -4356,12 +4366,15 @@ Veteran Levels for AEGIS Cruisers:
   • Does not get defense bonuses from terrain.
   • Not subject to zones of control.
   • Slowed down while damaged.
-  • Can attack units on non-native tiles.
-  • Can launch attack from non-native tiles.
 ➤ <b>2× defense bonus</b> if attacked by Submarine.
 ➤ <b>2× defense bonus</b> if attacked by Marines or Anti-Aircraft Artillery.
 ➤ <b style="color:#9aa">STACK ESCAPE</b>: 60% odds to escape if stack defender loses, if it has more moves left than attacker.
 ➤ <b>Unable to attack air units.</b>
+➤ <b style="color:#9aa">Can Attack reachable targets on land tiles.</b>
+  • Battle will last 20 combat rounds, which may or may not result in a victor.
+  • Chance of attacker promotion is half frequency: 2 battles required for same chance of promotion as 1 sea battle. 
+  • Firepower is reduced to 1. Attack strength is increased +33%
+    * Overall effect is -33% reduction in attack strength.
 ➤ <b style="color:#9aa">PORT PENALTY</b>: If attacked in a city, firepower is set to 1 and firepower of attacker is doubled.
 ➤ May impose a zone of control on its adjacent tiles.
   • <b style="color:#9aa">Prevents enemy cities from working the tile it's on.</b>
@@ -4398,7 +4411,7 @@ Veteran Levels for Battleship:
 
 <pre class='cost'>Cost: 50 shields</pre>
 <pre class='upkeep'>Upkeep: 1 Shield, 1 Unhappy</pre>
-<pre class='moves'>Moves: 10</pre>
+<pre class='moves'>Moves: 11</pre>
 <pre class='vision'>Vision: 3.46 tiles</pre>
 <pre class='attack'>Attack: 12</pre>
 <pre class='defense'>Defense: 2</pre>
@@ -4418,7 +4431,7 @@ Submarines can Stack-Escape：a 75% chance to escape a killed stack if they have
   • Slowed down while damaged.
   • <b style="color:#9aa">Unreachable</b>. Air and Land units cannot attack this one.
   ◦ Doesn't prevent enemy units from attacking other units on its tile.
-  • Can launch attack from non-native tiles.
+  • <b style="color:#9aa">Cannot</b> launch attack from non-native tiles.
 ➤ <b>2× defense bonus</b> if attacked by Submarine.
 ➤ <b style="color:#9aa">STACK ESCAPE</b>: 75% odds to escape if stack defender loses, if it has more moves left than attacker.
 ➤ Attack value reduced against some ships.
@@ -4453,7 +4466,7 @@ Veteran Levels for Submarines:
 
 <pre class='cost'>Cost: 155 shields</pre>
 <pre class='upkeep'>Upkeep: 1 Shield, 1 Unhappy</pre>
-<pre class='moves'>Moves: 10</pre>
+<pre class='moves'>Moves: 11</pre>
 <pre class='vision'>Vision: 3.46 tiles</pre>
 <pre class='attack'>Attack: 1</pre>
 <pre class='defense'>Defense: 9</pre>
@@ -4468,7 +4481,7 @@ Veteran Levels for Submarines:
   • Does not get defense bonuses from terrain.
   • Not subject to zones of control.
   • Slowed down while damaged.
-  • Can launch attack from non-native tiles.
+  • <b style="color:#9aa">Cannot</b> launch attack from non-native tiles.
 ➤ <b>2× defense bonus</b> if attacked by Marines or Anti-Aircraft Artillery.
 ➤ <b style="color:#9aa">STACK ESCAPE</b>: 60% odds to escape if stack defender loses, if it has more moves left than attacker.
 ➤ Unable to attack air units.
