@@ -5,7 +5,7 @@
         title="All units sorted by type" >&#9823;National Units</button>
 
         <button id="button_unit_homecity" type="button" class="button tab_emulator_button" onClick="change_empire_mode(1);"
-        title="All units by home city" >&#x1F3E0;Unit Home Cities</button>
+        title="All units by home city" >&#x1F3E0;Unit Upkeep</button>
 
         <button id="button_unit_deployment" type="button" class="button tab_emulator_button" onClick="change_empire_mode(2);"
         title="All units in cities" >&#x2299;City Deployment</button>

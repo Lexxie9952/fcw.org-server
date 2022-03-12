@@ -303,7 +303,7 @@ function empire_unit_homecity_screen(wide_screen,narrow_screen,small_screen,
     
     var rheight = 28 * Math.ceil( (/*unit_count*/11*40) /  ($(window).width()-140) );
     unit_row_html = "<tr class='cities_row' style='height:"+rheight+"px;'>";
-    unit_row_html += "<td style='cursor:pointer; font-size:85%; text-align:right; padding-right:10px;' onclick='javascript:show_city_dialog_by_id(" + pcity['id']+")' id='citycell"+city_id+"'>"+pcity['name']+"</td>";
+    unit_row_html += "<td style='cursor:pointer; font-size:85%; width:35%; text-align:right; padding-right:10px;' onclick='javascript:show_city_dialog_by_id(" + pcity['id']+")' id='citycell"+city_id+"'>"+pcity['name']+"</td>";
     unit_row_html += "<td class='food_upkeep_column'   style='font-size:95%; font-weight:520; text-align:right; padding-right:10px; color:#ced434;' id='f_upkeep"+city_id+"'> </td>";
     unit_row_html += "<td class='gold_upkeep_column'   style='font-size:95%; font-weight:520; text-align:right; padding-right:10px; color:#ffd52c;' id='g_upkeep"+city_id+"'> </td>";
     unit_row_html += "<td class='shield_upkeep_column' style='font-size:95%; font-weight:520; text-align:right; padding-right:10px; color:#ff4030;' id='s_upkeep"+city_id+"'> </td>";
