@@ -1197,6 +1197,17 @@ reqs    =
     }
 ; ***********************************************************
 
+; ****************** BUNKER *********************************
+[effect_bunker_nuke_proof]
+type    = "Tile_Nuke_Proof"
+value   = 90  ; 90% probability of survival
+reqs    =
+    { "type",          "name",        "range"
+      "Extra",         "Bunker",      "Local"
+    }
+; ***********************************************************
+
+
 ; Base vision range - radius of vision is sqrt(5) = 2.24
 [effect_city_vision]
 type    = "City_Vision_Radius_Sq"
