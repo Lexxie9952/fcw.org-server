@@ -457,7 +457,10 @@ Not_Tech_Source
     Tech cannot be received from this player by any means.
 
 Nuke_Proof
-    City is nuke proof.
+    The percentage chance the city will absolutely prevent nuclear explosions
+    from taking place on all tiles whose distance from the city center are 2
+    or less: that is, within the 5x5 square whose center is the city tile.
+    (see also: Tile_Nuke_Proof)
 
 Output_Add_Bonus
     City production is increased by adding raw amount. This happens prior 
@@ -651,6 +654,10 @@ Terrain_Defend_Add_Bonus
             Mountains 3.0   Mountains + River 3.5
     NOTE: (For unit classes with "TerrainDefense" flag, this effect can be
            used to add other defense effects.)
+
+Tile_Nuke_Proof
+    The percent chance that a tile and all its unit occupants will survive 
+    a nuclear blast. (see also Nuke_Proof)
 
 Tile_Workable
     If value > 0, city can work target tile.

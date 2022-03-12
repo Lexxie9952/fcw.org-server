@@ -3333,6 +3333,19 @@ static void do_nuke_tile(struct player *pplayer, struct tile *ptile,
   struct city *pcity = NULL;
   int pop_loss;
 
+  bool protected = is_tile_nuke_proof(ptile);
+  if (protected) {
+    unit_list_iterate_safe(ptile->units, punit) {
+      notify_player(unit_owner(punit), ptile, E_UNIT_LOST_MISC, ftc_server,
+                    _("[`nuclearexplosion`] Your tile was unaffected by a %s nuclear blast."),
+                    pplayer == unit_owner(punit)
+                    ? _("self-induced")
+                    : nation_adjective_for_player(pplayer));
+      break; /* only one unit per tile triggers this message */
+    } unit_list_iterate_safe_end;  
+    return;  /* protected tile: avoid all further nuke action below */  
+  }
+
   pcity = tile_city(ptile);
 
   unit_list_iterate_safe(ptile->units, punit) {

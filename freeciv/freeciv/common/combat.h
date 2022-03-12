@@ -61,6 +61,8 @@ bool unit_really_ignores_citywalls(const struct unit *punit);
 struct city *sdi_try_defend(const struct player *owner,
 			       const struct tile *ptile);
 
+bool is_tile_nuke_proof(const struct tile *ptile);
+
 int get_attack_power(const struct unit *punit);
 int base_get_attack_power(const struct unit_type *punittype,
 			  int veteran, int moves_left);

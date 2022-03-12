@@ -361,6 +361,12 @@ adv_want dai_effect_value(struct player *pplayer, struct government *gov,
            * (capital + 1) * amount / 100;
     }
     break;
+  case EFT_TILE_NUKE_PROOF:
+    if (ai->threats.nuclear) {
+      v += city_size_get(pcity) * unit_list_size(pcity->tile->units) 
+           * (capital + 1) * amount / 100;
+    }
+    break;
   case EFT_REVEAL_MAP:
     if (!ai->explore.land_done || !ai->explore.sea_done) {
       v += 10;

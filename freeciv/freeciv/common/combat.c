@@ -443,6 +443,26 @@ struct city *sdi_try_defend(const struct player *owner,
 }
 
 /*******************************************************************//**
+  Besides SDI protecting a city, individual tiles may be nuke resistant
+  for their own reasons; e.g., bunker, fallout shelter, etc.
+  This gives finer control of protecting specific tiles without 
+  shooting down the nuke and preventing its explosion. In addition,
+  it allows setting a probability for tile protection. (Use 0 or 100
+  for boolean behaviour).
+***********************************************************************/
+bool is_tile_nuke_proof(const struct tile *ptile)
+{
+  int val = get_target_bonus_effects(NULL,
+                                     NULL, NULL,
+                                     tile_city(ptile), NULL, ptile,
+                                     NULL, NULL,
+                                     NULL, NULL, NULL,
+                                     EFT_TILE_NUKE_PROOF);
+
+  return (fc_rand(100) < val);
+}
+
+/*******************************************************************//**
   Convenience wrapper for base_get_attack_power.
 ***********************************************************************/
 int get_attack_power(const struct unit *punit)

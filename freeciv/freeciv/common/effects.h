@@ -366,6 +366,9 @@ extern "C" {
 /* Similar to incite_cost_pct but alters the cost based on actor player (not target player) */
 #define SPECENUM_VALUE141 EFT_ACTOR_INCITE_COST_PCT
 #define SPECENUM_VALUE141NAME "Actor_Incite_Cost_Pct"
+/* The percent chance a tile will be immune to nuclear blast */
+#define SPECENUM_VALUE142 EFT_TILE_NUKE_PROOF
+#define SPECENUM_VALUE142NAME "Tile_Nuke_Proof"
 
 /* FCW does not have /common and needs to hard code any changes or re-ordering of the above in effects.js */
 /********************************************************************************************************~*/

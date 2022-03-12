@@ -443,7 +443,8 @@ operations are excessively slower than land operations.
       and tactically usable with more frequency in more
       contextual situations.
 ==============================================================
-71.
+71. Bunkers have 90% chance to resist nuclear detonation.
+i.e., units inside won't die.
 ==============================================================
 72.
 ==============================================================
