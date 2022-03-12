@@ -7382,6 +7382,7 @@ reqs	=
       "Action", "Investigate City", "Local", TRUE
       "DiplRel", "War", "Local", FALSE
       "DiplRel", "Alliance", "Local", FALSE
+      "DiplRel", "Team",     "Local", FALSE
     }
 [effect_incident_success_spy_attack]
 type	= "Casus_Belli_Success"
@@ -7407,6 +7408,7 @@ reqs	=
       "Action", "Pillage", "Local", TRUE
       "DiplRel", "War", "Local", FALSE
       "DiplRel", "Alliance", "Local", FALSE
+      "DiplRel", "Team", "Local", FALSE
     }
 [effect_incident_success_sneaky_road]
 type	= "Casus_Belli_Success"
@@ -7416,6 +7418,7 @@ reqs	=
       "Action", "Build Road", "Local", TRUE
       "DiplRel", "War", "Local", FALSE
       "DiplRel", "Alliance", "Local", FALSE
+      "DiplRel", "Team", "Local", FALSE
     }
 [effect_incident_success_sneaky_fort]
 type	= "Casus_Belli_Success"
@@ -7425,6 +7428,7 @@ reqs	=
       "Action", "Build Base", "Local", TRUE
       "DiplRel", "War", "Local", FALSE
       "DiplRel", "Alliance", "Local", FALSE
+      "DiplRel", "Team", "Local", FALSE
     }
 [effect_incident_success_sneaky_transform]
 type	= "Casus_Belli_Success"
@@ -7434,6 +7438,7 @@ reqs	=
       "Action", "Transform Terrain", "Local", TRUE
       "DiplRel", "War", "Local", FALSE
       "DiplRel", "Alliance", "Local", FALSE
+      "DiplRel", "Team", "Local", FALSE
     }
 [effect_incident_caught_steal_maps1]
 type	= "Casus_Belli_Caught"
@@ -7708,6 +7713,7 @@ reqs	=
       "Action", "Found City", "Local", TRUE
       "DiplRel", "War", "Local", FALSE
       "DiplRel", "Alliance", "Local", FALSE
+      "DiplRel", "Team", "Local", FALSE
     }
 [effect_incident_paradrop_invasion]
 type	= "Casus_Belli_Success"
@@ -7717,6 +7723,7 @@ reqs	=
       "Action", "Paradrop Unit", "Local", TRUE
       "DiplRel", "War", "Local", FALSE
       "DiplRel", "Alliance", "Local", FALSE
+      "DiplRel", "Team", "Local", FALSE
     }
 
 ;********************************************************************
@@ -8085,6 +8092,7 @@ reqs    =
     { "type",   "name",                            "range", "present"
       "DiplRel", "War",                            "Local", FALSE
       "DiplRel", "Alliance",                       "Local", FALSE
+      "DiplRel", "Team",                           "Local", FALSE
       "DiplRel", "Armistice",                      "Local", FALSE  ; Time to get units out of the territory
       "DiplRel", "Foreign",                        "Local", TRUE
       "UnitFlag", "NonMil",                        "Local", FALSE
@@ -8165,6 +8173,7 @@ reqs    =
     { "type",   "name",                            "range", "present"
       "DiplRel", "War",                            "Local", FALSE
       "DiplRel", "Alliance",                       "Local", FALSE
+      "DiplRel", "Team",                           "Local", FALSE
       "DiplRel", "Armistice",                      "Local", FALSE  ; Time to get units out of the territory
       "DiplRel", "Foreign",                        "Local", TRUE
       "UnitFlag", "NonMil",                        "Local", FALSE
