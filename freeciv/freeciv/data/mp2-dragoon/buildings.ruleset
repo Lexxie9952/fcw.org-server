@@ -229,23 +229,19 @@ sabotage	= 50
 sound		= "b_fortifications"
 sound_alt	= "b_generic"
 helptext	= _("\
-Fortifications are modifications to the natural terrain which increase\
+Fortifications are modifications to non-mountainous terrain to increase\
  its defense. Fortifications raise the defense bonus of Flatland\
  by +0.50, and other land by +0.33. (Flatland: 1.5×. Forest and Swamp: 1.66×,\
- Jungle: 1.83×, Hills: 2.33×.) \n\n NOTE: Terrain Bonuses give defending\
+ Jungle: 1.83×, Hills: 2.33×.) Fortifications may combine with other defense\
+ improvements in the city.\n\n NOTE: Terrain Bonuses give defending\
  Land units extra defense against attacks from units of all types. \n\n\
 "), _("\
-Fortifications prevent population loss when a defending unit is killed. \n\
+Fortifications prevent population loss when a defending unit is killed.\
+ Fortifications are unassailable by Siege Rams. If an enemy attempts to\
+ sabotage Fortifications, the odds of success are halved. \n\n\
 "), _("\
-Fortifications are unassailable by Siege Rams.\
- If an enemy attempts sabotage, odds of success are halved. \n\
-"), _("\
-➤ Fortifications may combine with other defense improvements in the city.\
- Fortifications cannot be made on mountains.\n\
-➤ AFTER making City Walls, you can sell Fortifications with a full return of gold\
- cost.\
+Discovery of Metallurgy increases cost to 45 shields.\
 ")
-
 [building_barracks]
 name		= _("Barracks")
 genus		= "Improvement"
@@ -389,8 +385,8 @@ City Walls give a 2× bonus to every unit in a City against Land unit attacks.\
  reduced when attacked by Catapults, Cannons, Artillery, and Howitzers.\n\
  "), _("\
 City Walls prevent population loss when a defending unit is killed. If an enemy\
- attempts to sabotage City Walls, the odds of success are halved. \n\
- "), _("\
+ attempts to sabotage City Walls, the odds of success are halved. \n\n\
+"), _("\
 Discovery of Metallurgy increases cost to 75 shields.\
 ")
 
@@ -2111,7 +2107,7 @@ The Lighthouse gives all your sea units +2 movement points\
  and increases their vision. It must be built in a city adjacent\
  to Ocean before the discovery of Electricity.\n\n\
 The Lighthouse movement bonus reduces to +1 when combined with\
- any bonus from Magellan or Nuclear Power technology.\n\n\ 
+ any bonus from Magellan or Nuclear Power technology.\n\ 
 The Lighthouse is never obsolete.\
 ")
 
@@ -2456,7 +2452,7 @@ sound		= "w_pyramids"
 sound_alt	= "w_generic"
 helptext	= _("\
 Every city will gain +25% to its food storage when the city grows\
- or starves. Newly founded cities start with +6 food. In addition,\
+ or starves. Newly founded cities start with +5 food. In addition,\
  the city with the Pyramids can rapture every turn when celebrating. \n\
 This Wonder is never obsolete.\
 ")
