@@ -115,7 +115,7 @@ void action_give_casus_belli_to_allies(struct player *offender,
   players_iterate(ally) {
     if (ally != offender && ally != victim_player) {
       /* We found a "third party player" who is an ally of the victim: */
-      if (player_diplstate_get(ally, victim_player)->type == DS_ALLIANCE) {
+      if (pplayers_allied(ally, victim_player)) {
         cb_now = player_diplstate_get(ally, offender)->has_reason_to_cancel;
         /* A fresh new casus belli deserves a notification to the recipient*/
         if (player_diplstate_get(ally, offender)->has_reason_to_cancel==0) {
@@ -166,9 +166,15 @@ static void action_give_casus_belli(struct player *offender,
   }
   */
 
+  /* Team Members can never be at war nor have casus belli (I think?) */
+  if (victim_player && 
+      player_diplstate_get(offender, victim_player)->type == DS_TEAM) {
+    return;
+  }
+
   /* Server setting game.server.casusbelli_allies gives casus belli to
      the victim's allies also: */ 
-  if (victim_player && offender!= victim_player //pillage your own tile = no casus belli
+  if (victim_player && offender != victim_player // pillage your own tile = no casus belli
       && game.server.casusbelli_allies) {
     action_give_casus_belli_to_allies(offender, victim_player);
   }

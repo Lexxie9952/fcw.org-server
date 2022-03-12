@@ -1384,8 +1384,7 @@ static void package_player_info(struct player *plr,
      non-global: altered by player- and civ-specific effects */
   memset(&web_packet->advance_saved_bulbs, 0, sizeof(web_packet->advance_saved_bulbs)); // clear arrays  
   memset(&web_packet->advance_costs, 0, sizeof(web_packet->advance_costs));    
-  if (info_level >= INFO_FULL || (receiver && (player_diplstate_get(plr, receiver)->type == DS_TEAM 
-                                               || player_diplstate_get(plr, receiver)->type == DS_ALLIANCE))) {
+  if (info_level >= INFO_FULL || (receiver && pplayers_allied(plr, receiver))) {
     advance_index_iterate(A_NONE, i) {
       if (research) {
         /* Both info arrays always have to be present together or always absent together, as
