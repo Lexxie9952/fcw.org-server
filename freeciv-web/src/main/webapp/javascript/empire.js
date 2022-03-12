@@ -271,6 +271,7 @@ function empire_unit_homecity_screen(wide_screen,narrow_screen,small_screen,
           else if (empire_upkeep_show_free && l==0) show_unit=true;
         } else if (empire_upkeep_show_free) show_unit=true;
         if (!empire_upkeep_show_zero && z==true) show_unit=false;
+        else if (empire_upkeep_show_zero && z==true) show_unit=true;
         if (show_unit) {
           units_sorted_by_type[sunit['type']].push(sunit);
         }
