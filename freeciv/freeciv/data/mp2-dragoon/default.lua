@@ -293,7 +293,7 @@ function _deflua_make_partisans_callback(city, loser, winner, reason)
     return
   end
 
-  local partisan_utype = 17
+  local partisan_utype = 18
   local partisan_name = "Partisan"
   local partisans = random(0, 1 + (city.size + 1) / 2) + 1
   if partisans > 8 then
@@ -302,7 +302,7 @@ function _deflua_make_partisans_callback(city, loser, winner, reason)
 
   if loser.government:rule_name() == "Theocracy" then
     partisan_name = "Zealot"
-    partisan_utype = 16
+    partisan_utype = 17
   end
 
   city.tile:place_partisans(loser, partisans + (partisan_utype*256), city:map_sq_radius())
