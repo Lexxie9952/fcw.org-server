@@ -62,11 +62,10 @@ richness.
    Gradually people will wake up into realising a multiplicity
    of Bronze Age diversity exists. 
 ============================================================
-7. With Pyramids, cities start with +5 food for 5/15.
-   (Was +5 = 5/20 in MP2C).
-   compensates the increase in cost and
-   science requirements. Pyramid strategies will be more
-   non-conformist, rare, and more of a commitment, but also
+7. With Pyramids, cities start with 33% or +5 food for 5/15.
+   (MP2C was: 25% or 5/20.).
+   This compensates the increase in Pyramids cost and the
+   higher science requirements. Pyramid strategies will be
    more interesting.
    Cost: 180 (was 200)
    Gives its city a rapture rate of 100% regardless of gov.
@@ -134,7 +133,7 @@ richness.
    turns off the bonus. The two different "make content"
    bonuses were clarified.
 =============================================================
-19. Adam Smith wonder adjusted back to 300 gold; the former 
+19. Adam Smith wonder adjusted back to 300 cost; the former 
    cost increase had been implemented before the WYSIWYG 
    upgrade, which now makes this wonder less OP and no
    longer justifying the cost increase.
@@ -197,7 +196,7 @@ Multirole Fighter, upgrades Escort Fighter
    A6 D7 two turns fuel. Cost: 90
    Range fighter
 =============================================================
-31. Rapture Rate is here. Allows govs to participate in
+31. Rapture Rate is here. Allows most govs to participate in
    it at different rates; which allows finer balancing of 
    the govs to make them more usable and interesting.
 
@@ -219,7 +218,20 @@ Nationalism                50  50  50  50  50  50  50 100
 Theocracy                  40  40  40  40  40  40  40  40    * (57.2% with cathedral)             
 Communism                  40  40  40  40  40  40  40  40
 =============================================================
-32. Terrain Walls
+32. Terrain Walls - The Great Wall wonder allows 
+one to build walls right on the map. The terrain properties
+are:
+1. Takes one turn to build.
+2. Takes four turns to pillage.
+3. Can't be built on a Base, River, or Canal
+4. Non-allied units lose all move points moving onto a wall,
+and lose all move points moving off of a wall
+5. Enemy units who are on a non-allied wall tile and have 
+no moves left, are considered as 'attempting to scale the
+wall' and in a vulnerable state, and have a -50% defense 
+while caught on the wall with no moves left.
+6. Allied units on a wall are considered fortified for free,
+even if not in a fortified state.
 =============================================================
 33. SentryAlways 
 		scout, balloon, zeppelin, e.fighter, m.fighter, 
@@ -247,7 +259,7 @@ who must migrate to decent starting position.
 37. Boats 8hp - Triremes and Warriors can beat them; similar
    to what was done with Workers/Tribesmen.
 ==============================================================
-38. Terrain Walls are available to be made for any nation 
+38. DUPLICATE OF 32. Terrain Walls are available to be made for any nation 
  who owns The Great Wall. To build them you must select 
  Tile Target with the (D)o command. Features: non-allied 
  units lose all moves when entering or exiting a tile with
@@ -262,10 +274,13 @@ who must migrate to decent starting position.
 40. Wild Animal hunting now gives food (for edible types).
 /set animals >0
 ==============================================================
-41. Mobile SAM gets 2x defense also against Missile units,
+41. Mobile SAM gets 2x defense against Missile units,
    and can now carry two missiles.
-==============================================================
-42. Armor II bonus vs. CM cut to 50% was (100% i.e. 2x)
+42. Armor II bonus vs. Missiles cut to 50% was (100% i.e. 2x)
+this buffs the little used Mobile SAM to more usefulness in
+tactical operations and nerfs the Armor II which was getting 
+too much use as an anti-cruise missile defender unit instead 
+of its intended purpose.
 ==============================================================
 43. EFT_REHOME_PCT alters the likelihood of units disbanding
     from conquered/razed cities based on gov type.
@@ -281,13 +296,11 @@ who must migrate to decent starting position.
    nations who don't have Lighthouse. 
 ==============================================================
 46. Citadel of Aleppo - 3x defense impervious to ballistic
-   units and siege ram. Currently worthless because
-   disallows fortifications so you're better off making 
-   city walls + fortifications. Needs to be changed perhaps
-   or is pending adjustments to city walls and fortification
-   bonuses.
+   units and siege ram. Allows each nation to make one 
+   special fortress city with the same strength as old 
+   city walls, to feel safe about it. Cost:120
 ==============================================================
-47. Ballista
+47. Ballista unit - 
 ==============================================================
 48. Chand Baori - cost 65 (was 80)
 ==============================================================
@@ -336,7 +349,7 @@ bronze working go to 20.
 ==============================================================
 54. Theology gives blueprints for Theocracy.
 ==============================================================
-55. Theocracies can make the Patriarch unit, which is a
+55. Theocracies can make the Patriarch unique unit, which is a
 diplomatic unit that bribes and incites at 1/3 the cost.
 ==============================================================
 56. Zealots can change home city to a foreign ally who is 
@@ -348,9 +361,11 @@ diplomatic unit that bribes and incites at 1/3 the cost.
 ==============================================================
 57. Theocracy can incite other cities at a 33% discount.
 ==============================================================
-58. Crew Repair simplified: every type of ship gets 10% repair
-effectively +1 over previous, slight buff to ship durability
-and usability.
+58. Crew Repair simplified: every type of ship gets 10% repair:
+i.e., effectively +1 hp more than previously: providing a
+slight buff to ship durability and usability, and bringing the
+successfully tested crew repair to the ancient (wooden ships)
+This combines with improved Lighthouse/Nuclear Power effects.
 ==============================================================
 59. req #2 for Gunpowder changed from Iron Working to 
 Feudalism (which needs Iron Working anyway)...fixes some
@@ -398,17 +413,35 @@ and borders were greatly reduced and replaced with a game of
 "city pounding"
 -disrupted tactical integrity of the game.
 ==============================================================
-67. City Fortifications changed/simplified. Simply adds +0.33
-to the terrain defense bonus (+0.50 for Flatland). All other
-complexities removed.
+67. City Fortifications cleaned and simplified.
+Simply adds +0.33 to the terrain defense bonus 
+(+0.50 for Flatland). Gets same +10 cost increase as 
+City walls, after metallurgy. All other iffy conditionals 
+cleaned out and removed. 
 ==============================================================
 68. All Ballistic type units can now SUA iff they haven't 
 moved; are also able to SUA against oceanic tiles (if not
 trasported.) 
 ==============================================================
-69. 
+69. Most ships gain +1 move. Adjusts a discrepancy between
+their speed and that of corresponding land units using roads.
+Ships to not gain +1 = Trireme, Longboat, Ram Ship
+Frigate gets +2 (had received a +1 adjustment prior to all
+ships getting a general +1). This changes also lessens 
+the "molasses effect" in island games, where all sea-based 
+operations are excessively slower than land operations.
 ==============================================================
-70. 
+70. Shore attacks for modern ships changed:
+  • Battle will last 20 combat rounds, which may or may not result
+    in a victor.
+  • Chance of attacker promotion is half frequency: 2 battles
+    required for same chance of promotion as 1 sea battle. 
+  • Firepower is reduced to 1. Attack strength is increased +33%
+    * Overall effect is -33% reduction in attack strength, less
+      chance of promotion, less chance of fatality for either
+      combatant, but generally in spite of this, more effective
+      and tactically usable with more frequency in more
+      contextual situations.
 ==============================================================
 71.
 ==============================================================
