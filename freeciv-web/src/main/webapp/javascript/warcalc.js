@@ -492,6 +492,8 @@ function warcalc_set_tooltips()
           $("#wca175").prop("title", bl+"Veteran-2 ('Hardened')");
         }
         if (client_rules_flag[CRF_MP2_D]) {
+          $("#wca133").show();
+          $("#wca133").prop("title", bl+"FP2 ships attacking land (Firepower is reduced to 1)");
           $("#wc125").prop("title", bl+"In city with City Walls dvs Artillery"+nbl+"In city with SAM Battery dvs Stealth Aircraft");
           $("#wc150").prop("title", bl+"Veteran-1 ('Veteran')"+nbl+"Jungle"+nbl+"Flatland terrain in city with Fortifications"+nbl+"Land unit Fortified OR inside city"+nbl+"In city with City Walls dvs Cannon"
           +nbl+"Helicopter dvs Foot or Mounted units"+nbl+"Armor II dvs Missile" );

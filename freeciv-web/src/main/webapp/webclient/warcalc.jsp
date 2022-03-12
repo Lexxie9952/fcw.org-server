@@ -20,7 +20,7 @@
                 <tr>
                     <th class="wcttmsg" id="wcth1" title='Attacker vs. Defender bonus appliers' style="font-size:90%">Attack&nbsp;</th>
                     <td align="center"><input id="wca125" class="tiny_button" type="button" value="&#xD7;1.25" onClick="wc_A(1.25);"></td>
-                    <td align="center"><input id="wca133" class="tiny_button" type="button" value="-" onClick="wc_A(1.33);" disabled></td>
+                    <td align="center"><input id="wca133" class="tiny_button" type="button" value="&#xD7;1.33" onClick="wc_A(1.33);" disabled></td>
                     <td align="center"><input id="wca150" class="tiny_button" type="button" value="&#xD7;1.5&nbsp;" onClick="wc_A(1.50);"></td>
                     <td align="center"><input id="wca167" class="tiny_button" type="button" value="-" onClick="wc_A(1.67);" disabled></td>
                     <td align="center"><input id="wca175" class="tiny_button" type="button" value="&#xD7;1.75" onClick="wc_A(1.75);"></td>
