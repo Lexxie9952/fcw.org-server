@@ -1840,9 +1840,10 @@ reqs           =
     }
 buildable      = FALSE
 removal_time   = 0
+native_to      = "Land", "LandNoKill", "LandAirSea"
 flags          = "TerrChangeRemoves", "NoStackDeath"
 helptext       = _("\
-Ruins mark the former site of a city that was destroyed or abandoned. Units in Ruins\
+Ruins mark the former site of a city that was destroyed or abandoned. Land units in Ruins\
  do not experience Stack-Kill. Also, Hideouts made in Ruins will never disappear.\
 ")
 
