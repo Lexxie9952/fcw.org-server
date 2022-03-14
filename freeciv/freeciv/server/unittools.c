@@ -1541,6 +1541,7 @@ void place_partisans(struct tile *pcenter, struct player *powner,
 {
   struct tile *ptile = NULL;
   struct unit_type *u_type = get_role_unit(L_PARTISAN, 0);
+  int vet_level = 0;
 
 #ifdef FREECIV_WEB
   /* FCW uses bitwise trickery to specify the unit_type. TODO: this function
@@ -1556,6 +1557,20 @@ void place_partisans(struct tile *pcenter, struct player *powner,
     u_type = utype_by_number((Unit_type_id)utype_idx);
     if (!u_type) return;
   }
+
+  /* Cities with Barracks or players with Sun Tzu get vet partisans: */
+  vet_level  = get_target_bonus_effects(NULL,
+                                        powner,
+                                        NULL,
+                                        tile_city(pcenter), 
+                                        NULL,
+                                        pcenter,
+                                        NULL,
+                                        u_type,
+                                        NULL,
+                                        NULL,
+                                        NULL,
+                                        EFT_VETERAN_BUILD);
 #endif
 
   while (count-- > 0
@@ -1563,7 +1578,7 @@ void place_partisans(struct tile *pcenter, struct player *powner,
                                       sq_radius, &ptile)) {
     struct unit *punit;
 
-    punit = create_unit(powner, ptile, u_type, 0, 0, -1);
+    punit = create_unit(powner, ptile, u_type, vet_level, 0, -1);
     if (can_unit_do_activity(punit, ACTIVITY_FORTIFYING)) {
       punit->activity = ACTIVITY_FORTIFIED; /* yes; directly fortified */
       send_unit_info(NULL, punit);
