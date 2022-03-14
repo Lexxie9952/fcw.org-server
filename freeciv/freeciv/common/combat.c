@@ -452,12 +452,29 @@ struct city *sdi_try_defend(const struct player *owner,
 ***********************************************************************/
 bool is_tile_nuke_proof(const struct tile *ptile)
 {
-  int val = get_target_bonus_effects(NULL,
-                                     NULL, NULL,
-                                     tile_city(ptile), NULL, ptile,
-                                     NULL, NULL,
-                                     NULL, NULL, NULL,
-                                     EFT_TILE_NUKE_PROOF);
+  /* Set initial resistance value of the tile */
+  int val = get_target_bonus_effects(NULL, NULL, NULL, tile_city(ptile),
+                                       NULL, ptile, NULL, NULL, NULL,
+                                       NULL, NULL, EFT_TILE_NUKE_PROOF);
+
+
+  /* Check if any unit has a higher resistance than the tile itself */
+  unit_list_iterate_safe(ptile->units, punit) {
+     int tmp = get_target_bonus_effects(NULL,
+                                        unit_owner(punit),
+                                        NULL,
+                                        tile_city(ptile),
+                                        NULL,
+                                        ptile,
+                                        punit,
+                                        unit_type_get(punit),
+                                        NULL,
+                                        NULL,
+                                        NULL,
+                                        EFT_TILE_NUKE_PROOF);
+      /* The highest resistance value will be used. */
+      if (tmp > val) val = tmp;
+  } unit_list_iterate_safe_end; 
 
   return (fc_rand(100) < val);
 }
