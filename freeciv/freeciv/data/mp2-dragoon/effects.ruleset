@@ -1207,6 +1207,22 @@ reqs    =
     }
 ; ***********************************************************
 
+[effect_aegis_nuke_proof]
+type    = "Tile_Nuke_Proof"
+value   = 50  ; 50% probability of survival
+reqs    =
+    { "type",          "name",           "range", "present"
+      "UnitType",      "AEGIS Cruiser",  "Local",  TRUE
+      "Tech",          "Laser",          "Player", TRUE
+    }
+[effect_mobile_sam_nuke_proof]
+type    = "Tile_Nuke_Proof"
+value   = 33  ; 33% probability of survival
+reqs    =
+    { "type",          "name",           "range", "present"
+      "UnitType",      "Mobile SAM",     "Local",  TRUE
+      "Tech",          "Laser",          "Player", TRUE
+    }
 
 ; Base vision range - radius of vision is sqrt(5) = 2.24
 [effect_city_vision]
@@ -2600,6 +2616,14 @@ reqs	=
       "UnitFlag", "NonMil", "Local", FALSE
       "UnitFlag", "NoVeteran", "Local", FALSE
     }
+[effect_barracks_3]
+type    = "Veteran_Build"
+value	= 1
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Barracks", "City", TRUE
+      "UnitType", "Scout",   "Local", TRUE
+    }    
 [effect_barracks_a]
 type    = "HP_Regen"
 value	= 100
@@ -2655,6 +2679,14 @@ reqs	=
       "UnitFlag", "NonMil", "Local", FALSE
       "UnitFlag", "NoVeteran", "Local", FALSE
     }
+[effect_barracks_ii_3]
+type    = "Veteran_Build"
+value	= 1
+reqs	=
+    { "type",     "name",        "range", "present"
+      "Building", "Barracks II", "City",  TRUE
+      "UnitType", "Scout",       "Local", TRUE
+    }
 [effect_barracks_ii_a]
 type    = "HP_Regen"
 value	= 100
@@ -2709,6 +2741,14 @@ reqs	=
       "UnitClass", "LandNoKill", "Local", TRUE
       "UnitFlag", "NonMil", "Local", FALSE
       "UnitFlag", "NoVeteran", "Local", FALSE
+    }
+[effect_barracks_iii_3]
+type    = "Veteran_Build"
+value	= 1
+reqs	=
+    { "type",     "name",        "range", "present"
+      "Building", "Barracks III", "City",  TRUE
+      "UnitType", "Scout",       "Local", TRUE
     }
 [effect_barracks_iii_a]
 type    = "HP_Regen"
@@ -6403,6 +6443,14 @@ reqs	=
     { "type", "name", "range", "present"
       "Building", "Sun Tzu's War Academy", "Player", TRUE
       "UnitClass", "LandNoKill", "Local", TRUE
+    }
+[effect_sun_tzus_war_academy_3]
+type    = "Veteran_Build"
+value	= 1
+reqs	=
+    { "type",     "name",                  "range",  "present"
+      "Building", "Sun Tzu's War Academy", "Player", TRUE
+      "UnitType", "Scout",                 "Local",  TRUE
     }
 ;************************************************************************ Supreme Court
 [effect_supreme_court_corruption1]
