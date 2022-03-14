@@ -497,6 +497,7 @@ flags    = ""
 graphic     = "a.laser"
 graphic_alt = "-"
 cost = 5790
+helptext = _("Gives nuke resistance to AEGIS and Mobile SAM.")
 
 [advance_leadership]
 name     = _("Leadership")
