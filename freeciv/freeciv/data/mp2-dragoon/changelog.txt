@@ -71,7 +71,10 @@ richness.
    Gives its city a rapture rate of 100% regardless of gov.
 ============================================================
 8. Partisans can investigate conquered cities not owned 
-   by the original owner.
+   by the original owner. Partisans join the sentry always
+   class of units. Partisans gain +2/9 moves per veteran
+   level. Partisans also gain whatever vet level effects
+   are operative from Barracks or wonders (all rulesets).
 ============================================================
 9. Ziggurat 
    was least popular Tribe Wonder:
@@ -113,10 +116,10 @@ richness.
    Misc techs rounded to clean numbers. 
    Philosophy now gives a 70% blueprint instead of a full tech.
 =============================================================
-15. Explorer renamed to Scout. Available with Horseback Riding,
-   moves 4 tiles (6 with Map Making, which then makes it identical
-   to previous Explorer. Cost reduced 2 shields, same as 
-   Horsemen.)
+15. Explorer changed to Scout. Available with Horseback Riding,
+   moves 4 tiles (6 with Map Making, which makes it identical
+   to the Explorer.) Cost reduced 2 shields to be the same 
+   as Horseme. Gains +2/9 move per veteran level.
 =============================================================
 16. QUAY upgrades
    a. Quay-to-Road and Road-to-Quay uses 2/3 move point. (was 1/3, 3/3)

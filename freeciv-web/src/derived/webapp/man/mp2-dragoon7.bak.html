@@ -469,6 +469,7 @@ In other respects, this unit is identical to Workers I. </b>
 ➤ <b style="color:#9aa">Expellable</b>: can be expelled from foreign tiles.
 ➤ May acquire veteran status.
 ➤ Veteran bonuses stack with other work rate bonuses.
+
 Veteran Levels for Workers II are unique to this unit type:
 <table class="vet_level">
 <tr><th>Veteran level</th><th>Work factor</th><th>Promotion Odds per turn/work</th><th>Move bonus</th></tr>
@@ -1068,7 +1069,7 @@ Veteran Levels for Zealots are the standard ruleset default:
 <div class='item' id='utype18'>
 <h3 class='section'>Partisan</h3>
 
-<pre class='cost'>Cost: 50 shields</pre>
+<pre class='cost'>Cost: 45 shields</pre>
 <pre class='upkeep'>Upkeep: 1 Unhappy</pre>
 <pre class='moves'>Moves: 2</pre>
 <pre class='vision'>Vision: 2.00 tiles</pre>
@@ -1077,7 +1078,8 @@ Veteran Levels for Zealots are the standard ruleset default:
 <pre class='firepower'>Firepower: 1</pre>
 <pre class='hitpoints'>Hitpoints: 20</pre>
 <pre class='obsolete'>Obsolete by: None</pre>
-<pre class='helptext'><b class='unit_desc'>Partisans are guerilla fighters who can use the terrain to their advantage.  Like the Scout that they upgrade, they can slip through ZOC and live off the land with no upkeep.</b>
+<pre class='helptext'><b class='unit_desc'>Partisans are guerilla fighters who can use the terrain to their advantage. Like the Scout that they upgrade, they can slip through ZOC and live off the land with no upkeep, and gain +²⁄₉ move per veteran level. Partisans provide sentry intel even if not sentried. 
+</b>
 <b class='unit_desc'>Proportional to city size, up to 8 Partisans appear when an enemy conquers your city. They randomly fortify on any tile inside the circle defined by its workable radius. Partisans prefer defensive tiles, and ignore tile nationality. They spawn only when:
 ➣ Guerilla Warfare is known by any player.
 ➣ The city was originally built by you.
@@ -1115,17 +1117,17 @@ Veteran Levels for Zealots are the standard ruleset default:
 ➤ May acquire veteran status.
   • Veterans have increased strength in combat.
 
-Veteran Levels for Partisans are the standard ruleset default:
+Veteran Levels for Partisans are unique to this unit type:
 <table class="vet_level">
 <tr><th>Veteran level</th><th>Power factor</th><th>Promotion Odds</th><th>Move bonus</th></tr>
 <tr><hr style="border-top: 1px solid #000"></tr>
 <tr><td>green</td><td>100%</td><td>50%</td> <td>-</td></tr>
-<tr><td>veteran</td><td>150%</td><td>33%</td> <td>-</td></tr>  
-<tr><td>hardened</td><td>175%</td><td>20%</td> <td>-</td></tr>
-<tr><td>elite</td><td>200%</td><td>15%</td> <td>-</td></tr>
-<tr><td>crack</td><td>210%</td><td>15%</td> <td>+ 1/9</td></tr>
-<tr><td>master</td><td>220%</td><td>15%</td> <td>+ 1/9</td></tr>
-<tr><td>champion</td><td>230%</td><td>-</td><td>+ 1/9</td></tr></table>
+<tr><td>veteran</td><td>150%</td><td>33%</td> <td>+ 2/9</td></tr>  
+<tr><td>hardened</td><td>175%</td><td>20%</td> <td>+ 4/9</td></tr>
+<tr><td>elite</td><td>200%</td><td>15%</td> <td>+ 2/3</td></tr>
+<tr><td>crack</td><td>210%</td><td>15%</td> <td>+ 8/9</td></tr>
+<tr><td>master</td><td>220%</td><td>15%</td> <td>+1 1/9</td></tr>
+<tr><td>wind walker</td><td>230%</td><td>-</td><td>+1 1/3</td></tr></table>
 <br><b style="font-family:Freeciv; font-size:larger">Transport Loading Logistics</b>
 <img src="/images/man/logistics_foot_load.png">
 <b style="font-family:Freeciv; font-size:larger">Transport Unloading Logistics</b>
@@ -1268,7 +1270,7 @@ Veteran Levels for Alpine Troops are the standard ruleset default:
 <div class='item' id='utype21'>
 <h3 class='section'>Marines</h3>
 
-<pre class='cost'>Cost: 60 shields</pre>
+<pre class='cost'>Cost: 55 shields</pre>
 <pre class='upkeep'>Upkeep: 1 Shield, 1 Unhappy</pre>
 <pre class='moves'>Moves: 2</pre>
 <pre class='vision'>Vision: 2.83 tiles</pre>
@@ -1404,7 +1406,7 @@ Veteran Levels for Ground Troops are the standard ruleset default:
 <div class='item' id='utype23'>
 <h3 class='section'>Paratroopers</h3>
 
-<pre class='cost'>Cost: 60 shields</pre>
+<pre class='cost'>Cost: 55 shields</pre>
 <pre class='upkeep'>Upkeep: 1 Shield, 1 Unhappy</pre>
 <pre class='moves'>Moves: 2</pre>
 <pre class='vision'>Vision: 2.00 tiles</pre>
@@ -2418,6 +2420,7 @@ Veteran Levels for AAA are the default for all other military units:
 <pre class='helptext'><b class='unit_desc'>The Mobile SAM is the strongest Anti-Air unit on the ground. It can attack nearby aircraft. It has a 2× bonus against all Air and Missile units. The Mobile SAM can also carry two Missiles of any type. Unlike the AAA, it cannot attack non-native tiles or attack while transported.</b>
 
 <b class='unit_desc'>AAA can upgrade to Mobile SAM for free on its 10th turn of service. The Convert order must be done in the capital city and takes 4 turns.</b>
+<b class='unit_desc'>The discovery of Laser gives all units on the tile a 33% chance to resist nuclear attack.</b>
 <hr style='border-top: 1px solid #000'>➤ Belongs to Land unit class.
   • Can occupy empty enemy cities.
   • Subject to zones of control.
@@ -4305,7 +4308,7 @@ Veteran Levels for Missile Destroyers:
 <pre class='firepower'>Firepower: 2</pre>
 <pre class='hitpoints'>Hitpoints: 30</pre>
 <pre class='obsolete'>Obsolete by: None</pre>
-<pre class='helptext'><b class='unit_desc'>The AEGIS Cruiser has an Anti-Air missile system. Radar and sonar give superior vision and 2× defense bonus against Submarines. The AEGIS can carry two Missiles, and is the only ship that can attack Air and Missile units.</b>
+<pre class='helptext'><b class='unit_desc'>The AEGIS Cruiser has an Anti-Air missile system. Radar and sonar give superior vision and 2× defense bonus against Submarines. The AEGIS can carry two Missiles, and is the only ship that can attack Air and Missile units. The discovery of Laser gives all units on the tile a 50% chance to resist nuclear attack.</b>
 <b class='unit_desc'>Excellent vision and 3× Anti-Air bonus are ideal for scouting and escorting.</b>
 <hr style='border-top: 1px solid #000'>➤ Belongs to Sea unit class.
   • <b style="color:#9aa">Crew Repair</b>: each turn, regardless of movement, recovers 2 hit points.
@@ -5219,7 +5222,9 @@ Electricity and Combustion each give Trains an additional +1 move.</b>
 <pre class='firepower'>Firepower: 1</pre>
 <pre class='hitpoints'>Hitpoints: 10</pre>
 <pre class='obsolete'>Obsolete by: Partisan</pre>
-<pre class='helptext'><b class='unit_desc' style='line-height:115%;font-size:115%;'>Scouts are brave explorers of unknown territory. They can slip through enemy ZOC. Like Tribesmen, they ignore all terrain penalties, treating every tile as if it had a road. This means they can move 4 tiles per turn (6 with the discovery of Map Making.) As a non-military traveler, they can also visit far off cities to Investigate City and gather intel. Sometimes generals will use their scouting information for strategic advantage. Scouts can make contact with far-off lands to arrange cease-fire or peace. Best of all, Scouts live off the land and have no upkeep. In later times, Scouts upgrade to Partisans.</b>
+<pre class='helptext'><b class='unit_desc'>Scouts are explorers of unknown territory. They live off the land with no upkeep. They can slip through ZOC. They ignore terrain penalties, treating every tile as if it had a road. They can move 4 tiles per turn (6 after discovering Map Making.) For each veteran level, they gain an additional +²⁄₉ move point. Scouts can Investigate City to gather intel, and their terrain scouting can give tactical advantage. Scouts can make contact with far-off lands to arrange Cease-fire or Peace. In later times, Scouts upgrade to Partisans. 
+</b>
+<b class='unit_desc'>Scouts provide sentry intel even if not sentried. Scouts gain the same veteran levels from buildings and wonders as other land units.</b>
 <hr style='border-top: 1px solid #000'>➤ Belongs to Land unit class.
   • Slowed down while damaged.
   • <b style="color:#9aa">AIRLIFT</b>: Can be airlifted if it has remaining moves.
@@ -5242,6 +5247,18 @@ Electricity and Combustion each give Trains an additional +1 move.</b>
 ➤ <b style="color:#9aa">Expellable</b>: can be expelled from foreign tiles.
 ➤ May acquire veteran status.
   • Veterans have increased strength in combat.
+
+Veteran Levels for Scouts are unique to this unit type:
+<table class="vet_level">
+<tr><th>Veteran level</th><th>Power factor</th><th>Promotion Odds</th><th>Move bonus</th></tr>
+<tr><hr style="border-top: 1px solid #000"></tr>
+<tr><td>green</td><td>100%</td><td>50%</td> <td>-</td></tr>
+<tr><td>veteran</td><td>150%</td><td>33%</td> <td>+ 2/9</td></tr>  
+<tr><td>hardened</td><td>175%</td><td>20%</td> <td>+ 4/9</td></tr>
+<tr><td>elite</td><td>200%</td><td>15%</td> <td>+ 2/3</td></tr>
+<tr><td>crack</td><td>210%</td><td>15%</td> <td>+ 8/9</td></tr>
+<tr><td>master</td><td>220%</td><td>15%</td> <td>+1 1/9</td></tr>
+<tr><td>wind walker</td><td>230%</td><td>-</td><td>+1 1/3</td></tr></table>
 <br><b style="font-family:Freeciv; font-size:larger">Transport Loading Logistics</b>
 <img src="/images/man/logistics_generic_load.png">
 <b style="font-family:Freeciv; font-size:larger">Transport Unloading Logistics</b>
