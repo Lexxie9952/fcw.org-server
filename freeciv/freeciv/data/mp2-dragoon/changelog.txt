@@ -399,9 +399,9 @@ free-fortify bonus being multiplied twice for units in
 cities with walls, creating 4.5x. The result of this mistake
 made some dramatic changes to gameplay:
 -the ability to rapid-buy walls in an emergency for chokepoint
-cities for 4.5x instead of 3x meant the game become much more 
-skewed to not needing to buy as many military units and thus 
-more heavily economic until heavy post-gunpowder offensive 
+cities for 4.5x instead of 3x meant the game became skewed to
+not needing to buy as many military units, and thus 
+more heavily economic until post-gunpowder heavy 
 weaponry was discovered.
 -greatly force-multiplied the strategic dynamics of
 "playing sim city while gunpowder rushing"
@@ -449,7 +449,10 @@ operations are excessively slower than land operations.
 71. Bunkers have 90% chance to resist nuclear detonation.
 i.e., units inside won't die.
 ==============================================================
-72.
+72. All ships gain +1 to their minimum speed when damaged:
+Boat, Trireme, Riverships: 3 (was 2)
+Submarines: 5 (was 4)
+all other Sea Units: 4 (was 3)
 ==============================================================
 73.
 ==============================================================

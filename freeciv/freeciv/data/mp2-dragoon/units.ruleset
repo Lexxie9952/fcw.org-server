@@ -269,7 +269,7 @@ helptext      = _("\
 
 [unitclass_sea]
 name          = _("?unitclass:Sea")
-min_speed     = 3
+min_speed     = 4
 hp_loss_pct   = 0
 flags         = "DamageSlows", "AttackNonNative", "AttFromNonNative", "CanPillage", "WaterVessel"
 helptext      = _("\
@@ -281,7 +281,7 @@ helptext      = _("\
 ; Because it is now Unreachable, any unit able to attack it needs this class in its targets.
 [unitclass_submarine]
 name          = _("?unitclass:Submarine")
-min_speed     = 4
+min_speed     = 5
 hp_loss_pct   = 0
 flags         = "DamageSlows", "AttackNonNative", "AttFromNonNative", "CanPillage", "Unreachable", "WaterVessel"
 helptext      = _("\
@@ -291,14 +291,14 @@ helptext      = _("\
 
 [unitclass_trireme]
 name          = _("?unitclass:Trireme")
-min_speed     = 2
+min_speed     = 3
 hp_loss_pct   = 0
 flags         = "DamageSlows", "AttFromNonNative", "WaterVessel"
 
 [unitclass_rivership]
 ; /* Extra class providing ability to travel rivers */
 name          = _("?unitclass:RiverShip")
-min_speed     = 2
+min_speed     = 3
 hp_loss_pct   = 0
 flags         = "DamageSlows", "AttackNonNative", "AttFromNonNative", "WaterVessel"
 
@@ -2788,9 +2788,10 @@ veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
 veteran_move_bonus = 0, 0, 0, 0, 9, 9, 9
 roles         = ""
 helptext      = _("\
-Fighters are the first offensive Air units. Their superior mobility and firepower alter\
- the very nature of warfare. They can move anywhere and attack any unit (except Submarines\
- and Jet Bombers.)\n\
+Fighters are the first offensive Air units. Their superior mobility and firepower alter the\
+ very nature of warfare. They can move anywhere and attack any unit except Submarines, Jet\
+ Bombers, Spy Planes, and Satellites. Fighters need fuel to avoid crashing and thus must end\
+ every turn in a city, Airbase, or Carrier. Air units can't conquer undefended enemy cities.\n\
 "), _("
 INTERCEPTOR：the Vigil order lets Fighters auto-attack adjacent Air units if they\
  have better attack odds. A Fighter can Vigil if it uses 2 move points or less. \n\
@@ -4663,7 +4664,7 @@ Submarines are strong attackers but weak defenders. They can carry 8 Missiles.\
  unless they have a unit or city adjacent to it. \ 
 "), _("\
 Submarines have superior attrition rates when attacking in numbers. They excel\
- at hit-and-run against weaker ships.\
+ at hit-and-run against weaker ships. They have a minimum speed of 5 when damaged.\
 "), _("
 Submarines can Stack-Escape：a 75% chance to escape a killed stack if they have more remaining move points than the attacker.\
 ")
