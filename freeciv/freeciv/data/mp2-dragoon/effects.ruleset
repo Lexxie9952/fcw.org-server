@@ -861,6 +861,16 @@ value = 50
       "UnitClassFlag", "TerrainDefense", "Local"
     }
 
+;This effect is triggered in a city if no other healing effects are.
+[effect_city_1hp_heal_minimum]
+type    = "Unit_Recover"
+value   = 1
+reqs    =
+    { "type",          "name",         "range", "present"
+      "CityTile",      "Center",       "Local", TRUE
+      "UnitState",     "MovedThisTurn","Local", TRUE
+    }
+
 ; ****************************** RECYCLE SHIELDS **************************
 [effect_unit_shield_value_recycle]
 type    = "Unit_Shield_Value_Pct"
@@ -7855,7 +7865,7 @@ reqs    =
 
 [effect_action_success_move_cost_capture]
 type    = "Action_Success_Actor_Move_Cost"
-value   = 9      ; 1 move
+value   = 6      ; 1 move
 reqs    =
     { "type", "name", "range", "present"
       "Action", "Capture Units", "Local", TRUE
