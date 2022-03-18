@@ -1688,8 +1688,9 @@ target_reqs =
 ;ATTACKS every enabler below has 2 more duplicates in sections below, to
 ;handle Pax Dei logic. Always keep them identical except for Pax Dei 
 ;reqs, which fall below the ;... marker.
-;---------------------------------------------------------------------------
-;Tribesmen can attack:   
+;----------------------------------------------------------------------------ATTACK ENABLERS
+;-----------------------------------------------------------TRIBESMEN ONLY
+;NB: Pax Dei not invalidated by Monotheism
 [actionenabler_attack_native_tribesmen]
 action = "Attack"
 actor_reqs    =
@@ -1698,130 +1699,168 @@ actor_reqs    =
       "MinMoveFrags", "1",              "Local", TRUE
       "UnitState",    "OnNativeTile",   "Local", TRUE
       "UnitState",    "Transported",    "Local", FALSE
+      ;...
       "DiplRel",      "War",            "Local", TRUE
-      "UnitClassFlag", "Missile",      "Local", FALSE
+      "UnitClassFlag","Missile",        "Local", FALSE
       ;...
       "Building",     "Pax Dei",        "World", FALSE
     }
-;Native attack ALWAYS allowed for units who aren't CargoRestrained
-[actionenabler_landclass_attacker_native_unrestrained]
-action = "Attack"
+;-----------------------------------------------------------MISSILES ONLY
+;NB: not affected by Pax DEI
+[actionenabler_explode_missile]
+action = "Suicide Attack"
 actor_reqs    =
-    { "type",         "name",           "range", "present"
-      "UnitFlag",     "NonMil",         "Local", FALSE
-      "UnitClassFlag","CargoRestrained","Local", FALSE
-      "MinMoveFrags", "1",              "Local", TRUE
-      "UnitState",    "OnNativeTile",   "Local", TRUE
-      "UnitClassFlag", "TerrainSpeed",  "Local", TRUE
-      "DiplRel",      "War",            "Local", TRUE
-      "UnitClassFlag", "Missile",       "Local", FALSE
-      "UnitFlag", "CantAttack",         "Local", FALSE
+    { "type",          "name",    "range", "present"
+      "UnitClassFlag", "Missile", "Local", TRUE
+      "MinMoveFrags",  "1",       "Local", TRUE
       ;...
-      "Building",     "Pax Dei",        "World", FALSE
+      "DiplRel",       "War",     "Local", TRUE
+      "UnitFlag",      "NonMil",  "Local", FALSE
     }
-;Native attack ALWAYS allowed for units who aren't CargoRestrained
-[actionenabler_non_landclass_attacker_native_unrestrained]
-action = "Attack"
-actor_reqs    =
-    { "type",         "name",           "range", "present"
-      "UnitFlag",     "NonMil",         "Local", FALSE
-      "UnitClassFlag","CargoRestrained","Local", FALSE
-      "MinMoveFrags", "1",              "Local", TRUE
-      "UnitState",    "OnNativeTile",   "Local", TRUE
-      "UnitClassFlag", "TerrainSpeed",  "Local", FALSE
-      "DiplRel",      "War",            "Local", TRUE
-      "UnitClassFlag", "Missile",       "Local", FALSE
-      "UnitFlag", "CantAttack",         "Local", FALSE
-      ;...
-      "Building",     "Pax Dei",        "World", FALSE
-    }
-target_reqs = 
-    { "type",  "name",   "range", "present"
-      "Extra", "Bunker", "Local", FALSE
-    }
+
+;-----------------------------------------------------------------------NATIVE ATTACKS
+
+;-----------------------------------------------------------all Land___ except LandAirSea
 ;Native attack for CargoRestrained units allowed, if not Transported
-[actionenabler_landclass_attacker_native_restrained]
+[actionenabler_land_attacker_native_restrained]
 action = "Attack"
 actor_reqs    =
     { "type",         "name",           "range", "present"
-      "UnitFlag",     "NonMil",         "Local", FALSE
-      "UnitClassFlag","CargoRestrained","Local", TRUE
+      "UnitClassFlag","TerrainSpeed",   "Local", TRUE  ;all Land___ 
+      "UnitClassFlag","CargoRestrained","Local", TRUE  ;!LandAirSea
       "MinMoveFrags", "1",              "Local", TRUE
       "UnitState",    "OnNativeTile",   "Local", TRUE
       "UnitState",    "Transported",    "Local", FALSE
-      "UnitClassFlag","TerrainSpeed",   "Local", TRUE
+      ;...
       "DiplRel",      "War",            "Local", TRUE
-      "UnitClassFlag", "Missile",       "Local", FALSE
-      "UnitFlag", "CantAttack",         "Local", FALSE
+      "UnitClassFlag","Missile",        "Local", FALSE
+      "UnitFlag",     "CantAttack",     "Local", FALSE
+      "UnitFlag",     "NonMil",         "Local", FALSE  ;!Tribesmen
       ;...
       "Building",     "Pax Dei",        "World", FALSE
     }
-;Non-Land units can't attack Bunkers 
-[actionenabler_non_landclass_attacker_native_restrained]
+;-----------------------------------------------------------LANDAIRSEA 
+;LandAirSea = (Land__) && (!Land && !LandNoKill)
+;Native attack ALWAYS allowed for units who aren't CargoRestrained
+[actionenabler_land_attacker_native_unrestrained]
 action = "Attack"
 actor_reqs    =
     { "type",         "name",           "range", "present"
+      "UnitClassFlag","TerrainSpeed",   "Local", TRUE    ;all Land___ types.
+      "UnitClassFlag","CargoRestrained","Local", FALSE   ;!Land, !LandNoKill, !LandRoad
+      "MinMoveFrags", "1",              "Local", TRUE
+      "UnitState",    "OnNativeTile",   "Local", TRUE    ; No "Transported" restriction
+      ;...
+      "DiplRel",      "War",            "Local", TRUE
+      "UnitClassFlag","Missile",        "Local", FALSE
+      "UnitFlag",     "CantAttack",     "Local", FALSE
       "UnitFlag",     "NonMil",         "Local", FALSE
-      "UnitClassFlag","CargoRestrained","Local", TRUE
+      ;...
+      "Building",     "Pax Dei",        "World", FALSE
+    }
+;-----------------------------------------------------------all AIR__, SEA types
+;Native attack ALWAYS allowed for units who aren't CargoRestrained
+;Sea,RiverShip,Trireme,Air,Air_High_Altitude,AirProtect = (!Land__)
+[actionenabler_non_land_attacker_native_unrestrained]
+action = "Attack"
+actor_reqs    =
+    { "type",         "name",           "range", "present"
+      "UnitClassFlag","TerrainSpeed",   "Local", FALSE  ;!Land___ == everything else
+      "UnitClassFlag","CargoRestrained","Local", FALSE  ;!Land,!LandNoKill,!LandRoad [redundant (for now)...]
       "MinMoveFrags", "1",              "Local", TRUE
       "UnitState",    "OnNativeTile",   "Local", TRUE
-      "UnitState",    "Transported",    "Local", FALSE
-      "UnitClassFlag", "TerrainSpeed",  "Local", FALSE
+      ;...
       "DiplRel",      "War",            "Local", TRUE
-      "UnitClassFlag", "Missile",       "Local", FALSE
-      "UnitFlag", "CantAttack",         "Local", FALSE
+      "UnitClassFlag","Missile",        "Local", FALSE
+      "UnitFlag",     "CantAttack",     "Local", FALSE
+      "UnitFlag",     "NonMil",         "Local", FALSE
       ;...
       "Building",     "Pax Dei",        "World", FALSE
     }
 target_reqs = 
-    { "type",  "name",   "range", "present"
-      "Extra", "Bunker", "Local", FALSE
-    }    
-;Marines
-[actionenabler_attack_marines]
+    { "type",          "name",          "range", "present"
+      "Extra",        "Bunker",         "Local", FALSE
+    }
+;-----------------------------------------------------------all AIR__, SEA types
+;Non-Land units can't attack Bunkers 
+[actionenabler_non_land_attacker_native_restrained]
+action = "Attack"
+actor_reqs    =
+    { "type",         "name",           "range", "present"
+      "UnitClassFlag","TerrainSpeed",   "Local", FALSE
+      "UnitClassFlag","CargoRestrained","Local", TRUE      ; <<<<<<<<<< no air sea types are cargorestrained!
+      "MinMoveFrags", "1",              "Local", TRUE
+      "UnitState",    "OnNativeTile",   "Local", TRUE
+      "UnitState",    "Transported",    "Local", FALSE
+      ;...
+      "DiplRel",       "War",           "Local", TRUE
+      "UnitClassFlag", "Missile",       "Local", FALSE
+      "UnitFlag",      "CantAttack",    "Local", FALSE
+      "UnitFlag",      "NonMil",        "Local", FALSE
+      ;...
+      "Building",     "Pax Dei",        "World", FALSE
+    }
+target_reqs = 
+    { "type",          "name",          "range", "present"
+      "Extra",        "Bunker",         "Local", FALSE
+    }
+;-----------------------------------------------------------------------NON-NATIVE ATTACK
+
+;-----------------------------------------------------------Marines,AAA
+;"Marines" flag can always attack non-natively
+;NB: currently seems redundant with AttFromNonNative below
+[actionenabler_attack_marines_from_non_native]
 action = "Attack"
 actor_reqs    =
     { "type",          "name",    "range", "present"
-      "UnitFlag",      "NonMil",  "Local", FALSE
       "MinMoveFrags",  "1",       "Local", TRUE
       "UnitFlag",      "Marines", "Local", TRUE
+      ;...
       "DiplRel",       "War",     "Local", TRUE
-      "UnitClassFlag", "Missile",      "Local", FALSE
+      "UnitClassFlag", "Missile", "Local", FALSE
+      "UnitFlag",      "NonMil",  "Local", FALSE
       ;...
-      "Building",     "Pax Dei",        "World", FALSE
+      "Building",     "Pax Dei",  "World", FALSE
     }
-[actionenabler_landclass_attack_from_non_native]
+;-----------------------------------------------------------Land___:AttFromNonNative
+;This is all Land__ classes with "AttFromNonNative": i.e., only LandAirSea
+;In other words, this enabler currently seems redundant
+[actionenabler_land_attack_from_non_native]
 action = "Attack"
 actor_reqs    =
     { "type",          "name",             "range", "present"
-      "UnitFlag",      "NonMil",           "Local", FALSE
-      "MinMoveFrags",  "1",                "Local", TRUE
-      "UnitClassFlag", "AttFromNonNative", "Local", TRUE
       "UnitClassFlag", "TerrainSpeed",     "Local", TRUE
+      "MinMoveFrags",  "1",                "Local", TRUE
+      "UnitClassFlag", "AttFromNonNative", "Local", TRUE
+      ;...
       "DiplRel",       "War",              "Local", TRUE
       "UnitClassFlag", "Missile",          "Local", FALSE
-      "UnitFlag", "CantAttack",            "Local", FALSE
+      "UnitFlag",      "CantAttack",       "Local", FALSE
+      "UnitFlag",      "NonMil",           "Local", FALSE
       ;...
-      "Building",     "Pax Dei",        "World", FALSE
+      "Building",      "Pax Dei",          "World", FALSE
     }
-[actionenabler_non_landclass_attack_from_non_native]
+;-----------------------------------------------------------all AIR__, SEA types
+[actionenabler_non_land_attack_from_non_native]
 action = "Attack"
 actor_reqs    =
     { "type",          "name",             "range", "present"
-      "UnitFlag",      "NonMil",           "Local", FALSE
+      "UnitClassFlag", "TerrainSpeed",     "Local", FALSE
       "MinMoveFrags",  "1",                "Local", TRUE
       "UnitClassFlag", "AttFromNonNative", "Local", TRUE
-      "UnitClassFlag", "TerrainSpeed",     "Local", FALSE
+      ;...
       "DiplRel",       "War",              "Local", TRUE
       "UnitClassFlag", "Missile",          "Local", FALSE
-      "UnitFlag", "CantAttack",            "Local", FALSE
+      "UnitFlag",      "CantAttack",       "Local", FALSE
+      "UnitFlag",      "NonMil",           "Local", FALSE
       ;...
-      "Building",     "Pax Dei",        "World", FALSE
+      "Building",     "Pax Dei",           "World", FALSE
     }
 target_reqs = 
-    { "type",  "name",   "range", "present"
-      "Extra", "Bunker", "Local", FALSE
+    { "type",          "name",             "range", "present"
+      "Extra",        "Bunker",            "Local", FALSE
     }
+;-----------------------------------------------------------------------NONMIL EXCEPTIONS
 ; ***** NON-MIL ATTACKER rules (commerce units)
 ;Commerce units have to be NonMil to enter peaceful waters
 ;but they can also attack those with whom they are at war:   
@@ -1833,15 +1872,16 @@ actor_reqs    =
       "UnitClassFlag","CargoRestrained","Local", FALSE
       "MinMoveFrags", "1",              "Local", TRUE
       "UnitState",    "OnNativeTile",   "Local", TRUE
+      ;...
       "DiplRel",      "War",            "Local", TRUE
-      "UnitClassFlag", "Missile",       "Local", FALSE
-      "UnitFlag", "CantAttack",         "Local", FALSE
+      "UnitClassFlag","Missile",        "Local", FALSE
+      "UnitFlag",     "CantAttack",     "Local", FALSE
       ;...
       "Building",     "Pax Dei",        "World", FALSE
     }
 target_reqs = 
-    { "type",  "name",   "range", "present"
-      "Extra", "Bunker", "Local", FALSE
+    { "type",         "name",           "range", "present"
+      "Extra",        "Bunker",         "Local", FALSE
     }
 [actionenabler_attack_from_non_native_nonmil_attacker]
 action = "Attack"
@@ -1850,156 +1890,178 @@ actor_reqs    =
       "UnitFlag",      "NonMilAttack",     "Local", TRUE
       "MinMoveFrags",  "1",                "Local", TRUE
       "UnitClassFlag", "AttFromNonNative", "Local", TRUE
+      ;...
       "DiplRel",       "War",              "Local", TRUE
       "UnitClassFlag", "Missile",          "Local", FALSE
-      "UnitFlag", "CantAttack",            "Local", FALSE
+      "UnitFlag",      "CantAttack",       "Local", FALSE
       ;...
-      "Building",     "Pax Dei",        "World", FALSE
+      "Building",     "Pax Dei",           "World", FALSE
     }
 target_reqs = 
-    { "type",  "name",   "range", "present"
-      "Extra", "Bunker", "Local", FALSE
-    }
-
-[actionenabler_explode_missile]
-action = "Suicide Attack"
-actor_reqs    =
-    { "type",          "name",    "range", "present"
-      "UnitFlag",      "NonMil",  "Local", FALSE
-      "UnitClassFlag", "Missile", "Local", TRUE
-      "MinMoveFrags",  "1",       "Local", TRUE
-      "DiplRel",       "War",     "Local", TRUE
+    { "type",         "name",              "range", "present"
+      "Extra",        "Bunker",            "Local", FALSE
     }
 
 ;---------------------------------------------------------------------------
 ; Same as above. For PAX DEI without Monotheism, it's legal.
 ;---------------------------------------------------------------------------
-;Native attack ALWAYS allowed for units who aren't CargoRestrained
-[actionenabler_landclass_attacker_native_unrestrained_pd_no_m]
-action = "Attack"
-actor_reqs    =
-    { "type",         "name",           "range", "present"
-      "UnitFlag",     "NonMil",         "Local", FALSE
-      "UnitClassFlag","CargoRestrained","Local", FALSE
-      "MinMoveFrags", "1",              "Local", TRUE
-      "UnitState",    "OnNativeTile",   "Local", TRUE
-      "UnitClassFlag", "TerrainSpeed",  "Local", TRUE
-      "DiplRel",      "War",            "Local", TRUE
-      "UnitClassFlag", "Missile",       "Local", FALSE
-      "UnitFlag", "CantAttack",         "Local", FALSE
-      ;...
-      "Building",     "Pax Dei",        "World", TRUE
-      "Tech",         "Monotheism",     "Player",FALSE
-    }
-;Native attack ALWAYS allowed for units who aren't CargoRestrained
-[actionenabler_non_landclass_attacker_native_unrestrained_pd_no_m]
-action = "Attack"
-actor_reqs    =
-    { "type",         "name",           "range", "present"
-      "UnitFlag",     "NonMil",         "Local", FALSE
-      "UnitClassFlag","CargoRestrained","Local", FALSE
-      "MinMoveFrags", "1",              "Local", TRUE
-      "UnitState",    "OnNativeTile",   "Local", TRUE
-      "UnitClassFlag", "TerrainSpeed",  "Local", FALSE
-      "DiplRel",      "War",            "Local", TRUE
-      "UnitClassFlag", "Missile",       "Local", FALSE
-      "UnitFlag", "CantAttack",         "Local", FALSE
-      ;...
-      "Building",     "Pax Dei",        "World", TRUE
-      "Tech",         "Monotheism",     "Player",FALSE
-    }
-target_reqs = 
-    { "type",  "name",   "range", "present"
-      "Extra", "Bunker", "Local", FALSE
-    }
+;----------------------------------------------------------------------------PAX DEI ATTACK ENABLERS
+
+;-----------------------------------------------------------------------NATIVE ATTACKS
+
+;-----------------------------------------------------------all Land___ except LandAirSea
 ;Native attack for CargoRestrained units allowed, if not Transported
-[actionenabler_landclass_attacker_native_restrained_pd_no_m]
+[actionenabler_land_attacker_native_restrained_pd_no_m]
 action = "Attack"
 actor_reqs    =
     { "type",         "name",           "range", "present"
-      "UnitFlag",     "NonMil",         "Local", FALSE
-      "UnitClassFlag","CargoRestrained","Local", TRUE
+      "UnitClassFlag","TerrainSpeed",   "Local", TRUE  ;all Land___ 
+      "UnitClassFlag","CargoRestrained","Local", TRUE  ;!LandAirSea
       "MinMoveFrags", "1",              "Local", TRUE
       "UnitState",    "OnNativeTile",   "Local", TRUE
       "UnitState",    "Transported",    "Local", FALSE
-      "UnitClassFlag","TerrainSpeed",   "Local", TRUE
+      ;...
       "DiplRel",      "War",            "Local", TRUE
-      "UnitClassFlag", "Missile",       "Local", FALSE
-      "UnitFlag", "CantAttack",         "Local", FALSE
+      "UnitClassFlag","Missile",        "Local", FALSE
+      "UnitFlag",     "CantAttack",     "Local", FALSE
+      "UnitFlag",     "NonMil",         "Local", FALSE  ;!Tribesmen
       ;...
       "Building",     "Pax Dei",        "World", TRUE
       "Tech",         "Monotheism",     "Player",FALSE
     }
-;Non-Land units can't attack Bunkers 
-[actionenabler_non_landclass_attacker_native_restrained_pd_no_m]
+
+;-----------------------------------------------------------LANDAIRSEA 
+;LandAirSea = (Land__) && (!Land && !LandNoKill)
+;Native attack ALWAYS allowed for units who aren't CargoRestrained
+[actionenabler_land_attacker_native_unrestrained_pd_no_m]
 action = "Attack"
 actor_reqs    =
     { "type",         "name",           "range", "present"
+      "UnitClassFlag","TerrainSpeed",   "Local", TRUE    ;all Land___ types
+      "UnitClassFlag","CargoRestrained","Local", FALSE   ;!Land, !LandNoKill, !LandRoad
+      "MinMoveFrags", "1",              "Local", TRUE
+      "UnitState",    "OnNativeTile",   "Local", TRUE    ; No "Transported" restriction
+      ;...
+      "DiplRel",      "War",            "Local", TRUE
+      "UnitClassFlag","Missile",        "Local", FALSE
+      "UnitFlag",     "CantAttack",     "Local", FALSE
       "UnitFlag",     "NonMil",         "Local", FALSE
-      "UnitClassFlag","CargoRestrained","Local", TRUE
+      ;...
+      "Building",     "Pax Dei",        "World", TRUE
+      "Tech",         "Monotheism",     "Player",FALSE
+    }
+
+;-----------------------------------------------------------all AIR__, SEA types
+;Native attack ALWAYS allowed for units who aren't CargoRestrained
+;Sea,RiverShip,Trireme,Air,Air_High_Altitude,AirProtect = (!Land__)
+;Native attack ALWAYS allowed for units who aren't CargoRestrained
+[actionenabler_non_land_attacker_native_unrestrained_pd_no_m]
+action = "Attack"
+actor_reqs    =
+    { "type",         "name",           "range", "present"
+      "UnitClassFlag","TerrainSpeed",   "Local", FALSE  ;!Land___ == everything else
+      "UnitClassFlag","CargoRestrained","Local", FALSE  ;!Land,!LandNoKill,!LandRoad [redundant (for now)...]
+      "MinMoveFrags", "1",              "Local", TRUE
+      "UnitState",    "OnNativeTile",   "Local", TRUE
+      ;...
+      "DiplRel",      "War",           "Local", TRUE
+      "UnitClassFlag","Missile",       "Local", FALSE
+      "UnitFlag",     "CantAttack",    "Local", FALSE
+      "UnitFlag",     "NonMil",        "Local", FALSE
+      ;...
+      "Building",     "Pax Dei",       "World", TRUE
+      "Tech",         "Monotheism",    "Player",FALSE
+    }
+target_reqs = 
+    { "type",          "name",         "range", "present"
+      "Extra",        "Bunker",        "Local", FALSE
+    }
+
+;-----------------------------------------------------------all AIR__, SEA types
+;Non-Land units can't attack Bunkers 
+[actionenabler_non_land_attacker_native_restrained_pd_no_m]
+action = "Attack"
+actor_reqs    =
+    { "type",         "name",           "range", "present"
+      "UnitClassFlag","TerrainSpeed",   "Local", FALSE
+      "UnitClassFlag","CargoRestrained","Local", TRUE      ; <<<<<<<<<< no air sea types are cargorestrained!
       "MinMoveFrags", "1",              "Local", TRUE
       "UnitState",    "OnNativeTile",   "Local", TRUE
       "UnitState",    "Transported",    "Local", FALSE
-      "UnitClassFlag", "TerrainSpeed",  "Local", FALSE
-      "DiplRel",      "War",            "Local", TRUE
+      ;...
+      "DiplRel",       "War",           "Local", TRUE
       "UnitClassFlag", "Missile",       "Local", FALSE
-      "UnitFlag", "CantAttack",         "Local", FALSE
+      "UnitFlag",      "CantAttack",    "Local", FALSE
+      "UnitFlag",      "NonMil",        "Local", FALSE
       ;...
       "Building",     "Pax Dei",        "World", TRUE
       "Tech",         "Monotheism",     "Player",FALSE
     }
 target_reqs = 
-    { "type",  "name",   "range", "present"
-      "Extra", "Bunker", "Local", FALSE
-    }    
+    { "type",          "name",          "range", "present"
+      "Extra",        "Bunker",         "Local", FALSE
+    }
+;-----------------------------------------------------------------------NON-NATIVE ATTACK
+
+;-----------------------------------------------------------Marines,AAA
+;"Marines" flag can always attack non-natively
+;NB: currently seems redundant with AttFromNonNative below
 ;Marines
 [actionenabler_attack_marines_pd_no_m]
 action = "Attack"
 actor_reqs    =
-    { "type",          "name",    "range", "present"
-      "UnitFlag",      "NonMil",  "Local", FALSE
-      "MinMoveFrags",  "1",       "Local", TRUE
-      "UnitFlag",      "Marines", "Local", TRUE
-      "DiplRel",       "War",     "Local", TRUE
-      "UnitClassFlag", "Missile",      "Local", FALSE
+    { "type",          "name",     "range", "present"
+      "MinMoveFrags",  "1",        "Local", TRUE
+      "UnitFlag",      "Marines",  "Local", TRUE
       ;...
-      "Building",     "Pax Dei",        "World", TRUE
-      "Tech",         "Monotheism",     "Player",FALSE
+      "DiplRel",       "War",      "Local", TRUE
+      "UnitClassFlag", "Missile",  "Local", FALSE
+      "UnitFlag",      "NonMil",   "Local", FALSE
+      ;...
+      "Building",     "Pax Dei",   "World", TRUE
+      "Tech",         "Monotheism","Player",FALSE
     }
-[actionenabler_landclass_attack_from_non_native_pd_no_m]
+;-----------------------------------------------------------Land___:AttFromNonNative
+;This is all Land__ classes with "AttFromNonNative": i.e., only LandAirSea
+;In other words, this enabler currently seems redundant
+[actionenabler_land_attack_from_non_native_pd_no_m]
 action = "Attack"
 actor_reqs    =
     { "type",          "name",             "range", "present"
-      "UnitFlag",      "NonMil",           "Local", FALSE
-      "MinMoveFrags",  "1",                "Local", TRUE
-      "UnitClassFlag", "AttFromNonNative", "Local", TRUE
       "UnitClassFlag", "TerrainSpeed",     "Local", TRUE
+      "MinMoveFrags",  "1",                "Local", TRUE
+      "UnitClassFlag", "AttFromNonNative", "Local", TRUE
+
       "DiplRel",       "War",              "Local", TRUE
       "UnitClassFlag", "Missile",          "Local", FALSE
-      "UnitFlag", "CantAttack",            "Local", FALSE
+      "UnitFlag",      "CantAttack",       "Local", FALSE
+      "UnitFlag",      "NonMil",           "Local", FALSE
       ;...
       "Building",     "Pax Dei",        "World", TRUE
       "Tech",         "Monotheism",     "Player",FALSE
     }
-[actionenabler_non_landclass_attack_from_non_native_pd_no_m]
+;-----------------------------------------------------------all AIR__, SEA types
+[actionenabler_non_land_attack_from_non_native_pd_no_m]
 action = "Attack"
 actor_reqs    =
     { "type",          "name",             "range", "present"
-      "UnitFlag",      "NonMil",           "Local", FALSE
+      "UnitClassFlag", "TerrainSpeed",     "Local", FALSE
       "MinMoveFrags",  "1",                "Local", TRUE
       "UnitClassFlag", "AttFromNonNative", "Local", TRUE
-      "UnitClassFlag", "TerrainSpeed",     "Local", FALSE
+      ;...
       "DiplRel",       "War",              "Local", TRUE
       "UnitClassFlag", "Missile",          "Local", FALSE
-      "UnitFlag", "CantAttack",            "Local", FALSE
+      "UnitFlag",      "CantAttack",       "Local", FALSE
+      "UnitFlag",      "NonMil",           "Local", FALSE
       ;...
-      "Building",     "Pax Dei",        "World", TRUE
-      "Tech",         "Monotheism",     "Player",FALSE
+      "Building",     "Pax Dei",           "World", TRUE
+      "Tech",         "Monotheism",        "Player",FALSE
     }
 target_reqs = 
-    { "type",  "name",   "range", "present"
-      "Extra", "Bunker", "Local", FALSE
+    { "type",          "name",             "range", "present"
+      "Extra",        "Bunker",            "Local", FALSE
     }
+;-----------------------------------------------------------------------NONMIL EXCEPTIONS
 ; ***** NON-MIL ATTACKER rules (commerce units)
 ;Commerce units have to be NonMil to enter peaceful waters
 ;but they can also attack those with whom they are at war:   
@@ -2011,16 +2073,17 @@ actor_reqs    =
       "UnitClassFlag","CargoRestrained","Local", FALSE
       "MinMoveFrags", "1",              "Local", TRUE
       "UnitState",    "OnNativeTile",   "Local", TRUE
+      ;...
       "DiplRel",      "War",            "Local", TRUE
-      "UnitClassFlag", "Missile",       "Local", FALSE
-      "UnitFlag", "CantAttack",         "Local", FALSE
+      "UnitClassFlag","Missile",        "Local", FALSE
+      "UnitFlag",     "CantAttack",     "Local", FALSE
       ;...
       "Building",     "Pax Dei",        "World", TRUE
       "Tech",         "Monotheism",     "Player",FALSE
     }
 target_reqs = 
-    { "type",  "name",   "range", "present"
-      "Extra", "Bunker", "Local", FALSE
+    { "type",         "name",           "range", "present"
+      "Extra",        "Bunker",         "Local", FALSE
     }
 [actionenabler_attack_from_non_native_nonmil_attacker_pd_no_m]
 action = "Attack"
@@ -2029,146 +2092,171 @@ actor_reqs    =
       "UnitFlag",      "NonMilAttack",     "Local", TRUE
       "MinMoveFrags",  "1",                "Local", TRUE
       "UnitClassFlag", "AttFromNonNative", "Local", TRUE
+      ;...
       "DiplRel",       "War",              "Local", TRUE
       "UnitClassFlag", "Missile",          "Local", FALSE
-      "UnitFlag", "CantAttack",            "Local", FALSE
+      "UnitFlag",      "CantAttack",       "Local", FALSE
       ;...
-      "Building",     "Pax Dei",        "World", TRUE
-      "Tech",         "Monotheism",     "Player",FALSE
+      "Building",     "Pax Dei",           "World", TRUE
+      "Tech",         "Monotheism",        "Player",FALSE
     }
 target_reqs = 
-    { "type",  "name",   "range", "present"
-      "Extra", "Bunker", "Local", FALSE
+    { "type",         "name",           "range", "present"
+      "Extra",        "Bunker",         "Local", FALSE
     }
 ;---------------------------------------------------------------------------
 ; Last one. For PAX DEI on your own territory, it's legal.
 ;---------------------------------------------------------------------------
-;Native attack ALWAYS allowed for units who aren't CargoRestrained
-[actionenabler_landclass_attacker_native_unrestrained_pd_m_domestic]
-action = "Attack"
-actor_reqs    =
-    { "type",         "name",           "range", "present"
-      "UnitFlag",     "NonMil",         "Local", FALSE
-      "UnitClassFlag","CargoRestrained","Local", FALSE
-      "MinMoveFrags", "1",              "Local", TRUE
-      "UnitState",    "OnNativeTile",   "Local", TRUE
-      "UnitClassFlag", "TerrainSpeed",  "Local", TRUE
-      "DiplRel",      "War",            "Local", TRUE
-      "UnitClassFlag", "Missile",       "Local", FALSE
-      "UnitFlag", "CantAttack",         "Local", FALSE
-      ;...
-      "Building",     "Pax Dei",        "World", TRUE
-      "UnitState",    "OnDomesticTile", "Local", TRUE
-    }
-;Native attack ALWAYS allowed for units who aren't CargoRestrained
-[actionenabler_non_landclass_attacker_native_unrestrained_pd_m_domestic]
-action = "Attack"
-actor_reqs    =
-    { "type",         "name",           "range", "present"
-      "UnitFlag",     "NonMil",         "Local", FALSE
-      "UnitClassFlag","CargoRestrained","Local", FALSE
-      "MinMoveFrags", "1",              "Local", TRUE
-      "UnitState",    "OnNativeTile",   "Local", TRUE
-      "UnitClassFlag", "TerrainSpeed",  "Local", FALSE
-      "DiplRel",      "War",            "Local", TRUE
-      "UnitClassFlag", "Missile",       "Local", FALSE
-      "UnitFlag", "CantAttack",         "Local", FALSE
-      ;...
-      "Building",     "Pax Dei",        "World", TRUE
-      "UnitState",    "OnDomesticTile", "Local", TRUE
-    }
-target_reqs = 
-    { "type",  "name",   "range", "present"
-      "Extra", "Bunker", "Local", FALSE
-    }
+;-----------------------------------------------------------------------NATIVE ATTACKS
+
+;-----------------------------------------------------------all Land___ except LandAirSea
 ;Native attack for CargoRestrained units allowed, if not Transported
-[actionenabler_landclass_attacker_native_restrained_pd_m_domestic]
+[actionenabler_land_attacker_native_restrained_pd_m_domestic]
 action = "Attack"
 actor_reqs    =
     { "type",         "name",           "range", "present"
-      "UnitFlag",     "NonMil",         "Local", FALSE
+      "UnitClassFlag","TerrainSpeed",   "Local", TRUE
       "UnitClassFlag","CargoRestrained","Local", TRUE
       "MinMoveFrags", "1",              "Local", TRUE
       "UnitState",    "OnNativeTile",   "Local", TRUE
       "UnitState",    "Transported",    "Local", FALSE
-      "UnitClassFlag","TerrainSpeed",   "Local", TRUE
+      ;...
       "DiplRel",      "War",            "Local", TRUE
-      "UnitClassFlag", "Missile",       "Local", FALSE
-      "UnitFlag", "CantAttack",         "Local", FALSE
+      "UnitClassFlag","Missile",        "Local", FALSE
+      "UnitFlag",     "CantAttack",     "Local", FALSE
+      "UnitFlag",     "NonMil",         "Local", FALSE
       ;...
       "Building",     "Pax Dei",        "World", TRUE
       "UnitState",    "OnDomesticTile", "Local", TRUE
     }
-;Non-Land units can't attack Bunkers 
-[actionenabler_non_landclass_attacker_native_restrained_pd_m_domestic]
+;-----------------------------------------------------------LANDAIRSEA 
+;LandAirSea = (Land__) && (!Land && !LandNoKill)
+;Native attack ALWAYS allowed for units who aren't CargoRestrained
+[actionenabler_land_attacker_native_unrestrained_pd_m_domestic]
 action = "Attack"
 actor_reqs    =
     { "type",         "name",           "range", "present"
+      "UnitClassFlag","TerrainSpeed",   "Local", TRUE    ;all Land___ types.
+      "UnitClassFlag","CargoRestrained","Local", FALSE   ;!Land, !LandNoKill, !LandRoad
+      "MinMoveFrags", "1",              "Local", TRUE
+      "UnitState",    "OnNativeTile",   "Local", TRUE    ; No "Transported" restriction
+      ;...
+      "DiplRel",      "War",            "Local", TRUE
+      "UnitClassFlag","Missile",        "Local", FALSE
+      "UnitFlag",     "CantAttack",     "Local", FALSE
       "UnitFlag",     "NonMil",         "Local", FALSE
-      "UnitClassFlag","CargoRestrained","Local", TRUE
+      ;...
+      "Building",     "Pax Dei",        "World", TRUE
+      "UnitState",    "OnDomesticTile", "Local", TRUE
+    }
+;-----------------------------------------------------------all AIR__, SEA types
+;Native attack ALWAYS allowed for units who aren't CargoRestrained
+;Sea,RiverShip,Trireme,Air,Air_High_Altitude,AirProtect = (!Land__)
+[actionenabler_non_land_attacker_native_unrestrained_pd_m_domestic]
+action = "Attack"
+actor_reqs    =
+    { "type",         "name",           "range", "present"
+      "UnitClassFlag","TerrainSpeed",   "Local", FALSE  ;!Land___ == everything else
+      "UnitClassFlag","CargoRestrained","Local", FALSE  ;!Land,!LandNoKill,!LandRoad [redundant (for now)...]
       "MinMoveFrags", "1",              "Local", TRUE
       "UnitState",    "OnNativeTile",   "Local", TRUE
-      "UnitState",    "Transported",    "Local", FALSE
-      "UnitClassFlag", "TerrainSpeed",  "Local", FALSE
+      ;...
       "DiplRel",      "War",            "Local", TRUE
-      "UnitClassFlag", "Missile",       "Local", FALSE
-      "UnitFlag", "CantAttack",         "Local", FALSE
+      "UnitClassFlag","Missile",        "Local", FALSE
+      "UnitFlag",     "CantAttack",     "Local", FALSE
+      "UnitFlag",     "NonMil",         "Local", FALSE
       ;...
       "Building",     "Pax Dei",        "World", TRUE
       "UnitState",    "OnDomesticTile", "Local", TRUE
     }
 target_reqs = 
-    { "type",  "name",   "range", "present"
-      "Extra", "Bunker", "Local", FALSE
-    }    
-;Marines
+    { "type",          "name",          "range", "present"
+      "Extra",        "Bunker",         "Local", FALSE
+    }
+;-----------------------------------------------------------all AIR__, SEA types
+;Non-Land units can't attack Bunkers 
+[actionenabler_non_land_attacker_native_restrained_pd_m_domestic]
+action = "Attack"
+actor_reqs    =
+    { "type",         "name",           "range", "present"
+      "UnitClassFlag","TerrainSpeed",   "Local", FALSE
+      "UnitClassFlag","CargoRestrained","Local", TRUE      ; <<<<<<<<<< no air sea types are cargorestrained!
+      "MinMoveFrags", "1",              "Local", TRUE
+      "UnitState",    "OnNativeTile",   "Local", TRUE
+      "UnitState",    "Transported",    "Local", FALSE
+      ;...
+      "DiplRel",       "War",           "Local", TRUE
+      "UnitClassFlag", "Missile",       "Local", FALSE
+      "UnitFlag",      "CantAttack",    "Local", FALSE
+      "UnitFlag",      "NonMil",        "Local", FALSE
+      ;...
+      "Building",     "Pax Dei",        "World", TRUE
+      "UnitState",    "OnDomesticTile", "Local", TRUE
+    }
+target_reqs = 
+    { "type",          "name",          "range", "present"
+      "Extra",        "Bunker",         "Local", FALSE
+    }
+;-----------------------------------------------------------------------NON-NATIVE ATTACK
+
+;-----------------------------------------------------------Marines,AAA
+;"Marines" flag can always attack non-natively
+;NB: currently seems redundant with AttFromNonNative below
 [actionenabler_attack_marines_pd_m_domestic]
 action = "Attack"
 actor_reqs    =
     { "type",          "name",    "range", "present"
-      "UnitFlag",      "NonMil",  "Local", FALSE
       "MinMoveFrags",  "1",       "Local", TRUE
       "UnitFlag",      "Marines", "Local", TRUE
+      ;...
       "DiplRel",       "War",     "Local", TRUE
-      "UnitClassFlag", "Missile",      "Local", FALSE
+      "UnitClassFlag", "Missile", "Local", FALSE
+      "UnitFlag",      "NonMil",  "Local", FALSE
       ;...
-      "Building",     "Pax Dei",        "World", TRUE
-      "UnitState",    "OnDomesticTile", "Local", TRUE
+      "Building",      "Pax Dei",        "World", TRUE
+      "UnitState",     "OnDomesticTile", "Local", TRUE
     }
-[actionenabler_landclass_attack_from_non_native_pd_m_domestic]
+;-----------------------------------------------------------Land___:AttFromNonNative
+;This is all Land__ classes with "AttFromNonNative": i.e., only LandAirSea
+;In other words, this enabler currently seems redundant
+[actionenabler_land_attack_from_non_native_pd_m_domestic]
 action = "Attack"
 actor_reqs    =
     { "type",          "name",             "range", "present"
-      "UnitFlag",      "NonMil",           "Local", FALSE
-      "MinMoveFrags",  "1",                "Local", TRUE
-      "UnitClassFlag", "AttFromNonNative", "Local", TRUE
       "UnitClassFlag", "TerrainSpeed",     "Local", TRUE
+      "MinMoveFrags",  "1",                "Local", TRUE
+      "UnitClassFlag", "AttFromNonNative", "Local", TRUE
+      ;...
       "DiplRel",       "War",              "Local", TRUE
       "UnitClassFlag", "Missile",          "Local", FALSE
-      "UnitFlag", "CantAttack",            "Local", FALSE
+      "UnitFlag",      "CantAttack",       "Local", FALSE
+      "UnitFlag",      "NonMil",           "Local", FALSE
       ;...
-      "Building",     "Pax Dei",        "World", TRUE
-      "UnitState",    "OnDomesticTile", "Local", TRUE
+      "Building",     "Pax Dei",           "World", TRUE
+      "UnitState",    "OnDomesticTile",    "Local", TRUE
     }
-[actionenabler_non_landclass_attack_from_non_native_pd_m_domestic]
+;-----------------------------------------------------------all AIR__, SEA types
+[actionenabler_non_land_attack_from_non_native_pd_m_domestic]
 action = "Attack"
 actor_reqs    =
     { "type",          "name",             "range", "present"
-      "UnitFlag",      "NonMil",           "Local", FALSE
-      "MinMoveFrags",  "1",                "Local", TRUE
-      "UnitClassFlag", "AttFromNonNative", "Local", TRUE
       "UnitClassFlag", "TerrainSpeed",     "Local", FALSE
+      "UnitClassFlag", "AttFromNonNative", "Local", TRUE
+      "MinMoveFrags",  "1",                "Local", TRUE
+      ;...
       "DiplRel",       "War",              "Local", TRUE
       "UnitClassFlag", "Missile",          "Local", FALSE
-      "UnitFlag", "CantAttack",            "Local", FALSE
+      "UnitFlag",      "CantAttack",       "Local", FALSE
+      "UnitFlag",      "NonMil",           "Local", FALSE
       ;...
-      "Building",     "Pax Dei",        "World", TRUE
-      "UnitState",    "OnDomesticTile", "Local", TRUE
+      "Building",     "Pax Dei",           "World", TRUE
+      "UnitState",    "OnDomesticTile",    "Local", TRUE
     }
 target_reqs = 
-    { "type",  "name",   "range", "present"
-      "Extra", "Bunker", "Local", FALSE
+    { "type",          "name",             "range", "present"
+      "Extra",        "Bunker",            "Local", FALSE
     }
+;-----------------------------------------------------------------------NONMIL EXCEPTIONS
 ; ***** NON-MIL ATTACKER rules (commerce units)
 ;Commerce units have to be NonMil to enter peaceful waters
 ;but they can also attack those with whom they are at war:   
@@ -2180,16 +2268,17 @@ actor_reqs    =
       "UnitClassFlag","CargoRestrained","Local", FALSE
       "MinMoveFrags", "1",              "Local", TRUE
       "UnitState",    "OnNativeTile",   "Local", TRUE
+      ;...
       "DiplRel",      "War",            "Local", TRUE
-      "UnitClassFlag", "Missile",       "Local", FALSE
-      "UnitFlag", "CantAttack",         "Local", FALSE
+      "UnitClassFlag","Missile",        "Local", FALSE
+      "UnitFlag",     "CantAttack",     "Local", FALSE
       ;...
       "Building",     "Pax Dei",        "World", TRUE
       "UnitState",    "OnDomesticTile", "Local", TRUE
     }
 target_reqs = 
-    { "type",  "name",   "range", "present"
-      "Extra", "Bunker", "Local", FALSE
+    { "type",         "name",           "range", "present"
+      "Extra",        "Bunker",         "Local", FALSE
     }
 [actionenabler_attack_from_non_native_nonmil_attacker_pd_m_domestic]
 action = "Attack"
@@ -2198,16 +2287,17 @@ actor_reqs    =
       "UnitFlag",      "NonMilAttack",     "Local", TRUE
       "MinMoveFrags",  "1",                "Local", TRUE
       "UnitClassFlag", "AttFromNonNative", "Local", TRUE
+      ;...
       "DiplRel",       "War",              "Local", TRUE
       "UnitClassFlag", "Missile",          "Local", FALSE
-      "UnitFlag", "CantAttack",            "Local", FALSE
+      "UnitFlag",      "CantAttack",       "Local", FALSE
       ;...
-      "Building",     "Pax Dei",        "World", TRUE
-      "UnitState",    "OnDomesticTile", "Local", TRUE
+      "Building",     "Pax Dei",           "World", TRUE
+      "UnitState",    "OnDomesticTile",    "Local", TRUE
     }
 target_reqs = 
-    { "type",  "name",   "range", "present"
-      "Extra", "Bunker", "Local", FALSE
+    { "type",         "name",              "range", "present"
+      "Extra",        "Bunker",            "Local", FALSE
     }
 ;---------------------------------------------------------------------------
 [actionenabler_conquer_city_native_unrestrained]
@@ -3523,7 +3613,7 @@ set =
       "autoattack", "enabled", FALSE
       "autoattack_style", 1, FALSE
       "barbarians", "DISABLED", FALSE
-      "blueprints", 70, FALSE
+      "blueprints", 65, FALSE
       "borders", "SEE_INSIDE", FALSE
       "casusbelli_allies", 1, FALSE      ; casus belli on one, is casus belli on all (allies).
       "casusbelliturns", 12, FALSE       ; how many turns casus belli lasts after an incident, if not reset. will go +1 higher for further incidents. will be reset by any new non-aggression pact.
@@ -3570,7 +3660,7 @@ set =
       "startpos", "DEFAULT", FALSE
       "startunits", "DDDwwwAucca", "FALSE"  ;3 Tribesmen, 3 Workers, 1 Caravan, 1 Founders, 2 Settlers, 1 Well-Digger
       "steepness", 20, FALSE
-      "techleak", 40, FALSE
+      "techleak", 50, FALSE
       "techlossforgiveness", 200, FALSE
       "techlossrestore", 100, FALSE
       "techpenalty", 0, FALSE
