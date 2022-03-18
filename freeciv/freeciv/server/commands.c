@@ -540,12 +540,12 @@ static struct command commands[] = {
   },
   {"playernation", ALLOW_ADMIN,
    /* TRANS: translate text between <> and [] only */
-   N_("playernation <player-name> [nation] [is-male] [leader] [style]"),
+   N_("playernation [player_name] [nation] [is_male] [leader] [style]"),
    N_("Set the nation and other details of a player."),
    N_("This command sets the nation of a specific player and optionally, "
       "the gender, new leader name, and civ graphic style of a player.\n"
-      "Gender parameter is 0 for female, 1 for male, and defaults male. "
-      "Omitting all [parameters] will reset the player with that name to "
+      "is_male parameter is 0 for female, 1 for male, and defaults male. "
+      "Usually the last 3 parameters are omitted, which results in the "
       "defaults. [style] is one of the following {european,classical, "
       "tropical,asian,babylonian,celtic}.\nEXAMPLE:\n /playernation John "
       "Italian 1 Giovanni classical\n^ sets the nation with leader named "
