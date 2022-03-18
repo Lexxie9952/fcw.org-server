@@ -454,7 +454,30 @@ Boat, Trireme, Riverships: 3 (was 2)
 Submarines: 5 (was 4)
 all other Sea Units: 4 (was 3)
 ==============================================================
-73.
+73. If in a city and not qualified for any other healing 
+effect, a minimum +1 hp healing takes place. (e.g., no 
+healing from barracks, being fortified, +1/3hp for staying
+on turn in city and not moving, or +10% for being on a tile
+and not moving for a whole turn.)
 ==============================================================
-74.
+74. Default blueprints is 65 (was 70)
+    Default techleak is 50 (was 40)
+Slight penalty for "technology gangs" and slightly more help
+for those not in one. Note the slightly more bulbs needed 
+at 65% blueprint is somewhat lessened by higher techleak.    
+==============================================================
+75. Latejoin gold is 14/turn instead of 13, as early game is
+somewhat faster in mp2d
+==============================================================
+76. Capture and Expel both cost 2/3 move. (Was 1, 2/3)
+==============================================================
+77.
+==============================================================
+78.
+==============================================================
+79.
+==============================================================
+80.
+==============================================================
+81.
 

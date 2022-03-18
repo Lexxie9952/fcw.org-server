@@ -107,7 +107,7 @@ UnitClass:     Local
 UnitClassFlag: Local
 UnitFlag:      Local
 UnitState:     Local                                                   "Transported", "OnLivableTile", "Transporting", "OnDomesticTile", "HasHomeCity",
-                                                                       "OnNativeTile", New in 3.1: "InNativeExtra", "MovedThisTurn"; FCW: "Fortified"
+                                                                       "OnNativeTile", New in 3.1: "InNativeExtra", "MovedThisTurn"; FCW: "Fortified" (deprecated, use "Activity")
 UnitType:      Local
 
 
