@@ -1204,6 +1204,10 @@ act_gfx_alt    = "unit.irrigate"
 act_gfx_alt2   = "-"
 rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
+reqs           =
+    { "type", "name", "range"
+      "TerrainClass", "Land", "Local"
+    }
 build_time     = 0
 removal_time   = 0
 conflicts      = "Mine", "Oil Well"
@@ -1222,6 +1226,42 @@ this does not make cities count as a water source for further \
 irrigation. Irrigation can be built on the city tile simply to allow \
 irrigating elsewhere, but will not give the tile any further bonus \
 except in the case of a desert river (see above.)\
+")
+
+[extra_fishtrap]
+name           = _("Fishtrap")
+category       = "Infra"
+causes         = "Base"
+rmcauses       = "Pillage"
+graphic        = "ts.fishtrap"
+graphic_alt    = "-"
+act_gfx_alt    = "unit.irrigation"
+act_gfx_alt2   = "unit.irrigate"
+rmact_gfx      = "None"
+rmact_gfx_alt  = "-"
+reqs           =
+    { "type",       "name",          "range",     "present"
+     "TerrainClass","Oceanic",       "Local",     TRUE
+     "Extra",       "Buoy",          "Local",     FALSE
+     "Extra",       "Fish",          "Local",     FALSE
+     "Extra",       "Whales",        "Local",     FALSE
+;-------------------
+     "Extra",       "Fishtrap",      "CAdjacent", FALSE 
+     "Extra",       "Fish",          "Adjacent",  TRUE
+;-------------------
+      "UnitFlag",   "Settlers",      "Local",     TRUE
+      "Tech",       "Refrigeration", "Player", TRUE
+    }
+build_time     = 1
+removal_time   = 0
+conflicts      = "Fish", "Whales", "Buoy"
+helptext       = _("\
+Fishtraps become available with Refrigeration technology. Any Worker-type\
+ transported at sea can make one. A Fishtrap provides +2 food to its tile.\
+ Any Fish adjacent to the tile will also be raised to +6 food output and\
+ gain +1 trade. Fishtraps must be made adjacent to Fish, but cannot be made\
+ cardinally adjacent to each other. Nor can they be built directly on a tile
+ with Fish, Whales, or a Buoy.\
 ")
 
 [extra_mine]
@@ -1383,6 +1423,7 @@ reqs           =
     { "type", "name", "range"
       "Tech", "Refrigeration", "Player"
       "Extra", "Irrigation", "Local"
+      "TerrainClass", "Land", "Local"
     }
 build_time     = 0
 removal_time   = 0
@@ -2805,6 +2846,11 @@ vision_main_sq = 2
 extra          = "Tile Claim"
 gui_type       = "Other"
 border_sq      = 0
+
+[base_fishtrap]
+extra          = "Fishtrap"
+gui_type       = "Other"
+border_sq      = -1
 
 [base_fort]
 extra          = "Fort"

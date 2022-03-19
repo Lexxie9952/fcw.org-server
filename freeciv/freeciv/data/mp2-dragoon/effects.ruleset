@@ -570,6 +570,37 @@ reqs	=
       "Extra",      "Oil",      "Local", TRUE
       "OutputType", "Shield",   "Local", TRUE
     }
+
+; *** FISH TRAPS ***
+[effect_fishtrap_fish_1]
+type    = "Output_Add_Tile"
+value	= 2
+reqs	=
+    { "type",       "name",          "range"
+      "Extra",      "Fish",          "Local"
+      "Extra",      "Fishtrap",      "Adjacent"
+      "OutputType", "Food",          "Local"
+      "Tech",       "Refrigeration", "Player"
+   }
+[effect_fishtrap_fish_2]
+type    = "Output_Inc_Tile"
+value	= 1
+reqs	=
+    { "type",       "name",          "range"
+      "Extra",      "Fish",          "Local"
+      "Extra",      "Fishtrap",      "Adjacent"
+      "OutputType", "Trade",         "Local"
+      "Tech",       "Refrigeration", "Player"
+   }
+[effect_fishtrap]
+type    = "Output_Add_Tile"
+value	= 2
+reqs	=
+    { "type",       "name",          "range"
+      "Extra",      "Fishtrap",      "Local"
+      "OutputType", "Food",          "Local"
+      "Tech",       "Refrigeration", "Player"
+   }
 ; *****************************************************
 
 ; Vision benefit from mountains (for every land unit)

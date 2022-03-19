@@ -1782,7 +1782,6 @@ target_reqs =
       "Extra",        "Bunker",         "Local", FALSE
     }
 ;-----------------------------------------------------------all AIR__, SEA types
-;Non-Land units can't attack Bunkers 
 [actionenabler_non_land_attacker_native_restrained]
 action = "Attack"
 actor_reqs    =
@@ -2912,6 +2911,23 @@ target_reqs    =
     { "type",    "name",     "range"
       "Terrain", "Glacier",  "Local"
     }
+
+[actionenabler_build_fishtrap]
+action        = "Build Base"
+actor_reqs    = 
+     { "type",     "name",        "range", "present"
+       "UnitFlag", "Settlers",    "Local", TRUE
+       "UnitState","Transported", "Local", TRUE
+       "UnitType", "Tribesmen",   "Local", FALSE
+       "UnitFlag", "CanHide",     "Local", FALSE
+       "UnitFlag", "CanClaim",    "Local", FALSE
+       "UnitFlag", "Well-Digger", "Local", FALSE
+     }
+target_reqs    =
+     { "type",         "name",          "range",  "present"
+       "TerrainClass", "Oceanic",       "Local",  TRUE
+       "Tech",         "Refrigeration", "Player", TRUE
+     }
 
 [actionenabler_irrigate_welldigger]
 action        = "Build Irrigation"

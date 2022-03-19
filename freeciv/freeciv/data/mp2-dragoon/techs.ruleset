@@ -801,7 +801,7 @@ req2     = "Electricity"
 flags    = ""
 graphic     = "a.refrigeration"
 graphic_alt = "-"
-helptext = _("Allows Farmland.")
+helptext = _("Allows Farmland and Fishtraps.")
 cost = 2775
 
 [advance_robotics]

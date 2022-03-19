@@ -471,7 +471,12 @@ somewhat faster in mp2d
 ==============================================================
 76. Capture and Expel both cost 2/3 move. (Was 1, 2/3)
 ==============================================================
-77.
+77. Fishtraps become available with Refrigeration technology.
+ A Fishtrap provides +2 food to its tile. Any Fish adjacent to
+ the tile will be raised to +6 food output and gain +1 trade.
+ Fishtraps must be made adjacent to Fish, but cannot be made
+ cardinally adjacent to each other. Nor can they be built
+ directly on a tile with Fish, Whales, or a Buoy.
 ==============================================================
 78.
 ==============================================================
