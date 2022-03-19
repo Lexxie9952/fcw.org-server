@@ -2376,6 +2376,9 @@ function fill_layer2_sprite_array(ptile, pcity)
       result_sprites.push(get_base_flag_sprite(ptile));
       result_sprites.push({"key" : "base.buoy_mg",
                            "offset_y" : -normal_tile_height / 2});
+    } else if (typeof EXTRA_FISHTRAP !== 'undefined' && tile_has_extra(ptile, EXTRA_FISHTRAP)) {
+      result_sprites.push({"key" : "ts.fishtrap",
+                           "offset_y" : 0});
     }
     if (typeof EXTRA_TILE_CLAIM !== 'undefined' && tile_has_extra(ptile, EXTRA_TILE_CLAIM)) {
       result_sprites.push({"key" : "base.tileclaim_mg",
