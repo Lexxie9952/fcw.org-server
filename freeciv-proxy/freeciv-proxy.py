@@ -168,7 +168,7 @@ class WSHandler(websocket.WebSocketHandler):
             return True
         compat_encrypt = not result[0][0]
         if compat_encrypt:
-            query = ("select secure_hashed_password, CAST(ENCRYPT(%(pwd)s, secure_hashed_password) AS CHAR), activated from auth where lower(username)=lower(%(usr)s)")
+            query = ("select secure_hashed_password, CAST(ENCRYPT(%(pwd)s, secure_hashed_password) AS CHAR), activated, id from auth where lower(username)=lower(%(usr)s)")
             cursor.execute(query, {'usr': username, 'pwd': password})
         else:
             query = ("select secure_hashed_password, activated from auth where lower(username)=lower(%(usr)s)")
@@ -180,9 +180,13 @@ class WSHandler(websocket.WebSocketHandler):
             return True
 
         if compat_encrypt:
-            for db_pass, encrypted_pass, active in result:
+            for db_pass, encrypted_pass, active, uid in result:
                 if (active == 0): return False
-                if db_pass == encrypted_pass: return True
+                if db_pass == encrypted_pass:
+                    new_hash = hashlib.sha256(password.encode('utf-8')).hexdigest()
+                    query = ("update auth set secure_hashed_password = %(pwd)s, digest_pw = TRUE where id = %(uid)s;")
+                    cursor.execute(query, {'pwd': new_hash, 'uid': uid})
+                    return True
         else:
             for secure_shashed_password, active in result:
                 if (active == 0): return False
