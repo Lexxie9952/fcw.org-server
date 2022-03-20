@@ -2844,7 +2844,6 @@ bool unit_perform_action(struct player *pplayer,
     success = action_performer;                                           \
     if (success) {                                                        \
       action_success_actor_price(paction, actor_id, actor);               \
-      action_success_target_pay_mp(paction, target_id, punit);            \
     }                                                                     \
     return success;                                                       \
   } else {                                                                \
@@ -2870,6 +2869,7 @@ bool unit_perform_action(struct player *pplayer,
     success = action_performer;                                           \
     if (success) {                                                        \
       action_success_actor_price(paction, actor_id, actor);               \
+      action_success_target_pay_mp(paction, target_id, punit);            \
     }                                                                     \
     return success;                                                       \
   } else {                                                                \
