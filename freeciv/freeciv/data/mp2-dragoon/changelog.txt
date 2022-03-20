@@ -478,9 +478,19 @@ somewhat faster in mp2d
  cardinally adjacent to each other. Nor can they be built
  directly on a tile with Fish, Whales, or a Buoy.
 ==============================================================
-78.
+78. Except for Aircraft, Missiles, and Marines, the move cost
+to Deboard and Board is 1/3, likewise a Transport doing Load
+or Unload causes 1/3 move cost to all the units which that 
+command causes to Deboard or Board. This is a "balanced 
+compromise" to (1) reducing "double move" phenomena using
+mulitple load/unload on multiple transports, while (2) at same
+time not excessively slowing the longturn pace and aggravating
+the already cumbersome, slow, and costly transport logistics.
 ==============================================================
-79.
+79. Techleak, when tallying the total number of players vs.
+the number of players having a tech: doesn't count dead
+players, Barbarian players, NewAvailablePlayers, and players
+who are idle 5 or more turns.
 ==============================================================
 80.
 ==============================================================

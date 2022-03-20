@@ -7444,7 +7444,7 @@ reqs	=
 ;*********************************************************
 
 
-;LOSING MOVES FROM ILLEGAL ACTION NEVER MADE SENSE. JUST FORBID IT AND LET THEM PICK A LEGAL ACTION. 
+;NO ILLEGAL ACTION MOVE COST IN MP2D
 ;[effect_illegal_action_move_cost_base]
 ;type	= "Illegal_Action_Move_Cost"
 ;value	= 0
@@ -7854,20 +7854,33 @@ reqs    =
 ;    { "type", "name", "range", "present"
 ;      "Action", "Transport Disembark", "Local", TRUE
 ;    }
-;[effect_action_success_move_cost_board]
-;type    = "Action_Success_Actor_Move_Cost"
-;value   = 0
-;reqs    =
-;    { "type", "name", "range", "present"
-;      "Action", "Transport Board", "Local", TRUE
-;    }
-;[effect_action_success_move_cost_deboard]
-;type    = "Action_Success_Actor_Move_Cost"
-;value   = 0
-;reqs    =
-;    { "type", "name", "range", "present"
-;      "Action", "Transport Deboard", "Local", TRUE    ;renamed to Transport Deboard later.
-;    }
+[effect_action_success_move_cost_board]
+type    = "Action_Success_Actor_Move_Cost"
+value   = 3
+reqs    =
+    { "type",          "name",            "range", "present"
+      "Action",        "Transport Board", "Local", TRUE
+      "UnitClassFlag", "TerrainSpeed",    "Local", TRUE      ; Does not affect Aircraft, Missiles, etc.
+      "UnitFlag",      "Marines",         "Local", FALSE     ; Does not affect Marines, AAA.
+    }
+[effect_action_success_move_cost_deboard]
+type    = "Action_Success_Actor_Move_Cost"
+value   = 3
+reqs    =
+    { "type",          "name",              "range", "present"
+      "Action",        "Transport Deboard", "Local", TRUE
+      "UnitClassFlag", "TerrainSpeed",      "Local", TRUE      ; Does not affect Aircraft, Missiles, etc.
+      "UnitFlag",      "Marines",           "Local", FALSE     ; Does not affect Marines, AAA.
+    }
+[effect_action_success_move_cost_transport_unload]
+type    = "Action_Success_Target_Move_Cost"   ; "Local" scope on unit pertains to target, not actor.
+value   = 3
+reqs    =
+    { "type",          "name",             "range", "present"
+      "Action",        "Transport Unload", "Local", TRUE
+      "UnitClassFlag", "TerrainSpeed",     "Local", TRUE      ; Does not affect Aircraft, Missiles, etc.
+      "UnitFlag",      "Marines",          "Local", FALSE     ; Does not affect Marines, AAA.
+    }
 
 ;[effect_action_success_siege_ram_city_walls]
 ;type    = "Action_Success_Actor_Move_Cost"
