@@ -443,7 +443,7 @@ Random randomValue=new Random();
 
 													<td style="font-size:80%">
 															<b>
-															${fn:replace(game.message, 'LongTurn', 'Longturn')}
+															${game.message}
 														</b>
 													</td>
 
