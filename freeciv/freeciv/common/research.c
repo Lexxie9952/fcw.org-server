@@ -997,6 +997,17 @@ int research_total_bulbs_required(const struct research *presearch,
         if (is_barbarian(aplayer)) {
           continue;
         }
+/* FCW games can have "pseudo-dead" players who are idle and all but dead,
+   and NewAvailablePlayers who are empty slots and not playing */ 
+#ifdef FREECIV_WEB
+const int IDLE_IS_DEAD = 5;
+        if (is_human(aplayer) && aplayer->nturns_idle >= IDLE_IS_DEAD) {
+          continue;
+        }
+        if (strncmp("NewAvailablePlayer", aplayer->name, 18) == 0) {
+          continue;
+        }
+#endif
         players++;
         if (A_FUTURE == tech
             ? research_get(aplayer)->future_tech > presearch->future_tech
