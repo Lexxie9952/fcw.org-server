@@ -3239,12 +3239,12 @@ base_tech_cost   = 20
 ;                    players which already know the tech and you have an
 ;                    embassy with.
 ; "All Players"    - Technology cost is reduced depending on the number of
-;                    all players (human, AI and barbarians) which already
-;                    know the tech.
+;                    all living players (human, AI and barbarians) which
+;                    already know the tech.
 ; "Normal Players" - Technology cost is reduced depending on the number of
-;                    normal players (human and AI) which already know the
-;                    tech.
-tech_leakage = "All Players"
+;                    normal living players (human and AI) which already know
+;                    the tech. (FCW: and if human, are not idle 5 or more turns)
+tech_leakage = "Normal Players"
 
 ; Method of paying tech upkeep
 ; "None"   - no upkeep
