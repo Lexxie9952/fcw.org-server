@@ -119,6 +119,9 @@
 		color: green;
 		font-weight: bold;
 	}
+	.multiplayer-games .running {
+		color: #8ea7bf;
+	}
 	.table>tbody>tr>td {
 		padding: 2px;
 	}
@@ -193,6 +196,13 @@
 	.name {
 		text-shadow: 1px 2px #777 !important;
 	}
+	.table thead tr th, 
+	.table tbody tr th,
+	.table tfoot tr th, .table thead tr td,
+	.table tbody tr td,
+	.table tfoot tr td {
+		padding:3px;
+	}
 
 	@font-face {
   font-family: Helvetica;
@@ -220,7 +230,14 @@
 	}
 
 </style>
+<!-- Using jsDelivr for identicons -->
+<script src="https://cdn.jsdelivr.net/npm/jdenticon@3.1.1/dist/jdenticon.min.js"
+        integrity="sha384-l0/0sn63N3mskDgRYJZA6Mogihu0VY3CusdLMiwpJ9LFPklOARUcOiWEIGGmFELx"
+        crossorigin="anonymous">
+</script>
+
 </head>
+
 <body>
 	<div class="container">
 		<%@include file="/WEB-INF/jsp/fragments/header.jsp"%>
@@ -400,58 +417,63 @@ Random randomValue=new Random();
 
 		<div class="row">
 			<div class="col-md-6" style="padding-left:0px; padding-right:0px">
-				<div class="panel-freeciv">
-					<h3>Multiplayer and One Turn per Day games:</h3>
+				<div class="panel-freeciv" style="padding:0px">
+					<h3>LongTurn Games (one turn per day):</h3>
 					<c:if test="${not empty games and fn:length(games) > 0}">
-						<table class="table multiplayer-games">
+						<table class="table multiplayer-games" style="margin-bottom:0px">
 							<thead>
 								<tr>
-									<th>Game name</th>
-									<th class="hidden-xs">State</th>
-									<th>Turn</th>
-									<th>Players</th>
-									<th>Actions</th>
+									<th class="hidden-xs" style="padding-left:0px"></th>
+									<th style="font-size:80%; width:100%">Game</th>
+									<!-- <th class="hidden-xs">State</th> --> <!-- exclude to make more room for tight fit-->
+									<th style="font-size:80%; text-align:center">Turn<br>Players</th>
+									<th style="font-size:80%">Link</th>
 								</tr>
 							</thead>
 							<tbody>
 								<c:forEach items="${games}" var="game">
-									<tr class="${game.players > 0 && state == 'Pregame' ? 'highlight' : ''}">
-										<td style="color:#8ea7bf">
-										    <b>
-											  ${fn:replace(game.message, 'LongTurn', ' One Turn per Day ')}
-											</b>
-										</td>
-										<td class="hidden-xs">
-											${game.state}
-										</td>
-										<td style="text-align:center">
-											${game.turn}
-										</td>
-										<td style="text-align:center">
-											<c:choose>
-												<c:when test="${game.players == 0}">
-													None
-												</c:when>
-												<c:when test="${game.players == 1}">
-													1 <span class="hidden-xs">player</span>
-												</c:when>
-												<c:otherwise>
-													${game.players} <span class="hidden-xs">players</span>
-												</c:otherwise>
-											</c:choose>
-										</td>			
-										<td>
-											<c:choose>
-												<c:when test="${game.state == 'Running' or game.state == 'Pregame'}">
-													<a  class="label label-success" href="/webclient/?action=multi&civserverport=${game.port}&amp;civserverhost=${game.host}&amp;multi=true&amp;type=${game.type}">Play</a>
-												</c:when>
-												<c:otherwise>
-													<a class="label label-success" href="/webclient/?action=observe&amp;civserverport=${game.port}&amp;civserverhost=${game.host}&amp;multi=true&amp;type=${game.type}">Observe</a>
-												</c:otherwise>
-											</c:choose>
-											<a class="label label-primary" href="/game/details?host=${game.host}&amp;port=${game.port}">Info</a>
-										</td>
-									</tr>
+										
+										<c:choose>
+											<c:when test="${!fn:contains(game.message, 'New Freeciv-web Multiplayer')}">
+
+												<tr class="${game.players > 0 && state == 'Pregame' ? 'highlight' : 'running'}">
+													<td class="hidden-xs" style="padding-left:0px;">
+														<svg width="32" height="32" data-jdenticon-value="${game.message}>"></svg>
+													</td>
+
+													<td style="font-size:80%">
+															<b>
+															${fn:replace(game.message, 'LongTurn', 'Longturn')}
+														</b>
+													</td>
+
+													<!-- 
+													<td class="hidden-xs">
+														${game.state}
+													</td> --> <!-- excluded to make more room for tight fit-->
+													<td style="text-align:center; font-size:80%">
+														T${game.turn}<br>${game.players}
+													</td>
+
+													<td style="font-size:80%">
+														<c:choose>
+															<c:when test="${game.state == 'Running' or game.state == 'Pregame'}">
+																<a  class="label label-success" href="/webclient/?action=multi&civserverport=${game.port}&amp;civserverhost=${game.host}&amp;multi=true&amp;type=${game.type}">Play</a><br>
+															</c:when>
+															<c:otherwise>
+																<br>
+																<!-- Observe is not a case that's ever legal for LongTurn games; as for Multiplayer it will always be 'Running' or 'Pregame'
+																<a class="label label-success" href="/webclient/?action=observe&amp;civserverport=${game.port}&amp;civserverhost=${game.host}&amp;multi=true&amp;type=${game.type}">Observe</a><br>
+																-->
+															</c:otherwise>
+														</c:choose>
+														<a class="label label-primary" href="/game/details?host=${game.host}&amp;port=${game.port}">Info</a>
+													</td>
+												</tr>
+
+											</c:when>
+										</c:choose>
+
 								</c:forEach>		
 							</tbody>
 						</table>

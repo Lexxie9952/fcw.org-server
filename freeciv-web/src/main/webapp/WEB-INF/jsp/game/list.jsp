@@ -11,6 +11,12 @@
 }
 </style>
 
+<!-- Using jsDelivr for identicons -->
+<script src="https://cdn.jsdelivr.net/npm/jdenticon@3.1.1/dist/jdenticon.min.js"
+        integrity="sha384-l0/0sn63N3mskDgRYJZA6Mogihu0VY3CusdLMiwpJ9LFPklOARUcOiWEIGGmFELx"
+        crossorigin="anonymous">
+</script>
+
 <script>
 (function ($) {
 	
@@ -335,6 +341,7 @@
 					<c:if test="${fn:length(longturnGamesList) > 0}">
 						<table id="longturn-table" class="table">
 							<tr>
+								<th class="hidden-xs"></th>
 								<th class="hidden-xs">Players</th>
 								<th>Game Info<br><span style="font-size:90%; font-weight:600; color: #3718c1"><i>Late-join bonus gold ensures FAIR-START&#8482; in the first 10 turns.</i></span></th>
 								<th style="text-align:center" class="hidden-xs">State</th>
@@ -344,33 +351,37 @@
 							<c:forEach items="${longturnGamesList}" var="game">
 								<tr
 									class="${game.isProtected() ? 'private-game' : (game.state eq 'Running' ? 'running-game' : (game.players gt 0 ? 'highlight' : ''))}">
+									
 									<td class="hidden-xs">
+										<svg width="48" height="48" data-jdenticon-value="${game.message}>"></svg>
+									</td>
+									<td class="hidden-xs" style="text-align:center">
 										<c:choose>
 											<c:when test="${game.players == 0}">
 													None
 												</c:when>
 											<c:when test="${game.players == 1}">
-													1 player
+													1 <!-- player -->
 												</c:when>
 											<c:otherwise>
-													${game.players} players
+													${game.players} <!-- players -->
 												</c:otherwise>
 										</c:choose>
 									</td>
 									<td>
-											<c:if test="${game.turn lt 13}">
+											<c:if test="${game.turn lt 11}">
 												<span style="color: #3718c1">${game.message}</span>
 											</c:if>
-											<c:if test="${game.turn > 12}">
+											<c:if test="${game.turn > 10}">
 												${game.message}
 											</c:if>
 									</td>
 									<td class="hidden-xs" style="text-align:center">${game.state} <span style="color:#32587d; text-shadow:1px 1px #0001">${game.port}</span></td>
 									<td style="text-align:right">
-											<c:if test="${game.turn lt 13}">
+											<c:if test="${game.turn lt 11}">
 												<span style="color: #3718c1; text-shadow: 1px 1px #d9ceff;">${game.turn}</span>
 											</c:if>
-											<c:if test="${game.turn > 12}">
+											<c:if test="${game.turn > 10}">
 												${game.turn}
 											</c:if>
 									</td>
