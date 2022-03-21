@@ -1103,6 +1103,14 @@ bool can_player_see_units_in_city(const struct player *pplayer,
 bool can_player_see_city_internals(const struct player *pplayer,
 				   const struct city *pcity)
 {
+#ifdef FREECIV_WEB
+  /* FCW allows allies who share vision to see internals, as it 
+     helps with many things such as planning trade routes. */
+  if (pplayers_allied(pplayer, city_owner(pcity))
+     && gives_shared_vision(city_owner(pcity), pplayer)) {
+     return true;
+  } 
+#endif  
   return (!pplayer || pplayer == city_owner(pcity));
 }
 
