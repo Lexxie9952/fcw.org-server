@@ -284,7 +284,7 @@ function fill_sprite_array(layer, ptile, pedge, pcorner, punit, pcity, citymode)
         var pterrain = tile_terrain(ptile);
         
         sprite_array = sprite_array.concat(fill_terrain_sprite_layer(2, ptile, pterrain, tterrain_near));
-  
+        if (draw_map_grid) sprite_array = sprite_array.concat({"key":"grid.map"});
         sprite_array = sprite_array.concat(fill_irrigation_sprite_array(ptile, pcity));
       }
     break;
@@ -300,8 +300,7 @@ function fill_sprite_array(layer, ptile, pedge, pcorner, punit, pcity, citymode)
       if (ptile != null) {
         // TEST: borders moved from last sub-layer of LAYER_SPECIAL1 to here:
         //  it was drawing on top of resources, and seemed better here:
-        if (draw_map_grid) sprite_array = sprite_array.concat(get_grid_line_sprites(ptile));
-          sprite_array = sprite_array.concat(get_border_line_sprites(ptile));
+        sprite_array = sprite_array.concat(get_border_line_sprites(ptile));
 
         var spec_sprite = get_tile_specials_sprite(ptile);
         if (spec_sprite != null) sprite_array.push(spec_sprite);
@@ -1152,31 +1151,6 @@ function get_border_line_sprites(ptile)
   }
   return result;
 }
-
-/**********************************************************************
-...ADD_SPRITE_SIMPLE(t->sprites.grid.main[pedge->type] used in gtk client
-***********************************************************************/
-function get_grid_line_sprites(ptile)
-{
-  var result = [];
-
-  // first test run, just draw the player's border on every tile
-
-  for (var i = 0; i < num_cardinal_tileset_dirs/2; i++) {
-    var dir = cardinal_tileset_dirs[i];
-    var checktile = mapstep(ptile, dir);
-
-    if (checktile != null) {
-      if (terrains[ptile['terrain']]['name'] == "Deep Ocean")
-        result.push({"key" : "mapgrid", "dir" : dir, "color": "rgba(66,57,47,1.0)" });  //stronger contrast on deep ocean
-      else
-        result.push({"key" : "mapgrid", "dir" : dir, "color": "rgba(0,0,0,0.35)" });
-    }
-  }
-
-  return result;
-}
-
 
 /**********************************************************************
   ...returns the shield (not the flag)

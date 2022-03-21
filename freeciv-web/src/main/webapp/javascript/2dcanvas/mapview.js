@@ -623,7 +623,8 @@ function mapview_put_tile_label(pcanvas, tile, canvas_x, canvas_y) {
 
 /**************************************************************************
   Renders the national border lines onto the canvas.
-**************************************************************************/
+  DEPRECATED BECAUSE CPU LOAD WAS TOO HEAVY
+***************************************************************************
 function mapview_put_grid_line(pcanvas, dir, color, canvas_x, canvas_y) {
   var x = canvas_x + 47;
   var y = canvas_y + 3;
@@ -650,6 +651,7 @@ function mapview_put_grid_line(pcanvas, dir, color, canvas_x, canvas_y) {
   pcanvas.closePath();
   pcanvas.stroke();
 }
+*/
 
 /**************************************************************************
   Renders the national border lines onto the canvas.
