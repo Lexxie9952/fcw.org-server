@@ -47,4 +47,6 @@ tiles = { "row", "column", "tag"
   3, 2, "grid.userspot"
   3, 3, "grid.pollute_ring"
   3, 4, "grid.pollute_icon"
+
+  3, 5, "grid.map"
 }
