@@ -433,8 +433,9 @@ function update_map_canvas(canvas_x, canvas_y, width, height)
     for (city_id in cities) {
       if (cities[city_id]['traderoute_count']>0) {
         for (tr = 0; tr < cities[city_id]['traderoute_count']; tr++) {
-          if (city_trade_routes[city_id][tr]) {
+          if (city_trade_routes && city_trade_routes[city_id] && city_trade_routes[city_id][tr]) {
             var correct_x, src=city_id, dest=city_trade_routes[city_id][tr]['partner'];
+            if (!cities[src] || !cities[dest]) continue;
             src_x = tiles[cities[src]['tile']]['x'];
             src_y = tiles[cities[src]['tile']]['y'];
             dest_x = tiles[cities[dest]['tile']]['x'];
@@ -463,7 +464,13 @@ function update_map_canvas(canvas_x, canvas_y, width, height)
           //    console.log(to);
           //  } 
             mapview_canvas_ctx.lineWidth = 3;
-            mapview_canvas_ctx.strokeStyle = 'rgb(255,0,255)';
+            if (!observing) {
+              if (cities[src].owner !=null && cities[src].owner != client.conn.playing.playerno 
+                && cities[dest].owner != null && cities[dest].owner != client.conn.playing.playerno) {
+                mapview_canvas_ctx.strokeStyle = 'rgb(255,128,0)';      // Orange:  others' traderoutes
+              } else mapview_canvas_ctx.strokeStyle = 'rgb(255,255,0)'; // Yellow:  my traderoutes
+            } else mapview_canvas_ctx.strokeStyle = 'rgb(255,128,0)';   // Orange:  observer (i.e. others')
+
             mapview_canvas_ctx.beginPath();
             mapview_canvas_ctx.moveTo(from['gui_dx']-mapview.gui_x0, from['gui_dy']-mapview.gui_y0);
             mapview_canvas_ctx.lineTo(to['gui_dx']-mapview.gui_x0,   to['gui_dy']-mapview.gui_y0);  
