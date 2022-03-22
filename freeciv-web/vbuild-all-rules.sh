@@ -23,7 +23,7 @@ printf "\nRe-generating manuals\n"
 
 # Vagrant install needs to copy these files into the tomcat webapp
 printf "\nCopying to Tomcat webapp\n"
-   cp /vagrant/freeciv-web/src/derived/webapp/man/*.* /var/lib/tomcat8/webapps/freeciv-web/man/
+   cp /vagrant/freeciv-web/src/derived/webapp/man/*.* /var/lib/tomcat9/webapps/freeciv-web/man/
 
 printf "\n\n****** REMINDER: ************************************************************\n"
 printf "(1) ./vclean-rules.sh is required to fix custom .html files that were overwritten.\n"

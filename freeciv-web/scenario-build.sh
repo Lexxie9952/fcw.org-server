@@ -6,7 +6,7 @@
 # scenario_name.sav files are located in:
 #########################################
 # /home/freeciv/freeciv-web/freeciv/freeciv/data/scenarios
-# /var/lib/tomcat8/webapps/data/savegames
+# /var/lib/tomcat9/webapps/data/savegames
 
 # scenario_name.sav.gz files are located in:
 ############################################
@@ -28,8 +28,8 @@ printf "\nUpdating scenarios...\n"
 printf "***********************\n"
    for r in ${SCENARIOS[@]}; do
       echo "$r"
-      echo "     copying to /var/lib/tomcat8/webapps/data/savegames"
-      cp /home/freeciv/freeciv-web/freeciv/freeciv/data/scenarios/$r /var/lib/tomcat8/webapps/data/savegames
+      echo "     copying to /var/lib/tomcat9/webapps/data/savegames"
+      cp /home/freeciv/freeciv-web/freeciv/freeciv/data/scenarios/$r /var/lib/tomcat9/webapps/data/savegames
       echo "     copying to /home/freeciv/freeciv-web/freeciv/build/data/scenarios"
       cp /home/freeciv/freeciv-web/freeciv/freeciv/data/scenarios/$r /home/freeciv/freeciv-web/freeciv/build/data/scenarios      
       printf "\n"

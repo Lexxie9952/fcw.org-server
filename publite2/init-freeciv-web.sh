@@ -35,7 +35,7 @@ fi
 addArgs --log "../logs/freeciv-web-log-${2}.log"
 
 if [ "$5" = "pbem" ]; then
-  addArgs --Ranklog "/var/lib/tomcat8/webapps/data/ranklogs/rank_${2}.log"
+  addArgs --Ranklog "/var/lib/tomcat9/webapps/data/ranklogs/rank_${2}.log"
 fi
 
 savesdir=${1}
@@ -57,7 +57,7 @@ fi
 addArgs --saves "${savesdir}"
 
 export FREECIV_SAVE_PATH=${savesdir};
-rm -f "/var/lib/tomcat8/webapps/data/scorelogs/score-${2}.log"
+rm -f "/var/lib/tomcat9/webapps/data/scorelogs/score-${2}.log"
 
 # Start Freeciv-proxy in background
 ../freeciv-proxy/start-freeciv-proxy.sh "${3}" >> "../logs/freeciv-proxy-loop.log" 2>&1 &

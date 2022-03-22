@@ -27,6 +27,6 @@ printf "\nOverwriting auto-generated manual with release-version: MP2-Dragoon"
    cp /vagrant/freeciv-web/src/derived/webapp/man/mp2-dragoon7.bak.html /vagrant/freeciv-web/src/derived/webapp/man/mp2-dragoon7.html
 
 printf "\nDirectly copying rules to Tomcat webapp\n"
-   cp /vagrant/freeciv-web/src/derived/webapp/man/*.* /var/lib/tomcat8/webapps/freeciv-web/man/
+   cp /vagrant/freeciv-web/src/derived/webapp/man/*.* /var/lib/tomcat9/webapps/freeciv-web/man/
 
 printf "\n*** REMINDER:  run ./build.sh to refresh and activate new manual.\n"

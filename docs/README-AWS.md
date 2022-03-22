@@ -93,8 +93,8 @@ sudo mkdir -p /freeciv-data
 sudo mount /dev/xvdf /freeciv-data
 
 if [ -d /freeciv-data/data ]; then
-    sudo mkdir -p /var/lib/tomcat8/webapps
-    sudo ln -s /freeciv-data/data /var/lib/tomcat8/webapps/
+    sudo mkdir -p /var/lib/tomcat9/webapps
+    sudo ln -s /freeciv-data/data /var/lib/tomcat9/webapps/
 fi
 
 # Fetch and build FreeCiv Web
@@ -142,7 +142,7 @@ cd freeciv-web
 ## Important Locations
 
 * Longterm games are configured in `~/freeciv-web/publite2/pubscript_longturn_*.serv`
-* Saved games, scorelogs, ranklogs are in `/var/lib/tomcat8/webapps/data`
+* Saved games, scorelogs, ranklogs are in `/var/lib/tomcat9/webapps/data`
 * Logfiles for proxies and games are in `~/freeciv-web/logs/`
 
 ## Stooopid Google
