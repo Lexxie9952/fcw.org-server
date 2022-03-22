@@ -2501,9 +2501,7 @@ actor_reqs    =
       "UnitType",      "Marines",         "Local", FALSE
       "UnitFlag",      "Well-Digger",     "Local", FALSE
     }
-;Somewhat counterintuitive but this results in Marines able to build
-;Forts and airbases, though no airbase inside an existing fort,
-;because otherwise they'd also be able to build Fortresses.
+;Marines are able to build Forts and Airbases
 [actionenabler_marines_can_fort_only]
 action        = "Build Base"
 actor_reqs    =
@@ -2512,10 +2510,7 @@ actor_reqs    =
       "UnitState",     "Transported",     "Local", FALSE
       "UnitFlag",      "CanFortress",     "Local", TRUE
     }
-target_reqs    =
-    { "type",   "name",       "range", "present"
-      "Extra",  "Fort",       "Local",  FALSE
-    }
+
 [actionenabler_base_prole]
 action        = "Build Base"
 actor_reqs    =

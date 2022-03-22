@@ -1584,6 +1584,7 @@ reqs           =
       "Tech", "Construction",    "Player", TRUE,  FALSE
       "TerrainClass", "Land",    "Local",  TRUE,  FALSE
       "UnitFlag", "CanFortress", "Local",  TRUE,  FALSE
+      "UnitType", "Marines",     "Local",  FALSE, TRUE   ; Marines can do Forts only
       "CityTile", "Center",      "Local",  FALSE, TRUE
     }
 build_time     = 5
@@ -1625,6 +1626,7 @@ reqs           =
       "TerrainFlag", "Low Land", "Local", TRUE, FALSE
       "TerrainClass", "Oceanic", "CAdjacent", TRUE, FALSE
       "UnitFlag", "CanFortress", "Local", TRUE, FALSE
+      "UnitType", "Marines",     "Local",  FALSE, TRUE   ; Marines can do Forts only
       "CityTile", "Center", "Local", FALSE, TRUE
     }
 build_time     = 8
@@ -1703,6 +1705,7 @@ reqs           =
       "TerrainClass", "Land", "Local", TRUE, FALSE
       "UnitFlag", "CanFortress", "Local", TRUE, FALSE
       "CityTile", "Center", "Local", FALSE, TRUE
+      "UnitType", "Marines",     "Local",  FALSE, TRUE   ; Marines can do Forts only
 ;      "Extra", "River", "Local", FALSE, FALSE
     }
 build_time     = 36
