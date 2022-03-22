@@ -106,7 +106,7 @@ function check_browser_compatibility()
     // Safari 3.0+ "[object HTMLElementConstructor]" 
     var isSafari = /constructor/i.test(window.HTMLElement) || (function (p) { return p.toString() === "[object SafariRemoteNotification]"; })(!window['safari'] || (typeof safari !== 'undefined' && safari.pushNotification));
   */
-  var isIE = /*@cc_on!@*/false || !!document.documentMode;  // Internet Explorer 6-11
+  var isIE = /* @cc_on!@ || */ !!document.documentMode;  // Internet Explorer 6-11
   /*
     var isEdge = !isIE && !!window.StyleMedia;   // Edge 20+
     var isChrome = !!window.chrome && (!!window.chrome.webstore || !!window.chrome.runtime);  // Chrome 1 - 71
