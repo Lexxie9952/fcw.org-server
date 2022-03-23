@@ -116,11 +116,11 @@
 	.multiplayer-games th:last-child { width: 80px; }
 	.multiplayer-games a.label:first-child { margin-right: 3px; }
 	.multiplayer-games .highlight { 
-		color: green;
+		color: #9c9;
 		font-weight: bold;
 	}
 	.multiplayer-games .running {
-		color: #8ea7bf;
+		color: #ccc;
 	}
 	.table>tbody>tr>td {
 		padding: 2px;
