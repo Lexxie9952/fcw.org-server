@@ -65,6 +65,34 @@ function tile_resource(tile)
   return null;
 }
 
+/**************************************************************************
+  Returns true iff the specified tile has an adjacent tile which contains 
+  the specified extra. The 'cardinal' parameter tells us to only look
+  for CAdjacent tiles. 
+**************************************************************************/
+function is_extra_adjacent(ptile, extra, cardinal)
+{
+  if (ptile == null || extra == null) return false;
+
+  for (dir = 0; dir < 8; dir++) {
+
+    if (cardinal && !is_cardinal_dir(dir)) {
+      continue;
+    }
+
+    let tile1 = mapstep(ptile, dir);
+
+    if (tile1 != null && tile_get_known(tile1) != TILE_UNKNOWN) {
+      if (tile_has_extra(tile1, extra)) {
+        return true;
+      }
+    }
+
+  }
+
+  return false;
+}
+
 /************************************************************************//**
   Check if tile contains an extra type that claim territory
 ****************************************************************************/
