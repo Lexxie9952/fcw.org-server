@@ -2727,6 +2727,10 @@ function create_unit_offset_arrays()
       case "Transport Helicopter":
           vx -= 24; vy += 15;
           break;
+      case "Trawler":
+          dx -= 13; dy += 6;
+          mx -= 6; my += 7; 
+          break;
       case "Trireme":
           vx += 2; vy += 1;
           break;
