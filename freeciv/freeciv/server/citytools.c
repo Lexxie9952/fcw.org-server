@@ -2281,12 +2281,11 @@ void broadcast_city_info(struct city *pcity)
     package_city(pcity, &packet, &web_packet, routes, FALSE);
   } else {
     pcity->server.needs_arrange = CNA_BROADCAST_PENDING;
-
     return;
   }
   players_iterate(pplayer) {
-    if (can_player_see_city_internals(pplayer, pcity)) {
-      if (!send_city_suppressed || pplayer != powner) {
+    if (!send_city_suppressed || pplayer != powner) {
+      if (can_player_see_city_internals(pplayer, pcity)) {
         update_dumb_city(pplayer, pcity);
         lsend_packet_city_info(pplayer->connections, &packet, FALSE);
         web_lsend_packet(city_info_addition, pplayer->connections, &web_packet, FALSE);
@@ -2294,8 +2293,7 @@ void broadcast_city_info(struct city *pcity)
           lsend_packet_traderoute_info(pplayer->connections, route_packet);
         } traderoute_packet_list_iterate_end;
       }
-    } else {
-      if (player_can_see_city_externals(pplayer, pcity)) {
+    } else if (player_can_see_city_externals(pplayer, pcity)) {
         reality_check_city(pplayer, pcity->tile);
         update_dumb_city(pplayer, pcity);
         package_dumb_city(pplayer, pcity->tile, &sc_pack);
