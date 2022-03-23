@@ -1697,7 +1697,7 @@ graphic_alt	= "-"
 obsolete_by	=
     { "type", "name", "range"
     }
-build_cost	= 100
+build_cost	= 90
 upkeep		= 0
 sabotage	= 0
 sound		= "w_copernicus_observatory"
