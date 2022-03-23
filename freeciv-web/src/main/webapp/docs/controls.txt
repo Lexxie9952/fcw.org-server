@@ -37,6 +37,8 @@ The current and complete list of Freeciv-web controls can be found here:<br>
 
 <tr><td><img src="/images/orders/irrigation.png"></td><td><span class="vctr"> Build Farmland</td><td><span class="hotkey">i</span></span></td></tr>
 
+<tr><td><img src="/images/orders/fishtrap.png"></td><td><span class="vctr"> Lay Fishtrap</td><td><span class="hotkey">i</span></span></td></tr>
+
 <tr><td><img src="/images/orders/forest_remove_default.png"></td><td><span class="vctr">Cultivate (Chop Forest)</td><td><span class="hotkey">i</span></span></td></tr>
 
 <tr><td><img src="/images/orders/vigil.png"></td><td><span class="vctr"> Vigil</td><td><span class="hotkey">Shift-I</span></span></td></tr>
@@ -119,6 +121,7 @@ The current and complete list of Freeciv-web controls can be found here:<br>
 <tr><td><span class="hotkey">  h</span></td><td> set unit's (h)omecity  (to city on current tile)</td></tr>
 <tr><td><span class="hotkey">shift-H</span></td><td> make Hideout</td></tr>
 <tr><td><span class="hotkey">  i</span></td><td> build (i)rrigation or convert terrain  (settler/worker units)</td></tr>
+<tr><td><span class="hotkey">  i</span></td><td> (on ocean tile) lay f(i)shtrap</td></tr>
 <tr><td><span class="hotkey">shift-I</span></td><td> v(I)gil: (I)ntercept and auto-attack adjacent air units</td></tr>
 <tr><td><span class="hotkey">alt-shift-I</span></td><td> connect irrigation along path</td></tr>
 <tr><td><span class="hotkey">  j</span></td><td> no orders - skip orders for this unit this turn </td></tr>

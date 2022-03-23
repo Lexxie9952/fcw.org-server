@@ -44,4 +44,5 @@ tiles = { "row", "column", "tag"
   1,  4, "u.ballista_o"               ; Lexxie
   1,  5, "u.siege_tower_o"            ; Lexxie
   1,  6, "u.patriarch_o"              ; Lexxie
+  1,  7, "u.trawler_o"                ; Lexxie
 }

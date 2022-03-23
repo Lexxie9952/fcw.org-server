@@ -50,6 +50,7 @@ tiles = { "row", "column", "tag"
   2, 3, "unit.patrol"
   2, 4, "unit.pillage"               ; Lexxie
   2, 5, "unit.hideout"               ; Lexxie
+  2, 6, "unit.fishing"               ; Lexxie
 
   3, 0, "unit.irrigate"
   3, 1, "unit.plant"                 ; Lexxie
