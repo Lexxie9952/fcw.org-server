@@ -12,6 +12,12 @@
 		.table th {
 			text-align: center;
 		}
+		.play_button {
+		background-color: #55968e;
+		}
+		.info_button {
+			background-color: #b56f4a;
+		}
 		.dropdown-menu {
 			background-image: url('/images/bg-med-dark.jpg');
 			border-radius: 5px;
@@ -163,9 +169,9 @@
 				<div class="row">
 					<div class="center-block" style="width: 600px;">
 						<c:choose>
-							<c:when test="${state == 'Pregame'}">
+							<c:when test="${state == 'Pregame' or type=='longturn'}">
 								<div>
-									<a class="label label-success" href="/webclient/?action=multi&civserverport=${port}&amp;civserverhost=${host}&amp;type=${type}">
+									<a class="label play_button" href="/webclient/?action=multi&civserverport=${port}&amp;civserverhost=${host}&amp;type=${type}">
 										Join</a> You can join this game now.
 								</div>
 							</c:when>
