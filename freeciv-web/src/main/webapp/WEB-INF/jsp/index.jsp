@@ -203,6 +203,12 @@
 	.table tfoot tr td {
 		padding:3px;
 	}
+	.play_button {
+		background-color: #55968e;
+	}
+	.info_button {
+		background-color: #b56f4a;
+	}
 
 	@font-face {
   font-family: Helvetica;
@@ -458,7 +464,7 @@ Random randomValue=new Random();
 													<td style="font-size:80%">
 														<c:choose>
 															<c:when test="${game.state == 'Running' or game.state == 'Pregame'}">
-																<a  class="label label-success" href="/webclient/?action=multi&civserverport=${game.port}&amp;civserverhost=${game.host}&amp;multi=true&amp;type=${game.type}">Play</a><br>
+																<a  class="label play_button" href="/webclient/?action=multi&civserverport=${game.port}&amp;civserverhost=${game.host}&amp;multi=true&amp;type=${game.type}">Play</a><br>
 															</c:when>
 															<c:otherwise>
 																<br>
@@ -467,7 +473,7 @@ Random randomValue=new Random();
 																-->
 															</c:otherwise>
 														</c:choose>
-														<a class="label label-primary" href="/game/details?host=${game.host}&amp;port=${game.port}">Info</a>
+														<a class="label info_button" href="/game/details?host=${game.host}&amp;port=${game.port}">Info</a>
 													</td>
 												</tr>
 
