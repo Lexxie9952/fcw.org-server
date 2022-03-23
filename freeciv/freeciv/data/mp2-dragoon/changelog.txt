@@ -492,7 +492,9 @@ the number of players having a tech: doesn't count dead
 players, Barbarian players, NewAvailablePlayers, and players
 who are idle 5 or more turns.
 ==============================================================
-80.
+80. MagLevs can only be built wherever railroads may be built,
+(i.e. Road and SeaBridge). A railroad is not required. They
+can't be built on ocean (unless SeaBridge.)
 ==============================================================
 81.
 

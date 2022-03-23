@@ -2477,6 +2477,7 @@ actor_reqs    =
       "UnitFlag",      "CanClaim",     "Local", FALSE
       "UnitType",      "Tribesmen",    "Local", FALSE
       "UnitType",      "Proletarians", "Local", FALSE
+      "UnitType",      "Trawler",      "Local", FALSE
     }
 [actionenabler_cultivate_tribesmen]
 action        = "Cultivate"
@@ -2504,6 +2505,7 @@ actor_reqs    =
       "UnitFlag",      "CanClaim",    "Local", FALSE
       "UnitType",      "Tribesmen",   "Local", FALSE 
       "UnitType",      "Proletarians","Local", FALSE
+      "UnitType",      "Trawler",     "Local", FALSE
       "UnitFlag",      "Well-Digger", "Local", FALSE
       "CityTile",      "Center",      "Local", FALSE
     }
@@ -2534,6 +2536,7 @@ actor_reqs    =
       "UnitFlag",      "CanClaim",    "Local", FALSE
       "UnitFlag",      "Well-Digger", "Local", FALSE
       "UnitType",      "Proletarians","Local", FALSE
+      "UnitType",      "Trawler",     "Local", FALSE
       "CityTile",      "Center",      "Local", TRUE
       "Terrain",       "Grassland",   "Local", FALSE
       "Terrain",       "Plains",      "Local", FALSE
@@ -2718,9 +2721,7 @@ actor_reqs    =
       "UnitType",      "Marines",         "Local", FALSE
       "UnitFlag",      "Well-Digger",     "Local", FALSE
     }
-;Somewhat counterintuitive but this results in Marines able to build
-;Forts and airbases, though no airbase inside an existing fort,
-;because otherwise they'd also be able to build Fortresses.
+;Marines are able to build Forts and Airbases
 [actionenabler_marines_can_fort_only]
 action        = "Build Base"
 actor_reqs    =
@@ -2729,10 +2730,7 @@ actor_reqs    =
       "UnitState",     "Transported",     "Local", FALSE
       "UnitFlag",      "CanFortress",     "Local", TRUE
     }
-target_reqs    =
-    { "type",   "name",       "range", "present"
-      "Extra",  "Fort",       "Local",  FALSE
-    }
+
 [actionenabler_base_prole]
 action        = "Build Base"
 actor_reqs    =
@@ -2852,7 +2850,7 @@ target_reqs    =
       "TerrainFlag", "Oil",  "Local", FALSE
     }
 
-[actionenabler_desert_oil]
+[actionenabler_desert_mining]
 action        = "Build Mine"
 actor_reqs    =
     { "type",          "name",         "range",   "present"
@@ -2868,7 +2866,7 @@ target_reqs    =
     { "type",    "name",         "range"
       "Terrain", "Desert",       "Local"
     }
-[actionenabler_desert_oil_prole]
+[actionenabler_desert_mining_prole]
 action        = "Build Mine"
 actor_reqs    =
     { "type",          "name",         "range",   "present"
@@ -2912,7 +2910,19 @@ target_reqs    =
       "Terrain", "Glacier",  "Local"
     }
 
-[actionenabler_build_fishtrap]
+[actionenabler_build_fishtrap_trawler]
+action        = "Build Base"
+actor_reqs    = 
+     { "type",     "name",        "range", "present"
+       "UnitFlag", "Settlers",    "Local", TRUE
+       "UnitType", "Trawler",     "Local", TRUE
+     }
+target_reqs    =
+     { "type",         "name",          "range",  "present"
+       "TerrainClass", "Oceanic",       "Local",  TRUE
+       "Tech",         "Refrigeration", "Player", TRUE
+     }
+[actionenabler_build_fishtrap_worker_types]
 action        = "Build Base"
 actor_reqs    = 
      { "type",     "name",        "range", "present"
@@ -3065,61 +3075,8 @@ target_reqs    =
     { "type",    "name",     "range", "present"
       "ExtraFlag", "IrrigationSource", "CAdjacent", TRUE
     }
-;NO LONGER NEEDED NOW THAT WE USE IrrigationSource flag:
-;[actionenabler_irrigate_src_oasis]
-;action        = "Build Irrigation"
-;actor_reqs    =
-;    { "type",          "name",         "range", "present"
-;      "UnitFlag",      "Settlers",     "Local", TRUE
-;      "UnitFlag",      "CanHide",      "Local", FALSE
-;      "UnitFlag",      "CanClaim",     "Local", FALSE
-;      "UnitType",      "Proletarians", "Local", FALSE
-;      "UnitFlag",      "Well-Digger",  "Local", FALSE
-;    }
-;target_reqs    =
-;    { "type",    "name",     "range", "present"
-;      "Extra",   "Oasis",    "CAdjacent", TRUE
-;    }    
-;[actionenabler_irrigate_src_oasis_prole]
-;action        = "Build Irrigation"
-;actor_reqs    =
-;    { "type",          "name",         "range", "present"
-;      "UnitFlag",      "Settlers",     "Local", TRUE
-;      "UnitType",      "Proletarians", "Local", TRUE
-;      "Gov",           "Communism",    "Player",TRUE
-;    }
-;target_reqs    =
-;    { "type",    "name",     "range", "present"
-;      "Extra",   "Oasis",    "CAdjacent", TRUE
-;    }    
-; 
-;[actionenabler_irrigate_src_irrigation]
-;action        = "Build Irrigation"
-;actor_reqs    =
-;    { "type",          "name",         "range", "present"
-;      "UnitFlag",      "Settlers",     "Local", TRUE
-;      "UnitFlag",      "Well-Digger",  "Local", FALSE
-;      "UnitType",      "Proletarians", "Local", FALSE
-;      "UnitFlag",      "CanHide",      "Local", FALSE
-;      "UnitFlag",      "CanClaim",     "Local", FALSE
-;    }
-;target_reqs    =
-;    { "type",    "name",       "range", "present"
-;      "Extra",   "Irrigation", "CAdjacent", TRUE
-;    }
-;[actionenabler_irrigate_src_irrigation_prole]
-;action        = "Build Irrigation"
-;actor_reqs    =
-;    { "type",          "name",         "range", "present"
-;      "UnitFlag",      "Settlers",     "Local", TRUE
-;      "UnitType",      "Proletarians", "Local", TRUE
-;      "Gov",           "Communism",    "Player",TRUE
-;    }
-;target_reqs    =
-;    { "type",    "name",       "range", "present"
-;      "Extra",   "Irrigation", "CAdjacent", TRUE
-;    }
 
+;**************************************************************************** Board Deboard Unload Disembark Embark
 [actionenabler_deboard]
 action        = "Transport Deboard"
 actor_reqs    =
@@ -3187,6 +3144,7 @@ actor_reqs    =
       "DiplRel",      "Peace",      "Local", FALSE
       "DiplRel",      "Never met",  "Local", FALSE
     }
+;*******************************************************************************************************************
 
 [borders]
 ; Base border radius from city.

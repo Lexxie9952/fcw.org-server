@@ -5490,6 +5490,51 @@ Scouts provide sentry intel even if not sentried. Scouts gain the same veteran l
  from buildings and wonders as other land units.\
 ")
 
+[unit_trawler]
+name          = _("Trawler")
+class         = "RiverShip"
+tech_req      = "Electricity"
+obsolete_by   = "None"
+graphic       = "u.trawler_o"
+graphic_alt   = "-"
+sound_move    = "m_transport"
+sound_move_alt = "m_transport"
+sound_fight   = "f_trireme"
+sound_fight_alt = "f_generic"
+build_cost    = 30
+pop_cost      = 0
+attack        = 0
+defense       = 1
+hitpoints     = 15
+firepower     = 1
+move_rate     = 2
+vision_radius_sq = 4
+transport_cap = 1
+fuel          = 0
+uk_happy      = 0
+uk_shield     = 0
+uk_food       = 0
+uk_gold       = 0
+cargo         = "Land", "LandNoKill", "LandAirSea", "Cargo"
+flags         = "Settlers", "Infra", "CanRoad", "CanFortress", "Cant_Pillage", "NonMil",
+                "HasNoZOC", "NoVeteran", "Capturable", "Expellable", "BadCityDefender",
+                "Airbase" ;for buoys
+; No veteran levels (level name is never displayed)
+veteran_names = _("green")
+veteran_base_raise_chance = 0
+veteran_work_raise_chance = 0
+veteran_power_fact = 100
+veteran_move_bonus = 63
+roles         = ""
+helptext      = _("\
+Trawlers are multi-purpose powered boats. They are used for fishing and water work.\
+ At sea, a Trawler can put down Fishtraps, Buoys, Sea Bridges, and Rails over\
+  Sea Bridges. On rivers they clean Pollution and Fallout; and build Quays,\
+  Canals, and Bridges. Trawlers can be captured or expelled on rivers.\n\n\
+Trawlers can only carry one unit. This may be less threatening for approaching\
+ foreign coastal waters.\
+")
+
 [unit_leader]
 name          = _("?unit:Leader")
 class         = "Land"

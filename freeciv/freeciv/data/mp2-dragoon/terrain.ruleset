@@ -1205,8 +1205,9 @@ act_gfx_alt2   = "-"
 rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
 reqs           =
-    { "type", "name", "range"
-      "TerrainClass", "Land", "Local"
+    { "type",         "name",    "range", "present", "quiet"
+      "TerrainClass", "Land",    "Local", TRUE,      FALSE
+      "UnitType",     "Trawler", "Local", FALSE,     TRUE
     }
 build_time     = 0
 removal_time   = 0
@@ -1235,8 +1236,8 @@ causes         = "Base"
 rmcauses       = "Pillage"
 graphic        = "ts.fishtrap"
 graphic_alt    = "-"
-act_gfx_alt    = "unit.irrigation"
-act_gfx_alt2   = "unit.irrigate"
+act_gfx_alt    = "unit.fishing"
+act_gfx_alt2   = "unit.irrigation"
 rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
 reqs           =
@@ -1249,8 +1250,8 @@ reqs           =
      "Extra",       "Fishtrap",      "CAdjacent", FALSE 
      "Extra",       "Fish",          "Adjacent",  TRUE
 ;-------------------
-      "UnitFlag",   "Settlers",      "Local",     TRUE
-      "Tech",       "Refrigeration", "Player", TRUE
+     "UnitFlag",    "Settlers",      "Local",     TRUE
+     "Tech",        "Refrigeration", "Player",    TRUE
     }
 build_time     = 1
 removal_time   = 0
@@ -1277,8 +1278,9 @@ act_gfx_alt2   = "-"
 rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
 reqs           =
-    { "type", "name", "range", "present", "quiet"
-      "TerrainFlag", "Oil", "Local", FALSE, TRUE
+    { "type",        "name",    "range", "present", "quiet"
+      "TerrainFlag", "Oil",     "Local", FALSE,     TRUE
+      "UnitType",    "Trawler", "Local", FALSE,     TRUE
     }
 build_time     = 0
 removal_time   = 0
@@ -1305,8 +1307,9 @@ act_gfx_alt2   = "unit.plant"
 rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
 reqs           =
-    { "type", "name", "range", "quiet"
-      "TerrainFlag", "Oil", "Local", TRUE
+    { "type",        "name",    "range", "present", "quiet"
+      "TerrainFlag", "Oil",     "Local", TRUE,      FALSE
+      "UnitType",    "Trawler", "Local", FALSE,     TRUE
     }
 build_time     = 0
 removal_time   = 0
@@ -1332,8 +1335,8 @@ act_gfx_alt2   = "-"
 rmact_gfx      = "unit.pollution"
 rmact_gfx_alt  = "-"
 reqs           =
-    { "type", "name", "range", "present", "quiet"
-      "TerrainFlag", "NoPollution", "Local", FALSE, TRUE
+    { "type",        "name",        "range", "present", "quiet"
+      "TerrainFlag", "NoPollution", "Local", FALSE,     TRUE
     }
 removal_time   = 0
 flags          = "GlobalWarming"
@@ -1420,10 +1423,11 @@ act_gfx_alt2   = "unit.irrigate"
 rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
 reqs           =
-    { "type", "name", "range"
-      "Tech", "Refrigeration", "Player"
-      "Extra", "Irrigation", "Local"
-      "TerrainClass", "Land", "Local"
+    { "type",         "name",          "range", "present", "quiet"
+      "Tech",         "Refrigeration", "Player", TRUE,     FALSE
+      "Extra",        "Irrigation",    "Local",  TRUE,     FALSE
+      "TerrainClass", "Land",          "Local",  TRUE,     FALSE
+      "UnitType",     "Trawler",       "Local",  FALSE,    TRUE
     }
 build_time     = 0
 removal_time   = 0
@@ -1593,12 +1597,13 @@ act_gfx_alt2   = "-"
 rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
 reqs           =
-    { "type", "name", "range", "present", "quiet"
-      "Tech", "Masonry", "Player", TRUE, FALSE
-      "TerrainClass", "Land", "Local", TRUE, FALSE
-      "UnitFlag", "CanFortress", "Local", TRUE, FALSE
-      "CityTile", "Center", "Local", FALSE, TRUE
-      "Extra", "Hideout", "Local", FALSE, FALSE
+    { "type",         "name",        "range", "present", "quiet"
+      "Tech",         "Masonry",     "Player", TRUE,     FALSE
+      "TerrainClass", "Land",        "Local",  TRUE,     FALSE
+      "UnitFlag",     "CanFortress", "Local",  TRUE,     FALSE
+      "UnitType",     "Trawler",     "Local",  FALSE,    TRUE
+      "CityTile",     "Center",      "Local",  FALSE,    TRUE
+      "Extra",        "Hideout",     "Local",  FALSE,    FALSE
     }
 build_time     = 3
 removal_time   = 0
@@ -1640,6 +1645,8 @@ reqs           =
       "Tech", "Construction",    "Player", TRUE,  FALSE
       "TerrainClass", "Land",    "Local",  TRUE,  FALSE
       "UnitFlag", "CanFortress", "Local",  TRUE,  FALSE
+      "UnitType", "Marines",     "Local",  FALSE, TRUE   ; Marines can do Forts only
+      "UnitType", "Trawler",     "Local",  FALSE, TRUE   ; Fishtraps only
       "CityTile", "Center",      "Local",  FALSE, TRUE
     }
 build_time     = 5
@@ -1673,15 +1680,17 @@ act_gfx_alt2   = "-"
 rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
 reqs           =
-    { "type", "name", "range", "present", "quiet"
-      "Extra", "Fort", "Local", TRUE, FALSE
-      "Extra", "Fortress", "Local", FALSE, TRUE
-      "Extra", "Hideout", "Local", FALSE, FALSE
-      "Tech", "Engineering", "Player", TRUE, FALSE
-      "TerrainFlag", "Low Land", "Local", TRUE, FALSE
-      "TerrainClass", "Oceanic", "CAdjacent", TRUE, FALSE
-      "UnitFlag", "CanFortress", "Local", TRUE, FALSE
-      "CityTile", "Center", "Local", FALSE, TRUE
+    { "type",         "name",        "range",     "present", "quiet"
+      "Extra",        "Fort",        "Local",     TRUE,      FALSE
+      "Extra",        "Fortress",    "Local",     FALSE,     TRUE
+      "Extra",        "Hideout",     "Local",     FALSE,     FALSE
+      "Tech",         "Engineering", "Player",    TRUE,      FALSE
+      "TerrainFlag",  "Low Land",    "Local",     TRUE,      FALSE
+      "TerrainClass", "Oceanic",     "CAdjacent", TRUE,      FALSE
+      "UnitFlag",     "CanFortress", "Local",     TRUE,      FALSE
+      "UnitType",     "Marines",     "Local",     FALSE,     TRUE   ; Marines can do Forts only
+      "UnitType",     "Trawler",     "Local",     FALSE,     TRUE   ; Fishtraps only
+      "CityTile",     "Center",      "Local",     FALSE,     TRUE
     }
 build_time     = 8
 removal_time   = 0
@@ -1759,6 +1768,8 @@ reqs           =
       "TerrainClass", "Land", "Local", TRUE, FALSE
       "UnitFlag", "CanFortress", "Local", TRUE, FALSE
       "CityTile", "Center", "Local", FALSE, TRUE
+      "UnitType", "Marines",     "Local",  FALSE, TRUE   ; Marines can do Forts only
+      "UnitType", "Trawler",     "Local",  FALSE, TRUE   ; Fishtraps only
 ;      "Extra", "River", "Local", FALSE, FALSE
     }
 build_time     = 36
@@ -1791,6 +1802,7 @@ reqs           =
       "Extra", "Hideout", "Local", FALSE, FALSE
       "TerrainClass", "Land", "Local", TRUE, FALSE
       "UnitFlag", "Airbase", "Local", TRUE, FALSE
+      "UnitType", "Trawler", "Local", FALSE, TRUE    ; Fishtraps only
       "CityTile", "Center", "Local", FALSE, TRUE
     }
 build_time     = 3
@@ -1824,7 +1836,8 @@ reqs           =
       "Extra", "Airbase", "Local", TRUE, FALSE
       "TerrainClass", "Land", "Local", TRUE, FALSE
       "UnitFlag", "Airbase", "Local", TRUE, FALSE
-      "UnitType", "Marines", "Local", FALSE, TRUE
+      "UnitType", "Marines", "Local", FALSE, TRUE    ; Fort and Airbase only
+      "UnitType", "Trawler", "Local", FALSE, TRUE    ; Fishtraps only
       "CityTile", "Center", "Local", FALSE, TRUE
     }
 build_time     = 5
@@ -2038,7 +2051,7 @@ City center tiles with roads are automatically upgraded to railroads\
 name           = _("Maglev")
 category       = "Infra"
 causes         = "Road"
-rmcauses       = "Pillage", "Disappear"
+rmcauses       = "Pillage"
 graphic        = "road.maglev"
 graphic_alt    = "road.rail"
 activity_gfx   = "unit.maglev"
@@ -2046,17 +2059,11 @@ act_gfx_alt    = "unit.road"
 act_gfx_alt2   = "-"
 rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
-;For now this is how we disallow MagLev on ocean: it disappears if you make it.
-disappearance_chance    = 10000
-disappearance_reqs = 
-    { "type",         "name",      "range", "present"
-      "TerrainClass", "Oceanic",   "Local", TRUE
-      "Extra",        "Sea Bridge","Local", FALSE
-    }
 reqs           =
-    { "type", "name", "range", "present", "quiet"
-      "Tech", "Superconductors", "Player", TRUE, FALSE
-      "UnitFlag", "CanRoad", "Local", TRUE, FALSE        
+    { "type",     "name",            "range"
+      "Tech",     "Superconductors", "Player"
+      "ExtraFlag","Railable",        "Local"
+      "UnitFlag", "CanRoad",         "Local"        
     }
 build_time     = 3
 removal_time   = 0
@@ -2124,11 +2131,11 @@ rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
 generated      = FALSE
 reqs           =
-    { "type", "name", "range", "present"
-      "TerrainClass", "Oceanic", "Local", TRUE
-      "TerrainClass", "Land", "CAdjacent", TRUE
-      "Tech", "Steel", "Player", TRUE
-      "UnitFlag", "CanRoad", "Local", TRUE
+    { "type",         "name",    "range",     "present"
+      "TerrainClass", "Oceanic", "Local",     TRUE
+      "TerrainClass", "Land",    "CAdjacent", TRUE
+      "Tech",         "Steel",   "Player",    TRUE
+      "UnitFlag",     "CanRoad", "Local",     TRUE
     }
 build_time     = 12
 removal_time   = 0
@@ -2160,6 +2167,7 @@ reqs           =
       "Building",      "Great Wall", "Player",    TRUE
       "TerrainClass",  "Land",       "CAdjacent", TRUE
       "UnitFlag",      "CanRoad",    "Local",     TRUE
+      "UnitType",      "Trawler",    "Local",     FALSE
       "CityTile",      "Center",     "Local",     FALSE
       "Extra",         "Naval Base", "Local",     FALSE
       "Extra",         "Fortress",   "Local",     FALSE
