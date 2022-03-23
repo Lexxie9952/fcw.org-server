@@ -115,6 +115,10 @@
     <span style="cursor:pointer" onclick="key_unit_fortress();"><img src="/images/orders/buoy.png" name="buoy_button" alt="" border="0" width="30" height="30"></span>
   </div>
 
+  <div id="order_fishtrap" class="order_button not_mobile" title="Lay Fishtrap (I)">
+    <span style="cursor:pointer" onclick="key_unit_fishtrap();"><img src="/images/orders/fishtrap.png" name="fishtrap_button" alt="" border="0" width="30" height="30"></span>
+  </div>
+
   <div id="order_navalbase" class="order_button not_mobile" title="Build Naval Base (shift-N)">
     <span style="cursor:pointer" onclick="key_unit_naval_base();"><img src="/images/orders/navalbase.png" name="navbase_button" alt="" border="0" width="30" height="30"></span>
   </div>

@@ -1490,6 +1490,7 @@ function update_unit_order_commands()
   $("#order_well").hide();
   $("#order_fortress").hide();
   $("#order_buoy").hide();
+  $("#order_fishtrap").hide();
   $("#order_hideout").hide();
   $("#order_navalbase").hide();
   $("#order_airbase").hide();
@@ -1595,6 +1596,7 @@ function update_unit_order_commands()
     var infra_type = false;
     if (ptype['name'] == "Workers" || ptype['name'] == "Migrants"
       || (ptype['name'] == "Tribesmen" && client_rules_flag[CRF_MP2_C])
+      || (ptype['name'] == "Trawler")
       || (ptype['name'] =="Proletarians" && governments[client.conn.playing['government']]['name']=="Communism")) {
 
         worker_type = true;
@@ -1627,6 +1629,7 @@ function update_unit_order_commands()
     const TILECLAIMS    = (typeof EXTRA_TILE_CLAIM !== 'undefined');
     const AIRBASES      = (typeof EXTRA_AIRBASE !== 'undefined');
     const BUOYS         = (typeof EXTRA_BUOY !== 'undefined');
+    const FISHTRAPS     = (typeof EXTRA_FISHTRAP !== 'undefined');
     const RADAR         = (typeof EXTRA_RADAR !== 'undefined');
     const QUAYS         = (typeof EXTRA_QUAY !== 'undefined');
     /* Whether player has tech for the Base. */
@@ -1638,6 +1641,7 @@ function update_unit_order_commands()
     const BUNKER_TECH    = tech_known("Steel");
     const AIRBASE_TECH   = tech_known("Radio");
     const BUOY_TECH      = tech_known("Radio");
+    const FISHTRAP_TECH  = tech_known("Refrigeration");
     const RADAR_TECH     = tech_known("Radar");
     /* Whether the tile has pre-existing bases, which may be reqs or blockers for other bases to be built. */
     const TILE_HAS_HIDEOUT   = HIDEOUTS   && tile_has_extra(ptile,EXTRA_);
@@ -1649,6 +1653,7 @@ function update_unit_order_commands()
     const TILE_HAS_CLAIM     = TILECLAIMS && tile_has_extra(ptile,EXTRA_TILE_CLAIM);
     const TILE_HAS_AIRBASE   = AIRBASES   && tile_has_extra(ptile,EXTRA_AIRBASE);
     const TILE_HAS_BUOY      = BUOYS      && tile_has_extra(ptile,EXTRA_BUOY);
+    const TILE_HAS_FISHTRAP  = FISHTRAPS  && tile_has_extra(ptile,EXTRA_FISHTRAP);
     const TILE_HAS_RADAR     = RADAR      && tile_has_extra(ptile,EXTRA_RADAR);
     //-- Misc reqs: 
     const TILE_HAS_RIVER     = tile_has_extra(ptile,EXTRA_RIVER);
@@ -1669,6 +1674,7 @@ function update_unit_order_commands()
     //const CAN_TILE_CLAIM     = !pcity && !oceanic && TILECLAIMS && !TILE_HAS_CLAIM && (client.conn.playing.playerno==tile_owner(ptile) || 
     const CAN_TILE_AIRBASE   = !pcity && !oceanic && AIRBASES   && !TILE_HAS_AIRBASE && !(TILE_HAS_RIVER && NO_RIVER_BASE);
     const CAN_TILE_BUOY      = !pcity &&  oceanic && BUOYS      && !TILE_HAS_BUOY && !(TILE_HAS_RIVER && NO_RIVER_BASE);
+    const CAN_TILE_FISHTRAP  = !pcity &&  oceanic && FISHTRAPS  && !TILE_HAS_FISHTRAP // this is only a 'half true' qualifier for tile can do fishtrap: further checks done later below
     const CAN_TILE_RADAR     = !pcity && !oceanic && RADAR      && !TILE_HAS_RADAR && TILE_HAS_AIRBASE && !(TILE_HAS_RIVER && NO_RIVER_BASE);
     /* Currently iterating unit is able to build bases on this tile? */
     const UNIT_CAN_HIDEOUT   = CAN_TILE_HIDEOUT   && HIDEOUT_TECH   && utype_has_flag(ptype,UTYF_FOOTSOLDIER);
@@ -1679,6 +1685,7 @@ function update_unit_order_commands()
     const UNIT_CAN_BUNKER    = CAN_TILE_BUNKER    && BUNKER_TECH    && (worker_type || infra_type);
     const UNIT_CAN_AIRBASE   = CAN_TILE_AIRBASE   && AIRBASE_TECH   && (worker_type || infra_type || (ptype['name'] == "Marines" && client_rules_flag[CRF_MARINE_BASES])) && ptype['name'] != "Settlers";
     const UNIT_CAN_BUOY      = CAN_TILE_BUOY      && BUOY_TECH      && (worker_type || infra_type) && ptype['name'] != "Settlers";
+    const UNIT_CAN_FISHTRAP  = CAN_TILE_FISHTRAP  && FISHTRAP_TECH  && (worker_type || infra_type);
     const UNIT_CAN_RADAR     = CAN_TILE_RADAR     && RADAR_TECH     && (worker_type || infra_type) && ptype['name'] != "Settlers";
     // ******************************************************************************************************************* </END Base Logic setup> ***
     if (UNIT_CAN_HIDEOUT) {
@@ -1707,6 +1714,13 @@ function update_unit_order_commands()
       unit_actions["fortress"] = {name: "Lay Buoy (shift-F)"};  $("#order_buoy").show();
     }
     //--
+    if (UNIT_CAN_FISHTRAP) { // half-true prequalifier for ability to fishtrap... check the rest here:
+      if (!is_extra_adjacent(ptile, EXTRA_FISHTRAP, true /* true == cadjacent */)) {
+        if (is_extra_adjacent(ptile, EXTRA_FISH, false /* false == adjacent */)) {
+          unit_actions["fishtrap"] = {name: "Lay Fishtrap (I)"};  $("#order_fishtrap").show();
+        }
+      }      
+    }
     if (UNIT_CAN_NAVALBASE) {
       unit_actions["navalbase"] = {name: "Naval Base (shift-N)"};  $("#order_navalbase").show();
     }
@@ -1759,7 +1773,8 @@ function update_unit_order_commands()
           unit_actions["road"] = {name: "Road (R)"};
         } else $("#order_road").hide();
       }
-    } //---------------------------------------------------------------------------------------------------
+    }
+    //---------------------------------------------------------------------------------------------------
 
 
     // Figure out default of whether pillage is legal and show it, before applying special rules later
@@ -1801,8 +1816,13 @@ function update_unit_order_commands()
 
       if (!tile_has_extra(ptile, EXTRA_ROAD)) {
         if ( !client_rules_flag[CRF_SEABRIDGE] || !tile_has_extra(ptile, EXTRA_SEABRIDGE)) {
-          $("#order_road").show();
-          $("#order_railroad").hide();
+          if (is_ocean_tile(ptile)) {        // an ocean tile with no sea bridge extra or ruleset: can't build roads
+              $("#order_road").hide();
+              $("#order_railroad").hide();
+          } else {
+            $("#order_road").show();
+            $("#order_railroad").hide();
+          }
           if (!(tile_has_extra(ptile, EXTRA_RIVER) && !tech_known('Bridge Building'))) {
             unit_actions["road"] = {name: "Road (R)"};
           }
@@ -2166,6 +2186,25 @@ function update_unit_order_commands()
     Commands not tied to a specific unit:
     Auto-attack, UI modes, jump to last screen focus, etc.
   */
+
+  /* FORCED EXCLUSION RULES */
+  // TRAWLERS, they can't do lots of things that Workers can.
+  if ((client_rules_flag[CRF_MP2_D]) && ptype['name'] == "Trawler") {
+    $("#order_irrigate").hide();        delete unit_actions["irrigation"];
+    $("#order_build_farmland").hide();  // ""
+    $("#order_mine").hide();            delete unit_actions["mine"];
+    $("#order_oil_well").hide();        // "" 
+    $("#order_plant_forest").hide();    // ""
+    $("#order_make_swamp").hide();      // ""
+    $("#order_forest_remove").hide();   delete unit_actions["forest"];
+    $("#order_radar").hide();           delete unit_actions["airbase"];
+    $("#order_airbase").hide()          // "
+    if (unit_actions["fortress"] && unit_actions["fortress"]["name"] != "Lay Buoy (shift-F)") {
+      delete unit_actions["fortress"];
+      $("#order_fortress").hide();        // ""
+    }
+    $("#order_navalbase").hide();         // ""
+  }
 
   var num_tile_units = tile_units(ptile);
   if (num_tile_units != null) {
@@ -4266,6 +4305,10 @@ function handle_context_menu_callback(key)
       key_unit_airbase();
       break;
 
+    case "fishtrap":
+      key_unit_fishtrap();
+      break;
+
     case "transform":
       key_unit_transform();
       break;
@@ -5604,8 +5647,16 @@ function key_unit_irrigate()
   var funits = get_units_in_focus();
   for (var i = 0; i < funits.length; i++) {
     var punit = funits[i];
-    /* EXTRA_NONE -> server decides */
-    request_new_unit_activity(punit, ACTIVITY_IRRIGATE, EXTRA_NONE);
+
+    /* MP2-D onward: "I" for irrigate, when done on ocean tiles, means,
+       to lay a Fishtrap: */
+    if (client_rules_flag[CRF_MP2_D] && is_ocean_tile(unit_tile(punit))) {
+        const punit = funits[i];
+        request_new_unit_activity(punit, ACTIVITY_BASE, EXTRA_FISHTRAP);
+    } else {  // Normal irrigation of land;
+      /* EXTRA_NONE -> server decides */
+      request_new_unit_activity(punit, ACTIVITY_IRRIGATE, EXTRA_NONE);
+    }
     // Focused unit got orders, make sure not on waiting_list now:
     remove_unit_id_from_waiting_list(punit['id']);
   }
@@ -6074,12 +6125,18 @@ function can_build_sea_bridge(punit, ptile)
 **************************************************************************/
 function can_build_maglev(punit, ptile)
 {
+  const seabridge_rules = (typeof EXTRA_SEABRIDGE !== "undefined");
+  
   return ((typeof EXTRA_MAGLEV !== "undefined")
       &&  (punit != null && ptile != null)
       &&  (!tile_has_extra(ptile, EXTRA_MAGLEV))
 
+      && (!client_rules_flag[CRF_MP2_D]  // MP2D on requires road or seabridge under it
+          || (tile_has_extra(ptile, EXTRA_ROAD) || tile_has_extra(ptile, EXTRA_SEABRIDGE))
+         )
+
       && (!is_ocean_tile(ptile) 
-          || (typeof EXTRA_SEABRIDGE !== "undefined" && tile_has_extra(ptile, EXTRA_SEABRIDGE))
+          || (seabridge_rules && tile_has_extra(ptile, EXTRA_SEABRIDGE))
          )
 
       &&  (unit_can_do_action(punit, ACTION_ROAD))
@@ -6135,8 +6192,11 @@ function can_build_canal(punit, ptile)
   // TODO: Deprecate all pre-MP2C logic to simplify to the superior solution
 
   if (typeof EXTRA_CANAL === "undefined") return 0;
+  if (typeof EXTRA_WATERWAY === "undefined") return 0;
+
   if (tile_terrain(ptile) == null) return 0;
-  if (punit == null || ptile == null) return 0; 
+  if (punit == null || ptile == null) return 0;
+  if (is_ocean_tile(ptile)) return 0;
 
   var is_lowland = (tile_terrain(ptile)['name'] != 'Hills'
                    && tile_terrain(ptile)['name'] != 'Mountains');
@@ -6170,6 +6230,7 @@ function can_build_canal(punit, ptile)
   }
 
   if (  !tile_has_extra(ptile, EXTRA_CANAL)
+        && !tile_has_extra(ptile, EXTRA_WATERWAY)
         && unit_can_do_action(punit, ACTION_ROAD)
         && is_lowland
         && water_near
@@ -6364,6 +6425,29 @@ function key_unit_naval_base()
         remove_unit_id_from_waiting_list(punit['id']);
       }
     }},     200);
+  deactivate_goto(false);
+  setTimeout(update_unit_focus, update_focus_delay);
+}
+
+/**************************************************************************
+ Tell the units in focus to build naval base. NOTE: This is not called by
+ a key_unit keypress "I" like other key_unit commands. But it gets called
+ by a context menu click or orders button click. If the "I" key is pressed
+ then key_unit_irrigate does the same code as this if it is on an ocean
+ tile.
+**************************************************************************/
+function key_unit_fishtrap()
+{
+  if (typeof EXTRA_FISHTRAP === "undefined") return;
+
+  var funits = get_units_in_focus();
+
+  for (var i = 0; i < funits.length; i++) {
+    const punit = funits[i];
+    request_new_unit_activity(punit, ACTIVITY_BASE, EXTRA_FISHTRAP);
+    remove_unit_id_from_waiting_list(punit['id']);
+  }
+
   deactivate_goto(false);
   setTimeout(update_unit_focus, update_focus_delay);
 }
