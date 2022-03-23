@@ -202,12 +202,12 @@ some tasks you can work on. Pull requests on Github is welcome!
 Contributors to Freeciv-web
 ---------------------------
 Lexxie9952 [@lexxie9952](https://discordapp.com/users/Lexxie9952)
-Andreas Røsdal  [@andreasrosdal](https://github.com/andreasrosdal)  
-Marko Lindqvist [@cazfi](https://github.com/cazfi)  
-Sveinung Kvilhaugsvik [@kvilhaugsvik](https://github.com/kvilhaugsvik) 
-Máximo Castañeda [@lonemadmax](https://github.com/lonemadmax)  
-Gerik Bonaert [@adaxi](https://github.com/adaxi)  
-and the [Freeciv.org project](http://freeciv.wikia.com/wiki/People)!
+Andreas Røsdal  [@andreasrosdal](https://github.com/andreasrosdal)
+Marko Lindqvist [@cazfi](https://github.com/cazfi)
+Sveinung Kvilhaugsvik [@kvilhaugsvik](https://github.com/kvilhaugsvik)
+Máximo Castañeda [@lonemadmax](https://github.com/lonemadmax)
+Gerik Bonaert [@adaxi](https://github.com/adaxi)
+and the [Freeciv.org project](http://www.freeciv.org/wiki/People)!
 
 About FCW and this repository
 -----------------------------
