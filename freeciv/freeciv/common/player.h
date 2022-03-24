@@ -35,8 +35,8 @@ extern "C" {
 #include "unitlist.h"
 #include "vision.h"
 
-#define PLAYER_DEFAULT_TAX_RATE 0
-#define PLAYER_DEFAULT_SCIENCE_RATE 100
+#define PLAYER_DEFAULT_TAX_RATE 40
+#define PLAYER_DEFAULT_SCIENCE_RATE 60 // NB: Team game setup resulted in Unassigned with 100% sci keeping this illegal rate when assigned to a human. 
 #define PLAYER_DEFAULT_LUXURY_RATE 0
 
 #define ANON_PLAYER_NAME "noname"
