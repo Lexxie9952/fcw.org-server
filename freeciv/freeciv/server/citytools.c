@@ -2298,7 +2298,6 @@ void broadcast_city_info(struct city *pcity)
         update_dumb_city(pplayer, pcity);
         package_dumb_city(pplayer, pcity->tile, &sc_pack);
         lsend_packet_city_short_info(pplayer->connections, &sc_pack);
-      }
     }
   } players_iterate_end;
 
