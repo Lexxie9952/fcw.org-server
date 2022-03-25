@@ -1758,7 +1758,7 @@ actor_reqs    =
       ;...
       "Building",     "Pax Dei",        "World", FALSE
     }
-;-----------------------------------------------------------all AIR__, SEA types
+;-----------------------------------------------------------all AIR__ types
 ;Native attack ALWAYS allowed for units who aren't CargoRestrained
 ;Sea,RiverShip,Trireme,Air,Air_High_Altitude,AirProtect = (!Land__)
 [actionenabler_non_land_attacker_native_unrestrained]
@@ -1781,16 +1781,16 @@ target_reqs =
     { "type",          "name",          "range", "present"
       "Extra",        "Bunker",         "Local", FALSE
     }
-;-----------------------------------------------------------all AIR__, SEA types
+;-----------------------------------------------------------all SEA types
 [actionenabler_non_land_attacker_native_restrained]
 action = "Attack"
 actor_reqs    =
     { "type",         "name",           "range", "present"
       "UnitClassFlag","TerrainSpeed",   "Local", FALSE
-      "UnitClassFlag","CargoRestrained","Local", TRUE      ; <<<<<<<<<< no air sea types are cargorestrained!
+      "UnitClassFlag","CargoRestrained","Local", TRUE  
       "MinMoveFrags", "1",              "Local", TRUE
       "UnitState",    "OnNativeTile",   "Local", TRUE
-      "UnitState",    "Transported",    "Local", FALSE
+      "UnitState",    "Transported",    "Local", FALSE  ; Can't attack while towed on Trawler
       ;...
       "DiplRel",       "War",           "Local", TRUE
       "UnitClassFlag", "Missile",       "Local", FALSE
@@ -1839,6 +1839,27 @@ actor_reqs    =
       ;...
       "Building",      "Pax Dei",          "World", FALSE
     }
+;-----------------------------------------------------------all AIR__ types
+[actionenabler_non_land_attack_from_non_native_unrestrained]
+action = "Attack"
+actor_reqs    =
+    { "type",          "name",             "range", "present"
+      "UnitClassFlag", "TerrainSpeed",     "Local", FALSE
+      "MinMoveFrags",  "1",                "Local", TRUE
+      "UnitClassFlag", "AttFromNonNative", "Local", TRUE
+      "UnitClassFlag","CargoRestrained",   "Local", FALSE
+      ;...
+      "DiplRel",       "War",              "Local", TRUE
+      "UnitClassFlag", "Missile",          "Local", FALSE
+      "UnitFlag",      "CantAttack",       "Local", FALSE
+      "UnitFlag",      "NonMil",           "Local", FALSE
+      ;...
+      "Building",     "Pax Dei",           "World", FALSE
+    }
+target_reqs = 
+    { "type",          "name",             "range", "present"
+      "Extra",        "Bunker",            "Local", FALSE
+    }
 ;-----------------------------------------------------------all AIR__, SEA types
 [actionenabler_non_land_attack_from_non_native]
 action = "Attack"
@@ -1847,6 +1868,8 @@ actor_reqs    =
       "UnitClassFlag", "TerrainSpeed",     "Local", FALSE
       "MinMoveFrags",  "1",                "Local", TRUE
       "UnitClassFlag", "AttFromNonNative", "Local", TRUE
+      "UnitClassFlag", "CargoRestrained",  "Local", TRUE
+      "UnitState",     "Transported",      "Local", FALSE  ; Can't attack while towed on Trawler
       ;...
       "DiplRel",       "War",              "Local", TRUE
       "UnitClassFlag", "Missile",          "Local", FALSE
@@ -1868,7 +1891,7 @@ action = "Attack"
 actor_reqs    =
     { "type",         "name",           "range", "present"
       "UnitFlag",     "NonMilAttack",   "Local", TRUE
-      "UnitClassFlag","CargoRestrained","Local", FALSE
+      "UnitState",    "Transported",    "Local", FALSE  ; Tribesmen aren't Marines, Ships can't attack while towed on Trawler
       "MinMoveFrags", "1",              "Local", TRUE
       "UnitState",    "OnNativeTile",   "Local", TRUE
       ;...
@@ -1887,6 +1910,7 @@ action = "Attack"
 actor_reqs    =
     { "type",          "name",             "range", "present"
       "UnitFlag",      "NonMilAttack",     "Local", TRUE
+      "UnitState",     "Transported",      "Local", FALSE  ; Ships can't attack while towed on Trawler
       "MinMoveFrags",  "1",                "Local", TRUE
       "UnitClassFlag", "AttFromNonNative", "Local", TRUE
       ;...
@@ -3103,6 +3127,22 @@ actor_reqs    =
       "DiplRel", "Peace",      "Local", FALSE
       "DiplRel", "Never met",  "Local", FALSE
     }
+
+;This enabler can replace the one above if/when needed if "russian doll" exploits are discovered which should be stopped.
+;Note: this is currently not illegal. In most cases it makes sense (e.g., Bomber with a Bomb on a Carrier, Trawler towing a
+;ship with Goods, Mobile SAM with loaded missiles can board a Transport, etc.)
+;[actionenabler_board_no_russian_doll_tricks]
+;action        = "Transport Board"
+;actor_reqs    =
+;    { "type",    "name",         "range", "present"
+;      "DiplRel", "Armistice",    "Local", FALSE
+;      "DiplRel", "War",          "Local", FALSE
+;      "DiplRel", "Cease-fire",   "Local", FALSE
+;      "DiplRel", "Peace",        "Local", FALSE
+;      "DiplRel", "Never met",    "Local", FALSE
+;      "UnitType","Trawler",      "Local", FALSE   ; put unit_types here who can't be cargo if they also have cargo
+;      "UnitState","Transporting","Local", FALSE   ; note it should be legal for some cases like towing a ship with cargo
+;    }
 
 ;TO DO: this gives ruleset control over logical requirements for
 ;when units can unload. Finally ruleset could have supreme control
