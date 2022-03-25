@@ -510,7 +510,7 @@ can't be built on ocean (unless SeaBridge.)
 84. New feature, cargo on some types of transports is openly
 visible. Current test case are Wagons and Trawlers.
 ==============================================================
-85.
+85. Battleships get same vision radius as Cruiser. 
 ==============================================================
 86.
 ==============================================================
