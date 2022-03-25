@@ -7837,7 +7837,7 @@ reqs    =
       "Building", "Ecclesiastical Palace", "Local", FALSE
     }
 
-;******************************************************************** MOVE COSTS
+;************************************************************************************ MOVE COSTS
 ;TODO: by having control over embark/board and disembark/deboard,
 ;we can gracefully upgrade mechanics to minimalist nirvana:
 ;[effect_action_success_move_cost_embark]
@@ -7940,6 +7940,172 @@ reqs    =
     { "type", "name", "range", "present"
       "Action", "Expel Unit", "Local", TRUE
     }
+
+;\/ \/ ---------------------- TRAWLERS ---------------------- \/ \/
+;Loaded Trawlers move at 6 instead of 9. Changing state changes
+;speed but is proportional to the % of remaining move points
+;(similar to what happens to move points upgrading Cav to Armor)
+[effect_action_success_tugging_trawler_move_penalty_board_1]
+type    = "Action_Success_Target_Move_Cost"
+value   = 9
+reqs    =
+    { "type",          "name",            "range"
+      "Action",        "Transport Board", "Local"
+      "UnitType",      "Trawler",         "Local"
+      "MinMoveFrags",  "27",              "Local"
+    }
+[effect_action_success_tugging_trawler_move_penalty_board_2]
+type    = "Action_Success_Target_Move_Cost"
+value   = 9
+reqs    =
+    { "type",          "name",            "range"
+      "Action",        "Transport Board", "Local"
+      "UnitType",      "Trawler",         "Local"
+      "MinMoveFrags",  "54",              "Local"
+    }
+[effect_action_success_tugging_trawler_move_penalty_board_3]
+type    = "Action_Success_Target_Move_Cost"
+value   = 9
+reqs    =
+    { "type",          "name",            "range"
+      "Action",        "Transport Board", "Local"
+      "UnitType",      "Trawler",         "Local"
+      "MinMoveFrags",  "81",              "Local"
+    }
+[effect_action_success_tugging_trawler_move_penalty_embark_1]
+type    = "Action_Success_Target_Move_Cost"
+value   = 9
+reqs    =
+    { "type",          "name",             "range"
+      "Action",        "Transport Embark", "Local"
+      "UnitType",      "Trawler",          "Local"
+      "MinMoveFrags",  "18",               "Local"
+    }
+[effect_action_success_tugging_trawler_move_penalty_embark_2]
+type    = "Action_Success_Target_Move_Cost"
+value   = 9
+reqs    =
+    { "type",          "name",             "range"
+      "Action",        "Transport Embark", "Local"
+      "UnitType",      "Trawler",          "Local"
+      "MinMoveFrags",  "36",               "Local"
+    }
+[effect_action_success_tugging_trawler_move_penalty_embark_3]
+type    = "Action_Success_Target_Move_Cost"
+value   = 9
+reqs    =
+    { "type",          "name",             "range"
+      "Action",        "Transport Embark", "Local"
+      "UnitType",      "Trawler",          "Local"
+      "MinMoveFrags",  "54",               "Local"
+    }
+;TODO WHEN IMPLEMENTED: "Transport Load" WILL NEED need Actor_Success_Actor_Move_Cost <<<<<<<<<<<<<<<<<<<<<< **
+;[effect_action_success_tugging_trawler_move_penalty_load]
+;type    = "Action_Success_Target_Move_Cost"
+;value   = 27
+;reqs    =
+;    { "type",          "name",           "range"
+;      "Action",        "Transport Load", "Local"
+;      "UnitType",      "Trawler",        "Local"
+;    }
+;...
+;TODO: Disembark action should should like Deboard and test the transporter
+;as the target in Action_Success_Target_Move_Cost, then a trawler whose
+;cargo disembarks can get the same pro-rated moves back just like for Deboard
+;and unload.
+[effect_action_success_release_tugging_speed_recoup_1]
+type    = "Action_Success_Target_Move_Cost"
+value   = -9 ;returns 1 move if done towing while moves are left
+reqs    =
+    { "type",          "name",              "range"
+      "Action",        "Transport Deboard", "Local"
+      "UnitType",      "Trawler",           "Local"
+      "MinMoveFrags",  "18",                "Local"
+    }
+[effect_action_success_release_tugging_speed_recoup_2]
+type    = "Action_Success_Target_Move_Cost"
+value   = -9 ;returns 1 move if done towing while moves are left
+reqs    =
+    { "type",          "name",              "range"
+      "Action",        "Transport Deboard", "Local"
+      "UnitType",      "Trawler",           "Local"
+      "MinMoveFrags",  "36",                "Local"
+    }
+[effect_action_success_release_tugging_speed_recoup_3]  ;Trawler was loaded but never moved, goes back to 9.
+type    = "Action_Success_Target_Move_Cost"
+value   = -9 ;returns 1 move if done towing while moves are left
+reqs    =
+    { "type",          "name",              "range"
+      "Action",        "Transport Deboard", "Local"
+      "UnitType",      "Trawler",           "Local"
+      "MinMoveFrags",  "54",                "Local"
+    }
+;...
+[effect_action_success_release_tugging_speed_recoup_4]
+type    = "Action_Success_Actor_Move_Cost"
+value   = -9 ;returns 1 move if done towing while moves are left
+reqs    =
+    { "type",          "name",             "range"
+      "Action",        "Transport Unload", "Local"
+      "UnitType",      "Trawler",          "Local"
+      "MinMoveFrags",  "18",               "Local"
+    }
+[effect_action_success_release_tugging_speed_recoup_5]
+type    = "Action_Success_Actor_Move_Cost"
+value   = -9 ;returns 1 move if done towing while moves are left
+reqs    =
+    { "type",          "name",             "range"
+      "Action",        "Transport Unload", "Local"
+      "UnitType",      "Trawler",          "Local"
+      "MinMoveFrags",  "36",               "Local"
+    }
+[effect_action_success_release_tugging_speed_recoup_6]   ;Trawler was loaded but never moved, goes back to 9.
+type    = "Action_Success_Actor_Move_Cost"
+value   = -9 ;returns 1 move if done towing while moves are left
+reqs    =
+    { "type",          "name",             "range"
+      "Action",        "Transport Unload", "Local"
+      "UnitType",      "Trawler",          "Local"
+      "MinMoveFrags",  "54",               "Local"
+    }
+;...
+[effect_tugging_trawler_has_6_moves_at_TC]
+type    = "Move_Bonus"
+value   = -27
+reqs    =
+    { "type",          "name",         "range"
+      "UnitType",      "Trawler",      "Local"
+      "UnitState",     "Transporting", "Local"
+    }
+;...
+;No Double Move Attacks by tugging your warships farther.
+[effect_disembarking_from_trawler_lost_moves]
+type    = "Action_Success_Actor_Move_Cost"
+value   = 65535
+reqs    =
+    { "type",          "name",                "range"
+      "UnitClassFlag", "WaterVessel",         "Local"
+      "Action",        "Transport Disembark", "Local"
+    }
+[effect_deboarding_from_trawler_lost_moves]
+type    = "Action_Success_Actor_Move_Cost"
+value   = 65535
+reqs    =
+    { "type",          "name",              "range"
+      "UnitClassFlag", "WaterVessel",       "Local"
+      "Action",        "Transport Deboard", "Local"
+    }
+[effect_unloading_from_trawler_lost_moves]
+type    = "Action_Success_Target_Move_Cost"
+value   = 65535
+reqs    =
+    { "type",          "name",              "range"
+      "UnitClassFlag", "WaterVessel",       "Local"
+      "Action",        "Transport Unload",  "Local"
+    }
+;OPTIONAL PROBLEM KILLER if the above 3 don't cover all cases: "Transport Board" loses all moves on WaterVessels    
+;/\ /\ ---------------------- TRAWLERS ---------------------- /\ /\
+
 ;******************************************************************** </end MOVE COSTS>
 
 ; The Well-Digger can move 3 before you know Pottery or Alphabet.
