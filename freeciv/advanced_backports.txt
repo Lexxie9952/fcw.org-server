@@ -9,7 +9,7 @@ commits being done by cazfi:
 
 Keep the list sorted by the order they were committed to upstream Freeciv.
 Commit is the commit ID hash in the upstream Freeciv git repository.
-Commit Date is NOT the author date (that GitHub shows) but the date it was committed.
+Commit Date is NOT the author date (that GitHub shows) but the date it was committed << I don't underestand
 Completeness Comment is an explanation of what was changed and/or is missing.
 
 Commit                                   Commit Date         Completeness Comment
@@ -19,24 +19,25 @@ a623e13f5ac5a539c6b90afacc667f4266ceae2e 2020-02-12 14:13:16 Unchanged and compl
 46f22c251d36539d5059bd1876a46dbb024cc9ab 2020-02-18 00:00:05 Unchanged and complete
 4b29d6320d8f12337a2f25dc0a99eb6b79e6d4ef 2020-02-22 23:51:23 Unchanged and complete
 5c49fa4b0c6ac84b74d6adef10d49a777f5dd410 2020-02-25 16:45:31 Unchanged and complete
+d9c010701fda075d083aea600adade73cef45020 2020-04-13          Unchanged and complete "Fix division by zero when transforming unit with zero move_rate"
 c67cb82f51ef5034cc361738ab8ae74946374262 2020-06-13 11:43:44 Unchanged and complete
 5f5aad1b8cc6d2fea720e260f8c47944b696f32e 2020-06-13 11:43:44 Unchanged and complete
-d8a54ddb6a5ac083c400411a3dd456267d0ac17f 2021-05-13          Adjusted, but complete
-cedd5f7a5af8a10445f01b09bd91794e0126101d 2021-07-04 09:41:02 Unchanged and complete
-487302f4292c25f781e28d1ca7ff8c6b1e108e54 2021-09-28          Unchanged and complete   "Allow moving CoastStrict unit to ocean city, or city in 1x1 island"
-8ba9f30e04b06a162ffb7d9a487ca478080a443c 2021-11-27          Unchanged and complete   "Lua: Add Player:give_bulbs() method"
-91c7b0deb6db7af4e11bf5a446521aa3b58bd6e2 2021-07-02          identity_number can go > 64k
-1673a1244ebd084fa288c66da661b36bfa70964e 2021-12-11	         Lua: Add government information to Player object
 9cf91898a7fb1a1f048539ee15791d41d56070f3 2021-04-10  	       Unchanged and complete: Wait until city is in sane state before sending info packets
    Hoped this would fix cityturn.c lines 967 and 1126 constantly throwing
    1: in city_increase_size() [../../freeciv/server/cityturn.c::1126]: assertion 'pcity->server.needs_arrange == CNA_NOT' failed.
    ...But it did not.
    + 9ffc624fd11f02acbec27f42df921cf796ccbe99 "Fix send_city_info_at_tile() crash when the tile has no city"
+d8a54ddb6a5ac083c400411a3dd456267d0ac17f 2021-05-13          Adjusted, but complete
+91c7b0deb6db7af4e11bf5a446521aa3b58bd6e2 2021-07-02          identity_number can go > 64k
+cedd5f7a5af8a10445f01b09bd91794e0126101d 2021-07-04 09:41:02 Unchanged and complete
+487302f4292c25f781e28d1ca7ff8c6b1e108e54 2021-09-28          Unchanged and complete   "Allow moving CoastStrict unit to ocean city, or city in 1x1 island"
 aacd4ab7b4e3d28b67eb77eb243054a722fa13c8 2021-10-05 ?        Adjusted and complete    "Free rally point when the city is destroyed."
                                                              (also sets dest_tile to -1 flag; FCW uses dest_tile so client can report coordinates of rally points.)
-3799001c7630b926ea1cc1693c2958077f082ea8 2021-10-19          Unchanged and complete   "Clear rally point on city transfer"
 3f4d25ff3019e252f377c123ed4464276c476d30 2021-10-12          Unchanged and complete: Fix revealing trade partner to destination owner when trade route established
 aa5cc416df38aa7baa8ae113f0b7ed4eb9f5dcd6 2021-10-17          Unchanged and complete: Lua: Add Tile:show() and Tile:hide() methods
+3799001c7630b926ea1cc1693c2958077f082ea8 2021-10-19          Unchanged and complete   "Clear rally point on city transfer"
 569d5e61ef026a887f4c2667fddf75fea7f09b3b 2021-10-21          Unchanged and complete: default.lua: Add a chance that a map is found from a hut
+8ba9f30e04b06a162ffb7d9a487ca478080a443c 2021-11-27          Unchanged and complete   "Lua: Add Player:give_bulbs() method"
+1673a1244ebd084fa288c66da661b36bfa70964e 2021-12-11	         Lua: Add government information to Player object
 https://osdn.net/projects/freeciv/ticket/44158#preview ...
-...                                      2022-03-23          No upstream commit yet, implements S3_1 patch available on OSDN
+...                                      2022-03-23          No upstream commit yet, implements S3_1 patch available on OSDN - broadcast_city_info to proper pplayers not powner
