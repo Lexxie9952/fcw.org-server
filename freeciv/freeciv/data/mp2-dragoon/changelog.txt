@@ -485,7 +485,7 @@ command causes to Deboard or Board. This is a "balanced
 compromise" to (1) reducing "double move" phenomena using
 mulitple load/unload on multiple transports, while (2) at same
 time not excessively slowing the longturn pace and aggravating
-the already cumbersome, slow, and costly transport logistics.
+the already cumbersome transport logistics.
 ==============================================================
 79. Techleak, when tallying the total number of players vs.
 the number of players having a tech: doesn't count dead
@@ -498,15 +498,23 @@ can't be built on ocean (unless SeaBridge.)
 ==============================================================
 82. Copernicus costs 90 (was 100).
 ==============================================================
-81.
+83. Trawlers are work-boats that can do Fishtraps, Buoys,
+ Roads, Quays, Canals, Sea Bridges, & clean pollution/fallout.
+ Trawlers can carry one Land unit, usually Engineers or 
+ Workers, to expedite their water work. Trawlers can tow ships 
+ at a reduced rate of -3 move points. Towing gets damaged
+ ships back to port for repair and helps crew repair rates 
+ if the damaged is resting while towed. If a Trawler stops
+ towing it recovers pro-rated move points.
 ==============================================================
-81.
+84. New feature, cargo on some types of transports is openly
+visible. Current test case are Wagons and Trawlers.
 ==============================================================
-81.
+85.
 ==============================================================
-81.
+86.
 ==============================================================
-81.
+87.
 ==============================================================
-81.
+88.
 
