@@ -46,7 +46,7 @@ flags =
     _("Helicopter"), _("Loses 1hp for every turn in the air.\n\
 ➤ Gets +1 move point if starting its turn in a City or Airbase.")
     _("Submarine"), _("Attack value reduced against some ships.")
-    _("Unbribable"), _("Can't be bribed.")
+    _("Unbribable"), _("Can’t be bribed.")
     _("TradeRoute"), _("Can establish a foreign trade route (must travel to target city).")
     _("HelpWonder"), _("Can help build a Wonder in any non-hostile city.")
     _("Capturer"),   _("Can capture some enemy units.")
@@ -66,11 +66,11 @@ flags =
     _("FortBuster"), _("Defending Forts get no bonus. +33% attack bonus vs. the 2× defense of a Fortress.")
     _("FortressBuster"), _("Defending Fortresses get no bonus.")
     _("AntiAir"), _("Anti-Air bonus of this unit is less effective against Stealth, which has a 25% bonus against this unit.")
-;;;   _("NeverBlocked"), _("Bypasses unreachable units when attacking a tile.")   ; UNCOMMENT THIS IF NOT USING LEXXIE'S PATCH FOR THIS FLAG
-;;;    _("MultiSlot"), _("Cities with proper requirements can produce more than one of these per turn.") ;uncomment if you don't have slot_control patch
+;;;   _("NeverBlocked"), _("Bypasses unreachable units when attacking a tile.")   ; UNCOMMENT THIS IF NOT USING LEXXIE’s PATCH FOR THIS FLAG
+;;;    _("MultiSlot"), _("Cities with proper requirements can produce more than one of these per turn.") ;uncomment if you don’t have slot_control patch
     _("CanHide"), _("In appropriate terrain, this unit can make a Hideout, which will conceal all land units on the tile.")
     _("WillNever")
-;;;    _("TransportDefender"), _("Can defend while transported on non-native tiles.") ;uncomment if you don't have TransportDefender patch
+;;;    _("TransportDefender"), _("Can defend while transported on non-native tiles.") ;uncomment if you don’t have TransportDefender patch
     _("NonMilAttack"), _("Has military capacity but for peaceful purposes, can enter territories with whom you are at Peace")
     _("Cant_Pillage"), _("Unable to pillage tiles.")
     _("CanClaim"), _("Is able to claim sovereignty of foreign tiles bordering domestic territory.")
@@ -91,7 +91,7 @@ class_flags =
     _("CanPillage")
     _("Airliftable"), _("Can be airlifted if it has remaining moves.")
     _("BorderPolice"), _("Military units from this class can peacefully expel certain foreign units.")
-    _("CargoRestrained"), _("Can't attack as Cargo. Must first unload.")
+    _("CargoRestrained"), _("Can’t attack as Cargo. Must first deboard or disembark.")
     _("WaterVessel")
   }
 
@@ -272,7 +272,8 @@ helptext      = _("\
 name          = _("?unitclass:Sea")
 min_speed     = 4
 hp_loss_pct   = 0
-flags         = "DamageSlows", "AttackNonNative", "AttFromNonNative", "CanPillage", "WaterVessel"
+flags         = "DamageSlows", "AttackNonNative", "AttFromNonNative", "CanPillage", "WaterVessel",
+                "CargoRestrained" ;can't attack while being towed by Trawler
 helptext      = _("\
   • Crew Repair：each turn, regardless of movement, recovers 8% of its hit points (rounded down).\
 ")
@@ -284,7 +285,8 @@ helptext      = _("\
 name          = _("?unitclass:Submarine")
 min_speed     = 5
 hp_loss_pct   = 0
-flags         = "DamageSlows", "AttackNonNative", "AttFromNonNative", "CanPillage", "Unreachable", "WaterVessel"
+flags         = "DamageSlows", "AttackNonNative", "AttFromNonNative", "CanPillage", "Unreachable", "WaterVessel",
+                "CargoRestrained" ;can't attack while being towed by Trawler
 helptext      = _("\
   • Visibility bonus：not visible to other players unless they have a unit or city adjacent to it.\n\
   • Crew Repair：each turn, regardless of movement, recovers 2 hit points.\
@@ -294,14 +296,16 @@ helptext      = _("\
 name          = _("?unitclass:Trireme")
 min_speed     = 3
 hp_loss_pct   = 0
-flags         = "DamageSlows", "AttFromNonNative", "WaterVessel"
+flags         = "DamageSlows", "AttFromNonNative", "WaterVessel",
+                "CargoRestrained" ;can't attack while being towed by Trawler
 
 [unitclass_rivership]
 ; /* Extra class providing ability to travel rivers */
 name          = _("?unitclass:RiverShip")
 min_speed     = 3
 hp_loss_pct   = 0
-flags         = "DamageSlows", "AttackNonNative", "AttFromNonNative", "WaterVessel"
+flags         = "DamageSlows", "AttackNonNative", "AttFromNonNative", "WaterVessel",
+                "CargoRestrained" ;can't attack while being towed by Trawler
 
 [unitclass_heli]
 name          = _("?unitclass:Helicopter")
@@ -424,9 +428,9 @@ flags         = "Unreachable", "DoesntOccupyTile"
 ;                 refuel point
 ; uk_*          = upkeep costs, these are used as base values in the game
 ; cargo         = Unit classes this unit can transport
-; city_slots    = How many of homecity's unit maintenance slots unit takes
+; city_slots    = How many of homecity’s unit maintenance slots unit takes
 ; city_size     = UNUSED in MP rulesets in its original form, so now it is used
-;                 for bit-field for additional flags that won't break save game
+;                 for bit-field for additional flags that won’t break save game
 ;                 compatibility.
 ;                 BIT 0 = RESERVED for +1 bombard range.
 ;                 BIT 1 =      bombard_stay_fortified, attacks do not lose fortified status. 
@@ -450,9 +454,9 @@ flags         = "Unreachable", "DoesntOccupyTile"
 ; bonuses.flag  = flag of the unit that bonus applies against
 ; bonuses.type  = type of the bonus. See below
 ; bonuses.value = value of the bonus. Sum of these is used if multiple apply.
-; bonuses.quiet = don't auto generate help text for this bonus. Use this if
-;                 the bonus is documented in the unit type's help text.
-;                 This is useful when the combination of a unit's bonuses
+; bonuses.quiet = don’t auto generate help text for this bonus. Use this if
+;                 the bonus is documented in the unit type’s help text.
+;                 This is useful when the combination of a unit’s bonuses
 ;                 becomes complex enough to make the auto generated help
 ;                 ugly or inaccurate.
 ; flags         = special flag strings; list of built-in flags described below
@@ -511,7 +515,7 @@ flags         = "Unreachable", "DoesntOccupyTile"
 ;                 less
 ; "OneAttack"	  = can only make a single attack, regardless of movement points
 ; "FieldUnit"	  = cause unhappiness even when not being aggressive
-; "BeachLander" = won't lose all its movement when moving from non-native
+; "BeachLander" = won’t lose all its movement when moving from non-native
 ;                 terrain to native terrain even if slow_invasions is on.
 ; "Settlers"	  = "can irrigate and build roads" but really seems to be a required flag for 
 ;                 any tile improvement at all.
@@ -553,7 +557,7 @@ flags         = "Unreachable", "DoesntOccupyTile"
 ;		              and firepower of attacker is doubled (the Pearl Harbour rule)
 ; "BarbarianOnly" = only barbarians can build this unit
 ; "Shield2Gold" = Switch from shield upkeep to gold upkeep possible.
-; "NewCityGamesOnly" = unit can't be built on scenarios where founding new cities
+; "NewCityGamesOnly" = unit can’t be built on scenarios where founding new cities
 ;                 is not allowed. Give this flag to units that would make no sense
 ;                 to have in a game with such a scenario
 ; "CanEscape"   = this unit has, given that certain conditions are
@@ -561,7 +565,7 @@ flags         = "Unreachable", "DoesntOccupyTile"
 ;                 killed when killstack is enabled and the defender of its
 ;                 tile is defeated. The conditions are that it has more move
 ;                 points than required to move to an adjacent tile plus the
-;                 attackers move points and that the attacker doesn't have
+;                 attackers move points and that the attacker doesn’t have
 ;                 the "CanKillEscaping" unit type flag.
 ; "CanKillEscaping" = an attack from this unit ignores the "CanEscape" unit
 ;                 type flag.
@@ -572,10 +576,10 @@ flags         = "Unreachable", "DoesntOccupyTile"
 ;                 do so even if has better odds when defending against it
 ;                 then when attacking it. Applies when the autoattack server
 ;                 setting is enabled.
-; "NeverProtects" = doesn't protect reachable units on its tile from enemy
+; "NeverProtects" = doesn’t protect reachable units on its tile from enemy
 ;                 attackers, even if the unreachableprotects server setting
 ;                 is enabled and the unit class is unreachable
-; "NeverBlocked" = isn't blocked by unreachable units on targeted tile,
+; "NeverBlocked" = isn’t blocked by unreachable units on targeted tile,
 ;                  even if the unreachableprotects server setting
 ;                  is enabled and the unit class is unreachable
 ; "MultiSlot"    = if server setting slot_control is ON, only unit types with this
@@ -583,7 +587,7 @@ flags         = "Unreachable", "DoesntOccupyTile"
 ; "TransportDefender" = Unit can always defend while transported, even on non-native
 ;                  terrain.
 ; "SentryAlways" = This unit always reports sentry-type information; give this flag to 
-;                  reconnaissance/scouting type units who can't sentry because they are 
+;                  reconnaissance/scouting type units who can’t sentry because they are 
 ;                  fuel-type units (which can only sentry on refueling tiles.)
 ; "Reserved1"
 ; "Reserved2"
@@ -855,7 +859,7 @@ This unit can fix unlucky starts, but has very high upkeep.\
  -2 Food -2 Prod. This unit WILL NOT WORK：• Outside your borders,\
  • After Alphabet or Pottery, • After any player discovers Writing,\
  • After it reaches an age of 10 turns.\
- >> Don't fool around：high upkeep will permanently hinder you. Only make this unit if you\
+ >> Don’t fool around：high upkeep will permanently hinder you. Only make this unit if you\
  lack water when the game starts!\
 ")
 
@@ -1495,7 +1499,7 @@ Falconets are huge and heavy. They have woeful accuracy but lethal\
  firepower：they either kill or totally miss. On paper, attack odds\
  are closest to a Musketeer (A3). Yet there is a high chance of losing\
  when you expect to win, or winning when you expect to lose. The outcome\
- is in God's hands! Falconeers defend a bit worse than they attack. \n\
+ is in God’s hands! Falconeers defend a bit worse than they attack. \n\
 Righteous faith is needed to fight with slow heavy inaccurate weaponry:\
  only Theocracies can train Falconeers. Other governments will incur\
  high upkeep or see them retire.\
@@ -2256,7 +2260,7 @@ helptext      = _("\
 Catapults are rock-throwing war machines. Massive stones diminish\
  the defense bonus of City Walls by -25%, down to 1.75×. \n\
 "), _("
-If they haven't moved, Catapults can do 4 rounds of Bombardment\
+If they haven’t moved, Catapults can do 4 rounds of Bombardment\
  on a single unit, which may possibly be killed. When special\
  attacked from range or rammed in a Fortress, they can retaliate\
  with the same type of Bombardment. \n\  
@@ -2347,24 +2351,24 @@ bonuses       =
    }
 roles         = ""
 helptext      = _("\
-Ballistae fire massive bolts through enemy formations. They can\
- do this from any time to any tile.\
- Slow reload prevents them from doing conventional attacks.\
- Ballistae do 5 rounds of Ranged Attack on two units without\
- retaliation. Accuracy is poor (A1). Damage is 5× more than normal.\
- To do Ranged Attack, Ballistae must have used no move points.\n\n\
-Ballistae defend at (D1) with an 80% defense penalty vs.\
- foot soliders and mounted units. However, the defensive role\
- gives Ballistae the chance to reload and fire until one of the combatants\
- dies in conventional combat.\n\n\
-Baliistae are capable of Special Unit Defense against ranged attacks. They retaliate\
- with their own ranged attack.\n\n\  
-A Ballista's best offensive role is to soften forts and fortified positions.\
- Defensively, they deter attacks from catapults and special attacks from ranged\
- units. Ballistae can do ranged attacks from and on sea units.\
+Ballistae don’t conventionally attack. Ranged Attack fires\
+ massive bolts through enemy formations for 5 rounds,\
+ targeting up to 2 units who can’t conventionally retaliate.\
+ This may also target Ocean tiles. They must have all their\
+ move points to do attack, and can't target Fortresses\
+ or Cities. Though they only have A1 accuracy, 5FP causes 5× damage. \n\
+"), _("
+When conventionally defending against foot and mounted units,\
+ Ballistae defend at 20% defense strength (0.2). This roughly cancels\
+ the 5× damage, making them like a D1 defender. However, a lucky hit\
+ or strong defensive terrain can reveal the 5FP as very effective.\
+ Against other attackers, the 5× damage is a deadly deterrent. \n\ 
+"), _("
+Ballistae excel at degrading forts and well-fortified tiles. Defensively,\
+ they are capable of Special Unit Defense, reciprocating against ranged\
+ attacks with their own retaliatory attack. \n\
 ")
 bombard_rate = 5
-
 
 [unit_cannon]
 name          = _("Cannon")
@@ -2403,7 +2407,7 @@ Cannons are guns that fire massive metallic projectiles faster and\
  more accurately than earlier ballistic weapons. This reduces the\
  defense bonuses of City Walls in half, down to 1.5×. \n\
 "), _("
-If they haven't moved, Cannons can do 5 rounds of Bombardment\
+If they haven’t moved, Cannons can do 5 rounds of Bombardment\
  on two units, with one possible fatality. When special attacked\
  from range or rammed in a Fortress, they can retaliate with the\
  same type of Bombardment.\
@@ -2448,7 +2452,7 @@ Artillery are a major upgrade to Cannons, with doubled firepower. Accuracy\
  against City Walls than their predecessors. The bonus of City Walls\
  is reduced -75% down to 1.25×. \n\
 "), _("
-If they haven't moved, Artillery can do 6 rounds of Bombardment\
+If they haven’t moved, Artillery can do 6 rounds of Bombardment\
  on three units, with one possible fatality. When special attacked\
  from range, they can retaliate with the same type of Bombardment.\
 ")
@@ -2589,7 +2593,7 @@ helptext      = _("\
 Howitzers are upgraded Artillery with a terrifying increase to mobility and attack\
  strength. City Walls are completely ineffective against Howitzers. \n\
 "), _("
-If they haven't moved, Howitzers can do 7 rounds of Bombardment\
+If they haven’t moved, Howitzers can do 7 rounds of Bombardment\
  on four units, with one possible fatality. When special attacked\
  from range, they can retaliate with the same type of Bombardment.\
  This is a strong deterrent.\
@@ -2792,7 +2796,7 @@ helptext      = _("\
 Fighters are the first offensive Air units. Their superior mobility and firepower alter the\
  very nature of warfare. They can move anywhere and attack any unit except Submarines, Jet\
  Bombers, Spy Planes, and Satellites. Fighters need fuel to avoid crashing and thus must end\
- every turn in a city, Airbase, or Carrier. Air units can't conquer undefended enemy cities.\n\
+ every turn in a city, Airbase, or Carrier. Air units can’t conquer undefended enemy cities.\n\
 "), _("
 INTERCEPTOR：the Vigil order lets Fighters auto-attack adjacent Air units if they\
  have better attack odds. A Fighter can Vigil if it uses 2 move points or less. \n\
@@ -4575,7 +4579,7 @@ defense       = 12
 hitpoints     = 40
 firepower     = 2
 move_rate     = 11
-vision_radius_sq = 12
+vision_radius_sq = 13
 transport_cap = 0
 fuel          = 0
 city_size     = 3252       ; 000000,001,100,101101,00 = atk_bonus=0, max_kills=1, targets=4, move_cost=45 frags, stay_fortfy=0, reserved = 0
@@ -5348,7 +5352,7 @@ roles         = ""
 helptext      = _("\
 The Truck replaces the Caravan as the basic Commerce unit on Land. It moves at\
  more than twice the speed; but is restricted to the same roads and flatland\
- tiles as Wagons, and can't use rails. Each Truck used to build a Wonder\
+ tiles as Wagons, and can’t use rails. Each Truck used to build a Wonder\
  will add 50 shields. See the entry on Caravan to read what Commerce units may do. \n\
 "), _("\
 Trucks allow units with less than 3 move points to travel your roads faster: Like\
@@ -5515,7 +5519,8 @@ uk_happy      = 0
 uk_shield     = 0
 uk_food       = 0
 uk_gold       = 0
-cargo         = "Land", "LandNoKill", "LandAirSea", "Cargo"
+cargo         = "Land", "LandNoKill", "LandAirSea", "LandRoad", "Cargo", 
+                "RiverShip", "Sea", "Submarine", "Trireme"
 flags         = "Settlers", "Infra", "CanRoad", "CanFortress", "Cant_Pillage", "NonMil",
                 "HasNoZOC", "NoVeteran", "Capturable", "Expellable", "BadCityDefender",
                 "Airbase" ;for buoys
@@ -5527,12 +5532,20 @@ veteran_power_fact = 100
 veteran_move_bonus = 63
 roles         = ""
 helptext      = _("\
-Trawlers are multi-purpose powered boats. They are used for fishing and water work.\
- At sea, a Trawler can put down Fishtraps, Buoys, Sea Bridges, and Rails over\
-  Sea Bridges. On rivers they clean Pollution and Fallout; and build Quays,\
-  Canals, and Bridges. Trawlers can be captured or expelled on rivers.\n\n\
-Trawlers can only carry one unit. This may be less threatening for approaching\
- foreign coastal waters.\
+Trawlers are high-powered work-boats. They are used for fishing and water work.\
+ Trawlers work at the same rate as Workers. At sea, a Trawler can put down Fishtraps,\
+ Buoys, Sea Bridges, and Rails over Sea Bridges. On rivers they can build Roads, Quays,\
+ Canals, and clean Pollution or Fallout. Trawlers on rivers can be captured or expelled\
+ by land units capable of doing so. Trawlers can carry one Land unit. \n\n\
+Trawlers can tow ships via Load (l), Board (B), or Embark orders. Towing is useful for\
+ getting damaged ships in distant waters back to port for repair. Crew repair rates for\
+ towed ships are double on turns where towed ships rest in tow. \n\n\
+When towing, encumbrance slows Trawler speed to 6 move points. Towing at any time during\
+ a turn reduces the remaining move points proportional to the slower speed. If a Trawler\
+ stops towing a ship via Unload (t) or Deboard (T), the Trawler recoups pro-rated move\
+ points proportional to its faster unencumbered speed. \n\n\
+Towed ships lose all move points after release from towing, nullifying any repair\
+ bonus from resting.\
 ")
 
 [unit_leader]
