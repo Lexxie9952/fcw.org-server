@@ -507,7 +507,7 @@ static void do_upgrade_effects(struct player *pplayer)
 
     transform_unit(punit, type_to, TRUE);
     notify_player(pplayer, unit_tile(punit), E_UNIT_UPGRADED, ftc_server,
-                  _("[`ribbon`] %s %s upgraded for free to %s %s."),
+                  _("[`ribbon`] %s %s upgraded for free to %s %s"),
                   old_unit_emoji, utype_name_translation(type_from),
                   unit_link(punit), UNIT_EMOJI(punit));
     unit_list_remove(candidates, punit);
@@ -929,7 +929,7 @@ static void unit_convert(struct unit *punit)
     transform_unit(punit, to_type, TRUE);
     notify_player(unit_owner(punit), unit_tile(punit),
                   E_UNIT_UPGRADED, ftc_server,
-                  _("[`recycle`] %s converted to %s %s."),
+                  _("[`recycle`] %s converted to %s %s"),
                   utype_name_translation(from_type),
                   utype_name_translation(to_type), UNIT_EMOJI(punit));
   } else {
@@ -1668,7 +1668,8 @@ void bounce_unit(struct unit *punit, bool verbose)
   if (count == 0) {
     square_iterate(&(wld.map), punit_tile, DIST, ptile) {
       if (count >= ARRAY_SIZE(tiles)) break;
-      if (ptile == punit_tile) continue;
+      if (
+        ptile == punit_tile) continue;
       if (can_unit_exist_at_tile(&(wld.map), punit, ptile)
           && !is_non_allied_city_tile(ptile, pplayer)
           && !is_non_allied_unit_tile(ptile, pplayer)) {
@@ -1683,7 +1684,7 @@ void bounce_unit(struct unit *punit, bool verbose)
     if (verbose) {
       notify_player(pplayer, ptile, E_UNIT_RELOCATED, ftc_server,
                     /* TRANS: A unit is moved to resolve stack conflicts. */
-                    _("Moved your %s %s."),
+                    _("Moved your %s %s"),
                     unit_link(punit), UNIT_EMOJI(punit));
     }
     /* TODO: should a unit be able to bounce to a transport like is done
@@ -1707,7 +1708,7 @@ void bounce_unit(struct unit *punit, bool verbose)
   if (verbose) {
     notify_player(pplayer, punit_tile, E_UNIT_LOST_MISC, ftc_server,
                   /* TRANS: A unit is disbanded to resolve stack conflicts. */
-                  _("[`warning`] Disbanded your %s %s."),
+                  _("[`warning`] Disbanded your %s %s"),
                   unit_tile_link(punit), UNIT_EMOJI(punit));
   }
   wipe_unit(punit, ULR_STACK_CONFLICT, NULL);
