@@ -1950,6 +1950,9 @@ void transform_unit(struct unit *punit, const struct unit_type *to_unit,
   const struct unit_type *old_type = punit->utype;
   int old_mr = unit_move_rate(punit);
   int old_hp = unit_type_get(punit)->hp;
+  int old_fu = utype_fuel(old_type),
+      new_fu = utype_fuel(to_unit),
+      cur_fu = punit->fuel;
 
   if (!is_free) {
     pplayer->economic.gold -=
@@ -1979,6 +1982,12 @@ void transform_unit(struct unit *punit, const struct unit_type *to_unit,
   } else {
     punit->moves_left = punit->moves_left * unit_move_rate(punit) / old_mr;
   }
+  /* Scale Fuel. Avoid "unfair" death by covering every case in the logic tree:    
+   * CASE 1. Old type has no fuel? Fill up with 100% fuel.  ==(Don't start with no fuel)
+   * CASE 2. New type has more fuel? Add the difference.    ==(Same amount of burnt fuel)
+   * CASE 3: New type has less fuel? Keep max.legal amount. ==(Avoid unfair death) */ 
+  punit->fuel
+    = (!old_fu) ? new_fu : MAX(cur_fu + (new_fu - old_fu), MIN(cur_fu, new_fu));
 
   unit_forget_last_activity(punit);
 
