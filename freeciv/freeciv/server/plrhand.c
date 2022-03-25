@@ -271,7 +271,10 @@ static int get_player_maxrate(struct player *pplayer)
   int maxrate = get_player_bonus(pplayer, EFT_MAX_RATES);
 
   if (maxrate == 0) {
-    return 100; /* effects not initialized yet */
+    /* 25.3.2020: hacky fix for lt players getting 100 sci,
+       this shouldn't matter because 60 is just as arbitrary
+       as 100 */
+    return 60; /* effects not initialized yet */
   }
 
   /* 34 + 33 + 33 = 100 */
