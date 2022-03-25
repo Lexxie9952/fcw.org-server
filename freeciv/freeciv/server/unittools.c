@@ -1647,6 +1647,7 @@ void bounce_unit(struct unit *punit, bool verbose)
   pplayer = unit_owner(punit);
   punit_tile = unit_tile(punit);
 
+  /* First preference, bounce to a tile unit can survive */
   square_iterate(&(wld.map), punit_tile, DIST, ptile) {
     if (count >= ARRAY_SIZE(tiles)) {
       break;
@@ -1662,6 +1663,19 @@ void bounce_unit(struct unit *punit, bool verbose)
       tiles[count++] = ptile;
     }
   } square_iterate_end;
+  /* Second preference, bounce to a tile where unit can exist 
+   * i.e., might lose fuel or helicopter hp */
+  if (count == 0) {
+    square_iterate(&(wld.map), punit_tile, DIST, ptile) {
+      if (count >= ARRAY_SIZE(tiles)) break;
+      if (ptile == punit_tile) continue;
+      if (can_unit_exist_at_tile(&(wld.map), punit, ptile)
+          && !is_non_allied_city_tile(ptile, pplayer)
+          && !is_non_allied_unit_tile(ptile, pplayer)) {
+        tiles[count++] = ptile;
+      }
+    } square_iterate_end;
+  }
 
   if (count > 0) {
     struct tile *ptile = tiles[fc_rand(count)];
