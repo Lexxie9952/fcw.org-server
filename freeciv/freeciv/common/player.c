@@ -1016,9 +1016,19 @@ bool can_player_see_unit_at(const struct player *pplayer,
    * isn't taken into account. */
   if (is_transported && unit_owner(punit) != pplayer
       && !pplayers_allied(pplayer, unit_owner(punit))) {
+#ifdef FREECIV_WEB
+    /* TODO: is_cargo_visible based on EFT or just a new var in unit_type */
+    // currently, ugly hack waiting for the above:
+    const struct unit *tunit = unit_transport_get(punit);
+    // possible add later: Galley, Trireme, Longboat, Carrier (planes on deck)
+    if (0 == strncmp("Wagon", utype_rule_name(unit_type_get(tunit)), 5)
+     || 0 == strncmp("Trawler", utype_rule_name(unit_type_get(tunit)), 7)) {
+       goto next_check;
+     }
+#endif
     return FALSE;
   }
-
+next_check:
   /* Units in cities may be hidden. */
   pcity = tile_city(ptile);
   if (pcity && !can_player_see_units_in_city(pplayer, pcity)) {
