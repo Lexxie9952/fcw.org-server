@@ -144,7 +144,7 @@ void do_longturn_tech_latejoiner_effect(struct player *pplayer)
 **************************************************************************/
 void attach_longturn_player(struct connection *pc, struct player *pplayer)
 {
-    set_as_human(pplayer);
+    player_set_under_human_control(pplayer);
 
     pplayer->economic.gold += game.info.turn * game.server.latejoin_gold; 
     if (pplayer->economic.gold > game.server.latejoin_gold_max) { 
