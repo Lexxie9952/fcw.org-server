@@ -3807,7 +3807,7 @@ function update_city_screen()
             break;
           case CURV_POLLUTION:
             city_user = "<td class='non_priority' style='text-align:right; padding-right:32px' onclick='javascript:change_city_user_row(" + pcity['id'] + ");'>"
-              + "<span style='color:#A73'>" + (pcity['pollution']<1 ? " " : pcity['pollution']) +"</span>" +  "</td>";
+              + "<span style='color:#A73'>" + (pcity['pollution']<1 ? " " : pcity['pollution']) +"%</span>" +  "</td>";
             break;
           case CURV_TRADE_REVENUE:
             const rev = get_city_traderoute_revenue(pcity['id']);
