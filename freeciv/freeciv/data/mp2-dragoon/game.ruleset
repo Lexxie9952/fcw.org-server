@@ -747,6 +747,7 @@ actor_reqs    =
     { "type",         "name",          "range", "present"
       "UnitFlag",     "Diplomat",      "Local", TRUE
       "UnitType",     "Emissary",      "Local", FALSE
+      "UnitType",     "Spy",           "Local", FALSE
       "UnitType",     "Siege Ram",     "Local", FALSE
       "UnitState",    "OnLivableTile", "Local", TRUE
       "UnitState",    "Transported",   "Local", FALSE
@@ -765,6 +766,7 @@ actor_reqs    =
     { "type",         "name",          "range", "present"
       "UnitFlag",     "Diplomat",      "Local", TRUE
       "UnitType",     "Emissary",      "Local", FALSE
+      "UnitType",     "Spy",           "Local", FALSE
       "UnitType",     "Siege Ram",     "Local", FALSE
       "UnitState",    "OnLivableTile", "Local", TRUE
       "UnitState",    "Transported",   "Local", FALSE
