@@ -3956,15 +3956,20 @@ static bool unit_survive_autoattack(struct unit *punit)
   if (!game.server.autoattack) {
     return TRUE;
   }
-  /* AA_PROVOKED_ONLY: only attack Provoking units with non-sentried units --
-    Lets ruleset use will_never and "Provoking" to exactly specify autoattack
-    only for much needed cases like Fighters intercepting Air attackers. Also
-    allows player to tactically OPT OUT of autoattack, by using sentry. */
+  /* AA_PROVOKED_ONLY: only attack Provoking units with vigiling units --
+   * Lets ruleset use will_never and "Provoking" to exactly specify autoattack
+   * only for special cases like Fighters intercepting Air attackers.
+   * Allows player to tactically OPT IN to autoattack, by using vigil.
+
+  NOTE: Since non-Provoking units can be attacked by units with UTYF_RESERVED1,
+  this check is now down farther below.
+
   if (game.server.autoattack_style == AA_PROVOKED_ONLY) {
     if (!unit_has_type_flag(punit, UTYF_PROVOKING)) {
-      return TRUE; /* Unit is not Provoking: no autoattack to be done here. */
+      return TRUE; // Unit is not Provoking: no autoattack to be done here.
     }
   }
+  */
 
   autoattack = autoattack_prob_list_new_full(autoattack_prob_free);
 
@@ -3985,11 +3990,22 @@ static bool unit_survive_autoattack(struct unit *punit)
                                      tgt_tile, tile_city(tgt_tile),
                                      punit, NULL);
 
-     // If AA_PROVOKED_ONLY, only non-sentry units can autoattack;
-     // thus, giving human tactical opt-out to decisionmaking.                                
+     /* If AA_PROVOKED_ONLY, only vigiling units can auto-attack;
+      * giving human tactical opt-in to auto-attacking. */                                
       if (game.server.autoattack_style == AA_PROVOKED_ONLY) {
           if (penemy->activity != ACTIVITY_UNKNOWN) {  // vigil
             continue;  // skip/disallow units not under vigil
+          }
+          /* Vigiling units only auto-attack units flagged as "Provoking" unless
+           * the vigiling unit has has the Reserved1 flag (which indicates it
+           * auto-attacks ANYTHING, if it has better odds of winning). */
+          if (!unit_has_type_flag(punit, UTYF_PROVOKING)) { // non-provoking
+            if (!unit_has_type_flag(penemy, UTYF_RESERVED1)) { //non-Reserved1
+              // skip units sans "Reserved1" from attacking non-"Provoking" unit
+              continue; 
+            } else if (unit_has_type_flag(punit, UTYF_CIVILIAN)) {
+              continue; // Reserved1 units autoattack everything except civilians
+            }
           }
       }
 
@@ -4043,10 +4059,21 @@ static bool unit_survive_autoattack(struct unit *punit)
                                    tgt_tile, tile_city(tgt_tile),
                                    punit, NULL);
 
-    /* If AA_PROVOKED_ONLY, sentrying a unit is user decision to not auto-attack */                           
+    /* If AA_PROVOKED_ONLY, only vigil units can auto-attack */                           
     if (game.server.autoattack_style == AA_PROVOKED_ONLY) {
       if (penemy->activity != ACTIVITY_UNKNOWN) {  //ACTIVITY_VIGIL
             continue;  // skip/disallow units not under Vigil
+      }
+      /* Vigiling units only auto-attack units flagged as "Provoking" unless
+       * the vigiling unit has has the Reserved1 flag (which indicates it
+       * auto-attacks ANYTHING, if it has better odds of winning). */
+      if (!unit_has_type_flag(punit, UTYF_PROVOKING)) { // non-provoking
+        if (!unit_has_type_flag(penemy, UTYF_RESERVED1)) { //non-Reserved1
+          // skip units sans "Reserved1" from attacking non-"Provoking" unit
+          continue; 
+        } else if (unit_has_type_flag(punit, UTYF_CIVILIAN)) {
+          continue; // Reserved1 units autoattack everything except civilians
+        }
       }
     }
 
@@ -4065,17 +4092,17 @@ static bool unit_survive_autoattack(struct unit *punit)
         && penemywin > threshold) {
 
         notify_player(unit_owner(penemy), unit_tile(punit), E_UNIT_ORDERS, ftc_server,
-              _("[`anger`] Your %s %s intercepted %s %s %s %s while under vigil."),
+              _("[`anger`] Your %s %s engaged %s %s %s %s while under vigil."),
               penemy_emoji, unit_link(penemy),
-              indefinite_article_for_word(nation_rule_name(nation_of_unit(punit)), false),
+              (is_unit_plural(punit) ? "" : indefinite_article_for_word(nation_rule_name(nation_of_unit(punit)), false)),
               nation_rule_name(nation_of_unit(punit)),
               unit_rule_name(punit), punit_emoji );
 
         notify_player(unit_owner(punit), unit_tile(punit), E_UNIT_ORDERS, ftc_server,
-              _("[`anger`] Your %s %s %s intercepted by %s %s %s %s under vigil."),
+              _("[`anger`] Your %s %s %s engaged by %s %s %s %s under vigil."),
               unit_link(punit), punit_emoji,
               (is_unit_plural(punit) ? "were" : "was"),
-              indefinite_article_for_word(nation_rule_name(nation_of_unit(penemy)), false),
+              (is_unit_plural(punit) ? "" : indefinite_article_for_word(nation_rule_name(nation_of_unit(penemy)), false)),
               nation_rule_name(nation_of_unit(penemy)),
               penemy_emoji, unit_rule_name(penemy) );
 
@@ -4090,9 +4117,10 @@ static bool unit_survive_autoattack(struct unit *punit)
       action_auto_perf_unit_do(AAPC_UNIT_MOVED_ADJ,
                                penemy, unit_owner(punit), NULL,
                                tgt_tile, tile_city(tgt_tile), punit, NULL);
+
     } else {
         notify_player(unit_owner(penemy), unit_tile(punit), E_UNIT_ORDERS, ftc_server,
-              _("[`anger`] Your %s %s declined intercepting %s %s %s %s while under vigil."),
+              _("[`anger`] Your %s %s declined engaging %s %s %s %s while under vigil."),
               penemy_emoji, unit_rule_name(penemy),
               is_unit_plural(punit) ? "" : indefinite_article_for_word(nation_rule_name(nation_of_unit(punit)), false),
               nation_rule_name(nation_of_unit(punit)),
