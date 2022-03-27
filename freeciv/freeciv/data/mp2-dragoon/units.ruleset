@@ -2662,10 +2662,10 @@ attack        = 2
 defense       = 1
 hitpoints     = 20
 firepower     = 2
-move_rate     = 6
+move_rate     = 7
 vision_radius_sq = 24
 transport_cap = 0
-fuel          = 5
+fuel          = 7
 city_size     = 2632    ;000000,001,010,010010,0,0 = atk_bonus=0, max_kills=1, targets=2, move_cost=18 frags, stay_frtfy=0, reserved = 0
 paratroopers_mr_sub = 0 ;00000,00,0000,000,0,0 = bbd_retal_rate=0, iPill_rand_tgts=0, iPill_odds=-0 pentads, iPill_moves=0, iPillage=0, ATK_Stay_Fortified=0
 uk_happy      = 0
@@ -2690,8 +2690,8 @@ helptext      = _("\
 As new technology inspires the upgrade of Balloons, the Zeppelin appears.\
  In theory, it can be used for tactical advantage in combat. However,\
  vulnerability and cost make it better for intel. It can do limited attack\
- with bombs, or 20 combat rounds with medium caliber ordnance. It can stay out\
- for two Turn Changes before landing in a City, Quay, Fortress, Naval Base,\
+ with bombs, or 20 combat rounds with medium caliber ordnance. It has 7 turns\
+ of fuel so can stay out for many turns before landing in a City, Quay, Fortress, Naval Base,\
  Airbase, or transport with 6+ capacity. \n\
 Zeppelins have great vision and are unreachable by units prior to Marines and\
  Destroyers. Zeppelins do not block units under them from being attacked. Zeppelins\
@@ -5424,15 +5424,18 @@ uk_shield     = 0
 uk_food       = 0
 uk_gold       = 0
 disembarks    = "Air", "LandRoad", "LandRail", "Sea", "RiverShip"
-flags         = "HelpWonder", "TradeRoute", "IgZOC", "NonMil", "HasNoZOC", "Capturable", "Cant_Fortify", "NoVeteran", "Cant_Pillage"
+flags         = "HelpWonder", "TradeRoute", "IgZOC", "NonMil", "HasNoZOC", "Capturable",
+                "Cant_Fortify", "NoVeteran", "Cant_Pillage", "MultiSlot"
 roles         = ""
 helptext      = _("\
-The methodical logistics of modern shipping render the Freight unit：a cargo\
- container separate from the transport vehicle. Freight brings benefits of\
+Modern shipping logistics yield the Freight unit：a cargo container\
+ separate from the transport vehicle. Freight brings benefits of\
  organized efficiency. Like all Commerce units, it can Help Build\
- Wonders, and Establish Trade Route.\
- Unlike other Commerce units, it can Disband to Recycle Production with\
- no net loss in shields. This gives Freight a variety of creative industrial uses. \n\
+ Wonders, and Establish Trade Route. Unlike other Commerce units, it\
+ can Disband to Recycle Production with no net loss in shields. This\
+ gives Freight a variety of industrial uses. Similar to Infantry,\
+ Freight can use extra build slots a city may have.\
+  \n\
 "), _("\
 By itself, Freight is only able to move to tiles with loading infrastructure:\
  Cities, Quays, Fortresses, Airbases, and Naval Bases. To be transported, it must be carried\

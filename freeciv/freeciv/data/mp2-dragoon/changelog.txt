@@ -174,8 +174,8 @@ richness.
    Marine corps land/air/sea. Thus, have gold upkeep not 
    shield upkeep; and get Infantry build slot bonus.
 =============================================================
-28. Zeppelin 5 turns of fuel: more realistic and provides 
-   more possible use for this special unit.
+28. Zeppelin 7 moves, 7 turns of fuel.  More realistic and
+ provides more possible use for this special unit.
 =============================================================
 29. Fixed bug (also mp2c) where Airplane was not counted 
    as non-military and couldn't do diplomatic missions 
@@ -512,7 +512,7 @@ visible. Current test case are Wagons and Trawlers.
 ==============================================================
 85. Battleships get same vision radius as Cruiser. 
 ==============================================================
-86.
+86. Freight can use multiple build slots, like Infantry.
 ==============================================================
 87.
 ==============================================================
