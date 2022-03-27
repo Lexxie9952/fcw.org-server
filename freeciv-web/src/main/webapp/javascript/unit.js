@@ -43,8 +43,8 @@ var unit_bombard_attack_names = {
   "Battleship": "Bombard",
   "Ballista":   "Ranged Attack",
   "Catapult":   "Bombard",
-  "Cannon":   "Bombard",
-  "Artillery":   "Bombard",
+  "Cannon":     "Bombard",
+  "Artillery":  "Bombard",
   "Howitzer":   "Bombard"
 };
 
