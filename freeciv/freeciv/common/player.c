@@ -1021,8 +1021,9 @@ bool can_player_see_unit_at(const struct player *pplayer,
     // currently, ugly hack waiting for the above:
     const struct unit *tunit = unit_transport_get(punit);
     // possible add later: Galley, Trireme, Longboat, Carrier (planes on deck)
-    if (0 == strncmp("Wagon", utype_rule_name(unit_type_get(tunit)), 5)
-     || 0 == strncmp("Trawler", utype_rule_name(unit_type_get(tunit)), 7)) {
+    if (tunit != NULL 
+        && (0 == strcmp("Wagon", utype_rule_name(unit_type_get(tunit)))
+            || 0 == strcmp("Trawler", utype_rule_name(unit_type_get(tunit))))) {
        goto next_check;
      }
 #endif
