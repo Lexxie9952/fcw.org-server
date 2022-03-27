@@ -22,8 +22,8 @@ function _deflua_hut_get_gold(unit, gold)
                 gold)
     owner:change_gold(gold)
   elseif gold == 5 then  
-    notify.event(owner, unit.tile, E.HUT_GOLD, PL_("[`gold`] You found stone tools worth %d gold.",
-                                                  "[`gold`] You found stone tools worth %d gold.", gold),
+    notify.event(owner, unit.tile, E.HUT_GOLD, PL_("[`gold`] You found bronze tools worth %d gold.",
+                                                  "[`gold`] You found bronze tools worth %d gold.", gold),
                 gold)
     owner:change_gold(gold)
   elseif gold == 10 then  
@@ -216,7 +216,7 @@ end
 
 -- Randomly choose a hut event
 function _deflua_hut_enter_callback(unit)
-  local chance = random(0, 13)
+  local chance = random(0, 14)
   local alive = true
 
   if chance == 0 then
@@ -236,20 +236,20 @@ function _deflua_hut_enter_callback(unit)
   elseif chance == 9 then
     if unit.tile:has_extra("River") then
       if not _deflua_hut_get_boat(unit) then
-        _deflua_hut_consolation_prize(unit)
+        _deflua_hut_reveal_map(unit)
       end
     else
-      _deflua_hut_consolation_prize(unit)
+      _deflua_hut_reveal_map(unit)
     end
   elseif chance == 10 then
     if not _deflua_hut_get_goods(unit) then
-      _deflua_hut_consolation_prize(unit)
+      _deflua_hut_reveal_map(unit)
     end
   elseif chance == 11 then
     if not _deflua_hut_get_mercenaries(unit) then
-      _deflua_hut_consolation_prize(unit)
+      _deflua_hut_reveal_map(unit)
     end
-  elseif chance == 12 or chance == 13 then
+  elseif chance >= 12 then
     _deflua_hut_reveal_map(unit)
   end
 
