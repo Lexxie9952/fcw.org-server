@@ -514,7 +514,26 @@ visible. Current test case are Wagons and Trawlers.
 ==============================================================
 86. Freight can use multiple build slots, like Infantry.
 ==============================================================
-87.
+87. Boarding a transport requires having moves left. This 
+works in conjunction with the 1/3 move cost of boarding/deboarding 
+for a limiting factor on double moving and transporter-swapping
 ==============================================================
-88.
+88. Ballistic sub-class of units can vigil if in a city or
+base of any type. They auto-bombard instead of auto-attack.
+This relieves some issues vis-a-vis unfair camping advantages,
+by letting people who aren't on all the time to set up 
+retaliatory defense structures in some areas. Also gives 
+is a balance adjustment for weaker city walls.
+==============================================================
+89.
+==============================================================
+90.
+==============================================================
+91.
+==============================================================
+92.
+==============================================================
+93.
+==============================================================
+94.
 
