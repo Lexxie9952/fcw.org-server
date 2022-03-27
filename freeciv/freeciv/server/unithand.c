@@ -4233,7 +4233,7 @@ static bool unit_bombard(struct unit *punit, struct tile *ptile,
                              or   * Your 🤺Swordsmen retaliation eliminated the English Horsemen🏇. */
                         /* TODO: replace generic "assaulted" with ruleset
                           defined name of action.*/
-                        _("[`boom`] Your %s %s <b>%s</b> the %s %s [`%s`]."),
+                        _("[`boom`] Your %s %s <b>%s</b> the %s %s [`%s`]"),
                         /*UNIT_EMOJI(punit), */unit_name_translation(punit),
                         (is_retaliation ? "retaliation": "assault"),
                         get_battle_winner_verb(0),
@@ -4246,7 +4246,7 @@ static bool unit_bombard(struct unit *punit, struct tile *ptile,
                              or   ! French 🤺Swordsmen retaliated and eliminated your Horsemen🏇. */
                         /* TODO: replace generic "assaulted" with ruleset
                           defined name of action.*/
-                        _("[`warning`] %s %s %s %s and <b>%s</b> your %s [`%s`]."),
+                        _("[`warning`] %s %s %s %s and <b>%s</b> your %s [`%s`]"),
                         nation_adjective_for_player(pplayer),
                         UNIT_EMOJI(punit), unit_name_translation(punit),
                         (is_retaliation ? "retaliated": "assaulted"),
