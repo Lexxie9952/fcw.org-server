@@ -263,8 +263,8 @@ nuke_defender_survival_chance_pct = 0
 ;   NOTE: "will_never" was replaced by if_attacker req vector in 2021.
 ;   will_never - units with this unit type flag will never auto attack.
 
-;possible attack_actions= "Capture Units", "Bombard", "Attack", "Suicide Attack"
-attack_actions= "Attack"
+;possible attack_actions= "Capture Units", "Bombard", "Bombard 2", "Bombard 3", "Attack", "Suicide Attack"
+attack_actions= "Bombard", "Attack"
 
 ; Non-fighters don't auto-attack.
 will_never = "WillNever"
@@ -3128,7 +3128,9 @@ actor_reqs    =
       "DiplRel", "Cease-fire", "Local", FALSE
       "DiplRel", "Peace",      "Local", FALSE
       "DiplRel", "Never met",  "Local", FALSE
-    }
+      "MinMoveFrags", "1",     "Local", TRUE ;this prevents things like moving Artillery away with a Truck after attack, and...
+    }                                        ;...a soft limit on double moving via multiple transporters. TODO: raise it to "3"?
+;TODO: possibly infantry can be allowed to get rescued/scooped, at least if only by a Transport Helicopter?
 
 ;This enabler can replace the one above if/when needed if "russian doll" exploits are discovered which should be stopped.
 ;Note: this is currently not illegal. In most cases it makes sense (e.g., Bomber with a Bomb on a Carrier, Trawler towing a
@@ -3142,6 +3144,7 @@ actor_reqs    =
 ;      "DiplRel", "Cease-fire",   "Local", FALSE
 ;      "DiplRel", "Peace",        "Local", FALSE
 ;      "DiplRel", "Never met",    "Local", FALSE
+;      "MinMoveFrags", "1",       "Local", TRUE
 ;      "UnitType","Trawler",      "Local", FALSE   ; put unit_types here who can't be cargo if they also have cargo
 ;      "UnitState","Transporting","Local", FALSE   ; note it should be legal for some cases like towing a ship with cargo
 ;    }
