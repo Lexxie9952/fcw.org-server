@@ -172,7 +172,7 @@ The current and complete list of Freeciv-web controls can be found here:<br>
 <tr><td><span class="hotkey">space</span></td><td> De-select units, clear GOTO paths, exit drag-select</td></tr>
 <tr><td><span class="hotkey">shift-space</span></td><td> Re-focus to previous map position</td></tr>
 <tr><td><span class="hotkey">ctrl-alt-space</span></td><td> Paste smartlink to tile/unit under cursor</td></tr>
-<tr><td><span class="hotkey">|</span></td><td> Skip music track, go to next track.</td></tr>
+<tr><td><span class="hotkey">shift-\</span></td><td> Skip music track, go to next track.</td></tr>
 <tr><td><span class="hotkey">ctrl-B</span></td><td> Highlight borders with flags</td></tr>
 <tr><td><span class="hotkey">ctrl-shift-B</span></td><td> Toggle national colors on minimap: primary,secondary,tertiary,diplomatic state</td></tr>
 <tr><td><span class="hotkey">alt-shift-B</span></td><td> Animate borders for visibility assistance</td></tr>
