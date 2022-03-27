@@ -185,8 +185,10 @@ struct unit_class {
 #define SPECENUM_VALUE5NAME N_("?unitflag:OneAttack")
 #define SPECENUM_VALUE6 UTYF_FIELDUNIT
 #define SPECENUM_VALUE6NAME N_("?unitflag:FieldUnit")
-/* autoattack: a unit will choose to attack this unit even if defending
- * against it has better odds. */
+/* a unit will choose to autoattack a unit flagged PROVOKING even if
+ * defending against it has better odds. if autoattack_style=1, then
+ * only units with Provoking flag will be attacked by units doing 
+ * ACTIVITY_VIGIL. */
 #define SPECENUM_VALUE7 UTYF_PROVOKING
 #define SPECENUM_VALUE7NAME N_("?unitflag:Provoking")
 /* Overrides unreachable_protects server setting for defender */
@@ -279,8 +281,13 @@ struct unit_class {
 #define SPECENUM_VALUE35 UTYF_SENTRYALWAYS
 #define SPECENUM_VALUE35NAME N_("?unitflag:SentryAlways")
 /* RESERVED for future use*/
+/* the future came and we're using it. This is being used when autoattack_style=1
+   and a unit is vigiling, to specify that this unit_type does not limit itself
+   to autoattacking only units with the "?unitflag:Provoking" but may autoattack
+   anything. if you rename this flag then make sure to search codebase for
+   "Reserved1" and adjust that to Reserved2 or assign that mechanic another UTYF */  
 #define SPECENUM_VALUE36 UTYF_RESERVED1
-#define SPECENUM_VALUE36NAME N_("?unitflag:Reserved1")
+#define SPECENUM_VALUE36NAME N_("?unitflag:Reserved1") /* see comment above */
 /* RESERVED for future use*/
 #define SPECENUM_VALUE37 UTYF_RESERVED2
 #define SPECENUM_VALUE37NAME N_("?unitflag:Reserved2")
