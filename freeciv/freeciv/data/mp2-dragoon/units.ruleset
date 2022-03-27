@@ -2254,7 +2254,7 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-flags         = "CantReachAir", "WillNever", "Bombarder"
+flags         = "CantReachAir", "Bombarder", "Reserved1" ;autoattacks (!NonMil) targets instead of "Provoking" targets 
 roles         = ""
 helptext      = _("\
 Catapults are rock-throwing war machines. Massive stones diminish\
@@ -2265,6 +2265,9 @@ If they haven’t moved, Catapults can do 4 rounds of Bombardment\
  attacked from range or rammed in a Fortress, they can retaliate\
  with the same type of Bombardment. \n\  
 Catapults are weak defenders, and need an escort to be effective.\
+"), _("
+VIGIL：the Vigil order lets Catapults auto-Bombard adjacent military units if they\
+ have better attack odds. Can be done in cities or bases if it has used no moves. \n\
 ")
 bombard_rate = 4
 
@@ -2343,7 +2346,7 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-flags         = "CantReachAir", "WillNever", "Bombarder", "CantAttack"
+flags         = "CantReachAir", "Bombarder", "CantAttack", "Reserved1" ;autoattacks (!NonMil) targets instead of "Provoking" targets
 bonuses       =
    { "flag", "type", "value"
      "Horse",       "DefenseMultiplierPct", -80
@@ -2367,6 +2370,9 @@ When conventionally defending against foot and mounted units,\
 Ballistae excel at degrading forts and well-fortified tiles. Defensively,\
  they are capable of Special Unit Defense, reciprocating against ranged\
  attacks with their own retaliatory attack. \n\
+"), _("
+VIGIL：the Vigil order lets Ballistae automatically Range-Attack adjacent military units\
+ if they have better attack odds. Can be done in cities or bases if it has used no moves. \n\
 ")
 bombard_rate = 5
 
@@ -2400,7 +2406,7 @@ uk_gold       = 0
 embarks       = "Helicopter"    ; transport helicopter only
 disembarks    = "Helicopter"
 targets       = "LandRail"
-flags         = "CantReachAir", "WillNever", "Bombarder"
+flags         = "CantReachAir", "Bombarder", "Reserved1" ;autoattacks (!NonMil) targets instead of "Provoking" targets
 roles         = "BarbarianTech", "BarbarianBuildTech"
 helptext      = _("\
 Cannons are guns that fire massive metallic projectiles faster and\
@@ -2411,6 +2417,9 @@ If they haven’t moved, Cannons can do 5 rounds of Bombardment\
  on two units, with one possible fatality. When special attacked\
  from range or rammed in a Fortress, they can retaliate with the\
  same type of Bombardment.\
+"), _("
+VIGIL：the Vigil order lets Cannons auto-Bombard adjacent military units if they\
+ have better attack odds. Can be done in cities or bases if it has used no moves. \n\
 ")
 bombard_rate = 5
 
@@ -2444,7 +2453,7 @@ uk_gold       = 0
 embarks       = "Helicopter"    ; transport helicopter only
 disembarks    = "Helicopter"
 targets       = "Balloon", "LandRail", "Zeppelin"
-flags         = "CantReachAir", "WillNever", "Bombarder"
+flags         = "CantReachAir", "Bombarder", "Reserved1" ;autoattacks (!NonMil) targets instead of "Provoking" targets
 roles         = ""
 helptext      = _("\
 Artillery are a major upgrade to Cannons, with doubled firepower. Accuracy\
@@ -2455,6 +2464,9 @@ Artillery are a major upgrade to Cannons, with doubled firepower. Accuracy\
 If they haven’t moved, Artillery can do 6 rounds of Bombardment\
  on three units, with one possible fatality. When special attacked\
  from range, they can retaliate with the same type of Bombardment.\
+"), _("
+VIGIL：the Vigil order lets Artillery auto-Bombard adjacent military units if they\
+ have better attack odds. Can be done in cities or bases if it has used no moves. \n\
 ")
 bombard_rate = 6
 
@@ -2587,7 +2599,7 @@ uk_gold       = 0
 embarks       = "Helicopter"    ; transport helicopter only
 disembarks    = "Helicopter"
 targets       = "Balloon", "LandRail", "Zeppelin"
-flags         = "CantReachAir", "WillNever", "Bombarder"
+flags         = "CantReachAir", "Bombarder", "Reserved1" ;autoattacks (!NonMil) targets instead of "Provoking" targets
 roles         = ""
 helptext      = _("\
 Howitzers are upgraded Artillery with a terrifying increase to mobility and attack\
@@ -2597,6 +2609,9 @@ If they haven’t moved, Howitzers can do 7 rounds of Bombardment\
  on four units, with one possible fatality. When special attacked\
  from range, they can retaliate with the same type of Bombardment.\
  This is a strong deterrent.\
+"), _("
+VIGIL：the Vigil order lets Howitzers auto-Bombard adjacent military units if they\
+ have better attack odds. Can be done in cities or bases if it has used no moves. \n\
 ")
 bombard_rate = 7
 
