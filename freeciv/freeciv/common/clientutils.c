@@ -301,6 +301,8 @@ const char *concat_tile_activity_text(struct tile *ptile)
         astr_add(&str, "%s(%d)", get_activity_text(i), turns);
         num_activities++;
       }
+    } else if (i==ACTIVITY_UNKNOWN) { /* vigil */
+        astr_add(&str, "%s", get_activity_text(i));
     }
   } activity_type_iterate_end;
 
