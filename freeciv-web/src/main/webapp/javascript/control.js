@@ -6052,6 +6052,7 @@ function unit_can_vigil(punit)
 {
   // Hard coded for now until we get action enablers
   var ptype = unit_type(punit);
+  var ptile = unit_tile(punit);
   var name = ptype['name'];
   var moves_used = (parseFloat(ptype['move_rate']) / parseFloat(SINGLE_MOVE))
                  - (parseFloat(punit['movesleft']) / parseFloat(SINGLE_MOVE));
@@ -6062,6 +6063,17 @@ function unit_can_vigil(punit)
   if (server_settings["autoattack_style"]["val"] == 0) return false;
 
     switch (name) {
+      case "Catapult":
+      case "Ballista":
+      case "Cannon":
+      case "Artillery":
+      case "Howitzer":
+        if (client_rules_flag[CRF_MP2_D]) {
+          if (!moves_used && (tile_city(ptile) || does_tile_have_base(ptile))) {
+            return true;
+          }
+        }
+        break;  
       case "Fighter":
         if (moves_used <= 2)
           return true;
