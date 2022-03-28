@@ -1115,8 +1115,8 @@ sound		= "b_supermarket"
 sound_alt	= "b_generic"
 helptext	= _("\
 Increases the food resources by +100% on each farmland tile which\
- is being used around the city. An irrigable city centre tile receives a\
- +50% bonus immediately, but cannot receive a benefit from farmland.\
+ is being used around the city. An irrigable city centre tile receives an\
+ immediate +50% bonus if it does not have Farmland.\
  Farmland tiles are those which have been irrigated a second time.\
 ")
 
