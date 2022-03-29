@@ -16,13 +16,18 @@ artists = "
   b.chand_baori
   b.citadel_aleppo
   b.colossus
+  b.commissariat
   b.copernicus_observatory
   b.eiffel_tower
+  b.fusion_reactor_wonder
+  b.genghis_khans_equestrian_school
+  b.gibraltar_fortress
   b.great_library
   b.great_wall
   b.hammurabi
   b.hanging_gardens
   b.hypogeum
+  b.internet
   b.isaac_newtons_college
   b.js_bachs_cathedral
   b.king_richards_crusade
@@ -33,8 +38,10 @@ artists = "
   b.manhattan_project
   b.marco_polos_embassy
   b.mausoleum
+  b.medici_bank
   b.michelangelos_chapel
   b.pasteur_institute
+  b.propaganda_ministry
   b.pyramids
   b.olympics
   b.roman_colosseum
@@ -42,6 +49,7 @@ artists = "
   b.sphinx
   b.statue_of_liberty
   b.statue_of_zeus
+  b.sun_tzus_war_academy
   b.temple_of_artemis
   b.teslas_laboratory
   b.united_nations
@@ -75,6 +83,7 @@ sprites =
                 "b.chand_baori", "wonders/chand_baori"
                 "b.citadel_aleppo", "wonders/citadel_aleppo"
 		"b.colossus", "wonders/colossus"
+                "b.commissariat", "wonders/commissariat"
 		"b.copernicus_observatory", "wonders/copernicus_observatory"
 		"b.cure_for_cancer", "wonders/cure_for_cancer"
 		"b.darwins_voyage", "wonders/darwins_voyage"
@@ -105,6 +114,7 @@ sprites =
 		"b.oracle", "wonders/oracle"
                 "b.pasteur_institute", "wonders/pasteur_institute"
                 "b.pax_dei", "wonders/pax_dei"
+                "b.propaganda_ministry", "wonders/propagandaministry"
 		"b.pyramids", "wonders/pyramids"
                 "b.roman_colosseum", "wonders/colosseum"
 		"b.seti_program", "wonders/seti_program"
