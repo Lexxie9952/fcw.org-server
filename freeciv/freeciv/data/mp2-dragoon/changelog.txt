@@ -329,7 +329,7 @@ of its intended purpose.
 ==============================================================
 50. Corruption reducing buildings and wonders will always be
 guaranteed to reduce at least 1 corruption (if there is any).
-This finally solves an age-old freeciv problem the came from
+This finally solves an age-old freeciv problem that came from
 "double-truncation-rounding" error, which made corruption
 reduction nearly worthless in small despotism cities
 or medium monarchy cities; yet these are the exact contexts
@@ -545,9 +545,9 @@ reduces overly strong penalties on discovery of automobile
 95. Communism completely unaffected by empire size/# cities 
 (was 12, then none)
 ==============================================================
-96.Communism +1 trade on irrigated tiles that produce trade.
+96. Communism +1 trade on irrigated tiles that produce trade.
 ==============================================================
-97.Monarchy, CM, Theocracy: 1 free gold upkeep on units.
+97. Monarchy, CM, Theocracy: 1 free gold upkeep on units.
 Communism: 3 free gold upkeep on units.
 ==============================================================
 98. Colosseum costs 375
