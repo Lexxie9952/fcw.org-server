@@ -700,7 +700,7 @@ actor_reqs    =
 
 ; ************************ ESTABLISH EMBASSY ***********************
 ; DIPLOMAT: normal establish embassy--if not at war 
-[actionenabler_establish_embassy]
+[actionenabler_emissary_establish_embassy]
 action       = "Establish Embassy Stay"
 actor_reqs    =
     { "type",         "name",          "range", "present"
@@ -717,8 +717,8 @@ target_reqs  =
     { "type",        "name",      "range",  "present"
       "NationGroup", "Barbarian", "Player", FALSE
     }
-;if at war, courthouse/police station/fundie will block embassy: do a cease-fire first!
-[actionenabler_establish_embassy_war]
+;if at war, courthouse/police station/homeland_sec/theocracy will block embassy: do a cease-fire first!
+[actionenabler_emissary_establish_embassy_war]
 action       = "Establish Embassy Stay"
 actor_reqs    =
     { "type",         "name",          "range", "present"
@@ -740,8 +740,8 @@ target_reqs  =
       "Gov",         "Theocracy",    "Player",  FALSE
     }
 
-; SPY: normal establish embassy--if not at war 
-[actionenabler_establish_embassy_spy_diplomat_patriarch]
+; Diplomat & Patriarch: normal establish embassy--if not at war 
+[actionenabler_establish_embassy_diplomat_patriarch]
 action       = "Establish Embassy"
 actor_reqs    =
     { "type",         "name",          "range", "present"
@@ -759,8 +759,8 @@ target_reqs  =
     { "type",        "name",      "range",  "present"
       "NationGroup", "Barbarian", "Player", FALSE
     }
-;if at war, police station or fundie will block embassy: do a cease-fire first!
-[actionenabler_establish_embassy_spy_diplomat_patriarch_diplomat_war]
+;if at war, courthouse/police station/homeland_sec/theocracy will block embassy: do a cease-fire first!
+[actionenabler_establish_embassy_diplomat_patriarch_war]
 action       = "Establish Embassy"
 actor_reqs    =
     { "type",         "name",          "range", "present"
@@ -775,11 +775,36 @@ actor_reqs    =
       "DiplRel",      "War",           "Local", TRUE 
     }
 target_reqs  =
+    { "type",        "name",              "range", "present"
+      "NationGroup", "Barbarian",         "Player", FALSE
+      "Building",    "Courthouse",        "City",   FALSE
+      "Building",    "Homeland Security", "City",   FALSE
+      "Building",    "Police Station",    "City",   FALSE  ; to do: when we can check for spy present to stop it
+      "Gov",         "Theocracy",         "Player", FALSE
+    }
+;Diplomat with espionage tech: when at war, only police station and fundie block hostile embassies
+[actionenabler_establish_embassy_diplomat_patriarch_war_espionage_tech]
+action       = "Establish Embassy"
+actor_reqs    =
+    { "type",         "name",          "range", "present"
+      "UnitFlag",     "Diplomat",      "Local", TRUE
+      "UnitType",     "Emissary",      "Local", FALSE
+      "UnitType",     "Spy",           "Local", FALSE
+      "UnitType",     "Siege Ram",     "Local", FALSE
+      "UnitState",    "OnLivableTile", "Local", TRUE
+      "UnitState",    "Transported",   "Local", FALSE
+      "MinMoveFrags", "1",             "Local", TRUE
+      "DiplRel",      "Foreign",       "Local", TRUE
+      "DiplRel",      "War",           "Local", TRUE
+      "Tech",         "Espionage",     "Player",TRUE  ;actor unit's owner needs espionage tech <<<<<< 
+    }
+target_reqs  =
     { "type",        "name",          "range",    "present"
       "NationGroup", "Barbarian",     "Player",   FALSE
       "Building",    "Police Station","City",     FALSE  ; to do: when we can check for spy present to stop it
       "Gov",         "Theocracy",     "Player",   FALSE
     }
+
 ; ***************************************************
 
 [actionenabler_investigate_city]
@@ -1219,25 +1244,40 @@ target_reqs    =
 [actionenabler_ballistic_SUA_unmoved]
 action = "Bombard"
 actor_reqs    =
-    { "type",         "name",         "range", "present"
-      "UnitFlag",     "Bombarder",    "Local", TRUE
-      "UnitType",     "Archers",      "Local", FALSE 
-      "UnitType",     "Phalanx",      "Local", FALSE 
-      "UnitType",     "Legion",       "Local", FALSE 
-      "UnitType",     "Siege Ram",    "Local", FALSE 
-      "UnitType",     "Zealots",      "Local", FALSE 
-      "UnitType",     "Zeppelin",     "Local", FALSE 
-      "UnitType",     "Marines",      "Local", FALSE 
-      "UnitType",     "Battleship",   "Local", FALSE 
-      "UnitState",    "Transported",  "Local", FALSE
-      "UnitState",    "MovedThisTurn","Local", FALSE
-      "DiplRel",      "War",          "Local", TRUE
+    { "type",         "name",          "range", "present"
+      "UnitFlag",     "Bombarder",     "Local", TRUE
+      "UnitType",     "Archers",       "Local", FALSE 
+      "UnitType",     "Phalanx",       "Local", FALSE 
+      "UnitType",     "Legion",        "Local", FALSE 
+      "UnitType",     "Siege Ram",     "Local", FALSE 
+      "UnitType",     "Zealots",       "Local", FALSE 
+;      "UnitType",     "Magnum Turret", "Local", FALSE ;needed for SUD it seems
+      "UnitType",     "Zeppelin",      "Local", FALSE 
+      "UnitType",     "Marines",       "Local", FALSE 
+      "UnitType",     "Battleship",    "Local", FALSE 
+      "UnitState",    "Transported",   "Local", FALSE
+      "UnitState",    "MovedThisTurn", "Local", FALSE
+      "MinMoveFrags", "1",             "Local", TRUE ;redundant to above except M.Turret thinks it's never moved.
+      "DiplRel",      "War",           "Local", TRUE
    }
 target_reqs    =
     { "type",   "name", "range", "present"
       "CityTile",   "Center",    "Local", FALSE
       "Extra",      "Fortress",  "Local", FALSE
       "Extra",      "Naval Base","Local", FALSE
+;      "TerrainClass", "Oceanic",  "Local", FALSE      can bombard ocean tiles.
+    }
+[actionenabler_ballistic_SUA_magnum_turret]
+action = "Bombard 2"
+actor_reqs    =
+    { "type",         "name",          "range", "present"
+      "UnitFlag",     "Bombarder",     "Local", TRUE
+      "UnitType",     "Magnum Turret", "Local", TRUE 
+      "MinMoveFrags", "1",             "Local", TRUE
+      "DiplRel",      "War",           "Local", TRUE
+    }
+target_reqs    =
+    { "type",   "name", "range", "present"
 ;      "TerrainClass", "Oceanic",  "Local", FALSE      can bombard ocean tiles.
     }
 
@@ -1707,6 +1747,16 @@ actor_reqs    =
       ;...
       "Building",     "Pax Dei",        "World", FALSE
     }
+;-----------------------
+[actionenabler_magnum_turret_attack]
+action = "Attack"
+actor_reqs    =
+    { "type",         "name",           "range", "present"
+      "UnitType",     "Magnum Turret",  "Local", TRUE  ;Magnum Turret Only
+      ;...  NB: not affected by Pax Dei
+      "DiplRel",      "War",            "Local", TRUE
+      "UnitClassFlag","Missile",        "Local", FALSE
+    }
 ;-----------------------------------------------------------MISSILES ONLY
 ;NB: not affected by Pax DEI
 [actionenabler_explode_missile]
@@ -1721,7 +1771,6 @@ actor_reqs    =
     }
 
 ;-----------------------------------------------------------------------NATIVE ATTACKS
-
 ;-----------------------------------------------------------all Land___ except LandAirSea
 ;Native attack for CargoRestrained units allowed, if not Transported
 [actionenabler_land_attacker_native_restrained]
@@ -3122,12 +3171,13 @@ target_reqs    =
 [actionenabler_board]
 action        = "Transport Board"
 actor_reqs    =
-    { "type",    "name",       "range", "present"
-      "DiplRel", "Armistice",  "Local", FALSE
-      "DiplRel", "War",        "Local", FALSE
-      "DiplRel", "Cease-fire", "Local", FALSE
-      "DiplRel", "Peace",      "Local", FALSE
-      "DiplRel", "Never met",  "Local", FALSE
+    { "type",    "name",          "range", "present"
+      "DiplRel", "Armistice",     "Local", FALSE
+      "DiplRel", "War",           "Local", FALSE
+      "DiplRel", "Cease-fire",    "Local", FALSE
+      "DiplRel", "Peace",         "Local", FALSE
+      "DiplRel", "Never met",     "Local", FALSE
+      "UnitType","Magnum Turret", "Local", FALSE ;only needed for utype_can_do_action to render false so we aren't show illegal order options 
       "MinMoveFrags", "1",     "Local", TRUE ;this prevents things like moving Artillery away with a Truck after attack, and...
     }                                        ;...a soft limit on double moving via multiple transporters. TODO: raise it to "3"?
 ;TODO: possibly infantry can be allowed to get rescued/scooped, at least if only by a Transport Helicopter?
@@ -3145,6 +3195,7 @@ actor_reqs    =
 ;      "DiplRel", "Peace",        "Local", FALSE
 ;      "DiplRel", "Never met",    "Local", FALSE
 ;      "MinMoveFrags", "1",       "Local", TRUE
+;      "UnitType","Magnum Turret", "Local", FALSE ;only needed for utype_can_do_action to render false so we aren't show illegal order options 
 ;      "UnitType","Trawler",      "Local", FALSE   ; put unit_types here who can't be cargo if they also have cargo
 ;      "UnitState","Transporting","Local", FALSE   ; note it should be legal for some cases like towing a ship with cargo
 ;    }

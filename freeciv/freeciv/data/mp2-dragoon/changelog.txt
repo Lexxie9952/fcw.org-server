@@ -494,7 +494,10 @@ who are idle 5 or more turns.
 ==============================================================
 80. MagLevs can only be built wherever railroads may be built,
 (i.e. Road and SeaBridge). A railroad is not required. They
-can't be built on ocean (unless SeaBridge.)
+can't be built on ocean (unless SeaBridge.) Railroads take
+1.5 worker-turns to complete, not 2; this can assist 
+economic pace in some cases of never vet Workers and work
+bonuses.
 ==============================================================
 82. Copernicus costs 90 (was 100).
 ==============================================================
@@ -525,15 +528,46 @@ by letting people who aren't on all the time to set up
 retaliatory defense structures in some areas. Also gives 
 is a balance adjustment for weaker city walls.
 ==============================================================
-89.
+89. New unit Magnum Turret, unique unit.
 ==============================================================
-90.
+90. Communism gets +40% capital prod bonus
 ==============================================================
-91.
+91. New wonder: Commissariat of Agriculture: +5 starting food
+in each city. Work-rate for Farmland is 2 worker-turns, not 3.
++10% gross food output per city.
 ==============================================================
-92.
+92. Communist cities get the effects of a free Supermarket.
 ==============================================================
-93.
+93. Leonardo's Workshop now obsolete by Robotics. 
+more quantitative easing on upgrade retadation syndrome, 
+reduces overly strong penalties on discovery of automobile
 ==============================================================
-94.
+95. Communism completely unaffected by empire size/# cities 
+(was 12, then none)
+==============================================================
+96.Communism +1 trade on irrigated tiles that produce trade.
+==============================================================
+97.Monarchy, CM, Theocracy: 1 free gold upkeep on units.
+Communism: 3 free gold upkeep on units.
+==============================================================
+98. Colosseum costs 375
+==============================================================
+99. New wonder: Propaganda Ministry, +1 happy +2 lux for 
+authoritarian governments.
+==============================================================
+100. FORMERLY: courthouse/homeland/police/theocracy blocked 
+diplomats from hostile embassy (needs ceasefire/peace first);
+only police station/theocracy blocked hostile spies.
+NOW: courthouse/homeland/police/theo blocks emissary and diplo;
+only police/theo blocks diplo who has espionage tech
+==============================================================
+101.
+==============================================================
+102.
+==============================================================
+103.
+==============================================================
+104.
+==============================================================
+105.
 

@@ -165,7 +165,7 @@ req1     = "Combustion"
 req2     = "Steel"
 graphic     = "a.automobile"
 graphic_alt = "-"
-helptext = _("Obsoletes Leonardos Workshop, Colossus. +25% population pollution.")
+helptext = _("Obsoletes Colossus. +25% population pollution.")
 cost = 4230
 
 [advance_avionics]
@@ -377,7 +377,7 @@ req2     = "Democracy"
 flags    = ""
 graphic     = "a.espionage"
 graphic_alt = "-"
-helptext = _("Obsoletes Diplomat.")
+helptext = _("Lets Diplomat/Patriarch do hostile embassy vs Courthouse & Homeland Security.")
 cost = 2900
 
 [advance_explosives]
@@ -811,7 +811,7 @@ req2     = "Computers"
 flags    = ""
 graphic     = "a.robotics"
 graphic_alt = "-"
-helptext = _("Obsoletes Artillery, King Richards Crusade.")
+helptext = _("Obsoletes Artillery, Leonardos Workshop, King Richards Crusade.")
 cost = 7250
 
 [advance_rocketry]

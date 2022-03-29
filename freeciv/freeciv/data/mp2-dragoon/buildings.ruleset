@@ -354,9 +354,8 @@ Courthouses reduce corruption by half. (If there is any\
 "), _("\
  Cost to incite revolt in the city is 2× if empty and 4× if occupied.\
 "), _("\
- A unique bonus that only a local Courthouse provides to its city: \
- Diplomats can’t establish embassies unless you permit it through\
- Cease-fire or Peace. (Spies require a Police Station to block them.)\
+ Emissaries can’t establish embassies unless you permit it through\
+ Cease-fire or Peace. (Diplomats with Espionage tech may do so.)\
 ")
 
 [building_city_walls]
@@ -466,9 +465,11 @@ sound		= "b_supermarket"
 sound_alt	= "b_generic"
 helptext	= _("\
 Increases the food resources by +100% on each farmland tile which\
- is being used around the city. An irrigable city centre tile receives a\
- +50% bonus immediately, but cannot receive a benefit from farmland.\
- Farmland tiles are those which have been irrigated a second time.\
+ is being used by the city. An irrigable city centre tile receives an\
+ immediate +50% bonus even without Farmland.\
+ Farmland tiles are those which have been irrigated a second time. \n\
+Communist government has these effects for free, and gets no bonus\
+ from this building.\
 ")
 
 [building_barracks_iii]
@@ -778,9 +779,9 @@ helptext	= _("\
 Police Stations neutralize the unhappiness caused by two military units or two\
  unhappy Foreign Nationals. Under authoritarian government, they also force\
  two additional citizens to be content (Despotism, Communism, and Nationalism.)\
- Police Stations prevent Establishing Embassy without first agreeing to Cease-Fire\
- or Peace. They also half the odds to Investigate City under all governments\
- except Democracy.\
+ Police Stations prevent ALL units from Establishing Embassy without first agreeing\
+ to Cease-Fire or Peace. They also half the odds to Investigate City under all\
+ governments except Democracy.\
 "), _("\
  Diplomatic combat gets a bonus of ¼ of base odds. (At general base odds\
  of ½, odds of losing become：½ - ⅛ = ⅜). All other hostile diplomatic\
@@ -925,7 +926,10 @@ helptext	= _("\
 You can build Homeland Security offices if you own the Supreme Court. Homeland Security\
  gives the same bonus as a Courthouse vs. hostile diplomatic acts. In addition, it\
  prevents its city from being poisoned by spies. As a ministry of the Supreme Court,\
- it has no upkeep and cannot be sabotaged.\
+ it has no upkeep and cannot be sabotaged. \n\
+"), _("\
+ Emissaries can’t establish embassies unless you permit it through\
+ Cease-fire or Peace. (Diplomats with Espionage tech may do so.)\
 ")
 
 [building_super_highways]
@@ -1586,7 +1590,7 @@ genus		= "SmallWonder"
 reqs	=
     { "type",         "name",              "range",   "present", "quiet"
       "Tech",         "Engineering",       "Player",  TRUE,      FALSE
-      "Tech",         "Gunpowder",         "Player",  FALSE,     FALSE
+      "Tech",         "Metallurgy",         "Player",  FALSE,     FALSE
       "Building",     "Citadel of Aleppo", "Player",  FALSE,     TRUE
       "Building",     "City Walls",        "City",    FALSE,     TRUE
     }
@@ -1602,7 +1606,7 @@ sound		= "w_citadel_aleppo"
 sound_alt	= "w_generic"
 helptext	= _("\
 The great Citadel of Aleppo turns an entire city into a formidable fortress.\
-  It must be built before Gunpowder is discovered. It provides 3× defense\
+  It must be built before Metallurgy is discovered. It provides 3× defense\
   against all Land attacks: the thick walls are impervious to sabotage, Siege
   Rams, and any bonuses from Catapults, Cannons, Artillery, and Howitzers. \n\
 The Citadel of Aleppo cannot be made in a city that has City Walls,\
@@ -1682,6 +1686,34 @@ In the coastal city where this wonder is built, +1 trade is added to every\
 A trade route established from the city with Colossus gets +40% one-time revenue,\
  and roughly +25% in ongoing revenue. \n\
  Obsolete by：Automobile.\
+")
+
+[building_commissariat_of_agriculture]
+name		= _("Commissariat of Agriculture")
+genus		= "SmallWonder"
+reqs	=
+    { "type",     "name",                       "range", "present", "quiet"
+      "Tech",     "Communism",                  "Player", TRUE,     FALSE
+      "Gov",      "Communism",                  "Player", TRUE,     FALSE
+      "Building", "Commissariat of Agriculture","Player", FALSE,    TRUE
+    }
+graphic	= "b.commissariat"
+graphic_alt	= "b.pyramids"
+obsolete_by	=
+    { "type", "name", "range"
+    }
+build_cost	= 150
+upkeep		= 0
+sabotage	= 0
+sound		= "w_commissariat"
+sound_alt	= "w_generic"
+helptext	= _("\
+The Commissariat of Agriculture submits all agricultural output\
+ to State methods and planning. Newly founded cities start\
+ with +5 food. Time to create Farmland is reduced to 2\
+ worker-turns. Gross food output in every city receives a +10%\
+ multiplier.\n\n\
+This Wonder is never obsolete, but only works in Communism.\
 ")
 
 [building_copernicus_observatory]
@@ -1854,7 +1886,9 @@ The Great Wall protects your cities with City Walls. Unlike normal\
 "), _("\
 The Great Wall gives no extra effect when City Walls are already present.\
  However, regular City Walls still protect a city in which the Great\
- Wall has not yet activated. \n Warning! This Wonder is obsolete when\
+ Wall has not yet activated. \n\
+The Great Wall also allows you to build Walls over the land terrain\
+ itself. See the manual for more information. \n WARNING! This Wonder is obsolete when\
  ANY nation in the world discovers Machine Tools.\
 ")
 
@@ -2070,7 +2104,7 @@ graphic	= "b.leonardos_workshop"
 graphic_alt	= "-"
 obsolete_by	=
     { "type", "name", "range"
-      "Tech", "Automobile", "Player"
+      "Tech", "Robotics", "Player"
     }
 build_cost	= 300
 upkeep		= 0
@@ -2079,7 +2113,7 @@ sound		= "w_leonardos_workshop"
 sound_alt	= "w_generic"
 helptext	= _("\
 Upgrades two obsolete units per game turn. Obsolete by：\
- Automobile.\
+ Robotics.\
 ")
 
 [building_lighthouse]
@@ -2432,6 +2466,34 @@ Obsolete by: Theocracy, or 13 turns after built. \n\
  alter this wonder’s effects in specific games.)\
 ")
 
+[building_propaganda_ministry]
+name		= _("Propaganda Ministry")
+genus		= "SmallWonder"
+reqs	=
+    { "type",     "name",                "range", "present", "quiet"
+      "Tech",     "Communism",           "Player", TRUE,      FALSE
+      "Building", "Propaganda Ministry", "Player", FALSE,     TRUE
+    }
+graphic	= "b.propaganda_ministry"
+graphic_alt	= "-"
+obsolete_by	=
+    { "type", "name", "range"
+    }
+build_cost	= 200
+upkeep		= 0
+sabotage	= 0
+sound		= "w_pyramids"
+sound_alt	= "w_generic"
+helptext	= _("\
+The Propaganda Ministry manages news and public belief toward\
+ national solidarity. It also ensures entertainment and cultural\
+ gatherings are aligned on message for the populace to love its\
+ leadership. The Propagandra Ministry gives every city in\
+ authoritarian governments +1 happy and +2 luxury. \n\n\
+This Wonder is never obsolete, but only has an effect in Despotism, Communism,\
+ and Nationalism.\
+")
+
 [building_pyramids]
 name		= _("Pyramids")
 genus		= "SmallWonder"
@@ -2451,9 +2513,11 @@ sabotage	= 0
 sound		= "w_pyramids"
 sound_alt	= "w_generic"
 helptext	= _("\
-Every city will gain +25% to its food storage when the city grows\
- or starves. Newly founded cities start with +5 food. In addition,\
- the city with the Pyramids can rapture every turn when celebrating. \n\
+The Pyramids are especially effective for non-representative governments. \n\
+ Every city gains +5 to grain storage when founded, and +25% to grain\
+ storage when it starves or grows from reaching its grain ceiling.\
+ Also, the city with the Pyramids can rapture every turn when celebrating\
+ — at a 100% rate — regardless of government. \n\
 This Wonder is never obsolete.\
 ")
 
@@ -2470,7 +2534,7 @@ graphic_alt	= "-"
 obsolete_by	=
     { "type", "name", "range"
     }
-build_cost	= 400
+build_cost	= 375
 upkeep		= 0
 sabotage	= 0
 sound		= "w_roman_colosseum"

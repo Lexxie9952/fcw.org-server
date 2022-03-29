@@ -855,9 +855,9 @@ reqs    =
 type    = "Fortify_Defense_Bonus"
 value   = 50
 reqs    =
-    { "type",      "name",           "range"
-      "Extra",     "Walls",          "Local"
-      "UnitState", "OnDomesticTile", "Local" ;TODO: Bring in ability to check DiplRel on tile and change to Alliance
+    { "type",      "name",           "range", "present"
+      "Extra",     "Walls",          "Local", TRUE
+      "UnitState", "OnDomesticTile", "Local", TRUE  ; TODO: Bring in ability to check DiplRel on tile and change to Alliance
     }
 
 ;Enemies who moved onto walls and lost all moves are considered as scaling
@@ -866,10 +866,10 @@ reqs    =
 type    = "Fortify_Defense_Bonus"
 value   = -50
 reqs    =
-    { "type", "name", "range", "present"
-      "Extra", "Walls", "Local", TRUE
-      "UnitState", "OnDomesticTile", "Local", FALSE ;;TODO: Bring in ability to check DiplRel on tile and change to Alliance
-      "MinMoveFrags", "1", "Local", FALSE
+    { "type",         "name",           "range", "present"
+      "Extra",        "Walls",          "Local", TRUE
+      "UnitState",    "OnDomesticTile", "Local", FALSE   ; TODO: Bring in ability to check DiplRel on tile and change to Alliance,FALSE
+      "MinMoveFrags", "1",              "Local", FALSE
     }
 
 [effect_city_fortified]
@@ -1521,6 +1521,14 @@ reqs    =
       "OutputType", "Shield",      "Local", TRUE
       "Building",   "Magna Carta", "Player", FALSE
     }
+[effect_gold_upkeep_free_units_both_monarchies]
+type    = "Unit_Upkeep_Free_Per_City"
+value   = 1
+reqs    =
+    { "type",       "name",        "range", "present"
+      "Gov",        "Monarchy",    "Player", TRUE
+      "OutputType", "Gold",        "Local", TRUE
+    }
 [effect_upkeep_free_units_magna_carta]
 type    = "Unit_Upkeep_Free_Per_City"
 value   = 1
@@ -1591,6 +1599,14 @@ reqs   =
       "Gov", "Communism", "Player"
       "OutputType", "Shield", "Local"
     }
+[effect_gold_upkeep_free_units_communism]
+type    = "Unit_Upkeep_Free_Per_City"
+value   = 3
+reqs    =
+    { "type",       "name",        "range", "present"
+      "Gov",        "Communism",   "Player", TRUE
+      "OutputType", "Gold",        "Local", TRUE
+    }
 [effect_building_upkeep_communism]
 type    = "Upkeep_Free"          ; 
 value   = 1
@@ -1613,6 +1629,14 @@ reqs    =
     { "type", "name", "range"
       "Gov", "Theocracy", "Player"
       "OutputType", "Shield", "Local"
+    }
+[effect_gold_upkeep_free_units_theocracy]
+type    = "Unit_Upkeep_Free_Per_City"
+value   = 1
+reqs    =
+    { "type", "name", "range"
+      "Gov", "Theocracy", "Player"
+      "OutputType", "Gold", "Local"
     }
 [effect_nationalism_unit_upkeep]
 type    = "Upkeep_Factor"
@@ -1791,7 +1815,7 @@ reqs    =
     }
 [effect_empire_size_base_communism]
 type    = "Empire_Size_Base"
-value   = 12
+value   = 9999
 reqs	=
     { "type",       "name",      "range"
       "Gov", "Communism", "Player"
@@ -2325,14 +2349,27 @@ reqs  =
       "OutputType", "Trade",       "Local",  TRUE
     }
 
+;Communism gets free +1 trade on irrigated road/river...
 [effect_gov_tile_bonus_communism]
+type    = "Output_Inc_Tile"
+value   = 1
+reqs	=
+    { "type",       "name",      "range", "present"
+      "OutputType", "Trade",     "Local",  TRUE
+      "Extra",      "Irrigation","Local",  TRUE
+      "Gov",        "Communism", "Player", TRUE
+    }
+;..if it celebrates we add +1 only if it lacks irrigation:
+[effect_gov_tile_bonus_communism_1]
 type    = "Output_Inc_Tile_Celebrate"
 value   = 1
 reqs	=
-    { "type",       "name",      "range"
-      "OutputType", "Trade",     "Local"
-      "Gov",        "Communism", "Player"
+    { "type",       "name",      "range", "present"
+      "OutputType", "Trade",     "Local",  TRUE
+      "Extra",      "Irrigation","Local",  FALSE
+      "Gov",        "Communism", "Player", TRUE
     }
+
 [effect_gov_city_center_food_bonus_communism]
 type    = "Output_Inc_Tile_Celebrate"
 value   = 1
@@ -2901,9 +2938,9 @@ reqs	=
       "Building", "City Walls", "City", TRUE
       "UnitType", "Cannon", "Local", TRUE
     }
-[effect_city_walls_vs_Artillery_75pct_bonus]
+[effect_city_walls_vs_Artillery_50_pct_bonus]
 type    = "Defend_Bonus"
-value	= 25 ; 1.25x vs Artillery
+value	= 50 ; 1.5x vs Artillery
 reqs	=
     { "type", "name", "range", "present"
       "Building", "City Walls", "City", TRUE
@@ -3042,7 +3079,7 @@ reqs	=
       "Tech", "Machine Tools", "World", FALSE
     }
 
-; 2.25x vs Artillery not needed since Machine Tools expires it.
+; 1.5x vs Artillery not needed since Machine Tools expires it.
 
 [effect_great_wall_0_assimilated]
 type    = "Defend_Bonus"
@@ -3094,7 +3131,7 @@ reqs	=
       "Tech", "Machine Tools", "World", FALSE
     }
 
-; 2.25x vs Artillery not needed since Machine Tools expires it.
+; 1.5x vs Artillery not needed since Machine Tools expires it.
 
 [effect_great_wall_1_original]
 type    = "Defend_Bonus"
@@ -3701,7 +3738,7 @@ reqs    =
     }
 [effect_palace_communism]
 type = "Output_Bonus"
-value  = 25
+value  = 40
 reqs =
     { "type", "name", "range"
       "Gov", "Communism", "Player"
@@ -4702,24 +4739,48 @@ reqs	=
 type    = "Output_Per_Tile"
 value	= 100
 reqs	=
-    { "type", "name", "range"
-      "Extra", "Farmland", "Local"
-      "Building", "Supermarket", "City"
-      "OutputType", "Food", "Local"
+    { "type",       "name",        "range", "present"
+      "Gov",        "Communism",   "Player", FALSE
+      "Building",   "Supermarket", "City",   TRUE
+      "Extra",      "Farmland",    "Local",  TRUE
+      "OutputType", "Food",        "Local",  TRUE
     }
-
 [effect_supermarket_center]
 type    = "Output_Per_Tile"
 value	= 50
 reqs	=
-    { "type", "name", "range", "present"
-      "CityTile", "Center", "Local", TRUE
-      "Extra", "Farmland", "Local", FALSE
-      "TerrainAlter", "CanIrrigate", "Local", TRUE
-      "Building", "Supermarket", "City", TRUE
-      "OutputType", "Food", "Local", TRUE
-      "Extra", "Mine", "Local", FALSE
-      "Extra", "Oil Well", "Local", FALSE
+    { "type",         "name",        "range",  "present"
+      "Gov",          "Communism",   "Player", FALSE
+      "CityTile",     "Center",      "Local",  TRUE
+      "Extra",        "Farmland",    "Local",  FALSE
+      "TerrainAlter", "CanIrrigate", "Local",  TRUE
+      "Building",     "Supermarket", "City",   TRUE
+      "OutputType",   "Food",        "Local",  TRUE
+      "Extra",        "Mine",        "Local",  FALSE
+      "Extra",        "Oil Well",    "Local",  FALSE
+    }
+[effect_communism_free_supermarket_effect]
+type    = "Output_Per_Tile"
+value	= 100
+reqs	=
+    { "type",       "name",      "range"
+      "Gov",        "Communism", "Player"
+      "Extra",      "Farmland",  "Local"
+      "OutputType", "Food",      "Local"
+    }
+[effect_communism_free_supermarket_center]
+type    = "Output_Per_Tile"
+value	= 50
+reqs  =
+    { "type",         "name",        "range",  "present"
+      "Gov",          "Communism",   "Player", TRUE
+      "CityTile",     "Center",      "Local",  TRUE
+      "Extra",        "Farmland",    "Local",  FALSE
+      "TerrainAlter", "CanIrrigate", "Local",  TRUE
+      "Building",     "Supermarket", "City",   TRUE
+      "OutputType",   "Food",        "Local",  TRUE
+      "Extra",        "Mine",        "Local",  FALSE
+      "Extra",        "Oil Well",    "Local",  FALSE
     }
 
 [effect_temple]
@@ -5529,6 +5590,43 @@ reqs    =
       "UnitType", "Goods",    "Local", TRUE
       "Tech", "Steam Engine", "Player",FALSE
     }
+;************************************************************************ Commissariat of Agriculture
+[effect_commissariat_1]
+type    = "Growth_Food"
+value	= 34 ; 34% = 5/15 = 33.3% 
+reqs	=
+    { "type",     "name",                       "range",  "present"
+      "Building", "Commissariat of Agriculture", "Player", TRUE
+      "Gov",      "Communism",                  "Player", TRUE
+      "Building", "Granary",                    "City",   FALSE ;won't happen
+      "Age",      "2",                          "City",   FALSE
+    }
+[effect_commissariat_2]
+type    = "Output_Bonus_2"
+; Output_Bonus_2 uses trunc rounding. True +10% is achieved knowing the following:
+; 10% with trunc rounding: x̄ = +8.11% food. (median is slightly lower)
+; 12% with trunc rounding: x̄ = +9.92% food. (median is lower)
+; (NB: bonus suffers somewhat more in low pop cities)
+; If changing from 10% to another value, use "commisariat_rounding.ods" to calibrate
+value	= 12
+reqs    =
+    { "type",       "name",                       "range",  "present"
+      "Building",   "Commissariat of Agriculture", "Player", TRUE
+      "OutputType", "Food",                       "Local",  TRUE
+      "Gov",        "Communism",                  "Player", TRUE
+    }
+[effect_commissariat_3]
+type    = "Unit_Work_Pct"  ;Unit_Work_Frag_Bonus
+value	  = 50
+reqs    =
+    {
+      "type",     "name",      "range", "present"
+      "UnitFlag", "Infra",     "Local",  TRUE
+      "Gov",      "Communism", "Player", TRUE
+      "Extra",    "Irrigation","Local",  TRUE
+      "Activity", "Irrigate",  "Local",  TRUE
+    }
+
 ;************************************************************************ Copernicus 
 [effect_copernicus_observatory]
 type    = "Output_Bonus"
@@ -6288,6 +6386,34 @@ reqs	=
       "Tech",     "Philosophy","Player",TRUE
       "Tech",     "Theocracy", "World", FALSE
     }
+
+;************************************************************************ Propaganda Ministry
+[effect_propaganda_ministry_1]
+type    = "Output_Add_Tile"
+value   = 2
+reqs    =
+    { "type",       "name",                "range", "present"
+      "Building",   "Propaganda Ministry", "Player", TRUE
+      "CityTile",   "Center",              "Local",  TRUE
+      "OutputType", "Luxury",              "Local",  TRUE
+      "Gov",        "Anarchy",             "Player", FALSE
+      "Gov",        "Monarchy",            "Player", FALSE
+      "Gov",        "Republic",            "Player", FALSE
+      "Gov",        "Democracy",           "Player", FALSE
+      "Gov",        "Theocracy",           "Player", FALSE
+    }
+[effect_propaganda_ministry_2]
+type    = "Make_Happy"
+value	= 1
+ reqs	=
+    { "type",       "name",                "range", "present"
+      "Building",   "Propaganda Ministry", "Player", TRUE
+      "Gov",        "Anarchy",             "Player", FALSE
+      "Gov",        "Monarchy",            "Player", FALSE
+      "Gov",        "Republic",            "Player", FALSE
+      "Gov",        "Democracy",           "Player", FALSE
+      "Gov",        "Theocracy",           "Player", FALSE
+     }
 
 ;************************************************************************ Pyramids
 [effect_pyramids]

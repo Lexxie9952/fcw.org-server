@@ -242,6 +242,13 @@ helptext      = _("\
   • Can be airlifted from a suitable city.\
 ")
 
+[unitclass_land_immobile]
+name          = _("?unitclass:LandImmobile")
+min_speed     = 3
+hp_loss_pct   = 0
+flags         = "BuildAnywhere", "ZOC", "CanFortify", "TerrainDefense",
+                "AttFromNonNative", "AttackNonNative"
+
 [unitclass_landnokill]
 name          = _("?unitclass:LandNoKill")
 min_speed     = 1
@@ -1529,14 +1536,14 @@ transport_cap = 0
 fuel          = 0
 city_size     = 1080; 000000,0,100,001110,0,0 = atk_bonus=0, max_kills=0, targets=4, move_cost=14 frags, sty_frtfy=0, reserved = 0
 uk_happy      = 2
-uk_shield     = 1
+uk_shield     = 0
 uk_food       = 0
-uk_gold       = 0
+uk_gold       = 1
 embarks       = "LandRoad", "LandRail", "Helicopter"    ; transport helicopter only
 disembarks    = "LandRoad", "LandRail", "Helicopter"
 targets       = "Balloon", "Helicopter", "LandRail"
 flags         = "Fanatic", "FootSoldier", "Capturer", "CantReachAir", "Unbribable", "Bombarder",
-                "Settlers", "CanHide", "MultiSlot", "Shield2Gold", "WillNever"
+                "Settlers", "CanHide", "MultiSlot", "WillNever"
 roles         = "DefendGood", "DefendGoodStartUnit", "FirstBuild"
 helptext      = _("\
 Zealots are warriors devoted to a higher cause. Their faith\
@@ -1587,7 +1594,7 @@ uk_gold       = 0
 embarks       = "LandRoad", "LandRail", "Helicopter"    ; transport helicopter only
 disembarks    = "LandRoad", "LandRail", "Helicopter"
 targets       = "Balloon", "Helicopter", "LandRail"
-flags         = "MultiSlot", "Shield2Gold", "IgTer", "IgZOC", "NoHome", "FootSoldier", "Capturer",
+flags         = "MultiSlot", "IgTer", "IgZOC", "NoHome", "FootSoldier", "Capturer",
                 "CantReachAir", "Settlers", "CanHide", "WillNever", "SentryAlways"
 roles         = "DefendGood", "Partisan", "BarbarianTech"
 veteran_names =
@@ -1643,13 +1650,13 @@ city_size     = 2;  ...xxxxx..., 1, 0  use bombard_stay_fortified on a non-bomba
 paratroopers_mr_sub = 0 ;00,0000,000,0,0 iPill_rand_tgts=0, iPill_odds=-0 pentads, iPill_moves=0, iPillage=0, ATK_Stay_Fortified=0
 ;NOTE：iPillage changes in rules require client_rules_flag and get_what_can_unit_pillage_from() changes.
 uk_happy      = 1
-uk_shield     = 1
+uk_shield     = 0
 uk_food       = 0
-uk_gold       = 0
+uk_gold       = 1
 embarks       = "LandRoad", "LandRail", "Helicopter"    ; transport helicopter only
 disembarks    = "LandRoad", "LandRail", "Helicopter"
 targets       = "Balloon", "Helicopter", "LandRail"
-flags         = "MultiSlot", "Shield2Gold", "FootSoldier", "Capturer", 
+flags         = "MultiSlot", "FootSoldier", "Capturer", 
                 "CantReachAir", "Settlers", "CanHide", "WillNever"
 roles         = "DefendGood", "DefendGoodStartUnit", "FirstBuild"
 helptext      = _("\
@@ -1658,8 +1665,6 @@ Riflemen are World War-era infantry. They are good at defending cities and\
 "), _("\
 Under Communism this unit costs 5 less. Also, Communism tech allows Communist\
  governments to de-commission Riflemen into Workers II via the Convert order. And vice versa. \
-"), _("\
-\nThe discovery of Banking changes upkeep from shields to gold.\
 ")
 
 [unit_alpine_troops]
@@ -1684,21 +1689,19 @@ vision_radius_sq = 4
 transport_cap = 0
 fuel          = 0
 uk_happy      = 1
-uk_shield     = 1
+uk_shield     = 0
 uk_food       = 0
-uk_gold       = 0
+uk_gold       = 1
 embarks       = "LandRoad", "LandRail", "Helicopter"    ; transport helicopter only
 disembarks    = "LandRoad", "LandRail", "Helicopter"
 targets       = "Balloon", "Helicopter", "LandRail"
-flags         = "MultiSlot",  "Shield2Gold", "IgTer", "FootSoldier", "Capturer",
+flags         = "MultiSlot",  "IgTer", "FootSoldier", "Capturer",
                 "CantReachAir", "Settlers", "CanHide", "WillNever"
 roles         = "DefendGood", "DefendGoodStartUnit"
 helptext      = _("\
 Alpine Troops are highly mobile units and\
  excellent defenders.  Similar to a Scout, they\
  treat every land tile like a road were on it. \
-"), _("\
-\nThe discovery of Banking changes upkeep from shields to gold.\
 ")
 
 [unit_marines]
@@ -1726,13 +1729,13 @@ city_size     = 2618 ; 000000,001,010,001110,1,0 = atk_bonus=0, max_kills=1, tar
 paratroopers_mr_sub = 1 ;00,0000,000,0,1 iPill_rand_tgts=0, iPill_odds=-0 pentads, iPill_moves=0, iPillage=0, ATK_Stay_Fortified=1
 ;NOTE：iPillage changes in rules require client_rules_flag and get_what_can_unit_pillage_from() changes.
 uk_happy      = 1
-uk_shield     = 1
+uk_shield     = 0
 uk_food       = 0
-uk_gold       = 0
+uk_gold       = 1
 embarks       = "Helicopter", "Land", "Sea", "LandRoad", "LandRail"
 disembarks    = "Helicopter", "Land", "Sea", "LandRoad", "LandRail"
 targets       = "Sea", "Balloon", "Helicopter", "LandRail", "Zeppelin"
-flags         = "MultiSlot", "Shield2Gold", "Marines", "FootSoldier", "BeachLander",
+flags         = "MultiSlot", "Marines", "FootSoldier", "BeachLander",
                 "Capturer", "NeverBlocked",  "Settlers", "CanHide", "WillNever",
                 "Airbase", "CanFortress", "Bombarder"; can Fort only, actually.
 veteran_names =
@@ -1763,8 +1766,6 @@ Marines are experts at all-terrain warfare. They are the strongest\
  be done to Oceanic tiles if the Marines are not transported. \n\
  Marines built in a city with an Airport, Port Facility, and Barracks III\
  receive an extra veteran level. \
-"), _("\
-\nThe discovery of Banking changes upkeep from shields to gold.\
 ")
 bombard_rate = 3
 
@@ -1791,13 +1792,13 @@ transport_cap = 0
 fuel          = 0
 paratroopers_mr_sub = 1 ;00,0000,000,0,1 iPill_rand_tgts=0, iPill_odds=-0 pentads, iPill_moves=0, iPillage=0, ATK_Stay_Fortified=1
 uk_happy      = 1
-uk_shield     = 1
+uk_shield     = 0
 uk_food       = 0
-uk_gold       = 0
+uk_gold       = 1
 embarks       = "LandRoad", "LandRail", "Helicopter"    ; transport helicopter only
 disembarks    = "LandRoad", "LandRail", "Helicopter"
 targets       = "Balloon", "Helicopter", "LandRail", "Zeppelin"
-flags         = "MultiSlot", "Shield2Gold", "FootSoldier", "Capturer",
+flags         = "MultiSlot", "FootSoldier", "Capturer",
                 "CantReachAir", "Settlers", "CanHide", "WillNever"
 roles         = "DefendOk", "DefendOkStartUnit"
 veteran_names =
@@ -1841,13 +1842,13 @@ vision_radius_sq = 4
 transport_cap = 0
 fuel          = 0
 uk_happy      = 1
-uk_shield     = 1
+uk_shield     = 0
 uk_food       = 0
-uk_gold       = 0
+uk_gold       = 1
 embarks       = "LandRoad", "LandRail", "Helicopter"    ; transport helicopter only
 disembarks    = "LandRoad", "LandRail", "Helicopter"
 targets       = "Balloon", "Helicopter", "LandRail", "Zeppelin"
-flags         = "MultiSlot", "Shield2Gold", "Paratroopers", "FootSoldier", "Capturer",
+flags         = "MultiSlot", "Paratroopers", "FootSoldier", "Capturer",
                 "CantReachAir", "Provoking", "Settlers", "CanHide", "WillNever"
 roles         = "DefendOk", "DefendOkStartUnit"
 helptext      = _("\
@@ -1858,8 +1859,6 @@ Paratroopers are experts at airborne attacks.\
  as Paratroopers landing on a tile occupied by enemy units will be lost.\
  Also note：Paradropping is assumed to be done from aircraft. Therefore,\
  Fighters on Vigil may auto-attack the tile you land on, if adjacent. \
-"), _("\
-\nThe discovery of Banking changes upkeep from shields to gold.\
 ")
 paratroopers_range = 14
 paratroopers_mr_req = 1
@@ -1888,9 +1887,9 @@ vision_radius_sq = 4
 transport_cap = 0
 fuel          = 0
 uk_happy      = 1
-uk_shield     = 1
+uk_shield     = 0
 uk_food       = 0
-uk_gold       = 0
+uk_gold       = 1
 embarks       = "Helicopter"    ; transport helicopter only
 ;disembarks    = "Helicopter"
 targets       = "Balloon", "Helicopter", "LandRail", "Zeppelin"
@@ -1899,8 +1898,6 @@ roles         = "DefendGood", "DefendGoodStartUnit"
 helptext      = _("\
 Mechanized Infantry have the strongest general defense strength of any land unit.\
  They have decent attack strength in open field engagements, and excellent mobility. \
-"), _("\
-\nUpkeep for Mechanized infantry is paid in gold instead of shields.\
 ")
 
 [unit_horsemen]
@@ -2456,14 +2453,12 @@ targets       = "Balloon", "LandRail", "Zeppelin"
 flags         = "CantReachAir", "Bombarder", "Reserved1" ;autoattacks (!NonMil) targets instead of "Provoking" targets
 roles         = ""
 helptext      = _("\
-Artillery are a major upgrade to Cannons, with doubled firepower. Accuracy\
- and projectile speed go to a whole new level. They have a greater bonus\
- against City Walls than their predecessors. The bonus of City Walls\
- is reduced -75% down to 1.25×. \n\
+Artillery upgrade Cannons with doubled firepower. Against Artillery,\
+ the bonus of City Walls is reduced -50% down to 1.5×. \n\
 "), _("
 If they haven’t moved, Artillery can do 6 rounds of Bombardment\
  on three units, with one possible fatality. When special attacked\
- from range, they can retaliate with the same type of Bombardment.\
+ from range, they retaliate with the same type of Bombardment.\
 "), _("
 VIGIL：the Vigil order lets Artillery auto-Bombard adjacent military units if they\
  have better attack odds. Can be done in cities or bases if it has used no moves. \n\
@@ -3494,7 +3489,7 @@ veteran_names =
   _("?vet_rank:crack"),
   _("?vet_rank:ace"),
   _("?vet_rank:top gun")
-veteran_base_raise_chance = 40, 25, 16, 10, 10, 10, 0
+veteran_base_raise_chance = 50, 33, 20, 15, 15, 15, 0
 veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
 veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
 veteran_move_bonus = 0, 0, 0, 0, 9, 9, 9
@@ -5130,7 +5125,9 @@ A Diplomat performs official or covert actions. Covert actions make incidents\
 Except for Bribing, Establishing Embassy, and Investigate City, diplomatic actions will\
  spend the Diplomat, making him unavailable for further use. Diplomats may claim a tile for\
  your nation if adjacent to a tile claim made inside your own national border. Foreign tile\
- claims require the Diplomat to be accompanied by another unit. \
+ claims require the Diplomat to be accompanied by another unit. \n\
+Espionage tech allows Diplomats to establish hostile embassies vs. Courthouse and Homeland\
+ Security (but not vs. Police Station or Theocracy.)\ 
 "), _("\
 Diplomats can be upgraded from Emissaries for free. Full rules for Diplomats are in the Manual.\
 ")
@@ -5798,10 +5795,60 @@ Investigating, Converting, Establishing Embassy, and Inciting can be done multip
  successful. Other actions spend the Patriarch, allowing no further use. A Patriarch may\
  claim a tile for your nation if adjacent to a tile claim made inside your own national border.\
  Foreign tile claims require the Patriarch to be accompanied by another unit. \n\
+Espionage tech allows the Patriarch to establish hostile embassies vs. Courthouse and Homeland\
+ Security (but not vs. Police Station or Theocracy.) \n\ 
 "), _("\
 In diplomatic contests, the wiles, power, and influence of the Patriarch make him equal\
  to a Spy in strength.\
 ")
+
+[unit_magnum_turret]
+name          = _("Magnum Turret")
+class         = "LandImmobile"
+tech_req      = "Mass Production"
+obsolete_by   = "None"
+graphic       = "u.turret_guns_o"
+graphic_alt   = "-"
+sound_move    = "m_generic"
+sound_move_alt = "m_generic"
+sound_fight   = "f_battleship"
+sound_fight_alt = "f_generic"
+build_cost    = 145
+pop_cost      = 0
+attack        = 10
+defense       = 7
+hitpoints     = 40
+firepower     = 3
+move_rate     = 3
+vision_radius_sq = 4
+transport_cap = 0
+fuel          = 0
+city_size     = 5414        ; 000000,010,101,001001,10 = atk_bonus=0, max_kills=2, targets=5, move_cost=9 frags, stay_fortfy=1, reserved = 0
+paratroopers_mr_sub = 14336 ; 00111,00,0000,000,0,0 - bbd_retal_rate=7, iPill_rand_tgts=0, iPill_odds=0, iPill_moves=0, iPillage=0, ATK_Stay_Fortified=0
+uk_happy      = 1 
+uk_shield     = 1
+uk_food       = 0
+uk_gold       = 0
+targets       = "Balloon", "LandRail", "Zeppelin"
+flags         = "Unique", "CantReachAir", "Bombarder", "Reserved1" ;autoattacks (!NonMil) targets instead of "Provoking" targets
+roles         = ""
+helptext      = _("\
+On rare occasions in history, nations constructed monumental turret guns.\
+ Cost-benefit is debatable among military theorists due to scale, cost, and immobility.\
+ The Magnum Turret stays where it’s built. You may build only one. \n\n\
+The Magnum Turret features copious armor and defensive accomodation, giving much higher defense\
+ than its cousins. In theory, the Magnum Turret frightens attackers and deters enemy\
+ encampments near its city. It may attack or Bombard ocean tiles.\n\
+"), _("
+If it hasn't acted yet during the turn, the Magnum Turret can do 7 rounds of Bombardment\
+ up to 2 tiles distant upon five units, with two possible fatalities. When special attacked from range, they can\
+ retaliate with the same type of Bombardment. \n\
+"), _("
+VIGIL：the Vigil order instructs the Magnum Turret to auto-Bombard adjacent military units if they\
+ have better attack odds.\
+")
+bombard_rate = 7
+
 
 ;*** This unit can be turned on by uncommenting this, the Virtual class above, and adding "Virtual" as native to oceanic tiles
 ;*** in terrain.ruleset.
