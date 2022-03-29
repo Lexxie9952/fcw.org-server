@@ -2396,10 +2396,10 @@ sabotage	= 0
 sound		= "w_pyramids"
 sound_alt	= "w_generic"
 helptext	= _("\
-Every city will gain +25% to its food storage when the city grows,\
- starves, or is founded. In addition, the city with the Pyramids\
- can rapture when celebrating.\
- This Wonder does not become obsolete.\
+Every city will gain +25% to its food storage when the city grows from\
+ from reaching its grain ceiling, or starves, or is founded. In addition,\
+ the city with the Pyramids can rapture when celebrating, regardless of\
+ government. \nThis Wonder does not become obsolete.\
 ")
 
 [building_roman_colosseum]
