@@ -1991,13 +1991,12 @@ function update_unit_order_commands()
     }
 
     if (pcity != null && city_has_building(pcity, improvement_id_by_name(B_AIRPORT_NAME))) {
-      if (pcity["airlift"]>0 && punit['movesleft']>0) {
+      const can_airlift = unit_can_do_action(punit, ACTION_AIRLIFT);
+      if (pcity["airlift"]>0 && punit['movesleft']>0 && can_airlift) {
         unit_actions["airlift"] = {name: "Airlift (shift-L)"};
         $("#order_airlift").show();
-        //$("#order_airlift_disabled").hide();
       } else {
-        //$("#order_airlift").hide();
-        $("#order_airlift_disabled").show();
+        if (can_airlift) $("#order_airlift_disabled").show();
       }
     }
 
@@ -6067,9 +6066,10 @@ function unit_can_vigil(punit)
       case "Ballista":
       case "Cannon":
       case "Artillery":
+      case "Magnum Turret":
       case "Howitzer":
         if (client_rules_flag[CRF_MP2_D]) {
-          if (!moves_used && (tile_city(ptile) || does_tile_have_base(ptile))) {
+          if (moves_used <= 0 && (tile_city(ptile) || does_tile_have_base(ptile))) {
             return true;
           }
         }

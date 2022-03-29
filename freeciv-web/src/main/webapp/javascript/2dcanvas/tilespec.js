@@ -2661,6 +2661,10 @@ function create_unit_offset_arrays()
           dx -= 3; dy -= 3; 
           vx -= 12; vy += 11;
           break;
+      case "Magnum Turret":
+          dx -= 16; dy -= 2;
+          vx += 8; vy -= 14;
+          break;
       case "Musketeers":
           dx += 1; dy -= 4;
           vx += 1; vy -= 19;

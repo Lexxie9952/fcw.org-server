@@ -32,20 +32,21 @@ var unit_pillage_sound_delay_times = {
 };
 
 var unit_bombard_attack_names = {
-  "Phalanx":    "Rumble Attack",
-  "Archers":    "Volley Attack",
-  "Legion":     "Pilum Assult",
-  "Siege Ram":  "Ram Fortress",
-  "Fanatics":   "Skirmish Assault",
-  "Zealots":    "Skirmish Assault",
-  "Marines":    "Bazooka Attack",
-  "Zeppelin":   "Bomb",
-  "Battleship": "Bombard",
-  "Ballista":   "Ranged Attack",
-  "Catapult":   "Bombard",
-  "Cannon":     "Bombard",
-  "Artillery":  "Bombard",
-  "Howitzer":   "Bombard"
+  "Phalanx":       "Rumble Attack",
+  "Archers":       "Volley Attack",
+  "Legion":        "Pilum Assult",
+  "Siege Ram":     "Ram Fortress",
+  "Fanatics":      "Skirmish Assault",
+  "Zealots":       "Skirmish Assault",
+  "Marines":       "Bazooka Attack",
+  "Zeppelin":      "Bomb",
+  "Battleship":    "Bombard",
+  "Ballista":      "Ranged Attack",
+  "Catapult":      "Bombard",
+  "Cannon":        "Bombard",
+  "Artillery":     "Bombard",
+  "Howitzer":      "Bombard",
+  "Magnum Turret": "Bombard"
 };
 
 // Determines if victory by this unit shows crossed swords or gunpowder explosion.
@@ -409,6 +410,7 @@ function unit_could_possibly_load(punit, ptype, ttype, tclass)
 
   // Disqualify all units who can never be cargo.
   if (pclass == "Sea" ||
+      pclass == "LandImmobile" ||
       pclass == "RiverShip" ||
       pclass == "Submarine" ||
       pclass == "Trireme" ||
