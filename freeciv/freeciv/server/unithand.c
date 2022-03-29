@@ -4782,10 +4782,11 @@ static bool do_attack(struct unit *punit, struct tile *def_tile,
     notify_player(unit_owner(ploser), def_tile,
                   E_UNIT_LOST_ATT, ftc_server,
                   /* TRANS: "... Cannon ... the Polish Destroyer." */
-                  _("[`warning`] Your attacking %s failed against the %s %s."),
+                  _("[`warning`] Your attacking %s failed against the %s %s (%dhp)."),
                   loser_link,
                   nation_adjective_for_player(unit_owner(pwinner)),
-                  winner_link);
+                  winner_link,
+                  pwinner->hp);
     wipe_unit(ploser, ULR_KILLED, unit_owner(pwinner));
   } else {
     /* The defender lost, the attacker punit lives! */
