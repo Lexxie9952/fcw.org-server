@@ -615,7 +615,7 @@ Veteran Levels for Warriors are the standard ruleset default:
   • <b>No</b> unit can be killed.  
   • Cannot be done to Cities, Forts, Fortresses, Naval Bases, nor Oceanic tiles.
   • Can do action while fortified and remain fortified afterwards.
-    - Using the D command to click the target will preserve fortified status of Phalanx.
+➤ Can attack while fortified and remain fortified afterwards.
 ➤ Unable to attack air units.
 ➤ May impose a zone of control on its adjacent tiles.
   • <b style="color:#9aa">Prevents enemy cities from working the tile it's on.</b>
@@ -685,7 +685,6 @@ With the discovery of Conscription, Archers can convert to Musketeers in any dom
   • <b>No</b> unit can be killed.  
   • Cannot be done to Cities, Fortresses, nor Naval Bases.
   • Can do action while fortified and remain fortified afterwards.
-    - Using the D command to click the target will preserve fortified status of Archers.
 ➤ Unable to attack air units.
 ➤ May impose a zone of control on its adjacent tiles.
   • <b style="color:#9aa">Prevents enemy cities from working the tile it's on.</b>
@@ -1151,7 +1150,7 @@ Veteran Levels for Partisans are unique to this unit type:
 <h3 class='section'>Riflemen</h3>
 
 <pre class='cost'>Cost: 40 shields</pre>
-<pre class='upkeep'>Upkeep: 1 Shield, 1 Unhappy</pre>
+<pre class='upkeep'>Upkeep: 1 Gold, 1 Unhappy</pre>
 <pre class='moves'>Moves: 2</pre>
 <pre class='vision'>Vision: 2.00 tiles</pre>
 <pre class='attack'>Attack: 5</pre>
@@ -1221,7 +1220,7 @@ Veteran Levels for Riflemen are the standard ruleset default:
 <h3 class='section'>Alpine Troops</h3>
 
 <pre class='cost'>Cost: 50 shields</pre>
-<pre class='upkeep'>Upkeep: 1 Shield, 1 Unhappy</pre>
+<pre class='upkeep'>Upkeep: 1 Gold, 1 Unhappy</pre>
 <pre class='moves'>Moves: 2</pre>
 <pre class='vision'>Vision: 2.00 tiles</pre>
 <pre class='attack'>Attack: 5</pre>
@@ -1288,7 +1287,7 @@ Veteran Levels for Alpine Troops are the standard ruleset default:
 <h3 class='section'>Marines</h3>
 
 <pre class='cost'>Cost: 55 shields</pre>
-<pre class='upkeep'>Upkeep: 1 Shield, 1 Unhappy</pre>
+<pre class='upkeep'>Upkeep: 1 Gold, 1 Unhappy</pre>
 <pre class='moves'>Moves: 2</pre>
 <pre class='vision'>Vision: 2.83 tiles</pre>
 <pre class='attack'>Attack: 8</pre>
@@ -1296,13 +1295,18 @@ Veteran Levels for Alpine Troops are the standard ruleset default:
 <pre class='firepower'>Firepower: 1</pre>
 <pre class='hitpoints'>Hitpoints: 20</pre>
 <pre class='obsolete'>Obsolete by: None</pre>
-<pre class='helptext'><b class='unit_desc'>Marines are experts at all-terrain warfare. They are the strongest foot unit in the game, and are armed with diverse weaponry.
-Unlike other units, Marines can attack Sea units (at a 50% penalty). Air units do not stop them from attacking reachable targets. They can attack while fortified and maintain fortified status. They can attack from a Transport or Helicopter, and can offload without losing a turn of movement. Marines can make Forts and Airbases. Marines get an extra 2/9 movement points for each veteran level they possess. Starting at v2, they gain the ability to do long-range bazooka attacks for 3 combat rounds, hitting up to 2 units on the tile and killing a maximum of 1.
-Bazooka attacks can be done to Ocean tiles if the Marines aren't transported.
-
-Marines built in a city with an Airport, Port Facility, and Barracks III receive an extra veteran level.</b>
-
-<b class='unit_desc'>The discovery of Banking changes upkeep from shields to gold.</b>
+<pre class='helptext'><b class='unit_desc'>Marines are experts at all-terrain warfare. Armed with diverse weaponry, they are the strongest foot unit in the game. Marines have special abilities. They can：
+  ▪ Attack Sea units (at a 50% penalty). 
+  ▪ Attack while fortified and maintain fortified status. 
+  ▪ Attack from a Transport or Helicopter. 
+  ▪ Attack reachable targets on a tile without being blocked by Fighters. 
+  ▪ Do Bazooka attacks, if vet-2： 3 rounds on 2 units, max. 1 kill. 
+  ▪ Do Bazooka attacks on ocean tiles, if not transported. 
+  ▪ Disembark from non-native tiles using only 1 move point. 
+  ▪ (De)board and (un)load without using or needing move points. 
+  ▪ Make Forts and Airbases.
+ 
+Marines gain greater strength bonuses with veterancy, and get +2/9 move points for each veteran level. Marines built in a city with an Airport, Port Facility, and Barracks III receive an extra veteran level.</b>
 <hr style='border-top: 1px solid #000'>➤ Belongs to LandAirSea unit class.
   • Can attack from Ships and Helicopters.
   • Can occupy empty enemy cities.
@@ -1320,13 +1324,18 @@ Marines built in a city with an Airport, Port Facility, and Barracks III receive
   • Cannot be done to a City, Fortress, or Naval Base.
   • A maximum of <b>1</b> unit can be killed.
   • Can do action while fortified and remain fortified afterwards.
-    - Using the D command to click the target will preserve fortified status of Marines.
+➤ Can attack while fortified and remain fortified afterwards.
 ➤ May load and unload from Trains and Helicopters even when underway.
-➤ Won't lose all movement when moving from non-native terrain to native terrain, or unloading from transport.
+➤ <b style="color:#9aa">Loses only 1 move point when disembarking</b> from non-native terrain to native terrain.
+  • Native disembark uses terrain move cost.
+➤ <b style="color:#9aa">Transport Board</b> and <b style="color:#9aa">Transport Deboard</b> <b>do not use or need move points.</b>
+  • The same is true when the AAA is the affected cargo of <b>Transport Load</b>, <b>Transport Unload</b>.
 ➤ May impose a zone of control on its adjacent tiles.
   • <b style="color:#9aa">Prevents enemy cities from working the tile it's on.</b>
 ➤ The discovery of <b>Banking</b> converts the shield upkeep of this unit to 1 gold upkeep.
 ➤ Under certain conditions, <b>cities can make more than one of this unit per turn, plus one of any other unit type.</b>
+➤ Can attack against Sea units, which are usually not reachable.
+  • attacks at a -50% penalty.
 ➤ Can attack against Helicopter units, which are usually not reachable.
 ➤ Can <b style="color:#9aa">Capture Unit</b>
   • target unit must be alone, not on Mountains, and not in a Fort, Fortress, or Naval Base.
@@ -1341,6 +1350,10 @@ Marines built in a city with an Airport, Port Facility, and Barracks III receive
 ➤ Can <b style="color:#9aa">Pillage</b>
 ➤ Can <b style="color:#9aa">Fortify</b>, granting a 50% defensive bonus when not in a city.
   • Gets the 50% defensive bonus automatically while in cities.
+➤ Can <b style="color:#9aa">Build Bases</b>
+  • can build Fort and Airbase.
+  • cannot build Fortress, Naval Base, Castle, Bunker, Radar, or Buoy. 
+  • veteran work rates apply.
 ➤ Can <b style="color:#9aa">Make Hideout</b>
   • Requires Forest, Jungle, Swamp, or Mountains. Land units will be invisible.
 ➤ May acquire veteran status.
@@ -1428,7 +1441,7 @@ Veteran Levels for Ground Troops are the standard ruleset default:
 <h3 class='section'>Paratroopers</h3>
 
 <pre class='cost'>Cost: 55 shields</pre>
-<pre class='upkeep'>Upkeep: 1 Shield, 1 Unhappy</pre>
+<pre class='upkeep'>Upkeep: 1 Gold, 1 Unhappy</pre>
 <pre class='moves'>Moves: 2</pre>
 <pre class='vision'>Vision: 2.00 tiles</pre>
 <pre class='attack'>Attack: 6</pre>
@@ -1497,7 +1510,7 @@ Veteran Levels for Paratroopers are the standard ruleset default:
 <h3 class='section'>Mechanized Infantry</h3>
 
 <pre class='cost'>Cost: 50 shields</pre>
-<pre class='upkeep'>Upkeep: 1 Shield, 1 Unhappy</pre>
+<pre class='upkeep'>Upkeep: 1 Gold, 1 Unhappy</pre>
 <pre class='moves'>Moves: 6</pre>
 <pre class='vision'>Vision: 2.00 tiles</pre>
 <pre class='attack'>Attack: 6</pre>
@@ -2120,6 +2133,7 @@ VIGIL：the Vigil order lets Catapults auto-Bombard adjacent military units if t
     • A maximum of <b>1</b> unit can be killed.
     • Can be done to ocean tiles if not transported.
     • Cannot be done to Cities, Fortresses, Naval Bases, Castles, and Bunkers.
+    • Can do action while fortified and remain fortified afterwards.
     • Action requires:
       - a minimum of <b>2</b> move points
       - Catapult to have used no moves this turn.
@@ -2300,6 +2314,7 @@ VIGIL：the Vigil order lets Cannons auto-Bombard adjacent military units if the
     • A maximum of <b>1</b> unit can be killed.
     • Can be done to ocean tiles if not transported.
     • Cannot be done to Cities, Fortresses, Naval Bases, Castles, and Bunkers.
+    • Can do action while fortified and remain fortified afterwards.
     • Action requires:
       - a minimum of <b>2</b> move points
       - Cannon to have used no moves this turn.
@@ -2373,6 +2388,7 @@ VIGIL：the Vigil order lets Artillery auto-Bombard adjacent military units if t
     • A maximum of <b>1</b> unit can be killed.
     • Can be done to ocean tiles if not transported.
     • Cannot be done to Cities, Fortresses, Naval Bases, Castles, and Bunkers.
+    • Can do action while fortified and remain fortified afterwards.
     • Action requires:
       - a minimum of <b>2</b> move points
       - Artillery to have used no moves this turn.
@@ -2414,7 +2430,7 @@ Veteran Levels for Artillery are the standard ruleset default:
 <h3 class='section'>Anti-Aircraft Artillery</h3>
 
 <pre class='cost'>Cost: 50 shields</pre>
-<pre class='upkeep'>Upkeep: 1 Shield, 1 Unhappy</pre>
+<pre class='upkeep'>Upkeep: 1 Gold, 1 Unhappy</pre>
 <pre class='moves'>Moves: 2</pre>
 <pre class='vision'>Vision: 2.83 tiles</pre>
 <pre class='attack'>Attack: 2</pre>
@@ -2422,9 +2438,9 @@ Veteran Levels for Artillery are the standard ruleset default:
 <pre class='firepower'>Firepower: 2</pre>
 <pre class='hitpoints'>Hitpoints: 20</pre>
 <pre class='obsolete'>Obsolete by: None</pre>
-<pre class='helptext'><b class='unit_desc'>Anti-Aircraft Artillery (AAA) can attack almost anything from anywhere. AAA get a 2× bonus against Air units. AAA qualify as weaponry for Marines and have the same abilities: they can be transported on any unit that carries Marines, can attack from or to non-native tiles, do not lose a turn when unloading, and can use extra build slots. Transported AAA defend their tile on both Land and Sea. (AAA cannot attack Submarines, Missiles, or Jet Bombers.)</b>
-
-<b class='unit_desc'>After Space Flight and 9 turns of service, AAA can be retrofitted to Mobile SAM. The Convert order must be done in a capital, and takes 3 turns.</b>
+<pre class='helptext'><b class='unit_desc'>Anti-Aircraft Artillery (AAA) are in the LandAirSea class, with similar abilities to Marines. AAA get a 2× bonus against Air units. They can attack any tile from anywhere, even while transported. They can be transported by any unit that can carry Marines. AAA can disembark from non-native tiles using only 1 move point, and board/deboard without using or needing move points. Transported AAA can defend their tile from attacks on both Land and Sea. As infantry weaponry, they can use extra city build slots. The only units AAA can't attack are Submarines, Missiles, and High Altitude aircraft.</b>
+<b class='unit_desc'>
+After Space Flight and 9 turns of service, AAA can be retrofitted to Mobile SAM. The Convert order must be done in a capital, and takes 3 turns.</b>
 <hr style='border-top: 1px solid #000'>➤ Belongs to LandAirSea unit class.
   • Can attack from Ships and Helicopters.
   • Can occupy empty enemy cities.
@@ -2432,15 +2448,21 @@ Veteran Levels for Artillery are the standard ruleset default:
   • Slowed down while damaged.
   • <b style="color:#9aa">Can attack from non-native tiles and while transported.</b>
   • <b style="color:#9aa">AIRLIFT</b>: Can be airlifted if it has remaining moves.
-➤ <b style="color:#9aa">2× attack bonus</b> when attacking Fighter, Escort Fighter, Dive Bomber, Medium Bomber, Heavy Bomber, Strategic Bomber, Helicopter, Jet Fighter, Ground Strike Fighter, Stealth Fighter, or Stealth Bomber.
-➤ <b style="color:#9aa">2× defense bonus</b> if attacked by Fighter, Escort Fighter, Dive Bomber, Medium Bomber, Heavy Bomber, Strategic Bomber, Helicopter, Jet Fighter, Ground Strike Fighter, Jet Bomber, Stealth Fighter, or Stealth Bomber.
+➤ <b style="color:#9aa">2× attack bonus</b> when attacking Airplanes and Helicopters.
+➤ <b style="color:#9aa">2× defense bonus</b> if attacked by Airplanes and Helicopters.
 ➤ <b style="color:#9aa">Unblockable</b>: unreachable units can't block its attacks on reachable units.
 ➤ Can defend while transported on non-native tiles.
 ➤ Anti-Air bonus of this unit is less effective against Stealth, which has a 25% bonus against this unit.
 ➤ May load and unload from Trains and Helicopters even when underway.
+➤ <b style="color:#9aa">Loses only 1 move point when disembarking</b> from non-native terrain to native terrain.
+  • Native disembark uses terrain move cost.
+➤ <b style="color:#9aa">Transport Board</b> and <b style="color:#9aa">Transport Deboard</b> <b>do not use or need move points.</b>
+  • The same is true when the AAA is the affected cargo of <b>Transport Load</b>, <b>Transport Unload</b>.
 ➤ May impose a zone of control on its adjacent tiles.
   • <b style="color:#9aa">Prevents enemy cities from working the tile it's on.</b>
+➤ Can attack while fortified and remain fortified afterwards.
 ➤ Can attack against Helicopter units, which are usually not reachable.
+➤ Can attack against Sea units, which are usually not reachable.
 ➤ Can attack against Air units, which are usually not reachable.
 ➤ Can attack against AirProtect units, which are usually not reachable.
 ➤ Can <b style="color:#9aa">Expel</b>
@@ -2452,6 +2474,7 @@ Veteran Levels for Artillery are the standard ruleset default:
 ➤ Can <b style="color:#9aa">Pillage</b>
 ➤ Can <b style="color:#9aa">Fortify</b>, granting a 50% defensive bonus when not in a city.
   • Gets the 50% defensive bonus automatically while in cities.
+➤ Under certain conditions, <b>cities can make more than one of this unit per turn, plus one of any other unit type.</b>
 ➤ Can <b style="color:#9aa">Convert Unit</b>
   • is converted into Mobile SAM (takes 4 turns).
   • must be converted in capital city with same nationality as the unit.
@@ -2499,7 +2522,7 @@ Veteran Levels for AAA are the default for all other military units:
   • <b style="color:#9aa">AIRLIFT</b>: Can be airlifted if it has remaining moves.
   • Can't attack as Cargo. Must first unload.
 ➤ <b style="color:#9aa">2× attack bonus</b> when attacking Airplanes and Helicopters.
-➤ <b style="color:#9aa">2× defense bonus</b> if attacked by Airplanes and Helicopters.
+➤ <b style="color:#9aa">2× defense bonus</b> if attacked by Aircraft, Helicopter, or Cruise Missile.
 ➤ <b style="color:#9aa">Unblockable</b>: unreachable units can't block its attacks on reachable units.
 ➤ May be obtained by conversion of Anti-Aircraft Artillery.
 ➤ Anti-Air bonus of this unit is less effective against Stealth, which has a 25% bonus against this unit.
@@ -2558,6 +2581,7 @@ VIGIL：the Vigil order lets Howitzers auto-Bombard adjacent military units if t
     • A maximum of <b>1</b> unit can be killed.
     • Can be done to ocean tiles if not transported.
     • Cannot be done to Cities, Fortresses, Naval Bases, Castles, and Bunkers.
+    • Can do action while fortified and remain fortified afterwards.
     • Action requires:
       - a minimum of <b>2</b> move points
       - Howitzer to have used no moves this turn.
@@ -3193,7 +3217,7 @@ NOTE:  Due to game mechanics, Satellites block terrestrial movement over a tile.
 <pre class='helptext'><b class='unit_desc'>Transport Helicopters can carry three land units, which they can pick up from anywhere</b>
 <b class='unit_desc'>Foot and artillery types can unload by stepping off to any adjacent tile, but will lose all moves (except Marine types). Other types need a City, Airbase, or Naval Base to unload.</b>
 
-<b class='unit_desc'>Helicopters lose 1 hp for each turn not ended in a City, Base, or Carrier. +1 move is awarded if starting a turn in a City or Airbase.</b>
+<b class='unit_desc'>Helicopters lose 1 hp for each turn not ended in a City, Base, or Carrier. +1 move is awarded if starting a turn in a City or Airbase. The first turn spent in a city, all Helicopter types regain 10hp.</b>
 
 <b class='unit_desc'>All Helicopters can be attacked by land from Riflemen onward; by sea from Ironclad onward; get +50% defence vs. foot units; and are unreachable to artillery types. Unlike attack Helicopters, Transport Helicopters are intercepted by Fighters on vigil. Transport Helicopters can Stack-Escape：a 60% chance to escape a killed stack if they have more remaining moves than the attacker.</b>
 <hr style='border-top: 1px solid #000'>➤ Belongs to Helicopter unit class.
@@ -3208,6 +3232,7 @@ NOTE:  Due to game mechanics, Satellites block terrestrial movement over a tile.
 ➤ Anti-Air units have bonuses against this unit.
 ➤ Loses 1hp for every turn in the air.
 ➤ Gets +1 move point if starting its turn in a City or Airbase.
+➤ The first turn spent in a city, all Helicopter types regain 10hp.
 ➤ Can carry and refuel up to 3 qualifying Land units.
   • Some cargo cannot be loaded or unloaded except in a City or a Base native to this transport.
   • Cargo not visible except to allies.
@@ -3243,7 +3268,7 @@ Veteran Levels for Helicopter types:
 <pre class='obsolete'>Obsolete by: None</pre>
 <pre class='helptext'><b class='unit_desc'>Helicopters are the Air Cavalry of modern armies. They can attack multiple targets and conquer cities. Unaffected by terrain, they are good for Partisan suppression. They can transport Marines and AAA and are thus well-suited for commando ops.
 </b>
-<b class='unit_desc'>For each turn not ended in a City, Base, or Carrier, 1hp is lost. +1 move is awarded if starting a turn in a City or Airbase.
+<b class='unit_desc'>For each turn not ended in a City, Base, or Carrier, 1hp is lost. +1 move is awarded if starting a turn in a City or Airbase. The first turn spent in a city, all Helicopter types regain 10hp.
 </b>
 <b class='unit_desc'>Helicopters fly low to avoid Interception. This invites attacks by ground units from Riflemen onward. They are unreachable to Artillery types and get +50% defense vs. foot units. Helicopters can be attacked by Sea from Ironclad onward.
 Helicopters can retaliate 3 rounds against Special Unit Attacks.
@@ -3261,6 +3286,7 @@ Helicopters can retaliate 3 rounds against Special Unit Attacks.
 ➤ Anti-Air units have bonuses against this unit.
 ➤ Loses 1hp for every turn in the air.
 ➤ Gets +1 move point if starting its turn in a City or Airbase.
+➤ The first turn spent in a city, all Helicopter types regain 10hp.
 ➤ Can carry and refuel 1 Marines or Anti-Aircraft Artillery unit.
   • Cargo not visible except to allies.
 ➤ May impose a zone of control on its adjacent tiles.
@@ -5663,8 +5689,8 @@ The Patriarch has his own veteran level:
 <div class='item' id='utype103'>
 <h3 class='section'>Magnum Turret</h3>
 
-<pre class='cost'>Cost: 145 shields</pre>
-<pre class='upkeep'>Upkeep: 1 Shield, 1 Unhappy</pre>
+<pre class='cost'>Cost: 160 shields</pre>
+<pre class='upkeep'>Upkeep: 1 Shield</pre>
 <pre class='moves'>Moves: 0</pre>
 <pre class='vision'>Vision: 2.00 tiles</pre>
 <pre class='attack'>Attack: 10</pre>

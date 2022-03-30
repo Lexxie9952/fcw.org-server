@@ -3164,11 +3164,11 @@ target_reqs    =
       "UnitState", "Transporting", "Local"
     }
 
-;TO DO: this gives ruleset control over logical requirements for
-;when units can board as cargo onto transporters. This should be
-;extended and exploited to finally give ruleset supreme control 
-;over smooth minimalist non-exploitable behaviours.
-[actionenabler_board]
+; This gives ruleset control over logical requirements for when
+; units can board as cargo onto transporters. This can be
+; extended to give ruleset supreme control over smooth balanced 
+; non-exploitable behaviours.
+[actionenabler_board_non_marines]
 action        = "Transport Board"
 actor_reqs    =
     { "type",    "name",          "range", "present"
@@ -3180,7 +3180,18 @@ actor_reqs    =
       "UnitType","Magnum Turret", "Local", FALSE ;only needed for utype_can_do_action to render false so we aren't show illegal order options 
       "MinMoveFrags", "1",     "Local", TRUE ;this prevents things like moving Artillery away with a Truck after attack, and...
     }                                        ;...a soft limit on double moving via multiple transporters. TODO: raise it to "3"?
-;TODO: possibly infantry can be allowed to get rescued/scooped, at least if only by a Transport Helicopter?
+;TODO: possibly other infantry can be allowed to get rescued/scooped, at least if only by a Transport Helicopter?
+[actionenabler_board_marines]
+action        = "Transport Board"
+actor_reqs    =
+    { "type",    "name",          "range", "present"
+      "DiplRel", "Armistice",     "Local", FALSE
+      "DiplRel", "War",           "Local", FALSE
+      "DiplRel", "Cease-fire",    "Local", FALSE
+      "DiplRel", "Peace",         "Local", FALSE
+      "DiplRel", "Never met",     "Local", FALSE
+      "UnitFlag","Marines",       "Local", TRUE 
+    }
 
 ;This enabler can replace the one above if/when needed if "russian doll" exploits are discovered which should be stopped.
 ;Note: this is currently not illegal. In most cases it makes sense (e.g., Bomber with a Bomb on a Carrier, Trawler towing a

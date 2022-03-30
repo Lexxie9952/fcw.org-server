@@ -1736,7 +1736,7 @@ embarks       = "Helicopter", "Land", "Sea", "LandRoad", "LandRail"
 disembarks    = "Helicopter", "Land", "Sea", "LandRoad", "LandRail"
 targets       = "Sea", "Balloon", "Helicopter", "LandRail", "Zeppelin"
 flags         = "MultiSlot", "Marines", "FootSoldier", "BeachLander",
-                "Capturer", "NeverBlocked",  "Settlers", "CanHide", "WillNever",
+                "Capturer", "NeverBlocked", "Settlers", "CanHide", "WillNever",
                 "Airbase", "CanFortress", "Bombarder"; can Fort only, actually.
 veteran_names =
   _("?vet_rank:green"),
@@ -1752,20 +1752,22 @@ veteran_power_fact = 100, 150, 175, 250, 300, 350, 400
 veteran_move_bonus = 0, 2, 4, 6, 8, 10, 12
 roles         = "DefendOk", "DefendOkStartUnit", "BarbarianSeaTech"
 helptext      = _("\
-Marines are experts at all-terrain warfare. They are the strongest\
- foot unit in the game, and are armed with diverse weaponry. \n\
- Unlike other units, Marines can attack Sea units (at a 50% penalty).\
- Air units do not stop them from attacking reachable targets.\
- They can attack while fortified and maintain fortified status.\
- They can attack from a Transport or Helicopter, and can offload\
- without losing a turn of movement. Marines can also makes Forts\
- and Airbases. Marines get an extra 2/9 movement points for each\
- veteran level they possess. Starting at v2, they gain the ability\
- to do Bazooka ranged attacks for 3 combat rounds, hitting up to 2\
- units on the tile and killing a maximum of 1. Bazooka attacks can\
- be done to Oceanic tiles if the Marines are not transported. \n\
- Marines built in a city with an Airport, Port Facility, and Barracks III\
- receive an extra veteran level. \
+Marines are experts at all-terrain warfare. Armed with diverse\
+ weaponry, they are the strongest foot unit, with special abilities.\
+ They can：\n\
+ ▪ Attack Sea units (at a 50% penalty). \n\
+ ▪ Attack and remain fortified. \n\
+ ▪ Attack from a Transport or Helicopter. \n\
+ ▪ Attack reachable units protected by Fighters. \n\
+ ▪ Do v2 Bazooka attacks：3 rounds, 2 units, 1 kill \n\
+ ▪ Bazooka attack ocean tiles, if not transported. \n\
+ ▪ Disembark from non-native tiles with 1 move. \n\
+ ▪ De/board,un/load without using moves. \n\
+ ▪ Make Forts and Airbases. \n\
+"), _("
+Marines gain greater strength bonuses with veterancy, and +2/9\
+ move for each veteran level. Marines built in a city with an\
+ Airport, Port Facility, and Barracks III get an extra veteran level.\
 ")
 bombard_rate = 3
 
@@ -2488,6 +2490,7 @@ convert_to    = "Mobile SAM"
 convert_time  = 5
 transport_cap = 0
 fuel          = 0
+paratroopers_mr_sub = 1 ;00,0000,000,0,1 iPill_rand_tgts=0, iPill_odds=-0 pentads, iPill_moves=0, iPillage=0, ATK_Stay_Fortified=1
 uk_happy      = 1
 uk_shield     = 0
 uk_food       = 0
@@ -2500,16 +2503,16 @@ bonuses       =
      "AirAttacker", "DefenseDivider", 1
      "AirAttacker", "DefenseMultiplier", 1
    }
-flags         = "NeverBlocked", "AntiAir", "Marines", "WillNever", "TransportDefender", "MultiSlot"
+flags         = "MultiSlot", "Marines", "BeachLander", "NeverBlocked", "AntiAir", "WillNever", "TransportDefender"
 roles         = ""
 helptext      = _("\
-Anti-Aircraft Artillery (AAA) can attack almost anything from anywhere. AAA get a\
- 2× bonus against Air units. AAA qualify as weaponry for Marines and have the same\
- abilities：they can be transported on any unit that carries Marines, can attack from\
- or to non-native tiles, do not lose a turn when unloading, and can use extra build\
- slots. Transported AAA can\
- defend their tile on both Land and Sea. (AAA can’t attack Submarines, Missiles,\
- or Jet Bombers.)\
+Anti-Aircraft Artillery (AAA) are in the LandAirSea class, with cabilities\
+ like Marines. AAA get a 2× bonus against Air units. They can attack any tile from\
+ anywhere, even while transported. They can be transported by any unit that can carry\
+ Marines. AAA can disembark from non-native tiles using only 1 move point, and board/deboard\
+ without using move points. Transported AAA can always defend their tile, even at Sea.\
+ As infantry weaponry, they may use extra city build slots. AAA can’t attack Submarines,\
+ Missiles, and High Altitude aircraft.\
 "), _("
 After Space Flight and 9 turns of service, AAA can be retrofitted to\
  Mobile SAM. The Convert order must be done in a capital, and takes 3 turns.\
@@ -3319,7 +3322,8 @@ Transport Helicopters can carry three land units, which they can pick up from an
  lose all moves (except Marine types). Other types need a City, Airbase, or Naval Base to unload. \n\
 "), _("\
  Helicopters lose 1 hp for each turn not ended in a City, Base, or Carrier. +1 move\
- is awarded if starting a turn in a City or Airbase. \n\
+ is awarded if starting a turn in a City or Airbase. The first turn spent\
+ in a city, all Helicopter types regain 10hp. \n\
 "), _("\
  All Helicopters can be attacked by land from Riflemen onward; by sea from Ironclad\
  onward; get +50% defence vs. foot units; and are unreachable to artillery types.\
@@ -3387,7 +3391,8 @@ Helicopters are the Air Cavalry of modern armies. They can attack multiple targe
  They can transport Marines and AAA and are thus well-suited for commando ops. \n\
 "), _("\
 For each turn not ended in a City, Base, or Carrier, 1hp is lost. +1 move\
- is awarded if starting a turn in a City or Airbase. \n\
+ is awarded if starting a turn in a City or Airbase. The first turn spent\
+ in a city, all Helicopter types regain 10hp. \n\
 "), _("\
 Helicopters fly low to avoid Interception. This invites attacks by ground units from\
  Riflemen onward. They are unreachable to Artillery types and get +50% defense\
@@ -5813,7 +5818,7 @@ sound_move    = "m_generic"
 sound_move_alt = "m_generic"
 sound_fight   = "f_battleship"
 sound_fight_alt = "f_generic"
-build_cost    = 145
+build_cost    = 160
 pop_cost      = 0
 attack        = 10
 defense       = 7
@@ -5825,7 +5830,7 @@ transport_cap = 0
 fuel          = 0
 city_size     = 5414        ; 000000,010,101,001001,10 = atk_bonus=0, max_kills=2, targets=5, move_cost=9 frags, stay_fortfy=1, reserved = 0
 paratroopers_mr_sub = 14336 ; 00111,00,0000,000,0,0 - bbd_retal_rate=7, iPill_rand_tgts=0, iPill_odds=0, iPill_moves=0, iPillage=0, ATK_Stay_Fortified=0
-uk_happy      = 1 
+uk_happy      = 0           ; it's always stuck in a city
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0

@@ -561,9 +561,14 @@ only police station/theocracy blocked hostile spies.
 NOW: courthouse/homeland/police/theo blocks emissary and diplo;
 only police/theo blocks diplo who has espionage tech
 ==============================================================
-101.
+101.Helicopters types gain half hp first turn arriving and
+staying in city: (hp is  "half" like a kind of fuel, and "half"
+the amount of damage it got.) This rightly sets healing to 1 turn
+for short sortie, 2 turns for damaged <50%, and 3 turns for badly
+damaged if there's no airport.
 ==============================================================
-102.
+102.Abilities of Marines and AAA were cleaned up and clarified
+in better documentation. 
 ==============================================================
 103.
 ==============================================================
