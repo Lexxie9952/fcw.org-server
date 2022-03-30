@@ -5845,7 +5845,7 @@ The Magnum Turret features copious armor and defensive accomodation, giving much
  than its cousins. In theory, the Magnum Turret frightens attackers and deters enemy\
  encampments near its city. It may attack or Bombard ocean tiles.\n\
 "), _("
-If it hasn't acted yet during the turn, the Magnum Turret can do 7 rounds of Bombardment\
+If has moves left, the Magnum Turret can do 7 rounds of Bombardment\
  up to 2 tiles distant upon five units, with two possible fatalities. When special attacked from range, they can\
  retaliate with the same type of Bombardment. \n\
 "), _("
