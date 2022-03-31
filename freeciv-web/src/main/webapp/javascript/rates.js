@@ -161,9 +161,7 @@ function tax_rate_key_listener(ev)
     switch (keyboard_key) {
       case 'W':
         ev.stopPropagation();
-        clearInterval(rate_updater_interval);
-        rate_output_update=null;
-        $("#rates_dialog").dialog('close');
+        close_rates_dialog();
         $("#rates_dialog").remove();
         break;
       case 'R':
