@@ -1106,9 +1106,9 @@ table.vet_level tr:nth-child(9) td {
 }
 #worklist_dialog_headline {
   width: 100%;
-  height: 48px;
+  height: 60px;
   font-size: 120%;
-  padding-bottom: 5px;
+  padding-bottom: 0px;
   background-color: rgba(40,40,40,0.2);
 }
 
