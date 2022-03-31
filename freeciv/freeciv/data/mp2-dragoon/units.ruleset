@@ -1439,7 +1439,7 @@ roles         = "DefendGood", "DefendGoodStartUnit", "FirstBuild",
 helptext      = _("\
 Musketeers are infantry equipped with early firearms. They replace Pikemen as the preferred\
  city defender, and replace Archers and Legions for offensive foot soldiers.\
- The discovery of Labor Union allows upgrading Musketeers to Riflemen for free\
+ The discovery of Labor Union allows converting Musketeers to Riflemen for free\
  in any domestic city. \
 "), _("\
 \nThe discovery of Banking changes upkeep from shields to gold.\
@@ -2563,8 +2563,8 @@ The Mobile SAM is the strongest Anti-Air unit on the ground. It can\
  After discovery of Laser, Mobile SAMS provide a 33% chance of defending\
  their tile from nuclear blast.\n\
 "), _("
-AAA can upgrade to Mobile SAM for free on its 10th turn of service.\
- The Convert order must be done in the capital city and takes 4 turns.\
+AAA can upgrade to Mobile SAM for free on its 9th turn of service.\
+ The Convert order must be done in the capital city and takes 3 turns.\
 ")
 
 [unit_howitzer]
@@ -2655,7 +2655,7 @@ Balloons gather intel on potential battle areas. They have great vision and\
  from being attacked, and can’t fly over mountains.\
 "), _("
 NOTE：GOTO disallows unit loss from lack of fuel. You\
- can override this by ordering moves to adjacent tiles.\
+ can override this by moving to adjacent tiles.\
 ")
 
 [unit_zeppelin]
@@ -2712,7 +2712,7 @@ Zeppelins have great vision and are unreachable by units prior to Marines and\
  Balloons, they can fly over Mountains.\
 "), _("
 NOTE：GOTO disallows unit loss from lack of fuel. You\
- can override this by ordering moves to adjacent tiles.\
+ can override this by moving to adjacent tiles.\
 ")
 bombard_rate = 4
 
@@ -2757,7 +2757,7 @@ Airplanes can carry a diplomatic unit or a Freight unit. They can land in any do
 "), _("
 Airplanes can Stack-Escape：a 60% chance to escape a killed stack if they have more remaining moves than the attacker.\
  NOTE：GOTO disallows unit loss from lack of fuel. You\
- can override this by ordering moves to adjacent tiles.\
+ can override this by moving to adjacent tiles.\
 ")
 
 [unit_fighter]
@@ -2816,7 +2816,7 @@ INTERCEPTOR：the Vigil order lets Fighters auto-attack adjacent Air units if th
 "), _("
 Fighters can Stack-Escape：a 60% chance to escape a killed stack if they have more remaining moves than the attacker.\
  NOTE：GOTO disallows unit loss from lack of fuel. You\
- can override this by ordering moves to adjacent tiles.\
+ can override this by moving to adjacent tiles.\
 ")
 
 [unit_escort_fighter]
@@ -2879,7 +2879,7 @@ INTERCEPTOR：the Vigil order lets Escort Fighters auto-attack adjacent Air unit
 "), _("
 This aircraft can Stack-Escape：a 60% chance to escape a killed stack if it has more remaining moves than the attacker.\
  NOTE：GOTO disallows unit loss from lack of fuel. You\
- can override this by ordering moves to adjacent tiles.\
+ can override this by moving to adjacent tiles.\
 ")
 
 [unit_dive_bomber]
@@ -3012,7 +3012,7 @@ Republic:1   Democracy:2    (aggressive) \n\
 "), _("
 This aircraft can Stack-Escape：a 60% chance to escape a killed stack if it has more remaining moves than the attacker.\
  NOTE：GOTO disallows unit loss from lack of fuel. You\
- can override this by ordering moves to adjacent tiles.\
+ can override this by moving to adjacent tiles.\
 ")
 
 [unit_heavy_bomber]
@@ -3070,7 +3070,7 @@ Republic:1   Democracy:2 \n\
 "), _("
 This aircraft can Stack-Escape：a 60% chance to escape a killed stack if it has more remaining moves than the attacker.\
  NOTE：GOTO disallows unit loss from lack of fuel. You\
- can override this by ordering moves to adjacent tiles.\
+ can override this by moving to adjacent tiles.\
 ")
 
 [unit_strategic_bomber]
@@ -3127,7 +3127,7 @@ The Strategic Bomber offers a small improvement in attack. Higher altitude offer
 "), _("
 This aircraft can Stack-Escape：a 60% chance to escape a killed stack if it has more remaining moves than the attacker.\
  NOTE：GOTO disallows unit loss from lack of fuel. You\
- can override this by ordering moves to adjacent tiles.\
+ can override this by moving to adjacent tiles.\
 ")
 
 [unit_awacs]
@@ -3169,7 +3169,7 @@ The AWACS has great fuel capacity for long range flights, and advanced radar tha
 "), _("
 AWACS can Stack-Escape：a 60% chance to escape a killed stack if they have more remaining moves than the attacker.\
  NOTE：GOTO disallows unit loss from lack of fuel. You\
- can override this by ordering moves to adjacent tiles.\
+ can override this by moving to adjacent tiles.\
 ")
 
 [unit_spy_plane]
@@ -3214,7 +3214,7 @@ The Spy Plane is an ultrasonic high altitude aircraft with long range. It gather
 "), _("
 Spy Planes can Stack-Escape：a 67% chance to escape a killed stack if they have more remaining moves than the attacker.\
  NOTE：GOTO disallows unit loss from lack of fuel. You\
- can override this by ordering moves to adjacent tiles.\
+ can override this by moving to adjacent tiles.\
 ")
 [unit_satellite]
 name          = _("Satellite")
@@ -3453,7 +3453,7 @@ INTERCEPTOR：the Vigil order lets Jet Fighters auto-attack adjacent Air units i
  have better attack odds. This unit can Vigil if it uses 3 move points or less. \n\
 "), _("
 Jet Fighters can Stack-Escape：a 60% chance to escape a killed stack if they have more remaining moves than the attacker.\
- NOTE：GOTO disallows unit loss from lack of fuel. You can override this by ordering moves to adjacent tiles.\
+ NOTE：GOTO disallows unit loss from lack of fuel. You can override this by moving to adjacent tiles.\
 ")
 
 [unit_multi_fighter]
@@ -3510,7 +3510,7 @@ INTERCEPTOR：the Vigil order lets Multi-Fighters auto-attack adjacent Air units
  have better attack odds. This unit can Vigil if it has 1 turn of fuel or more. \n\
 "), _("
 Multi-Fighters can Stack-Escape：a 60% chance to escape a killed stack if they have more remaining moves than the attacker.\
- NOTE：GOTO disallows unit loss from lack of fuel. You can override this by ordering moves to adjacent tiles.\
+ NOTE：GOTO disallows unit loss from lack of fuel. You can override this by moving to adjacent tiles.\
 ")
 
 [unit_ground_strike_fighter]
@@ -3569,7 +3569,7 @@ Ground Strike Fighters upgrade the Dive Bomber. They can’t block attacks on ot
  specialized niche unit. It is not an interceptor. \n\
 This aircraft can Stack-Escape：a 60% chance to escape a killed stack if it has more remaining moves than the attacker.\
  NOTE：GOTO prevents unit loss from lack of fuel. You\
- can override this by ordering moves to adjacent tiles.\
+ can override this by moving to adjacent tiles.\
 ")
 
 [unit_jet_bomber]
@@ -3620,11 +3620,11 @@ helptext      = _("\
 Jet Bombers are stratospheric long-range bombers with 3 turns of fuel：they can be airborne for two\
  turn-changes. Their range makes them useful even after Stealth Bombers are available. Stratospheric\
  altitude is unreachable to propeller-based Fighters and AAA. Jet Bombers can Carpet Bomb, an\
- instant-Pillage of tiles from the air. May carry three Bombs. \n\ 
+ instant-Pillage of tiles from the air. May carry three Bombs. \ 
 "), _("
 Jet Bombers can Stack-Escape：a 60% chance to escape a killed stack if they have more remaining moves than the attacker.\
  NOTE：GOTO disallows unit loss from lack of fuel. You\
- can override this by ordering moves to adjacent tiles.\
+ can override this by moving to adjacent tiles.\
 ")
 
 [unit_stealth_fighter]
@@ -3684,7 +3684,7 @@ INTERCEPTOR：the Vigil order lets Stealth Fighters auto-attack adjacent Air uni
 Stealth Fighters can Stack-Escape：a 67% chance to escape a killed stack if they have more remaining moves than the attacker.\
 "), _("
 NOTE：GOTO disallows unit loss from lack of fuel. You\
- can override this by ordering moves to adjacent tiles.\
+ can override this by moving to adjacent tiles.\
 ")
 
 [unit_stealth_bomber]
@@ -3742,7 +3742,7 @@ The deadliest Bomber, with improved attack and speed. Stealth Bombers can’t be
 "), _("
 Stealth Bombers can Stack-Escape：a 67% chance to escape a killed stack if they have more remaining moves than the attacker.\
  NOTE：GOTO disallows unit loss from lack of fuel. You\
- can override this by ordering moves to adjacent tiles.\
+ can override this by moving to adjacent tiles.\
 ")
 
 [unit_boat]
