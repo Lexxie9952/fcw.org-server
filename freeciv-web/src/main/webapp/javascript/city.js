@@ -2744,6 +2744,7 @@ function populate_worklist_production_choices(pcity)
         return;
       }
       send_city_worklist_add(pcity['id'], kind, value);
+      production_selection = []; 
     });
   } else {
     $(".kindvalue_item").click(function() {
