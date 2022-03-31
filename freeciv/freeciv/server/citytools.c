@@ -2284,8 +2284,8 @@ void broadcast_city_info(struct city *pcity)
     return;
   }
   players_iterate(pplayer) {
-    if (!send_city_suppressed || pplayer != powner) {
-      if (can_player_see_city_internals(pplayer, pcity)) {
+    if (can_player_see_city_internals(pplayer, pcity)) {
+      if (!send_city_suppressed || pplayer != powner) {
         update_dumb_city(pplayer, pcity);
         lsend_packet_city_info(pplayer->connections, &packet, FALSE);
         web_lsend_packet(city_info_addition, pplayer->connections, &web_packet, FALSE);
