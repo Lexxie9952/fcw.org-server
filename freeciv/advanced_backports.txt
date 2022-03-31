@@ -40,4 +40,5 @@ aa5cc416df38aa7baa8ae113f0b7ed4eb9f5dcd6 2021-10-17          Unchanged and compl
 8ba9f30e04b06a162ffb7d9a487ca478080a443c 2021-11-27          Unchanged and complete   "Lua: Add Player:give_bulbs() method"
 1673a1244ebd084fa288c66da661b36bfa70964e 2021-12-11	         Lua: Add government information to Player object
 https://osdn.net/projects/freeciv/ticket/44158#preview ...
-...                                      2022-03-23          No upstream commit yet, implements S3_1 patch available on OSDN - broadcast_city_info to proper pplayers not powner
+...                                      2022-03-23          No upstream commit yet
+
