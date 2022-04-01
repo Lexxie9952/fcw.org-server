@@ -4065,8 +4065,8 @@ static bool unit_survive_autoattack(struct unit *punit)
             continue;  // skip/disallow units not under Vigil
       }
       /* Vigiling units only auto-attack units flagged as "Provoking" unless
-       * the vigiling unit has has the Reserved1 flag (which indicates it
-       * auto-attacks ANYTHING, if it has better odds of winning). */
+       * the vigiling unit has the Reserved1 flag (which indicates it
+       * auto-attacks all !civilians, if it has better odds of winning). */
       if (!unit_has_type_flag(punit, UTYF_PROVOKING)) { // non-provoking
         if (!unit_has_type_flag(penemy, UTYF_RESERVED1)) { //non-Reserved1
           // skip units sans "Reserved1" from attacking non-"Provoking" unit

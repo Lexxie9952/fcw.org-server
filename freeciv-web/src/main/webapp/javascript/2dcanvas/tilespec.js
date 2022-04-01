@@ -2642,7 +2642,7 @@ function create_unit_offset_arrays()
           vx += 9; vy += 4;
           break;
       case "Legion":
-          vx += 1; vy -= 7;
+          vx += 1; vy -= 8;
           break;
       case "Marines":
           dx += 2; dy += 2;

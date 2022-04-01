@@ -1443,7 +1443,7 @@ The Agōgē creates a culture of extreme fitness, and is famous for\
 In the city with the Agōgē, a Barracks is not needed to make veteran\
  land units. If you have a Barracks, then Phalanxes will be made at\
  +2 veteran level; but other units still will be made with +1 veteran\
- level. \n\ 
+ level. \ 
 "), _("
 In all your cities, Foot units begin their turn with +1 move.\
  and the wonder counts as a Barracks. \n\n\
@@ -1607,7 +1607,7 @@ sound_alt	= "w_generic"
 helptext	= _("\
 The great Citadel of Aleppo turns an entire city into a formidable fortress.\
   It must be built before Metallurgy is discovered. It provides 3× defense\
-  against all Land attacks: the thick walls are impervious to sabotage, Siege
+  against all Land attacks: the thick walls are impervious to sabotage, Siege\
   Rams, and any bonuses from Catapults, Cannons, Artillery, and Howitzers. \n\
 The Citadel of Aleppo cannot be made in a city that has City Walls,\
  but it is possible to sell those in order to allow for the Citadel.\

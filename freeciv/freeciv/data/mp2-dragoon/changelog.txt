@@ -454,10 +454,10 @@ Boat, Trireme, Riverships: 3 (was 2)
 Submarines: 5 (was 4)
 all other Sea Units: 4 (was 3)
 ==============================================================
-73. If in a city and not qualified for any other healing 
-effect, a minimum +1 hp healing takes place. (e.g., no 
-healing from barracks, being fortified, +1/3hp for staying
-on turn in city and not moving, or +10% for being on a tile
+73. If ending turn in a city and not qualified for any other
+healing effect, a minimum +1 hp healing takes place. (e.g., 
+no healing from barracks, being fortified, +1/3hp for staying
+1 turn in city and not moving, or +10% for being on a tile
 and not moving for a whole turn.)
 ==============================================================
 74. Default blueprints is 65 (was 70)
@@ -522,7 +522,10 @@ works in conjunction with the 1/3 move cost of boarding/deboarding
 for a limiting factor on double moving and transporter-swapping
 ==============================================================
 88. Ballistic sub-class of units can vigil if in a city or
-base of any type. They auto-bombard instead of auto-attack.
+base of any type. They auto-bombard instead of auto-attack,
+based on if they have a higher probability of winning a 
+standard attack. Unlike air interception, they only target
+non-civilian military units.
 This relieves some issues vis-a-vis unfair camping advantages,
 by letting people who aren't on all the time to set up 
 retaliatory defense structures in some areas. Also gives 
