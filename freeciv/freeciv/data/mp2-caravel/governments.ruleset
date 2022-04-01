@@ -220,7 +220,8 @@ Improvements that appease unhappy citizens add +1 base gold in tithes for each\
 "), _("\
 No citizens are made unhappy by each aggressive unit. \n\
 2% Base corruption in cities\n\
-2% Extra corruption per each tile in distance from capital\n\
+2% Extra corruption per each tile in distance from capital \n\n\
+Having an Ecclesiastical Palace allows instant and orderly transition to this government.\
 ")
 
 ;------------------------------------------------------------------------

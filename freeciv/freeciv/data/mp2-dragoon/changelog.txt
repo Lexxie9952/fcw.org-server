@@ -573,7 +573,9 @@ damaged if there's no airport.
 102.Abilities of Marines and AAA were cleaned up and clarified
 in better documentation. 
 ==============================================================
-103.
+103.Ecclesiastical Palace allows instant switching to 
+Theocracy with no anarchy or revolution delay (if you have
+Theocracy)
 ==============================================================
 104.
 ==============================================================
