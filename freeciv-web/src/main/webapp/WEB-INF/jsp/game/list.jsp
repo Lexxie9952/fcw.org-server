@@ -11,11 +11,6 @@
 }
 </style>
 
-<!-- Using jsDelivr for identicons -->
-<script src="https://cdn.jsdelivr.net/npm/jdenticon@3.1.1/dist/jdenticon.min.js"
-        integrity="sha384-l0/0sn63N3mskDgRYJZA6Mogihu0VY3CusdLMiwpJ9LFPklOARUcOiWEIGGmFELx"
-        crossorigin="anonymous">
-</script>
 
 <script>
 (function ($) {
@@ -477,4 +472,6 @@
 	</div>
 
 </body>
+<script src="/static/javascript/jdenticon.min.js"></script>
+
 </html>
