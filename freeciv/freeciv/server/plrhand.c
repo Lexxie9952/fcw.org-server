@@ -534,7 +534,7 @@ void handle_player_change_government(struct player *pplayer,
     }
   }
 
-/* for now, this hack is easier than making ruleset capable of this: */
+/* PLACEHOLDER, ruleset flexibility for ruleset-defined transition periods. */
 bool block_rf = false; // blocks multiple changing of govs in the same turn after revo finished
 #ifdef FREECIV_WEB
   struct impr_type *ecc_pal = improvement_by_rule_name("Ecclesiastical Palace");
@@ -546,7 +546,7 @@ bool block_rf = false; // blocks multiple changing of govs in the same turn afte
     block_rf = true;
     pplayer->revolution_finishes = -1;
   }
-#endif 
+#endif
 
   pplayer->government = plr_revo_gov;
   pplayer->target_government = gov;
