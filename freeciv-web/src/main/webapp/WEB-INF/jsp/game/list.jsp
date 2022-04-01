@@ -345,7 +345,7 @@
 							<tr>
 								<th class="hidden-xs"></th>
 								<th class="hidden-xs">Players</th>
-								<th>Game Info<br><span style="font-size:90%; font-weight:600; color: #b6a6ff; text-shadow: 1px 1px #216;"><i>Late-join bonus gold ensures FAIR-START&#8482; in the first 10 turns.</i></span></th>
+								<th>Game Info<br><span style="font-size:90%; font-weight:600; color: #b6a6ff; text-shadow: 1px 1px #216;"><i>Late-join bonus gold and bulbs ensure FAIR-START&#8482; in the first 10 turns.</i></span></th>
 								<th style="text-align:center" class="hidden-xs">State</th>
 								<th style="text-align:right">Turn</th>
 								<th style="text-align:center">Action</th>
