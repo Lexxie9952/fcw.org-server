@@ -4242,7 +4242,7 @@ roles         = "Hunter"
 helptext      = _("\
 The Missile Destroyer has double the firepower of a Destroyer, and shares the same roles\
  as its ancestor. It gains 2× defense against Air and Missile units. It has a 2× ASW bonus\
- and can can carry one Missile.\
+ and can carry one Missile.\
 "), _("
 Missile Destroyers can Stack-Escape：a 67% chance to escape a killed stack if they have more remaining move points than the attacker.\
 ")
