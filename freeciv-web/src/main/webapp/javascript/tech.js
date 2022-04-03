@@ -192,6 +192,10 @@ function init_tech_screen()
   tech_canvas.width = (max_width + tech_item_width) * tech_xscale;
   tech_canvas.height = max_height + tech_item_height;
 
+  /* A blank space tech_result_text will not render a blank line in html, then when the text appears,
+   * will cause the layout to vertically re-adjust which causes jitter-jank. Therefore, force a blank line: */ 
+  $("#tech_result_text").html("&nbsp;");
+
   if (is_small_screen()) {
     tech_canvas.width = Math.floor(tech_canvas.width * 0.6);
     tech_canvas.height = Math.floor(tech_canvas.height * 0.6);
@@ -542,7 +546,7 @@ function update_tech_screen()
 
     if (touch_device) $("#tech_results").css("margin-left","-22px");
     $("#tech_result_text").html("<span style='font-size:"+fs+"' title='"+tech_help_text+"' id='tech_advance_helptext'>" + get_advances_text(clicked_tech_id)
-        +" "+(is_wide_screen ? "" /*tech_help_text*/ : "") + "</span>");
+        +"&nbsp;"+(is_wide_screen ? "" /*tech_help_text*/ : "") + "</span>");
     $("#tech_advance_helptext").tooltip({ 
       disabled: false,
       show: { delay:350, effect:"none", duration: 0 }, hide: {delay:220, effect:"none", duration: 220}
@@ -561,7 +565,7 @@ function update_tech_screen()
     var research_help_text = html_safe(cleaned_text(techs[client.conn.playing['researching']].helptext));
 
     $("#tech_result_text").html("<span style='font-size:"+fs+"' title='"+research_help_text+"' id='tech_advance_helptext'>" + get_advances_text(client.conn.playing['researching'])
-        +" "+(is_wide_screen ? "" /*research_help_text*/ : "") +"</span>");
+        +"&nbsp;"+(is_wide_screen ? "" /*research_help_text*/ : "") +"</span>");
     $("#tech_advance_helptext").tooltip({
       disabled: false,
       show: { delay:350, effect:"none", duration: 0 }, hide: {delay:220, effect:"none", duration: 220}
