@@ -6073,7 +6073,7 @@ function unit_can_vigil(punit)
             return true;
           }
         }
-        break;  
+        break;
       case "Fighter":
         if (moves_used <= 2)
           return true;
