@@ -299,7 +299,16 @@ function unit_can_deboard(punit)
   //****************************************************************** */
   // COMMON
   if (pcity) return true;
-  if (utype_has_flag(ptype, UTYF_MARINES) && !is_ocean_tile(ptile)) return true;
+  /* UTYF_MARINES flag is a mishmash intersection of old capabilities of Marines programmed first as a hard-coded server flag, 
+   * next migrated over to a custom ruleset flag, and now is a confused holdover for backward compatibility to older rulesets.
+   * The whole thing is getting deprecated so it can be split into several flags handling distinctly DIFFERENT behaviours instead
+   * of all together. Therefore the line below is commented out and we'll have to see what breaks or needs changing as we 
+   * extricate ourselves from that legacy mess. The line below that is the new handling. May change behaviour specifically for AAA
+   * in MP2A-C, though not necessarily in a bad way (since AAA acting like full Marines when it comes to transports is a bad thing.)
+  //if (utype_has_flag(ptype, UTYF_MARINES) && !is_ocean_tile(ptile)) return true;
+   */
+  if (ptype.rule_name == "Marines" && !is_ocean_tile(ptile)) return true;
+  
   if ((typeof EXTRA_NAVALBASE !== "undefined") && tile_has_extra(ptile, EXTRA_NAVALBASE)) return true;
   if (pclass == "Air") return true;
   if (pclass == "AirProtect") return true;
@@ -331,14 +340,14 @@ function unit_can_deboard(punit)
   }
   // Brava onward:
   if (tclass.rule_name == "LandRail"
-      || tclass.rule_name == "LandRoad") { // Foot soldiers can unload from Train/Truck on any Base or Quay.
+      || tclass.rule_name == "LandRoad") { // Foot soldiers can deboard from Train/Truck on any Base or Quay.
     if (tile_has_extra(ptile, EXTRA_AIRBASE)) return true;
     if (quay_rules && tile_has_extra(ptile, EXTRA_QUAY)) return true;
     if (typeof EXTRA_FORT !== 'undefined' && tile_has_extra(ptile, EXTRA_FORT)) return true;
     if (tile_has_extra(ptile, EXTRA_FORTRESS)) return true;
     if ((typeof EXTRA_CASTLE !== "undefined") && tile_has_extra(ptile, EXTRA_CASTLE)) return true;
     if ((typeof EXTRA_BUNKER !== "undefined") && tile_has_extra(ptile, EXTRA_BUNKER)) return true;
-    return false;  // City already unloaded; Marines, Balloons, and AAA already got off higher above.
+    return false;  // City already unloaded; Marines and Balloons already got off higher above.
   }
   if (tile_has_extra(ptile, EXTRA_QUAY)) return true;
   if (tile_has_extra(ptile, EXTRA_RIVER)) return false;
@@ -352,7 +361,7 @@ function unit_can_deboard(punit)
   The server won't tell us for sure. Knowing the unit CAN'T load is a 
   pragmatic way to prevent long GUI lists of invalid transport candidates
   to load onto. It generalises what's true for the mainstream rulesets.
-  It shouldn't ever be called for non-mainstream rulesets.
+  It should be circumvented/ignored in non-mainstream rulesets.
 **************************************************************************/
 function unit_could_possibly_load(punit, ptype, ttype, tclass)
 {
@@ -361,6 +370,13 @@ function unit_could_possibly_load(punit, ptype, ttype, tclass)
 
   var pclass = get_unit_class_name(punit);
   //console.log("   pclass=="+pclass);
+
+  // In MP2D, only Marines can board/load without moves left: stops exploit of "attack-and-scoop"
+  if (client_rules_flag[CRF_MP2_D]) {
+    if (ptype.rule_name != "Marines" && punit.movesleft <= 0) {
+      return false;
+    }
+  }
 
   // Transported units can't swap transports except under some conditions:
   // TO DO: when actionenabler_load is in server, we can put all this in game.ruleset actionenablers.
