@@ -1610,7 +1610,13 @@ function get_unit_activity_sprite(punit)
         "offset_y" : - unit_activity_offset_y};
     }
   }
-
+  if (client_rules_flag[CRF_MP2_D]) {
+    if (tile_has_extra(tiles[punit['tile']], EXTRA_DEEPDIVE) && get_unit_class_name(punit) == "Submarine") {
+      return {"key" : "unit.hidden",
+        "offset_x" : unit_activity_offset_x,
+        "offset_y" : - unit_activity_offset_y};
+    }
+  }
   return null;
 }
 function get_city_coastal_overlay_sprite(pcity) {
@@ -2660,6 +2666,10 @@ function create_unit_offset_arrays()
       case "Missile Destroyer":
           dx -= 3; dy -= 3; 
           vx -= 12; vy += 11;
+          break;
+      case "Missile Submarine":
+          dx -= 2; dy -= 6;
+          vx -= 12; vy += 5;
           break;
       case "Magnum Turret":
           dx -= 16; dy -= 2;
