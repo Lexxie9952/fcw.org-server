@@ -89,7 +89,10 @@ var action_images = {
   "Canal": "orders/canal",
   "Waterway": "orders/canal",
   "Buoy": "orders/buoy",
+  "Hideout": "orders/hideout",
+  "Depth": "orders/deepdive",
   "": "orders/hideout",
+  "​": "orders/deepdive",           // contains a zero width space to be different from hideout
   "Maglev": "orders/maglev",
   "Naval Base": "orders/navalbase",
   "Oil Well": "orders/oil_well",
@@ -100,10 +103,11 @@ var action_images = {
   "Sea Bridge": "orders/seabridge",
   "River": "orders/well",
   "Tile Claim": "nation_tab_icon",
-  "Fort": "orders/fortress",
+  "Fort": "orders/fort",
   "Fortress": "orders/fortress",
-  "Castle": "orders/fortress",
-  "Bunker": "orders/fortress",
+  "Fishtrap": "orders/fishtrap",
+  "Castle": "orders/castle",
+  "Bunker": "orders/bunker",
   "Fallout": "orders/fallout",
   "Irrigation": "orders/irrigate_default",
   "Farmland": "orders/irrigation",
@@ -435,9 +439,11 @@ function render_action_image_into_button(text, action_id, sub_tgt, order, activi
       //console.log("    sub_tgt not undefined etc.");
       if (action_id == ACTION_ROAD || action_id == ACTION_BASE) {
         //console.log("    action_id is ROAD or BASE");
-        if (action_images[extras[sub_tgt]['name']]) {
-          key = extras[sub_tgt]['name'];
+        if (action_images[extras[sub_tgt]['rule_name']]) {
+          key = extras[sub_tgt]['rule_name'];
           //console.log("      Reassigned key:%s",key);
+          if (key == "Depth") text = "Dive Deep";
+          else if (key=="Hideout") text = "Build Hideout";
         }
       }
     };
@@ -509,6 +515,7 @@ function create_act_sel_button(parent_id,
 
   if (action_images[action_id]) {
     button_text = render_action_image_into_button(button_text, action_id, sub_target_override);
+    button_text = button_text.replace("Build Dive Deep","Dive Deep");
   }
   /* Create the initial button with this action */
   var button = {
@@ -1594,15 +1601,16 @@ function create_select_tgt_extra_button(parent_id, actor_unit_id,
   var text = "";
   var button = {};
   var target_tile = index_to_tile(target_tile_id);
-  var title = extras[target_extra_id]['name'];
+  var title = extras[target_extra_id]['rule_name'];
   if (title=="") title = "Hideout";
+  else if (title=="​Depth") title = "Deep Depth";
   var spacer = "&nbsp" + (title == "Walls" ? "&nbsp;&nbsp;" : "");
 
   // UI Heuristic: buttons for stuff you can never do get rejected:
   if (title.includes("Quay") && title.length == 5) return null; //quay+"" 0-width char can't be made
   // </end stuff that can't be done>
 
-  text += render_action_image_into_button(spacer+title, extras[target_extra_id]['name'],
+  text += render_action_image_into_button(spacer+title, extras[target_extra_id]['rule_name'],
                                           target_extra_id);
 
   if (tile_has_extra(target_tile, target_extra_id)) {
@@ -1820,6 +1828,8 @@ function select_last_action()
     buttons = add_action_last_button(buttons, ACTION_BASE, "Build Fortress", ORDER_PERFORM_ACTION, null, null, EXTRA_FORTRESS);
   if (client_rules_flag[CRF_EXTRA_HIDEOUT] && server_settings.hideouts.val && tech_known('Warrior Code'))
     buttons = add_action_last_button(buttons, ACTION_BASE, "Build Hideout", ORDER_PERFORM_ACTION, null, null, EXTRA_);
+  if (client_rules_flag[CRF_MP2_D])
+    buttons = add_action_last_button(buttons, ACTION_BASE, "Dive Deep", ORDER_PERFORM_ACTION, null, null, EXTRA_DEEPDIVE);
 
   if (client_rules_flag[CRF_CANALS] && tech_known('Engineering')) {
     buttons = add_action_last_button(buttons, ACTION_ROAD, "Canal, coastal", ORDER_PERFORM_ACTION, null, null, EXTRA_CANAL);
