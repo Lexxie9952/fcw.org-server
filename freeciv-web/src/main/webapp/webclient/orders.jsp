@@ -107,8 +107,20 @@
     <span style="cursor:pointer" onclick="key_unit_canal();"><img src="/images/orders/canal.png" name="canal_button" alt="" border="0" width="30" height="30"></span>
   </div>
 
-  <div id="order_fortress" class="order_button not_mobile" title="Build Fort (shift-F)">
+  <div id="order_fort" class="order_button not_mobile" title="Build Fort (shift-F)">
+    <span style="cursor:pointer" onclick="key_unit_fortress();"><img src="/images/orders/fort.png" name="fort_button" alt="" border="0" width="30" height="30"></span>
+  </div>
+
+  <div id="order_fortress" class="order_button not_mobile" title="Build Fortress (shift-F)">
     <span style="cursor:pointer" onclick="key_unit_fortress();"><img src="/images/orders/fortress.png" name="fortress_button" alt="" border="0" width="30" height="30"></span>
+  </div>
+
+  <div id="order_castle" class="order_button not_mobile" title="Build Castle (shift-F)">
+    <span style="cursor:pointer" onclick="key_unit_fortress();"><img src="/images/orders/castle.png" name="castle_button" alt="" border="0" width="30" height="30"></span>
+  </div>
+
+  <div id="order_bunker" class="order_button not_mobile" title="Build Bunker (shift-F)">
+    <span style="cursor:pointer" onclick="key_unit_fortress();"><img src="/images/orders/bunker.png" name="bunker_button" alt="" border="0" width="30" height="30"></span>
   </div>
 
   <div id="order_buoy" class="order_button not_mobile" title="Lay Buoy (shift-F)">
@@ -133,6 +145,10 @@
 
    <div id="order_hideout" class="order_button not_mobile" title="Hideout (shift-H)">
     <span style="cursor:pointer" onclick="key_unit_hideout();"><img src="/images/orders/hideout.png" name="hideout_button" alt="" border="0" width="30" height="30"></span>
+  </div>
+
+  <div id="order_deepdive" class="order_button not_mobile" title="Dive Deep (ctrl-D)">
+    <span style="cursor:pointer" onclick="key_unit_dive();"><img src="/images/orders/deepdive.png" name="deepdive_button" alt="" border="0" width="30" height="30"></span>
   </div>
 
   <div id="order_transform" class="order_button not_mobile" title="Transform terrain (O)">
