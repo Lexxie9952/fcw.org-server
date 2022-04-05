@@ -1488,10 +1488,14 @@ function update_unit_order_commands()
   $("#order_quay").hide();
   $("#order_canal").hide();
   $("#order_well").hide();
+  $("#order_fort").hide();
   $("#order_fortress").hide();
+  $("#order_castle").hide();
+  $("#order_bunker").hide();
   $("#order_buoy").hide();
   $("#order_fishtrap").hide();
   $("#order_hideout").hide();
+  $("#order_deepdive").hide();
   $("#order_navalbase").hide();
   $("#order_airbase").hide();
   $("#order_radar").hide();
@@ -1632,6 +1636,7 @@ function update_unit_order_commands()
     const FISHTRAPS     = (typeof EXTRA_FISHTRAP !== 'undefined');
     const RADAR         = (typeof EXTRA_RADAR !== 'undefined');
     const QUAYS         = (typeof EXTRA_QUAY !== 'undefined');
+    const DEEPDIVE      = (typeof EXTRA_DEEPDIVE !== 'undefined');
     /* Whether player has tech for the Base. */
     const HIDEOUT_TECH   = tech_known("Warrior Code");
     const FORT_TECH      = tech_known("Construction") || (tech_known("Masonry") && client_rules_flag[CRF_MASONRY_FORT]);
@@ -1655,6 +1660,7 @@ function update_unit_order_commands()
     const TILE_HAS_BUOY      = BUOYS      && tile_has_extra(ptile,EXTRA_BUOY);
     const TILE_HAS_FISHTRAP  = FISHTRAPS  && tile_has_extra(ptile,EXTRA_FISHTRAP);
     const TILE_HAS_RADAR     = RADAR      && tile_has_extra(ptile,EXTRA_RADAR);
+    const TILE_HAS_DEEPDIVE  = DEEPDIVE   && tile_has_extra(ptile,EXTRA_DEEPDIVE);
     //-- Misc reqs: 
     const TILE_HAS_RIVER     = tile_has_extra(ptile,EXTRA_RIVER);
     const NO_RIVER_BASE      = client_rules_flag[CRF_NO_BASES_ON_RIVERS];
@@ -1676,6 +1682,7 @@ function update_unit_order_commands()
     const CAN_TILE_BUOY      = !pcity &&  oceanic && BUOYS      && !TILE_HAS_BUOY && !(TILE_HAS_RIVER && NO_RIVER_BASE);
     const CAN_TILE_FISHTRAP  = !pcity &&  oceanic && FISHTRAPS  && !TILE_HAS_FISHTRAP // this is only a 'half true' qualifier for tile can do fishtrap: further checks done later below
     const CAN_TILE_RADAR     = !pcity && !oceanic && RADAR      && !TILE_HAS_RADAR && TILE_HAS_AIRBASE && !(TILE_HAS_RIVER && NO_RIVER_BASE);
+    const CAN_TILE_DEEPDIVE  = terrain_name == "Deep Ocean" && !TILE_HAS_DEEPDIVE && !TILE_HAS_BUOY && !TILE_HAS_FISHTRAP; 
     /* Currently iterating unit is able to build bases on this tile? */
     const UNIT_CAN_HIDEOUT   = CAN_TILE_HIDEOUT   && HIDEOUT_TECH   && utype_has_flag(ptype,UTYF_FOOTSOLDIER);
     const UNIT_CAN_FORT      = CAN_TILE_FORT      && FORT_TECH      && (worker_type || infra_type || (ptype['name'] == "Legion" && client_rules_flag[CRF_LEGION_WORK]) || (ptype['name'] == "Marines" && client_rules_flag[CRF_MARINE_BASES]));
@@ -1687,14 +1694,17 @@ function update_unit_order_commands()
     const UNIT_CAN_BUOY      = CAN_TILE_BUOY      && BUOY_TECH      && (worker_type || infra_type) && ptype['name'] != "Settlers";
     const UNIT_CAN_FISHTRAP  = CAN_TILE_FISHTRAP  && FISHTRAP_TECH  && (worker_type || infra_type);
     const UNIT_CAN_RADAR     = CAN_TILE_RADAR     && RADAR_TECH     && (worker_type || infra_type) && ptype['name'] != "Settlers";
+    const UNIT_CAN_DEEPDIVE  = CAN_TILE_DEEPDIVE && ptype['name'] == "Missile Submarine";
     // ******************************************************************************************************************* </END Base Logic setup> ***
     if (UNIT_CAN_HIDEOUT) {
       unit_actions["hideout"] = {name: "Hideout (shift-H)"};  $("#order_hideout").show();  
+    } else if (UNIT_CAN_DEEPDIVE) {
+      unit_actions["Dive Deep"] = {name: "Dive Deep (ctrl-D)"};  $("#order_deepdive").show();
     }
     //--
     if (UNIT_CAN_FORT) {
-      unit_actions["fortress"] = {name: "Build Fort (shift-F)"};  $("#order_fortress").show();
-      $("#order_fortress").prop("title", "Build Fort (shift-F)");
+      unit_actions["fort"] = {name: "Build Fort (shift-F)"};  $("#order_fort").show();
+      $("#order_fort").prop("title", "Build Fort (shift-F)");
     } else if (UNIT_CAN_FORTRESS) { // Fortress over Bunker allowed, to remove it. (Bunkers are pillage-proof)
       if (TILE_HAS_BUNKER) {
         unit_actions["fortress"] = {name: "Remove Bunker (shift-F)"}; 
@@ -1705,13 +1715,13 @@ function update_unit_order_commands()
       }
       $("#order_fortress").show();
     } else if (UNIT_CAN_CASTLE) {
-      unit_actions["fortress"] = {name: "Build Castle (shift-F)"};  $("#order_fortress").show();
-      $("#order_fortress").prop("title", "Build Castle (shift-F)");
+      unit_actions["castle"] = {name: "Build Castle (shift-F)"};  $("#order_castle").show();
+      $("#order_castle").prop("title", "Build Castle (shift-F)");
     } else if (UNIT_CAN_BUNKER) {
-      unit_actions["fortress"] = {name: "Build Bunker (shift-F)"};  $("#order_fortress").show();
-      $("#order_fortress").prop("title", "Build Bunker (shift-F)");
+      unit_actions["bunker"] = {name: "Build Bunker (shift-F)"};  $("#order_bunker").show();
+      $("#order_bunker").prop("title", "Build Bunker (shift-F)");
     } else if (UNIT_CAN_BUOY) {
-      unit_actions["fortress"] = {name: "Lay Buoy (shift-F)"};  $("#order_buoy").show();
+      unit_actions["buoy"] = {name: "Lay Buoy (shift-F)"};  $("#order_buoy").show();
     }
     //--
     if (UNIT_CAN_FISHTRAP) { // half-true prequalifier for ability to fishtrap... check the rest here:
@@ -3735,7 +3745,10 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
         // CTRL-ALT-D user forced disconnect
         the_event.preventDefault(); // override possible browser shortcut
         clinet_disconnect_from_server();
-      } else if (!(alt || ctrl)) {
+      } else if (ctrl && !shift && !alt) {
+        the_event.preventDefault(); // override possible browser shortcut
+        key_unit_dive();
+      } else if (!(alt || ctrl || shift)) {
         key_unit_action_select();
       }
     break;
@@ -5600,6 +5613,25 @@ function key_unit_hideout()
     request_new_unit_activity(punit, ACTIVITY_BASE, activity);
     // Focused unit got orders, make sure not on waiting_list now:
     remove_unit_id_from_waiting_list(punit['id']);
+  }
+  deactivate_goto(false);
+  setTimeout(update_unit_focus, update_focus_delay);
+}
+
+/**************************************************************************
+ Tell the units in focus to dive deep (build a "deep depth" "base")
+**************************************************************************/
+function key_unit_dive()
+{
+  const deepdive_rules = client_rules_flag[CRF_MP2_D];
+  if (!deepdive_rules) return;
+
+  var funits = get_units_in_focus();
+  for (var i = 0; i < funits.length; i++) {
+    var punit = funits[i];
+      request_new_unit_activity(punit, ACTIVITY_BASE, EXTRA_DEEPDIVE);
+    // Focused unit got orders, make sure not on waiting_list now:
+      remove_unit_id_from_waiting_list(punit['id']);
   }
   deactivate_goto(false);
   setTimeout(update_unit_focus, update_focus_delay);

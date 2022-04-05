@@ -19,6 +19,8 @@ The current and complete list of Freeciv-web controls can be found here:<br>
 
 <tr><td><img src="/images/orders/disband_default.png"></td><td><span class="vctr"> Disband unit</td><td><span class="hotkey">shift-D</span></span></td></tr>
 
+<tr><td><img src="/images/orders/deepdive.png"></td><td><span class="vctr"> Dive Deep</td><td><span class="hotkey">ctrl-D</span></span></td></tr>
+
 <tr><td><img src="/images/orders/airbase.png"></td><td><span class="vctr"> Build Airbase, Radar Tower</td><td><span class="hotkey">shift-E</span></span></td></tr>
 
 <tr><td><img src="/images/orders/fortify_default.png"></td><td><span class="vctr"> Fortify</td><td><span class="hotkey">f</span></span></td></tr>
