@@ -528,7 +528,9 @@ const char *get_infrastructure_text(bv_extras extras)
       } extra_type_iterate_end;
 
       // Ultra-short names flag extras which are invisible to players, e.g. hideout
-      if (strlen(extra_name_translation(pextra)) <= 1)
+      if (strlen(extra_name_translation(pextra)) <= 1
+          // TODO: a built in ExtraFlag for not showing/revealing certain extras, instead of this:
+          || strcmp("Depth", extra_rule_name(pextra))==0) //zero-width space indicates no-show
         hidden = true;
 
       if (!hidden) {
