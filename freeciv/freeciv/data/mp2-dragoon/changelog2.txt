@@ -318,11 +318,11 @@ trasported.)
 13. Trawlers are work-boats that can do Fishtraps, Buoys,
  Roads, Quays, Canals, Sea Bridges, & clean pollution/fallout.
  Trawlers can carry one Land unit, usually Engineers or 
- Workers, to expedite their water work. Trawlers can tow ships 
- at a reduced rate of -3 move points. Towing gets damaged
- ships back to port for repair and helps crew repair rates 
- if the damaged is resting while towed. If a Trawler stops
- towing it recovers pro-rated move points.
+ Workers, to expedite their water work. Trawlers can tow ships
+ who haven't moved, but at a reduced rate of -3 move points.
+ Towing gets damaged ships back to port for repair and helps
+ crew repair rates if the damaged is resting while towed. If a
+ Trawler stops towing it recovers pro-rated move points.
 ==============================================================
 14. Ballista unit, new tactical use type of unit
 ==============================================================
