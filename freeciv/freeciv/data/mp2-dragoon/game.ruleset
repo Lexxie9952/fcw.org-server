@@ -601,31 +601,19 @@ actor_reqs    =
       "UnitType", "Anti-Aircraft Artillery", "Local"
       "UnitState","OnDomesticTile",   "Local"
       "CityTile", "Center",           "Local"
-      "Building", "Palace",           "City"
       "Tech",     "Space Flight",     "Player"
       "Age",      "9",                "Local"
     }
-[actionenabler_convert_AAA_in_capital_2]
-action = "Convert Unit"
-actor_reqs    =
-    { "type",     "name",             "range"
-      "UnitType", "Anti-Aircraft Artillery", "Local"
-      "UnitState","OnDomesticTile",   "Local"
-      "CityTile", "Center",           "Local"
-      "Building", "Ecclesiastical Palace", "City"
-      "Tech",     "Space Flight",     "Player"
-      "Age",      "9",                "Local"
-    }
+
 [actionenabler_foot_to_musket] ;;old foot units become muskets with Conscription
 action = "Convert Unit"
 actor_reqs    =
     { "type",     "name",             "range", "present"
       "UnitClass","Land",             "Local", TRUE
       "UnitFlag", "FootSoldier",      "Local", TRUE
-      "UnitType", "Riflemen",         "Local", FALSE   ; Don't allow Riflemen to become Workers with this enabler
-      "UnitType", "Musketeers",       "Local", FALSE   ; SAFETY: block future convert features that Musketeers might get
-      "UnitType", "Alpine Troops",    "Local", FALSE   ; SAFETY: block future convert features that Alpines might get
-      "UnitType", "Marines",          "Local", FALSE   ; SAFETY: block future convert features that Marines might get
+      "UnitType", "Riflemen",         "Local", FALSE   ; SAFETY: Don't allow Riflemen to become Workers with this enabler
+      "UnitType", "Musketeers",       "Local", FALSE   ; SAFETY: Musketeers become Riflemen with Labor Union
+      "UnitType", "Alpine Troops",    "Local", FALSE   ; SAFETY: Alpines become Ground Troops with Combined Arms
       "UnitType", "Paratroopers",     "Local", FALSE   ; SAFETY: block future convert features that Paratroopers might get
       "UnitState","OnDomesticTile",   "Local", TRUE
       "CityTile", "Center",           "Local", TRUE
@@ -1776,11 +1764,10 @@ actor_reqs    =
 action = "Attack"
 actor_reqs    =
     { "type",         "name",           "range", "present"
-      "UnitClassFlag","TerrainSpeed",   "Local", TRUE  ;all Land___ 
-      "UnitClassFlag","CargoRestrained","Local", TRUE  ;!LandAirSea
+      "UnitClassFlag","TerrainSpeed",   "Local", TRUE  ;all Land___ (CargoRestrained && !CargoRestrained)
       "MinMoveFrags", "1",              "Local", TRUE
       "UnitState",    "OnNativeTile",   "Local", TRUE
-      "UnitState",    "Transported",    "Local", FALSE
+      "UnitState",    "Transported",    "Local", FALSE ;forced CargoRestrained condition
       ;...
       "DiplRel",      "War",            "Local", TRUE
       "UnitClassFlag","Missile",        "Local", FALSE
@@ -1798,6 +1785,7 @@ actor_reqs    =
     { "type",         "name",           "range", "present"
       "UnitClassFlag","TerrainSpeed",   "Local", TRUE    ;all Land___ types.
       "UnitClassFlag","CargoRestrained","Local", FALSE   ;!Land, !LandNoKill, !LandRoad
+      "UnitType", "Anti-Aircraft Artillery","Local",FALSE ;AAA has to fall through to use CargoRestrained enablers because it is indeed a restrained exception 
       "MinMoveFrags", "1",              "Local", TRUE
       "UnitState",    "OnNativeTile",   "Local", TRUE    ; No "Transported" restriction
       ;...
@@ -1855,15 +1843,13 @@ target_reqs =
     }
 ;-----------------------------------------------------------------------NON-NATIVE ATTACK
 
-;-----------------------------------------------------------Marines,AAA
-;"Marines" flag can always attack non-natively
-;NB: currently seems redundant with AttFromNonNative below
+;-----------------------------------------------------------Marines have no "transported" restriction
 [actionenabler_attack_marines_from_non_native]
 action = "Attack"
 actor_reqs    =
     { "type",          "name",    "range", "present"
       "MinMoveFrags",  "1",       "Local", TRUE
-      "UnitFlag",      "Marines", "Local", TRUE
+      "UnitType",      "Marines", "Local", TRUE ;if more types get this, it will become UnitFlag "TransportedAttacker"
       ;...
       "DiplRel",       "War",     "Local", TRUE
       "UnitClassFlag", "Missile", "Local", FALSE
@@ -1871,16 +1857,16 @@ actor_reqs    =
       ;...
       "Building",     "Pax Dei",  "World", FALSE
     }
-;-----------------------------------------------------------Land___:AttFromNonNative
-;This is all Land__ classes with "AttFromNonNative": i.e., only LandAirSea
-;In other words, this enabler currently seems redundant
+;-----------------------------------------------------------Land___
+;This is all Land__ classes where the Unit also has a NonNativeAttack flag
 [actionenabler_land_attack_from_non_native]
 action = "Attack"
 actor_reqs    =
     { "type",          "name",             "range", "present"
-      "UnitClassFlag", "TerrainSpeed",     "Local", TRUE
+      "UnitClassFlag", "TerrainSpeed",     "Local", TRUE   ; All land classes
       "MinMoveFrags",  "1",                "Local", TRUE
-      "UnitClassFlag", "AttFromNonNative", "Local", TRUE
+      "UnitFlag",      "NonNativeAttack",  "Local", TRUE   ; AAA, Mobile SAM, (ad redundantly), Marines.
+      "UnitState",     "Transported",      "Local", FALSE  ; Can't attack on Truck or Transport.
       ;...
       "DiplRel",       "War",              "Local", TRUE
       "UnitClassFlag", "Missile",          "Local", FALSE
@@ -1910,7 +1896,7 @@ target_reqs =
     { "type",          "name",             "range", "present"
       "Extra",        "Bunker",            "Local", FALSE
     }
-;-----------------------------------------------------------all AIR__, SEA types
+;-----------------------------------------------------------all SEA types
 [actionenabler_non_land_attack_from_non_native]
 action = "Attack"
 actor_reqs    =
@@ -1989,7 +1975,7 @@ action = "Attack"
 actor_reqs    =
     { "type",         "name",           "range", "present"
       "UnitClassFlag","TerrainSpeed",   "Local", TRUE  ;all Land___ 
-      "UnitClassFlag","CargoRestrained","Local", TRUE  ;!LandAirSea
+;      "UnitClassFlag","CargoRestrained","Local", TRUE  ;no need to prevent LandAirSea from using this because we have CargoRestrained sub-members of that class (i.e. AAA)
       "MinMoveFrags", "1",              "Local", TRUE
       "UnitState",    "OnNativeTile",   "Local", TRUE
       "UnitState",    "Transported",    "Local", FALSE
@@ -2012,6 +1998,7 @@ actor_reqs    =
     { "type",         "name",           "range", "present"
       "UnitClassFlag","TerrainSpeed",   "Local", TRUE    ;all Land___ types
       "UnitClassFlag","CargoRestrained","Local", FALSE   ;!Land, !LandNoKill, !LandRoad
+      "UnitType", "Anti-Aircraft Artillery","Local",FALSE ;AAA is CargoRestrained but in a !CargoRestrained unitclass:it falls thru to enabler above.
       "MinMoveFrags", "1",              "Local", TRUE
       "UnitState",    "OnNativeTile",   "Local", TRUE    ; No "Transported" restriction
       ;...
@@ -2076,16 +2063,14 @@ target_reqs =
     }
 ;-----------------------------------------------------------------------NON-NATIVE ATTACK
 
-;-----------------------------------------------------------Marines,AAA
-;"Marines" flag can always attack non-natively
-;NB: currently seems redundant with AttFromNonNative below
-;Marines
+;-----------------------------------------------------------Marines have no "transported" restriction
+;Marines can always attack non-natively
 [actionenabler_attack_marines_pd_no_m]
 action = "Attack"
 actor_reqs    =
     { "type",          "name",     "range", "present"
       "MinMoveFrags",  "1",        "Local", TRUE
-      "UnitFlag",      "Marines",  "Local", TRUE
+      "UnitType",      "Marines",  "Local", TRUE
       ;...
       "DiplRel",       "War",      "Local", TRUE
       "UnitClassFlag", "Missile",  "Local", FALSE
@@ -2094,17 +2079,17 @@ actor_reqs    =
       "Building",     "Pax Dei",   "World", TRUE
       "Tech",         "Monotheism","Player",FALSE
     }
-;-----------------------------------------------------------Land___:AttFromNonNative
-;This is all Land__ classes with "AttFromNonNative": i.e., only LandAirSea
-;In other words, this enabler currently seems redundant
+;-----------------------------------------------------------Land___
+;This is all Land__ classes where the Unit also has a NonNativeAttack flag
 [actionenabler_land_attack_from_non_native_pd_no_m]
 action = "Attack"
 actor_reqs    =
     { "type",          "name",             "range", "present"
-      "UnitClassFlag", "TerrainSpeed",     "Local", TRUE
+      "UnitClassFlag", "TerrainSpeed",     "Local", TRUE   ; All Land classes
       "MinMoveFrags",  "1",                "Local", TRUE
-      "UnitClassFlag", "AttFromNonNative", "Local", TRUE
-
+      "UnitFlag",      "NonNativeAttack",  "Local", TRUE   ; AAA, Mobile SAM, (and redundantly), Marines.
+      "UnitState",     "Transported",      "Local", FALSE  ; Can't attack on Truck or Transport.
+      ;...
       "DiplRel",       "War",              "Local", TRUE
       "UnitClassFlag", "Missile",          "Local", FALSE
       "UnitFlag",      "CantAttack",       "Local", FALSE
@@ -2143,7 +2128,7 @@ action = "Attack"
 actor_reqs    =
     { "type",         "name",           "range", "present"
       "UnitFlag",     "NonMilAttack",   "Local", TRUE
-      "UnitClassFlag","CargoRestrained","Local", FALSE
+      "UnitState",    "Transported",    "Local", FALSE  ; Tribesmen aren't Marines, Ships can't attack while towed on Trawler
       "MinMoveFrags", "1",              "Local", TRUE
       "UnitState",    "OnNativeTile",   "Local", TRUE
       ;...
@@ -2163,6 +2148,7 @@ action = "Attack"
 actor_reqs    =
     { "type",          "name",             "range", "present"
       "UnitFlag",      "NonMilAttack",     "Local", TRUE
+      "UnitState",     "Transported",      "Local", FALSE  ; Ships can't attack while towed on Trawler
       "MinMoveFrags",  "1",                "Local", TRUE
       "UnitClassFlag", "AttFromNonNative", "Local", TRUE
       ;...
@@ -2189,7 +2175,7 @@ action = "Attack"
 actor_reqs    =
     { "type",         "name",           "range", "present"
       "UnitClassFlag","TerrainSpeed",   "Local", TRUE
-      "UnitClassFlag","CargoRestrained","Local", TRUE
+;      "UnitClassFlag","CargoRestrained","Local", TRUE ;allow CR unitclass exceptions to fall thru and use this enabler (AAA)
       "MinMoveFrags", "1",              "Local", TRUE
       "UnitState",    "OnNativeTile",   "Local", TRUE
       "UnitState",    "Transported",    "Local", FALSE
@@ -2211,6 +2197,7 @@ actor_reqs    =
     { "type",         "name",           "range", "present"
       "UnitClassFlag","TerrainSpeed",   "Local", TRUE    ;all Land___ types.
       "UnitClassFlag","CargoRestrained","Local", FALSE   ;!Land, !LandNoKill, !LandRoad
+      "UnitType","Anti-Aircraft Artillery","Local",FALSE ;AAA is CR in a !CR class, and must fall thru to use enabler above.
       "MinMoveFrags", "1",              "Local", TRUE
       "UnitState",    "OnNativeTile",   "Local", TRUE    ; No "Transported" restriction
       ;...
@@ -2222,7 +2209,7 @@ actor_reqs    =
       "Building",     "Pax Dei",        "World", TRUE
       "UnitState",    "OnDomesticTile", "Local", TRUE
     }
-;-----------------------------------------------------------all AIR__, SEA types
+;-----------------------------------------------------------all AIR__ types
 ;Native attack ALWAYS allowed for units who aren't CargoRestrained
 ;Sea,RiverShip,Trireme,Air,Air_High_Altitude,AirProtect = (!Land__)
 [actionenabler_non_land_attacker_native_unrestrained_pd_m_domestic]
@@ -2246,14 +2233,14 @@ target_reqs =
     { "type",          "name",          "range", "present"
       "Extra",        "Bunker",         "Local", FALSE
     }
-;-----------------------------------------------------------all AIR__, SEA types
+;-----------------------------------------------------------all SEA types
 ;Non-Land units can't attack Bunkers 
 [actionenabler_non_land_attacker_native_restrained_pd_m_domestic]
 action = "Attack"
 actor_reqs    =
     { "type",         "name",           "range", "present"
       "UnitClassFlag","TerrainSpeed",   "Local", FALSE
-      "UnitClassFlag","CargoRestrained","Local", TRUE      ; <<<<<<<<<< no air sea types are cargorestrained!
+      "UnitClassFlag","CargoRestrained","Local", TRUE      ; Sea types are CR (can't attack while tugged by Trawler)
       "MinMoveFrags", "1",              "Local", TRUE
       "UnitState",    "OnNativeTile",   "Local", TRUE
       "UnitState",    "Transported",    "Local", FALSE
@@ -2272,15 +2259,14 @@ target_reqs =
     }
 ;-----------------------------------------------------------------------NON-NATIVE ATTACK
 
-;-----------------------------------------------------------Marines,AAA
-;"Marines" flag can always attack non-natively
-;NB: currently seems redundant with AttFromNonNative below
+;-----------------------------------------------------------Marines can attack while transported
+;"Marines" flag can always attack non-natively even while transported.
 [actionenabler_attack_marines_pd_m_domestic]
 action = "Attack"
 actor_reqs    =
     { "type",          "name",    "range", "present"
       "MinMoveFrags",  "1",       "Local", TRUE
-      "UnitFlag",      "Marines", "Local", TRUE
+      "UnitType",      "Marines", "Local", TRUE
       ;...
       "DiplRel",       "War",     "Local", TRUE
       "UnitClassFlag", "Missile", "Local", FALSE
@@ -2289,16 +2275,16 @@ actor_reqs    =
       "Building",      "Pax Dei",        "World", TRUE
       "UnitState",     "OnDomesticTile", "Local", TRUE
     }
-;-----------------------------------------------------------Land___:AttFromNonNative
-;This is all Land__ classes with "AttFromNonNative": i.e., only LandAirSea
-;In other words, this enabler currently seems redundant
+;-----------------------------------------------------------Land___
+;This is all Land__ classes where the Unit also has a NonNativeAttack flag
 [actionenabler_land_attack_from_non_native_pd_m_domestic]
 action = "Attack"
 actor_reqs    =
     { "type",          "name",             "range", "present"
-      "UnitClassFlag", "TerrainSpeed",     "Local", TRUE
+      "UnitClassFlag", "TerrainSpeed",     "Local", TRUE   ; All Land classes
       "MinMoveFrags",  "1",                "Local", TRUE
-      "UnitClassFlag", "AttFromNonNative", "Local", TRUE
+      "UnitFlag",      "NonNativeAttack",  "Local", TRUE   ; AAA, Mobile SAM, (and redundantly), Marines.
+      "UnitState",     "Transported",      "Local", FALSE  ; Can't attack on Truck or Transport.
       ;...
       "DiplRel",       "War",              "Local", TRUE
       "UnitClassFlag", "Missile",          "Local", FALSE
@@ -2338,7 +2324,7 @@ action = "Attack"
 actor_reqs    =
     { "type",         "name",           "range", "present"
       "UnitFlag",     "NonMilAttack",   "Local", TRUE
-      "UnitClassFlag","CargoRestrained","Local", FALSE
+      "UnitState",    "Transported",    "Local", FALSE  ; Tribesmen aren't Marines, Ships can't attack while towed on Trawler
       "MinMoveFrags", "1",              "Local", TRUE
       "UnitState",    "OnNativeTile",   "Local", TRUE
       ;...
@@ -2358,6 +2344,7 @@ action = "Attack"
 actor_reqs    =
     { "type",          "name",             "range", "present"
       "UnitFlag",      "NonMilAttack",     "Local", TRUE
+      "UnitState",     "Transported",      "Local", FALSE  ; Ships can't attack while towed on Trawler
       "MinMoveFrags",  "1",                "Local", TRUE
       "UnitClassFlag", "AttFromNonNative", "Local", TRUE
       ;...
@@ -2407,7 +2394,7 @@ target_reqs    =
     { "type",           "name",          "range", "present"
       "MaxUnitsOnTile", "0",             "Local", TRUE
     }
-[actionenabler_conquer_city_marines]
+[actionenabler_conquer_city_marines]                         ; Marines are only unit who can conquer from a transport.
 action = "Conquer City"
 actor_reqs    =
     { "type",           "name",          "range", "present"
@@ -2415,17 +2402,14 @@ actor_reqs    =
       "UnitFlag",       "NonMil",        "Local", FALSE
       "DiplRel",        "War",           "Local", TRUE
       "MinMoveFrags",   "1",             "Local", TRUE
-      "UnitFlag",       "Marines",       "Local", TRUE
-      "UnitType",       "Anti-Aircraft Artillery", "Local", FALSE
-      ;AAA got Marines flag only to enable reasonable attacks,
-      ;not for conquering cities from a Transport.
+      "UnitType",       "Marines",       "Local", TRUE
       "Nation",         "Animal Kingdom", "Player",FALSE
     }
 target_reqs    =
-    { "type",           "name",          "range", "present"
-      "MaxUnitsOnTile", "0",             "Local", TRUE
-    }
-[actionenabler_conquer_city_from_non_native]
+     { "type",           "name",          "range", "present"
+       "MaxUnitsOnTile", "0",             "Local", TRUE
+     }
+[actionenabler_conquer_city_from_non_native]                 ; This currently only opens up the case for Helicopters only (?)
 action = "Conquer City"
 actor_reqs    =
     { "type",           "name",             "range", "present"
@@ -2434,9 +2418,8 @@ actor_reqs    =
       "DiplRel",        "War",              "Local", TRUE
       "MinMoveFrags",   "1",                "Local", TRUE
       "UnitClassFlag",  "AttFromNonNative", "Local", TRUE
-      "UnitType",       "Anti-Aircraft Artillery", "Local", FALSE
-      ;AAA got AttFromNonNative only to enable reasonable attacks,
-      ;not for conquering cities from a Transport.
+      "UnitState",      "Transported",      "Local", FALSE    ; only Marines can conquer while transported, and that's covered above.
+      "UnitType", "Anti-Aircraft Artillery","Local", FALSE    ; redundantly exclude AAA even though this could only happen while transported 
       "Nation",         "Animal Kingdom",   "Player",FALSE
     }
 target_reqs    =
@@ -2825,6 +2808,26 @@ actor_reqs    =
        "UnitState",     "OnLivableTile",   "Local",  TRUE
        "DiplRel",       "Foreign",         "Local",  FALSE
     }
+[actionenabler_build_deep_dive_depth]
+action        = "Build Base"
+actor_reqs    =
+    { "type",          "name",            "range", "present"
+; Hard contradiction between Tile Claim and Hideout is necessary so that
+; the actionenabler for one never allows the other to be made. TODO: 
+; req is just a CanHide unit, when actionenabler req can check base type:
+;       "UnitType",      "Missile Submarine","Local",    TRUE
+;       "Extra",         "Buoy",             "Local",    FALSE
+;       "Extra",         "Fishtrap",         "Local",    FALSE
+;       "Terrain",       "Deep Ocean",       "Local",    TRUE
+;       "Extra",         "Fish",             "Adjacent", FALSE  ;prevent making Fishtrap 
+    }
+target_reqs    =
+    { "type",     "name",       "range", "present"
+ ;      "Extra",   "Buoy",       "Local", FALSE
+ ;      "Extra",   "Fishtrap",   "Local", FALSE
+ ;      "Terrain", "Deep Ocean", "Local", TRUE
+    }
+
 [actionenabler_build_hideout_unclaimed]
 action        = "Build Base"
 actor_reqs    =
@@ -3176,10 +3179,11 @@ actor_reqs    =
       "DiplRel", "Cease-fire",    "Local", FALSE
       "DiplRel", "Peace",         "Local", FALSE
       "DiplRel", "Never met",     "Local", FALSE
-      "UnitType","Magnum Turret", "Local", FALSE ;only needed for utype_can_do_action to render false so we aren't show illegal order options 
-      "MinMoveFrags", "1",     "Local", TRUE ;this prevents things like moving Artillery away with a Truck after attack, and...
-    }                                        ;...a soft limit on double moving via multiple transporters. TODO: raise it to "3"?
-;TODO: possibly other infantry can be allowed to get rescued/scooped, at least if only by a Transport Helicopter?
+      "UnitType","Magnum Turret", "Local", FALSE ;Makes utype_can_do_action() render false so we don't show illegal orders buttons 
+      "MinMoveFrags", "1",        "Local", TRUE  ;prevents moving Artillery away with a Truck after attack (or Sub with Trawler)...
+    }                                            ;...while also putting a soft limiter on double moving via multiple transporters.
+;Scooping units with no moves left after an attack is currently on restriction to avoid exploits -- only Marines can do it
+;because they have no move_frag reqs or move_cost and they're special.
 [actionenabler_board_marines]
 action        = "Transport Board"
 actor_reqs    =
@@ -3189,7 +3193,7 @@ actor_reqs    =
       "DiplRel", "Cease-fire",    "Local", FALSE
       "DiplRel", "Peace",         "Local", FALSE
       "DiplRel", "Never met",     "Local", FALSE
-      "UnitFlag","Marines",       "Local", TRUE 
+      "UnitType","Marines",       "Local", TRUE 
     }
 
 ;This enabler can replace the one above if/when needed if "russian doll" exploits are discovered which should be stopped.
