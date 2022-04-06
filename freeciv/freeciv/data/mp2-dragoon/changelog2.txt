@@ -512,7 +512,7 @@ who are idle 5 or more turns.
   cargo must have remaining moves left. This is not the case
   for Deboard/Unload (it lets a unit who spent its moves
   boarding, safely land at destination and transport to move
-  on to other things.)
+  on to other things.) (doesn't apply to missiles)
   
 All the above is the current evolution of "balanced compromise"
 to (1) reducing "double move" phenomena using mulitple load/unload

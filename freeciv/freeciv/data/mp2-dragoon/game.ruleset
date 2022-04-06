@@ -3166,34 +3166,53 @@ target_reqs    =
       "UnitState", "Transporting", "Local"
     }
 
-; This gives ruleset control over logical requirements for when
-; units can board as cargo onto transporters. This can be
-; extended to give ruleset supreme control over smooth balanced 
-; non-exploitable behaviours.
-[actionenabler_board_non_marines]
+[actionenabler_board_air_and_missile]  ;no move frag req for boarding for planes and missiles 
 action        = "Transport Board"
 actor_reqs    =
-    { "type",    "name",          "range", "present"
-      "DiplRel", "Armistice",     "Local", FALSE
-      "DiplRel", "War",           "Local", FALSE
-      "DiplRel", "Cease-fire",    "Local", FALSE
-      "DiplRel", "Peace",         "Local", FALSE
-      "DiplRel", "Never met",     "Local", FALSE
-      "UnitType","Magnum Turret", "Local", FALSE ;Makes utype_can_do_action() render false so we don't show illegal orders buttons 
-      "MinMoveFrags", "1",        "Local", TRUE  ;prevents moving Artillery away with a Truck after attack (or Sub with Trawler)...
-    }                                            ;...while also putting a soft limiter on double moving via multiple transporters.
-;Scooping units with no moves left after an attack is currently on restriction to avoid exploits -- only Marines can do it
-;because they have no move_frag reqs or move_cost and they're special.
+    { "type",          "name",          "range", "present"
+      "UnitClassFlag", "TerrainSpeed",  "Local", FALSE  ;not Land
+      "UnitClassFlag", "WaterVessel",   "Local", FALSE  ;not Sea
+      "DiplRel",       "Armistice",     "Local", FALSE
+      "DiplRel",       "War",           "Local", FALSE
+      "DiplRel",       "Cease-fire",    "Local", FALSE
+      "DiplRel",       "Peace",         "Local", FALSE
+      "DiplRel",       "Never met",     "Local", FALSE
+    }
+[actionenabler_board_universal_land_units]
+action        = "Transport Board"
+actor_reqs    =
+    { "type",          "name",          "range", "present"
+      "UnitClassFlag", "TerrainSpeed",  "Local", TRUE   ;all Land 
+      "DiplRel",       "Armistice",     "Local", FALSE
+      "DiplRel",       "War",           "Local", FALSE
+      "DiplRel",       "Cease-fire",    "Local", FALSE
+      "DiplRel",       "Peace",         "Local", FALSE
+      "DiplRel",       "Never met",     "Local", FALSE
+      "UnitType",      "Magnum Turret", "Local", FALSE ;Makes utype_can_do_action() render false so we don't show illegal orders buttons 
+      "MinMoveFrags",  "1",             "Local", TRUE  ;limits double-move and "attack-and-haul".
+    }
+[actionenabler_board_sea_trawler]       
+action        = "Transport Board"
+actor_reqs    =
+    { "type",          "name",          "range", "present"
+      "UnitClassFlag", "WaterVessel",   "Local", TRUE   ;Sea
+      "DiplRel",       "Armistice",     "Local", FALSE
+      "DiplRel",       "War",           "Local", FALSE
+      "DiplRel",       "Cease-fire",    "Local", FALSE
+      "DiplRel",       "Peace",         "Local", FALSE
+      "DiplRel",       "Never met",     "Local", FALSE
+      "UnitState",     "MovedThisTurn", "Local", FALSE   ;Sea units may not have moved to get on trawler 
+    }
 [actionenabler_board_marines]
 action        = "Transport Board"
 actor_reqs    =
     { "type",    "name",          "range", "present"
+      "UnitType","Marines",       "Local", TRUE 
       "DiplRel", "Armistice",     "Local", FALSE
       "DiplRel", "War",           "Local", FALSE
       "DiplRel", "Cease-fire",    "Local", FALSE
       "DiplRel", "Peace",         "Local", FALSE
       "DiplRel", "Never met",     "Local", FALSE
-      "UnitType","Marines",       "Local", TRUE 
     }
 
 ;This enabler can replace the one above if/when needed if "russian doll" exploits are discovered which should be stopped.
