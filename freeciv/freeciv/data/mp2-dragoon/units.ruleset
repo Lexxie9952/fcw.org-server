@@ -245,7 +245,7 @@ helptext      = _("\
 name          = _("?unitclass:LandImmobile")
 min_speed     = 3
 hp_loss_pct   = 0
-flags         = "BuildAnywhere", "ZOC", "CanFortify", "TerrainDefense",
+flags         = "TerrainSpeed", "BuildAnywhere", "ZOC", "CanFortify", "TerrainDefense",
                 "AttFromNonNative", "AttackNonNative"
 
 [unitclass_landnokill]
@@ -5611,22 +5611,19 @@ veteran_power_fact = 100
 veteran_move_bonus = 63
 roles         = ""
 helptext      = _("\
-
-They work at the same rate as Workers, and can put down Fishtraps, Buoys, Sea Bridges, and Road types.
-
 Trawlers are high-powered work-boats used for fishing and ocean work.\
  They work at the same rate as Workers, and can put down Fishtraps,\
  Buoys, Sea Bridges, Road types, or clean Pollution and Fallout.\
  Trawlers can carry one Land unit. \n\n\
-Trawlers can tow ships via Load, Board, or Embark orders. Towing helps\
- damaged ships return to port for repair. Crew repair rates for\
- towed ships are improved by letting the ships rest while towed. \n\n\
+Trawlers can tow ships who haven’t moved via a Load, Board,\
+ or Embark order. Towing helps damaged ships return to port for repair.\
+ Crew repair rates for towed ships are improved by letting the ships rest\
+ while towed. \n\n\
 When towing, encumbrance slows the Trawler to 6 move points. Remaining moves\
  reduce proportional to this slower speed. If a Trawler\
  stops towing a ship via Unload or Deboard, it regains pro-rated moves\
  proportional to its natural speed. \n\n\
-Towed ships lose all moves after release, preventing any repair\
- bonus from resting.\
+Towed ships lose all moves after release.\
 ")
 
 [unit_leader]
