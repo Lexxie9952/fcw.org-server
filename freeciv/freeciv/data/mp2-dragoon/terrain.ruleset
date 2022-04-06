@@ -1242,6 +1242,7 @@ rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
 reqs           =
     { "type",       "name",          "range",     "present"
+     "UnitFlag",    "NonMil",        "Local",     TRUE
      "TerrainClass","Oceanic",       "Local",     TRUE
      "Extra",       "Buoy",          "Local",     FALSE
      "Extra",       "Fish",          "Local",     FALSE
@@ -1522,15 +1523,15 @@ build_time     = 3
 removal_time   = 0
 unit_seen      = "Hidden"
 native_to      = "Land", "LandAirSea", "LandNoKill", "Helicopter"
-flags          = "NativeTile"
+flags          = "NativeTile", "NoStackDeath"
 helptext       = _("\
 Since the dawn of time, camouflaged and concealed terrain has been\
  enhanced to make Hideouts. Usually the intent is to evade an\
  aggressor or to set an ambush. Hideouts can only be put in Forests,\
  Swamps, Mountains, and Jungle. Warrior Code must be known. Tile must\
- be Friendly or Unclaimed. Only a Foot soldier alone on a tile can make a Hideout.\
- Only Land units and Helicopters can hide in them. Other types will be seen.\
- Invisibility is the only bonus of a Hideout. Hideouts can’t stack with\
+ be Friendly or Unclaimed. Only a Foot soldier alone on a tile can make a Hideout. Only\
+ Land units and Helicopters can hide in them. Other types will be seen. Invisibility\
+ and prevention of stack-death are the two bonuses of a Hideout. Hideouts can’t stack with\
  other bases. Hideouts are invisible to anyone not occupying the tile with\
  a Land unit. For each turn it is unoccupied, a Hideout has a 15% chance\
  of being lost to the elements of nature. The only way to know if there is\
@@ -1540,11 +1541,64 @@ TIP: Hideouts are good for guarding a border or setting a trap for\
  intruders. Be careful! An abandoned Hideout can be used against you!\ 
 ")
 
+[extra_deep_dive_hideout]
+rule_name      = "Depth"
+name           = _("​") ; has a zero-width space in it to make it invisible but different EXTRA_ assignment in js client
+category       = "Infra"
+causes         = "Base"
+rmcauses       = "Disappear"
+graphic        = "None"
+graphic_alt    = "None"
+activity_gfx   = "unit.deepdive"
+act_gfx_alt    = "unit.hideout"
+act_gfx_alt2   = "-"
+rmact_gfx      = "None"
+rmact_gfx_alt  = "-"
+reqs           =
+    { "type",        "name",              "range", "present", "quiet"
+      "UnitType",    "Missile Submarine", "Local", TRUE,      FALSE
+      "Terrain",     "Deep Ocean",        "Local", TRUE,      FALSE
+      "Extra",       "Buoy",              "Local", FALSE,     FALSE
+      "Extra",       "Fishtrap",          "Local", FALSE,     FALSE
+    }
+disappearance_reqs = 
+    { "type",           "name",      "range",  "present"
+      "MaxUnitsOnTile", "0",         "Local",  TRUE
+      ;TODO, when disappear reqs can check for a unit on the tile:
+      ;"UnitClass",      "Submarine", "Tile",   FALSE
+    }
+disappearance_chance    = 10000     ; 10000/10000 = 100% will disappear if unoccupied
+build_time     = 0
+removal_time   = 0
+unit_seen      = "Hidden"
+native_to      = "Submarine"
+flags          = "NativeTile"
+helptext       = _("\
+Modern submarines capable of greater depth can go near the bottom\
+ of the ocean floor, where they are all but undetectable as long as\
+ they turn their engines off and do not move. In Freeciv this is\
+ represented by “Building Depth”, creating a virtual extra on\
+ the tile which makes all units on the tile hidden, even to\
+ adjacent units. Missile Submarines at depth may still be attacked,\
+ but can only be discovered by a unit going directly to their tile.\
+ Only one Missile Submarine on the tile is required to “Build Depth”,\
+ and any other submarines coming to the tile are assumed to join it\
+ at depth.\
+ Depth can only be achieved in Deep Ocean by Missile Submarines.\
+ The tile cannot have a Buoy or Fishtrap. The depth associated to\
+ Submarines on a tile will remain as long they remain on the tile\
+ at each turn change. That is: a Submarine may leave on scouting\
+ and return to the tile, where it will automatically achieve\
+ invisible depth upon arrival. The only way to know if there are\
+ Submarines hiding at depth is to move a unit onto the tile. \n\
+")
+
+
 [extra_tileclaim]
 name           = _("Tile Claim")
 category       = "Infra"
 causes         = "Base"
-rmcauses       = "Pillage"
+rmcauses       = "Pillage", "Disappear"
 graphic        = "base.tileclaim"
 graphic_alt    = "-"
 activity_gfx   = "unit.tileclaim"
@@ -1552,6 +1606,12 @@ act_gfx_alt    = "-"
 act_gfx_alt2   = "-"
 rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
+disappearance_chance    = 5000
+disappearance_reqs = 
+    { "type",           "name",          "range", "present"
+       "MaxUnitsOnTile", "0",            "Local", TRUE
+       "ExtraFlag",      "NoStackDeath", "Local", FALSE ; will not disappear if there's a base or ruins there.
+    }
 reqs           =
     { "type", "name",            "range","present", "quiet"
 ; Hard contradiction between Tile Claim and Hideout is necessary so that
@@ -1843,7 +1903,7 @@ reqs           =
 build_time     = 5
 removal_time   = 0
 native_to      = "Air", "Balloon", "Zeppelin", "Helicopter", "Missile", "Bomb", "AirProtect", "Air_High_Altitude"
-flags          = "Refuel", "NoStackDeath"
+flags          = "Refuel"
 helptext       = _("\
 With the available tech, Radar can be added to an Airbase, which significantly increases its vision.\
 ")
@@ -1865,6 +1925,7 @@ reqs           =
       "Tech", "Radio", "Player", TRUE, FALSE
       "TerrainClass", "Oceanic", "Local", TRUE, FALSE
       "UnitFlag", "Airbase", "Local", TRUE, FALSE
+      "UnitFlag", "NonMil", "Local", TRUE, FALSE  ;Missile Submarine can't do buoys
       "CityTile", "Center", "Local", FALSE, TRUE
     }
 build_time     = 3
@@ -2850,6 +2911,11 @@ extra          = "Hideout"
 gui_type       = "Other"
 border_sq      = -1
 vision_main_sq = 2
+
+[base_deep_dive_hideout]
+extra          = "Depth"
+gui_type       = "Other"
+border_sq      = -1
 
 [base_tileclaim]
 extra          = "Tile Claim"
