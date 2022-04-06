@@ -93,10 +93,7 @@ reqs	=
       "UnitType",  "Ironclad",  "Local", FALSE
       "UnitType",  "Destroyer", "Local", FALSE
       "UnitType",  "Transport", "Local", FALSE ; just in case we give it A1 some day.
-    }
-target_reqs = 
-    { "type",         "name", "range", "present"
-      "TerrainClass", "Land", "Local", TRUE
+      "TerrainClass", "Land",   "Local", TRUE  ; Attack_Bonus resolves to defender's tile.
     }
 
 ; Combat_rounds Tribesmen
@@ -610,25 +607,9 @@ reqs	=
 type    = "Unit_Vision_Radius_Sq"
 value   = 5    
 reqs    =
-    { "type",      "name",      "range"
-      "Terrain",   "Mountains", "Local"
-      "UnitClass", "Land",      "Local"
-    }
-[effect_mountains_vision_1]
-type    = "Unit_Vision_Radius_Sq"
-value   = 5
-reqs    =
-    { "type",      "name",      "range"
-      "Terrain",   "Mountains", "Local"
-      "UnitClass", "LandAirSea",      "Local"
-    }
-[effect_mountains_vision_2]
-type    = "Unit_Vision_Radius_Sq"
-value   = 5
-reqs    =
-    { "type",      "name",      "range"
-      "Terrain",   "Mountains", "Local"
-      "UnitClass", "LandNoKill",      "Local"
+    { "type",          "name",         "range"
+      "Terrain",       "Mountains",    "Local"
+      "UnitClassFlag", "TerrainSpeed", "Local" ;all Land__ classes
     }
 [effect_hills_vision]
 type    = "Unit_Vision_Radius_Sq"
@@ -636,26 +617,8 @@ value   = 3
 reqs    =
     { "type",      "name",      "range"
       "Terrain",   "Hills", "Local"
-      "UnitClass", "Land",      "Local"
+      "UnitClassFlag", "TerrainSpeed", "Local" ;all Land__ classes
     }
-[effect_hills_vision_1]
-type    = "Unit_Vision_Radius_Sq"
-value   = 3
-reqs    =
-    { "type",      "name",      "range"
-      "Terrain",   "Hills", "Local"
-      "UnitClass", "LandAirSea",      "Local"
-    }
-[effect_hills_vision_2]
-type    = "Unit_Vision_Radius_Sq"
-value   = 3
-reqs    =
-    { "type",      "name",      "range"
-      "Terrain",   "Hills", "Local"
-      "UnitClass", "LandNoKill",      "Local"
-    }
-
-
 
 ; basic free tech upkeep
 [effect_upkeep_tech_free]
@@ -1011,25 +974,9 @@ reqs    =
 type    = "HP_Regen"
 value   = 10
 reqs    =
-    { "type", "name", "range"
-      "Extra", "Fort", "Tile"
-      "UnitClass", "Land", "Local"
-    }
-[effect_fort_hp_regen_1]
-type    = "HP_Regen"
-value   = 10
-reqs    =
-    { "type", "name", "range"
-      "Extra", "Fort", "Tile"
-      "UnitClass", "LandAirSea", "Local"
-    }
-[effect_fort_hp_regen_2]
-type    = "HP_Regen"
-value   = 10
-reqs    =
-    { "type", "name", "range"
-      "Extra", "Fort", "Tile"
-      "UnitClass", "LandNoKill", "Local"
+    { "type",          "name",         "range"
+      "Extra",         "Fort",         "Tile"
+      "UnitClassFlag", "TerrainSpeed", "Local" ; all Land_ classes
     }
 
 ; **** FORTRESS/NAVAL BASE ***************************************************
@@ -1081,82 +1028,28 @@ reqs    =
 type    = "Unit_Vision_Radius_Sq"
 value   = 8   
 reqs    =
-    { "type",     "name",      "range"
-      "Extra",    "Fortress",  "tile"
-      "Tech",     "Invention", "Player"
-      "UnitClass", "Land",     "Local"
-    }
-[effect_fortress_vision_1]   ;Marines, AAA
-type    = "Unit_Vision_Radius_Sq"
-value   = 8
-reqs    =
-    { "type",      "name",       "range"
-      "Extra",     "Fortress",   "tile"
-      "Tech",      "Invention",  "Player"
-      "UnitClass", "LandAirSea", "Local"
-    }
-[effect_fortress_vision_2]     ;Knights
-type    = "Unit_Vision_Radius_Sq"
-value   = 8
-reqs    =
-    { "type",      "name",       "range"
-      "Extra",     "Fortress",   "tile"
-      "Tech",      "Invention",  "Player"
-      "UnitClass", "LandNoKill", "Local"
+    { "type",          "name",         "range"
+      "Extra",         "Fortress",     "tile"
+      "Tech",          "Invention",    "Player"
+      "UnitClassFlag", "TerrainSpeed", "Local"   ;all Land_ classes
     }
 [effect_castle_vision]
 type    = "Unit_Vision_Radius_Sq"
 value   = 8   
 reqs    =
-    { "type",     "name",      "range"
-      "Extra",    "Castle",  "tile"
-      "Tech",     "Invention", "Player"
-      "UnitClass", "Land",     "Local"
-    }
-[effect_castle_vision_1]   ;Marines, AAA
-type    = "Unit_Vision_Radius_Sq"
-value   = 8
-reqs    =
-    { "type",      "name",       "range"
-      "Extra",     "Castle",   "tile"
-      "Tech",      "Invention",  "Player"
-      "UnitClass", "LandAirSea", "Local"
-    }
-[effect_castle_vision_2]     ;Knights
-type    = "Unit_Vision_Radius_Sq"
-value   = 8
-reqs    =
-    { "type",      "name",       "range"
-      "Extra",     "Castle",   "tile"
-      "Tech",      "Invention",  "Player"
-      "UnitClass", "LandNoKill", "Local"
+    { "type",          "name",         "range"
+      "Extra",         "Castle",       "tile"
+      "Tech",          "Invention",    "Player"
+      "UnitClassFlag", "TerrainSpeed", "Local"   ;all Land_ classes
     }
 [effect_navalbase_vision]
 type    = "Unit_Vision_Radius_Sq"
 value   = 8   
 reqs    =
-    { "type",     "name",      "range"
-      "Extra",    "Naval Base",  "tile"
-      "Tech",     "Invention", "Player"
-      "UnitClass", "Land",     "Local"
-    }
-[effect_navalbase_vision_1]   ;Marines, AAA
-type    = "Unit_Vision_Radius_Sq"
-value   = 8
-reqs    =
-    { "type",      "name",       "range"
-      "Extra",     "Naval Base",   "tile"
-      "Tech",      "Invention",  "Player"
-      "UnitClass", "LandAirSea", "Local"
-    }
-[effect_navalbase_vision_2]     ;Knights
-type    = "Unit_Vision_Radius_Sq"
-value   = 8
-reqs    =
-    { "type",      "name",       "range"
-      "Extra",     "Naval Base",   "tile"
-      "Tech",      "Invention",  "Player"
-      "UnitClass", "LandNoKill", "Local"
+    { "type",          "name",         "range"
+      "Extra",         "Naval Base",   "tile"
+      "Tech",          "Invention",    "Player"
+      "UnitClassFlag", "TerrainSpeed", "Local"   ;all Land_ classes
     }
 
 ; Fortress types, HP regen --------------------------------------------
@@ -1165,27 +1058,11 @@ reqs    =
 type    = "HP_Regen"
 value   = 15
 reqs    =
-    { "type", "name", "range"
-      "ExtraFlag", "FortressHeal", "Tile"
-      "UnitClass", "Land", "Local"
-    }
-[effect_fortress_hp_regen_1]
-type    = "HP_Regen"
-value   = 15
-reqs    =
-    { "type", "name", "range"
-      "ExtraFlag", "FortressHeal", "Tile"
-      "UnitClass", "LandAirSea", "Local"
+    { "type",          "name",         "range"
+      "ExtraFlag",     "FortressHeal", "Tile"
+      "UnitClassFlag", "TerrainSpeed", "Local"   ;all Land_ classes
     }
 [effect_fortress_hp_regen_2]
-type    = "HP_Regen"
-value   = 15
-reqs    =
-    { "type", "name", "range"
-      "ExtraFlag", "FortressHeal", "Tile"
-      "UnitClass", "LandNoKill", "Local"
-    }
-[effect_fortress_hp_regen_3]
 type    = "HP_Regen"
 value   = 25  ;25 because not cumulative with Fort (Fort only nullfies hp loss each turn)
 reqs    =
@@ -2650,19 +2527,19 @@ reqs	=
 type    = "Output_Bonus"
 value	= 50
 reqs	=
-    { "type", "name", "range"
-      "Building", "Marketplace", "City"
-      "Building", "Bank", "City"
-      "OutputType", "Gold", "Local"
+    { "type",       "name",        "range"
+      "Building",   "Marketplace", "City"
+      "Building",   "Bank",        "City"
+      "OutputType", "Gold",        "Local"
     }
 [effect_bank_luxury]
 type    = "Output_Bonus"
 value	= 50
 reqs	=
-    { "type", "name", "range"
-      "Building", "Marketplace", "City"
-      "Building", "Bank", "City"
-      "OutputType", "Luxury", "Local"
+    { "type",       "name",        "range"
+      "Building",   "Marketplace", "City"
+      "Building",   "Bank",        "City"
+      "OutputType", "Luxury",      "Local"
     }
 ;Changes require changes to city_force_income_update() in city.js
 [effect_bank_coinage]
@@ -2679,31 +2556,11 @@ reqs	=
 type    = "Veteran_Build"
 value	= 1
 reqs	=
-    { "type", "name", "range", "present"
-      "Building", "Barracks", "City", TRUE
-      "UnitClass", "Land", "Local", TRUE
-      "UnitFlag", "NonMil", "Local", FALSE
-      "UnitFlag", "NoVeteran", "Local", FALSE
-    }
-[effect_barracks_1]
-type    = "Veteran_Build"
-value	= 1
-reqs	=
-    { "type", "name", "range", "present"
-      "Building", "Barracks", "City", TRUE
-      "UnitClass", "LandNoKill", "Local", TRUE
-      "UnitFlag", "NonMil", "Local", FALSE
-      "UnitFlag", "NoVeteran", "Local", FALSE
-    }
-[effect_barracks_2]
-type    = "Veteran_Build"
-value	= 1
-reqs	=
-    { "type", "name", "range", "present"
-      "Building", "Barracks", "City", TRUE
-      "UnitClass", "LandRoad", "Local", TRUE
-      "UnitFlag", "NonMil", "Local", FALSE
-      "UnitFlag", "NoVeteran", "Local", FALSE
+    { "type",          "name",         "range", "present"
+      "Building",      "Barracks",     "City",  TRUE
+      "UnitClassFlag", "TerrainSpeed", "Local", TRUE ;all land classes 
+      "UnitFlag",      "NonMil",       "Local", FALSE
+      "UnitFlag",      "NoVeteran",    "Local", FALSE
     }
 [effect_barracks_3]
 type    = "Veteran_Build"
@@ -2717,58 +2574,22 @@ reqs	=
 type    = "HP_Regen"
 value	= 100
 reqs	=
-    { "type", "name", "range", "present"
-      "Building", "Barracks", "City", TRUE
-      "UnitClass", "Land", "Local", TRUE
-    }
-[effect_barracks_b]
-type    = "HP_Regen"
-value	= 100
-reqs	=
-    { "type", "name", "range", "present"
-      "Building", "Barracks", "City", TRUE
-      "UnitClass", "LandAirSea", "Local", TRUE  ; might be resting in allied city with Barracks I
-    }
-[effect_barracks_c]
-type    = "HP_Regen"
-value	= 100
-reqs	=
-    { "type", "name", "range", "present"
-      "Building", "Barracks", "City", TRUE
-      "UnitClass", "LandNoKill", "Local", TRUE
+    { "type",          "name",         "range"
+      "Building",      "Barracks",     "City"
+      "UnitClassFlag", "TerrainSpeed", "Local" ;all land classes 
     }
 
 [effect_barracks_ii]
 type    = "Veteran_Build"
 value	= 1
 reqs	=
-    { "type", "name", "range", "present"
-      "Building", "Barracks II", "City", TRUE
-      "UnitClass", "Land", "Local", TRUE
-      "UnitFlag", "NonMil", "Local", FALSE
-      "UnitFlag", "NoVeteran", "Local", FALSE
-    }
-[effect_barracks_ii_1]
-type    = "Veteran_Build"
-value	= 1
-reqs	=
-    { "type", "name", "range", "present"
-      "Building", "Barracks II", "City", TRUE
-      "UnitClass", "LandAirSea", "Local", TRUE
-      "UnitFlag", "NonMil", "Local", FALSE
-      "UnitFlag", "NoVeteran", "Local", FALSE
+    { "type",          "name",         "range", "present"
+      "Building",      "Barracks II",  "City",  TRUE
+      "UnitClassFlag", "TerrainSpeed", "Local", TRUE  ;all land classes
+      "UnitFlag",      "NonMil",       "Local", FALSE
+      "UnitFlag",      "NoVeteran",    "Local", FALSE
     }
 [effect_barracks_ii_2]
-type    = "Veteran_Build"
-value	= 1
-reqs	=
-    { "type", "name", "range", "present"
-      "Building", "Barracks II", "City", TRUE
-      "UnitClass", "LandNoKill", "Local", TRUE
-      "UnitFlag", "NonMil", "Local", FALSE
-      "UnitFlag", "NoVeteran", "Local", FALSE
-    }
-[effect_barracks_ii_3]
 type    = "Veteran_Build"
 value	= 1
 reqs	=
@@ -2780,56 +2601,20 @@ reqs	=
 type    = "HP_Regen"
 value	= 100
 reqs	=
-    { "type", "name", "range", "present"
-      "Building", "Barracks II", "City", TRUE
-      "UnitClass", "Land", "Local", TRUE
-    }
-[effect_barracks_ii_b]
-type    = "HP_Regen"
-value	= 100
-reqs	=
-    { "type", "name", "range", "present"
-      "Building", "Barracks II", "City", TRUE
-      "UnitClass", "LandAirSea", "Local", TRUE
-    }
-[effect_barracks_ii_c]
-type    = "HP_Regen"
-value	= 100
-reqs	=
-    { "type", "name", "range", "present"
-      "Building", "Barracks II", "City", TRUE
-      "UnitClass", "LandNoKill", "Local", TRUE
+    { "type",          "name",         "range", "present"
+      "Building",      "Barracks II",  "City",  TRUE
+      "UnitClassFlag", "TerrainSpeed", "Local", TRUE ;all land classes
     }
 
 [effect_barracks_iii]
 type    = "Veteran_Build"
 value	= 1
 reqs	=
-    { "type", "name", "range", "present"
-      "Building", "Barracks III", "City", TRUE
-      "UnitClass", "Land", "Local", TRUE
-      "UnitFlag", "NonMil", "Local", FALSE
-      "UnitFlag", "NoVeteran", "Local", FALSE
-    }
-[effect_barracks_iii_1]
-type    = "Veteran_Build"
-value	= 1
-reqs	=
-    { "type", "name", "range", "present"
-      "Building", "Barracks III", "City", TRUE
-      "UnitClass", "LandAirSea", "Local", TRUE
-      "UnitFlag", "NonMil", "Local", FALSE
-      "UnitFlag", "NoVeteran", "Local", FALSE
-    }
-[effect_barracks_iii_2]
-type    = "Veteran_Build"
-value	= 1
-reqs	=
-    { "type", "name", "range", "present"
-      "Building", "Barracks III", "City", TRUE
-      "UnitClass", "LandNoKill", "Local", TRUE
-      "UnitFlag", "NonMil", "Local", FALSE
-      "UnitFlag", "NoVeteran", "Local", FALSE
+    { "type",          "name",         "range", "present"
+      "Building",      "Barracks III", "City",  TRUE
+      "UnitClassFlag", "TerrainSpeed", "Local", TRUE  ;all land classes
+      "UnitFlag",      "NonMil",       "Local", FALSE
+      "UnitFlag",      "NoVeteran",    "Local", FALSE
     }
 [effect_barracks_iii_3]
 type    = "Veteran_Build"
@@ -2843,25 +2628,9 @@ reqs	=
 type    = "HP_Regen"
 value	= 100
 reqs	=
-    { "type", "name", "range"
-      "Building", "Barracks III", "City"
-      "UnitClass", "Land", "Local"
-    }
-[effect_barracks_iii_b]
-type    = "HP_Regen"
-value	= 100
-reqs	=
-    { "type", "name", "range", "present"
-      "Building", "Barracks III", "City", TRUE
-      "UnitClass", "LandAirSea", "Local", TRUE
-    }
-[effect_barracks_iii_c]
-type    = "HP_Regen"
-value	= 100
-reqs	=
-    { "type", "name", "range", "present"
-      "Building", "Barracks III", "City", TRUE
-      "UnitClass", "LandNoKill", "Local", TRUE
+    { "type",          "name",         "range"
+      "Building",      "Barracks III", "City"
+      "UnitClassFlag", "TerrainSpeed", "Local" ;all land classes
     }
 
 ;prolongs time-window relevance of amphibious invasions later in game
@@ -2925,13 +2694,13 @@ reqs	=
 type    = "Defend_Bonus"
 value	= 100 ; 3x vs most Land
 reqs	=
-    { "type", "name", "range", "present"
-      "Building", "City Walls", "City", TRUE
-      "UnitClass", "Land", "Local", TRUE
-      "UnitType", "Catapult", "Local", FALSE
-      "UnitType", "Cannon", "Local", FALSE
-      "UnitType", "Artillery", "Local", FALSE
-      "UnitType", "Howitzer", "Local", FALSE
+    { "type",          "name",         "range", "present"
+      "Building",      "City Walls",   "City",  TRUE
+      "UnitClassFlag", "TerrainSpeed", "Local", TRUE
+      "UnitType",      "Catapult",     "Local", FALSE
+      "UnitType",      "Cannon",       "Local", FALSE
+      "UnitType",      "Artillery",    "Local", FALSE
+      "UnitType",      "Howitzer",     "Local", FALSE
     }
 [effect_city_walls_vs_Catapult_25pct_bonus]
 type    = "Defend_Bonus"
@@ -2956,22 +2725,6 @@ reqs	=
     { "type", "name", "range", "present"
       "Building", "City Walls", "City", TRUE
       "UnitType", "Artillery", "Local", TRUE
-    }
-[effect_city_walls_vs_Land_2]
-type    = "Defend_Bonus"
-value	= 100
-reqs	=
-    { "type", "name", "range", "present"
-      "Building", "City Walls", "City", TRUE
-      "UnitClass", "LandAirSea", "Local", TRUE
-   }
-[effect_city_walls_vs_Land_3]
-type    = "Defend_Bonus"
-value	= 100
-reqs	=
-    { "type", "name", "range", "present"
-      "Building", "City Walls", "City", TRUE
-      "UnitClass", "LandNoKill", "Local", TRUE
     }
 [effect_city_walls_1]
 type    = "Unit_No_Lose_Pop"
@@ -3047,19 +2800,19 @@ reqs    =
 type    = "Defend_Bonus"
 value	= 100 ; 2x vs most Land
 reqs	=
-    { "type", "name", "range", "present"
-      "Building", "Great Wall", "Player", TRUE
-      "Building", "City Walls", "City", FALSE
-      "Building", "Citadel of Aleppo", "City", FALSE
-      "Age", "3", "City", TRUE
-      "CityStatus", "OwnedByOriginal", "City",  TRUE
-      "UnitClass", "Land", "Local", TRUE
-      "CityTile", "Center", "Local", TRUE
-      "UnitType", "Catapult", "Local", FALSE
-      "UnitType", "Cannon", "Local", FALSE
-      "UnitType", "Artillery", "Local", FALSE
-      "UnitType", "Howitzer", "Local", FALSE
-      "Tech", "Machine Tools", "World", FALSE
+    { "type",          "name",              "range", "present"
+      "Building",      "Great Wall",        "Player", TRUE
+      "Building",      "City Walls",        "City", FALSE
+      "Building",      "Citadel of Aleppo", "City", FALSE
+      "Age",           "3",                 "City",  TRUE
+      "CityStatus",    "OwnedByOriginal",   "City",  TRUE
+      "UnitClassFlag", "TerrainSpeed",      "Local", TRUE  ;all land classes
+      "CityTile",      "Center",            "Local", TRUE
+      "UnitType",      "Catapult",          "Local", FALSE
+      "UnitType",      "Cannon",            "Local", FALSE
+      "UnitType",      "Artillery",         "Local", FALSE
+      "UnitType",      "Howitzer",          "Local", FALSE
+      "Tech",          "Machine Tools",     "World", FALSE
     }
 [effect_great_wall_0_vs_Catapult25pct_bonus_original]
 type    = "Defend_Bonus"
@@ -3089,7 +2842,6 @@ reqs	=
       "UnitType", "Cannon", "Local", TRUE
       "Tech", "Machine Tools", "World", FALSE
     }
-
 ; 1.5x vs Artillery not needed since Machine Tools expires it.
 
 [effect_great_wall_0_assimilated]
@@ -3103,7 +2855,7 @@ reqs	=
       "Age", "3", "City", TRUE
       "CityStatus", "OwnedByOriginal", "City",  FALSE
       "MinForeignPct", "19", "City",  FALSE
-      "UnitClass", "Land", "Local", TRUE
+      "UnitClassFlag", "TerrainSpeed", "Local", TRUE  ; all land classes
       "CityTile", "Center", "Local", TRUE
       "UnitType", "Catapult", "Local", FALSE
       "UnitType", "Cannon", "Local", FALSE
@@ -3141,67 +2893,8 @@ reqs	=
       "UnitType", "Cannon", "Local", TRUE
       "Tech", "Machine Tools", "World", FALSE
     }
-
 ; 1.5x vs Artillery not needed since Machine Tools expires it.
 
-[effect_great_wall_1_original]
-type    = "Defend_Bonus"
-value	= 100
-reqs	=
-    { "type", "name", "range", "present"
-      "Building", "Great Wall", "Player", TRUE
-      "Building", "City Walls", "City", FALSE
-      "Building", "Citadel of Aleppo", "City", FALSE
-      "Age", "3", "City", TRUE
-      "CityStatus", "OwnedByOriginal", "City",  TRUE
-      "UnitClass", "LandNoKill", "Local", TRUE
-      "CityTile", "Center", "Local", TRUE
-      "Tech", "Machine Tools", "World", FALSE
-    }
-[effect_great_wall_1_assimilated]
-type    = "Defend_Bonus"
-value	= 100
-reqs	=
-    { "type", "name", "range", "present"
-      "Building", "Great Wall", "Player", TRUE
-      "Building", "City Walls", "City", FALSE
-      "Building", "Citadel of Aleppo", "City", FALSE
-      "Age", "3", "City", TRUE
-      "CityStatus", "OwnedByOriginal", "City",  FALSE
-      "MinForeignPct", "19", "City",  FALSE
-      "UnitClass", "LandNoKill", "Local", TRUE
-      "CityTile", "Center", "Local", TRUE
-      "Tech", "Machine Tools", "World", FALSE
-    }
-[effect_great_wall_3_original]
-type    = "Defend_Bonus"
-value	= 100
-reqs	=
-    { "type", "name", "range", "present"
-      "Building", "Great Wall", "Player", TRUE
-      "Building", "City Walls", "City", FALSE
-      "Building", "Citadel of Aleppo", "City", FALSE
-      "Age", "3", "City", TRUE
-      "CityStatus", "OwnedByOriginal", "City",  TRUE
-      "UnitClass", "LandAirSea", "Local", TRUE
-      "CityTile", "Center", "Local", TRUE
-      "Tech", "Machine Tools", "World", FALSE
-    }
-[effect_great_wall_3_assimilated]
-type    = "Defend_Bonus"
-value	= 100
-reqs	=
-    { "type", "name", "range", "present"
-      "Building", "Great Wall", "Player", TRUE
-      "Building", "City Walls", "City", FALSE
-      "Building", "Citadel of Aleppo", "City", FALSE
-      "Age", "3", "City", TRUE
-      "CityStatus", "OwnedByOriginal", "City",  FALSE
-      "MinForeignPct", "19", "City",  FALSE
-      "UnitClass", "LandAirSea", "Local", TRUE
-      "CityTile", "Center", "Local", TRUE
-      "Tech", "Machine Tools", "World", FALSE
-    }
 [effect_great_wall_poploss_original]
 type    = "Unit_No_Lose_Pop"
 value	= 1
@@ -4788,22 +4481,16 @@ reqs   =
       "Tech", "Electricity", "Player"
     }
 ; Air+Sea+LandAirSea CLASS units REQUIRE PHYSICS so their BONUS
-; is in their stats to AVOID more [effect_] entries.
+; is in their stats for better documentation generation.
 [effect_physics_vision]
 type    = "Unit_Vision_Radius_Sq"
 value	= 4
 reqs	=
-    { "type", "name", "range"
-      "Tech", "Physics", "Player"
-      "UnitClass", "Land", "Local"
-    }
-[effect_physics_vision_1]
-type    = "Unit_Vision_Radius_Sq"
-value	= 4
-reqs	=
-    { "type", "name", "range"
-      "Tech", "Physics", "Player"
-      "UnitClass", "LandNoKill", "Local"
+    { "type",          "name",         "range",  "present"
+      "Tech",          "Physics",      "Player", TRUE
+      "UnitClassflag", "TerrainSpeed", "Local",  TRUE 
+      "UnitClass",     "LandAirSea",   "Local",  FALSE
+
     }
 [effect_physics_vision_2]
 type    = "Unit_Vision_Radius_Sq"
@@ -4825,17 +4512,9 @@ reqs	=
 type    = "Unit_Vision_Radius_Sq"
 value   = 7
 reqs    =
-    { "type",      "name",      "range"
-      "Tech", "Space Flight",   "Player"
-      "UnitClass", "Land",      "Local"
-    }
-[effect_satellite_vision_1]  ;Vision benefit from satellite communication to LandAirSea
-type    = "Unit_Vision_Radius_Sq"
-value   = 7
-reqs    =
-    { "type",      "name",      "range"
-      "Tech", "Space Flight",   "Player"
-      "UnitClass", "LandAirSea",      "Local"
+    { "type",          "name",         "range"
+      "Tech",          "Space Flight", "Player"
+      "UnitClassFlag", "TerrainSpeed", "Local"
     }
 [effect_satellite_vision_2]  ;Vision benefit from satellite communication to sea units
 type    = "Unit_Vision_Radius_Sq"
@@ -5019,7 +4698,7 @@ reqs	=
     { "type",      "name",            "range", "present"
       "Building",  "Agōgē of Sparta", "City",   TRUE
       "Building",  "Barracks",        "City",   FALSE
-      "UnitClass", "Land",            "Local",  TRUE
+      "UnitClassFlag","TerrainSpeed", "Local",  TRUE
       "UnitType",  "Phalanx",         "Local",  FALSE
       "UnitFlag",  "NonMil",          "Local",  FALSE
       "UnitFlag",  "NoVeteran",       "Local",  FALSE
@@ -5034,24 +4713,13 @@ reqs	=
       "UnitFlag",  "NonMil",          "Local",  FALSE
       "UnitFlag",  "NoVeteran",       "Local",  FALSE
     }    
-[effect_agoge_veteran_build2]
-type    = "Veteran_Build"
-value	= 1
-reqs	=
-    { "type",      "name",            "range", "present"
-      "Building",  "Agōgē of Sparta", "Player", TRUE
-      "Building",  "Barracks",        "City",   FALSE
-      "UnitClass", "LandNoKill",      "Local",  TRUE
-      "UnitFlag",  "NonMil",          "Local",  FALSE
-      "UnitFlag",  "NoVeteran",       "Local",  FALSE
-    }
 [effect_agoge_barracks_a]
 type    = "HP_Regen"
 value	= 100
 reqs	=
-    { "type",     "name",             "range", "present"
-      "Building", "Agōgē of Sparta",  "City",  TRUE
-      "UnitClass", "Land",            "Local", TRUE
+    { "type",          "name",            "range", "present"
+      "Building",      "Agōgē of Sparta", "City",  TRUE
+      "UnitClassFlag", "TerrainSpeed",    "Local", TRUE
     }
 
 ; -------------------------------------------------------------
@@ -5380,28 +5048,10 @@ reqs =
 type    = "Defend_Bonus"
 value	= 200 ; 3x vs Land
 reqs	=
-    { "type",      "name",              "range", "present"
-      "Building",  "Citadel of Aleppo", "City",  TRUE
-      "Building",  "City Walls",        "City",  FALSE          ;shouldn't happen
-      "UnitClass", "Land",              "Local", TRUE
-    }
-[effect_citadel_vs_Land2]
-type    = "Defend_Bonus"
-value	= 200 ; 3x vs Land
-reqs	=
-    { "type",      "name",              "range", "present"
-      "Building",  "Citadel of Aleppo", "City",  TRUE
-      "Building",  "City Walls",        "City",  FALSE          ;shouldn't happen
-      "UnitClass", "LandNoKill",        "Local", TRUE
-    }
-[effect_citadel_vs_Land3]
-type    = "Defend_Bonus"
-value	= 200 ; 3x vs Land
-reqs	=
-    { "type",      "name",              "range", "present"
-      "Building",  "Citadel of Aleppo", "City",  TRUE
-      "Building",  "City Walls",        "City",  FALSE          ;shouldn't happen
-      "UnitClass", "LandAirSea",        "Local", TRUE
+    { "type",          "name",              "range", "present"
+      "Building",      "Citadel of Aleppo", "City",  TRUE
+      "Building",      "City Walls",        "City",  FALSE    ;shouldn't happen
+      "UnitClassFlag", "TerrainSpeed",      "Local", TRUE     ;all Land classes
     }
 [effect_citadel_visible]
 type    = "Visible_Walls"
@@ -6570,27 +6220,11 @@ reqs	=
 type    = "Veteran_Build"
 value	= 1
 reqs	=
-    { "type", "name", "range", "present"
-      "Building", "Sun Tzu's War Academy", "Player", TRUE
-      "UnitClass", "Land", "Local", TRUE
-      "UnitFlag", "NonMil", "Local", FALSE
-      "UnitFlag", "NoVeteran", "Local", FALSE
-    }
-[effect_sun_tzus_war_academy_1]
-type    = "Veteran_Build"
-value	= 1
-reqs	=
-    { "type", "name", "range", "present"
-      "Building", "Sun Tzu's War Academy", "Player", TRUE
-      "UnitClass", "LandAirSea", "Local", TRUE
-    }
-[effect_sun_tzus_war_academy_2]
-type    = "Veteran_Build"
-value	= 1
-reqs	=
-    { "type", "name", "range", "present"
-      "Building", "Sun Tzu's War Academy", "Player", TRUE
-      "UnitClass", "LandNoKill", "Local", TRUE
+    { "type",          "name",                  "range", "present"
+      "Building",      "Sun Tzu's War Academy", "Player", TRUE
+      "UnitClassFlag", "TerrainSpeed",          "Local",  TRUE
+      "UnitFlag",      "NonMil",                "Local",  FALSE
+      "UnitFlag",      "NoVeteran",             "Local",  FALSE
     }
 [effect_sun_tzus_war_academy_3]
 type    = "Veteran_Build"
@@ -7004,21 +6638,21 @@ reqs	=
 type    = "Veteran_Build"
 value	= 1
 reqs	=
-    { "type",     "name",      "range", "present"
-      "Building", "Ziggurat",  "City",  TRUE
-      "Gov",      "Despotism", "Player",TRUE
-      "Building", "Barracks",  "City",  FALSE
-      "UnitClass","Land",      "Local", TRUE
-      "UnitFlag", "NonMil",    "Local", FALSE
-      "UnitFlag", "NoVeteran", "Local", FALSE
+    { "type",         "name",         "range", "present"
+      "Building",     "Ziggurat",     "City",  TRUE
+      "Gov",          "Despotism",    "Player",TRUE
+      "Building",     "Barracks",     "City",  FALSE
+      "UnitClassFlag","TerrainSpeed", "Local", TRUE
+      "UnitFlag",     "NonMil",       "Local", FALSE
+      "UnitFlag",     "NoVeteran",    "Local", FALSE
     }
 [effect_ziggurat_barracks_a]
 type    = "HP_Regen"
 value	= 100
 reqs	=
-    { "type", "name", "range", "present"
-      "Building", "Ziggurat",  "City",  TRUE
-      "UnitClass", "Land", "Local", TRUE
+    { "type",          "name",         "range", "present"
+      "Building",      "Ziggurat",     "City",  TRUE
+      "UnitClassFlag", "TerrainSpeed", "Local", TRUE
     }
 [effect_ziggurat_temple]
 type    = "Make_Content"
