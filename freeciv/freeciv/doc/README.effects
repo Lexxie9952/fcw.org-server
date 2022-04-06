@@ -278,6 +278,9 @@ Coinage_Bonus_Pm
 Combat_Rounds
     Maximum number of rounds combat lasts. Unit is the attacker. Zero and
     negative values mean that combat continues until either side dies.
+    Local tile reqs resolve to the tile the battle is fought on; that is,
+    the defender's tile. Thus a ruleset can reduce combat_rounds for 
+    contexts like non-native attacks, attacking vs. mountains, etc.
 
 Conquest_Tech_Pct
     Percent chance that a player conquering a city learns a tech from the

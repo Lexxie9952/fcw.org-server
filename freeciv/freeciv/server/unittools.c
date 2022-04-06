@@ -360,7 +360,29 @@ void unit_versus_unit(struct unit *attacker, struct unit *defender,
   } else if (defensepower == 0) {
     *def_hp = 0;
   }
-  max_rounds = get_unit_bonus(attacker, EFT_COMBAT_ROUNDS);
+
+  
+  /* Combat_Rounds tests the defended tile rather than attacker tile,
+   * so that, e.g., it can be reduced during non-native engagements. */
+  max_rounds = get_target_bonus_effects(NULL,
+                                        unit_owner(attacker),
+                                        unit_owner(defender),
+                                        unit_tile(defender) ? tile_city(unit_tile(defender)) : NULL, /*based on tile attacke*/
+                                        NULL,
+                                        unit_tile(defender),
+                                        attacker,
+                                        unit_type_get(attacker),
+                                        NULL,
+                                        NULL,
+                                        NULL,
+                                        EFT_COMBAT_ROUNDS);
+
+  notify_player(unit_owner(attacker), NULL, E_UNIT_ACTION_FAILED, ftc_server, 
+               _("ATK FP = %d\nATK POW = %d\nmax_rounds = %d"), 
+                 attack_firepower,
+                 attackpower,
+                 max_rounds);
+
   for (rounds = 0;
        *att_hp > 0 && *def_hp > 0
          && (max_rounds <= 0 || max_rounds > rounds);
