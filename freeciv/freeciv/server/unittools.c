@@ -369,7 +369,7 @@ void unit_versus_unit(struct unit *attacker, struct unit *defender,
                                         unit_owner(defender),
                                         unit_tile(defender) ? tile_city(unit_tile(defender)) : NULL, /*based on tile attacke*/
                                         NULL,
-                                        unit_tile(defender),
+                                        unit_tile(defender), // consistency: same tile used in get_total_attack_power() above.
                                         attacker,
                                         unit_type_get(attacker),
                                         NULL,
@@ -377,6 +377,13 @@ void unit_versus_unit(struct unit *attacker, struct unit *defender,
                                         NULL,
                                         EFT_COMBAT_ROUNDS);
 
+/* DEBUG TESTS
+  notify_player(unit_owner(attacker), NULL, E_UNIT_ACTION_FAILED, ftc_server, 
+               _("ATK FP = %d\nATK POW = %d\nmax_rounds = %d"), 
+                 attack_firepower,
+                 attackpower,
+                 max_rounds);
+*/
   for (rounds = 0;
        *att_hp > 0 && *def_hp > 0
          && (max_rounds <= 0 || max_rounds > rounds);
