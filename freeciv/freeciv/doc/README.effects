@@ -176,7 +176,8 @@ Any_Government
 
 Attack_Bonus
     Increases offensive bonuses of units. Unit requirements on this effect are
-    the attacking unit itself.
+    the attacking unit itself. Evaluations of the tile (Terrain flag, etc.)
+    resolve to the tile where the battle happens (i.e. defender's tile.)
 
 Border_Vision
     Give vision on all tiles within the player's borders. Happens during
