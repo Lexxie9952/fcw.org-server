@@ -59,7 +59,7 @@ flags =
     _("Infra"), _("Can build infrastructure.")
     _("Proletarian"), _("Controllable only by Communist governments.")
     _("Paratroopers"), _("Can be paradropped from a friendly city or suitable base.")
-    _("Marines"), _("Can launch attack from non-native tiles.")
+    _("NonNativeAttack"), _("Overrides unit class to allow attacks on non-native tiles.")
     _("Expellable"), _("Can be peacefully expelled from foreign tiles.")
     _("AirProtector"), _("Is Unreachable AND can protect its tile from units unable to attack this unit.")
     _("CantReachAir"), _("Unable to attack air units.")
@@ -170,10 +170,9 @@ veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
 ; "AttackNonNative"   = Unit Class can attack units on non-native tiles. Unit type
 ;                       flag "Only_Native_Attack" can override this
 ; "AttFromNonNative"  = Unit Class can launch attack from non-native tile (against
-;                       native one)
-;                       This applies for both attacking from transport or
+;                       native one). This applies for both attacking from transport or
 ;                       cities. If only some unit types of the class should
-;                       get this property, use type flag "Marines"
+;                       get this property, use type flag "NonNativeAttack"
 ; "KillCitizen"       = Upon successful attack against a city, unit kills one
 ;                       citizen. The effect "Unit_No_Lose_Pop" and the server
 ;                       setting 'killcitizen' can disable this.
@@ -576,12 +575,11 @@ flags         = "Unreachable", "DoesntOccupyTile"
 ;                 the "CanKillEscaping" unit type flag.
 ; "CanKillEscaping" = an attack from this unit ignores the "CanEscape" unit
 ;                 type flag.
-; "Provoking" =   Under autoattack_style=1 which this ruleset uses, only 
-;                 Fighter types will autoattack and will ONLY attack units
-;                 marked with the Provoking flag.  If overridden to autoattack_style=0,
-;                 a unit considering to auto attack this unit will choose to
-;                 do so even if has better odds when defending against it
-;                 then when attacking it. Applies when the autoattack server
+; "Provoking" =   Under autoattack_style=1 which this ruleset uses, Fighter
+;                 types will ONLY autoattack units marked with the Provoking flag.
+;                 If overridden to autoattack_style=0, a unit considering to autoattack
+;                 this unit will choose to do so even if has better odds when defending
+;                 against it than when attacking it. Applies when the autoattack server
 ;                 setting is enabled.
 ; "NeverProtects" = doesn’t protect reachable units on its tile from enemy
 ;                 attackers, even if the unreachableprotects server setting
@@ -1735,9 +1733,9 @@ uk_gold       = 1
 embarks       = "Helicopter", "Land", "Sea", "LandRoad", "LandRail"
 disembarks    = "Helicopter", "Land", "Sea", "LandRoad", "LandRail"
 targets       = "Sea", "Balloon", "Helicopter", "LandRail", "Zeppelin"
-flags         = "MultiSlot", "Marines", "FootSoldier", "BeachLander",
+flags         = "MultiSlot", "NonNativeAttack", "FootSoldier", "BeachLander",
                 "Capturer", "NeverBlocked", "Settlers", "CanHide", "WillNever",
-                "Airbase", "CanFortress", "Bombarder"; can Fort only, actually.
+                "Airbase", "Bombarder", "CanFortress"; can Fort only, actually.
 veteran_names =
   _("?vet_rank:green"),
   _("?vet_rank:veteran"),
@@ -2471,7 +2469,7 @@ bombard_rate = 6
 name          = _("Anti-Aircraft Artillery")
 class         = "LandAirSea"
 tech_req      = "Flight"
-obsolete_by   = "None"
+obsolete_by   = "None"   ; allows making AAA to defend helis or reduced costs
 graphic       = "u.anti_aircraft"
 graphic_alt   = "-"
 sound_move    = "m_anti_aircraft"
@@ -2503,19 +2501,16 @@ bonuses       =
      "AirAttacker", "DefenseDivider", 1
      "AirAttacker", "DefenseMultiplier", 1
    }
-flags         = "MultiSlot", "Marines", "BeachLander", "NeverBlocked", "AntiAir", "WillNever", "TransportDefender"
+flags         = "NeverBlocked", "AntiAir", "WillNever", "TransportDefender", "NonNativeAttack"
 roles         = ""
 helptext      = _("\
-Anti-Aircraft Artillery (AAA) are in the LandAirSea class, with cabilities\
- like Marines. AAA get a 2× bonus against Air units. They can attack any tile from\
- anywhere, even while transported. They can be transported by any unit that can carry\
- Marines. AAA can disembark from non-native tiles using only 1 move point, and board/deboard\
- without using move points. Transported AAA can always defend their tile, even at Sea.\
- As infantry weaponry, they may use extra city build slots. AAA can’t attack Submarines,\
- Missiles, and High Altitude aircraft.\
+Anti-Aircraft Artillery (AAA) get a 2× bonus against Air units. They can attack any tile.\
+ They can be transported by any unit that can carry Marines.\
+ Transported AAA can always defend their tile, even at sea. AAA can’t attack while transported,\
+ and cannot attack Submarines, Missiles, and High Altitude aircraft.\
 "), _("
 After Space Flight and 9 turns of service, AAA can be retrofitted to\
- Mobile SAM. The Convert order must be done in a capital, and takes 3 turns.\
+ Mobile SAM. The Convert order must be done in a domestic capital, and takes 3 turns.\
 ")
 
 [unit_mobile_sam]
@@ -2553,18 +2548,19 @@ bonuses       =
      "AirAttacker", "DefenseMultiplier", 1
      "Missile", "DefenseMultiplier", 1
    }
-flags         = "NeverBlocked", "AntiAir", "WillNever"
+flags         = "NeverBlocked", "AntiAir", "WillNever", "TransportDefender", "NonNativeAttack"
 roles         = ""
 helptext      = _("\
 The Mobile SAM is the strongest Anti-Air unit on the ground. It can\
  attack nearby aircraft. It has a 2× bonus against all Air and Missile\
- units. The Mobile SAM can also carry two Missiles of any type. Unlike\
- the AAA, it can’t attack non-native tiles or attack while transported.\
- After discovery of Laser, Mobile SAMS provide a 33% chance of defending\
- their tile from nuclear blast.\n\
+ units. The Mobile SAM can also carry two Missiles of any type. Like\
+ the AAA, it can attack non-native tiles but not while transported.\
+ Transported Mobile SAMs can always defend their tile, even at sea.\
+ The discovery of Laser gives all units on its tile a 33% chance to\
+ survive nuclear attack. \n\
 "), _("
 AAA can upgrade to Mobile SAM for free on its 9th turn of service.\
- The Convert order must be done in the capital city and takes 3 turns.\
+ The Convert order must be done in a domestic city and takes 3 turns.\
 ")
 
 [unit_howitzer]
@@ -2755,7 +2751,7 @@ Airplanes can carry a diplomatic unit or a Freight unit. They can land in any do
  or allied city. For diplomatic missions to non-allied nations, an empty Airbase must be available for landing.\
  Airplanes have two turns of fuel. Each new aviation tech upgrades range by +2 moves per turn. \n\
 "), _("
-Airplanes can Stack-Escape：a 60% chance to escape a killed stack if they have more remaining moves than the attacker.\
+Stack-Escape：60% odds to evade stack-death if it has more moves left than attacker.\
  NOTE：GOTO disallows unit loss from lack of fuel. You\
  can override this by moving to adjacent tiles.\
 ")
@@ -2814,7 +2810,7 @@ Fighters are the first offensive Air units. Their superior mobility and firepowe
 INTERCEPTOR：the Vigil order lets Fighters auto-attack adjacent Air units if they\
  have better attack odds. A Fighter can Vigil if it uses 2 move points or less. \n\
 "), _("
-Fighters can Stack-Escape：a 60% chance to escape a killed stack if they have more remaining moves than the attacker.\
+Stack-Escape：60% odds to evade stack-death if it has more moves left than attacker.\
  NOTE：GOTO disallows unit loss from lack of fuel. You\
  can override this by moving to adjacent tiles.\
 ")
@@ -2877,7 +2873,7 @@ Escort Fighters are large fighters with high fuel capacity. Higher mass and\
 INTERCEPTOR：the Vigil order lets Escort Fighters auto-attack adjacent Air units if they\
  have better attack odds. This unit can Vigil if it uses 3 move points or less. \n\
 "), _("
-This aircraft can Stack-Escape：a 60% chance to escape a killed stack if it has more remaining moves than the attacker.\
+Stack-Escape：60% odds to evade stack-death if it has more moves left than attacker.\
  NOTE：GOTO disallows unit loss from lack of fuel. You\
  can override this by moving to adjacent tiles.\
 ")
@@ -2952,8 +2948,8 @@ LOSSES: \n\
  • Can’t block its tile \n\
  • Can’t intercept \n\
 "), _("
-Communists pay 10 less for this unit. Can Stack-Escape：a 60% chance to escape a\
- killed stack if it has more remaining moves than the attacker.\
+Communists pay 10 less for this unit.\
+ Stack-Escape：60% odds to evade stack-death if it has more moves left than attacker.\
  GOTO prevents unit loss from lack of fuel.\
  Override this by ordering adjacent moves.\
 ")
@@ -3010,7 +3006,7 @@ The Medium Bomber is well suited for moderately strong targets or multiple weak 
 Republic:0   Democracy:1    (non-aggressive) \n\
 Republic:1   Democracy:2    (aggressive) \n\
 "), _("
-This aircraft can Stack-Escape：a 60% chance to escape a killed stack if it has more remaining moves than the attacker.\
+Stack-Escape：60% odds to evade stack-death if it has more moves left than attacker.\
  NOTE：GOTO disallows unit loss from lack of fuel. You\
  can override this by moving to adjacent tiles.\
 ")
@@ -3068,7 +3064,7 @@ Heavy Bombers are large and sturdy Bombers with larger payload and numerous gunn
 ➤ Unhappy effect for Field units: \n\
 Republic:1   Democracy:2 \n\
 "), _("
-This aircraft can Stack-Escape：a 60% chance to escape a killed stack if it has more remaining moves than the attacker.\
+Stack-Escape：60% odds to evade stack-death if it has more moves left than attacker.\
  NOTE：GOTO disallows unit loss from lack of fuel. You\
  can override this by moving to adjacent tiles.\
 ")
@@ -3125,7 +3121,7 @@ The Strategic Bomber offers a small improvement in attack. Higher altitude offer
  defense. It has considerably longer range, with one more turn of fuel. Upgraded payload enables\
  instant-Pillage bombing. May carry two Bombs. \n\
 "), _("
-This aircraft can Stack-Escape：a 60% chance to escape a killed stack if it has more remaining moves than the attacker.\
+Stack-Escape：60% odds to evade stack-death if it has more moves left than attacker.\
  NOTE：GOTO disallows unit loss from lack of fuel. You\
  can override this by moving to adjacent tiles.\
 ")
@@ -3167,7 +3163,7 @@ helptext      = _("\
 The AWACS has great fuel capacity for long range flights, and advanced radar that can determine\
  the location of enemy units over a wide area. The AWACS has 2 turns of fuel. \n\
 "), _("
-AWACS can Stack-Escape：a 60% chance to escape a killed stack if they have more remaining moves than the attacker.\
+Stack-Escape：60% odds to evade stack-death if it has more moves left than attacker.\
  NOTE：GOTO disallows unit loss from lack of fuel. You\
  can override this by moving to adjacent tiles.\
 ")
@@ -3210,9 +3206,9 @@ helptext      = _("\
 The Spy Plane is an ultrasonic high altitude aircraft with long range. It gathers\
  intel over a wide area. Stealth technology makes it invisible, except to enemies on\
  adjacent tiles. Spy Planes have 2 turns of fuel. They are unreachable to primitive\
- propeller-based aircraft.\
+ propeller-based aircraft. \
 "), _("
-Spy Planes can Stack-Escape：a 67% chance to escape a killed stack if they have more remaining moves than the attacker.\
+Stack-Escape：67% odds to evade stack-death if it has more moves left than attacker.\
  NOTE：GOTO disallows unit loss from lack of fuel. You\
  can override this by moving to adjacent tiles.\
 ")
@@ -3256,9 +3252,9 @@ Satellites orbit the Earth above the atmosphere. They are unreachable to anythin
  but missiles. Their orbital velocity allows them to circumnavigate the planet\
  in a couple turns. Telescopic cameras allow them to Investigate City, even if the\
  city has a Police Station. Satellites can’t be seen by others unless adjacent.\
- Satellites require Laser tech and can only be built in the city with the Apollo Program.\
+ Satellites require Laser tech and can only be built in the city with the Apollo Program. \
 "), _("
-Satellites can Stack-Escape：a 100% chance to escape a killed stack if they have more remaining move points than the attacker.\
+Stack-Escape：100% odds to evade stack-death if it has more moves left than attacker.\
 "), _("
 NOTE： Due to game mechanics, a Satellite blocks terrestrial movement\
  over a tile. This is solved by killing it with any Missile. To avoid\
@@ -3328,7 +3324,7 @@ Transport Helicopters can carry three land units, which they can pick up from an
  All Helicopters can be attacked by land from Riflemen onward; by sea from Ironclad\
  onward; get +50% defence vs. foot units; and are unreachable to artillery types.\
  Unlike attack Helicopters, Transport Helicopters are intercepted by Fighters on vigil.\
- Transport Helicopters can Stack-Escape：a 60% chance to escape a killed stack if they have more remaining moves than the attacker.\
+ Stack-Escape：60% odds to evade stack-death if it has more moves left than attacker.\
 ")
 
 [unit_helicopter]
@@ -3399,7 +3395,7 @@ Helicopters fly low to avoid Interception. This invites attacks by ground units 
  vs. foot units. Helicopters can be attacked by Sea from Ironclad onward.
 Helicopters can retaliate 3 rounds against Special Unit Attacks. \n\
 "), _("\
-Helicopters can Stack-Escape：a 60% chance to escape a killed stack if they have more remaining moves than the attacker.\
+Stack-Escape：60% odds to evade stack-death if it has more moves left than attacker.\
  Helicopters can transport one Marines or AAA unit.\
 ")
 
@@ -3452,7 +3448,7 @@ Jet Fighters upgrade the Fighter with improved attack, defense, and range.\
 INTERCEPTOR：the Vigil order lets Jet Fighters auto-attack adjacent Air units if they\
  have better attack odds. This unit can Vigil if it uses 3 move points or less. \n\
 "), _("
-Jet Fighters can Stack-Escape：a 60% chance to escape a killed stack if they have more remaining moves than the attacker.\
+Stack-Escape：60% odds to evade stack-death if it has more moves left than attacker.\
  NOTE：GOTO disallows unit loss from lack of fuel. You can override this by moving to adjacent tiles.\
 ")
 
@@ -3509,7 +3505,7 @@ Multi-Fighters are fitted for mission versatility.\
 INTERCEPTOR：the Vigil order lets Multi-Fighters auto-attack adjacent Air units if they\
  have better attack odds. This unit can Vigil if it has 1 turn of fuel or more. \n\
 "), _("
-Multi-Fighters can Stack-Escape：a 60% chance to escape a killed stack if they have more remaining moves than the attacker.\
+Stack-Escape：60% odds to evade stack-death if it has more moves left than attacker.\
  NOTE：GOTO disallows unit loss from lack of fuel. You can override this by moving to adjacent tiles.\
 ")
 
@@ -3567,7 +3563,7 @@ Ground Strike Fighters upgrade the Dive Bomber. They can’t block attacks on ot
  air. No unit can stop this unit from attacking surface units on a tile. This unit\
  can also do pinpointed surgical strikes to pillage tiles. This aircraft is a\
  specialized niche unit. It is not an interceptor. \n\
-This aircraft can Stack-Escape：a 60% chance to escape a killed stack if it has more remaining moves than the attacker.\
+Stack-Escape：60% odds to evade stack-death if it has more moves left than attacker.\
  NOTE：GOTO prevents unit loss from lack of fuel. You\
  can override this by moving to adjacent tiles.\
 ")
@@ -3622,7 +3618,7 @@ Jet Bombers are stratospheric long-range bombers with 3 turns of fuel：they can
  altitude is unreachable to propeller-based Fighters and AAA. Jet Bombers can Carpet Bomb, an\
  instant-Pillage of tiles from the air. May carry three Bombs. \ 
 "), _("
-Jet Bombers can Stack-Escape：a 60% chance to escape a killed stack if they have more remaining moves than the attacker.\
+Stack-Escape：60% odds to evade stack-death if it has more moves left than attacker.\
  NOTE：GOTO disallows unit loss from lack of fuel. You\
  can override this by moving to adjacent tiles.\
 ")
@@ -3681,7 +3677,7 @@ The most advanced Fighter, with improved attack and longer range. Stealth Fighte
 INTERCEPTOR：the Vigil order lets Stealth Fighters auto-attack adjacent Air units if they\
  have better attack odds. This unit can Vigil if it uses 4 move points or less. \n\
 "), _("
-Stealth Fighters can Stack-Escape：a 67% chance to escape a killed stack if they have more remaining moves than the attacker.\
+Stack-Escape：67% odds to evade stack-death if it has more moves left than attacker.\
 "), _("
 NOTE：GOTO disallows unit loss from lack of fuel. You\
  can override this by moving to adjacent tiles.\
@@ -3740,7 +3736,7 @@ The deadliest Bomber, with improved attack and speed. Stealth Bombers can’t be
  unless adjacent to an enemy. Stealth evasion gives a 25% bonus against all Anti-Air\
  units, and reduces SAM Batteries down to only a 25% bonus. May carry two Bombs. \n\
 "), _("
-Stealth Bombers can Stack-Escape：a 67% chance to escape a killed stack if they have more remaining moves than the attacker.\
+Stack-Escape：67% odds to evade stack-death if it has more moves left than attacker.\
  NOTE：GOTO disallows unit loss from lack of fuel. You\
  can override this by moving to adjacent tiles.\
 ")
@@ -4149,9 +4145,9 @@ Like most early sea units, when it initiates combat there will be 15 rounds\
  result in the loss of one of the units. Although the Galleon is not a Commerce\
  unit, it retains one vestige of the commercial abilities for the ships it upgrades.\
  It can enter Peace waters to deliver commercial cargo, and does not cause\
- unhappiness.\
+ unhappiness. \
 "), _("
-Galleons can Stack-Escape：a 60% chance to escape a killed stack if they have more remaining moves than the attacker.\
+Stack-Escape：60% odds to evade stack-death if it has more moves left than attacker.\
 ")
 
 [unit_frigate]
@@ -4183,7 +4179,7 @@ targets       = "Submarine", "LandRail"
 cargo         = "Land", "LandNoKill", "LandAirSea", "LandRoad"
 bonuses       =
    { "flag", "type", "value"
-     "Marines", "DefenseMultiplier", 1    
+     "NonNativeAttack", "DefenseMultiplier", 1    
    }
 veteran_names =
   _("?vet_rank:green"),
@@ -4205,7 +4201,7 @@ The Frigate is versatile — it is a superior offensive unit and also a decent t
  extra +1hp per turn, regardless of whether it has moved.\
 "), _("
 From Frigates onward, all sea attacks end with a single victor.\
- Frigates can Stack-Escape：a 60% chance to escape a killed stack if they have more remaining move points than the attacker.\
+ Stack-Escape：60% odds to evade stack-death if it has more moves left than attacker.\
 ")
 
 [unit_cargo_ship]
@@ -4276,7 +4272,7 @@ uk_gold       = 0
 cargo         = "Land", "LandNoKill", "LandAirSea", "Balloon", "LandRoad", "Cargo", "Zeppelin"
 bonuses       =
    { "flag", "type", "value"
-     "Marines", "DefenseMultiplier", 1    
+     "NonNativeAttack", "DefenseMultiplier", 1    
    }
 flags         = "BadCityDefender", "CanEscape"
 veteran_names =
@@ -4329,7 +4325,7 @@ uk_gold       = 0
 targets       = "Balloon", "Submarine", "Helicopter", "LandRail"
 bonuses       =
    { "flag", "type", "value"
-     "Marines", "DefenseMultiplier", 1    
+     "NonNativeAttack", "DefenseMultiplier", 1    
    }   
 flags         = "BadCityDefender", "CanEscape", "CantReachAir", "WillNever"
 veteran_names =
@@ -4349,9 +4345,9 @@ helptext      = _("\
 The Ironclad is an armored ship that is much more sturdy than the Frigate but\
  loses transport capability and the ability to navigate rivers. From the Ironclad\
  onward, warships are excellent at attacking shore targets, and can also pillage\
- buoys.\ 
+ buoys. \ 
 "), _("
-Ironclads and all modern ships can Stack-Escape：a 60% chance to escape a killed stack if they have more remaining move points than the attacker.\
+Stack-Escape：60% odds to evade stack-death if it has more moves left than attacker.\
 ")
 
 [unit_destroyer]
@@ -4384,7 +4380,7 @@ targets       = "Balloon", "Submarine", "Helicopter", "LandRail", "Zeppelin"
 bonuses       =
    { "flag", "type", "value"
      "Submarine", "DefenseMultiplier", 3
-     "Marines", "DefenseMultiplier", 1    
+     "NonNativeAttack", "DefenseMultiplier", 1    
    }   
 flags         = "BadCityDefender", "CanEscape", "CantReachAir", "WillNever"
 veteran_names =
@@ -4405,9 +4401,9 @@ Destroyers are the first of the modern ships to start your modern\
  navy. Their main roles are fast scouting, seek-and-destroy,\
  anti-submarine warfare, shore bombardment of lighter targets,\
  and supporting the needs of larger fleets. 4× ASW defence gives a\
- 35% chance defending vs Submarines.\
+ 35% chance defending vs Submarines. \
 "), _("
-Destroyers can Stack-Escape：a 67% chance to escape a killed stack if they have more remaining move points than the attacker.\
+Stack-Escape：67% odds to evade stack-death if it has more moves left than attacker.\
 ")
 
 [unit_cruiser]
@@ -4439,7 +4435,7 @@ targets       = "Balloon", "Submarine", "Helicopter", "LandRail", "Zeppelin"
 bonuses       =
    { "flag", "type", "value"
      "Submarine", "DefenseMultiplier", 1
-     "Marines", "DefenseMultiplier", 1    
+     "NonNativeAttack", "DefenseMultiplier", 1    
    }
 flags         = "BadCityDefender", "CanEscape", "CantReachAir", "WillNever"
 veteran_names =
@@ -4481,7 +4477,7 @@ hitpoints     = 30
 firepower     = 2
 move_rate     = 13
 vision_radius_sq = 16
-transport_cap = 1
+transport_cap = 2
 fuel          = 0
 uk_happy      = 1
 uk_shield     = 1
@@ -4492,7 +4488,7 @@ cargo         = "Missile"; , "Virtual"
 bonuses       =
    { "flag", "type", "value"
      "Submarine", "DefenseMultiplier", 1
-     "Marines", "DefenseMultiplier", 1 
+     "NonNativeAttack", "DefenseMultiplier", 1 
      "AirAttacker", "DefenseMultiplier", 1
      "Missile", "DefenseMultiplier", 1
    }   
@@ -4513,9 +4509,9 @@ roles         = "Hunter"
 helptext      = _("\
 The Missile Destroyer has double the firepower of a Destroyer, and shares the same roles\
  as its ancestor. It gains 2× defense against Air and Missile units. It has a 2× ASW bonus\
- and can carry one Missile.\
+ and can carry two Missiles. \
 "), _("
-Missile Destroyers can Stack-Escape：a 67% chance to escape a killed stack if they have more remaining move points than the attacker.\
+Stack-Escape：67% odds to evade stack-death if it has more moves left than attacker.\
 ")
 
 [unit_aegis_cruiser]
@@ -4537,7 +4533,7 @@ hitpoints     = 30
 firepower     = 2
 move_rate     = 12
 vision_radius_sq = 19
-transport_cap = 2
+transport_cap = 5
 fuel          = 0
 uk_happy      = 1
 uk_shield     = 1
@@ -4550,7 +4546,7 @@ bonuses       =
      "AirAttacker", "DefenseMultiplier", 2
      "Missile", "DefenseMultiplier", 2
      "Submarine", "DefenseMultiplier", 1
-     "Marines", "DefenseMultiplier", 1
+     "NonNativeAttack", "DefenseMultiplier", 1
    }
 flags         = "BadCityDefender", "CanEscape", "AntiAir", "WillNever"
 veteran_names =
@@ -4569,11 +4565,13 @@ roles         = "Hunter"
 helptext      = _("\
 The AEGIS Cruiser has an Anti-Air missile system. Radar and sonar\
  give superior vision and 2× defense bonus against Submarines.\
- The AEGIS can carry two Missiles, and is the only ship that can attack\
- Air and Missile units. The discovery of Laser gives all units on the\
- tile a 50% chance to resist nuclear attack.\
+ The AEGIS can carry five Missiles, and is the only ship that can attack\
+ Air and Missile units.  The discovery of Laser gives all units on its tile\
+ a 50% chance to survive nuclear attack. \n\
 "), _("\
-Excellent vision and 3× Anti-Air bonus are ideal for scouting and escorting.\
+Excellent vision and 3× Anti-Air bonus are ideal for scouting and escorting. \
+"), _("
+Stack-Escape：60% odds to evade stack-death if it has more moves left than attacker.\
 ")
 
 [unit_battleship]
@@ -4607,7 +4605,7 @@ targets       = "Balloon", "Submarine", "Helicopter", "LandRail", "Zeppelin"
 bonuses       =
    { "flag", "type", "value"
      "Submarine", "DefenseMultiplier", 1
-     "Marines", "DefenseMultiplier", 1    
+     "NonNativeAttack", "DefenseMultiplier", 1    
    }
 flags         = "BadCityDefender", "CanEscape", "CantReachAir", "WillNever", "Bombarder"
 veteran_names =
@@ -4626,7 +4624,9 @@ roles         = ""
 helptext      = _("\
 The Battleship is the supreme naval unit, with excellent offensive and defensive strength. It has a 2× defense bonus vs Submarines.\
  Battleships may expend 5 move points to do a 3 round bombardment which hits up to 4 units within a stack, of which only a maximum\
- of one can be killed. Defending Battleships get a free bombardment against Special Unit Attacks.\
+ of one can be killed. Defending Battleships get a free bombardment against Special Unit Attacks. \
+"), _("
+Stack-Escape：60% odds to evade stack-death if it has more moves left than attacker.\
 ")
 bombard_rate = 3
 
@@ -4634,7 +4634,7 @@ bombard_rate = 3
 name          = _("Submarine")
 class         = "Submarine"
 tech_req      = "Automobile"
-obsolete_by   = "None"
+obsolete_by   = "Missile Submarine"
 graphic       = "u.submarine"
 graphic_alt   = "-"
 sound_move    = "m_submarine"
@@ -4649,14 +4649,14 @@ hitpoints     = 28
 firepower     = 2
 move_rate     = 11
 vision_radius_sq = 12
-transport_cap = 8
+transport_cap = 0 ;8
 fuel          = 0
 uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
 targets       = "Balloon", "Submarine"
-cargo         = "Missile"
+;cargo         = "Missile"
 vision_layer  = "Subsurface"
 bonuses       =
    { "flag", "type", "value"
@@ -4678,15 +4678,76 @@ veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
 veteran_move_bonus = 0, 0, 0, 0, 9, 9, 9
 roles         = "Hunter"
 helptext      = _("\
-Submarines are strong attackers but weak defenders. They can carry 8 Missiles.\
+Submarines are strong attackers but weak defenders.\
  They are unreachable by Air units, but do not block air attacks on surface ships.\
  Submarines can’t attack units on shore. Submarines can’t be seen by other players\
  unless they have a unit or city adjacent to it. \ 
 "), _("\
 Submarines have superior attrition rates when attacking in numbers. They excel\
- at hit-and-run against weaker ships. They have a minimum speed of 5 when damaged.\
+ at hit-and-run against weaker ships. They have a minimum speed of 5 when damaged. \
 "), _("
-Submarines can Stack-Escape：a 75% chance to escape a killed stack if they have more remaining move points than the attacker.\
+Stack-Escape：75% odds to evade stack-death if it has more moves left than attacker.\
+")
+
+[unit_missile_submarine]
+name          = _("Missile Submarine")
+class         = "Submarine"
+tech_req      = "Nuclear Power"
+obsolete_by   = "None"
+graphic       = "u.missile_submarine"
+graphic_alt   = "-"
+sound_move    = "m_submarine"
+sound_move_alt = "m_generic"
+sound_fight   = "f_submarine"
+sound_fight_alt = "f_generic"
+build_cost    = 55
+pop_cost      = 0
+attack        = 12
+defense       = 4
+hitpoints     = 30
+firepower     = 2
+move_rate     = 11
+vision_radius_sq = 12
+transport_cap = 4
+fuel          = 0
+uk_happy      = 1
+uk_shield     = 1
+uk_food       = 0
+uk_gold       = 0
+targets       = "Balloon", "Submarine"
+cargo         = "Missile"
+vision_layer  = "Subsurface"
+bonuses       =
+   { "flag", "type", "value"
+     "Submarine", "DefenseMultiplier", 1
+   }
+flags         = "NeverProtects", "BadCityDefender", "Only_Native_Attack",
+                "Settlers", "Infra", "CanFortress", "Airbase", ;for building "Depth"
+                "Submarine", "CanEscape", "CantReachAir", "WillNever"
+veteran_names =
+  _("?vet_rank:green"),
+  _("?vet_rank:veteran"),
+  _("?vet_rank:hardened"),
+  _("?vet_rank:elite"),
+  _("?vet_rank:crack"),
+  _("?vet_rank:master"),
+  _("?vet_rank:sea wolf")
+veteran_base_raise_chance = 50, 33, 20, 15, 15, 15, 0
+veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
+veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
+veteran_move_bonus = 0, 0, 0, 0, 9, 9, 9
+roles         = "Hunter"
+helptext      = _("\
+A Missile Submarine is an upgraded Submarine. It gains 2hp, greater defense, and capacity\
+ for 4 Missiles. It can’t be seen except by an adjacent unit or city. The DIVE DEEP order\
+ makes Missile Submarines completely invisible to adjacent units on the following turn：\
+ enemies only discover it if moving directly to its tile, at which point they may\
+ attack. It can only be done in Deep Ocean while the Missile Submarine stays quietly in place. \n\
+Missile Submarines are unreachable by Air units, but don’t block air attacks on surface ships. \n\
+"), _("\
+Minimum speed is 5, when damaged.\n\
+"), _("
+Stack-Escape：75% odds to evade stack-death if it has more moves left than attacker.\
 ")
 
 [unit_carrier]
@@ -4718,7 +4779,7 @@ targets       = "Balloon", "Submarine", "Helicopter", "Zeppelin"
 cargo         = "Air", "AirProtect", "Air_High_Altitude", "Missile", "Helicopter", "Balloon", "LandAirSea", "Zeppelin"
 bonuses       =
    { "flag", "type", "value"
-     "Marines", "DefenseMultiplier", 1    
+     "NonNativeAttack", "DefenseMultiplier", 1    
    }
 flags         = "BadCityDefender", "Only_Native_Attack", "CanEscape",
                 "CantReachAir", "WillNever"
@@ -5341,7 +5402,7 @@ Electricity and Combustion each give Trains an additional +1 move.\
 [unit_truck]
 name          = _("Truck")
 class         = "LandRoad"
-tech_req      = "The Corporation"
+tech_req      = "Automobile"
 obsolete_by   = "None"
 graphic       = "u.truck"
 graphic_alt   = "-"
@@ -5368,9 +5429,9 @@ flags         = "HelpWonder", "TradeRoute", "NonMil", "HasNoZOC", "Capturable", 
 roles         = ""
 helptext      = _("\
 The Truck replaces the Caravan as the basic Commerce unit on Land. It moves at\
- more than twice the speed; but is restricted to the same roads and flatland\
- tiles as Wagons, and can’t use rails. Each Truck used to build a Wonder\
- will add 50 shields. See the entry on Caravan to read what Commerce units may do. \n\
+ more than twice the speed; but is restricted to roads and quays, and can’t use rails.\
+ Each Truck used to build a Wonder will add 50 shields. See the entry on Caravan to read\
+ what Commerce units may do. \n\
 "), _("\
 Trucks allow units with less than 3 move points to travel your roads faster: Like\
  the Wagon, any cargo can board a Truck anywhere, but a city, quay, or base is\
@@ -5418,7 +5479,7 @@ Goods can only move to tiles with a City, Quay, Fortress, Airbase, or Naval Base
 [unit_freight]
 name          = _("Freight")
 class         = "Cargo"
-tech_req      = "Mass Production"
+tech_req      = "The Corporation"
 obsolete_by   = "None"
 graphic       = "u.container"
 graphic_alt   = "u.freight"
@@ -5445,18 +5506,16 @@ flags         = "HelpWonder", "TradeRoute", "IgZOC", "NonMil", "HasNoZOC", "Capt
                 "Cant_Fortify", "NoVeteran", "Cant_Pillage", "MultiSlot"
 roles         = ""
 helptext      = _("\
-Modern shipping logistics yield the Freight unit：a cargo container\
- separate from the transport vehicle. Freight brings benefits of\
- organized efficiency. Like all Commerce units, it can Help Build\
- Wonders, and Establish Trade Route. Unlike other Commerce units, it\
- can Disband to Recycle Production with no net loss in shields. This\
- gives Freight a variety of industrial uses. Similar to Infantry,\
- Freight can use extra build slots a city may have.\
+Freight brings benefits of organized efficiency. Like all Commerce units, it can\
+ Help Build Wonders, and Establish Trade Route. Unlike other Commerce units, it\
+ can Disband to Recycle Production with no net loss in shields. This gives\
+ Freight a variety of industrial uses. Similar to Infantry, Freight can use extra\
+ build slots a city may have.\
   \n\
 "), _("\
 By itself, Freight is only able to move to tiles with loading infrastructure:\
  Cities, Quays, Fortresses, Airbases, and Naval Bases. To be transported, it must be carried\
- by Train, Truck, Airplane, or ship. If adjacent to a foreign city, use the D key to\
+ as cargo. If adjacent to a foreign city, use the D key to\
  do Commerce functions.\
 ")
 
@@ -5552,19 +5611,21 @@ veteran_power_fact = 100
 veteran_move_bonus = 63
 roles         = ""
 helptext      = _("\
-Trawlers are high-powered work-boats. They are used for fishing and water work.\
- Trawlers work at the same rate as Workers. At sea, a Trawler can put down Fishtraps,\
- Buoys, Sea Bridges, and Rails over Sea Bridges. On rivers they can build Roads, Quays,\
- Canals, and clean Pollution or Fallout. Trawlers on rivers can be captured or expelled\
- by land units capable of doing so. Trawlers can carry one Land unit. \n\n\
-Trawlers can tow ships via Load (l), Board (B), or Embark orders. Towing is useful for\
- getting damaged ships in distant waters back to port for repair. Crew repair rates for\
- towed ships are double on turns where towed ships rest in tow. \n\n\
-When towing, encumbrance slows Trawler speed to 6 move points. Towing at any time during\
- a turn reduces the remaining move points proportional to the slower speed. If a Trawler\
- stops towing a ship via Unload (t) or Deboard (T), the Trawler recoups pro-rated move\
- points proportional to its faster unencumbered speed. \n\n\
-Towed ships lose all move points after release from towing, nullifying any repair\
+
+They work at the same rate as Workers, and can put down Fishtraps, Buoys, Sea Bridges, and Road types.
+
+Trawlers are high-powered work-boats used for fishing and ocean work.\
+ They work at the same rate as Workers, and can put down Fishtraps,\
+ Buoys, Sea Bridges, Road types, or clean Pollution and Fallout.\
+ Trawlers can carry one Land unit. \n\n\
+Trawlers can tow ships via Load, Board, or Embark orders. Towing helps\
+ damaged ships return to port for repair. Crew repair rates for\
+ towed ships are improved by letting the ships rest while towed. \n\n\
+When towing, encumbrance slows the Trawler to 6 move points. Remaining moves\
+ reduce proportional to this slower speed. If a Trawler\
+ stops towing a ship via Unload or Deboard, it regains pro-rated moves\
+ proportional to its natural speed. \n\n\
+Towed ships lose all moves after release, preventing any repair\
  bonus from resting.\
 ")
 
@@ -5841,19 +5902,17 @@ helptext      = _("\
 On rare occasions in history, nations constructed monumental turret guns.\
  Cost-benefit is debatable among military theorists due to scale, cost, and immobility.\
  The Magnum Turret stays where it’s built. You may build only one. \n\n\
-The Magnum Turret features copious armor and defensive accomodation, giving much higher defense\
- than its cousins. In theory, the Magnum Turret frightens attackers and deters enemy\
- encampments near its city. It may attack or Bombard ocean tiles.\n\
+Housed in armored defenses, the Magnum Turret deters attackers and nearby enemy\
+ encampments. It may attack or Bombard ocean tiles.\n\
 "), _("
-If has moves left, the Magnum Turret can do 7 rounds of Bombardment\
- up to 2 tiles distant upon five units, with two possible fatalities. When special attacked from range, they can\
+If it has moves left, the Magnum Turret can do 7 rounds of Bombardment\
+ up to 2 tiles distant upon five units, with two possible fatalities. When special attacked from range, it can\
  retaliate with the same type of Bombardment. \n\
 "), _("
 VIGIL：the Vigil order instructs the Magnum Turret to auto-Bombard adjacent military units if they\
  have better attack odds.\
 ")
 bombard_rate = 7
-
 
 ;*** This unit can be turned on by uncommenting this, the Virtual class above, and adding "Virtual" as native to oceanic tiles
 ;*** in terrain.ruleset.
