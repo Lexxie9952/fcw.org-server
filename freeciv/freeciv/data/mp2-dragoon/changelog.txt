@@ -172,7 +172,7 @@ richness.
 =============================================================
 27. Clarification: AAA are considered as part of 
    Marine corps land/air/sea. Thus, have gold upkeep not 
-   shield upkeep; and get Infantry build slot bonus.
+   shield upkeep. They are not multislot however.
 =============================================================
 28. Zeppelin 7 moves, 7 turns of fuel.  More realistic and
  provides more possible use for this special unit.
@@ -478,14 +478,21 @@ somewhat faster in mp2d
  cardinally adjacent to each other. Nor can they be built
  directly on a tile with Fish, Whales, or a Buoy.
 ==============================================================
-78. Except for Aircraft, Missiles, and Marines, the move cost
-to Deboard and Board is 1/3, likewise a Transport doing Load
-or Unload causes 1/3 move cost to all the units which that 
-command causes to Deboard or Board. This is a "balanced 
-compromise" to (1) reducing "double move" phenomena using
-mulitple load/unload on multiple transports, while (2) at same
-time not excessively slowing the longturn pace and aggravating
-the already cumbersome transport logistics.
+78. Except for Aircraft, Missiles, and Marines:
+* the move cost to Deboard and Board is 1/3, likewise a Transport
+  doing Load or Unload causes 1/3 move cost to all the units which
+  that command causes to Deboard or Board. 
+* the requirement to be able to Board (or Load a unit) is the
+  cargo must have remaining moves left. This is not the case
+  for Deboard/Unload (it lets a unit who spent its moves
+  boarding, safely land at destination and transport to move
+  on to other things.)
+  
+All the above is the current evolution of "balanced compromise"
+to (1) reducing "double move" phenomena using mulitple load/unload
+on multiple transports, while (2) at same time not excessively
+slowing the longturn pace and aggravating the already
+cumbersome transport logistics.
 ==============================================================
 79. Techleak, when tallying the total number of players vs.
 the number of players having a tech: doesn't count dead
@@ -541,9 +548,11 @@ in each city. Work-rate for Farmland is 2 worker-turns, not 3.
 ==============================================================
 92. Communist cities get the effects of a free Supermarket.
 ==============================================================
-93. Leonardo's Workshop now obsolete by Robotics. 
-more quantitative easing on upgrade retadation syndrome, 
-reduces overly strong penalties on discovery of automobile
+93. Leonardo's Workshop is now never obsolete, but the
+discovery of Robotics or Rocketry reduces the effect to 1
+upgrade turn. Reasons: more quantitative easing on upgrade
+retadation syndrome; reduce overly strong penalties on
+discovery of automobile.
 ==============================================================
 95. Communism completely unaffected by empire size/# cities 
 (was 12, then none)
@@ -577,7 +586,59 @@ in better documentation.
 Theocracy with no anarchy or revolution delay (if you have
 Theocracy)
 ==============================================================
-104.
+104.Combustion increases pollution 25% instead of Automobile:
+the Leo/Sun Tzu/Colossus/Barracks II/Pollution quintuple
+penalty was too excessive and one-pathed tech strategies.
 ==============================================================
-105.
+105. Mass Transit moved to Combustion : realism, balance, and
+playability. (Allow pollution reduction on the second pop.
+polluting effect instead of third).
+==============================================================
+106. Freight moved to the Corporation - allows earlier use 
+of Freight advantages at a time when they're more appropriate,
+during the difficult ramp up of industrial revolution. Also,
+the bonuses of the unit suit the represented technology.
+==============================================================
+107.Truck moved to Automobile, for obvious reasons, but also, 
+this unit is quite powerful and was available too early 
+(too hard to make wonders at this stage, allowed Marines on 
+Trucks to make Cavalry less meaningful.)
+==============================================================
+108.Power Plants, all are +30%, and +20% with Mass Prod.
+Nuclear remains at +60% (automatic since one has Mass Prod.)
+Hydro Upkeep reduced from 3 to 2. Hoover makes all Hydros 
+act like Nuclear but still producing no extra pollution.
+==============================================================
+109.No stack death in hideouts; this helps give the hideout
+more parity as a strategic option, compared to a Fort. Too
+often, people wanting to make hideouts did not choose them 
+because stack death made it always a worse choice than a fort 
+which has a bonus defense AND no stack death.
+==============================================================
+110.Missile carrying ships -- changes:
+AEGIS can carry 5 (was 2)
+Missile Destroyer can carry 2 (was 1)
+Submarine can carry 0 (was 8)
+Missile Submarine can carry 4 (new unit!)
+==============================================================
+111.Lighthouse and Magellan's Expedition get the Port Facility
+effect of healing ships which stay in town for one full turn.
+==============================================================
+112.Submarine class loses 1 less move point than other units when 
+attacking and succeeding. Submarine unit can no longer carry
+missiles...
+==============================================================
+113.New unit Missile Submarine...can carry missiles and do 
+"deep dive". 2 more hp and better defense also.
+==============================================================
+114.
+==============================================================
+115.
+==============================================================
+116.
+==============================================================
+117.
+==============================================================
+118.
+
 
