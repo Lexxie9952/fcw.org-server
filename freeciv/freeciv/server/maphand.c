@@ -2352,6 +2352,10 @@ void map_claim_base(struct tile *ptile, struct extra_type *pextra,
     if (powner != NULL) {
       map_claim_border_ownership(ptile, powner, ptile);
       map_claim_border(ptile, powner, -1);
+      /* Since this is a tile_claiming_base, remove any original claimant (e.g. foreign city)*/
+      if (ptile->owner == powner) {
+        ptile->claimer = ptile;
+      }
     }
     city_thaw_workers_queue();
     city_refresh_queue_processing();
@@ -2489,7 +2493,13 @@ void destroy_extra(struct tile *ptile, struct extra_type *pextra)
     struct player *owner = extra_owner(ptile);
 
     if (territory_claiming_base(pbase)) {
+      /* clear all surrounding tiles claimed by this extra */
       map_clear_border(ptile);
+      /* ownership of the base-tile is maintained on the turn the
+       * base is destroyed: allows the right city to claim the tile
+       * on the next turn. */
+      ptile->owner = owner;
+      if (ptile->worked) ptile->claimer = city_tile(ptile->worked);
     }
 
     if (NULL != owner
