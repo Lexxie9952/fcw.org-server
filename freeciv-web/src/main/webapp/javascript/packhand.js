@@ -36,7 +36,7 @@ var DEBUG_FOCUS = false;          // for debugging advancing unit focus glitches
 //
 /* Prevent hard-coded checking of extras from failing in rulesets 
    which don't have those extras: */
-   const EXTRA_NOT_EXIST = 65535;
+const EXTRA_NOT_EXIST = 65535;  
 //
 /* Commenting out a key/value pair will result in packets of that type
    not being logged in DEBUG_SHORT_PACKETS mode. That is, it's helpful
@@ -1134,28 +1134,22 @@ function handle_ruleset_control(packet)
 
   improvements_init();
 
-  /* handle_ruleset_extra defines some variables dynamically */
+  /* handle_ruleset_extra() defines some variables dynamically */
   for (var extra in extras) {
     var ename = extras[extra]['name'];
     delete window["EXTRA_" + ename.toUpperCase()];
     if (ename == "Railroad") delete window["EXTRA_RAIL"];
     else if (ename == "Oil Well") delete window["EXTRA_OIL_WELL"];
     else if (ename == "Minor Tribe Village") delete window["EXTRA_HUT"];
-    else if (typeof EXTRA_SEABRIDGE !== 'undefined') {
-      if (ename == "Sea Bridge") delete window["EXTRA_SEABRIDGE"];
-    }
-    else if (typeof EXTRA_FORT !== 'undefined') { //makes sure it's defined first
-      if (ename == "Fort") delete window["EXTRA_FORT"]; ///// 
-    } else if (typeof EXTRA_NAVALBASE !== 'undefined') {
-        if (ename =="Naval Base") delete window["EXTRA_NAVALBASE"]
-    } else if (typeof EXTRA_CASTLE !== 'undefined') {
-      if (ename =="Castle") delete window["EXTRA_CASTLE"]
-    } else if (typeof EXTRA_BUNKER !== 'undefined') {
-      if (ename =="Bunker") delete window["EXTRA_BUNKER"]
-    } else if (typeof EXTRA_TILE_CLAIM !== 'undefined') {
-      if (ename =="Tile Claim") delete window["EXTRA_TILE_CLAIM"]
-    } else if (typeof EXTRA_WALLS !== 'undefined') {
-      if (ename =="Walls") delete window["EXTRA_WALLS"]
+    else if (typeof EXTRA_SEABRIDGE !== 'undefined' && ename == "Sea Bridge") delete window["EXTRA_SEABRIDGE"];
+    else if (typeof EXTRA_FORT !== 'undefined' && ename == "Fort") delete window["EXTRA_FORT"]; 
+    else if (typeof EXTRA_NAVALBASE !== 'undefined' && ename =="Naval Base") delete window["EXTRA_NAVALBASE"];
+    else if (typeof EXTRA_CASTLE !== 'undefined' && ename =="Castle") delete window["EXTRA_CASTLE"];
+    else if (typeof EXTRA_BUNKER !== 'undefined' && ename =="Bunker") delete window["EXTRA_BUNKER"];
+    else if (typeof EXTRA_TILE_CLAIM !== 'undefined' && ename =="Tile Claim") delete window["EXTRA_TILE_CLAIM"];
+    else if (typeof EXTRA_WALLS !== 'undefined' && ename =="Walls") delete window["EXTRA_WALLS"];
+    else if (extras[extra].rule_name == "Depth") {
+      delete window["EXTRA_​"]
     }
   }
   extras = {};
@@ -2446,6 +2440,7 @@ function handle_ruleset_extra(packet)
   if (packet['name'] == "Bunker") window["EXTRA_BUNKER"] = packet['id'];
   if (packet['name'] == "Tile Claim") window["EXTRA_TILE_CLAIM"] = packet['id'];
   if (packet['name'] == "Walls") window["EXTRA_WALLS"] = packet['id'];
+  if (packet['rule_name'] == "Depth") window["EXTRA_DEEPDIVE"] = packet['id'];
 }
 
 /**************************************************************************
