@@ -388,6 +388,10 @@ function unit_could_possibly_load(punit, ptype, ttype, tclass)
       } else {
         return false; // No other classes can board with 0 moves left.
       }
+    }
+    // Can't get on a Trawler if you moved this turn:
+    if (pclass == "Sea" || pclass == "Submarine") {
+      if (unit_has_moved(punit)) return false;
     } 
   }
 
