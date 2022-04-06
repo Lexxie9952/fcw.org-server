@@ -371,11 +371,24 @@ function unit_could_possibly_load(punit, ptype, ttype, tclass)
   var pclass = get_unit_class_name(punit);
   //console.log("   pclass=="+pclass);
 
-  // In MP2D, only Marines can board/load without moves left: stops exploit of "attack-and-scoop"
+  // In MP2D, only special classes can board/load without moves left:
   if (client_rules_flag[CRF_MP2_D]) {
-    if (ptype.rule_name != "Marines" && punit.movesleft <= 0) {
-      return false;
-    }
+    if (punit.movesleft <= 0) {
+      if (  ptype.rule_name == "Marines"
+         || pclass == "Air" 
+         || pclass == "AirProtect"
+         || pclass == "Air_High_Altitude"
+         || pclass == "Missile"
+         || pclass == "Cargo"
+         || pclass == "Balloon"
+         || pclass == "Zeppelin"
+         || pclass == "Helicopter") {
+
+          // These classes may proceed to see if they may board
+      } else {
+        return false; // No other classes can board with 0 moves left.
+      }
+    } 
   }
 
   // Transported units can't swap transports except under some conditions:
