@@ -377,12 +377,6 @@ void unit_versus_unit(struct unit *attacker, struct unit *defender,
                                         NULL,
                                         EFT_COMBAT_ROUNDS);
 
-  notify_player(unit_owner(attacker), NULL, E_UNIT_ACTION_FAILED, ftc_server, 
-               _("ATK FP = %d\nATK POW = %d\nmax_rounds = %d"), 
-                 attack_firepower,
-                 attackpower,
-                 max_rounds);
-
   for (rounds = 0;
        *att_hp > 0 && *def_hp > 0
          && (max_rounds <= 0 || max_rounds > rounds);
