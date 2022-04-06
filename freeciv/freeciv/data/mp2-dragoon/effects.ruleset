@@ -54,13 +54,15 @@ reqs	=
 type    = "Combat_Rounds"
 value   = 20
 reqs	=
-    { "type",      "name", "range", "present"
-      "UnitClass", "Sea",  "Local", TRUE
+    { "type",         "name", "range", "present"
+      "UnitClass",    "Sea",  "Local", TRUE  
+      ; scope resolves to tile being attacked so effect can be influnced by things like terrain, tile nativity 
+      "TerrainClass", "Land", "Local", TRUE  
     }
 target_reqs = 
-    { "type",         "name", "range", "present"
-      "TerrainClass", "Land", "Local", TRUE
+    { "type",      "name", "range", "present"
     }
+
 ; Non-native battles limited by combat_rounds don't usually 
 ; result in a victor, and often the attacker uses multiple 
 ; attack moves on a single defender, which artificially 
@@ -804,7 +806,7 @@ type    = "Stack_Escape_Pct"
 value   = 15 ; 60% → 75%
 reqs    =
     { "type", "name", "range"
-      "UnitType", "Submarine", "Local"
+      "UnitClass", "Submarine", "Local"
     }
 [effect_destroyer_stack_escape_odds]
 type    = "Stack_Escape_Pct"
@@ -3581,12 +3583,12 @@ reqs	=
 type    = "Pollu_Pop_Pct_2"
 value	= -100
 
-[effect_pollu_pop_automobile]
+[effect_pollu_pop_combustion]
 type    = "Pollu_Pop_Pct_2"
 value	= 25
 reqs    =
     { "type", "name", "range"
-      "Tech", "Automobile", "Player"
+      "Tech", "Combustion", "Player"
     }
 [effect_pollu_pop_industrialization]
 type    = "Pollu_Pop_Pct_2"
@@ -4065,7 +4067,7 @@ reqs	=
 ;************************************************************************** POWER PLANTS
 [effect_coal_plant]
 type    = "Output_Bonus"
-value	= 20
+value	= 30
 reqs	=
     { "type",       "name",           "range", "present"
       "Building",   "Factory",        "City",   TRUE
@@ -4081,7 +4083,7 @@ type    = "Output_Bonus"
 value	= 20
 reqs	=
     { "type",       "name",           "range", "present"
-      "Building",   "Mfg. Plant",     "City",   TRUE
+      "Tech",       "Mass Production","Player", TRUE
       "Building",   "Coal Plant",     "City",   TRUE
       "OutputType", "Shield",         "Local",  TRUE
       "Building",   "Nuclear Plant",  "City",   FALSE
@@ -4091,7 +4093,7 @@ reqs	=
     }
 [effect_coal_plant_upgrade_1] 
 type    = "Improvement_Sale_Pct"
-value = 70 ; full 'recycle value' after City Walls go up.
+value = 70 ; 'recycle value' after Hydro goes in
 reqs  =
     { "type", "name", "range"
       "Building", "Coal Plant", "Local"
@@ -4099,7 +4101,7 @@ reqs  =
     }
 [effect_coal_plant_upgrade_2] 
 type    = "Improvement_Sale_Pct"
-value = 70 ; full 'recycle value' after City Walls go up.
+value = 70 ; 'recycle value' after Hydro goes in
 reqs  =
     { "type", "name", "range"
       "Building", "Coal Plant", "Local"
@@ -4107,7 +4109,7 @@ reqs  =
     }
 [effect_coal_plant_upgrade_3] 
 type    = "Improvement_Sale_Pct"
-value = 70 ; full 'recycle value' after City Walls go up.
+value = 70 ; 'recycle value' after Hydro goes in
 reqs  =
     { "type",     "name",          "range","present"
       "Building", "Coal Plant",    "Local", TRUE
@@ -4118,7 +4120,7 @@ reqs  =
 ;---------------------------------------------------------
 [effect_hydro_plant]
 type    = "Output_Bonus"
-value	= 20
+value	= 30
 reqs	=
     { "type",      "name",           "range", "present"
       "Building",  "Factory",        "City",   TRUE
@@ -4132,17 +4134,17 @@ reqs	=
 type    = "Output_Bonus"
 value	= 20
 reqs	=
-    { "type",      "name",          "range", "present"
-      "Building",  "Mfg. Plant",    "City",   TRUE
-      "Building",  "Hydro Plant",   "City",   TRUE
-      "OutputType","Shield",        "Local",  TRUE
-      "Building",  "Nuclear Plant", "City",   FALSE
-      "Building",  "Hoover Dam",    "City",   FALSE
-      "Building",  "Fusion Reactor","Player", FALSE
+    { "type",      "name",           "range", "present"
+      "Tech",      "Mass Production","Player", TRUE
+      "Building",  "Hydro Plant",    "City",   TRUE
+      "OutputType","Shield",         "Local",  TRUE
+      "Building",  "Nuclear Plant",  "City",   FALSE
+      "Building",  "Hoover Dam",     "City",   FALSE
+      "Building",  "Fusion Reactor", "Player", FALSE
     }
 [effect_hydro_plant_2]
 type    = "Pollu_Prod_Pct"
-value	= -25
+value	= -30
 reqs	=
     { "type",     "name",             "range", "present"
       "Building", "Factory",          "City",  TRUE
@@ -4155,10 +4157,10 @@ reqs	=
     }
 [effect_hydro_plant_3]
 type    = "Pollu_Prod_Pct"
-value	= -25
+value	= -20
 reqs	=
     { "type",     "name",             "range", "present"
-      "Building", "Mfg. Plant",       "City",  TRUE
+      "Tech",     "Mass Production",  "Player", TRUE
       "Building", "Hydro Plant",      "City",  TRUE
       "Building", "Recycling Center", "City",  FALSE
       "Building", "Fusion Reactor",   "Player",FALSE
@@ -4169,15 +4171,15 @@ reqs	=
 ;---------------------------------------------------------
 [effect_hoover_dam_city_1]
 type    = "Output_Bonus"
-value	= 154
+value	= 160
 reqs	=
-    { "type",       "name",       "range"
-      "Building",   "Hoover Dam", "City"
-      "OutputType", "Shield",     "Local"
+    { "type",       "name",           "range",  "present"
+      "Building",   "Hoover Dam",     "City",   TRUE
+      "OutputType", "Shield",         "Local",  TRUE
     }
 [effect_hoover_dam_city_2]
-type    = "Pollu_Prod_Pct" ;-25 for factory, -25 for mfg_plant
-value	= -50
+type    = "Pollu_Prod_Pct" ;-60: zero excess pollution
+value	= -60
 reqs	=
     { "type",     "name",            "range", "present"
       "Building", "Hoover Dam",      "City",   TRUE
@@ -4186,7 +4188,7 @@ reqs	=
       "Building", "Fusion Reactor",  "Player", FALSE
     }
 [effect_hoover_dam_city_3]
-type    = "Pollu_Prod_Pct" ;-25 for factory, -25 for mfg_plant
+type    = "Pollu_Prod_Pct" ;-30 for factory, -20 for mass prod, -30 for fusion reactor
 value	= -80
 reqs	=
     { "type",     "name",            "range", "present"
@@ -4194,27 +4196,14 @@ reqs	=
       "Building", "Fusion Reactor",  "Player", TRUE
     }
 ; _ _ _ Bonuses for Hydro Plants in other cities: _ _ _
-[effect_hoover_hydro_plant_bonus_1]
+[effect_hoover_hydro_plant_is_like_nuclear]  ; effect on other hydro plants
 type    = "Output_Bonus"
-value	= 7
-reqs	=
-    { "type",      "name",           "range", "present"
-      "Building",  "Hoover Dam",     "Player", TRUE
-      "Building",  "Hoover Dam",     "City",   FALSE
-      "Building",  "Factory",        "City",   TRUE
-      "Building",  "Hydro Plant",    "City",   TRUE
-      "OutputType","Shield",         "Local",  TRUE
-      "Building",  "Nuclear Plant",  "City",   FALSE
-      "Building",  "Fusion Reactor", "Player", FALSE
-    }
-[effect_hoover_hydro_plant_bonus_2]
-type    = "Output_Bonus"
-value	= 7
+value	= 10
 reqs	=
     { "type",      "name",          "range", "present"
       "Building",  "Hoover Dam",    "Player", TRUE
       "Building",  "Hoover Dam",    "City",   FALSE
-      "Building",  "Mfg. Plant",    "City",   TRUE
+      "Tech",      "Mass Production","Player",TRUE
       "Building",  "Hydro Plant",   "City",   TRUE
       "OutputType","Shield",        "Local",  TRUE
       "Building",  "Nuclear Plant", "City",   FALSE
@@ -4237,19 +4226,12 @@ reqs    =
       "Tech", "Conscription", "Player", TRUE
       "Building", "Hoover Dam", "City", TRUE
     }
-;Waiting on an Effect which can compare or inject range value.
-;[effect_hoover_hydro_upkeep]
-;type    = "Upkeep_Reduce"
-;value   = 1
-;reqs    =
-;    { "type",      "name",          "range", "present"
-;      "Building",  "Hoover Dam",    "Player", TRUE
-;      "Building",  "Hydro Plant",   "Local",  TRUE
-;    }
 ;---------------------------------------------------------
+;...
+;Nuclear Plants require Mass Production so are a flat +60
 [effect_nuclear_plant]
 type    = "Output_Bonus"
-value	= 30
+value	= 60
 reqs	=
     { "type",       "name",          "range", "present"
       "Building",   "Factory",       "City",   TRUE
@@ -4258,20 +4240,9 @@ reqs	=
       "Building",   "Hoover Dam",    "City",   FALSE
       "Building",   "Fusion Reactor","Player", FALSE
     }
-[effect_nuclear_plant_1]
-type    = "Output_Bonus"
-value	= 30
-reqs	=
-    { "type",      "name",           "range", "present"
-      "Building",  "Mfg. Plant",     "City",   TRUE
-      "Building",  "Nuclear Plant",  "City",   TRUE
-      "OutputType","Shield",         "Local",  TRUE
-      "Building",  "Fusion Reactor", "Player", FALSE
-      "Building",  "Hoover Dam",     "City",   FALSE
-    }
 [effect_nuclear_plant_2]
 type    = "Pollu_Prod_Pct"
-value	= -25
+value	= -50
 reqs	=
     { "type",     "name",             "range", "present"
       "Building", "Factory",          "City",   TRUE
@@ -4281,46 +4252,26 @@ reqs	=
       "Building", "Hoover Dam",       "City",   FALSE
       "Building", "Solar Plant",      "City",   FALSE
     }
-[effect_nuclear_plant_3]
-type    = "Pollu_Prod_Pct"
-value	= -25
-reqs	=
-    { "type",     "name",             "range", "present"
-      "Building", "Mfg. Plant",       "City",   TRUE
-      "Building", "Nuclear Plant",    "City",   TRUE
-      "Building", "Recycling Center", "City",   FALSE
-      "Building", "Fusion Reactor",   "Player", FALSE
-      "Building", "Hoover Dam",       "City",   FALSE
-      "Building", "Solar Plant",      "City",   FALSE
-    }
 ;---------------------------------------------------------
-[effect_fusion_reactor]
-type    = "Output_Bonus"
-value	= 40
-reqs	=
-    { "type",       "name",           "range", "present"
-      "Building",   "Fusion Reactor", "Player", TRUE
-      "Building",   "Factory",        "City",   TRUE
-      "OutputType", "Shield",         "Local",  TRUE
-    }
+;...
+;Fusion Reactor requires Mass Production so is a flat +80
 [effect_fusion_reactor_1]
-type    = "Output_Bonus"
-value	= 40
-reqs	=
-    { "type",       "name",           "range", "present"
-      "Building",   "Fusion Reactor", "Player", TRUE
-      "Building",   "Mfg. Plant",     "City",   TRUE
-      "OutputType", "Shield",         "Local",  TRUE
-    }
-[effect_fusion_reactor_1a_hoover]
 type    = "Output_Bonus"
 value	= 80
 reqs	=
     { "type",       "name",           "range", "present"
       "Building",   "Fusion Reactor", "Player", TRUE
+      "Building",   "Hoover Dam",     "City",   FALSE
+      "Building",   "Factory",        "City",   TRUE
+      "OutputType", "Shield",         "Local",  TRUE
+    }
+[effect_fusion_reactor_1a_hoover]
+type    = "Output_Bonus"
+value	= 20
+reqs	=
+    { "type",       "name",           "range", "present"
+      "Building",   "Fusion Reactor", "Player", TRUE
       "Building",   "Hoover Dam",     "City",   TRUE
-      "Building",   "Mfg. Plant",     "City",   FALSE
-      "Building",   "Factory",        "City",   FALSE
       "OutputType", "Shield",         "Local",  TRUE
     }
 [effect_fusion_reactor_2]
@@ -4870,7 +4821,7 @@ reqs	=
       "Tech", "Physics", "Player"
       "UnitClass", "RiverShip", "Local"
     }  
-[effect_satellite_vision]  ;Vision benefit from satellite communication to land units
+[effect_satellite_vision]  ;Vision benefit from satellite communication to Land units
 type    = "Unit_Vision_Radius_Sq"
 value   = 7
 reqs    =
@@ -4878,7 +4829,7 @@ reqs    =
       "Tech", "Space Flight",   "Player"
       "UnitClass", "Land",      "Local"
     }
-[effect_satellite_vision_1]  ;Vision benefit from satellite communication to land units (Marines)
+[effect_satellite_vision_1]  ;Vision benefit from satellite communication to LandAirSea
 type    = "Unit_Vision_Radius_Sq"
 value   = 7
 reqs    =
@@ -5697,50 +5648,50 @@ reqs	=
 type    = "Veteran_Build"
 value	= 1
 reqs	=
-    { "type", "name", "range", "present"
-      "Building", "JTIDS", "Player", TRUE
-      "UnitFlag", "FootSoldier", "Local", TRUE
+    { "type",     "name",        "range"
+      "Building", "JTIDS",       "Player"
+      "UnitFlag", "FootSoldier", "Local"
     }
 [effect_jtids_1]
 type    = "Veteran_Build"
 value	= 1
 reqs	=
-    { "type", "name", "range", "present"
-      "Building", "JTIDS", "Player", TRUE
-      "UnitType", "Mech. Inf.", "Local", TRUE   ; uses rule_name
+    { "type",     "name",       "range"
+      "Building", "JTIDS",      "Player"
+      "UnitType", "Mech. Inf.", "Local"  ; uses rule_name
     }
 [effect_jtids_2]
 type    = "Veteran_Combat"
 value	= 75  ; 87 57::35 26 26 26
 reqs	=
-    { "type", "name", "range", "present"
-      "Building", "JTIDS", "Player", TRUE
-      "UnitFlag", "FootSoldier", "Local", TRUE
-      "UnitType", "Marines", "Local", FALSE
+    { "type",     "name",        "range", "present"
+      "Building", "JTIDS",       "Player", TRUE
+      "UnitFlag", "FootSoldier", "Local",  TRUE
+      "UnitType", "Marines",     "Local",  FALSE
     }
 [effect_jtids_3]
 type    = "Veteran_Combat"
 value	= 60  ; 80 52::32 24 24 24
 reqs	=
-    { "type", "name", "range", "present"
-      "Building", "JTIDS", "Player", TRUE
-      "UnitType", "Mech. Inf.", "Local", TRUE   ; uses rule_name
+    { "type",     "name",       "range"
+      "Building", "JTIDS",      "Player"
+      "UnitType", "Mech. Inf.", "Local"  ; uses rule_name
     }
 [effect_jtids_4]
 type    = "Veteran_Combat"
 value	= 40  ;84 70::56 42 28 21
 reqs	=
-    { "type", "name", "range", "present"
-      "Building", "JTIDS", "Player", TRUE
-      "UnitFlag", "FootSoldier", "Local", TRUE
-      "UnitType", "Marines", "Local", TRUE
+    { "type",     "name",        "range"
+      "Building", "JTIDS",       "Player"
+      "UnitFlag", "FootSoldier", "Local"
+      "UnitType", "Marines",     "Local"
     }
 ;************************************************************************ J.S. Bach
 [effect_js_bachs_cathedral]
 type    = "Force_Content"
 value	= 2
 reqs	=
-    { "type", "name", "range"
+    { "type",     "name",                  "range"
       "Building", "J.S. Bach's Cathedral", "Player"
     }
 ;************************************************************************ King Richard
@@ -5760,17 +5711,22 @@ reqs    =
       "Building", "King Richard's Crusade", "City", TRUE
     }
 ;************************************************************************ Leonardo
-[effect_leonardos_workshop]
+[effect_leonardos_workshop_1]
 type    = "Upgrade_Unit"
-value	= 2
+value	= 1
+reqs	=
+    { "type",     "name",                "range"
+      "Building", "Leonardo's Workshop", "Player"
+    }
+;Discovery of Robitics OR Rocketry reduces the effect to only 1
+[effect_leonardos_workshop_2]
+type    = "Upgrade_Unit"
+value	= 1
 reqs	=
     { "type",     "name",                "range",  "present"
       "Building", "Leonardo's Workshop", "Player", TRUE
-; Prevent CONVERT from bypassing its actionenabler by getting upgrade midstream:
-; NOTE: Activity reqs currently always evaluate false and is waiting for a fix.
-; Fix was made to server unit.cc::unit_upgrade_test to disallow upgrades on converting
-; units.
-;    "Activity", "Convert",             "Local",  FALSE 
+      "Tech",     "Robotics",            "Player", FALSE
+      "Tech",     "Rocketry",            "Player", FALSE
     }
 ;************************************************************************ Genghis Khan
 [effect_genghis_khans_equestrian_school]
@@ -5798,6 +5754,14 @@ reqs	=
       "Building", "Lighthouse", "Player"
       "UnitClassFlag", "WaterVessel", "Local"
     }
+[effect_lighthouse_3]
+type    = "HP_Regen"
+value	= 100
+reqs	=
+    { "type",          "name",          "range"
+      "Building",      "Lighthouse",    "City"
+      "UnitClassFlag", "WaterVessel",   "Local"
+    }
 ;************************************************************************ Magellan
 [effect_magellans_expedition]
 type    = "Veteran_Build"
@@ -5817,6 +5781,14 @@ reqs	=
       "Building",  "Magellan's Expedition", "Player", TRUE
       "Building",  "Lighthouse",            "Player", FALSE
       "UnitClassFlag", "WaterVessel",       "Local",  TRUE
+    }
+[effect_magellan_quick_repair]
+type    = "HP_Regen"
+value	= 100
+reqs	=
+    { "type",          "name",                  "range"
+      "Building",      "Magellan's Expedition", "City"
+      "UnitClassFlag", "WaterVessel",           "Local"
     }
 ;************************************************************************ Manhattan
 [effect_manhattan_project]
@@ -7984,7 +7956,7 @@ reqs    =
     { "type",          "name",            "range", "present"
       "Action",        "Transport Board", "Local", TRUE
       "UnitClassFlag", "TerrainSpeed",    "Local", TRUE      ; Does not affect Aircraft, Missiles, etc.
-      "UnitFlag",      "Marines",         "Local", FALSE     ; Does not affect Marines, AAA.
+      "UnitType",      "Marines",         "Local", FALSE     ; Does not affect Marines
     }
 [effect_action_success_move_cost_deboard]
 type    = "Action_Success_Actor_Move_Cost"
@@ -7993,7 +7965,7 @@ reqs    =
     { "type",          "name",              "range", "present"
       "Action",        "Transport Deboard", "Local", TRUE
       "UnitClassFlag", "TerrainSpeed",      "Local", TRUE      ; Does not affect Aircraft, Missiles, etc.
-      "UnitFlag",      "Marines",           "Local", FALSE     ; Does not affect Marines, AAA.
+      "UnitType",      "Marines",         "Local", FALSE       ; Does not affect Marines
     }
 [effect_action_success_move_cost_transport_unload]
 type    = "Action_Success_Target_Move_Cost"   ; "Local" scope on unit pertains to target, not actor.
@@ -8002,7 +7974,7 @@ reqs    =
     { "type",          "name",             "range", "present"
       "Action",        "Transport Unload", "Local", TRUE
       "UnitClassFlag", "TerrainSpeed",     "Local", TRUE      ; Does not affect Aircraft, Missiles, etc.
-      "UnitFlag",      "Marines",          "Local", FALSE     ; Does not affect Marines, AAA.
+      "UnitType",      "Marines",         "Local", FALSE      ; Does not affect Marines
     }
 
 ;[effect_action_success_siege_ram_city_walls]
@@ -8062,6 +8034,16 @@ value   = 65535
 reqs    =
     { "type", "name", "range", "present"
       "Action", "Expel Unit", "Local", TRUE
+    }
+
+;Hit and run bonus of subs, attack has no move cost (except damage to the sub)
+[effect_action_success_move_cost_sub_attack]
+type    = "Action_Success_Actor_Move_Cost"
+value   = -9
+reqs    =
+    { "type",          "name",            "range", "present"
+      "Action",        "Attack",          "Local", TRUE
+      "UnitClass",     "Submarine",       "Local", TRUE
     }
 
 ;\/ \/ ---------------------- TRAWLERS ---------------------- \/ \/
@@ -8132,7 +8114,7 @@ reqs    =
 ;      "UnitType",      "Trawler",        "Local"
 ;    }
 ;...
-;TODO: Disembark action should should like Deboard and test the transporter
+;TODO: Disembark action should be like Deboard and test the transporter
 ;as the target in Action_Success_Target_Move_Cost, then a trawler whose
 ;cargo disembarks can get the same pro-rated moves back just like for Deboard
 ;and unload.
