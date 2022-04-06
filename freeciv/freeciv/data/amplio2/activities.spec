@@ -58,6 +58,7 @@ tiles = { "row", "column", "tag"
   3, 3, "unit.pollution"             ; Lexxie
   3, 4, "unit.fallout"               ; Lexxie
   3, 5, "unit.hidden"                ; Lexxie
+  3, 6, "unit.deepdive"              ; Lexxie
 
   4, 0, "unit.goto"                  ; Lexxie
   4, 1, "unit.convert"               ; Lexxie
