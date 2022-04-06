@@ -165,7 +165,7 @@ req1     = "Combustion"
 req2     = "Steel"
 graphic     = "a.automobile"
 graphic_alt = "-"
-helptext = _("Obsoletes Colossus. +25% population pollution.")
+helptext = _("Obsoletes Caravan, Wagon, Colossus.")
 cost = 4230
 
 [advance_avionics]
@@ -260,7 +260,7 @@ req2     = "Explosives"
 flags    = ""
 graphic     = "a.combustion"
 graphic_alt = "-"
-helptext = _("Obsoletes Balloon. +1 move for Trains.")
+helptext = _("Obsoletes Balloon. +1 move for Trains. +25% population pollution.")
 cost = 3810
 
 [advance_communism]
@@ -566,7 +566,7 @@ req1     = "Automobile"
 req2     = "The Corporation"
 graphic     = "a.mass_production"
 graphic_alt = "-"
-helptext = _("Obsoletes Goods. +25% population pollution.")
+helptext = _("+25% population pollution. Increases output from Power Plants.")
 cost = 4680
 
 [advance_mathematics]
@@ -811,7 +811,7 @@ req2     = "Computers"
 flags    = ""
 graphic     = "a.robotics"
 graphic_alt = "-"
-helptext = _("Obsoletes Artillery, Leonardos Workshop, King Richards Crusade.")
+helptext = _("Obsoletes Artillery, King Richard’s Crusade. Reduces Leonardo’s Workshop to 1.")
 cost = 7250
 
 [advance_rocketry]
@@ -821,7 +821,7 @@ req2     = "Miniaturization"
 flags    = ""
 graphic     = "a.rocketry"
 graphic_alt = "-"
-helptext = _("Obsoletes Destroyer, Cruiser.")
+helptext = _("Obsoletes Destroyer, Cruiser. Reduces Leonardo’s Workshop to 1.")
 cost = 7040
 
 [advance_sanitation]
@@ -911,7 +911,7 @@ req2     = "Industrialization"
 flags    = ""
 graphic     = "a.the_corporation"
 graphic_alt = "-"
-helptext = _("Obsoletes Caravan, Wagon. +25% Coinage for Stock Exchange")
+helptext = _("Obsoletes Goods. +25% Coinage for Stock Exchange")
 cost = 2900
 
 [advance_the_republic]
