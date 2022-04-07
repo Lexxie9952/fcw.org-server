@@ -663,7 +663,13 @@ Unclassified yet
 ================================================================================================================
 
 ==============================================================
-114.
+114. Cities go from 5x5 without corners to 
+5x5 with corners, at size 21.
+7x7 without corners, at size 30.
+This is experimental feature to gradually progress to managing
+fewer, but larger, cities. It helps non-rapturing govs access
+more food tiles. In addition it will help some 
+cities reach their potential by getting more ocean later.
 ==============================================================
 115.
 ==============================================================
