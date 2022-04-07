@@ -281,7 +281,7 @@ hp_loss_pct   = 0
 flags         = "DamageSlows", "AttackNonNative", "AttFromNonNative", "CanPillage", "WaterVessel",
                 "CargoRestrained" ;can't attack while being towed by Trawler
 helptext      = _("\
-  • Crew Repair：each turn, regardless of movement, recovers 8% of its hit points (rounded down).\
+  • Crew Repair：each turn, regardless of movement, recovers 10% of its hit points (rounded down).\
 ")
 
 ; Separating the Submarine class finally allows it to be unreachable by Air. The old Submarine was 
@@ -295,7 +295,7 @@ flags         = "DamageSlows", "AttackNonNative", "AttFromNonNative", "CanPillag
                 "CargoRestrained" ;can't attack while being towed by Trawler
 helptext      = _("\
   • Visibility bonus：not visible to other players unless they have a unit or city adjacent to it.\n\
-  • Crew Repair：each turn, regardless of movement, recovers 2 hit points.\
+  • Crew Repair：each turn, regardless of movement, recovers 3 hit points.\
 ")
 
 [unitclass_trireme]
@@ -821,51 +821,103 @@ Tribesmen lose many versatility bonuses as you become more civilized. For\
 
 ;A unique patch unit to provide fair starts regardless of lack of nearby water.
 ;to make as a start unit, use the letter "a"：for example, cccwwwxxa
-[unit_welldigger]
-name          = _("Well-Digger")
+[unit_peasants]
+name          = _("Peasants")
 class         = "Land"
-tech_req      = "None"
-obsolete_by   = "Workers"
-graphic       = "u.well_digger"
-graphic_alt   = "-"
+tech_req      = "Monarchy"
+gov_req       = "Monarchy"
+impr_req      = "Magna Carta"
+obsolete_by   = "None"
+graphic       = "u.peasants"
+graphic_alt   = "u.migrants"
 sound_move    = "m_worker"
 sound_move_alt = "m_generic"
 sound_fight   = "f_worker"
 sound_fight_alt = "f_generic"
-build_cost    = 5
-pop_cost      = 0
+build_cost    = 10
+pop_cost      = 1
 attack        = 0
 defense       = 1
 hitpoints     = 8
 firepower     = 1
-move_rate     = 3
+move_rate     = 2
 vision_radius_sq = 4
 transport_cap = 0
 fuel          = 0
+city_size     = 1
 uk_happy      = 0
-uk_shield     = 5
-uk_food       = 2
-uk_gold       = 2
-flags         = "Settlers", "Infra", "NonMil", "HasNoZOC", "Cant_Fortify", "Unique", "Well-Digger", "Expellable"
-embarks       = "LandRoad"
-disembarks    = "LandRoad"
+uk_shield     = 0
+uk_food       = 0
+uk_gold       = 0
+embarks       = "LandRoad", "LandRail", "Helicopter"    ; transport helicopter only
+disembarks    = "LandRoad", "LandRail", "Helicopter"
+flags         = "MultiSlot", "Cant_Fortify", "NonMil", "HasNoZOC", "AddToCity", 
+                "Capturable", "Expellable", "Cant_Pillage"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
 veteran_base_raise_chance = 0
 veteran_work_raise_chance = 0
 veteran_power_fact = 100
 veteran_move_bonus = 0
-roles         = "AttackFastStartUnit"     ;this role taken over for well-digger
 helptext      = _("\
-This unit can fix unlucky starts, but has very high upkeep.\ 
- If you have no water, make a Well-Digger in a city that can\
- support it, create a water source, then disband the unit. \n\
- This unit can dig wells to create irrigation sources. It will cost its home city\
- -2 Food -2 Prod. This unit WILL NOT WORK：• Outside your borders,\
- • After Alphabet or Pottery, • After any player discovers Writing,\
- • After it reaches an age of 10 turns.\
- >> Don’t fool around：high upkeep will permanently hinder you. Only make this unit if you\
- lack water when the game starts!\
+Population Cost: 1. Adds Population: 1.\n\n\
+Peasants are the common people of Monarchies. You can encourage them\
+ by royal edict to migrate to other cities and help colonize new\
+ areas. But to have such access, you must be a Constitutional Monarchy\
+ with the Magna Carta wonder： Peasants can only be made in\
+ the city with Magna Carta, so choose that city carefully. \n\
+If managed correctly, Peasants can increase your national population\
+ growth. They give a tremendous advantage for growing new colonies\
+ and settlements faster. \n\
+Peasants can only be made in one city, but you can make more than one per\ 
+ turn under the right conditions. When a city completes a unit, it will try\
+ to make more of them if it doesn’t have a worklist. So be careful!\
+")
+
+[unit_pilgrims]
+name          = _("Pilgrims")
+class         = "Land"
+tech_req      = "Theocracy"
+gov_req       = "Theocracy"
+obsolete_by   = "None"
+graphic       = "u.pilgrims"
+graphic_alt   = "-"
+sound_move    = "m_worker"
+sound_move_alt = "m_generic"
+sound_fight   = "f_worker"
+sound_fight_alt = "f_generic"
+build_cost    = 10
+pop_cost      = 0
+attack        = 0
+defense       = 1
+hitpoints     = 8
+firepower     = 1
+move_rate     = 2
+vision_radius_sq = 4
+transport_cap = 0
+fuel          = 0
+city_size     = 1
+uk_happy      = 0
+uk_shield     = 0
+uk_food       = 2
+uk_gold       = 0
+embarks       = "LandRoad", "LandRail", "Helicopter"    ; transport helicopter only
+disembarks    = "LandRoad", "LandRail", "Helicopter"
+flags         = "Fanatic", "Cant_Fortify", "NonMil", "HasNoZOC", "AddToCity", "Capturable", "Expellable", "Cant_Pillage"
+; No veteran levels (level name is never displayed)
+veteran_names = _("green")
+veteran_base_raise_chance = 0
+veteran_work_raise_chance = 0
+veteran_power_fact = 100
+veteran_move_bonus = 0
+helptext      = _("\
+Population Cost: 0. Adds Population: 1.\n\n\
+Pilgrims are wayfaring migrants from Theocratic nations. Like Zealots,\
+ they have no upkeep if under a Theocratic government. Heeding the call\
+ of ecclesiastic authority, Pilgrims can be guided from one city to another in\
+ order to transfer population from city to city. Pilgrims have no population\
+ cost, so can be thought of as geographically controled rapture for the price\
+ of 10 shields.\
 ")
 
 [unit_proletarians]
@@ -918,52 +970,6 @@ Communist States can assign Proletarians from one city to another, which transfe
 "), _("\
 Large numbers of Proletarians can be used to rapidly complete important State projects,\
  which you may organize into Five-turn Plans.\
-")
-
-[unit_pilgrims]
-name          = _("Pilgrims")
-class         = "Land"
-tech_req      = "Theocracy"
-gov_req       = "Theocracy"
-obsolete_by   = "None"
-graphic       = "u.pilgrims"
-graphic_alt   = "-"
-sound_move    = "m_worker"
-sound_move_alt = "m_generic"
-sound_fight   = "f_worker"
-sound_fight_alt = "f_generic"
-build_cost    = 10
-pop_cost      = 0
-attack        = 0
-defense       = 1
-hitpoints     = 8
-firepower     = 1
-move_rate     = 2
-vision_radius_sq = 4
-transport_cap = 0
-fuel          = 0
-city_size     = 1
-uk_happy      = 0
-uk_shield     = 0
-uk_food       = 2
-uk_gold       = 0
-embarks       = "LandRoad", "LandRail", "Helicopter"    ; transport helicopter only
-disembarks    = "LandRoad", "LandRail", "Helicopter"
-flags         = "Fanatic", "Cant_Fortify", "NonMil", "HasNoZOC", "AddToCity", "Capturable", "Expellable", "Cant_Pillage"
-; No veteran levels (level name is never displayed)
-veteran_names = _("green")
-veteran_base_raise_chance = 0
-veteran_work_raise_chance = 0
-veteran_power_fact = 100
-veteran_move_bonus = 0
-helptext      = _("\
-Population Cost: 0. Adds Population: 1.\n\n\
-Pilgrims are wayfaring migrants from Theocratic nations. Like Zealots,\
- they have no upkeep if under a Theocratic government. Heeding the call\
- of ecclesiastic authority, Pilgrims can be guided from one city to another in\
- order to transfer population from city to city. Pilgrims have no population\
- cost, so can be thought of as geographically controled rapture for the price\
- of 10 shields.\
 ")
 
 [unit_migrants]
@@ -1510,60 +1516,6 @@ Righteous faith is needed to fight with slow heavy inaccurate weaponry:\
  high upkeep or see them retire.\
 ")
 
-[unit_zealots]
-name          = _("Zealots")
-class         = "Land"
-tech_req      = "Conscription"
-gov_req       = "Theocracy"
-obsolete_by   = "None"
-graphic       = "u.zealots"
-graphic_alt   = "u.fanatics"
-sound_move    = "m_fanatics"
-sound_move_alt = "m_generic"
-sound_fight   = "f_zealots"
-sound_fight_alt = "f_riflemen"
-build_cost    = 20
-pop_cost      = 0
-attack        = 4
-defense       = 4
-hitpoints     = 20
-firepower     = 1
-move_rate     = 2
-vision_radius_sq = 4
-transport_cap = 0
-fuel          = 0
-city_size     = 1080; 000000,0,100,001110,0,0 = atk_bonus=0, max_kills=0, targets=4, move_cost=14 frags, sty_frtfy=0, reserved = 0
-uk_happy      = 2
-uk_shield     = 0
-uk_food       = 0
-uk_gold       = 1
-embarks       = "LandRoad", "LandRail", "Helicopter"    ; transport helicopter only
-disembarks    = "LandRoad", "LandRail", "Helicopter"
-targets       = "Balloon", "Helicopter", "LandRail"
-flags         = "Fanatic", "FootSoldier", "Capturer", "CantReachAir", "Unbribable", "Bombarder",
-                "Settlers", "CanHide", "MultiSlot", "WillNever"
-roles         = "DefendGood", "DefendGoodStartUnit", "FirstBuild"
-helptext      = _("\
-Zealots are warriors devoted to a higher cause. Their faith\
- is strong and they cannot be bribed. \
-"), _("\
-Theocratic nations can maintain Zealots without paying\
- their steep upkeep. (Zealots are unhappy if not under Theocracy,\
- requiring high upkeep to stay content.) Zealots\
- produced in a city with Ecclesiastical Palace are inspired by\
- fervorous faith to +1 higher veteran level. \n\
-"), _("\
-Zealots fervently defend their homeland, and can do surprise skirmish\
- assaults to snipe and injure foreign occupants：Up to 4 invaders\
- on the tile will endure three combat rounds without defense. Skirmish\
- assaults can also be done to foreign occupied cities if they have\
- a remaining Foreign National population. \n\
-"), _("\
-Zealots can Estabish Home City in any allied city that is Theocracy,\
- allowing control to pass between nations who share the same faith.\
-")
-bombard_rate = 3
-
 [unit_partisan]
 name          = _("Partisan")
 class         = "Land"
@@ -1664,6 +1616,60 @@ Riflemen are World War-era infantry. They are good at defending cities and\
 Under Communism this unit costs 5 less. Also, Communism tech allows Communist\
  governments to de-commission Riflemen into Workers II via the Convert order. And vice versa. \
 ")
+
+[unit_zealots]
+name          = _("Zealots")
+class         = "Land"
+tech_req      = "Conscription"
+gov_req       = "Theocracy"
+obsolete_by   = "None"
+graphic       = "u.zealots"
+graphic_alt   = "u.fanatics"
+sound_move    = "m_fanatics"
+sound_move_alt = "m_generic"
+sound_fight   = "f_zealots"
+sound_fight_alt = "f_riflemen"
+build_cost    = 20
+pop_cost      = 0
+attack        = 4
+defense       = 4
+hitpoints     = 20
+firepower     = 1
+move_rate     = 2
+vision_radius_sq = 4
+transport_cap = 0
+fuel          = 0
+city_size     = 1080; 000000,0,100,001110,0,0 = atk_bonus=0, max_kills=0, targets=4, move_cost=14 frags, sty_frtfy=0, reserved = 0
+uk_happy      = 2
+uk_shield     = 0
+uk_food       = 0
+uk_gold       = 1
+embarks       = "LandRoad", "LandRail", "Helicopter"    ; transport helicopter only
+disembarks    = "LandRoad", "LandRail", "Helicopter"
+targets       = "Balloon", "Helicopter", "LandRail"
+flags         = "Fanatic", "FootSoldier", "Capturer", "CantReachAir", "Unbribable", "Bombarder",
+                "Settlers", "CanHide", "MultiSlot", "WillNever"
+roles         = "DefendGood", "DefendGoodStartUnit", "FirstBuild"
+helptext      = _("\
+Zealots are warriors devoted to a higher cause. Their faith\
+ is strong and they cannot be bribed. \
+"), _("\
+Theocratic nations can maintain Zealots without paying\
+ their steep upkeep. (Zealots are unhappy if not under Theocracy,\
+ requiring high upkeep to stay content.) Zealots\
+ produced in a city with Ecclesiastical Palace are inspired by\
+ fervorous faith to +1 higher veteran level. \n\
+"), _("\
+Zealots fervently defend their homeland, and can do surprise skirmish\
+ assaults to snipe and injure foreign occupants：Up to 4 invaders\
+ on the tile will endure three combat rounds without defense. Skirmish\
+ assaults can also be done to foreign occupied cities if they have\
+ a remaining Foreign National population. \n\
+"), _("\
+Zealots can Estabish Home City in any allied city that is Theocracy,\
+ allowing control to pass between nations who share the same faith.\
+")
+bombard_rate = 3
 
 [unit_alpine_troops]
 name          = _("Alpine Troops")
@@ -1900,6 +1906,60 @@ Mechanized Infantry have the strongest general defense strength of any land unit
  They have decent attack strength in open field engagements, and excellent mobility. \
 ")
 
+[unit_scout]
+name          = _("Scout")
+class         = "Land"
+tech_req      = "Horseback Riding"
+obsolete_by   = "Partisan"
+graphic       = "u.scout"
+graphic_alt   = "-"
+sound_move    = "m_explorer"
+sound_move_alt = "m_generic"
+sound_fight   = "f_horsemen"
+sound_fight_alt = "f_generic"
+build_cost    = 18
+pop_cost      = 0
+attack        = 0
+defense       = 1
+hitpoints     = 8
+firepower     = 1
+move_rate     = 1
+vision_radius_sq = 5
+transport_cap = 0
+fuel          = 0
+uk_happy      = 0
+uk_shield     = 0
+uk_food       = 0
+uk_gold       = 0
+embarks       = "LandRoad", "Helicopter"    ; transport helicopter only
+disembarks    = "LandRoad", "Helicopter"
+flags         = "IgTer", "IgZOC", "NonMil", "HasNoZOC", "Capturable", "Expellable", "Cant_Pillage", "NoHome", "Horse", "SentryAlways"
+roles         = "Explorer", "ExplorerStartUnit"
+veteran_names =
+  _("?vet_rank:green"),
+  _("?vet_rank:veteran"),
+  _("?vet_rank:hardened"),
+  _("?vet_rank:elite"),
+  _("?vet_rank:crack"),
+  _("?vet_rank:master"),
+  _("?vet_rank:wind walker")
+veteran_base_raise_chance = 50, 33, 20, 15, 15, 15, 0
+veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
+veteran_power_fact = 100, 150, 175, 250, 300, 350, 400
+veteran_move_bonus = 3, 5, 7, 9, 11, 13, 15
+helptext      = _("\
+Scouts are explorers of unknown territory. They live off the land with no upkeep.\
+ They can slip through ZOC. They ignore terrain penalties, treating every tile as\
+ if it had a road. They can move 4 tiles per turn (6 after discovering Map Making.)\
+ For each veteran level, they gain an additional +²⁄₉ move point. Scouts can Investigate City\
+ to gather intel, and their terrain scouting can give tactical advantage. Scouts can make\
+ contact with far-off lands to arrange Cease-fire or Peace. In later times, Scouts upgrade\
+ to Partisans. \n\
+"), _("
+Scouts provide sentry intel even if not sentried. Scouts gain the same veteran levels\
+ from buildings and wonders as other land units.\
+")
+
 [unit_horsemen]
 name          = _("Horsemen")
 class         = "Land"
@@ -1996,6 +2056,44 @@ Elephants are towering animals trained for war. Their mobility and formidable\
  defend poorly against most units.\
 ")
 
+[unit_knights]
+name          = _("Knights")
+class         = "LandNoKill"
+tech_req      = "Chivalry"
+obsolete_by   = "Dragoons"
+graphic       = "u.knights"
+graphic_alt   = "-"
+sound_move    = "m_knights"
+sound_move_alt = "m_generic"
+sound_fight   = "f_knights"
+sound_fight_alt = "f_generic"
+build_cost    = 38
+pop_cost      = 0
+attack        = 4
+defense       = 2
+hitpoints     = 10
+firepower     = 1
+move_rate     = 4
+vision_radius_sq = 4
+transport_cap = 0
+fuel          = 0
+uk_happy      = 1
+uk_shield     = 1
+uk_food       = 0
+uk_gold       = 0
+bonuses       =
+   { "flag", "type", "value"
+     "Horse", "DefenseMultiplierPct", 50
+   }
+flags         = "Horse", "Capturer", "CantReachAir", "WillNever"
+roles         = "AttackFastStartUnit", "BarbarianTech",
+                "BarbarianBuildTech", "BarbarianSeaTech", "Hunter"
+helptext      = _("\
+Knights are heavily armored mounted warriors. They defend at D3 against mounted units.\
+ Their noble status allows them to attack cities without population reduction, and\
+ conquer a size 1 city without destroying it.\
+")
+
 [unit_crusaders]
 name          = _("Crusaders")
 class         = "Land"
@@ -2021,52 +2119,23 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
+bonuses       =
+   { "flag", "type", "value"
+   ; Crease Base Defense of 3.5. Use flags to include all unit_types with no overlap:
+     "CantReachAir", "DefenseMultiplierPct", 50   ; all military Land, Sea, Bombers, EXCEPT AAA, Mobile SAM, AEGIS
+     "AntiAir",      "DefenseMultiplierPct", 50   ; AAA, Mobile SAM, AEGIS
+     "NonMil",       "DefenseMultiplierPct", 50   ; all NonMil units
+     "AirAttacker",  "DefenseMultiplierPct", 50   ; Aircraft (including Bombers)
+     "FieldUnit",    "DefenseMultiplierPct", -50  ; Cancel overlapped doubled bonus on Bombers.
+   }
 flags         = "Horse", "Capturer", "CantReachAir", "WillNever"
 roles         = "AttackFastStartUnit"
 helptext      = _("\
 Crusaders are mounted warriors driven by a higher cause.\
- They have superior attack to Knights, but are poor at defending.\
- They are ideally suited for leading the charge in offensive campaigns.\
-")
-
-[unit_knights]
-name          = _("Knights")
-class         = "LandNoKill"
-tech_req      = "Chivalry"
-obsolete_by   = "Dragoons"
-graphic       = "u.knights"
-graphic_alt   = "-"
-sound_move    = "m_knights"
-sound_move_alt = "m_generic"
-sound_fight   = "f_knights"
-sound_fight_alt = "f_generic"
-build_cost    = 38
-pop_cost      = 0
-attack        = 4
-defense       = 1
-hitpoints     = 10
-firepower     = 1
-move_rate     = 4
-vision_radius_sq = 4
-transport_cap = 0
-fuel          = 0
-uk_happy      = 1
-uk_shield     = 1
-uk_food       = 0
-uk_gold       = 0
-bonuses       =
-   { "flag", "type", "value"
-     "Horse", "DefenseMultiplier", 2
-     "FootSoldier", "DefenseMultiplier", 1
-   }
-flags         = "Horse", "Capturer", "CantReachAir", "WillNever"
-roles         = "AttackFastStartUnit", "BarbarianTech",
-                "BarbarianBuildTech", "BarbarianSeaTech", "Hunter"
-helptext      = _("\
-Knights are heavily armored mounted warriors. They defend at D:3 against mounted units.\
- They defend at D:2 against foot units. They defend at D:1 against everything else.\
- Their noble status allows them to attack cities without population reduction, and\
- conquer a size 1 city without destroying it.\
+ They have superior attack to Knights, but are only half\
+ as good at defending against mounted units.\
+ They are ideally suited for leading the charge in offensive\
+ campaigns.\
 ")
 
 [unit_dragoons]
@@ -2784,7 +2853,12 @@ uk_gold       = 0
 targets       = "Air", "AirProtect", "Missile", "Balloon", "Helicopter", "LandRail", "Zeppelin"
 bonuses       =
    { "flag", "type", "value"
-      "AirAttacker", "DefenseMultiplierPct", 17 ; defends at 3.5 (3*1.17=3.51) vs air attackers
+   ; Crease Base Defense of 3.5. Use flags to include all unit_types with no overlap:
+     "CantReachAir", "DefenseMultiplierPct", 17   ; all military Land, Sea, Bombers, EXCEPT AAA, Mobile SAM, AEGIS
+     "AntiAir",      "DefenseMultiplierPct", 17   ; AAA, Mobile SAM, AEGIS
+     "NonMil",       "DefenseMultiplierPct", 17   ; all NonMil units
+     "AirAttacker",  "DefenseMultiplierPct", 17   ; Aircraft (including Bombers)
+     "FieldUnit",    "DefenseMultiplierPct", -17  ; Cancel overlapped doubled bonus on Bombers.
    }
 flags         = "AirAttacker", "Unbribable", "HasNoZOC", "CanEscape",
                 "AirProtector", "Provoking"
@@ -4138,7 +4212,7 @@ veteran_move_bonus = 0, 0, 0, 0, 9, 9, 9
 roles         = "Ferryboat", "FerryStartUnit", "BarbarianBoat"
 helptext      = _("\
 The Galleon is a heavily armed transport ship that can carry up to 4 units. Galleons can attack and travel on rivers,\
- and also do shore attacks. Galleon crews repair their ship an extra +1hp per turn, regardless of whether it has moved.\
+ and also do shore attacks. Galleon crews repair their ship an extra +2hp per turn, regardless of whether it has moved.\
 "), _("
 Like most early sea units, when it initiates combat there will be 15 rounds\
  of combat and 15 total hitpoints lost between both units. This may or may not\
@@ -4198,10 +4272,63 @@ roles         = "Hunter"
 helptext      = _("\
 The Frigate is versatile — it is a superior offensive unit and also a decent transport ship. Frigates\
  can attack and travel on rivers, or make shore attacks from sea. Frigate crews repair their ship an\
- extra +1hp per turn, regardless of whether it has moved.\
+ extra +2hp per turn, regardless of whether it has moved.\
 "), _("
 From Frigates onward, all sea attacks end with a single victor.\
  Stack-Escape：60% odds to evade stack-death if it has more moves left than attacker.\
+")
+
+[unit_trawler]
+name          = _("Trawler")
+class         = "RiverShip"
+tech_req      = "Electricity"
+obsolete_by   = "None"
+graphic       = "u.trawler_o"
+graphic_alt   = "-"
+sound_move    = "m_transport"
+sound_move_alt = "m_transport"
+sound_fight   = "f_trireme"
+sound_fight_alt = "f_generic"
+build_cost    = 30
+pop_cost      = 0
+attack        = 0
+defense       = 1
+hitpoints     = 15
+firepower     = 1
+move_rate     = 2
+vision_radius_sq = 4
+transport_cap = 1
+fuel          = 0
+uk_happy      = 0
+uk_shield     = 0
+uk_food       = 0
+uk_gold       = 0
+cargo         = "Land", "LandNoKill", "LandAirSea", "LandRoad", "Cargo", 
+                "RiverShip", "Sea", "Submarine", "Trireme"
+flags         = "Settlers", "Infra", "CanRoad", "CanFortress", "Cant_Pillage", "NonMil",
+                "HasNoZOC", "NoVeteran", "Capturable", "Expellable", "BadCityDefender",
+                "Airbase" ;for buoys
+; No veteran levels (level name is never displayed)
+veteran_names = _("green")
+veteran_base_raise_chance = 0
+veteran_work_raise_chance = 0
+veteran_power_fact = 100
+veteran_move_bonus = 63
+roles         = ""
+helptext      = _("\
+Trawlers are high-powered work-boats used for fishing and ocean work.\
+ They work at the same rate as Workers, and can put down Fishtraps,\
+ Buoys, Sea Bridges, Road types, or clean Pollution and Fallout.\
+ Trawlers can carry one Land unit. \n\n\
+Trawlers can tow ships who haven’t moved, via a Load, Board,\
+ or Embark order. Towing helps damaged ships return to port for repair.\
+ Crew repair rates for towed ships are improved by letting the ships rest\
+ while towed. \n\n\
+When towing, encumbrance slows the Trawler to 6 move points. Remaining moves\
+ reduce proportional to this slower speed. If a Trawler\
+ stops towing a ship via Unload or Deboard, it regains pro-rated moves\
+ proportional to its natural speed. \n\n\
+Towed ships lose all moves after release.\
 ")
 
 [unit_cargo_ship]
@@ -4845,6 +4972,100 @@ A Cruise Missile can strike distant targets. It\
  block attacks on other units on its tile. \n\
 ")
 
+[unit_nuclear_missile]
+name          = _("Nuclear Missile")
+class         = "Missile"
+tech_req      = "Space Flight"
+obsolete_by   = "None"
+graphic       = "u.nuclear"
+graphic_alt   = "-"
+sound_move    = "m_nuclear"
+sound_move_alt = "m_generic"
+sound_fight   = "f_nuclear"
+sound_fight_alt = "f_generic"
+build_cost    = 160
+pop_cost      = 0
+attack        = 100
+defense       = 0
+hitpoints     = 10
+firepower     = 1
+move_rate     = 24
+vision_radius_sq = 2
+transport_cap = 0
+fuel          = 1
+uk_happy      = 1
+uk_shield     = 1
+uk_food       = 0
+uk_gold       = 0
+embarks       = "Submarine"
+disembarks    = "Submarine"
+targets       = "Balloon", "Helicopter", "Air", "AirProtect", "Air_High_Altitude", "Missile", "Submarine", "LandRail", "LandRoad", "Space", "Zeppelin"
+flags         = "NeverProtects", "FieldUnit", "OneAttack", "Nuclear", "HasNoZOC", "Unbribable",
+                "NeverBlocked", "WillNever", "NoVeteran"
+; No veteran levels (level name is never displayed)
+veteran_names = _("green")
+veteran_base_raise_chance = 0
+veteran_work_raise_chance = 0
+veteran_power_fact = 100
+veteran_move_bonus = 0
+roles         = ""
+helptext      = _("\
+If you have Space Flight and the Manhattan Project has been built by any player, you can make Nuclear Missiles.\
+ Nuclear blasts destroy ALL units in a 3×3 area. City population is reduced by half. Land tiles may get nuclear fallout.\
+ Fallout reduces tile output and increases risk of nuclear winter. \
+"), _("\
+If Fallout is cleaned on the turn it appears, the chance of nuclear winter is reduced.\
+")
+bombard_rate = 0       ; default sq_radius of 2：every adjacent tile.
+
+[unit_tactical_nuke]
+name          = _("Tactical Nuke")
+class         = "Missile"
+tech_req      = "Fusion Power"
+impr_req      = "Enrichment Facility"
+obsolete_by   = "None"
+graphic       = "u.tnuke"
+graphic_alt   = "-"
+sound_move    = "m_nuclear"
+sound_move_alt = "m_generic"
+sound_fight   = "f_nuclear"
+sound_fight_alt = "f_generic"
+build_cost    = 130
+pop_cost      = 0
+attack        = 100
+defense       = 0
+hitpoints     = 10
+firepower     = 1
+move_rate     = 18
+vision_radius_sq = 2
+transport_cap = 0
+fuel          = 1
+uk_happy      = 1
+uk_shield     = 1
+uk_food       = 0
+uk_gold       = 0
+embarks       = "Submarine"
+disembarks    = "Submarine"
+targets       = "Balloon", "Helicopter", "Air", "AirProtect", "Air_High_Altitude", "Missile", "Submarine", "LandRail", "LandRoad", "Space", "Zeppelin"
+flags         = "NeverProtects", "FieldUnit", "OneAttack", "Nuclear", "HasNoZOC", "Unbribable",
+                "NeverBlocked", "WillNever", "NoVeteran"
+; No veteran levels (level name is never displayed)
+veteran_names = _("green")
+veteran_base_raise_chance = 0
+veteran_work_raise_chance = 0
+veteran_power_fact = 100
+veteran_move_bonus = 0
+roles         = ""
+helptext      = _("\
+Tactical Nukes are very small warheads attached to missiles. A Tactical Nuke destroys all units on\
+ a single tile. City population is reduced by half. The target tile may get Fallout. In theory,\
+ Tactical Nukes are small enough to get the advantages of nuclear armaments without the severity of\
+ consequences. In reality, they might be a gateway that escalates toward mutual assured destruction. \n\
+If you have Fusion Power and the Manhattan Project was built, a Tactical Nuke\
+ can be made in a city with an Enrichment Facility. \
+")
+bombard_rate = -2   ; 2 - 2 = 0：only nukes target tile.
+
 [unit_atom_bomb]
 name          = _("Atom Bomb")
 class         = "Bomb"
@@ -4991,100 +5212,6 @@ If you have Fusion Power and the Manhattan Project was built, a Doomsday Bomb\
 The Fallout from a Doomsday Bomb is a sure ticket to Nuclear Winter.\
 ")
 bombard_rate = 27    ; radius = sqrt(25) = 5.19
-
-[unit_nuclear_missile]
-name          = _("Nuclear Missile")
-class         = "Missile"
-tech_req      = "Space Flight"
-obsolete_by   = "None"
-graphic       = "u.nuclear"
-graphic_alt   = "-"
-sound_move    = "m_nuclear"
-sound_move_alt = "m_generic"
-sound_fight   = "f_nuclear"
-sound_fight_alt = "f_generic"
-build_cost    = 160
-pop_cost      = 0
-attack        = 100
-defense       = 0
-hitpoints     = 10
-firepower     = 1
-move_rate     = 24
-vision_radius_sq = 2
-transport_cap = 0
-fuel          = 1
-uk_happy      = 1
-uk_shield     = 1
-uk_food       = 0
-uk_gold       = 0
-embarks       = "Submarine"
-disembarks    = "Submarine"
-targets       = "Balloon", "Helicopter", "Air", "AirProtect", "Air_High_Altitude", "Missile", "Submarine", "LandRail", "LandRoad", "Space", "Zeppelin"
-flags         = "NeverProtects", "FieldUnit", "OneAttack", "Nuclear", "HasNoZOC", "Unbribable",
-                "NeverBlocked", "WillNever", "NoVeteran"
-; No veteran levels (level name is never displayed)
-veteran_names = _("green")
-veteran_base_raise_chance = 0
-veteran_work_raise_chance = 0
-veteran_power_fact = 100
-veteran_move_bonus = 0
-roles         = ""
-helptext      = _("\
-If you have Space Flight and the Manhattan Project has been built by any player, you can make Nuclear Missiles.\
- Nuclear blasts destroy ALL units in a 3×3 area. City population is reduced by half. Land tiles may get nuclear fallout.\
- Fallout reduces tile output and increases risk of nuclear winter. \
-"), _("\
-If Fallout is cleaned on the turn it appears, the chance of nuclear winter is reduced.\
-")
-bombard_rate = 0       ; default sq_radius of 2：every adjacent tile.
-
-[unit_tactical_nuke]
-name          = _("Tactical Nuke")
-class         = "Missile"
-tech_req      = "Fusion Power"
-impr_req      = "Enrichment Facility"
-obsolete_by   = "None"
-graphic       = "u.tnuke"
-graphic_alt   = "-"
-sound_move    = "m_nuclear"
-sound_move_alt = "m_generic"
-sound_fight   = "f_nuclear"
-sound_fight_alt = "f_generic"
-build_cost    = 130
-pop_cost      = 0
-attack        = 100
-defense       = 0
-hitpoints     = 10
-firepower     = 1
-move_rate     = 18
-vision_radius_sq = 2
-transport_cap = 0
-fuel          = 1
-uk_happy      = 1
-uk_shield     = 1
-uk_food       = 0
-uk_gold       = 0
-embarks       = "Submarine"
-disembarks    = "Submarine"
-targets       = "Balloon", "Helicopter", "Air", "AirProtect", "Air_High_Altitude", "Missile", "Submarine", "LandRail", "LandRoad", "Space", "Zeppelin"
-flags         = "NeverProtects", "FieldUnit", "OneAttack", "Nuclear", "HasNoZOC", "Unbribable",
-                "NeverBlocked", "WillNever", "NoVeteran"
-; No veteran levels (level name is never displayed)
-veteran_names = _("green")
-veteran_base_raise_chance = 0
-veteran_work_raise_chance = 0
-veteran_power_fact = 100
-veteran_move_bonus = 0
-roles         = ""
-helptext      = _("\
-Tactical Nukes are very small warheads attached to missiles. A Tactical Nuke destroys all units on\
- a single tile. City population is reduced by half. The target tile may get Fallout. In theory,\
- Tactical Nukes are small enough to get the advantages of nuclear armaments without the severity of\
- consequences. In reality, they might be a gateway that escalates toward mutual assured destruction. \n\
-If you have Fusion Power and the Manhattan Project was built, a Tactical Nuke\
- can be made in a city with an Enrichment Facility. \
-")
-bombard_rate = -2   ; 2 - 2 = 0：only nukes target tile.
 
 [unit_emissary]
 name          = _("Emissary")
@@ -5252,59 +5379,57 @@ Spies who survive ops escape to the nearest friendly city. Spies have\
  Full rules are in the Manual.\
 ")
 
-[unit_caravan]
-name          = _("Caravan")
+[unit_patriarch]
+name          = _("Patriarch")
 class         = "Land"
-tech_req      = "Trade"
-obsolete_by   = "Truck"
-graphic       = "u.caravan"
-graphic_alt   = "-"
-sound_move    = "m_caravan"
+tech_req      = "Theocracy"
+impr_req      = "Ecclesiastical Palace"
+gov_req       = "Theocracy"
+obsolete_by   = "None"
+graphic       = "u.patriarch_o"
+graphic_alt   = "u.emissary"
+sound_move    = "m_diplomat"
 sound_move_alt = "m_generic"
-sound_fight   = "f_caravan"
+sound_fight   = "f_diplomat"
 sound_fight_alt = "f_generic"
-build_cost    = 30
+build_cost    = 55
 pop_cost      = 0
 attack        = 0
-defense       = 1
-hitpoints     = 10
+defense       = 0
+hitpoints     = 8
 firepower     = 1
-move_rate     = 2
+move_rate     = 4
 vision_radius_sq = 4
+transport_cap = 0
 fuel          = 0
 uk_happy      = 0
 uk_shield     = 0
 uk_food       = 0
 uk_gold       = 0
-transport_cap = 2
-cargo         = "Cargo"
-embarks       = "LandRoad", "Helicopter"    ; transport helicopter only
-disembarks    = "LandRoad", "Helicopter"
-flags         = "HelpWonder", "TradeRoute", "IgZOC", "NonMil", "HasNoZOC", "Capturable", "Expellable", "Cant_Pillage"
-roles         = "AttackStrongStartUnit"  ;note：MP2 does not start games with ASSUs so has co-opted this for caravan start unit.
-veteran_names =
-  _("?vet_rank:green"),
-  _("?vet_rank:veteran"),
-  _("?vet_rank:hardened"),
-  _("?vet_rank:elite runner"),
-  _("?vet_rank:caravaneer"),
-  _("?vet_rank:master runner"),
-  _("?vet_rank:zaeim alqafila")
-veteran_base_raise_chance = 50, 33, 20, 15, 15, 15, 0
-veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
-veteran_power_fact = 100, 150, 175, 250, 300, 350, 400
-veteran_move_bonus = 7, 7, 7, 7, 8, 9, 10
+embarks       = "LandRail", "Helicopter"    ; transport helicopter only
+disembarks    = "LandRail", "Helicopter"
+flags         = "Unique", "Diplomat", "Unbribable", "IgZOC", "NonMil", "HasNoZOC", "Expellable", "Cant_Pillage", "CanClaim", "Settlers", "NoVeteran"
+; No veteran levels (level name is never displayed)
+veteran_names = _("chosen one")
+veteran_base_raise_chance = 0
+veteran_work_raise_chance = 0
+veteran_power_fact = 125
+veteran_move_bonus = 0
 helptext      = _("\
-The Caravan is versatile and rugged. It is the only all-terrain land Commerce unit.\
- It is also the only one that presents no potential military\
- threat to trade partners. It can defend itself, fortify, and has 2 7/9 moves. \n\ 
-Commerce units can help build Wonders in any city with whom\
- you are not at war. In foreign cities 15+ tiles distant, they can create Trade Routes,\
- increasing net trade in both cities relative to their combined trade. Routes are inactive\
- during war and (re)activate during peace. \n\
-Commerce units can build any Wonders for which you have the tech requirement. To use them\
- for a Trade Route, they need to have given a Home City. \n\
-All Commerce units can carry Goods as cargo.\
+The Patriarch is unique—you can make only one, and only with Theocracy in a\
+ city with an Ecclesiastical Palace. He can do what Diplomats can do, with extra\
+ powers of persuasion. Under Theocracy, the Patriarch converts units to join your\
+ side at 1/3 the cost of a normal Bribe; and incites cities to become yours at\
+ one third the normal cost. \n\
+Investigating, Converting, Establishing Embassy, and Inciting can be done multiple times if\
+ successful. Other actions spend the Patriarch, allowing no further use. A Patriarch may\
+ claim a tile for your nation if adjacent to a tile claim made inside your own national border.\
+ Foreign tile claims require the Patriarch to be accompanied by another unit. \n\
+Espionage tech allows the Patriarch to establish hostile embassies vs. Courthouse and Homeland\
+ Security (but not vs. Police Station or Theocracy.) \n\ 
+"), _("\
+In diplomatic contests, the wiles, power, and influence of the Patriarch make him equal\
+ to a Spy in strength.\
 ")
 
 [unit_wagon]
@@ -5352,6 +5477,61 @@ Wagons allow units with less than 3 move points to travel your roads faster.\
 Read the help on Caravans to see what Commerce units can do.\
 ")
 
+[unit_caravan]
+name          = _("Caravan")
+class         = "Land"
+tech_req      = "Trade"
+obsolete_by   = "Truck"
+graphic       = "u.caravan"
+graphic_alt   = "-"
+sound_move    = "m_caravan"
+sound_move_alt = "m_generic"
+sound_fight   = "f_caravan"
+sound_fight_alt = "f_generic"
+build_cost    = 30
+pop_cost      = 0
+attack        = 0
+defense       = 1
+hitpoints     = 10
+firepower     = 1
+move_rate     = 2
+vision_radius_sq = 4
+fuel          = 0
+uk_happy      = 0
+uk_shield     = 0
+uk_food       = 0
+uk_gold       = 0
+transport_cap = 3
+cargo         = "Cargo"
+embarks       = "LandRoad", "Helicopter"    ; transport helicopter only
+disembarks    = "LandRoad", "Helicopter"
+flags         = "HelpWonder", "TradeRoute", "IgZOC", "NonMil", "HasNoZOC", "Capturable", "Expellable", "Cant_Pillage"
+roles         = "AttackStrongStartUnit"  ;note：MP2 does not start games with ASSUs so has co-opted this for caravan start unit.
+veteran_names =
+  _("?vet_rank:green"),
+  _("?vet_rank:veteran"),
+  _("?vet_rank:hardened"),
+  _("?vet_rank:elite runner"),
+  _("?vet_rank:caravaneer"),
+  _("?vet_rank:master runner"),
+  _("?vet_rank:zaeim alqafila")
+veteran_base_raise_chance = 50, 33, 20, 15, 15, 15, 0
+veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
+veteran_power_fact = 100, 150, 175, 250, 300, 350, 400
+veteran_move_bonus = 7, 7, 7, 7, 8, 9, 10
+helptext      = _("\
+The Caravan is versatile and rugged. It is the only all-terrain land Commerce unit.\
+ It is also the only one that presents no potential military\
+ threat to trade partners. It can defend itself, fortify, and carry 3 Goods or Freight. \n\ 
+Commerce units can help build Wonders in any city with whom\
+ you are not at war. In foreign cities 15+ tiles distant, they can create Trade Routes,\
+ increasing net trade in both cities relative to their combined trade. Routes are inactive\
+ during war and (re)activate during peace. \n\
+Commerce units can build any Wonders for which you have the tech requirement. To use them\
+ for a Trade Route, they need to have given a Home City. \n\
+All Commerce units can carry Goods as cargo.\
+")
+
 [unit_train]
 name          = _("Train")
 class         = "LandRail"
@@ -5392,7 +5572,7 @@ Trains are Commerce units with a bonus：they allow units with less than 3 move 
  Trains are more restricted than for Wagons and Trucks. Except for Foot soldiers,\
  all units need to be in a city to get on or off a Train. \n\
 Foot Soldiers use Trains the same as Wagons and Trucks, and can: \n\
- 1. Board anywhere; \n 2. Deboard in a Base or Quay.; \n\
+ 1. Board anywhere; \n 2. Deboard in a Base or Quay; \n\
  3. Disembark outside a City (loses all moves.) \n\n\
 On non-allied foreign rails, Trains incur full terrain movement cost.\
  Pre-gunpowder units can’t attack Trains. \n\n\
@@ -5517,113 +5697,6 @@ By itself, Freight is only able to move to tiles with loading infrastructure:\
  Cities, Quays, Fortresses, Airbases, and Naval Bases. To be transported, it must be carried\
  as cargo. If adjacent to a foreign city, use the D key to\
  do Commerce functions.\
-")
-
-[unit_scout]
-name          = _("Scout")
-class         = "Land"
-tech_req      = "Horseback Riding"
-obsolete_by   = "Partisan"
-graphic       = "u.scout"
-graphic_alt   = "-"
-sound_move    = "m_explorer"
-sound_move_alt = "m_generic"
-sound_fight   = "f_horsemen"
-sound_fight_alt = "f_generic"
-build_cost    = 18
-pop_cost      = 0
-attack        = 0
-defense       = 1
-hitpoints     = 8
-firepower     = 1
-move_rate     = 1
-vision_radius_sq = 5
-transport_cap = 0
-fuel          = 0
-uk_happy      = 0
-uk_shield     = 0
-uk_food       = 0
-uk_gold       = 0
-embarks       = "LandRoad", "Helicopter"    ; transport helicopter only
-disembarks    = "LandRoad", "Helicopter"
-flags         = "IgTer", "IgZOC", "NonMil", "HasNoZOC", "Capturable", "Expellable", "Cant_Pillage", "NoHome", "Horse", "SentryAlways"
-roles         = "Explorer", "ExplorerStartUnit"
-veteran_names =
-  _("?vet_rank:green"),
-  _("?vet_rank:veteran"),
-  _("?vet_rank:hardened"),
-  _("?vet_rank:elite"),
-  _("?vet_rank:crack"),
-  _("?vet_rank:master"),
-  _("?vet_rank:wind walker")
-veteran_base_raise_chance = 50, 33, 20, 15, 15, 15, 0
-veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
-veteran_power_fact = 100, 150, 175, 250, 300, 350, 400
-veteran_move_bonus = 3, 5, 7, 9, 11, 13, 15
-helptext      = _("\
-Scouts are explorers of unknown territory. They live off the land with no upkeep.\
- They can slip through ZOC. They ignore terrain penalties, treating every tile as\
- if it had a road. They can move 4 tiles per turn (6 after discovering Map Making.)\
- For each veteran level, they gain an additional +²⁄₉ move point. Scouts can Investigate City\
- to gather intel, and their terrain scouting can give tactical advantage. Scouts can make\
- contact with far-off lands to arrange Cease-fire or Peace. In later times, Scouts upgrade\
- to Partisans. \n\
-"), _("
-Scouts provide sentry intel even if not sentried. Scouts gain the same veteran levels\
- from buildings and wonders as other land units.\
-")
-
-[unit_trawler]
-name          = _("Trawler")
-class         = "RiverShip"
-tech_req      = "Electricity"
-obsolete_by   = "None"
-graphic       = "u.trawler_o"
-graphic_alt   = "-"
-sound_move    = "m_transport"
-sound_move_alt = "m_transport"
-sound_fight   = "f_trireme"
-sound_fight_alt = "f_generic"
-build_cost    = 30
-pop_cost      = 0
-attack        = 0
-defense       = 1
-hitpoints     = 15
-firepower     = 1
-move_rate     = 2
-vision_radius_sq = 4
-transport_cap = 1
-fuel          = 0
-uk_happy      = 0
-uk_shield     = 0
-uk_food       = 0
-uk_gold       = 0
-cargo         = "Land", "LandNoKill", "LandAirSea", "LandRoad", "Cargo", 
-                "RiverShip", "Sea", "Submarine", "Trireme"
-flags         = "Settlers", "Infra", "CanRoad", "CanFortress", "Cant_Pillage", "NonMil",
-                "HasNoZOC", "NoVeteran", "Capturable", "Expellable", "BadCityDefender",
-                "Airbase" ;for buoys
-; No veteran levels (level name is never displayed)
-veteran_names = _("green")
-veteran_base_raise_chance = 0
-veteran_work_raise_chance = 0
-veteran_power_fact = 100
-veteran_move_bonus = 63
-roles         = ""
-helptext      = _("\
-Trawlers are high-powered work-boats used for fishing and ocean work.\
- They work at the same rate as Workers, and can put down Fishtraps,\
- Buoys, Sea Bridges, Road types, or clean Pollution and Fallout.\
- Trawlers can carry one Land unit. \n\n\
-Trawlers can tow ships who haven’t moved via a Load, Board,\
- or Embark order. Towing helps damaged ships return to port for repair.\
- Crew repair rates for towed ships are improved by letting the ships rest\
- while towed. \n\n\
-When towing, encumbrance slows the Trawler to 6 move points. Remaining moves\
- reduce proportional to this slower speed. If a Trawler\
- stops towing a ship via Unload or Deboard, it regains pro-rated moves\
- proportional to its natural speed. \n\n\
-Towed ships lose all moves after release.\
 ")
 
 [unit_leader]
@@ -5759,110 +5832,51 @@ When a Barbarian Leader is killed on a tile without any defending units,\
  the 100 gold ransom is paid, but only to land units and helicopters.\
 ")
 
-[unit_peasants]
-name          = _("Peasants")
+[unit_welldigger]
+name          = _("Well-Digger")
 class         = "Land"
-tech_req      = "Monarchy"
-gov_req       = "Monarchy"
-impr_req      = "Magna Carta"
-obsolete_by   = "None"
-graphic       = "u.peasants"
-graphic_alt   = "u.migrants"
+tech_req      = "None"
+obsolete_by   = "Workers"
+graphic       = "u.well_digger"
+graphic_alt   = "-"
 sound_move    = "m_worker"
 sound_move_alt = "m_generic"
 sound_fight   = "f_worker"
 sound_fight_alt = "f_generic"
-build_cost    = 10
-pop_cost      = 1
+build_cost    = 5
+pop_cost      = 0
 attack        = 0
 defense       = 1
 hitpoints     = 8
 firepower     = 1
-move_rate     = 2
+move_rate     = 3
 vision_radius_sq = 4
 transport_cap = 0
 fuel          = 0
-city_size     = 1
 uk_happy      = 0
-uk_shield     = 0
-uk_food       = 0
-uk_gold       = 0
-embarks       = "LandRoad", "LandRail", "Helicopter"    ; transport helicopter only
-disembarks    = "LandRoad", "LandRail", "Helicopter"
-flags         = "MultiSlot", "Cant_Fortify", "NonMil", "HasNoZOC", "AddToCity", 
-                "Capturable", "Expellable", "Cant_Pillage"
+uk_shield     = 5
+uk_food       = 2
+uk_gold       = 2
+flags         = "Settlers", "Infra", "NonMil", "HasNoZOC", "Cant_Fortify", "Unique", "Well-Digger", "Expellable"
+embarks       = "LandRoad"
+disembarks    = "LandRoad"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
 veteran_base_raise_chance = 0
 veteran_work_raise_chance = 0
 veteran_power_fact = 100
 veteran_move_bonus = 0
+roles         = "AttackFastStartUnit"     ;this role taken over for well-digger
 helptext      = _("\
-Population Cost: 1. Adds Population: 1.\n\n\
-Peasants are the common people of Monarchies. You can encourage them\
- by royal edict to migrate to other cities and help colonize new\
- areas. But to have such access, you must be a Constitutional Monarchy\
- with the Magna Carta wonder： Peasants can only be made in\
- the city with Magna Carta, so choose that city carefully. \n\
-If managed correctly, Peasants can increase your national population\
- growth. They give a tremendous advantage for growing new colonies\
- and settlements faster. \n\
-Peasants can only be made in one city, but you can make more than one per\ 
- turn under the right conditions. When a city completes a unit, it will try\
- to make more of them if it doesn’t have a worklist. So be careful!\
-")
-
-[unit_patriarch]
-name          = _("Patriarch")
-class         = "Land"
-tech_req      = "Theocracy"
-impr_req      = "Ecclesiastical Palace"
-gov_req       = "Theocracy"
-obsolete_by   = "None"
-graphic       = "u.patriarch_o"
-graphic_alt   = "u.emissary"
-sound_move    = "m_diplomat"
-sound_move_alt = "m_generic"
-sound_fight   = "f_diplomat"
-sound_fight_alt = "f_generic"
-build_cost    = 55
-pop_cost      = 0
-attack        = 0
-defense       = 0
-hitpoints     = 8
-firepower     = 1
-move_rate     = 4
-vision_radius_sq = 4
-transport_cap = 0
-fuel          = 0
-uk_happy      = 0
-uk_shield     = 0
-uk_food       = 0
-uk_gold       = 0
-embarks       = "LandRail", "Helicopter"    ; transport helicopter only
-disembarks    = "LandRail", "Helicopter"
-flags         = "Unique", "Diplomat", "Unbribable", "IgZOC", "NonMil", "HasNoZOC", "Expellable", "Cant_Pillage", "CanClaim", "Settlers", "NoVeteran"
-; No veteran levels (level name is never displayed)
-veteran_names = _("chosen one")
-veteran_base_raise_chance = 0
-veteran_work_raise_chance = 0
-veteran_power_fact = 125
-veteran_move_bonus = 0
-helptext      = _("\
-The Patriarch is unique—you can make only one, and only with Theocracy in a\
- city with an Ecclesiastical Palace. He can do what Diplomats can do, with extra\
- powers of persuasion. Under Theocracy, the Patriarch converts units to join your\
- side at 1/3 the cost of a normal Bribe; and incites cities to become yours at\
- one third the normal cost. \n\
-Investigating, Converting, Establishing Embassy, and Inciting can be done multiple times if\
- successful. Other actions spend the Patriarch, allowing no further use. A Patriarch may\
- claim a tile for your nation if adjacent to a tile claim made inside your own national border.\
- Foreign tile claims require the Patriarch to be accompanied by another unit. \n\
-Espionage tech allows the Patriarch to establish hostile embassies vs. Courthouse and Homeland\
- Security (but not vs. Police Station or Theocracy.) \n\ 
-"), _("\
-In diplomatic contests, the wiles, power, and influence of the Patriarch make him equal\
- to a Spy in strength.\
+This unit can fix unlucky starts, but has very high upkeep.\ 
+ If you have no water, make a Well-Digger in a city that can\
+ support it, create a water source, then disband the unit. \n\
+ This unit can dig wells to create irrigation sources. It will cost its home city\
+ -2 Food -2 Prod. This unit WILL NOT WORK：• Outside your borders,\
+ • After Alphabet or Pottery, • After any player discovers Writing,\
+ • After it reaches an age of 10 turns.\
+ >> Don’t fool around：high upkeep will permanently hinder you. Only make this unit if you\
+ lack water when the game starts!\
 ")
 
 [unit_magnum_turret]
