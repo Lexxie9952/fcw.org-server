@@ -3271,6 +3271,22 @@ reqs	=
       "Gov",      "Communism",   "Player", FALSE
     }
 
+;City Radius
+[effect_bigger_size_21_cities]
+type    = "City_Radius_Sq"       ;size 21 cities get 5x5+corners
+value = 3
+reqs	=
+    { "type",    "name", "range", "present"
+      "MinSize", "21",   "City",   TRUE
+    }
+[effect_bigger_size_30_cities]    
+type    = "City_Radius_Sq"       ;size 30 cities get 7x7-corners
+value = 2
+reqs	=
+    { "type",    "name", "range", "present"
+      "MinSize", "30",    "City",   TRUE
+    }
+
 ; No population pollution until certain techs researched
 [effect_pollu_pop_base]
 type    = "Pollu_Pop_Pct_2"
