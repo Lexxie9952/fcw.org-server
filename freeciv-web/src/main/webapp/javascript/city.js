@@ -2697,7 +2697,7 @@ function populate_worklist_production_choices(pcity)
        + "<td class='prod_choice_name'>" + production_list[a]['text'] + "</td>";       
        
        if (kind == VUT_UTYPE /*&& !small*/) {
-          production_html += "<td title='Attack/Defence/Firepower, Hitpoints' class='prod_choice_info' "
+          production_html += "<td title='Attack/Defense/Firepower, Hitpoints' class='prod_choice_info' "
           + "style='padding-right:30px; text-align:right'>" 
           + production_list[a]['unit_details'] + "</td>"
           + "<td class='prod_choice_cost'>" + get_universal_discount_price(unit_types[value],pcity) + "</td></tr>";

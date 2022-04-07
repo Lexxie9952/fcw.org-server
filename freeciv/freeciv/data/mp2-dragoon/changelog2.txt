@@ -234,7 +234,9 @@ IV. Units*
 3. Explorer changed to Scout. Available with Horseback Riding,
    moves 4 tiles (6 with Map Making, which makes it identical
    to the Explorer.) Cost reduced 2 shields to be the same 
-   as Horseme. Gains +2/9 move per veteran level.
+   as Horsemen. Gains +2/9 move per veteran level.
+   Gain same vet bonuses as are given Horsemen, by buildings
+   and wonders.
 =============================================================
 4. AAA re-balance and Mobile SAM rebalance/simplify.
    ...
@@ -671,10 +673,10 @@ fewer, but larger, cities. It helps non-rapturing govs access
 more food tiles. In addition it will help some 
 cities reach their potential by getting more ocean later.
 ==============================================================
-115.
+115. Caravan can carry 3 goods and freight.
 ==============================================================
-116.
+116. Crusaders defend at 1.5
 ==============================================================
-117.
+117. Knights simplified to D2 with D3 vs mounted.
 ==============================================================
 118.

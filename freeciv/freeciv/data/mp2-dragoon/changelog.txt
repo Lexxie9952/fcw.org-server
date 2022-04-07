@@ -119,7 +119,9 @@ richness.
 15. Explorer changed to Scout. Available with Horseback Riding,
    moves 4 tiles (6 with Map Making, which makes it identical
    to the Explorer.) Cost reduced 2 shields to be the same 
-   as Horseme. Gains +2/9 move per veteran level.
+   as Horsemen. Gains +2/9 move per veteran level.
+   Gain same vet bonuses as are given Horsemen, by buildings
+   and wonders.
 =============================================================
 16. QUAY upgrades
    a. Quay-to-Road and Road-to-Quay uses 2/3 move point. (was 1/3, 3/3)
@@ -638,11 +640,11 @@ This is experimental feature to gradually progress to managing
 fewer, but larger, cities. In addition it will help some 
 cities reach their potential by getting more ocean later.
 ==============================================================
-115.
+115.Caravan can carry 3 goods/freight
 ==============================================================
-116.
+116.Crusaders defend at 1.5
 ==============================================================
-117.
+117. Knights simplified to D2 with D3 vs mounted.
 ==============================================================
 118.
 
