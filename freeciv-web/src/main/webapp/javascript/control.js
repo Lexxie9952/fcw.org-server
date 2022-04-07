@@ -7758,8 +7758,7 @@ function update_active_units_dialog()
       var fuel_left = (aunit['fuel']-1) + aunit['movesleft']/ptype['move_rate'];
       var fuel_color = "";
       var size_adj = mobile_mode ? "font-size:100%" : "font-size:100%;";
-      if (aunit['movesleft']==0) fuel_color = "<span style='color:gainsboro;"+size_adj+"'><b>";    // no moves left, fuel indicator is dimmed down
-      else if (fuel_left>2.001) fuel_color = "<span style='color:deepskyblue;"+size_adj+"'><b>";   // more than 2 turns of fuel = blue skies ahead
+      if (fuel_left>2.001) fuel_color = "<span style='color:deepskyblue;"+size_adj+"'><b>";   // more than 2 turns of fuel = blue skies ahead
       else if (fuel_left>1.001) fuel_color = "<span style='color:darkturquoise;"+size_adj+"'><b>"; // more than 1 turn  of fuel = blue skies ahead
       else if (fuel_left>0.85) fuel_color = "<span style='color:lawngreen;"+size_adj+"'><b>";      // full turn of fuel = green
       else if (fuel_left>0.67) fuel_color = "<span style='color:greenyellow;"+size_adj+"'><b>";    // most moves = green-yellow
@@ -7769,13 +7768,12 @@ function update_active_units_dialog()
       else if (fuel_left>0.50) fuel_color = "<span style='color:orangered;"+size_adj+"'><b>";
       else  fuel_color = "<span style='color:red;"+size_adj+"'><b>";
 
-      if (aunit['movesleft']==0 && fuel_left<1.0001) { fuel_left="";} // no moves and exactly 1 or less fuel are special cases like airlift/refueling/etc where we don't need to show fuel
-      else {
-        if (mobile_mode) { // mobile version of text
-          active_uinfo += " <span>F:" + fuel_color + fuel_left.toFixed(fuel_left<1?2:1) + "</b></span></span>";
-        } else { // normal non-mobile text
-          active_uinfo += " <span title='Fuel Left'>Fuel:" + fuel_color + fuel_left.toFixed(fuel_left<1?2:1) + "</b></span></span>";
-        }
+      if (mobile_mode) { // mobile version of text
+        active_uinfo += " <span>F:" + fuel_color 
+        + fuel_left.toFixed((fuel_left>0 && fuel_left<1)?2:1) + "</b></span></span>";
+      } else { // normal non-mobile text
+        active_uinfo += " <span title='Fuel Left'>Fuel:" + fuel_color 
+        + fuel_left.toFixed((fuel_left>0 && fuel_left<1)?2:1) + "</b></span></span>";
       }
     }
     active_uinfo += "</div>";
