@@ -942,8 +942,12 @@ function show_city_dialog(pcity)
     show: { delay:200, effect:"none", duration: 0 }, hide: {delay:120, effect:"none", duration: 0}
   });
   
-  if (pcity['size'] >= 27) $("#city_canvas_top_div").width(pcity['size']*15-30); // Fix the specialist panel overlapping with the citizen amounts panel for bigger cities 
-  
+  /* Fix the citzen panel overlaps the "citizen amounts" panel for bigger cities with 5 city_radius_sq
+   * Those with larger city_radius_sq get a bigger canvas with more room */
+  if (pcity.city_radius_sq<=5 && pcity['size'] >= 27) {
+    $("#city_canvas_top_div").width(pcity['size']*15-30);  
+  }
+
   $('#disbandable_city').off();
   $('#disbandable_city').prop('checked',
                               pcity['city_options'] != null && pcity['city_options'].isSet(CITYO_DISBAND));
@@ -4636,6 +4640,7 @@ function set_citydlg_dimensions(pcity)
     case 8:
     case 9:
       citydlg_map_height += tileset_height;
+      citydlg_map_width += tileset_width;
     break;
     default:
       if (pcity.city_radius_sq > 17) {
@@ -4647,6 +4652,7 @@ function set_citydlg_dimensions(pcity)
   //console.log("%d,%d",citydlg_map_width,citydlg_map_height)
 
   $("#city_canvas_div").css({"width":citydlg_map_width, "height":citydlg_map_height});
+  $("#city_canvas_top_div").css({"width":citydlg_map_width, "height":citydlg_map_height});
   //$("#city_canvas").css({"width":citydlg_map_width, "height":citydlg_map_height});
   $("#city_canvas").attr('width', citydlg_map_width);
   $("#city_canvas").attr('height', citydlg_map_height);
