@@ -1202,7 +1202,11 @@ function handle_non_integer_combat_scores(key)
     unit_types[key].attack_strength += 0.5;
   }
   else if (unit_types[key]['name']=="Fighter") {
-    unit_types[key].defense_strength += 0.5; // easier than *= 1.666forever
+    unit_types[key].defense_strength += 0.5;
+  }
+  else if (unit_types[key]['name']=="Crusaders") {
+    if (client_rules_flag[CRF_MP2_D])
+      unit_types[key].defense_strength += 0.5;
   }
   else {
     return; // skip message
