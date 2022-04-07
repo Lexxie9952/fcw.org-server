@@ -3979,21 +3979,6 @@ static bool unit_survive_autoattack(struct unit *punit)
   if (!game.server.autoattack) {
     return TRUE;
   }
-  /* AA_PROVOKED_ONLY: only attack Provoking units with vigiling units --
-   * Lets ruleset use will_never and "Provoking" to exactly specify autoattack
-   * only for special cases like Fighters intercepting Air attackers.
-   * Allows player to tactically OPT IN to autoattack, by using vigil.
-
-  NOTE: Since non-Provoking units can be attacked by units with UTYF_RESERVED1,
-  this check is now down farther below.
-
-  if (game.server.autoattack_style == AA_PROVOKED_ONLY) {
-    if (!unit_has_type_flag(punit, UTYF_PROVOKING)) {
-      return TRUE; // Unit is not Provoking: no autoattack to be done here.
-    }
-  }
-  */
-
   autoattack = autoattack_prob_list_new_full(autoattack_prob_free);
 
   /* Kludge to prevent attack power from dropping to zero during calc */
@@ -4032,9 +4017,10 @@ static bool unit_survive_autoattack(struct unit *punit)
           }
       }
 
-      if (action_prob_possible(probability->prob)) {
-        probability->unit_id = penemy->id;
-        autoattack_prob_list_prepend(autoattack, probability);
+      if (action_prob_possible(probability->prob) 
+          && is_unit_reachable_at(punit, penemy, unit_tile(punit))) {
+          probability->unit_id = penemy->id;
+          autoattack_prob_list_prepend(autoattack, probability);
       } else {
         FC_FREE(probability);
       }
