@@ -597,6 +597,11 @@ void player_restore_units(struct player *pplayer)
           && !is_unit_being_refueled(punit)) {
         struct unit *carrier;
 
+         /* auto-refuel is not a UWT event but we can't let it change
+            the previous UWT timestamp: therefore we will reset it to
+            whatever UWT timestamp it had before the auto-return */
+         time_t original_timestamp = punit->server.action_timestamp;
+
         carrier = transporter_for_unit(punit);
         if (carrier) {
           unit_transport_load_tp_status(punit, carrier, FALSE);
@@ -640,7 +645,7 @@ void player_restore_units(struct player *pplayer)
 
               if (alive) {
                 /* Clear activity. Unit info will be sent in the end of
-	         * the function. */
+	               * the function. */
                 unit_activity_handling(punit, ACTIVITY_IDLE);
                 adv_unit_new_task(punit, AUT_NONE, NULL);
                 punit->goto_tile = NULL;
@@ -652,11 +657,14 @@ void player_restore_units(struct player *pplayer)
                   }
                 }
 
+                /* Auto-refuel is not a human-enacted move so does not incur UWT: */
+                punit->server.action_timestamp = original_timestamp;
+
                 notify_player(pplayer, unit_tile(punit),
                               E_UNIT_ORDERS, ftc_server,
                               _("[`fuel`] Your %s %s has returned to refuel."),
                               UNIT_EMOJI(punit), unit_link(punit));
-	      }
+	              }
               pf_path_destroy(path);
               break;
             }
@@ -676,7 +684,7 @@ void player_restore_units(struct player *pplayer)
       /* 6) Automatically refuel air units in cities, airbases, and
        *    transporters (carriers). */
       if (is_unit_being_refueled(punit)) {
-	punit->fuel = utype_fuel(unit_type_get(punit));
+	      punit->fuel = utype_fuel(unit_type_get(punit));
       }
     }
   } unit_list_iterate_safe_end;
