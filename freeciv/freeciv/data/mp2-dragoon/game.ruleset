@@ -612,21 +612,21 @@ actor_reqs    =
       "UnitClass","Land",             "Local", TRUE
       "UnitFlag", "FootSoldier",      "Local", TRUE
       "UnitType", "Riflemen",         "Local", FALSE   ; SAFETY: Don't allow Riflemen to become Workers with this enabler
-      "UnitType", "Musketeers",       "Local", FALSE   ; SAFETY: Musketeers become Riflemen with Labor Union
+      "UnitType", "Musketeers",       "Local", FALSE   ; SAFETY: Musketeers become Riflemen with Mechanization
       "UnitType", "Alpine Troops",    "Local", FALSE   ; SAFETY: Alpines become Ground Troops with Combined Arms
       "UnitType", "Paratroopers",     "Local", FALSE   ; SAFETY: block future convert features that Paratroopers might get
       "UnitState","OnDomesticTile",   "Local", TRUE
       "CityTile", "Center",           "Local", TRUE
       "Tech",     "Conscription",     "Player",TRUE
     }
-[actionenabler_musket_to_rifle] ;;Musketeers become Riflemen with Labor Union
+[actionenabler_musket_to_rifle] ;;Musketeers become Riflemen with Mechanization
 action = "Convert Unit"
 actor_reqs    =
     { "type",     "name",             "range", "present"
       "UnitType", "Musketeers",       "Local", TRUE 
       "UnitState","OnDomesticTile",   "Local", TRUE
       "CityTile", "Center",           "Local", TRUE
-      "Tech",     "Labor Union",      "Player",TRUE
+      "Tech",     "Mechanization",    "Player",TRUE
     }
 
 [actionenabler_sabotage_city]

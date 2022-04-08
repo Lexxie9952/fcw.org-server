@@ -18,9 +18,10 @@ format_version=20
 ;                 as part of some sentences, so try to make it descriptive
 ;                 and sensible.
 ; helptxt       = displayed in the help for advances with this flag (optional)
-;flags =
-;  { "name", "helptxt"
-;  }
+flags =
+  { "name",           "helptxt"
+    "Specialization", "A sub-technology providing specialzed sophisticated access"
+  }
 
 ; /* <-- avoid gettext warnings
 ;
@@ -88,7 +89,7 @@ format_version=20
 ; graphic_alt   = alternate icon
 ; helptext      = optional help text string (set units ruleset for examples)
 ; bonus_message = text seen when a player is the first to discover
-;                 an bonus tech. Must contain '%s' to mark place of the tech
+;                 a bonus tech. Must contain '%s' to mark place of the tech
 ;                 gained.
 ; cost          = if tech_cost_style is set to "Classic+" or "Experimental+",
 ;                 this field is read for information on how much a tech
@@ -170,8 +171,8 @@ cost = 4230
 
 [advance_avionics]
 name     = _("Avionics")
-req1     = "Computers"
-req2     = "Rocketry"
+req1     = "Rocketry"
+req2     = "None"
 flags    = ""
 graphic     = "a.avionics"
 graphic_alt = "-"
@@ -246,7 +247,7 @@ cost = 50
 
 [advance_combined_arms]
 name     = _("Combined Arms")
-req1     = "Mobile Warfare"
+req1     = "Computers"
 req2     = "Advanced Flight"
 flags    = ""
 graphic     = "a.combined_arms"
@@ -275,13 +276,13 @@ cost = 1650
 
 [advance_computers]
 name     = _("Computers")
-req1     = "Mass Production"
-req2     = "Miniaturization"
+req1     = "Mechanization"
+req2     = "Radio"
 flags    = ""
 graphic     = "a.computers"
 graphic_alt = "-"
 helptext = _("Obsoletes Temple of Artemis.")
-cost = 5650
+cost = 15650
 
 [advance_conscription]
 name     = _("Conscription")
@@ -479,20 +480,10 @@ graphic     = "a.iron_working"
 graphic_alt = "-"
 cost = 65
 
-[advance_labor_union]
-name     = _("Labor Union")
-req1     = "Mass Production"
-req2     = "Guerilla Warfare"
-flags    = ""
-graphic     = "a.labor_union"
-graphic_alt = "-"
-cost = 5430
-helptext = _("Musketeers can convert to Riflemen.")
-
 [advance_laser]
 name     = _("Laser")
 req1     = "Nuclear Power"
-req2     = "None"
+req2     = "Computers"
 flags    = ""
 graphic     = "a.laser"
 graphic_alt = "-"
@@ -577,6 +568,16 @@ flags    = ""
 graphic     = "a.mathematics"
 graphic_alt = "-"
 cost = 80
+
+[advance_mechanization]
+name     = _("Mechanization")
+req1     = "Mass Production"
+req2     = "Machine Tools"
+flags    = ""
+graphic     = "a.mechanization"
+graphic_alt = "-"
+cost = 5430
+helptext = _("Musketeers can convert to Riflemen.")
 
 [advance_medicine]
 name     = _("Medicine")
@@ -745,7 +746,7 @@ cost = 22
 
 [advance_radar]
 name     = _("Radar")
-req1     = "Electronics"
+req1     = "Mechanization"
 req2     = "Advanced Flight"
 flags    = ""
 graphic     = "a.radar"
@@ -756,7 +757,7 @@ cost = 6630
 [advance_radio]
 name     = _("Radio")
 req1     = "Flight"
-req2     = "None"
+req2     = "Miniaturization"
 flags    = ""
 graphic     = "a.radio"
 graphic_alt = "-"
@@ -817,7 +818,7 @@ cost = 7250
 [advance_rocketry]
 name     = _("Rocketry")
 req1     = "Radar"
-req2     = "Miniaturization"
+req2     = "Computers"
 flags    = ""
 graphic     = "a.rocketry"
 graphic_alt = "-"
@@ -845,8 +846,8 @@ cost = 110
 
 [advance_space_flight]
 name     = _("Space Flight")
-req1     = "Computers"
-req2     = "Rocketry"
+req1     = "Rocketry"
+req2     = "Nuclear Power"
 flags    = ""
 graphic     = "a.space_flight"
 graphic_alt = "-"
@@ -1006,6 +1007,20 @@ cost = 50
 ;flags    = ""
 ;graphic     = "a.horseback_riding"
 ;graphic_alt = "-"
+
+;This is the exemplar for how to do a specialty add-on tech, it's basically just a dead-end tech
+;usually for cheaper than its parent req, that allows "specializing into" the parent tech more, 
+;and so, the "Specialization" flag is used by FCW help it display it as a minor add-on attached
+;to the parent, whereas other clients would just show it separately.
+[advance_dive_bombers]
+name     = _("Flight.2")
+req1     = "Flight"
+req2     = "None"
+flags    = "Specialization"
+graphic     = "a.flight" ;this pic won't be shown in the tech tree but will show in other places
+graphic_alt = "-"
+cost = 750
+
 
 
 ; A placeholder tech used to ensure that when
