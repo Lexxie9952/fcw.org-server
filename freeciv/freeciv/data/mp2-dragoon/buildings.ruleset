@@ -842,7 +842,7 @@ sound_alt	= "b_generic"
 helptext	= _("\
 A Hydro Plant boosts the base production of a city by +30%. The\
  discovery of Mass Production increases this to +50%. The extra\
- output of a Hydro Plant generates no pollution.\
+ output of a Hydro Plant generates no pollution. \n\
 "), _("\
 ➤ With a Factory and Mass Production technology, this makes a\
  combined +150% production bonus. \n\
@@ -1282,8 +1282,6 @@ Space Structurals form the base of your spaceship.  All other\
 Before you can build any spaceship parts, your nation must have built the\
  Apollo Program; and a city needs a Factory.\
 ")
-
-
 
 [building_palace]
 name		= _("Palace")
