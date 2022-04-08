@@ -23,9 +23,13 @@ var techcoststyle1 = {};
 
 var bulb_output_text = "";
 
-var tech_canvas_text_font = "18px Arial";
-var tech_canvas_text_font_redux = "17px Arial"; // smaller for bold long tech names
-var tech_canvas_text_font_alt = "18px Arial";   // smaller for !bold long names
+var tech_canvas_text_font               = "17px Arial";
+var tech_canvas_text_font_redux         = "16.5px Arial";
+var tech_canvas_text_font_alt           = "16.5px Arial";
+// Specialty add-on sub-techs in little boxes:
+var tech_canvas_text_font_special       = "13px Arial";
+var tech_canvas_text_font_special_redux = "11px Arial";
+var tech_canvas_text_font_special_alt   = "13px Arial";
 
 var is_tech_tree_init = false;
 var tech_dialog_active = false;
@@ -85,7 +89,7 @@ var  A_NEVER = null;
 var tech_canvas = null;
 var tech_canvas_ctx = null;
 
-var tech_item_width = 222;
+var tech_item_width = 207;
 var tech_item_height = 52;
 var maxleft = 0;
 var clicked_tech_id = null;
@@ -191,6 +195,18 @@ function init_tech_screen()
 
   tech_canvas.width = (max_width + tech_item_width) * tech_xscale;
   tech_canvas.height = max_height + tech_item_height;
+  if ($("#technologies").height()-15>tech_canvas.height) {
+    tech_canvas.height = $("#technologies").height()-15;  // now sizes to max available vert.space.
+  }
+
+  // Vertically rescale tech tree to use available screen space.
+  const scalar = (tech_canvas.height) / (max_height + tech_item_height);
+  if (scalar>1) {
+    for (r in reqtree) {
+      var j = reqtree[r].y;
+      reqtree[r].y = Math.floor(reqtree[r].y * scalar);
+    }
+  }
 
   /* A blank space tech_result_text will not render a blank line in html, then when the text appears,
    * will cause the layout to vertically re-adjust which causes jitter-jank. Therefore, force a blank line: */ 
@@ -208,7 +224,7 @@ function init_tech_screen()
   }
 
   if (!is_small_screen()) { 
-    $("#mouse_info_box").html("<div title='Right-click:     Scrolls the screen.\nMiddle-click:    Sets the Future Goal.\nALT+Right-click: alternate mid-click' style='margin-right:-10px;margin-bottom:10px;float:right;width:26px;height:20px;'>&#x2753;</div>");
+    $("#mouse_info_box").html("<div title='Drag empty area: Scrolls the screen.\nRight-click:     Scrolls the screen.\nMiddle-click:    Sets the Future Goal.\nALT+Right-click: alternate mid-click' style='margin-right:-10px;margin-bottom:10px;float:right;width:26px;height:20px;'>&#x2753;</div>");
     $("#mouse_info_box").css('cursor', "help");
     $("#mouse_info_box").tooltip({
       show: { delay:0, effect:"none", duration: 0 }, hide: {delay:120, effect:"none", duration: 0}
@@ -216,6 +232,10 @@ function init_tech_screen()
   }
   is_tech_tree_init = true;
   clicked_tech_id = null;
+
+  //Make tech tree draggable to scroll it.
+  $("#technologies").addClass("dragscroll");
+  dragscroll.reset();
 }
 /**************************************************************************
  ...
@@ -224,8 +244,6 @@ function update_tech_tree()
 {
   if (freeze) return;
   var hy = 24;
-  var hx = 48 + 160;
-  hx = tech_item_width;
 
   tech_canvas_ctx.clearRect(0, 0, 5824, 726);
 
@@ -243,6 +261,7 @@ function update_tech_tree()
 
       var dx = Math.floor(reqtree[rid+'']['x'] * tech_xscale);  //scale in X direction.
       var dy = reqtree[rid+'']['y'];
+      var hx = get_tech_item_width(techs[ptech['req'][i]]);
 
       // Alternating line colour sequence, each tech gets a different line colour to differentiate.
       var sequence = 1+Math.round(dy/55)+Math.round(dx/45);      // Create a "seed" that bumps up as we span the canvas vertically and horizontally
@@ -256,16 +275,16 @@ function update_tech_tree()
       }
       else { // else differentiate line colours to make tracing them easier
         if (sequence == 9) tech_canvas_ctx.strokeStyle =      'rgba(144, 134, 134, 0.95)';     // grey
-        else if (sequence == 8) tech_canvas_ctx.strokeStyle = 'rgba(55, 83, 204, 0.83)';       // egyptian blue
-        else if (sequence == 7) tech_canvas_ctx.strokeStyle = 'rgba(81, 146, 187, 0.8)';       // medium teal-blue
+        else if (sequence == 8) tech_canvas_ctx.strokeStyle = 'rgba(55, 83, 204, 0.89)';       // egyptian blue
+        else if (sequence == 7) tech_canvas_ctx.strokeStyle = 'rgba(81, 146, 187, 0.88)';      // medium teal-blue
         else if (sequence == 6) tech_canvas_ctx.strokeStyle = 'rgba(121, 127, 82, 0.88)';      // olive / ochre
-        else if (sequence == 5) tech_canvas_ctx.strokeStyle = 'rgba(138, 36, 78, 0.8)';        // wine
+        else if (sequence == 5) tech_canvas_ctx.strokeStyle = 'rgba(152, 40, 85, 0.88)';       // wine
         else if (sequence == 4) tech_canvas_ctx.strokeStyle = 'rgba(161, 227, 243, 0.8)';      // bright sky
         else if (sequence == 3) tech_canvas_ctx.strokeStyle = 'rgba(60, 187, 146, 0.8)';       // bronze sea spray (strong green-cyan)
         else if (sequence == 2) tech_canvas_ctx.strokeStyle = 'rgba(124, 108, 167, 0.95)';     // periwinkle
         else if (sequence == 1) tech_canvas_ctx.strokeStyle = 'rgba(223, 223, 223, 0.8)';      // white
         else tech_canvas_ctx.strokeStyle =                    'rgba(189, 91, 79, 0.85)';       // coral / salmon
-        tech_canvas_ctx.lineWidth = 3;
+        tech_canvas_ctx.lineWidth = 2;
       }
 
       var node_offset = 3;
@@ -297,6 +316,13 @@ function update_tech_tree()
 
   for (var tech_id in techs) {
     var ptech = techs[tech_id];
+    const is_special = (ptech.flags[0] == TECH_SPECIAL_TECH); // specialty add-on tech
+    var twidth  = get_tech_item_width(ptech);
+    var theight = get_tech_item_height(ptech);
+    var tfont = get_tech_item_font(ptech);
+    const thoriz = !is_special ? 51 : 1;
+    const tvert = !is_special ? 15 : 11;
+  
     if (!(tech_id+'' in reqtree) || reqtree[tech_id+''] == null) continue;
 
     var x = Math.floor(reqtree[tech_id+'']['x'] * tech_xscale)+2;  //scale in X direction.
@@ -304,18 +330,18 @@ function update_tech_tree()
 
     /* KNOWN TECHNOLOGY */
     if (player_invention_state(client.conn.playing, ptech['id']) == TECH_KNOWN) {
-
-      var tag = tileset_tech_graphic_tag(ptech);
       tech_canvas_ctx.fillStyle = KNOWN_TECH_FILL;
-      tech_canvas_ctx.fillRect(x-2, y-2, tech_item_width, tech_item_height);
+      tech_canvas_ctx.fillRect(x-2, y-2, twidth, theight);
       tech_canvas_ctx.strokeStyle = KNOWN_TECH_FRAME;
-      tech_canvas_ctx.strokeRect(x-2, y-2, tech_item_width, tech_item_height);
-      mapview_put_tile(tech_canvas_ctx, tag, x+1, y)
+      tech_canvas_ctx.strokeRect(x-2, y-2, twidth, theight);
+      if (!is_special) {
+        var tag = tileset_tech_graphic_tag(ptech);
+        mapview_put_tile(tech_canvas_ctx, tag, x+1, y)
+      }
       // tech names >17 overflow their boxes on mobile, so use redux font for those
-      if (ptech['name'].length>17) tech_canvas_ctx.font = tech_canvas_text_font_alt;
-      else tech_canvas_ctx.font = tech_canvas_text_font;
+      tech_canvas_ctx.font = tfont;
       tech_canvas_ctx.fillStyle = "rgba(0, 0, 0, 1)";
-      tech_canvas_ctx.fillText(ptech['name'], x + 50, y + 15);
+      tech_canvas_ctx.fillText(ptech['name'], x + thoriz, y + tvert);
 
       if (x > maxleft) maxleft = x;
 
@@ -327,13 +353,13 @@ function update_tech_tree()
         tech_canvas_ctx.lineWidth=6;
         tech_canvas_ctx.strokeStyle = CUR_TECH_FRAME;
       } else if (client.conn.playing['tech_goal'] == ptech['id']) {
-        tech_canvas_ctx.lineWidth=6;
+        tech_canvas_ctx.lineWidth=5;
         bgcolor = POSSIBLE_AND_FUTURE_FILL; // show as future goal but differentiate to also show tech is possible now
         tech_canvas_ctx.strokeStyle = FUTURE_TECH_FRAME;
         tech_canvas_ctx.fillStyle = 'rgb(0, 0, 0)';
       }
       var bp = player_has_blueprints(client.conn.playing, ptech['id']);
-      var tag = tileset_tech_graphic_tag(ptech);
+      if (!is_special) var tag = tileset_tech_graphic_tag(ptech);
       if (bp) {
         tag = "a.blueprints";
         if (client.conn.playing['researching'] != ptech['id']) { // No bright blue box for current research
@@ -341,61 +367,59 @@ function update_tech_tree()
         }
       }
       tech_canvas_ctx.fillStyle = bgcolor;
-      tech_canvas_ctx.fillRect(x-2, y-2, tech_item_width, tech_item_height);
-      if (tech_canvas_ctx.lineWidth<6) { // don't override current research frame colour
+      tech_canvas_ctx.fillRect(x-2, y-2, twidth, theight);
+      if (tech_canvas_ctx.lineWidth<5) { // don't override current research frame colour
         tech_canvas_ctx.lineWidth=2;
         tech_canvas_ctx.strokeStyle = bp ? BLUEPRINT_TECH_FRAME : POSSIBLE_TECH_FRAME;
       }
-      tech_canvas_ctx.strokeRect(x-2, y-2, tech_item_width, tech_item_height);
+      tech_canvas_ctx.strokeRect(x-2, y-2, twidth, theight);
       tech_canvas_ctx.lineWidth=1;
-      mapview_put_tile(tech_canvas_ctx, tag, x+1, y)
-
+      if (!is_special) {
+        mapview_put_tile(tech_canvas_ctx, tag, x+1, y)
+      }
       if (client.conn.playing['researching'] == ptech['id']) {
         tech_canvas_ctx.fillStyle = 'rgb(0, 0, 0)';
         // tech names >17 overflow their boxes when bold, so use redux font for those
-        if (ptech['name'].length>17) tech_canvas_ctx.font = "Bold "+tech_canvas_text_font_redux;
-        else tech_canvas_ctx.font = "Bold " + tech_canvas_text_font;
+        tech_canvas_ctx.font = "Bold " + tfont;
       } else {
         // tech names >17 overflow their boxes on mobile, so use redux font for those
-        if (ptech['name'].length>17) tech_canvas_ctx.font = tech_canvas_text_font_alt;
-        else tech_canvas_ctx.font = tech_canvas_text_font;
+        tech_canvas_ctx.font = tfont;
         tech_canvas_ctx.fillStyle = 'rgb(255, 255, 255)';
       }
-      tech_canvas_ctx.fillText(ptech['name'], x + 51, y + 16);
+      tech_canvas_ctx.fillText(ptech['name'], x + thoriz, y + tvert);
 
     /* UNKNOWN TECHNOLOGY. */
     } else if (player_invention_state(client.conn.playing, ptech['id']) == TECH_UNKNOWN) {
       var bgcolor = (client.conn.playing != null && is_tech_req_for_goal(ptech['id'], client.conn.playing['tech_goal'])) ? "rgb(133, 167, 212)" : "rgb(61, 95, 130)";
       if (client.conn.playing['tech_goal'] == ptech['id']) {
-        tech_canvas_ctx.lineWidth=6;
+        tech_canvas_ctx.lineWidth=5;
         tech_canvas_ctx.strokeStyle = FUTURE_TECH_FRAME;
       }
 
-      var tag = tileset_tech_graphic_tag(ptech);
+      if (!is_special) var tag = tileset_tech_graphic_tag(ptech);
       if (player_has_blueprints(client.conn.playing, ptech['id'])) {
         bgcolor = BLUEPRINT_TECH_FILL;
         tag = "a.blueprints";
       }
       tech_canvas_ctx.fillStyle =  bgcolor;
-      tech_canvas_ctx.fillRect(x-2, y-2, tech_item_width, tech_item_height);
-      if (tech_canvas_ctx.lineWidth<6) // don't override current research frame colour
+      tech_canvas_ctx.fillRect(x-2, y-2, twidth, theight);
+      if (tech_canvas_ctx.lineWidth<5) // don't override current research frame colour
         tech_canvas_ctx.strokeStyle = UNKNOWN_TECH_FRAME;
-      tech_canvas_ctx.strokeRect(x-2, y-2, tech_item_width, tech_item_height);
+      tech_canvas_ctx.strokeRect(x-2, y-2, twidth, theight);
       tech_canvas_ctx.lineWidth=1;
-      mapview_put_tile(tech_canvas_ctx, tag, x+1, y)
-
+      if (!is_special) {
+        mapview_put_tile(tech_canvas_ctx, tag, x+1, y)
+      }
       if (client.conn.playing['tech_goal'] == ptech['id']) {
         tech_canvas_ctx.fillStyle = 'rgb(0, 0, 0)';
         // tech names >17 overflow their boxes when bold, so use redux font for those
-        if (ptech['name'].length>17) tech_canvas_ctx.font = "Bold "+tech_canvas_text_font_redux;
-        else tech_canvas_ctx.font = "Bold " + tech_canvas_text_font;
+        tech_canvas_ctx.font = "Bold " + tfont;
       } else {
         tech_canvas_ctx.fillStyle = 'rgb(255, 255, 255)';
         // tech names >17 overflow their boxes on mobile, so use redux font for those
-        if (ptech['name'].length>17) tech_canvas_ctx.font = tech_canvas_text_font_alt;
-        else tech_canvas_ctx.font = tech_canvas_text_font;
+        tech_canvas_ctx.font = tfont;
       }
-      tech_canvas_ctx.fillText(ptech['name'], x + 51, y + 16);
+      tech_canvas_ctx.fillText(ptech['name'], x + thoriz, y + tvert);
     }
 
     var tech_things = 0;
@@ -414,7 +438,7 @@ function update_tech_tree()
       
       var sprite = sprites[tileset_unit_type_graphic_tag(ptype)];
       if (sprite != null) {
-        tech_canvas_ctx.drawImage(sprite, x + 50 + ((tech_things++) * 30), y + 23, 28, 24);
+        tech_canvas_ctx.drawImage(sprite, x + thoriz + ((tech_things++) * 30), y + tvert+7, 28, 24);
       }
     }
 
@@ -436,10 +460,59 @@ function update_tech_tree()
 
       var sprite = sprites[tileset_building_graphic_tag(pimpr)];
       if (sprite != null) {
-        tech_canvas_ctx.drawImage(sprite, x + 50 + ((tech_things++) * 30), y + 23, 28, 24);
+        tech_canvas_ctx.drawImage(sprite, x + thoriz + ((tech_things++) * 30), y + tvert+7, 28, 24);
       }
     }
   }
+}
+
+/**************************************************************************
+ Get dynamic heights, widths, font, for tech boxes.
+**************************************************************************/
+function get_tech_item_width(ptech) {
+
+  if (!ptech.boxwidth) {
+    const is_special = (ptech.flags[0] == TECH_SPECIAL_TECH); // "child" techs
+    var twidth  = !is_special ? tech_item_width : tech_item_width/2; 
+    /* If we don't know how many things this tech enables, set it */
+    if (!techs[ptech.id].things) {
+      techs[ptech.id].things = get_improvements_from_tech(ptech.id).length;
+      techs[ptech.id].things += get_utypes_from_tech(ptech.id).length;
+    }  
+    /* Minimize box size to needed for text and enabled prod items. */ 
+    if (!is_special) {
+      var tw1 = twidth - 7 * (18-ptech.name.length);      // 7px = width char
+      var tw2 = twidth - 28 * (5-techs[ptech.id].things); // 28px = size of an image
+      if (is_small_screen()) {
+        tw1 = twidth - 7 * (15-ptech.name.length);      // 7px = width char
+        tw1 = tw1 < tw2 ? tw2 : tw1 // set tw1 as the greater of the two
+        twidth = twidth < tw1 ? tw1: twidth; // pick greater of twidth or tw1
+      } else {
+        var twidth = tw1 < tw2 ? tw2 : tw1; // pick the greater of the 2
+      }
+    } else { // special child tech:
+      var tw1 = twidth - 5 * (19-ptech.name.length);      // 5px = width char
+      var tw2 = twidth - 28 * (3-techs[ptech.id].things); // 28px = size of an image
+      var twidth = tw1 < tw2 ? tw2 : tw1;                 // pick the greater of the 2
+    }
+    techs[ptech.id].boxwidth = twidth;
+  }
+
+  return techs[ptech.id].boxwidth;
+}
+function get_tech_item_height(ptech) {
+  const is_special = (ptech.flags[0] == TECH_SPECIAL_TECH);              // special add-on specialty sub-techs are smaller
+  var theight = !is_special ? tech_item_height : tech_item_height * .80; // height of tech box
+  return theight;
+}
+function get_tech_item_font(ptech) {
+  const is_special = (ptech.flags[0] == TECH_SPECIAL_TECH);              // special add-on specialty sub-techs are smaller
+  tfont = !is_special ? tech_canvas_text_font : tech_canvas_text_font_special;// font size of tech box (special add_on techs are smaller)
+    if (ptech['name'].length>17) {                                                  // possible redux for long tech names
+      if (!is_special) tfont = tech_canvas_text_font_redux;
+      else tfont = tech_canvas_text_font_special_redux;
+    }
+  return tfont;
 }
 
 /**************************************************************************
@@ -705,13 +778,14 @@ function tech_mapview_mouse_click(e)
 
       var x = Math.floor(reqtree[tech_id+'']['x'] * tech_xscale)+2;  //scale in X direction.
       var y = reqtree[tech_id+'']['y']+2;
+      var twidth = get_tech_item_width(ptech);
 
       if (is_small_screen()) {
         x = x * 0.6;
         y = y * 0.6;
       }
 
-      if (tech_mouse_x > x && tech_mouse_x < x + tech_item_width
+      if (tech_mouse_x > x && tech_mouse_x < x + twidth
           && tech_mouse_y > y && tech_mouse_y < y + tech_item_height) {
         if (mouse_button == 2 || (mouse_button == 3 && e.altKey)) send_player_tech_goal(ptech['id']);        
         else if (player_invention_state(client.conn.playing, ptech['id']) == TECH_PREREQS_KNOWN) {
@@ -1048,7 +1122,7 @@ function update_tech_dialog_cursor()
       }
 
       // We caught the cursor hovering inside a tech!
-      if (tech_mouse_x > x && tech_mouse_x < x + tech_item_width
+      if (tech_mouse_x > x && tech_mouse_x < x + get_tech_item_width(ptech)
           && tech_mouse_y > y && tech_mouse_y < y + tech_item_height) {
         if (player_invention_state(client.conn.playing, ptech['id']) == TECH_PREREQS_KNOWN) {
           tech_canvas.style.cursor = "pointer";
