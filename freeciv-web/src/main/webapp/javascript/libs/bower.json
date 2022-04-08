@@ -1,0 +1,36 @@
+{
+  "name": "dragscroll",
+  "version": "0.0.8",
+  "homepage": "https://github.com/asvd/dragscroll",
+  "authors": [
+    "Dmitry Prokashev <heliosframework@gmail.com>"
+  ],
+  "description": "Tiny library for drag-n-drop scrolling style",
+  "main": "dragscroll.js",
+  "moduleType": [
+    "amd",
+    "globals"
+  ],
+  "keywords": [
+    "dragscroll",
+    "scroll",
+    "scrolling",
+    "mouse",
+    "hold",
+    "click-and-hold",
+    "drag-and-drop",
+    "drag-n-drop",
+    "click-n-hold",
+    "click-and-hold",
+    "drag",
+    "viewport"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
