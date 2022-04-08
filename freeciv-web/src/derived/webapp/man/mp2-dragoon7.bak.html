@@ -2037,12 +2037,14 @@ Veteran Levels for Cavalry are the standard ruleset default:
 <pre class='upkeep'>Upkeep: 1 Shield, 1 Unhappy</pre>
 <pre class='moves'>Moves: 6</pre>
 <pre class='vision'>Vision: 2.00 tiles</pre>
-<pre class='attack'>Attack: 10</pre>
+<pre class='attack'>Attack: 11</pre>
 <pre class='defense'>Defense: 5</pre>
 <pre class='firepower'>Firepower: 1</pre>
 <pre class='hitpoints'>Hitpoints: 30</pre>
 <pre class='obsolete'>Obsolete by: Armor II</pre>
-<pre class='helptext'><b class='unit_desc'>Armor is the mechanized equivalent of a Cavalry unit. They have high attack strength, superb mobility, and the highest defense of any offensive unit. They are massive all-terrain vehicles, well-suited for penetrating defensive fortifications: Units inside Forts get no defense bonus against Armor. Units inside Fortresses get a reduced bonus of 1.67× instead of 2×.</b>
+<pre class='helptext'><b class='unit_desc'>Armor is the mechanized equivalent of a Cavalry unit. They have high attack strength, superb mobility, and the highest defense of any offensive unit. They are massive all-terrain vehicles, well-suited for penetrating defensive fortifications: Units inside Forts get no defense bonus against Armor. Units inside Fortresses get a reduced bonus of 1.67× instead of 2×.
+
+Stack-Escape：40% odds to evade stack-death if attacker doesn’t have more moves than it does.</b>
 <hr style='border-top: 1px solid #000'>➤ Belongs to Land unit class.
   • Can occupy empty enemy cities.
   • Subject to zones of control.
@@ -2102,7 +2104,9 @@ Veteran Levels for Armor are the standard ruleset default:
 <pre class='firepower'>Firepower: 1</pre>
 <pre class='hitpoints'>Hitpoints: 30</pre>
 <pre class='obsolete'>Obsolete by: None</pre>
-<pre class='helptext'><b class='unit_desc'>Armor II is the ultra-modern upgrade to Armor. It features high tech composite armor and electronic countermeasures (ECM). Forts and Fortresses gain no bonus against its ability to blast and break through fortifications. ECM and composite armor give a 50% defense bonus against Missiles. Unlike most land units, Armor II can attack reachable units regardless of whether unreachable units protect the tile.</b>
+<pre class='helptext'><b class='unit_desc'>Armor II is the ultra-modern upgrade to Armor. It features high tech composite armor and electronic countermeasures (ECM). Forts and Fortresses gain no bonus against its ability to blast and break through fortifications. ECM and composite armor give a 50% defense bonus against Missiles. Unlike most land units, Armor II can attack reachable units regardless of whether unreachable units protect the tile.
+
+Stack-Escape：40% odds to evade stack-death if attacker doesn’t have more moves than it does.</b>
 <hr style='border-top: 1px solid #000'>➤ Belongs to Land unit class.
   • Can occupy empty enemy cities.
   • Subject to zones of control.
@@ -2774,7 +2778,7 @@ Veteran Levels for Zeppelins:
 <pre class='obsolete'>Obsolete by: None</pre>
 <pre class='helptext'><b class='unit_desc'>Airplanes can carry a diplomatic unit or a Freight unit. They can land in any domestic or allied city. For missions to non-allied nations, an empty Airbase must be available for landing. Airplanes have two turns of fuel. Each new aviation tech upgrades range by +2 moves per turn.</b>
 <b class='unit_desc'>
-Stack-Escape：60% odds to evade stack-death if it has more moves left than attacker. NOTE：GOTO disallows unit loss from lack of fuel. You can override this by ordering moves to adjacent tiles.</b>
+Stack-Escape：60% odds to evade stack-death if attacker doesn’t have more moves than it does. NOTE：GOTO disallows unit loss from lack of fuel. You can override this by ordering moves to adjacent tiles.</b>
 <hr style='border-top: 1px solid #000'>➤ Belongs to Air unit class.
   • Speed is not affected by terrain.
   • Does not get defense bonuses from terrain.
@@ -2783,7 +2787,7 @@ Stack-Escape：60% odds to evade stack-death if it has more moves left than atta
   ◦ Doesn't prevent enemy units from attacking other units on its tile.
   • <b style="color:#9aa">Doesn't prevent enemy cities from working the tile it's on.</b>
   • <b style="color:#9aa">AIRLIFT</b>: Can be airlifted if it has remaining moves.
-➤ <b style="color:#9aa">STACK ESCAPE</b>: 60% odds to escape if stack defender loses, if it has more moves left than attacker.
+➤ <b style="color:#9aa">STACK ESCAPE</b>: 60% odds to escape if stack defender loses, if attacker doesn’t have more moves than it does.
 ➤ Never imposes a zone of control.
 ➤ <b style="color:#9aa">INTERCEPTED</b> by Fighter types on Vigil: they auto-attack if they have better odds attacking than defending.
 ➤ Can carry 1 Emissary, Diplomat, or Spy.
@@ -2813,7 +2817,7 @@ Stack-Escape：60% odds to evade stack-death if it has more moves left than atta
 </b><b class='unit_desc'>
 INTERCEPTOR: the Vigil order lets Fighters auto-attack adjacent Air units if they have better attack odds. A Fighter can Vigil if it uses 2 move points or less.
 </b><b class='unit_desc'>
-Stack-Escape：60% odds to evade stack-death if it has more moves left than attacker. NOTE：GOTO disallows unit loss from lack of fuel. You can override this by ordering moves to adjacent tiles.</b>
+Stack-Escape：60% odds to evade stack-death if attacker doesn’t have more moves than it does. NOTE：GOTO disallows unit loss from lack of fuel. You can override this by ordering moves to adjacent tiles.</b>
 <hr style='border-top: 1px solid #000'>➤ Belongs to AirProtect unit class.
   • <b style="color:#9aa">INTERCEPTOR</b>: can be given the Vigil order to auto-attack adjacent Air units.
   • <b style="color:#9aa">AIR COVER</b>: Most units who cannot attack this unit also cannot attack other units on the tile.
@@ -2823,7 +2827,7 @@ Stack-Escape：60% odds to evade stack-death if it has more moves left than atta
   • <b style="color:#9aa">Unreachable</b>. Most units cannot attack this one.
   • <b style="color:#9aa">Doesn't prevent enemy cities from working the tile it's on.</b>
   • <b style="color:#9aa">AIRLIFT</b>: Can be airlifted if it has remaining moves.
-➤ <b style="color:#9aa">STACK ESCAPE</b>: 60% odds to escape if stack defender loses, if it has more moves left than attacker.
+➤ <b style="color:#9aa">STACK ESCAPE</b>: 60% odds to escape if stack defender loses, if attacker doesn’t have more moves than it does.
 ➤ Anti-Air units have bonuses against this unit.
 ➤ Never imposes a zone of control.
 ➤ <b style="color:#9aa">INTERCEPTED</b> by Fighter types on Vigil: they auto-attack if they have better odds attacking than defending.
@@ -2873,7 +2877,7 @@ Fighters types on Vigil will (usually) engage the following units:
 <pre class='helptext'><b class='unit_desc'>Escort Fighters are large fighters with high fuel capacity. Higher mass and stronger construction allow them to absorb more damage. They do not attack as well as standard Fighters, but can return home on the next turn. They are good for long-range missions, defensive air support, and escorting bombers.</b>
 <b class='unit_desc'>
 INTERCEPTOR: the Vigil order lets Escort Fighters auto-attack adjacent Air units if they have better attack odds. This unit can Vigil if it uses 3 move points or less.</b><b class='unit_desc'>
-Stack-Escape：60% odds to evade stack-death if it has more moves left than attacker. NOTE：GOTO disallows unit loss from lack of fuel. You can override this by ordering moves to adjacent tiles.</b>
+Stack-Escape：60% odds to evade stack-death if attacker doesn’t have more moves than it does. NOTE：GOTO disallows unit loss from lack of fuel. You can override this by ordering moves to adjacent tiles.</b>
 <hr style='border-top: 1px solid #000'>➤ Belongs to AirProtect unit class.
   • <b style="color:#9aa">INTERCEPTOR</b>: can be given the Vigil order to auto-attack adjacent Air units.
   • <b style="color:#9aa">AIR COVER</b>: Most units who cannot attack this unit also cannot attack other units on the tile.
@@ -2883,7 +2887,7 @@ Stack-Escape：60% odds to evade stack-death if it has more moves left than atta
   • <b style="color:#9aa">Unreachable</b>. Most units cannot attack this one.
   • <b style="color:#9aa">Doesn't prevent enemy cities from working the tile it's on.</b>
   • <b style="color:#9aa">AIRLIFT</b>: Can be airlifted if it has remaining moves.
-➤ <b style="color:#9aa">STACK ESCAPE</b>: 60% odds to escape if stack defender loses, if it has more moves left than attacker.
+➤ <b style="color:#9aa">STACK ESCAPE</b>: 60% odds to escape if stack defender loses, if attacker doesn’t have more moves than it does.
 ➤ Anti-Air units have bonuses against this unit.
 ➤ Never imposes a zone of control.
 ➤ <b style="color:#9aa">Reconnaissance:</b> reports visible enemy movement even if not sentried.
@@ -2943,7 +2947,7 @@ LOSSES:
 • Can't block its tile
 • Can't intercept</b>
 <b class='unit_desc'>
-Communists pay 10 less for this unit. Stack-Escape：60% odds to evade stack-death if it has more moves left than attacker. GOTO prevents unit loss from lack of fuel. Override this by ordering adjacent moves.</b>
+Communists pay 10 less for this unit. Stack-Escape：60% odds to evade stack-death if attacker doesn’t have more moves than it does. GOTO prevents unit loss from lack of fuel. Override this by ordering adjacent moves.</b>
 <hr style='border-top: 1px solid #000'>➤ Belongs to Air unit class.
   • Speed is not affected by terrain.
   • Does not get defense bonuses from terrain.
@@ -2960,7 +2964,7 @@ Communists pay 10 less for this unit. Stack-Escape：60% odds to evade stack-dea
   • Applies to all Land units
   • Applies to all Sea units (except Submarines are unreachable.)
 ➤ <b style="color:#9aa">+33% defense bonus</b> if attacked by Anti-Aircraft Artillery, Mobile SAM, or AEGIS Cruiser.
-➤ <b style="color:#9aa">STACK ESCAPE</b>: 60% odds to escape if stack defender loses, if it has more moves left than attacker.
+➤ <b style="color:#9aa">STACK ESCAPE</b>: 60% odds to escape if stack defender loses, if attacker doesn’t have more moves than it does.
 ➤ Anti-Air units have bonuses against this unit.
 ➤ May impose a zone of control on its adjacent tiles.
 ➤ <b style="color:#9aa">INTERCEPTED</b> by Fighter types on Vigil: they auto-attack if they have better odds attacking than defending.
@@ -3005,7 +3009,7 @@ Veteran Levels for Dive Bombers are the default for offensive Air units:
 Republic:0   Democracy:1    (non-aggressive)
 Republic:1   Democracy:2    (aggressive)</b>
 <b class='unit_desc'>
-Stack-Escape：60% odds to evade stack-death if it has more moves left than attacker. NOTE：GOTO disallows unit loss from lack of fuel. You can override this by ordering moves to adjacent tiles.</b>
+Stack-Escape：60% odds to evade stack-death if attacker doesn’t have more moves than it does. NOTE：GOTO disallows unit loss from lack of fuel. You can override this by ordering moves to adjacent tiles.</b>
 <hr style='border-top: 1px solid #000'>➤ Belongs to Air unit class.
   • Speed is not affected by terrain.
   • Does not get defense bonuses from terrain.
@@ -3014,7 +3018,7 @@ Stack-Escape：60% odds to evade stack-death if it has more moves left than atta
   ◦ Doesn't prevent enemy units from attacking other units on its tile.
   • <b style="color:#9aa">Doesn't prevent enemy cities from working the tile it's on.</b>
   • <b style="color:#9aa">AIRLIFT</b>: Can be airlifted if it has remaining moves.
-➤ <b style="color:#9aa">STACK ESCAPE</b>: 60% odds to escape if stack defender loses, if it has more moves left than attacker.
+➤ <b style="color:#9aa">STACK ESCAPE</b>: 60% odds to escape if stack defender loses, if attacker doesn’t have more moves than it does.
 ➤ Anti-Air units have bonuses against this unit.
 ➤ Unable to attack air units.
 ➤ Never imposes a zone of control.
@@ -3057,7 +3061,7 @@ Veteran Levels for Medium Bombers are the default for offensive Air units:
 ➤ Unhappy effect for Field units:
 Republic:1   Democracy:2</b>
 <b class='unit_desc'>
-Stack-Escape：60% odds to evade stack-death if it has more moves left than attacker. NOTE：GOTO disallows unit loss from lack of fuel. You can override this by ordering moves to adjacent tiles.</b>
+Stack-Escape：60% odds to evade stack-death if attacker doesn’t have more moves than it does. NOTE：GOTO disallows unit loss from lack of fuel. You can override this by ordering moves to adjacent tiles.</b>
 <hr style='border-top: 1px solid #000'>➤ Belongs to Air unit class.
   • Speed is not affected by terrain.
   • Does not get defense bonuses from terrain.
@@ -3066,7 +3070,7 @@ Stack-Escape：60% odds to evade stack-death if it has more moves left than atta
   ◦ Doesn't prevent enemy units from attacking other units on its tile.
   • <b style="color:#9aa">Doesn't prevent enemy cities from working the tile it's on.</b>
   • <b style="color:#9aa">AIRLIFT</b>: Can be airlifted if it has remaining moves.
-➤ <b style="color:#9aa">STACK ESCAPE</b>: 60% odds to escape if stack defender loses, if it has more moves left than attacker.
+➤ <b style="color:#9aa">STACK ESCAPE</b>: 60% odds to escape if stack defender loses, if attacker doesn’t have more moves than it does.
 ➤ Anti-Air units have bonuses against this unit.
 ➤ Unable to attack air units.
 ➤ Can carry and refuel 1 Bomb unit.
@@ -3110,7 +3114,7 @@ Veteran Levels for Heavy Bombers are the default for offensive Air units:
 <pre class='obsolete'>Obsolete by: Jet Bomber</pre>
 <pre class='helptext'><b class='unit_desc'>The Strategic Bomber offers a small improvement in attack. Higher altitude offers a good upgrade in defense. It has considerably longer range, with one more turn of fuel. Upgraded payload enables instant-Pillage bombing. May carry two Bombs. May carry two Bombs.</b>
 <b class='unit_desc'>
-Stack-Escape：60% odds to evade stack-death if it has more moves left than attacker. NOTE：GOTO disallows unit loss from lack of fuel. You can override this by ordering moves to adjacent tiles.</b>
+Stack-Escape：60% odds to evade stack-death if attacker doesn’t have more moves than it does. NOTE：GOTO disallows unit loss from lack of fuel. You can override this by ordering moves to adjacent tiles.</b>
 <hr style='border-top: 1px solid #000'>➤ Belongs to Air unit class.
   • Speed is not affected by terrain.
   • Does not get defense bonuses from terrain.
@@ -3123,7 +3127,7 @@ Stack-Escape：60% odds to evade stack-death if it has more moves left than atta
   • <b>60%</b> odds of success. <b>+5%</b> for each veteran level.
   • Destroys <b>1 random</b> infrastructural improvement on the tile, instantly.
   • Uses <b>3</b> movement points. May result in Strategic Bomber being unable to re-fuel.
-➤ <b style="color:#9aa">STACK ESCAPE</b>: 60% odds to escape if stack defender loses, if it has more moves left than attacker.
+➤ <b style="color:#9aa">STACK ESCAPE</b>: 60% odds to escape if stack defender loses, if attacker doesn’t have more moves than it does.
 ➤ Anti-Air units have bonuses against this unit.
 ➤ Unable to attack air units.
 ➤ Can carry and refuel up to 2 Bomb units.
@@ -3167,7 +3171,7 @@ Veteran Levels for Strategic Bombers are the default for offensive Air units:
 <pre class='obsolete'>Obsolete by: Spy Plane</pre>
 <pre class='helptext'><b class='unit_desc'>The AWACS has great fuel capacity for long range flights, and advanced radar that can determine the location of enemy units over a wide area. The AWACS has 2 turns of fuel.</b>
 <b class='unit_desc'>
-Stack-Escape：60% odds to evade stack-death if it has more moves left than attacker. NOTE：GOTO disallows unit loss from lack of fuel. You can override this by ordering moves to adjacent tiles.</b>
+Stack-Escape：60% odds to evade stack-death if attacker doesn’t have more moves than it does. NOTE：GOTO disallows unit loss from lack of fuel. You can override this by ordering moves to adjacent tiles.</b>
 <hr style='border-top: 1px solid #000'>➤ Belongs to Air unit class.
   • Speed is not affected by terrain.
   • Does not get defense bonuses from terrain.
@@ -3176,7 +3180,7 @@ Stack-Escape：60% odds to evade stack-death if it has more moves left than atta
   ◦ Doesn't prevent enemy units from attacking other units on its tile.
   • <b style="color:#9aa">Doesn't prevent enemy cities from working the tile it's on.</b>
   • <b style="color:#9aa">AIRLIFT</b>: Can be airlifted if it has remaining moves.
-➤ <b style="color:#9aa">STACK ESCAPE</b>: 60% odds to escape if stack defender loses, if it has more moves left than attacker.
+➤ <b style="color:#9aa">STACK ESCAPE</b>: 60% odds to escape if stack defender loses, if attacker doesn’t have more moves than it does.
 ➤ Never imposes a zone of control.
 ➤ <b style="color:#9aa">Reconnaissance:</b> reports visible enemy movement even if not sentried.
 ➤ <b style="color:#9aa">INTERCEPTED</b> by Fighter types on Vigil: they auto-attack if they have better odds attacking than defending.
@@ -3202,7 +3206,7 @@ Stack-Escape：60% odds to evade stack-death if it has more moves left than atta
 <pre class='obsolete'>Obsolete by: None</pre>
 <pre class='helptext'><b class='unit_desc'>The Spy Plane is an ultrasonic high altitude aircraft with long range. It gathers intel over a wide area. Stealth technology makes it invisible, except to enemies on adjacent tiles. Spy Planes have 2 turns of fuel. They are unreachable to primitive propeller based aircraft.</b>
 <b class='unit_desc'>
-Stack-Escape：67% odds to evade stack-death if it has more moves left than attacker.<br>
+Stack-Escape：67% odds to evade stack-death if attacker doesn’t have more moves than it does.<br>
 NOTE: GOTO disallows unit loss from lack of fuel. You can override this by ordering moves to adjacent tiles.</b>
 <hr style='border-top: 1px solid #000'>➤ Belongs to Air_High_Altitude unit class.
   • <b style="color:#9aa">Invisible</b> except when next to an enemy unit or city.
@@ -3213,7 +3217,7 @@ NOTE: GOTO disallows unit loss from lack of fuel. You can override this by order
   ◦ Doesn't prevent enemy units from attacking other units on its tile.
   • <b style="color:#9aa">Doesn't prevent enemy cities from working the tile it's on.</b>
   • <b style="color:#9aa">AIRLIFT</b>: Can be airlifted if it has remaining moves.
-➤ <b style="color:#9aa">STACK ESCAPE</b>: 60% odds to escape if stack defender loses, if it has more moves left than attacker.
+➤ <b style="color:#9aa">STACK ESCAPE</b>: 60% odds to escape if stack defender loses, if attacker doesn’t have more moves than it does.
 ➤ Is invisible except when next to an enemy unit or city.
 ➤ Never imposes a zone of control.
 ➤ <b style="color:#9aa">Reconnaissance:</b> reports visible enemy movement even if not sentried.
@@ -3239,7 +3243,7 @@ NOTE: GOTO disallows unit loss from lack of fuel. You can override this by order
 <pre class='obsolete'>Obsolete by: None</pre>
 <pre class='helptext'><b class='unit_desc'>Satellites orbit the Earth above the atmosphere. They are unreachable to anything but missiles. Their orbital velocity allows them to circumnavigate the planet in a couple turns. Telescopic cameras allow them to Investigate City, even if the city has a Police Station. Satellites cannot be seen by others unless adjacent. Satellites require Laser tech, and can only be built in the city with the Apollo Program.</b>
 <b class='unit_desc'>
-Stack-Escape：100% odds to evade stack-death if it has more moves left than attacker.
+Stack-Escape：100% odds to evade stack-death if attacker doesn’t have more moves than it does.
 NOTE:  Due to game mechanics, Satellites block terrestrial movement over a tile. This is solved by killing it with any Missile. To avoid this, end your turn far away from developed or trafficked areas.</b>
 <hr style='border-top: 1px solid #000'>➤ Belongs to Space unit class.
   • Speed is not affected by terrain.
@@ -3248,7 +3252,7 @@ NOTE:  Due to game mechanics, Satellites block terrestrial movement over a tile.
   • <b style="color:#9aa">Unreachable</b>. Only missile types can attack this unit.
   ◦ Doesn't prevent enemy units from attacking other units on its tile.
   • <b style="color:#9aa">Doesn't prevent enemy cities from working the tile it's on.</b>
-➤ <b style="color:#9aa">STACK ESCAPE</b>: 100% odds to escape if stack defender loses, if it has more moves left than attacker.
+➤ <b style="color:#9aa">STACK ESCAPE</b>: 100% odds to escape if stack defender loses, if attacker doesn’t have more moves than it does.
 ➤ Is invisible except when next to an enemy unit or city.
 ➤ Never imposes a zone of control.
 ➤ <b style="color:#9aa">Reconnaissance:</b> reports visible enemy movement even if not sentried.
@@ -3275,7 +3279,7 @@ NOTE:  Due to game mechanics, Satellites block terrestrial movement over a tile.
 
 <b class='unit_desc'>Helicopters lose 1 hp for each turn not ended in a City, Base, or Carrier. +1 move is awarded if starting a turn in a City or Airbase. The first turn spent in a city, all Helicopter types regain 10hp.</b>
 
-<b class='unit_desc'>All Helicopters can be attacked by land from Riflemen onward; by sea from Ironclad onward; get +50% defence vs. foot units; and are unreachable to artillery types. Unlike attack Helicopters, Transport Helicopters are intercepted by Fighters on vigil. Stack-Escape：60% odds to evade stack-death if it has more moves left than attacker.</b>
+<b class='unit_desc'>All Helicopters can be attacked by land from Riflemen onward; by sea from Ironclad onward; get +50% defence vs. foot units; and are unreachable to artillery types. Unlike attack Helicopters, Transport Helicopters are intercepted by Fighters on vigil. Stack-Escape：60% odds to evade stack-death if attacker doesn’t have more moves than it does.</b>
 <hr style='border-top: 1px solid #000'>➤ Belongs to Helicopter unit class.
   • Speed is not affected by terrain.
   • Does not get defense bonuses from terrain.
@@ -3283,7 +3287,7 @@ NOTE:  Due to game mechanics, Satellites block terrestrial movement over a tile.
   • <b style="color:#9aa">Unreachable</b>. Artillery, Howitzer, and units prior to Riflemen and Ironclad can't attack this unit.
   • <b style="color:#9aa">AIRLIFT</b>: Can be airlifted if it has remaining moves.
 ➤ <b style="color:#9aa">+50% defense bonus</b> if attacked by Foot Soldiers or Cavalry.
-➤ <b style="color:#9aa">STACK ESCAPE</b>: 60% odds to escape if stack defender loses, if it has more moves left than attacker.
+➤ <b style="color:#9aa">STACK ESCAPE</b>: 60% odds to escape if stack defender loses, if attacker doesn’t have more moves than it does.
 ➤ <b style="color:#9aa">INTERCEPTED</b> by Fighter types on Vigil: they auto-attack if they have better odds attacking than defending.
 ➤ Anti-Air units have bonuses against this unit.
 ➤ Loses 1hp for every turn in the air.
@@ -3329,7 +3333,7 @@ Veteran Levels for Helicopter types:
 <b class='unit_desc'>Helicopters fly low to avoid Interception. This invites attacks by ground units from Riflemen onward. They are unreachable to Artillery types and get +50% defense vs. foot units. Helicopters can be attacked by Sea from Ironclad onward.
 Helicopters can retaliate 3 rounds against Special Unit Attacks.
 </b>
-<b class='unit_desc'>Stack-Escape：60% odds to evade stack-death if it has more moves left than attacker. Helicopters can transport one Marines or AAA unit.</b>
+<b class='unit_desc'>Stack-Escape：60% odds to evade stack-death if attacker doesn’t have more moves than it does. Helicopters can transport one Marines or AAA unit.</b>
 <hr style='border-top: 1px solid #000'>➤ Belongs to Helicopter unit class.
   • Can occupy empty enemy cities.
   • Speed is not affected by terrain.
@@ -3338,7 +3342,7 @@ Helicopters can retaliate 3 rounds against Special Unit Attacks.
   • <b style="color:#9aa">Unreachable</b>. Artillery, Howitzer, and units prior to Riflemen and Ironclad can't attack this unit.
   • <b style="color:#9aa">AIRLIFT</b>: Can be airlifted if it has remaining moves.
 ➤ <b style="color:#9aa">+50% defense bonus</b> if attacked by Foot Soldiers or Cavalry.
-➤ <b style="color:#9aa">STACK ESCAPE</b>: 60% odds to escape if stack defender loses, if it has more moves left than attacker.
+➤ <b style="color:#9aa">STACK ESCAPE</b>: 60% odds to escape if stack defender loses, if attacker doesn’t have more moves than it does.
 ➤ Anti-Air units have bonuses against this unit.
 ➤ Loses 1hp for every turn in the air.
 ➤ Gets +1 move point if starting its turn in a City or Airbase.
@@ -3387,7 +3391,7 @@ Veteran Levels for Helicopter types:
 <b class='unit_desc'>
 INTERCEPTOR: the Vigil order lets Jet Fighters auto-attack adjacent Air units if they have better attack odds. This unit can Vigil if it uses 3 move points or less.
 </b><b class='unit_desc'>
-Stack-Escape：60% odds to evade stack-death if it has more moves left than attacker. NOTE：GOTO disallows unit loss from lack of fuel. You can override this by ordering moves to adjacent tiles.</b>
+Stack-Escape：60% odds to evade stack-death if attacker doesn’t have more moves than it does. NOTE：GOTO disallows unit loss from lack of fuel. You can override this by ordering moves to adjacent tiles.</b>
 <hr style='border-top: 1px solid #000'>➤ Belongs to AirProtect unit class.
   • <b style="color:#9aa">INTERCEPTOR</b>: can be given the Vigil order to auto-attack adjacent Air units.
   • <b style="color:#9aa">AIR COVER</b>: Most units who cannot attack this unit also cannot attack other units on the tile.
@@ -3397,7 +3401,7 @@ Stack-Escape：60% odds to evade stack-death if it has more moves left than atta
   • <b style="color:#9aa">Unreachable</b>. Most units cannot attack this one.
   • <b style="color:#9aa">Doesn't prevent enemy cities from working the tile it's on.</b>
   • <b style="color:#9aa">AIRLIFT</b>: Can be airlifted if it has remaining moves.
-➤ <b style="color:#9aa">STACK ESCAPE</b>: 60% odds to escape if stack defender loses, if it has more moves left than attacker.
+➤ <b style="color:#9aa">STACK ESCAPE</b>: 60% odds to escape if stack defender loses, if attacker doesn’t have more moves than it does.
 ➤ Anti-Air units have bonuses against this unit.
 ➤ Never imposes a zone of control.
 ➤ <b style="color:#9aa">INTERCEPTED</b> by Fighter types on Vigil: they auto-attack if they have better odds attacking than defending.
@@ -3447,7 +3451,7 @@ Fighters types on Vigil will (usually) engage the following units:
 <b class='unit_desc'>
 INTERCEPTOR：the Vigil order lets Multi-Fighters auto-attack adjacent Air units if they have better attack odds. This unit can Vigil if it has 1 turn of fuel or more. 
 </b>
-<b class='unit_desc'>Stack-Escape：60% odds to evade stack-death if it has more moves left than attacker. NOTE：GOTO disallows unit loss from lack of fuel. You can override this by ordering moves to adjacent tiles.</b>
+<b class='unit_desc'>Stack-Escape：60% odds to evade stack-death if attacker doesn’t have more moves than it does. NOTE：GOTO disallows unit loss from lack of fuel. You can override this by ordering moves to adjacent tiles.</b>
 <hr style='border-top: 1px solid #000'>➤ Belongs to AirProtect unit class.
   • <b style="color:#9aa">INTERCEPTOR</b>: can be given the Vigil order to auto-attack adjacent Air units.
   • <b style="color:#9aa">AIR COVER</b>: Most units who cannot attack this unit also cannot attack other units on the tile.
@@ -3457,7 +3461,7 @@ INTERCEPTOR：the Vigil order lets Multi-Fighters auto-attack adjacent Air units
   • <b style="color:#9aa">Unreachable</b>. Most units cannot attack this one.
   • <b style="color:#9aa">Doesn't prevent enemy cities from working the tile it's on.</b>
   • <b style="color:#9aa">AIRLIFT</b>: Can be airlifted if it has remaining moves.
-➤ <b style="color:#9aa">STACK ESCAPE</b>: 60% odds to escape if stack defender loses, if it has more moves left than attacker.
+➤ <b style="color:#9aa">STACK ESCAPE</b>: 60% odds to escape if stack defender loses, if attacker doesn’t have more moves than it does.
 ➤ Anti-Air units have bonuses against this unit.
 ➤ Never imposes a zone of control.
 ➤ <b style="color:#9aa">Reconnaissance:</b> reports visible enemy movement even if not sentried.
@@ -3504,7 +3508,7 @@ Fighters types on Vigil will (usually) engage the following units:
 <pre class='hitpoints'>Hitpoints: 20</pre>
 <pre class='obsolete'>Obsolete by: None</pre>
 <pre class='helptext'><b class='unit_desc'>Ground Strike Fighters upgrade the Dive Bomber. They cannot block attacks on other units on their tile, nor engage against Fighters. However, like the Dive Bomber, they can interdict ZoC over land tiles. High fuel capacity allows two turns in the air. No unit can stop this unit from attacking surface units on a tile. This unit can also do pinpointed surgical strikes to pillage tiles. This aircraft is a specialized niche unit. It is not an interceptor.
-Stack-Escape：60% odds to evade stack-death if it has more moves left than attacker. NOTE：GOTO prevents unit loss from lack of fuel. You can override this by ordering moves to adjacent tiles.</b>
+Stack-Escape：60% odds to evade stack-death if attacker doesn’t have more moves than it does. NOTE：GOTO prevents unit loss from lack of fuel. You can override this by ordering moves to adjacent tiles.</b>
 <hr style='border-top: 1px solid #000'>➤ Belongs to Air unit class.
   • Speed is not affected by terrain.
   • Does not get defense bonuses from terrain.
@@ -3519,7 +3523,7 @@ Stack-Escape：60% odds to evade stack-death if it has more moves left than atta
   • Uses <b>3</b> movement points. May result in Ground Strike Fighter being unable to re-fuel.
 ➤ <b style="color:#9aa">+33% defense bonus</b> if attacked by Anti-Aircraft Artillery, Mobile SAM, or AEGIS Cruiser.
 ➤ <b style="color:#9aa">Unblockable</b>: unreachable units can't block its attacks on reachable units.
-➤ <b style="color:#9aa">STACK ESCAPE</b>: 60% odds to escape if stack defender loses, if it has more moves left than attacker.
+➤ <b style="color:#9aa">STACK ESCAPE</b>: 60% odds to escape if stack defender loses, if attacker doesn’t have more moves than it does.
 ➤ Anti-Air units have bonuses against this unit.
 ➤ May impose a zone of control on its adjacent tiles.
 ➤ <b style="color:#9aa">INTERCEPTED</b> by Fighter types on Vigil: they auto-attack if they have better odds attacking than defending.
@@ -3559,7 +3563,7 @@ Veteran Levels for Ground Strike Fighters are the default for offensive Air unit
 <pre class='obsolete'>Obsolete by: None</pre>
 <pre class='helptext'><b class='unit_desc'>Jet Bombers are stratospheric long-range bombers with 3 turns of fuel: they can be airborne for two turn-changes. Their range makes them useful even after Stealth Bombers are available. Stratospheric altitude is unreachable to propeller-based Fighters and AAA. Jet Bombers can carpet-bomb, pillaging tiles from the air. May carry three Bombs. 
 </b><b class='unit_desc'>
-Stack-Escape：60% odds to evade stack-death if it has more moves left than attacker. NOTE：GOTO disallows unit loss from lack of fuel. You can override this by ordering moves to adjacent tiles.</b>
+Stack-Escape：60% odds to evade stack-death if attacker doesn’t have more moves than it does. NOTE：GOTO disallows unit loss from lack of fuel. You can override this by ordering moves to adjacent tiles.</b>
 <hr style='border-top: 1px solid #000'>➤ Belongs to Air_High_Altitude unit class.
   • Speed is not affected by terrain.
   • Does not get defense bonuses from terrain.
@@ -3573,7 +3577,7 @@ Stack-Escape：60% odds to evade stack-death if it has more moves left than atta
   • Destroys up to <b>2 random</b> infrastructural improvements on the tile, instantly.
   • Odds of hitting targets are calculated <b>separately</b>.
   • Uses <b>3</b> movement points. May result in Jet Bomber being unable to re-fuel.
-➤ <b style="color:#9aa">STACK ESCAPE</b>: 60% odds to escape if stack defender loses, if it has more moves left than attacker.
+➤ <b style="color:#9aa">STACK ESCAPE</b>: 60% odds to escape if stack defender loses, if attacker doesn’t have more moves than it does.
 ➤ Anti-Air units have bonuses against this unit.
 ➤ Unable to attack air units.
 ➤ Can carry and refuel up to 3 Bomb units.
@@ -3617,7 +3621,7 @@ Veteran Levels for Jet Bombers are the default for offensive Air units:
 <b class='unit_desc'>
 INTERCEPTOR: the Vigil order lets Stealth Fighters auto-attack adjacent Air units if they have better attack odds. This unit can Vigil if it uses 4 move points or less.
 </b><b class='unit_desc'>
-Stack-Escape：67% odds to evade stack-death if it has more moves left than attacker.<br>
+Stack-Escape：67% odds to evade stack-death if attacker doesn’t have more moves than it does.<br>
 NOTE: GOTO disallows unit loss from lack of fuel. You can override this by ordering moves to adjacent tiles.</b>
 <hr style='border-top: 1px solid #000'>➤ Belongs to AirProtect unit class.
   • <b style="color:#9aa">INTERCEPTOR</b>: can be given the Vigil order to auto-attack adjacent Air units.
@@ -3630,7 +3634,7 @@ NOTE: GOTO disallows unit loss from lack of fuel. You can override this by order
   • <b style="color:#9aa">AIRLIFT</b>: Can be airlifted if it has remaining moves.
 ➤ <b style="color:#9aa">+25% attack bonus</b> when attacking Anti-Aircraft Artillery, Mobile SAM, or AEGIS Cruiser.
 ➤ <b style="color:#9aa">+25% defense bonus</b> if attacked by Anti-Aircraft Artillery, Mobile SAM, or AEGIS Cruiser.
-➤ <b style="color:#9aa">STACK ESCAPE</b>: 60% odds to escape if stack defender loses, if it has more moves left than attacker.
+➤ <b style="color:#9aa">STACK ESCAPE</b>: 60% odds to escape if stack defender loses, if attacker doesn’t have more moves than it does.
 ➤ Anti-Air units have bonuses against this unit.
 ➤ <b style="color:#9aa">Unreachable</b> AND <b>can protect its tile</b> from units unable to attack this unit.
 ➤ <b style="color:#9aa">Invisible</b> except when next to an enemy unit or city.
@@ -3680,7 +3684,7 @@ Fighters types on Vigil will (usually) engage the following units:
 <pre class='obsolete'>Obsolete by: None</pre>
 <pre class='helptext'><b class='unit_desc'>The deadliest Bomber, with improved attack and speed. Stealth Bombers cannot be seen unless adjacent to an enemy. Stealth evasion gives a 25% bonus against all Anti-Air units, and reduces SAM Batteries down to only a 25% bonus. May carry two Bombs.</b>
 <b class='unit_desc'>
-Stack-Escape：67% odds to evade stack-death if it has more moves left than attacker.<br>
+Stack-Escape：67% odds to evade stack-death if attacker doesn’t have more moves than it does.<br>
 NOTE: GOTO disallows unit loss from lack of fuel. You can override this by ordering moves to adjacent tiles.</b>
 <hr style='border-top: 1px solid #000'>➤ Belongs to Air unit class.
   • Speed is not affected by terrain.
@@ -3692,7 +3696,7 @@ NOTE: GOTO disallows unit loss from lack of fuel. You can override this by order
   • <b style="color:#9aa">AIRLIFT</b>: Can be airlifted if it has remaining moves.
 ➤ <b style="color:#9aa">+25% attack bonus</b> when attacking Anti-Aircraft Artillery, Mobile SAM, or AEGIS Cruiser.
 ➤ <b style="color:#9aa">+25% defense bonus</b> if attacked by Anti-Aircraft Artillery, Mobile SAM, or AEGIS Cruiser.
-➤ <b style="color:#9aa">STACK ESCAPE</b>: 60% odds to escape if stack defender loses, if it has more moves left than attacker.
+➤ <b style="color:#9aa">STACK ESCAPE</b>: 60% odds to escape if stack defender loses, if attacker doesn’t have more moves than it does.
 ➤ Anti-Air units have bonuses against this unit.
 ➤ Unable to attack air units.
 ➤ Can carry and refuel up to 2 Bomb units.
@@ -4106,7 +4110,7 @@ Veteran Levels for Caravels:
 
 <b class='unit_desc'>Like most early sea units, when it initiates combat there will be 15 rounds of combat and 15 total hitpoints lost between both units. This may or may not result in the loss of one of the units.</b>
 
-<b class='unit_desc'>Stack-Escape：60% odds to evade stack-death if it has more moves left than attacker.</b>
+<b class='unit_desc'>Stack-Escape：60% odds to evade stack-death if attacker doesn’t have more moves than it does.</b>
 <hr style='border-top: 1px solid #000'>➤ Belongs to RiverShip unit class.
   • Speed is not affected by terrain.
   • Does not get defense bonuses from terrain.
@@ -4114,7 +4118,7 @@ Veteran Levels for Caravels:
   • Slowed down while damaged.
   • <b style="color:#9aa">Crew Repair</b>Automatically repairs 10% of its hitpoints each turn, regardless of movement (+2hp)
 ➤ Can enter foreign territory regardless of peace treaty.
-➤ <b style="color:#9aa">STACK ESCAPE</b>: 60% odds to escape if stack defender loses, if it has more moves left than attacker.
+➤ <b style="color:#9aa">STACK ESCAPE</b>: 60% odds to escape if stack defender loses, if attacker doesn’t have more moves than it does.
 ➤ Unable to attack air units.
 ➤ Can carry up to 4 Land, LandNoKill, LandAirSea, or Balloon units.
   • Cargo not visible except to allies.
@@ -4157,7 +4161,7 @@ Veteran Levels for Galleons:
 <pre class='obsolete'>Obsolete by: Ironclad</pre>
 <pre class='helptext'><b class='unit_desc'>The Frigate is versatile — it's a superior offensive unit and also a decent transport ship. Frigates can attack and travel on rivers, or make shore attacks from sea. Frigate crews repair their ship an extra +2hp per turn, regardless of whether it has moved.</b>
 
-<b class='unit_desc'>From Frigates onward, all sea attacks end with a single victor. Stack-Escape：60% odds to evade stack-death if it has more moves left than attacker.</b>
+<b class='unit_desc'>From Frigates onward, all sea attacks end with a single victor. Stack-Escape：60% odds to evade stack-death if attacker doesn’t have more moves than it does.</b>
 <hr style='border-top: 1px solid #000'>➤ Belongs to RiverShip unit class.
   • Speed is not affected by terrain.
   • Does not get defense bonuses from terrain.
@@ -4165,7 +4169,7 @@ Veteran Levels for Galleons:
   • Slowed down while damaged.
   • <b style="color:#9aa">Crew Repair</b>Automatically repairs 10% of its hitpoints each turn, regardless of movement (+2hp)
 ➤ <b>2× defense bonus</b> if attacked by Marines or Anti-Aircraft Artillery.
-➤ <b style="color:#9aa">STACK ESCAPE</b>: 60% odds to escape if stack defender loses, if it has more moves left than attacker.
+➤ <b style="color:#9aa">STACK ESCAPE</b>: 60% odds to escape if stack defender loses, if attacker doesn’t have more moves than it does.
 ➤ Unable to attack air units.
 ➤ Can carry up to 2 Land, LandNoKill, or LandAirSea units.
   • Cargo not visible except to allies.
@@ -4309,7 +4313,7 @@ Towed ships lose all moves after release.</b>
   • Slowed down while damaged.
   • <b style="color:#9aa">Crew Repair</b>Automatically repairs 10% of its hitpoints each turn, regardless of movement (+3hp)
 ➤ <b>2× defense bonus</b> if attacked by Marines or Anti-Aircraft Artillery.
-➤ <b style="color:#9aa">STACK ESCAPE</b>: 60% odds to escape if stack defender loses, if it has more moves left than attacker.
+➤ <b style="color:#9aa">STACK ESCAPE</b>: 60% odds to escape if stack defender loses, if attacker doesn’t have more moves than it does.
 ➤ Can carry and refuel up to 8 Land, LandNoKill, LandAirSea, or Balloon units.
   • Cargo not visible except to allies.
 ➤ <b style="color:#9aa">PORT PENALTY</b>: If attacked in a city, firepower is set to 1 and firepower of attacker is doubled.
@@ -4346,7 +4350,7 @@ Veteran Levels for Transports:
 <pre class='obsolete'>Obsolete by: Destroyer</pre>
 <pre class='helptext'><b class='unit_desc'>The Ironclad is an armored ship that is much more sturdy than the Frigate but loses transport capability and the ability to navigate rivers. From the Ironclad onward, warships are excellent at attacking shore targets, and can also pillage buoys.</b>
 
-<b class='unit_desc'>Ironclads and all modern ships can Stack-Escape：60% odds to evade stack-death if it has more moves left than attacker.</b>
+<b class='unit_desc'>Ironclads and all modern ships can Stack-Escape：60% odds to evade stack-death if attacker doesn’t have more moves than it does.</b>
 <hr style='border-top: 1px solid #000'>➤ Belongs to Sea unit class.
   • <b style="color:#9aa">Crew Repair</b>: each turn, regardless of movement, recovers 2 hit points.
   • Speed is not affected by terrain.
@@ -4355,7 +4359,7 @@ Veteran Levels for Transports:
   • Slowed down while damaged.
   • <b style="color:#9aa">Crew Repair</b>Automatically repairs 10% of its hitpoints each turn, regardless of movement (+3hp)
 ➤ <b>2× defense bonus</b> if attacked by Marines or Anti-Aircraft Artillery.
-➤ <b style="color:#9aa">STACK ESCAPE</b>: 60% odds to escape if stack defender loses, if it has more moves left than attacker.
+➤ <b style="color:#9aa">STACK ESCAPE</b>: 60% odds to escape if stack defender loses, if attacker doesn’t have more moves than it does.
 ➤ <b>Unable to attack air units.</b>
 ➤ <b style="color:#9aa">Can Attack reachable targets on land tiles.</b>
   • Battle will last 20 combat rounds, which may or may not result in a victor.
@@ -4398,7 +4402,7 @@ Veteran Levels for Ironclads:
 <pre class='hitpoints'>Hitpoints: 30</pre>
 <pre class='obsolete'>Obsolete by: Missile Destroyer</pre>
 <pre class='helptext'><b class='unit_desc'>Destroyers are the first of the modern ships to start your modern navy. Their main roles are fast scouting, seek-and-destroy, anti-submarine warfare, shore bombardment of lighter targets, and supporting the needs of larger fleets. 4× ASW defence gives a 35% chance defending vs Submarines.
-Stack-Escape：67% odds to evade stack-death if it has more moves left than attacker.</b>
+Stack-Escape：67% odds to evade stack-death if attacker doesn’t have more moves than it does.</b>
 <hr style='border-top: 1px solid #000'>➤ Belongs to Sea unit class.
   • <b style="color:#9aa">Crew Repair</b>: each turn, regardless of movement, recovers 2 hit points.
   • Speed is not affected by terrain.
@@ -4408,7 +4412,7 @@ Stack-Escape：67% odds to evade stack-death if it has more moves left than atta
   • <b style="color:#9aa">Crew Repair</b>Automatically repairs 10% of its hitpoints each turn, regardless of movement (+3hp)
 ➤ <b>4× defense bonus</b> if attacked by Submarine.
 ➤ <b>2× defense bonus</b> if attacked by Marines or Anti-Aircraft Artillery.
-➤ <b style="color:#9aa">STACK ESCAPE</b>: 67% odds to escape if stack defender loses, if it has more moves left than attacker.
+➤ <b style="color:#9aa">STACK ESCAPE</b>: 67% odds to escape if stack defender loses, if attacker doesn’t have more moves than it does.
 ➤ <b>Unable to attack air units.</b>
 ➤ <b style="color:#9aa">Can Attack reachable targets on land tiles.</b>
   • Battle will last 20 combat rounds, which may or may not result in a victor.
@@ -4461,7 +4465,7 @@ Veteran Levels for Destroyers:
   • <b style="color:#9aa">Crew Repair</b>Automatically repairs 10% of its hitpoints each turn, regardless of movement (+3hp)
 ➤ <b>2× defense bonus</b> if attacked by Submarine.
 ➤ <b>2× defense bonus</b> if attacked by Marines or Anti-Aircraft Artillery.
-➤ <b style="color:#9aa">STACK ESCAPE</b>: 60% odds to escape if stack defender loses, if it has more moves left than attacker.
+➤ <b style="color:#9aa">STACK ESCAPE</b>: 60% odds to escape if stack defender loses, if attacker doesn’t have more moves than it does.
 ➤ <b>Unable to attack air units.</b>
 ➤ <b style="color:#9aa">Can Attack reachable targets on land tiles.</b>
   • Battle will last 20 combat rounds, which may or may not result in a victor.
@@ -4506,7 +4510,7 @@ Veteran Levels for Cruisers:
 <pre class='hitpoints'>Hitpoints: 30</pre>
 <pre class='obsolete'>Obsolete by: None</pre>
 <pre class='helptext'><b class='unit_desc'>The Missile Destroyer has double the firepower of a Destroyer, and shares the same roles as its ancestor. It gains 2× defense against Air and Missile units. It has a 2× ASW bonus and can carry two Missiles.
-Stack-Escape：67% odds to evade stack-death if it has more moves left than attacker.</b>
+Stack-Escape：67% odds to evade stack-death if attacker doesn’t have more moves than it does.</b>
 <hr style='border-top: 1px solid #000'>➤ Belongs to Sea unit class.
   • <b style="color:#9aa">Crew Repair</b>: each turn, regardless of movement, recovers 2 hit points.
   • Speed is not affected by terrain.
@@ -4517,7 +4521,7 @@ Stack-Escape：67% odds to evade stack-death if it has more moves left than atta
 ➤ <b>2× defense bonus</b> if attacked by Submarine.
 ➤ <b>2× defense bonus</b> if attacked by Marines or Anti-Aircraft Artillery.
 ➤ <b>2× defense bonus</b> if attacked by Aircraft, Helicopter, or Cruise Missile.
-➤ <b style="color:#9aa">STACK ESCAPE</b>: 67% odds to escape if stack defender loses, if it has more moves left than attacker.
+➤ <b style="color:#9aa">STACK ESCAPE</b>: 67% odds to escape if stack defender loses, if attacker doesn’t have more moves than it does.
 ➤ <b>Unable to attack air units.</b>
 ➤ Can carry and refuel up to 2 Missile units.
   • Cargo not visible except to allies.
@@ -4573,7 +4577,7 @@ Veteran Levels for Missile Destroyers:
 ➤ <b style="color:#9aa">3× defense bonus</b> if attacked by Aircraft, Helicopter, or Cruise Missile.
 ➤ <b>2× defense bonus</b> if attacked by Submarine.
 ➤ <b>2× defense bonus</b> if attacked by Marines or Anti-Aircraft Artillery.
-➤ <b style="color:#9aa">STACK ESCAPE</b>: 60% odds to escape if stack defender loses, if it has more moves left than attacker.
+➤ <b style="color:#9aa">STACK ESCAPE</b>: 60% odds to escape if stack defender loses, if attacker doesn’t have more moves than it does.
 ➤ Anti-Air bonus of this unit is less effective against Stealth, which has a 25% bonus against this unit.
 ➤ May impose a zone of control on its adjacent tiles.
   • <b style="color:#9aa">Prevents enemy cities from working the tile it's on.</b>
@@ -4629,7 +4633,7 @@ Veteran Levels for AEGIS Cruisers:
   • <b style="color:#9aa">Crew Repair</b>Automatically repairs 10% of its hitpoints each turn, regardless of movement (+4hp)
 ➤ <b>2× defense bonus</b> if attacked by Submarine.
 ➤ <b>2× defense bonus</b> if attacked by Marines or Anti-Aircraft Artillery.
-➤ <b style="color:#9aa">STACK ESCAPE</b>: 60% odds to escape if stack defender loses, if it has more moves left than attacker.
+➤ <b style="color:#9aa">STACK ESCAPE</b>: 60% odds to escape if stack defender loses, if attacker doesn’t have more moves than it does.
 ➤ <b>Unable to attack air units.</b>
 ➤ <b style="color:#9aa">Can Attack reachable targets on land tiles.</b>
   • Battle will last 20 combat rounds, which may or may not result in a victor.
@@ -4682,7 +4686,7 @@ Veteran Levels for Battleship:
 <pre class='helptext'><b class='unit_desc'>Submarines are strong attackers but weak defenders. They are unreachable by Air units, but do not block air attacks on surface ships. Submarines cannot attack units on shore. Submarines cannot be seen by other players unless they have a unit or city adjacent to it.</b>
 
 <b class='unit_desc'>Submarines have superior attrition rates when attacking in numbers. They excel at hit-and-run against weaker ships. They have a minimum speed of 5 if damaged.
-Stack-Escape：75% odds to evade stack-death if it has more moves left than attacker.</b>
+Stack-Escape：75% odds to evade stack-death if attacker doesn’t have more moves than it does.</b>
 <hr style='border-top: 1px solid #000'>➤ Belongs to Submarine unit class.
   • <b style="color:#9aa">Invisible</b> except when next to an enemy unit or city.
   • <b style="color:#9aa">Crew Repair</b>: each turn, regardless of movement, recovers 2 hit points.
@@ -4695,7 +4699,7 @@ Stack-Escape：75% odds to evade stack-death if it has more moves left than atta
     ◦ Doesn't prevent enemy units from attacking other units on its tile.
   • <b style="color:#9aa">Cannot</b> perform attacks on Land or cities.
 ➤ <b>2× defense bonus</b> if attacked by Submarine or Missile Submarine.
-➤ <b style="color:#9aa">STACK ESCAPE</b>: 75% odds to escape if stack defender loses, if it has more moves left than attacker.
+➤ <b style="color:#9aa">STACK ESCAPE</b>: 75% odds to escape if stack defender loses, if attacker doesn’t have more moves than it does.
 ➤ Attack value reduced against some ships.
 ➤ Unable to attack air units.
 ➤ Can only attack units on native tiles.
@@ -4740,7 +4744,7 @@ Missile Submarines are unreachable by Air units, but don’t block air attacks o
 </b>
 <b class='unit_desc'>Minimum speed is 5, when damaged.
 </b><b class='unit_desc'>
-Stack-Escape：75% odds to evade stack-death if it has more moves left than attacker.</b>
+Stack-Escape：75% odds to evade stack-death if attacker doesn’t have more moves than it does.</b>
 <hr style='border-top: 1px solid #000'>➤ Belongs to Submarine unit class.
   • <b style="color:#9aa">Invisible</b> except when next to an enemy unit or city.
   • <b style="color:#9aa">Crew Repair</b>: each turn, regardless of movement, recovers 3 hit points.
@@ -4753,7 +4757,7 @@ Stack-Escape：75% odds to evade stack-death if it has more moves left than atta
     ◦ Doesn't prevent enemy units from attacking other units on its tile.
   • <b style="color:#9aa">Cannot</b> perform attacks on Land or cities.
 ➤ <b>2× defense bonus</b> if attacked by Submarine or Missile Submarine.
-➤ <b style="color:#9aa">STACK ESCAPE</b>: 75% odds to escape if stack defender loses, if it has more moves left than attacker.
+➤ <b style="color:#9aa">STACK ESCAPE</b>: 75% odds to escape if stack defender loses, if attacker doesn’t have more moves than it does.
 ➤ Can <b style="color:#9aa">DIVE DEEP</b>, becoming totally invisible if it stays motionless on its tile.
   • Becomes totally invisible even to adjacent units and cities, on the next turn.
   • Bonus is lost if the Submarine moves.
@@ -4808,7 +4812,7 @@ Veteran Levels for Missile Submarines:
   • <b style="color:#9aa">Crew Repair</b>Automatically repairs 10% of its hitpoints each turn, regardless of movement (+4hp)
   • <b style="color:#9aa">Cannot</b> perform attacks on Land or cities.
 ➤ <b>2× defense bonus</b> if attacked by Marines or Anti-Aircraft Artillery.
-➤ <b style="color:#9aa">STACK ESCAPE</b>: 60% odds to escape if stack defender loses, if it has more moves left than attacker.
+➤ <b style="color:#9aa">STACK ESCAPE</b>: 60% odds to escape if stack defender loses, if attacker doesn’t have more moves than it does.
 ➤ Unable to attack air units.
 ➤ Can carry and refuel up to 10 Missile, LandAirSea, Helicopter, Air, Air_High_Altitude, AirProtect, or Balloon units.
   • Cargo not visible except to allies.

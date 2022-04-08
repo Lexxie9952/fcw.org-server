@@ -1443,7 +1443,7 @@ roles         = "DefendGood", "DefendGoodStartUnit", "FirstBuild",
 helptext      = _("\
 Musketeers are infantry equipped with early firearms. They replace Pikemen as the preferred\
  city defender, and replace Archers and Legions for offensive foot soldiers.\
- The discovery of Labor Union allows converting Musketeers to Riflemen for free\
+ The discovery of Mechanization allows converting Musketeers to Riflemen for free\
  in any domestic city. \
 "), _("\
 \nThe discovery of Banking changes upkeep from shields to gold.\
@@ -1874,7 +1874,7 @@ paratroopers_mr_sub = 0
 name          = _("Mechanized Infantry")
 rule_name     = "Mech. Inf."
 class         = "Land"
-tech_req      = "Labor Union"
+tech_req      = "Mechanization"
 obsolete_by   = "None"
 graphic       = "u.mech_inf"
 graphic_alt   = "-"
@@ -2223,7 +2223,7 @@ sound_fight   = "f_armor"
 sound_fight_alt = "Blitz Sack"
 build_cost    = 80
 pop_cost      = 0
-attack        = 10
+attack        = 11
 defense       = 5
 hitpoints     = 30
 firepower     = 1
@@ -2240,13 +2240,14 @@ uk_gold       = 0
 embarks       = "Helicopter"    ; transport helicopter only
 ;disembarks    = "Helicopter"
 targets       = "Balloon", "Helicopter", "LandRail", "Zeppelin"
-flags         = "CantReachAir", "FortBuster", "WillNever"
+flags         = "CantReachAir", "FortBuster", "WillNever", "CanEscape"
 roles         = "AttackFastStartUnit", "Hunter"
 helptext      = _("\
 Armor is the mechanized equivalent of a Cavalry unit. They have high attack strength,\
  superb mobility, and the highest defense of any offensive unit. They are massive all-terrain\
  vehicles, well-suited for penetrating defensive fortifications：Units inside Forts get no defense\
- bonus against Armor. Units inside Fortresses get a reduced bonus of 1.67× instead of 2×.\
+ bonus against Armor. Units inside Fortresses get a reduced bonus of 1.67× instead of 2×. \n\
+Stack-Escape：40% odds to evade stack-death if attacker doesn’t have more moves than it does.\
 ")
 
 [unit_armor_ii]
@@ -2283,14 +2284,15 @@ bonuses       =
    { "flag", "type", "value"
      "Missile",      "DefenseMultiplierPct", 50
    }
-flags         = "CantReachAir", "FortressBuster", "NeverBlocked", "WillNever"
+flags         = "CantReachAir", "FortressBuster", "NeverBlocked", "WillNever", "CanEscape"
 roles         = "AttackFastStartUnit", "Hunter"
 helptext      = _("\
 Armor II is the ultra-modern upgrade to Armor. It features high tech composite armor and\
  electronic countermeasures (ECM). Forts and Fortresses gain no bonus against\
  its ability to blast and break through fortifications. ECM and composite armor\
  give a 50% defense bonus against Missiles. Unlike most land units,\
- Armor II can attack reachable units regardless of whether unreachable units protect the tile.\ 
+ Armor II can attack reachable units regardless of whether unreachable units protect the tile. \n\
+Stack-Escape：40% odds to evade stack-death if attacker doesn’t have more moves than it does.\
 ")
 
 [unit_catapult]
@@ -2820,7 +2822,7 @@ Airplanes can carry a diplomatic unit or a Freight unit. They can land in any do
  or allied city. For diplomatic missions to non-allied nations, an empty Airbase must be available for landing.\
  Airplanes have two turns of fuel. Each new aviation tech upgrades range by +2 moves per turn. \n\
 "), _("
-Stack-Escape：60% odds to evade stack-death if it has more moves left than attacker.\
+Stack-Escape：60% odds to evade stack-death if attacker doesn’t have more moves than it does.\
  NOTE：GOTO disallows unit loss from lack of fuel. You\
  can override this by moving to adjacent tiles.\
 ")
@@ -2884,7 +2886,7 @@ Fighters are the first offensive Air units. Their superior mobility and firepowe
 INTERCEPTOR：the Vigil order lets Fighters auto-attack adjacent Air units if they\
  have better attack odds. A Fighter can Vigil if it uses 2 move points or less. \n\
 "), _("
-Stack-Escape：60% odds to evade stack-death if it has more moves left than attacker.\
+Stack-Escape：60% odds to evade stack-death if attacker doesn’t have more moves than it does.\
  NOTE：GOTO disallows unit loss from lack of fuel. You\
  can override this by moving to adjacent tiles.\
 ")
@@ -2947,7 +2949,7 @@ Escort Fighters are large fighters with high fuel capacity. Higher mass and\
 INTERCEPTOR：the Vigil order lets Escort Fighters auto-attack adjacent Air units if they\
  have better attack odds. This unit can Vigil if it uses 3 move points or less. \n\
 "), _("
-Stack-Escape：60% odds to evade stack-death if it has more moves left than attacker.\
+Stack-Escape：60% odds to evade stack-death if attacker doesn’t have more moves than it does.\
  NOTE：GOTO disallows unit loss from lack of fuel. You\
  can override this by moving to adjacent tiles.\
 ")
@@ -2955,7 +2957,7 @@ Stack-Escape：60% odds to evade stack-death if it has more moves left than atta
 [unit_dive_bomber]
 name          = _("Dive Bomber")
 class         = "Air"
-tech_req      = "Radio"
+tech_req      = "Flight.2"
 obsolete_by   = "Ground Strike Fighter"
 graphic       = "u.dive_bomber"
 graphic_alt   = "-"
@@ -3023,7 +3025,7 @@ LOSSES: \n\
  • Can’t intercept \n\
 "), _("
 Communists pay 10 less for this unit.\
- Stack-Escape：60% odds to evade stack-death if it has more moves left than attacker.\
+ Stack-Escape：60% odds to evade stack-death if attacker doesn’t have more moves than it does.\
  GOTO prevents unit loss from lack of fuel.\
  Override this by ordering adjacent moves.\
 ")
@@ -3031,7 +3033,7 @@ Communists pay 10 less for this unit.\
 [unit_medium_bomber]
 name          = _("Medium Bomber")
 class         = "Air"
-tech_req      = "Advanced Flight"
+tech_req      = "Radio"
 obsolete_by   = "Jet Bomber"
 graphic       = "u.medium_bomber"
 graphic_alt   = "-"
@@ -3080,7 +3082,7 @@ The Medium Bomber is well suited for moderately strong targets or multiple weak 
 Republic:0   Democracy:1    (non-aggressive) \n\
 Republic:1   Democracy:2    (aggressive) \n\
 "), _("
-Stack-Escape：60% odds to evade stack-death if it has more moves left than attacker.\
+Stack-Escape：60% odds to evade stack-death if attacker doesn’t have more moves than it does.\
  NOTE：GOTO disallows unit loss from lack of fuel. You\
  can override this by moving to adjacent tiles.\
 ")
@@ -3088,7 +3090,7 @@ Stack-Escape：60% odds to evade stack-death if it has more moves left than atta
 [unit_heavy_bomber]
 name          = _("Heavy Bomber")
 class         = "Air"
-tech_req      = "Radar"
+tech_req      = "Advanced Flight"
 obsolete_by   = "Jet Bomber"
 graphic       = "u.heavy_bomber_o"
 graphic_alt   = "-"
@@ -3138,7 +3140,7 @@ Heavy Bombers are large and sturdy Bombers with larger payload and numerous gunn
 ➤ Unhappy effect for Field units: \n\
 Republic:1   Democracy:2 \n\
 "), _("
-Stack-Escape：60% odds to evade stack-death if it has more moves left than attacker.\
+Stack-Escape：60% odds to evade stack-death if attacker doesn’t have more moves than it does.\
  NOTE：GOTO disallows unit loss from lack of fuel. You\
  can override this by moving to adjacent tiles.\
 ")
@@ -3146,7 +3148,7 @@ Stack-Escape：60% odds to evade stack-death if it has more moves left than atta
 [unit_strategic_bomber]
 name          = _("Strategic Bomber")
 class         = "Air"
-tech_req      = "Rocketry"
+tech_req      = "Radar"
 obsolete_by   = "Jet Bomber"
 graphic       = "u.ultra_heavy_bomber_o"
 graphic_alt   = "-"
@@ -3195,7 +3197,7 @@ The Strategic Bomber offers a small improvement in attack. Higher altitude offer
  defense. It has considerably longer range, with one more turn of fuel. Upgraded payload enables\
  instant-Pillage bombing. May carry two Bombs. \n\
 "), _("
-Stack-Escape：60% odds to evade stack-death if it has more moves left than attacker.\
+Stack-Escape：60% odds to evade stack-death if attacker doesn’t have more moves than it does.\
  NOTE：GOTO disallows unit loss from lack of fuel. You\
  can override this by moving to adjacent tiles.\
 ")
@@ -3237,7 +3239,7 @@ helptext      = _("\
 The AWACS has great fuel capacity for long range flights, and advanced radar that can determine\
  the location of enemy units over a wide area. The AWACS has 2 turns of fuel. \n\
 "), _("
-Stack-Escape：60% odds to evade stack-death if it has more moves left than attacker.\
+Stack-Escape：60% odds to evade stack-death if attacker doesn’t have more moves than it does.\
  NOTE：GOTO disallows unit loss from lack of fuel. You\
  can override this by moving to adjacent tiles.\
 ")
@@ -3282,7 +3284,7 @@ The Spy Plane is an ultrasonic high altitude aircraft with long range. It gather
  adjacent tiles. Spy Planes have 2 turns of fuel. They are unreachable to primitive\
  propeller-based aircraft. \
 "), _("
-Stack-Escape：67% odds to evade stack-death if it has more moves left than attacker.\
+Stack-Escape：67% odds to evade stack-death if attacker doesn’t have more moves than it does.\
  NOTE：GOTO disallows unit loss from lack of fuel. You\
  can override this by moving to adjacent tiles.\
 ")
@@ -3328,7 +3330,7 @@ Satellites orbit the Earth above the atmosphere. They are unreachable to anythin
  city has a Police Station. Satellites can’t be seen by others unless adjacent.\
  Satellites require Laser tech and can only be built in the city with the Apollo Program. \
 "), _("
-Stack-Escape：100% odds to evade stack-death if it has more moves left than attacker.\
+Stack-Escape：100% odds to evade stack-death if attacker doesn’t have more moves than it does.\
 "), _("
 NOTE： Due to game mechanics, a Satellite blocks terrestrial movement\
  over a tile. This is solved by killing it with any Missile. To avoid\
@@ -3398,7 +3400,7 @@ Transport Helicopters can carry three land units, which they can pick up from an
  All Helicopters can be attacked by land from Riflemen onward; by sea from Ironclad\
  onward; get +50% defence vs. foot units; and are unreachable to artillery types.\
  Unlike attack Helicopters, Transport Helicopters are intercepted by Fighters on vigil.\
- Stack-Escape：60% odds to evade stack-death if it has more moves left than attacker.\
+ Stack-Escape：60% odds to evade stack-death if attacker doesn’t have more moves than it does.\
 ")
 
 [unit_helicopter]
@@ -3469,7 +3471,7 @@ Helicopters fly low to avoid Interception. This invites attacks by ground units 
  vs. foot units. Helicopters can be attacked by Sea from Ironclad onward.
 Helicopters can retaliate 3 rounds against Special Unit Attacks. \n\
 "), _("\
-Stack-Escape：60% odds to evade stack-death if it has more moves left than attacker.\
+Stack-Escape：60% odds to evade stack-death if attacker doesn’t have more moves than it does.\
  Helicopters can transport one Marines or AAA unit.\
 ")
 
@@ -3522,7 +3524,7 @@ Jet Fighters upgrade the Fighter with improved attack, defense, and range.\
 INTERCEPTOR：the Vigil order lets Jet Fighters auto-attack adjacent Air units if they\
  have better attack odds. This unit can Vigil if it uses 3 move points or less. \n\
 "), _("
-Stack-Escape：60% odds to evade stack-death if it has more moves left than attacker.\
+Stack-Escape：60% odds to evade stack-death if attacker doesn’t have more moves than it does.\
  NOTE：GOTO disallows unit loss from lack of fuel. You can override this by moving to adjacent tiles.\
 ")
 
@@ -3579,7 +3581,7 @@ Multi-Fighters are fitted for mission versatility.\
 INTERCEPTOR：the Vigil order lets Multi-Fighters auto-attack adjacent Air units if they\
  have better attack odds. This unit can Vigil if it has 1 turn of fuel or more. \n\
 "), _("
-Stack-Escape：60% odds to evade stack-death if it has more moves left than attacker.\
+Stack-Escape：60% odds to evade stack-death if attacker doesn’t have more moves than it does.\
  NOTE：GOTO disallows unit loss from lack of fuel. You can override this by moving to adjacent tiles.\
 ")
 
@@ -3637,7 +3639,7 @@ Ground Strike Fighters upgrade the Dive Bomber. They can’t block attacks on ot
  air. No unit can stop this unit from attacking surface units on a tile. This unit\
  can also do pinpointed surgical strikes to pillage tiles. This aircraft is a\
  specialized niche unit. It is not an interceptor. \n\
-Stack-Escape：60% odds to evade stack-death if it has more moves left than attacker.\
+Stack-Escape：60% odds to evade stack-death if attacker doesn’t have more moves than it does.\
  NOTE：GOTO prevents unit loss from lack of fuel. You\
  can override this by moving to adjacent tiles.\
 ")
@@ -3692,7 +3694,7 @@ Jet Bombers are stratospheric long-range bombers with 3 turns of fuel：they can
  altitude is unreachable to propeller-based Fighters and AAA. Jet Bombers can Carpet Bomb, an\
  instant-Pillage of tiles from the air. May carry three Bombs. \ 
 "), _("
-Stack-Escape：60% odds to evade stack-death if it has more moves left than attacker.\
+Stack-Escape：60% odds to evade stack-death if attacker doesn’t have more moves than it does.\
  NOTE：GOTO disallows unit loss from lack of fuel. You\
  can override this by moving to adjacent tiles.\
 ")
@@ -3751,7 +3753,7 @@ The most advanced Fighter, with improved attack and longer range. Stealth Fighte
 INTERCEPTOR：the Vigil order lets Stealth Fighters auto-attack adjacent Air units if they\
  have better attack odds. This unit can Vigil if it uses 4 move points or less. \n\
 "), _("
-Stack-Escape：67% odds to evade stack-death if it has more moves left than attacker.\
+Stack-Escape：67% odds to evade stack-death if attacker doesn’t have more moves than it does.\
 "), _("
 NOTE：GOTO disallows unit loss from lack of fuel. You\
  can override this by moving to adjacent tiles.\
@@ -3810,7 +3812,7 @@ The deadliest Bomber, with improved attack and speed. Stealth Bombers can’t be
  unless adjacent to an enemy. Stealth evasion gives a 25% bonus against all Anti-Air\
  units, and reduces SAM Batteries down to only a 25% bonus. May carry two Bombs. \n\
 "), _("
-Stack-Escape：67% odds to evade stack-death if it has more moves left than attacker.\
+Stack-Escape：67% odds to evade stack-death if attacker doesn’t have more moves than it does.\
  NOTE：GOTO disallows unit loss from lack of fuel. You\
  can override this by moving to adjacent tiles.\
 ")
@@ -4221,7 +4223,7 @@ Like most early sea units, when it initiates combat there will be 15 rounds\
  It can enter Peace waters to deliver commercial cargo, and does not cause\
  unhappiness. \
 "), _("
-Stack-Escape：60% odds to evade stack-death if it has more moves left than attacker.\
+Stack-Escape：60% odds to evade stack-death if attacker doesn’t have more moves than it does.\
 ")
 
 [unit_frigate]
@@ -4275,7 +4277,7 @@ The Frigate is versatile — it is a superior offensive unit and also a decent t
  extra +2hp per turn, regardless of whether it has moved.\
 "), _("
 From Frigates onward, all sea attacks end with a single victor.\
- Stack-Escape：60% odds to evade stack-death if it has more moves left than attacker.\
+ Stack-Escape：60% odds to evade stack-death if attacker doesn’t have more moves than it does.\
 ")
 
 [unit_trawler]
@@ -4388,7 +4390,7 @@ attack        = 0
 defense       = 3
 hitpoints     = 30
 firepower     = 1
-move_rate     = 11
+move_rate     = 10
 vision_radius_sq = 12
 transport_cap = 8
 fuel          = 0
@@ -4474,7 +4476,7 @@ The Ironclad is an armored ship that is much more sturdy than the Frigate but\
  onward, warships are excellent at attacking shore targets, and can also pillage\
  buoys. \ 
 "), _("
-Stack-Escape：60% odds to evade stack-death if it has more moves left than attacker.\
+Stack-Escape：60% odds to evade stack-death if attacker doesn’t have more moves than it does.\
 ")
 
 [unit_destroyer]
@@ -4530,7 +4532,7 @@ Destroyers are the first of the modern ships to start your modern\
  and supporting the needs of larger fleets. 4× ASW defence gives a\
  35% chance defending vs Submarines. \
 "), _("
-Stack-Escape：67% odds to evade stack-death if it has more moves left than attacker.\
+Stack-Escape：67% odds to evade stack-death if attacker doesn’t have more moves than it does.\
 ")
 
 [unit_cruiser]
@@ -4638,7 +4640,7 @@ The Missile Destroyer has double the firepower of a Destroyer, and shares the sa
  as its ancestor. It gains 2× defense against Air and Missile units. It has a 2× ASW bonus\
  and can carry two Missiles. \
 "), _("
-Stack-Escape：67% odds to evade stack-death if it has more moves left than attacker.\
+Stack-Escape：67% odds to evade stack-death if attacker doesn’t have more moves than it does.\
 ")
 
 [unit_aegis_cruiser]
@@ -4698,7 +4700,7 @@ The AEGIS Cruiser has an Anti-Air missile system. Radar and sonar\
 "), _("\
 Excellent vision and 3× Anti-Air bonus are ideal for scouting and escorting. \
 "), _("
-Stack-Escape：60% odds to evade stack-death if it has more moves left than attacker.\
+Stack-Escape：60% odds to evade stack-death if attacker doesn’t have more moves than it does.\
 ")
 
 [unit_battleship]
@@ -4753,7 +4755,7 @@ The Battleship is the supreme naval unit, with excellent offensive and defensive
  Battleships may expend 5 move points to do a 3 round bombardment which hits up to 4 units within a stack, of which only a maximum\
  of one can be killed. Defending Battleships get a free bombardment against Special Unit Attacks. \
 "), _("
-Stack-Escape：60% odds to evade stack-death if it has more moves left than attacker.\
+Stack-Escape：60% odds to evade stack-death if attacker doesn’t have more moves than it does.\
 ")
 bombard_rate = 3
 
@@ -4813,7 +4815,7 @@ Submarines are strong attackers but weak defenders.\
 Submarines have superior attrition rates when attacking in numbers. They excel\
  at hit-and-run against weaker ships. They have a minimum speed of 5 when damaged. \
 "), _("
-Stack-Escape：75% odds to evade stack-death if it has more moves left than attacker.\
+Stack-Escape：75% odds to evade stack-death if attacker doesn’t have more moves than it does.\
 ")
 
 [unit_missile_submarine]
@@ -4874,7 +4876,7 @@ Missile Submarines are unreachable by Air units, but don’t block air attacks o
 "), _("\
 Minimum speed is 5, when damaged.\n\
 "), _("
-Stack-Escape：75% odds to evade stack-death if it has more moves left than attacker.\
+Stack-Escape：75% odds to evade stack-death if attacker doesn’t have more moves than it does.\
 ")
 
 [unit_carrier]
