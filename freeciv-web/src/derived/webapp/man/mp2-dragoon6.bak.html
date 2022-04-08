@@ -18,7 +18,7 @@ Anarchy offers slightly less corruption than Despotism, but slightly more unhapp
 Celebrating cities cannot rapture.
 No citizens are made unhappy by each aggressive unit.
 25% base corruption in cities
-2% extra corruption per each tile in distance from capital
+2% extra corruption per each tile in distance from a capital
 
 <table class="gov_city_happy_table">
 <b title="Profile of citizen happiness in each city, based on the number of cities in the empire.">City Happiness vs. Empire Size</b>
@@ -62,7 +62,7 @@ Features:
 • If you lose your capital, the base chance of civil war is 90%.
 • You can have up to 9 cities before an additional unhappy citizen appears in each city due to civilization size.
 • After the first unhappy citizen due to civilization size, for each 6 additional cities another unhappy citizen will appear.
-• Has unlimited science/gold/luxuries rates.
+• Science/gold/luxuries rates will be ignored, and all trade will be alotted to luxury.
 • Your units may impose martial law. Each military unit inside a city will force 1 unhappy citizen to become content.
 • Each worked tile that gives more than 2 Food, Shield, or Trade suffers a -1 penalty unless its city is celebrating. (Cities below size 3 will not celebrate.)
 
@@ -74,13 +74,12 @@ Features:
 
 <pre class='helptext'>Under Despotism, you are the absolute ruler of your people.  Your control over your citizens is maintained largely by martial law. Under Despotism, tiles suffer a -1 tile output penalty if they produce 3 resource points.
 
-
 Despotism suffers the highest level of corruption of all forms of government.
 
 Celebrating cities cannot rapture.
 No citizens are made unhappy by each aggressive unit.
 37% base corruption in cities
-4% extra corruption per each tile in distance from capital
+4% extra corruption per each tile in distance from a capital
 Gulag：You can starve cities without disorder, with 2 martial law units or a Police Station.
 Authoritarian: Police Stations force an additional 2 citizens to be content.
 
@@ -122,6 +121,7 @@ Authoritarian: Police Stations force an additional 2 citizens to be content.
 </table>
 
 Features:
+• Capital city (with Palace) gains +75% shield production.
 • Newly founded cities get +2 food (+4 for capital.)
 • Trade production suffers massive losses.
 • Trade losses increase quickly with distance from capital.
@@ -146,7 +146,7 @@ Monarchy suffers the same small amount of corruption that the Republic does.
 Celebrating cities cannot rapture.
 No citizens are made unhappy by each aggressive unit.
 15% base corruption in cities
-2% extra corruption per each tile in distance from capital
+2% extra corruption per each tile in distance from a capital
 
 Requires knowledge of the technology Monarchy.
 
@@ -187,6 +187,7 @@ Requires knowledge of the technology Monarchy.
 </table>
 
 Features:
+• Capital city (with Palace) gains +50% shield production.
 • Trade losses increase with distance from capital.
 • Each of your cities will avoid paying 3 Shield upkeep for your units.
 • Each of your cities will avoid paying 1 Gold upkeep for your units.
@@ -208,7 +209,7 @@ Celebrating cities not founded by you can rapture 3 out of 5 turns, if they have
 1 citizen is made unhappy by each aggressive unit*.
     (* first two aggressive units do not cause unhappy)
 15% base corruption in cities
-2% extra corruption per each tile in distance from capital
+2% extra corruption per each tile in distance from a capital
 
 Requires knowledge of the technology Monarchy and the Magna Carta Wonder.
 
@@ -283,6 +284,7 @@ Requires knowledge of the technology Monarchy and the Magna Carta Wonder.
   </table>
 
 Features:
+• Capital city (with Palace) gains +50% shield production.
 • Trade losses increase with distance from capital.
 • Each of your cities will avoid paying 1 Shield upkeep for your units.
 • Each of your cities will avoid paying 1 Gold upkeep for your units.
@@ -313,7 +315,7 @@ Celebrating cities can rapture every turn.
 1 citizen is made unhappy by each aggressive unit*.
      (* first aggressive unit does not cause unhappy)
 15% base corruption in cities
-2% extra corruption per each tile in distance from capital
+2% extra corruption per each tile in distance from a capital
 
 Requires knowledge of the technology The Republic.
 
@@ -407,13 +409,13 @@ Features:
 <div class='item' id='gov4'>
 <h3 class='section'>Democracy</h3>
 
-<pre class='helptext'>Under Democracy, citizens govern directly by voting on issues. Democracy offers the highest level of trade. base corruption is half that of Republic or Monarchy, and corruption from distance to a capital is very low. Citizens become very upset during wars. Democracy revolts to Anarchy if any city remains in disorder for two turns. Cities and units belonging to Democracy have triple the cost to incite or bribe, respectively.
+<pre class='helptext'>Under Democracy, citizens govern directly by voting on issues. Democracy offers the highest level of trade. Base corruption is half that of Republic or Monarchy, and corruption from distance to a capital is very low. Citizens become very upset during wars. Democracy revolts to Anarchy if any city remains in disorder for two turns. Cities and units belonging to Democracy have triple the cost to incite or bribe, respectively.
 
 Celebrating cities with less than 10% foreign citizens can rapture every turn.
 Celebrating cities with 10% or more foreign citizens can rapture 1 out of 2 turns.
 2 citizens are made unhappy by each aggressive unit.
 8% base corruption in cities
-0.4% extra corruption per each tile in distance from capital
+0.4% extra corruption per each tile in distance from a capital
 
 Requires knowledge of the technology Democracy.
 
@@ -507,11 +509,11 @@ Improvements that appease unhappy citizens add +1 base gold in tithes for each c
 Having an Ecclesiastical Palace allows instant and orderly transition to this government.
 
 Celebrating cities can rapture 2 out of 5 turns.
-Celebrating cities can rapture 4 out of 7 turns if they have a Cathedral.
+Celebrating cities can rapture 4 out of 7 turns if they have a Cathedral building present in the city.
 Each city gains +1 happy citizen.
 No citizens are made unhappy by each aggressive unit.
 0% base corruption in cities
-1% extra corruption per each tile in distance from capital
+1% extra corruption per each tile in distance from a capital
 
 Requires knowledge of the technology Theocracy.
 
@@ -586,6 +588,7 @@ Requires knowledge of the technology Theocracy.
   </table>
 
 Features:
+• Capital city (with Palace) gains +50% gold production.
 • No trade losses from base corruption.
 • Trade losses only accrue based on distance to a capital, at a slow rate.
 • You pay 2 times normal Food upkeep for your units.
@@ -594,7 +597,7 @@ Features:
 • You can have up to 14 cities before an additional unhappy citizen appears in each city due to civilization size.
 • After the first unhappy citizen due to civilization size, for each 15 additional cities another unhappy citizen will appear.
 • The maximum rate you can set for science, gold, or luxuries is 80%.
-• Celebrating cities can grow by rapture, at reduced rate (Cities below size 3 cannot grow in this way.)
+• Celebrating cities can grow by rapture. (Cities below size 3 cannot grow in this way.)
 • Your units may impose martial law. Each military unit inside a city will force 1 unhappy citizen to become content.
 • A maximum of 2 units in each city can enforce martial law.
 • Each worked tile with Trade will yield +1 more Trade while its city is celebrating. (Cities below size 3 will not celebrate.)
@@ -602,10 +605,10 @@ Features:
 • Gold production is increased 20%.
 • Buildings and Wonders that make citizens content or happy give 1 base gold per citizen affected.
 • Pays no upkeep for Pilgrims or Zealots.
-• Allows you to build Pilgrims.
-• Allows you to build Falconeers.
-• Allows you to build a Patriarch, with Ecclesiastical Palace.
-• Allows you to build Zealots, with Conscription.
+• Allows Pilgrims.
+• Allows Falconeers.
+• Allows Patriarch (with Ecclesiastical Palace.)
+• Allows Zealots (with Conscription.)
 
 
 </pre>
@@ -617,7 +620,7 @@ Features:
 
 Content cities get a +1 trade bonus on irrigated tiles that produce trade. Each city gets 4 shields and 3 gold of free unit upkeep. Buildings with 1 upkeep are free. The city with a Palace gets +40% production.
 
-Each city gets 4 shields of free unit upkeep. Buildings with 1 upkeep are free. The city with a Palace gets +50% production.
+Each city gets 4 shields of free unit upkeep. Buildings with 1 upkeep are free. The city with a Palace gets +40% production.
 
 Riflemen cost 5 less; Armor and Dive Bombers, 10 less. Diplomats and Spies get +1 vet level. The effect of Cathedrals and Michelangelo is reduced -1. Each city gets the effects of a Supermarket for free.
 
@@ -628,7 +631,7 @@ Celebrating cities can rapture 2 out of 5 turns.
 Celebrating cities which have a Granary gain +1 food output.
 No citizens are made unhappy by aggressive units.
 20% base corruption in cities
-No extra corruption per each tile in distance from capital
+No extra corruption per each tile in distance from a capital
 Gulag：You can starve cities without disorder, with 2 martial law units or 1 martial law unit and a Police Station.
 Authoritarian: Police Stations force an additional 2 citizens to be content.
 
@@ -695,15 +698,15 @@ Requires knowledge of the technology Communism.
   </table>
 
 Features:
+• Capital city (with Palace) gains +40% shield production.
 • Trade production will suffer moderate losses.
 • Distance from capital does not increase trade losses.
 • Each of your cities will avoid paying 4 Shield upkeep for your units.
 • Each of your cities will avoid paying 3 Gold upkeep for your units.
 • If you lose your capital, the base chance of civil war is 50%.
-• You can have up to 12 cities before an additional unhappy citizen appears in each city due to civilization size.
-• Thereafter, you may have an unlimited number of cities without an increase in unhappy citizens.
+• You may have an unlimited number of cities without an increase in unhappy citizens.
 • The maximum rate you can set for science, gold, or luxuries is 80%.
-• Celebrating cities can grow by rapture, at reduced rate (Cities below size 3 cannot grow in this way.)
+• Celebrating cities can grow by rapture. (Cities below size 3 cannot grow in this way.)
 • When not celebrating, +1 trade on each <b>irrigated tile</b> that produces trade.
 • When celebrating, +1 trade on each tile that produces trade.
 • Your units may impose martial law. Each military unit inside a city will force 2 unhappy citizens to become content.
@@ -712,7 +715,7 @@ Features:
 • Each worked tile with Trade will yield +1 more Trade while its city is celebrating. (Cities below size 3 will not celebrate.)
 • Cathedral and Michelangelo effects diminished by -1.
 • Disqualified from all bonuses to Coinage.
-• Allows you to build Proletarians.
+• Allows Proletarians.
 
 
 </pre>
@@ -737,7 +740,7 @@ Celebrating cities not founded by you can rapture 1 out of 3 turns.
 Celebrating cities not founded by you can rapture 2 out of 3 turns, if they have no foreign citizens.
 No citizens are made unhappy by each aggressive unit.
 8% base corruption in capital,
-2% extra corruption per each tile in distance from capital
+2% extra corruption per each tile in distance from a capital
 Authoritarian: Police Stations force an additional 2 citizens to be content.
 
 Requires knowledge of the technology Nationalism.
@@ -813,6 +816,7 @@ Requires knowledge of the technology Nationalism.
   </table>
 
 Features:
+• Capital city (with Palace) gains +15% shield production.
 • Trade production suffers a small amount of losses.
 • Trade losses increase with distance from capital.
 • You pay 2 times normal Food upkeep for your units.
@@ -829,9 +833,8 @@ Features:
 • Luxury production is decreased 15%.
 • Science production is increased 20% in original cities.
 • When not celebrating, +1 trade on each Land tile that produces trade.
-• When celebrating, +1 trade on each tile that produces trade.
 • Each worked Sea tile yields +1 more Trade while its city is celebrating. (Cities below size 3 will not celebrate.)
-• Allows you to build Migrants.
+• Allows Migrants.
 
 
 </pre>
