@@ -643,9 +643,9 @@ all other Sea Units: 4 (was 3)
 ==============================================================
 8. Most ships gain +1 move. Adjusts a discrepancy between
 their speed and that of corresponding land units using roads.
-Ships to not gain +1 = Trireme, Longboat, Ram Ship
+Ships to not gain +1 = Trireme, Longboat, Ram Ship, Transport
 Frigate gets +2 (had received a +1 adjustment prior to all
-ships getting a general +1). This changes also lessens 
+ships getting a general +1). This change also lessens 
 the "molasses effect" in island games, where all sea-based 
 operations are excessively slower than land operations.
 ==============================================================
@@ -679,4 +679,74 @@ cities reach their potential by getting more ocean later.
 ==============================================================
 117. Knights simplified to D2 with D3 vs mounted.
 ==============================================================
-118.
+118. Armor unit changes (the units were a little underpowered)
+Armor I: A10 goes to A11
+Armor I & II: Each unit gains 40% odds of Stack-Escape when 
+its stack is killed
+==============================================================
+119. Tech changes
+
+Flight
+gets Dive Bomber (was:Radio)
+
+Radio
+Flight, Miniaturization (was Flight only)
+gets Medium Bomber (was:Advanced Flight)
+ups the cost to getting planes available one tech level sooner
+
+Advanced Flight
+gets Heavy Bomber (was:Medium Bomober)
+
+Labor Union, name changed to Mechanization
+Mass Production,Machine Tools(was:Guerilla Warfare)
+
+Radar
+Advanced Flight, Mechanization(was:Electronics)
+gets Strategic Bomber (was: Heavy Bomber)
+more expensive second req balances availability of Strategic Bomber
+one tech sooner. (it was available "too late" in WW3 era which one 
+could nevertheless enter too soon.)
+
+Computers
+Mechanization(was:Mass Prod), Radio(was:Miniaturization)
+tech is now a 3x cost tech to solve some balance playability
+1. too easy to ignore earlier techs and unrealistically race to a "killer"
+2. late game tech pace accelerated too fast out of WW2 era and players didn't
+even complete WW2 techs before having rockets and jet fighters and such.
+3.could slightly de-pressurise the arms race to WW3 tech
+4.JTIDS which is to give infantry greater power vis-a-vis stronger
+WW3 era units and loss of Sun Tzu, was being obtained prior to even
+having Flight, Mobile Warfare, etc. 
+
+Avionics
+Rocketry
+
+Combined Arms
+Advanced Flight, Computers(was:Mobile Warfare)
+all ww3 techs require Computers as the expensive breakthrough
+
+Rocketry
+Radar, Computers(was:Miniaturization)
+all ww3 techs require Computers as the expensive breakthrough
+
+Space Flight
+Rocketry,Nuclear Power (was:Computers)
+Rocketry already has Computers as a req.
+all ww3 techs require Computers as the expensive breakthrough
+==============================================================
+120.
+==============================================================
+121.
+==============================================================
+122.
+==============================================================
+123.
+==============================================================
+124.
+==============================================================
+125.
+==============================================================
+126.
+==============================================================
+127.
+==============================================================
