@@ -757,6 +757,20 @@ reqs    =
 type    = "Stack_Escape_Pct"
 value   = 10 ; 50% → = 60%
 
+[effect_armor_stack_escape_odds]
+type    = "Stack_Escape_Pct"
+value   = -20 ; 60%-20 → 40%
+reqs    =
+    { "type", "name", "range"
+      "UnitType", "Armor", "Local"
+    }
+[effect_armor2_stack_escape_odds]
+type    = "Stack_Escape_Pct"
+value   = -20 ; 60%-20 → 40%
+reqs    =
+    { "type", "name", "range"
+      "UnitType", "Armor II", "Local"
+    }
 [effect_satellite_stack_escape_odds]
 type    = "Stack_Escape_Pct"
 value   = 40 ; 60% → 100%
@@ -875,6 +889,18 @@ reqs    =
       "CityTile",      "Center",       "Local", TRUE
       "UnitState",     "MovedThisTurn","Local", TRUE
     }
+
+;Kill off Tribesmen after 100AD for those with no Chand Baori
+;[effect_tribesmen_dying]
+;type    = "Unit_Recover"
+;value   = -4
+;reqs    =
+;    { "type",          "name",         "range", "present"
+;      "UnitType",      "Tribesmen",    "Local", TRUE
+;      "MinYear",       "100",          "World", TRUE
+;      "Building",      "Chand Baori",  "Player",FALSE  
+;    }
+
 
 ; ****************************** RECYCLE SHIELDS **************************
 [effect_unit_shield_value_recycle]
