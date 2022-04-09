@@ -3439,6 +3439,7 @@ move_rate     = 24
 vision_radius_sq = 12
 transport_cap = 2
 fuel          = 2
+paratroopers_mr_sub = 146 ;000,00000,00,0100,100,1,0 - max_ATKs=0, bbd_retal_rate=0, iPill_rand_tgts=0, iPill_odds=-4 pentads=80%, iPill_moves=4, iPillage=1, ATK_Stay_Fortified=0
 uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
@@ -3469,7 +3470,8 @@ roles         = ""
 helptext      = _("\
 The deadliest Bomber, with improved attack and speed. Stealth Bombers can’t be seen\
  unless adjacent to an enemy. Stealth evasion gives a 25% bonus against all Anti-Air\
- units, and reduces SAM Batteries down to only a 25% bonus. May carry two Bombs. \n\
+ units, and reduces SAM Batteries down to only a 25% bonus. Stealth Bombers can\
+ iPillage. May carry two Bombs. \n\
 "), _("
 Stealth Bombers can Stack-Escape：a 67% chance to escape a killed stack if they have more remaining moves than the attacker.\
  NOTE：GOTO disallows unit loss from lack of fuel. You\
