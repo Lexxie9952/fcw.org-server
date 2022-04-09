@@ -454,22 +454,24 @@ function handle_iPillage_event(message, tile_id)  // iPillage.
   var ptype;
   var delay = 0;
 
-  message=message.substring(8); // removes "💥 Your ", leaving, "Ground Strike Fighter destroyed the Roman Quay with a Ground Strike"
-
+  //console.log("Intercepted an iPillage");
   for (ptype_id in unit_types) {
     // Find out the unit_type who did this hostile deed !
     ptype = unit_types[ptype_id];
-    if (message.startsWith(ptype['name'])) {
+                                           //needed to prevent false positives
+    if (message.includes(ptype['name']) && utype_can_iPillage(ptype)) {
       // The alt sound is preferred for alternate attack types:
       var sskey = ptype['sound_fight_alt'];
-      if (!sskey) sskey = ptype['sound_fight']; //fallback
-      if (!soundset[sskey]) sskey = ptype['sound_fight']; //fallback
-      //console.log("calling playsound with sskey:"+sskey);
+      if (sskey) sskey = sskey.replace(/ /g, "_").toLowerCase();
+      else sskey = ptype['sound_fight']; //fallback1
+      if (!soundset[sskey]) sskey = "bomb"; //fallback2
       play_hostile_event_sound(sskey, ptile, ptype);
-
       break;
-    }
+    } 
   }
+  //final fallback3 if we couldn't find a ptype for ipillage sound:
+  if (!ptype) play_hostile_event_sound("bomb", ptile, ptype);
+
   // Activate explosion on the tile also.
   delay = 500; // synchronise explosion with sound effect
   // times for each unit are in the top of unit.js:

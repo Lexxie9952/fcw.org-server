@@ -26,6 +26,7 @@ var units = {};
 var unit_pillage_sound_delay_times = {
   "Dive Bomber": 3000,
   "Ground Strike Fighter": 300,
+  "Stealth Bomber": 300,
   "Jet Bomber": 300,
   "Armor":      400,
   "Armor II":   400
@@ -1032,7 +1033,8 @@ function get_what_can_unit_pillage_from(punit, ptile)
       if (ptype['name'] != "Ground Strike Fighter"
          && ptype['name'] != "Dive Bomber"
          && ptype['name'] != "Jet Bomber" 
-         && ptype['name'] != "Strategic Bomber" 
+         && ptype['name'] != "Strategic Bomber"
+         && ptype['name'] != "Stealth Bomber"
          ) {
         return targets;
       }
@@ -1341,7 +1343,9 @@ function utype_get_extra_stats(ptype) {
   pstats.iPillage_random_targets =  (BB & 0b11000000000) >> 9;
   // Bit 11-15: # of rounds of Bombard retaliation
   pstats.bombard_retaliate_rounds =
-                              (BB & 0b11111100000000000) >> 11;
+                               (BB & 0b1111100000000000) >> 11;
+  // Bit 16-18: # of max attacks per turn                              
+  pstats.max_attacks =      (BB & 0b1110000000000000000) >> 16;
   
   /* Adjustments of the raw encoded values to match their purpose: */
 
