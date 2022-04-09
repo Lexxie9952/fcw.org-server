@@ -410,6 +410,8 @@ void unit_versus_unit(struct unit *attacker, struct unit *defender,
       attacker->changed_from = ACTIVITY_IDLE;
     }
   }
+  // Increment number of times unit has attacked this turn:
+  attacker->server.attacks_this_turn++;
 }
 
 /**********************************************************************//**
@@ -788,6 +790,8 @@ static void unit_restore_movepoints(struct player *pplayer, struct unit *punit)
 {
   punit->moves_left = unit_move_rate(punit);
   punit->done_moving = FALSE;
+  /* remaining attacks is something to restore also: */
+  punit->server.attacks_this_turn = 0;
 }
 
 /**********************************************************************//**

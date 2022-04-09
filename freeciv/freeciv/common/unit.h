@@ -243,6 +243,7 @@ struct unit {
       int ord_city;
 
       struct vision *vision;
+      int attacks_this_turn;    // tracks "OneAttack", "TwoAttack", etc.
       time_t action_timestamp;
       struct unit_wait_list_link *wait;
       int action_turn;

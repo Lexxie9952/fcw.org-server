@@ -621,13 +621,13 @@ struct bombard_stats {
   int bombard_move_cost;          // Bits   2-7: Move fragments expended by performing a bombard action
   int bombard_primary_targets;    // Bits  8-10: Max # of targets on tile that are hit. (0==all)
   int bombard_primary_kills;      // Bits 11-13: Max # of kills possible on primary targets (0==none)
+  int bombard_atk_mod;            // Bits 14-19: Attack strength mod for bombard, cf.utype_get_bombard_stats
   int bombard_collateral_targets; // RESERVED, # of secondary units who receive (lesser) damage
   int bombard_collateral_kills;   // RESERVED, # of collateral units who could possibly die (0==none)
   int bombard_collateral_rate_reduce;//RESERVED, reduction in bombard_rate for collateral target exposure
   int bombard_collateral_atk_mod; // RESERVED, adjustment to atk strength on collateral targets (e.g., -25)
   int bombard_fortified_def_mod;  // RESERVED, additional defense bonus for targets IFF fortified
   int bombard_rate_range_mod;     // RESERVED, adjustment to bombard_rate for each 1 tile distance
-  int bombard_atk_mod;            // RESERVED, % adjustment to attack strength when bombarding (-50 = -50%)
   int bombard_atk_range_mod;      // RESERVED, % adjustment to attack strength for tile distance beyond dist==1
 
   // RESERVED for later use
@@ -653,6 +653,7 @@ struct extra_unit_stats {
   int iPillage_odds;              // Bits 5-8 - odds of success expressed as 100-(6*)
   int iPillage_random_targets;    // Bit 9-10:  non-zero==randomly pick x targets. 0==user select target.
   int bombard_retaliate_rounds;   // Bits 11-15:number of rounds of bombard retaliation when bombarded
+  int max_attacks;                // Bits 16-18:max number of attacks per turn, e.g., 001 = 'OneAttack'
     /****** NOTE ****** A retaliator should be aware to also set the following bombard_stats,
        which are used in its retaliation but do NOT enable initiated bombardment, per se:
                                            bombard_primary_targets 

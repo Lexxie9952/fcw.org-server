@@ -156,7 +156,7 @@ extern "C" {
 #define SPECENUM_VALUE45NAME "Paradrop Unit"
 #define SPECENUM_VALUE46 ACTION_AIRLIFT
 #define SPECENUM_VALUE46NAME "Airlift Unit"
-#define SPECENUM_VALUE47 ACTION_ATTACK
+#define SPECENUM_VALUE47 ACTION_ATTACK    /* NOTE: when ACTION_ATTACK_2 is added, be SURE to insert it into FCW's customized unit_can_do_action() for max_attacks compatibility */
 #define SPECENUM_VALUE47NAME "Attack"
 #define SPECENUM_VALUE48 ACTION_SUICIDE_ATTACK
 #define SPECENUM_VALUE48NAME "Suicide Attack"

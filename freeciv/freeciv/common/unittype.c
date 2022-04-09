@@ -2521,8 +2521,13 @@ void utype_get_extra_stats(struct extra_unit_stats *pstats,
 {
   fc_assert(NULL != ptype);
 
-//FIXME: / SINGLE_MOVE should be there instead of / 9, but it means all these
-//functions need to go into unittools.c in the /server directory: 
+  /* This bitfield needs some preparations: the server multiplies the value
+   * in units.ruleset by SINGLE_MOVE when loading the utype data. This makes
+   * this a non-ideal var for storing bitfield since:
+   (1) we lose 4 bits of resolution (from 32 down to 28: BIT27 is our max)
+   (2) we just assume SINGLE_MOVE is 9 (MP2), but can't know what it is
+       without moving these funcs into /server, since /common doesn't have
+       access to SINGLE_MOVE */
   int BB = ptype->paratroopers_mr_sub / 9;        
 
   /* extra_unit_stats are currently embedded in paratroopers_mr_sub,
@@ -2550,7 +2555,10 @@ void utype_get_extra_stats(struct extra_unit_stats *pstats,
   pstats->iPillage_random_targets =  (BB & 0b11000000000) >> 9;
   // Bit 11-15: # of rounds of Bombard retaliation
   pstats->bombard_retaliate_rounds =
-                               (BB & 0b11111100000000000) >> 11;
+                                (BB & 0b1111100000000000) >> 11;
+  // Bit 16-18: # of max attacks per turn                              
+  pstats->max_attacks =      (BB & 0b1110000000000000000) >> 16;
+                            
 
   /* Adjustments of the raw encoded values to match their purpose: */
 

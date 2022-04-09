@@ -330,12 +330,33 @@ bool is_military_unit(const struct unit *punit)
 }
 
 /**********************************************************************//**
+  Determines if a unit with a limited number of attacks per turn is
+  still able to attack (or has used up all its attacks.)
+**************************************************************************/
+static bool unit_has_attacks_left(const struct unit *punit) { 
+  struct extra_unit_stats pstats;
+  unit_get_extra_stats(&pstats, punit);
+
+  if (pstats.max_attacks) {
+    if (punit->server.attacks_this_turn >= pstats.max_attacks) {
+      return false;
+    }
+  }
+
+  return true;
+}
+/**********************************************************************//**
   Return TRUE iff this unit can do the specified generalized (ruleset
   defined) action enabler controlled action.
 **************************************************************************/
 bool unit_can_do_action(const struct unit *punit,
                         const action_id act_id)
 {
+  /* Hard-coded req: unit can't attack if it has no attacks left: */
+  if (act_id == ACTION_ATTACK) {
+    /* if other ACTION_ATTACK types are added, && them in above */
+    if (!unit_has_attacks_left(punit)) return false;
+  }
   return utype_can_do_action(unit_type_get(punit), act_id);
 }
 
