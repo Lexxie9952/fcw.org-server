@@ -1008,11 +1008,12 @@ cost = 50
 ;graphic     = "a.horseback_riding"
 ;graphic_alt = "-"
 
+;==========================================CHILD TECHS===================================================
 ;This is the exemplar for how to do a specialty add-on tech, it's basically just a dead-end tech
 ;usually for cheaper than its parent req, that allows "specializing into" the parent tech more, 
 ;and so, the "Specialization" flag is used by FCW help it display it as a minor add-on attached
 ;to the parent, whereas other clients would just show it separately.
-[advance_dive_bombers]
+[advance_flight2]
 name     = _("Flight.2")
 req1     = "Flight"
 req2     = "None"
@@ -1021,19 +1022,11 @@ graphic     = "a.flight" ;this pic won't be shown in the tech tree but will show
 graphic_alt = "-"
 cost = 750
 
-
-
-; A placeholder tech used to ensure that when
-; a game is reloaded, a player can`t rebuild
-; the "Darwin's Voyage" small wonder and get
-; two free advances again.
-; THIS RULESET DOES NOT USE OLD DARWIN'S VOYAGE BEHAVIOUR OR THEORY OF EVOLUTION.
-[advance_theory_of_evolution]
-name     = _("Theory of Evolution")
-req1     = "None"
+[advance_radio2]
+name     = _("Radio.2")
+req1     = "Radio"
 req2     = "None"
-root_req = "Theory of Evolution"
-flags    = ""
-graphic  = "b.darwins_voyage"
+flags    = "Specialization"
+graphic     = "a.Combustion" ;this pic won't be shown in the tech tree but will show in other places
 graphic_alt = "-"
-helptext = _("This technology is not researchable and has no effect.")
+cost = 820
