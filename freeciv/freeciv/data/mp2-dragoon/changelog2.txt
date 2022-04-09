@@ -734,7 +734,16 @@ Rocketry,Nuclear Power (was:Computers)
 Rocketry already has Computers as a req.
 all ww3 techs require Computers as the expensive breakthrough
 ==============================================================
-120.
+120. max_attacks per turn
+Fighter, Escort Fighter: 2
+Dive Bomber, Medium Bomber, Heavy Bomber: 1
+Strategic Bomber, Jet Bomber, 2
+Stealth Bomber, 3
+
+new unit Bomb
+
+new carry capacities
+Med.Bomber 1
 ==============================================================
 121.
 ==============================================================

@@ -1,4 +1,4 @@
-;：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：’ ×
+;’：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：’ ×
 ; Modifying this file:
 ; You should not modify this file except to make bugfixes or
 ; for other "maintenance".  If you want to make custom changes,
@@ -14,7 +14,7 @@
 ; unit with the relevant role that the player can build will be chosen.
 ; If no such unit can be found (eg Scouts that require Horseback Riding),
 ; then the first unit with this role will be chosen.
-;：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：’ ×
+;’：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：’ ×
 
 [datafile]
 description="Unit definitions for the MP2 ruleset."
@@ -186,20 +186,34 @@ veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
 ; REQUIRE CHANGES TO FCW function unit_could_possibly_load() in unit.js
 ; **********************************************************************************
 ; **********************************************************************************
+; missile flag not class, indicates suicide explosion and possibly other things.
 [unitclass_missile]
 name          = _("?unitclass:Missile")
 min_speed     = 1
 hp_loss_pct   = 0
 hut_behavior  = "Frighten"
 flags         = "Missile", "Unreachable", "DoesntOccupyTile", "Airliftable"
+helptext      = _("\
+  • Can be airlifted from a suitable city.\
+")
 
-; missile flag not class, indicates suicide explosion and possibly other things.
 [unitclass_bomb]
 name          = _("?unitclass:Bomb")
 min_speed     = 1
 hp_loss_pct   = 0
 hut_behavior  = "Frighten"
 flags         = "Unreachable", "DoesntOccupyTile", "Airliftable" 
+helptext      = _("\
+  • Can be airlifted from a suitable city.\
+")
+
+[unitclass_conventional_bomb]
+name          = _("?unitclass:Bomb2")
+min_speed     = 1
+hp_loss_pct   = 0
+hut_behavior  = "Frighten"
+flags         = "BuildAnywhere", "Missile", "Unreachable", "DoesntOccupyTile", "Airliftable",
+                "AttackNonNative"
 helptext      = _("\
   • Can be airlifted from a suitable city.\
 ")
@@ -2848,6 +2862,7 @@ move_rate     = 20
 vision_radius_sq = 12
 transport_cap = 0
 fuel          = 1
+paratroopers_mr_sub = 131072 ;010,00000,00,0000,000,0,0 - max_ATKs=2, bbd_retal_rate=0, iPill_rand_tgts=0, iPill_odds=-10 pentads=50%, iPill_moves=6, iPillage=1, attack_stay_fortified=0
 uk_happy      = 0
 uk_shield     = 1
 uk_food       = 0
@@ -2881,7 +2896,8 @@ helptext      = _("\
 Fighters are the first offensive Air units. Their superior mobility and firepower alter the\
  very nature of warfare. They can move anywhere and attack any unit except Submarines, Jet\
  Bombers, Spy Planes, and Satellites. Fighters need fuel to avoid crashing and thus must end\
- every turn in a city, Airbase, or Carrier. Air units can’t conquer undefended enemy cities.\n\
+ every turn in a city, Airbase, or Carrier. Air units can’t conquer undefended enemy cities.\
+ Fighters can attack twice per turn. \n\
 "), _("
 INTERCEPTOR：the Vigil order lets Fighters auto-attack adjacent Air units if they\
  have better attack odds. A Fighter can Vigil if it uses 2 move points or less. \n\
@@ -2912,6 +2928,7 @@ move_rate     = 18
 vision_radius_sq = 12
 transport_cap = 0
 fuel          = 2
+paratroopers_mr_sub = 131072 ;010,00000,00,0000,000,0,0 - max_ATKs=2, bbd_retal_rate=0, iPill_rand_tgts=0, iPill_odds=-10 pentads=50%, iPill_moves=6, iPillage=1, attack_stay_fortified=0
 uk_happy      = 0
 uk_shield     = 1
 uk_food       = 0
@@ -2945,6 +2962,7 @@ Escort Fighters are large fighters with high fuel capacity. Higher mass and\
  stronger construction allow them to absorb more damage. They do not attack\
  as well as standard Fighters, but can return home on the next turn. They are\
  good for long-range missions, defensive air support, and escorting bombers.\
+ Escort Fighters can attack twice per turn. \n\
 "), _("
 INTERCEPTOR：the Vigil order lets Escort Fighters auto-attack adjacent Air units if they\
  have better attack odds. This unit can Vigil if it uses 3 move points or less. \n\
@@ -2975,7 +2993,7 @@ move_rate     = 18
 vision_radius_sq = 12
 transport_cap = 0
 fuel          = 1
-paratroopers_mr_sub = 346 ;000,00000,00,1010,110,1,0 - max_ATKs=0, bbd_retal_rate=0, iPill_rand_tgts=0, iPill_odds=-10 pentads=50%, iPill_moves=6, iPillage=1, attack_stay_fortified=0
+paratroopers_mr_sub = 65882 ;001,00000,00,1010,110,1,0 - max_ATKs=1, bbd_retal_rate=0, iPill_rand_tgts=0, iPill_odds=-10 pentads=50%, iPill_moves=6, iPillage=1, attack_stay_fortified=0
 ;NOTE：iPillage changes in rules require client_rules_flag and get_what_can_unit_pillage_from() changes.
 uk_happy      = 0
 uk_shield     = 1
@@ -3012,7 +3030,8 @@ helptext      = _("\
 Dive Bombers are fitted with armor and armaments for ground attack and sea combat.\
  They do better attacking surface targets and defending vs Anti-Air, but have reduced\
  range and Air-to-Air ability. They do not block attacks on their same tile, but exert\
- ZoC on adjacent land tiles and can iPillage. The Dive Bomber is not an interceptor.\
+ ZoC on adjacent land tiles and can iPillage. The Dive Bomber is not an interceptor,\
+ and can only attack once per turn.\
  Role specialization yields the following gains and losses over a Fighter: \n\n\
  GAINS: \n\
  • A:4½  vs Surface units (Land or Sea) \n\
@@ -3022,6 +3041,7 @@ Dive Bombers are fitted with armor and armaments for ground attack and sea comba
 LOSSES: \n\
  • A3/D3 in Air-to-Air \n\
  • Can’t block its tile \n\
+ • One attack per turn \n\
  • Can’t intercept \n\
 "), _("
 Communists pay 10 less for this unit.\
@@ -3049,13 +3069,15 @@ hitpoints     = 20
 firepower     = 2
 move_rate     = 15
 vision_radius_sq = 12
-transport_cap = 0
+transport_cap = 1
 fuel          = 2
+paratroopers_mr_sub = 65536 ;001,00000,00,0000,000,0,0 - max_ATKs=1, bbd_retal_rate=0, iPill_rand_tgts=1, iPill_odds=-8 pentads=60%, iPill_moves=3, iPillage=1, ATK_Stay_Fortified=0
 uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
 targets       = "Balloon", "LandRail", "Zeppelin"
+cargo         = "Bomb2"
 bonuses       =
    { "flag", "type", "value"
    }
@@ -3075,9 +3097,10 @@ veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
 veteran_move_bonus = 0, 0, 0, 0, 9, 9, 9
 roles         = ""
 helptext      = _("\
-The Medium Bomber is well suited for moderately strong targets or multiple weak targets.\
- It may not attack other Air units. It is a Soft Field Unit and can’t carry Bomb\
- units, causing less discontent than other types of Bombers. \n\
+The Medium Bomber is well suited for hitting a moderately strong target.\
+ It may not attack other Air units, and can only attack once per turn. It can only\
+ carry conventional Bombs, not nuclear bomb units. This makes it a Soft Field Unit,\
+ causing less discontent than other types of Bombers. \n\
 ➤ Unhappy effect for Soft Field units: \n\
 Republic:0   Democracy:1    (non-aggressive) \n\
 Republic:1   Democracy:2    (aggressive) \n\
@@ -3108,12 +3131,13 @@ move_rate     = 16
 vision_radius_sq = 12
 transport_cap = 1
 fuel          = 2
+paratroopers_mr_sub = 65536 ;001,00000,00,0000,000,0,0 - max_ATKs=1, bbd_retal_rate=0, iPill_rand_tgts=1, iPill_odds=-8 pentads=60%, iPill_moves=3, iPillage=1, ATK_Stay_Fortified=0
 uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
 targets       = "Balloon", "LandRail", "Zeppelin"
-cargo         = "Bomb"
+cargo         = "Bomb2", "Bomb"
 bonuses       =
    { "flag", "type", "value"
    }
@@ -3134,7 +3158,7 @@ veteran_move_bonus = 0, 0, 0, 0, 9, 9, 9
 roles         = ""
 helptext      = _("\
 Heavy Bombers are large and sturdy Bombers with larger payload and numerous gunner defense stations.\
- They are excellent for hitting strong well-defended ground targets.\
+ They are excellent for hitting strong well-defended ground targets, and can attack once per turn.\
  They can’t attack Air units. They can carry one Bomb. Like most Bombers, the Heavy Bomber is a Field Unit.\
  Field Units cause the same unhappiness no matter if aggressively or peacefully deployed. \n\
 ➤ Unhappy effect for Field units: \n\
@@ -3162,18 +3186,18 @@ attack        = 13
 defense       = 4
 hitpoints     = 20
 firepower     = 2
-move_rate     = 16
+move_rate     = 17
 vision_radius_sq = 12
 transport_cap = 2
 fuel          = 3
-paratroopers_mr_sub = 782 ;000,00000,01,1000,011,1,0 - max_ATKs=0, bbd_retal_rate=0, iPill_rand_tgts=1, iPill_odds=-8 pentads=60%, iPill_moves=3, iPillage=1, ATK_Stay_Fortified=0
+paratroopers_mr_sub = 131854 ;010,00000,01,1000,011,1,0 - max_ATKs=2, bbd_retal_rate=0, iPill_rand_tgts=1, iPill_odds=-8 pentads=60%, iPill_moves=3, iPillage=1, ATK_Stay_Fortified=0
 ;NOTE：iPillage changes in rules require client_rules_flag and get_what_can_unit_pillage_from() changes.
 uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
 targets       = "Balloon", "LandRail", "Zeppelin"
-cargo         = "Bomb"
+cargo         = "Bomb2", "Bomb"
 bonuses       =
    { "flag", "type", "value"
    }
@@ -3193,7 +3217,7 @@ veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
 veteran_move_bonus = 0, 0, 0, 0, 9, 9, 9
 roles         = ""
 helptext      = _("\
-The Strategic Bomber offers a small improvement in attack. Higher altitude offers a good upgrade in\
+The Strategic Bomber can do two attacks per turn. Higher altitude offers a good upgrade in\
  defense. It has considerably longer range, with one more turn of fuel. Upgraded payload enables\
  instant-Pillage bombing. May carry two Bombs. \n\
 "), _("
@@ -3496,6 +3520,7 @@ move_rate     = 24
 vision_radius_sq = 12
 transport_cap = 0
 fuel          = 1
+paratroopers_mr_sub = 196608 ;011,00000,00,0000,000,0,0 - max_ATKs=3, bbd_retal_rate=0, iPill_rand_tgts=0, iPill_odds=0, iPill_moves=0, iPillage=0, ATK_Stay_Fortified=0
 uk_happy      = 0
 uk_shield     = 1
 uk_food       = 0
@@ -3519,7 +3544,8 @@ veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
 veteran_move_bonus = 0, 0, 0, 0, 9, 9, 9
 roles         = ""
 helptext      = _("\
-Jet Fighters upgrade the Fighter with improved attack, defense, and range.\
+Jet Fighters upgrade the Fighter with improved attack, defense, and range. A Jet Fighter\
+ can do a maximum of three attacks per turn. \n\
 "), _("
 INTERCEPTOR：the Vigil order lets Jet Fighters auto-attack adjacent Air units if they\
  have better attack odds. This unit can Vigil if it uses 3 move points or less. \n\
@@ -3549,6 +3575,7 @@ move_rate     = 22
 vision_radius_sq = 12
 transport_cap = 0
 fuel          = 2
+paratroopers_mr_sub = 131072 ;010,00000,00,0000,000,0,0 - max_ATKs=2, bbd_retal_rate=0, iPill_rand_tgts=0, iPill_odds=0, iPill_moves=0, iPillage=0, ATK_Stay_Fortified=0
 uk_happy      = 0
 uk_shield     = 1
 uk_food       = 0
@@ -3576,7 +3603,8 @@ Multi-Fighters are fitted for mission versatility.\
  They are sturdy, defend better, and have two turns of fuel. They are\
  good for escorting bombers, pursuing enemy bombers on long range\
  missions, defensive ground support, naval missions, reconnaissance,\
- and interception. A Multi-Fighter can vigil at any range.\
+ and interception. A Multi-Fighter can vigil at any range, and can\
+ do a maximum of 2 attacks per turn. \n\
 "), _("
 INTERCEPTOR：the Vigil order lets Multi-Fighters auto-attack adjacent Air units if they\
  have better attack odds. This unit can Vigil if it has 1 turn of fuel or more. \n\
@@ -3637,7 +3665,7 @@ Ground Strike Fighters upgrade the Dive Bomber. They can’t block attacks on ot
  units on their tile, nor engage against Fighters. However, like the Dive Bomber,\
  they can interdict ZoC over land tiles. High fuel capacity allows two turns in the\
  air. No unit can stop this unit from attacking surface units on a tile. This unit\
- can also do pinpointed surgical strikes to pillage tiles. This aircraft is a\
+ has no limit to attacks per turn and can also do pinpointed surgical strikes to pillage tiles. This aircraft is a\
  specialized niche unit. It is not an interceptor. \n\
 Stack-Escape：60% odds to evade stack-death if attacker doesn’t have more moves than it does.\
  NOTE：GOTO prevents unit loss from lack of fuel. You\
@@ -3665,14 +3693,14 @@ move_rate     = 19
 vision_radius_sq = 12
 transport_cap = 3
 fuel          = 3
-paratroopers_mr_sub = 1198 ;000,00000,10,0101,011,1,0 - max_ATKs=0, bbd_retal_rate=0, iPill_rand_tgts=2, iPill_odds=-5 pentads=75%, iPill_moves=3, iPillage=1, ATK_Stay_Fortified=0
+paratroopers_mr_sub = 132270 ;010,00000,10,0101,011,1,0 - max_ATKs=2, bbd_retal_rate=0, iPill_rand_tgts=2, iPill_odds=-5 pentads=75%, iPill_moves=3, iPillage=1, ATK_Stay_Fortified=0
 ;NOTE：iPillage changes in rules require client_rules_flag and get_what_can_unit_pillage_from() changes.
 uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
 targets       = "LandRail"
-cargo         = "Bomb"
+cargo         = "Bomb2", "Bomb"
 flags         = "FieldUnit", "Unbribable", "AirAttacker", "HasNoZOC", "CanEscape",
                 "CantReachAir", "NeverProtects", "Provoking", "WillNever"
 veteran_names =
@@ -3691,7 +3719,8 @@ roles         = ""
 helptext      = _("\
 Jet Bombers are stratospheric long-range bombers with 3 turns of fuel：they can be airborne for two\
  turn-changes. Their range makes them useful even after Stealth Bombers are available. Stratospheric\
- altitude is unreachable to propeller-based Fighters and AAA. Jet Bombers can Carpet Bomb, an\
+ altitude is unreachable to propeller-based Fighters and AAA. A Jet Bomber may do a maximum of three\
+ attacks per turn. Jet Bombers can Carpet Bomb, an\
  instant-Pillage of tiles from the air. May carry three Bombs. \ 
 "), _("
 Stack-Escape：60% odds to evade stack-death if attacker doesn’t have more moves than it does.\
@@ -3748,7 +3777,8 @@ roles         = ""
 helptext      = _("\
 The most advanced Fighter, with improved attack and longer range. Stealth Fighters can’t be seen unless adjacent\
  to an enemy. Stealth evasion gives a 25% bonus against all Anti-Air units, and reduces\
- SAM Batteries down to a smaller 25% bonus.\
+ SAM Batteries down to a smaller 25% bonus. A Stealth Fighter has no limit to the number\
+ of attacks per turn it can do. \n
 "), _("
 INTERCEPTOR：the Vigil order lets Stealth Fighters auto-attack adjacent Air units if they\
  have better attack odds. This unit can Vigil if it uses 4 move points or less. \n\
@@ -3769,7 +3799,7 @@ graphic_alt   = "-"
 sound_move    = "m_stealth_bomber"
 sound_move_alt = "m_generic"
 sound_fight   = "f_stealth_bomber"
-sound_fight_alt = "f_generic"
+sound_fight_alt = "Bomb Strike"
 build_cost    = 160
 pop_cost      = 0
 attack        = 19 
@@ -3780,6 +3810,7 @@ move_rate     = 24
 vision_radius_sq = 12
 transport_cap = 2
 fuel          = 2
+paratroopers_mr_sub = 196754 ;011,00000,00,0100,100,1,0 - max_ATKs=3, bbd_retal_rate=0, iPill_rand_tgts=0, iPill_odds=-4 pentads=80%, iPill_moves=4, iPillage=1, ATK_Stay_Fortified=0
 uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
@@ -3791,7 +3822,7 @@ bonuses       =
       "AntiAir", "DefenseMultiplierPct", 25
    }
 vision_layer  = "Stealth"
-cargo         = "Bomb"
+cargo         = "Bomb2", "Bomb"
 flags         = "FieldUnit", "AirAttacker", "HasNoZOC", "Unbribable",
                 "CanEscape", "CantReachAir", "NeverProtects", "Provoking", "WillNever"
 veteran_names =
@@ -3810,7 +3841,9 @@ roles         = ""
 helptext      = _("\
 The deadliest Bomber, with improved attack and speed. Stealth Bombers can’t be seen\
  unless adjacent to an enemy. Stealth evasion gives a 25% bonus against all Anti-Air\
- units, and reduces SAM Batteries down to only a 25% bonus. May carry two Bombs. \n\
+ units, and reduces SAM Batteries down to only a 25% bonus. A Stealth Bomber may do\
+ a maximum of three attacks per turn. Stealth Bombers can Bomb Strike, an\
+ instant-Pillage of tiles from the air. May carry two Bombs. \n\
 "), _("
 Stack-Escape：67% odds to evade stack-death if attacker doesn’t have more moves than it does.\
  NOTE：GOTO disallows unit loss from lack of fuel. You\
@@ -5067,6 +5100,54 @@ If you have Fusion Power and the Manhattan Project was built, a Tactical Nuke\
  can be made in a city with an Enrichment Facility. \
 ")
 bombard_rate = -2   ; 2 - 2 = 0：only nukes target tile.
+
+[unit_bombs]
+name          = _("Bombs")
+class         = "Bomb2"
+tech_req      = "Bombcraft"
+obsolete_by   = "None"
+graphic       = "u.bombs"
+graphic_alt   = "-"
+sound_move    = "m_atom_bomb"
+sound_move_alt = "m_generic"
+sound_fight   = "ground_strike"
+sound_fight_alt = "f_nuclear"
+build_cost    = 25
+pop_cost      = 0
+attack        = 10
+defense       = 0
+hitpoints     = 10
+firepower     = 1
+move_rate     = 1
+vision_radius_sq = 0
+transport_cap = 0
+fuel          = 1
+uk_happy      = 1
+uk_shield     = 0
+uk_food       = 0
+uk_gold       = 1
+targets       = "LandRail", "LandRoad"
+flags         = "NeverProtects", "OneAttack", "HasNoZOC", "Unbribable",
+                "WillNever", "NoVeteran", "Multislot", "CantReachAir", "Missile"
+; No veteran levels (level name is never displayed)
+veteran_names = _("green")
+veteran_base_raise_chance = 0
+veteran_work_raise_chance = 0
+veteran_power_fact = 100
+veteran_move_bonus = 0
+roles         = ""
+helptext      = _("\
+Bombs are several tons of explosive payload. While bombers are considered\
+ to carry standard weaponry included, the Bombs unit represents heavier\
+ payloads of larger, higher grade weaponry. Only bombers with high capacity can\
+ carry this unit. \n\
+Bombs can only be moved by bombers or the airlift order. They can’t attack\
+ from inside a domestic city. Bombs are cheap, but they damage more often than\
+ kill, and even victory has a cost. Hidden expenses lie in logistics, delivery\
+ risk, and non-reusability. \n\
+"), _("\
+Multislot: Under certain conditions, cities can make one (or more) multislot units per turn, plus one of any other type.\
+")
 
 [unit_atom_bomb]
 name          = _("Atom Bomb")

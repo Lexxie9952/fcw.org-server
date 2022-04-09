@@ -132,6 +132,7 @@ richness.
    A new server feature simplifies this. <ADD TO: SIMPLIFIERS>
 =============================================================
 17. Ecclesiastical Palace, cost:70 (was 90). (same as Palace)
+allows instant transition to Theocracy.
 =============================================================
 18. Zeus promotion bonus changed: instead of The Republic
    tech turning it off, it's Monotheism or Communism that
@@ -693,7 +694,16 @@ Rocketry,Nuclear Power (was:Computers)
 Rocketry already has Computers as a req.
 all ww3 techs require Computers as the expensive breakthrough
 ==============================================================
-120.
+120. max_attacks per turn
+Fighter, Escort Fighter: 2
+Dive Bomber, Medium Bomber, Heavy Bomber: 1
+Strategic Bomber, Jet Bomber, 2
+Stealth Bomber, 3
+
+new unit Bomb
+
+new carry capacities
+Med.Bomber 1
 ==============================================================
 121.
 ==============================================================
