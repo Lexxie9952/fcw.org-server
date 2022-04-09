@@ -2649,6 +2649,13 @@ actor_reqs    =
       "UnitType", "Jet Bomber",        "Local", TRUE
       "MinMoveFrags", "1",             "Local", TRUE
     }
+[actionenabler_pillage4]
+action        = "Pillage"
+actor_reqs    =
+    { "type",     "name",              "range", "present"
+      "UnitType", "Stealth Bomber",    "Local", TRUE
+      "MinMoveFrags", "1",             "Local", TRUE
+    }
 
 [actionenabler_clean_pollution]
 action        = "Clean Pollution"
