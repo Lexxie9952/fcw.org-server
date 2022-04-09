@@ -474,8 +474,8 @@ ui_name_spy_attack = _("Eliminate %sSpy%s")
 ; /* TRANS: _Bombard (100% chance of success). */
 ui_name_bombard = _("%sSpecial Attack%s")
 
-; /* TRANS: _Explode Missile (100% chance of success). */
-ui_name_suicide_attack = _("%sExplode Missile%s")
+; /* TRANS: _Explode (100% chance of success). */
+ui_name_suicide_attack = _("%sExplode%s")
 
 ; /* TRANS: _Conquer City (100% chance of success). */
 ui_name_conquer_city = _("%sConquer City%s")
@@ -1751,7 +1751,21 @@ action = "Suicide Attack"
 actor_reqs    =
     { "type",          "name",    "range", "present"
       "UnitClassFlag", "Missile", "Local", TRUE
+      "UnitClass",     "Bomb2",   "Local", FALSE
       "MinMoveFrags",  "1",       "Local", TRUE
+      ;...
+      "DiplRel",       "War",     "Local", TRUE
+      "UnitFlag",      "NonMil",  "Local", FALSE
+    }
+[actionenabler_explode_conventional_bomb]
+action = "Suicide Attack"
+actor_reqs    =
+    { "type",          "name",        "range", "present"
+      "UnitClassFlag", "Missile",     "Local", TRUE
+      "UnitClass",     "Bomb2",       "Local", TRUE
+      "MinMoveFrags",  "1",           "Local", TRUE
+      "CityTile",      "Center",      "Local", FALSE
+      "UnitState",     "Transported", "Local", TRUE
       ;...
       "DiplRel",       "War",     "Local", TRUE
       "UnitFlag",      "NonMil",  "Local", FALSE
