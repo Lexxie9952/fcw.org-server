@@ -1238,7 +1238,7 @@ convert_time  = 4
 transport_cap = 0
 fuel          = 0
 city_size     = 278     ;000000,000,001,000101,1,0 atk_bonus=0, max_kiils=0, targets=1, move_cost=5 frags, stay_frtfy=1, reserverd=0
-paratroopers_mr_sub = 1 ;00,0000,000,0,1 iPill_rand_tgts=0, iPill_odds=-0 pentads, iPill_moves=0, iPillage=0, ATK_Stay_Fortified=1
+paratroopers_mr_sub = 1 ;000,00000,00,0000,000,0,1 max_ATKs=0, bbd_retal_rate=0, iPill_rand_tgts=0, iPill_odds=-0 pentads, iPill_moves=0, iPillage=0, ATK_Stay_Fortified=1
 ;NOTE：iPillage changes in rules require client_rules_flag and get_what_can_unit_pillage_from() changes.
 uk_happy      = 1
 uk_shield     = 1
@@ -1290,7 +1290,7 @@ convert_time  = 2
 transport_cap = 0
 fuel          = 0
 city_size     = 826 ; 000000,000,011,001110,1,0 = atk_bonus=0, max_kills=0, targets=3, move_cost=14 frags, stay_fortfy=1, reserved = 0
-paratroopers_mr_sub = 4096 ; 00010,00,0000,000,0,0 - bbd_retal_rate=2, iPill_rand_tgts=0, iPill_odds=0, iPill_moves=0, iPillage=0, ATK_Stay_Fortified=0
+paratroopers_mr_sub = 4096 ; 000,00010,00,0000,000,0,0 - max_ATKs=0, bbd_retal_rate=2, iPill_rand_tgts=0, iPill_odds=0, iPill_moves=0, iPillage=0, ATK_Stay_Fortified=0
 ;NOTE：iPillage changes in rules require client_rules_flag and get_what_can_unit_pillage_from() changes.
 uk_happy      = 1
 uk_shield     = 1
@@ -1597,7 +1597,7 @@ convert_time  = 2
 transport_cap = 0
 fuel          = 0
 city_size     = 2;  ...xxxxx..., 1, 0  use bombard_stay_fortified on a non-bombard unit to specify can remain fortified when attacking.
-paratroopers_mr_sub = 0 ;00,0000,000,0,0 iPill_rand_tgts=0, iPill_odds=-0 pentads, iPill_moves=0, iPillage=0, ATK_Stay_Fortified=0
+paratroopers_mr_sub = 0 ;000,00000,00,0000,000,0,0 max_ATKs=0, bbd_retal_rate=0, iPill_rand_tgts=0, iPill_odds=-0 pentads, iPill_moves=0, iPillage=0, ATK_Stay_Fortified=0
 ;NOTE：iPillage changes in rules require client_rules_flag and get_what_can_unit_pillage_from() changes.
 uk_happy      = 1
 uk_shield     = 0
@@ -1730,7 +1730,7 @@ vision_radius_sq = 8  ; hard-coded the +4 extra for effect_physics_vision since 
 transport_cap = 0
 fuel          = 0
 city_size     = 2618 ; 000000,001,010,001110,1,0 = atk_bonus=0, max_kills=1, targets=2, move_cost=14 frags, stay_frtfy=1, reserved = 0
-paratroopers_mr_sub = 1 ;00,0000,000,0,1 iPill_rand_tgts=0, iPill_odds=-0 pentads, iPill_moves=0, iPillage=0, ATK_Stay_Fortified=1
+paratroopers_mr_sub = 1 ;000,00000,00,0000,000,0,1 max_ATKs=0, bbd_retal_rate=0, iPill_rand_tgts=0, iPill_odds=-0 pentads, iPill_moves=0, iPillage=0, ATK_Stay_Fortified=1
 ;NOTE：iPillage changes in rules require client_rules_flag and get_what_can_unit_pillage_from() changes.
 uk_happy      = 1
 uk_shield     = 0
@@ -1796,7 +1796,7 @@ move_rate     = 2
 vision_radius_sq = 4
 transport_cap = 0
 fuel          = 0
-paratroopers_mr_sub = 1 ;00,0000,000,0,1 iPill_rand_tgts=0, iPill_odds=-0 pentads, iPill_moves=0, iPillage=0, ATK_Stay_Fortified=1
+paratroopers_mr_sub = 1 ;000,00000,00,0000,000,0,1 max_ATKs=0, bbd_retal_rate=0, iPill_rand_tgts=0, iPill_odds=-0 pentads, iPill_moves=0, iPillage=0, ATK_Stay_Fortified=1
 uk_happy      = 1
 uk_shield     = 0
 uk_food       = 0
@@ -2231,7 +2231,7 @@ move_rate     = 6
 vision_radius_sq = 4
 transport_cap = 0
 fuel          = 0
-paratroopers_mr_sub = 170 ;00,0101,010,1,0 iPill_rand_tgts=0, iPill_odds=-5 pentads=75%, iPill_moves=2, iPillage=1, ATK_Stay_Fortified=0
+paratroopers_mr_sub = 170 ;000,00000,00,0101,010,1,0 max_ATKs=0, bbd_retal_rate=0, iPill_rand_tgts=0, iPill_odds=-5 pentads=75%, iPill_moves=2, iPillage=1, ATK_Stay_Fortified=0
 ;NOTE：iPillage changes in rules require client_rules_flag and get_what_can_unit_pillage_from() changes.
 uk_happy      = 1
 uk_shield     = 1
@@ -2271,7 +2271,7 @@ move_rate     = 6
 vision_radius_sq = 4
 transport_cap = 0
 fuel          = 0
-paratroopers_mr_sub = 170 ;00,0101,010,1,0 iPill_rand_tgts=0, iPill_odds=-5 pentads=80%, iPill_moves=2, iPillage=1, ATK_Stay_Fortified=0
+paratroopers_mr_sub = 170 ;000,00000,00,0101,010,1,0 max_ATKs=0, bbd_retal_rate=0, iPill_rand_tgts=0, iPill_odds=-5 pentads=80%, iPill_moves=2, iPillage=1, ATK_Stay_Fortified=0
 ;NOTE：iPillage changes in rules require client_rules_flag and get_what_can_unit_pillage_from() changes.
 uk_happy      = 1
 uk_shield     = 1
@@ -2317,7 +2317,7 @@ vision_radius_sq = 4
 transport_cap = 0
 fuel          = 0
 city_size     = 2306       ; 000000,001,001,000000,10 = atk_bonus=0, max_kills=1, targets=1, move_cost=0 frags, stay_fortfy=1, reserved = 0
-paratroopers_mr_sub = 8192 ; 00100,00,0000,000,0,0 - bbd_retal_rate=4, iPill_rand_tgts=0, iPill_odds=0, iPill_moves=0, iPillage=0, ATK_Stay_Fortified=0
+paratroopers_mr_sub = 8192 ; 000,00100,00,0000,000,0,0 - max_ATKs=0, bbd_retal_rate=4, iPill_rand_tgts=0, iPill_odds=0, iPill_moves=0, iPillage=0, ATK_Stay_Fortified=0
 uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
@@ -2409,7 +2409,7 @@ vision_radius_sq = 4
 transport_cap = 0
 fuel          = 0
 city_size     = 4680        ; 000000,010,010,010010,00 = atk_bonus=0, max_kills=2, targets=2, move_cost=18 frags, stay_fortfy=0, reserved = 0
-paratroopers_mr_sub = 10241 ; 00101,00,0000,000,0,1 - bbd_retal_rate=5, iPill_rand_tgts=0, iPill_odds=0, iPill_moves=0, iPillage=0, ATK_Stay_Fortified=1
+paratroopers_mr_sub = 10241 ; 000,00101,00,0000,000,0,1 - max_ATKs=0, bbd_retal_rate=5, iPill_rand_tgts=0, iPill_odds=0, iPill_moves=0, iPillage=0, ATK_Stay_Fortified=1
 uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
@@ -2466,7 +2466,7 @@ vision_radius_sq = 4
 transport_cap = 0
 fuel          = 0
 city_size     = 2562        ; 000000,001,010,000000,10 = atk_bonus=0, max_kills=1, targets=2, move_cost=0 frags, stay_fortfy=1, reserved = 0
-paratroopers_mr_sub = 10240 ; 00101,00,0000,000,0,0 - bbd_retal_rate=5, iPill_rand_tgts=0, iPill_odds=0, iPill_moves=0, iPillage=0, ATK_Stay_Fortified=0
+paratroopers_mr_sub = 10240 ; 000,00101,00,0000,000,0,0 - max_ATKs=0, bbd_retal_rate=5, iPill_rand_tgts=0, iPill_odds=0, iPill_moves=0, iPillage=0, ATK_Stay_Fortified=0
 uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
@@ -2513,7 +2513,7 @@ vision_radius_sq = 4
 transport_cap = 0
 fuel          = 0
 city_size     = 2818        ; 000000,001,011,000000,10 = atk_bonus=0, max_kills=1, targets=3, move_cost=0 frags, stay_fortfy=1, reserved = 0
-paratroopers_mr_sub = 12288 ; 00110,00,0000,000,0,0 - bbd_retal_rate=6, iPill_rand_tgts=0, iPill_odds=0, iPill_moves=0, iPillage=0, ATK_Stay_Fortified=0
+paratroopers_mr_sub = 12288 ; 000,00110,00,0000,000,0,0 - max_ATKs=0, bbd_retal_rate=6, iPill_rand_tgts=0, iPill_odds=0, iPill_moves=0, iPillage=0, ATK_Stay_Fortified=0
 uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
@@ -2559,7 +2559,7 @@ convert_to    = "Mobile SAM"
 convert_time  = 5
 transport_cap = 0
 fuel          = 0
-paratroopers_mr_sub = 1 ;00,0000,000,0,1 iPill_rand_tgts=0, iPill_odds=-0 pentads, iPill_moves=0, iPillage=0, ATK_Stay_Fortified=1
+paratroopers_mr_sub = 1 ;000,00000,00,0000,000,0,1 max_ATKs=0, bbd_retal_rate=0, iPill_rand_tgts=0, iPill_odds=-0 pentads, iPill_moves=0, iPillage=0, ATK_Stay_Fortified=1
 uk_happy      = 1
 uk_shield     = 0
 uk_food       = 0
@@ -2656,7 +2656,7 @@ vision_radius_sq = 4
 transport_cap = 0
 fuel          = 0
 city_size     = 3074        ; 000000,001,100,000000,10 = atk_bonus=0, max_kills=1, targets=4, move_cost=0 frags, stay_fortfy=1, reserved = 0
-paratroopers_mr_sub = 14336 ; 00111,00,0000,000,0,0 - bbd_retal_rate=7, iPill_rand_tgts=0, iPill_odds=0, iPill_moves=0, iPillage=0, ATK_Stay_Fortified=0
+paratroopers_mr_sub = 14336 ; 000,00111,00,0000,000,0,0 - max_ATKs=0, bbd_retal_rate=7, iPill_rand_tgts=0, iPill_odds=0, iPill_moves=0, iPillage=0, ATK_Stay_Fortified=0
 uk_happy      = 1 
 uk_shield     = 1
 uk_food       = 0
@@ -2747,7 +2747,7 @@ vision_radius_sq = 24
 transport_cap = 0
 fuel          = 7
 city_size     = 2632    ;000000,001,010,010010,0,0 = atk_bonus=0, max_kills=1, targets=2, move_cost=18 frags, stay_frtfy=0, reserved = 0
-paratroopers_mr_sub = 0 ;00000,00,0000,000,0,0 = bbd_retal_rate=0, iPill_rand_tgts=0, iPill_odds=-0 pentads, iPill_moves=0, iPillage=0, ATK_Stay_Fortified=0
+paratroopers_mr_sub = 0 ;000,00000,00,0000,000,0,0 = max_ATKs=0, bbd_retal_rate=0, iPill_rand_tgts=0, iPill_odds=-0 pentads, iPill_moves=0, iPillage=0, ATK_Stay_Fortified=0
 uk_happy      = 0
 uk_shield     = 0
 uk_food       = 0
@@ -2975,7 +2975,7 @@ move_rate     = 18
 vision_radius_sq = 12
 transport_cap = 0
 fuel          = 1
-paratroopers_mr_sub = 346 ;00,1010,110,1,0 - iPill_rand_tgts=0, iPill_odds=-10 pentads=50%, iPill_moves=6, iPillage=1, attack_stay_fortified=0
+paratroopers_mr_sub = 346 ;000,00000,00,1010,110,1,0 - max_ATKs=0, bbd_retal_rate=0, iPill_rand_tgts=0, iPill_odds=-10 pentads=50%, iPill_moves=6, iPillage=1, attack_stay_fortified=0
 ;NOTE：iPillage changes in rules require client_rules_flag and get_what_can_unit_pillage_from() changes.
 uk_happy      = 0
 uk_shield     = 1
@@ -3166,7 +3166,7 @@ move_rate     = 16
 vision_radius_sq = 12
 transport_cap = 2
 fuel          = 3
-paratroopers_mr_sub = 782 ;01,1000,011,1,0 - iPill_rand_tgts=1, iPill_odds=-8 pentads=60%, iPill_moves=3, iPillage=1, ATK_Stay_Fortified=0
+paratroopers_mr_sub = 782 ;000,00000,01,1000,011,1,0 - max_ATKs=0, bbd_retal_rate=0, iPill_rand_tgts=1, iPill_odds=-8 pentads=60%, iPill_moves=3, iPillage=1, ATK_Stay_Fortified=0
 ;NOTE：iPillage changes in rules require client_rules_flag and get_what_can_unit_pillage_from() changes.
 uk_happy      = 1
 uk_shield     = 1
@@ -3426,7 +3426,7 @@ vision_radius_sq = 12
 transport_cap = 1
 fuel          = 0
 city_size     = 2816       ; 000000,001,011,000000,00 = atk_bonus=0, max_kills=1, targets=3, move_cost=0 frags, stay_fortfy=0, reserved = 0
-paratroopers_mr_sub = 6144 ; 00011,00,0000,000,0,0 - bbd_retal_rate=3, iPill_rand_tgts=0, iPill_odds=0, iPill_moves=0, iPillage=0, ATK_Stay_Fortified=0
+paratroopers_mr_sub = 6144 ; 000,00011,00,0000,000,0,0 - max_ATKs=0, bbd_retal_rate=3, iPill_rand_tgts=0, iPill_odds=0, iPill_moves=0, iPillage=0, ATK_Stay_Fortified=0
 uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
@@ -3606,7 +3606,7 @@ move_rate     = 21
 vision_radius_sq = 12
 transport_cap = 0
 fuel          = 2
-paratroopers_mr_sub = 178 ;00,0101,100,1,0 - iPill_rand_tgts=0, iPill_odds=-5 pentads=75%, iPill_moves=4, iPillage=1, ATK_Stay_Fortified=0
+paratroopers_mr_sub = 178 ;000,00000,00,0101,100,1,0 - max_ATKs=0, bbd_retal_rate=0, iPill_rand_tgts=0, iPill_odds=-5 pentads=75%, iPill_moves=4, iPillage=1, ATK_Stay_Fortified=0
 ;NOTE：iPillage changes in rules require client_rules_flag and get_what_can_unit_pillage_from() changes.
 uk_happy      = 0
 uk_shield     = 1
@@ -3665,7 +3665,7 @@ move_rate     = 19
 vision_radius_sq = 12
 transport_cap = 3
 fuel          = 3
-paratroopers_mr_sub = 1198 ;10,0101,011,1,0 - iPill_rand_tgts=2, iPill_odds=-5 pentads=75%, iPill_moves=3, iPillage=1, ATK_Stay_Fortified=0
+paratroopers_mr_sub = 1198 ;000,00000,10,0101,011,1,0 - max_ATKs=0, bbd_retal_rate=0, iPill_rand_tgts=2, iPill_odds=-5 pentads=75%, iPill_moves=3, iPillage=1, ATK_Stay_Fortified=0
 ;NOTE：iPillage changes in rules require client_rules_flag and get_what_can_unit_pillage_from() changes.
 uk_happy      = 1
 uk_shield     = 1
@@ -4725,7 +4725,7 @@ vision_radius_sq = 13
 transport_cap = 0
 fuel          = 0
 city_size     = 3252       ; 000000,001,100,101101,00 = atk_bonus=0, max_kills=1, targets=4, move_cost=45 frags, stay_fortfy=0, reserved = 0
-paratroopers_mr_sub = 6144 ; 00011,00,0000,000,0,0 - bbd_retal_rate=3, iPill_rand_tgts=0, iPill_odds=0, iPill_moves=0, iPillage=0, ATK_Stay_Fortified=0
+paratroopers_mr_sub = 6144 ; 000,00011,00,0000,000,0,0 - max_ATKs=0, bbd_retal_rate=3, iPill_rand_tgts=0, iPill_odds=0, iPill_moves=0, iPillage=0, ATK_Stay_Fortified=0
 uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
@@ -5903,7 +5903,7 @@ vision_radius_sq = 4
 transport_cap = 0
 fuel          = 0
 city_size     = 5414        ; 000000,010,101,001001,10 = atk_bonus=0, max_kills=2, targets=5, move_cost=9 frags, stay_fortfy=1, reserved = 0
-paratroopers_mr_sub = 14336 ; 00111,00,0000,000,0,0 - bbd_retal_rate=7, iPill_rand_tgts=0, iPill_odds=0, iPill_moves=0, iPillage=0, ATK_Stay_Fortified=0
+paratroopers_mr_sub = 14336 ; 000,00111,00,0000,000,0,0 - max_ATKs=0, bbd_retal_rate=7, iPill_rand_tgts=0, iPill_odds=0, iPill_moves=0, iPillage=0, ATK_Stay_Fortified=0
 uk_happy      = 0           ; it's always stuck in a city
 uk_shield     = 1
 uk_food       = 0
