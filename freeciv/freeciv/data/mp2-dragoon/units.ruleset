@@ -5104,7 +5104,7 @@ bombard_rate = -2   ; 2 - 2 = 0：only nukes target tile.
 [unit_bombs]
 name          = _("Bombs")
 class         = "Bomb2"
-tech_req      = "Bombcraft"
+tech_req      = "Radio.2"
 obsolete_by   = "None"
 graphic       = "u.bombs"
 graphic_alt   = "-"
