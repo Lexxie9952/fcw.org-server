@@ -57,7 +57,7 @@ var action_images = {
   45: "orders/paradrop",
   46: "orders/airlift",
   47: "e/redexclamation",                // Attack
-  48: "e/cruisemissile",
+  48: "e/boom",
   51: "cities_tab_icon",                 // conquer city
   54: "orders/transform_default",
   55: "orders/forest_remove_default",
