@@ -536,6 +536,9 @@ function generate_help_text(key)
       //var as = punit_type['attack_strength'];
       // Display base attack relative to v0 vet power which may be non-100:
       var as = fractionalize(utype_real_base_attack_strength(punit_type));
+      if (pstats.max_attacks>0) {
+        as += " <span style='color:white'>(max. "+pstats.max_attacks+" attack"+(pstats.max_attacks>1?"s":"")+" per turn)</span>"
+      }
     msg += span1 + "Attack: " + span_end + span2 + as + div_end;
     // DEFENSE
     msg += "<div"+flex+" id='utype_fact_defense_str'>";
