@@ -224,7 +224,7 @@ function init_tech_screen()
   }
 
   if (!is_small_screen()) { 
-    $("#mouse_info_box").html("<div title='Drag empty area: Scrolls the screen.\nRight-click:     Scrolls the screen.\nMiddle-click:    Sets the Future Goal.\nALT+Right-click: alternate mid-click' style='margin-right:-10px;margin-bottom:10px;float:right;width:26px;height:20px;'>&#x2753;</div>");
+    $("#mouse_info_box").html("<div title='Drag empty area: Scrolls the screen.\nRight-click: Centers the screen.\nMiddle-click: Sets the Future Goal.\nALT+Right-click: same as mid-click' style='margin-right:-10px;margin-bottom:10px;float:right;width:26px;height:20px;'>&#x2753;</div>");
     $("#mouse_info_box").css('cursor', "help");
     $("#mouse_info_box").tooltip({
       show: { delay:0, effect:"none", duration: 0 }, hide: {delay:120, effect:"none", duration: 0}
@@ -491,7 +491,7 @@ function get_tech_item_width(ptech) {
         var twidth = tw1 < tw2 ? tw2 : tw1; // pick the greater of the 2
       }
     } else { // special child tech:
-      var tw1 = twidth - 5 * (19-ptech.name.length);      // 5px = width char
+      var tw1 = twidth - 6 * (16-ptech.name.length);      // 5px = width char
       var tw2 = twidth - 28 * (3-techs[ptech.id].things); // 28px = size of an image
       var twidth = tw1 < tw2 ? tw2 : tw1;                 // pick the greater of the 2
     }
