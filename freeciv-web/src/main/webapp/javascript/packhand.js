@@ -1208,6 +1208,10 @@ function handle_non_integer_combat_scores(key)
     if (client_rules_flag[CRF_MP2_D])
       unit_types[key].defense_strength += 0.5;
   }
+  else if (unit_types[key]['name']=="Dive Bomber") {
+    if (client_rules_flag[CRF_MP2_D])
+      unit_types[key].attack_strength += 1.5; //represents the majority of its targets it has a 50% or +1.5 bonus on.
+  }
   else {
     return; // skip message
   }
