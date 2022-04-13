@@ -4228,7 +4228,7 @@ uk_happy      = 0
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-targets       = "Submarine", "LandRail"
+targets       = "LandRail"
 cargo         = "Land", "LandNoKill", "LandAirSea", "Balloon", "LandRoad", "Cargo"
 flags         = "BadCityDefender", "CanEscape", "CantReachAir", "WillNever",
                 "NonMil", "NonMilAttack" ;  maritime trade can continue after Caravel expires.
@@ -4284,7 +4284,7 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-targets       = "Submarine", "LandRail"
+targets       = "LandRail"
 cargo         = "Land", "LandNoKill", "LandAirSea", "LandRoad"
 bonuses       =
    { "flag", "type", "value"
@@ -4337,7 +4337,7 @@ fuel          = 0
 uk_happy      = 0
 uk_shield     = 0
 uk_food       = 0
-uk_gold       = 0
+uk_gold       = 1
 cargo         = "Land", "LandNoKill", "LandAirSea", "LandRoad", "Cargo", 
                 "RiverShip", "Sea", "Submarine", "Trireme"
 flags         = "Settlers", "Infra", "CanRoad", "CanFortress", "Cant_Pillage", "NonMil",

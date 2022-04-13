@@ -747,9 +747,10 @@ Med.Bomber 1
 
 stealth bomber can ipillage
 ==============================================================
-121.
+121. Buoys report nearby visible activity like a sentry, and
+ are even able to see enemy submarines, if cardinally adjacent.
 ==============================================================
-122.
+122.Frigates and Galleons can't attack Subs
 ==============================================================
 123.
 ==============================================================
