@@ -1685,8 +1685,8 @@ function update_unit_order_commands()
     const CAN_TILE_DEEPDIVE  = terrain_name == "Deep Ocean" && !TILE_HAS_DEEPDIVE && !TILE_HAS_BUOY && !TILE_HAS_FISHTRAP; 
     /* Currently iterating unit is able to build bases on this tile? */
     const UNIT_CAN_HIDEOUT   = CAN_TILE_HIDEOUT   && HIDEOUT_TECH   && utype_has_flag(ptype,UTYF_FOOTSOLDIER);
-    const UNIT_CAN_FORT      = CAN_TILE_FORT      && FORT_TECH      && (worker_type || infra_type || (ptype['name'] == "Legion" && client_rules_flag[CRF_LEGION_WORK]) || (ptype['name'] == "Marines" && client_rules_flag[CRF_MARINE_BASES]));
-    const UNIT_CAN_FORTRESS  = CAN_TILE_FORTRESS  && FORTRESS_TECH  && (worker_type || infra_type || (ptype['name'] == "Legion" && client_rules_flag[CRF_LEGION_WORK]));
+    const UNIT_CAN_FORT      = CAN_TILE_FORT      && FORT_TECH      && (worker_type || infra_type || (ptype['name'] == "Legion" && client_rules_flag[CRF_LEGION_WORK]) || (ptype['name'] == "Marines" && client_rules_flag[CRF_MARINE_BASES])) && ptype['name'] != "Trawler";
+    const UNIT_CAN_FORTRESS  = CAN_TILE_FORTRESS  && FORTRESS_TECH  && (worker_type || infra_type || (ptype['name'] == "Legion" && client_rules_flag[CRF_LEGION_WORK])) && ptype['name'] != "Trawler";
     const UNIT_CAN_NAVALBASE = CAN_TILE_NAVALBASE && NAVALBASE_TECH && (worker_type || infra_type || (ptype['name'] == "Legion" && client_rules_flag[CRF_LEGION_WORK])) && can_build_naval_base(punit,ptile);
     const UNIT_CAN_CASTLE    = CAN_TILE_CASTLE    && CASTLE_TECH    && (worker_type || infra_type);
     const UNIT_CAN_BUNKER    = CAN_TILE_BUNKER    && BUNKER_TECH    && (worker_type || infra_type);

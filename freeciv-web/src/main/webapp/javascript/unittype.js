@@ -98,6 +98,7 @@ const UTYF_MULTISLOT = 33;                /* if server setting slot_control is O
 const UTYF_TRANSPORTDEFENDER = 34;        /* Unit can always defend while transported, even on non-native terrain  */
 const UTYF_SENTRYALWAYS = 35;             /* These units always behave as sentry (e.g. fortified snipers, air reconnaissance units who
                                              can't sentry because !refuel tile, etc.) */     
+const UTYF_NONPROVOKEVIGIL = 36;          /* will attack non-provoking units on vigil */
 const UTYF_RESERVED1 = 36;
 const UTYF_RESERVED2 = 37;                /* RESERVED for future use */
 const UTYF_RESERVED3 = 38;

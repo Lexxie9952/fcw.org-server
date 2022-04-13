@@ -1792,6 +1792,11 @@ function select_last_action()
   var id     = "#sel_last_action_dialog";
   var dhtml   = "";
   var buttons = [];
+  var ptype = current_focus.length ? unit_type(current_focus[0]) : null;
+  var uname = ptype ? ptype.name : null;
+  var can_vigil = ptype ? /*utype_has_flag(ptype, UTYF_NONPROVOKEVIGIL) || commented out because !moved_this_turn req*/ 
+                  uname.includes("Fighter") : true;
+  const msub = (uname == "Missile Submarine") /* "DIVE DEEP" fools utype_can_do_action
 
   /* Reset dialog page. */
   remove_active_dialog(id);
@@ -1819,56 +1824,68 @@ function select_last_action()
   buttons = add_action_last_button(buttons, ACTION_TRANSPORT_BOARD, "Board");
 */
   buttons = add_action_last_button(buttons, ACTION_SPY_BRIBE_UNIT, "Bribe");
-  if (tech_known('Radio'))
+  if (tech_known('Radio') && (!uname || uname =="Trawler"))
+    buttons = add_action_last_button(buttons, ACTION_BASE, "Build Buoy", ORDER_PERFORM_ACTION, null, null, EXTRA_BUOY);
+  if (tech_known('Radio') && uname !="Trawler" && !msub)
     buttons = add_action_last_button(buttons, ACTION_BASE, "Build Airbase", ORDER_PERFORM_ACTION, null, null, EXTRA_AIRBASE);
   buttons = add_action_last_button(buttons, ACTION_FOUND_CITY, "Build City");
-  if (client_rules_flag[CRF_MASONRY_FORT] && tech_known('Masonry'))
+  if (client_rules_flag[CRF_MASONRY_FORT] && tech_known('Masonry') && uname !="Trawler" && !msub)
     buttons = add_action_last_button(buttons, ACTION_BASE, "Build Fort", ORDER_PERFORM_ACTION, null, null, EXTRA_FORT);
-  if (tech_known('Construction'))
+  if (tech_known('Construction') && uname != "Trawler" && !msub)
     buttons = add_action_last_button(buttons, ACTION_BASE, "Build Fortress", ORDER_PERFORM_ACTION, null, null, EXTRA_FORTRESS);
-  if (client_rules_flag[CRF_EXTRA_HIDEOUT] && server_settings.hideouts.val && tech_known('Warrior Code'))
+  if (client_rules_flag[CRF_EXTRA_HIDEOUT] && server_settings.hideouts.val && tech_known('Warrior Code') && (!ptype || utype_has_flag(ptype,UTYF_FOOTSOLDIER)))
     buttons = add_action_last_button(buttons, ACTION_BASE, "Build Hideout", ORDER_PERFORM_ACTION, null, null, EXTRA_);
-  if (client_rules_flag[CRF_MP2_D])
-    buttons = add_action_last_button(buttons, ACTION_BASE, "Dive Deep", ORDER_PERFORM_ACTION, null, null, EXTRA_DEEPDIVE);
-
-  if (client_rules_flag[CRF_CANALS] && tech_known('Engineering')) {
+  if (client_rules_flag[CRF_CANALS] && tech_known('Engineering') && !msub) {
     buttons = add_action_last_button(buttons, ACTION_ROAD, "Canal, coastal", ORDER_PERFORM_ACTION, null, null, EXTRA_CANAL);
     buttons = add_action_last_button(buttons, ACTION_ROAD, "Canal, inland", ORDER_PERFORM_ACTION, null, null, EXTRA_WATERWAY);
   }
   buttons = add_action_last_button(buttons, ACTION_CAPTURE_UNITS, "Capture Unit"); 
 
-  buttons = add_action_last_button(buttons, ACTION_COUNT, "Clean Pollution", ORDER_ACTIVITY, ACTIVITY_POLLUTION, null, EXTRA_POLLUTION);
-  buttons = add_action_last_button(buttons, ACTION_COUNT, "Clean Fallout", ORDER_ACTIVITY, ACTIVITY_FALLOUT, null, EXTRA_FALLOUT);
+  if (!msub) {
+    buttons = add_action_last_button(buttons, ACTION_COUNT, "Clean Pollution", ORDER_ACTIVITY, ACTIVITY_POLLUTION, null, EXTRA_POLLUTION);
+    buttons = add_action_last_button(buttons, ACTION_COUNT, "Clean Fallout", ORDER_ACTIVITY, ACTIVITY_FALLOUT, null, EXTRA_FALLOUT);
+  }
 
   buttons = add_action_last_button(buttons, ACTION_CONQUER_CITY);    
   buttons = add_action_last_button(buttons, ACTION_CONVERT);
-  buttons = add_action_last_button(buttons, ACTION_CULTIVATE);
+  if (!msub)
+    buttons = add_action_last_button(buttons, ACTION_CULTIVATE);
 
   buttons = add_action_last_button(buttons, ACTION_SUICIDE_ATTACK, "Detonate Missile");
   buttons = add_action_last_button(buttons, ACTION_NUKE, "Detonate Nuke");
+  if (client_rules_flag[CRF_MP2_D] && (!uname || uname == "Missile Submarine"))
+    buttons = add_action_last_button(buttons, ACTION_BASE, "Dive Deep", ORDER_PERFORM_ACTION, null, null, EXTRA_DEEPDIVE);
   buttons = add_action_last_button(buttons, ACTION_TRANSPORT_EMBARK, "Embark");
   buttons = add_action_last_button(buttons, ACTION_TRADE_ROUTE);
   buttons = add_action_last_button(buttons, ACTION_EXPEL_UNIT);
   buttons = add_action_last_button(buttons, ACTION_FORTIFY);
   buttons = add_action_last_button(buttons, ACTION_HELP_WONDER);
   buttons = add_action_last_button(buttons, ACTION_HOME_CITY, "Home City");
-  buttons = add_action_last_button(buttons, ACTION_IRRIGATE, "Irrigate"); // works on blank tiles but not farmland
-  if (tech_known('Refrigeration'))
+  if (uname != "Trawler" && !msub)
+    buttons = add_action_last_button(buttons, ACTION_IRRIGATE, "Irrigate"); // works on blank tiles but not farmland
+  if (tech_known('Refrigeration') && uname != "Trawler" && !msub)
     buttons = add_action_last_button(buttons, ACTION_IRRIGATE, "Irrigate Farmland", ORDER_PERFORM_ACTION, null, null, EXTRA_FARMLAND);
   buttons = add_action_last_button(buttons, ACTION_JOIN_CITY);
   //buttons = add_action_last_button(buttons, ACTION_TRANSPORT_LOAD); // GET FROM SVEINUNG WHO FINISHED THIS RECENTLY
   
-  if (client_rules_flag[CRF_MAGLEV] && tech_known('Superconductors'))
+  if (client_rules_flag[CRF_MAGLEV] && tech_known('Superconductors') && !msub)
     buttons = add_action_last_button(buttons, ACTION_ROAD, "MagLev", ORDER_PERFORM_ACTION, null, null, EXTRA_MAGLEV);
+  if (uname !="Trawler") {
+    if (!msub) {
+      buttons = add_action_last_button(buttons, ACTION_MINE, "Mine", ORDER_PERFORM_ACTION, null, null, EXTRA_MINE);
+    }
+    buttons = add_action_last_button(buttons, ACTION_PILLAGE, "Pillage Anything", ORDER_PERFORM_ACTION, null, null, -1);
+  }
+
+  if (!msub) {
+    buttons = add_action_last_button(buttons, ACTION_PLANT, "Plant");
+    buttons = add_action_last_button(buttons, ACTION_SPY_POISON_ESC, "Poison City");
   
-  buttons = add_action_last_button(buttons, ACTION_MINE, "Mine", ORDER_PERFORM_ACTION, null, null, EXTRA_MINE);
-  buttons = add_action_last_button(buttons, ACTION_PILLAGE, "Pillage Anything", ORDER_PERFORM_ACTION, null, null, -1);
-  buttons = add_action_last_button(buttons, ACTION_PLANT, "Plant");
-  buttons = add_action_last_button(buttons, ACTION_SPY_POISON_ESC, "Poison City");
-  
-  if (tech_known('Railroad'))
-    buttons = add_action_last_button(buttons, ACTION_ROAD, "Railroad", ORDER_PERFORM_ACTION, null, null, EXTRA_RAILROAD);
-  buttons = add_action_last_button(buttons, ACTION_ROAD, "Road", ORDER_PERFORM_ACTION, null, null, EXTRA_ROAD);
+    if (tech_known('Railroad')) {
+      buttons = add_action_last_button(buttons, ACTION_ROAD, "Railroad", ORDER_PERFORM_ACTION, null, null, EXTRA_RAILROAD);
+    }
+    buttons = add_action_last_button(buttons, ACTION_ROAD, "Road", ORDER_PERFORM_ACTION, null, null, EXTRA_ROAD);
+  }
   
   buttons = add_action_last_button(buttons, ACTION_RECYCLE_UNIT);
   buttons = add_action_last_button(buttons, ACTION_SPY_SABOTAGE_UNIT_ESC, "Sabotage Unit");
@@ -1883,7 +1900,8 @@ function select_last_action()
   buttons = add_action_last_button(buttons, ACTION_TRANSPORT_UNLOAD);
 */
   buttons = add_action_last_button(buttons, ACTION_UPGRADE_UNIT);
-  buttons = add_action_last_button(buttons, ACTION_COUNT, "Vigil", ORDER_ACTIVITY, ACTIVITY_VIGIL, null, -1);
+  if (can_vigil)
+    buttons = add_action_last_button(buttons, ACTION_COUNT, "Vigil", ORDER_ACTIVITY, ACTIVITY_VIGIL, null, -1);
   buttons = add_action_last_button(buttons, ACTION_COUNT, "NO ACTION", ORDER_LAST);
   var close_button = {
     html: render_action_image_into_button("Cancel (𝗪)", "cancel"),
