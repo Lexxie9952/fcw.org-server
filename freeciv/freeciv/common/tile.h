@@ -152,7 +152,9 @@ bool tile_has_visible_extra(const struct tile *ptile, const struct extra_type *p
 bool tile_has_cause_extra(const struct tile *ptile, enum extra_cause cause);
 void tile_add_extra(struct tile *ptile, const struct extra_type *pextra);
 void tile_remove_extra(struct tile *ptile, const struct extra_type *pextra);
-bool tile_has_extra_flag(const struct tile *ptile, enum extra_flag_id flag);;
+bool tile_has_extra_flag(const struct tile *ptile, enum extra_flag_id flag);
+const struct extra_type *tile_get_extra_by_flag(const struct tile *ptile,
+                                                enum extra_flag_id flag);
 
 /* Vision related */
 enum known_type tile_get_known(const struct tile *ptile,

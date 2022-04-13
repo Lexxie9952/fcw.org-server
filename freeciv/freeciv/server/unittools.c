@@ -140,7 +140,7 @@ static void update_unit_activity(struct unit *punit, time_t now);
 static bool try_to_save_unit(struct unit *punit, const struct unit_type *pttype,
                              bool helpless, bool teleporting,
                              const struct city *pexclcity);
-static void wakeup_neighbor_sentries(struct unit *punit);
+static void wakeup_neighbor_sentries(struct unit *punit, bool departure);
 static void do_upgrade_effects(struct player *pplayer);
 
 static bool maybe_cancel_patrol_due_to_enemy(struct unit *punit);
@@ -2146,7 +2146,7 @@ struct unit *create_unit_full(struct player *pplayer, struct tile *ptile,
 
   send_unit_info(NULL, punit);
   maybe_make_contact(ptile, unit_owner(punit));
-  wakeup_neighbor_sentries(punit);
+  wakeup_neighbor_sentries(punit, true);
 
   /* update unit upkeep */
   city_units_upkeep(game_city_by_number(homecity_id));
@@ -4189,16 +4189,18 @@ static void cancel_orders(struct unit *punit, char *dbg_msg)
 
 /**********************************************************************//**
   Will wake up any neighboring enemy sentry units or patrolling
-  units.
+  units. 'departure' indicates a departure from the tile rather 
+  than arrival at it (used to suppress double-messaging in some cases)
 **************************************************************************/
-static void wakeup_neighbor_sentries(struct unit *punit)
+static void wakeup_neighbor_sentries(struct unit *punit, bool departure)
 {
+  bool longturn = is_longturn();
   bool alone_in_city;
   int stile_x, stile_y;   // tile of waking sentry unit
   int mtile_x, mtile_y;   // tile of moving unit
 
   // Make a reference copy for use.
-  char punit_emoji[MAX_LEN_LINK], penemy_emoji[MAX_LEN_LINK];
+  char punit_emoji[MAX_LEN_LINK];
   sprintf(punit_emoji, "%s", UNIT_EMOJI(punit));
 
   if (NULL != tile_city(unit_tile(punit))) {
@@ -4221,10 +4223,40 @@ static void wakeup_neighbor_sentries(struct unit *punit)
   int num_wakings[MAX_NUM_PLAYERS] = {0}; // used to limit spam of wake-up messages
 
   square_iterate(&(wld.map), unit_tile(punit), 3, ptile) {
+    int distance_sq = sq_map_distance(unit_tile(punit), ptile);
+
+    /* if the tile has an extra who reports movement; e.g., Buoy, do that first: */
+    const struct extra_type *reporting_extra = tile_get_extra_by_flag(ptile, EF_REPORTS);
+    if (!departure && reporting_extra) {
+      int radius_sq = 0; /* "dumb" extras can see someone on their own tile only */ 
+      if (extra_base_get(reporting_extra)) { /* base extras have a vision radius */
+        radius_sq = extra_base_get(reporting_extra)->vision_main_sq;
+      }
+      if (extra_owner(ptile)           
+         && radius_sq >= distance_sq
+         && can_player_see_unit(extra_owner(ptile), punit)
+         && !pplayers_allied(unit_owner(punit), extra_owner(ptile))) {
+
+        if (++num_wakings[player_number(extra_owner(ptile))] <= 1) {
+          index_to_map_pos(&stile_x, &stile_y, tile_index(ptile));
+          index_to_map_pos(&mtile_x, &mtile_y, tile_index(unit_tile(punit)) );
+
+          notify_player(extra_owner(ptile), unit_tile(punit),
+                E_UNIT_SENTRY_WAKE, ftc_server,
+                _("[`eye`] %s (%d,%d) saw %s %s %s<span class='sc'>%c</span> moving at (%d,%d)"),
+                extra_name_translation(reporting_extra),
+                stile_x, stile_y, 
+                nation_rule_name(nation_of_unit(punit)), 
+                unit_name_translation(punit), punit_emoji,
+                unit_scrambled_id(punit->id),
+                mtile_x, mtile_y );
+        }
+      }
+    }
+    
     unit_list_iterate(ptile->units, penemy) {
       // don't notify the same player twice for movement to this tile
       int enemy_playerno = player_number(unit_owner(penemy));
-      int distance_sq = sq_map_distance(unit_tile(punit), ptile);
       int radius_sq = get_unit_vision_at(penemy, unit_tile(penemy), V_MAIN);
 
       if (!pplayers_allied(unit_owner(punit), unit_owner(penemy))
@@ -4238,31 +4270,33 @@ static void wakeup_neighbor_sentries(struct unit *punit)
           /* on board transport; don't awaken */
           && can_unit_exist_at_tile(&(wld.map), penemy, unit_tile(penemy))) {
 
-        /* ACTIVITY_SENTRY units wake to be idle/ready for orders.
-           (Units not on sentry with AlwaysSentry flag, however, do not): */    
-        if (penemy->activity == ACTIVITY_SENTRY) {
+        /* in !longturn games, ACTIVITY_SENTRY units wake to be ready for orders. */
+        if (!longturn && penemy->activity == ACTIVITY_SENTRY) {
           set_unit_activity(penemy, ACTIVITY_IDLE);
         }
         send_unit_info(NULL, penemy);
 
-        if (true /*is_longturn()*/) {
-          if (++num_wakings[enemy_playerno] < 2) {
-              index_to_map_pos(&stile_x, &stile_y, tile_index(ptile));
-              index_to_map_pos(&mtile_x, &mtile_y, tile_index(unit_tile(punit)) );
-
-              // Make a reference copy for use.
-              sprintf(penemy_emoji, "%s", UNIT_EMOJI(penemy));
-
-              notify_player(unit_owner(penemy), unit_tile(punit),
-                    E_UNIT_SENTRY_WAKE, ftc_server,
-                    _("[`eye`] %s (%d,%d) saw %s %s %s<span class='sc'>%c</span> moving at (%d,%d)"),
-                    unit_link(penemy),
-                    stile_x, stile_y, 
-                    nation_rule_name(nation_of_unit(punit)), 
-                    unit_name_translation(punit), punit_emoji,
-                    unit_scrambled_id(punit->id),
-                    mtile_x, mtile_y );
+        // reporting a departure from a stack can be confused as an arrival to a stack
+        // and tbh any excuse to limit number of messages is a good excuse.
+        if (!departure && ++num_wakings[enemy_playerno] <= 1) {
+          /* longturn games wake only the unit reporting, thus, a single unit moving into
+              an area won't unsentry all other units who could report on future moves: */
+          if (longturn && penemy->activity == ACTIVITY_SENTRY) {
+            set_unit_activity(penemy, ACTIVITY_IDLE);
           }
+
+          index_to_map_pos(&stile_x, &stile_y, tile_index(ptile));
+          index_to_map_pos(&mtile_x, &mtile_y, tile_index(unit_tile(punit)) );
+
+          notify_player(unit_owner(penemy), unit_tile(punit),
+                E_UNIT_SENTRY_WAKE, ftc_server,
+                _("[`eye`] %s (%d,%d) saw %s %s %s<span class='sc'>%c</span> moving at (%d,%d)"),
+                unit_link(penemy),
+                stile_x, stile_y, 
+                nation_rule_name(nation_of_unit(punit)), 
+                unit_name_translation(punit), punit_emoji,
+                unit_scrambled_id(punit->id),
+                mtile_x, mtile_y );
         }
       }
     } unit_list_iterate_end;
@@ -4616,7 +4650,7 @@ bool unit_move_real(struct unit *punit, struct tile *pdesttile, int move_cost,
   /* Wakup units next to us before we move. Only called on the first
      move to avoid duplicate arrival/departure wakings + spam */
   if (first_move) {
-    wakeup_neighbor_sentries(punit);
+    wakeup_neighbor_sentries(punit, true);
   }
 
   /* Make info packets at 'psrctile'. */
@@ -4825,7 +4859,7 @@ bool unit_move_real(struct unit *punit, struct tile *pdesttile, int move_cost,
 
   /* Wakeup units and make contact. */
   if (unit_lives) {
-    wakeup_neighbor_sentries(punit);
+    wakeup_neighbor_sentries(punit, false);
   }
   maybe_make_contact(pdesttile, pplayer);
 

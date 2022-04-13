@@ -920,6 +920,23 @@ bool tile_has_extra_flag(const struct tile *ptile, enum extra_flag_id flag)
 }
 
 /************************************************************************//**
+  Same as function above but returns the first extra which provides
+  the effect in question.
+****************************************************************************/
+const struct extra_type *tile_get_extra_by_flag(const struct tile *ptile,
+                                                enum extra_flag_id flag)
+{
+  extra_type_iterate(pextra) {
+    if (tile_has_extra(ptile, pextra)
+        && extra_has_flag(pextra, flag)) {
+      return pextra;
+    }
+  } extra_type_iterate_end;
+
+  return NULL;
+}
+
+/************************************************************************//**
   Returns TRUE if the given tile has a extra conflicting with the given one.
 ****************************************************************************/
 bool tile_has_conflicting_extra(const struct tile *ptile,
