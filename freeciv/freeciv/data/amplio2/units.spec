@@ -58,7 +58,7 @@ tiles = { "row", "column", "tag"
   0,  8, "u.horsemen"		      ; [Lexxie]
   0,  9, "u.chariot"		      ; [BB] & [GB] & [Lexxie]
   0, 10, "u.cruiser"		      ; [Nemo] & [Lexxie]
-  0, 11, "u.diplomat"		      ; [Nemo] & [Lexxie]
+  0, 11, "u.diplomat"		      ; [Lexxie] & [GB][*m]
   0, 12, "u.fighter"		      ; [Lexxie]
   0, 13, "u.frigate"		      ; [BB]
   0, 14, "u.ironclad"		      ; [Nemo] & [Lexxie]
