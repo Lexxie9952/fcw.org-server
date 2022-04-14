@@ -8,7 +8,8 @@ var console_filters = {
 'cityprod':   true,
 'citywarn':   true,
 'chat':       true,
-'setting':    true
+'setting':    true,
+'pollution':  true
 };
 
 
@@ -38,6 +39,8 @@ function console_filter_radio_clicked(which_btn)
     $("li.e_unit_sentry_wake").hide();
   if (console_filters['actions']) {
     $("li.e_bad_command").show();
+    $("li.e_unit_action_actor_failure").show();
+    $("li.e_unit_action_target_hostile").show();
     $("li.e_unit_relocated").show();
     $("li.e_unit_did_expel").show();
     $("li.e_unit_action_failed").show();
@@ -51,6 +54,8 @@ function console_filter_radio_clicked(which_btn)
   } else {
     $("li.e_bad_command").hide();
     $("li.e_unit_relocated").hide();
+    $("li.e_unit_action_actor_failure").hide();
+    $("li.e_unit_action_target_hostile").hide();
     $("li.e_unit_did_expel").hide();
     $("li.e_unit_action_failed").hide();
     $("li.e_my_unit_did_heal").hide();
@@ -67,6 +72,7 @@ function console_filter_radio_clicked(which_btn)
     $("li.e_city_cma_release").hide();
   }
   if (console_filters['diplomacy']) {
+    $("li.e_unit_action_target_other").show();
     $("li.e_revolt_done").show();
     $("li.e_revolt_start").show();
     $("li.e_spaceship").show();
@@ -111,6 +117,7 @@ function console_filter_radio_clicked(which_btn)
     $("li.e_city_transfer").show();
   }
   else {
+    $("li.e_unit_action_target_other").hide();
     $("li.e_revolt_done").hide();
     $("li.e_revolt_start").hide();
     $("li.e_spaceship").hide();
@@ -155,6 +162,7 @@ function console_filter_radio_clicked(which_btn)
     $("li.e_city_transfer").hide();              
   }
   if (console_filters['cityprod']) {
+    $("li.e_worklist").show();
     $("li.e_imp_build").show();
     $("li.e_unit_built").show();
     $("li.e_imp_sold").show();
@@ -163,6 +171,7 @@ function console_filter_radio_clicked(which_btn)
     $("li.e_unit_built_pop_cost").show();
     $("li.e_city_production_changed").show();
   } else {
+    $("li.e_worklist").hide();
     $("li.e_imp_build").hide();
     $("li.e_unit_built").hide();
     $("li.e_imp_sold").hide();
@@ -271,6 +280,13 @@ function console_filter_radio_clicked(which_btn)
     $("li.e_setting").hide();
     $("li.e_connection").hide();
   }
+  if (console_filters['pollution']) {
+    $("li.e_pollution").show();
+    $("li.e_global_eco").show();
+  } else {
+    $("li.e_pollution").hide();
+    $("li.e_global_eco").hide();
+  }
 }
 
 
@@ -333,7 +349,11 @@ function console_filter_dialog()
   + "<label for='f_chat' title='' class='css-label dark-check-orange'><span class='e_chat_msg_private_sent'>Chat</span></label><br>";
 
   dhtml += "<input type='checkbox' class='css-checkbox' id='f_setting' value='false' onclick='console_filter_radio_clicked(\"setting\");'>"
-  + "<label for='f_setting' title='' class='css-label dark-check-white'><span class='e_setting'>System Events & Player Delegation</span></label><br><br>";
+  + "<label for='f_setting' title='' class='css-label dark-check-white'><span class='e_setting'>System Events & Player Delegation</span></label><br>";
+
+  dhtml += "<input type='checkbox' class='css-checkbox' id='f_pollution' value='false' onclick='console_filter_radio_clicked(\"pollution\");'>"
+  + "<label for='f_pollution' title='' class='css-label dark-check-orange'><span class='e_pollution'>Pollution and Climate</span></label><br><br>";
+
   
   $(id).html(dhtml);
   $("#f_combat").prop("checked", console_filters['combat']);
@@ -346,6 +366,7 @@ function console_filter_dialog()
   $("#f_citywarn").prop("checked", console_filters['citywarn']);
   $("#f_chat").prop("checked", console_filters['chat']);
   $("#f_setting").prop("checked", console_filters['setting']);
+  $("#f_pollution").prop("checked", console_filters['pollution']);
 
   var buttons = { 'Set All': function() {console_filters_set(true);},
                   'Clear': function() {console_filters_set(false);},
