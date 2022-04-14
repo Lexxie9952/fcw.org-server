@@ -348,11 +348,12 @@ function console_filter_dialog()
   dhtml += "<input type='checkbox' class='css-checkbox' id='f_chat' value='false' onclick='console_filter_radio_clicked(\"chat\");'>"
   + "<label for='f_chat' title='' class='css-label dark-check-orange'><span class='e_chat_msg_private_sent'>Chat</span></label><br>";
 
+  dhtml += "<input type='checkbox' class='css-checkbox' id='f_pollution' value='false' onclick='console_filter_radio_clicked(\"pollution\");'>"
+  + "<label for='f_pollution' title='' class='css-label dark-check-orange'><span class='e_pollution'>Pollution and Climate</span></label><br>";
+
   dhtml += "<input type='checkbox' class='css-checkbox' id='f_setting' value='false' onclick='console_filter_radio_clicked(\"setting\");'>"
   + "<label for='f_setting' title='' class='css-label dark-check-white'><span class='e_setting'>System Events & Player Delegation</span></label><br>";
 
-  dhtml += "<input type='checkbox' class='css-checkbox' id='f_pollution' value='false' onclick='console_filter_radio_clicked(\"pollution\");'>"
-  + "<label for='f_pollution' title='' class='css-label dark-check-orange'><span class='e_pollution'>Pollution and Climate</span></label><br><br>";
 
   
   $(id).html(dhtml);
@@ -384,7 +385,8 @@ function console_filter_dialog()
   $(id).dialog('open');
   $(id).css("background","url(/images/bg-dark50.png)");
   $(id).next().css("text-align", "center");
-  $(id).dialog('widget').position({my:"center top", at:"center top", of:window})
+  $(id).dialog('widget').position({my:"left top", at:"left center", of:window})
+  
   dialog_register(id);
-  $("#console_filter_dialog").dialog().next().children().children()[3].focus();
+  $(id).dialog().next().children().children()[3].focus();
 }

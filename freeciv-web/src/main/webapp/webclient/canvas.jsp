@@ -16,6 +16,10 @@
       </div>
       <div id="game_chat_box">
         <canvas id="chat_direction" style="cursor:pointer" width="29" height="20" role="button"></canvas>
+        <span style="padding: 0px; margin:1px; margin-left:-1px">
+          <img style="cursor:pointer;" title='Filter Messages (alt-F)' onclick="console_filter_dialog()" 
+          onmouseover="this.src='/images/filter1.png'" onmouseout="this.src='/images/filter.png'" src="/images/filter.png">
+        </span>
         <span style="padding: 0px; margin:0px;">
           <img style="cursor:pointer; margin-top:-2px;" title='Emoji (ctrl-E)' onclick="emoji_popup()" 
           onmouseover="this.src='/images/e/smirk.png'" onmouseout="this.src='/images/e/unamused_grey.png'" src="/images/e/unamused_grey.png">
