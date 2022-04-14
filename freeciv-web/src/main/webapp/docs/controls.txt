@@ -184,6 +184,7 @@ The current and complete list of Freeciv-web controls can be found here:<br>
 <tr><td><span class="hotkey">ctrl-shift-C</span></td><td> Cycle city info display mode on map</td></tr>
 <tr><td><span class="hotkey">ctrl-alt-D</span></td><td> Disconnect (disconnected viewing mode)</td></tr>
 <tr><td><span class="hotkey">ctrl-E</span></td><td> Emoji selector</td></tr>
+<tr><td><span class="hotkey">alt-F</span></td><td> Apply filters to console messages (include/exclude types)</td></tr>
 <tr><td><span class="hotkey">alt-shift-F</span></td><td> Focus lock: center on active unit</td></tr>
 <tr><td><span class="hotkey">ctrl-G</span></td><td> Map grid on/off</td></tr>
 <tr><td><span class="hotkey">ctrl-alt-shift-I</span></td><td> Change style of the letter capital 'I'</td></tr>
@@ -265,7 +266,7 @@ The current and complete list of Freeciv-web controls can be found here:<br>
 <br>
 <br>
 <h2>Admin only:</h2><table class="ctrls_tbl"><tr><td><span class="hotkey">Ctrl-Shift-E</span></td><td>          Toggle Debug Log Messages</td></tr>
-<tr><td><span class="hotkey">Ctrl-Alt-Shift-S Toggle Supercow Interaction Lock</span></td>
+<tr><td><span class="hotkey">Ctrl-Alt-Shift-S</span></td><td>          Toggle Supercow Interaction Lock</td></tr>
 </table>
 <br>
 <br>

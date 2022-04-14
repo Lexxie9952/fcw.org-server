@@ -2197,11 +2197,10 @@ input[type="email" i], #email {
   color: #7cb4ff;
   font-size: 82%;
 }
-.e_unit_orders { /* sentry saw a unit*/
-/*  color: #d5e9a7; */
+.e_unit_orders { 
   color: #7cb4ff;
  }
- .e_imp_build,
+.e_imp_build,
 .e_unit_built {
   color: #acb8d3 
 }

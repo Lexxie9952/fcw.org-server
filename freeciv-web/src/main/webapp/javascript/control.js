@@ -3775,9 +3775,13 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
         add_client_message("<b>Alt-Shift-F</b>. Focus-lock set to "+(focuslock ? "ON." : "OFF."));
         simpleStorage.set('focuslock', focuslock);
       }
-      else if (shift) {
+      else if (shift && !alt && !ctrl) {
         key_unit_fortress();
-      } else {
+      } else if (alt && !ctrl && !shift) {
+        the_event.preventDefault();
+        console_filter_dialog();
+      }
+      else {
         key_unit_fortify();
       }
     break;
@@ -4156,11 +4160,12 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
     // shift-space, return to previous map position
     // space, will clear selection and goto.
     case 32:
-      if (shift) auto_center_last_location();
-      else if (ctrl && alt) {
+      if (shift &&!ctrl && !alt) auto_center_last_location();
+      else if (ctrl && alt && !shift) {
         the_event.preventDefault();
         key_paste_link_under_cursor();
-      } else {
+      }
+      else {
         save_last_unit_focus();
 
         current_focus = [];
