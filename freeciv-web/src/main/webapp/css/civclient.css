@@ -2311,6 +2311,7 @@ input[type="email" i], #email {
 .e_hut_merc,
 .e_hut_settler,
 .e_hut_tech,
+.e_hut_map,
 .e_hut_barb_city_near,
 
 .e_embassy_was_expelled,
@@ -2628,6 +2629,7 @@ background-image:url(/images/dark-check-green.png);
 .dark-check-cyan{background-image:url(/images/dark-check-cyan.png);}
 .dark-check-green{background-image:url(/images/dark-check-green.png);}
 .dark-check-orange{background-image:url(/images/dark-check-orange.png);}
+.dark-check-yellow{background-image:url(/images/dark-check-yellow.png);}
 .dark-check-red{background-image:url(/images/dark-check-red.png);}
 .dark-check-white{background-image:url(/images/dark-check-white.png);}
 .dark-check-blue{background-image:url(/images/dark-check-blue.png);}
