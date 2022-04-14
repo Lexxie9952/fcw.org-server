@@ -370,6 +370,9 @@ function unit_could_possibly_load(punit, ptype, ttype, tclass)
   if (!punit || !ptype || !ttype || !tclass) return false;
 
   var pclass = get_unit_class_name(punit);
+  var ptile = tiles[punit['tile']];
+  var can_load = false;
+
   //console.log("   pclass=="+pclass);
 
   // In MP2D, only special classes can board/load without moves left:
@@ -399,8 +402,6 @@ function unit_could_possibly_load(punit, ptype, ttype, tclass)
   // Transported units can't swap transports except under some conditions:
   // TO DO: when actionenabler_load is in server, we can put all this in game.ruleset actionenablers.
   if ( (pclass.startsWith("Land") || pclass=="Cargo") && punit['transported']) {
-    var ptile = tiles[punit['tile']];
-    var can_load = false;
 
     var from_unit  = units[punit['transported_by']]; // unit currently transporting the cargo who wants to swap transports
     var from_class = get_unit_class(from_unit);      // unit_class of the transport currently transporting the cargo
@@ -441,6 +442,8 @@ function unit_could_possibly_load(punit, ptype, ttype, tclass)
     if (!can_load) return false; // Must unload from current transport first.
   }
   //////////// End of handling for already-transported units doing a transport-swap ///////////////////////
+
+  //console.log("2, can_load == "+can_load);
 
   // Disqualify all units who can never be cargo.
   if (pclass == "Sea" ||
@@ -490,14 +493,25 @@ function unit_could_possibly_load(punit, ptype, ttype, tclass)
     if (!ttype.name.includes("Bomber") 
         && tclass.rule_name != "LandRail"
         && tclass.rule_name != "LandRoad" ) return false;
-    if (ttype.cargo[0]==0) return false; // Dive-Bomber or Bomber who can't carry bombs.
+    if (ttype.cargo[0]==0) return false; // any "Bomber" who can't carry bombs.
   } 
   else if (pclass == "Missile") {
     if (ttype.name=="Missile Destroyer" ||
         ttype.name=="AEGIS Cruiser" ||
-        ttype.name=="Submarine" ||
+        (tclass.rule_name=="Submarine" && !client_rules_flag[CRF_MP2_D]) ||
+        ttype.name=="Missile Submarine" ||
         ttype.name=="Mobile SAM" ||
-        ttype.name=="Carrier") return true;
+        ttype.name=="Carrier") {
+          //starting in MP2D missiles must load in a city or be a transport swap
+          if (client_rules_flag[CRF_MP2_D]) { 
+            if (tile_city(ptile)) return true;
+            else if (can_load) return true;
+            else return false;
+          }
+          //pre-MP2D: missiles can board on the qualifying transport types above
+          return true;
+        }
+    //the transport type is one who can't carry missiles:
     return false;
   }
   else if (pclass.startsWith("Land")) {   // Land, LandNoKill, LandAirSea, LandRail, LandRoad
@@ -505,7 +519,7 @@ function unit_could_possibly_load(punit, ptype, ttype, tclass)
     if (tclass.rule_name == "Land") return false; // can't load on Caravans, the only Land class with cargo capacity.
     if (tclass.rule_name == "Submarine") return false;
     if (tclass.rule_name == "LandRail" || tclass.rule_name == "LandRoad") {  
-      if (utype_real_base_move_rate(ptype) >= 3 * SINGLE_MOVE) return false; // Rail equality: units with <3 moves can use trains
+      if (utype_real_base_move_rate(ptype) >= 3 * SINGLE_MOVE) return false; // Equality: units with <3 moves can use wagon/train/truck
       //if (!unit_has_type_flag(punit, UTYF_FOOTSOLDIER)) return false; //used to be foot only, now it's line above
     }
     if (tclass.rule_name == "Air") {
