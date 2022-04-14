@@ -710,7 +710,11 @@ Med.Bomber 1
 ==============================================================
 122.Frigates and Galleons can't attack Subs
 ==============================================================
-123.
+123.Missiles must be loaded on transports:
+(a) in a city, or (b) as cargo from one transport to another 
+on the same tile, (c) so-called parachute-catch-delivery, 
+where a missile floating at TC auto-returns to the nearest
+unit who can carry it  
 ==============================================================
 124.
 ==============================================================

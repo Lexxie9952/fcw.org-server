@@ -4991,8 +4991,8 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-embarks       = "Submarine"
-disembarks    = "Submarine"
+embarks       = "Submarine", "Sea", "Land"  ;since disallowing embark disallows "Transport Board" also, we must use actionenabler to disallow disembark
+disembarks    = "Submarine", "Sea", "Land"
 targets       = "LandRail", "Space"
 flags         = "NeverProtects", "FieldUnit", "OneAttack", "HasNoZOC", "Unbribable",
                 "CantReachAir", "Missile", "NeverBlocked", "WillNever"
@@ -5032,8 +5032,8 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-embarks       = "Submarine"
-disembarks    = "Submarine"
+embarks       = "Submarine", "Sea", "Land"  ;since disallowing embark disallows "Transport Board" also, we must use actionenabler to disallow disembark
+disembarks    = "Submarine", "Sea", "Land"
 targets       = "Balloon", "Helicopter", "Air", "AirProtect", "Air_High_Altitude", "Missile", "Submarine", "LandRail", "LandRoad", "Space", "Zeppelin"
 flags         = "NeverProtects", "FieldUnit", "OneAttack", "Nuclear", "HasNoZOC", "Unbribable",
                 "NeverBlocked", "WillNever", "NoVeteran"
@@ -5079,8 +5079,8 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-embarks       = "Submarine"
-disembarks    = "Submarine"
+embarks       = "Submarine", "Sea", "Land"  ;since disallowing embark disallows "Transport Board" also, we must use actionenabler to disallow disembark
+disembarks    = "Submarine", "Sea", "Land"
 targets       = "Balloon", "Helicopter", "Air", "AirProtect", "Air_High_Altitude", "Missile", "Submarine", "LandRail", "LandRoad", "Space", "Zeppelin"
 flags         = "NeverProtects", "FieldUnit", "OneAttack", "Nuclear", "HasNoZOC", "Unbribable",
                 "NeverBlocked", "WillNever", "NoVeteran"

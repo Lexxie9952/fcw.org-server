@@ -3280,14 +3280,26 @@ actor_reqs    =
       "MinMoveFrags", "1",           "Local"
     }
 
-;TO DO: this now enables ruleset to control embarkation stipulations, rather
-;than hard-coded client. This actionenabler should be extended with all the 
-;mp2c logic and taken advantage of for expanded/simplified/upgraded mechanics.
 [actionenabler_embark]
 action        = "Transport Embark"
 actor_reqs    =
     { "type",         "name",       "range", "present"
       "MinMoveFrags", "1",          "Local", TRUE
+      "UnitClass",    "Missile",    "Local", FALSE
+      "DiplRel",      "Armistice",  "Local", FALSE
+      "DiplRel",      "War",        "Local", FALSE
+      "DiplRel",      "Cease-fire", "Local", FALSE
+      "DiplRel",      "Peace",      "Local", FALSE
+      "DiplRel",      "Never met",  "Local", FALSE
+    }
+;Missiles can board/embark (1) in cities, (2) as a cargo swap, (3) i.e., NOT flying through air to land in a catch-net. 
+[actionenabler_embark_missiles]
+action        = "Transport Embark"
+actor_reqs    =
+    { "type",         "name",       "range", "present"
+      "MinMoveFrags", "1",          "Local", TRUE
+      "UnitClass",    "Missile",    "Local", TRUE
+      "UnitState",    "Transported","Local", TRUE
       "DiplRel",      "Armistice",  "Local", FALSE
       "DiplRel",      "War",        "Local", FALSE
       "DiplRel",      "Cease-fire", "Local", FALSE
