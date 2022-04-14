@@ -565,7 +565,7 @@ discovery of automobile.
 97. Monarchy, CM, Theocracy: 1 free gold upkeep on units.
 Communism: 3 free gold upkeep on units.
 ==============================================================
-98. Colosseum costs 375
+98. Colosseum costs 360
 ==============================================================
 99. New wonder: Propaganda Ministry, +1 happy +2 lux for 
 authoritarian governments.

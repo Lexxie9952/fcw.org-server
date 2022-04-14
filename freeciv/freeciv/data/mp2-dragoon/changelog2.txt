@@ -537,7 +537,7 @@ upgrade turn. Reasons: more quantitative easing on upgrade
 retadation syndrome; reduce overly strong penalties on
 discovery of automobile.
 ==============================================================
-28. Colosseum costs 375
+28. Colosseum costs 360
 ==============================================================
 29. FORMERLY: courthouse/homeland/police/theocracy blocked 
 diplomats from hostile embassy (needs ceasefire/peace first);

@@ -2526,7 +2526,7 @@ graphic_alt	= "-"
 obsolete_by	=
     { "type", "name", "range"
     }
-build_cost	= 375
+build_cost	= 360
 upkeep		= 0
 sabotage	= 0
 sound		= "w_roman_colosseum"
