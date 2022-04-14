@@ -804,8 +804,9 @@ function is_unprefixed_message(message) {
 ...
 ****************************************************************************/
 function check_text_input(event,chatboxtextarea) {
-  if (event.keyCode == 13 && event.shiftKey == 0)  {
-    send_text_input(chatboxtextarea);
+  if (event.keyCode == 13) {
+    if (event.shiftKey == 0) send_text_input(chatboxtextarea);
+    else if (C_S_RUNNING == client_state()) send_end_turn();
   }
   if (event.ctrlKey) {
     // allow ctrl-E hotkey to pop-up emoji selector, when inside chat text input: 
@@ -823,6 +824,12 @@ function check_text_input(event,chatboxtextarea) {
       event.preventDefault();
       quicksave();
     } 
+  } 
+  else if (event.altKey) {
+    if (String.fromCharCode(event.keyCode) == 'F') {
+      event.preventDefault();
+      console_filter_dialog();
+    }
   }
 }
 /****************************************************************************
@@ -3558,6 +3565,13 @@ function civclient_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_even
       if (alt && !ctrl && !shift) {
         the_event.preventDefault(); // override possible browser shortcut
         $('#ui-id-2').trigger("click"); // empire tab
+      }
+    break;
+
+    case 'F':
+      if (alt && !ctrl && !shift) {
+        the_event.preventDefault();
+        console_filter_dialog();
       }
     break;
 
