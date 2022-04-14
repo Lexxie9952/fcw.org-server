@@ -159,7 +159,6 @@ function console_filter_radio_clicked(which_btn)
     $("li.e_imp_buy").show();
     $("li.e_unit_buy").show();
     $("li.e_unit_built_pop_cost").show();
-    $("li.e_city_build").show();
     $("li.e_city_production_changed").show();
   } else {
     $("li.e_imp_build").hide();
@@ -168,10 +167,10 @@ function console_filter_radio_clicked(which_btn)
     $("li.e_imp_buy").hide();
     $("li.e_unit_buy").hide();
     $("li.e_unit_built_pop_cost").hide();
-    $("li.e_city_build").hide();
     $("li.e_city_production_changed").hide();
   }
   if (console_filters['citywarn']) {
+    $("li.e_city_build").show();
     $("li.e_disaster").show();
     $("li.e_city_plague").show();
     $("li.e_city_lost").show();
@@ -186,6 +185,7 @@ function console_filter_radio_clicked(which_btn)
     $("li.e_city_normal").show();
     $("li.e_city_gran_throttle").show();
   } else {
+    $("li.e_city_build").hide();
     $("li.e_disaster").hide();
     $("li.e_city_plague").hide();
     $("li.e_city_lost").hide();
@@ -237,9 +237,33 @@ function console_filter_radio_clicked(which_btn)
     $("li.cht_you").hide();
   }
   if (console_filters['setting']) {
+    $("li.e_report").show();
+    $("li.e_game_start").show();
+    $("li.e_spontaneous_extra").hide();
+    $("li.e_hut_barb").show();
+    $("li.e_hut_gold").show();
+    $("li.e_hut_map").show();
+    $("li.e_hut_city").show();
+    $("li.e_hut_merc").show();
+    $("li.e_hut_settler").show();
+    $("li.e_hut_tech").show();
+    $("li.e_hut_barb_city_near").show();
+    $("li.e_beginner_help").show();
     $("li.e_setting").show();
     $("li.e_connection").show();
   } else {
+    $("li.e_report").hide();
+    $("li.e_game_start").hide();
+    $("li.e_spontaneous_extra").hide();
+    $("li.e_hut_barb").hide();
+    $("li.e_hut_gold").hide();
+    $("li.e_hut_map").hide();
+    $("li.e_hut_city").hide();
+    $("li.e_hut_merc").hide();
+    $("li.e_hut_settler").hide();
+    $("li.e_hut_tech").hide();
+    $("li.e_hut_barb_city_near").hide();
+    $("li.e_beginner_help").hide();
     $("li.e_setting").hide();
     $("li.e_connection").hide();
   }
@@ -267,7 +291,7 @@ function console_filter_dialog()
 {
   var i;
 
-  var rid     = "console_class_filter";
+  var rid     = "console_filter_dialog";
   var id      = "#" + rid;
   var dhtml   = "";
 
@@ -275,7 +299,7 @@ function console_filter_dialog()
   remove_active_dialog(id);
   $("<div id='" + rid + "'></div>").appendTo("div#game_page");
 
-  dhtml += "Apply filters to existing messages:<br><br>";
+  dhtml += "Filter existing messages by type:<br><br>";
   
   dhtml += "<input type='checkbox' class='css-checkbox' id='f_combat' value='false' onclick='console_filter_radio_clicked(\"combat\");'>"
   + "<label for='f_combat' title='' class='css-label dark-check-blue'><span class='e_unit_win_att'>Unit Combat</span></label><br>";
@@ -299,13 +323,13 @@ function console_filter_dialog()
   + "<label for='f_cityprod' title='' class='css-label dark-check-yellow'><span class='e_unit_buy'>City Production</span></label><br>";
     
   dhtml += "<input type='checkbox' class='css-checkbox' id='f_citywarn' value='false' onclick='console_filter_radio_clicked(\"citywarn\");'>"
-  + "<label for='f_citywarn' title='' class='css-label dark-check-red'><span class='e_city_famine'>City Warnings</span></label><br>";
+  + "<label for='f_citywarn' title='' class='css-label dark-check-red'><span class='e_city_famine'>City Events</span></label><br>";
 
   dhtml += "<input type='checkbox' class='css-checkbox' id='f_chat' value='false' onclick='console_filter_radio_clicked(\"chat\");'>"
   + "<label for='f_chat' title='' class='css-label dark-check-orange'><span class='e_chat_msg_private_sent'>Chat</span></label><br>";
 
   dhtml += "<input type='checkbox' class='css-checkbox' id='f_setting' value='false' onclick='console_filter_radio_clicked(\"setting\");'>"
-  + "<label for='f_setting' title='' class='css-label dark-check-white'><span class='e_setting'>Player Delegation & System Events</span></label><br><br>";
+  + "<label for='f_setting' title='' class='css-label dark-check-white'><span class='e_setting'>System Events & Player Delegation</span></label><br><br>";
   
   $(id).html(dhtml);
   $("#f_combat").prop("checked", console_filters['combat']);
@@ -322,20 +346,20 @@ function console_filter_dialog()
   var buttons = { 'Set All': function() {console_filters_set(true);},
                   'Clear': function() {console_filters_set(false);},
                   'Flip':function() {console_filters_set('flip');},
-                  'Apply':    function() {console_filter_radio_clicked(); remove_active_dialog(id);}
+                  'Do it! (𝗪)':    function() {console_filter_radio_clicked(); remove_active_dialog(id);}
                 };
 
   $(id).dialog({
       title    : "Filter console messages",
       bgiframe : true,
       modal    : false,
-      width    : "400px",
+      width    : "380px",
       buttons  : buttons });
 
   $(id).dialog('open');
- // $(".ui-widget-overlay.ui-front").remove(); // don't put dark overlay fade over rest of screen
   $(id).css("background","url(/images/bg-dark50.png)");
   $(id).next().css("text-align", "center");
   $(id).dialog('widget').position({my:"center top", at:"center top", of:window})
   dialog_register(id);
+  $("#console_filter_dialog").dialog().next().children().children()[3].focus();
 }
