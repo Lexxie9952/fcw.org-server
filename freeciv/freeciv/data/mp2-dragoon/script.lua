@@ -114,7 +114,7 @@ function tech_researched_handler(tech, player, how)
     if game_turn < 15 then
       for c in player:cities_iterate() do 
         if c:has_building(find.building_type("Palace")) and first_horse_warning > 0 then
-          notify.event(NIL, c.tile, E.TECH_GAIN,
+          notify.event(NIL, c.tile, E.BEGINNER_INFO,
           _("<font color=#ffff60>[`scout`] Travellers say the %s now ride horses, near %s. (%i,%i)</font>"),
           player.nation:plural_translation(), c.name, c.tile.x, c.tile.y )
           notify.all( _("<img src='/images/e/scout.png'> A tribe has learned to ride horses near %s (%i,%i)"),
@@ -122,7 +122,7 @@ function tech_researched_handler(tech, player, how)
         end
         if c:has_building(find.building_type("Palace")) and first_horse_warning == 0 then
           first_horse_warning = 1
-          notify.event(NIL, c.tile, E.TECH_GAIN,
+          notify.event(NIL, c.tile, E.BEGINNER_INFO,
           _("[`events/wildbeasts`]<br><font color=#ffff60>[`scout`] Travellers tell of the %s, who ride horses near %s! (%i,%i)</font>"),
           player.nation:plural_translation(), c.name, c.tile.x, c.tile.y )
           notify.all( _("<img src='/images/e/scout.png'> A tribe has learned to ride wild beasts near %s (%i,%i)"),

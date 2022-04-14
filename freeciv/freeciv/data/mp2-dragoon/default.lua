@@ -39,7 +39,7 @@ end
 function _deflua_hut_get_bulbs(unit, bulbs)
   local owner = unit.owner
 
-    notify.event(owner, unit.tile, E.HUT_GOLD, PL_("[`bulb`] You found ancient tablets worth %d bulb.",
+    notify.event(owner, unit.tile, E.HUT_TECH, PL_("[`bulb`] You found ancient tablets worth %d bulb.",
                                                   "[`bulb`] You found ancient tablets worth %d bulbs.", bulbs),
                 bulbs)
     owner:give_bulbs(bulbs)
