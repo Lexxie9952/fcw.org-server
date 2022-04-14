@@ -37,6 +37,7 @@ function console_filter_radio_clicked(which_btn)
   else 
     $("li.e_unit_sentry_wake").hide();
   if (console_filters['actions']) {
+    $("li.e_bad_command").show();
     $("li.e_unit_relocated").show();
     $("li.e_unit_did_expel").show();
     $("li.e_unit_action_failed").show();
@@ -48,6 +49,7 @@ function console_filter_radio_clicked(which_btn)
     $("li.e_unit_illegal_action").show();
     $("li.e_unit_lost_misc").show();
   } else {
+    $("li.e_bad_command").hide();
     $("li.e_unit_relocated").hide();
     $("li.e_unit_did_expel").hide();
     $("li.e_unit_action_failed").hide();
@@ -170,6 +172,7 @@ function console_filter_radio_clicked(which_btn)
     $("li.e_city_production_changed").hide();
   }
   if (console_filters['citywarn']) {
+    $("li.e_caravan_action").show();
     $("li.e_city_build").show();
     $("li.e_disaster").show();
     $("li.e_city_plague").show();
@@ -185,6 +188,7 @@ function console_filter_radio_clicked(which_btn)
     $("li.e_city_normal").show();
     $("li.e_city_gran_throttle").show();
   } else {
+    $("li.e_caravan_action").hide();
     $("li.e_city_build").hide();
     $("li.e_disaster").hide();
     $("li.e_city_plague").hide();
@@ -346,7 +350,7 @@ function console_filter_dialog()
   var buttons = { 'Set All': function() {console_filters_set(true);},
                   'Clear': function() {console_filters_set(false);},
                   'Flip':function() {console_filters_set('flip');},
-                  'Do it! (𝗪)':    function() {console_filter_radio_clicked(); remove_active_dialog(id);}
+                  'Do it!':    function() {console_filter_radio_clicked(); remove_active_dialog(id);}
                 };
 
   $(id).dialog({
