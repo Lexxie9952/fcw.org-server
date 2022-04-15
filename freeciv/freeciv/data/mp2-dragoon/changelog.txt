@@ -716,7 +716,7 @@ on the same tile, (c) so-called parachute-catch-delivery,
 where a missile floating at TC auto-returns to the nearest
 unit who can carry it  
 ==============================================================
-124.
+124.chance of razed building goes from 20% to 15%
 ==============================================================
 125.
 ==============================================================

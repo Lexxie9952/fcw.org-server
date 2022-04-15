@@ -3786,6 +3786,7 @@ set =
       "nukes_minor", "ENABLED", FALSE      ; set to DISABLED to completely disallow nuclear detonations
       "nukes_major", "ENABLED", FALSE      ; set to DISABLED to disallow nuclear fusion weapons
       "polarstrip", "DISABLED", FALSE      ; blocks making horizontal polar strips on most generators
+      "razechance", 15, FALSE              ; each building has 15% chance to be lost/razed during a conquest
       "revolen", 1, FALSE
       "restrictinfra", "ENABLED", FALSE    ; required for mp2 mechanics.
       "separatepoles", FALSE, FALSE
