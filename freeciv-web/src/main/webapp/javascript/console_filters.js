@@ -319,7 +319,7 @@ function console_filter_dialog()
   remove_active_dialog(id);
   $("<div id='" + rid + "'></div>").appendTo("div#game_page");
 
-  dhtml += "Filter existing messages by type:<br><br>";
+  //dhtml += "Filter existing messages by type:<br><br>";
   
   dhtml += "<input type='checkbox' class='css-checkbox' id='f_combat' value='false' onclick='console_filter_radio_clicked(\"combat\");'>"
   + "<label for='f_combat' title='' class='css-label dark-check-blue'><span class='e_unit_win_att'>Unit Combat</span></label><br>";
@@ -331,7 +331,7 @@ function console_filter_dialog()
   + "<label for='f_sentry' name='lblSS' title='' class='css-label dark-check-blue'><span class='e_unit_sentry_wake' style='font-size:100%'>Sentry Reports</span></label><br>";
 
   dhtml += "<input type='checkbox' class='css-checkbox' id='f_governor' value='false' onclick='console_filter_radio_clicked(\"governor\");'>"
-  + "<label for='f_governor' title='' class='css-label dark-check-blue'><span class='e_city_cma_release'>City Governor</span></label><br>";
+  + "<label for='f_governor' title='' class='css-label dark-check-blue'><span class='e_city_cma_release'>Governors</span></label><br>";
 
   dhtml += "<input type='checkbox' class='css-checkbox' id='f_tech' value='false' onclick='console_filter_radio_clicked(\"tech\");'>"
   + "<label for='f_tech' title='' class='css-label dark-check-cyan'><span class='e_tech_gain'>Technology</span></label><br>";
@@ -379,14 +379,15 @@ function console_filter_dialog()
       title    : "Filter console messages",
       bgiframe : true,
       modal    : false,
-      width    : "380px",
+      width    : (is_small_screen() ? "98%" : "360px"),
       buttons  : buttons });
 
   $(id).dialog('open');
+  $(id).parent().css("zIndex", 151); // force placement over other windows.
   $(id).css("background","url(/images/bg-dark50.png)");
   $(id).next().css("text-align", "center");
   $(id).dialog('widget').position({my:"left top", at:"left center", of:window})
-  
+
   dialog_register(id);
   $(id).dialog().next().children().children()[3].focus();
 }
