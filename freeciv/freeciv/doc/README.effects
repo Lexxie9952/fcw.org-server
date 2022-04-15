@@ -557,6 +557,19 @@ Rapture_Rate_Pm
     NOTE: for backward compat, a rate of 0 is treated as the formerly 
     hard-coded assumption that the rate is 1000pm.
 
+Raze_Building_Pct
+    Increases or decreases the chance of each building being lost when
+    a city is conquered. (Modifies 'razechance' by amount percent.) Req
+    scope only accesses the conquering player and the target city. Effect
+    is applied AFTER ownership of city is transferred: "OwnedByOriginal"
+    indicates liberation of a city originally built by the conqueror.
+    "Building", "Local" modifies the chance of the exact building itself
+    being razed. Razings occur in an iteration loop: if you check for the
+    presence of "Building", "City" and that indicated building is razed, all
+    buildings iterated afterward aren't affected by whatever bonus it had.
+     _Illegal scopes_:
+        Units and Victim Players.   
+
 Rehome_Pct
     Units who would disband after their homecity is conquered, have this 
     value's percent chance to rehome to the nearest legal domestic city,

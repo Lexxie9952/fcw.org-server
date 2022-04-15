@@ -453,6 +453,9 @@ adv_want dai_effect_value(struct player *pplayer, struct government *gov,
     num = num_affected_units(peffect, ai);
     v += amount * (3 * c + num);
     break;
+  case EFT_RAZE_BUILDING_PCT:
+    /* Negative is desirable, avoid amount=65535 to skew decision */
+    v -= MAX(100,amount) / 5;
   case EFT_UPGRADE_UNIT:
     if (amount == 1) {
       v += ai->stats.units.upgradeable * 2;

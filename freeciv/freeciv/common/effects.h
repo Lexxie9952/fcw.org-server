@@ -369,6 +369,10 @@ extern "C" {
 /* The percent chance a tile will be immune to nuclear blast */
 #define SPECENUM_VALUE142 EFT_TILE_NUKE_PROOF
 #define SPECENUM_VALUE142NAME "Tile_Nuke_Proof"
+/* Modifies the chance the actor will raze buildings when conquering cities */
+#define SPECENUM_VALUE143 EFT_RAZE_BUILDING_PCT
+#define SPECENUM_VALUE143NAME "Raze_Building_Pct"
+
 
 /* FCW does not have /common and needs to hard code any changes or re-ordering of the above in effects.js */
 /********************************************************************************************************~*/

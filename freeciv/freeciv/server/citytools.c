@@ -935,21 +935,34 @@ struct city *find_closest_city(const struct tile *ptile,
   always palace) with game.server.razechance% chance, barbarians destroy more
   set the city's shield stock to 0
 ****************************************************************************/
-static int raze_city(struct city *pcity)
+static int raze_city(struct city *pcity, struct player *ptaker)
 {
   int loot_gold = 0;
-  int razechance = game.server.razechance;
+  int razeadd = 0;
   bool city_remains = TRUE;
 
-  /* land barbarians are more likely to destroy city improvements */
+  /* TODO: this should now use EFT_RAZE_BUILDING_PCT=150 for barbarians
+     in the ruleset instead of hard-coding. (150% * 20 = 30)
+  Land barbarians are more likely to destroy city improvements */
   if (is_land_barbarian(city_owner(pcity))) {
-    razechance += 30;
+    razeadd += 30;
   }
 
   city_built_iterate(pcity, pimprove) {
     /* Small wonders should have already been removed by
      * transfer_city() (with 100% probability). */
     fc_assert(!is_small_wonder(pimprove));
+    int razechance = game.server.razechance * (100
+                   + get_target_bonus_effects(NULL, ptaker, NULL, pcity, pimprove,
+                                              city_tile(pcity), NULL, NULL, NULL,
+                                              NULL, NULL, EFT_RAZE_BUILDING_PCT))
+                   / 100 + razeadd;
+    /* DEBUG TESTING               
+    notify_player(ptaker, city_tile(pcity), E_IMP_BUILD, ftc_server,
+      _("Raze chance for %s in %s is %d%%"),
+      improvement_name_translation(pimprove),
+      city_link(pcity), razechance); */
+
     if (is_improvement(pimprove) && (fc_rand(100) < razechance)) {
       /* FIXME: Should maybe have conquering unit instead of NULL as destroyer */
       city_remains = building_removed(pcity, pimprove, "razed", NULL);
@@ -1270,7 +1283,7 @@ bool transfer_city(struct player *ptaker, struct city *pcity,
     struct extra_type *upgradet;
 
     if (raze) {
-      total_loot += raze_city(pcity);
+      total_loot += raze_city(pcity, ptaker);
     }
 
     if (taker_had_no_cities) {
