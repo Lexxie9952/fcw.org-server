@@ -89,7 +89,8 @@ helptext	= _("\
 Makes one unhappy citizen content. Mysticism doubles\
  this effect. With both Mysticism and the Oracle, +4 citizens are\
  made content. Does not affect citizens made unhappy by military\
- activity.\
+ activity. \n\
+Odds of loss from razing are halved.\
 ")
 
 [building_marketplace]
@@ -112,7 +113,8 @@ sound_alt	= "b_generic"
 helptext	= _("\
 Increases the luxury and tax output in a city by +50%.\
 Also increases the conversion rate of Coinage by +25%,\
- yielding a rate of 1.75 gold per 1 shield invested.\
+ yielding a rate of 1.75 gold per 1 shield invested. \n\
+Odds of loss from razing are halved.\
 ")
 
 [building_harbour]
@@ -136,7 +138,8 @@ sound		= "b_harbour"
 sound_alt	= "b_generic"
 helptext	= _("\
 Gives one extra food resource on all Oceanic tiles. The city needs\
- to be coastal to build this improvement.\
+ to be coastal to build this improvement. \n\
+Odds of loss from razing are halved.\
 ")
 
 [building_aqueduct]
@@ -158,7 +161,8 @@ sound		= "b_aqueduct"
 sound_alt	= "b_generic"
 helptext	= _("\
 Allows a city to grow larger than size 8.  A Sewer System is also\
- required for a city to grow larger than size 12.\
+ required for a city to grow larger than size 12. \n\
+Odds of loss from razing are halved.\
 ")
 ; There is also an effect to reduce the chance of plague, but you have to
 ; enable illness in game.ruleset for that to be relevant.
@@ -317,7 +321,8 @@ sound		= "b_sewer_system"
 sound_alt	= "b_generic"
 helptext	= _("\
 Allows a city to grow larger than size 12.  An Aqueduct is first\
- required for a city to grow larger than size 8.\
+ required for a city to grow larger than size 8. \n\
+Odds of loss from razing are halved.\
 ")
 ; There is also an effect to reduce the chance of plague, but you have to
 ; enable illness in game.ruleset for that to be relevant.
@@ -469,7 +474,8 @@ Increases the food resources by +100% on each farmland tile which\
  immediate +50% bonus even without Farmland.\
  Farmland tiles are those which have been irrigated a second time. \n\
 Communist government has these effects for free, and gets no bonus\
- from this building.\
+ from this building. \n\
+Odds of loss from razing are halved.\
 ")
 
 [building_barracks_iii]
@@ -621,7 +627,8 @@ A Cathedral makes 3 unhappy citizens content, but does not affect citizens\
  Communist government decreases the effect by -1. (Michelangelo’s Chapel enhances\
  the effect of Cathedrals by +1 happy citizen and +1 forced content citizen.)\n\
 Under Theocracy, the rapture rate increases to 4 out of 7 turns when the\
- Cathedral improvement is physically present inside the city.\
+ Cathedral improvement is physically present inside the city. \n\
+Odds of loss from razing are halved.\
 ")
 
 [building_airport]
@@ -746,7 +753,8 @@ sound_alt	= "b_generic"
 helptext	= _("\
 Entertains the citizens of a city, making three unhappy citizens content. \
  (Four after the discovery of Electricity.)  However, it does not\
- affect citizens made unhappy by military activity.\
+ affect citizens made unhappy by military activity. \n\
+Odds of loss from razing are halved.\
 ")
 
 [building_police_station]
@@ -852,7 +860,8 @@ A Hydro Plant boosts the base production of a city by +30%. The\
 "), _("\
 ➤ The sale price of a Coal Plant becomes 85% original value\
  after a city has built a Hydro Plant. \n\n\
-Hydro Plants can only be built on or adjacent to rivers.\
+Hydro Plants can only be built on or adjacent to rivers. \n\
+Odds of loss from razing are halved.\
 ")
 
 [building_nuclear_plant]
@@ -1162,7 +1171,8 @@ sound_alt	= "b_generic"
 helptext	= _("\
 The amount of stored food will be set to half full whenever a city\
  with a Granary 1) grows in size, or 2) loses size from starvation.\
- This helps a city to grow faster and more easily withstand famine.\
+ This helps a city to grow faster and more easily withstand famine. \n\
+Odds of loss from razing are halved.\
 ")
 
 [building_totem_pole]
@@ -1190,7 +1200,7 @@ Gives two luxury to a city. In small tribal settlements, this can\
 The process of building a Totem Pole is sometimes more useful than\
  finishing it. It keeps your tribe productive by storing shields that\
  can transfer into a building made available by a future scientific\
- discovery. \n\
+ discovery. Odds of loss from razing are halved. \n\
 Obsolete by：Temple, Ceremonial Burial.\
 ")
 

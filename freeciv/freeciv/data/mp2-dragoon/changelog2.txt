@@ -758,7 +758,14 @@ on the same tile, (c) so-called parachute-catch-delivery,
 where a missile floating at TC auto-returns to the nearest
 unit who can carry it  
 ==============================================================
-124.chance of razed building goes from 20% to 15%
+124.chance of razed building goes from 1/5 to 1/7 (20>14)
+anarchy,despotism,communism conquerors have +50% (21%)
+democracy,theocracy conquerors have -50% (7%)
+liberating your own city reduces it by -50%
+   normal: 7%, anarchy/despotism/commie: 14%, demo/theo: 0%
+certain buildings have a reduced chance of razing:
+amphitheatre,aqueduct,cathedral,granary,harbor,marketplace,
+hydro plant,sewer,supermarket,temple,totem pole
 ==============================================================
 125.
 ==============================================================

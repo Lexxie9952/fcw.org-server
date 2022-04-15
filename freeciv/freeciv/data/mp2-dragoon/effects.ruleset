@@ -1634,6 +1634,40 @@ reqs	=
 ;    { "type",       "name",      "range"
 ;      "Gov", "Theocracy", "Player"
 ;    }
+;******************************************* RAZED BUILDINGS IN LIBERATED CITIES
+[effect_razings_mean_govs]  ;anarchy, despotism, communism
+type    = "Raze_Building_Pct"
+value   = 50                       
+reqs	=
+    { "type","name",       "range", "present"
+      "Gov", "Monarchy",   "Player", FALSE
+      "Gov", "Republic",   "Player", FALSE
+      "Gov", "Democracy",  "Player", FALSE
+      "Gov", "Theocracy",  "Player", FALSE
+      "Gov", "Nationalism","Player", FALSE
+    }
+;Monarchy,Republic,Nationalism = Standard razechance: no effect.
+
+[effect_razings_nice_govs]  ;theocracy, democracy
+type    = "Raze_Building_Pct"
+value   = -50                       
+reqs	=
+    { "type","name",       "range", "present"
+      "Gov", "Anarchy",    "Player", FALSE
+      "Gov", "Despotism",  "Player", FALSE
+      "Gov", "Monarchy",   "Player", FALSE
+      "Gov", "Republic",   "Player", FALSE
+      "Gov", "Communism",  "Player", FALSE
+      "Gov", "Nationalism","Player", FALSE
+    }
+
+[effect_liberation_on_razing]
+type    = "Raze_Building_Pct"
+value   = -50  ; "mean" = razechance, "std" = 1/2 raze chance, "nice" = 0%
+reqs	=
+    { "type",       "name",            "range", "present"
+      "CityStatus", "OwnedByOriginal", "City",  TRUE
+    }
 ;******************************************* EMPIRE SIZE / cities
 [effect_empire_size_base_anarchy]
 type    = "Empire_Size_Base"
@@ -2528,6 +2562,31 @@ reqs	=
       "UnitClass", "Helicopter", "Local"
     }
 
+[effect_amphitheatre]
+type    = "Make_Content"
+value	= 3
+reqs	=
+    { "type", "name", "range"
+      "Building", "Amphitheatre", "City"
+    }
+
+[effect_amphitheatre_1]
+type    = "Make_Content"
+value	= 1
+reqs	=
+    { "type", "name", "range"
+      "Tech", "Electricity", "Player"
+      "Building", "Amphitheatre", "City"
+    }
+
+[effect_amphitheatre_razings]
+type   = "Raze_Building_Pct"
+value = -50
+reqs  =
+    { "type", "name", "range"
+      "Building", "Amphitheatre", "Local"
+    }
+
 ; Base max city size of 8
 [effect_aqueduct_size]
 type    = "Size_Adj"
@@ -2547,6 +2606,14 @@ value	= 50
 reqs	=
     { "type", "name", "range"
       "Building", "Aqueduct", "City"
+    }
+
+[effect_aqueduct_razings]
+type   = "Raze_Building_Pct"
+value = -50
+reqs  =
+    { "type", "name", "range"
+      "Building", "Aqueduct", "Local"
     }
 
 [effect_bank_gold]
@@ -2697,6 +2764,13 @@ reqs	=
       "Gov", "Communism", "Player", TRUE
       "Building", "Cathedral", "City", TRUE
       "Building", "Michelangelo's Chapel", "Player", FALSE
+    }
+[effect_cathedral_razings]
+type   = "Raze_Building_Pct"
+value = -50
+reqs  =
+    { "type", "name", "range"
+      "Building", "Cathedral", "Local"
     }
 ;--- ENHANCED CATHEDRAL with Michelangelo: ***
 [effect_cathedral_ma]
@@ -3027,23 +3101,6 @@ reqs	=
 ;    }
 ;------------------------------------------------------------
 
-[effect_amphitheatre]
-type    = "Make_Content"
-value	= 3
-reqs	=
-    { "type", "name", "range"
-      "Building", "Amphitheatre", "City"
-    }
-
-[effect_amphitheatre_1]
-type    = "Make_Content"
-value	= 1
-reqs	=
-    { "type", "name", "range"
-      "Tech", "Electricity", "Player"
-      "Building", "Amphitheatre", "City"
-    }
-
 ; BECAUSE OF ROUNDING, AVERAGE EFFECT OF 50 ENDS UP BEING 41%, WHEREAS 60 YIELDS ABOUT 53% WHICH IS CLOSER TO ADVERTISED
 [effect_courthouse_corruption1]
 type    = "Output_Waste_Pct"
@@ -3251,6 +3308,13 @@ reqs	=
     { "type", "name", "range"
       "Building", "Granary", "City"
     }
+[effect_granary_razings]
+type   = "Raze_Building_Pct"
+value = -50
+reqs  =
+    { "type", "name", "range"
+      "Building", "Granary", "Local"
+    }
 
 [effect_harbour]
 type    = "Output_Add_Tile"
@@ -3260,6 +3324,13 @@ reqs	=
       "TerrainClass", "Oceanic", "Local"
       "Building", "Harbour", "City"
       "OutputType", "Food", "Local"
+    }
+[effect_harbour_razings]
+type   = "Raze_Building_Pct"
+value = -50
+reqs  =
+    { "type", "name", "range"
+      "Building", "Harbour", "Local"
     }
 
 [effect_library]
@@ -3295,6 +3366,13 @@ reqs	=
     { "type",     "name",        "range", "present"
       "Building", "Marketplace", "City",   TRUE
       "Gov",      "Communism",   "Player", FALSE
+    }
+[effect_marketplace_razings]
+type   = "Raze_Building_Pct"
+value = -50
+reqs  =
+    { "type", "name", "range"
+      "Building", "Marketplace", "Local"
     }
 
 ;City Radius
@@ -3903,6 +3981,13 @@ reqs	=
       "Building", "Hoover Dam",       "City",  FALSE
       "Building", "Nuclear Plant",    "City",  FALSE
     }
+[effect_hydro_plant_razings]
+type   = "Raze_Building_Pct"
+value = -50
+reqs  =
+    { "type", "name", "range"
+      "Building", "Hydro Plant", "Local"
+    }
 ;---------------------------------------------------------
 [effect_hoover_dam_city_1]
 type    = "Output_Bonus"
@@ -4262,6 +4347,13 @@ reqs	=
       "Building", "Aqueduct", "City"
       "Building", "Sewer System", "City"
     }
+[effect_sewer_razings]
+type   = "Raze_Building_Pct"
+value = -50
+reqs  =
+    { "type", "name", "range"
+      "Building", "Sewer System", "Local"
+    }
 
 [effect_space_component]
 type    = "SS_Component"
@@ -4454,6 +4546,13 @@ reqs	=
       "Extra",        "Mine",        "Local",  FALSE
       "Extra",        "Oil Well",    "Local",  FALSE
     }
+[effect_supermarket_razings]
+type   = "Raze_Building_Pct"
+value = -50
+reqs  =
+    { "type", "name", "range"
+      "Building", "Supermarket", "Local"
+    }
 [effect_communism_free_supermarket_effect]
 type    = "Output_Per_Tile"
 value	= 100
@@ -4494,6 +4593,13 @@ reqs	=
       "Tech", "Mysticism", "Player"
       "Building", "Temple", "City"
     }
+[effect_temple_razings]
+type   = "Raze_Building_Pct"
+value = -50
+reqs  =
+    { "type", "name", "range"
+      "Building", "Temple", "Local"
+    }
 
 [effect_totem_pole]
 type    = "Output_Add_Tile"
@@ -4503,6 +4609,13 @@ reqs    =
       "Building", "Totem Pole", "City"
       "CityTile", "Center", "Local"
       "OutputType", "Luxury", "Local"
+    }
+[effect_totem_pole_razings]
+type   = "Raze_Building_Pct"
+value = -50
+reqs  =
+    { "type", "name", "range"
+      "Building", "Totem Pole", "Local"
     }
 
 [effect_university]
