@@ -378,9 +378,9 @@ bool check_for_game_over(void)
   if (winners) {
     notify_conn(game.est_connections, NULL, E_GAME_END, ftc_server,
                 /* TRANS: There can be several winners listed */
-                _("Scenario victory to %s."), astr_str(&str));
+                _("[`trophy`] Scenario victory to %s."), astr_str(&str));
     astr_free(&str);
-    return TRUE;
+    return TRUE && !is_longturn();
   }
   astr_free(&str);
 
@@ -406,8 +406,8 @@ bool check_for_game_over(void)
 
   if (0 == candidates) {
     notify_conn(game.est_connections, NULL, E_GAME_END, ftc_server,
-                _("Game is over."));
-    return TRUE;
+                _("[`trophy`] Game is over."));
+    return TRUE && !is_longturn();
   } else if (0 < defeated) {
     /* If nobody conceded the game, it mays be a solo game or a single team
      * game. */
@@ -439,13 +439,13 @@ bool check_for_game_over(void)
         if (team_candidates == candidates && team_defeated < defeated) {
           /* We need a player in a other team to conced the game here. */
           notify_conn(game.est_connections, NULL, E_GAME_END, ftc_server,
-                      _("Team victory to %s."),
+                      _("[`trophy`] Team victory to %s."),
                       team_name_translation(pteam));
           /* All players of the team win, even dead and surrended ones. */
           player_list_iterate(members, pplayer) {
             pplayer->is_winner = TRUE;
           } player_list_iterate_end;
-          return TRUE;
+          return TRUE && !is_longturn();
         }
       } teams_iterate_end;
     }
@@ -496,10 +496,10 @@ bool check_for_game_over(void)
         } player_list_iterate_end;
         notify_conn(game.est_connections, NULL, E_GAME_END, ftc_server,
                     /* TRANS: There can be several winners listed */
-                    _("Allied victory to %s."), astr_str(&str));
+                    _("[`trophy`] Allied victory to %s."), astr_str(&str));
         astr_free(&str);
         player_list_destroy(winner_list);
-        return TRUE;
+        return TRUE && !is_longturn();
       }
     }
 
@@ -522,9 +522,9 @@ bool check_for_game_over(void)
 
       if (found) {
         notify_conn(game.est_connections, NULL, E_GAME_END, ftc_server,
-                    _("Game ended in conquest victory for %s."), player_name(victor));
+                    _("[`trophy`] Game ended in conquest victory for %s."), player_name(victor));
         victor->is_winner = TRUE;
-        return TRUE;
+        return TRUE && !is_longturn();
       }
     }
   }
@@ -552,11 +552,11 @@ bool check_for_game_over(void)
     if (best != NULL && best_value >= game.info.culture_vic_points
         && best_value > second_value * (100 + game.info.culture_vic_lead) / 100) {
       notify_conn(game.est_connections, NULL, E_GAME_END, ftc_server,
-                  _("Game ended in cultural domination victory for %s."),
+                  _("[`trophy`] Game ended in cultural domination victory for %s."),
                   player_name(best));
       best->is_winner = TRUE;
 
-      return TRUE;
+      return TRUE && !is_longturn();
     }
   }
 
@@ -564,7 +564,7 @@ bool check_for_game_over(void)
   if (game.info.turn > game.server.end_turn) {
     notify_conn(game.est_connections, NULL, E_GAME_END, ftc_server,
                 _("Game ended as the turn limit was exceeded."));
-    return TRUE;
+    return TRUE && !is_longturn();
   } else if (game.info.turn == game.server.end_turn) {
     /* Give them a chance to decide to extend the game */
     notify_conn(game.est_connections, NULL, E_GAME_END, ftc_server,
@@ -621,7 +621,7 @@ bool check_for_game_over(void)
 
       if (1 < player_list_size(members)) {
         notify_conn(NULL, NULL, E_GAME_END, ftc_server,
-                    _("Team victory to %s."),
+                    _("[`trophy`] Team victory to %s."),
                     team_name_translation(pplayer->team));
         /* All players of the team win, even dead and surrendered ones. */
         player_list_iterate(members, pteammate) {
@@ -629,10 +629,10 @@ bool check_for_game_over(void)
         } player_list_iterate_end;
       } else {
         notify_conn(NULL, NULL, E_GAME_END, ftc_server,
-                    _("Game ended in victory for %s."), player_name(pplayer));
+                    _("[`trophy`] Game ended in victory for %s."), player_name(pplayer));
         pplayer->is_winner = TRUE;
       }
-      return TRUE;
+      return TRUE && !is_longturn();
     }
 
     /* Print notice(s) of imminent arrival. These are not infallible

@@ -2336,9 +2336,12 @@ input[type="email" i], #email {
 .e_chat_error,
 .e_bad_command,
 .e_game_start,
-.e_game_end,
 .e_turn_bell {
   color: #f1efef;
+}
+.e_game_end {
+  font-size:150%;
+  color: #fff;
 }
 .e_beginner_help {
   font-size: 80%;
