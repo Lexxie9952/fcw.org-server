@@ -510,7 +510,7 @@ int get_activity_rate(const struct unit *punit)
 
    float move_rate = (float)unit_type_get(punit)->move_rate;
    // Add work_bonus_rate and/or multiple by work_bonus_pct:
-   move_rate = (move_rate + work_bonus_rate) * (1.0 + work_bonus_pct) + .5; //round up 
+   move_rate = (move_rate + work_bonus_rate) * (1.0 + work_bonus_pct) + .1; //round up 
                                                              
 
   /* All settler actions are multiplied by ACTIVITY_FACTOR. */
