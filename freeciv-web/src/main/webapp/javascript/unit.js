@@ -17,6 +17,7 @@
 
 ***********************************************************************/
 
+const ACTIVITY_FACTOR = 100;
 
 var units = {};
 
@@ -602,18 +603,19 @@ function move_points_text(moves, make_fraction)
     // change 3/6 to 1/2, 3/9 to 1/3, etc:
     numerator = Math.floor(moves % SINGLE_MOVE);
     denominator = SINGLE_MOVE;
-    
+
     var simplified_fraction = fraction_reduce(numerator, denominator);
     numerator = simplified_fraction.numerator;
     denominator = simplified_fraction.denominator;
 
-
-    if (Math.floor(moves / SINGLE_MOVE) > 0) {
+    if (Math.floor(moves / SINGLE_MOVE) > 0 && numerator>0) {
       result = "" + Math.floor(moves / SINGLE_MOVE) 
                + spacer + numerator
                + div_symbol + denominator;
-    } else {
+    } else if (numerator>0) {
       result = "" + numerator + div_symbol + denominator;
+    } else {
+      result = Math.floor(moves / SINGLE_MOVE);
     }
   } else {
     result = Math.floor(moves / SINGLE_MOVE);
@@ -987,6 +989,15 @@ function get_unit_city_info(punit, plaintext)
        var yG = tiles[punit['goto_tile']]['y'];
        result += "\nActivity: GOTO ("+xG+","+yG+")";
      }
+  }
+
+  if (punit['activity_count']) {
+    const is_2x_rules = unit_types[0].move_rate / SINGLE_MOVE; // in 2x rules, 1 Worker-Turn = 2 work-units
+    var work = punit.activity_count / is_2x_rules;
+    var plural = (work / ACTIVITY_FACTOR) > (1+1/SINGLE_MOVE) ? "s" : ""
+    result += "\nWork Done: "
+           + move_points_text(work * SINGLE_MOVE / ACTIVITY_FACTOR, true)
+           + " unit"+plural;
   }
 
   result += "\n";  // Space for separating key stats
