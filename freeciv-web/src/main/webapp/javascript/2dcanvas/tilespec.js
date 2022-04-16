@@ -1168,8 +1168,8 @@ function get_unit_nation_flag_sprite(punit, unit_offset)
   // returned different values for the same frame!
 
   return {"key" : "f.shield." + nation['graphic_str'],
-          "offset_x" : unit_flag_offset_x + unit_offset['x'],
-          "offset_y" : - unit_flag_offset_y + unit_offset['y']};
+          "offset_x" : unit_flag_offset_x + unit_offset_x,
+          "offset_y" : - unit_flag_offset_y + unit_offset_y};
 }
 /**********************************************************************
   ...returns the shield (not the flag) in html usable form

@@ -374,6 +374,7 @@ Rerun the sync-js-hand.js script.
 									<include>libs/*.js</include>
 									<include>2dcanvas/*.js</include>
 									<include>2dcanvas/tilespec-constants.js</include>
+									<include>webgl/*.js</include>
 								</includes>
 								<excludes>
 									<exclude>webclient.js</exclude>
@@ -381,6 +382,24 @@ Rerun the sync-js-hand.js script.
 									<exclude>libs/jquery.min.js</exclude>
 									<exclude>libs/hammer.min.js</exclude>
 									<exclude>libs/gif.worker.js</exclude>
+								</excludes>
+							</configuration>
+							<goals>
+								<goal>minify</goal>
+							</goals>
+						</execution>
+						<execution>
+							<id>webgl-minify</id>
+							<configuration>
+								<baseSourceDir>${project.build.directory}/${project.build.finalName}</baseSourceDir>
+								<sourceDir>javascript/webgl/libs</sourceDir>
+								<targetDir>javascript</targetDir>
+								<outputFilename>webgl-client.js</outputFilename>
+								<includes>
+									<include>*.js</include>
+								</includes>
+								<excludes>
+									<exclude>three.min.js</exclude>
 								</excludes>
 							</configuration>
 							<goals>

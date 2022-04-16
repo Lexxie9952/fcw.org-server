@@ -153,6 +153,7 @@ function remove_city(pcity_id)
   var update = client.conn.playing.playerno && city_owner(pcity).playerno == client.conn.playing.playerno;
   var ptile = city_tile(cities[pcity_id]);
   delete cities[pcity_id];
+  if (renderer == RENDERER_WEBGL) update_city_position(ptile);
 
   if (update) {
     city_screen_updater.update();
@@ -508,12 +509,17 @@ function show_city_dialog(pcity)
   $("#worklist_dialog_headline").unbind('click');
   $("#worklist_dialog_headline").click(function(ev) { ev.stopImmediatePropagation(); city_remove_current_prod()} );
 
+  var orig_renderer = renderer;
+  renderer = RENDERER_2DCANVAS;
+
   set_citydlg_dimensions(pcity);
   set_city_mapview_active();
 
   // Center map on area around city for when they leave the city
+  //save_map_return_position(city_tile(pcity)); //save tile locations for shift-spacebar return position function
   center_tile_mapcanvas(city_tile(pcity));
   update_map_canvas(0, 0, mapview['store_width'], mapview['store_height']);
+  renderer = orig_renderer;
 
   var pop_string = is_small_screen() ? city_population(pcity)+"K" : numberWithCommas(city_population(pcity)*1000);
   var change_string = pcity['granary_turns'] < 0 ? "Starves in: " : "Growth in: ";
@@ -1580,7 +1586,7 @@ function close_city_dialog()
   if (active_city) {  // map will be centered on city that was being viewed
     center_tile_mapcanvas(city_tile(active_city));
     active_city = null;
-    update_map_canvas_full();
+    if (renderer == RENDERER_2DCANVAS) update_map_canvas_full();
   }
 
   // Closing city dialog re-shows container for minimized windows:
@@ -4577,7 +4583,7 @@ function city_get_foreign_pct(city_id)
 
 /**************************************************************************
  Returns the 3d model name for the given city.
-**************************************************************************
+**************************************************************************/
 function city_to_3d_model_name(pcity)
 {
   var size = 0;
@@ -4602,7 +4608,7 @@ function city_to_3d_model_name(pcity)
   }
 
   return "city_" + city_style_name + "_" + size;
-}*/
+}
 
 /**************************************************************************
  Returns the city walls scale of for the given city.

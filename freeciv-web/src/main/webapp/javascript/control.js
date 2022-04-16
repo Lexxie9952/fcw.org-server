@@ -149,7 +149,11 @@ function control_init()
   urgent_focus_queue = [];
 
   touch_device = is_touch_device();
-  mapctrl_init_2d();
+  if (renderer == RENDERER_2DCANVAS) {
+    mapctrl_init_2d();
+  } else {
+    init_webgl_mapctrl();
+  }
 
   $(document).keydown(global_keyboard_listener);
   $(window).resize(mapview_window_resized);
@@ -228,7 +232,7 @@ function control_init()
   }, false);
 
   var context_options = {
-        selector: '#canvas',
+        selector: (renderer == RENDERER_2DCANVAS) ? '#canvas' : '#canvas_div' ,
 	    zIndex: 5000,
         autoHide: true,
         callback: function(key, options) {
@@ -252,9 +256,14 @@ function control_init()
   if (!touch_device) {
     context_options['position'] = function(opt, x, y){
                                                 if (touch_device) return;
-                                                //var new_top = mouse_y + $("#canvas_div").offset().top;
-                                                var new_top = mouse_y + $("#canvas").offset().top-52;
-                                                opt.$menu.css({top: new_top , left: mouse_x+16});
+                                                //if (renderer == RENDERER_2DCANVAS) var new_top = mouse_y + $("#canvas_div").offset().top;
+                                                if (renderer == RENDERER_2DCANVAS) {
+                                                  var new_top = mouse_y + $("#canvas").offset().top-52;
+                                                  opt.$menu.css({top: new_top , left: mouse_x+16});
+                                                } else {
+                                                  var new_top = mouse_y + $("#canvas_div").offset().top-52;
+                                                  opt.$menu.css({top: new_top , left: mouse_x+16});
+                                                }
                                               };
   } else {
     context_options['position'] = function(opt, x, y){
@@ -444,7 +453,7 @@ function mouse_moved_cb(e)
       mouse_y = e.clientY;
     }
   }
-  if (active_city == null && mapview_canvas != null
+  if (renderer == RENDERER_2DCANVAS && active_city == null && mapview_canvas != null
       && $("#canvas").length) {
     mouse_x = mouse_x - $("#canvas").offset().left;
     mouse_y = mouse_y - $("#canvas").offset().top;
@@ -456,6 +465,22 @@ function mouse_moved_cb(e)
 
       mapview['gui_x0'] += diff_x;
       mapview['gui_y0'] += diff_y;
+      touch_start_x = mouse_x;
+      touch_start_y = mouse_y;
+      update_mouse_cursor();
+    }
+  } else if (renderer == RENDERER_WEBGL && active_city == null && $("#canvas_div").length) {
+    mouse_x = mouse_x - $("#canvas_div").offset().left;
+    mouse_y = mouse_y - $("#canvas_div").offset().top;
+
+    if (mapview_mouse_movement && !goto_active) {
+      // move the mapview using mouse movement.
+      var spos = webgl_canvas_pos_to_map_pos(touch_start_x, touch_start_y);
+      var epos = webgl_canvas_pos_to_map_pos(mouse_x, mouse_y);
+      if (spos != null && epos != null) {
+        camera_look_at(camera_current_x + spos['x'] - epos['x'], camera_current_y, camera_current_z + spos['y'] - epos['y']);
+      }
+
       touch_start_x = mouse_x;
       touch_start_y = mouse_y;
       update_mouse_cursor();
@@ -494,7 +519,12 @@ function update_mouse_cursor()
   }
 
   //console.log("update_mouse_cursor() mmm:1 g_a:0, came_from_context_menu:"+came_from_context_menu);
-  var ptile = canvas_pos_to_tile(mouse_x, mouse_y);
+  var ptile;
+  if (renderer == RENDERER_2DCANVAS) {
+    ptile = canvas_pos_to_tile(mouse_x, mouse_y);
+  } else {
+    ptile = webgl_canvas_pos_to_tile(mouse_x, mouse_y);
+  }
 
 
   if (ptile == null) return; /* TO DO: this is the only way this function returns without forcing real_mouse_move_mode=false, presumably because
@@ -1385,6 +1415,7 @@ function advance_focus_inactive_units()
     current_focus = []; /* Reset focus units. */
     unit_may_have_lost_focus();
     waiting_units_list = []; /* Reset waiting units list */
+    if (renderer == RENDERER_WEBGL) webgl_clear_unit_focus();
     update_active_units_dialog();
     $("#game_unit_orders_default").hide();
   }
@@ -2482,6 +2513,7 @@ function set_unit_focus(punit)
   } else {
     current_focus[0] = punit;
     action_selection_next_in_focus(IDENTITY_NUMBER_ZERO);
+    if (renderer == RENDERER_WEBGL) update_unit_position(index_to_tile(punit['tile']));
   }
 
   if (punit) warcalc_set_default_vals(punit);
@@ -2509,6 +2541,10 @@ function click_unit_in_panel(e, punit)
       }
     }
 
+    // though doing the exact same thing as single-click, shift-click was losing the other units in the panel, so
+    // try to emulate everything else it does, as a test to get those units displayed in the panel even though
+    // not in focus:
+    if (renderer == RENDERER_WEBGL) update_unit_position ( index_to_tile(punit['tile']));
     auto_center_on_focus_unit();
 
     update_active_units_dialog(); //previously only doing this but it lost unselected units in the panel
@@ -2534,11 +2570,13 @@ function set_unit_focus_and_redraw(punit)
   if (punit == null) {
     current_focus = [];
     unit_may_have_lost_focus();
+    if (renderer == RENDERER_WEBGL) webgl_clear_unit_focus();
   } else {
     current_focus[0] = punit;
     unit_may_have_lost_focus();
     action_selection_next_in_focus(IDENTITY_NUMBER_ZERO);
     warcalc_set_default_vals(punit); // warcalc default vals as last clicked units
+    if (renderer == RENDERER_WEBGL) update_unit_position(index_to_tile(punit['tile']));
   }
 
   //shift-spacebar to return to last location:
@@ -2592,6 +2630,7 @@ function auto_center_on_focus_unit()
 
   if (ptile != null && auto_center_on_unit) {
     center_tile_mapcanvas(ptile);
+    update_unit_position(ptile);
   }
 }
 
@@ -2945,6 +2984,7 @@ function do_map_click(ptile, qtype, first_time_called)
     if (goto_active /*&& !touch_device*/) { //(allow clicking same tile when giving a Nuke order.)
       deactivate_goto(false);
     }
+    if (renderer == RENDERER_2DCANVAS) {
       if (!mouse_click_mod_key['shiftKey']) { // normal left-click
         /* CONDITIONS FOR SHOWING A CONTEXT MENU:
            1.Automatic context menu when clicking unit, if 'unit_click_menu' user PREF is on.
@@ -2969,6 +3009,7 @@ function do_map_click(ptile, qtype, first_time_called)
             came_from_context_menu = true;
           }
         }
+      }
     } else if (!mouse_click_mod_key['shiftKey'] && unit_click_menu
                && !should_ask_server_for_actions(current_focus[0])) {
       // 3D handling of above. TO DO: test/integrate same 2D functionality above for 3D if appropriate
@@ -3363,7 +3404,11 @@ function do_map_click(ptile, qtype, first_time_called)
           set_unit_focus_and_redraw(sunits[0]);
           if (city_click_goto_cooldown(ptile) && !should_ask_server_for_actions(sunits[0])) { 
             // don't show contextmenu if in the cooldown period for a double tap GOTO
-            $("#canvas").contextMenu();
+            if (renderer == RENDERER_2DCANVAS) {
+              $("#canvas").contextMenu();
+            } else { //3D handling can potentially be made different later
+              $("#canvas_div").contextMenu();
+            }
           }
           return; // move the commented-out return from below up here
         } else if (!goto_active) { //if GOTO active then the click is a move command, not a show city command
@@ -3537,7 +3582,7 @@ function global_keyboard_listener(ev)
   }
   civclient_handle_key(keyboard_key, ev.keyCode, ev['ctrlKey'],  ev['altKey'], ev['shiftKey'], ev);
 
-  $("#canvas").contextMenu('hide');
+  if (renderer == RENDERER_2DCANVAS) $("#canvas").contextMenu('hide');
 }
 
 /**************************************************************************
@@ -4163,7 +4208,11 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
       came_from_context_menu = false;
       /* Abort any context menu blocking. */
       context_menu_active = true;
-      $("#canvas").contextMenu(true);
+      if (renderer == RENDERER_2DCANVAS) {
+        $("#canvas").contextMenu(true);
+      } else {
+        $("#canvas_div").contextMenu(true);
+      }
 
       /* Abort target tile selection. */
       paradrop_active = false;
@@ -4184,6 +4233,7 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
 
         current_focus = [];
         unit_may_have_lost_focus();
+        if (renderer == RENDERER_WEBGL) webgl_clear_unit_focus();
         clear_all_modes();
         $("#canvas_div").css("cursor", "default");
         goto_request_map = {};
@@ -4210,10 +4260,37 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
       break;
 
     case 107:
+      //zoom in
+      if (renderer == RENDERER_WEBGL) {
+        let new_camera_dy = camera_dy - 60;
+        let new_camera_dx = camera_dx - 45;
+        let new_camera_dz = camera_dz - 45;
+        if (new_camera_dy < 350 || new_camera_dy > 1200) {
+          return;
+        } else {
+          camera_dx = new_camera_dx;
+          camera_dy = new_camera_dy;
+          camera_dz = new_camera_dz;
+        }
+        camera_look_at(camera_current_x, camera_current_y, camera_current_z);
+      }
       break;
 
     case 109:
       //zoom out
+      if (renderer == RENDERER_WEBGL) {
+        let new_camera_dy = camera_dy + 60;
+        let new_camera_dx = camera_dx + 45;
+        let new_camera_dz = camera_dz + 45;
+        if (new_camera_dy < 350 || new_camera_dy > 1200) {
+          return;
+        } else {
+          camera_dx = new_camera_dx;
+          camera_dy = new_camera_dy;
+          camera_dz = new_camera_dz;
+        }
+        camera_look_at(camera_current_x, camera_current_y, camera_current_z);
+      }
       break;
 
   }
@@ -7205,11 +7282,15 @@ function check_request_goto_path()
   if (goto_active && current_focus.length > 0
       && (prev_mouse_x != mouse_x || prev_mouse_y != mouse_y || prev_goto_tile<=LAST_FORCED_CHECK)) {
 
-    ptile = canvas_pos_to_tile(mouse_x, mouse_y);
+    if (renderer == RENDERER_2DCANVAS) {
+      ptile = canvas_pos_to_tile(mouse_x, mouse_y);
+    } else {
+      ptile = webgl_canvas_pos_to_tile(mouse_x, mouse_y);
+    }
 
     if (ptile != null) {
       if (ptile['tile'] != prev_goto_tile) {
-        clear_goto_tiles(); // TO DO: goto tiles should not be in tiles[tild_id][goto_dir] which takes forever to clear, but their own array instead
+        clear_goto_tiles(); // TODO: goto tiles should not be in tiles[tild_id][goto_dir] which takes forever to clear, but their own array instead
         /* Send request for goto_path to server. */
         for (var i = 0; i < current_focus.length; i++) {
           request_goto_path(current_focus[i]['id'], ptile['x'], ptile['y']);
@@ -7284,6 +7365,7 @@ function update_goto_path(goto_packet)
   // Don't bother checking goto for same tile unit is on
   if (ptile==goaltile) return;
 
+  if (renderer == RENDERER_2DCANVAS) {
     for (var i = 0; i < goto_packet['dir'].length; i++) {
       if (ptile == null) break;
       var dir = goto_packet['dir'][i];
@@ -7296,6 +7378,9 @@ function update_goto_path(goto_packet)
       ptile['goto_dir'] = dir;
       ptile = mapstep(ptile, dir);
     }
+  } else {
+    webgl_render_goto_line(ptile, goto_packet['dir']);
+  }
 
   current_goto_turns = goto_packet['turns'];
 
@@ -7330,8 +7415,11 @@ function show_goto_path(goto_packet)
 **************************************************************************/
 function center_tile_mapcanvas(ptile)
 {
-
-  center_tile_mapcanvas_2d(ptile);
+  if (renderer == RENDERER_2DCANVAS) {
+    center_tile_mapcanvas_2d(ptile);
+  } else {
+    center_tile_mapcanvas_3d(ptile);
+  }
 
 }
 
@@ -7340,7 +7428,13 @@ function center_tile_mapcanvas(ptile)
 **************************************************************************/
 function popit()
 {
-  var ptile = canvas_pos_to_tile(mouse_x, mouse_y);
+  var ptile;
+
+  if (renderer == RENDERER_2DCANVAS) {
+    ptile = canvas_pos_to_tile(mouse_x, mouse_y);
+  } else {
+    ptile = webgl_canvas_pos_to_tile(mouse_x, mouse_y);
+  }
 
   if (ptile == null) return;
 

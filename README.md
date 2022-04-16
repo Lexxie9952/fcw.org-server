@@ -193,11 +193,15 @@ Developers interested in Freeciv-web
 
 If you want to contibute to Freeciv-web, see the [issues](https://github.com/freeciv/freeciv-web/issues) on GibHub and the [TODO file](TODO.md) for 
 some tasks you can work on. Pull requests on Github is welcome! 
+
+Freeciv WebGL
+-------------
+Freeciv WebGL is the 3D version, which uses the Three.js 3D engine. More info about the WebGL 3D version can be found for [developers](https://github.com/freeciv/freeciv-web/tree/develop/freeciv-web/src/main/webapp/javascript/webgl) and [3D artists](https://github.com/freeciv/freeciv-web/wiki/Contributing-Blender-models-for-Freeciv-WebGL).
   
 
 Contributors to Freeciv-web
 ---------------------------
-Lexxie9952 [@lexxie9952](https://discordapp.com/users/Lexxie9952)
+Lexxie9952 [@lexxie9952](https://discordapp.com/users/Lexxie9952)  
 Andreas Røsdal  [@andreasrosdal](https://github.com/andreasrosdal)  
 Marko Lindqvist [@cazfi](https://github.com/cazfi)  
 Sveinung Kvilhaugsvik [@kvilhaugsvik](https://github.com/kvilhaugsvik) 
