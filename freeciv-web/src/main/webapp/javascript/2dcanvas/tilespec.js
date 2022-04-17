@@ -47,7 +47,8 @@ var border_flag_offsets = {
 const CITY_WALLS = 1,
       CITY_COASTAL_DEFENSE = 2,
       CITY_FORTIFICATIONS = 4,
-      CITY_CITADEL = 8;
+      CITY_CITADEL = 8,
+      CITY_SAM = 16;
 
 var current_select_sprite = 0;
 var max_select_sprite = 4;
@@ -358,7 +359,9 @@ function fill_sprite_array(layer, ptile, pedge, pcorner, punit, pcity, citymode)
         if (layer_sprite) sprite_array.push(layer_sprite);
         layer_sprite = get_city_coastal_overlay_sprite(pcity);
         if (layer_sprite) sprite_array.push(layer_sprite);
-        
+        layer_sprite = get_city_sam_battery_overlay_sprite(pcity);
+        if (layer_sprite) sprite_array.push(layer_sprite);
+
         if (polluted) sprite_array.push({"key" : "grid.pollute_icon"}); //pollution icon clearly over top
         
         // starving: show empty plate
@@ -1168,8 +1171,8 @@ function get_unit_nation_flag_sprite(punit, unit_offset)
   // returned different values for the same frame!
 
   return {"key" : "f.shield." + nation['graphic_str'],
-          "offset_x" : unit_flag_offset_x + unit_offset_x,
-          "offset_y" : - unit_flag_offset_y + unit_offset_y};
+          "offset_x" : unit_flag_offset_x + unit_offset['x'],
+          "offset_y" : - unit_flag_offset_y + unit_offset['y']};
 }
 /**********************************************************************
   ...returns the shield (not the flag) in html usable form
@@ -1646,6 +1649,12 @@ function get_city_fortifications_underlay_sprite(pcity) {
       // !(&1) means, don't show if there are also City Walls
   if ((pcity['walls'] & CITY_FORTIFICATIONS) && !(pcity['walls'] & CITY_WALLS) && !(pcity['walls'] & CITY_CITADEL)) {
     return {"key": "city.fortifications_underlay", "offset_x" : -4, "offset_y" : -24};
+  }
+  return null; // no underlay.
+}
+function get_city_sam_battery_overlay_sprite(pcity) {
+  if ((pcity['walls'] & CITY_SAM)) {
+    return {"key": "city.sam_overlay", "offset_x" : -16, "offset_y" : -24};
   }
   return null; // no underlay.
 }

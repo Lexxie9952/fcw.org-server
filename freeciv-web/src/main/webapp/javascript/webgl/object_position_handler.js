@@ -102,7 +102,7 @@ function update_unit_position(ptile) {
       scene.add(new_unit);
     }
     /* add flag. */
-    var pflag = get_unit_nation_flag_sprite(visible_unit);
+    var pflag = get_unit_nation_flag_sprite(visible_unit, {'x': unit_offset_x , 'y': unit_offset_y});
     var new_flag;
     if (unit_flag_positions[ptile['index']] == null) {
       new_flag = get_flag_shield_mesh(pflag['key']);
@@ -238,7 +238,7 @@ function update_unit_position(ptile) {
     }
 
     /* add flag. */
-    var pflag = get_unit_nation_flag_sprite(visible_unit);
+    var pflag = get_unit_nation_flag_sprite(visible_unit, {'x': unit_offset_x , 'y': unit_offset_y});
     var new_flag;
     if (unit_flag_positions[ptile['index']] == null) {
       new_flag = get_flag_shield_mesh(pflag['key']);
