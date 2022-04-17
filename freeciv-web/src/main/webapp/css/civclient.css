@@ -1264,10 +1264,17 @@ body:not(.mobile) .ui-dialog.unit_dialog {
   background-image: url(/images/gov.federation.png) !important; 
 }
 
+/* vertically aligned images */
 .v,
 .lowered_gov
 {
   vertical-align: middle;
+}
+
+.vu /* upkeep icons with tight fit in city::Supported Units panel */
+{
+  vertical-align: middle;
+  margin: -6px 7px -5px -1px;
 }
 
 .sb 

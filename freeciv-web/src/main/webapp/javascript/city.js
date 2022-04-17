@@ -377,7 +377,7 @@ function show_city_dialog(pcity)
     } else {
       city_dialog_title += "<div id='scp_show' style='font-size:95%;cursor:copy;' title='Specialist Control Pane' "
       +"onclick='toggle_specialist_control_pane();'"
-      +"><img class='lowered_gov' style='border-radius:2px' src='/images/specialistpane.png'></div>";
+      +"><img class='v' style='border-radius:2px' src='/images/specialistpane.png'></div>";
     }
   } 
   city_dialog_title += "</div>";
@@ -685,8 +685,15 @@ function show_city_dialog(pcity)
   var sunits = get_supported_units(pcity);
   if (sunits != null) {
     var supported_units_html = "";
+    var upkeep_str = "";
+    var fu=0,gu=0,su=0;   // total upkeep counters
     for (var t = 0; t < sunits.length; t++) {
       punit = sunits[t];
+      if (punit['upkeep'] != null) {
+        su += parseInt(punit['upkeep'][O_SHIELD],10);
+        fu += parseInt(punit['upkeep'][O_FOOD],10);
+        gu += parseInt(punit['upkeep'][O_GOLD],10);
+      }
       sprite = get_unit_image_sprite(punit);
       if (sprite == null) {
          console.log("Missing sprite for " + punit);
@@ -705,6 +712,11 @@ function show_city_dialog(pcity)
                                                   + get_html_hp_sprite(punit,false) 
                                                   + get_html_activity_sprite(punit);
     }
+    if (fu) upkeep_str += "" + fu + "<img class='vu' src='/images/wheat.png'>";
+    if (su) upkeep_str += "" + su + "<img class='vu' style='margin-left:0px' src='/images/e/shield.png'>";
+    if (gu) upkeep_str += "" + gu + "<img class='vu' style='margin-left:-3px' src='/images/gold.png'>";
+
+    $("#city_supported_units_title").html("Supported Units: <span style='float:right; margin:-1px'>"+upkeep_str+"</span>");
     $("#city_supported_units_list").html(supported_units_html);
     // trick to compensate for removed scrollbar clipping the top:
     $("#city_supported_units_list").css({"margin-top":"-10px","padding-top":"20px"});
@@ -3566,7 +3578,7 @@ function update_city_screen()
   var citizen_types = ["unhappy","content","happy"]
   var sprite;
   var city_list_citizen_html = "";
-  var updown_sort_arrows = "<img class='lowered_gov' src='data:image/gif;base64,R0lGODlhFQAJAIAAAP///////yH5BAEAAAEALAAAAAAVAAkAAAIXjI+AywnaYnhUMoqt3gZXPmVg94yJVQAAOw=='>";
+  var updown_sort_arrows = "<img class='v' src='data:image/gif;base64,R0lGODlhFQAJAIAAAP///////yH5BAEAAAEALAAAAAAVAAkAAAIXjI+AywnaYnhUMoqt3gZXPmVg94yJVQAAOw=='>";
   // Used for generating micro-icon of current prooduction:
   var prod_sprite;
   var prod_img_html;
@@ -3585,15 +3597,15 @@ function update_city_screen()
     city_list_html = "<table class='tablesorter-dark' id='city_table' style='border=0px;border-spacing=0;padding=0;'>"
         + "<thead id='city_table_head'><tr>"
         + "<th style='text-align:right;'>Name"+updown_sort_arrows+"</th><th style='text-align:right;'>Size"+updown_sort_arrows+"</th>"+city_list_citizen_html
-        + "<th style='text-align:right;' title='Text: Current state. Color: Next turn state'>State<img class='lowered_gov' src='data:image/gif;base64,R0lGODlhFQAJAIAAAP///////yH5BAEAAAEALAAAAAAVAAkAAAIXjI+AywnaYnhUMoqt3gZXPmVg94yJVQAAOw=='></img> </th>"
-        + "<th id='food' title='Food surplus' class='food_text' style='text-align:right;padding-right:0px'><img style='margin-right:-6px; margin-top:-3px;' class='lowered_gov' src='/images/wheat.png'></th>"
-        + "<th title='Production surplus (shields)' class='prod_text' style='text-align:right;padding-right:0px'> <img class='lowered_gov' src='/images/shield14x18.png'></th>"
-        + "<th title='Trade' class='trade_text' style='text-align:right;padding-right:0px;'><img class='lowered_gov' src='/images/trade.png'></th>"
-        + "<th title='"+CURV_title[city_user_row_val]+"' class='non_priority' style='text-align:right;padding-left:0px;padding-right:30px;'><img class='lowered_gov' src='"+CURV_icons[city_user_row_val]+"'></th>"
+        + "<th style='text-align:right;' title='Text: Current state. Color: Next turn state'>State<img class='v' src='data:image/gif;base64,R0lGODlhFQAJAIAAAP///////yH5BAEAAAEALAAAAAAVAAkAAAIXjI+AywnaYnhUMoqt3gZXPmVg94yJVQAAOw=='></img> </th>"
+        + "<th id='food' title='Food surplus' class='food_text' style='text-align:right;padding-right:0px'><img style='margin-right:-6px; margin-top:-3px;' class='v' src='/images/wheat.png'></th>"
+        + "<th title='Production surplus (shields)' class='prod_text' style='text-align:right;padding-right:0px'> <img class='v' src='/images/shield14x18.png'></th>"
+        + "<th title='Trade' class='trade_text' style='text-align:right;padding-right:0px;'><img class='v' src='/images/trade.png'></th>"
+        + "<th title='"+CURV_title[city_user_row_val]+"' class='non_priority' style='text-align:right;padding-left:0px;padding-right:30px;'><img class='v' src='"+CURV_icons[city_user_row_val]+"'></th>"
     //    + "<th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>"
-        + "<th title='Gold' class='gold_text' style='text-align:right;padding-right:0px;'><img class='lowered_gov' src='/images/gold.png'></th>"
-        + "<th title='Luxury' class='lux_text' style='text-align:right;padding-right:0px'><img class='lowered_gov' src='/images/luxury2.png'></th>"
-        + "<th title='Science (bulbs)' class='sci_text' style='text-align:right'><img class='lowered_gov' src='/images/sci.png'></th>"
+        + "<th title='Gold' class='gold_text' style='text-align:right;padding-right:0px;'><img class='v' src='/images/gold.png'></th>"
+        + "<th title='Luxury' class='lux_text' style='text-align:right;padding-right:0px'><img class='v' src='/images/luxury2.png'></th>"
+        + "<th title='Science (bulbs)' class='sci_text' style='text-align:right'><img class='v' src='/images/sci.png'></th>"
         + "<th style='text-align:right;'>Grows In"+updown_sort_arrows+"</th><th style='text-align:right;'>Granary"
               +updown_sort_arrows+"</th><th style='text-align:right;' title='Click to change'>Producing"+updown_sort_arrows+"</th>"
         + "<th style='text-align:right;' title='Turns to finish &nbsp;&nbsp; Prod completed/needed'>Turns"+updown_sort_arrows
@@ -3609,13 +3621,13 @@ function update_city_screen()
     + "<thead id='city_table_head'><tr>"
     + "<th style='text-align:right;'>Name"+"</th><th style='text-align:center;'>Pop"+"</th>"+city_list_citizen_html
     + "<th style='text-align:center;' title='Text: Current state. Color: Next turn state'>Mood</th>"
-    + "<th id='food' title='Food surplus' class='food_text' style='text-align:right;padding-right:0px'><img style='margin-right:-6px; margin-top:-3px;' class='lowered_gov' src='/images/wheat.png'></th>"
-    + "<th title='Production surplus (shields)' class='prod_text' style='text-align:right;padding-right:0px'> <img class='lowered_gov' src='/images/shield14x18.png'></th>"
-    + "<th title='Trade' class='trade_text' style='text-align:right;padding-right:0px;'><img class='lowered_gov' src='/images/trade.png'></th>"
+    + "<th id='food' title='Food surplus' class='food_text' style='text-align:right;padding-right:0px'><img style='margin-right:-6px; margin-top:-3px;' class='v' src='/images/wheat.png'></th>"
+    + "<th title='Production surplus (shields)' class='prod_text' style='text-align:right;padding-right:0px'> <img class='v' src='/images/shield14x18.png'></th>"
+    + "<th title='Trade' class='trade_text' style='text-align:right;padding-right:0px;'><img class='v' src='/images/trade.png'></th>"
     + "<th>&nbsp;&nbsp;&nbsp;&nbsp;</th>"
-    + "<th title='Gold' class='gold_text' style='text-align:right;padding-right:0px;'><img class='lowered_gov' src='/images/gold.png'></th>"
-    + "<th title='Luxury' class='lux_text' style='text-align:right;padding-right:0px'><img class='lowered_gov' src='/images/luxury2.png'></th>"
-    + "<th title='Science (bulbs)' class='sci_text' style='text-align:right'><img class='lowered_gov' src='/images/sci.png'></th>"
+    + "<th title='Gold' class='gold_text' style='text-align:right;padding-right:0px;'><img class='v' src='/images/gold.png'></th>"
+    + "<th title='Luxury' class='lux_text' style='text-align:right;padding-right:0px'><img class='v' src='/images/luxury2.png'></th>"
+    + "<th title='Science (bulbs)' class='sci_text' style='text-align:right'><img class='v' src='/images/sci.png'></th>"
     /*+ "<th style='text-align:right;'>Grows"+"</th><th style='text-align:right;'>Grain"*/
     + ( (!tiny_screen) ? ("<th style='text-align:right;'>Grows"+"</th><th style='text-align:right;'>Grain")
                      : ("<th style='text-align:center;'>Grow"+"</th><th style='text-align:right;'>Food") )
@@ -3636,13 +3648,13 @@ function update_city_screen()
     + "<thead id='city_table_head'><tr>"
     + "<th style='text-align:right;'>Name"+"</th><th style='text-align:center;'>Pop"+"</th>"+city_list_citizen_html
     + "<th style='text-align:center;' title='Text: Current state. Color: Next turn state'>Mood</th>"
-    + "<th id='food' title='Food surplus' class='food_text' style='text-align:right;padding-right:0px'><img style='margin-right:-6px; margin-top:-3px;' class='lowered_gov' src='/images/wheat.png'></th>"
-    + "<th title='Production surplus (shields)' class='prod_text' style='text-align:right;padding-right:0px'> <img class='lowered_gov' src='/images/shield14x18.png'></th>"
-    + "<th title='Trade' class='trade_text' style='text-align:right;padding-right:0px;'><img class='lowered_gov' src='/images/trade.png'></th>"
+    + "<th id='food' title='Food surplus' class='food_text' style='text-align:right;padding-right:0px'><img style='margin-right:-6px; margin-top:-3px;' class='v' src='/images/wheat.png'></th>"
+    + "<th title='Production surplus (shields)' class='prod_text' style='text-align:right;padding-right:0px'> <img class='v' src='/images/shield14x18.png'></th>"
+    + "<th title='Trade' class='trade_text' style='text-align:right;padding-right:0px;'><img class='v' src='/images/trade.png'></th>"
     + "<th>&nbsp;&nbsp;&nbsp;</th>"
-    + "<th title='Gold' class='gold_text' style='text-align:right;padding-right:0px;'><img class='lowered_gov' src='/images/gold.png'></th>"
-    + "<th title='Luxury' class='lux_text' style='text-align:right;padding-right:0px'><img class='lowered_gov' src='/images/luxury2.png'></th>"
-    + "<th title='Science (bulbs)' class='sci_text' style='text-align:right'><img class='lowered_gov' src='/images/sci.png'></th>"
+    + "<th title='Gold' class='gold_text' style='text-align:right;padding-right:0px;'><img class='v' src='/images/gold.png'></th>"
+    + "<th title='Luxury' class='lux_text' style='text-align:right;padding-right:0px'><img class='v' src='/images/luxury2.png'></th>"
+    + "<th title='Science (bulbs)' class='sci_text' style='text-align:right'><img class='v' src='/images/sci.png'></th>"
     + "<th style='text-align:center;'>Grow"+"</th><th style='text-align:right;'>Food"
           +"</th><th style='text-align:right;' title='Click to change'>Build"+"</th>"
     + "<th style='text-align:right;' title='Turns to finish &nbsp;&nbsp; Prod completed/needed'>in</th>"
