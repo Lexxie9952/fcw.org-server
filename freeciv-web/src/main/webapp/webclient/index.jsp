@@ -41,6 +41,8 @@ var fcwDebug=<%= fcwDebug %>;
 </script>
 <script type="text/javascript" src="/javascript/libs/jquery.min.js?ts=${initParam.buildTimeStamp}"></script>
 
+<script type="text/javascript" src="/javascript/webgl/libs/three.min.js??ts=${initParam.buildTimeStamp}"></script>
+
 <script src="https://apis.google.com/js/platform.js"></script>
 
 <script type="text/javascript" src="/javascript/webclient.min.js?ts=${initParam.buildTimeStamp}"></script>
@@ -84,6 +86,22 @@ var fcwDebug=<%= fcwDebug %>;
 </script>
 <% } %>
 </body>
+
+<script id="terrain_fragment_shh" type="x-shader/x-fragment">
+  <jsp:include page="/javascript/webgl/shaders/terrain_fragment_shader.glsl" flush="false"/>
+</script>
+
+<script id="terrain_vertex_shh" type="x-shader/x-vertex">
+  <jsp:include page="/javascript/webgl/shaders/terrain_vertex_shader.glsl" flush="false"/>
+</script>
+
+<script id="tex_fragment_shh" type="x-shader/x-fragment">
+  <jsp:include page="/javascript/webgl/shaders/labels_fragment_shader.glsl" flush="false"/>
+</script>
+
+<script id="labels_vertex_shh" type="x-shader/x-vertex">
+  <jsp:include page="/javascript/webgl/shaders/labels_vertex_shader.glsl" flush="false"/>
+</script>
 
 
 </html>

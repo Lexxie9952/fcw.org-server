@@ -459,6 +459,22 @@ function init_options_dialog()
    //----------------------------------------------------------------^^USER OPTIONS^^
    $('#graphic_theme').change();
 
+  if (!is_longturn()) {
+    if (renderer == RENDERER_WEBGL) {
+        $("#switch_renderer_button").html("Use 2D HTML5 graphics");
+        $("#renderer_help").html("Switch to 2D isometric graphics.")
+    } else {
+        $("#switch_renderer_button").html("Use 3D WebGL graphics");
+        $("#renderer_help").html("Use 3D WebGL graphics. Make sure your computer<br> supports 3D WebGL graphics.")
+        $("#update_model_button").hide();
+    }
+
+    if (!Detector.webgl) {
+        $("#switch_renderer_button").hide();
+        $("#renderer_help").html("3D WebGL not supported.")
+    }
+  }
+
   $("#title_setting_div").hide();
 
   if (is_longturn()) {
