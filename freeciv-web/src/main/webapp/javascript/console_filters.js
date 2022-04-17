@@ -181,6 +181,7 @@ function console_filter_radio_clicked(which_btn)
     $("li.e_city_production_changed").hide();
   }
   if (console_filters['citywarn']) {
+    $("li.e_city_cantbuild").show();
     $("li.e_caravan_action").show();
     $("li.e_city_build").show();
     $("li.e_disaster").show();
@@ -197,6 +198,7 @@ function console_filter_radio_clicked(which_btn)
     $("li.e_city_normal").show();
     $("li.e_city_gran_throttle").show();
   } else {
+    $("li.e_city_cantbuild").hide();
     $("li.e_caravan_action").hide();
     $("li.e_city_build").hide();
     $("li.e_disaster").hide();
@@ -287,6 +289,7 @@ function console_filter_radio_clicked(which_btn)
     $("li.e_pollution").hide();
     $("li.e_global_eco").hide();
   }
+  chatbox_scroll_to_bottom(false);
 }
 
 
