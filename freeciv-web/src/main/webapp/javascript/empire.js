@@ -287,8 +287,14 @@ function empire_unit_homecity_screen(wide_screen,narrow_screen,small_screen,
   var ukg = new Array(cities.length);
   var uks = new Array(cities.length);
 
-  // Go through each city and pluck out units by type so they're arranged by type
-  for (var city_id in cities) { //rows (cities)
+// Go through each city in the order sorted in the cities list, and pluck out units by type, so they're arranged by type:
+  if ($("#city_table_head").length == 0) update_city_screen();              // If cities list has never been created, create it.
+  var current_city_row = $("#city_table_head").next().children().first();   // Get first row of the sorted cities list.
+  // Iterate through all player cities in the order they're sorted in the sorted cities list:
+  while (current_city_row.length > 0) {
+  //for (var city_id in cities) { //rows (cities)
+    var city_id = current_city_row.attr('id').substr(12);
+    current_city_row = current_city_row.next(); // bump up to next city row for when we iterate the loop back up here
     var pcity = cities[city_id];
 
     ukf[city_id] = 0;  // set counters at 0 before adding it up
@@ -538,8 +544,14 @@ function empire_unitcity_screen(wide_screen,narrow_screen,small_screen,
 
   var sumHPD = new Array(cities.length);
 
-  // Go through each city and pluck out units by type so they're arranged by type
-  for (var city_id in cities) { //rows (cities)
+// Go through each city in the order sorted in the cities list, and pluck out units by type, so they're arranged by type:
+  if ($("#city_table_head").length == 0) update_city_screen();              // If cities list has never been created, create it.
+  var current_city_row = $("#city_table_head").next().children().first();   // Get first row of the sorted cities list.
+  // Iterate through all player cities in the order they're sorted in the sorted cities list:
+  while (current_city_row.length > 0) {
+  //for (var city_id in cities) { //rows (cities)
+    var city_id = current_city_row.attr('id').substr(12);
+    current_city_row = current_city_row.next(); // bump up to next city row for when we iterate the loop back up here
     var pcity = cities[city_id];
 
     // Only process legal cities owned by player
@@ -792,8 +804,14 @@ function empire_econ_improvements_screen(wide_screen,narrow_screen,small_screen,
   var improvements_html = "";
   var city_count = 0; // number of cities (total rows)
 
-  // Go through each city
-  for (var city_id in cities) { 
+// Go through each city in the order sorted in the cities list, and pluck out units by type, so they're arranged by type:
+  if ($("#city_table_head").length == 0) update_city_screen();              // If cities list has never been created, create it.
+  var current_city_row = $("#city_table_head").next().children().first();   // Get first row of the sorted cities list.
+  // Iterate through all player cities in the order they're sorted in the sorted cities list:
+  while (current_city_row.length > 0) {
+  //for (var city_id in cities) { //rows (cities)
+    var city_id = current_city_row.attr('id').substr(12);
+    current_city_row = current_city_row.next(); // bump up to next city row for when we iterate the loop back up here
     var pcity = cities[city_id];
 
     // Only process legal cities owned by player
@@ -998,8 +1016,14 @@ function empire_econ_upkeep_screen(wide_screen,narrow_screen,small_screen,
   var city_count = 0; // number of cities (total rows)
   let city_upkeep = new Array(cities.length);
 
-  // Go through each city
-  for (var city_id in cities) { 
+  // Go through each city in the order sorted in the cities list, and pluck out units by type, so they're arranged by type:
+  if ($("#city_table_head").length == 0) update_city_screen();              // If cities list has never been created, create it.
+  var current_city_row = $("#city_table_head").next().children().first();   // Get first row of the sorted cities list.
+  // Iterate through all player cities in the order they're sorted in the sorted cities list:
+  while (current_city_row.length > 0) {
+  //for (var city_id in cities) { //rows (cities)
+    var city_id = current_city_row.attr('id').substr(12);
+    current_city_row = current_city_row.next(); // bump up to next city row for when we iterate the loop back up here
     var pcity = cities[city_id];
     city_upkeep[city_id] = 0; // start counter
     // Only process legal cities owned by player
@@ -1228,8 +1252,14 @@ function empire_econ_worklists_screen(wide_screen,narrow_screen,small_screen,
   var queue_html = "";
   var city_count = 0; // number of cities (total rows)
 
-  // Go through each city
-  for (var city_id in cities) { 
+// Go through each city in the order sorted in the cities list, and pluck out units by type, so they're arranged by type:
+  if ($("#city_table_head").length == 0) update_city_screen();              // If cities list has never been created, create it.
+  var current_city_row = $("#city_table_head").next().children().first();   // Get first row of the sorted cities list.
+  // Iterate through all player cities in the order they're sorted in the sorted cities list:
+  while (current_city_row.length > 0) {
+  //for (var city_id in cities) { //rows (cities)
+    var city_id = current_city_row.attr('id').substr(12);
+    current_city_row = current_city_row.next(); // bump up to next city row for when we iterate the loop back up here
     var pcity = cities[city_id];
     // Only process legal cities owned by player
     if (client.conn.playing == null || city_owner(pcity) == null || city_owner(pcity).playerno != client.conn.playing.playerno) {
