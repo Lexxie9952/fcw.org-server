@@ -583,6 +583,7 @@ A Manufacturing Plant increases base production by +50%,\
 [building_sam_battery]
 name		= _("SAM Battery")
 genus		= "Improvement"
+flags		= "VisibleByOthers"
 reqs	=
     { "type", "name", "range"
       "Tech", "Rocketry", "Player"

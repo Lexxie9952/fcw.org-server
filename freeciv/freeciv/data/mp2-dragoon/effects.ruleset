@@ -4261,7 +4261,13 @@ reqs	=
       "Building", "Research Lab", "City"
       "OutputType", "Science", "Local"
     }
-
+[effect_sam_battery_visible]
+type    = "Visible_Walls"
+value	= 16
+reqs	=
+    { "type", "name", "range"
+      "Building", "SAM Battery", "City"
+    }
 [effect_sam_battery]
 type    = "Defend_Bonus"
 value	= 100
@@ -5523,7 +5529,7 @@ reqs	=
     { "type",     "name",                "range"
       "Building", "Leonardo's Workshop", "Player"
     }
-;Discovery of Robitics OR Rocketry reduces the effect to only 1
+;Discovery of Robotics OR Rocketry reduces the effect to only 1
 [effect_leonardos_workshop_2]
 type    = "Upgrade_Unit"
 value	= 1
