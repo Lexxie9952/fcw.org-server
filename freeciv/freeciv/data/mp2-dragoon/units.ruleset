@@ -2261,7 +2261,8 @@ Armor is the mechanized equivalent of a Cavalry unit. They have high attack stre
  superb mobility, and the highest defense of any offensive unit. They are massive all-terrain\
  vehicles, well-suited for penetrating defensive fortifications：Units inside Forts get no defense\
  bonus against Armor. Units inside Fortresses get a reduced bonus of 1.67× instead of 2×. \n\
-Stack-Escape：40% odds to evade stack-death if attacker doesn’t have more moves than it does.\
+Communists pay 10 less for this unit.\
+ Stack-Escape：40% odds to evade stack-death if attacker doesn’t have more moves than it does.\
 ")
 
 [unit_armor_ii]
