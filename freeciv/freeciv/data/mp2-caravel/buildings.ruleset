@@ -962,6 +962,7 @@ Adds +100% to base science output for each Library and University\
 [building_sam_battery]
 name		= _("SAM Battery")
 genus		= "Improvement"
+flags		= "VisibleByOthers"
 reqs	=
     { "type", "name", "range"
       "Tech", "Rocketry", "Player"
@@ -1195,9 +1196,9 @@ sabotage	= 100
 sound		= "b_supermarket"
 sound_alt	= "b_generic"
 helptext	= _("\
-Increases the food resources by +100% on each farmland tile which\
- is being used around the city. An irrigable city centre tile receives an\
- immediate +50% bonus if it does not have Farmland.\
+Increases the food resources by +100% on each farmland tile used\
+ by the city. An irrigable city centre tile receives an\
+ immediate +50% bonus even without Farmland.\
  Farmland tiles are those which have been irrigated a second time.\
 ")
 
