@@ -164,7 +164,7 @@ tiles = { "row", "column", "tag"
  10, 1, "city.coastal_underlay"
  10, 2, "city.fortifications_overlay"
  10, 3, "city.fortifications_underlay"
-; 10, 4, "city.citadel_overlay"
-; 10, 5, "city.citadel_underlay"
+ 10, 4, "city.sam_overlay"
+; 10, 5, unused
  10, 6, "city.citadel_overlay"
 }
