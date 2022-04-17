@@ -115,8 +115,6 @@ function civclient_init()
   if (renderer == RENDERER_2DCANVAS) init_mapview();
   if (renderer == RENDERER_WEBGL) init_webgl_renderer();
 
-  init_mapview();
-
   game_init();
   $('#tabs').tabs({ heightStyle: "fill" });
   control_init();
