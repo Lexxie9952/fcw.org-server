@@ -5,17 +5,11 @@ USING THE RULESET FOR TRANSPORT LOGISTICS CONTROL.
 
 Transport swapping
 ============================================================================
-Transport swapping at sea between Ship types (maybe create a "Ship" flag)
+Transport swapping at sea between WaterVessels
 OR between RiverShip class on a river:
   uses all moves; EXCEPT:
     LandAirSea, uses 1 5/9 moves
   can't be done if cargo has no moves left
-
-Transport swapping on SHIP units in a Quay, Naval Base, City
-  Legal, uses no moves
-
-Transport swapping on other transporters:
-  Legal in all cases where Unload is legal (assumes Load is also legal)
 
 Disembarking and Embarking
 =============================================================================
@@ -26,12 +20,12 @@ Disembarking LandAirSea to adjacent transport on blank sea tile should cost 1 5/
 
 
 Wagon type:
-  Allowed for all at full cost to all units (except LandAirSea)
+  disembarking allowed for all at full cost to all units (except LandAirSea)
     This means an making an "Unload" enabler for emulating "Disembark to same tile"
     LandAirSea costs 1 move for each.
 
 Truck type:
-  Disallowed except for Foot Soldiers, costs full moves. 
+  Disallowed except for Foot Soldiers, for whom it costs full moves. 
     This means an making an "Unload" enabler for emulating "Disembark to same tile"
     LandAirSea costs 1 move for each.
 
@@ -41,7 +35,7 @@ LandRail class:
     LandAirSea costs 1 move for each.
 
 Helicopter class:
-  Allowed only for "Foot" and Artillery types, at full cost (emulating disembark to same tile)
+  Allowed only for "Foot" (and Artillery?) types, at full cost (emulating disembark to same tile)
 
 
 Boarding/Loading
@@ -49,27 +43,15 @@ Boarding/Loading
 note: if it's legal cargo server already allows it. If not, it doesn't.
 Forbid only cases the ruleset wants to "outlaw":
 
-Wagons
-   Unit Types with less than 3 moves can do the Board command AND Cargo-class, all else cannot:
-    If we can't check base move score, we can make a UnitFlag, otherwise we need a separate 
-    UnitClass and change cargo characteristics.
-
 Trucks
-   Unit Types with less than 3 moves can do the Board command, AND Bomb, AND Cargo-class, but:
    Boarding on a blank tile (no base or city) is illegal except for "Foot" soldiers
 
 Trains (LandRail class)
-   Unit Types with less than 3 moves can do the Board command AND Bomb, AND Cargo-class AND Zeppelin
    Boarding on a blank tile (no base or city) is illegal except for "Foot soldiers" and Zeppelins
 
-Sea class:
-  Allowed in all cases where Sea units are allowed to go: City, Quay, Naval Base, Blank Sea tile (e.g., Fighter on Carrier)
-
-RiverShip class:
-  Allowed in all cases: City, Quay, Naval Base, Blank River tile.
-
 Helicopter class:
-  Loading allowed for all legal cargo, anywhere. (rescue pick-up!)
+  Loading allowed for all legal cargo, anywhere? The rescue pick-up rule was nerfed,
+	but can be reconsidered one more time. Analyse it.
 
 
 ===============================================================================
