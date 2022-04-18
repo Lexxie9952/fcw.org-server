@@ -98,8 +98,7 @@ const UTYF_MULTISLOT = 33;                /* if server setting slot_control is O
 const UTYF_TRANSPORTDEFENDER = 34;        /* Unit can always defend while transported, even on non-native terrain  */
 const UTYF_SENTRYALWAYS = 35;             /* These units always behave as sentry (e.g. fortified snipers, air reconnaissance units who
                                              can't sentry because !refuel tile, etc.) */     
-const UTYF_NONPROVOKEVIGIL = 36;          /* will attack non-provoking units on vigil */
-const UTYF_RESERVED1 = 36;
+const UTYF_NONPROVOKEVIGIL = 36;          /* with AA_ADVANCED autoattack rulesets, these units attack non-provoking units when on vigil (except civilians) */
 const UTYF_RESERVED2 = 37;                /* RESERVED for future use */
 const UTYF_RESERVED3 = 38;
 
@@ -185,7 +184,7 @@ const UTYF_FORTBUSTER = UTYF_USER_FLAG_28     // Defending Forts get no bonus. H
 const UTYF_FORTRESSBUSTER = UTYF_USER_FLAG_29 // Defending Fortresses get no bonus.
 const UTYF_ANTIAIR = UTYF_USER_FLAG_30;       // Anti-Air unit. e.g., AEGIS, AAA, Mobile SAM
 const UTYF_CANHIDE = UTYF_USER_FLAG_31;       /* Can make hideouts */
-const UTYF_WILLNEVER = UTYF_USER_FLAG_32;     // Doesn't auto-attack.
+const UTYF_WILLNEVER = UTYF_USER_FLAG_32;     // Doesn't auto-attack. Used in "if_attacker" reqs in game.ruleset.
 const UTYF_NONMILATTACK = UTYF_USER_FLAG_33;  // NonMilAttack - can attack and enter peace waters/territory
 const UTYF_CANT_PILLAGE = UTYF_USER_FLAG_34;  // CantPillage - unable to pillage tiles
 const UTYF_CAN_CLAIM = UTYF_USER_FLAG_35;     // CanClaim - able to make Tile Claims

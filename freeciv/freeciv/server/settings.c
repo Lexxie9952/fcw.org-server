@@ -2520,19 +2520,18 @@ static struct setting settings[] = {
           ALLOW_NONE, ALLOW_CTRL,
           N_("Style for server side autoattack."),
           N_("How the setting \"autoattack\" behaves, if enabled.\n "
-             "(Some rulesets depend on non-default settings for this, in order "
+             "(Some rulesets depend on non-default settings in order "
              "to elicit intended behavior from units.)\n"
-             "0: ➤ DEFAULT:  Units on adjacent tiles generally attack enemy "
-             "units if they have better odds attacking than defending, OR if the "
-             "enemy has the flag \"Provoking\". Exception: a single unit in a city "
-             "not wanting to leave the city undefended if it loses.\n"
-             "1: ➤ PROVOKED_ONLY: \"Provoking\" units ONLY will be auto-attacked. "
-             "Rulesets use \"will_never\" and \"Provoking'\" flags to make reqs "
-             "for which units proactively attack specific types. Only units with the "
-             "Vigil order will auto-attack, giving players tactical control. "
-             "This is used to minimize 'baiting' "
-             "and other unnatural dynamics: e.g., a ruleset can be coded so that "
-             "only Fighters auto-attack other Air units.\n"),
+             "0: ➤ LEGACY:  Units on adjacent tiles generally attack enemy units if "
+             "they have better odds attacking than defending, OR if the enemy has the "
+             "flag \"Provoking\". Exception: a single unit in a city not wanting to leave "
+             "the city undefended if it loses. \n"
+             "1: ➤ ADVANCED: Like above, but rulesets use \"if_attacker\" reqs, \"Provoking\" flag, "
+             "and \"NonProvokeVigil\" flag to control which units auto-attack specific "
+             "types. Also, only units with the 'Vigil' order auto-attack. Players get "
+             "control over attack decisions. ('Human intelligence' reduces 'AI-baiting' "
+             "and other exploits. Rulesets can be coded to feature such things as Fighters "
+             "being able to intercept incoming enemy Air units.\n"),
           NULL, NULL, NULL,
           GAME_MIN_AUTOATTACK_STYLE, GAME_MAX_AUTOATTACK_STYLE,
           GAME_DEFAULT_AUTOATTACK_STYLE)

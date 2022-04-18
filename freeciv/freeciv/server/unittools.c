@@ -4010,21 +4010,21 @@ static bool unit_survive_autoattack(struct unit *punit)
                                      tgt_tile, tile_city(tgt_tile),
                                      punit, NULL);
 
-     /* If AA_PROVOKED_ONLY, only vigiling units can auto-attack;
+     /* If AA_ADVANCED, only vigiling units can auto-attack;
       * giving human tactical opt-in to auto-attacking. */                                
-      if (game.server.autoattack_style == AA_PROVOKED_ONLY) {
+      if (game.server.autoattack_style == AA_ADVANCED) {
           if (penemy->activity != ACTIVITY_UNKNOWN) {  // vigil
             continue;  // skip/disallow units not under vigil
           }
           /* Vigiling units only auto-attack units flagged as "Provoking" unless
-           * the vigiling unit has has the Reserved1 flag (which indicates it
-           * auto-attacks ANYTHING, if it has better odds of winning). */
+           * the vigiling unit has the UTYF_NONPROVOKEVIGIL flag (which indicates any
+           * non-civilian provokes it, if it has better odds of winning). */
           if (!unit_has_type_flag(punit, UTYF_PROVOKING)) { // non-provoking
-            if (!unit_has_type_flag(penemy, UTYF_RESERVED1)) { //non-Reserved1
-              // skip units sans "Reserved1" from attacking non-"Provoking" unit
+            if (!unit_has_type_flag(penemy, UTYF_NONPROVOKEVIGIL)) {
+              // only UTYF_NONPROVOKEVIGIL auto-attack non-"Provoking" units
               continue; 
             } else if (unit_has_type_flag(punit, UTYF_CIVILIAN)) {
-              continue; // Reserved1 units autoattack everything except civilians
+              continue; // UTYF_NONPROVOKEVIGIL units autoattack everything except civilians
             }
           }
       }
@@ -4080,20 +4080,20 @@ static bool unit_survive_autoattack(struct unit *punit)
                                    tgt_tile, tile_city(tgt_tile),
                                    punit, NULL);
 
-    /* If AA_PROVOKED_ONLY, only vigil units can auto-attack */                           
-    if (game.server.autoattack_style == AA_PROVOKED_ONLY) {
+    /* If AA_ADVANCED, only vigil units can auto-attack */                           
+    if (game.server.autoattack_style == AA_ADVANCED) {
       if (penemy->activity != ACTIVITY_UNKNOWN) {  //ACTIVITY_VIGIL
             continue;  // skip/disallow units not under Vigil
       }
       /* Vigiling units only auto-attack units flagged as "Provoking" unless
-       * the vigiling unit has the Reserved1 flag (which indicates it
+       * the vigiling unit has the UTYF_NONPROVOKEVIGIL flag (which indicates it
        * auto-attacks all !civilians, if it has better odds of winning). */
       if (!unit_has_type_flag(punit, UTYF_PROVOKING)) { // non-provoking
-        if (!unit_has_type_flag(penemy, UTYF_RESERVED1)) { //non-Reserved1
-          // skip units sans "Reserved1" from attacking non-"Provoking" unit
+        if (!unit_has_type_flag(penemy, UTYF_NONPROVOKEVIGIL)) {
+          // only UTYF_NONPROVOKEVIGIL auto-attack non-"Provoking" units
           continue; 
         } else if (unit_has_type_flag(punit, UTYF_CIVILIAN)) {
-          continue; // Reserved1 units autoattack everything except civilians
+          continue; // UTYF_NONPROVOKEVIGIL units autoattack everything except civilians
         }
       }
     }
@@ -4107,9 +4107,9 @@ static bool unit_survive_autoattack(struct unit *punit)
     penemywin = action_prob_to_0_to_1_pessimist(peprob->prob);
 
     /* UTYF_PROVOKING prioritizes autoattack under AA_DEFAULT, but under 
-     * AA_PROVOKED_ONLY, it only flags to not automatically disallow autoattack */
+     * AA_ADVANCED, it only flags to not automatically disallow autoattack */
     if ( (penemywin > 1.0 - punitwin
-          || (unit_has_type_flag(punit, UTYF_PROVOKING) && game.server.autoattack_style != AA_PROVOKED_ONLY) )
+          || (unit_has_type_flag(punit, UTYF_PROVOKING) && game.server.autoattack_style != AA_ADVANCED) )
         && penemywin > threshold) {
 
         notify_player(unit_owner(penemy), unit_tile(punit), E_UNIT_ORDERS, ftc_server,

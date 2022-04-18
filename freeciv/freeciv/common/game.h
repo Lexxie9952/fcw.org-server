@@ -757,8 +757,15 @@ extern struct world wld;
 
 #define GAME_DEFAULT_AUTOATTACK      FALSE
 #define GAME_DEFAULT_AUTOATTACK_STYLE 0
+/* autoattack_style server setting:
+ * AA_DEFAULT  - Every unit autoattacks based on an "AI" decision to autoattack 
+                 if it thinks its odds of winning an attack are better than defending,
+                 or always if the enemy unit has the "Provoking" flag.
+ * AA_ADVANCED - Rulesets provide more intelligence and human control over autoattack.
+                 Auto-attackers and their targets are subject to ruleset flags, conditions,
+                 and human-selected activity states to opt-in to auto-attacking: */
 #define AA_DEFAULT 0
-#define AA_PROVOKED_ONLY 1
+#define AA_ADVANCED 1
 #define GAME_MIN_AUTOATTACK_STYLE   0
 #define GAME_MAX_AUTOATTACK_STYLE   1
 /* a server effect could be made that allows
