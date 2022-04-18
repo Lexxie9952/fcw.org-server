@@ -266,7 +266,7 @@ nuke_defender_survival_chance_pct = 0
 ;possible attack_actions= "Capture Units", "Bombard", "Bombard 2", "Bombard 3", "Attack", "Suicide Attack"
 attack_actions= "Bombard", "Attack"
 
-; Non-fighters don't auto-attack.
+; Which flags mark units who don't ever auto-attack.
 will_never = "WillNever"
 
 if_attacker =

@@ -608,7 +608,10 @@ flags         = "Unreachable", "DoesntOccupyTile"
 ; "SentryAlways" = This unit always reports sentry-type information; give this flag to 
 ;                  reconnaissance/scouting type units who can’t sentry because they are 
 ;                  fuel-type units (which can only sentry on refueling tiles.)
-; "Reserved1"
+; "NonProvokeVigil" = Units under activity Vigil with this flag will attack are only  
+;                  restricted to not auto-attack civilians, (rather than only attacking
+;                  units with the "Provoking" flag) (assuming autoattackstyle=1)  
+;                  
 ; "Reserved2"
 ; "Reserved3"     = reserved for future use.
 ; ------------------------------------------
@@ -2337,7 +2340,7 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-flags         = "CantReachAir", "Bombarder", "Reserved1" ;autoattacks (!NonMil) targets instead of "Provoking" targets 
+flags         = "CantReachAir", "Bombarder", "NonProvokeVigil" ;autoattacks (!NonMil) targets instead of "Provoking" targets 
 roles         = ""
 helptext      = _("\
 Catapults are rock-throwing war machines. Massive stones diminish\
@@ -2429,7 +2432,7 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-flags         = "CantReachAir", "Bombarder", "CantAttack", "Reserved1" ;autoattacks (!NonMil) targets instead of "Provoking" targets
+flags         = "CantReachAir", "Bombarder", "CantAttack", "NonProvokeVigil" ;autoattacks (!NonMil) targets instead of "Provoking" targets
 bonuses       =
    { "flag", "type", "value"
      "Horse",       "DefenseMultiplierPct", -80
@@ -2489,7 +2492,7 @@ uk_gold       = 0
 embarks       = "Helicopter"    ; transport helicopter only
 disembarks    = "Helicopter"
 targets       = "LandRail"
-flags         = "CantReachAir", "Bombarder", "Reserved1" ;autoattacks (!NonMil) targets instead of "Provoking" targets
+flags         = "CantReachAir", "Bombarder", "NonProvokeVigil" ;autoattacks (!NonMil) targets instead of "Provoking" targets
 roles         = "BarbarianTech", "BarbarianBuildTech"
 helptext      = _("\
 Cannons are guns that fire massive metallic projectiles faster and\
@@ -2536,7 +2539,7 @@ uk_gold       = 0
 embarks       = "Helicopter"    ; transport helicopter only
 disembarks    = "Helicopter"
 targets       = "Balloon", "LandRail", "Zeppelin"
-flags         = "CantReachAir", "Bombarder", "Reserved1" ;autoattacks (!NonMil) targets instead of "Provoking" targets
+flags         = "CantReachAir", "Bombarder", "NonProvokeVigil" ;autoattacks (!NonMil) targets instead of "Provoking" targets
 roles         = ""
 helptext      = _("\
 Artillery upgrade Cannons with doubled firepower. Against Artillery,\
@@ -2679,7 +2682,7 @@ uk_gold       = 0
 embarks       = "Helicopter"    ; transport helicopter only
 disembarks    = "Helicopter"
 targets       = "Balloon", "LandRail", "Zeppelin"
-flags         = "CantReachAir", "Bombarder", "Reserved1" ;autoattacks (!NonMil) targets instead of "Provoking" targets
+flags         = "CantReachAir", "Bombarder", "NonProvokeVigil" ;autoattacks (!NonMil) targets instead of "Provoking" targets
 roles         = ""
 helptext      = _("\
 Howitzers are upgraded Artillery with a terrifying increase to mobility and attack\
@@ -5991,7 +5994,7 @@ uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
 targets       = "Balloon", "LandRail", "Zeppelin"
-flags         = "Unique", "CantReachAir", "Bombarder", "Reserved1" ;autoattacks (!NonMil) targets instead of "Provoking" targets
+flags         = "Unique", "CantReachAir", "Bombarder", "NonProvokeVigil" ;autoattacks (!NonMil) targets instead of "Provoking" targets
 roles         = ""
 helptext      = _("\
 On rare occasions in history, nations constructed monumental turret guns.\

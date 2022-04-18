@@ -582,7 +582,10 @@ flags         = "Unreachable", "DoesntOccupyTile"
 ; "SentryAlways" = This unit always reports sentry-type information; give this flag to 
 ;                  reconnaissance/scouting type units who can't sentry because they are 
 ;                  fuel-type units (which can only sentry on refueling tiles.)
-; "Reserved1"
+; "NonProvokeVigil" = Units under activity Vigil with this flag will attack are only  
+;                  restricted to not auto-attack civilians, (rather than only attacking
+;                  units with the "Provoking" flag) (assuming autoattackstyle=1)  
+;              
 ; "Reserved2"
 ; "Reserved3"     = reserved for future use.
 ; -------------------------------------------
