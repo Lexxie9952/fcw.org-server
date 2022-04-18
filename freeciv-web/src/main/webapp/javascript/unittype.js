@@ -99,7 +99,7 @@ const UTYF_TRANSPORTDEFENDER = 34;        /* Unit can always defend while transp
 const UTYF_SENTRYALWAYS = 35;             /* These units always behave as sentry (e.g. fortified snipers, air reconnaissance units who
                                              can't sentry because !refuel tile, etc.) */     
 const UTYF_NONPROVOKEVIGIL = 36;          /* with AA_ADVANCED autoattack rulesets, these units attack non-provoking units when on vigil (except civilians) */
-const UTYF_RESERVED2 = 37;                /* RESERVED for future use */
+const UTYF_NOSTACKDEATH = 37;             /* Unit does not die in stack kill events. This means stack is not gone, so CanEscape units remain anchored to the stack. */
 const UTYF_RESERVED3 = 38;
 
 

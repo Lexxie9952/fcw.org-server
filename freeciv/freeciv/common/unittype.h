@@ -287,9 +287,11 @@ struct unit_class {
    "Reserved1" and adjust that to Reserved2 or assign that mechanic another UTYF */  
 #define SPECENUM_VALUE36 UTYF_NONPROVOKEVIGIL
 #define SPECENUM_VALUE36NAME N_("?unitflag:NonProvokeVigil") /* see comment above */
-/* RESERVED for future use*/
-#define SPECENUM_VALUE37 UTYF_RESERVED2
-#define SPECENUM_VALUE37NAME N_("?unitflag:Reserved2")
+/* Unit doesn't die when its stack is killed. Since that means the stack is not gone,
+   it also anchors any "CanEscape" units who successfully survive, to also stay in
+   the stack, rather than fleeing to adjacent tiles where they might be picked off: */
+#define SPECENUM_VALUE37 UTYF_NOSTACKDEATH
+#define SPECENUM_VALUE37NAME N_("?unitflag:NoStackDeath")
 /* RESERVED for future use*/
 #define SPECENUM_VALUE38 UTYF_RESERVED3
 #define SPECENUM_VALUE38NAME N_("?unitflag:Reserved3")

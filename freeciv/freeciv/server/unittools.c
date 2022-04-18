@@ -2640,7 +2640,9 @@ void kill_unit(struct unit *pkiller, struct unit *punit, bool vet)
 
   int ransom, unitcount = 0;
   bool escaped;
-  /* number of secondary casualties to list before abrdiging to
+  /* whether CanEscape units flee to adjacent tile (or stay on current): */
+  bool escapers_flee = true;
+  /* number of secondary casualties to list before abridging to
      "x other units." */
   const int MAX_SECONDARY_CASUALTIES_TO_REPORT = 6;
   const int MAX_KILLED_UNITS_TO_REPORT_TO_ALL_PLAYERS = 128;
@@ -2755,7 +2757,9 @@ void kill_unit(struct unit *pkiller, struct unit *punit, bool vet)
 
   if (unitcount == 0) {
     unit_list_iterate(unit_tile(punit)->units, vunit) {
-      if (pplayers_at_war(pvictor, unit_owner(vunit))) {
+      if (pplayers_at_war(pvictor, unit_owner(vunit))
+          /* important, previous versions forgot to check reachability here! */
+          && is_unit_reachable_at(vunit, pkiller, unit_tile(punit))) {
 	      unitcount++;
       }
     } unit_list_iterate_end;
@@ -2800,80 +2804,111 @@ void kill_unit(struct unit *pkiller, struct unit *punit, bool vet)
       num_escaped[i] = 0;
     }
 
+    /* When a surviving "NoStackDeath" unit occupies the tile, "escapees" don't 
+     * flee to adjacent tiles, since the stack isn't gone yet. */
+    unit_list_iterate(ptile->units, vunit) {
+      if (unit_has_type_flag(vunit, UTYF_NOSTACKDEATH) && !vunit->server.dying) {
+        escapers_flee = false;
+      }
+    } unit_list_iterate_end;
+
     /* count killed units after letting some units (possibly) escape */
     unit_list_iterate(ptile->units, vunit) {
       struct player *vplayer = unit_owner(vunit);
+      bool nostackdeath = unit_has_type_flag(vunit, UTYF_NOSTACKDEATH);
 
       if (pplayers_at_war(pvictor, vplayer)
           && is_unit_reachable_at(vunit, pkiller, ptile)) {
         escaped = FALSE;
 
-        if (unit_has_type_flag(vunit, UTYF_CANESCAPE)
-            && !unit_has_type_flag(pkiller, UTYF_CANKILLESCAPING) // TODO: should be a % chance to kill escaping, not hard-coded 100%
-            && vunit->hp > 0
-            && vunit->moves_left >= pkiller->moves_left
-            /*&& fc_rand(2)*/) {
-          // CanEscape is possible. Adjust 50% base odds, based on ruleset effects:    
-          int escape_chance = 50 + get_target_bonus_effects(NULL,
-                                           vplayer,
-                                           pvictor,
-                                           tile_city(unit_tile(vunit)),
-                                           NULL,
-                                           unit_tile(vunit),
-                                           vunit,
-                                           unit_type_get(vunit),
-                                           NULL,
-                                           NULL,
-                                           action_by_number(ACTION_ATTACK),
-                                           EFT_STACK_ESCAPE_PCT);
-          // Escape Charm. +1% odds for each move point more the defender has over attacker:                                 
-          escape_chance += ((vunit->moves_left - pkiller->moves_left) / SINGLE_MOVE); 
-          // Roll the dice:
-          if (fc_rand(100)<escape_chance) {
-            // Successful roll: vunit will escape iff there is legal tile to escape.
-            int curr_def_bonus;
-            int def_bonus = 0;
-            struct tile *dsttile = NULL;
-            int move_cost;
+        if ((nostackdeath && vunit->hp > 0)
+             || (unit_has_type_flag(vunit, UTYF_CANESCAPE)
+                 && !unit_has_type_flag(pkiller, UTYF_CANKILLESCAPING) // TODO: should be a % chance to kill escaping, not hard-coded 100%
+                 && vunit->hp > 0
+                 && vunit->moves_left >= pkiller->moves_left)
+            ) { /* Unit might survive stack-kill because UTYF_NOSTACKDEATH || UTYF_CANESCAPE: */
+          if (nostackdeath) {
+            /* UTYF_NOSTACKDEATH units always survive: */
+            num_escaped[player_index(vplayer)]++;
+            escaped = TRUE;
+            unitcount--;
+          }
+          /* CanEscape is possible. Adjust 50% base odds, based on ruleset effects: */
+          else {
+            int escape_chance = 50 + get_target_bonus_effects(NULL,
+                                          vplayer,
+                                          pvictor,
+                                          tile_city(unit_tile(vunit)),
+                                          NULL,
+                                          unit_tile(vunit),
+                                          vunit,
+                                          unit_type_get(vunit),
+                                          NULL,
+                                          NULL,
+                                          action_by_number(ACTION_ATTACK),
+                                          EFT_STACK_ESCAPE_PCT);
+            // Escape Charm. +1% odds for each move point more the defender has over attacker:                                 
+            escape_chance += ((vunit->moves_left - pkiller->moves_left) / SINGLE_MOVE);
+          
+            // Roll the dice:
+            if (fc_rand(100)<escape_chance) {
+              // Successful roll: vunit will escape iff there is legal tile to escape.
+              int curr_def_bonus;
+              int def_bonus = 0;
+              struct tile *dsttile = NULL;
+              int move_cost;
 
-            fc_assert(vunit->hp > 0);
+              fc_assert(vunit->hp > 0);
 
-            adjc_iterate(&(wld.map), ptile, ptile2) {
-              if (can_exist_at_tile(&(wld.map), vunit->utype, ptile2)
-                  && NULL == tile_city(ptile2)) {
-                move_cost = map_move_cost_unit(&(wld.map), vunit, ptile2);
-                if (pkiller->moves_left <= vunit->moves_left - move_cost
-                    && (is_allied_unit_tile(ptile2, pvictim)
-                        || unit_list_size(ptile2->units)) == 0) {
-                  curr_def_bonus = tile_extras_defense_bonus(ptile2,
-                                                            vunit->utype);
-                  if (def_bonus <= curr_def_bonus) {
-                    def_bonus = curr_def_bonus;
-                    dsttile = ptile2;
+              /* Units who successfully escaped ... */
+              if (escapers_flee == false) {
+                /* stay on the tile because a NoStackDeath is present */
+                num_escaped[player_index(vplayer)]++;
+                escaped = TRUE;
+                unitcount--;
+              }
+              else { 
+                /* or, flee to an adjacent tile ... */
+                adjc_iterate(&(wld.map), ptile, ptile2) {
+                  if (can_exist_at_tile(&(wld.map), vunit->utype, ptile2)
+                      && NULL == tile_city(ptile2)) {
+                    move_cost = map_move_cost_unit(&(wld.map), vunit, ptile2);
+                    if (pkiller->moves_left <= vunit->moves_left - move_cost
+                        && (is_allied_unit_tile(ptile2, pvictim)
+                            || unit_list_size(ptile2->units)) == 0) {
+                      curr_def_bonus = tile_extras_defense_bonus(ptile2,
+                                                                vunit->utype);
+                      if (def_bonus <= curr_def_bonus) {
+                        def_bonus = curr_def_bonus;
+                        dsttile = ptile2;
+                      }
+                    }
                   }
+                } adjc_iterate_end;
+
+                if (dsttile != NULL) {
+                  /* TODO: Consider if forcing the unit to perform actions that
+                  * includes a move, like "Transport Embark", should be done when
+                  * a regular move is illegal or rather than a regular move. If
+                  * yes: remember to set action_requester to ACT_REQ_RULES. */
+                  move_cost = map_move_cost_unit(&(wld.map), vunit, dsttile);
+                  /* FIXME: Shouldn't unit_move_handling() be used here? This is
+                  * the unit escaping by moving itself. It should therefore
+                  * respect movement rules. */
+                  unit_move(vunit, dsttile, move_cost, NULL, FALSE, FALSE);
+                  num_escaped[player_index(vplayer)]++;
+                  escaped = TRUE;
+                  unitcount--;
                 }
               }
-            } adjc_iterate_end;
-
-            if (dsttile != NULL) {
-              /* TODO: Consider if forcing the unit to perform actions that
-               * includes a move, like "Transport Embark", should be done when
-               * a regular move is illegal or rather than a regular move. If
-               * yes: remember to set action_requester to ACT_REQ_RULES. */
-              move_cost = map_move_cost_unit(&(wld.map), vunit, dsttile);
-              /* FIXME: Shouldn't unit_move_handling() be used here? This is
-               * the unit escaping by moving itself. It should therefore
-               * respect movement rules. */
-              unit_move(vunit, dsttile, move_cost, NULL, FALSE, FALSE);
-              num_escaped[player_index(vplayer)]++;
-              escaped = TRUE;
-              unitcount--;
             }
           }
         }
 
         if (!escaped) {
           num_killed[player_index(vplayer)]++;
+          /* marked for death */
+          vunit->server.dying = TRUE;
 
           if (vunit != punit) {
             other_killed[player_index(vplayer)] = vunit;
@@ -3154,11 +3189,11 @@ void kill_unit(struct unit *pkiller, struct unit *punit, bool vet)
         notify_player(player_by_number(i), unit_tile(punit),
                       E_UNIT_ESCAPED, ftc_server,
                       /* TRANS: "2 units escaped from attack by a Swiss Battleship." ;~) */
-                      PL_("[`running`] %d unit escaped from attack by %s %s %s",
-                          "[`running`] %d units escaped from attack by %s %s %s",
+                      PL_("[`running`] %d unit wasn't killed by the %s %s",
+                          "[`running`] %d units weren't killed by the %s %s",
                           num_escaped[i]),
                       num_escaped[i],
-                      is_unit_plural(pkiller) ? "" : indefinite_article_for_word(nation_adjective_for_player(pvictor), false),
+                      //is_unit_plural(pkiller) ? "" : indefinite_article_for_word(nation_adjective_for_player(pvictor), false),
                       nation_adjective_for_player(pkiller->nationality),
                       pkiller_link);
       }
@@ -3169,10 +3204,11 @@ void kill_unit(struct unit *pkiller, struct unit *punit, bool vet)
     punit = NULL; /* wiped during following iteration so unsafe to use */
 
     unit_list_iterate_safe(ptile->units, punit2) {
-      if (pplayers_at_war(pvictor, unit_owner(punit2))
-	  && is_unit_reachable_at(punit2, pkiller, ptile)) {
+      if (punit2->server.dying
+          && pplayers_at_war(pvictor, unit_owner(punit2))
+	        && is_unit_reachable_at(punit2, pkiller, ptile)) {
         wipe_unit(punit2, ULR_KILLED, pvictor);
-      }
+      } else punit2->server.dying = FALSE; /* shouldn't happen */
     } unit_list_iterate_safe_end;
   }
 }
