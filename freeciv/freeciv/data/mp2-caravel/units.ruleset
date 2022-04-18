@@ -585,8 +585,8 @@ flags         = "Unreachable", "DoesntOccupyTile"
 ; "NonProvokeVigil" = Units under activity Vigil with this flag will attack are only  
 ;                  restricted to not auto-attack civilians, (rather than only attacking
 ;                  units with the "Provoking" flag) (assuming autoattackstyle=1)  
-;              
-; "Reserved2"
+; "NoStackDeath" = When in a stack whose defender is killed, this unit survives and 
+;                  remains occupying the same tile. 
 ; "Reserved3"     = reserved for future use.
 ; -------------------------------------------
 ; Following actions require extra fields:

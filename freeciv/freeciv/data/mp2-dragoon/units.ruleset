@@ -610,9 +610,9 @@ flags         = "Unreachable", "DoesntOccupyTile"
 ;                  fuel-type units (which can only sentry on refueling tiles.)
 ; "NonProvokeVigil" = Units under activity Vigil with this flag will attack are only  
 ;                  restricted to not auto-attack civilians, (rather than only attacking
-;                  units with the "Provoking" flag) (assuming autoattackstyle=1)  
-;                  
-; "Reserved2"
+;                  units with the "Provoking" flag) (assuming autoattackstyle=1)
+; "NoStackDeath" = When in a stack whose defender is killed, this unit survives and 
+;                  remains occupying the same tile. 
 ; "Reserved3"     = reserved for future use.
 ; ------------------------------------------
 ; Following actions require extra fields:
@@ -4773,7 +4773,7 @@ bonuses       =
      "Submarine", "DefenseMultiplier", 1
      "NonNativeAttack", "DefenseMultiplier", 1    
    }
-flags         = "BadCityDefender", "CanEscape", "CantReachAir", "WillNever", "Bombarder"
+flags         = "BadCityDefender", "NoStackDeath", "CantReachAir", "WillNever", "Bombarder", "NeverBlocked"
 veteran_names =
   _("?vet_rank:green"),
   _("?vet_rank:veteran"),
@@ -4789,10 +4789,12 @@ veteran_move_bonus = 0, 0, 0, 0, 9, 9, 9
 roles         = ""
 helptext      = _("\
 The Battleship is the supreme naval unit, with excellent offensive and defensive strength. It has a 2× defense bonus vs Submarines.\
- Battleships may expend 5 move points to do a 3 round bombardment which hits up to 4 units within a stack, of which only a maximum\
- of one can be killed. Defending Battleships get a free bombardment against Special Unit Attacks. \
+ Because of the size and range of its guns, unreachable units cannot block it from attacking a tile. \n\
+Battleships may expend 5 move points to do a 3 round bombardment which hits up to 4 units within a stack, of which a maximum of one\
+ can be killed. This can be done on any units within 2 tiles distance. Defending Battleships get a free bombardment against\
+ Special Unit Attacks. \
 "), _("
-Stack-Escape：60% odds to evade stack-death if attacker doesn’t have more moves than it does.\
+Stack-Chief：(1) Will not die if other units in its stack die. (2) Other units escaping Stack Death aren’t forced to other tiles.\
 ")
 bombard_rate = 3
 
@@ -4947,7 +4949,7 @@ bonuses       =
    { "flag", "type", "value"
      "NonNativeAttack", "DefenseMultiplier", 1    
    }
-flags         = "BadCityDefender", "Only_Native_Attack", "CanEscape",
+flags         = "BadCityDefender", "Only_Native_Attack", "NoStackDeath",
                 "CantReachAir", "WillNever"
 veteran_names =
   _("?vet_rank:green"),
@@ -4964,10 +4966,10 @@ veteran_move_bonus = 0, 0, 0, 0, 9, 9, 9
 roles         = ""
 helptext      = _("\
 The Carrier is a mobile airport that can carry Air units, Helicopters, AAA, Marines, and Missiles.\
- Fighters can Vigil on a Carrier if they have enough moves and the Carrier has not moved since the\
- Vigil order was given. \
+ Fighters can Vigil on a Carrier if they have enough moves and the Carrier hasn’t moved since the\
+ Vigil order was given. Carriers are very expensive and thus, usually protected by a fleet of scouts and escorts. \n\
 "), _("\
-Carriers are very expensive and thus, usually protected by a fleet of scouts and escorts.\
+Stack-Chief：(1) Will not die if other units in its stack die. (2) Other units escaping Stack Death aren’t forced to other tiles.\
 ")
 
 [unit_cruise_missile]

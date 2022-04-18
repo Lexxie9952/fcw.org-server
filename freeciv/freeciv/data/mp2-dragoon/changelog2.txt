@@ -767,7 +767,11 @@ certain buildings have a reduced chance of razing:
 amphitheatre,aqueduct,cathedral,granary,harbor,marketplace,
 hydro plant,sewer,supermarket,temple,totem pole
 ==============================================================
-125.
+125. Battleship and Carrier become Stack-Chief: don't die in
+stack deaths, anchor successful CanEscape units to stay in
+the stack rather than fleeing to adjacent tiles. 
+Battleship is never blocked.
+Batleship gets Bombard range of 2.
 ==============================================================
 126.
 ==============================================================

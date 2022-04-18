@@ -1503,7 +1503,7 @@ target_reqs    =
 
 ;Battleships can do bombardment
 [actionenabler_battleship_bombard]
-action = "Bombard"
+action = "Bombard 2"
 actor_reqs    =
     { "type",         "name",         "range", "present"
       "UnitFlag",     "Bombarder",    "Local", TRUE
