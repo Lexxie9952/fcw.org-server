@@ -4344,20 +4344,31 @@ static bool unit_bombard(struct unit *punit, struct tile *ptile,
       
       // Retaliators get a chance to 'recursively' fight back */
       // ... if defender has bombard retaliation capability:
-      if (rstats.bombard_retaliate_rounds   
-       // ... and if attacker is reachable:
-       && is_unit_reachable_at(punit, pdefender, unit_tile(punit))
-       /* ... and ACTION_BOMBARD is possible on the attacker's tile ...
-       && is_action_enabled_unit_on_tile(ACTION_BOMBARD, pdefender, 
-                                         unit_tile(punit), NULL) TODO: commented out because wrongly returns FALSE */
-       // ... and if defender has moves_left: 
-       && pdefender->moves_left > 0) { 
-        
-          unit_bombard(pdefender,        // Defender is now Attacker
-                      unit_tile(punit),  // Attacker tile is now Defender tile
-                      paction,           // (still Bombardment, but will be unused)
-                      true);             // is_retaliation==true, ...    
-      }                                  // ... (to avoid recursion)
+      if (rstats.bombard_retaliate_rounds 
+          && is_unit_reachable_at(punit, pdefender, unit_tile(punit))) {
+        /* in order of precedence, attempt BOMBARD1 (shorter range but stronger),
+         * else BOMBARD2 (longer ranger but weaker), else BOMBARD3 (longest/weakest): 
+         * TODO: bombard_retaliate_rounds has grown kinda redundant since they are all
+         * assumed to be symmetric SUA, thus this becomes more of a flag for can_retaliate;
+         * however, what we really want is BOMBARD,BOMBARD2,BOMBARD3 to have separately
+         * settable rounds to compensate for worse accuracy/strength at higher range,
+         * thus bombard_retaliate_rounds can become a special flag with dual purpose of
+         * (1) signifying its possible, and (2) (possibly) adjusting/overriding the standard
+         * bombard rate that's now just pulled from the symmetric SUA instead of injected
+         * in the line "bombard_rate = estats.bombard_retaliate_rounds;" about 240 lines above.
+         * final FIXME: bombard_retal is 1 bit bool, EFT_BOMBARD_RATE has a val to adjust it
+         * for units doing BOMBARD,BOMBARD2,BOMBARD3 based on which "Action", "...", Local, TRUE
+         * they have, likewise EFT_BOMBARD_RETAL_RATE; OR we bite the bullet and put all these
+         * extra_stats into the damn unit_type records. but EFT gives us dynamic control over
+         * circumstances (like vet level, terrain etc.)
+         */
+         if (is_action_enabled_unit_on_units(ACTION_BOMBARD, pdefender,unit_tile(punit)))
+           unit_bombard(pdefender,unit_tile(punit),action_by_number(ACTION_BOMBARD),true);
+         else if (is_action_enabled_unit_on_units(ACTION_BOMBARD2, pdefender,unit_tile(punit)))
+           unit_bombard(pdefender,unit_tile(punit),action_by_number(ACTION_BOMBARD2),true);
+         else if (is_action_enabled_unit_on_units(ACTION_BOMBARD3, pdefender,unit_tile(punit)))
+           unit_bombard(pdefender,unit_tile(punit),action_by_number(ACTION_BOMBARD3),true); 
+      }                
     } unit_list_iterate_safe_end;
   }
 
