@@ -4043,12 +4043,12 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
         } else if (shift && !ctrl) {
           key_unit_connect(EXTRA_IRRIGATION);
         }
-        else {
+        else if (!shift && !ctrl) {
           the_event.preventDefault(); // override possible browser shortcut
           key_unit_move(DIR8_NORTHWEST); // alt+I=8
         }
       }
-      else if (shift) key_unit_vigil();
+      else if (shift && !ctrl && !alt) key_unit_vigil();
       else if (!shift && !alt && !ctrl) key_unit_irrigate();
     break;
     case 'O':
