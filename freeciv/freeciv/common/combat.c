@@ -758,23 +758,52 @@ struct unit *get_defender(const struct unit *attacker,
 {
   struct unit *bestdef = NULL;
   int bestvalue = -99, best_cost = 0, rating_of_best = 0;
+  //float best_healer = 0
+  //float best_offense = 0;
+  //bool will_stack_die = is_stack_vulnerable(unit_tile(defender));
 
   /* Simply call win_chance with all the possible defenders in turn, and
-   * take the best one.  It currently uses build cost as a tiebreaker in
+   * take the best one. It currently uses build cost as a tiebreaker in
    * case 2 units are identical, but this is crude as build cost does not
-   * neccesarily have anything to do with the value of a unit.  This function
-   * could be improved to take the value of the unit into account.  It would
+   * necessarily have anything to do with the value of a unit. This function
+   * could be improved to take the value of the unit into account. It would
    * also be nice if the function was a bit more fuzzy about prioritizing,
    * making it able to fx choose a 1a/9d unit over a 10a/10d unit. It should
    * also be able to spare units without full hp's to some extent, as these
-   * could be more valuable later. */
+   * could be more valuable later. ** Of particular importance is whether 
+   * stack death takes place, in which case the absolute best defender is a
+   * lot more important than if it's 44 units in a Fortress, where a much 
+   * cheaper unit with 6% worse odds is a lot better volunteer to die first. */
+
+   /* 18April2022. build_cost now includes transported units who might drown!
+    * commented out are other potential tiebreakers but they don't seem
+    * necessary, but they are presented as inputs to a future smart fx
+    * will_stack_die = if (false), apply "fuzzy" rules to let almost-as-
+    *   strong defenders who are much cheaper, go first.
+    * best_hidden_value = all else equal, this damaged unit will be stronger
+    *   when it heals and therefore has better value.
+    * best_offense = all else equal, this unit has more "offensive utility",
+    *   valued as: attack strength = twice as important as mobility. */
   unit_list_iterate(ptile->units, defender) {
     /* We used to skip over allied units, but the logic for that is
      * complicated and is now handled elsewhere. */
     if (unit_can_defend_here(&(wld.map), defender)
         && unit_attack_unit_at_tile_result(attacker, defender, ptile) == ATT_OK) {
       bool change = FALSE;
+      // Tiebreakers:
       int build_cost = unit_build_shield_cost_base(defender);
+      /* drowned cargo can make this unit a lot more valuable! */
+      if (unit_list_size(defender->transporting) != 0) {
+        unit_list_iterate(defender->transporting, cunit) {
+          build_cost += unit_build_shield_cost_base(cunit);
+        } unit_list_iterate_end;
+      }
+    /* usable later in a fuzzy function:
+      float heal_value = unit_type(defender)->hp / (defender->hp+.00001);
+      float offense = 2.0 * get_attack_power(defender) / POWER_FACTOR
+                      + unit_type(defender)->move_rate / SINGLE_MOVE);
+    */
+
       int defense_rating = get_defense_rating(attacker, defender);
       /* This will make units roughly evenly good defenders look alike. */
       int unit_def 
@@ -789,23 +818,38 @@ struct unit *get_defender(const struct unit *attacker,
          * not handled. */
       }
 
+      /* better defender: always pick it! */
       if (unit_def > bestvalue) {
-	change = TRUE;
-      } else if (unit_def == bestvalue) {
-	if (build_cost < best_cost) {
-	  change = TRUE;
-	} else if (build_cost == best_cost) {
-	  if (rating_of_best < defense_rating) {	
-	    change = TRUE;
-	  }
-	}
+	      change = TRUE;
+      }
+      /* else if equal defender, do a tiebreaker */
+      else if (unit_def == bestvalue) {
+        /* cheaper but equal, pick it! */
+	      if (build_cost < best_cost) {
+	          change = TRUE;
+	      }
+        else if (build_cost == best_cost) {
+          /* super tiebreaker: cost and defense are 
+             same, so find any good reason: */
+	        if (rating_of_best < defense_rating) {	
+	          change = TRUE;
+          } /*
+          else if (best_healer < heal_value) {
+            change = TRUE
+          }
+          else if (best_offense < offense) {
+            change = TRUE;
+          } */
+        }
       }
 
       if (change) {
-	bestvalue = unit_def;
-	bestdef = defender;
-	best_cost = build_cost;
-	rating_of_best = defense_rating;
+        bestvalue = unit_def;
+        bestdef = defender;
+        best_cost = build_cost;
+        /*best_healer = heal_value;
+        best_offense = offense; */
+        rating_of_best = defense_rating;
       }
     }
   } unit_list_iterate_end;
