@@ -4487,6 +4487,11 @@ static bool unit_move_consequences(struct unit *punit,
 static void check_unit_activity(struct unit *punit)
 {
   switch (punit->activity) {
+  case ACTIVITY_UNKNOWN:         // VIGIL
+    if (!unit_transported(punit)) {
+      set_unit_activity(punit, ACTIVITY_IDLE);
+    }
+    break;
   case ACTIVITY_IDLE:
   case ACTIVITY_SENTRY:
   case ACTIVITY_EXPLORE:
@@ -4501,7 +4506,6 @@ static void check_unit_activity(struct unit *punit)
   case ACTIVITY_FORTRESS:
   case ACTIVITY_PILLAGE:
   case ACTIVITY_TRANSFORM:
-  case ACTIVITY_UNKNOWN:         // VIGIL
   case ACTIVITY_AIRBASE:
   case ACTIVITY_FORTIFYING:
   case ACTIVITY_FALLOUT:
