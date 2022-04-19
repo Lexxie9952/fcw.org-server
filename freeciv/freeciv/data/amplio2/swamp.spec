@@ -4,7 +4,7 @@ options = "+Freeciv-spec-Devel-2019-Jul-03"
 
 [info]
 artists = "
-	 Unknown
+	 Canik
 "
 ;modified substantially by Lexxie.
 
