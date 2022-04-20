@@ -3972,7 +3972,7 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
         the_event.stopPropagation();
         the_event.preventDefault(); // override possible browser shortcut
         show_tax_rates_dialog();
-      } else if (ctrl && alt && !shift) {
+      } else if (ctrl && alt /*&& !shift || shift*/) {
         the_event.preventDefault(); // override possible browser shortcut
         draw_city_traderoutes = !draw_city_traderoutes;
       } else key_unit_unload();
