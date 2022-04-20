@@ -166,6 +166,7 @@ function console_filter_radio_clicked(which_btn)
     $("li.e_imp_build").show();
     $("li.e_unit_built").show();
     $("li.e_imp_sold").show();
+    $("li.e_imp_auto").show();
     $("li.e_imp_buy").show();
     $("li.e_unit_buy").show();
     $("li.e_unit_built_pop_cost").show();
@@ -175,6 +176,7 @@ function console_filter_radio_clicked(which_btn)
     $("li.e_imp_build").hide();
     $("li.e_unit_built").hide();
     $("li.e_imp_sold").hide();
+    $("li.e_imp_auto").hide();
     $("li.e_imp_buy").hide();
     $("li.e_unit_buy").hide();
     $("li.e_unit_built_pop_cost").hide();
@@ -386,7 +388,7 @@ function console_filter_dialog()
       buttons  : buttons });
 
   $(id).dialog('open');
-  $(id).parent().css("zIndex", 151); // force placement over other windows.
+  $(id).parent().css("zIndex", 1051); // force placement over other windows.
   $(id).css("background","url(/images/bg-dark50.png)");
   $(id).next().css("text-align", "center");
   $(id).dialog('widget').position({my:"left top", at:"left center", of:window})
