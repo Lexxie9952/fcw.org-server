@@ -12,6 +12,7 @@ under the GNU Affero General Public License. See [License](LICENSE.txt) for the 
 
 Currently known servers based on Freeciv-web:
 - [Freecivweb.org](https://www.freecivweb.org) - Full Freeciv-web
+- [Freeciv TnT](https://www.tacticsandtriumph.com) - Freeciv-web Games & Mods (no PBEM)
 - [moving borders](https://fcw.movingborders.es) (Everything except longturn and real-Earth)
 
 ![Freeciv-web](https://raw.githubusercontent.com/Lexxie9952/fcw.org-server/master/fcw-2021.png "Freeciv-web screenshot")
