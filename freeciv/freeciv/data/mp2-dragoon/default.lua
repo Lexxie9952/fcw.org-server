@@ -216,7 +216,7 @@ end
 
 -- Randomly choose a hut event
 function _deflua_hut_enter_callback(unit)
-  local chance = random(0, 14)
+  local chance = random(0, 15)
   local alive = true
 
   if chance == 0 then
@@ -249,7 +249,7 @@ function _deflua_hut_enter_callback(unit)
     if not _deflua_hut_get_mercenaries(unit) then
       _deflua_hut_reveal_map(unit)
     end
-  elseif chance >= 12 then
+  else
     _deflua_hut_reveal_map(unit)
   end
 
