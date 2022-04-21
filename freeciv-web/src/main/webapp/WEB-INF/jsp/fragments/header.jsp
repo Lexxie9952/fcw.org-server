@@ -10,30 +10,29 @@
 		</button>
 		<a class="navbar-brand" href="/">
 			<!--Logo font is: Liberation Sans Bold Italic -->
-			<img src="/static/images/brand.png" alt="Freeciv-web">
+			<img src="/static/images/brand.png" alt="Freeciv TnT">
 		</a>
 		</div>
 
 		<!-- Collect the nav links, forms, and other panel-freeciv for toggling -->
 		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 		<ul class="nav navbar-nav">
-			<li><a href="/webclient/?action=new&amp;type=singleplayer">New Game</a></li>
+			<li><a href="/webclient/?action=new&amp;type=singleplayer">Singleplayer</a></li>
 			<li class="dropdown">
-				<a href="/game/list?v=singleplayer" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-					<span onclick="window.location='/game/list?v=singleplayer'">Online Games</span> <span class="caret"></span> <span class="badge ongoing-games-number" id="ongoing-games" title="Ongoing games"></span>
+				<a href="/game/list?v=multiplayer" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+					<span onclick="window.location='/game/list?v=multiplayer'">Multiplayer</span> <span class="caret"></span> <span class="badge ongoing-games-number" id="ongoing-games" title="Ongoing games"></span>
 				</a>
 				<ul class="dropdown-menu">
-					<li><a href="/game/list?v=singleplayer">Single-player</a></li>
+					<li><a href="/game/list?v=longturn">Official Games</a></li>
 					<li role="separator" class="divider"></li>
-					<li><a href="/game/list?v=multiplayer">Multiplayer</a></li>
+					<li><a href="/game/list?v=multiplayer">Unofficial Games</a></li>
 					<li role="separator" class="divider"></li>
-					<li><a href="/game/list?v=longturn">Longturn (1 turn/day)</a></li>
-					<li role="separator" class="divider"></li>
-					<li><a href="/game/list?v=play-by-email">Play by Email</a></li>
+					<li><a href="/game/list?v=singleplayer">Practice vs AI</a></li>
 				</ul>
 			</li>
-			<li id="donate_link"><a href="https://www.patreon.com/freecivweb">Please Donate</a></li>
-			<li><a href="https://github.com/Lexxie9952/fcw.org-server">Development</a></li>
+			<li id="donate_link"><a href="https://www.patreon.com/freeciv_val">Donations</a></li>
+			<li><a href="https://github.com/Canik05/freeciv-tnt">Source</a></li>
+			<li><a href="https://val.tacticsandtriumph.com/">TnT Valhalla</a></li>
 			<%--<li class="dropdown">
 				<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" title="${pageContext.request.locale.language} ${pageContext.request.locale.country}">
 					Language <span class="caret"></span>
@@ -51,7 +50,7 @@
 			<input type="hidden" name="sites" value="www.freeciv.org,forum.freeciv.org,freeciv.wikia.com">
 			<div class="form-group">
 				<div class="input-group">
-					<input type="text" class="form-control" name="q" placeholder="Search Freeciv...">
+					<input type="text" class="form-control" name="q" placeholder="Freeciv TnT">
 					<span class="input-group-btn">
 						<button class="btn btn-default" type="submit"><i class="fa fa-search"></i></button>
 					</span>
