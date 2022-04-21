@@ -13,11 +13,11 @@
         e.printStackTrace();
     }
 %>
-<title>${empty title ? "Freeciv-web - open source turn-based strategy game" : title}</title>
+<title>${empty title ? "Tactics & Triumph - Freeciv Games & Mods" : title}</title>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-<meta name="author" content="The Freeciv project">
-<meta name="description" content="Play Freeciv online in 2D or 3D! Freeciv is an empire-building strategy game starting at the dawn of time. Can you survive to dominate a modern world?">
+<meta name="author" content="Tactics & Triumph">
+<meta name="description" content="Play Freeciv TnT! Freeciv is an empire-building strategy game starting at the dawn of time. Can you survive to dominate a modern world?">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta property="og:image" content="/static/images/frontpage-jumbotron-alt.png" />
 
@@ -32,17 +32,6 @@
 
 <link rel="manifest" href="/static/manifest.json">
 
-<% if (gaTrackingId != null) { %>
-<script>
-	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-
-	ga('create', '<%= gaTrackingId %>', 'auto');
-	ga('send', 'pageview');  
-</script>
-<% } %>
 <% if (trackJsToken != null) { %>
 <script type="text/javascript">window._trackJs = { token: '<%= trackJsToken %>' };</script>
 <script type="text/javascript" src="https://cdn.trackjs.com/releases/current/tracker.js"></script>
@@ -61,55 +50,46 @@
 	body {
 		padding-top: 60px;
 		padding-bottom: 20px;
-		color: #ccc;
-  	background-image: url('/images/bg-dark.jpg'); 
-	}
-	a {
-    text-shadow: 1px 1px #000 !important;
-		color: #b1efef;
-	}
-	a:hover {
-    text-shadow: 1px 1px #005 !important;
-    color: #dcb;
-    text-decoration: underline;
+		color: #a8a8a8;
+  	background-image: url('/images/bg-alt-dark.jpg'); 
 	}
 	h1, h2, h3, h4, h5, h6 {
-		color: #85afaf;
+		color: #a8a8a8;
 		font-family: 'Freeciv', 'Segoe UI';
 		text-shadow: 1px 1px #222;
 	}
 	h1, h2, h3 {
 		font-family: 'Freeciv', 'Segoe UI';
-		border-bottom: 1px solid #827d70;
+		border-bottom: 2px solid #a8a8a8;
 	}
 	.table>thead>tr>th {
     vertical-align: bottom;
-    border-bottom: 2px solid #777;
+    border-bottom: 2px solid #060d15;
 	}
 	.table>thead>tr>th, .table>tbody>tr>th, .table>tfoot>tr>th, .table>thead>tr>td, .table>tbody>tr>td, .table>tfoot>tr>td {
-    border-top: 1px solid #7d7d7d;
+    border-top: 1px solid #060d15;
 	}
 	.input-group .form-control:first-child {
     border-bottom-right-radius: 0;
     border-top-right-radius: 0;
-    background: #000;
-    color: #ccc;
-    border-color: #444;
+    background: rgb(28, 14, 55);
+    color: #bbb5e1;
+    border-color: #5932ae;
 		border-radius: 6px 0px 0px 6px;
 	}
 	.input-group-btn:last-child>.btn, .input-group-btn:last-child>.btn-group {
-    background-color: #888;
-    background: #444;
+    background-color: #674292;
+    background: rgb(88, 45, 174);
     color: #000;
-    border-color: #444;
-    text-shadow: 1px 1px #888;
+    border-color: rgb(94, 43, 196);
+    text-shadow: 1px 1px rgb(118, 66, 123);
 	}
 	/* 
 	 * Delimits an area where to put content.
 	 */
 	.panel-freeciv {
 		background-color: rgba(243, 236, 209, 0.5);                
-		border-bottom: 1px solid #827d70;
+		border-bottom: 1px solid #2f251b;
 		border-radius: 3px;
 		margin-top: 1%;
 		padding: 1%;
@@ -140,7 +120,7 @@
 	 * The bootstrap theme we use adds some transparency, this ensure it is removed.
 	 */
 	.navbar-inverse {
-		background-color: #2220;
+		background-color: rgba(5, 55, 75, 0.24);
 		background: url(/images/bg-med-dark.jpg);
 	}
 	/*
@@ -155,7 +135,7 @@
 	}
 	.ongoing-games-number {
 		margin-left: 5px;
-		background:#be602d;
+		background:#55636e;
 	}
 	.nav {
 		font-size: 16px;
