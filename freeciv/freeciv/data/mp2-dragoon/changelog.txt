@@ -249,6 +249,8 @@ Foreign city: destroyer gov mustn't be Demo, Theo;
 city size 2-8; 
 Domestic city: only avail to Despo, Commie;
 15% foreign, must use (D)o command. size 1-8;
+spawns up to 5 partisans and 5 migrant refugees, but no more
+than 8 total spawned units
 ==============================================================
 35. Huts can now also give:
   * Small bulb awards (1-5 bulbs).
