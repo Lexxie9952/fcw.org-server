@@ -5804,6 +5804,52 @@ void handle_unit_autosettlers(struct player *pplayer, int unit_id)
 }
 
 /**********************************************************************//**
+  Handle request to get warcalc odds.
+**************************************************************************/
+void handle_warcalc_req(struct player *pplayer, int attacker_id,
+                             int defender_id)
+{
+  struct unit *attacker = game_unit_by_number(attacker_id);
+  struct unit *defender = game_unit_by_number(defender_id);
+
+  /* First, make sure player is allowed to query these odds: */
+  if (!attacker || !defender) {
+    return;
+  }
+  if (!can_player_see_unit(pplayer, attacker) ||
+      !can_player_see_unit(pplayer, defender)) {
+        return;
+  }
+
+  /* For attackers with 0 moves_left, warcalc people want to know the attack
+     strength @ full moves. To get that, we must turn tired_attack off: */
+  bool saved_setting = game.info.tired_attack;
+  if (attacker->moves_left <= 0) game.info.tired_attack = false;
+  float attackpower = get_total_attack_power(attacker, defender);
+  float defensepower = get_total_defense_power(attacker, defender);
+  game.info.tired_attack = saved_setting;
+
+  int attack_firepower, defense_firepower;
+
+  get_modified_firepower(attacker, defender,
+			 &attack_firepower, &defense_firepower);
+
+  struct packet_warcalc_reply p;
+  p.attack_strength = attackpower / POWER_FACTOR;
+  p.defend_strength = defensepower / POWER_FACTOR;
+  p.atk_mod_fp = attack_firepower;
+  p.def_mod_fp = defense_firepower;
+
+  notify_player(pplayer, unit_tile(attacker),
+            E_BEGINNER_HELP, ftc_server,
+            _("[`dice`] A:%.2f FP:%d D:%.2f FP:%d"),
+            p.attack_strength, attack_firepower,
+            p.defend_strength, defense_firepower);
+
+  send_packet_warcalc_reply(pplayer->current_conn, &p);
+}
+
+/**********************************************************************//**
   Update everything that needs changing when unit activity changes from
   old activity to new one.
 **************************************************************************/

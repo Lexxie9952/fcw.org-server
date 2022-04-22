@@ -2719,6 +2719,23 @@ function handle_ruleset_multiplier(packet)
   /* TODO: implement */
 }
 
+/************************************************************************//**
+  Handle server reply for warcalc data.
+****************************************************************************/
+function handle_warcalc_reply(packet)
+{
+  var a   = packet['attack_strength'];
+  var d   = packet['defend_strength'];
+  var afp = packet['atk_mod_fp'];
+  var dfp = packet['def_mod_fp'];
+
+  $("#id_astr").val(trim_decimals(a));
+  $("#id_dstr").val(trim_decimals(d));
+  $("#id_afp").val(afp);
+  $("#id_dfp").val(dfp);
+
+  $("#warcalc_calc_button").click(); //re-calc odds
+}
 
 /************************************************************************//**
   Returns true if the sound of an event in the chat_log history should not

@@ -2398,3 +2398,17 @@ PACKET_RALLY_PATH_REQ = 292; cs, dsend
   UNIT_TYPE utype_id;
   TILE goal;
 end
+
+# client request for warcalc data
+PACKET_WARCALC_REQ = 293; cs, dsend
+  UNIT attacker_id;
+  UNIT defender_id;
+end
+
+# server reply to client's warcalc request
+PACKET_WARCALC_REPLY = 294; sc, lsend
+  UFLOAT attack_strength;
+  UFLOAT defend_strength;
+  UINT16 atk_mod_fp;
+  UINT16 def_mod_fp;
+end

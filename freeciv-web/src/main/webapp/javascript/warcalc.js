@@ -105,6 +105,28 @@ function warcalc_swap_roles()
   }
 }
 /**************************************************************************
+  Ask server to factor all bonuses.
+*************************************************************************/
+function warcalc_request_server()
+{
+  if (!my_uid || !their_uid) return; // need two real units to swap
+  // Def. strength is existentially dependent on a real unit on a 
+  // real tile with terrain bonus, fortify state, etc.; other things
+  // depend on it being real too, so abort if there aren't 2 real units:
+  if ( !(units[my_uid] && units[their_uid]) ) return;
+
+  var packet = {
+      "pid"         : packet_warcalc_req,
+      "attacker_id" : (warcalc_role_mode == WARCALC_ATTACKING ? my_uid : their_uid),
+      "defender_id" : (warcalc_role_mode == WARCALC_ATTACKING ? their_uid : my_uid)
+    }
+
+  console.log(packet);
+
+  send_request(JSON.stringify(packet));
+}
+
+/**************************************************************************
   Flipping attacker and defender may result in different bonuses
   Returns false if there was an invalid unit / dead unit
 *************************************************************************/
