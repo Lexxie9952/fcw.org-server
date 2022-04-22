@@ -1663,6 +1663,11 @@ AC_CONFIG_FILES([Makefile
 	  data/webperimental/Makefile
 	  data/mpplus/Makefile
 	  data/mp2/Makefile
+	  data/mp2-ag/Makefile
+	  data/mp2-brava/Makefile
+	  data/mp2-caravel/Makefile
+	  data/mp2c-desert/Makefile
+	  data/mp2c-occ/Makefile
 	  data/scenarios/Makefile
 	  data/nation/Makefile
           data/ruledit/Makefile
