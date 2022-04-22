@@ -42,7 +42,6 @@ SRV_RE_FILES = \
 	mp2.serv \
 	mp2-ag.serv \
 	mp2-brava.serv \
-	mp2b-desert.serv \
 	mp2-caravel.serv \
 	mp2c-desert.serv \
 	mp2c-occ.serv
