@@ -579,12 +579,13 @@ function update_tech_screen()
   init_tech_screen();
   update_tech_tree();
 
-  var research_goal_text = "No research target selected.<br>Please select a technology now";
+  var research_goal_text = "No research target selected.<br>Please select one";
   if (techs[client.conn.playing['researching']] != null) {
     research_goal_text = touch_device ? "Current Research: " : "Research:"; 
     research_goal_text += techs[client.conn.playing['researching']]['name'];
   }
   if (techs[client.conn.playing['tech_goal']] != null) {
+    if (!techs[client.conn.playing['researching']]) research_goal_text = "No research target selected."
     if (!touch_device) research_goal_text += "<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Future Goal: ";
     else research_goal_text += "&nbsp;<font color='lightskyblue'>Future Goal:</font>"
     

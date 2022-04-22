@@ -195,8 +195,11 @@ function update_game_status_panel() {
     status_html += "<span style='cursor:pointer;' onclick='javascript:show_tax_rates_dialog();'><img class='sb' height='18px' style='margin-right:-4px' src='/images/e/gold.png' title='Gold Tax rate'> <b title='Gold Tax rate' style='color:#fff0d1'>" 
     + tax + "</b><span title='Gold Tax rate' style='color:#bcbcbc'>%</span> &nbsp;";
     status_html += "<img class='sb' height='17px' width='16px' style='margin-right:-1px' src='/images/e/quavers.png' title='Luxury rate'> <b title='Luxury rate' style='color:#f5e4ff'>" + lux + "</b><span title='Luxury rate' style='color:#bcbcbc'>%</span> &nbsp;";
-    const sci_title = "Science:\n"+(techs[client.conn.playing['researching']]===undefined ? "" : techs[client.conn.playing['researching']]['name']) +"\n"
-                    + client.conn.playing['bulbs_researched'] + " / " + client.conn.playing['researching_cost'] +" bulbs\n" + bulb_output_text;             
+    const sci_title = "Science:\n"+(techs[client.conn.playing['researching']]===undefined ? (techs[client.conn.playing['tech_goal']]===undefined ? "No goal" : techs[client.conn.playing['tech_goal']]['name']+" (goal)") 
+                                                                                          : techs[client.conn.playing['researching']]['name']) +"\n"
+                    + client.conn.playing['bulbs_researched']
+                    + (client.conn.playing['researching_cost'] ? " / " + client.conn.playing['researching_cost'] +" bulbs\n" + bulb_output_text
+                                                             : " extra bulbs\n" + bulb_output_text);             
     status_html += "<img class='sb' height='17px' style='margin-right:-2px' src='/images/e/sci.png' title='"+sci_title+"'> <b title='"+sci_title+"' style='color:#ebfaff'>" + sci + "</b><span title='"+sci_title+"' style='color:#bcbcbc'>%</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> ";
   
   } else if (server_settings != null && server_settings['metamessage'] != null) {    // Status message for gamemasters/admins/supercows:

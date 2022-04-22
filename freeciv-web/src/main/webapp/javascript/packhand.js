@@ -918,7 +918,8 @@ function handle_web_player_info_addition(packet)
       after LUA Player:give_bulbs(..). TODO: Remove after upstream fixes
       this bug: */
       var cur_tech = client.conn.playing['researching'];
-      client.conn.playing['bulbs_researched'] = client.conn.playing.advance_saved_bulbs[cur_tech];
+      if (client.conn.playing.advance_saved_bulbs[cur_tech] !== undefined)
+        client.conn.playing['bulbs_researched'] = client.conn.playing.advance_saved_bulbs[cur_tech];
 
       // TODO: should this be handled only once in handle_processing_finished() which is flagged
       // to be processed there by setting ui_update_nations_info = true (similar to func above?)
