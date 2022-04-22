@@ -39,7 +39,13 @@ SRV_RE_FILES = \
 	civ2civ3.serv \
 	sandbox.serv \
 	mpplus.serv \
-	mp2.serv
+	mp2.serv \
+	mp2-ag.serv \
+	mp2-brava.serv \
+	mp2b-desert.serv \
+	mp2-caravel.serv \
+	mp2c-desert.serv \
+	mp2c-occ.serv
 
 if SERVER
 SERVER_FILES = $(SRV_RE_FILES)
@@ -79,7 +85,12 @@ EXTRA_DIST = \
 	civ2civ3.serv \
 	sandbox.serv \
 	mpplus.serv \
-	mp2.serv
+	mp2.serv \
+	mp2-ag.serv \
+	mp2-brava.serv \
+	mp2-caravel.serv \
+	mp2c-desert.serv \
+	mp2c-occ.serv
 
 if CLIENT
 CLIENTDATADIRS = amplio2 misc flags buildings cimpletoon isotrident trident\
@@ -88,7 +99,7 @@ else
 CLIENTDATADIRS = 
 endif
 
-SRV_RE_DATADIRS = default classic civ1 civ2 sandbox multiplayer alien civ2civ3 webperimental mpplus mp2 nation
+SRV_RE_DATADIRS = default classic civ1 civ2 sandbox multiplayer alien civ2civ3 webperimental mpplus mp2 nation mp2-ag mp2-brava mp2-caravel mp2c-desert mp2c-occ
 if SERVER
 SERVERDATADIRS = $(SRV_RE_DATADIRS) scenarios
 else
