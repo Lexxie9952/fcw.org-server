@@ -276,7 +276,7 @@ A:D fighters:alpines (was substantially less, at a time when
     SAM Battery becomes available to make it even worse.)
 
 Stealth Fighter
-   A9 D6 Cost:85 was A8 D4.
+   A9 D6 Cost:80 was A8 D4.
 Jet Fighter
    A7 D6, was A6 D5. (better defender than escort fighter)
 Ground Strike Fighter

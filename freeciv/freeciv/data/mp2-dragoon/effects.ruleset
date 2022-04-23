@@ -806,6 +806,13 @@ reqs    =
     { "type", "name", "range"
       "UnitType", "Stealth Fighter", "Local"
     }
+[effect_stealth_multifighter_stack_escape_odds]
+type    = "Stack_Escape_Pct"
+value   = 7 ; 60% → 67%
+reqs    =
+    { "type", "name", "range"
+      "UnitType", "Stealth Multi-Fighter", "Local"
+    }
 [effect_stealth_bomber_stack_escape_odds]
 type    = "Stack_Escape_Pct"
 value   = 7 ; 60% → 67%

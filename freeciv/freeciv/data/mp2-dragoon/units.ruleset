@@ -3562,7 +3562,7 @@ Stack-Escape：60% odds to evade stack-death if attacker doesn’t have more mov
 name          = _("Multi-Fighter")
 class         = "AirProtect"
 tech_req      = "Avionics"
-obsolete_by   = "None"
+obsolete_by   = "Stealth Multi-Fighter"
 graphic       = "u.multifighter"
 graphic_alt   = "-"
 sound_move    = "m_jet_fighter"
@@ -3743,7 +3743,7 @@ sound_move    = "m_stealth_fighter"
 sound_move_alt = "m_generic"
 sound_fight   = "f_stealth_fighter"
 sound_fight_alt = "f_generic"
-build_cost    = 85
+build_cost    = 80
 pop_cost      = 0
 attack        = 9
 defense       = 6
@@ -3782,10 +3782,71 @@ helptext      = _("\
 The most advanced Fighter, with improved attack and longer range. Stealth Fighters can’t be seen unless adjacent\
  to an enemy. Stealth evasion gives a 25% bonus against all Anti-Air units, and reduces\
  SAM Batteries down to a smaller 25% bonus. A Stealth Fighter has no limit to the number\
- of attacks per turn it can do. \n
+ of attacks per turn it can do. \n\
 "), _("
 INTERCEPTOR：the Vigil order lets Stealth Fighters auto-attack adjacent Air units if they\
  have better attack odds. This unit can Vigil if it uses 4 move points or less. \n\
+"), _("
+Stack-Escape：67% odds to evade stack-death if attacker doesn’t have more moves than it does.\
+"), _("
+NOTE：GOTO disallows unit loss from lack of fuel. You\
+ can override this by moving to adjacent tiles.\
+")
+
+[unit_stealth_multifighter]
+name          = _("Stealth Multi-Fighter")
+class         = "AirProtect"
+tech_req      = "Stealth"
+obsolete_by   = "None"
+graphic       = "u.multistealth"
+graphic_alt   = "-"
+sound_move    = "m_stealth_fighter"
+sound_move_alt = "m_generic"
+sound_fight   = "f_stealth_fighter"
+sound_fight_alt = "f_generic"
+build_cost    = 95
+pop_cost      = 0
+attack        = 7
+defense       = 9
+hitpoints     = 20
+firepower     = 2
+move_rate     = 26
+vision_radius_sq = 12
+transport_cap = 0
+fuel          = 2
+uk_happy      = 0
+uk_shield     = 1
+uk_food       = 0
+uk_gold       = 0
+targets       = "Air", "AirProtect", "Air_High_Altitude", "Missile", "Balloon", "Helicopter", "LandRail", "Zeppelin"
+bonuses       =
+   { "flag", "type", "value"
+     "AntiAir", "DefenseDividerPct", 25
+     "AntiAir", "DefenseMultiplierPct", 25
+   }
+vision_layer  = "Stealth"
+flags         = "AirAttacker", "Unbribable", "HasNoZOC", "CanEscape", "AirProtector", "Provoking", "SentryAlways"
+veteran_names =
+  _("?vet_rank:green"),
+  _("?vet_rank:veteran"),
+  _("?vet_rank:hardened"),
+  _("?vet_rank:elite"),
+  _("?vet_rank:crack"),
+  _("?vet_rank:ace"),
+  _("?vet_rank:top gun")
+veteran_base_raise_chance = 40, 25, 16, 10, 10, 10, 0
+veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
+veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
+veteran_move_bonus = 0, 0, 0, 0, 9, 9, 9
+roles         = ""
+helptext      = _("\
+Stealth Multi-Fighters can’t be seen unless adjacent to an enemy. Stealth evasion gives a\
+ 25% bonus against all Anti-Air units, and reduces SAM Batteries down to a smaller 25% bonus.\
+ A Stealth Multi-Fighter has no limit to the number of attacks per turn it can do, and can\
+ Vigil any tile it occupies. \n\
+"), _("
+INTERCEPTOR：the Vigil order lets Stealth Fighters auto-attack adjacent Air units if they\
+ have better attack odds. \n\
 "), _("
 Stack-Escape：67% odds to evade stack-death if attacker doesn’t have more moves than it does.\
 "), _("
