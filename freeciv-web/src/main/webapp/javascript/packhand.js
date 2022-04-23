@@ -2723,6 +2723,7 @@ function handle_ruleset_multiplier(packet)
 /************************************************************************//**
   Handle server reply for warcalc data.
 ****************************************************************************/
+var warcalc_server_reply = false;
 function handle_warcalc_reply(packet)
 {
   var a   = packet['attack_strength'];
@@ -2735,6 +2736,7 @@ function handle_warcalc_reply(packet)
   $("#id_afp").val(afp);
   $("#id_dfp").val(dfp);
 
+  warcalc_server_reply = true;
   $("#warcalc_calc_button").click(); //re-calc odds
 }
 

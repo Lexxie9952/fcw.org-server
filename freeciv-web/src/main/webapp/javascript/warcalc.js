@@ -299,6 +299,12 @@ function warcalc_get_defense_bonus(punit)
 *************************************************************************/
 function warcalc_compute()
 {
+  /* Global var is set true if we are calling this immediately after
+     receiving a reply from server. ver_color differentiates server-
+     authenticated data to help verify the result */
+  var ver_color = warcalc_server_reply ? "; color:#9d9" : "";
+  warcalc_server_reply = false;
+
   //strength
   var att = $("#id_astr").val();
   var def = $("#id_dstr").val();
@@ -310,7 +316,7 @@ function warcalc_compute()
   var dfp = $("#id_dfp").val();
 
   var prob = 100 * warcalc_win_chance(att,ahp,afp,def,dhp,dfp);
-  $("#att_win").html("<br>Attacker has a <b style='font-size:115%'>"+prob.toFixed(2)+"%</b> chance to win.");
+  $("#att_win").html("<br>Attacker has a <b style='font-size:115%"+ver_color+"'>"+prob.toFixed(2)+"%</b> chance to win.");
   $("#def_win").html("Defender has a "+(100-prob).toFixed(2)+"% chance to win.");
   $("#wc_done_btn").show();
   expected_hitpoints(att,ahp,afp,def,dhp,dfp);
