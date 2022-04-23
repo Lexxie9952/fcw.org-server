@@ -25,7 +25,15 @@ The current and complete list of Freeciv-web controls can be found here:<br>
 
 <tr><td><img src="/images/orders/fortify_default.png"></td><td><span class="vctr"> Fortify</td><td><span class="hotkey">f</span></span></td></tr>
 
-<tr><td><img src="/images/orders/fortress.png"></td><td><span class="vctr"> Build Fort/Fortress or Buoy</td><td><span class="hotkey">shift-F</span></span></td></tr>
+<tr><td><img src="/images/orders/fort.png"></td><td><span class="vctr"> Build Fort</td><td><span class="hotkey">shift-F</span></span></td></tr>
+
+<tr><td><img src="/images/orders/fortress.png"></td><td><span class="vctr"> Build Fortress</td><td><span class="hotkey">shift-F</span></span></td></tr>
+
+<tr><td><img src="/images/orders/castle.png"></td><td><span class="vctr"> Build Castle</td><td><span class="hotkey">shift-F</span></span></td></tr>
+
+<tr><td><img src="/images/orders/bunker.png"></td><td><span class="vctr"> Build Bunker</td><td><span class="hotkey">shift-F</span></span></td></tr>
+
+<tr><td><img src="/images/orders/buoy.png"></td><td><span class="vctr"> Build Buoy</td><td><span class="hotkey">shift-F</span></span></td></tr>
 
 <tr><td><img src="/images/orders/go_and.png"></td><td><span class="vctr"> Go and do action</td><td><span class="hotkey">ctrl-alt-G (+SHIFT delay to next turn)</span></span></td></tr>
 
