@@ -16,7 +16,11 @@
   <ol id="pregame_message_area"></ol>
   <div id="pregame_chat_box" style="margin-bottom:20px">
     <i class="fa fa-commenting-o fa-2" aria-hidden="true" style="color: white; font-size: 160%;"></i>
-    <input id="pregame_text_input" style="width:75.5%" spellcheck="false" autocomplete="off" type="text" name="text_input" value=">" />
+    <!-- Prevent browsers from assuming pregame_text_input is a password/autofill field! -->
+    <input type="text" name="prevent_autofill" id="prevent_autofill" value="" style="display:none;" />
+    <input type="password" name="password_fake" id="password_fake" value="" style="display:none;" />
+    <!-- ^^ autofill killer ^^ -->
+    <input id="pregame_text_input" type="text" readonly onfocus="this.removeAttribute('readonly');" onblur="this.setAttribute('readonly','');" style="width:75.5%" spellcheck="false" autocomplete="off" name="text_input" value=">" />
   </div>
 </div>
 
