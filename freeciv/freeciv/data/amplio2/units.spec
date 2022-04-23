@@ -145,4 +145,5 @@ tiles = { "row", "column", "tag"
   4, 15, "u.worker2"          ; [Lexxie]
   4, 16, "u.missile_submarine" ;[Lexxie]
   4, 17, "u.bombs"            ; [Lexxie]
+  4, 18, "u.multistealth"     ; [Lexxie]
 }
