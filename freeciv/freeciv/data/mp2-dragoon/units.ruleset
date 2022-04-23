@@ -5204,10 +5204,10 @@ veteran_power_fact = 100
 veteran_move_bonus = 0
 roles         = ""
 helptext      = _("\
-Bombs are several tons of explosive payload. While bombers are considered\
- to carry standard weaponry included, the Bombs unit represents heavier\
- payloads of larger, higher grade weaponry. Only bombers with high capacity can\
- carry this unit. \n\
+While bombers carry standard weaponry included, the Bombs unit\
+ includes a payload of large numbers of smaller weaponry. This lets bombers\
+ disrupt target defenses before coming in for a riskier fatal\
+ strike. Only bombers with high capacity can carry this unit. \n\
 Bombs can only be moved by bombers or the airlift order. They can’t attack\
  from inside a domestic city. Bombs are cheap, but they damage more often than\
  kill, and even victory has a cost. Hidden expenses lie in logistics, delivery\
