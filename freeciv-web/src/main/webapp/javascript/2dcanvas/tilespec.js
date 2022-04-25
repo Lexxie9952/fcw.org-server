@@ -2495,7 +2495,8 @@ function create_unit_offset_arrays()
           vx -= 8; vy -= 8;
           break;
       case "Armor":
-          vx += 12; vy += 11;
+          dx -= 3; dy -= 6;
+          vx += 15; vy -= 13;
           break;
       case "Armor II":
           vx += 11; vy += 4;
@@ -2658,6 +2659,10 @@ function create_unit_offset_arrays()
           break;
       case "Legion":
           vx += 1; vy -= 8;
+          break;
+      case "Light Armor":
+          dx -= 1; dy -= 7
+          vx += 11; vy -= 11;
           break;
       case "Marines":
           dx += 2; dy += 2;
