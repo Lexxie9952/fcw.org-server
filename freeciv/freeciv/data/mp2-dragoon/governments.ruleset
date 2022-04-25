@@ -211,7 +211,7 @@ Theocracy is formed on religious beliefs which are the law of the land. \
 The people are devoted and often willing to die for their faith. Each city\
  has +1 happy citizen. Cities very\
  near a capital have very low corruption. Cost for enemies to incite cities or\
- bribe units is 2x, but Zealots cannot be bribed. Cost to incite foreign cities\
+ bribe units is 2x, but Zealots and Fanatics cannot be bribed. Cost to incite foreign cities\
  is reduced by a third. Enemies cannot establish embassies without first making\
  Ceasefire or Peace. \
 "), _("\
@@ -249,7 +249,7 @@ Content cities get a +1 trade bonus on irrigated tiles that\
  3 gold of free unit upkeep. Buildings with 1 upkeep are free.\
  The city with a Palace gets +40% production. \
 "), _("\
-Riflemen cost 5 less; Armor and Dive Bombers, 10 less.\
+Riflemen and Light Armor cost 5 less; Armor and Dive Bombers, 10 less.\
  Diplomats and Spies get +1 vet level. The effect of\
  Cathedrals and Michelangelo is reduced -1. Each city\
  gets the effects of a Supermarket for free.\
@@ -298,7 +298,7 @@ Police Stations cost 10 shields less.\
  Migrants can be made to help grow cities. Tile workers gain a ⅑ move\
  bonus and for every three worker turns of work put in, get a fourth\
  worker turn free. Cost of upgrades is 25% less. Riflemen are produced at +1 vet\
- level. Armor gets a +1 move bonus. Fighters and Dive Bombers have 50% higher odds of promotion. \n\
+ level. Armor types get a +1 move bonus. Fighters and Dive Bombers have 50% higher odds of promotion. \n\
 "), _("\
 No citizens are made unhappy by each aggressive unit.\n\
 8% Base corruption in capital,\n\

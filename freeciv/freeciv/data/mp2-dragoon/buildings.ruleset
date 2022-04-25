@@ -298,7 +298,7 @@ With a Barracks II, each new land unit built in a city will\
  automatically have Veteran V1 status, which means that its attack and\
  defense strengths are increased by 50%. Also, damaged land units\
  which stay in town for one full turn without moving are completely\
- restored. Obsolete by：Mobile Warfare.\
+ restored. Obsolete by：Combustion.\
 ")
 
 [building_sewer_system]
@@ -483,7 +483,7 @@ name		= _("Barracks III")
 genus		= "Improvement"
 reqs	=
     { "type", "name", "range"
-      "Tech", "Mobile Warfare", "Player"
+      "Tech", "Combustion", "Player"
     }
 graphic	= "b.barracks_iii"
 graphic_alt	= "b.barracks_i"
@@ -498,7 +498,7 @@ sound_alt	= "b_generic"
 helptext	= _("\
 With a Barracks III, each new land unit built in a city will\
  automatically have Veteran V1 status, which means that its attack and\
- defense strengths are increased by 50%.  Also, damaged land units\
+ defense strengths are increased by 50%. Also, damaged land units\
  which stay in town for one full turn without moving are completely\
  restored.\
 "), _("\
@@ -1374,7 +1374,7 @@ Sets your religious capital and second center of government. Loss of this\
  +50% under Monarchy, +50% under Theocracy, +25% under Communism, and\
  +15% under Nationalism.\
 "), _("\
- Under Theocracy, Zealots produced in the city with this building\
+ Under Theocracy, Zealots and Fanatics produced in the city with this building\
  are inspired by fervorous faith to +1 higher veteran level.\
 "), _("\
  Allows instantly switching to Theocracy government if Theocracy tech is\
@@ -2000,6 +2000,7 @@ graphic	= "b.isaac_newtons_college"
 graphic_alt	= "-"
 obsolete_by	=
     { "type", "name", "range"
+      "Tech", "Computers", "Player"
     }
 build_cost	= 420
 upkeep		= 0
@@ -2011,7 +2012,7 @@ Adds 100% of base science production to every city in your\
  nation that has a University.  That is, the boost that a\
  Library gives with no other science improvements is added\
  to the total science output in each city with a University.\
- This wonder is never obsolete.\
+ Obsolete by：Computers.\
 ")
 
 [building_js_bachs_cathedral]
@@ -2705,7 +2706,7 @@ graphic	= "b.sun_tzus_war_academy"
 graphic_alt	= "-"
 obsolete_by	=
     { "type", "name", "range"
-      "Tech", "Mobile Warfare", "Player"
+      "Tech", "Combustion", "Player"
     }
 build_cost	= 310
 upkeep		= 0
@@ -2716,7 +2717,7 @@ helptext	= _("\
 All your new military land units produced in cities in your nation\
  start with an additional veteran level (this is cumulative with any\
  Barracks in a city：with both, units are created as Hardened).\
- Obsolete by：Mobile Warfare.\
+ Obsolete by：Combustion.\
 ")
 
 [building_temple_of_artemis]

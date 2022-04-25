@@ -166,7 +166,7 @@ req1     = "Combustion"
 req2     = "Steel"
 graphic     = "a.automobile"
 graphic_alt = "-"
-helptext = _("Obsoletes Caravan, Wagon, Colossus.")
+helptext = _("Obsoletes Caravan, Wagon, Colossus. +1 move for Light Armor")
 cost = 4230
 
 [advance_avionics]
@@ -233,7 +233,7 @@ req2     = "Horseback Riding"
 flags    = ""
 graphic     = "a.chivalry"
 graphic_alt = "-"
-helptext = _("Obsoletes Horsemen, Chariots.")
+helptext = _("Obsoletes Horsemen, Chariot.")
 cost = 225
 
 [advance_code_of_laws]
@@ -252,6 +252,7 @@ req2     = "Advanced Flight"
 flags    = ""
 graphic     = "a.combined_arms"
 graphic_alt = "-"
+helptext = _("Obsoletes Riflemen, Zealots, Alpine Troops.")
 cost = 5650
 
 [advance_combustion]
@@ -261,7 +262,7 @@ req2     = "Explosives"
 flags    = ""
 graphic     = "a.combustion"
 graphic_alt = "-"
-helptext = _("Obsoletes Balloon. +1 move for Trains. +25% population pollution.")
+helptext = _("Obsoletes Balloon, Sun Tzu, Barracks II. +1 move for Trains. +25% population pollution.")
 cost = 3810
 
 [advance_communism]
@@ -281,7 +282,7 @@ req2     = "Radio"
 flags    = ""
 graphic     = "a.computers"
 graphic_alt = "-"
-helptext = _("Obsoletes Temple of Artemis.")
+helptext = _("Obsoletes Temple of Artemis, Isaac Newton’s College")
 cost = 15650
 
 [advance_conscription]
@@ -320,7 +321,7 @@ req2     = "Invention"
 flags    = ""
 graphic     = "a.democracy"
 graphic_alt = "-"
-helptext = _("Obsoletes Code of Hammurabi. Allows government Democracy.")
+helptext = _("Obsoletes Workers, Code of Hammurabi. Allows government Democracy.")
 cost = 950
 
 [advance_economics]
@@ -429,7 +430,7 @@ req2     = "Tactics"
 flags    = ""
 graphic     = "a.guerilla_warfare"
 graphic_alt = "-"
-helptext = _("Obsoletes Explorer. Globally unlocks defensive partisans.")
+helptext = _("Obsoletes Scout. Globally unlocks Partisan spawning.")
 cost = 3985
 
 [advance_gunpowder]
@@ -440,7 +441,7 @@ flags    = ""
 graphic     = "a.gunpowder"
 graphic_alt = "-"
 cost = 950
-helptext = _("Obsoletes Castle, Agōgē of Sparta, Barracks, earlier foot soldiers.")
+helptext = _("Obsoletes early foot soldiers, Castle, Barracks, Agōgē of Sparta.")
 
 [advance_horseback_riding]
 name     = _("Horseback Riding")
@@ -497,7 +498,7 @@ req2     = "Gunpowder"
 flags    = ""
 graphic     = "a.leadership"
 graphic_alt = "-"
-helptext = _("Obsoletes Horsemen, Chariot, Elephant, Knight, Crusader.")
+helptext = _("Obsoletes Horsemen, Chariot, Elephants, Knights, Crusaders.")
 cost = 1250
 
 [advance_literacy]
@@ -614,7 +615,6 @@ req2     = "Electronics"
 flags    = ""
 graphic     = "a.miniaturization"
 graphic_alt = "-"
-helptext = _("Obsoletes Lighthouse.")
 cost = 4490
 
 [advance_mobile_warfare]
@@ -624,7 +624,7 @@ req2     = "Tactics"
 flags    = ""
 graphic     = "a.mobile_warfare"
 graphic_alt = "-"
-helptext = _("Obsoletes Barracks II, Cavalry, Sun Tzu, Genghis Khan.")
+helptext = _("Obsoletes Cavalry, Light Armor, Genghis Khan.")
 cost = 5120
 
 [advance_monarchy]
@@ -693,7 +693,7 @@ req2     = "Electronics"
 flags    = ""
 graphic     = "a.nuclear_power"
 graphic_alt = "-"
-helptext = _("+2 moves for modern Sea units.")
+helptext = _("Obsoletes Submarine. +2 moves for modern Sea units.")
 cost = 5650
 
 [advance_philosophy]
@@ -851,7 +851,7 @@ req2     = "Nuclear Power"
 flags    = ""
 graphic     = "a.space_flight"
 graphic_alt = "-"
-helptext = _("Obsoletes earlier Bombers.")
+helptext = _("Obsoletes prior Bombers.")
 cost = 7680
 
 [advance_stealth]
@@ -861,6 +861,7 @@ req2     = "Avionics"
 flags    = ""
 graphic     = "a.stealth"
 graphic_alt = "-"
+helptext = _("Obsoletes AWACS, Multi-Fighter.")
 cost = 11920
 
 [advance_steam_engine]
@@ -1013,6 +1014,17 @@ cost = 50
 ;usually for cheaper than its parent req, that allows "specializing into" the parent tech more, 
 ;and so, the "Specialization" flag is used by FCW help it display it as a minor add-on attached
 ;to the parent, whereas other clients would just show it separately.
+[advance_combu2]
+name     = _("Combu.2")
+req1     = "Combustion"
+req2     = "Tactics"
+flags    = "Specialization"
+graphic     = "a.combustion" ;this pic won't be shown in the tech tree but will show in other places
+graphic_alt = "-"
+cost = 610
+helptext = _("Obsoletes Cavalry.")
+
+
 [advance_flight2]
 name     = _("Flight.2")
 req1     = "Flight"
@@ -1027,6 +1039,6 @@ name     = _("Radio.2")
 req1     = "Radio"
 req2     = "None"
 flags    = "Specialization"
-graphic     = "a.Combustion" ;this pic won't be shown in the tech tree but will show in other places
+graphic     = "a.radio" ;this pic won't be shown in the tech tree but will show in other places
 graphic_alt = "-"
 cost = 820

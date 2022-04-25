@@ -1239,6 +1239,7 @@ actor_reqs    =
       "UnitType",     "Legion",        "Local", FALSE 
       "UnitType",     "Siege Ram",     "Local", FALSE 
       "UnitType",     "Zealots",       "Local", FALSE 
+      "UnitType",     "Fanatics",      "Local", FALSE 
       "UnitType",     "Zeppelin",      "Local", FALSE 
       "UnitType",     "Marines",       "Local", FALSE 
       "UnitType",     "Battleship",    "Local", FALSE 
@@ -1399,13 +1400,14 @@ target_reqs    =
       "Extra", "Naval Base", "Local", TRUE
     }
 
-;Zealots can do skirmish assaults
-[actionenabler_zealot_skirmish_assault]
+;Zealots and Fanatics can do skirmish assaults
+[actionenabler_zealot_fanatic_skirmish_assault]
 action = "Bombard"
 actor_reqs    =
     { "type",         "name",           "range", "present"
       "UnitFlag",     "Bombarder",      "Local",  TRUE
-      "UnitType",     "Zealots",       "Local",  TRUE
+      "UnitFlag",     "Fanatic",        "Local",  TRUE  ; Zealots, Fanatics, Pilgrims
+      "UnitFlag",     "NonMil",         "Local",  FALSE ; !Pilgrims
       "UnitState",    "OnDomesticTile", "Local",  TRUE
       "MinMoveFrags", "1",              "Local",  TRUE
       "DiplRel",      "War",            "Local",  TRUE
@@ -1419,13 +1421,14 @@ target_reqs    =
       "Extra",    "Naval Base",   "Local", FALSE
       "TerrainClass",  "Oceanic", "Local", FALSE
     }
-;Zealots can infiltrate/skirmish foreign occupied cities
+;Zealots and Fanatics can infiltrate/skirmish foreign occupied cities
 [actionenabler_zealot_skirmish_original_city]
 action = "Bombard"
 actor_reqs    =
     { "type",         "name",           "range", "present"
       "UnitFlag",     "Bombarder",      "Local",  TRUE
-      "UnitType",     "Zealots",       "Local",  TRUE
+      "UnitFlag",     "Fanatic",        "Local",  TRUE  ; Zealots, Fanatics, Pilgrims
+      "UnitFlag",     "NonMil",         "Local",  FALSE ; !Pilgrims
       "MinMoveFrags", "1",              "Local",  TRUE
       "DiplRel",      "War",            "Local",  TRUE
       "Gov",          "Theocracy", "Player", TRUE
@@ -2450,13 +2453,13 @@ actor_reqs    =
 ; REMOVE LINE BELOW TO ALLOW GIVING UNITS TO ALLIES THROUGH HOME CITY COMMAND
       "DiplRel",   "Foreign",  "Local", FALSE
     }
-[actionenabler_change_ally_home_city_zealot_caliphate]
+[actionenabler_change_ally_home_city_zealot_fanatic_pilgrim]
 action = "Home City"
 actor_reqs    =
     { "type",      "name",        "range", "present"
       "UnitFlag",  "NoHome",      "Local", FALSE
       "UnitState", "HasHomeCity", "Local", TRUE
-      "UnitType",  "Zealots",     "Local", TRUE
+      "UnitFlag",  "Fanatic",     "Local", TRUE
     }
 target_reqs    =
     { "type", "name",      "range", "present"

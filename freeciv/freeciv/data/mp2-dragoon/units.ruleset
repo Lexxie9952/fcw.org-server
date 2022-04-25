@@ -187,6 +187,12 @@ veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
 ; **********************************************************************************
 ; **********************************************************************************
 ; missile flag not class, indicates suicide explosion and possibly other things.
+[unitclass_cargo]
+name          = _("?unitclass:Cargo")
+min_speed     = 1
+hp_loss_pct   = 0
+flags         = "BuildAnywhere", "ZOC", "TerrainSpeed"
+
 [unitclass_missile]
 name          = _("?unitclass:Missile")
 min_speed     = 1
@@ -237,14 +243,20 @@ helptext      = _("\
   • Only able to move on road tiles.\
 ")
 
-[unitclass_cargo]
-name          = _("?unitclass:Cargo")
-min_speed     = 1
-hp_loss_pct   = 0
-flags         = "BuildAnywhere", "ZOC", "TerrainSpeed"
-
 [unitclass_land]
 name          = _("?unitclass:Land")
+min_speed     = 1
+hp_loss_pct   = 0
+flags         = "TerrainSpeed", "DamageSlows", "CanOccupyCity", "BuildAnywhere",
+                "CollectRansom", "ZOC", "CanFortify", "CanPillage",
+                "TerrainDefense", "KillCitizen", "Airliftable", "BorderPolice",
+                "CargoRestrained"
+helptext      = _("\
+  • Can be airlifted from a suitable city.\
+")
+
+[unitclass_bigland]
+name          = _("?unitclass:Big Land")
 min_speed     = 1
 hp_loss_pct   = 0
 flags         = "TerrainSpeed", "DamageSlows", "CanOccupyCity", "BuildAnywhere",
@@ -934,7 +946,10 @@ Pilgrims are wayfaring migrants from Theocratic nations. Like Zealots,\
  of ecclesiastic authority, Pilgrims can be guided from one city to another in\
  order to transfer population from city to city. Pilgrims have no population\
  cost, so can be thought of as geographically controled rapture for the price\
- of 10 shields.\
+ of 10 shields. \n\
+"), _("\
+Pilgrims can Estabish Home City in any allied city that is Theocracy,\
+ allowing control to pass between nations who share the same faith.\
 ")
 
 [unit_proletarians]
@@ -1639,7 +1654,7 @@ name          = _("Zealots")
 class         = "Land"
 tech_req      = "Conscription"
 gov_req       = "Theocracy"
-obsolete_by   = "None"
+obsolete_by   = "Fanatics"
 graphic       = "u.zealots"
 graphic_alt   = "u.fanatics"
 sound_move    = "m_fanatics"
@@ -1753,8 +1768,8 @@ uk_happy      = 1
 uk_shield     = 0
 uk_food       = 0
 uk_gold       = 1
-embarks       = "Helicopter", "Land", "Sea", "LandRoad", "LandRail"
-disembarks    = "Helicopter", "Land", "Sea", "LandRoad", "LandRail"
+embarks       = "Helicopter", "Land", "Sea", "LandRoad", "LandRail", "Big Land" ;NB: currently no Big Land units are transports
+disembarks    = "Helicopter", "Land", "Sea", "LandRoad", "LandRail", "Big Land"
 targets       = "Sea", "Balloon", "Helicopter", "LandRail", "Zeppelin"
 flags         = "MultiSlot", "NonNativeAttack", "FootSoldier", "BeachLander",
                 "Capturer", "NeverBlocked", "Settlers", "CanHide", "WillNever",
@@ -1801,7 +1816,7 @@ graphic       = "u.groundtroops"
 graphic_alt   = "-"
 sound_move    = "m_riflemen"
 sound_move_alt = "m_generic"
-sound_fight   = "f_paratroopers"
+sound_fight   = "f_ground_troops"
 sound_fight_alt = "f_generic"
 build_cost    = 40
 pop_cost      = 0
@@ -1842,6 +1857,59 @@ Ground Troops upgrade earlier infantry with better weaponry. The\
  Ground Troops can stay fortified while attacking, and veterans\
  enjoy a +⅓ move bonus.\
 ")
+
+[unit_fanatics]
+name          = _("Fanatics")
+class         = "Land"
+tech_req      = "Combined Arms"
+gov_req       = "Theocracy"
+obsolete_by   = "None"
+graphic       = "u.fanatics"
+graphic_alt   = "u.fanatics"
+sound_move    = "m_fanatics"
+sound_move_alt = "m_generic"
+sound_fight   = "f_fanatics"
+sound_fight_alt = "f_riflemen"
+build_cost    = 25
+pop_cost      = 0
+attack        = 6
+defense       = 5
+hitpoints     = 20
+firepower     = 1
+move_rate     = 2
+vision_radius_sq = 4
+transport_cap = 0
+fuel          = 0
+city_size     = 1080; 000000,0,100,001110,0,0 = atk_bonus=0, max_kills=0, targets=4, move_cost=14 frags, sty_frtfy=0, reserved = 0
+uk_happy      = 2
+uk_shield     = 0
+uk_food       = 0
+uk_gold       = 1
+embarks       = "LandRoad", "LandRail", "Helicopter"    ; transport helicopter only
+disembarks    = "LandRoad", "LandRail", "Helicopter"
+targets       = "Balloon", "Helicopter", "LandRail"
+flags         = "Fanatic", "FootSoldier", "Capturer", "CantReachAir", "Unbribable", "Bombarder",
+                "Settlers", "CanHide", "MultiSlot", "WillNever"
+roles         = "DefendGood", "DefendGoodStartUnit", "FirstBuild"
+helptext      = _("\
+Fanatics are modern warriors devoted to a higher cause. They cannot be bribed. \
+"), _("\
+Theocratic nations can maintain Fanatics without paying\
+ their steep upkeep. (Fanatics are unhappy if not under Theocracy,\
+ requiring high upkeep to stay content.) Fanatics\
+ produced in a city with Ecclesiastical Palace are inspired by\
+ fervorous faith to +1 higher veteran level. \n\
+"), _("\
+Fanatics fervently defend their homeland, and can do surprise skirmish\
+ assaults to snipe and injure foreign occupants：Up to 4 invaders\
+ on the tile will endure three combat rounds without defense. Skirmish\
+ assaults can also be done to foreign occupied cities if they have\
+ a remaining Foreign National population. \n\
+"), _("\
+Fanatics can Estabish Home City in any allied city that is Theocracy,\
+ allowing control to pass between nations who share the same faith.\
+")
+bombard_rate = 3
 
 [unit_paratroopers]
 name          = _("Paratroopers")
@@ -1890,7 +1958,7 @@ paratroopers_mr_sub = 0
 [unit_mech_inf]
 name          = _("Mechanized Infantry")
 rule_name     = "Mech. Inf."
-class         = "Land"
+class         = "Big Land"
 tech_req      = "Mechanization"
 obsolete_by   = "None"
 graphic       = "u.mech_inf"
@@ -1920,7 +1988,9 @@ flags         = "MultiSlot", "Shield2Gold", "CantReachAir", "WillNever"
 roles         = "DefendGood", "DefendGoodStartUnit"
 helptext      = _("\
 Mechanized Infantry have the strongest general defense strength of any land unit.\
- They have decent attack strength in open field engagements, and excellent mobility. \
+ They have decent attack strength in open field engagements, and excellent mobility.\
+\nBig Land units can’t enter Mountains without a road or native base, and do not\
+ receive a move bonus from Rivers.\ 
 ")
 
 [unit_scout]
@@ -2193,7 +2263,7 @@ Dragoons are mounted warriors carrying early firearms.\
 name          = _("Cavalry")
 class         = "Land"
 tech_req      = "Tactics"
-obsolete_by   = "Armor"
+obsolete_by   = "Light Armor"
 graphic       = "u.cavalry"
 graphic_alt   = "-"
 sound_move    = "m_cavalry"
@@ -2227,9 +2297,49 @@ The combination of mobility and superior attack strength make Cavalry\
  the most feared offensive unit in their era.\
 ")
 
+[unit_light_armor]
+name          = _("Light Armor")
+class         = "Big Land"
+tech_req      = "Combu.2"
+obsolete_by   = "Armor"
+graphic       = "u.lightarmor"
+graphic_alt   = "-"
+sound_move    = "m_light_armor"
+sound_move_alt = "m_generic"
+sound_fight   = "f_light_armor"
+sound_fight_alt = "-"
+build_cost    = 65
+pop_cost      = 0
+attack        = 9
+defense       = 5
+hitpoints     = 25
+firepower     = 1
+move_rate     = 4
+vision_radius_sq = 4
+transport_cap = 0
+fuel          = 0
+uk_happy      = 1
+uk_shield     = 1
+uk_food       = 0
+uk_gold       = 0
+embarks       = "Helicopter"    ; transport helicopter only
+;disembarks    = "Helicopter"
+targets       = "Balloon", "Helicopter", "LandRail", "Zeppelin"
+flags         = "CantReachAir", "FortBuster", "WillNever"
+roles         = "AttackFastStartUnit", "Hunter"
+helptext      = _("\
+Light Armor is an early mechanized replacement for Cavalry. It is good for mobile offensives,\
+ and also defends better than any unit of its era. The discovery of Automobile gives\
+ +1 move point. Units inside Forts get no defense bonus against Light Armor.\
+ Units inside Fortresses get a reduced bonus of 1.67× instead of 2×. \
+\nBig Land units can’t enter Mountains without a road or native base, and do not\
+ receive a move bonus from Rivers. \n
+Communists pay 5 less for this unit.\
+")
+
 [unit_armor]
 name          = _("Armor")
-class         = "Land"
+class         = "Big Land"
 tech_req      = "Mobile Warfare"
 obsolete_by   = "Armor II"
 graphic       = "u.armor"
@@ -2263,14 +2373,15 @@ helptext      = _("\
 Armor is the mechanized equivalent of a Cavalry unit. They have high attack strength,\
  superb mobility, and the highest defense of any offensive unit. They are massive all-terrain\
  vehicles, well-suited for penetrating defensive fortifications：Units inside Forts get no defense\
- bonus against Armor. Units inside Fortresses get a reduced bonus of 1.67× instead of 2×. \n\
-Communists pay 10 less for this unit.\
- Stack-Escape：40% odds to evade stack-death if attacker doesn’t have more moves than it does.\
+ bonus against Armor. Units inside Fortresses get a reduced bonus of 1.67× instead of 2×. \
+\nBig Land units can’t enter Mountains without a road or native base, and do not\
+ receive a move bonus from Rivers. \nCommunists pay 10 less for this unit. \
+\nStack-Escape：40% odds to evade stack-death if attacker doesn’t have more moves than it does.\
 ")
 
 [unit_armor_ii]
 name          = _("Armor II")
-class         = "Land"
+class         = "Big Land"
 tech_req      = "Plastics"
 obsolete_by   = "None"
 graphic       = "u.armor_ii"
@@ -2309,7 +2420,9 @@ Armor II is the ultra-modern upgrade to Armor. It features high tech composite a
  electronic countermeasures (ECM). Forts and Fortresses gain no bonus against\
  its ability to blast and break through fortifications. ECM and composite armor\
  give a 50% defense bonus against Missiles. Unlike most land units,\
- Armor II can attack reachable units regardless of whether unreachable units protect the tile. \n\
+ Armor II can attack reachable units regardless of whether unreachable units protect the tile. \
+\nBig Land units can’t enter Mountains without a road or native base, and do not\
+ receive a move bonus from Rivers. \n\
 Stack-Escape：40% odds to evade stack-death if attacker doesn’t have more moves than it does.\
 ")
 
@@ -2604,7 +2717,7 @@ After Space Flight and 9 turns of service, AAA can be retrofitted to\
 
 [unit_mobile_sam]
 name          = _("Mobile SAM")
-class         = "Land"
+class         = "Big Land"
 tech_req      = "Space Flight"
 obsolete_by   = "None"
 graphic       = "u.mobile_sam"
@@ -2646,7 +2759,9 @@ The Mobile SAM is the strongest Anti-Air unit on the ground. It can\
  the AAA, it can attack non-native tiles but not while transported.\
  Transported Mobile SAMs can always defend their tile, even at sea.\
  The discovery of Laser gives all units on its tile a 33% chance to\
- survive nuclear attack. \n\
+ survive nuclear attack. \
+\nBig Land units can’t enter Mountains without a road or native base, and do not\
+ receive a move bonus from Rivers. \n\
 "), _("
 AAA can upgrade to Mobile SAM for free on its 9th turn of service.\
  The Convert order must be done in a domestic city and takes 3 turns.\
@@ -3398,7 +3513,7 @@ bonuses       =
       "Horse", "DefenseMultiplierPct", 50
       ;Cavalry is covered by it getting a separate "attack bonus of -50%"
    }
-cargo         = "Land", "LandAirSea", "LandNoKill"
+cargo         = "Land", "LandAirSea", "LandNoKill", "Big Land"
 flags         = "Helicopter", "AirAttacker", "Unbribable", "Provoking",
                 "CanEscape", "WillNever", "HasNoZOC", "NeverProtects"
                 ; Tranport Heli is provoking; Fighters do not like them.
@@ -3807,7 +3922,7 @@ sound_fight_alt = "f_generic"
 build_cost    = 95
 pop_cost      = 0
 attack        = 7
-defense       = 9
+defense       = 8
 hitpoints     = 20
 firepower     = 2
 move_rate     = 26
@@ -3940,7 +4055,7 @@ uk_happy      = 0
 uk_shield     = 0
 uk_food       = 0
 uk_gold       = 0
-cargo         = "Land", "LandNoKill", "LandAirSea", "Cargo"
+cargo         = "Land", "LandNoKill", "LandAirSea", "Big Land", "Cargo"
 flags         = "BadCityDefender", "HelpWonder", "TradeRoute", "CoastStrict", "NonMil", "HasNoZOC"
 veteran_names =
   _("?vet_rank:green"),
@@ -3990,7 +4105,7 @@ uk_happy      = 0
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-cargo         = "Land", "LandNoKill", "LandAirSea", "LandRoad", "Cargo"
+cargo         = "Land", "LandNoKill", "LandAirSea", "Big Land", "LandRoad", "Cargo"
 flags         = "BadCityDefender", "CantReachAir", "HelpWonder",
                 "TradeRoute", "Coast", "WillNever", "NonMil", "NonMilAttack"
 veteran_names =
@@ -4044,7 +4159,7 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-cargo         = "Land", "LandNoKill", "LandAirSea", "LandRoad"
+cargo         = "Land", "LandNoKill", "LandAirSea", "Big Land", "LandRoad"
 flags         = "BadCityDefender", "CantReachAir", "WillNever"
 veteran_names =
   _("?vet_rank:green"),
@@ -4093,7 +4208,7 @@ uk_happy      = 0
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-cargo         = "Land", "LandNoKill", "LandAirSea", "LandRoad", "Cargo"
+cargo         = "Land", "LandNoKill", "LandAirSea", "Big Land", "LandRoad", "Cargo"
 flags         = "BadCityDefender", "CantReachAir", "HelpWonder",
                 "Traderoute", "Only_Native_Attack", "WillNever", "NonMil", "NonMilAttack"
 veteran_names =
@@ -4145,7 +4260,7 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-cargo         = "Land", "LandNoKill", "LandAirSea", "LandRoad"
+cargo         = "Land", "LandNoKill", "LandAirSea", "Big Land", "LandRoad"
 flags         = "BadCityDefender", "CantReachAir", "WillNever"
 veteran_names =
   _("?vet_rank:green"),
@@ -4188,13 +4303,12 @@ hitpoints     = 10
 firepower     = 1
 move_rate     = 6
 vision_radius_sq = 2
-transport_cap = 1
+transport_cap = 0
 fuel          = 0
 uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-cargo         = "Land", "LandNoKill", "LandAirSea", "LandRoad", "Cargo"
 flags         = "BadCityDefender", "CantReachAir", "Only_Native_Attack", "WillNever"
 veteran_names =
   _("?vet_rank:green"),
@@ -4241,7 +4355,7 @@ uk_happy      = 0
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-cargo         = "Land", "LandNoKill", "LandAirSea", "LandRoad", "Cargo"
+cargo         = "Land", "LandNoKill", "LandAirSea", "Big Land", "LandRoad", "Cargo"
 flags         = "BadCityDefender", "CantReachAir", "Traderoute", "WillNever", "NonMil", "NonMilAttack"
 veteran_names =
   _("?vet_rank:green"),
@@ -4294,7 +4408,7 @@ uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
 targets       = "LandRail"
-cargo         = "Land", "LandNoKill", "LandAirSea", "Balloon", "LandRoad", "Cargo"
+cargo         = "Land", "LandNoKill", "LandAirSea", "Big Land", "Balloon", "LandRoad", "Cargo"
 flags         = "BadCityDefender", "CanEscape", "CantReachAir", "WillNever",
                 "NonMil", "NonMilAttack" ;  maritime trade can continue after Caravel expires.
 veteran_names =
@@ -4350,7 +4464,7 @@ uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
 targets       = "LandRail"
-cargo         = "Land", "LandNoKill", "LandAirSea", "LandRoad"
+cargo         = "Land", "LandNoKill", "LandAirSea", "Big Land", "LandRoad"
 bonuses       =
    { "flag", "type", "value"
      "NonNativeAttack", "DefenseMultiplier", 1    
@@ -4403,7 +4517,7 @@ uk_happy      = 0
 uk_shield     = 0
 uk_food       = 0
 uk_gold       = 1
-cargo         = "Land", "LandNoKill", "LandAirSea", "LandRoad", "Cargo", 
+cargo         = "Land", "LandNoKill", "LandAirSea", "Big Land", "LandRoad", "Cargo", 
                 "RiverShip", "Sea", "Submarine", "Trireme"
 flags         = "Settlers", "Infra", "CanRoad", "CanFortress", "Cant_Pillage", "NonMil",
                 "HasNoZOC", "NoVeteran", "Capturable", "Expellable", "BadCityDefender",
@@ -4456,7 +4570,7 @@ uk_happy      = 0
 uk_shield     = 0
 uk_food       = 0
 uk_gold       = 0
-cargo         = "Land", "LandNoKill", "LandAirSea", "Balloon", "LandRoad", "Cargo"
+cargo         = "Land", "LandNoKill", "LandAirSea", "Big Land", "Balloon", "LandRoad", "Cargo"
 flags         = "BadCityDefender", "HelpWonder", "Traderoute", "NonMil", "HasNoZOC", "NoVeteran"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
@@ -4496,7 +4610,7 @@ uk_happy      = 0
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-cargo         = "Land", "LandNoKill", "LandAirSea", "Balloon", "LandRoad", "Cargo", "Zeppelin"
+cargo         = "Land", "LandNoKill", "LandAirSea", "Big Land", "Balloon", "LandRoad", "Cargo", "Zeppelin"
 bonuses       =
    { "flag", "type", "value"
      "NonNativeAttack", "DefenseMultiplier", 1    
@@ -4834,7 +4948,7 @@ bonuses       =
      "Submarine", "DefenseMultiplier", 1
      "NonNativeAttack", "DefenseMultiplier", 1    
    }
-flags         = "BadCityDefender", "NoStackDeath", "CantReachAir", "WillNever", "Bombarder", "NeverBlocked"
+flags         = "BadCityDefender", "NoStackDeath", "CantReachAir", "WillNever", "Bombarder"
 veteran_names =
   _("?vet_rank:green"),
   _("?vet_rank:veteran"),
@@ -4849,8 +4963,8 @@ veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
 veteran_move_bonus = 0, 0, 0, 0, 9, 9, 9
 roles         = ""
 helptext      = _("\
-The Battleship is the supreme naval unit, with excellent offensive and defensive strength. It has a 2× defense bonus vs Submarines.\
- Because of the size and range of its guns, unreachable units cannot block it from attacking a tile. \n\
+The Battleship is the supreme naval unit, with excellent offensive and defensive strength.\
+ It has a 2× defense bonus vs Submarines. \n\
 Battleships may expend 5 move points to do a 3 round bombardment which hits up to 4 units within a stack, of which a maximum of one\
  can be killed. This can be done on any units within 2 tiles distance. Defending Battleships get a free bombardment against\
  Special Unit Attacks. \
@@ -5058,8 +5172,8 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-embarks       = "Submarine", "Sea", "Land"  ;since disallowing embark disallows "Transport Board" also, we must use actionenabler to disallow disembark
-disembarks    = "Submarine", "Sea", "Land"
+embarks       = "Submarine", "Sea", "Land", "Big Land"  ;since disallowing embark disallows "Transport Board" also, we must use actionenabler to disallow disembark
+disembarks    = "Submarine", "Sea", "Land", "Big Land"
 targets       = "LandRail", "Space"
 flags         = "NeverProtects", "FieldUnit", "OneAttack", "HasNoZOC", "Unbribable",
                 "CantReachAir", "Missile", "NeverBlocked", "WillNever"
@@ -5099,8 +5213,8 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-embarks       = "Submarine", "Sea", "Land"  ;since disallowing embark disallows "Transport Board" also, we must use actionenabler to disallow disembark
-disembarks    = "Submarine", "Sea", "Land"
+embarks       = "Submarine", "Sea", "Land", "Big Land"  ;since disallowing embark disallows "Transport Board" also, we must use actionenabler to disallow disembark
+disembarks    = "Submarine", "Sea", "Land", "Big Land"
 targets       = "Balloon", "Helicopter", "Air", "AirProtect", "Air_High_Altitude", "Missile", "Submarine", "LandRail", "LandRoad", "Space", "Zeppelin"
 flags         = "NeverProtects", "FieldUnit", "OneAttack", "Nuclear", "HasNoZOC", "Unbribable",
                 "NeverBlocked", "WillNever", "NoVeteran"
@@ -5146,8 +5260,8 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-embarks       = "Submarine", "Sea", "Land"  ;since disallowing embark disallows "Transport Board" also, we must use actionenabler to disallow disembark
-disembarks    = "Submarine", "Sea", "Land"
+embarks       = "Submarine", "Sea", "Land", "Big Land"  ;since disallowing embark disallows "Transport Board" also, we must use actionenabler to disallow disembark
+disembarks    = "Submarine", "Sea", "Land", "Big Land"
 targets       = "Balloon", "Helicopter", "Air", "AirProtect", "Air_High_Altitude", "Missile", "Submarine", "LandRail", "LandRoad", "Space", "Zeppelin"
 flags         = "NeverProtects", "FieldUnit", "OneAttack", "Nuclear", "HasNoZOC", "Unbribable",
                 "NeverBlocked", "WillNever", "NoVeteran"

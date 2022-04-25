@@ -999,6 +999,7 @@ reqs    =
       "UnitClass", "Air",              "Local", FALSE ; ...   "       "      "  "      "      "    "       "
       "UnitClass", "Air_High_Altitude","Local", FALSE ; ...   "       "      "  "      "      "    "       "
       "UnitClass", "AirProtect",       "Local", FALSE ; ...   "       "      "  "      "      "    "       "
+      "UnitType",  "Light Armor",      "Local", FALSE ; ...   "       "      "  "      "      "    "       "
       "UnitType",  "Armor",            "Local", FALSE ; ...   "       "      "  "      "      "    "       "
       "UnitType",  "Armor II",         "Local", FALSE ; ...   "       "      "  "      "      "    "       "
     }
@@ -3621,9 +3622,10 @@ reqs	=
 type    = "Veteran_Build"
 value	= 1
 reqs	=
-    { "type", "name", "range", "present"
-      "Building", "Ecclesiastical Palace", "City", TRUE
-      "UnitType", "Zealots", "Local", TRUE
+    { "type",     "name",                  "range", "present"
+      "Building", "Ecclesiastical Palace", "City",  TRUE
+      "UnitFlag", "Fanatic",               "Local", TRUE  ;Zealots and Fanatics
+      "UnitFlag", "NonMil",                "Local", FALSE
     }
 [effect_ecclesiastical_palace_gov_center]
 type    = "Gov_Center"
@@ -4800,6 +4802,15 @@ reqs	=
       "Tech", "Combustion", "Player"
       "UnitClass", "LandRail", "Local"
     }
+[effect_automobile_light_armor]
+type    = "Move_Bonus"
+value	= 9
+reqs	=
+    { "type", "name", "range"
+      "Tech", "Automobile", "Player"
+      "UnitType", "Light Armor", "Local"
+    }
+
 ;************************************************************************ Adam Smith
 [effect_asmiths_trading_co]
 type    = "Upkeep_Free"
@@ -8138,6 +8149,15 @@ reqs    =
       "Gov", "Nationalism", "Player", TRUE
     }
 ;NATIONALISM ARMOR MOVE BONUS
+[effect_light_armor_movement_nationalism]
+type    = "Move_Bonus"
+value	  = 9
+reqs    =
+    {
+      "type", "name", "range", "present"
+      "UnitType", "Light Armor", "Local", TRUE
+      "Gov", "Nationalism", "Player", TRUE
+    }    
 [effect_armor_movement_nationalism]
 type    = "Move_Bonus"
 value	  = 9
@@ -8224,6 +8244,16 @@ reqs    =
     {
       "type", "name", "range", "present"
       "UnitType", "Armor", "Local", TRUE
+      "Gov", "Communism", "Player", TRUE
+    }
+;COMMUNISM 5 shield discount Light Armor
+[effect_communist_light_armor]
+type    = "Unit_Build_Cost_Pct"
+value	  = -7
+reqs    =
+    {
+      "type", "name", "range", "present"
+      "UnitType", "Light Armor", "Local", TRUE
       "Gov", "Communism", "Player", TRUE
     }
 ;COMMUNISM No disorder from starvation

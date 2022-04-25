@@ -390,7 +390,7 @@ warmer_wetter_result = "Desert"
 warmer_drier_result  = "Desert"
 cooler_wetter_result = "Tundra"
 cooler_drier_result  = "Grassland"
-native_to            = "Land", "LandNoKill", "LandAirSea", "Air", "Balloon", "Zeppelin", "Missile", "Helicopter", "AirProtect", "Air_High_Altitude", "Bomb", "Space"
+native_to            = "Land", "LandNoKill", "LandAirSea", "Big Land", "Air", "Balloon", "Zeppelin", "Missile", "Helicopter", "AirProtect", "Air_High_Altitude", "Bomb", "Space"
 flags                = "Starter", "CanHaveRiver", "Low Land", "Flat Land"
 property_green       = 38
 property_temperate   = 38
@@ -435,7 +435,7 @@ warmer_wetter_result = "Swamp"
 warmer_drier_result  = "Swamp"
 cooler_wetter_result = "Tundra"
 cooler_drier_result  = "Tundra"
-native_to            = "Land", "LandNoKill", "LandAirSea", "Air", "Balloon", "Zeppelin", "Missile", "Helicopter", "AirProtect", "Air_High_Altitude", "Bomb", "Space"
+native_to            = "Land", "LandNoKill", "LandAirSea", "Big Land", "Air", "Balloon", "Zeppelin", "Missile", "Helicopter", "AirProtect", "Air_High_Altitude", "Bomb", "Space"
 flags                = "Starter", "CanHaveRiver", "Low Land", "Flat Land"
 property_green       = 69
 property_temperate   = 69
@@ -482,7 +482,7 @@ warmer_wetter_result = "Jungle"
 warmer_drier_result  = "Jungle"
 cooler_wetter_result = "no"
 cooler_drier_result  = "no"
-native_to            = "Land", "LandNoKill", "LandAirSea", "Air", "Balloon", "Zeppelin", "Missile", "Helicopter",
+native_to            = "Land", "LandNoKill", "LandAirSea", "Big Land", "Air", "Balloon", "Zeppelin", "Missile", "Helicopter",
                        "AirProtect", "Air_High_Altitude", "Bomb", "Space"
 flags                = "Starter", "CanHaveRiver", "Low Land"
 property_cold        = 21
@@ -531,7 +531,7 @@ warmer_wetter_result = "Ocean"
 warmer_drier_result  = "Lake"
 cooler_wetter_result = "Grassland"
 cooler_drier_result  = "Grassland"
-native_to            = "Land", "LandNoKill", "LandAirSea", "Air", "Balloon", "Zeppelin", "Missile", "Helicopter",
+native_to            = "Land", "LandNoKill", "LandAirSea", "Big Land", "Air", "Balloon", "Zeppelin", "Missile", "Helicopter",
                        "AirProtect", "Air_High_Altitude", "Bomb", "Space"
 flags                = "CanHaveRiver", "Low Land"
 property_wet         = 85
@@ -577,7 +577,7 @@ warmer_wetter_result = "Grassland"
 warmer_drier_result  = "no"
 cooler_wetter_result = "Plains"
 cooler_drier_result  = "Plains"
-native_to            = "Land", "LandNoKill", "LandAirSea", "Air", "Balloon", "Zeppelin", "Missile", "Helicopter", "AirProtect", "Air_High_Altitude", "Bomb", "Space"
+native_to            = "Land", "LandNoKill", "LandAirSea", "Big Land", "Air", "Balloon", "Zeppelin", "Missile", "Helicopter", "AirProtect", "Air_High_Altitude", "Bomb", "Space"
 flags                = "CanHaveRiver", "Oil", "Low Land", "Flat Land"
 property_dry         = 69
 property_tropical    = 35
@@ -627,7 +627,7 @@ warmer_wetter_result = "no"
 warmer_drier_result  = "no"
 cooler_wetter_result = "Forest"
 cooler_drier_result  = "Forest"
-native_to            = "Land", "LandNoKill", "LandAirSea", "Air", "Balloon", "Zeppelin", "Missile", "Helicopter",
+native_to            = "Land", "LandNoKill", "LandAirSea", "Big Land", "Air", "Balloon", "Zeppelin", "Missile", "Helicopter",
                        "AirProtect", "Air_High_Altitude", "Bomb", "Space"
 flags                = "CanHaveRiver", "Low Land"
 property_foliage     = 31
@@ -671,7 +671,7 @@ warmer_wetter_result = "no"
 warmer_drier_result  = "no"
 cooler_wetter_result = "no"
 cooler_drier_result  = "no"
-native_to            = "Land", "LandNoKill", "LandAirSea", "Air", "Balloon", "Zeppelin", "Missile", "Helicopter",
+native_to            = "Land", "LandNoKill", "LandAirSea", "Big Land", "Air", "Balloon", "Zeppelin", "Missile", "Helicopter",
                        "AirProtect", "Air_High_Altitude", "Bomb", "Space"
 flags                = "Starter", "CanHaveRiver"
 property_mountainous = 55
@@ -765,7 +765,7 @@ warmer_wetter_result = "Grassland"
 warmer_drier_result  = "Plains"
 cooler_wetter_result = "Glacier"
 cooler_drier_result  = "Glacier"
-native_to            = "Land", "LandNoKill", "LandAirSea", "Air", "Balloon", "Zeppelin", "Missile", "Helicopter", "AirProtect", "Air_High_Altitude", "Bomb", "Space"
+native_to            = "Land", "LandNoKill", "LandAirSea", "Big Land", "Air", "Balloon", "Zeppelin", "Missile", "Helicopter", "AirProtect", "Air_High_Altitude", "Bomb", "Space"
 flags                = "Starter", "NoBarbs", "CanHaveRiver", "Low Land", "Flat Land"
 property_cold        = 17
 property_frozen      = 7
@@ -808,7 +808,7 @@ warmer_wetter_result = "Tundra"
 warmer_drier_result  = "Tundra"
 cooler_wetter_result = "no"
 cooler_drier_result  = "no"
-native_to            = "Land", "LandNoKill", "LandAirSea", "Air", "Balloon", "Zeppelin", "Missile", "Helicopter", "AirProtect", "Air_High_Altitude", "Bomb", "Space"
+native_to            = "Land", "LandNoKill", "LandAirSea", "Big Land", "Air", "Balloon", "Zeppelin", "Missile", "Helicopter", "AirProtect", "Air_High_Altitude", "Bomb", "Space"
 flags                = "NoBarbs", "NoCities", "CanHaveRiver", "Oil", "Frozen", "Flat Land"
 property_frozen      = 30
 property_cold        = 2
@@ -1524,7 +1524,7 @@ disappearance_chance    = 1500     ; 1500/10000 = 15% per turn if unoccupied
 build_time     = 3
 removal_time   = 0
 unit_seen      = "Hidden"
-native_to      = "Land", "LandAirSea", "LandNoKill", "Helicopter"
+native_to      = "Land", "LandAirSea", "LandNoKill", "Big Land", "Helicopter"
 flags          = "NativeTile", "NoStackDeath"
 helptext       = _("\
 Since the dawn of time, camouflaged and concealed terrain has been\
@@ -1634,7 +1634,7 @@ build_time     = 1
 removal_time   = 0
 ;conflicts      = "Fortress", "Naval Base", "Castle", "Bunker"
 defense_bonus  = 0
-native_to      = "Land", "LandAirSea", "LandNoKill"
+native_to      = "Land", "LandAirSea", "LandNoKill", "Big Land"
 ;hidden_by      = "Fortress", "Naval Base", "Castle", "Bunker"
 flags          = "ShowFlag", "NativeTile"
 helptext       = _("\
@@ -1669,7 +1669,7 @@ reqs           =
     }
 build_time     = 3
 removal_time   = 0
-native_to      = "Land", "LandAirSea", "LandNoKill", "LandRoad", "Helicopter", "Balloon", "AirProtect"
+native_to      = "Land", "LandAirSea", "LandNoKill", "Big Land", "LandRoad", "Helicopter", "Balloon", "AirProtect"
 hidden_by      = "Fortress", "Naval Base", "Castle", "Bunker"
 flags          = "NativeTile", "NoStackDeath"  ;, "Refuel"
 ;NOTE: effect_fortress_regen should give 25% of 20HP to helicopter, +1hp for being stationary
@@ -1715,7 +1715,7 @@ build_time     = 5
 removal_time   = 0
 conflicts      = "Naval Base"
 defense_bonus  = 67
-native_to      = "Land", "LandAirSea", "LandNoKill", "LandRoad", "Cargo", "Helicopter", "Balloon", "Zeppelin"
+native_to      = "Land", "LandAirSea", "LandNoKill", "Big Land", "LandRoad", "Cargo", "Helicopter", "Balloon", "Zeppelin"
 hidden_by      = "Castle", "Bunker"
 flags          = "NativeTile", "Refuel", "NoStackDeath", "FortressHeal"
 helptext       = _("\
@@ -1758,8 +1758,8 @@ build_time     = 8
 removal_time   = 0
 conflicts      = "Fortress", "Castle", "Bunker"
 defense_bonus  = 67
-native_to      = "Trireme", "RiverShip", "Sea", "Submarine", "Balloon", "Zeppelin", 
-                 "Land", "LandRoad", "Cargo", "LandAirSea", "LandNoKill", "Helicopter"
+native_to      = "Trireme", "RiverShip", "Sea", "Submarine", "Balloon", "Zeppelin", "Land",
+                 "LandRoad", "Big Land", "Cargo", "LandAirSea", "LandNoKill", "Helicopter"
 flags          = "NativeTile", "NoStackDeath", "Refuel", "FortressHeal"
 helptext       = _("\
 Naval bases are coastal Fortresses with ocean access. They allow ships to enter and\ 
@@ -1796,7 +1796,7 @@ reqs           =
 build_time     = 11
 removal_time   = 0
 unit_seen      = "Hidden"
-native_to      = "Land", "LandAirSea", "LandNoKill", "LandRoad", "Cargo", "Helicopter", "Balloon", "Zeppelin"
+native_to      = "Land", "LandAirSea", "LandNoKill", "Big Land", "LandRoad", "Cargo", "Helicopter", "Balloon", "Zeppelin"
 conflicts      = "Airbase", "Naval Base", "Bunker"
 flags          = "NativeTile", "Refuel", "NoStackDeath", "FortressHeal"
 helptext       = _("\
@@ -1837,7 +1837,7 @@ reqs           =
 build_time     = 36
 removal_time   = 0
 unit_seen      = "Hidden"
-native_to      = "Land", "LandAirSea", "LandNoKill", "LandRoad", "Cargo", "Helicopter", "Balloon", "Zeppelin"
+native_to      = "Land", "LandAirSea", "LandNoKill", "LandRoad", "Big Land", "Cargo", "Helicopter", "Balloon", "Zeppelin"
 conflicts      = "Airbase", "Naval Base", "Castle"
 flags          = "NativeTile", "Refuel", "NoStackDeath", "FortressHeal"
 helptext       = _("\
@@ -1958,7 +1958,7 @@ reqs           =
     }
 buildable      = FALSE
 removal_time   = 0
-native_to      = "Land", "LandNoKill", "LandAirSea"
+native_to      = "Land", "LandNoKill", "LandAirSea", "Big Land"
 flags          = "TerrChangeRemoves", "NoStackDeath"
 helptext       = _("\
 Ruins mark the former site of a city that was destroyed or abandoned. Land units in Ruins\
@@ -1988,7 +1988,7 @@ reqs           =
     }
 build_time     = 2
 removal_time   = 0
-native_to      = "Land", "LandRoad", "LandAirSea", "LandNoKill", "Trireme", "Cargo", "Balloon", "Zeppelin", "RiverShip"
+native_to      = "Land", "LandRoad", "LandAirSea", "LandNoKill", "Big Land", "Trireme", "Cargo", "Balloon", "Zeppelin", "RiverShip"
 ;hidden_by      = ""
 flags          = "NativeTile"
 helptext       = _("\
@@ -2034,7 +2034,7 @@ reqs           =
     }
 build_time     = 0
 removal_time   = 0
-native_to      = "Land", "LandRoad", "LandAirSea", "LandNoKill", "Trireme", "Cargo", "Balloon", "Zeppelin", "RiverShip"
+native_to      = "Land", "LandRoad", "LandAirSea", "LandNoKill", "Big Land", "Trireme", "Cargo", "Balloon", "Zeppelin", "RiverShip"
 ;hidden_by      = ""
 flags          = "NativeTile", "AutoOnCityCenter"
 helptext       = _("\
@@ -2060,7 +2060,7 @@ reqs           =
     }
 build_time     = 0
 removal_time   = 0
-native_to      = "Land", "LandNoKill", "LandAirSea", "LandRoad"
+native_to      = "Land", "LandNoKill", "LandAirSea", "LandRoad", "Big Land"
 hidden_by      = "Railroad", "Maglev", "Naval Base"
 flags          = "AutoOnCityCenter", "NativeTile", "Railable"
 bridged_over   = "River"
@@ -2094,7 +2094,7 @@ reqs           =
     }
 build_time     = 3
 removal_time   = 0
-native_to      = "Land", "LandNoKill", "LandAirSea", "LandRail"
+native_to      = "Land", "LandNoKill", "LandAirSea", "LandRail", "Big Land" ;NB:by making this non-native we could equalize movement without "Train" unit 
 hidden_by      = "Maglev", "Naval Base"
 flags          = "AutoOnCityCenter", "NativeTile"
 bridged_over   = "River"
@@ -2131,7 +2131,7 @@ reqs           =
     }
 build_time     = 3
 removal_time   = 0
-native_to      = "Land", "LandNoKill", "LandAirSea", "LandRail"
+native_to      = "Land", "LandNoKill", "LandAirSea", "LandRail", "Big Land"
 hidden_by      = "Naval Base"
 flags          = "NativeTile", "AutoOnCityCenter"
 helptext       = _("\
@@ -2170,7 +2170,7 @@ reqs           =
 build_time = 2
 removal_time = 0
 flags          = "NativeTile", "Quayable", "IrrigationSource", "WaterwaySource"
-native_to      = "Land", "LandNoKill", "LandAirSea", "Trireme", "RiverShip"
+native_to      = "Land", "LandNoKill", "LandAirSea", "Trireme", "RiverShip" ;NOTE: "Big Land" doesn't use rivers like a road 
 helptext       = _("\
 Any land terrain type may have a River on it.  A River adds 1\
  trade to the resources produced by that tile. It also adds +0.50 to\
@@ -2203,7 +2203,7 @@ reqs           =
     }
 build_time     = 12
 removal_time   = 0
-native_to      = "Land", "LandNoKill", "LandAirSea", "LandRoad"
+native_to      = "Land", "LandNoKill", "LandAirSea", "LandRoad", "Big Land"
 flags          = "NativeTile", "Railable"
 helptext          = _("\
 Sea Bridges are engineering marvels which span lakes and seas to connect them for \
@@ -2251,7 +2251,7 @@ build_time     = 2
 removal_time   = 8
 conflicts      = "Fortress", "Naval Base", "Castle", "Bunker", "Airbase", "River", "Canal", "Waterway"
 defense_bonus  = 0
-native_to      = "Land", "LandNoKill", "LandAirSea", "LandRoad"
+native_to      = "Land", "LandNoKill", "LandAirSea", "LandRoad", "Big Land"
 flags          = "NativeTile"
 helptext          = _("\
 If you own the Great Wall, Walls can be built on land not held by a foreign
@@ -2285,7 +2285,7 @@ reqs           =
     }
 build_time     = 10
 removal_time   = 0
-native_to      = "Trireme", "Sea", "RiverShip", "Land", "LandAirSea", "LandNoKill", "Helicopter", "Submarine"
+native_to      = "Trireme", "Sea", "RiverShip", "Land", "LandAirSea", "LandNoKill", "Helicopter", "Submarine" ; not native to "Big Land", like River
 flags          = "NativeTile", "Quayable", "IrrigationSource", "WaterwaySource"
 helptext          = _("\
 Canals allow ships to travel through land tiles. Canals can be built on \
@@ -2313,7 +2313,7 @@ reqs           =
     }
 build_time     = 10
 removal_time   = 0
-native_to      = "Trireme", "Sea", "RiverShip", "Land", "LandAirSea", "LandNoKill", "Helicopter", "Submarine"
+native_to      = "Trireme", "Sea", "RiverShip", "Land", "LandAirSea", "LandNoKill", "Helicopter", "Submarine" ; not native to "Big Land", like River
 flags          = "NativeTile", "Quayable", "IrrigationSource"
 helptext          = _("\
 Waterways are navigational channels that connect canals with rivers. Essentially, they're the same as canals.\
