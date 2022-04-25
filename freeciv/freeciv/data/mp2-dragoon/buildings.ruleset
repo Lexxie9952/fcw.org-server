@@ -285,7 +285,7 @@ graphic	= "b.barracks_ii"
 graphic_alt	= "b.barracks_i"
 obsolete_by	=
     { "type", "name", "range"
-      "Tech", "Mobile Warfare", "Player"
+      "Tech", "Combustion", "Player"
       "Building", "Barracks III", "City"
     }
 build_cost	= 35
@@ -296,7 +296,7 @@ sound_alt	= "b_generic"
 helptext	= _("\
 With a Barracks II, each new land unit built in a city will\
  automatically have Veteran V1 status, which means that its attack and\
- defense strengths are increased by 50%.  Also, damaged land units\
+ defense strengths are increased by 50%. Also, damaged land units\
  which stay in town for one full turn without moving are completely\
  restored. Obsolete by：Mobile Warfare.\
 ")
