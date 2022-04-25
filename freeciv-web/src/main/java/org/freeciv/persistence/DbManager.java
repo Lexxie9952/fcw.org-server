@@ -22,7 +22,7 @@ public class DbManager {
 	}
 
 	public static String getQuerySaltHash() {
-		return " SELECT secure_hashed_password FROM auth " //
+		return " SELECT secure_hashed_password,digest_pw FROM auth " //
 				+ " WHERE LOWER(username) = LOWER(?) AND activated = '1' " //
 				+ " LIMIT 1 ";
 	}
@@ -148,8 +148,8 @@ public class DbManager {
 	}
 
 	public static String getQueryInsertAuthPlayer() {
-		return "INSERT INTO auth (username, email, secure_hashed_password, activated, ip) " //
-				+ "VALUES (?, ?, ?, ?, ?)";
+		return "INSERT INTO auth (username, email, secure_hashed_password, activated, ip, digest_pw) " //
+				+ "VALUES (?, ?, ?, ?, ?, TRUE)";
 	}
 	
     public static String getQueryInsertCheater() {
