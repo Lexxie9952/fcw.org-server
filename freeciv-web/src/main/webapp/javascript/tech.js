@@ -90,6 +90,7 @@ var tech_canvas = null;
 var tech_canvas_ctx = null;
 
 var tech_item_width = 207;
+var special_tech_item_width = 58;
 var tech_item_height = 52;
 var maxleft = 0;
 var clicked_tech_id = null;
@@ -473,7 +474,7 @@ function get_tech_item_width(ptech) {
 
   if (!ptech.boxwidth) {
     const is_special = (ptech.flags[0] == TECH_SPECIAL_TECH); // "child" techs
-    var twidth  = !is_special ? tech_item_width : tech_item_width/2; 
+    var twidth  = !is_special ? tech_item_width : special_tech_item_width; 
     /* If we don't know how many things this tech enables, set it */
     if (!techs[ptech.id].things) {
       techs[ptech.id].things = get_improvements_from_tech(ptech.id).length;
@@ -491,7 +492,7 @@ function get_tech_item_width(ptech) {
         var twidth = tw1 < tw2 ? tw2 : tw1; // pick the greater of the 2
       }
     } else { // special child tech:
-      var tw1 = twidth - 6 * (16-ptech.name.length);      // 5px = width char
+      var tw1 = twidth - 6 * (7-ptech.name.length);      // 6px = width char
       var tw2 = twidth - 28 * (3-techs[ptech.id].things); // 28px = size of an image
       var twidth = tw1 < tw2 ? tw2 : tw1;                 // pick the greater of the 2
     }
