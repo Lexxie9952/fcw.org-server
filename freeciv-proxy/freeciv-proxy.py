@@ -35,6 +35,7 @@ import mysql.connector
 import configparser
 import urllib.request
 import urllib.parse
+import hashlib
 
 PROXY_PORT = 8002
 CONNECTION_LIMIT = 1000
@@ -115,12 +116,11 @@ class WSHandler(websocket.WebSocketHandler):
 
     def on_close(self):
         if hasattr(self, 'civcom') and self.civcom is not None:
-            mycivcom = self.civcom
+            self.civcom.stopped = True
+            self.civcom.close_connection()
+            if self.civcom.key in list(civcoms.keys()):
+                del civcoms[self.civcom.key]
             del(self.civcom)
-            mycivcom.stopped = True
-            mycivcom.close_connection()
-            if mycivcom.key in list(civcoms.keys()):
-                del civcoms[mycivcom.key]
             gc.collect()
 
     # Check user authentication
@@ -159,17 +159,38 @@ class WSHandler(websocket.WebSocketHandler):
             return "password"
 
     def check_user_password(self, cursor, username, password):
-        query = ("select secure_hashed_password, CAST(ENCRYPT(%(pwd)s, secure_hashed_password) AS CHAR), activated from auth where lower(username)=lower(%(usr)s)")
-        cursor.execute(query, {'usr': username, 'pwd': password})
+        # Encryption method transition period code. Clear out first query and
+        # compat_encrypt use after the transition period.
+        query = ("select digest_pw from auth where lower(username) = lower(%(usr)s)")
+        cursor.execute(query, {'usr': username})
+        result = cursor.fetchall()
+        if len(result) == 0:
+            return True
+        compat_encrypt = not result[0][0]
+        if compat_encrypt:
+            query = ("select secure_hashed_password, CAST(ENCRYPT(%(pwd)s, secure_hashed_password) AS CHAR), activated, id from auth where lower(username)=lower(%(usr)s)")
+            cursor.execute(query, {'usr': username, 'pwd': password})
+        else:
+            query = ("select secure_hashed_password, activated from auth where lower(username)=lower(%(usr)s)")
+            cursor.execute(query, {'usr': username})
         result = cursor.fetchall()
 
         if len(result) == 0:
             # Unreserved user, no password needed
             return True
 
-        for db_pass, encrypted_pass, active in result:
-            if (active == 0): return False
-            if db_pass == encrypted_pass: return True
+        if compat_encrypt:
+            for db_pass, encrypted_pass, active, uid in result:
+                if (active == 0): return False
+                if db_pass == encrypted_pass:
+                    new_hash = hashlib.sha256(password.encode('utf-8')).hexdigest()
+                    query = ("update auth set secure_hashed_password = %(pwd)s, digest_pw = TRUE where id = %(uid)s;")
+                    cursor.execute(query, {'pwd': new_hash, 'uid': uid})
+                    return True
+        else:
+            for secure_shashed_password, active in result:
+                if (active == 0): return False
+                if secure_shashed_password == hashlib.sha256(password.encode('utf-8')).hexdigest(): return True
 
         return False
 
@@ -197,8 +218,8 @@ class WSHandler(websocket.WebSocketHandler):
             if (int(civserverport) < 5000):
                 return None
             civcom = CivCom(username, int(civserverport), key, self)
-            civcoms[key] = civcom
             civcom.start()
+            civcoms[key] = civcom
 
             return civcom
         else:
