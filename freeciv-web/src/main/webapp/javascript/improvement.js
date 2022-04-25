@@ -56,6 +56,7 @@ var sorted_improvements = [];
 // Discounted price lists from MP2 rules
 var communist_discounts = {
   "Riflemen": 5,
+  "Light Armor": 5,
   "Dive Bomber": 10,
   "Armor": 10
 };
