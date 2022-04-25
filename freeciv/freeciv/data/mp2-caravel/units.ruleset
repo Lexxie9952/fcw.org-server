@@ -3755,13 +3755,12 @@ hitpoints     = 10
 firepower     = 1
 move_rate     = 6
 vision_radius_sq = 2
-transport_cap = 1
+transport_cap = 0
 fuel          = 0
 uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-cargo         = "Land", "LandNoKill", "LandAirSea", "LandRoad", "Cargo"
 flags         = "BadCityDefender", "CantReachAir", "Only_Native_Attack", "WillNever"
 veteran_names =
   _("?vet_rank:green"),
