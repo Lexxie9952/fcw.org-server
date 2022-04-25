@@ -756,8 +756,9 @@ var reqtree_mp2c = {
         91: {x: 416, y: 0, col:1},   // Writing
         /* Begin "Specialization Add-On techs". Use this as a model
          * exemplar of how to position relative to parent tech */
-        92: {x: (3700+44), y: (351+49)}, //Flight.2
-        93: {x: (3951+44), y: (594+49)}  //Radio.2
+        92: {x: (3488+44), y: (188+49)}, //Combust.2
+        93: {x: (3700+44), y: (351+49)}, //Flight.2
+        94: {x: (3951+44), y: (594+49)}  //Radio.2
     };
 
     /*
