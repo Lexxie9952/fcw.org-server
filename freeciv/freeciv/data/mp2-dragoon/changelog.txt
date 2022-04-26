@@ -608,7 +608,8 @@ bonuses.
    as non-military and couldn't do diplomatic missions 
    to nations with whom you're at peace.
 ==============================================================
-9. Theocracy spawns Zealots instead of Partisans 
+9. Theocracy spawns Zealots instead of Partisans; Fanatics if
+available.
 ==============================================================
 10. Wild Animal hunting now gives food (for edible types).
 /set animals >0
