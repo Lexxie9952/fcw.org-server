@@ -78,6 +78,7 @@ function console_filter_radio_clicked(which_btn)
     $("li.e_spaceship").show();
     $("li.e_new_government").show();
     $("li.e_uprising").show();
+    $("li.e_destroyed").show();
     $("li.e_anarchy").show();
     $("li.e_embassy_was_expelled").show();
     $("li.e_embassy_did_expel").show();
@@ -123,6 +124,7 @@ function console_filter_radio_clicked(which_btn)
     $("li.e_spaceship").hide();
     $("li.e_new_government").hide();
     $("li.e_uprising").hide();
+    $("li.e_destroyed").hide();
     $("li.e_anarchy").hide();
     $("li.e_embassy_was_expelled").hide();
     $("li.e_embassy_did_expel").hide();
