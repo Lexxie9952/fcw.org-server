@@ -400,6 +400,17 @@ V. Misc*
    Chemistry 900 (800)
    Astronomy, Feudalism, Trade, Republic 150 (145)
 
+Steam Engine gains Magnetism as req.2 (was Invention)
+Automobile loses Steel req (redundant)
+Avionics gains Computers as req.2 (was "None")
+Combined Arms gains Computers as req.2 (was "M.Warfare")
+Computers gains Mechanization (L.U.) as req2 (was Mass Prod)
+Radar gains Mechanization (L.U.) as req2 (was Electronics (redundant)
+Radio gains Miniaturization as req2 (was "None")
+Rocketry gains Computers as req.2 (was Miniaturization)
+Space Flight gains Nuclear Power as req.2 (was Computers)
+
+
    Misc techs rounded to clean numbers. 
    Philosophy now gives a 70% blueprint instead of a full tech.
 =============================================================
@@ -817,11 +828,27 @@ bonus as Zealots.
 131.Pilgrims can establish home city in allied theocractic
 cities, just like Zealots and Fanatics.
 ==============================================================
-132.
+132.ERA BOUNDARIES - subtly increase balance and realism 
+and subtly reduces proportional influence of "tech-rushing"
+vs. other game influences. ERA Boundaries have double 
+tech costs and expire more buildngs and wonders.
+
+Gunpowder costs 2x, expires BARRACKS, AGOGE.
+   Magnetism,Steam Engine +100 bulbs also.
+   some other techs in this tier area have increases
+
+Combustion costs 3x, expires BARRACKS II and SUN TZU
+
+Computers costs 2x, expires Artemis, Isaac.
 ==============================================================
-133.
+133. Armor II price decrease (original 85 cost balanced 
+   2x missile bonus but also made it too expensive for its
+   primary purpose which isn't missile defense. Now missile
+   defence is 1.5x and cost is more suited for its primary
+   roles.)
 ==============================================================
-134.
+134. Armor reduced in cost to 75 (80 was prohibitively not
+     useful)
 ==============================================================
 135.
 ==============================================================

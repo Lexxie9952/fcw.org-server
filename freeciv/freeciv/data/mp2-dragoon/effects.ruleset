@@ -8239,7 +8239,7 @@ reqs    =
 ;COMMUNISM 10 shield discount Armor
 [effect_communist_armor]
 type    = "Unit_Build_Cost_Pct"
-value	  = -12
+value	  = -13
 reqs    =
     {
       "type", "name", "range", "present"

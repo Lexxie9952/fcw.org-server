@@ -163,7 +163,7 @@ cost = 1080
 [advance_automobile]
 name     = _("Automobile")
 req1     = "Combustion"
-req2     = "Steel"
+req2     = "None"
 graphic     = "a.automobile"
 graphic_alt = "-"
 helptext = _("Obsoletes Caravan, Wagon, Colossus. +1 move for Light Armor")
@@ -263,7 +263,7 @@ flags    = ""
 graphic     = "a.combustion"
 graphic_alt = "-"
 helptext = _("Obsoletes Balloon, Sun Tzu, Barracks II. +1 move for Trains. +25% population pollution.")
-cost = 3810
+cost = 7620
 
 [advance_communism]
 name     = _("Communism")
@@ -430,7 +430,7 @@ req2     = "Tactics"
 flags    = ""
 graphic     = "a.guerilla_warfare"
 graphic_alt = "-"
-helptext = _("Obsoletes Scout. Globally unlocks Partisan spawning.")
+helptext = _("Obsoletes Scout. Globally unlocks Partisan effects.")
 cost = 3985
 
 [advance_gunpowder]
@@ -440,7 +440,7 @@ req2     = "Feudalism"
 flags    = ""
 graphic     = "a.gunpowder"
 graphic_alt = "-"
-cost = 950
+cost = 1900
 helptext = _("Obsoletes early foot soldiers, Castle, Barracks, Agōgē of Sparta.")
 
 [advance_horseback_riding]
@@ -530,7 +530,7 @@ flags    = ""
 graphic     = "a.magnetism"
 graphic_alt = "-"
 helptext = _("Obsoletes Caravel.")
-cost = 875
+cost = 975
 
 [advance_map_making]
 name     = _("Map Making")
@@ -620,7 +620,7 @@ cost = 4490
 [advance_mobile_warfare]
 name     = _("Mobile Warfare")
 req1     = "Automobile"
-req2     = "Tactics"
+req2     = "Miniaturization"
 flags    = ""
 graphic     = "a.mobile_warfare"
 graphic_alt = "-"
@@ -874,7 +874,7 @@ flags    = ""
 graphic     = "a.steam_engine"
 graphic_alt = "-"
 helptext = _("Obsoletes Frigate, Hanging Gardens. Ends Colossus discount on Commerce units.")
-cost = 1240
+cost = 1340
 
 [advance_steel]
 name     = _("Steel")
