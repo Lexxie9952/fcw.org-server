@@ -139,7 +139,7 @@ function update_game_status_panel() {
     if (!is_small_screen()) {
       var pplayer = client.conn.playing;
       var pnation = nations[pplayer['nation']];
-      var tag = pnation['graphic_str'];
+      var tag = pnation ? pnation['graphic_str'] : null;
   
       var civ_flag = "";
       if (!pnation['customized']) {

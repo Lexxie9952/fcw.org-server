@@ -548,7 +548,7 @@ function update_mouse_cursor()
   } else if ( (goto_active||rally_active) && current_goto_turns == null) {
     /* show invalid goto cursor*/
     $("#canvas_div").css("cursor", "not-allowed");
-  } else if (pcity != null && client.conn.playing != null && city_owner_player_id(pcity) == client.conn.playing.playerno) {
+  } else if (pcity != null && client.conn.playing != null && player_can_see_inside_city(pcity)) {
     /* select city cursor*/
     $("#canvas_div").css("cursor", "pointer");
   } else if (punit != null && client.conn.playing != null && punit['owner'] == client.conn.playing.playerno) {
@@ -3394,8 +3394,8 @@ function do_map_click(ptile, qtype, first_time_called)
 
   else {
     if (pcity != null) { //if city clicked
-      if (pcity['owner'] == client.conn.playing.playerno && !mouse_click_mod_key['shiftKey']) { //if city is your own
-        //console.log("Clicked our own city.");
+      if (player_can_see_inside_city(pcity) && !mouse_click_mod_key['shiftKey']) { // if allowed to look inside and not shift-clicking
+        //console.log("Clicked a city we're allowed to see inside...");
         if (sunits != null && sunits.length > 0 //if units inside
             && sunits[0]['activity'] == ACTIVITY_IDLE //if unit idle/selectable
             && sunits[0]['owner'] == client.conn.playing.playerno  // if foreign-allied occupant we don't want to select the unit

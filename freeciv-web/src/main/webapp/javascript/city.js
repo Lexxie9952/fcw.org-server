@@ -142,6 +142,18 @@ function city_owner(pcity)
 }
 
 /**************************************************************************
+ Returns true if a player can see inside the city.
+**************************************************************************/
+function player_can_see_inside_city(pcity)
+{
+/*  Formerly we assumed only the owner can see inside a city.
+    That's wrong (investigate city, allied shared vision, etc.)
+    If the client has info on the city's worklist, then we can
+    see inside the city. */
+  return (pcity.worklist !== undefined);
+}
+
+/**************************************************************************
  Removes a city from the game
 **************************************************************************/
 function remove_city(pcity_id)
@@ -1224,10 +1236,10 @@ function get_shields_remaining(pcity)
 /**************************************************************************
 ...
 **************************************************************************/
-function generate_production_list()
+function generate_production_list(pcity)
 {
   var production_list = [];
-  const gov_id = players[client.conn.playing.playerno].government;
+  const gov_id = city_owner(pcity).government;
 
   // THIS was a clean-up of DIRTY hard-coding. If it fails, see commits for 23Feb2021 to revert.
   for (var unit_type_id in unit_types) {
@@ -2606,12 +2618,13 @@ function city_worklist_dialog(pcity)
 **************************************************************************/
 function populate_worklist_production_choices(pcity)    
 {
-  const gov_id = players[client.conn.playing.playerno].government;
+  //const gov_id = players[client.conn.playing.playerno].government;
+  const gov_id = city_owner(pcity).government
   var small = is_small_screen();
 
   if (!sorted_improvements.length) build_sorted_improvements_array();
 
-  var production_list = generate_production_list();
+  var production_list = generate_production_list(pcity);
   var production_html = "<table class='worklist_table'><tr style='background-color:#0004'><td>Type</td><td>Name</td><td style='padding-right:30px; text-align:right'>Info</td><td>Cost</td></tr>";
   for (var a = 0; a < production_list.length; a++) {
     var sprite = production_list[a]['sprite'];
