@@ -1793,7 +1793,8 @@ function update_unit_order_commands()
       if (client_rules_flag[CRF_MP2_C]) {
         if (ptype['name']=="Goods" || ptype['name']=="Well-Digger" || ptype['name']=="Tribesmen" || ptype['name']=="Freight") {
           $("#order_disband").show();
-          var city_prod_name = get_city_production_type(pcity)['name']; 
+          let city_prod = get_city_production_type(pcity);
+          var city_prod_name = city_prod ? city_prod['name'] : null;
           if (!city_prod_name) city_prod_name = "Production";
           $("#order_disband").prop('title', 'Help Build '+city_prod_name+' (shift-D)');
         }
