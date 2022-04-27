@@ -590,7 +590,7 @@ void send_tile_info(struct conn_list *dest, struct tile *ptile,
       }
 
       send_packet_tile_info(pconn, &info);
-    } else if (send_unknown) {
+    } else {
       info.known = TILE_UNKNOWN;
       info.continent = 0;
       info.owner = MAP_TILE_OWNER_NULL;
