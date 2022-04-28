@@ -367,7 +367,7 @@ static const char *search_for_city_name(struct tile *ptile,
 bool is_allowed_city_name(struct player *pplayer, const char *cityname,
 			  char *error_buf, size_t bufsz)
 {
-  //struct connection *pconn = conn_by_user(pplayer->username);
+  struct connection *pconn = conn_by_user(pplayer->username);
 
   /* Mode 1: A city name has to be unique for each player. */
   if (CNM_PLAYER_UNIQUE == game.server.allowed_city_names
@@ -421,22 +421,22 @@ bool is_allowed_city_name(struct player *pplayer, const char *cityname,
   }
 
   /* To prevent abuse, only players with HACK access (usually local
-   * connections) can use non-ascii names.  Otherwise players could use
+   * connections) can use non-ascii names. Otherwise players could use
    * confusing garbage names in multi-player games.
    *
    * We can even reach here for an AI player, if all the cities of the
    * original nation are exhausted and the backup nations have non-ascii
-   * names in them. 
-  if (!is_ascii_name(cityname)
+   * names in them. */
+  if (!is_safe_name(cityname)
       && (!pconn || pconn->access_level != ALLOW_HACK)) {
     if (error_buf) {
       fc_snprintf(error_buf, bufsz,
-                  _("%s is not a valid name. Only ASCII or "
-                    "ruleset names are allowed for cities."),
+                  _("%s is not a valid name. Only alphanumeric "
+                    "names are allowed for cities."),
                   cityname);
     }
     return FALSE;
-  }*/
+  }
 
 
   return TRUE;

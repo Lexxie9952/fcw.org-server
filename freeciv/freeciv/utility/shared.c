@@ -230,6 +230,41 @@ static bool is_ascii(char ch)
 }
 
 /************************************************************************//**
+  Check that the given char is NOT a non-textual symbol that can mess
+  with scripts, break scripts, be used to inject scripts, break or
+  create markdown, and so on:  
+****************************************************************************/
+static bool is_script_safe(char ch)
+{
+  switch (ch) {
+    case '&':
+    case '|':
+    case '^':
+    case '%':
+    case ',':
+    case '*':
+    case '\0':
+    case '<':
+    case '>':
+    case '[':
+    case ']':
+    case '(':
+    case ')':
+    case '{':
+    case '}':
+    case ':':
+    case '/':
+    case '\\':
+    case '=':
+    case '"':
+      return false;
+      break;
+    default:
+      return true;
+  }
+}
+
+/************************************************************************//**
   Check if the name is safe security-wise.  This is intended to be used to
   make sure an untrusted filename is safe to be used.
 ****************************************************************************/
@@ -261,7 +296,7 @@ bool is_safe_filename(const char *name)
   This is used in sundry places to make sure that names of cities,
   players etc. do not contain yucky characters of various sorts.
   Returns TRUE iff the name is acceptable.
-  FIXME:  Not internationalised.
+  FIXME:  Not internationalised. (See fix in function below):
 ****************************************************************************/
 bool is_ascii_name(const char *name)
 {
@@ -288,6 +323,36 @@ bool is_ascii_name(const char *name)
       if (name[i] == illegal_chars[j]) {
       	return FALSE;
       }
+    }
+  }
+
+  /* otherwise, it's okay... */
+  return TRUE;
+}
+
+/************************************************************************//**
+  This is used in sundry places to make sure that names of cities,
+  players etc. do not contain yucky characters of various sorts.
+  Returns TRUE iff the name is acceptable. It's a revision of 
+  is_ascii_name(), in order to allow internationalised names
+****************************************************************************/
+bool is_safe_name(const char *name)
+{
+  int i;
+  /* must not be NULL or empty */
+  if (!name || *name == '\0') {
+    return FALSE;
+  }
+
+  /* must begin and end with some non-space character */
+  if ((*name == ' ') || (*(strchr(name, '\0') - 1) == ' ')) {
+    return FALSE;
+  }
+
+  /* must be composed entirely of non-illegal characters: */
+  for (i = 0; name[i]; i++) {
+    if (!is_script_safe(name[i])) {
+      return FALSE;
     }
   }
 

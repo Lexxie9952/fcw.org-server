@@ -34,6 +34,7 @@ var ping_last = new Date().getTime();
 var pingtime_check = 240000;
 var ping_timer = null;
 var last_user_action_time = new Date().getTime();
+/* to disable auto-logout, use:  kick_inactive_time = Number.MAX_VALUE; */
 var kick_inactive_time = 40 * 60000; // 40min inactive = kick off time
 
 /* Tracking and knowing ping performance can be used later to adjust 
@@ -218,76 +219,30 @@ function network_stop()
 ****************************************************************************/
 function send_request(packet_payload)
 {
-  if (ws != null) {
+/* The line below allows you to patch in a network encryption/security
+   protocol between client and server to diminish hacking/cheating. If you
+   can't or don't wish to implement one, then: remove the line below and
+   replace this function with the function of the same name available at:
 
-    //console.log("Received outgoing pid=="+object_packet['pid'])
-    
-    /* This was a patch for when FCW server did not yet have unit_do_action
-       compatibility for Clean Pollution and Clean Fallout so had to be 
-       sent that order as a change in unit activity instead. It appears
-       to now be in place and working, so this commented section can be 
-       removed after some months of testing when everyone is happily
-       cleaning pollution and fallout:
-    
-    workaround current 3.1 server uses actionenablers to filter activities
-       legality. The actions being sent to the client after a (D)o Action 
-       render unit_do_action requests in the user dialog, which the server
-       rejects because it wants the request as a change_activity packet. 
-       TO DO: remove when upstream fixes this.
+https://github.com/freeciv/freeciv-web/blob/develop/freeciv-web/src/main/webapp/javascript/clinet.js
 
-    var object_packet = JSON.parse(packet_payload);
-    if ( (object_packet['pid'] == packet_unit_do_action) // 84
-      && (object_packet['action_type']== ACTION_CLEAN_POLLUTION
-          || object_packet['action_type'] == ACTION_CLEAN_FALLOUT)
-       )
-        { // change do_action request to a change_activity request
-          console.log("Client forced to circumvent server's suggested packet_unit_do_action as a packet_unit_change_activity.")
+*/
+  send_request_secure(packet_payload);
 
-          object_packet['pid'] = packet_unit_change_activity; // 222
-          object_packet['unit_id'] = object_packet['actor_id'];
-          object_packet['activity'] = (object_packet['action_type']==ACTION_CLEAN_POLLUTION ? ACTIVITY_POLLUTION : ACTIVITY_FALLOUT);
-          object_packet['target'] = -1;
-          delete object_packet.actor_id;  // remove keys not present in packet_unit_change_activity
-          delete object_packet.target_id;
-          delete object_packet.extra_id;
-          delete object_packet.value;
-          delete object_packet.name;
-          delete object_packet.action_type;
-          packet_payload = JSON.stringify(object_packet);
-        }
-        END Client workaround of 3.1 server bug ******************************/
+/* Next, you have two choices:
+     1. No auto-logout of inactive sessions: At the top of this file change
+     to:      kick_inactive_time = Number.MAX_VALUE;
+        -- OR --
+     2. Auto-logout inactive sessions: add these 4 lines of code
+        to the end of this function:
 
-    ws.send(packet_payload);
-  }
-
-  if (DEBUG_LOG_PACKETS || DEBUG_ACTION_PACKETS) 
-    console.log("OUTGOING PACKET>>>>>"+packet_payload);
-  
-  if (debug_active) {
-    clinet_last_send = new Date().getTime();
-  }
-  // User actions use send_request. Track user activity/inactivity here:
-  // 2 types of outgoing messages are false positive for user action:
   var packet_type = jQuery.parseJSON("["+packet_payload+"]")[0]['pid'];
-  if (DEBUG_SHORT_PACKETS) {
-    var ptitle = getKeyByValue(packet_names, packet_type);
-    // Only print infos from packet pids we defined in packhand.js:packet_names
-    if (ptitle) {
-      console.log("***** OUT (%d): %s",packet_type, ptitle);
-      if (DEBUG_EXPAND_PACKETS && packet_type>1) {
-        var my_obj = jQuery.parseJSON("["+packet_payload+"]");
-        console.log(my_obj);
-      }
-    }
-  }
-
-  // ping answer and update_metamessage_game_running_status():
   if (packet_type==packet_conn_pong || packet_type==packet_chat_msg_req) 
     return;
-  // If we made it here, the user did something. Update activity stamp:
   set_last_user_action_time();
-}
 
+*/
+}
 
 /****************************************************************************
 ...
