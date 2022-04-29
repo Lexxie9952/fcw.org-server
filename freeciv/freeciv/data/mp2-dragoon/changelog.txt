@@ -243,25 +243,25 @@ IV. Units*
 =============================================================
 4. AAA re-balance and Mobile SAM rebalance/simplify.
    ...
-   * AAA are an integral part of ground infantry forces so 
-    get gold upkeep instead of shield upkeep. Compensates
+   * AAA are an integral part of ground infantry, so get
+    gold upkeep instead of shield upkeep. This compensates
     some losses to this unit:
-   * In other respects AAA are no longer like Marines who
-     attack while transported or BeachLander moves, but
-     are same as any other ballistic unit. Still retain 
-     ability to attack non-native tiles.
-   * AAA need 9 turns of service + 3 turns to convert to M.Sam
-    (was 10 + 4).
+   * AAA lose 2 Marines-like abilities: attacking while
+     transported, and having movese left to attack when
+     offloading to shore. AAA still retain the ability to 
+     attack non-native tiles.
+   * AAA need 9 turns of service + 2 turns to convert to M.Sam
+    (was 10 + 4). No longer required in capital (decreases 
+    micro-management tasks)
    * Upgrades to Mobile SAM like any other unit (simplicity)
 5. Mobile SAM
    * Mobile SAMs 2x defense now also against Missile units
    * Can now carry two missiles (was 1)
-   * Can now attack non-native tiles like AAA
    * After discovery of Laser, Mobile SAMS provide a 33% chance
      of defending all units on their tile from a nuclear blast.
-   * Mobile SAM convert from AAA in 3 turns after 9 turns of 
+   * Mobile SAM convert from AAA in 2 turns after 9 turns of 
      service and the order can be done in any domestic city.
-     (was: 10, capital city)
+     (was: 10, 4 turns, capital city)
 =============================================================
 6. Armor II bonus vs. Missiles cut to 50% (was 100% i.e. 2x)
 this buffs the little used Mobile SAM to more usefulness in
