@@ -2687,7 +2687,7 @@ firepower     = 2
 move_rate     = 2
 vision_radius_sq = 8;  hard-coding in physics bonus here since its a req, lets us cut making a new effect
 convert_to    = "Mobile SAM"
-convert_time  = 5
+convert_time  = 4
 transport_cap = 0
 fuel          = 0
 paratroopers_mr_sub = 1 ;000,00000,00,0000,000,0,1 max_ATKs=0, bbd_retal_rate=0, iPill_rand_tgts=0, iPill_odds=-0 pentads, iPill_moves=0, iPillage=0, ATK_Stay_Fortified=1
@@ -2711,8 +2711,8 @@ Anti-Aircraft Artillery (AAA) get a 2× bonus against Air units. They can attack
  Transported AAA can always defend their tile, even at sea. AAA can’t attack while transported,\
  and cannot attack Submarines, Missiles, and High Altitude aircraft.\
 "), _("
-After Space Flight and 9 turns of service, AAA can be retrofitted to\
- Mobile SAM. The Convert order must be done in a domestic capital, and takes 3 turns.\
+After Space Flight and 9 turns of service, AAA can be converted to\
+ Mobile SAM. The order must be done in a domestic city, and takes 2 turns.\
 ")
 
 [unit_mobile_sam]
@@ -2750,21 +2750,19 @@ bonuses       =
      "AirAttacker", "DefenseMultiplier", 1
      "Missile", "DefenseMultiplier", 1
    }
-flags         = "NeverBlocked", "AntiAir", "WillNever", "TransportDefender", "NonNativeAttack"
+flags         = "NeverBlocked", "AntiAir", "WillNever"
 roles         = ""
 helptext      = _("\
 The Mobile SAM is the strongest Anti-Air unit on the ground. It can\
  attack nearby aircraft. It has a 2× bonus against all Air and Missile\
- units. The Mobile SAM can also carry two Missiles of any type. Like\
- the AAA, it can attack non-native tiles but not while transported.\
- Transported Mobile SAMs can always defend their tile, even at sea.\
+ units. The Mobile SAM can also carry two Missiles of any type.\
  The discovery of Laser gives all units on its tile a 33% chance to\
  survive nuclear attack. \
 \nBig Land units can’t enter Mountains without a road or native base, and do not\
  receive a move bonus from Rivers. \n\
 "), _("
-AAA can upgrade to Mobile SAM for free on its 9th turn of service.\
- The Convert order must be done in a domestic city and takes 3 turns.\
+AAA can convert to Mobile SAM for free after 9 turns of service.\
+ The order must be done in a domestic city and takes 2 turns.\
 ")
 
 [unit_howitzer]
@@ -2989,7 +2987,7 @@ uk_gold       = 0
 targets       = "Air", "AirProtect", "Missile", "Balloon", "Helicopter", "LandRail", "Zeppelin"
 bonuses       =
    { "flag", "type", "value"
-   ; Crease Base Defense of 3.5. Use flags to include all unit_types with no overlap:
+   ; Increase Base Defense to 3.5. Use flags to include all unit_types with no overlap:
      "CantReachAir", "DefenseMultiplierPct", 17   ; all military Land, Sea, Bombers, EXCEPT AAA, Mobile SAM, AEGIS
      "AntiAir",      "DefenseMultiplierPct", 17   ; AAA, Mobile SAM, AEGIS
      "NonMil",       "DefenseMultiplierPct", 17   ; all NonMil units
