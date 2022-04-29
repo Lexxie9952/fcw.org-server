@@ -2454,7 +2454,7 @@ uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
 flags         = "CantReachAir", "Bombarder", "NonProvokeVigil" ;autoattacks (!NonMil) targets instead of "Provoking" targets 
-roles         = ""
+roles         = "AttackStrongStartUnit"
 helptext      = _("\
 Catapults are rock-throwing war machines. Massive stones diminish\
  the defense bonus of City Walls by -25%, down to 1.75×. \n\
@@ -2606,7 +2606,7 @@ embarks       = "Helicopter"    ; transport helicopter only
 disembarks    = "Helicopter"
 targets       = "LandRail"
 flags         = "CantReachAir", "Bombarder", "NonProvokeVigil" ;autoattacks (!NonMil) targets instead of "Provoking" targets
-roles         = "BarbarianTech", "BarbarianBuildTech"
+roles         = "AttackStrongStartUnit", "BarbarianTech", "BarbarianBuildTech"
 helptext      = _("\
 Cannons are guns that fire massive metallic projectiles faster and\
  more accurately than earlier ballistic weapons. This reduces the\
@@ -2653,7 +2653,7 @@ embarks       = "Helicopter"    ; transport helicopter only
 disembarks    = "Helicopter"
 targets       = "Balloon", "LandRail", "Zeppelin"
 flags         = "CantReachAir", "Bombarder", "NonProvokeVigil" ;autoattacks (!NonMil) targets instead of "Provoking" targets
-roles         = ""
+roles         = "AttackStrongStartUnit"
 helptext      = _("\
 Artillery upgrade Cannons with doubled firepower. Against Artillery,\
  the bonus of City Walls is reduced -50% down to 1.5×. \n\
@@ -2796,7 +2796,7 @@ embarks       = "Helicopter"    ; transport helicopter only
 disembarks    = "Helicopter"
 targets       = "Balloon", "LandRail", "Zeppelin"
 flags         = "CantReachAir", "Bombarder", "NonProvokeVigil" ;autoattacks (!NonMil) targets instead of "Provoking" targets
-roles         = ""
+roles         = "AttackStrongStartUnit"
 helptext      = _("\
 Howitzers are upgraded Artillery with a terrifying increase to mobility and attack\
  strength. City Walls are completely ineffective against Howitzers. \n\
@@ -5159,7 +5159,7 @@ sound_fight_alt = "f_generic"
 build_cost    = 60
 pop_cost      = 0
 attack        = 18
-defense       = 0
+defense       = 1
 hitpoints     = 10
 firepower     = 3
 move_rate     = 24
@@ -5768,7 +5768,7 @@ cargo         = "Cargo"
 embarks       = "LandRoad", "Helicopter"    ; transport helicopter only
 disembarks    = "LandRoad", "Helicopter"
 flags         = "HelpWonder", "TradeRoute", "IgZOC", "NonMil", "HasNoZOC", "Capturable", "Expellable", "Cant_Pillage"
-roles         = "AttackStrongStartUnit"  ;note：MP2 does not start games with ASSUs so has co-opted this for caravan start unit.
+roles         = "TradeStartUnit"
 veteran_names =
   _("?vet_rank:green"),
   _("?vet_rank:veteran"),
@@ -5868,7 +5868,7 @@ uk_food       = 0
 uk_gold       = 0
 cargo         = "Land", "LandAirSea", "Bomb", "Cargo"
 flags         = "HelpWonder", "TradeRoute", "NonMil", "HasNoZOC", "Capturable", "Expellable", "NoVeteran", "Cant_Pillage"
-roles         = ""
+roles         = "TradeStartUnit"
 helptext      = _("\
 The Truck replaces the Caravan as the basic Commerce unit on Land. It moves at\
  more than twice the speed; but is restricted to roads and quays, and can’t use rails.\
@@ -6128,7 +6128,7 @@ veteran_base_raise_chance = 0
 veteran_work_raise_chance = 0
 veteran_power_fact = 100
 veteran_move_bonus = 0
-roles         = "AttackFastStartUnit"     ;this role taken over for well-digger
+roles         = "UserType2Startunit"
 helptext      = _("\
 This unit can fix unlucky starts, but has very high upkeep.\ 
  If you have no water, make a Well-Digger in a city that can\
