@@ -582,8 +582,8 @@ flags         = "Unreachable", "DoesntOccupyTile"
 ; "SentryAlways" = This unit always reports sentry-type information; give this flag to 
 ;                  reconnaissance/scouting type units who can't sentry because they are 
 ;                  fuel-type units (which can only sentry on refueling tiles.)
-; "NonProvokeVigil" = Units under activity Vigil with this flag will attack are only  
-;                  restricted to not auto-attack civilians, (rather than only attacking
+; "AvidAttacker" = Units under activity Vigil with this flag auto-attack everything  
+;                  except "NonProvoking" units, (rather than only attacking
 ;                  units with the "Provoking" flag) (assuming autoattackstyle=1)  
 ; "NoStackDeath" = When in a stack whose defender is killed, this unit survives and 
 ;                  remains occupying the same tile. 
