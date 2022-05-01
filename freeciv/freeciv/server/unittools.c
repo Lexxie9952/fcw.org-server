@@ -1062,7 +1062,7 @@ void unit_activity_complete(struct unit *punit)
   case ACTIVITY_CONVERT:
   case ACTIVITY_FORTIFIED:
   case ACTIVITY_SENTRY:
-  case ACTIVITY_UNKNOWN:
+  case ACTIVITY_VIGIL:
   case ACTIVITY_PATROL_UNUSED:
   case ACTIVITY_LAST:
     break;
@@ -1250,7 +1250,7 @@ static void update_unit_activity(struct unit *punit, time_t now)
   case ACTIVITY_FORTIFIED:
   case ACTIVITY_SENTRY:
   case ACTIVITY_PATROL_UNUSED:
-  case ACTIVITY_UNKNOWN:
+  case ACTIVITY_VIGIL:
   case ACTIVITY_LAST:
     break;
 
@@ -4015,6 +4015,86 @@ static int compare_units(const struct autoattack_prob *const *p1,
 }
 
 /**********************************************************************//**
+  Returns a will_attack code of AA_NO, AA_ODDS, or AA_ALWAYS, indicating
+  if 'punit' provokes auto-attack from the unit 'penemy'.
+  Called when autoattack_style == AA_ADVANCED
+**************************************************************************/
+static int will_unit_autoattack_unit (struct unit *penemy, 
+                                       struct unit *punit)
+{
+
+/* Autoattack may happen based on which flags attacker and defender have:
+                       attacker ⏩      
+——————————————————————————————————————————————————————————————————————————————————
+defender         ""    AvidAttacker  O1   O2   O3    A1   A2   A3    !if_attacker*
+——————————————————————————————————————————————————————————————————————————————————
+NonProvoking     N-    N-            N-   N-   N-    N-   N-   N-    N-  
+""               --    ODDS          --   --   --    --   --   --    N-  
+Provoking        ODDS  ODDS          ODDS ODDS ODDS  ODDS ODDS ODDS  N-  
+ProvokingClass1  --    ODDS          ODDS --   --    YES  --   --    N-
+ProvokingClass2  --    ODDS          --   ODDS --    --   YES  --    N-
+ProvokingClass3  --    ODDS          --   --   ODDS  --   --   YES   N-
+——————————————————————————————————————————————————————————————————————————————————
+notes:
+O1-3 = OddsAttackClass1-3
+A1-3 = AlwaysAttackClass1-3
+""   = Has no UTYF flags related to autoattack
+N-   = AA_NO     = overrides any possible autoattack, will never auto-attack
+YES  = AA_ALWAYS = ALWAYS auto-attacks (unless overridden by "N-")
+ODDS = AA_ODDS   = auto-attack if odds are better (unless overridden by N- or YES)
+--   = AA_NO     = no auto-attack (unless overridden by YES or ODDS)
+
+*if_attacker = (from game.ruleset) - means this unit will never autoattack. This
+               gets filtered during the construction of the autoattack prob_list
+*/
+
+  /* N-, Priority 1: Immediately kick out overriding cases that can never attack: */
+  if (penemy->activity != ACTIVITY_VIGIL) {
+    return AA_NO;  
+  }
+  /* for performance this is checked only once @ start of unit_survive_autoattack()
+  if (unit_has_type_flag(punit, UTYF_NONPROVOKING)) return AA_NO; */
+
+  /* YES, Priority 2: cases that always attack override cases that attack based on good odds: */
+  if (unit_has_type_flag(punit, UTYF_PROVOKINGCLASS1)) {
+    if (unit_has_type_flag(penemy, UTYF_ALWAYSATTACKCLASS1)) {
+      return AA_ALWAYS;
+    }
+  }
+  if (unit_has_type_flag(punit, UTYF_PROVOKINGCLASS2)) {
+    if (unit_has_type_flag(penemy, UTYF_ALWAYSATTACKCLASS2)) {
+      return AA_ALWAYS;
+    }
+  }
+  if (unit_has_type_flag(punit, UTYF_PROVOKINGCLASS3)) {
+    if (unit_has_type_flag(penemy, UTYF_ALWAYSATTACKCLASS3)) {
+      return AA_ALWAYS;
+    }
+  }
+  /* ODDS, Priority 3: cases that attack if the odds are good */
+  if (unit_has_type_flag(punit, UTYF_PROVOKING)) return AA_ODDS;
+  if (unit_has_type_flag(penemy, UTYF_AVIDATTACKER)) return AA_ODDS;
+  if (unit_has_type_flag(punit, UTYF_PROVOKINGCLASS1)) {
+    if (unit_has_type_flag(penemy, UTYF_ODDSATTACKCLASS1)) {
+      return AA_ODDS;
+    }
+  }
+  if (unit_has_type_flag(punit, UTYF_PROVOKINGCLASS2)) {
+    if (unit_has_type_flag(penemy, UTYF_ODDSATTACKCLASS2)) {
+      return AA_ODDS;
+    }
+  }
+  if (unit_has_type_flag(punit, UTYF_PROVOKINGCLASS3)) {
+    if (unit_has_type_flag(penemy, UTYF_ODDSATTACKCLASS3)) {
+      return AA_ODDS;
+    }
+  }
+
+/* --, Priority 4: Fulfilled NO criteria for an autoattack */
+  return AA_NO;
+}
+
+/**********************************************************************//**
   Check if unit survives enemy autoattacks. We assume that any
   unit that is adjacent to us can see us.
 **************************************************************************/
@@ -4024,7 +4104,8 @@ static bool unit_survive_autoattack(struct unit *punit)
   int moves = punit->moves_left;
   int sanity1 = punit->id;
 
-  if (!game.server.autoattack) {
+  if (!game.server.autoattack 
+      || unit_has_type_flag(punit, UTYF_NONPROVOKING)) {
     return TRUE;
   }
   autoattack = autoattack_prob_list_new_full(autoattack_prob_free);
@@ -4035,6 +4116,13 @@ static bool unit_survive_autoattack(struct unit *punit)
   adjc_iterate(&(wld.map), unit_tile(punit), ptile) {
     /* First add all eligible units to a autoattack list */
     unit_list_iterate(ptile->units, penemy) {
+      /* AA_ADVANCED has ruleset filters for whether to auto-attack */                                
+      if (game.server.autoattack_style == AA_ADVANCED) {
+        if (!will_unit_autoattack_unit(penemy,punit)) {
+          continue;
+        }
+      }
+
       struct autoattack_prob *probability = fc_malloc(sizeof(*probability));
       struct tile *tgt_tile = unit_tile(punit);
 
@@ -4045,25 +4133,6 @@ static bool unit_survive_autoattack(struct unit *punit)
                                      penemy, unit_owner(punit), NULL,
                                      tgt_tile, tile_city(tgt_tile),
                                      punit, NULL);
-
-     /* If AA_ADVANCED, only vigiling units can auto-attack;
-      * giving human tactical opt-in to auto-attacking. */                                
-      if (game.server.autoattack_style == AA_ADVANCED) {
-          if (penemy->activity != ACTIVITY_UNKNOWN) {  // vigil
-            continue;  // skip/disallow units not under vigil
-          }
-          /* Vigiling units only auto-attack units flagged as "Provoking" unless
-           * the vigiling unit has the UTYF_NONPROVOKEVIGIL flag (which indicates any
-           * non-civilian provokes it, if it has better odds of winning). */
-          if (!unit_has_type_flag(punit, UTYF_PROVOKING)) { // non-provoking
-            if (!unit_has_type_flag(penemy, UTYF_NONPROVOKEVIGIL)) {
-              // only UTYF_NONPROVOKEVIGIL auto-attack non-"Provoking" units
-              continue; 
-            } else if (unit_has_type_flag(punit, UTYF_CIVILIAN)) {
-              continue; // UTYF_NONPROVOKEVIGIL units autoattack everything except civilians
-            }
-          }
-      }
 
       if (action_prob_possible(probability->prob) 
           && is_unit_reachable_at(punit, penemy, unit_tile(punit))) {
@@ -4082,6 +4151,19 @@ static bool unit_survive_autoattack(struct unit *punit)
   }
 
   autoattack_prob_list_iterate_safe(autoattack, peprob, penemy) {
+    int will_attack = AA_ODDS;
+    /* AA_ADVANCED has ruleset filters for whether to auto-attack */                                
+    if (game.server.autoattack_style == AA_ADVANCED) {
+      will_attack = will_unit_autoattack_unit(penemy, punit);
+      if (will_attack == AA_NO) {
+        continue;
+      }
+    } else { /* autoattack_style==AA_DEFAULT: Legacy hard-coded logic */
+      if (unit_has_type_flag(punit, UTYF_PROVOKING)) {
+        will_attack = AA_ALWAYS;
+      }
+    }
+
     int sanity2 = penemy->id;
     struct tile *ptile = unit_tile(penemy);
     struct unit *enemy_defender = get_defender(punit, ptile);
@@ -4116,24 +4198,6 @@ static bool unit_survive_autoattack(struct unit *punit)
                                    tgt_tile, tile_city(tgt_tile),
                                    punit, NULL);
 
-    /* If AA_ADVANCED, only vigil units can auto-attack */                           
-    if (game.server.autoattack_style == AA_ADVANCED) {
-      if (penemy->activity != ACTIVITY_UNKNOWN) {  //ACTIVITY_VIGIL
-            continue;  // skip/disallow units not under Vigil
-      }
-      /* Vigiling units only auto-attack units flagged as "Provoking" unless
-       * the vigiling unit has the UTYF_NONPROVOKEVIGIL flag (which indicates it
-       * auto-attacks all !civilians, if it has better odds of winning). */
-      if (!unit_has_type_flag(punit, UTYF_PROVOKING)) { // non-provoking
-        if (!unit_has_type_flag(penemy, UTYF_NONPROVOKEVIGIL)) {
-          // only UTYF_NONPROVOKEVIGIL auto-attack non-"Provoking" units
-          continue; 
-        } else if (unit_has_type_flag(punit, UTYF_CIVILIAN)) {
-          continue; // UTYF_NONPROVOKEVIGIL units autoattack everything except civilians
-        }
-      }
-    }
-
     if (!action_prob_possible(peprob->prob)) {
       /* No longer legal. */
       continue;
@@ -4142,11 +4206,9 @@ static bool unit_survive_autoattack(struct unit *punit)
     /* Assume the worst. */
     penemywin = action_prob_to_0_to_1_pessimist(peprob->prob);
 
-    /* UTYF_PROVOKING prioritizes autoattack under AA_DEFAULT, but under 
-     * AA_ADVANCED, it only flags to not automatically disallow autoattack */
-    if ( (penemywin > 1.0 - punitwin
-          || (unit_has_type_flag(punit, UTYF_PROVOKING) && game.server.autoattack_style != AA_ADVANCED) )
-        && penemywin > threshold) {
+    /* Do the attack if the conditions for autoattack are fulfilled: */
+    if ( (penemywin > 1.0 - punitwin || (will_attack == AA_ALWAYS))
+         && penemywin > threshold) {
 
         notify_player(unit_owner(penemy), unit_tile(punit), E_UNIT_ORDERS, ftc_server,
               _("[`anger`] Your %s %s engaged %s %s %s %s while under vigil."),
@@ -4487,7 +4549,7 @@ static bool unit_move_consequences(struct unit *punit,
 static void check_unit_activity(struct unit *punit)
 {
   switch (punit->activity) {
-  case ACTIVITY_UNKNOWN:         // VIGIL
+  case ACTIVITY_VIGIL:
     if (!unit_transported(punit)) {
       set_unit_activity(punit, ACTIVITY_IDLE);
     }
@@ -5868,7 +5930,7 @@ struct unit_order *create_unit_orders(int length,
       case ACTIVITY_CULTIVATE:
       case ACTIVITY_TRANSFORM:
       case ACTIVITY_CONVERT:
-      case ACTIVITY_UNKNOWN:        // new vigil activity
+      case ACTIVITY_VIGIL:
 	/* Simple activities. */
 	break;
       case ACTIVITY_FORTIFYING:

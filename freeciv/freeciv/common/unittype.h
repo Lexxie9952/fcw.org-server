@@ -280,67 +280,114 @@ struct unit_class {
    reconnaissance units who can't sentry because !refuel tile, etc.) */
 #define SPECENUM_VALUE35 UTYF_SENTRYALWAYS
 #define SPECENUM_VALUE35NAME N_("?unitflag:SentryAlways")
-/* This is being used when autoattack_style=1
-   and a unit is vigiling, to specify that this unit_type does not limit itself
-   to autoattacking only units with the "?unitflag:Provoking" but may autoattack
-   anything. if you rename this flag then make sure to search codebase for
-   "Reserved1" and adjust that to Reserved2 or assign that mechanic another UTYF */  
-#define SPECENUM_VALUE36 UTYF_NONPROVOKEVIGIL
-#define SPECENUM_VALUE36NAME N_("?unitflag:NonProvokeVigil") /* see comment above */
-/* Unit doesn't die when its stack is killed. Since that means the stack is not gone,
-   it also anchors any "CanEscape" units who successfully survive, to also stay in
-   the stack, rather than fleeing to adjacent tiles where they might be picked off: */
+/* Under autoattack_style=1, does not limit itself to autoattack only 
+   units with the flag UTYF_PROVOKING, but will autoattack anything except
+   UTYF_NONPROVOKING. */  
+#define SPECENUM_VALUE36 UTYF_AVIDATTACKER
+#define SPECENUM_VALUE36NAME N_("?unitflag:AvidAttacker")
+/* The following flag currently is a combination of StackSafe and StackAnchor,
+   and will be split into those 2 separate flags since they have 2 separate 
+   dynamics. Currently, it does both.
+   StackSafe = does not die when its stack dies
+   StackAnchor = CanEscape units do not flee to other tiles this unit is present */
 #define SPECENUM_VALUE37 UTYF_NOSTACKDEATH
 #define SPECENUM_VALUE37NAME N_("?unitflag:NoStackDeath")
-/* RESERVED for future use*/
-#define SPECENUM_VALUE38 UTYF_RESERVED3
-#define SPECENUM_VALUE38NAME N_("?unitflag:Reserved3")
-
-#define SPECENUM_VALUE39 UTYF_USER_FLAG_1
-#define SPECENUM_VALUE40 UTYF_USER_FLAG_2
-#define SPECENUM_VALUE41 UTYF_USER_FLAG_3
-#define SPECENUM_VALUE42 UTYF_USER_FLAG_4
-#define SPECENUM_VALUE43 UTYF_USER_FLAG_5
-#define SPECENUM_VALUE44 UTYF_USER_FLAG_6
-#define SPECENUM_VALUE45 UTYF_USER_FLAG_7
-#define SPECENUM_VALUE46 UTYF_USER_FLAG_8
-#define SPECENUM_VALUE47 UTYF_USER_FLAG_9
-#define SPECENUM_VALUE48 UTYF_USER_FLAG_10
-#define SPECENUM_VALUE49 UTYF_USER_FLAG_11
-#define SPECENUM_VALUE50 UTYF_USER_FLAG_12
-#define SPECENUM_VALUE51 UTYF_USER_FLAG_13
-#define SPECENUM_VALUE52 UTYF_USER_FLAG_14
-#define SPECENUM_VALUE53 UTYF_USER_FLAG_15
-#define SPECENUM_VALUE54 UTYF_USER_FLAG_16
-#define SPECENUM_VALUE55 UTYF_USER_FLAG_17
-#define SPECENUM_VALUE56 UTYF_USER_FLAG_18
-#define SPECENUM_VALUE57 UTYF_USER_FLAG_19
-#define SPECENUM_VALUE58 UTYF_USER_FLAG_20
-#define SPECENUM_VALUE59 UTYF_USER_FLAG_21
-#define SPECENUM_VALUE60 UTYF_USER_FLAG_22
-#define SPECENUM_VALUE61 UTYF_USER_FLAG_23
-#define SPECENUM_VALUE62 UTYF_USER_FLAG_24
-#define SPECENUM_VALUE63 UTYF_USER_FLAG_25
-#define SPECENUM_VALUE64 UTYF_USER_FLAG_26
-#define SPECENUM_VALUE65 UTYF_USER_FLAG_27
-#define SPECENUM_VALUE66 UTYF_USER_FLAG_28
-#define SPECENUM_VALUE67 UTYF_USER_FLAG_29
-#define SPECENUM_VALUE68 UTYF_USER_FLAG_30
-#define SPECENUM_VALUE69 UTYF_USER_FLAG_31
-#define SPECENUM_VALUE70 UTYF_USER_FLAG_32
-#define SPECENUM_VALUE71 UTYF_USER_FLAG_33
-#define SPECENUM_VALUE72 UTYF_USER_FLAG_34
-#define SPECENUM_VALUE73 UTYF_USER_FLAG_35
-#define SPECENUM_VALUE74 UTYF_USER_FLAG_36
-#define SPECENUM_VALUE75 UTYF_USER_FLAG_37
-#define SPECENUM_VALUE76 UTYF_USER_FLAG_38
-#define SPECENUM_VALUE77 UTYF_USER_FLAG_39
-#define SPECENUM_VALUE78 UTYF_USER_FLAG_40
-#define SPECENUM_VALUE79 UTYF_USER_FLAG_41
-#define SPECENUM_VALUE80 UTYF_USER_FLAG_42
-#define SPECENUM_VALUE81 UTYF_USER_FLAG_43
-#define SPECENUM_VALUE82 UTYF_USER_FLAG_44
-#define SPECENUM_VALUE83 UTYF_USER_FLAG_45
+/* RESERVED for future use. StackAnchor == CanEscape units escaping stack death do not flee to other tiles.*/
+#define SPECENUM_VALUE38 UTYF_STACKANCHOR
+#define SPECENUM_VALUE38NAME N_("?unitflag:StackAnchor")
+/* RESERVED for future use. StackAlone == Death of THIS unit doesn't result in others in its stack dying. */
+#define SPECENUM_VALUE39 UTYF_STACKALONE
+#define SPECENUM_VALUE39NAME N_("?unitflag:StackAlone")
+/* This unit is NEVER autoattacked. */
+#define SPECENUM_VALUE40 UTYF_NONPROVOKING
+#define SPECENUM_VALUE40NAME N_("?unitflag:NonProvoking")
+/* Defender autoattack target flags: */
+#define SPECENUM_VALUE41 UTYF_PROVOKINGCLASS1
+#define SPECENUM_VALUE41NAME N_("?unitflag:ProvokingClass1")
+#define SPECENUM_VALUE42 UTYF_PROVOKINGCLASS2
+#define SPECENUM_VALUE42NAME N_("?unitflag:ProvokingClass2")
+#define SPECENUM_VALUE43 UTYF_PROVOKINGCLASS3
+#define SPECENUM_VALUE43NAME N_("?unitflag:ProvokingClass3")
+/* Attacker autoattack flags */
+/* Will attack ProvokingClass #n if ODDS are better than defending */
+#define SPECENUM_VALUE44 UTYF_ODDSATTACKCLASS1
+#define SPECENUM_VALUE44NAME N_("?unitflag:OddsAttackClass1")
+#define SPECENUM_VALUE45 UTYF_ODDSATTACKCLASS2
+#define SPECENUM_VALUE45NAME N_("?unitflag:OddsAttackClass2")
+#define SPECENUM_VALUE46 UTYF_ODDSATTACKCLASS3
+#define SPECENUM_VALUE46NAME N_("?unitflag:OddsAttackClass3")
+/* Always attacks ProvokingClass #n */
+#define SPECENUM_VALUE47 UTYF_ALWAYSATTACKCLASS1
+#define SPECENUM_VALUE47NAME N_("?unitflag:AlwaysAttackClass1")
+#define SPECENUM_VALUE48 UTYF_ALWAYSATTACKCLASS2
+#define SPECENUM_VALUE48NAME N_("?unitflag:AlwaysAttackClass2")
+#define SPECENUM_VALUE49 UTYF_ALWAYSATTACKCLASS3
+#define SPECENUM_VALUE49NAME N_("?unitflag:AlwaysAttackClass3")
+/* Reserved for future use */
+#define SPECENUM_VALUE50 UTYF_RESERVED
+#define SPECENUM_VALUE50NAME N_("?unitflag:RESERVED")
+#define SPECENUM_VALUE51 UTYF_RESERVED1
+#define SPECENUM_VALUE51NAME N_("?unitflag:RESERVED1")
+#define SPECENUM_VALUE52 UTYF_RESERVED2
+#define SPECENUM_VALUE52NAME N_("?unitflag:RESERVED2")
+#define SPECENUM_VALUE53 UTYF_RESERVED3
+#define SPECENUM_VALUE53NAME N_("?unitflag:RESERVED3")
+#define SPECENUM_VALUE54 UTYF_RESERVED4
+#define SPECENUM_VALUE54NAME N_("?unitflag:RESERVED4")
+#define SPECENUM_VALUE55 UTYF_RESERVED5
+#define SPECENUM_VALUE55NAME N_("?unitflag:RESERVED5")
+#define SPECENUM_VALUE56 UTYF_RESERVED6
+#define SPECENUM_VALUE56NAME N_("?unitflag:RESERVED6")
+#define SPECENUM_VALUE57 UTYF_RESERVED7
+#define SPECENUM_VALUE57NAME N_("?unitflag:RESERVED7")
+#define SPECENUM_VALUE58 UTYF_RESERVED8
+#define SPECENUM_VALUE58NAME N_("?unitflag:RESERVED8")
+/* User Flags */
+#define SPECENUM_VALUE59 UTYF_USER_FLAG_1
+#define SPECENUM_VALUE60 UTYF_USER_FLAG_2
+#define SPECENUM_VALUE61 UTYF_USER_FLAG_3
+#define SPECENUM_VALUE62 UTYF_USER_FLAG_4
+#define SPECENUM_VALUE63 UTYF_USER_FLAG_5
+#define SPECENUM_VALUE64 UTYF_USER_FLAG_6
+#define SPECENUM_VALUE65 UTYF_USER_FLAG_7
+#define SPECENUM_VALUE66 UTYF_USER_FLAG_8
+#define SPECENUM_VALUE67 UTYF_USER_FLAG_9
+#define SPECENUM_VALUE68 UTYF_USER_FLAG_10
+#define SPECENUM_VALUE69 UTYF_USER_FLAG_11
+#define SPECENUM_VALUE70 UTYF_USER_FLAG_12
+#define SPECENUM_VALUE71 UTYF_USER_FLAG_13
+#define SPECENUM_VALUE72 UTYF_USER_FLAG_14
+#define SPECENUM_VALUE73 UTYF_USER_FLAG_15
+#define SPECENUM_VALUE74 UTYF_USER_FLAG_16
+#define SPECENUM_VALUE75 UTYF_USER_FLAG_17
+#define SPECENUM_VALUE76 UTYF_USER_FLAG_18
+#define SPECENUM_VALUE77 UTYF_USER_FLAG_19
+#define SPECENUM_VALUE78 UTYF_USER_FLAG_20
+#define SPECENUM_VALUE79 UTYF_USER_FLAG_21
+#define SPECENUM_VALUE80 UTYF_USER_FLAG_22
+#define SPECENUM_VALUE81 UTYF_USER_FLAG_23
+#define SPECENUM_VALUE82 UTYF_USER_FLAG_24
+#define SPECENUM_VALUE83 UTYF_USER_FLAG_25
+#define SPECENUM_VALUE84 UTYF_USER_FLAG_26
+#define SPECENUM_VALUE85 UTYF_USER_FLAG_27
+#define SPECENUM_VALUE86 UTYF_USER_FLAG_28
+#define SPECENUM_VALUE87 UTYF_USER_FLAG_29
+#define SPECENUM_VALUE88 UTYF_USER_FLAG_30
+#define SPECENUM_VALUE89 UTYF_USER_FLAG_31
+#define SPECENUM_VALUE90 UTYF_USER_FLAG_32
+#define SPECENUM_VALUE91 UTYF_USER_FLAG_33
+#define SPECENUM_VALUE92 UTYF_USER_FLAG_34
+#define SPECENUM_VALUE93 UTYF_USER_FLAG_35
+#define SPECENUM_VALUE94 UTYF_USER_FLAG_36
+#define SPECENUM_VALUE95 UTYF_USER_FLAG_37
+#define SPECENUM_VALUE96 UTYF_USER_FLAG_38
+#define SPECENUM_VALUE97 UTYF_USER_FLAG_39
+#define SPECENUM_VALUE98 UTYF_USER_FLAG_40
+#define SPECENUM_VALUE99 UTYF_USER_FLAG_41
+#define SPECENUM_VALUE100 UTYF_USER_FLAG_42
+#define SPECENUM_VALUE101 UTYF_USER_FLAG_43
+#define SPECENUM_VALUE102 UTYF_USER_FLAG_44
+#define SPECENUM_VALUE103 UTYF_USER_FLAG_45
 
 /* Note: the first ROLE flag must have a value +1 greater than last UTYF flag */
 
@@ -367,101 +414,101 @@ struct unit_class {
 
 #define SPECENUM_NAME unit_role_id
 /* is built first when city established */
-#define SPECENUM_VALUE84 L_FIRSTBUILD
-#define SPECENUM_VALUE84NAME N_("?unitflag:FirstBuild")
+#define SPECENUM_VALUE104 L_FIRSTBUILD
+#define SPECENUM_VALUE104NAME N_("?unitflag:FirstBuild")
 /* initial explorer unit */
-#define SPECENUM_VALUE85 L_EXPLORER
-#define SPECENUM_VALUE85NAME N_("?unitflag:Explorer")
+#define SPECENUM_VALUE105 L_EXPLORER
+#define SPECENUM_VALUE105NAME N_("?unitflag:Explorer")
 /* can be found in hut */
-#define SPECENUM_VALUE86 L_HUT
-#define SPECENUM_VALUE86NAME N_("?unitflag:Hut")
+#define SPECENUM_VALUE106 L_HUT
+#define SPECENUM_VALUE106NAME N_("?unitflag:Hut")
 /* can be found in hut, tech required */
-#define SPECENUM_VALUE87 L_HUT_TECH
-#define SPECENUM_VALUE87NAME N_("?unitflag:HutTech")
+#define SPECENUM_VALUE107 L_HUT_TECH
+#define SPECENUM_VALUE107NAME N_("?unitflag:HutTech")
 /* is created in Partisan circumstances */
-#define SPECENUM_VALUE88 L_PARTISAN
-#define SPECENUM_VALUE88NAME N_("?unitflag:Partisan")
+#define SPECENUM_VALUE108 L_PARTISAN
+#define SPECENUM_VALUE108NAME N_("?unitflag:Partisan")
 /* ok on defense (AI) */
-#define SPECENUM_VALUE89 L_DEFEND_OK
-#define SPECENUM_VALUE89NAME N_("?unitflag:DefendOk")
+#define SPECENUM_VALUE109 L_DEFEND_OK
+#define SPECENUM_VALUE109NAME N_("?unitflag:DefendOk")
 /* primary purpose is defense (AI) */
-#define SPECENUM_VALUE90 L_DEFEND_GOOD
-#define SPECENUM_VALUE90NAME N_("?unitflag:DefendGood")
+#define SPECENUM_VALUE110 L_DEFEND_GOOD
+#define SPECENUM_VALUE110NAME N_("?unitflag:DefendGood")
 /* is useful for ferrying (AI) */
-#define SPECENUM_VALUE91 L_FERRYBOAT
-#define SPECENUM_VALUE91NAME N_("?unitflag:FerryBoat")
+#define SPECENUM_VALUE111 L_FERRYBOAT
+#define SPECENUM_VALUE111NAME N_("?unitflag:FerryBoat")
 /* barbarians unit, land only */
-#define SPECENUM_VALUE92 L_BARBARIAN
-#define SPECENUM_VALUE92NAME N_("?unitflag:Barbarian")
+#define SPECENUM_VALUE112 L_BARBARIAN
+#define SPECENUM_VALUE112NAME N_("?unitflag:Barbarian")
 /* barbarians unit, global tech required */
-#define SPECENUM_VALUE93 L_BARBARIAN_TECH
-#define SPECENUM_VALUE93NAME N_("?unitflag:BarbarianTech")
+#define SPECENUM_VALUE113 L_BARBARIAN_TECH
+#define SPECENUM_VALUE113NAME N_("?unitflag:BarbarianTech")
 /* barbarian boat */
-#define SPECENUM_VALUE94 L_BARBARIAN_BOAT
-#define SPECENUM_VALUE94NAME N_("?unitflag:BarbarianBoat")
+#define SPECENUM_VALUE114 L_BARBARIAN_BOAT
+#define SPECENUM_VALUE114NAME N_("?unitflag:BarbarianBoat")
 /* what barbarians should build */
-#define SPECENUM_VALUE95 L_BARBARIAN_BUILD
-#define SPECENUM_VALUE95NAME N_("BarbarianBuild")
+#define SPECENUM_VALUE115 L_BARBARIAN_BUILD
+#define SPECENUM_VALUE115NAME N_("BarbarianBuild")
 /* barbarians build when global tech */
-#define SPECENUM_VALUE96 L_BARBARIAN_BUILD_TECH
-#define SPECENUM_VALUE96NAME N_("?unitflag:BarbarianBuildTech")
+#define SPECENUM_VALUE116 L_BARBARIAN_BUILD_TECH
+#define SPECENUM_VALUE116NAME N_("?unitflag:BarbarianBuildTech")
 /* barbarian leader */
-#define SPECENUM_VALUE97 L_BARBARIAN_LEADER
-#define SPECENUM_VALUE97NAME N_("?unitflag:BarbarianLeader")
+#define SPECENUM_VALUE117 L_BARBARIAN_LEADER
+#define SPECENUM_VALUE117NAME N_("?unitflag:BarbarianLeader")
 /* sea raider unit */
-#define SPECENUM_VALUE98 L_BARBARIAN_SEA
-#define SPECENUM_VALUE98NAME N_("?unitflag:BarbarianSea")
+#define SPECENUM_VALUE118 L_BARBARIAN_SEA
+#define SPECENUM_VALUE118NAME N_("?unitflag:BarbarianSea")
 /* sea raider unit, global tech required */
-#define SPECENUM_VALUE99 L_BARBARIAN_SEA_TECH
-#define SPECENUM_VALUE99NAME N_("?unitflag:BarbarianSeaTech")
+#define SPECENUM_VALUE119 L_BARBARIAN_SEA_TECH
+#define SPECENUM_VALUE119NAME N_("?unitflag:BarbarianSeaTech")
 /* Startunit: Cities */
-#define SPECENUM_VALUE100 L_START_CITIES
-#define SPECENUM_VALUE100NAME N_("?unitflag:CitiesStartunit")
+#define SPECENUM_VALUE120 L_START_CITIES
+#define SPECENUM_VALUE120NAME N_("?unitflag:CitiesStartunit")
 /* Startunit: Worker */
-#define SPECENUM_VALUE101 L_START_WORKER
-#define SPECENUM_VALUE101NAME N_("?unitflag:WorkerStartunit")
+#define SPECENUM_VALUE121 L_START_WORKER
+#define SPECENUM_VALUE121NAME N_("?unitflag:WorkerStartunit")
 /* Startunit: Explorer */
-#define SPECENUM_VALUE102 L_START_EXPLORER
-#define SPECENUM_VALUE102NAME N_("?unitflag:ExplorerStartunit")
+#define SPECENUM_VALUE122 L_START_EXPLORER
+#define SPECENUM_VALUE122NAME N_("?unitflag:ExplorerStartunit")
 /* Startunit: King */
-#define SPECENUM_VALUE103 L_START_KING
-#define SPECENUM_VALUE103NAME N_("?unitflag:KingStartunit")
+#define SPECENUM_VALUE123 L_START_KING
+#define SPECENUM_VALUE123NAME N_("?unitflag:KingStartunit")
 /* Startunit: Diplomat */
-#define SPECENUM_VALUE104 L_START_DIPLOMAT
-#define SPECENUM_VALUE104NAME N_("?unitflag:DiplomatStartunit")
+#define SPECENUM_VALUE124 L_START_DIPLOMAT
+#define SPECENUM_VALUE124NAME N_("?unitflag:DiplomatStartunit")
 /* Startunit: Ferryboat */
-#define SPECENUM_VALUE105 L_START_FERRY
-#define SPECENUM_VALUE105NAME N_("?unitflag:FerryStartunit")
+#define SPECENUM_VALUE125 L_START_FERRY
+#define SPECENUM_VALUE125NAME N_("?unitflag:FerryStartunit")
 /* Startunit: DefendOk */
-#define SPECENUM_VALUE106 L_START_DEFEND_OK
-#define SPECENUM_VALUE106NAME N_("?unitflag:DefendOkStartunit")
+#define SPECENUM_VALUE126 L_START_DEFEND_OK
+#define SPECENUM_VALUE126NAME N_("?unitflag:DefendOkStartunit")
 /* Startunit: DefendGood */
-#define SPECENUM_VALUE107 L_START_DEFEND_GOOD
-#define SPECENUM_VALUE107NAME N_("?unitflag:DefendGoodStartunit")
+#define SPECENUM_VALUE127 L_START_DEFEND_GOOD
+#define SPECENUM_VALUE127NAME N_("?unitflag:DefendGoodStartunit")
 /* Startunit: AttackFast */
-#define SPECENUM_VALUE108 L_START_ATTACK_FAST
-#define SPECENUM_VALUE108NAME N_("?unitflag:AttackFastStartunit")
+#define SPECENUM_VALUE128 L_START_ATTACK_FAST
+#define SPECENUM_VALUE128NAME N_("?unitflag:AttackFastStartunit")
 /* Startunit: AttackStrong */
-#define SPECENUM_VALUE109 L_START_ATTACK_STRONG
-#define SPECENUM_VALUE109NAME N_("?unitflag:AttackStrongStartunit")
+#define SPECENUM_VALUE129 L_START_ATTACK_STRONG
+#define SPECENUM_VALUE129NAME N_("?unitflag:AttackStrongStartunit")
 /* Startunit: UserType1 */
-#define SPECENUM_VALUE110 L_START_USERTYPE1
-#define SPECENUM_VALUE110NAME N_("?unitflag:UserType1Startunit")
+#define SPECENUM_VALUE130 L_START_USERTYPE1
+#define SPECENUM_VALUE130NAME N_("?unitflag:UserType1Startunit")
 /* Startunit: UserType2 */
-#define SPECENUM_VALUE111 L_START_USERTYPE2
-#define SPECENUM_VALUE111NAME N_("?unitflag:UserType2Startunit")
+#define SPECENUM_VALUE131 L_START_USERTYPE2
+#define SPECENUM_VALUE131NAME N_("?unitflag:UserType2Startunit")
 /* Startunit: UserType3 */
-#define SPECENUM_VALUE112 L_START_USERTYPE3
-#define SPECENUM_VALUE112NAME N_("?unitflag:UserType3Startunit")
+#define SPECENUM_VALUE132 L_START_USERTYPE3
+#define SPECENUM_VALUE132NAME N_("?unitflag:UserType3Startunit")
 /* Startunit: Trade */
-#define SPECENUM_VALUE113 L_START_TRADE
-#define SPECENUM_VALUE113NAME N_("?unitflag:TradeStartUnit")
+#define SPECENUM_VALUE133 L_START_TRADE
+#define SPECENUM_VALUE133NAME N_("?unitflag:TradeStartUnit")
 /* AI hunter type unit */
-#define SPECENUM_VALUE114 L_HUNTER
-#define SPECENUM_VALUE114NAME N_("?unitflag:Hunter")
+#define SPECENUM_VALUE134 L_HUNTER
+#define SPECENUM_VALUE134NAME N_("?unitflag:Hunter")
 /* can improve terrain */
-#define SPECENUM_VALUE115 L_SETTLERS
-#define SPECENUM_VALUE115NAME N_("?unitflag:Settlers")
+#define SPECENUM_VALUE135 L_SETTLERS
+#define SPECENUM_VALUE135NAME N_("?unitflag:Settlers")
 #define L_LAST (L_SETTLERS + 1)
 
 #include "specenum_gen.h"

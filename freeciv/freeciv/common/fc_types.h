@@ -143,7 +143,8 @@ enum output_type_id {
 #define SPECENUM_VALUE22 ACTIVITY_PLANT
 #define SPECENUM_VALUE22NAME N_("Plant")
 #define SPECENUM_COUNT ACTIVITY_LAST
-#include "specenum_gen.h"       // #13 above is now used as Vigil
+#include "specenum_gen.h"       
+#define ACTIVITY_VIGIL ACTIVITY_UNKNOWN  // #13 above is now used as Vigil
 
 /* Happens at once, not during turn change. */
 #define ACT_TIME_INSTANTANEOUS (-1)

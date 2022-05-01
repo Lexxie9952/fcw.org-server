@@ -2522,16 +2522,16 @@ static struct setting settings[] = {
           N_("How the setting \"autoattack\" behaves, if enabled.\n "
              "(Some rulesets depend on non-default settings in order "
              "to elicit intended behavior from units.)\n"
-             "0: ➤ LEGACY:  Units on adjacent tiles generally attack enemy units if "
+             "0: ➤ LEGACY:  Units on adjacent tiles generally auto-attack enemy units if "
              "they have better odds attacking than defending, OR if the enemy has the "
-             "flag \"Provoking\". Exception: a single unit in a city not wanting to leave "
-             "the city undefended if it loses. \n"
-             "1: ➤ ADVANCED: Like above, but rulesets use \"if_attacker\" reqs, \"Provoking\" flag, "
-             "and \"NonProvokeVigil\" flag to control which units auto-attack specific "
-             "types. Also, only units with the 'Vigil' order auto-attack. Players get "
-             "control over attack decisions. ('Human intelligence' reduces 'AI-baiting' "
-             "and other exploits. Rulesets can be coded to feature such things as Fighters "
-             "being able to intercept incoming enemy Air units.\n"),
+             "flag \"Provoking\", but never the flag \"NonProvoking\". Exception: a single "
+             "unit in a city not wanting to leave the city undefended if it loses. \n"
+             "1: ➤ ADVANCED: Like above, but rulesets use \"if_attacker\" reqs, \"Provoking\", "
+             "\"NonProvoking\", and \"AvidAttacker\" flags; as well as ProvokingClass, "
+             "OddsAttackClass, and AlwaysAttackClass flags, to exactly control which units "
+             "will sometimes (or always) auto-attack specific types. Also, only units with "
+             "the 'Vigil' order auto-attack: players thus get control over auto-attack "
+             "decisions.\n"),
           NULL, NULL, NULL,
           GAME_MIN_AUTOATTACK_STYLE, GAME_MAX_AUTOATTACK_STYLE,
           GAME_DEFAULT_AUTOATTACK_STYLE)

@@ -23,7 +23,15 @@
 #define DEFAULT_DETONATION_RADIUS_SQ        2
 // Nuclear explosions above this sq_radius are considered fusion devices
 // sq_radius = DEFAULT_DETONATION_RADIUS_SQ + unit_type.bombard_rate
-#define FUSION_DETONATION_RADIUS_SQ         6 
+#define FUSION_DETONATION_RADIUS_SQ         6
+
+/* Auto-Attack values */
+// unit will auto-attack no matter what
+#define AA_ALWAYS 2
+// unit will auto-attack if it has better odds than defending (with some other exceptions)
+#define AA_ODDS   1   
+// unit will not auto-attack
+#define AA_NO     0
 
 #define SPECENUM_NAME unit_loss_reason
 #define SPECENUM_VALUE0 ULR_KILLED

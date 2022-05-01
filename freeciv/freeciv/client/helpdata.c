@@ -2385,6 +2385,17 @@ char *helptext_unit(char *buf, size_t bufsz, struct player *pplayer,
     CATLSTR(buf, bufsz, _("%s Not subject to zones of control imposed "
                           "by other units.\n"), BULLET_BIG);
   }
+  if (utype_has_flag(utype, UTYF_NOSTACKDEATH)) {
+    CATLSTR(buf, bufsz, _("%s Does not die when units in its stack die.\n"), BULLET_BIG);
+  }
+  if (utype_has_flag(utype, UTYF_STACKANCHOR)) {
+    CATLSTR(buf, bufsz, _("%s CanEscape units escaping stack-kill aren't forced to "
+                          "flee to other tiles if this unit is present.\n"), BULLET_BIG);
+  }
+  if (utype_has_flag(utype, UTYF_STACKALONE)) {
+    CATLSTR(buf, bufsz, _("%s Death of this unit doesn't result in other "
+                          "units on the same tile dying.\n"), BULLET_BIG);
+  }
   if (utype_has_flag(utype, UTYF_CIVILIAN)) {
     CATLSTR(buf, bufsz,
             _("%s A non-military unit:\n"), BULLET_BIG);
@@ -2408,13 +2419,29 @@ char *helptext_unit(char *buf, size_t bufsz, struct player *pplayer,
             _("%s A field unit: one unhappiness applies even when non-aggressive.\n"),
             BULLET_BIG);
   }
+  if (utype_has_flag(utype, UTYF_AVIDATTACKER)) {
+    CATLSTR(buf, bufsz,
+            _("%s This unit, if on vigil, will auto-attack most units, not "
+              "just those which provoke auto-attacks.\n"), BULLET_BIG);
+  }
   if (utype_has_flag(utype, UTYF_PROVOKING)
       && server_setting_value_bool_get(
         server_setting_by_name("autoattack"))) {
+    if (game.server.autoattack_style) {
+        CATLSTR(buf, bufsz,
+            _("%s An enemy unit on vigil will auto attack this unit if "
+              "it is reachable.\n"), BULLET_BIG);          
+    }
+    else {
+      CATLSTR(buf, bufsz,
+              _("%s An enemy unit considering to auto attack this unit will "
+                "choose to do so even if it has better odds when defending "
+                "against it than when attacking it.\n"), BULLET_BIG);
+    }
+  }
+  if (utype_has_flag(utype, UTYF_NONPROVOKING)) {
     CATLSTR(buf, bufsz,
-            _("%s An enemy unit considering to auto attack this unit will "
-              "choose to do so even if it has better odds when defending "
-              "against it than when attacking it.\n"), BULLET_BIG);
+            _("%s This unit will never be auto-attacked.\n"), BULLET_BIG);
   }
   if (utype_has_flag(utype, UTYF_SHIELD2GOLD)) {
     /* FIXME: the conversion shield => gold is activated if
