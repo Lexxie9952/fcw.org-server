@@ -928,6 +928,7 @@ veteran_base_raise_chance = 0
 veteran_work_raise_chance = 0
 veteran_power_fact = 100
 veteran_move_bonus = 0
+roles         = "UserType2Startunit"
 helptext      = _("\
 Population Cost: 1. Adds Population: 1.\n\n\
 Peasants are the common people of Monarchies. You can encourage them\
@@ -2788,14 +2789,14 @@ bonuses       =
    { "flag", "type", "value"
      "AirAttacker", "DefenseDivider", 1
      "AirAttacker", "DefenseMultiplier", 1
-     "Missile", "DefenseMultiplier", 1
+     "Missile", "DefenseMultiplier", 2
    }
 flags         = "NeverBlocked", "AntiAir", "WillNever"
 roles         = ""
 helptext      = _("\
 The Mobile SAM is the strongest Anti-Air unit on the ground. It can\
- attack nearby aircraft. It has a 2× bonus against all Air and Missile\
- units. The Mobile SAM can also carry 3 Missiles of any type.\
+ attack nearby aircraft. It has a 2× bonus against Air and 3× against\
+ Missiles. The Mobile SAM can also carry 3 Missiles of any type.\
  The discovery of Laser gives all units on its tile a 33% chance to\
  survive nuclear attack. \
 \nBig Land units can’t enter Mountains without a road or native base, and do not\
@@ -5230,7 +5231,7 @@ ABMs are useful for anti-missile defense outside of cities. They must be\
 ABMs aren't very effective\
  against non-missiles. As a defensive unit, they cause no unhappiness; and\
  their upkeep is 1 gold. After required tech is known, 1 ABM is delivered free\
- to each new Mobile SAM and AEGIS Cruiser that is built.\
+ to each new Mobile SAM and AEGIS Cruiser that is built. \n\
 Multislot: Under certain conditions, cities can make one (or more) multislot units per turn, plus one of any other type.\
 ")
 

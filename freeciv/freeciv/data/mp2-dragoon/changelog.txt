@@ -255,8 +255,10 @@ IV. Units*
     micro-management tasks)
    * Upgrades to Mobile SAM like any other unit (simplicity)
 5. Mobile SAM
-   * Mobile SAMs 2x defense now also against Missile units
-   * Can now carry 3 missiles (was 1)
+   * Mobile SAMs 3x defense against Missile units, now takes
+      over the same defensive strength that Armor II had,
+      which was nerfed to 1.5x but made more affordable.
+   * Can now carry 3 missiles (was 1), including new type ABM.
    * like AEGIS, can attack Missiles
    * After discovery of Laser, Mobile SAMS provide a 33% chance
      of defending all units on their tile from a nuclear blast.
