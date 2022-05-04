@@ -3451,7 +3451,7 @@ static void do_nuke_tile(struct player *pplayer, struct tile *ptile,
   if (protected) {
     unit_list_iterate_safe(ptile->units, punit) {
       notify_player(unit_owner(punit), ptile, E_UNIT_LOST_MISC, ftc_server,
-                    _("[`nuclearexplosion`] Your tile was unaffected by a %s nuclear blast."),
+                    _("[`nuclearexplosion`] Your tile was unaffected by the %s nuclear blast."),
                     pplayer == unit_owner(punit)
                     ? _("self-induced")
                     : nation_adjective_for_player(pplayer));
