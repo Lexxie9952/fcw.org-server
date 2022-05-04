@@ -256,12 +256,14 @@ IV. Units*
    * Upgrades to Mobile SAM like any other unit (simplicity)
 5. Mobile SAM
    * Mobile SAMs 2x defense now also against Missile units
-   * Can now carry two missiles (was 1)
+   * Can now carry 3 missiles (was 1)
+   * like AEGIS, can attack Missiles
    * After discovery of Laser, Mobile SAMS provide a 33% chance
      of defending all units on their tile from a nuclear blast.
    * Mobile SAM convert from AAA in 2 turns after 9 turns of 
      service and the order can be done in any domestic city.
      (was: 10, 4 turns, capital city)
+   * After Space.2 tech, newly made mSAMS get a free ABM
 =============================================================
 6. Armor II bonus vs. Missiles cut to 50% (was 100% i.e. 2x)
 this buffs the little used Mobile SAM to more usefulness in
@@ -674,8 +676,8 @@ operations are excessively slower than land operations.
   • Chance of attacker promotion is half frequency: 2 battles
     required for same chance of promotion as 1 sea battle. 
   • Firepower is reduced to 1. Attack strength is increased +33%
-    * Overall effect is -33% reduction in attack strength, less
-      chance of promotion, less chance of fatality for either
+    * Overall effect is -33% reduction in attack strength, (was half) 
+      less chance of promotion, less chance of fatality for either
       combatant, but generally in spite of this, more effective
       and tactically usable with more frequency in more
       contextual situations.
@@ -850,9 +852,9 @@ Computers costs 2x, expires Artemis, Isaac.
 134. Armor reduced in cost to 75 (80 was prohibitively not
      useful)
 ==============================================================
-135.
+135. New unit Anti-Ballistic Missile
 ==============================================================
-136.
+136. 
 ==============================================================
 137.
 ==============================================================

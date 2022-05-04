@@ -6224,6 +6224,10 @@ function unit_can_vigil(punit)
         if (moves_used <= 4)
           return true;
       break;
+      case "Anti-Ballistic Missile":
+        if (tile_city(ptile) || punit['transported'])
+          return true;
+        break;
     }
   return false;
 }
