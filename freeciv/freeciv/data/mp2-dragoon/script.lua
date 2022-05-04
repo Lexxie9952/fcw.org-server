@@ -433,6 +433,27 @@ end
 
 signal.connect("building_built", "building_built_callback")
 
+-- Mobile SAMs get free ABMs if Space.2 is known
+function unit_built_callback(u, city)
+  local owner = u.owner
+  local utype = find.unit_type('Anti-Ballistic Missile')
+  local board = find.action('Transport Board')  
+  local req_tech = find.tech_type("Space.2")
+  if owner:knows_tech(req_tech) then  
+    if u.utype:rule_name() == "Mobile SAM" or u.utype:rule_name() == "AEGIS Cruiser" then
+      if edit.create_unit_full(owner, u.tile, utype, 0, city, 1, 1, u) then
+        notify.event(owner, city.tile, E.UNIT_BUILT, _("[`hammer`][`anti-ballisticmissile`] Anti-Ballistic Missile delivered to %s in %s"),u.utype:rule_name(),city.name)
+        return true
+      end  
+    end
+  end
+
+  -- continue processing
+  return false
+end
+
+signal.connect("unit_built", "unit_built_callback")
+
 function action_started_unit_city_callback(action, actor, city)
 
   -- Destroy City script (action.id==39)  
