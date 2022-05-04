@@ -69,7 +69,7 @@ flags =
 ;;;   _("NeverBlocked"), _("Bypasses unreachable units when attacking a tile.")   ; UNCOMMENT THIS IF NOT USING LEXXIE’s PATCH FOR THIS FLAG
 ;;;    _("MultiSlot"), _("Cities with proper requirements can produce more than one of these per turn.") ;uncomment if you don’t have slot_control patch
     _("CanHide"), _("In appropriate terrain, this unit can make a Hideout, which will conceal all land units on the tile.")
-    _("WillNever")
+    _("WillNever"), _("Can't vigil or auto-attack.")
 ;;;    _("TransportDefender"), _("Can defend while transported on non-native tiles.") ;uncomment if you don’t have TransportDefender patch
     _("NonMilAttack"), _("Has military capacity but for peaceful purposes, can enter territories with whom you are at Peace")
     _("Cant_Pillage"), _("Unable to pillage tiles.")
@@ -601,12 +601,6 @@ flags         = "Unreachable", "DoesntOccupyTile"
 ;                 the "CanKillEscaping" unit type flag.
 ; "CanKillEscaping" = an attack from this unit ignores the "CanEscape" unit
 ;                 type flag.
-; "Provoking" =   Under autoattack_style=1 which this ruleset uses, Fighter
-;                 types will ONLY autoattack units marked with the Provoking flag.
-;                 If overridden to autoattack_style=0, a unit considering to autoattack
-;                 this unit will choose to do so even if has better odds when defending
-;                 against it than when attacking it. Applies when the autoattack server
-;                 setting is enabled.
 ; "NeverProtects" = doesn’t protect reachable units on its tile from enemy
 ;                 attackers, even if the unreachableprotects server setting
 ;                 is enabled and the unit class is unreachable
@@ -620,13 +614,59 @@ flags         = "Unreachable", "DoesntOccupyTile"
 ; "SentryAlways" = This unit always reports sentry-type information; give this flag to 
 ;                  reconnaissance/scouting type units who can’t sentry because they are 
 ;                  fuel-type units (which can only sentry on refueling tiles.)
-; "NonProvokeVigil" = Units under activity Vigil with this flag will attack are only  
-;                  restricted to not auto-attack civilians, (rather than only attacking
-;                  units with the "Provoking" flag) (assuming autoattackstyle=1)
 ; "NoStackDeath" = When in a stack whose defender is killed, this unit survives and 
-;                  remains occupying the same tile. 
-; "Reserved3"     = reserved for future use.
-; ------------------------------------------
+;                  remains occupying the same tile.
+; "Provoking" =   Under autoattack_style=1 standard Vigil units will ONLY autoattack
+;                 units marked with the Provoking flag. Under autoattack_style=0, a
+;                 unit considering to autoattack this unit will choose to do so even
+;                 if has better odds when defending against it than when attacking it.
+;                 Autoattacks only apply when the autoattack server setting is enabled.
+; "NonProvoking" = This unit never gets autoattacked, under all possible settings.
+; "AvidAttacker" = Units under activity Vigil with this flag auto-attack everything  
+;                  except "NonProvoking" units, (rather than only attacking
+;                  units with the "Provoking" flag) (requires autoattackstyle=1)
+; "ProvokingClass1"   = This flag will trigger attackers with the flags below
+; "ProvokingClass2"   = This flag will trigger attackers with the flags below
+; "ProvokingClass3"   = This flag will trigger attackers with the flags below
+; "OddsAttackClass1"  = Unit will attack ProvokingClass1 if odds are better than defending
+; "OddsAttackClass2"  = Unit will attack ProvokingClass2 if odds are better than defending
+; "OddsAttackClass3"  = Unit will attack ProvokingClass3 if odds are better than defending
+; "AlwaysAttackClass1"= Unit always attacks ProvokingClass1 unless alone in a city with <90% odds to win.
+; "AlwaysAttackClass2"= Unit always attacks ProvokingClass2 unless alone in a city with <90% odds to win.
+; "AlwaysAttackClass3"= Unit always attacks ProvokingClass3 unless alone in a city with <90% odds to win.
+;—————————————————————————————————————————————————————————————————————————————————————
+;| Autoattack may happen based on which flags attacker and defender have:
+;|
+;| autoattackstyle=0
+;|                        attacker ⏩      
+;| —————————————————————————————————————————        
+;| defender            ""      !if_attacker*
+;| —————————————————————————————————————————        
+;| NonProvoking        N-       N-
+;| ""                  ODDS     N-
+;| Provoking           YES      N-
+;|
+;| autoattackstyle=1
+;|                        attacker ⏩      
+;| ——————————————————————————————————————————————————————————————————————————————————
+;| defender         ""    AvidAttacker  O1   O2   O3    A1   A2   A3    !if_attacker*
+;| ——————————————————————————————————————————————————————————————————————————————————
+;| NonProvoking     N-    N-            N-   N-   N-    N-   N-   N-    N-  
+;| ""               --    ODDS          --   --   --    --   --   --    N-  
+;| Provoking        ODDS  ODDS          ODDS ODDS ODDS  ODDS ODDS ODDS  N-  
+;| ProvokingClass1  --    ODDS          ODDS --   --    YES  --   --    N-
+;| ProvokingClass2  --    ODDS          --   ODDS --    --   YES  --    N-
+;| ProvokingClass3  --    ODDS          --   --   ODDS  --   --   YES   N-
+;| ——————————————————————————————————————————————————————————————————————————————————
+;| notes:
+;| O1-3 = OddsAttackClass1-3
+;| A1-3 = AlwaysAttackClass1-3
+;| ""   = Has no UTYF flags related to autoattack
+;| N-   = AA_NO     = overrides any possible autoattack, will never auto-attack
+;| YES  = AA_ALWAYS = ALWAYS auto-attacks (unless overridden by "N-")
+;| ODDS = AA_ODDS   = auto-attack if odds are better (unless overridden by N- or YES)
+;| --   = AA_NO     = no auto-attack (unless overridden by YES or ODDS)
+;—————————————————————————————————————————————————————————————————————————————————————
 ; Following actions require extra fields:
 ;  "Attack" and "Suicide Attack"
 ;   attack = base attack strength
@@ -716,7 +756,7 @@ uk_happy      = 0
 uk_shield     = 1
 uk_food       = 1
 uk_gold       = 0
-flags         = "Settlers", "NoBuild", "Infra", "CanRoad", "CanFortress", "NonMil", "HasNoZOC", "AddToCity", "Cities", "Cant_Fortify",
+flags         = "Settlers", "NoBuild", "Infra", "CanRoad", "CanFortress", "NonMil", "NonProvoking", "HasNoZOC", "AddToCity", "Cities", "Cant_Fortify",
                 "Expellable", "Unbribable"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
@@ -758,7 +798,7 @@ uk_happy      = 0
 uk_shield     = 1
 uk_food       = 1
 uk_gold       = 0
-flags         = "Settlers", "Infra", "CanRoad", "CanFortress", "NonMil", "HasNoZOC", "AddToCity", "Cities", "Cant_Fortify", "Expellable"
+flags         = "Settlers", "Infra", "CanRoad", "CanFortress", "NonMil", "NonProvoking", "HasNoZOC", "AddToCity", "Cities", "Cant_Fortify", "Expellable"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
 veteran_base_raise_chance = 0
@@ -813,7 +853,7 @@ bonuses       =
      "NoBuild", "DefenseDivider", 2     ; Barbarian Leader (which is 0D anyway), and Leader, which is hardly used.
    }
 flags         = "NoBuild", "Settlers", "Infra", "CanRoad",  "Capturable", "Expellable",
-                "HasNoZOC", "IgTer", "IgZOC", "NonMil", "NonMilAttack"
+                "HasNoZOC", "IgTer", "IgZOC", "NonMil", "NonProvoking", "NonMilAttack"
 roles         = "DefendGoodStartUnit"  ; re-purposed from Phalanx
 veteran_names =
   _("?vet_rank:green"),
@@ -880,7 +920,7 @@ uk_food       = 0
 uk_gold       = 0
 embarks       = "LandRoad", "LandRail", "Helicopter"    ; transport helicopter only
 disembarks    = "LandRoad", "LandRail", "Helicopter"
-flags         = "MultiSlot", "Cant_Fortify", "NonMil", "HasNoZOC", "AddToCity", 
+flags         = "MultiSlot", "Cant_Fortify", "NonMil", "NonProvoking", "HasNoZOC", "AddToCity", 
                 "Capturable", "Expellable", "Cant_Pillage"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
@@ -932,7 +972,7 @@ uk_food       = 2
 uk_gold       = 0
 embarks       = "LandRoad", "LandRail", "Helicopter"    ; transport helicopter only
 disembarks    = "LandRoad", "LandRail", "Helicopter"
-flags         = "Fanatic", "Cant_Fortify", "NonMil", "HasNoZOC", "AddToCity", "Capturable", "Expellable", "Cant_Pillage"
+flags         = "Fanatic", "Cant_Fortify", "NonMil", "NonProvoking", "HasNoZOC", "AddToCity", "Capturable", "Expellable", "Cant_Pillage"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
 veteran_base_raise_chance = 0
@@ -981,7 +1021,7 @@ uk_food       = 1
 uk_gold       = 0
 embarks       = "LandRoad", "LandRail", "Helicopter"    ; transport helicopter only
 disembarks    = "LandRoad", "LandRail", "Helicopter"
-flags         = "Settlers", "Infra", "Cant_Fortify", "NonMil", "HasNoZOC", "AddToCity", "Capturable", "Expellable", "Airbase", 
+flags         = "Settlers", "Infra", "Cant_Fortify", "NonMil", "NonProvoking", "HasNoZOC", "AddToCity", "Capturable", "Expellable", "Airbase", 
                  "CanFortress", "CanRoad", "Proletarian"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
@@ -1033,7 +1073,7 @@ uk_food       = 2
 uk_gold       = 0
 embarks       = "LandRoad", "LandRail", "Helicopter"    ; transport helicopter only
 disembarks    = "LandRoad", "LandRail", "Helicopter"
-flags         = "Cant_Fortify", "NonMil", "HasNoZOC", "AddToCity", "Capturable", "Expellable", "Cant_Pillage"
+flags         = "Cant_Fortify", "NonMil", "NonProvoking", "HasNoZOC", "AddToCity", "Capturable", "Expellable", "Cant_Pillage"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
 veteran_base_raise_chance = 0
@@ -1077,7 +1117,7 @@ uk_food       = 0
 uk_gold       = 0
 embarks       = "LandRoad", "LandRail", "Helicopter"    ; transport helicopter only
 disembarks    = "LandRoad", "LandRail", "Helicopter"
-flags         = "Settlers", "Infra", "CanRoad", "CanFortress", "NonMil", "HasNoZOC", "Airbase", "Cant_Fortify", "Capturable",
+flags         = "Settlers", "Infra", "CanRoad", "CanFortress", "NonMil", "NonProvoking", "HasNoZOC", "Airbase", "Cant_Fortify", "Capturable",
                 "Expellable", "Workers"
 ; No veteran levels (level name is never displayed)
 veteran_names =
@@ -1129,7 +1169,7 @@ uk_food       = 0
 uk_gold       = 0
 embarks       = "LandRoad", "LandRail", "Helicopter"    ; transport helicopter only
 disembarks    = "LandRoad", "LandRail", "Helicopter"
-flags         = "Settlers", "Infra", "CanRoad", "CanFortress", "NonMil", "HasNoZOC", "Airbase", "Cant_Fortify", "Capturable",
+flags         = "Settlers", "Infra", "CanRoad", "CanFortress", "NonMil", "NonProvoking", "HasNoZOC", "Airbase", "Cant_Fortify", "Capturable",
                 "Expellable", "Workers"
 ; No veteran levels (level name is never displayed)
 veteran_names =
@@ -1192,7 +1232,7 @@ uk_food       = 0
 uk_gold       = 0
 embarks       = "Helicopter"    ; transport helicopter only
 disembarks    = "Helicopter"
-flags         = "Settlers", "Infra", "CanRoad", "CanFortress", "NonMil", "HasNoZOC", "Transform", "Airbase", "Cant_Fortify", "Expellable"
+flags         = "Settlers", "Infra", "CanRoad", "CanFortress", "NonMil", "NonProvoking", "HasNoZOC", "Transform", "Airbase", "Cant_Fortify", "Expellable"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
 veteran_base_raise_chance = 0
@@ -2020,7 +2060,7 @@ uk_food       = 0
 uk_gold       = 0
 embarks       = "LandRoad", "Helicopter"    ; transport helicopter only
 disembarks    = "LandRoad", "Helicopter"
-flags         = "IgTer", "IgZOC", "NonMil", "HasNoZOC", "Capturable", "Expellable", "Cant_Pillage", "NoHome", "Horse", "SentryAlways"
+flags         = "IgTer", "IgZOC", "NonMil", "NonProvoking", "HasNoZOC", "Capturable", "Expellable", "Cant_Pillage", "NoHome", "Horse", "SentryAlways"
 roles         = "Explorer", "ExplorerStartUnit"
 veteran_names =
   _("?vet_rank:green"),
@@ -2453,7 +2493,7 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-flags         = "CantReachAir", "Bombarder", "NonProvokeVigil" ;autoattacks (!NonMil) targets instead of "Provoking" targets 
+flags         = "CantReachAir", "Bombarder", "AvidAttacker" ;autoattacks (!NonMil) targets instead of "Provoking" targets 
 roles         = "AttackStrongStartUnit"
 helptext      = _("\
 Catapults are rock-throwing war machines. Massive stones diminish\
@@ -2545,7 +2585,7 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-flags         = "CantReachAir", "Bombarder", "CantAttack", "NonProvokeVigil" ;autoattacks (!NonMil) targets instead of "Provoking" targets
+flags         = "CantReachAir", "Bombarder", "CantAttack", "AvidAttacker" ;autoattacks (!NonMil) targets instead of "Provoking" targets
 bonuses       =
    { "flag", "type", "value"
      "Horse",       "DefenseMultiplierPct", -80
@@ -2605,7 +2645,7 @@ uk_gold       = 0
 embarks       = "Helicopter"    ; transport helicopter only
 disembarks    = "Helicopter"
 targets       = "LandRail"
-flags         = "CantReachAir", "Bombarder", "NonProvokeVigil" ;autoattacks (!NonMil) targets instead of "Provoking" targets
+flags         = "CantReachAir", "Bombarder", "AvidAttacker" ;autoattacks (!NonMil) targets instead of "Provoking" targets
 roles         = "AttackStrongStartUnit", "BarbarianTech", "BarbarianBuildTech"
 helptext      = _("\
 Cannons are guns that fire massive metallic projectiles faster and\
@@ -2652,7 +2692,7 @@ uk_gold       = 0
 embarks       = "Helicopter"    ; transport helicopter only
 disembarks    = "Helicopter"
 targets       = "Balloon", "LandRail", "Zeppelin"
-flags         = "CantReachAir", "Bombarder", "NonProvokeVigil" ;autoattacks (!NonMil) targets instead of "Provoking" targets
+flags         = "CantReachAir", "Bombarder", "AvidAttacker" ;autoattacks (!NonMil) targets instead of "Provoking" targets
 roles         = "AttackStrongStartUnit"
 helptext      = _("\
 Artillery upgrade Cannons with doubled firepower. Against Artillery,\
@@ -2734,7 +2774,7 @@ hitpoints     = 30
 firepower     = 2
 move_rate     = 6
 vision_radius_sq = 4
-transport_cap = 2
+transport_cap = 3
 fuel          = 0
 uk_happy      = 1
 uk_shield     = 1
@@ -2742,7 +2782,7 @@ uk_food       = 0
 uk_gold       = 0
 embarks       = "Helicopter"    ; transport helicopter only
 disembarks    = "Helicopter"
-targets       = "Air", "AirProtect", "Air_High_Altitude", "Balloon", "Helicopter", "LandRail", "Zeppelin"
+targets       = "Air", "AirProtect", "Air_High_Altitude", "Balloon", "Helicopter", "LandRail", "Zeppelin", "Missile"
 cargo         = "Missile"
 bonuses       =
    { "flag", "type", "value"
@@ -2755,7 +2795,7 @@ roles         = ""
 helptext      = _("\
 The Mobile SAM is the strongest Anti-Air unit on the ground. It can\
  attack nearby aircraft. It has a 2× bonus against all Air and Missile\
- units. The Mobile SAM can also carry two Missiles of any type.\
+ units. The Mobile SAM can also carry 3 Missiles of any type.\
  The discovery of Laser gives all units on its tile a 33% chance to\
  survive nuclear attack. \
 \nBig Land units can’t enter Mountains without a road or native base, and do not\
@@ -2795,7 +2835,7 @@ uk_gold       = 0
 embarks       = "Helicopter"    ; transport helicopter only
 disembarks    = "Helicopter"
 targets       = "Balloon", "LandRail", "Zeppelin"
-flags         = "CantReachAir", "Bombarder", "NonProvokeVigil" ;autoattacks (!NonMil) targets instead of "Provoking" targets
+flags         = "CantReachAir", "Bombarder", "AvidAttacker" ;autoattacks (!NonMil) targets instead of "Provoking" targets
 roles         = "AttackStrongStartUnit"
 helptext      = _("\
 Howitzers are upgraded Artillery with a terrifying increase to mobility and attack\
@@ -2836,7 +2876,7 @@ uk_happy      = 0
 uk_shield     = 0
 uk_food       = 0
 uk_gold       = 0
-flags         = "Unbribable", "HasNoZOC", "NeverProtects", "NonMil", "NoVeteran", "SentryAlways"
+flags         = "Unbribable", "HasNoZOC", "NeverProtects", "NonMil", "NonProvoking", "NoVeteran", "SentryAlways"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
 veteran_base_raise_chance = 0
@@ -3456,7 +3496,7 @@ uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
 vision_layer  = "Stealth"
-flags         = "Unique", "HasNoZOC", "NonMil", "NoVeteran", "Unbribable", "NeverProtects", "CanEscape", "WillNever", "SentryAlways"
+flags         = "Unique", "HasNoZOC", "NonMil", "NonProvoking", "NoVeteran", "Unbribable", "NeverProtects", "CanEscape", "WillNever", "SentryAlways"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
 veteran_base_raise_chance = 0
@@ -4054,7 +4094,7 @@ uk_shield     = 0
 uk_food       = 0
 uk_gold       = 0
 cargo         = "Land", "LandNoKill", "LandAirSea", "Big Land", "Cargo"
-flags         = "BadCityDefender", "HelpWonder", "TradeRoute", "CoastStrict", "NonMil", "HasNoZOC"
+flags         = "BadCityDefender", "HelpWonder", "TradeRoute", "CoastStrict", "NonMil", "NonProvoking", "HasNoZOC"
 veteran_names =
   _("?vet_rank:green"),
   _("?vet_rank:veteran"),
@@ -4517,7 +4557,7 @@ uk_food       = 0
 uk_gold       = 1
 cargo         = "Land", "LandNoKill", "LandAirSea", "Big Land", "LandRoad", "Cargo", 
                 "RiverShip", "Sea", "Submarine", "Trireme"
-flags         = "Settlers", "Infra", "CanRoad", "CanFortress", "Cant_Pillage", "NonMil",
+flags         = "Settlers", "Infra", "CanRoad", "CanFortress", "Cant_Pillage", "NonMil", "NonProvoking",
                 "HasNoZOC", "NoVeteran", "Capturable", "Expellable", "BadCityDefender",
                 "Airbase" ;for buoys
 ; No veteran levels (level name is never displayed)
@@ -4569,7 +4609,7 @@ uk_shield     = 0
 uk_food       = 0
 uk_gold       = 0
 cargo         = "Land", "LandNoKill", "LandAirSea", "Big Land", "Balloon", "LandRoad", "Cargo"
-flags         = "BadCityDefender", "HelpWonder", "Traderoute", "NonMil", "HasNoZOC", "NoVeteran"
+flags         = "BadCityDefender", "HelpWonder", "Traderoute", "NonMil", "NonProvoking", "HasNoZOC", "NoVeteran"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
 veteran_base_raise_chance = 0
@@ -5145,6 +5185,55 @@ The Carrier is a mobile airport that can carry Air units, Helicopters, AAA, Mari
 Stack-Chief：(1) Will not die if other units in its stack die. (2) Other units escaping Stack Death aren’t forced to other tiles.\
 ")
 
+[unit_anti-ballistic_missile]
+name          = _("Anti-Ballistic Missile")
+class         = "Missile"
+tech_req      = "Space.2"
+obsolete_by   = "None"
+graphic       = "u.abm"
+graphic_alt   = "u.cruise_missile"
+sound_move    = "m_abm"
+sound_move_alt = "m_cruise_missile"
+sound_fight   = "f_cruise_missile"
+sound_fight_alt = "f_generic"
+build_cost    = 35
+pop_cost      = 0
+attack        = 1       ; equal chance of defeating a Cruise Missile
+defense       = 0
+hitpoints     = 1
+firepower     = 10      ; basically, the battle is over after 1 combat round.
+move_rate     = 24
+vision_radius_sq = 2
+transport_cap = 0
+fuel          = 1
+uk_happy      = 0
+uk_shield     = 0
+uk_food       = 0
+uk_gold       = 1
+embarks       = "Submarine", "Sea", "Land", "Big Land"  ;since disallowing embark disallows "Transport Board" also, we must use actionenabler to disallow disembark
+disembarks    = "Submarine", "Sea", "Land", "Big Land"
+targets       = "Missile"
+bonuses       =
+   { "flag", "type", "value", "quiet"
+     "Missile",      "DefenseDividerPct", 89, TRUE    ; 65.5% vs. conventional missiles, 74.25% vet vs. green
+     "Nuclear",      "DefenseDividerPct", -34, TRUE   ; 40% vs. nuclear missles, 50% as vet
+   }
+flags         = "NeverProtects", "OneAttack", "HasNoZOC", "Unbribable",
+                "CantReachAir", "Missile", "NeverBlocked", "AlwaysAttackClass1"
+roles         = ""
+helptext      = _("\
+ABMs intercept enemy missiles. Because there is seldom enough time to\
+ order a launch against incoming missiles, ABMs are usually set to Vigil,\
+ which makes them automatically intercept adjacent missiles. \n\
+ABMs are useful for anti-missile defense outside of cities. They must be\
+ cargo on a Mobile SAM or similar missile-capable unit, and set to Vigil. \n\\
+ABMs aren't very effective\
+ against non-missiles. As a defensive unit, they cause no unhappiness; and\
+ their upkeep is 1 gold. After required tech is known, 1 ABM is delivered free\
+ to each new Mobile SAM and AEGIS Cruiser that is built.\
+Multislot: Under certain conditions, cities can make one (or more) multislot units per turn, plus one of any other type.\
+")
+
 [unit_cruise_missile]
 name          = _("Cruise Missile")
 class         = "Missile"
@@ -5173,9 +5262,34 @@ uk_gold       = 0
 embarks       = "Submarine", "Sea", "Land", "Big Land"  ;since disallowing embark disallows "Transport Board" also, we must use actionenabler to disallow disembark
 disembarks    = "Submarine", "Sea", "Land", "Big Land"
 targets       = "LandRail", "Space"
+bonuses       =
+   { "flag", "type", "value", "quiet"
+   ; Basically we need to emulate 0 defense while still having defense, in order to engineer having odds of evading ABMs.
+   ; Thus, we decrease Base Defense to 0.01 by giving 99% penalty on all unit_types:
+     "CantReachAir", "DefenseMultiplierPct", -99, TRUE   ; all military Land, Sea, Missiles, Bombers, EXCEPT AAA, Mobile SAM, AEGIS
+     "AntiAir",      "DefenseMultiplierPct", -99, TRUE   ; AAA, Mobile SAM, AEGIS
+     "NonMil",       "DefenseMultiplierPct", -99, TRUE   ; all NonMil units
+     "AirAttacker",  "DefenseMultiplierPct", -99, TRUE   ; Aircraft (including Bombers)
+     "FieldUnit",    "DefenseMultiplierPct",  99, TRUE   ; Cancel out overlapped double-penalty on Missiles and Bombers.
+     "Nuclear",      "DefenseMultiplierPct", -99, TRUE   ; Nuclear don't have double-penalty so cancel out the cancellation on line above.
+   ; Now, we undo all the above and set D:1 for the case of being intercepted by an ABM:
+     "Missile",      "DefenseMultiplierPct", 99, TRUE
+   }
 flags         = "NeverProtects", "FieldUnit", "OneAttack", "HasNoZOC", "Unbribable",
-                "CantReachAir", "Missile", "NeverBlocked", "WillNever"
+                "CantReachAir", "Missile", "NeverBlocked", "WillNever", "ProvokingClass1"
 roles         = ""
+veteran_names =
+  _("?vet_rank:basic"),
+  _("?vet_rank:advanced"),
+  _("?vet_rank:cutting edge"),
+  _("?vet_rank:-"),
+  _("?vet_rank:--"),
+  _("?vet_rank:---"),
+  _("?vet_rank:----")
+veteran_base_raise_chance = 0, 0, 0, 0, 0, 0, 0
+veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
+veteran_power_fact = 100, 150, 175, 175, 175, 175, 175
+veteran_move_bonus = 0, 0, 0, 0, 0, 0, 0
 helptext      = _("\
 A Cruise Missile can strike distant targets. It\
  can’t attack Air units, but Air units never block\
@@ -5200,7 +5314,7 @@ sound_fight_alt = "f_generic"
 build_cost    = 160
 pop_cost      = 0
 attack        = 100
-defense       = 0
+defense       = 1
 hitpoints     = 10
 firepower     = 1
 move_rate     = 24
@@ -5214,8 +5328,21 @@ uk_gold       = 0
 embarks       = "Submarine", "Sea", "Land", "Big Land"  ;since disallowing embark disallows "Transport Board" also, we must use actionenabler to disallow disembark
 disembarks    = "Submarine", "Sea", "Land", "Big Land"
 targets       = "Balloon", "Helicopter", "Air", "AirProtect", "Air_High_Altitude", "Missile", "Submarine", "LandRail", "LandRoad", "Space", "Zeppelin"
+bonuses       =
+   { "flag", "type", "value", "quiet"
+   ; Basically we need to emulate 0 defense while still having defense, in order to engineer having odds of evading ABMs.
+   ; Thus, we decrease Base Defense to 0.01 by giving 99% penalty on all unit_types:
+     "CantReachAir", "DefenseMultiplierPct", -99, TRUE   ; all military Land, Sea, Missiles, Bombers, EXCEPT AAA, Mobile SAM, AEGIS
+     "AntiAir",      "DefenseMultiplierPct", -99, TRUE   ; AAA, Mobile SAM, AEGIS
+     "NonMil",       "DefenseMultiplierPct", -99, TRUE   ; all NonMil units
+     "AirAttacker",  "DefenseMultiplierPct", -99, TRUE   ; Aircraft (including Bombers)
+     "FieldUnit",    "DefenseMultiplierPct",  99, TRUE   ; Cancel out overlapped double-penalty on Missiles and Bombers.
+     "Nuclear",      "DefenseMultiplierPct", -99, TRUE   ; Nuclear don't have double-penalty so cancel out the cancellation on line above.
+   ; Now, we undo all the above and set D:1 for the case of being intercepted by an ABM:
+     "Missile",      "DefenseMultiplierPct", 99, TRUE
+   }
 flags         = "NeverProtects", "FieldUnit", "OneAttack", "Nuclear", "HasNoZOC", "Unbribable",
-                "NeverBlocked", "WillNever", "NoVeteran"
+                "NeverBlocked", "WillNever", "NoVeteran", "ProvokingClass1"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
 veteran_base_raise_chance = 0
@@ -5247,7 +5374,7 @@ sound_fight_alt = "f_generic"
 build_cost    = 130
 pop_cost      = 0
 attack        = 100
-defense       = 0
+defense       = 1
 hitpoints     = 10
 firepower     = 1
 move_rate     = 18
@@ -5261,8 +5388,21 @@ uk_gold       = 0
 embarks       = "Submarine", "Sea", "Land", "Big Land"  ;since disallowing embark disallows "Transport Board" also, we must use actionenabler to disallow disembark
 disembarks    = "Submarine", "Sea", "Land", "Big Land"
 targets       = "Balloon", "Helicopter", "Air", "AirProtect", "Air_High_Altitude", "Missile", "Submarine", "LandRail", "LandRoad", "Space", "Zeppelin"
+bonuses       =
+   { "flag", "type", "value", "quiet"
+   ; Basically we need to emulate 0 defense while still having defense, in order to engineer having odds of evading ABMs.
+   ; Thus, we decrease Base Defense to 0.01 by giving 99% penalty on all unit_types:
+     "CantReachAir", "DefenseMultiplierPct", -99, TRUE   ; all military Land, Sea, Missiles, Bombers, EXCEPT AAA, Mobile SAM, AEGIS
+     "AntiAir",      "DefenseMultiplierPct", -99, TRUE   ; AAA, Mobile SAM, AEGIS
+     "NonMil",       "DefenseMultiplierPct", -99, TRUE   ; all NonMil units
+     "AirAttacker",  "DefenseMultiplierPct", -99, TRUE   ; Aircraft (including Bombers)
+     "FieldUnit",    "DefenseMultiplierPct",  99, TRUE   ; Cancel out overlapped double-penalty on Missiles and Bombers.
+     "Nuclear",      "DefenseMultiplierPct", -99, TRUE   ; Nuclear don't have double-penalty so cancel out the cancellation on line above.
+   ; Now, we undo all the above and set D:1 for the case of being intercepted by an ABM:
+     "Missile",      "DefenseMultiplierPct", 99, TRUE
+   }
 flags         = "NeverProtects", "FieldUnit", "OneAttack", "Nuclear", "HasNoZOC", "Unbribable",
-                "NeverBlocked", "WillNever", "NoVeteran"
+                "NeverBlocked", "WillNever", "NoVeteran", "ProvokingClass1"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
 veteran_base_raise_chance = 0
@@ -5502,7 +5642,7 @@ uk_food       = 0
 uk_gold       = 0
 embarks       = "LandRail", "Helicopter"    ; transport helicopter only
 disembarks    = "LandRail", "Helicopter"
-flags         = "Diplomat", "IgZOC", "NonMil", "HasNoZOC", "Expellable", "Cant_Pillage", "CanClaim", "Settlers"
+flags         = "Diplomat", "IgZOC", "NonMil", "NonProvoking", "HasNoZOC", "Expellable", "Cant_Pillage", "CanClaim", "Settlers"
 veteran_names =
   _("?diplomatic_rank:courier"),
   _("?diplomatic_rank:messenger"),
@@ -5557,7 +5697,7 @@ uk_food       = 0
 uk_gold       = 0
 embarks       = "LandRail", "Helicopter"    ; transport helicopter only
 disembarks    = "LandRail", "Helicopter"
-flags         = "Diplomat", "IgZOC", "NonMil", "HasNoZOC", "Expellable", "Cant_Pillage", "CanClaim", "Settlers"
+flags         = "Diplomat", "IgZOC", "NonMil", "NonProvoking", "HasNoZOC", "Expellable", "Cant_Pillage", "CanClaim", "Settlers"
 veteran_names =
   _("?diplomatic_rank:attaché"),
   _("?diplomatic_rank:secretary"),
@@ -5614,7 +5754,7 @@ uk_food       = 0
 uk_gold       = 0
 embarks       = "LandRail", "Helicopter"    ; transport helicopter only
 disembarks    = "LandRail", "Helicopter"
-flags         = "Diplomat", "IgZOC", "NonMil", "HasNoZOC", "Spy", "Expellable", "CanClaim", "Settlers"
+flags         = "Diplomat", "IgZOC", "NonMil", "NonProvoking", "HasNoZOC", "Spy", "Expellable", "CanClaim", "Settlers"
 veteran_names =
   _("?spy_level:informant"),
   _("?spy_level:handler"),
@@ -5670,7 +5810,7 @@ uk_food       = 0
 uk_gold       = 0
 embarks       = "LandRail", "Helicopter"    ; transport helicopter only
 disembarks    = "LandRail", "Helicopter"
-flags         = "Unique", "Diplomat", "Unbribable", "IgZOC", "NonMil", "HasNoZOC", "Expellable", "Cant_Pillage", "CanClaim", "Settlers", "NoVeteran"
+flags         = "Unique", "Diplomat", "Unbribable", "IgZOC", "NonMil", "NonProvoking", "HasNoZOC", "Expellable", "Cant_Pillage", "CanClaim", "Settlers", "NoVeteran"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("chosen one")
 veteran_base_raise_chance = 0
@@ -5720,7 +5860,7 @@ uk_shield     = 0
 uk_food       = 0
 uk_gold       = 0
 cargo         = "Land", "Cargo", "LandAirSea"
-flags         = "HelpWonder", "TradeRoute", "Cant_Fortify", "NonMil", "HasNoZOC", "Capturable", "Expellable", "NoVeteran"
+flags         = "HelpWonder", "TradeRoute", "Cant_Fortify", "NonMil", "NonProvoking", "HasNoZOC", "Capturable", "Expellable", "NoVeteran"
 roles         = ""
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
@@ -5767,7 +5907,7 @@ transport_cap = 3
 cargo         = "Cargo"
 embarks       = "LandRoad", "Helicopter"    ; transport helicopter only
 disembarks    = "LandRoad", "Helicopter"
-flags         = "HelpWonder", "TradeRoute", "IgZOC", "NonMil", "HasNoZOC", "Capturable", "Expellable", "Cant_Pillage"
+flags         = "HelpWonder", "TradeRoute", "IgZOC", "NonMil", "NonProvoking", "HasNoZOC", "Capturable", "Expellable", "Cant_Pillage"
 roles         = "TradeStartUnit"
 veteran_names =
   _("?vet_rank:green"),
@@ -5820,7 +5960,7 @@ uk_shield     = 0
 uk_food       = 0
 uk_gold       = 0
 cargo         = "Land", "LandAirSea", "Balloon", "Bomb", "Cargo", "Zeppelin"
-flags         =  "HelpWonder", "TradeRoute", "NonMil", "HasNoZOC", "Cant_Fortify", "NoVeteran", "Capturable"
+flags         =  "HelpWonder", "TradeRoute", "NonMil", "NonProvoking", "HasNoZOC", "Cant_Fortify", "NoVeteran", "Capturable"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
 veteran_base_raise_chance = 0
@@ -5867,7 +6007,7 @@ uk_shield     = 0
 uk_food       = 0
 uk_gold       = 0
 cargo         = "Land", "LandAirSea", "Bomb", "Cargo"
-flags         = "HelpWonder", "TradeRoute", "NonMil", "HasNoZOC", "Capturable", "Expellable", "NoVeteran", "Cant_Pillage"
+flags         = "HelpWonder", "TradeRoute", "NonMil", "NonProvoking", "HasNoZOC", "Capturable", "Expellable", "NoVeteran", "Cant_Pillage"
 roles         = "TradeStartUnit"
 helptext      = _("\
 The Truck replaces the Caravan as the basic Commerce unit on Land. It moves at\
@@ -5906,7 +6046,7 @@ uk_happy      = 0
 uk_shield     = 0
 uk_food       = 0
 uk_gold       = 0
-flags         = "HelpWonder", "TradeRoute", "NonMil", "HasNoZOC", "Capturable", "Cant_Fortify", "NoVeteran", "Cant_Pillage"
+flags         = "HelpWonder", "TradeRoute", "NonMil", "NonProvoking", "HasNoZOC", "Capturable", "Cant_Fortify", "NoVeteran", "Cant_Pillage"
 roles         = ""
 helptext      = _("\
 Goods are used to establish Trade Routes, Help Build Wonders, and contribute to\
@@ -5944,7 +6084,7 @@ uk_shield     = 0
 uk_food       = 0
 uk_gold       = 0
 disembarks    = "Air", "LandRoad", "LandRail", "Sea", "RiverShip"
-flags         = "HelpWonder", "TradeRoute", "IgZOC", "NonMil", "HasNoZOC", "Capturable",
+flags         = "HelpWonder", "TradeRoute", "IgZOC", "NonMil", "NonProvoking", "HasNoZOC", "Capturable",
                 "Cant_Fortify", "NoVeteran", "Cant_Pillage", "MultiSlot"
 roles         = ""
 helptext      = _("\
@@ -6119,7 +6259,7 @@ uk_happy      = 0
 uk_shield     = 5
 uk_food       = 2
 uk_gold       = 2
-flags         = "Settlers", "Infra", "NonMil", "HasNoZOC", "Cant_Fortify", "Unique", "Well-Digger", "Expellable"
+flags         = "Settlers", "Infra", "NonMil", "NonProvoking", "HasNoZOC", "Cant_Fortify", "Unique", "Well-Digger", "Expellable"
 embarks       = "LandRoad"
 disembarks    = "LandRoad"
 ; No veteran levels (level name is never displayed)
@@ -6169,7 +6309,7 @@ uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
 targets       = "Balloon", "LandRail", "Zeppelin"
-flags         = "Unique", "CantReachAir", "Bombarder", "NonProvokeVigil" ;autoattacks (!NonMil) targets instead of "Provoking" targets
+flags         = "Unique", "CantReachAir", "Bombarder", "AvidAttacker" ;autoattacks (!NonMil) targets instead of "Provoking" targets
 roles         = ""
 helptext      = _("\
 On rare occasions in history, nations constructed monumental turret guns.\
@@ -6217,7 +6357,7 @@ bombard_rate = 7
 ;vision_layer  = "Subsurface"
 ;embarks       = "Sea"
 ;disembarks    = "Sea"
-;flags         = "IgZOC", "IgTer", "NonMil", "HasNoZOC", "Unbribable", "WillNever", "NoHome", "NoVeteran", "MultiSlot"
+;flags         = "IgZOC", "IgTer", "NonMil", "NonProvoking", "HasNoZOC", "Unbribable", "WillNever", "NoHome", "NoVeteran", "MultiSlot"
 ;helptext      = _("\
 ;A Sonar Ping represents active focusing of ship sonar on a\
 ; specific area. Destroyer class and AEGIS Cruisers may take\
