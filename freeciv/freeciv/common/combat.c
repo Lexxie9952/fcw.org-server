@@ -34,6 +34,9 @@
 
 #include "combat.h"
 
+/* debug 
+#include "../server/notify.h" */
+
 /*******************************************************************//**
   Checks if player is restricted diplomatically from attacking the tile.
   Returns FALSE if
@@ -457,26 +460,28 @@ bool is_tile_nuke_proof(const struct tile *ptile)
                                        NULL, ptile, NULL, NULL, NULL,
                                        NULL, NULL, EFT_TILE_NUKE_PROOF);
 
+  bool success = fc_rand(100) < val; /* successful vs nuke detonation? */
 
   /* Check if any unit has a higher resistance than the tile itself */
   unit_list_iterate_safe(ptile->units, punit) {
-     int tmp = get_target_bonus_effects(NULL,
-                                        unit_owner(punit),
-                                        NULL,
-                                        tile_city(ptile),
-                                        NULL,
-                                        ptile,
-                                        punit,
-                                        unit_type_get(punit),
-                                        NULL,
-                                        NULL,
-                                        NULL,
-                                        EFT_TILE_NUKE_PROOF);
-      /* The highest resistance value will be used. */
-      if (tmp > val) val = tmp;
+    if (success) break;
+    int tmp = get_target_bonus_effects(NULL,
+                                       unit_owner(punit),
+                                       NULL,
+                                       tile_city(ptile),
+                                       NULL,
+                                       ptile,
+                                       punit,
+                                       unit_type_get(punit),
+                                       NULL,
+                                       NULL,
+                                       NULL,
+                                       EFT_TILE_NUKE_PROOF);
+    
+    success |= (fc_rand(100) < tmp);
   } unit_list_iterate_safe_end; 
 
-  return (fc_rand(100) < val);
+  return success;
 }
 
 /*******************************************************************//**
@@ -780,7 +785,7 @@ struct unit *get_defender(const struct unit *attacker,
     * necessary, but they are presented as inputs to a future smart fx
     * will_stack_die = if (false), apply "fuzzy" rules to let almost-as-
     *   strong defenders who are much cheaper, go first.
-    * best_hidden_value = all else equal, this damaged unit will be stronger
+    * best_healer = all else equal, this damaged unit will be stronger
     *   when it heals and therefore has better value.
     * best_offense = all else equal, this unit has more "offensive utility",
     *   valued as: attack strength = twice as important as mobility. */
