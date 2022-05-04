@@ -1622,7 +1622,7 @@ metaserver, the player names can be found there.\
 ")
 
 [help_controls]
-name = _("Controls")
+name = _("Commands")
 ; /* TRANS: This text mentions the names of some client options. These names
 ;  * are separately translated elsewhere; they should match! */
 text = _("\
