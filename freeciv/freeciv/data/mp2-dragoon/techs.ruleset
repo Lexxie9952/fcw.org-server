@@ -1042,3 +1042,13 @@ flags    = "Specialization"
 graphic     = "a.radio" ;this pic won't be shown in the tech tree but will show in other places
 graphic_alt = "-"
 cost = 820
+
+[advance_space2]
+name     = _("Space.2")
+req1     = "Space Flight"
+req2     = "None"
+flags    = "Specialization"
+graphic     = "a.space_flight"  ;this pic won't be shown in the tech tree but will show in other places
+graphic_alt = "-"
+cost = 1230
+helptext = _("Mobile SAM are created with 1 free ABM.")
