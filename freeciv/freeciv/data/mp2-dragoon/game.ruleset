@@ -264,16 +264,16 @@ nuke_defender_survival_chance_pct = 0
 ;   will_never - units with this unit type flag will never auto attack.
 
 ;possible attack_actions= "Capture Units", "Bombard", "Bombard 2", "Bombard 3", "Attack", "Suicide Attack"
-attack_actions= "Bombard", "Attack"
+attack_actions= "Bombard", "Bombard 2", "Attack", "Suicide Attack"
 
 ; Which flags mark units who don't ever auto-attack.
 will_never = "WillNever"
 
 if_attacker =
-    { "type",         "name",     "range", "present"
-      "DiplRel",      "War",      "Local",  TRUE
-      "MinMoveFrags", "9",        "Local",  TRUE
-      "UnitFlag",     "WillNever", "Local", FALSE  ; in theory, replaces: will_never="WillNever"
+    { "type",         "name",      "range", "present"
+      "DiplRel",      "War",       "Local",  TRUE
+      "MinMoveFrags", "9",         "Local",  TRUE
+      "UnitFlag",     "WillNever", "Local",  FALSE  ;replaces: will_never="WillNever"
     }
 
 [actions]
