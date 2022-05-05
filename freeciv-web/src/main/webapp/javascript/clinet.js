@@ -219,29 +219,30 @@ function network_stop()
 ****************************************************************************/
 function send_request(packet_payload)
 {
-/* The line below allows you to patch in a network encryption/security
-   protocol between client and server to diminish hacking/cheating. If you
-   can't or don't wish to implement one, then: remove the line below and
-   replace this function with the function of the same name available at:
+/* send_request_secure() optionally allows server operator to patch in 
+  a secure network encryption and/or security protocol between client and
+  server. if you do not patch one, it will default to use vanilla insecure
+  communication 
 
 https://github.com/freeciv/freeciv-web/blob/develop/freeciv-web/src/main/webapp/javascript/clinet.js
 
 */
-  send_request_secure(packet_payload);
+  if (typeof send_request_secure === "function") {
+    send_request_secure(packet_payload);
+  } else {
+    if (ws != null) {
+      ws.send(packet_payload);
+    }
+  
+    if (debug_active) {
+      clinet_last_send = new Date().getTime();
+    }
 
-/* Next, you have two choices:
-     1. No auto-logout of inactive sessions: At the top of this file change
-     to:      kick_inactive_time = Number.MAX_VALUE;
-        -- OR --
-     2. Auto-logout inactive sessions: add these 4 lines of code
-        to the end of this function:
-
-  var packet_type = jQuery.parseJSON("["+packet_payload+"]")[0]['pid'];
-  if (packet_type==packet_conn_pong || packet_type==packet_chat_msg_req) 
-    return;
-  set_last_user_action_time();
-
-*/
+    var packet_type = jQuery.parseJSON("["+packet_payload+"]")[0]['pid'];
+    if (packet_type==packet_conn_pong || packet_type==packet_chat_msg_req) 
+      return;
+    set_last_user_action_time();  
+  }
 }
 
 /****************************************************************************
