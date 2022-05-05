@@ -2708,7 +2708,7 @@ obsolete_by	=
     { "type", "name", "range"
       "Tech", "Combustion", "Player"
     }
-build_cost	= 310
+build_cost	= 300
 upkeep		= 0
 sabotage	= 0
 sound		= "w_sun_tzus_war_academy"
