@@ -267,11 +267,11 @@ IV. Units*
      (was: 10, 4 turns, capital city)
    * After Space.2 tech, newly made mSAMS get a free ABM
 =============================================================
-6. Armor II bonus vs. Missiles cut to 50% (was 100% i.e. 2x)
-this buffs the little used Mobile SAM to more usefulness in
-tactical operations and nerfs the Armor II which was getting 
-too much use as an anti-cruise missile defender unit instead 
-of its intended purpose.
+6. Armor II bonus vs. Missiles cut to 75% (was 100% i.e. 2x)
+Mobile SAM now has more usefulness in tactical operations
+and nerfs the Armor II which was getting too much use as an
+anti-cruise missile defender unit instead of its intended
+purpose.
 7. Zeppelin 7 moves, 7 turns of fuel.  More realistic and
  provides more possible use for this special unit.
 =============================================================
@@ -460,10 +460,17 @@ than 8 total spawned units
   * Goods (if discovered by a unit who can carry Goods)
   * A map of the surrounding area (14 tile diameter)
 ==============================================================
-10. EFT_REHOME_PCT alters the likelihood of units disbanding
-    from conquered/razed cities based on gov type.
-    Despotism:15,Monarchy:30,CM/Comm:45,Repub/Natl:60,
-    Demo:75,Theo:90
+10. EFT_REHOME_PCT alters the likelihood of units surviving
+    instead of disbanding, if they are not in a city, and their
+    home city is conquered or destroyed. If lucky, they will
+    re-home to the nearest domestic city to their location.
+               std. nuclear
+    Despotism  25%    50%
+    Monarchy   35%    60%
+    CM/Comm    55%    80%
+    Repub/Natl 65%    90%
+    Demo       80%   100%
+    Theo       90%   100%
 ==============================================================
 11. Citadel of Aleppo - 3x defense impervious to ballistic
    units and siege ram. Allows each nation to make one 
@@ -819,7 +826,7 @@ tech tree strategies.
 128a. Sun Tzu expires with Combustion also - this becomes the 
 new chokepoint for entering "WW2" and encouraging 
 "napoleonic age", diminishes some imbalances in unit veterancy
-balances.
+balances. Cost goes back to 300 since it won't last as long.
 ==============================================================
 129.Isaac Newton obsolete by Computers. Make internet/research
 lab less pointless, slow breakneck acceleration out of WW2
@@ -856,7 +863,9 @@ Computers costs 2x, expires Artemis, Isaac.
 ==============================================================
 135. New unit Anti-Ballistic Missile
 ==============================================================
-136. 
+136. Autoattack: unit types can be set to attack only certain 
+classes of unit, and either by odds or always. "always"
+currently only used for ABMs. 
 ==============================================================
 137.
 ==============================================================

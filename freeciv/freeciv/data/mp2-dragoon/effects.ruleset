@@ -1853,21 +1853,21 @@ reqs	=
 ;********************************************** REHOME PROBABILITIES, governments
 [effect_rehome_pct_despotism]
 type    = "Rehome_Pct"
-value	= 15
+value	= 25
 reqs	=
     { "type", "name", "range"
       "Gov", "Despotism", "Player"
     }
 [effect_rehome_pct_monarchy]
 type    = "Rehome_Pct"
-value	= 30
+value	= 35
 reqs	=
     { "type", "name", "range"
       "Gov", "Monarchy", "Player"
     }
 [effect_rehome_pct_const_monarchy]
 type    = "Rehome_Pct"
-value	= 15  ; 45 %
+value	= 20  ; 55 %
 reqs	=
     { "type", "name", "range"
       "Gov", "Monarchy", "Player"
@@ -1875,28 +1875,28 @@ reqs	=
     }
 [effect_rehome_pct_communism]
 type    = "Rehome_Pct"
-value	= 45
+value	= 55
 reqs	=
     { "type", "name", "range"
       "Gov", "Communism", "Player"
     }
 [effect_rehome_pct_republic]
 type    = "Rehome_Pct"
-value	= 60
+value	= 65
 reqs	=
     { "type", "name", "range"
       "Gov", "Republic", "Player"
     }
 [effect_rehome_pct_nationalism]
 type    = "Rehome_Pct"
-value	= 60
+value	= 65
 reqs	=
     { "type", "name", "range"
       "Gov", "Nationalism", "Player"
     }
 [effect_rehome_pct_democracy]
 type    = "Rehome_Pct"
-value	= 75
+value	= 80
 reqs	=
     { "type", "name", "range"
       "Gov", "Democracy", "Player"
@@ -1908,6 +1908,14 @@ reqs	=
     { "type", "name", "range"
       "Gov", "Theocracy", "Player"
     }
+[effect_mutually_assured_destruction_provisions]
+type    = "Rehome_Pct"
+value	= 25
+reqs	=
+    { "type", "name", "range"
+      "UnitFlag", "Nuclear", "Local"
+    }
+
 ;********************************************** MARTIAL LAW, governments
 [effect_martial_law_each_anarchy]
 type    = "Martial_Law_Each"
@@ -8236,6 +8244,16 @@ reqs    =
       "UnitType", "Dive Bomber", "Local", TRUE
       "Gov", "Communism", "Player", TRUE
     }
+;COMMUNISM 5 shield discount Light Armor
+[effect_communist_light_armor]
+type    = "Unit_Build_Cost_Pct"
+value	  = -7
+reqs    =
+    {
+      "type", "name", "range", "present"
+      "UnitType", "Light Armor", "Local", TRUE
+      "Gov", "Communism", "Player", TRUE
+    }
 ;COMMUNISM 10 shield discount Armor
 [effect_communist_armor]
 type    = "Unit_Build_Cost_Pct"
@@ -8246,14 +8264,13 @@ reqs    =
       "UnitType", "Armor", "Local", TRUE
       "Gov", "Communism", "Player", TRUE
     }
-;COMMUNISM 5 shield discount Light Armor
-[effect_communist_light_armor]
+[effect_communist_armor_ii]
 type    = "Unit_Build_Cost_Pct"
-value	  = -7
+value	  = -12
 reqs    =
     {
       "type", "name", "range", "present"
-      "UnitType", "Light Armor", "Local", TRUE
+      "UnitType", "Armor II", "Local", TRUE
       "Gov", "Communism", "Player", TRUE
     }
 ;COMMUNISM No disorder from starvation

@@ -2452,7 +2452,7 @@ embarks       = "Helicopter"    ; transport helicopter only
 targets       = "Balloon", "Helicopter", "LandRail", "Zeppelin"
 bonuses       =
    { "flag", "type", "value"
-     "Missile",      "DefenseMultiplierPct", 50
+     "Missile",      "DefenseMultiplierPct", 75
    }
 flags         = "CantReachAir", "FortressBuster", "NeverBlocked", "WillNever", "CanEscape"
 roles         = "AttackFastStartUnit", "Hunter"
@@ -2460,10 +2460,10 @@ helptext      = _("\
 Armor II is the ultra-modern upgrade to Armor. It features high tech composite armor and\
  electronic countermeasures (ECM). Forts and Fortresses gain no bonus against\
  its ability to blast and break through fortifications. ECM and composite armor\
- give a 50% defense bonus against Missiles. Unlike most land units,\
+ give a 75% defense bonus against Missiles. Unlike most land units,\
  Armor II can attack reachable units regardless of whether unreachable units protect the tile. \
 \nBig Land units can’t enter Mountains without a road or native base, and do not\
- receive a move bonus from Rivers. \n\
+ receive a move bonus from Rivers. \nCommunists pay 10 less for this unit. \n\
 Stack-Escape：40% odds to evade stack-death if attacker doesn’t have more moves than it does.\
 ")
 

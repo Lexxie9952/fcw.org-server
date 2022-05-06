@@ -58,7 +58,8 @@ var communist_discounts = {
   "Riflemen": 5,
   "Light Armor": 5,
   "Dive Bomber": 10,
-  "Armor": 10
+  "Armor": 10,
+  "Armor II": 10
 };
 var nationalist_discounts = {
     "Police Station": 10
@@ -180,7 +181,10 @@ function get_universal_discount_price(ptype, pcity)
     if (communist_discounts[ptype['name']]) {
       if (!client_rules_flag[CRF_MP2_C]) {
         if (ptype['name'] == "Armor") return ptype['build_cost']
-      } 
+      }
+      if (ptype['name'] == "Armor II") {
+        if (!client_rules_flag[CRF_MP2_D]) return ptype['build_cost']
+      }
       return ptype['build_cost'] - communist_discounts[ptype['name']];
     }
   }
