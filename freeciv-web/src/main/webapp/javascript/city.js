@@ -522,7 +522,7 @@ function show_city_dialog(pcity)
   $("#worklist_dialog_headline").click(function(ev) { ev.stopImmediatePropagation(); city_remove_current_prod()} );
 
   var orig_renderer = renderer;
-  renderer = RENDERER_2DCANVAS;
+  if (renderer == RENDERER_WEBGL) renderer = RENDERER_2DCANVAS;
 
   set_citydlg_dimensions(pcity);
   set_city_mapview_active();
@@ -531,7 +531,8 @@ function show_city_dialog(pcity)
   //save_map_return_position(city_tile(pcity)); //save tile locations for shift-spacebar return position function
   center_tile_mapcanvas(city_tile(pcity));
   update_map_canvas(0, 0, mapview['store_width'], mapview['store_height']);
-  renderer = orig_renderer;
+
+  if (orig_renderer == RENDERER_WEBGL) renderer = orig_renderer;
 
   var pop_string = is_small_screen() ? city_population(pcity)+"K" : numberWithCommas(city_population(pcity)*1000);
   var change_string = pcity['granary_turns'] < 0 ? "Starves in: " : "Growth in: ";
