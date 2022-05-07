@@ -58,9 +58,9 @@ function update_animated_objects()
 
     if (flag != null) {
       flag.rotateOnAxis(new THREE.Vector3(0,1,0).normalize(), -1 * Math.PI / 4);
-      flag.translateOnAxis(new THREE.Vector3(1,0,0).normalize(), delta_x);
-      flag.translateOnAxis(new THREE.Vector3(0,1,0).normalize(), delta_z);
-      flag.translateOnAxis(new THREE.Vector3(0,0,1).normalize(), delta_y);
+      flag.translateOnAxis(new THREE.Vector3(1,0,0).normalize(), delta_x - flag_dx);
+      flag.translateOnAxis(new THREE.Vector3(0,1,0).normalize(), delta_z + flag_dz);
+      flag.translateOnAxis(new THREE.Vector3(0,0,1).normalize(), delta_y - flag_dy);
       flag.rotateOnAxis(new THREE.Vector3(0,1,0).normalize(), Math.PI / 4);
       flag.updateMatrix();
     }
