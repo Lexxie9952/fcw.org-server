@@ -271,7 +271,7 @@ Random randomValue=new Random();
 
 						<c:if test="${default_lang}">
 							<div class="features">
-								Play against the Freeciv AI with 2D HTML5 graphics
+								Play against the Freeciv AI with isometric graphics
 							</div>
 						</c:if>
 						<a id="single-button" href="/webclient/?action=new&type=singleplayer" class="btn"><i class="fa fa-flag"></i> <fmt:message key="index-game-launcher-2d"/></a>
@@ -279,7 +279,7 @@ Random randomValue=new Random();
 
                         <c:if test="${default_lang}">
                             <div class="features">
-                                Play against the Freeciv AI with 3D WebGL<br>graphics using the Three.js 3D engine
+                                3D pre-release (development testing only)
                             </div>
                         </c:if>
                         <a id="single-button" href="/webclient/?action=new&renderer=webgl&type=singleplayer" class="btn" id="webgl_button"><i class="fa fa-cube"></i><fmt:message key="index-game-launcher-3d"/></a>
