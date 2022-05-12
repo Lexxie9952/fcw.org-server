@@ -33,6 +33,7 @@ var scenarios = [
   {"img":"/images/france.png", "description":"France (140x90)", "savegame":"france"},
   {"img":"/images/italy.png", "description":"Italy (100x100)", "savegame":"italy"},
   {"img":"/images/japan.png", "description":"Japan (88x100)", "savegame":"japan"},
+  {"img":"/images/japan3.png", "description":"Huge Japan v3LT LONGTURN ONLY. (176x200)", "savegame":"japan3"},
   {"img":"/images/america.png", "description":"North America (116x100)", "savegame":"north_america"},
   {"img":"/images/riverland.png", "description":"Riverlands LT for 20 players (90x60)", "savegame":"riverland"},
 ];
