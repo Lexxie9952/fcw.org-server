@@ -13,7 +13,7 @@
 # /vagrant/freeciv/build/data/scenarios
 # /home/vagrant/freeciv/share/freeciv/scenarios/
 
-SCENARIOS=(europe.sav europe-new-positions.sav)
+SCENARIOS=(japan.sav japan3.sav europe.sav europe-new-positions.sav tutorial.sav riverland.sav)
 TOPDIR="$( cd ../"$( dirname "${BASH_SOURCE[0]}" )" > /dev/null && pwd )"
 
 printf "\n./vscenario-build.sh: VAGRANT VERSION. Use ./scenario-build.sh for deployed servers.\n"
@@ -21,8 +21,6 @@ printf "\n**********************************************************************
 printf "This refreshes only the SCENARIOS marked for rebuild inside this script.\n"
 printf "****************************************************************************\n"
 
-SCENARIOS=(europe.sav europe-new-positions.sav tutorial.sav)
-TOPDIR="$( cd ../"$( dirname "${BASH_SOURCE[0]}" )" > /dev/null && pwd )"
 
 printf "\nUpdating scenarios...\n"
 printf "***********************\n"
