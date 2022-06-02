@@ -253,6 +253,8 @@ function update_tech_tree()
     if (!(tech_id+'' in reqtree) || reqtree[tech_id+''] == null) {
       continue;
     }
+    // Techs disabled in special scenarios are flagged with ultra-high cost.
+    if (ptech.cost>900000) continue;
 
     var sx = Math.floor(reqtree[tech_id+'']['x'] * tech_xscale);  //scale in X direction.
     var sy = reqtree[tech_id+'']['y'];
@@ -317,6 +319,8 @@ function update_tech_tree()
 
   for (var tech_id in techs) {
     var ptech = techs[tech_id];
+    // Techs disabled in special scenarios are flagged with ultra-high cost.
+    if (ptech.cost>900000) continue;
     const is_special = (ptech.flags[0] == TECH_SPECIAL_TECH); // specialty add-on tech
     var twidth  = get_tech_item_width(ptech);
     var theight = get_tech_item_height(ptech);
