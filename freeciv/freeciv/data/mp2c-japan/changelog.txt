@@ -1,0 +1,2 @@
+1. Removed modern half of tech tree, in order to make this a pre-feudal to early gunpowder scenario.
+2. Most first tier techs cost 2 bulbs, to accelerate immediately out of Dark Age into a pre-feudal age.

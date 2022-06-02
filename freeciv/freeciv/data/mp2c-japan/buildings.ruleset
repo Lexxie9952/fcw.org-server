@@ -1,0 +1,1822 @@
+; Modifying this file：
+; You should not modify this file except to make bugfixes or
+; for other "maintenance".  If you want to make custom changes,
+; you should create a new datadir subdirectory and copy this file
+; into that directory, and then modify that copy.  Then use the
+; command "rulesetdir <mysubdir>" in the server to have freeciv
+; use your new customized file.
+
+; Note that the freeciv AI may not cope well with anything more
+; than minor changes.
+
+[datafile]
+description="Buildings data for Freeciv"
+options="+Freeciv-ruleset-Devel-2017.Jan.02 web-compatible"
+format_version=20
+
+; /* <-- avoid gettext warnings
+;
+; Below：The individual buildings, one per section.
+; (Buildings = City Improvements and Wonders)
+;
+; The actual tag used (the * in [building_*]) does not matter, except
+; it must be unique within this file, and it may be used in debug
+; output when reading this file.
+;
+; Notes
+;
+; name          = translatable name as seen by user
+; rule_name     = (optional) internal name for savegames, rulesets etc; if
+;                 not present, "name" is used for this purpose too. Since
+;                 the name used in savegames must not change, if you want
+;                 to rename an item after a ruleset has been released, you
+;                 should set "rule_name" to the original value of "name".
+; genus	        = genus; one of：
+;                 "GreatWonder", "SmallWonder", "Improvement", "Special".
+; reqs		= requirements to build the building (see effects.ruleset
+;		  and README.effects for help on requirements)
+; graphic	= icon of improvement (used in city dialog)
+; graphic_alt	= alternate icon of improvement
+; obsolete_by	= requirements for the building to become obsolete
+; build_cost	= production shields required to build
+; upkeep	= monetary upkeep value
+; sabotage	= percent chance of diplomat sabotage being successful
+; flags         = special flag strings
+;
+; ** Building flags **
+; "VisibleByOthers"  = Anyone who can see your city knows whether it has
+;                      this improvement. (Great and small wonders are
+;                      always visible.)
+; "SaveSmallWonder"  = If you lose the city with this building in, and the
+;                      "savepalace" server setting is enabled, another will
+;                      be built for free in a random city.
+;                      Should only be used with genus "SmallWonder".
+; "Gold"             = Not a real building; production turned into gold
+;                      indefinitely (capitalization/coinage).
+;                      Genus should be "Special".
+; "DisasterProof"    = Disasters never destroy this building. Is meaningful
+;                      only for genus "Improvement" buildings as others are
+;                      automatically disaster proof.
+;
+; */ <-- avoid gettext warnings
+
+[building_airport]
+name		= _("Airport")
+genus		= "Improvement"
+reqs	=
+    { "type", "name", "range"
+      "Tech", "Radio", "Player"
+    }
+graphic	= "b.airport"
+graphic_alt	= "-"
+obsolete_by	=
+    { "type", "name", "range"
+    }
+build_cost	= 120
+upkeep		= 3
+sabotage	= 100
+sound		= "b_airport"
+sound_alt	= "b_generic"
+helptext	= _("\
+Allows a city to produce veteran Air units, Helicopters, and Missiles.\
+ Damaged Air units and Helicopters which stay in town for one full turn\
+ without moving are completely repaired.\
+"), _("\
+Two cities with Airports can airlift units. Airlifting instantly transports\
+ the unit from one city to another and will use up all movement\
+ points. A unit must have some movement points left to be airlifted.\
+")
+
+[building_amphitheatre]
+name            = _("Amphitheater")
+rule_name       = "Amphitheatre"        ; en_GB used originally
+genus		= "Improvement"
+reqs	=
+    { "type", "name", "range"
+      "Tech", "Construction", "Player"
+    }
+graphic	= "b.colosseum"
+graphic_alt	= "-"
+obsolete_by	=
+    { "type", "name", "range"
+    }
+build_cost	= 60
+upkeep		= 4
+sabotage	= 100
+sound		= "b_colosseum"
+sound_alt	= "b_generic"
+helptext	= _("\
+Entertains the citizens of a city, making three unhappy citizens content. \
+ (Four after the discovery of Electricity.)  However, it does not\
+ affect citizens made unhappy by military activity.\
+")
+
+[building_aqueduct]
+name		= _("Aqueduct")
+genus		= "Improvement"
+reqs	=
+    { "type", "name", "range"
+      "Tech", "Construction", "Player"
+    }
+graphic	= "b.aqueduct"
+graphic_alt	= "-"
+obsolete_by	=
+    { "type", "name", "range"
+    }
+build_cost	= 60
+upkeep		= 2
+sabotage	= 100
+sound		= "b_aqueduct"
+sound_alt	= "b_generic"
+helptext	= _("\
+Allows a city to grow larger than size 8.  A Sewer System is also\
+ required for a city to grow larger than size 12.\
+")
+; There is also an effect to reduce the chance of plague, but you have to
+; enable illness in game.ruleset for that to be relevant.
+
+[building_bank]
+name		= _("Bank")
+genus		= "Improvement"
+reqs	=
+    { "type", "name", "range"
+      "Tech", "Banking", "Player"
+      "Building", "Marketplace", "City"
+    }
+graphic	= "b.bank"
+graphic_alt	= "-"
+obsolete_by	=
+    { "type", "name", "range"
+    }
+build_cost	= 80
+upkeep		= 2
+sabotage	= 100
+sound		= "b_bank"
+sound_alt	= "b_generic"
+helptext	= _("\
+Together, a Bank and Marketplace double the tax and luxury output in a city.\
+ That is, the Bank adds another +50% to the +50% of the Marketplace. \n\
+Banks also increase the conversion rate of Coinage by +25%. A Bank and\
+ Marketplace each add +25%, yielding a rate of 2.0 gold per 1 shield invested.\
+")
+
+[building_barracks]
+name		= _("Barracks")
+genus		= "Improvement"
+reqs	=
+    { "type", "name", "range"
+      "Tech", "Warrior Code", "Player"
+    }
+graphic	= "b.barracks_i"
+graphic_alt	= "-"
+obsolete_by	=
+    { "type", "name", "range"
+      "Tech", "Gunpowder", "Player"
+      "Building", "Barracks II", "City"
+    }
+build_cost	= 30
+upkeep		= 1
+sabotage	= 100
+sound		= "b_barracks_i"
+sound_alt	= "b_generic"
+helptext	= _("\
+With a Barracks I, each new land unit built in a city will\
+ automatically have Veteran V1 status, which means that its attack and\
+ defense strengths are increased by 50%. Also, damaged land units\
+ which stay in town for one full turn without moving are completely\
+ healed. Obsolete by：Gunpowder.\
+")
+
+[building_barracks_ii]
+name		= _("Barracks II")
+genus		= "Improvement"
+reqs	=
+    { "type", "name", "range"
+      "Tech", "Gunpowder", "Player"
+    }
+graphic	= "b.barracks_ii"
+graphic_alt	= "b.barracks_i"
+obsolete_by	=
+    { "type", "name", "range"
+      "Tech", "Mobile Warfare", "Player"
+    }
+build_cost	= 35
+upkeep		= 1
+sabotage	= 100
+sound		= "b_barracks_ii"
+sound_alt	= "b_generic"
+helptext	= _("\
+With a Barracks II, each new land unit built in a city will\
+ automatically have Veteran V1 status, which means that its attack and\
+ defense strengths are increased by 50%.  Also, damaged land units\
+ which stay in town for one full turn without moving are completely\
+ restored. Obsolete by：Mobile Warfare.\
+")
+
+[building_cathedral]
+name		= _("Cathedral")
+genus		= "Improvement"
+reqs	=
+    { "type", "name", "range"
+      "Tech", "Monotheism", "Player"
+      "Building", "Temple", "City"
+    }
+graphic	= "b.cathedral"
+graphic_alt	= "-"
+obsolete_by	=
+    { "type", "name", "range"
+    }
+build_cost	= 75
+upkeep		= 3
+sabotage	= 100
+sound		= "b_cathedral"
+sound_alt	= "b_generic"
+helptext	= _("\
+A Cathedral makes 3 unhappy citizens content, but does not affect citizens\
+ made unhappy by military activity. Theology increases the effect by +1.\
+ Communist government decreases the effect by -1. (Michelangelo’s Chapel enhances\
+ the effect of Cathedrals by +1 happy citizen and +1 forced content citizen.)\
+")
+
+[building_city_walls]
+name		= _("City Walls")
+genus		= "Improvement"
+flags		= "VisibleByOthers"
+reqs	=
+    { "type", "name", "range"
+      "Tech", "Construction", "Player"
+    }
+graphic	= "b.city_walls"
+graphic_alt	= "-"
+obsolete_by	=
+    { "type", "name", "range"
+    }
+build_cost	= 65
+upkeep		= 0
+sabotage	= 50
+sound		= "b_city_walls"
+sound_alt	= "b_generic"
+helptext	= _("\
+City Walls give a 3× bonus to every unit in a City against Land unit attacks.\
+ City Walls are useless against Air, Sea, and Missile units; and the bonus is\
+ reduced when attacked by Catapults, Cannons, Artillery, and Howitzers.\n\
+ "), _("\
+City Walls prevent population loss when a defending unit is killed. If an enemy\
+ attempts to sabotage City Walls, the odds of success are halved. In a city with\
+ Fortifications, only the terrain bonus adds to the City Wall bonus. \n\
+ "), _("\
+ Discovery of Metallurgy increases cost to 75 shields.\
+")
+
+[building_coastal_defense]
+name		= _("Coastal Defense")
+genus		= "Improvement"
+flags		= "VisibleByOthers"
+reqs	=
+    { "type", "name", "range"
+      "Tech", "Gunpowder", "Player"
+      "TerrainClass", "Oceanic", "Adjacent"
+    }
+graphic	= "b.coastal_defense"
+graphic_alt	= "-"
+obsolete_by	=
+    { "type", "name", "range"
+    }
+build_cost	= 65
+upkeep		= 2
+sabotage	= 100
+sound		= "b_coastal_defense"
+sound_alt	= "b_generic"
+helptext	= _("\
+Doubles the defense strength of all units in a city when defending against\
+ against enemy ships.\
+")
+
+[building_courthouse]
+name		= _("Courthouse")
+genus		= "Improvement"
+reqs	=
+    { "type", "name", "range"
+      "Tech", "Code of Laws", "Player"
+    }
+graphic	= "b.courthouse"
+graphic_alt	= "-"
+obsolete_by	=
+    { "type", "name", "range"
+    }
+build_cost	= 45
+upkeep		= 1
+sabotage	= 100
+sound		= "b_courthouse"
+sound_alt	= "b_generic"
+helptext	= _("\
+Courthouses reduce corruption by half, eliminate\
+ tile output penalties for Anarchy and Despotism, and\
+ give +1 shield of free unit upkeep.\
+"), _("\
+ Diplomatic combat gets a bonus of ¼ of base odds. (At general base odds\
+ of ½, odds of losing become：½ - ⅛ = ⅜). All other hostile diplomatic\
+ actions are 20% less effective (80% - 20% = 60%).\
+"), _("\
+ Courthouses make 1 unhappy citizen content, unless the\
+ citizen is unhappy about military activity).\
+"), _("\
+ Cost to incite revolt in the city is 2× if empty and 4× if occupied.\
+"), _("\
+ A unique bonus that only a local Courthouse provides to its city: \
+ Diplomats can’t establish embassies unless you permit it through\
+ Cease-fire or Peace. (Spies require a Police Station to block them.)\
+")
+
+[building_fortifications]
+name		= _("Fortifications")
+genus		= "Improvement"
+flags		= "VisibleByOthers"
+reqs	=
+    { "type", "name", "range"
+      "Tech", "Masonry", "Player"
+    }
+graphic	= "b.fortifications"
+graphic_alt	= "b.city_walls"
+obsolete_by	=
+    { "type", "name", "range"
+    }
+build_cost	= 35
+upkeep		= 0
+sabotage	= 50
+sound		= "b_fortifications"
+sound_alt	= "b_generic"
+helptext	= _("\
+Fortifications give 1.5× defense to every unit in a City vs. attacks by Land.\
+ This bonus is reduced if attacked by Catapult or the units to which it upgrades.\
+ Fortifications prevent population loss when a defending unit is killed. \n\
+"), _("\
+Fortifications raise the terrain bonus of Lowlands tiles by +17%.\
+ (Flatland is 1.17×, Forest and Swamp are 1.5×, and Jungle is 1.67×.)\
+ A terrain bonus helps defending Land units against attacks from units\
+ of all types. \n\
+"), _("\
+Fortifications are unassailable by Siege Rams.\
+ If an enemy attempts sabotage, odds of success are halved. \n\
+"), _("\
+➤ Except for any possible terrain bonus, this improvement offers no bonus when\
+ City Walls are in place. \n\
+➤ AFTER making City Walls, you can sell Fortifications with a full return of gold\
+ cost.\
+")
+
+[building_granary]
+name		= _("Granary")
+genus		= "Improvement"
+reqs	=
+    { "type", "name", "range"
+      "Tech", "Pottery", "Player"
+    }
+graphic	= "b.granary"
+graphic_alt	= "-"
+obsolete_by	=
+    { "type", "name", "range"
+    }
+build_cost	= 35
+upkeep		= 1
+sabotage	= 100
+sound		= "b_granary"
+sound_alt	= "b_generic"
+helptext	= _("\
+The amount of stored food will be set to half full whenever a city\
+ with a Granary 1) grows in size, or 2) loses size from starvation.\
+ This helps a city to grow faster and more easily withstand famine.\
+")
+
+[building_harbour]
+name            = _("Harbor")
+rule_name       = "Harbour"     ; en_GB spelling used originally
+genus		= "Improvement"
+reqs	=
+    { "type", "name", "range"
+      "Tech", "Seafaring", "Player"
+      "TerrainClass", "Oceanic", "Adjacent"
+    }
+graphic	= "b.harbour"
+graphic_alt	= "-"
+obsolete_by	=
+    { "type", "name", "range"
+    }
+build_cost	= 40
+upkeep		= 1
+sabotage	= 100
+sound		= "b_harbour"
+sound_alt	= "b_generic"
+helptext	= _("\
+Gives one extra food resource on all Oceanic tiles. The city needs\
+ to be coastal to build this improvement.\
+")
+
+[building_homeland_security]
+name            = _("Homeland Security")
+genus		= "Improvement"
+reqs	=
+    { "type", "name", "range"
+      "Tech", "Literacy", "Player"
+      "Building", "Supreme Court", "Player"
+    }
+graphic	= "b.homeland_security"
+graphic_alt	= "b.courthouse"
+obsolete_by	=
+    { "type", "name", "range"
+    }
+build_cost	= 30
+upkeep		= 0
+sabotage	= 0
+sound		= "b_homeland_security"
+sound_alt	= "b_generic"
+helptext	= _("\
+You can build Homeland Security offices if you own the Supreme Court. Homeland Security\
+ gives the same bonus as a Courthouse vs. hostile diplomatic acts. As a ministry of the\
+ Supreme Court, it has no upkeep and cannot be sabotaged.\
+")
+
+[building_library]
+name		= _("Library")
+genus		= "Improvement"
+reqs	=
+    { "type", "name", "range"
+      "Tech", "Writing", "Player"
+    }
+graphic	= "b.library"
+graphic_alt	= "-"
+obsolete_by	=
+    { "type", "name", "range"
+    }
+build_cost	= 60
+upkeep		= 1
+sabotage	= 100
+sound		= "b_library"
+sound_alt	= "b_generic"
+helptext	= _("\
+Increases the science output in a city by +100%.\
+")
+
+[building_marketplace]
+name		= _("Marketplace")
+genus		= "Improvement"
+reqs	=
+    { "type", "name", "range"
+      "Tech", "Currency", "Player"
+    }
+graphic	= "b.marketplace"
+graphic_alt	= "-"
+obsolete_by	=
+    { "type", "name", "range"
+    }
+build_cost	= 60
+upkeep		= 0
+sabotage	= 100
+sound		= "b_marketplace"
+sound_alt	= "b_generic"
+helptext	= _("\
+Increases the luxury and tax output in a city by +50%.\
+Also increases the conversion rate of Coinage by +25%,\
+ yielding a rate of 1.75 gold per 1 shield invested.\
+")
+
+[building_sewer_system]
+name		= _("Sewer System")
+genus		= "Improvement"
+reqs	=
+    { "type", "name", "range"
+      "Tech", "Sanitation", "Player"
+      "Building", "Aqueduct", "City"
+    }
+graphic	= "b.sewer_system"
+graphic_alt	= "-"
+obsolete_by	=
+    { "type", "name", "range"
+    }
+build_cost	= 80
+upkeep		= 2
+sabotage	= 100
+sound		= "b_sewer_system"
+sound_alt	= "b_generic"
+helptext	= _("\
+Allows a city to grow larger than size 12.  An Aqueduct is first\
+ required for a city to grow larger than size 8.\
+")
+; There is also an effect to reduce the chance of plague, but you have to
+; enable illness in game.ruleset for that to be relevant.
+
+[building_stock_exchange]
+name		= _("Stock Exchange")
+genus		= "Improvement"
+reqs	=
+    { "type", "name", "range"
+      "Tech", "Economics", "Player"
+      "Building", "Bank", "City"
+    }
+graphic	= "b.stock_exchange"
+graphic_alt	= "-"
+obsolete_by	=
+    { "type", "name", "range"
+    }
+build_cost	= 120
+upkeep		= 3
+sabotage	= 100
+sound		= "b_stock_exchange"
+sound_alt	= "b_generic"
+helptext	= _("\
+In cities with a Bank, a Stock Exchange boosts tax and luxury\
+ production by an additional +50%. \
+"), _("\
+* A Bank and Stock Exchange together boost\
+ tax and luxury production by +100%.\
+"), _("\
+* A Marketplace, Bank, and Stock Exchange together boost\
+ tax and luxury production by +150%. \
+"), _("\
+After discovery of The Corporation, non-Communist governments see the conversion rate of\
+ Coinage increase by +25%. A Bank, Marketplace, and Stock Exchange each add +25%, yielding\
+ a total rate of 2.25 gold per 1 shield invested.\
+")
+
+[building_supermarket]
+name		= _("Supermarket")
+genus		= "Improvement"
+reqs	=
+    { "type", "name", "range"
+      "Tech", "Refrigeration", "Player"
+    }
+graphic	= "b.supermarket"
+graphic_alt	= "-"
+obsolete_by	=
+    { "type", "name", "range"
+    }
+build_cost	= 80
+upkeep		= 3
+sabotage	= 100
+sound		= "b_supermarket"
+sound_alt	= "b_generic"
+helptext	= _("\
+Increases the food resources by +100% on each farmland tile used\
+ by the city. An irrigable city centre tile receives an\
+ immediate +50% bonus even without Farmland.\
+ Farmland tiles are those which have been irrigated a second time.\
+")
+
+[building_temple]
+name		= _("Temple")
+genus		= "Improvement"
+reqs	=
+    { "type", "name", "range"
+      "Tech", "Ceremonial Burial", "Player"
+    }
+graphic	= "b.temple"
+graphic_alt	= "-"
+obsolete_by	=
+    { "type", "name", "range"
+    }
+build_cost	= 30
+upkeep		= 1
+sabotage	= 100
+sound		= "b_temple"
+sound_alt	= "b_generic"
+helptext	= _("\
+Makes one unhappy citizen content. Mysticism doubles\
+ this effect. With both Mysticism and the Oracle, +4 citizens are\
+ made content. Does not affect citizens made unhappy by military\
+ activity.\
+")
+
+[building_totem_pole]
+name		= _("Totem Pole")
+genus		= "Improvement"
+reqs	=
+    { "type", "name", "range", "present"
+      "Tech", "Ceremonial Burial", "Player", FALSE
+    }
+graphic	= "b.totem_pole"
+graphic_alt	= "-"
+obsolete_by	=
+    { "type", "name", "range"
+      "Tech", "Ceremonial Burial", "Player"
+      "Building", "Temple", "City"
+    }
+build_cost	= 30
+upkeep		= 0
+sabotage	= 100
+sound		= "b_totem_pole"
+sound_alt	= "b_generic"
+helptext	= _("\
+Gives two luxury to a city. In small tribal settlements, this can\
+ be more effective than a Temple for aiding celebration. \n\
+The process of building a Totem Pole is sometimes more useful than\
+ finishing it. It keeps your tribe productive by storing shields that\
+ can transfer into a building made available by a future scientific\
+ discovery. \n\
+Obsolete by：Temple, Ceremonial Burial.\
+")
+
+[building_university]
+name		= _("University")
+genus		= "Improvement"
+reqs	=
+    { "type", "name", "range"
+      "Tech", "University", "Player"
+      "Building", "Library", "City"
+    }
+graphic	= "b.university"
+graphic_alt	= "-"
+obsolete_by	=
+    { "type", "name", "range"
+    }
+build_cost	= 120
+upkeep		= 3
+sabotage	= 100
+sound		= "b_university"
+sound_alt	= "b_generic"
+helptext	= _("\
+Adds +150% to science output in a city with a Library. \
+"), _("\
+*A University and Library combine for a +250% increase\
+ in science output.\
+")
+
+[building_palace]
+name		= _("Palace")
+genus		= "SmallWonder"
+flags		= "SaveSmallWonder"
+reqs	=
+    { "type", "name", "range"
+    }
+graphic	= "b.palace"
+graphic_alt	= "-"
+obsolete_by	=
+    { "type", "name", "range"
+    }
+build_cost	= 70
+upkeep		= 0
+sabotage	= 0
+sound		= "b_palace"
+sound_alt	= "b_generic"
+helptext	= _("\
+Sets the main capital of your nation. Loss of your main capital：\
+ (1) creates a new Palace and capital in a random city,\
+ (2) destroys any Spaceship you are building, (3) may cause civil war.\
+"), _("\
+ Capital cities gain +1 happy citizen.\
+"), _("\
+ Capitals can’t be incited to revolt. The closer a city is to a capital,\
+ the higher the cost to bribe or incite revolt. In a capital, the chance of\
+ enemy agents defeating your agents or sabotaging buildings is halved.\
+"), _("\
+ Corruption in cities increases with distance from a capital. Capitals\
+ enjoy a further reduction of corruption by half.\
+"), _("\
+ You can rebuild your Palace in another city. This may secure\
+ a safer location or reduce corruption for nearby cities.\ 
+"), _("\
+ The Palace gives a production bonus of +75% under Despotism,\
+ +50% under Monarchy, +25% under Communism, +15% under\
+ Nationalism; and Theocracy gets a +50% gold bonus.\
+"), _("\
+ A Palace automatically appears in your first city. This nullifies\
+ the move bonus for nations who have no cities, due to sedentary\
+ culture.\
+"), _("\
+ With Conscription, a Palace allows producing one extra qualifying unit per turn.\
+")
+
+[building_ecclesiastical_palace]
+name		= _("Ecclesiastical Palace")
+genus		= "SmallWonder"
+flags		= "SaveSmallWonder"
+reqs	=
+    { "type", "name", "range"
+      "Tech", "Mysticism", "Player"
+    }
+graphic	= "b.ecclesiastical_palace"
+graphic_alt	= "b.palace"
+obsolete_by	=
+    { "type", "name", "range"
+    }
+build_cost	= 90
+upkeep		= 0
+sabotage	= 0
+sound		= "b_palace"
+sound_alt	= "b_generic"
+helptext	= _("\
+Sets your religious capital and second center of government. Loss of this\
+ city will create a new Ecclesiastical Palace in a random city.\
+"), _("\
+ Capital cities gain +1 happy citizen.\
+"), _("\
+ Capitals can’t be incited to revolt. The closer a city is to a capital,\
+ the higher the cost to bribe or incite revolt. In a capital, the chance of\
+ enemy agents defeating your agents or sabotaging buildings is halved.\
+"), _("\
+ Corruption in cities increases with distance from the closest capital. Capitals\
+ enjoy a further reduction of corruption by half.\
+"), _("\
+ Religious capitals have a gold income bonus of +75% under Despotism,\
+ +50% under Monarchy, +50% under Theocracy, +25% under Communism, and\
+ +15% under Nationalism.\
+"), _("\
+ Under Theocracy, Zealots produced in the city with this building\
+ are inspired by fervorous faith to +1 higher veteran level.\
+"), _("\
+ Allows instantly switching to Theocracy government if Theocracy tech is\
+ known.\
+ With Conscription, allows producing one extra qualifying unit per turn.\
+")
+
+[building_asmiths_trading_co]
+name		= _("A.Smith's Trading Co.")
+genus		= "SmallWonder"
+reqs	=
+    { "type",     "name",                  "range", "present", "quiet"
+      "Tech",     "Economics",             "Player", TRUE,     FALSE
+      "Building", "A.Smith's Trading Co.", "Player", FALSE,    TRUE
+    }
+graphic	= "b.asmiths_trading_co"
+graphic_alt	= "-"
+obsolete_by	=
+    { "type", "name", "range"
+    }
+build_cost	= 320
+upkeep		= 0
+sabotage	= 0
+sound		= "w_asmiths_trading_co"
+sound_alt	= "w_generic"
+helptext	= _("\
+Adam Smith’s Trading Company increases your nation’s knowledge of\
+ economics. In all your cities, Buildings with upkeep of 1 gold become\
+ free. This Wonder enables three new specialists：\n\
+"), _("
+  * Each Laborer produces 1 production point for their city per turn; \n\
+"), _("
+  * Each Merchant produces 1 gold and 2 trade points per turn.\
+ Trade is then distributed by your national tax rates. \n\
+"), _("
+  * Each Farmer provides 1 food for their city per turn. \n\
+"), _("
+ This wonder is never obsolete.\
+")
+
+[building_agoge]
+name		= _("Agōgē of Sparta")
+genus		= "SmallWonder"
+reqs	=
+    { "type",     "name",            "range",  "present", "quiet"
+      "Tech",     "Bronze Working",  "Player", TRUE,      FALSE
+      "Building", "Agōgē of Sparta", "Player", FALSE,     TRUE
+    }
+graphic	= "b.agoge"
+graphic_alt	= "b.sun_tzus_war_academy"
+obsolete_by	=
+    { "type", "name", "range"
+      "Tech", "Gunpowder", "Player"
+    }
+build_cost	= 90
+upkeep		= 0
+sabotage	= 0
+sound		= "w_agoge"
+sound_alt	= "w_generic"
+helptext	= _("\
+The Agōgē creates a culture of extreme fitness, and is famous for\
+ vigilant patrols, secret shortcut trails, and battle readiness.\
+ All your foot soldiers get +⅓ move. Phalanx and Pikemen receive a\
+ +50% attack bonus. Foot units in the city with the Agōgē begin\
+ their turn with +1 move. Obsolete by：Gunpowder.\
+")
+
+[building_angkor_wat]
+name		= _("Angkor Wat")
+genus		= "SmallWonder"
+reqs	=
+    { "type",     "name",                "range","present","quiet", "survives"
+      "Tech",     "Code of Laws",        "Player", TRUE,    FALSE,  FALSE
+      "Building", "Angkor Wat",          "Player", FALSE,   TRUE,   FALSE
+      "Gov", "Democracy",                "Player", FALSE,   TRUE,   FALSE
+      "Gov", "Theocracy",                "Player", FALSE,   TRUE,   FALSE
+      "Gov", "Communism",                "Player", FALSE,   TRUE,   FALSE
+      "Gov", "Nationalism",              "Player", FALSE,   TRUE,   FALSE
+;requires 23Sept2021 changes to requirements.c, so obsolete wonders don't re-enable others
+      "Building", "Hanging Gardens",     "Player", FALSE,   FALSE,  TRUE
+      "Building","Mausoleum of Mausolos","Player", FALSE,   FALSE,  TRUE
+      "Building", "Code of Hammurabi",   "Player", FALSE,   FALSE,  TRUE
+    }
+graphic	= "b.angkor_wat"
+graphic_alt	= "-"
+obsolete_by	=
+    { "type", "name", "range", "survives"
+    }
+build_cost	= 200
+upkeep		= 0
+sabotage	= 0
+sound		= "w_angkor"
+sound_alt	= "w_generic"
+helptext	= _("\
+Angkor Wat gives you the glorious ancient city of\
+ splendor and culture. In Despotism and Monarchy,\
+ cities of size 3+ get the tile celebration bonus even if not celebrating.\
+ All cities gain +1 happy citizen. Work done on Jungle and Swamp tiles\
+ is 2× faster. In addition, the cost of Elephants is reduced by 5\
+ shields. \n\
+"), _("
+This Wonder is never obsolete, but it only has an effect in\
+ Despotism, Monarchies, and Republic. \ 
+"), _("
+Angkor Wat is a Civil Wonder. You can build only one Civil Wonder.\
+")
+
+[building_apollo_program]
+name		= _("Apollo Program")
+genus		= "SmallWonder"
+reqs	=
+    { "type",     "name",           "range",  "present", "quiet"
+      "Tech",     "Space Flight",   "Player", TRUE,      FALSE
+      "Building", "Apollo Program", "Player", FALSE,     TRUE
+    }
+graphic	= "b.apollo_program"
+graphic_alt	= "-"
+obsolete_by	=
+    { "type", "name", "range"
+    }
+build_cost	= 600
+upkeep		= 0
+sabotage	= 0
+sound		= "w_apollo_program"
+sound_alt	= "w_generic"
+helptext	= _("\
+Allows you to start building spaceship parts in cities\
+ with factories (assuming you have researched the necessary\
+ technologies). With Laser tech, the city with the Apollo\
+ Program can build a Satellite.\
+")
+
+[building_appian_way]
+name		= _("Appian Way")
+genus		= "SmallWonder"
+reqs	=
+    { "type",     "name",            "range",  "present", "quiet"
+      "Tech",     "The Wheel",       "Player", TRUE,      FALSE
+      "Building", "Appian Way",      "Player", FALSE,     TRUE
+    }
+graphic	= "b.appian_way"
+graphic_alt	= "-"
+obsolete_by	=
+    { "type", "name", "range"
+      "Tech", "Railroad", "Player"
+    }
+build_cost	= 100
+upkeep		= 0
+sabotage	= 0
+sound		= "w_appian"
+sound_alt	= "w_generic"
+helptext	= _("\
+The Appian Way is the first stone-paved highway that can drain\
+ rainwater. The Appian Way gives the following National bonuses：\n\
+ ➤ Trade Routes with 4 or more revenue get a slight increase in revenue. \n\
+ ➤ Tile-workers build Roads at twice the speed. \n\
+If not in Foreign territory：\n\
+ ➤ Wagons, Chariots, and Foot soldiers gain +⅓ move when starting\
+  their turn on a Road. \n\
+ ➤ Tile Workers gain +⅓ move. \n\n\
+The city with the Appian Way gets additional bonuses：\n\
+ ➤ Each trade-producing tile produces +1 extra trade, if there is a road on it. \n\
+ ➤ Wagons cost 5 shields less. \n\n\
+Obsolete by：Railroad.\
+")
+
+[building_chand_baori]
+name		= _("Chand Baori")
+genus		= "SmallWonder"
+reqs	=
+    { "type",         "name",        "range",   "present", "quiet"
+      "Tech",         "Monarchy",    "Player",  FALSE,     TRUE
+      "Tech",         "The Republic","Player",  FALSE,     TRUE
+      "Gov",          "Despotism",   "Player",  TRUE,      FALSE
+      "Building",     "Chand Baori", "Player",  FALSE,     TRUE
+    }
+graphic	= "b.chand_baori"
+graphic_alt	= "-"
+obsolete_by	=
+    { "type", "name", "range"
+    }
+build_cost	= 80
+upkeep		= 0
+sabotage	= 0
+sound		= "w_chand_baori"
+sound_alt	= "w_generic"
+helptext	= _("\
+Chand Baori can only be built during your first Despotism regime. All city\
+ centers become irrigation sources, and you can irrigate diagonal to any irrigation\
+ source. Your Tribesmen can still irrigate after turn 20. \
+Chand Baori’s home city gets a free well on the city center (i.e., river). \n\n\
+"), _("\
+During Despotism, Chand Baori gets two more bonuses:\n(1) In its city\
+ there is no tile penalty on food output. \n\
+"), _("\
+(2) Workers irrigate, cultivate, and plant faster on Grasslands, Plains, and Swamp: \n\
+• Irrigate is 2 turns instead of 3. On Swamp, Cultivate and Plant\
+ are 4 turns instead of 7. Plant time on Grassland and Plains is 4 and 5 turns. \n\
+• Tribesmen:  Irrigate:3; Cultivate/Plant on Swamp:8; Plant on Grassland/Plains: 6,9. \n\n\
+Chand Baori is never obsolete.\
+")
+
+[building_code_of_hammurabi]
+name		= _("Code of Hammurabi")
+genus		= "SmallWonder"
+reqs	=
+    { "type",     "name",               "range",  "present", "quiet", "survives"
+      "Tech",     "Alphabet",           "Player", TRUE,      FALSE,   FALSE
+      "Tech",     "Democracy",          "Player", FALSE,     FALSE,   FALSE
+      "Building", "Code of Hammurabi",  "Player", FALSE,     TRUE,    FALSE
+;requires 23Sept2021 changes to requirements.c, so obsolete wonders don't re-enable others
+      "Building", "Hanging Gardens",    "Player", FALSE,     FALSE,   TRUE
+      "Building", "Angkor Wat",         "Player", FALSE,     FALSE,   TRUE
+      "Building", "Mausoleum of Mausolos","Player",FALSE,    FALSE,   TRUE
+    }
+graphic	= "b.hammurabi"
+graphic_alt	= "-"
+obsolete_by	=
+    { "type", "name", "range"
+      "Tech", "Democracy", "Player"
+    }
+build_cost	= 130
+upkeep		= 0
+sabotage	= 0
+sound		= "w_hammurabi"
+sound_alt	= "w_generic"
+helptext	= _("\
+The Code of Hammurabi is a first step toward legal organized\
+ civilization. It is a primitive version of later societal\
+ advancements. In some ways, this Wonder closes the gap\
+ between Despotism and Monarchy by exactly half. \n\
+Improvements to Despotism：\n\
+  • base corruption is 26% (was 37%) \n\
+  • distance corruption is 3% (was 4%) \n\
+  • penalties eliminated on Lowland tiles. \n\
+Other bonuses：\n\
+  • awards blueprints for Code of Laws (or Writing if the former is known.) \n\
+  • cities with no Temple get +1 content citizen. \n\n\
+The Code of Hammurabi is a Civil Wonder. You can build only one Civil Wonder. \n\
+Obsolete by：Democracy.\
+")
+
+[building_colossus]
+name		= _("Colossus")
+genus		= "SmallWonder"
+reqs	=
+    { "type",     "name",           "range", "present", "quiet"
+      "Tech",     "Bronze Working", "Player", TRUE,     FALSE
+      "Building", "Colossus",       "Player", FALSE,    TRUE
+      "TerrainClass", "Oceanic",    "Adjacent",TRUE,    FALSE
+    }
+graphic	= "b.colossus"
+graphic_alt	= "-"
+obsolete_by	=
+    { "type", "name", "range"
+      "Tech", "Automobile", "Player"
+    }
+build_cost	= 100
+upkeep		= 0
+sabotage	= 0
+sound		= "w_colossus"
+sound_alt	= "w_generic"
+helptext	= _("\
+In the coastal city where this wonder is built, +1 trade is added to every\
+ tile that makes trade. The city center tile gets an additional +1 trade.\
+ Until you discover Steam Engine, the\
+ Colossus city receives a discount on all maritime Commerce units：\n\
+ Boat：            7 shields. \n\
+ Trireme：        15 shields. \n\
+ Goods:           20 shields. \n\
+ Galley：         25 shields. \n\
+ Caravel：        35 shields. \n\
+ A trade route established from this city gets +40% one-time revenue,\
+ and roughly +25% in ongoing revenue. \n\
+ Obsolete by：Automobile.\
+")
+
+[building_copernicus_observatory]
+name		= _("Copernicus' Observatory")
+genus		= "SmallWonder"
+reqs	=
+    { "type",     "name",                    "range",  "present", "quiet"
+      "Tech",     "Astronomy",               "Player", TRUE,      FALSE
+      "Building", "Copernicus' Observatory", "Player", FALSE,     TRUE
+    }
+graphic	= "b.copernicus_observatory"
+graphic_alt	= "-"
+obsolete_by	=
+    { "type", "name", "range"
+    }
+build_cost	= 100
+upkeep		= 0
+sabotage	= 0
+sound		= "w_copernicus_observatory"
+sound_alt	= "w_generic"
+helptext	= _("\
+Boosts science production by 100% in the city where it is built.\
+ That is, the base science level before any improvements were made,\
+ is added to the total science. This wonder is never obsolete.\
+")
+
+[building_genghis_khans_equestrian_school]
+name		= _("Genghis Khan's Equestrian School")
+genus		= "SmallWonder"
+reqs	=
+    { "type",         "name",       "range",    "present", "quiet"
+      "Tech",         "Horseback Riding", "Player",   TRUE,      FALSE
+      "Building",     "Genghis Khan's Equestrian School", "Player",   FALSE,     TRUE
+      "Building",     "Barracks", "City", TRUE, FALSE 
+    }
+graphic	= "b.genghis_khans_equestrian_school"
+graphic_alt	= "b.sun_tzus_war_academy"
+obsolete_by	=
+    { "type", "name", "range"
+      "Tech", "Mobile Warfare", "Player"
+    }
+build_cost	= 150
+upkeep		= 0
+sabotage	= 0
+sound		= "w_sun_tzus_war_academy"
+sound_alt	= "w_generic"
+helptext	= _("\
+Gives all mounted units +1 movement point, except for Cavalry. Must be\
+ built in a city with Barracks I (not II). Obsolete by：Mobile Warfare.\
+")
+
+[building_gibraltar_fortress]
+name		= _("Gibraltar Fortress")
+genus		= "SmallWonder"
+reqs	=
+    { "type",     "name",               "range",  "present", "quiet"
+      "Tech",     "Metallurgy",         "Player",   TRUE,     FALSE
+      "Building", "Coastal Defense",    "City",     TRUE,     FALSE
+      "Building", "Gibraltar Fortress", "Player",   FALSE,    TRUE
+;     "TerrainClass", "Oceanic",        "Adjacent", TRUE,     FALSE ; redundant to #2 req.
+    }
+graphic	= "b.gibraltar_fortress"
+graphic_alt	= "b.great_wall"
+obsolete_by	=
+    { "type", "name", "range"
+    }
+build_cost	= 330
+upkeep		= 0
+sabotage	= 0
+sound		= "w_gibraltar_fortress"
+sound_alt	= "w_generic"
+helptext	= _("\
+When facing attacks by sea, Gibraltar Fortress brings defensive capabilities\
+ to cities with Coastal Defense, especially to the city in which it’s built：\n\
+"), _("\
+1. Reduces cost of Coastal Defense by 15, to 50 shields. \n\
+2. The city with Gibraltar Fortress gains a +100% defense bonus, for a total\
+ of 3× defense against sea attacks. \n\
+3. All other cities with Coastal Defence gain +25% defense, for a total of 2.25×\
+ defense against sea attacks. \n\n\
+"), _("\
+Gibraltar Fortress must be built in a city with Coastal Defense, and is never obsolete.\
+")
+
+[building_great_wall]
+name		= _("Great Wall")
+genus		= "SmallWonder"
+reqs	=
+    { "type",     "name",          "range", "present","quiet"
+      "Tech",     "Construction",  "Player", TRUE,     FALSE
+      "Building", "Great Wall",    "Player", FALSE,    TRUE
+      "Tech",     "Machine Tools", "World",  FALSE,    FALSE 
+    }
+graphic	= "b.great_wall"
+graphic_alt	= "-"
+obsolete_by	=
+    { "type", "name", "range"
+      "Tech", "Machine Tools", "Player"
+    }
+build_cost	= 275
+upkeep		= 0
+sabotage	= 0
+sound		= "w_great_wall"
+sound_alt	= "w_generic"
+helptext	= _("\
+The Great Wall protects your cities with City Walls. Unlike normal\
+ City Walls, The Great Wall is impervious to Siege Rams. It takes three\
+ turns after founding a city for the Great Wall to extend protection\
+ to the new city. Also, the city must have been founded by you, or\
+ assimilated to where less than a fifth of its citizens are foreign. \n\
+"), _("\
+The Great Wall gives no extra effect when City Walls are already present.\
+ However, regular City Walls still protect a city in which the Great\
+ Wall has not yet activated. \n Warning! This Wonder is obsolete when\
+ ANY nation in the world discovers Machine Tools.\
+")
+
+[building_hanging_gardens]
+name		= _("Hanging Gardens")
+genus		= "SmallWonder"
+reqs	=
+    { "type",     "name",                "range", "present","quiet", "survives"
+      "Tech",     "Pottery",             "Player", TRUE,     FALSE, FALSE
+      "Building", "Hanging Gardens",     "Player", FALSE,    TRUE,  FALSE
+;requires 23Sept2021 changes to requirements.c, so obsolete wonders don't re-enable others
+      "Building", "Angkor Wat",          "Player", FALSE,    FALSE, TRUE
+      "Building", "Code of Hammurabi",   "Player", FALSE,    FALSE, TRUE
+      "Building","Mausoleum of Mausolos","Player", FALSE,    FALSE, TRUE
+    }
+graphic	= "b.hanging_gardens"
+graphic_alt	= "-"
+obsolete_by	=
+    { "type", "name", "range"
+      "Tech", "Steam Engine", "Player"
+    }
+build_cost	= 210
+upkeep		= 0
+sabotage	= 0
+sound		= "w_hanging_gardens"
+sound_alt	= "w_generic"
+helptext	= _("\
+Makes two content citizens happy in every city in your nation.\
+ If there are no content citizens, the wonder makes one unhappy\
+ citizen happy, even if unhappy about military activity. Gives\
+ +2 luxury in the city where it’s built. \n\
+"), _("
+The Hanging Gardens are a Civil Wonder. You can build only one Civil Wonder. \n\
+"), _("
+ Obsolete by：Steam Engine.\
+")
+
+[building_js_bachs_cathedral]
+name		= _("J.S. Bach's Cathedral")
+genus		= "SmallWonder"
+reqs	=
+    { "type",     "name",                  "range",  "present", "quiet"
+      "Tech",     "Theology",              "Player", TRUE,      FALSE
+      "Building", "J.S. Bach's Cathedral", "Player", FALSE,     TRUE
+    }
+graphic	= "b.js_bachs_cathedral"
+graphic_alt	= "-"
+obsolete_by	=
+    { "type", "name", "range"
+    }
+build_cost	= 300
+upkeep		= 0
+sabotage	= 0
+sound		= "w_js_bachs_cathedral"
+sound_alt	= "w_generic"
+helptext	= _("\
+Makes two unhappy citizens content in every city in your nation\
+ (including citizens unhappy about military activity).\
+ This wonder is never obsolete.\
+")
+
+[building_king_richards_crusade]
+name		= _("King Richard's Crusade")
+genus		= "SmallWonder"
+reqs	=
+    { "type",     "name",                   "range",  "present", "quiet"
+      "Tech",     "Engineering",            "Player", TRUE,      FALSE
+      "Building", "King Richard's Crusade", "Player", FALSE,     TRUE
+    }
+graphic	= "b.king_richards_crusade"
+graphic_alt	= "-"
+obsolete_by	=
+    { "type", "name", "range"
+      "Tech", "Robotics", "Player"
+    }
+build_cost	= 150
+upkeep		= 0
+sabotage	= 0
+sound		= "w_king_richards_crusade"
+sound_alt	= "w_generic"
+helptext	= _("\
+In the city where it’s built, adds one extra shield resource on every\
+ tile and lets you build one extra infantry unit per turn —— without\
+ Conscription tech.\
+ Obsolete by：Robotics.\
+")
+
+[building_leonardos_workshop]
+name		= _("Leonardo's Workshop")
+genus		= "SmallWonder"
+reqs	=
+    { "type",     "name",                "range",  "present", "quiet"
+      "Tech",     "Invention",           "Player", TRUE,      FALSE
+      "Building", "Leonardo's Workshop", "Player", FALSE,     TRUE
+    }
+graphic	= "b.leonardos_workshop"
+graphic_alt	= "-"
+obsolete_by	=
+    { "type", "name", "range"
+      "Tech", "Automobile", "Player"
+    }
+build_cost	= 300
+upkeep		= 0
+sabotage	= 0
+sound		= "w_leonardos_workshop"
+sound_alt	= "w_generic"
+helptext	= _("\
+Upgrades two obsolete units per game turn. Obsolete by：\
+ Automobile.\
+")
+
+[building_lighthouse]
+name		= _("Lighthouse")
+genus		= "SmallWonder"
+reqs	=
+    { "type",         "name",       "range",    "present", "quiet"
+      "Tech",         "Map Making", "Player",   TRUE,      FALSE
+      "TerrainClass", "Oceanic",    "Adjacent", TRUE,      FALSE
+      "Building",     "Lighthouse", "Player",   FALSE,     TRUE
+    }
+graphic	= "b.lighthouse"
+graphic_alt	= "-"
+obsolete_by	=
+    { "type", "name", "range"
+      "Tech", "Miniaturization", "Player"
+    }
+build_cost	= 170
+upkeep		= 0
+sabotage	= 0
+sound		= "w_lighthouse"
+sound_alt	= "w_generic"
+helptext	= _("\
+Gives all your sea units 2 additional movement points,\
+ while increasing their vision. Must be built adjacent\
+ to Ocean. Obsolete by：Miniaturization.\
+")
+
+[building_magellans_expedition]
+name		= _("Magellan's Expedition")
+genus		= "SmallWonder"
+reqs	=
+    { "type",         "name",                  "range",    "present", "quiet"
+      "Tech",         "Navigation",            "Player",   TRUE,      FALSE
+      "TerrainClass", "Oceanic",               "Adjacent", TRUE,      FALSE
+      "Building",     "Magellan's Expedition", "Player",   FALSE,     TRUE
+    }
+graphic	= "b.magellans_expedition"
+graphic_alt	= "-"
+obsolete_by	=
+    { "type", "name", "range"
+    }
+build_cost	= 400
+upkeep		= 0
+sabotage	= 0
+sound		= "w_magellans_expedition"
+sound_alt	= "w_generic"
+helptext	= _("\
+All your new sea units built in cities in your nation start with an\
+ additional veteran level (this is cumulative with any Port Facility.)\
+ Must be built in a coastal city. This wonder is never obsolete.\
+")
+
+[building_magna_carta]
+name		= _("Magna Carta")
+genus		= "SmallWonder"
+reqs	=
+    { "type",         "name",                  "range",    "present", "quiet"
+      "Tech",         "Monarchy",              "Player",   TRUE,      FALSE
+      "Building",     "Magna Carta",           "Player",   FALSE,     TRUE
+    }
+graphic	= "b.magna_carta"
+graphic_alt	= "-"
+obsolete_by	=
+    { "type", "name", "range"
+    }
+build_cost	= 300
+upkeep		= 0
+sabotage	= 0
+sound		= "w_magna_carta"
+sound_alt	= "w_generic"
+helptext	= _("\
+If you are a Monarchy, the Magna Carta establishes Constitutional Monarchy.\
+ This makes Monarchy more like a representative government: \n\
+"), _("
+Constitutional Monarchy summary：\n\
+ ➣ Empire base size goes from 11 to 23 (identical to +1 content citizen.) \n\
+ ➣ All Land tiles get celebration bonus for free. (+1 trade) \n\
+ ➣ Allows rapture in cities founded by you. \n\
+ ➣ Magna Carta city can build Peasants. \n\
+ ➣ Magna Carta city can build an extra infantry or Peasant per turn, without Conscription. \n\
+"), _("
+Setbacks from standard Monarchy：\n\
+ ➣ One unit may be used for Martial Law (not 3). \n\
+ ➣ One unit is free of upkeep (not 3). \n\
+ ➣ 2 military units may be abroad. Each extra causes a discontent citizen. \n\
+ ➣ Gives you a Senate, which can be ignored if both King Richard’s Crusade \
+and J.S. Bach’s Cathedral are owned. \n\
+See Government⟶Monarchy for more info.\
+")
+
+[building_marco_polos_embassy]
+name		= _("Marco Polo's Embassy")
+genus		= "SmallWonder"
+flags		= "SaveSmallWonder"
+reqs	=
+    { "type",     "name",                 "range",  "present", "quiet"
+      "Tech",     "Trade",                "Player", TRUE,      FALSE
+      "Building", "Marco Polo's Embassy", "Player", FALSE,     TRUE
+    }
+graphic	= "b.marco_polos_embassy"
+graphic_alt	= "-"
+obsolete_by	=
+    { "type", "name", "range"
+    }
+build_cost	= 400
+upkeep		= 0
+sabotage	= 0
+sound		= "w_marco_polos_embassy"
+sound_alt	= "w_generic"
+helptext	= _("\
+This Wonder increases Trade, the very lifeblood of your tax income, science output,\
+ and luxury for happiness. With this Wonder, Trade in each city increases by 40%.\
+ This Wonder does not become obsolete, and cannot be lost.\
+")
+
+[building_mausoleum_of_mausolos]     
+name		= _("Mausoleum of Mausolos")
+genus		= "SmallWonder"
+reqs	=
+    { "type", "name",                      "range","present","quiet", "survives"  
+      "Tech", "Ceremonial Burial",         "Player", TRUE,   FALSE, FALSE
+      "Building", "Mausoleum of Mausolos", "Player", FALSE,  TRUE,  FALSE
+;requires 23Sept2021 changes to requirements.c, so obsolete wonders don't re-enable others
+      "Building", "Angkor Wat",            "Player", FALSE,  FALSE,  TRUE
+      "Building", "Hanging Gardens",       "Player", FALSE,  FALSE,  TRUE
+      "Building", "Code of Hammurabi",     "Player", FALSE,  FALSE,  TRUE
+    }
+graphic         = "b.mausoleum"
+graphic_alt     = "-"
+obsolete_by	=
+    { "type", "name",      "range", "survives"
+      "Tech", "Radio",     "Player", FALSE
+    }
+build_cost	= 200
+upkeep		= 0
+sabotage	= 0
+sound		= "w_oracle"
+sound_alt	= "w_generic"
+helptext	= _("\
+The Mausoleum of Mausolos brings a spirit of prudence to your nation, giving\
+ subtle security and reduced corruption. This makes your people happier. \n\
+"), _("
+➤ A Courthouse or City Walls gives each city +1 content citizen, unless\
+ unhappy about military activity. \n\
+➤ Having both the above results in +1 content and +1 happy citizen. \n\
+➤ Acts like half a Courthouse in cities which lack Courthouse or\
+ Supreme Court effects: \n\
+   • 30% corruption reduction \n\
+   • Tile corruption penalty begins at 4 in Anarchy and Despotism (not 3) \n\
+   • 10% bonus vs diplomatic actions and combat \n\
+➤ Adds (at least) +35% to the cost of bribing your units. \n\
+➤ Prevents your cities from being incited to revolt. \n\
+➤ Halves the odds of investigating your cities (85% / 2 = 43%) \n\
+"), _("
+The Mausoleum of Mausolos is a Civil Wonder. You can make only one Civil Wonder. \n\
+Obsolete by：Radio.\
+")
+
+[building_medici_bank]     
+name		= _("Medici Bank")
+genus		= "SmallWonder"
+reqs	=
+    { "type",    "name",        "range", "present", "quiet"
+      "Tech",    "Banking",     "Player", TRUE,     FALSE
+      "Building","Medici Bank", "Player", FALSE,    TRUE
+      "Gov",     "Communism",   "Player", FALSE,    TRUE
+    }
+graphic         = "b.medici_bank"
+graphic_alt     = "-"
+obsolete_by	=
+    { "type", "name",     "range", "survives"
+      "Tech", "Fusion Power", "Player", FALSE
+    }
+build_cost	= 300
+upkeep		= 0
+sabotage	= 0
+sound		= "w_medici_bank"
+sound_alt	= "w_generic"
+helptext	= _("\
+The Medici Bank gives every city with a Bank +7% in gold revenue,\
+ and the rate on shield-to-coinage exchange also increases by +7%.\
+ This wonder has no effect under Communism. \n\
+Obsolete by：Fusion Power.\
+")
+
+[building_michelangelos_chapel]
+name		= _("Michelangelo's Chapel")
+genus		= "SmallWonder"
+reqs	=
+    { "type",     "name",                  "range",  "present", "quiet"
+      "Tech",     "Monotheism",            "Player", TRUE,      FALSE
+      "Building", "Michelangelo's Chapel", "Player", FALSE,     TRUE
+    }
+graphic	= "b.michelangelos_chapel"
+graphic_alt	= "-"
+obsolete_by	=
+    { "type", "name", "range"
+    }
+build_cost	= 300
+upkeep		= 0
+sabotage	= 0
+sound		= "w_michelangelos_chapel"
+sound_alt	= "w_generic"
+helptext	= _("\
+This Wonder counts as a Cathedral in all cities which lack one.\
+ That is, it makes 3 unhappy citizens content in each city,\
+ but does not affect citizens unhappy about military activity.\
+ (Theology increases the effect by +1. Communist government\
+ reduces the effect by -1.) \
+"), _("
+In cities which already have a Cathedral, this Wonder enhances the\
+ effects of the Cathedral, adding +1 happy citizen and +1 forced content.\
+ This Wonder is never obsolete.\
+")
+
+[building_olympics]
+name		= _("The Olympics")
+genus		= "SmallWonder"
+reqs	=
+    { "type",     "name",          "range", "present",  "quiet"
+      "Tech",     "Currency",      "Player", TRUE,      FALSE
+      "Building", "The Olympics",  "Player", FALSE,     TRUE
+    }
+graphic	= "b.olympics"
+graphic_alt	= "-"
+obsolete_by	=
+    { "type", "name", "range"
+    }
+build_cost	= 100
+upkeep		= 0
+sabotage	= 0
+sound		= "w_olympics"
+sound_alt	= "w_generic"
+helptext	= _("\
+THIS WONDER DOES NOTHING AND IS RESERVED FOR FUTURE RELEASE.\
+ ")
+
+[building_oracle]
+name		= _("Oracle")
+genus		= "SmallWonder"
+reqs	=
+    { "type",     "name",      "range",  "present", "quiet"
+      "Tech",     "Mysticism", "Player", TRUE,      FALSE
+      "Building", "Oracle",    "Player", FALSE,     TRUE
+    }
+graphic	= "b.oracle"
+graphic_alt	= "-"
+obsolete_by	=
+    { "type", "name", "range"
+      "Tech", "Theology", "Player"
+    }
+build_cost	= 100
+upkeep		= 0
+sabotage	= 0
+sound		= "w_oracle"
+sound_alt	= "w_generic"
+helptext	= _("\
+Makes two of your unhappy citizens content in every city\
+ with a Temple in your nation. Does not affect citizens made\
+ unhappy by military activity. Obsolete by：Theology.\
+")
+
+[building_pax_dei]
+name		= _("Pax Dei")
+genus		= "GreatWonder"
+flags   = "PaxDeiCounter"
+reqs	=
+    { "type",     "name",          "range", "present",  "quiet"
+      "Tech",     "Philosophy",    "Player", TRUE,      FALSE
+      "Building", "Pax Dei",       "Player", FALSE,     TRUE
+      "Building", "Pax Dei",       "World",  FALSE,     TRUE
+      "Tech",     "Theocracy",     "World",  FALSE,     FALSE
+    }
+graphic	= "b.pax_dei"
+graphic_alt	= "-"
+obsolete_by	=
+    { "type", "name",      "range", "survives"
+      "Tech", "Theocracy", "World",  FALSE   
+    }
+build_cost	= 115
+upkeep		= 0
+sabotage	= 0
+sound		= "w_pax_dei"
+sound_alt	= "w_generic"
+helptext	= _("\
+Pax Dei is a socio-philosophical movement against war and violence. \n\
+"), _("\
+All nations with Philosophy gain +2 unhappy about each aggressive military\
+ unit, and a Senate. \n\
+Nations with Monotheism are unable to attack unless defending their own\
+ domestic territory! \n\
+"), _("\
+Obsolete by: Theocracy, or 13 turns after built. \n\
+(The server settings 'pax_dei_counter' and 'pax_dei_set' may\
+ alter this wonder’s effects in specific games.)\
+")
+
+[building_pyramids]
+name		= _("Pyramids")
+genus		= "SmallWonder"
+reqs	=
+    { "type",     "name",        "range",  "present", "quiet"
+      "Tech",     "Mathematics", "Player", TRUE,      FALSE
+      "Building", "Pyramids", "Player", FALSE,     TRUE
+    }
+graphic	= "b.pyramids"
+graphic_alt	= "-"
+obsolete_by	=
+    { "type", "name", "range"
+    }
+build_cost	= 200
+upkeep		= 0
+sabotage	= 0
+sound		= "w_pyramids"
+sound_alt	= "w_generic"
+helptext	= _("\
+Every city will gain +25% to its food storage when the city grows from\
+ from reaching its grain ceiling, or starves, or is founded. In addition,\
+ the city with the Pyramids can rapture when celebrating, regardless of\
+ government. \nThis Wonder does not become obsolete.\
+")
+
+[building_roman_colosseum]
+name		= _("Roman Colosseum")
+genus		= "SmallWonder"
+reqs	=
+    { "type",     "name",            "range",  "present", "quiet"
+      "Tech",     "Engineering",     "Player", TRUE,      FALSE
+      "Building", "Roman Colosseum", "Player", FALSE,     TRUE
+    }
+graphic	= "b.roman_colosseum"
+graphic_alt	= "-"
+obsolete_by	=
+    { "type", "name", "range"
+    }
+build_cost	= 400
+upkeep		= 0
+sabotage	= 0
+sound		= "w_roman_colosseum"
+sound_alt	= "w_generic"
+helptext	= _("\
+The Roman Colosseum centralizes and gives prestige to the entertainment\
+ events of your empire. Every city with an Amphitheater gains +1 happy\
+ citizen and +1 luxury. In all your cities, Entertainers add 3 luxury\
+ instead of 2. This means your Entertainers equal the net trade value of\
+ Taxmen, Scientists, and Merchants. This Wonder is never obsolete.\
+")
+
+[building_shakespeares_theatre]
+name            = _("Shakespeare's Theater")
+rule_name       = "Shakespeare's Theatre"       ; en_GB used originally
+genus		= "SmallWonder"
+reqs	=
+    { "type",     "name",                  "range",  "present", "quiet"
+      "Tech",     "Medicine",              "Player", TRUE,      FALSE
+      "Building", "Shakespeare's Theatre", "Player", FALSE,     TRUE
+    }
+graphic	= "b.shakespeares_theatre"
+graphic_alt	= "-"
+obsolete_by	=
+    { "type", "name", "range"
+    }
+build_cost	= 200
+upkeep		= 0
+sabotage	= 0
+sound		= "w_shakespeares_theatre"
+sound_alt	= "w_generic"
+helptext	= _("\
+Makes all angry and unhappy citizens content in the city where it\
+ is located, including citizens unhappy about military activity.\
+ This Wonder does not become obsolete.\
+")
+
+[building_sphinx]
+name    = _("The Sphinx")
+genus		= "SmallWonder"
+reqs	=
+    { "type",      "name",                  "range", "present", "quiet"
+       "Gov",      "Despotism",             "Player", TRUE,      FALSE
+       "Tech",     "Philosophy",            "Player", FALSE,     TRUE
+       "Building", "The Sphinx",            "Player", FALSE,     TRUE
+    }
+graphic	= "b.sphinx"
+graphic_alt	= "-"
+obsolete_by	=
+    { "type", "name", "range"
+      "Tech", "Philosophy", "Player"
+    }
+build_cost	= 70
+upkeep		= 0
+sabotage	= 0
+sound		= "w_sphinx"
+sound_alt	= "w_generic"
+helptext	= _("\
+The Sphinx is said to watch over all citizens to ensure they are good.\
+ The result is loss of tile corruption penalties on all worked tiles in\
+ the city where it’s built. As a shared work of community art and culture, it\
+ adds +1 luxury. In addition, it reduces corruption in the city by half. \n\
+Obsolete by：Philosophy.\
+")
+
+;this should be wonder #65 if we counted correctly and need it for the "statue hack" to determine if player can get gov.
+[building_statue_of_liberty]  
+name		= _("Statue of Liberty")
+genus		= "SmallWonder"
+reqs	=
+    { "type",     "name",              "range",  "present", "quiet"
+      "Tech",     "Democracy",         "Player", TRUE,      FALSE
+      "Building", "Statue of Liberty", "Player", FALSE,     TRUE
+    }
+graphic	= "b.statue_of_liberty"
+graphic_alt	= "-"
+obsolete_by	=
+    { "type", "name", "range"
+    }
+build_cost	= 400
+upkeep		= 0
+sabotage	= 0
+sound		= "w_statue_of_liberty"
+sound_alt	= "w_generic"
+helptext	= _("\
+Allows you to instantly change government, including governments not\
+ yet researched by your civilization, and without the transition period\
+ of Anarchy. It also allows unprovoked declaration of war regardless of\
+ any Senate or United Nations. Democracies can’t fall into Anarchy from\
+ two turns of city disorder. \n\
+"), _("\
+This Wonder does not become obsolete.\
+")
+
+[building_statue_of_zeus]
+name		= _("Statue of Zeus")
+genus		= "SmallWonder"
+reqs	=
+    { "type", "name", "range", "present", "quiet"
+      "Tech", "Polytheism", "Player", TRUE, FALSE
+      "Building", "Statue of Zeus", "Player", FALSE, TRUE
+    }
+graphic         = "b.statue_of_zeus"
+graphic_alt     = "b.oracle"
+obsolete_by	=
+    { "type", "name", "range", "survives"
+    }
+build_cost	= 100
+upkeep		= 0
+sabotage	= 0
+sound		= "w_oracle"
+sound_alt	= "w_generic"
+helptext	= _("\
+The powerful Zeus gives order and organization to both city and nation.\
+ In every city in your nation, this Wonder neutralizes one unhappy\
+ citizen caused by military units. In Monarchies and non-representative\
+ government, the Statue of Zeus makes one citizen content. \n\
+"), _("
+Before the discovery of The Republic, increases odds of promotion by one third. \n\
+"), _("
+In the city the statue is located, it makes one citizen happy and provides\
+ free upkeep to 4 units. Except for one permanent happy citizen, the\
+ discovery of Tactics makes the Statue of Zeus obsolete.\
+")
+
+[building_supreme_court]
+name		= _("Supreme Court")
+genus		= "SmallWonder"
+reqs	=
+    { "type",     "name",          "range",  "present", "quiet"
+      "Tech",     "Literacy",      "Player", TRUE,      FALSE
+      "Building", "Supreme Court", "Player", FALSE,     TRUE
+    }
+graphic	= "b.great_library"
+graphic_alt	= "-"
+obsolete_by	=
+    { "type", "name", "range"
+    }
+build_cost	= 200
+upkeep		= 0
+sabotage	= 0
+sound		= "w_great_library"
+sound_alt	= "w_generic"
+helptext	= _("\
+With respect to corruption, incite protection, upkeep, and other bonuses, the\
+ Supreme Court gives the same effect as an extra Courthouse in all your cities. By\
+ itself, it gives no bonus against hostile diplomatic acts. However, owning the\
+ Supreme Court enables each city to build a regional Homeland Security building\
+ to acquire those additional bonuses. This Wonder is never obsolete.\
+")
+
+[building_sun_tzus_war_academy]
+name		= _("Sun Tzu's War Academy")
+genus		= "SmallWonder"
+reqs	=
+    { "type",     "name",                  "range",  "present", "quiet"
+      "Tech",     "Feudalism",             "Player", TRUE,      FALSE
+      "Building", "Sun Tzu's War Academy", "Player", FALSE,     TRUE
+    }
+graphic	= "b.sun_tzus_war_academy"
+graphic_alt	= "-"
+obsolete_by	=
+    { "type", "name", "range"
+      "Tech", "Mobile Warfare", "Player"
+    }
+build_cost	= 310
+upkeep		= 0
+sabotage	= 0
+sound		= "w_sun_tzus_war_academy"
+sound_alt	= "w_generic"
+helptext	= _("\
+All your new military land units produced in cities in your nation\
+ start with an additional veteran level (this is cumulative with any\
+ Barracks in a city：with both, units are created as Hardened).\
+ Obsolete by：Mobile Warfare.\
+")
+
+[building_temple_of_artemis]
+name		= _("Temple of Artemis")
+genus		= "SmallWonder"
+reqs	=
+    { "type", "name", "range", "present", "quiet"
+      "Tech", "Mysticism",  "Player", TRUE, FALSE
+      "Building", "Temple", "City",   TRUE, FALSE
+      "Building", "Temple of Artemis", "Player", FALSE, TRUE
+
+    }
+graphic         = "b.temple_of_artemis"
+graphic_alt     = "b.oracle"
+obsolete_by	=
+    { "type", "name", "range", "survives"
+      "Tech", "Computers", "Player", FALSE
+    }
+build_cost	= 250
+upkeep		= 0
+sabotage	= 0
+sound		= "w_oracle"
+sound_alt	= "w_generic"
+helptext	= _("\
+The bounteous Artemis bestows a multitudinous benefaction to all cities\
+ with Temples：+1 production, +1 luxury, +1 science, and +1 gold.\
+ Requires a Temple in the city where it will be built. (This wonder also\
+ recovers the lost bonus shield in cities built on resources of +1 shield：\
+ i.e. Grassland shield resource, Tundra fur.) Obsolete by：Computers.\
+")
+
+[building_ziggurat]
+name		= _("Ziggurat")
+genus		= "SmallWonder"
+flags		= "VisibleByOthers"
+reqs	=
+    { "type",     "name",     "range",  "present", "quiet"
+      "Tech",     "Masonry",  "Player",  TRUE,      FALSE
+      "Building", "Ziggurat", "Player",  FALSE,     TRUE
+      "Gov",      "Despotism","Player",  TRUE,      FALSE
+    }
+graphic	= "b.ziggurat"
+graphic_alt	= "-"
+obsolete_by	=
+    { "type", "name",     "range",  "present"
+      "Tech", "Monarchy", "Player", TRUE 
+    }
+build_cost	= 80
+upkeep		= 0
+sabotage	= 0
+sound		= "w_ziggurat"
+sound_alt	= "w_generic"
+helptext	= _("\
+The Ziggurat moves the production bonus from your Palace to the Ziggurat city,\
+ and gains the same corruption reduction and happy bonus effects. \n \
+The Ziggurat gathers all ruling functions of early civilization into one\
+ wondrous building. It counts as a Granary, Temple, and Barracks. In cities\
+ without Walls or Fortifications, it gives a defense bonus similar to\
+ Fortifications, but gives a guaranteed 1.75× defense, regardless of attacker\
+ or terrain type. \n\
+Obsolete by：Monarchy or switching from Despotism.\
+")
+
+[building_capitalization]
+name		= _("Coinage")
+genus		= "Special"
+flags		= "Gold"
+reqs	=
+    { "type", "name", "range"
+
+    }
+graphic	= "b.capitalization"
+graphic_alt	= "-"
+obsolete_by	=
+    { "type", "name", "range"
+    }
+build_cost	= 999
+upkeep		= 0
+sabotage	= 0
+helptext	= _("\
+Coinage converts production output to gold. The base rate is 2 shield\
+ to 3 gold. The base rate is favorable only in niche contexts. Under\
+ non-Communist government, city improvements increase the rate of return：\n\
+ ➤ 1.50 gold per shield： Base rate. \n\
+ ➤ 1.75 gold per shield： Marketplace (adds +25%). \n\
+ ➤ 2.00 gold per shield： Bank (adds +25%). \n\
+ ➤ 2.25 gold per shield： Stock Exchange + The Corporation (adds +25%). \n\
+Fractional income is resolved by randomized Banker’s Rounding.\
+")
