@@ -2298,7 +2298,7 @@ cargo         = "Cargo"
 embarks       = "LandRoad", "Helicopter"    ; transport helicopter only
 disembarks    = "LandRoad", "Helicopter"
 flags         = "HelpWonder", "TradeRoute", "IgZOC", "NonMil", "HasNoZOC", "Capturable", "Expellable", "Cant_Pillage"
-roles         = "AttackStrongStartUnit"  ;note：MP2 does not start games with ASSUs so has co-opted this for caravan start unit.
+roles         = "AttackStrongStartUnit", "TradeStartUnit"  ;note：MP2 does not start games with ASSUs so has co-opted this for caravan start unit.
 veteran_names =
   _("?vet_rank:green"),
   _("?vet_rank:veteran"),

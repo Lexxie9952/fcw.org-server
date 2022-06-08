@@ -3012,7 +3012,7 @@ set =
       "spaceship_travel_time", 225, FALSE
       "specials", 350, FALSE
       "startpos", "DEFAULT", FALSE
-      "startunits", "DDDwwwAucca", "FALSE"  ;3 Tribesmen, 3 Workers, 1 Caravan, 1 Founders, 2 Settlers, 1 Well-Digger
+      "startunits", "DDDwwwwttucccx", "FALSE"  ;3 Tribesmen, 4 workers, 2 caravans, 1 founders, 3 settlers, 1 explorer
       "steepness", 20, FALSE
       "techleak", 25, FALSE
       "techlossforgiveness", 200, FALSE
