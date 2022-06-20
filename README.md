@@ -210,8 +210,3 @@ Máximo Castañeda [@lonemadmax](https://github.com/lonemadmax)
 Gerik Bonaert [@adaxi](https://github.com/adaxi)  
 and the [Freeciv.org project](http://freeciv.wikia.com/wiki/People)!
 
-About FCW and this repository
------------------------------
-HELP! We have a dispute against this repository!
-Licensing restrictions not contained in the (A)GPL have been legally threatened against this repository. They seek to restrict our repository- and user- policies from having content allowed by our licenses. Claiming additional restrictions not contained within a license, misrepresenting them as being within that license, and threatening legal enforcement of said restrictions, legally qualifies as a breach of the license by the parties making the claim. Please be patient. FCW has suspended its Repository Policy pending resolution of the licensing infractions against us.
-
