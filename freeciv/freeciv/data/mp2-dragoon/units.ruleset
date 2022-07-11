@@ -3532,7 +3532,7 @@ sound_move    = "m_helicopter"
 sound_move_alt = "m_generic"
 sound_fight   = "f_helicopter"
 sound_fight_alt = "f_generic"
-build_cost    = 90
+build_cost    = 85
 pop_cost      = 0
 attack        = 0
 defense       = 3
@@ -3597,7 +3597,7 @@ sound_move    = "m_helicopter"
 sound_move_alt = "m_generic"
 sound_fight   = "f_helicopter"
 sound_fight_alt = "f_generic"
-build_cost    = 95
+build_cost    = 90
 pop_cost      = 0
 attack        = 10
 defense       = 5
@@ -4570,8 +4570,9 @@ veteran_move_bonus = 63
 roles         = ""
 helptext      = _("\
 Trawlers are high-powered work-boats used for fishing and ocean work.\
- They work at the same rate as Workers, and can put down Fishtraps,\
+ They work at the same rate as Workers, and can put down\
  Buoys, Sea Bridges, Road types, or clean Pollution and Fallout.\
+ With Refrigeration, they can put down Fishtraps.\
  Trawlers can carry one Land unit. \n\n\
 Trawlers can tow ships who haven’t moved, via a Load, Board,\
  or Embark order. Towing helps damaged ships return to port for repair.\

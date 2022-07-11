@@ -867,7 +867,7 @@ Computers costs 2x, expires Artemis, Isaac.
 classes of unit, and either by odds or always. "always"
 currently only used for ABMs. 
 ==============================================================
-137.
+137. Helicopters cost 5 less shields
 ==============================================================
 138.
 ==============================================================
