@@ -5,75 +5,74 @@
 	*/
 
 .dynamic-slider-control {
-	position:			relative;
-	-moz-user-focus:	normal;
-	-moz-user-select:	none;
-	cursor:				default;
+  position: relative;
+  -moz-user-focus: normal;
+  -moz-user-select: none;
+  cursor: default;
 }
 
 .horizontal {
-	width:				200px;
-	height:				27px;
+  width: 200px;
+  height: 27px;
 }
 
 .vertical {
-	width:				29px;
-	height:				200px;
+  width: 29px;
+  height: 200px;
 }
 
 .dynamic-slider-control input {
-	display:	none;
+  display: none;
 }
 
 .dynamic-slider-control .handle {
-	position:			absolute;	
-	font-size:			1px;
-	overflow:			hidden;
-	-moz-user-select:	none;
-	cursor:				default;
+  position: absolute;
+  font-size: 1px;
+  overflow: hidden;
+  -moz-user-select: none;
+  cursor: default;
 }
 
 .dynamic-slider-control.horizontal .handle {
-	width:				23px;
-	height:				23px;
-	background-image:	url("/images/slider_prod.png");
+  width: 23px;
+  height: 23px;
+  background-image: url("/images/slider_prod.png");
 }
 
 .dynamic-slider-control.horizontal .handle div {}
+
 .dynamic-slider-control.horizontal .handle.hover {}
 
 .dynamic-slider-control.vertical .handle {
-	width:				23px;
-	height:				23px;
-	background-image:	url("/images/slider_prod.png");
+  width: 23px;
+  height: 23px;
+  background-image: url("/images/slider_prod.png");
 }
 
 .dynamic-slider-control.vertical .handle.hover {}
 
 .dynamic-slider-control .line {
-	position:			absolute;
-	font-size:			0.01mm;
-	overflow:			hidden;
-	border:				1px solid rgb(90, 85, 74);
-	background:			rgb(172, 173, 169);
-	
-	behavior:			url("css/boxsizing.htc"); /* ie path bug */
-	box-sizing:			content-box;
-	-moz-box-sizing:	content-box;
+  position: absolute;
+  font-size: 0.01mm;
+  overflow: hidden;
+  border: 1px solid rgb(90, 85, 74);
+  background: rgb(172, 173, 169);
+
+  box-sizing: content-box;
 }
+
 .dynamic-slider-control.vertical .line {
-	width:				3px;
+  width: 3px;
 }
 
 .dynamic-slider-control.horizontal .line {
-	height:				3px;
+  height: 3px;
 }
 
 .dynamic-slider-control .line div {
-	width:		1px;
-	height:		1px;
-	
-	border:				1px solid;
-	border-color:		rgb(192, 179, 172) rgb(179,180,179)
-						rgb(189,190,189) rgb(192, 179, 172);
+  width: 1px;
+  height: 1px;
+
+  border: 1px solid;
+  border-color: rgb(192, 179, 172) rgb(179, 180, 179) rgb(189, 190, 189) rgb(192, 179, 172);
 }

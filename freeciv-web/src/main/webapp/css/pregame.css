@@ -1,16 +1,16 @@
-body { 
-    font-family: "lucida grande", tahoma, verdana, arial, sans-serif;
-	font-size: 14px;
-	margin: 0px 0px 0px 0px; 
-	background-color: #000000;
+body {
+  font-family: "lucida grande", tahoma, verdana, arial, sans-serif;
+  font-size: 14px;
+  margin: 0 0 0 0;
+  background-color: #000000;
 }
 
 
 #pregame_page {
   padding: 10px;
-  background: url("/images/bg-dark.jpg") repeat scroll 0 0 ;
+  background: url("/images/bg-dark.jpg") repeat scroll 0 0;
   width: 97%;
-  float:left;
+  float: left;
 }
 
 
@@ -45,12 +45,12 @@ body {
 
 #pregame_game_info:empty {
   display: none;
-  padding: 0px 0px;
-  border: 0px;
+  padding: 0 0;
+  border: 0;
 }
 
 #pregame_game_info:not(:empty) {
-  background: #111111 url(/images/bg.jpg); 
+  background: #111111 url(/images/bg.jpg);
   color: #000000;
   max-height: 15%;
   width: 78%;
@@ -69,26 +69,26 @@ body {
   padding: 5px 5px;
   border: 1px solid black;
   list-style-type: none;
-  margin: 0px;
+  margin: 0;
 }
 
 #pregame_player_icon {
-  background: transparent url(/images/player-icon.png); 
-  width: 24px; 
-  height: 24px; 
+  background: transparent url(/images/player-icon.png);
+  width: 24px;
+  height: 24px;
   margin: 5px;
-  float:left;
-  
+  float: left;
+
 }
 
 #pregame_ai_icon {
-  background: transparent url(/images/ai-icon.png); 
-  width: 24px; 
-  height: 24px; 
+  background: transparent url(/images/ai-icon.png);
+  width: 24px;
+  height: 24px;
   margin: 5px;
-  float:left;
-  
-}  
+  float: left;
+
+}
 
 #pregame_chat_box {
   width: 100%;
@@ -109,17 +109,17 @@ body {
 
 
 #nation_list {
-  float: left; 
-  height:590px; 
-  overflow: auto; 
+  float: left;
+  height: 590px;
+  overflow: auto;
   width: 29%;
 }
 
 #nation_legend {
-  float: left; 
-  height: 500px; 
-  overflow: auto; 
-  padding: 10px; 
+  float: left;
+  height: 500px;
+  overflow: auto;
+  padding: 10px;
   width: 22%;
   font-size: 120%;
   margin-left: 10px;
@@ -130,7 +130,7 @@ body {
 }
 
 #nation_flag_choice {
-  width = 25%;
+  width: 25%;
 }
 
 #nation_style_choices {
@@ -139,30 +139,28 @@ body {
   height: 590px;
   overflow: auto;
   float: left;
-  background-color: rgba(100,100,100,0.3);
+  background-color: rgba(100, 100, 100, 0.3);
 }
 
 .nation_choice {
-  width: 260px; 
-  margin-left: 5px; 
-  cursor:pointer;
-  cursor:hand;
+  width: 260px;
+  margin-left: 5px;
+  cursor: hand;
   font-weight: bold;
-  font-size: 1.1em; 
+  font-size: 1.1em;
   min-height: 33px;
 }
 
 #nation_autocomplete_box {
-  width: 210px; 
-  background:  #111111 url(/images/bg-dark.jpg); 
-  border:1px solid #000000; 
+  width: 210px;
+  background: #111111 url(/images/bg-dark.jpg);
+  border: 1px solid #000000;
   color: white;
 
 }
 
 #nation_heading {
-  padding: 3px; 
-  padding-bottom: 10px; 
+  padding: 3px 3px 10px;
   width: 100%;
 }
 
@@ -173,34 +171,34 @@ body {
 
 
 #pregame_buttons {
-  float:left;
+  float: left;
 }
 
 #share_icons {
-  float:left;
+  float: left;
   margin-left: 50px;
 }
 
 
 #savegame_note {
-  font-style:italic;
+  font-style: italic;
   font-size: 70%;
 }
 
-#selectable .ui-selecting { 
-  background: #228822; 
+#selectable .ui-selecting {
+  background: #228822;
 }
 
-#selectable .ui-selected { 
-  background: #117711; 
-  color: white; 
+#selectable .ui-selected {
+  background: #117711;
+  color: white;
 }
 
 #selectable {
   list-style-type: none;
   margin: 0;
   padding: 0;
-  width: 100%; 
+  width: 100%;
   overflow: auto;
   height: 400px;
 }
