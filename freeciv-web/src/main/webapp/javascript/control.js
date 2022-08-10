@@ -8014,31 +8014,32 @@ function check_mouse_drag_unit(ptile)
 /**************************************************************************
   Pop-up at game start to enter fullscreen. We might use a browser but we
   are a full-screen game, damn it!
+  Removed. Needs a do not ask again opton.
 **************************************************************************/
-function popup_fullscreen_enter_game_dialog()
-{
+//function popup_fullscreen_enter_game_dialog()
+//{
   // Don't show popup for small screen, we set enter it elsewhere.
-  if (is_small_screen()) return;
+//  if (is_small_screen()) return;
   
-  id = "#fullscreen_dialog";
-  remove_active_dialog(id);  /* Reset dialog page. */
-  $("#fullscreen_dialog").css("white-space","pre-wrap"); // allow \n to work.
-  $("<div id='fullscreen_dialog'></div>").appendTo("div#game_page");
+//  id = "#fullscreen_dialog";
+//  remove_active_dialog(id);  /* Reset dialog page. */
+//  $("#fullscreen_dialog").css("white-space","pre-wrap"); // allow \n to work.
+//  $("<div id='fullscreen_dialog'></div>").appendTo("div#game_page");
 
-  if (!is_small_screen())
-    $(id).html("<b>Enters Full Screen when you interact with game.</b><br><br><b>ALT-S</b> toggles Full Screen.<br><b>ESC</b> exits full screen.");
-  else 
-    $(id).html("<b>Play in Full Screen Mode.");
+//  if (!is_small_screen())
+//    $(id).html("<b>Enters Full Screen when you interact with game.</b><br><br><b>ALT-S</b> toggles Full Screen.<br><b>ESC</b> exits full screen.");
+//  else 
+//    $(id).html("<b>Play in Full Screen Mode.");
 
-  var buttons = { 'Yes!': function()
-                 { openFullscreen(); remove_active_dialog(id); },
-                  'No': function() {remove_active_dialog(id);} };
-  $(id).attr("title", "Full Immersion Mode");
-  var dwidth = is_small_screen() ? "90%" : "480";
-  $(id).dialog({bgiframe: true, modal: true, buttons: (buttons), height: "auto", width: dwidth});
-  $(id).dialog('open'); $(id).dialog('widget').position({my:"center", at:"center", of:window})
-  dialog_register(id);
-}
+//  var buttons = { 'Yes!': function()
+//                 { openFullscreen(); remove_active_dialog(id); },
+//                  'No': function() {remove_active_dialog(id);} };
+//  $(id).attr("title", "Full Immersion Mode");
+//  var dwidth = is_small_screen() ? "90%" : "480";
+//  $(id).dialog({bgiframe: true, modal: true, buttons: (buttons), height: "auto", width: dwidth});
+//  $(id).dialog('open'); $(id).dialog('widget').position({my:"center", at:"center", of:window})
+//  dialog_register(id);
+//}
 /****************************************************************************
  This function opens full screen mode.
 ****************************************************************************/
