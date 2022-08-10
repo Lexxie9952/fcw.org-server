@@ -153,7 +153,7 @@ function setup_window_size ()
     $("#button_empire_upkeep").html("&#x1f4b0;");
     $("#button_empire_prod").html("&#x1F528;");
     // Remove mini-map
-    $(".overview_dialog").hide(); overview_active = false;
+    // $(".overview_dialog").hide(); overview_active = false;
     // Remove orders buttons
     //if ($("#game_unit_orders_default").length > 0) $("#game_unit_orders_default").remove();
     $(".not_mobile").remove(); // gets rid of all except goto,paradrop,airlift,nuke,and "hide buttons"
@@ -173,6 +173,10 @@ function setup_window_size ()
     $('#ui-id-12').parent().show();  // unhide messagebox title
     $(".ui-dialog-titlebar").css({"font-size":"70%", "margin-left":"-3px"});
     $("#game_status_panel_bottom").css("font-size", "0.8em");
+
+    overview_current_state = "minimized";
+    game_unit_panel_state = "minimized";
+
   } else {  // handle case where small window is resized to large again 
     $("#map_tab").children().html("<img style='float:left; margin-right:5px;' src='/images/map_tab_icon.png'> Map");
     $("#empire_tab").children().html("<img style='float:left; margin-right:5px;' src='/images/empire_tab_icon.png'> Empire");
