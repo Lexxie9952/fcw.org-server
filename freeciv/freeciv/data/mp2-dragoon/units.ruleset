@@ -93,6 +93,7 @@ class_flags =
     _("BorderPolice"), _("Military units from this class can peacefully expel certain foreign units.")
     _("CargoRestrained"), _("Can’t attack as Cargo. Must first deboard or disembark.")
     _("WaterVessel")
+    _("DelayLoad"), _("Fractional move points spent to load or unload this unit.")
   }
 
 [veteran_system]
@@ -191,7 +192,7 @@ veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
 name          = _("?unitclass:Cargo")
 min_speed     = 1
 hp_loss_pct   = 0
-flags         = "BuildAnywhere", "ZOC", "TerrainSpeed"
+flags         = "BuildAnywhere", "ZOC", "TerrainSpeed", "DelayLoad"
 
 [unitclass_missile]
 name          = _("?unitclass:Missile")
@@ -208,7 +209,7 @@ name          = _("?unitclass:Bomb")
 min_speed     = 1
 hp_loss_pct   = 0
 hut_behavior  = "Frighten"
-flags         = "Unreachable", "DoesntOccupyTile", "Airliftable" 
+flags         = "Unreachable", "DoesntOccupyTile", "Airliftable", "DelayLoad"
 helptext      = _("\
   • Can be airlifted from a suitable city.\
 ")
@@ -219,7 +220,7 @@ min_speed     = 1
 hp_loss_pct   = 0
 hut_behavior  = "Frighten"
 flags         = "BuildAnywhere", "Missile", "Unreachable", "DoesntOccupyTile", "Airliftable",
-                "AttackNonNative"
+                "AttackNonNative", "DelayLoad"
 helptext      = _("\
   • Can be airlifted from a suitable city.\
 ")
@@ -228,7 +229,7 @@ helptext      = _("\
 name          = _("?unitclass:LandRail")
 min_speed     = 4
 hp_loss_pct   = 0
-flags         = "Unreachable", "BuildAnywhere", "ZOC", "TerrainDefense", "TerrainSpeed", "DamageSlows"
+flags         = "Unreachable", "BuildAnywhere", "ZOC", "TerrainDefense", "TerrainSpeed", "DamageSlows", "DelayLoad"
 helptext      = _("\
   • Only able to move on railroad tiles.\
 ")
@@ -238,7 +239,7 @@ name          = _("?unitclass:LandRoad")
 min_speed     = 3
 hp_loss_pct   = 0
 flags         = "BuildAnywhere", "ZOC", "TerrainDefense", "DamageSlows", "TerrainSpeed", "CanFortify",
-                "CargoRestrained"
+                "CargoRestrained", "DelayLoad"
 helptext      = _("\
   • Only able to move on road tiles.\
 ")
@@ -250,7 +251,7 @@ hp_loss_pct   = 0
 flags         = "TerrainSpeed", "DamageSlows", "CanOccupyCity", "BuildAnywhere",
                 "CollectRansom", "ZOC", "CanFortify", "CanPillage",
                 "TerrainDefense", "KillCitizen", "Airliftable", "BorderPolice",
-                "CargoRestrained"
+                "CargoRestrained", "DelayLoad"
 helptext      = _("\
   • Can be airlifted from a suitable city.\
 ")
@@ -262,7 +263,7 @@ hp_loss_pct   = 0
 flags         = "TerrainSpeed", "DamageSlows", "CanOccupyCity", "BuildAnywhere",
                 "CollectRansom", "ZOC", "CanFortify", "CanPillage",
                 "TerrainDefense", "KillCitizen", "Airliftable", "BorderPolice",
-                "CargoRestrained"
+                "CargoRestrained", "DelayLoad"
 helptext      = _("\
   • Can be airlifted from a suitable city.\
 ")
@@ -272,7 +273,7 @@ name          = _("?unitclass:LandImmobile")
 min_speed     = 3
 hp_loss_pct   = 0
 flags         = "TerrainSpeed", "BuildAnywhere", "ZOC", "CanFortify", "TerrainDefense",
-                "AttFromNonNative", "AttackNonNative"
+                "AttFromNonNative", "AttackNonNative", "DelayLoad"
 
 [unitclass_landnokill]
 name          = _("?unitclass:LandNoKill")
@@ -281,7 +282,7 @@ hp_loss_pct   = 0
 flags         = "TerrainSpeed", "DamageSlows", "CanOccupyCity", "BuildAnywhere",
                 "CollectRansom", "ZOC", "CanFortify", "CanPillage",
                 "TerrainDefense", "Airliftable", "BorderPolice",
-                "CargoRestrained"
+                "CargoRestrained", "DelayLoad"
 helptext      = _("\
   • Does not reduce population when attacking city.\
 ")
@@ -295,7 +296,7 @@ hp_loss_pct   = 0
 flags         = "TerrainSpeed", "DamageSlows", "CanOccupyCity", "BuildAnywhere",
                 "CollectRansom", "ZOC", "CanFortify", "CanPillage",
                 "TerrainDefense", "KillCitizen", "Airliftable", 
-                "AttackNonNative", "AttFromNonNative", "BorderPolice"
+                "AttackNonNative", "AttFromNonNative", "BorderPolice", "DelayLoad"
 helptext      = _("\
   • Can attack from Ships and Helicopters.\
 ")

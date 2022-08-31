@@ -285,7 +285,7 @@ signal.connect("hut_frighten", "_deflua_hut_frighten_callback")
   In the default ruleset, the requirements for inspiring partisans are:
   a) Guerilla warfare must be known by at least 1 player
   b) The player must know about Communism and Gunpowder
-  c) The player must run either a democracy or a communist society.
+  c) The player must be a democracy, theocracy, or communist.
 ]]--
 
 function _deflua_make_partisans_callback(city, loser, winner, reason)

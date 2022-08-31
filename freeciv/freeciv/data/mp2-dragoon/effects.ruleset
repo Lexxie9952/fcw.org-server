@@ -7776,7 +7776,7 @@ value   = 3
 reqs    =
     { "type",          "name",            "range", "present"
       "Action",        "Transport Board", "Local", TRUE
-      "UnitClassFlag", "TerrainSpeed",    "Local", TRUE      ; Does not affect Aircraft, Missiles, etc.
+      "UnitClassFlag", "DelayLoad",       "Local", TRUE      ; Does not affect Aircraft
       "UnitType",      "Marines",         "Local", FALSE     ; Does not affect Marines
     }
 [effect_action_success_move_cost_deboard]
@@ -7785,8 +7785,8 @@ value   = 3
 reqs    =
     { "type",          "name",              "range", "present"
       "Action",        "Transport Deboard", "Local", TRUE
-      "UnitClassFlag", "TerrainSpeed",      "Local", TRUE      ; Does not affect Aircraft, Missiles, etc.
-      "UnitType",      "Marines",         "Local", FALSE       ; Does not affect Marines
+      "UnitClassFlag", "DelayLoad",         "Local", TRUE      ; Does not affect Aircraft
+      "UnitType",      "Marines",           "Local", FALSE     ; Does not affect Marines
     }
 [effect_action_success_move_cost_transport_unload]
 type    = "Action_Success_Target_Move_Cost"   ; "Local" scope on unit pertains to target, not actor.
@@ -7794,8 +7794,8 @@ value   = 3
 reqs    =
     { "type",          "name",             "range", "present"
       "Action",        "Transport Unload", "Local", TRUE
-      "UnitClassFlag", "TerrainSpeed",     "Local", TRUE      ; Does not affect Aircraft, Missiles, etc.
-      "UnitType",      "Marines",         "Local", FALSE      ; Does not affect Marines
+      "UnitClassFlag", "DelayLoad",        "Local", TRUE      ; Does not affect Aircraft
+      "UnitType",      "Marines",          "Local", FALSE     ; Does not affect Marines
     }
 
 ;[effect_action_success_siege_ram_city_walls]

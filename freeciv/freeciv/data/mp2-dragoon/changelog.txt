@@ -554,7 +554,7 @@ cumbersome transport logistics.
 24. Copernicus costs 90 (was 100).
 ==============================================================
 25. New feature, cargo on some types of transports is openly
-visible. Current test case are Wagons and Trawlers.
+visible. Current test cases are Wagons and Trawlers.
 ==============================================================
 26. Boarding a transport requires having moves left. This 
 works in conjunction with the 1/3 move cost of boarding/deboarding 
@@ -773,7 +773,7 @@ Stealth Bomber, 3
 new unit Bomb
 
 new carry capacities
-Med.Bomber 1
+Med.Bomber 1 (conventional bombs)
 
 stealth bomber can ipillage
 ==============================================================
