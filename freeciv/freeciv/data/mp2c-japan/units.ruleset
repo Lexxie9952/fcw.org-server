@@ -1290,7 +1290,7 @@ uk_food       = 0
 uk_gold       = 0
 embarks       = "LandRoad", "LandRail", "Helicopter"    ; transport helicopter only
 disembarks    = "LandRoad", "LandRail", "Helicopter"
-targets       = "LandRail"
+targets       = "LandRail", "Balloon"
 flags         = "FootSoldier", "Capturer", "CantReachAir", "Settlers", "CanHide", "MultiSlot", "Shield2Gold", "WillNever"
 roles         = "DefendGood", "DefendGoodStartUnit", "FirstBuild",
                 "BarbarianTech", "BarbarianBuildTech", "BarbarianSeaTech"
@@ -1328,7 +1328,7 @@ uk_food       = 0
 uk_gold       = 0
 embarks       = "LandRoad", "LandRail", "Helicopter"    ; transport helicopter only
 disembarks    = "LandRoad", "LandRail", "Helicopter"
-targets       = "LandRail"
+targets       = "LandRail", "Balloon"
 bonuses       =
    { "flag", "type", "value"
      ;The values below would be what we use if we went with normal veterancy levels.
@@ -1561,7 +1561,7 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-targets       = "LandRail"
+targets       = "LandRail", "Balloon"
 flags         = "Horse", "Capturer", "CantReachAir", "WillNever"
 roles         = "AttackFastStartUnit", "BarbarianBuildTech", "BarbarianSeaTech", "Hunter"
 helptext      = _("\
@@ -1689,7 +1689,7 @@ uk_food       = 0
 uk_gold       = 0
 embarks       = "Helicopter"    ; transport helicopter only
 disembarks    = "Helicopter"
-targets       = "LandRail"
+targets       = "LandRail", "Balloon"
 flags         = "CantReachAir", "WillNever"
 roles         = "BarbarianTech", "BarbarianBuildTech"
 helptext      = _("\
@@ -2128,7 +2128,7 @@ uk_happy      = 0
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-targets       = "Submarine", "LandRail"
+targets       = "Submarine", "LandRail", "Balloon"
 cargo         = "Land", "LandNoKill", "LandAirSea", "Balloon", "LandRoad", "Cargo"
 flags         = "BadCityDefender", "CanEscape", "CantReachAir", "WillNever",
                 "NonMil", "NonMilAttack" ;  maritime trade can continue after Caravel expires.
@@ -2183,7 +2183,7 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-targets       = "Submarine", "LandRail"
+targets       = "Submarine", "LandRail", "Balloon"
 cargo         = "Land", "LandNoKill", "LandAirSea", "LandRoad"
 bonuses       =
    { "flag", "type", "value"
