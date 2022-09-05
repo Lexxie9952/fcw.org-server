@@ -1181,7 +1181,7 @@ veteran_names =
   _("?vet_rank:master workmen")
 veteran_base_raise_chance = 0, 0, 0, 0
 veteran_work_raise_chance = 7, 5, 3, 0
-veteran_power_fact = 100, 120, 125, 133
+veteran_power_fact = 100, 120, 125, 134
 veteran_move_bonus = 0, 1, 1, 1
 roles         = "Settlers", "WorkerStartUnit"
 helptext      = _("\
@@ -3021,7 +3021,7 @@ move_rate     = 20
 vision_radius_sq = 12
 transport_cap = 0
 fuel          = 1
-paratroopers_mr_sub = 131072 ;010,00000,00,0000,000,0,0 - max_ATKs=2, bbd_retal_rate=0, iPill_rand_tgts=0, iPill_odds=-10 pentads=50%, iPill_moves=6, iPillage=1, attack_stay_fortified=0
+paratroopers_mr_sub = 131072 ;010,00000,00,0000,000,0,0 - max_ATKs=2, bbd_retal_rate=0, iPill_rand_tgts=0, iPill_odds=-0 pentads, iPill_moves=0, iPillage=0, attack_stay_fortified=0
 uk_happy      = 0
 uk_shield     = 1
 uk_food       = 0
@@ -3087,7 +3087,7 @@ move_rate     = 18
 vision_radius_sq = 12
 transport_cap = 0
 fuel          = 2
-paratroopers_mr_sub = 131072 ;010,00000,00,0000,000,0,0 - max_ATKs=2, bbd_retal_rate=0, iPill_rand_tgts=0, iPill_odds=-10 pentads=50%, iPill_moves=6, iPillage=1, attack_stay_fortified=0
+paratroopers_mr_sub = 131072 ;010,00000,00,0000,000,0,0 - max_ATKs=2, bbd_retal_rate=0, iPill_rand_tgts=0, iPill_odds=-0 pentads=100%, iPill_moves=0, iPillage=0, attack_stay_fortified=0
 uk_happy      = 0
 uk_shield     = 1
 uk_food       = 0
@@ -3230,7 +3230,7 @@ move_rate     = 15
 vision_radius_sq = 12
 transport_cap = 1
 fuel          = 2
-paratroopers_mr_sub = 65536 ;001,00000,00,0000,000,0,0 - max_ATKs=1, bbd_retal_rate=0, iPill_rand_tgts=1, iPill_odds=-8 pentads=60%, iPill_moves=3, iPillage=1, ATK_Stay_Fortified=0
+paratroopers_mr_sub = 65536 ;001,00000,00,0000,000,0,0 - max_ATKs=1, bbd_retal_rate=0, iPill_rand_tgts=0, iPill_odds=-0 pentads=0%, iPill_moves=3, iPillage=0, ATK_Stay_Fortified=0
 uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
@@ -3290,7 +3290,7 @@ move_rate     = 16
 vision_radius_sq = 12
 transport_cap = 1
 fuel          = 2
-paratroopers_mr_sub = 65536 ;001,00000,00,0000,000,0,0 - max_ATKs=1, bbd_retal_rate=0, iPill_rand_tgts=1, iPill_odds=-8 pentads=60%, iPill_moves=3, iPillage=1, ATK_Stay_Fortified=0
+paratroopers_mr_sub = 65536 ;001,00000,00,0000,000,0,0 - max_ATKs=1, bbd_retal_rate=0, iPill_rand_tgts=0, iPill_odds=-0 pentads=, iPill_moves=0, iPillage=0, ATK_Stay_Fortified=0
 uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
@@ -3793,7 +3793,7 @@ move_rate     = 21
 vision_radius_sq = 12
 transport_cap = 0
 fuel          = 2
-paratroopers_mr_sub = 178 ;000,00000,00,0101,100,1,0 - max_ATKs=0, bbd_retal_rate=0, iPill_rand_tgts=0, iPill_odds=-5 pentads=75%, iPill_moves=4, iPillage=1, ATK_Stay_Fortified=0
+paratroopers_mr_sub = 262322 ;100,00000,00,0101,100,1,0 - max_ATKs=4, bbd_retal_rate=0, iPill_rand_tgts=0, iPill_odds=-5 pentads=75%, iPill_moves=4, iPillage=1, ATK_Stay_Fortified=0
 ;NOTE：iPillage changes in rules require client_rules_flag and get_what_can_unit_pillage_from() changes.
 uk_happy      = 0
 uk_shield     = 1
@@ -3802,7 +3802,7 @@ uk_gold       = 0
 targets       = "Air", "Air_High_Altitude", "Balloon", "Helicopter", "LandRail", "Zeppelin"
 bonuses       =
    { "flag", "type", "value"
-     "AntiAir",    "DefenseMultiplierPct",       33 ; D5.33 vs Anti-Air
+     "AntiAir",    "DefenseMultiplierPct",       33 ; 1.33x vs Anti-Air
    }
 flags         = "AirAttacker", "Unbribable", "CanEscape", "NeverBlocked",
                 "NeverProtects", "Provoking", "WillNever"
@@ -3908,6 +3908,7 @@ move_rate     = 28
 vision_radius_sq = 12
 transport_cap = 0
 fuel          = 1
+paratroopers_mr_sub = 196754 ;011,00000,00,0000,000,0,0 - max_ATKs=3, bbd_retal_rate=0, iPill_rand_tgts=0, iPill_odds=0 pentads=0%, iPill_moves=0, iPillage=0, ATK_Stay_Fortified=0
 uk_happy      = 0
 uk_shield     = 1
 uk_food       = 0
@@ -3969,6 +3970,7 @@ move_rate     = 26
 vision_radius_sq = 12
 transport_cap = 0
 fuel          = 2
+paratroopers_mr_sub = 131218 ;010,00000,00,0000,000,0,0 - max_ATKs=2, bbd_retal_rate=0, iPill_rand_tgts=0, iPill_odds=0 pentads=0%, iPill_moves=0, iPillage=0, ATK_Stay_Fortified=0
 uk_happy      = 0
 uk_shield     = 1
 uk_food       = 0
