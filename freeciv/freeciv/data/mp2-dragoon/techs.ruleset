@@ -293,7 +293,7 @@ flags    = ""
 graphic     = "a.conscription"
 graphic_alt = "-"
 helptext = _("Obsoletes Musketeers, Falconeers. Cities can build >1 unit. Old infantry convert to Musketeers.")
-cost = 1890
+cost = 2400
 
 [advance_construction]
 name     = _("Construction")
