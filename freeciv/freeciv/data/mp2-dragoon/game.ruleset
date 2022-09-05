@@ -2443,6 +2443,30 @@ target_reqs    =
     { "type",           "name",          "range", "present"
       "MaxUnitsOnTile", "0",             "Local", TRUE
     }
+######################################################################################## UNCOMMENT THE BELOW TO ALLOW A WAY TO CONQUER TINY ISLANDS
+; SPECIAL EXCEPTION: Non-Marine FootSoldiers with Capture abilities can conquer an empty 1x1 island city
+; from a transporter ship IFF the conquering unit has full moves and has not acted nor moved this turn.
+#[actionenabler_conquer_1x1_city_from_non_native_restrained]
+#action = "Conquer City"
+#actor_reqs    =
+#    { "type",           "name",           "range", "present"
+#      "UnitClassFlag",  "CanOccupyCity",  "Local", TRUE
+#      "UnitClassFlag",  "CargoRestrained","Local", TRUE         ; This enabler is an exception only for the case of non-Marines type units
+#      "UnitState",      "Transported",    "Local", TRUE         ; This enabler is an exception only for non-Marines conquering 1x1 island cities 
+#      "UnitFlag",       "NonMil",         "Local", FALSE
+#      "DiplRel",        "War",            "Local", TRUE
+#      "UnitFlag",       "FootSoldier",    "Local", TRUE         ; FootSoldiers only
+#      "UnitFlag",       "Capturer",       "Local", TRUE         ; Capturers only
+#      "MinMoveFrags",   "18",             "Local", TRUE         ; At least 2 move points (redundant insurance with req below)
+#      "UnitState",      "MovedThisTurn",  "Local", FALSE        ; Has not acted/moved this turn
+#      "UnitState",      "OnLivableTile",  "Local", FALSE        ; This enabler is an exceeption only for non-Marines on transport, not all-terrain units
+#      "NationGroup",    "Barbarian",      "Player",FALSE
+#    }
+#target_reqs    =
+#    { "type",           "name",          "range",    "present"
+#      "MaxUnitsOnTile", "0",             "Local",    TRUE
+#      "TerrainClass",   "Land",          "Adjacent", FALSE       ; This enabler is an exception only for the case of a 1x1 island city 
+#    }
 ;---------------------------------------------------------------------------
 [actionenabler_change_home_city]
 action = "Home City"
@@ -3311,7 +3335,7 @@ actor_reqs    =
       "DiplRel",      "Peace",      "Local", FALSE
       "DiplRel",      "Never met",  "Local", FALSE
     }
-;Missiles can board/embark (1) in cities, (2) as a cargo swap, (3) i.e., NOT flying through air to land in a catch-net. 
+;Missiles can board/embark only in cities or at TC throuogh "parachute catch" 
 [actionenabler_embark_missiles]
 action        = "Transport Embark"
 actor_reqs    =
