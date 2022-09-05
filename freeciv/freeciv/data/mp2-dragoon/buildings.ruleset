@@ -820,7 +820,7 @@ Coal Plants boost the base production of a city by +30%. The\
  production may contribute to pollution. \n\
 "), _("\
 ➤ With a Factory and Mass Production technology, this makes a\
- combined +150% production bonus. \n\
+ combined +100% production bonus. \n\
 "), _("\
 ➤ Only one Coal Plant, Hydro Plant, Nuclear Plant, or Fusion Reactor\
  can have an active effect in a city.\
@@ -854,7 +854,7 @@ A Hydro Plant boosts the base production of a city by +30%. The\
  output of a Hydro Plant generates no pollution. \n\
 "), _("\
 ➤ With a Factory and Mass Production technology, this makes a\
- combined +150% production bonus. \n\
+ combined +100% production bonus. \n\
 "), _("\
 ➤ Only one Coal Plant, Hydro Plant, Nuclear Plant, or\
  Fusion Reactor can have an active effect in a city. \n\
@@ -891,7 +891,7 @@ A Nuclear Plant boosts the base production of a city by +60%,\
  1/6 of the extra output contributes to pollution.) \n\
 "), _("\
 ➤ With a Factory and Mass Production technology, this makes a\
- combined +160% production bonus. \n\
+ combined +110% production bonus. \n\
 "), _("\
 ➤ Only one Coal Plant, Hydro Plant, Nuclear Plant, or\
  Fusion Reactor can have an active effect in a city. \n\
@@ -1041,7 +1041,6 @@ genus		= "Improvement"
 reqs	=
     { "type", "name", "range"
       "Tech", "Environmentalism", "Player"
-      "Building", "Factory", "City"
     }
 graphic	= "b.solar_plant"
 graphic_alt	= "-"
@@ -1939,7 +1938,7 @@ graphic_alt	= "-"
 obsolete_by	=
     { "type", "name", "range"
     }
-build_cost	= 600
+build_cost	= 550
 upkeep		= -15
 sabotage	= 0
 sound		= "w_hoover_dam"
@@ -1949,9 +1948,11 @@ In the city where it’s built, Hoover Dam counts exactly as a Hydro Plant,\
  Factory, and Manufacturing Plant. If any of those buildings already\
  exist in the city, they have no effect and can be sold. \n\
 "), _("
-Hoover Dam increases the production bonus of all Hydro Plants in all\
- your cities to +30%, the same as a Nuclear Plant. The increase does NOT\
- contribute to pollution. \n\
+Hoover Dam increases the bonus of all Hydro Plants in all your cities\
+ by another +10%, so that they yield +40% output. After Mass Production\
+ is discovered and gives another +20% bonus, all your Hydro Plants will\
+ then have +60% output—the same as a Nuclear Plant! The output increase\
+ does NOT contribute to pollution. \n\
 "), _("
 ➤ In the city with Hoover Dam, the +20% output from Mass Production\
  is received without needing that tech. The total of all combined\
