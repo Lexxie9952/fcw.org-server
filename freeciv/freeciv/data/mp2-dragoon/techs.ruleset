@@ -340,7 +340,7 @@ req2     = "Magnetism"
 flags    = ""
 graphic     = "a.electricity"
 graphic_alt = "-"
-helptext = _("Obsoletes Ironclad. +1 Effect for Amphitheaters. +1 move for Trains.")
+helptext = _("Obsoletes Ironclad. Disables making Lighthouse. +1 Effect for Amphitheaters. +1 move for Trains.")
 cost = 2220
 
 [advance_electronics]
