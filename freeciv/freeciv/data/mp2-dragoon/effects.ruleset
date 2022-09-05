@@ -4025,7 +4025,7 @@ reqs	=
       "Building", "Fusion Reactor",  "Player", FALSE
     }
 [effect_hoover_dam_city_3]
-type    = "Pollu_Prod_Pct" ;-30 for factory, -20 for mass prod, -30 for fusion reactor
+type    = "Pollu_Prod_Pct"
 value	= -80
 reqs	=
     { "type",     "name",            "range", "present"
@@ -4040,7 +4040,18 @@ reqs	=
     { "type",      "name",          "range", "present"
       "Building",  "Hoover Dam",    "Player", TRUE
       "Building",  "Hoover Dam",    "City",   FALSE
-      "Tech",      "Mass Production","Player",TRUE
+      "Building",  "Hydro Plant",   "City",   TRUE
+      "OutputType","Shield",        "Local",  TRUE
+      "Building",  "Nuclear Plant", "City",   FALSE
+      "Building",  "Fusion Reactor","Player", FALSE
+    }
+[effect_hoover_hydro_prod_bonus_makes_no_extra_pollution]
+type    = "Pollu_Prod_Pct"
+value	= -10
+reqs	=
+    { "type",      "name",          "range", "present"
+      "Building",  "Hoover Dam",    "Player", TRUE
+      "Building",  "Hoover Dam",    "City",   FALSE
       "Building",  "Hydro Plant",   "City",   TRUE
       "OutputType","Shield",        "Local",  TRUE
       "Building",  "Nuclear Plant", "City",   FALSE
