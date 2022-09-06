@@ -817,7 +817,8 @@ Settlers can perform most of the terrain alterations as\
 Upkeep for Settlers costs food as well as production. A Settler\
  can die if its supporting city runs out of food. Settlers in a\
  Republic, Democracy, or Theocratic nation require twice as\
- much food per turn.\
+ much food per turn. For the first five turns, each Settler will
+ produce +1 bulb of science output.\
 ")
 
 [unit_tribesmen]
@@ -5224,7 +5225,7 @@ bonuses       =
      "Nuclear",      "DefenseDividerPct", -34, TRUE   ; 40% vs. nuclear missles, 50% as vet
    }
 flags         = "NeverProtects", "OneAttack", "HasNoZOC", "Unbribable",
-                "CantReachAir", "Missile", "NeverBlocked", "AlwaysAttackClass1"
+                "CantReachAir", "Missile", "NeverBlocked", "AlwaysAttackClass1", "MultiSlot"
 roles         = ""
 helptext      = _("\
 ABMs intercept enemy missiles. Because there is seldom enough time to\
@@ -5452,7 +5453,7 @@ uk_food       = 0
 uk_gold       = 1
 targets       = "LandRail", "LandRoad"
 flags         = "NeverProtects", "OneAttack", "HasNoZOC", "Unbribable",
-                "WillNever", "NoVeteran", "Multislot", "CantReachAir", "Missile"
+                "WillNever", "NoVeteran", "MultiSlot", "CantReachAir", "Missile"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
 veteran_base_raise_chance = 0
