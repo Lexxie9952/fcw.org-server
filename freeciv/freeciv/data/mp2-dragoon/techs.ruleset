@@ -441,7 +441,7 @@ flags    = ""
 graphic     = "a.gunpowder"
 graphic_alt = "-"
 cost = 1900
-helptext = _("Obsoletes early foot soldiers, Castle, Barracks, Agōgē of Sparta.")
+helptext = _("Obsoletes early foot soldiers, Barracks, Agōgē of Sparta. Disables new Castles.")
 
 [advance_horseback_riding]
 name     = _("Horseback Riding")
@@ -703,7 +703,7 @@ req2     = "Literacy"
 flags    = ""
 graphic     = "a.philosophy"
 graphic_alt = "-"
-helptext = _("Obsoletes Sphinx. Bonus tech before 1600AD if no next tier techs are possessed.")
+helptext = _("Obsoletes Sphinx. Bonus blueprint before 1600AD if no next tier techs are possessed.")
 cost = 325
 
 [advance_physics]
