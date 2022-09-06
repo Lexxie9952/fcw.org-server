@@ -1536,8 +1536,9 @@ Since the dawn of time, camouflaged and concealed terrain has been\
  and prevention of stack-death are the two bonuses of a Hideout. Hideouts can’t stack with\
  other bases. Hideouts are invisible to anyone not occupying the tile with\
  a Land unit. For each turn it is unoccupied, a Hideout has a 15% chance\
- of being lost to the elements of nature. The only way to know if there is\
- a Hideout on a tile is to move a Land unit onto it. \n\
+ of being lost to the elements of nature, unless its built in the ruins\
+ of a former city. The only way to know if there is a Hideout on a tile is\
+ to move a Land unit onto it. \n\
 "), _("
 TIP: Hideouts are good for guarding a border or setting a trap for\
  intruders. Be careful! An abandoned Hideout can be used against you!\ 
