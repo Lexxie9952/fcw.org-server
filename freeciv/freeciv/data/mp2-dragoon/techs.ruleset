@@ -596,7 +596,7 @@ req2     = "University"
 flags    = ""
 graphic     = "a.metallurgy"
 graphic_alt = "-"
-helptext = _("Obsoletes Catapult, all Siege Rams. City Walls cost +10.")
+helptext = _("Obsoletes Catapult. Disables Siege Ram. Can’t make Citadel of Aleppo. Fortifications, Walls cost +10.")
 cost = 1340
 
 [advance_microbiology]
