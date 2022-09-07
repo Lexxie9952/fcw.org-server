@@ -1637,7 +1637,8 @@ veteran_move_bonus = 0, 2, 4, 6, 8, 10, 12
 helptext      = _("\
 Partisans are guerilla fighters who can use the terrain to their advantage. Like the Scout\
  that they upgrade, they can slip through ZOC and live off the land with no upkeep, and gain\
- +²⁄₉ move per veteran level. Partisans provide sentry intel even if not sentried. \n\
+ +²⁄₉ move per veteran level. Partisans provide sentry intel even if not sentried.\
+ Partisans can investigate conquered cities not owned by the original owner. \n\
 "), _("\
 Proportional to city size, up to 8 Partisans appear when an enemy conquers your city. They\
  randomly fortify on any tile inside the circle defined by its workable radius. Partisans\
@@ -1949,7 +1950,7 @@ Fanatics fervently defend their homeland, and can do surprise skirmish\
  assaults can also be done to foreign occupied cities if they have\
  a remaining Foreign National population. \n\
 "), _("\
-Fanatics can Estabish Home City in any allied city that is Theocracy,\
+Fanatics can Establish Home City in any allied city that is Theocracy,\
  allowing control to pass between nations who share the same faith.\
 ")
 bombard_rate = 3
@@ -2797,7 +2798,7 @@ flags         = "NeverBlocked", "AntiAir", "WillNever"
 roles         = ""
 helptext      = _("\
 The Mobile SAM is the strongest Anti-Air unit on the ground. It can\
- attack nearby aircraft. It has a 2× bonus against Air and 3× against\
+ attack nearby aircraft and missiles. It has a 2× bonus against Air and 3× against\
  Missiles. The Mobile SAM can also carry 3 Missiles of any type.\
  The discovery of Laser gives all units on its tile a 33% chance to\
  survive nuclear attack. \
@@ -5236,7 +5237,7 @@ ABMs are useful for anti-missile defense outside of cities. They must be\
 ABMs aren't very effective\
  against non-missiles. As a defensive unit, they cause no unhappiness; and\
  their upkeep is 1 gold. After required tech is known, 1 ABM is delivered free\
- to each new Mobile SAM and AEGIS Cruiser that is built. \n\
+ to each newly built unit capable of carrying missilies. \n\
 Multislot: Under certain conditions, cities can make one (or more) multislot units per turn, plus one of any other type.\
 ")
 

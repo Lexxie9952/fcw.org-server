@@ -332,6 +332,7 @@ flags    = ""
 graphic     = "a.economics"
 graphic_alt = "-"
 cost = 875
+helptext = _("Obsoletes Emissary.")
 
 [advance_electricity]
 name     = _("Electricity")
@@ -340,7 +341,7 @@ req2     = "Magnetism"
 flags    = ""
 graphic     = "a.electricity"
 graphic_alt = "-"
-helptext = _("Obsoletes Ironclad. Disables making Lighthouse. +1 Effect for Amphitheaters. +1 move for Trains.")
+helptext = _("Obsoletes Ironclad. Disables making Lighthouse. +1 for Amphitheaters. Trains +1 move. Full vision inside borders.")
 cost = 2220
 
 [advance_electronics]
@@ -389,7 +390,7 @@ req2     = "Chemistry"
 flags    = ""
 graphic     = "a.explosives"
 graphic_alt = "-"
-helptext = _("Obsoletes Workers.")
+helptext = _("Obsoletes Workers I,II. Disallows free upgrade from Workers to Workers II")
 cost = 1560
 
 [advance_feudalism]
@@ -596,7 +597,7 @@ req2     = "University"
 flags    = ""
 graphic     = "a.metallurgy"
 graphic_alt = "-"
-helptext = _("Obsoletes Catapult. Disables Siege Ram. Can’t make Citadel of Aleppo. Fortifications, Walls cost +10.")
+helptext = _("Obsoletes Catapult. Globally disables Siege Ram. Disallows Citadel of Aleppo. Fortifications, City Walls cost +10.")
 cost = 1340
 
 [advance_microbiology]
@@ -741,7 +742,7 @@ req2     = "None"
 flags    = ""
 graphic     = "a.pottery"
 graphic_alt = "-"
-helptext = _("Allows Quays.")
+helptext = _("Allows Quays, Goods.")
 cost = 22
 
 [advance_radar]
@@ -851,7 +852,7 @@ req2     = "Nuclear Power"
 flags    = ""
 graphic     = "a.space_flight"
 graphic_alt = "-"
-helptext = _("Obsoletes prior Bombers.")
+helptext = _("Obsoletes prior Bombers. Increases vision.")
 cost = 7680
 
 [advance_stealth]
@@ -1051,4 +1052,4 @@ flags    = "Specialization"
 graphic     = "a.space_flight"  ;this pic won't be shown in the tech tree but will show in other places
 graphic_alt = "-"
 cost = 1230
-helptext = _("Mobile SAM are created with 1 free ABM.")
+helptext = _("Missile transporters are created with 1 free ABM.")
