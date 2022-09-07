@@ -369,6 +369,7 @@ function show_city_dialog(pcity)
       }
     }
     var specialist_control_html = "<div style='padding-top:4px;' id='SC_pane'>";
+
     for (var u = 0; u < num_specialists; u++) {
       var spec_type_name = specialists[u]['plural_name'];
       var spec_gfx_key = "specialist." + specialists[u]['rule_name'] + "_0";
@@ -376,10 +377,11 @@ function show_city_dialog(pcity)
       var htitle = (selected_specialist == u) ? ("Unselect "+spec_type_name)
                                               : ("Assign "+spec_type_name);
       sprite = get_specialist_image_sprite(spec_gfx_key);
+
       specialist_control_html =  specialist_control_html +
-      "<span id='sp_t"+u+"' class='specialist_item' style='border-bottom:"+border+";margin-bottom:1px;cursor:"
-            + "pointer; background: transparent url(" + sprite['image-src'] + ");background-position:-" 
-            + sprite['tileset-x'] + "px -" + sprite['tileset-y'] + "px;  width: " + sprite['width'] 
+      "<span id='sp_t"+u+"' class='specialist_item' style='border-bottom:"+border+";margin-bottom:1px;"
+            + "cursor:pointer; background: transparent url(" + sprite['image-src'] + ");background-position:-" 
+            + sprite['tileset-x'] + "px -" + sprite['tileset-y'] + "px;  width: " +sprite['width'] 
             + "px;height: " + sprite['height'] + "px;float:left; '" 
             + " onclick='city_select_specialist(event, "+specialists[u]['id'] + ");'" 
             +" title='"+htitle+"'></span>";
@@ -868,17 +870,25 @@ function show_city_dialog(pcity)
   $('#specialist_panel').html(specialist_html);
   
   var rapture_citizen_html = "";
-            
-  for (var i = 0; i < 4; i++) {      
-      if (pcity['ppl_' + citizen_types[i]][FEELING_FINAL] > 0) {
-        sprite = get_specialist_image_sprite("citizen." + citizen_types[i] + "_" + (Math.floor(i / 2)));                      
-        rapture_citizen_html += "<div class='city_dialog_rapture_citizen' style='margin-right:auto;' title='"+citizen_types[i].charAt(0).toUpperCase() + citizen_types[i].slice(1)+" citizens'><div style='float:left;background: transparent url("
-        + sprite['image-src'] + ");background-position:-" + sprite['tileset-x'] + "px -" + sprite['tileset-y'] + "px;  width: " + sprite['width'] + "px;height: " + sprite['height'] + "px;'>"
-        +"</div><div style='float:left;height: "+sprite['height']+"px;margin-left:2px;'>"+pcity['ppl_' + citizen_types[i]][FEELING_FINAL]+"</div></div>";
-      }
-  }
+        
+  if (pcity['size']<41) // No room for totals panel showing happy/content/angry, in mega-large cities.
+    for (var i = 0; i < 4; i++) {      
+        if (pcity['ppl_' + citizen_types[i]][FEELING_FINAL] > 0) {
+          sprite = get_specialist_image_sprite("citizen." + citizen_types[i] + "_" + (Math.floor(i / 2)));
+                              
+          rapture_citizen_html += "<div class='city_dialog_rapture_citizen' style='margin-left:auto;' title='"+citizen_types[i].charAt(0).toUpperCase() + citizen_types[i].slice(1)+" citizens'><div style='float:left;background: transparent url("
+          + sprite['image-src'] + ");background-position:-" + sprite['tileset-x'] + "px -" + sprite['tileset-y'] + "px;  width: " + sprite['width'] + "px;height: " + sprite['height'] + "px;'>"
+          +"</div><div style='float:left;height: "+sprite['height']+"px;margin-left:2px;'>"+pcity['ppl_' + citizen_types[i]][FEELING_FINAL]+"</div></div>";
+        }
+   }
   
   $('#rapture_citizen_panel').html(rapture_citizen_html);
+
+  //Shave pixels off citizen sprites in very large cities, to get them to fit:
+  var sp_adjust = (pcity['size']-32)/-5;
+  if (sp_adjust<0) $(".specialist_item").css("margin-left",sp_adjust+"px");
+  else $(".specialist_item").css("margin-left","0px");
+  
   
   $('.city_dialog_rapture_citizen').tooltip({
     position: { my:"center bottom", at: "center top-4"},
