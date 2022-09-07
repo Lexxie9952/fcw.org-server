@@ -2403,7 +2403,6 @@ actor_reqs    =
       "UnitFlag",      "Well-Digger",  "Local", FALSE
       "UnitFlag",      "CanHide",      "Local", FALSE
       "UnitFlag",      "CanClaim",     "Local", FALSE
-      "UnitType",      "Proletarians", "Local", FALSE
       "UnitType",      "Tribesmen",    "Local", FALSE
     }
 target_reqs    =
