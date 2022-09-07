@@ -440,7 +440,7 @@ function unit_built_callback(u, city)
   local board = find.action('Transport Board')  
   local req_tech = find.tech_type("Space.2")
   if owner:knows_tech(req_tech) then  
-    if u.utype:rule_name() == "Mobile SAM" or u.utype:rule_name() == "AEGIS Cruiser" then
+    if u.utype:rule_name() == "Mobile SAM" or u.utype:rule_name() == "AEGIS Cruiser" or u.utype:rule_name() == "Missile Destroyer" or u.utype:rule_name() == "Missile Submarine" or u.utype:rule_name() == "Carrier" then
       if edit.create_unit_full(owner, u.tile, utype, 0, city, 1, 1, u) then
         notify.event(owner, city.tile, E.UNIT_BUILT, _("[`hammer`][`anti-ballisticmissile`] Anti-Ballistic Missile delivered to %s in %s"),u.utype:rule_name(),city.name)
         return true
