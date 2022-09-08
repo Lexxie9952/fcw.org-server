@@ -2557,7 +2557,8 @@ Siege Rams can only travel by road. They can carry 1 Land\
  disguise or defense. \n\ 
 Siege Rams need a minimum of\
  1 move point to attack a Fortress or City Walls.\
- Cities protected by the Great Wall are immune to Siege Rams. \n\
+ Cities protected by the Great Wall or Citadel of Aleppo are immune to\
+ Siege Rams. \n\
  The discovery of Metallurgy by any nation incapacitates Siege Rams.\
 ")
 bombard_rate = 4
@@ -5186,8 +5187,8 @@ veteran_move_bonus = 0, 0, 0, 0, 9, 9, 9
 roles         = ""
 helptext      = _("\
 The Carrier is a mobile airport that can carry Air units, Helicopters, AAA, Marines, and Missiles.\
- Fighters can Vigil on a Carrier if they have enough moves and the Carrier hasn’t moved since the\
- Vigil order was given. Carriers are very expensive and thus, usually protected by a fleet of scouts and escorts. \n\
+ Fighters can Vigil on a Carrier if they have enough moves left. Carriers are very expensive and thus,\
+ usually protected by a fleet of scouts and escorts. \n\
 "), _("\
 Stack-Chief：(1) Will not die if other units in its stack die. (2) Other units escaping Stack Death aren’t forced to other tiles.\
 ")

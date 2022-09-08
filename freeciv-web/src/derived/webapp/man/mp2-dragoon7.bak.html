@@ -2394,7 +2394,7 @@ Siege Rams may also ram Fortresses, doing up to 4hp of damage on each occupant. 
 
 Siege Rams can only travel by road. They can carry 1 Land unit as cargo: their slow pace means this serves more for disguise or defense.
 
-Siege Rams need an escort for protection. They need a minimum of 1 move point to attack a Fortress or City Walls. Cities protected by the Great Wall are immune to Siege Rams.
+Siege Rams need an escort for protection. They need a minimum of 1 move point to attack a Fortress or City Walls. Cities protected by the Great Wall or Citadel of Aleppo are immune to Siege Rams.
 
 The discovery of Metallurgy by any nation incapacitates Siege Rams.</b>
 <hr style='border-top: 1px solid #000'>➤ Belongs to LandRoad unit class.
@@ -2942,7 +2942,7 @@ Stack-Escape：60% odds to evade stack-death if attacker doesn’t have more mov
 ➤ Never imposes a zone of control.
 ➤ <b style="color:#9aa">INTERCEPTED</b> by Fighter types on Vigil: they auto-attack if they have better odds attacking than defending.
 ➤ Can carry 1 Emissary, Diplomat, or Spy.
-  • Cargo cannot be loaded or unloaded except in a City or a Airbase.
+  • Cargo cannot be loaded or unloaded except in a City or an Airbase.
   • Cargo not visible except to allies.
 ➤ Unit has to be in a City, Airbase, or on a Carrier after 2 turns.
 ➤ <b style="color:#9aa">Can't be bribed</b>.
@@ -3804,7 +3804,7 @@ NOTE: GOTO disallows unit loss from lack of fuel. You can override this by order
   • <b style="color:#9aa">AIRLIFT</b>: Can be airlifted if it has remaining moves.
 ➤ <b style="color:#9aa">+25% attack bonus</b> when attacking Anti-Aircraft Artillery, Mobile SAM, or AEGIS Cruiser.
 ➤ <b style="color:#9aa">+25% defense bonus</b> if attacked by Anti-Aircraft Artillery, Mobile SAM, or AEGIS Cruiser.
-➤ <b style="color:#9aa">STACK ESCAPE</b>: 60% odds to escape if stack defender loses, if attacker doesn’t have more moves than it does.
+➤ <b style="color:#9aa">STACK ESCAPE</b>: 67% odds to escape if stack defender loses, if attacker doesn’t have more moves than it does.
 ➤ Anti-Air units have bonuses against this unit.
 ➤ <b style="color:#9aa">Unreachable</b> AND <b>can protect its tile</b> from units unable to attack this unit.
 ➤ <b style="color:#9aa">Invisible</b> except when next to an enemy unit or city.
@@ -3869,7 +3869,7 @@ NOTE：GOTO disallows unit loss from lack of fuel. You can override this by movi
   • <b style="color:#9aa">Unreachable</b>. Most units cannot attack this one.
   • <b style="color:#9aa">Doesn't prevent enemy cities from working the tile it's on.</b>
   • <b style="color:#9aa">AIRLIFT</b>: Can be airlifted if it has remaining moves.
-➤ <b style="color:#9aa">STACK ESCAPE</b>: 60% odds to escape if stack defender loses, if attacker doesn’t have more moves than it does.
+➤ <b style="color:#9aa">STACK ESCAPE</b>: 67% odds to escape if stack defender loses, if attacker doesn’t have more moves than it does.
 ➤ Anti-Air units have bonuses against this unit.
 ➤ Never imposes a zone of control.
 ➤ <b style="color:#9aa">Reconnaissance:</b> reports visible enemy movement even if not sentried.
@@ -3929,7 +3929,7 @@ NOTE: GOTO disallows unit loss from lack of fuel. You can override this by order
   • <b style="color:#9aa">AIRLIFT</b>: Can be airlifted if it has remaining moves.
 ➤ <b style="color:#9aa">+25% attack bonus</b> when attacking Anti-Aircraft Artillery, Mobile SAM, or AEGIS Cruiser.
 ➤ <b style="color:#9aa">+25% defense bonus</b> if attacked by Anti-Aircraft Artillery, Mobile SAM, or AEGIS Cruiser.
-➤ <b style="color:#9aa">STACK ESCAPE</b>: 60% odds to escape if stack defender loses, if attacker doesn’t have more moves than it does.
+➤ <b style="color:#9aa">STACK ESCAPE</b>: 67% odds to escape if stack defender loses, if attacker doesn’t have more moves than it does.
 ➤ Anti-Air units have bonuses against this unit.
 ➤ Unable to attack air units.
 ➤ Can carry and refuel up to 2 Bomb units.
@@ -5032,7 +5032,7 @@ Veteran Levels for Missile Submarines:
 <pre class='firepower'>Firepower: 2</pre>
 <pre class='hitpoints'>Hitpoints: 40</pre>
 <pre class='obsolete'>Obsolete by: None</pre>
-<pre class='helptext'><b class='unit_desc'>The Carrier is a mobile airport that can carry Air units, Helicopters, AAA, Marines, and Missiles. Fighters can Vigil on a Carrier if they have enough moves and the Carrier hasn’t moved since the Vigil order was given. Carriers are very expensive and thus, usually protected by a fleet of scouts and escorts. 
+<pre class='helptext'><b class='unit_desc'>The Carrier is a mobile airport that can carry Air units, Helicopters, AAA, Marines, and Missiles. Fighters can Vigil on a Carrier if they have enough moves left. Carriers are very expensive and thus, usually protected by a fleet of scouts and escorts. 
 <b class='unit_desc'>Carriers are very expensive and thus, usually protected by a fleet of scouts and escorts.</b>
 </b>
 <b class='unit_desc'>Stack-Chief：(1) Will not die if other units in its stack die. (2) Other units escaping Stack Death aren’t forced to other tiles.</b>
@@ -5870,7 +5870,7 @@ Electricity and Combustion each give Trains an additional +1 move.</b>
   • Is <b>NOT</b> a unit. It is goods and materials for production and commerce. 
   • Only able to move onto Cities, Quays, Fortresses, and Naval Bases.
   • Cannot exist by itself outside a City, Quay, Fortress, or Naval Base.
-  • Pays 25% penalty for recycling production into Units, Buildings, or Wonders.
+  • Pays 15% penalty (3 shields) for recycling production into Units, Buildings, or Wonders.
   • Subject to zones of control.
   • Can't Fortify.
   • Can be carried by any Commerce Unit, and Galleons.
@@ -5883,7 +5883,7 @@ Electricity and Combustion each give Trains an additional +1 move.</b>
 ➤ Can <b style="color:#9aa">Help Build Wonder</b>
   • is done in friendly cities. Contributes the unit's shield cost to current production
   • uses up the Goods.
-  • adds 20 production.
+  • adds 17 production.
 ➤ Can <b style="color:#9aa">Establish Trade Route</b>
   • is done to foreign cities 15 or more tiles distant.
   • inactive during War.
