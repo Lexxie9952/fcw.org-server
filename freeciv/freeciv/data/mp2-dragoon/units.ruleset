@@ -1645,8 +1645,8 @@ Proportional to city size, up to 8 Partisans appear when an enemy conquers your 
  prefer defensive tiles, and ignore tile nationality. They spawn only when:\n\
  ➣ Guerilla Warfare is known by any player. \n\
  ➣ The city was originally built by you. \n\
- ➣ You must be Theocracy, OR,\n\
- ➣ You must be Democracy or Communist, AND know Communism AND Gunpowder.\
+ ➣ You must be Democracy or Communist, AND know Communism AND Gunpowder, OR \n\
+ ➣ You must be Theocracy, in which case the partisan spawn will yield Zealots or Fanatics.\
 ")
 
 [unit_riflemen]
