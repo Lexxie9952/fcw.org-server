@@ -1442,11 +1442,10 @@ The Agōgē creates a culture of extreme fitness, and is famous for\
 "), _("
 In the city with the Agōgē, a Barracks is not needed to make veteran\
  land units. If you have a Barracks, then Phalanxes will be made at\
- +2 veteran level; but other units still will be made with +1 veteran\
+ +2 veteran level; but other units will still be made with +1 veteran\
  level. \ 
 "), _("
-In all your cities, Foot units begin their turn with +1 move.\
- and the wonder counts as a Barracks. \n\n\
+In all your cities, Foot units begin their turn with +1 move. \n\n\
 Obsolete by：Gunpowder.\
 ")
 
@@ -2207,7 +2206,7 @@ Constitutional Monarchy summary：\n\
 "), _("
 Setbacks from standard Monarchy：\n\
  ➣ One unit may be used for Martial Law (not 3). \n\
- ➣ One unit is free of upkeep (not 3). \n\
+ ➣ One unit is free of shield-upkeep (not 3). \n\
  ➣ 2 military units may be abroad. Each extra causes a discontent citizen. \n\
  ➣ Gives you a Senate, which can be ignored if both King Richard’s Crusade \
 and J.S. Bach’s Cathedral are owned. \n\

@@ -100,7 +100,7 @@ helptext = _("\
 Under Despotism, you are the absolute ruler of your people.  Your\
  control over your citizens is maintained largely by martial law.\
  Under Despotism, tiles suffer a -1 tile output penalty if they\
- produce 3 resource points. \
+ produce 3 resource points. Each city gets 3 shields of free unit upkeep. \n\
 "), _("\
 Despotism suffers the highest level of corruption of all\
  forms of government.\n\ \
@@ -131,7 +131,8 @@ Under Monarchy, a king or queen serves as a hereditary figurehead\
  for your government. \
 "), _("\
 Monarchy suffers the same small amount of corruption that\
- the Republic does. \
+ the Republic does. Each city gets 3 shields and\
+ 1 gold of free unit upkeep.\
 "), _("\
 No citizens are made unhappy by each aggressive unit. \n\
 15% Base corruption in cities \n\
@@ -250,9 +251,9 @@ Content cities get a +1 trade bonus on irrigated tiles that\
  The city with a Palace gets +40% production. \
 "), _("\
 Riflemen and Light Armor cost 5 less; Armor, Armor II, and Dive Bombers, 10 less.\
- Diplomats and Spies get +1 vet level. The effect of\
- Cathedrals and Michelangelo is reduced -1. Each city\
- gets the effects of a Supermarket for free.\
+ Diplomats and Spies get +1 vet level. \n\n\
+ The effect of Cathedrals and Michelangelo is reduced -1. Each city gets the effects\
+ of a Supermarket for free. Celebrating cities with Granaries get +1 food on the city center tile.\
 "), _("\
 Communists can transfer Proletarians between cities to\
  re-distribute population, or use them as workers on\
