@@ -3601,18 +3601,18 @@ static void update_city_activity(struct city *pcity)
       bool redundant = game.info.rapturedelay == 1 && (rrate == 0 || rrate == 1000);
       if (!redundant) {
         notify_player(pplayer, city_tile(pcity), E_CITY_NORMAL, ftc_server,
-                      _("[`star2`]%s can rapture this turn."),
+                      _("[`star2`]%s can rapture this turn-change."),
                       city_link(pcity));
       }
     } else /*(!(pcity->rapture_status & 2)) - Can't rapture this turn*/ {
       if (pcity->rapture_status & 4) {
         notify_player(pplayer, city_tile(pcity), E_CITY_NORMAL, ftc_server,
-                      _("[`comet`]%s will pause rapture this turn."),
+                      _("[`comet`]%s will pause rapture this turn-change."),
                       city_link(pcity));
       }
       else if (pcity->rapture_status & 8) {
         notify_player(pplayer, city_tile(pcity), E_CITY_NORMAL, ftc_server,
-                      _("[`comet`]%s will pause rapture for 2 turns."),
+                      _("[`comet`]%s will pause rapture the next 2 turn-changes."),
                       city_link(pcity));
       }
     }
