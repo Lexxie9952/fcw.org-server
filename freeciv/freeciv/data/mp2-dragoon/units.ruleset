@@ -5818,7 +5818,7 @@ uk_food       = 0
 uk_gold       = 0
 embarks       = "LandRail", "Helicopter"    ; transport helicopter only
 disembarks    = "LandRail", "Helicopter"
-flags         = "Unique", "Diplomat", "Unbribable", "IgZOC", "NonMil", "NonProvoking", "HasNoZOC", "Expellable", "Cant_Pillage", "CanClaim", "Settlers", "NoVeteran"
+flags         = "Unique", "Spy", "Diplomat", "Unbribable", "IgZOC", "NonMil", "NonProvoking", "HasNoZOC", "Expellable", "Cant_Pillage", "CanClaim", "Settlers", "NoVeteran"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("chosen one")
 veteran_base_raise_chance = 0
@@ -5831,8 +5831,8 @@ The Patriarch is unique—you can make only one, and only with Theocracy in a\
  powers of persuasion. Under Theocracy, the Patriarch converts units to join your\
  side at 1/3 the cost of a normal Bribe; and incites cities to become yours at\
  one third the normal cost. \n\
-Investigating, Converting, Establishing Embassy, and Inciting can be done multiple times if\
- successful. Other actions spend the Patriarch, allowing no further use. A Patriarch may\
+Diplomatic actions can all be done multiple times if successful.\
+ Other actions spend the Patriarch, allowing no further use. A Patriarch may\
  claim a tile for your nation if adjacent to a tile claim made inside your own national border.\
  Foreign tile claims require the Patriarch to be accompanied by another unit. \n\
 Espionage tech allows the Patriarch to establish hostile embassies vs. Courthouse and Homeland\
