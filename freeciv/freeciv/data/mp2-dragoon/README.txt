@@ -12,9 +12,9 @@
 <a href="http://freeciv.fandom.com/wiki/Government.mp2d#Government_Chart" target="_blank">Governments</a>
 <a href="http://freecivweb.fandom.com/wiki/Special_Unit_Attacks#MP2_Units_with_Special_Unit_Attacks" target="_blank">Special Unit Attacks</a>
 <a href="http://freecivweb.fandom.com/wiki/Special_Unit_Attacks#Special_Unit_Defense" target="_blank">Special Unit Defense</a>
-<a href="http://freeciv.fandom.com/wiki/Defense_bonus_chart.mp2d" target="_blank">Terrain+Base Defense Bonus Quick-Reference</a>
+<a href="http://freeciv.fandom.com/wiki/Defense_bonus_chart.mp2c" target="_blank">Terrain+Base Defense Bonus Quick-Reference</a>
 <a href="http://freeciv.fandom.com/wiki/Diplomatic_Action_Chart.mp2" target="_blank">Diplomatic Odds Charts</a>
-<a href="http://freeciv.fandom.com/wiki/Vigil_engagement_chart.mp2d" target="_blank">Vigil Engagement Chart</a>
+<a href="http://freeciv.fandom.com/wiki/Vigil_engagement_chart.mp2c" target="_blank">Vigil Engagement Chart</a>
 <a href="http://freeciv.fandom.com/wiki/Hotkeys.mp" target="_blank">Hotkeys and Mouse Control</a>
 
 The MP2 Dragoon ruleset is the fourth official release of the Multiplayer-Evolution II ruleset. Multiplayer II Evolution rulesets are modernized rulesets to take advantage of cutting-edge advancements in Freeciv Server development. Earlier versions are closer to a version of Civ 2 that has been perfected for massive multiplayer game balance. Later versions evolve to import features, improvements, and novel ideas from all other versions of Freeciv, later versions of the commercial series, as well as original ideas from experienced players.
