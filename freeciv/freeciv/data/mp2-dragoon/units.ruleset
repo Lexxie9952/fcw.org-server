@@ -4840,7 +4840,7 @@ veteran_move_bonus = 0, 0, 0, 0, 9, 9, 9
 roles         = "Hunter"
 helptext      = _("\
 The Cruiser is a large and fast surface warship with equally strong offensive and defensive strength. More often than not, its\
- 2× ASW defence allows it to survive a Submarine attack. \
+ 2× ASW defense allows it to survive a Submarine attack. \
 "), _("\
 The main duties of the Cruiser are offensive strikes against lesser ships, and escorting weaker ships.\
 ")
