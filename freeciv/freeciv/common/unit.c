@@ -948,7 +948,7 @@ bool can_unit_do_activity_targeted_at(const struct unit *punit,
   switch (activity) {
   case ACTIVITY_IDLE:
   case ACTIVITY_GOTO:
-  case ACTIVITY_UNKNOWN:  // new vigil command: TODO: may need some reqs put in
+  case ACTIVITY_VIGIL:  // new vigil command: TODO: may need some reqs put in
     return TRUE;
 
   case ACTIVITY_POLLUTION:
