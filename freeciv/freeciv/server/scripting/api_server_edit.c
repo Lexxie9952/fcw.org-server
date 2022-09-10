@@ -40,6 +40,7 @@
 #include "stdinhand.h"
 #include "techtools.h"
 #include "unittools.h"
+#include "unithand.h"
 
 /* server/scripting */
 #include "script_server.h"
@@ -206,6 +207,15 @@ bool api_edit_unit_teleport(lua_State *L, Unit *punit, Tile *dest)
 *****************************************************************************/
 void api_edit_unit_turn(lua_State *L, Unit *punit, Direction dir)
 {
+  /* Total hack to induce vigil, until edit.perform_action from upstram
+     is merged , or 'set_activity' is possible */
+#ifdef FREECIV_WEB
+    unit_activity_handling(punit, ACTIVITY_VIGIL);
+    send_unit_info(NULL, punit);
+    return;
+#endif /* FREECIV_WEB */
+// end HACK
+
   LUASCRIPT_CHECK_STATE(L);
   LUASCRIPT_CHECK_ARG_NIL(L, punit, 2, Unit);
  

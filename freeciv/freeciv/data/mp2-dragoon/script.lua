@@ -437,16 +437,26 @@ signal.connect("building_built", "building_built_callback")
 function unit_built_callback(u, city)
   local owner = u.owner
   local utype = find.unit_type('Anti-Ballistic Missile')
-  local board = find.action('Transport Board')  
+  --local vigil = find.action('Vigil')
   local req_tech = find.tech_type("Space.2")
+  local created_ABM
   if owner:knows_tech(req_tech) then  
     if u.utype:rule_name() == "Mobile SAM" or u.utype:rule_name() == "AEGIS Cruiser" or u.utype:rule_name() == "Missile Destroyer" or u.utype:rule_name() == "Missile Submarine" or u.utype:rule_name() == "Carrier" then
-      if edit.create_unit_full(owner, u.tile, utype, 0, city, 1, 1, u) then
+      created_ABM = edit.create_unit_full(owner, u.tile, utype, 0, city, 1, 1, u) 
+      if created_ABM then
+        --edit.unit_kill(created_ABM, "killed", owner)
+        edit.unit_turn(created_ABM, created_ABM:facing())
         notify.event(owner, city.tile, E.UNIT_BUILT, _("[`hammer`][`anti-ballisticmissile`] Anti-Ballistic Missile delivered to %s in %s"),u.utype:rule_name(),city.name)
+        -- edit.perform_action(created_ABM, vigil)  ## TODO: when lua core is caught up and ACTION_VIGIL put in, this is the right way to do it.
+        --when that day happens, remove the commit from 9 Sept 2022
         return true
       end  
     end
-  end
+    if u.utype:rule_name() == "Anti-Ballistic Missile" then
+        edit.unit_turn(u, u:facing())
+        return true
+    end  
+ end
 
   -- continue processing
   return false
