@@ -29,6 +29,7 @@ const B_ADAM_SMITH_NAME = "A.Smith's Trading Co.";
 const B_AGOGE = "Ag"+String.fromCharCode(0x14D)+"g"+String.fromCharCode(0x113)+" of Sparta";
 const B_ANGKOR_WAT = "Angkor Wat";
 const B_APPIAN_WAY = "Appian Way";
+const B_CHAND_BAORI = "Chand Baori";
 const B_COLOSSUS = "Colossus";
 const B_GIBRALTAR_FORTRESS = "Gibraltar Fortress"
 const B_HOOVER_DAM = "Hoover Dam"

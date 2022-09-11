@@ -122,6 +122,7 @@ var show_citybar = true;
 var context_menu_active = true;
 var has_movesleft_warning_been_shown = false;
 var game_unit_panel_state = null;
+var chand_baori = false;   // flag for if diagonal irrigation allowed when can_irrigate() is called
 
 var chat_send_to = -1;
 var CHAT_ICON_EVERYBODY = String.fromCharCode(62075);
@@ -6446,11 +6447,15 @@ function can_irrigate(punit, ptile)
   var water_near = tile_has_extra(ptile, EXTRA_RIVER) // irrigation is also a water source but, it's already irrigated! ;)
       || (tile_has_extra(ptile, EXTRA_OASIS) && (client_rules_flag[CRF_OASIS_IRRIGATE]))
       || ((client_rules_flag[CRF_MP2_C]) && tile_has_extra(ptile, EXTRA_CANAL))
-      || ((client_rules_flag[CRF_MP2_C]) && tile_has_extra(ptile, EXTRA_WATERWAY));
+      || ((client_rules_flag[CRF_MP2_C]) && tile_has_extra(ptile, EXTRA_WATERWAY))
+      || (chand_baori && tile_city(ptile));
   // If no water on occupied tile, check cardinally adjacent:
   if (!water_near) {
-    for (var dir = 1; dir < 7; dir++) {
-      if (dir==2 || dir==5)
+    const start_dir = chand_baori ? 0 : 1;
+    const end_dir = chand_baori ? 6 : 7;
+
+    for (var dir = start_dir; dir <= end_dir; dir++) {
+      if (!chand_baori && (dir==2 || dir==5))
         continue; // only check cardinal dir 1,3,4,6 (N,W,E,S)
 
       var cadj_tile = mapstep(ptile, dir);
@@ -6459,6 +6464,7 @@ function can_irrigate(punit, ptile)
         if (terrain_name == "Lake"
          || terrain_name == "Ocean"
          || terrain_name == "Deep Ocean"
+         || (chand_baori && tile_city(cadj_tile))
          || tile_has_extra(cadj_tile, EXTRA_IRRIGATION)
          || tile_has_extra(cadj_tile, EXTRA_RIVER)
          || (client_rules_flag[CRF_MP2_C] && (tile_has_extra(cadj_tile, EXTRA_CANAL)))

@@ -2010,6 +2010,10 @@ function handle_begin_turn(packet)
   }
 
   if (is_tech_tree_init && tech_dialog_active) update_tech_screen();
+
+  /* It's more efficient to set this once, not every time we check if tile is irrigable.
+    this may later handle other rulesets' conditions where diagonal irrigaton is legal */
+    if (!observing) chand_baori = has_wonder("Chand Baori");
 }
 
 function handle_end_turn(packet)
