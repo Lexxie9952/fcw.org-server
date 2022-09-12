@@ -457,7 +457,7 @@ function unit_could_possibly_load(punit, ptype, ttype, tclass)
       pclass == "Space") {
       // Trawler is exception who can "rescue tug" sea units.
       if (ttype.name == "Trawler") {
-        if (pclass != "LandRail" && pclass != "Space") {
+        if (pclass != "LandRail" && pclass != "Space" && pclass !="LandImmobile") {
           return true;
         }
       }  
