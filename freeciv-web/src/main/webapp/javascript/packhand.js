@@ -1049,6 +1049,7 @@ function handle_ruleset_control(packet)
   }
   // Legacy rules block:
   switch (rules) {
+    /* 👇🏻 ALL MP2 rules get these flags set on */
     case "MP2":
     case "Avant-garde":
       client_rules_flag[CRF_MP2_A]=true;
@@ -1077,6 +1078,7 @@ function handle_ruleset_control(packet)
       client_rules_flag[CRF_TRIREME_FUEL] = true;
       client_rules_flag[CRF_2X_MOVES]=true;
     break;
+    /* <end block> all MP2 rules get these flags 👆🏻 */
 
     case "Multiplayer-Plus ruleset":
       client_rules_flag[CRF_CARGO_HEURISTIC]=true;
@@ -1101,6 +1103,7 @@ function handle_ruleset_control(packet)
 
     case "Civ2Civ3 ruleset":
       client_rules_flag[CRF_MAGLEV] = true;
+      client_rules_flag[CRF_COMMIE_BLDG_UPKEEP] = true;
     case "Sandbox ruleset":
       client_rules_flag[CRF_NO_BASES_ON_RIVERS] = true;
       client_rules_flag[CRF_COMMIE_BLDG_UPKEEP] = true;
@@ -1111,6 +1114,8 @@ function handle_ruleset_control(packet)
      these client_rules_flag[_] =false statements go here to avoid the chronologic
      override logic above */
   switch (ruleset_control['name']) {
+    case "MP2 Elephant":
+      client_rules_flag[CRF_MP2_E] = true;
     case "MP2 Dragoon":
       client_rules_flag[CRF_MP2_D] = true;
     case "MP2 Caravel":
