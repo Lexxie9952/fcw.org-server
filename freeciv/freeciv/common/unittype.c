@@ -1455,6 +1455,25 @@ void set_user_unit_class_flag_name(enum unit_class_flag_id id,
 }
 
 /**********************************************************************//**
+  Returns true if user class flag with this name exists.
+**************************************************************************/
+bool uclass_has_user_unit_class_flag_named(const struct unit_class *pclass,
+                                           const char *name)
+{
+  // Loop and find every user class flag the uclass has:
+  for (int id=UCF_USER_FLAG_1; id <= UCF_LAST_USER_FLAG; id++) {
+    if (uclass_has_flag(pclass, id)) {
+      // if it has a flag with this name, then return true
+      if (strcmp(name, unit_class_flag_id_name_cb(id))==0) {
+        return true;
+      }
+    }
+  }
+
+  return false;
+}
+
+/**********************************************************************//**
   Unit class flag name callback, called from specenum code.
 **************************************************************************/
 const char *unit_class_flag_id_name_cb(enum unit_class_flag_id flag)
