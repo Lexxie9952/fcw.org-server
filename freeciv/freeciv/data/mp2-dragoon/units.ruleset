@@ -5252,7 +5252,7 @@ graphic_alt   = "-"
 sound_move    = "m_cruise_missile"
 sound_move_alt = "m_generic"
 sound_fight   = "f_cruise_missile"
-sound_fight_alt = "f_generic"
+sound_fight_alt = "Missile Strike"
 build_cost    = 60
 pop_cost      = 0
 attack        = 18
@@ -5263,6 +5263,7 @@ move_rate     = 24
 vision_radius_sq = 2
 transport_cap = 0
 fuel          = 1
+paratroopers_mr_sub = 258 ;000,00000,00,1000,000,1,0 - max_ATKs=0, bbd_retal_rate=0, iPill_rand_tgts=0, iPill_odds=-8 pentads=60%, iPill_moves=0, iPillage=1, ATK_Stay_Fortified=0
 uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
@@ -5299,13 +5300,12 @@ veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
 veteran_power_fact = 100, 150, 175, 175, 175, 175, 175
 veteran_move_bonus = 0, 0, 0, 0, 0, 0, 0
 helptext      = _("\
-A Cruise Missile can strike distant targets. It\
- can’t attack Air units, but Air units never block\
- a strike on reachable surface units. Cruise Missiles\
- can be relocated by ending their turn on a city,\
- airbase, Submarine, Missile Destroyer, AEGIS Cruiser,\
- Carrier, or Mobile SAM. A Cruise Missile can’t\
- block attacks on other units on its tile. \n\
+A Cruise Missile can strike distant targets. It can’t attack Air units, but Air units never block\
+ a strike on reachable surface units. Cruise Missiles can be relocated by ending their turn on a city,\
+ airbase, Missile Destroyer, AEGIS Cruiser, Missile Submarine, Carrier, or Mobile SAM. A Cruise Missile\
+ can’t block attacks on other units on its tile. Via the Pillage command, a Cruise Missile has a 60%\
+ chance to strike and destroy a tile improvement. You may select the target with the Do command, then\
+ select Tile Target. \n\
 ")
 
 [unit_nuclear_missile]
@@ -5318,7 +5318,7 @@ graphic_alt   = "-"
 sound_move    = "m_nuclear"
 sound_move_alt = "m_generic"
 sound_fight   = "f_nuclear"
-sound_fight_alt = "f_generic"
+sound_fight_alt = "blast"
 build_cost    = 160
 pop_cost      = 0
 attack        = 100
@@ -5329,6 +5329,7 @@ move_rate     = 24
 vision_radius_sq = 2
 transport_cap = 0
 fuel          = 1
+paratroopers_mr_sub = 1410 ;000,00000,10,1100,000,1,0 - max_ATKs=0, bbd_retal_rate=0, iPill_rand_tgts=2, iPill_odds=-12 pentads=40%, iPill_moves=0, iPillage=1, ATK_Stay_Fortified=0
 uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
@@ -5360,7 +5361,7 @@ veteran_move_bonus = 0
 roles         = ""
 helptext      = _("\
 If you have Space Flight and the Manhattan Project has been built by any player, you can make Nuclear Missiles.\
- Nuclear blasts destroy ALL units in a 3×3 area. City population is reduced by half. Land tiles may get nuclear fallout.\
+ Nuclear blasts destroy ALL units in a 3×3 area, and up to 2 tile improvements on each tile (×2 at ground zero). City population is reduced by half. Land tiles may get nuclear fallout.\
  Fallout reduces tile output and increases risk of nuclear winter. \
 "), _("\
 If Fallout is cleaned on the turn it appears, the chance of nuclear winter is reduced.\
@@ -5378,7 +5379,7 @@ graphic_alt   = "-"
 sound_move    = "m_nuclear"
 sound_move_alt = "m_generic"
 sound_fight   = "f_nuclear"
-sound_fight_alt = "f_generic"
+sound_fight_alt = "blast"
 build_cost    = 130
 pop_cost      = 0
 attack        = 100
@@ -5389,6 +5390,7 @@ move_rate     = 18
 vision_radius_sq = 2
 transport_cap = 0
 fuel          = 1
+paratroopers_mr_sub = 1410 ;000,00000,10,1100,000,1,0 - max_ATKs=0, bbd_retal_rate=0, iPill_rand_tgts=2, iPill_odds=-12 pentads=40%, iPill_moves=0, iPillage=1, ATK_Stay_Fortified=0
 uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
@@ -5420,7 +5422,7 @@ veteran_move_bonus = 0
 roles         = ""
 helptext      = _("\
 Tactical Nukes are very small warheads attached to missiles. A Tactical Nuke destroys all units on\
- a single tile. City population is reduced by half. The target tile may get Fallout. In theory,\
+ a single tile, and up to 4 tile improvements. City population is reduced by half. The target tile may get Fallout. In theory,\
  Tactical Nukes are small enough to get the advantages of nuclear armaments without the severity of\
  consequences. In reality, they might be a gateway that escalates toward mutual assured destruction. \n\
 If you have Fusion Power and the Manhattan Project was built, a Tactical Nuke\
@@ -5438,7 +5440,7 @@ graphic_alt   = "-"
 sound_move    = "m_atom_bomb"
 sound_move_alt = "m_generic"
 sound_fight   = "bomb"
-sound_fight_alt = "f_nuclear"
+sound_fight_alt = "blast"
 build_cost    = 25
 pop_cost      = 0
 attack        = 10
@@ -5486,7 +5488,7 @@ graphic_alt   = "-"
 sound_move    = "m_atom_bomb"
 sound_move_alt = "m_generic"
 sound_fight   = "f_atom_bomb"
-sound_fight_alt = "f_nuclear"
+sound_fight_alt = "blast"
 build_cost    = 150
 pop_cost      = 0
 attack        = 100
@@ -5497,6 +5499,7 @@ move_rate     = 2
 vision_radius_sq = 0
 transport_cap = 0
 fuel          = 1
+paratroopers_mr_sub = 898 ;000,00000,01,1100,000,1,0 - max_ATKs=0, bbd_retal_rate=0, iPill_rand_tgts=1, iPill_odds=-12 pentads=40%, iPill_moves=0, iPillage=1, ATK_Stay_Fortified=0
 uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
@@ -5515,7 +5518,7 @@ roles         = ""
 helptext      = _("\
 If you have Nuclear Fission and the Manhattan Project has been built by any player, you can make Atom Bombs.\
  A Bomber can drop it within two tiles of its location. Unload the bomb and fly the Bomber out of range, then\
- attack the target (or detonate by pressing D twice.) The blast destroys ALL cardinally adjacent tiles. City population\
+ attack the target (or detonate by pressing D twice.) The blast destroys ALL cardinally adjacent tiles, and might destroy a tile improvement on each tile (×2 at ground zero). City population\
  is reduced by half. Land tiles may get nuclear fallout. \
 "), _("\
 Fallout reduces tile output and increases risk of nuclear winter.\
@@ -5533,7 +5536,7 @@ graphic_alt   = "-"
 sound_move    = "m_atom_bomb"
 sound_move_alt = "m_generic"
 sound_fight   = "f_atom_bomb"
-sound_fight_alt = "f_nuclear"
+sound_fight_alt = "blast"
 build_cost    = 190
 pop_cost      = 0
 attack        = 100
@@ -5544,6 +5547,7 @@ move_rate     = 2
 vision_radius_sq = 0
 transport_cap = 0
 fuel          = 1
+paratroopers_mr_sub = 1858 ;000,00000,11,1010,000,1,0 - max_ATKs=0, bbd_retal_rate=0, iPill_rand_tgts=3, iPill_odds=-10 pentads=50%, iPill_moves=0, iPillage=1, ATK_Stay_Fortified=0
 uk_happy      = 2
 uk_shield     = 1
 uk_food       = 0
@@ -5562,7 +5566,7 @@ roles         = ""
 helptext      = _("\
 Hydrogen Bombs make Atom Bombs seem tame. Any unprotected city at Ground Zero will be absolutely annihilated.\
  In other cities in the blast radius, population is reduced by about 75%. Blast area is 21 tiles:\
- the same area as an entire city (5×5 minus the corners.) All units within the blast are destroyed. \n\
+ the same area as an entire city (5×5 minus the corners.) All units within the blast are destroyed, and up to 3 tile improvements on each tile (×2 at ground zero). \n\
 A Bomber can drop a Hydrogen Bomb within two tiles of its location. Unload the bomb, fly the Bomber out of\
  range, then detonate by pressing D twice. \n\
 If you have Fusion Power and the Manhattan Project was built, a Hydrogen Bomb\
@@ -5583,7 +5587,7 @@ graphic_alt   = "-"
 sound_move    = "m_atom_bomb"
 sound_move_alt = "m_generic"
 sound_fight   = "f_atom_bomb"
-sound_fight_alt = "f_nuclear"
+sound_fight_alt = "blast"
 build_cost    = 1000
 pop_cost      = 0
 attack        = 100
@@ -5594,6 +5598,7 @@ move_rate     = 2
 vision_radius_sq = 0
 transport_cap = 0
 fuel          = 1
+paratroopers_mr_sub = 1794 ;000,00000,11,1000,000,1,0 - max_ATKs=0, bbd_retal_rate=0, iPill_rand_tgts=3, iPill_odds=-8 pentads=60%, iPill_moves=0, iPillage=1, ATK_Stay_Fortified=0
 uk_happy      = 4
 uk_shield     = 1
 uk_food       = 0
@@ -5613,7 +5618,7 @@ helptext      = _("\
 The Doomsday Bomb is the mother of all bombs. Blast area is about 100 tiles.\
  Only one can be made at a time. A city at Ground Zero will be\
  annihilated. Other cities in the blast area lose about 75% of their population.\
- All units within the blast are completely destroyed. \n\
+ All units within the blast are completely destroyed, and up to 3 tile improvements on each tile (×2 at ground zero). \n\
 A Bomber can drop the Bomb within two tiles of its location. Unload the Bomb and\
  pray that you can fly the Bomber out of range. Detonate by pressing D twice. \n\
 If you have Fusion Power and the Manhattan Project was built, a Doomsday Bomb\

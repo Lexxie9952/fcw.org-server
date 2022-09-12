@@ -2683,6 +2683,12 @@ actor_reqs    =
       "UnitType", "Stealth Bomber",    "Local", TRUE
       "MinMoveFrags", "1",             "Local", TRUE
     }
+[actionenabler_pillage5]                                         ; Cruise Missile iPillage !
+action        = "Pillage"
+actor_reqs    =
+    { "type",          "name",           "range", "present"
+      "UnitType",      "Cruise Missile", "Local", TRUE
+    }
 
 [actionenabler_clean_pollution]
 action        = "Clean Pollution"

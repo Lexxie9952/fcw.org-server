@@ -5134,7 +5134,9 @@ Attack Odds for Anti-Ballistic Missiles:
 <pre class='firepower'>Firepower: 3</pre>
 <pre class='hitpoints'>Hitpoints: 10</pre>
 <pre class='obsolete'>Obsolete by: None</pre>
-<pre class='helptext'><b class='unit_desc'>A Cruise Missile can strike distant targets. It cannot attack Air units, but Air units never block a strike on reachable surface units. Cruise Missiles can be relocated by ending their turn on a city, airbase, Missile Submarine, Missile Destroyer, AEGIS Cruiser, Carrier, or Mobile SAM. A Cruise Missile cannot block attacks on other units on its tile.</b>
+<pre class='helptext'><b class='unit_desc'>A Cruise Missile can strike distant targets. It cannot attack Air units, but Air units never block a strike on reachable surface units. Cruise Missiles can be relocated by ending their turn on a city, airbase, Missile Destroyer, AEGIS Cruiser, Missile Submarine, Carrier, or Mobile SAM. A Cruise Missile cannot block attacks on other units on its tile.
+Via the Pillage commmand, a Cruise Missile has a 60% chance to strike and destroy a tile improvement. You may selecet the target with the Do command, then select Tile Target. \n\
+</b>
 <hr style='border-top: 1px solid #000'>➤ Belongs to Missile unit class.
   • Speed is not affected by terrain.
   • Does not get defense bonuses from terrain.
@@ -5144,6 +5146,10 @@ Attack Odds for Anti-Ballistic Missiles:
   • <b style="color:#9aa">Doesn't prevent enemy cities from working the tile it's on.</b>
   • <b style="color:#9aa">AIRLIFT</b>: Can be airlifted if it has remaining moves.
 ➤ <b style="color:#9aa">Unblockable</b>: unreachable units can't block its attacks on reachable units.
+➤ Can safely <b style="color:#9aa">iPillage</b>: Instant <u>Missile Strike</u> against tile infrastructure.
+  • <b>60%</b> odds of success. <b>+5%</b> for each veteran level.
+  • Destroys <b>1 selected</b> infrastructural improvement on the tile, instantly.
+  • Spends the unit.
 ➤ AEGIS and Armor II have a defense bonus against this unit.
 ➤ <b>Unable to attack air units.</b>
 ➤ Never imposes a zone of control.
@@ -5172,7 +5178,7 @@ Attack Odds for Anti-Ballistic Missiles:
 <pre class='firepower'>Firepower: 1</pre>
 <pre class='hitpoints'>Hitpoints: 10</pre>
 <pre class='obsolete'>Obsolete by: None</pre>
-<pre class='helptext'><b class='unit_desc'>If you have Space Flight and the Manhattan Project has been built by any player, you can make Nuclear Missiles. Nuclear blasts destroy ALL units in a 3×3 area. City population is reduced by half. Land tiles may get nuclear fallout. Fallout reduces tile output and increases risk of nuclear winter.</b>
+<pre class='helptext'><b class='unit_desc'>If you have Space Flight and the Manhattan Project has been built by any player, you can make Nuclear Missiles. Nuclear blasts destroy ALL units in a 3×3 area, and up to 2 tile improvements on each tile (×2 at ground zero). City population is reduced by half. Land tiles may get nuclear fallout. Fallout reduces tile output and increases risk of nuclear winter.</b>
 <b class='unit_desc'>If Fallout is cleaned on the turn it appears, the chance of nuclear winter is reduced.</b>
 <hr style='border-top: 1px solid #000'>➤ Belongs to Missile unit class.
   • Speed is not affected by terrain.
@@ -5210,7 +5216,7 @@ Attack Odds for Anti-Ballistic Missiles:
 <pre class='firepower'>Firepower: 1</pre>
 <pre class='hitpoints'>Hitpoints: 10</pre>
 <pre class='obsolete'>Obsolete by: None</pre>
-<pre class='helptext'><b class='unit_desc'>Tactical Nukes are very small warheads attached to missiles. A Tactical Nuke destroys all units on a single tile. City population is reduced by half. The target tile may get Fallout. In theory, Tactical Nukes are small enough to get the advantages of nuclear armaments without the severity of consequences. In reality, they might be a gateway that escalates toward mutual assured destruction.
+<pre class='helptext'><b class='unit_desc'>Tactical Nukes are very small warheads attached to missiles. A Tactical Nuke destroys all units on a single tile, and up to 4 tile improvements. City population is reduced by half. The target tile may get Fallout. In theory, Tactical Nukes are small enough to get the advantages of nuclear armaments without the severity of consequences. In reality, they might be a gateway that escalates toward mutual assured destruction.
 If you have Fusion Power and the Manhattan Project was built, a Tactical Nuke can be made in a city with an Enrichment Facility. </b>
 <hr style='border-top: 1px solid #000'>➤ Belongs to Missile unit class.
   • Speed is not affected by terrain.
@@ -5283,7 +5289,7 @@ Bombs can only be moved by bombers or the airlift order. They can’t attack fro
 <pre class='firepower'>Firepower: 1</pre>
 <pre class='hitpoints'>Hitpoints: 10</pre>
 <pre class='obsolete'>Obsolete by: None</pre>
-<pre class='helptext'><b class='unit_desc'>If you have Nuclear Fission and the Manhattan Project has been built by any player, you can make Atom Bombs. A Bomber can drop it within two tiles of its location. Unload the bomb and fly the Bomber out of range, then attack the target (or detonate by pressing D twice.) The blast destroys ALL cardinally adjacent tiles. City population is reduced by half. Land tiles may get nuclear fallout.</b>
+<pre class='helptext'><b class='unit_desc'>If you have Nuclear Fission and the Manhattan Project has been built by any player, you can make Atom Bombs. A Bomber can drop it within two tiles of its location. Unload the bomb and fly the Bomber out of range, then attack the target (or detonate by pressing D twice.) The blast destroys ALL cardinally adjacent tiles, and might destroy a tile improvement on each tile (×2 at ground zero). City population is reduced by half. Land tiles may get nuclear fallout.</b>
 <b class='unit_desc'>Fallout reduces tile output and increases risk of nuclear winter.</b>
 <hr style='border-top: 1px solid #000'>➤ Belongs to Bomb unit class.
   • Speed is not affected by terrain.
@@ -5320,7 +5326,7 @@ Bombs can only be moved by bombers or the airlift order. They can’t attack fro
 <pre class='firepower'>Firepower: 1</pre>
 <pre class='hitpoints'>Hitpoints: 10</pre>
 <pre class='obsolete'>Obsolete by: None</pre>
-<pre class='helptext'><b class='unit_desc'>Hydrogen Bombs make Atom Bombs seem tame. Any unprotected city at Ground Zero will be absolutely annihilated. In other cities in the blast radius, population is reduced by about 75%. Blast area is 21 tiles: the same area as an entire city (5×5 minus the corners.) All units within the blast are destroyed.
+<pre class='helptext'><b class='unit_desc'>Hydrogen Bombs make Atom Bombs seem tame. Any unprotected city at Ground Zero will be absolutely annihilated. In other cities in the blast radius, population is reduced by about 75%. Blast area is 21 tiles: the same area as an entire city (5×5 minus the corners.) All units within the blast are destroyed, and up to 3 tile improvements on each tile (×2 at ground zero).
 A Bomber can drop a Hydrogen Bomb within two tiles of its location. Unload the bomb, fly the Bomber out of range, then detonate by pressing D twice.
 If you have Fusion Power and the Manhattan Project was built, a Hydrogen Bomb can be made in a city with an Enrichment Facility. </b>
 <b class='unit_desc'>Fallout from a Hydrogen Bomb is grave, with more than double the contaminated area.</b>
@@ -5360,7 +5366,7 @@ If you have Fusion Power and the Manhattan Project was built, a Hydrogen Bomb ca
 <pre class='firepower'>Firepower: 1</pre>
 <pre class='hitpoints'>Hitpoints: 30</pre>
 <pre class='obsolete'>Obsolete by: None</pre>
-<pre class='helptext'><b class='unit_desc'>The Doomsday Bomb is the mother of all bombs. Blast area is about 100 tiles. Only one can be made at a time. A city at Ground Zero will be annihilated. Other cities in the blast area lose about 75% of their population. All units within the blast are completely destroyed.
+<pre class='helptext'><b class='unit_desc'>The Doomsday Bomb is the mother of all bombs. Blast area is about 100 tiles. Only one can be made at a time. A city at Ground Zero will be annihilated. Other cities in the blast area lose about 75% of their population. All units within the blast are completely destroyed, and up to 3 tile improvements on each tile (×2 at ground zero).
 A Bomber can drop the Bomb within two tiles of its location. Unload the Bomb and pray that you can fly the Bomber out of range. Detonate by pressing D twice.
 If you have Fusion Power and the Manhattan Project was built, a Doomsday Bomb can be made in a city with an Enrichment Facility. </b>
 <b class='unit_desc'>The Fallout from a Doomsday Bomb is a sure ticket to Nuclear Winter.</b>
