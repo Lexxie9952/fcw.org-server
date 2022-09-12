@@ -880,6 +880,8 @@ void user_unit_class_flags_init(void);
 void set_user_unit_class_flag_name(enum unit_class_flag_id id,
                                    const char *name,
                                    const char *helptxt);
+bool uclass_has_user_unit_class_flag_named(const struct unit_class *pclass,
+                                           const char *name);
 const char *unit_class_flag_helptxt(enum unit_class_flag_id id);
 
 /* Ancillary routines */
