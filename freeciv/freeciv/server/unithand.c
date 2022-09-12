@@ -4442,6 +4442,97 @@ static bool unit_nuke(struct player *pplayer, struct unit *punit,
     return FALSE;
   }
 
+  /* Nukes with iPillage can destroy infrastucture in their blast radius,
+     which we have to do before the unit is wiped. */
+  if (unit_can_iPillage(punit)) {
+    struct extra_unit_stats pstats;
+    unit_get_extra_stats(&pstats, punit);
+
+    // Pillage ground zero ===============================================
+    // ===================================================================
+    // Cities can't lose tile infra because it's automatic to being a city
+    if (!tile_city(def_tile)) {
+
+      // Nuke extras as many times as the nuke's stats say to:
+      for (int i=0; i<pstats.iPillage_random_targets; i++) {
+
+        /* pick an extra */
+        struct extra_type *target = NULL;
+        bv_extras extras = *tile_extras(def_tile);
+        target = get_preferred_pillage(extras);
+
+        if (target) {
+          // Roll the dice
+          if (fc_rand(100)<pstats.iPillage_odds) {
+            destroy_extra(def_tile, target);
+
+              notify_player(unit_owner(punit), def_tile,
+                    E_UNIT_ACTION_TARGET_HOSTILE, ftc_server,
+                    _("[`nuclearexplosion`] Your %s vaporized the %s %s."),
+                    unit_link(punit),
+                    (tile_owner(def_tile) ? nation_adjective_for_player(tile_owner(def_tile)) : " " ), 
+                    extra_name_translation(target));
+
+              if (tile_owner(def_tile) && tile_owner(def_tile) != unit_owner(punit)) {
+                  notify_player(tile_owner(def_tile), def_tile,
+                          E_UNIT_ACTION_TARGET_HOSTILE, ftc_server,
+                          _("[`warning`] Your %s %s destroyed from %s %s done by %s %s %s!"),
+                          extra_name_translation(target),
+                          (is_word_plural(extra_name_translation(target)) ? "were" : "was"),
+                          indefinite_article_for_word(unit_type_get(punit)->sound_fight_alt, false),                          
+                          unit_type_get(punit)->sound_fight_alt,
+                          indefinite_article_for_word(nation_adjective_for_player(unit_owner(punit)), false),
+                          nation_adjective_for_player(unit_owner(punit)),
+                          unit_link(punit));
+              }
+          }
+        }
+      }
+    }
+    // Pillage blast area ================================================
+    // ===================================================================
+    int max_radius_sq = DEFAULT_DETONATION_RADIUS_SQ + extra_radius; 
+    circle_dxyr_iterate(&(wld.map), def_tile, max_radius_sq, ptile1, dx, dy, dr) {
+      if (!tile_city(ptile1)) {
+        // Nuke extras as many times as the nuke's stats say to:
+        for (int i=0; i<pstats.iPillage_random_targets; i++) {
+
+          /* pick an extra */
+          struct extra_type *target = NULL;
+          bv_extras extras = *tile_extras(ptile1);
+          target = get_preferred_pillage(extras);
+
+          if (target) {
+            // Roll the dice
+            if (fc_rand(100) < pstats.iPillage_odds/3) {  // 1/3 as likely away from ground zero
+              destroy_extra(ptile1, target);
+
+                notify_player(unit_owner(punit), ptile1,
+                      E_UNIT_ACTION_TARGET_HOSTILE, ftc_server,
+                      _("[`nuclearexplosion`] Your %s vaporized the %s %s."),
+                      unit_link(punit),
+                      (tile_owner(ptile1) ? nation_adjective_for_player(tile_owner(ptile1)) : " " ), 
+                      extra_name_translation(target));
+
+                if (tile_owner(ptile1) && tile_owner(ptile1) != unit_owner(punit)) {
+                    notify_player(tile_owner(ptile1), ptile1,
+                            E_UNIT_ACTION_TARGET_HOSTILE, ftc_server,
+                            _("[`warning`] Your %s %s destroyed from %s %s done by %s %s %s!"),
+                            extra_name_translation(target),
+                            (is_word_plural(extra_name_translation(target)) ? "were" : "was"),
+                            indefinite_article_for_word(unit_type_get(punit)->sound_fight_alt, false),                          
+                            unit_type_get(punit)->sound_fight_alt,
+                            indefinite_article_for_word(nation_adjective_for_player(unit_owner(punit)), false),
+                            nation_adjective_for_player(unit_owner(punit)),
+                            unit_link(punit));
+                }
+            }
+          }
+        }
+      }
+    } circle_dxyr_iterate_end;
+  }
+
   dlsend_packet_nuke_tile_info(game.est_connections, tile_index(def_tile));
 
   /* A nuke is always consumed when it detonates. See below. */
@@ -5926,11 +6017,15 @@ bool unit_activity_handling(struct unit *punit,
 
 /**********************************************************************//**
   Handle request for targeted activity.
+    other_tile means activity is not on punit's current tile, currently
+      only operationational for iPillage
 **************************************************************************/
 bool unit_activity_handling_targeted(struct unit *punit,
                                      enum unit_activity new_activity,
                                      struct extra_type **new_target)
 {
+  struct tile *pillage_tile = unit_tile(punit);
+
   if (!activity_requires_target(new_activity)) {
     unit_activity_handling(punit, new_activity);
     if (new_activity == ACTIVITY_TRANSFORM) {
@@ -5939,7 +6034,7 @@ bool unit_activity_handling_targeted(struct unit *punit,
                                    tile_owner(unit_tile(punit)),
                                    unit_tile(punit),
                                    tile_link(unit_tile(punit)));
-      }
+    }
 
   } else if (can_unit_do_activity_targeted(punit, new_activity, *new_target)) {
     enum unit_activity old_activity = punit->activity;
@@ -5971,17 +6066,17 @@ bool unit_activity_handling_targeted(struct unit *punit,
               if (pstats.iPillage_random_targets) punit->server.iPillage_count++; // increment counter for units who pillage multiple extras in one action
 /*** BEGIN SUCCESSFUL PILLAGE BLOCK ***/
               if (fc_rand(100) < odds) {
-                notify_player(unit_owner(punit), unit_tile(punit),
+                notify_player(unit_owner(punit), pillage_tile,
                           E_UNIT_ACTION_TARGET_HOSTILE, ftc_server,
                           /* changing this string below requires changing substring extraction in packhand:handle_iPillage_event() */
                           _("[`boom`] Your %s destroyed the %s %s with a %s."),
                           unit_link(punit),
-                          (tile_owner(unit_tile(punit)) ? nation_adjective_for_player(tile_owner(unit_tile(punit))) : " " ), 
+                          (tile_owner(pillage_tile) ? nation_adjective_for_player(tile_owner(pillage_tile)) : " " ), 
                           extra_name_translation(punit->activity_target),
                           unit_type_get(punit)->sound_fight_alt);
                 //notify other player:
-                if (tile_owner(punit->tile) && tile_owner(punit->tile) != unit_owner(punit)) {
-                  notify_player(tile_owner(punit->tile), unit_tile(punit),
+                if (tile_owner(pillage_tile) && tile_owner(pillage_tile) != unit_owner(punit)) {
+                  notify_player(tile_owner(pillage_tile), pillage_tile,
                           E_UNIT_ACTION_TARGET_HOSTILE, ftc_server,
                           _("[`warning`] Your %s %s destroyed from %s %s done by %s %s %s!"),
                           extra_name_translation(punit->activity_target),
@@ -6015,14 +6110,14 @@ bool unit_activity_handling_targeted(struct unit *punit,
 /*** END SUCCESSFUL iPILLAGE BLOCK ***/
 /*** BEGIN FAILED iPILLAGE BLOCK ***/
               else {
-                notify_player(unit_owner(punit), unit_tile(punit),
+                notify_player(unit_owner(punit), pillage_tile,
                           E_UNIT_ACTION_ACTOR_FAILURE, ftc_server,
                           _("[`anger`] Your %s's %s missed its target."),
                           unit_link(punit),
                           unit_type_get(punit)->sound_fight_alt);
                 //notify other player:
-                if (tile_owner(punit->tile)) {
-                  notify_player(tile_owner(punit->tile), unit_tile(punit),
+                if (tile_owner(pillage_tile) && tile_owner(pillage_tile) != unit_owner(punit)) {
+                  notify_player(tile_owner(pillage_tile), pillage_tile,
                           E_UNIT_ACTION_ACTOR_FAILURE, ftc_server,
                           _("[`anger`] %s %s %s failed while trying to %s your %s."),
                           indefinite_article_for_word(nation_adjective_for_player(unit_owner(punit)), true),
@@ -6039,14 +6134,21 @@ bool unit_activity_handling_targeted(struct unit *punit,
                   }
                 }
                 else punit->moves_left -= pstats.iPillage_moves * SINGLE_MOVE; // always reduce moves left for single_target ops
-                if (punit->moves_left<0) punit->moves_left = 0;
-                // unit_activity_complete(..) was not called due to FAILED MISSION, so do house-keeping here:
-                unit_did_action(punit); // iPillage, just like unit_move, needs an immediate real-time uwt timestamp.
-                unit_list_refresh_vision(unit_tile(punit)->units);
-                set_unit_activity(punit, ACTIVITY_IDLE);
-                unit_forget_last_activity(punit);
-                send_unit_info(NULL, punit);
-              } 
+
+                /* Successful missiles are spent after pillaging the tile. Failed missiles are spent here. */
+                if (unit_class_by_rule_name("Missile") == unit_class_get(punit)) {
+                  wipe_unit(punit, ULR_MISSILE, NULL);
+                } else {
+                  if (punit->moves_left<0) punit->moves_left = 0;
+                  // unit_activity_complete(..) was not called due to FAILED MISSION, so do house-keeping here:
+                  
+                    unit_did_action(punit); // iPillage, just like unit_move, needs an immediate real-time uwt timestamp.
+                    unit_list_refresh_vision(pillage_tile->units);
+                    set_unit_activity(punit, ACTIVITY_IDLE);
+                    unit_forget_last_activity(punit);
+                    send_unit_info(NULL, punit);
+                }
+              }
 /*** END FAILED iPILLAGE BLOCK ***/
             }
 /**** </end iPillage block>: TODO: move to its own function *****/
@@ -6065,9 +6167,9 @@ bool unit_activity_handling_targeted(struct unit *punit,
             // so that victim can preventatively react to the offensive behaviour:
             action_consequence_success(action_by_number(ACTION_PILLAGE),
                                     unit_owner(punit), unit_type_get(punit),
-                                    tile_owner(unit_tile(punit)),
-                                    unit_tile(punit),
-                                    tile_link(unit_tile(punit)));
+                                    tile_owner(pillage_tile),
+                                    pillage_tile,
+                                    tile_link(pillage_tile));
 
         }
 /**** </end all PILLAGE ACTIONS> *****/        

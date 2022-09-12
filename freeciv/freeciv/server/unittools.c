@@ -1084,6 +1084,14 @@ void unit_activity_complete(struct unit *punit)
 
       call_incident(INCIDENT_PILLAGE, unit_owner(punit), victim);
 
+      /* Certain keyword UCF or Uclass can be activators for specially coded behaviours!
+       * In this case, pillaging missiles are known to explode afterward and get removed */
+      if (unit_class_by_rule_name("Missile") == unit_class_get(punit)) {
+      /* If we have multiple Missile classes or other spent-unit pillagers, just check UCF this way:
+      if (uclass_has_user_unit_class_flag_named(unit_class_get(punit), "Missile")) { */
+        wipe_unit(punit, ULR_MISSILE, NULL);
+      }
+
       /* Change vision if effects have changed. */
       unit_list_refresh_vision(ptile->units);
     }
