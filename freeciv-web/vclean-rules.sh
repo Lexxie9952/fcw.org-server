@@ -26,6 +26,9 @@ printf "\nOverwriting auto-generated manual with release-version: MP2-Caravel"
 printf "\nOverwriting auto-generated manual with release-version: MP2-Dragoon"
    cp /vagrant/freeciv-web/src/derived/webapp/man/mp2-dragoon6.bak.html /vagrant/freeciv-web/src/derived/webapp/man/mp2-dragoon6.html
    cp /vagrant/freeciv-web/src/derived/webapp/man/mp2-dragoon7.bak.html /vagrant/freeciv-web/src/derived/webapp/man/mp2-dragoon7.html
+printf "\nOverwriting auto-generated manual with release-version: MP2-Elephant"
+   cp /vagrant/freeciv-web/src/derived/webapp/man/mp2-elephant6.bak.html /vagrant/freeciv-web/src/derived/webapp/man/mp2-elephant6.html
+   cp /vagrant/freeciv-web/src/derived/webapp/man/mp2-elephant7.bak.html /vagrant/freeciv-web/src/derived/webapp/man/mp2-elephant7.html
 
 printf "\nDirectly copying rules to Tomcat webapp\n"
    cp /vagrant/freeciv-web/src/derived/webapp/man/*.* /var/lib/tomcat8/webapps/freeciv-web/man/
