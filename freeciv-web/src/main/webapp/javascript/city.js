@@ -1293,10 +1293,10 @@ function generate_production_list(pcity)
                       "build_cost": get_universal_discount_price(punit_type),
                     "unit_details": (utype_real_base_attack_strength(punit_type) > 0 
                                     ? ("A<b style='font-family:Arial'>"+fractionalize(utype_real_base_attack_strength(punit_type)) + "</b> ")
-                                    : ("A<style='font-family:Arial'>&bullet; "))
+                                    : ("")) //("<s>A</s><style='font-family:Arial'> "))
                                   + (utype_real_base_defense_strength(punit_type) > 0
                                     ? ("D<b style='font-family:Arial'>"+fractionalize(utype_real_base_defense_strength(punit_type)) + "</b> ")
-                                    : ("D<style='font-family:Arial'>&bullet; "))
+                                    : ("")) //("<s>D</s><style='font-family:Arial'> "))
                                   + (punit_type['firepower']>1 ? "F<b style='font-family:Arial'>"+punit_type['firepower']+"</b> " : "")
                                   + "H<b style='font-family:Arial'>"+punit_type['hp']+"</b> "
                                   + "M<b style='font-family:Arial'>"
