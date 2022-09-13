@@ -1291,8 +1291,12 @@ function generate_production_list(pcity)
 	                      "helptext": cleaned_text(punit_type['helptext']),
                        "rule_name": punit_type['rule_name'],
                       "build_cost": get_universal_discount_price(punit_type),
-                    "unit_details": "A<b style='font-family:Arial'>"+fractionalize(utype_real_base_attack_strength(punit_type)) + "</b> " 
-                                  + "D<b style='font-family:Arial'>"+fractionalize(utype_real_base_defense_strength(punit_type)) + "</b> " 
+                    "unit_details": (utype_real_base_attack_strength(punit_type) > 0 
+                                    ? ("A<b style='font-family:Arial'>"+fractionalize(utype_real_base_attack_strength(punit_type)) + "</b> ")
+                                    : ("A<style='font-family:Arial'>&bullet; "))
+                                  + (utype_real_base_defense_strength(punit_type) > 0
+                                    ? ("D<b style='font-family:Arial'>"+fractionalize(utype_real_base_defense_strength(punit_type)) + "</b> ")
+                                    : ("D<style='font-family:Arial'>&bullet; "))
                                   + (punit_type['firepower']>1 ? "F<b style='font-family:Arial'>"+punit_type['firepower']+"</b> " : "")
                                   + "H<b style='font-family:Arial'>"+punit_type['hp']+"</b> "
                                   + "M<b style='font-family:Arial'>"
@@ -2740,7 +2744,7 @@ function populate_worklist_production_choices(pcity)
        + "<td class='prod_choice_name'>" + production_list[a]['text'] + "</td>";       
        
        if (kind == VUT_UTYPE /*&& !small*/) {
-          production_html += "<td title='Attack/Defense/Firepower, Hitpoints' class='prod_choice_info' "
+          production_html += "<td title='Attack/Defense/Firepower, HP, Moves' class='prod_choice_info' "
           + "style='padding-right:30px; text-align:right'>" 
           + production_list[a]['unit_details'] + "</td>"
           + "<td class='prod_choice_cost'>" + get_universal_discount_price(unit_types[value],pcity) + "</td></tr>";
