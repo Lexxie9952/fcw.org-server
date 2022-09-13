@@ -1230,18 +1230,24 @@ function handle_non_integer_combat_scores(key)
     unit_types[key].defense_strength *= 0.5;
   }
   else if (unit_types[key]['name']=="Escort Fighter") {
-    unit_types[key].attack_strength += 0.5;
+    if (!client_rules_flag[CRF_MP2_E]) {
+      unit_types[key].attack_strength += 0.5;
+    }
   }
   else if (unit_types[key]['name']=="Fighter") {
-    unit_types[key].defense_strength += 0.5;
+    if (!client_rules_flag[CRF_MP2_E]) {
+      unit_types[key].defense_strength += 0.5;
+    }
   }
   else if (unit_types[key]['name']=="Crusaders") {
-    if (client_rules_flag[CRF_MP2_D])
+    if (client_rules_flag[CRF_MP2_D] && !client_rules_flag[CRF_MP2_E])
       unit_types[key].defense_strength += 0.5;
   }
-  else if (unit_types[key]['name']=="Dive Bomber") {
-    if (client_rules_flag[CRF_MP2_D])
-      unit_types[key].attack_strength += 1.5; //represents the majority of its targets it has a 50% or +1.5 bonus on.
+  else if (unit_types[key]['name']=="Dive Bomber") { //represents the majority of its targets it has a 50% or +1.5 bonus on.
+    if (client_rules_flag[CRF_MP2_E])
+      unit_types[key].attack_strength += 15;  // MP2E uses 10x 'granularity' values
+    else if (client_rules_flag[CRF_MP2_D])
+      unit_types[key].attack_strength += 1.5;
   }
   else {
     return; // skip message
