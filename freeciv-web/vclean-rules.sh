@@ -22,7 +22,6 @@ printf "\nOverwriting generated manual with release-version: MP2-Brava"
 printf "\nOverwriting auto-generated manual with release-version: MP2-Caravel"
    cp /vagrant/freeciv-web/src/derived/webapp/man/mp2-caravel6.bak.html /vagrant/freeciv-web/src/derived/webapp/man/mp2-caravel6.html
    cp /vagrant/freeciv-web/src/derived/webapp/man/mp2-caravel7.bak.html /vagrant/freeciv-web/src/derived/webapp/man/mp2-caravel7.html
-
 printf "\nOverwriting auto-generated manual with release-version: MP2-Dragoon"
    cp /vagrant/freeciv-web/src/derived/webapp/man/mp2-dragoon6.bak.html /vagrant/freeciv-web/src/derived/webapp/man/mp2-dragoon6.html
    cp /vagrant/freeciv-web/src/derived/webapp/man/mp2-dragoon7.bak.html /vagrant/freeciv-web/src/derived/webapp/man/mp2-dragoon7.html
