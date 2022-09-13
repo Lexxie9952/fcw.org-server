@@ -72,7 +72,8 @@ const CRF_MP2_A                    = 32;
 const CRF_MP2_B                    = 33;
 const CRF_MP2_C                    = 34;
 const CRF_MP2_D                    = 35;
-const CRF_LAST                     = 36;
+const CRF_MP2_E                    = 36
+const CRF_LAST                     = 37;
 
 var graphic_theme_path;
 
