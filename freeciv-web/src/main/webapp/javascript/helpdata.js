@@ -372,7 +372,8 @@ function generate_help_text(key)
       + cleaned_text(terrain['helptext'])
 	    + "<br><br>"
       + "<table class='terrain_chart'>"
-      + "<tr><td>Movement cost:</td>" + "<td>" + terrain['movement_cost'] + "</td></tr>"
+      + "<tr><td>Movement cost:</td>" + "<td>" 
+      + (server_settings.move_cost_in_frags.val ? move_points_text(terrain['movement_cost']) : terrain['movement_cost']) + "</td></tr>"
 	    + "<tr><td>Defense bonus:</td>" + "<td>" + terrain['defense_bonus']+"%" + "</td></tr>"
 	    + "<tr><td>Base Output:</td>" +"<td>"
         + "<span title='Base Food Output' style='cursor: help; font-size:120%; font-family: Arial; color:#000; background-color:#40ff40'>&hairsp;"+ terrain['output'][0] + "&hairsp;</span>"

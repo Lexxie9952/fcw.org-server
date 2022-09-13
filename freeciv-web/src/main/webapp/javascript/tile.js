@@ -219,7 +219,8 @@ function improve_tile_info_dialog(message)
                + ttype['color_red']+","+ttype['color_green']+","+ttype['color_blue']
                +  ")'><br><br><b>" + ttype['name'] + "</b>"+has_river+"<br></span>";
 
-    added_text += "Defense Bonus: <b>" + db + "&times;</b> &nbsp;&nbsp;&nbsp; Movement Cost: <b>" + ttype['movement_cost'] + "</b><br>"
+    added_text += "Defense Bonus: <b>" + db + "&times;</b> &nbsp;&nbsp;&nbsp; Movement Cost: <b>" 
+    + (server_settings.move_cost_in_frags.val ? move_points_text(ttype['movement_cost']) : ttype['movement_cost'])+ "</b><br>"
     
     if (ttype['irrigation_time']) {
       added_text += "<span class='highlight_irrigation'>Irrigate:<b>" + Math.ceil(ttype['irrigation_time']/wt)+"</b></span>"

@@ -865,7 +865,8 @@ int tile_move_cost_ptrs(const struct civ_map *nmap,
       }
   }
 
-  cost = tile_terrain(t2)->movement_cost * SINGLE_MOVE;
+  cost = game.server.move_cost_in_frags ? tile_terrain(t2)->movement_cost
+                                        : tile_terrain(t2)->movement_cost * SINGLE_MOVE;
   ri = restrict_infra(pplayer, t1, t2);
   bool rri_active = false; // if ReverseRestrictInfra is in effect
 
