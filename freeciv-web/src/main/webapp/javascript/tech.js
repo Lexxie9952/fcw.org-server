@@ -1258,6 +1258,7 @@ function show_observer_tech_dialog()
 function get_current_bulbs_output()
 {
   var self_bulbs = 0;
+  var self_luxury = 0;
   var self_upkeep = 0;
   var pooled = false;
   var team_bulbs = 0;
@@ -1270,6 +1271,7 @@ function get_current_bulbs_output()
       var city = cities[city_id];
       if(city.owner === cplayer && city.prod != null) {
         self_bulbs += city.prod[O_SCIENCE];
+        self_luxury += city.prod[O_LUXURY];
       }
     }
     self_upkeep = client.conn.playing.tech_upkeep;
@@ -1302,6 +1304,7 @@ function get_current_bulbs_output()
 
   return {
     self_bulbs: self_bulbs,
+    self_luxury: self_luxury,
     self_upkeep: self_upkeep,
     pooled: pooled,
     team_bulbs: team_bulbs,
@@ -1355,7 +1358,7 @@ function update_bulbs_output_info()
 {
   var cbo = get_current_bulbs_output();
   $('#bulbs_output').html(get_current_bulbs_output_text(cbo));
-  update_net_bulbs(cbo.self_bulbs - cbo.self_upkeep);
+  update_net_bulbs(cbo.self_bulbs - cbo.self_upkeep, cbo.self_luxury);
 }
 
 /**************************************************************************

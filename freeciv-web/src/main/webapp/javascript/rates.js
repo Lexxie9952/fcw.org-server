@@ -89,6 +89,7 @@ function show_tax_rates_dialog()
     + "<table style='margin:10px; text-align:right;'>"
     + "<tr><td>Net Income: </td><td><span class='gold_text' id='income_info'></span></td></tr>"
     + "<tr><td>Research:  </td> <td><span class='sci_text' id='bulbs_info'></span></td></tr>"
+    + "<tr><td>Net Luxury:  </td> <td><span class='lux_text' id='lux_info'></span></td></tr>"
     + "</table>"
     
     + "<div id='max_tax_rate' style='text-align:center; margin:10px;'></div>"
@@ -233,16 +234,22 @@ function update_net_income()
 /**************************************************************************
   ...
 **************************************************************************/
-function update_net_bulbs(bulbs)
+function update_net_bulbs(bulbs, lux)
 {
-  if (bulbs === undefined) {
+  var cbo, lux;
+  if (bulbs === undefined || lux === undefined) {
     var cbo = get_current_bulbs_output();
     bulbs = cbo.self_bulbs - cbo.self_upkeep;
+    lux = cbo.self_luxury;
   }
   if (bulbs > 0) {
     bulbs = "+" + bulbs;
   }
+  if (lux > 0) {
+    lux = "+" + lux;
+  }
   $("#bulbs_info").html(bulbs);
+  $("#lux_info").html(lux)
 }
 
 /**************************************************************************
