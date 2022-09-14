@@ -1760,6 +1760,10 @@ actor_reqs    =
       "DiplRel",       "War",     "Local", TRUE
       "UnitFlag",      "NonMil",  "Local", FALSE
     }
+target_reqs = 
+    { "type",          "name",          "range", "present"
+      "Extra",        "Bunker",         "Local", FALSE
+    }
 [actionenabler_explode_conventional_bomb]
 action = "Suicide Attack"
 actor_reqs    =
@@ -1773,6 +1777,10 @@ actor_reqs    =
       "DiplRel",       "War",     "Local", TRUE
       "UnitFlag",      "NonMil",  "Local", FALSE
     }
+target_reqs = 
+    { "type",          "name",          "range", "present"
+      "Extra",        "Bunker",         "Local", FALSE
+    }  
 
 ;-----------------------------------------------------------------------NATIVE ATTACKS
 ;-----------------------------------------------------------all Land___ except LandAirSea

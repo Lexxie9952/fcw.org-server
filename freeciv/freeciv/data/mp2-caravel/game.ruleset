@@ -1785,6 +1785,10 @@ actor_reqs    =
       "MinMoveFrags",  "1",       "Local", TRUE
       "DiplRel",       "War",     "Local", TRUE
     }
+target_reqs = 
+    { "type",          "name",          "range", "present"
+      "Extra",        "Bunker",         "Local", FALSE
+    }
 
 ;---------------------------------------------------------------------------
 ; Same as above. For PAX DEI without Monotheism, it's legal.
