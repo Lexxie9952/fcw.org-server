@@ -886,9 +886,9 @@ int tile_move_cost_ptrs(const struct civ_map *nmap,
         if (rri) {
           rri_active |= rri;
           if (dest_has_road || (src_has_road && road_has_flag(proad, RF_INTEGRATE_COST_UP))) {
-            if (cost < proad->move_cost) {
-              cost = proad->move_cost;
-            }
+            if (cost < proad->move_cost) {  // possible TODO: what if RF_INTEGRATE_COST_UP and RF_PASSIVE_MOVEMENT co-existed?
+              cost = proad->move_cost;      // then we'd have to calculate move_cost as a % of actor unit's move points.
+            }                               // this would allow improvs like (takes 75% of unit's move points away if !IGTER)
           }
         }
       }
@@ -896,32 +896,61 @@ int tile_move_cost_ptrs(const struct civ_map *nmap,
   }
   if (rri_active) goto finish; /* skip extra processing and revoke IGTER */
 
+  int umr = (punit != NULL) 
+          ? unit_move_rate(punit)  // includes bonuses/hp/etc.
+          : utype_move_rate(punittype, NULL, pplayer, 0, punittype->hp, NULL);
+                    
   extra_type_list_iterate(pclass->cache.bonus_roads, pextra) {
     struct road_type *proad = extra_road_get(pextra);
+    int proad_cost = proad->move_cost;
+    /* If passive passenger on road, e.g. (boat on) river, (train on) rails,
+       then move_cost is the divisor of unit's move rate */
+    if (punit != NULL && road_has_flag(proad, RF_PASSIVE_MOVEMENT)) {
+
+      proad_cost = umr / proad->move_cost;
+      // Banker's rounding for rulesets whose frag systems don't divide evenly
+      if (umr % proad->move_cost > 0) {
+        if (punit->moves_left % 2 > 0) {
+          proad_cost++;
+        }
+      }
+
+    }
 
     /* We check the destination tile first, as that's
      * the end of move that determines the cost.
      * If can avoid inner loop about integrating roads
      * completely if the destination road has too high cost. */
 
-    if (cost > proad->move_cost
+    if (cost > proad_cost
         && (!ri || road_has_flag(proad, RF_UNRESTRICTED_INFRA))
         && tile_has_extra(t2, pextra)) {
       extra_type_list_iterate(proad->integrators, iextra) {
         struct road_type *sroad = extra_road_get(iextra);
+        int sroad_cost = sroad->move_cost;
+        if (punit != NULL && road_has_flag(sroad, RF_PASSIVE_MOVEMENT)) {
+          sroad_cost = umr / sroad->move_cost;
+          // Banker's rounding for rulesets whose frag systems don't divide evenly
+          if (umr % sroad->move_cost > 0) {
+            if (punit->moves_left % 2 > 0) {
+              sroad_cost++;
+            }
+          }
+        }
+
         /* We have no unrestricted infra related check here,
          * destination road is the one that counts. */
         if (tile_has_extra(t1, iextra)
             && is_native_extra_to_uclass(iextra, pclass)) {
           if (proad->move_mode == RMM_FAST_ALWAYS) {
-            cost = proad->move_cost;
+            cost = proad_cost;
             /* if roadA and roadB integrate and source road has the flag 
              * "IntegrateCostUp", then going from A-to-B or B-to-A has a
              * symmetric or equal move cost. It's like road<->rail, always
              * the greater move_cost (i.e., the move_cost of the road). */
             if (road_has_flag(sroad, RF_INTEGRATE_COST_UP)
-                && sroad->move_cost > cost) {
-              cost = sroad->move_cost;
+                && sroad_cost > cost) {
+              cost = sroad_cost;
             }
           } else {
             if (!cardinality_checked) {
@@ -930,17 +959,17 @@ int tile_move_cost_ptrs(const struct civ_map *nmap,
               cardinality_checked = TRUE;
             }
             if (cardinal_move) {
-              cost = proad->move_cost;
+              cost = proad_cost;
               if (road_has_flag(sroad, RF_INTEGRATE_COST_UP)
-                  && sroad->move_cost > cost) {
-                cost = sroad->move_cost;
+                  && sroad_cost > cost) {
+                cost = sroad_cost;
               }              
             } else {
               switch (proad->move_mode) {
               case RMM_CARDINAL:
                 break;
               case RMM_RELAXED:
-                if (cost > proad->move_cost * 2) {
+                if (cost > proad_cost * 2) {
                   cardinal_between_iterate(nmap, t1, t2, between) {
                     if (tile_has_extra(between, pextra)
                         || (pextra != iextra && tile_has_extra(between, iextra))) {
@@ -950,10 +979,10 @@ int tile_move_cost_ptrs(const struct civ_map *nmap,
                        * Should we check against enemy cities on between tile?
                        * Should we check against non-native terrain on between tile?
                        */
-                      cost = proad->move_cost * 2;
+                      cost = proad_cost * 2;
                       if (road_has_flag(sroad, RF_INTEGRATE_COST_UP)
-                          && sroad->move_cost * 2 > cost) {
-                        cost = sroad->move_cost * 2;
+                          && sroad_cost * 2 > cost) {
+                        cost = sroad_cost * 2;
                       }
                     }
                   } cardinal_between_iterate_end;
@@ -962,10 +991,10 @@ int tile_move_cost_ptrs(const struct civ_map *nmap,
               /* TODO: this code should never be reached. Remove it. */
               case RMM_FAST_ALWAYS:
                 fc_assert(proad->move_mode != RMM_FAST_ALWAYS); /* Already handled above */
-                cost = proad->move_cost;
+                cost = proad_cost;
                 if (road_has_flag(sroad, RF_INTEGRATE_COST_UP)
-                    && sroad->move_cost > cost) {
-                  cost = sroad->move_cost;
+                    && sroad_cost > cost) {
+                  cost = sroad_cost;
                 }                
                 break;
               }
