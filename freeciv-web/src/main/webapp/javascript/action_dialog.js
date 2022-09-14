@@ -103,6 +103,7 @@ var action_images = {
   "Sea Bridge": "orders/seabridge",
   "River": "orders/well",
   "Tile Claim": "nation_tab_icon",
+  "Watchtower": "orders/watchtower",
   "Fort": "orders/fort",
   "Fortress": "orders/fortress",
   "Fishtrap": "orders/fishtrap",
@@ -1761,7 +1762,7 @@ function select_tgt_extra(actor_unit, target_unit,
                                                     tgt_extra['id']);
     if (the_button != null) {
       the_button['class'] = 'act_sel_button';
-      the_button['height'] = '33.33px';
+      the_button['height'] = '31px';
 
       buttons.push(the_button);
       /* sort_order.push(i); 

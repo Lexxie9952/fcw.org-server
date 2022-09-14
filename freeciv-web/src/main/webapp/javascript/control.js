@@ -1527,6 +1527,7 @@ function update_unit_order_commands()
   $("#order_quay").hide();
   $("#order_canal").hide();
   $("#order_well").hide();
+  $("#order_watchtower").hide();
   $("#order_fort").hide();
   $("#order_fortress").hide();
   $("#order_castle").hide();
@@ -1637,7 +1638,7 @@ function update_unit_order_commands()
     ptype = unit_type(punit);
     var worker_type = false; // Handles civ2civ3 + mp2: these units have same orders as workers (join city already handled above):
     var infra_type = false;
-    if (ptype['name'] == "Workers" || ptype['name'] == "Migrants"
+    if (ptype['name'] == "Workers" || (ptype['name'] == "Migrants" && !client_rules_flag[CRF_MP2])
       || (ptype['name'] == "Tribesmen" && client_rules_flag[CRF_MP2_C])
       || (ptype['name'] == "Trawler")
       || (ptype['name'] =="Proletarians" && governments[client.conn.playing['government']]['name']=="Communism")) {
@@ -1664,6 +1665,7 @@ function update_unit_order_commands()
     // Each variable-grouping would become a single array indexed by base type.
     /* Whether Ruleset has Base*/
     const HIDEOUTS      = (typeof EXTRA_ !== 'undefined') && client_rules_flag[CRF_EXTRA_HIDEOUT] && server_settings['hideouts']['val'];
+    const WATCHTOWERS   = (typeof EXTRA_WATCHTOWER !== 'undefined') && client_rules_flag[CRF_EXTRA_WATCHTOWER]
     const FORTS         = (typeof EXTRA_FORT !== 'undefined');
     const FORTRESSES    = (typeof EXTRA_FORTRESS !== 'undefined');
     const NAVALBASES    = (typeof EXTRA_NAVALBASE !== 'undefined');
@@ -1678,6 +1680,7 @@ function update_unit_order_commands()
     const DEEPDIVE      = (typeof EXTRA_DEEPDIVE !== 'undefined');
     /* Whether player has tech for the Base. */
     const HIDEOUT_TECH   = tech_known("Warrior Code");
+    const WATCHTOWER_TECH= WATCHTOWERS && tech_known("Masonry") && client_rules_flag[CRF_EXTRA_WATCHTOWER];
     const FORT_TECH      = tech_known("Construction") || (tech_known("Masonry") && client_rules_flag[CRF_MASONRY_FORT]);
     const FORTRESS_TECH  = tech_known("Construction");
     const NAVALBASE_TECH = tech_known("Engineering");
@@ -1689,6 +1692,7 @@ function update_unit_order_commands()
     const RADAR_TECH     = tech_known("Radar");
     /* Whether the tile has pre-existing bases, which may be reqs or blockers for other bases to be built. */
     const TILE_HAS_HIDEOUT   = HIDEOUTS   && tile_has_extra(ptile,EXTRA_);
+    const TILE_HAS_WATCHTOWER= WATCHTOWERS&& tile_has_extra(ptile,EXTRA_WATCHTOWER);  
     const TILE_HAS_FORT      = FORTS      && tile_has_extra(ptile,EXTRA_FORT);
     const TILE_HAS_FORTRESS  = FORTRESSES && tile_has_extra(ptile,EXTRA_FORTRESS);
     const TILE_HAS_NAVALBASE = NAVALBASES && tile_has_extra(ptile,EXTRA_NAVALBASE);
@@ -1721,18 +1725,21 @@ function update_unit_order_commands()
     const CAN_TILE_BUOY      = !pcity &&  oceanic && BUOYS      && !TILE_HAS_BUOY && !(TILE_HAS_RIVER && NO_RIVER_BASE);
     const CAN_TILE_FISHTRAP  = !pcity &&  oceanic && FISHTRAPS  && !TILE_HAS_FISHTRAP // this is only a 'half true' qualifier for tile can do fishtrap: further checks done later below
     const CAN_TILE_RADAR     = !pcity && !oceanic && RADAR      && !TILE_HAS_RADAR && TILE_HAS_AIRBASE && !(TILE_HAS_RIVER && NO_RIVER_BASE);
+    const CAN_TILE_WATCHTOWER= !pcity && !oceanic && WATCHTOWERS&& !TILE_HAS_WATCHTOWER && !TILE_HAS_BUNKER && !TILE_HAS_CASTLE && !TILE_HAS_RADAR && !TILE_HAS_HIDEOUT
     const CAN_TILE_DEEPDIVE  = terrain_name == "Deep Ocean" && !TILE_HAS_DEEPDIVE && !TILE_HAS_BUOY && !TILE_HAS_FISHTRAP; 
     /* Currently iterating unit is able to build bases on this tile? */
-    const UNIT_CAN_HIDEOUT   = CAN_TILE_HIDEOUT   && HIDEOUT_TECH   && utype_has_flag(ptype,UTYF_FOOTSOLDIER);
-    const UNIT_CAN_FORT      = CAN_TILE_FORT      && FORT_TECH      && (worker_type || infra_type || (ptype['name'] == "Legion" && client_rules_flag[CRF_LEGION_WORK]) || (ptype['name'] == "Marines" && client_rules_flag[CRF_MARINE_BASES])) && ptype['name'] != "Trawler";
-    const UNIT_CAN_FORTRESS  = CAN_TILE_FORTRESS  && FORTRESS_TECH  && (worker_type || infra_type || (ptype['name'] == "Legion" && client_rules_flag[CRF_LEGION_WORK])) && ptype['name'] != "Trawler";
-    const UNIT_CAN_NAVALBASE = CAN_TILE_NAVALBASE && NAVALBASE_TECH && (worker_type || infra_type || (ptype['name'] == "Legion" && client_rules_flag[CRF_LEGION_WORK])) && can_build_naval_base(punit,ptile);
-    const UNIT_CAN_CASTLE    = CAN_TILE_CASTLE    && CASTLE_TECH    && (worker_type || infra_type);
-    const UNIT_CAN_BUNKER    = CAN_TILE_BUNKER    && BUNKER_TECH    && (worker_type || infra_type);
-    const UNIT_CAN_AIRBASE   = CAN_TILE_AIRBASE   && AIRBASE_TECH   && (worker_type || infra_type || (ptype['name'] == "Marines" && client_rules_flag[CRF_MARINE_BASES])) && ptype['name'] != "Settlers";
-    const UNIT_CAN_BUOY      = CAN_TILE_BUOY      && BUOY_TECH      && (worker_type || infra_type) && ptype['name'] != "Settlers";
-    const UNIT_CAN_FISHTRAP  = CAN_TILE_FISHTRAP  && FISHTRAP_TECH  && (worker_type || infra_type);
-    const UNIT_CAN_RADAR     = CAN_TILE_RADAR     && RADAR_TECH     && (worker_type || infra_type) && ptype['name'] != "Settlers";
+    const NOT_TRIBESMEN      = ptype['name'] != "Tribesmen"
+    const UNIT_CAN_HIDEOUT   = CAN_TILE_HIDEOUT   && HIDEOUT_TECH   && NOT_TRIBESMEN && utype_has_flag(ptype,UTYF_FOOTSOLDIER);
+    const UNIT_CAN_FORT      = CAN_TILE_FORT      && FORT_TECH      && NOT_TRIBESMEN && (worker_type || infra_type || (ptype['name'] == "Legion" && client_rules_flag[CRF_LEGION_WORK]) || (ptype['name'] == "Marines" && client_rules_flag[CRF_MARINE_BASES])) && ptype['name'] != "Trawler";
+    const UNIT_CAN_FORTRESS  = CAN_TILE_FORTRESS  && FORTRESS_TECH  && NOT_TRIBESMEN && (worker_type || infra_type || (ptype['name'] == "Legion" && client_rules_flag[CRF_LEGION_WORK])) && ptype['name'] != "Trawler";
+    const UNIT_CAN_NAVALBASE = CAN_TILE_NAVALBASE && NAVALBASE_TECH && NOT_TRIBESMEN && (worker_type || infra_type || (ptype['name'] == "Legion" && client_rules_flag[CRF_LEGION_WORK])) && can_build_naval_base(punit,ptile);
+    const UNIT_CAN_CASTLE    = CAN_TILE_CASTLE    && CASTLE_TECH    && NOT_TRIBESMEN && (worker_type || infra_type);
+    const UNIT_CAN_BUNKER    = CAN_TILE_BUNKER    && BUNKER_TECH    && NOT_TRIBESMEN && (worker_type || infra_type);
+    const UNIT_CAN_AIRBASE   = CAN_TILE_AIRBASE   && AIRBASE_TECH   && NOT_TRIBESMEN && (worker_type || infra_type || (ptype['name'] == "Marines" && client_rules_flag[CRF_MARINE_BASES])) && ptype['name'] != "Settlers";
+    const UNIT_CAN_BUOY      = CAN_TILE_BUOY      && BUOY_TECH      && NOT_TRIBESMEN && (worker_type || infra_type) && ptype['name'] != "Settlers";
+    const UNIT_CAN_FISHTRAP  = CAN_TILE_FISHTRAP  && FISHTRAP_TECH  && NOT_TRIBESMEN && (worker_type || infra_type);
+    const UNIT_CAN_RADAR     = CAN_TILE_RADAR     && RADAR_TECH     && NOT_TRIBESMEN && (worker_type || infra_type) && ptype['name'] != "Settlers";
+    const UNIT_CAN_WATCHTOWER= CAN_TILE_WATCHTOWER&& WATCHTOWER_TECH&& NOT_TRIBESMEN && (worker_type || infra_type || (ptype['name'] == "Legion" && client_rules_flag[CRF_LEGION_WORK]) || (ptype['name'] == "Marines" && client_rules_flag[CRF_MARINE_BASES])) && !(UNIT_CAN_RADAR || UNIT_CAN_AIRBASE) && ptype['name'] != "Trawler";
     const UNIT_CAN_DEEPDIVE  = CAN_TILE_DEEPDIVE && ptype['name'] == "Missile Submarine";
     // ******************************************************************************************************************* </END Base Logic setup> ***
     if (UNIT_CAN_HIDEOUT) {
@@ -1778,10 +1785,13 @@ function update_unit_order_commands()
       if (worker_type || infra_type) { 
         if (show_order_buttons==2) $("#order_airbase").show(); // Uncommon order for infra units.
       } else $("#order_airbase").show(); // Marines always want to see it.
-    }
-    if (UNIT_CAN_RADAR) {
+    } else if (UNIT_CAN_RADAR) {
       unit_actions["airbase"] = {name: "Build Radar (shift-E)"};
+      $("#order_watchtower").hide();
       $("#order_radar").show();
+    } else if (UNIT_CAN_WATCHTOWER) {
+      unit_actions["watchtower"] = {name: "Build Watchtower (shift-E)"};
+      $("#order_watchtower").show();
     }
     // ********************************************************************** </END Base Building> ***
 
@@ -4407,6 +4417,10 @@ function handle_context_menu_callback(key)
       key_unit_hideout();
       break;
 
+    case "watchtower":
+      key_unit_airbase();
+      break;
+
     case "navalbase":
       key_unit_naval_base();
       break;
@@ -5740,7 +5754,8 @@ function key_unit_dive()
 **************************************************************************/
 function key_unit_airbase()
 {
-  var radar_rules = client_rules_flag[CRF_RADAR_TOWER];
+  const radar_rules = client_rules_flag[CRF_RADAR_TOWER];
+  const tower_rules = client_rules_flag[CRF_EXTRA_WATCHTOWER];
   var activity = EXTRA_AIRBASE;
 
   var funits = get_units_in_focus();
@@ -5757,8 +5772,11 @@ function key_unit_airbase()
       }
     }
 
-    activity = EXTRA_AIRBASE;
-    if (radar_rules && tile_has_extra(ptile, EXTRA_AIRBASE)) activity=EXTRA_RADAR;
+    if (tile_has_extra(ptile, EXTRA_AIRBASE)) {
+      if (radar_rules && tile_has_extra(ptile, EXTRA_AIRBASE)) activity=EXTRA_RADAR;
+      else if (tower_rules && tech_known("Masonry")) activity = EXTRA_WATCHTOWER;
+    }
+    else if (tower_rules && !tech_known("Radio") && tech_known("Masonry")) activity = EXTRA_WATCHTOWER;
 
     request_new_unit_activity(punit, ACTIVITY_BASE, activity);
     // Focused unit got orders, make sure not on waiting_list now:

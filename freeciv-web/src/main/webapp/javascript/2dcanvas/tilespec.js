@@ -2396,6 +2396,10 @@ function fill_layer2_sprite_array(ptile, pcity)
                             "offset_y" : -normal_tile_height / 2});
       }
     }
+    if (typeof EXTRA_WATCHTOWER !== 'undefined' && tile_has_extra(ptile, EXTRA_WATCHTOWER)) {
+      result_sprites.push({"key" : "base.tower_mg",
+                           "offset_y" : -normal_tile_height / 2});
+    }
   }
 
   return result_sprites;

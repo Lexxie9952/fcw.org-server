@@ -107,6 +107,10 @@
     <span style="cursor:pointer" onclick="key_unit_canal();"><img src="/images/orders/canal.png" name="canal_button" alt="" border="0" width="30" height="30"></span>
   </div>
 
+  <div id="order_watchtower" class="order_button not_mobile" title="Build Watchtower (shift-E)">
+    <span style="cursor:pointer" onclick="key_unit_airbase();"><img src="/images/orders/watchtower.png" name="watchtower_button" alt="" border="0" width="30" height="30"></span>
+  </div>
+
   <div id="order_fort" class="order_button not_mobile" title="Build Fort (shift-F)">
     <span style="cursor:pointer" onclick="key_unit_fortress();"><img src="/images/orders/fort.png" name="fort_button" alt="" border="0" width="30" height="30"></span>
   </div>

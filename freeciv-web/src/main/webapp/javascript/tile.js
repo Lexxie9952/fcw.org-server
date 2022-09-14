@@ -151,6 +151,8 @@ function does_tile_have_base(ptile)
     return true;
   if (typeof EXTRA_TILE_CLAIM !== "undefined" && tile_has_extra(ptile, EXTRA_TILE_CLAIM))
     return true;
+  if (typeof EXTRA_WATCHTOWER !== "undefined" && tile_has_extra(ptile, EXTRA_WATCHTOWER))
+    return true;
   if (typeof EXTRA_ !== "undefined" && tile_has_extra(ptile, EXTRA_))  // hideout
     return true;
     

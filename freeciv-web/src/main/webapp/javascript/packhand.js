@@ -1116,6 +1116,7 @@ function handle_ruleset_control(packet)
   switch (ruleset_control['name']) {
     case "MP2 Elephant":
       client_rules_flag[CRF_MP2_E] = true;
+      client_rules_flag[CRF_EXTRA_WATCHTOWER] = true;
     case "MP2 Dragoon":
       client_rules_flag[CRF_MP2_D] = true;
     case "MP2 Caravel":
@@ -1174,11 +1175,12 @@ function handle_ruleset_control(packet)
     else if (ename == "Minor Tribe Village") delete window["EXTRA_HUT"];
     else if (typeof EXTRA_SEABRIDGE !== 'undefined' && ename == "Sea Bridge") delete window["EXTRA_SEABRIDGE"];
     else if (typeof EXTRA_FORT !== 'undefined' && ename == "Fort") delete window["EXTRA_FORT"]; 
-    else if (typeof EXTRA_NAVALBASE !== 'undefined' && ename =="Naval Base") delete window["EXTRA_NAVALBASE"];
-    else if (typeof EXTRA_CASTLE !== 'undefined' && ename =="Castle") delete window["EXTRA_CASTLE"];
-    else if (typeof EXTRA_BUNKER !== 'undefined' && ename =="Bunker") delete window["EXTRA_BUNKER"];
-    else if (typeof EXTRA_TILE_CLAIM !== 'undefined' && ename =="Tile Claim") delete window["EXTRA_TILE_CLAIM"];
-    else if (typeof EXTRA_WALLS !== 'undefined' && ename =="Walls") delete window["EXTRA_WALLS"];
+    else if (typeof EXTRA_NAVALBASE !== 'undefined' && ename == "Naval Base") delete window["EXTRA_NAVALBASE"];
+    else if (typeof EXTRA_CASTLE !== 'undefined' && ename == "Castle") delete window["EXTRA_CASTLE"];
+    else if (typeof EXTRA_BUNKER !== 'undefined' && ename == "Bunker") delete window["EXTRA_BUNKER"];
+    else if (typeof EXTRA_TILE_CLAIM !== 'undefined' && ename == "Tile Claim") delete window["EXTRA_TILE_CLAIM"];
+    else if (typeof EXTRA_WALLS !== 'undefined' && ename == "Walls") delete window["EXTRA_WALLS"];
+    else if (typeof EXTRA_WATCHTOWER !== 'undefned' && ename == "Watchtower") delete window["EXTRA_WATCHTOWER"];
     else if (extras[extra].rule_name == "Depth") {
       delete window["EXTRA_​"]
     }
@@ -2507,6 +2509,7 @@ function handle_ruleset_extra(packet)
   if (packet['name'] == "Bunker") window["EXTRA_BUNKER"] = packet['id'];
   if (packet['name'] == "Tile Claim") window["EXTRA_TILE_CLAIM"] = packet['id'];
   if (packet['name'] == "Walls") window["EXTRA_WALLS"] = packet['id'];
+  if (packet['name'] == "Watchtower") window["EXTRA_WATCHTOWER"] = packet['id'];
   if (packet['rule_name'] == "Depth") window["EXTRA_DEEPDIVE"] = packet['id'];
 }
 

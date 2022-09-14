@@ -107,6 +107,8 @@ The current and complete list of Freeciv-web controls can be found here:<br>
 
 <tr><td><img src="/images/orders/wait.png"></td><td><span class="vctr"> Wait</td><td><span class="hotkey">w</span> &emsp;(focus on next unit)</span></td></tr>
 
+<tr><td><img src="/images/orders/watchtower.png"></td><td><span class="vctr"> Build Watchtower</td><td><span class="hotkey">shift-W</span></span></td></tr>
+
 <tr><td><img src="/images/orders/auto_explore_default.png"></td><td><span class="vctr"> Auto explore</td><td><span class="hotkey">x</span></span></td></tr>
 </table>
 <img src="/images/orders/less_button.png"> <img src="/images/orders/more_button.png"><span class="vctr"> Less/More: toggle: common Orders / all orders</span>
@@ -121,9 +123,9 @@ The current and complete list of Freeciv-web controls can be found here:<br>
 <tr><td><span class="hotkey">shift-B</span></td><td> (B)oard transport</td></tr>
 <tr><td><span class="hotkey">  c</span></td><td> (c)enter map on active unit</td></tr>
 <tr><td><span class="hotkey">  d</span></td><td> (d)o - select unit execution</td></tr>
-<tr><td><span class="hotkey">shift-E</span></td><td> build airbas(E)</td></tr>
+<tr><td><span class="hotkey">shift-E</span></td><td> build airbas(E), watchtower, or radar tower</td></tr>
 <tr><td><span class="hotkey">  f</span></td><td> (f)ortify unit  (military units)</td></tr>
-<tr><td><span class="hotkey">shift-F</span></td><td> build (F)ortress  (settler/worker units)</td></tr>
+<tr><td><span class="hotkey">shift-F</span></td><td> build (F)ort, fortress, castle, or bunker</td></tr>
 <tr><td><span class="hotkey">  g</span></td><td> (g)o to tile  (then left-click mouse to select target tile)</td></tr>
 <tr><td><span class="hotkey">shift-G</span></td><td> delayed (G)oto (at turn change, reqs: unit with less than full moves)</td></tr>
 <tr><td><span class="hotkey">ctrl-alt-g</span></td><td> (g)o and do action</td></tr>

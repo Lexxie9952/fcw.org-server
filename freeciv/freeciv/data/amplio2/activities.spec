@@ -66,6 +66,7 @@ tiles = { "row", "column", "tag"
   4, 3, "unit.cargo"                 ; Lexxie
   4, 4, "unit.goto_delay"            ; Lexxie
   4, 5, "unit.radar"                 ; Lexxie
+  4, 6, "unit.tower"                 ; Lexxie
 
 ; [GS]
   5,  0, "unit.irrigation"
