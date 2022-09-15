@@ -4920,25 +4920,6 @@ reqs	=
       "UnitClassFlag", "TerrainSpeed",    "Local", TRUE
     }
 
-; -------------------------------------------------------------
-; This can't be done properly as fortified attack bonus because
-; attacking resets fortified state right before it happens. This
-; either needs an action enabler for "Attack 2" and attack bonus
-; applied that way, to not reset the state until after the 
-; combat resolution, or a new effect to test UnitChangedFromState.
-; For now we're substituting the fact the unit has not yet moved,
-; which is close enough. 
-[effect_phalanx_fortified_attack_bonus]
-type    = "Attack_Bonus"
-value   = 50
-reqs    =
-    { "type",   "name",   "range",  "present"
-      "Action", "Attack", "Local",  TRUE
-      "UnitType",     "Phalanx",         "Local",  TRUE
-;      "MinMoveFrags", "9",              "Local",  FALSE
-;      "Building",     "Agoge of Sparta", "Player", FALSE
-    }
-
 ;************************************************************************ Angkor Wat
 [effect_angkor_wat_free_tile_celeb_bonus]  ;free celebration tile output
 type    = "Output_Inc_Tile"  ; monarchy and theocracy
