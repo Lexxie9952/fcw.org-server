@@ -751,8 +751,9 @@ Unit_Vision_Radius_Sq
 
 Unit_Work_Frag_Bonus
     Adds a number of move fragments to the unit's work rate which accumulates
-    into its work target, per turn. For example, value = 50 for a unit with
-    one movepoint, would do 3 points of work every two turns. 
+    into its work target, per turn. For example, in a ruleset with 6 move frags,
+    a value of 6 would make the unit do work as if it had 1 more move point than
+    its base move rate for movement.
 
 Unit_Work_Pct
     Adds a percent to the unit's work that accumulates into the work 
