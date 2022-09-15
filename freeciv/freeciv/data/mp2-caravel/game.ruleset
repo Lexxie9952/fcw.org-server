@@ -1286,7 +1286,7 @@ actor_reqs    =
       "UnitFlag",     "Bombarder",    "Local", TRUE
       "UnitType",     "Siege Ram",    "Local", TRUE
       "UnitState",    "Transported",  "Local", FALSE
-      "MinMoveFrags", "10",           "Local", TRUE
+      "MinMoveFrags", "9",           "Local", TRUE
       "DiplRel",      "War",          "Local", TRUE
    }
 target_reqs    =
