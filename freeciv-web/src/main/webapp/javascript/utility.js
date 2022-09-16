@@ -82,6 +82,14 @@ function fraction_reduce(numerator,denominator) {
     return b ? gcd(b, a%b) : a;
   };
   gcd = gcd(numerator,denominator);
+  //avoid fifths -- they're more complex than tenths in the base-10 system:
+  if (denominator/gcd == 5) gcd /=2;
+  //in base-60 time- or move-systems, we avoid 12th,15ths,20ths, and 30ths:
+  //i.e., people like halves, thirds, and quarters, but not more complex: 
+  else if (denominator/gcd == 12) gcd /=5;
+  else if (denominator/gcd == 15) gcd /=4;
+  else if (denominator/gcd == 20) gcd /=3;
+  else if (denominator/gcd == 30) gcd /=2;
   return {"numerator": (numerator/gcd), "denominator": (denominator/gcd)};
 }
 

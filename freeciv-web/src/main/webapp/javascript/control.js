@@ -7865,7 +7865,7 @@ function update_active_units_dialog()
       if (mobile_mode) { // mobile version of text
         active_uinfo += "<span style='color:white'> &nbsp; M:<span style='color:lightgreen;font-size:110%'><b>" + move_points_text(aunit['movesleft'],false) + "</b></span></span>";
       } else { // normal non-mobile text:
-        active_uinfo += "<span style='color:white'>Moves:<span style='color:lightgreen;font-size:120%;'><b>" + move_points_text(aunit['movesleft'],false) + "</b></span></span> ";
+        active_uinfo += "<span style='color:white'>Moves:<span style='color:lightgreen;font-size:120%;'><b>" + move_points_text(aunit['movesleft'],false, true) + "</b></span></span> ";
       }
     }
     if (mobile_mode) { // mobile version of text

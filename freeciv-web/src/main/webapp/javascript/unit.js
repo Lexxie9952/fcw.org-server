@@ -590,7 +590,7 @@ function unit_moves_left(punit)
   moves = moves expressed in total move fragments
   make_fraction = make a unicode vulgar fraction out of remainder frags?
 **************************************************************************/
-function move_points_text(moves, make_fraction)
+function move_points_text(moves, make_fraction, small)
 {
   var result = "";
   if (make_fraction === undefined) make_fraction = false;
@@ -611,10 +611,10 @@ function move_points_text(moves, make_fraction)
 
     if (Math.floor(moves / SINGLE_MOVE) > 0 && numerator>0) {
       result = "" + Math.floor(moves / SINGLE_MOVE) 
-               + spacer + numerator
-               + div_symbol + denominator;
+               + spacer + (small?"<small>":"") + numerator
+               + div_symbol + denominator+ (small?"</small>":"");
     } else if (numerator>0) {
-      result = "" + numerator + div_symbol + denominator;
+      result = numerator + div_symbol + denominator;
     } else {
       result = Math.floor(moves / SINGLE_MOVE);
     }
