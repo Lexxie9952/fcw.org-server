@@ -851,8 +851,8 @@ embarks       = "LandRoad", "LandRail", "Helicopter"    ; transport helicopter o
 disembarks    = "LandRoad", "LandRail", "Helicopter"
 bonuses       =
    { "flag", "type", "value"
-     "NoBuild", "DefenseMultiplier", 1  ; all animals are "NoBuild" flag. technically this also means
-     "NoBuild", "DefenseDivider", 2     ; Barbarian Leader (which is 0D anyway), and Leader, which is hardly used.
+     "SuperSpy", "DefenseMultiplier", 1  ; all animals are "NoBuild" flag. technically this also means
+     "SuperSpy", "DefenseDivider", 2     ; Barbarian Leader (which is 0D anyway), and Leader, which is hardly used.
    }
 flags         = "NoBuild", "Settlers", "Infra", "CanRoad",  "Capturable", "Expellable",
                 "HasNoZOC", "IgTer", "IgZOC", "NonMil", "NonProvoking", "NonMilAttack"
