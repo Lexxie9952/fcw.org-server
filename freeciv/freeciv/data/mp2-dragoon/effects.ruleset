@@ -4605,7 +4605,6 @@ reqs  =
       "CityTile",     "Center",      "Local",  TRUE
       "Extra",        "Farmland",    "Local",  FALSE
       "TerrainAlter", "CanIrrigate", "Local",  TRUE
-      "Building",     "Supermarket", "City",   TRUE
       "OutputType",   "Food",        "Local",  TRUE
       "Extra",        "Mine",        "Local",  FALSE
       "Extra",        "Oil Well",    "Local",  FALSE
