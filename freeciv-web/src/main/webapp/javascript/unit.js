@@ -1308,7 +1308,7 @@ function unit_has_dual_pillage_options(punit)
 {
   var pstats = unit_get_extra_stats(punit);
 
-  return (pstats.iPillage && get_unit_class_name(punit).startsWith("Land"));
+  return (pstats.iPillage && get_unit_class_name(punit).includes("Land"));
 }
 
 
