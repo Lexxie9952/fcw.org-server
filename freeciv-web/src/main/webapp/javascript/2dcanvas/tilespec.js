@@ -2500,7 +2500,7 @@ function create_unit_offset_arrays()
           break;
       case "Armor":
           dx -= 3; dy -= 6;
-          vx += 15; vy -= 13;
+          vx += 17; vy -= 14;
           break;
       case "Armor II":
           vx += 11; vy += 4;
