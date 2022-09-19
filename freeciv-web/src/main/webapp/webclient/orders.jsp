@@ -47,12 +47,16 @@
     <span style="cursor:pointer" onclick="key_unit_road();"><img src="/images/orders/road_default.png" name="road_button" alt="" border="0" width="30" height="30"></span>
   </div>
 
+  <div id="order_hwy" class="order_button" title="Build highway (R)">
+    <span style="cursor:pointer" onclick="button_unit_road_type('Highway');"><img src="/images/orders/highway.png" name="highway_button" alt="" border="0" width="30" height="30"></span>
+  </div>
+
   <div id="order_seabridge" class="order_button" title="Build Sea Bridge (R)">
     <span style="cursor:pointer" onclick="key_unit_road();"><img src="/images/orders/seabridge.png" name="seabridge_button" alt="" border="0" width="30" height="30"></span>
   </div>
 
   <div id="order_railroad" class="order_button" title="Build railroad (R)">
-    <span style="cursor:pointer" onclick="key_unit_road();"><img src="/images/orders/railroad_default.png" name="railroad_button" alt="" border="0" width="30" height="30"></span>
+    <span style="cursor:pointer" onclick="button_unit_road_type('Railroad');"><img src="/images/orders/railroad_default.png" name="railroad_button" alt="" border="0" width="30" height="30"></span>
   </div>
 
   <div id="order_maglev" class="order_button" title="Build maglev (R)">

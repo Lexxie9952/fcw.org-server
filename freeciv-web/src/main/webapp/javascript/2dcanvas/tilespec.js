@@ -2094,7 +2094,8 @@ function get_treaty_disagree_thumb_down()
 ****************************************************************************/
 function fill_road_rail_sprite_array(ptile, pcity)
 {
-  var road = tile_has_extra(ptile, EXTRA_ROAD);
+  var hwy = client_rules_flag[CRF_EXTRA_HIGHWAY] ? tile_has_extra(ptile, EXTRA_HIGHWAY) : false;
+  var road = tile_has_extra(ptile, EXTRA_ROAD) || hwy;
   var rail = tile_has_extra(ptile, EXTRA_RAIL);
   // Road/river types ruleset may or may not have:
   const MAGLEV_active = (typeof EXTRA_MAGLEV !== "undefined");
@@ -2104,6 +2105,7 @@ function fill_road_rail_sprite_array(ptile, pcity)
   const QUAY2_active = (typeof EXTRA_QUAY2 !== "undefined");
   const SEABRIDGE_active = (typeof EXTRA_SEABRIDGE !== "undefined");
   const WALLS_active = (typeof EXTRA_WALLS !== "undefined");
+  const HWY_active = (typeof EXTRA_HIGHWAY !== "undefined");
   
   if (MAGLEV_active) {
     var maglev = tile_has_extra(ptile, EXTRA_MAGLEV);
@@ -2113,6 +2115,9 @@ function fill_road_rail_sprite_array(ptile, pcity)
   }
   if (WALLS_active) {
     var walls = tile_has_extra(ptile, EXTRA_WALLS)
+  }
+  if (HWY_active) {
+    var hwy = tile_has_extra(ptile, EXTRA_HIGHWAY);
   }
 
   var road_near = [];
@@ -2133,6 +2138,11 @@ function fill_road_rail_sprite_array(ptile, pcity)
     var tile1 = mapstep(ptile, dir);
     if (tile1 != null && tile_get_known(tile1) != TILE_UNKNOWN) {
       road_near[dir] = tile_has_extra(tile1, EXTRA_ROAD);
+
+      // Highways are exactly roads, just a different graphic:
+      if (HWY_active) {
+        road_near[dir] |=  tile_has_extra(tile1, EXTRA_HIGHWAY);
+      }
 
       // Quays integrate with roads "one-way", so we draw the road on the tile that
       // has it but not the quay tile, showing the road going TOWARD the quay.
@@ -2188,14 +2198,14 @@ function fill_road_rail_sprite_array(ptile, pcity)
     if (road) {
       for (i = 0; i < 8; i++) {
         if (draw_road[i]) {
-          const rtype = "road";
-          /*
+          let rtype = hwy ? "hwy" : "road";
+          /* if we make a different graphic for bridges just uncommennt this et voilà!
           if (tile_has_extra(ptile, EXTRA_RIVER) 
               || (CANAL_active  && tile_has_extra(ptile, EXTRA_CANAL))
               || (WATERWAY_active && tile_has_extra(ptile, EXTRA_WATERWAY))) {
                 rtype = "bridge";
-              }*/ 
-	        result_sprites.push({"key" : "road."+rtype+"_" + dir_get_tileset_name(i)});
+              }*/
+          result_sprites.push({"key" : "road."+rtype+"_" + dir_get_tileset_name(i)});
 	      }
       }
     }
@@ -2256,7 +2266,8 @@ function fill_road_rail_sprite_array(ptile, pcity)
   if (draw_single_rail) {
       result_sprites.push({"key" : "road.rail_isolated"});
   } else if (draw_single_road) {
-      result_sprites.push({"key" : "road.road_isolated"});
+      let rtype = hwy ? "hwy" : "road";
+      result_sprites.push({"key" : "road."+rtype+"_isolated"});
   } else if (MAGLEV_active) {
       if (draw_single_maglev) {
         result_sprites.push({"key" : "road.maglev_isolated"});

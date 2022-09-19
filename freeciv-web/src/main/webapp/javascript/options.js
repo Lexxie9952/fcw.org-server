@@ -68,13 +68,14 @@ const CRF_SPECIAL_UNIT_ATTACKS     = 28; // complex special one-way engagements 
 const CRF_NO_BASES_ON_RIVERS       = 29;
 const CRF_2X_MOVES                 = 30;
 const CRF_EXTRA_WATCHTOWER         = 31;
-const CRF_MP2                      = 32; // rules flags for "minimum" mp2 ruleset, for when new feature came in.
-const CRF_MP2_A                    = 33; 
-const CRF_MP2_B                    = 34;
-const CRF_MP2_C                    = 35;
-const CRF_MP2_D                    = 36;
-const CRF_MP2_E                    = 37;
-const CRF_LAST                     = 38;
+const CRF_EXTRA_HIGHWAY            = 32;
+const CRF_MP2                      = 33; // rules flags for "minimum" mp2 ruleset, for when new feature came in.
+const CRF_MP2_A                    = 34; 
+const CRF_MP2_B                    = 35;
+const CRF_MP2_C                    = 36;
+const CRF_MP2_D                    = 37;
+const CRF_MP2_E                    = 38;
+const CRF_LAST                     = 39;
 
 var graphic_theme_path;
 

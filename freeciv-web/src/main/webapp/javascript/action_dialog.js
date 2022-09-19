@@ -100,6 +100,7 @@ var action_images = {
   "Radar": "orders/radar",
   "Railroad": "orders/railroad_default",
   "Road": "orders/road",
+  "Highway": "orders/highway",
   "Sea Bridge": "orders/seabridge",
   "River": "orders/well",
   "Tile Claim": "nation_tab_icon",
