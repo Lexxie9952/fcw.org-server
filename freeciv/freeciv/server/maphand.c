@@ -249,7 +249,20 @@ bool upgrade_city_extras(struct city *pcity, struct extra_type **gained)
       if (extra_has_flag(pextra, EF_ALWAYS_ON_CITY_CENTER)
           || (extra_has_flag(pextra, EF_AUTO_ON_CITY_CENTER)
               && player_can_build_extra(pextra, pplayer, ptile)
-              && !tile_has_conflicting_extra(ptile, pextra))) {
+        /*    && !tile_has_conflicting_extra(ptile, pextra))*/)) {
+        /* if there's a conflicting extra, the higher tech extra is an
+           upgrade. Remove conflicting extra so we can put the new one. */      
+        if (tile_has_conflicting_extra(ptile, pextra)) {
+          int count = 0;
+          do {
+            const struct extra_type *pconfl = get_conflicting_extra(ptile, pextra);
+            tile_remove_extra(ptile, pconfl);
+            if (++count>100) {
+              log_error("Tried 100 times to remove conflicting %s but couldn't.",
+              extra_rule_name(pconfl));
+            }
+          } while (tile_has_conflicting_extra(ptile, pextra));
+        }        
         tile_add_extra(pcity->tile, pextra);
         if (gained != NULL) {
           if (upgradet) {

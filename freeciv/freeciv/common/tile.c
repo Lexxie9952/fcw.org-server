@@ -953,6 +953,22 @@ bool tile_has_conflicting_extra(const struct tile *ptile,
 }
 
 /************************************************************************//**
+  Returns the first extra that conflcts with pextra (there may be >1) 
+****************************************************************************/
+const struct extra_type *get_conflicting_extra(const struct tile *ptile,
+                                const struct extra_type *pextra)
+{
+  extra_type_iterate(pconfl) {
+    if (BV_ISSET(pextra->conflicts, extra_index(pconfl))
+        && tile_has_extra(ptile, pconfl)) {
+      return pconfl;
+    }
+  } extra_type_iterate_end;
+
+  return NULL;
+}
+
+/************************************************************************//**
   Returns TRUE if the given tile has a road of given type on it.
 ****************************************************************************/
 bool tile_has_visible_extra(const struct tile *ptile, const struct extra_type *pextra)
