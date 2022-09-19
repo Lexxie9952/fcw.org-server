@@ -38,24 +38,11 @@ function history_turn_notifications(turn, year)
         end
       end
 
-      -- Alternative Example: giving bulbs if no city founded yet
-      --[[
-      for c in p:cities_iterate() do 
-        if c:has_building(find.building_type("Palace")) then
-          has_city = 1
-          break         
-        end
-      end
-      if has_city == 0 then
-        p:give_bulbs(3)
-      end
-      ]]--
-
     end
   end
 
   if turn > 78 and turn < 85 then
-    notify.all("Philosophy will no longer award a bonus tech after turn 85.")
+    notify.all("Philosophy will no longer award a bonus on turn 85.")
   end
 
   if turn == 85 then
@@ -114,7 +101,7 @@ function tech_researched_handler(tech, player, how)
     if game_turn < 15 then
       for c in player:cities_iterate() do 
         if c:has_building(find.building_type("Palace")) and first_horse_warning > 0 then
-          notify.event(NIL, c.tile, E.BEGINNER_INFO,
+          notify.event(NIL, c.tile, E.TECH_GAIN,
           _("<font color=#ffff60>[`scout`] Travellers say the %s now ride horses, near %s. (%i,%i)</font>"),
           player.nation:plural_translation(), c.name, c.tile.x, c.tile.y )
           notify.all( _("<img src='/images/e/scout.png'> A tribe has learned to ride horses near %s (%i,%i)"),
@@ -122,7 +109,7 @@ function tech_researched_handler(tech, player, how)
         end
         if c:has_building(find.building_type("Palace")) and first_horse_warning == 0 then
           first_horse_warning = 1
-          notify.event(NIL, c.tile, E.BEGINNER_INFO,
+          notify.event(NIL, c.tile, E.TECH_GAIN,
           _("[`events/wildbeasts`]<br><font color=#ffff60>[`scout`] Travellers tell of the %s, who ride horses near %s! (%i,%i)</font>"),
           player.nation:plural_translation(), c.name, c.tile.x, c.tile.y )
           notify.all( _("<img src='/images/e/scout.png'> A tribe has learned to ride wild beasts near %s (%i,%i)"),
@@ -174,42 +161,42 @@ function tech_researched_handler(tech, player, how)
       local forbidden_tech = find.tech_type("Banking")
       if researcher:knows_tech(forbidden_tech) then
         notify.event(player, NIL, E.TECH_GAIN,
-          _("<font color=#ffdf90><b>The knowledge of Banking prevents a free bonus tech from the discovery of Philosophy.</b></font>"))
+          _("<font color=#ffdf90><b>The knowledge of Banking prevents a bonus from Philosophy.</b></font>"))
         return
       end
   
       forbidden_tech = find.tech_type("Medicine")
       if researcher:knows_tech(forbidden_tech) then
         notify.event(player, NIL, E.TECH_GAIN,
-          _("<font color=#ffdf90><b>The knowledge of Medicine prevents a free bonus tech from the discovery of Philosophy.</b></font>"))
+          _("<font color=#ffdf90><b>The knowledge of Medicine prevents a bonus from Philosophy.</b></font>"))
         return
       end
   
       forbidden_tech = find.tech_type("University")
       if researcher:knows_tech(forbidden_tech) then
         notify.event(player, NIL, E.TECH_GAIN,
-          _("<font color=#ffdf90><b>The knowledge of University prevents a free bonus tech from the discovery of Philosophy.</b></font>"))
+          _("<font color=#ffdf90><b>The knowledge of University prevents a bonus from Philosophy.</b></font>"))
         return
       end
   
       forbidden_tech = find.tech_type("Invention")
       if researcher:knows_tech(forbidden_tech) then
         notify.event(player, NIL, E.TECH_GAIN,
-          _("<font color=#ffdf90><b>The knowledge of Invention prevents a free bonus tech from the discovery of Philosophy.</b></font>"))
+          _("<font color=#ffdf90><b>The knowledge of Invention prevents a bonus from Philosophy.</b></font>"))
         return
       end
   
       forbidden_tech = find.tech_type("Physics")
       if researcher:knows_tech(forbidden_tech) then
         notify.event(player, NIL, E.TECH_GAIN,
-          _("<font color=#ffdf90><b>The knowledge of Physics prevents a free bonus tech from the discovery of Philosophy.</b></font>"))
+          _("<font color=#ffdf90><b>The knowledge of Physics prevents a bonus from Philosophy.</b></font>"))
         return
       end
   
       forbidden_tech = find.tech_type("Monotheism")
       if researcher:knows_tech(forbidden_tech) then
         notify.event(player, NIL, E.TECH_GAIN,
-          _("<font color=#ffdf90><b>The knowledge of Monotheism prevents a free bonus tech from the discovery of Philosophy.</b></font>"))
+          _("<font color=#ffdf90><b>The knowledge of Monotheism prevents a free bonus from Philosophy.</b></font>"))
         return
       end
   
