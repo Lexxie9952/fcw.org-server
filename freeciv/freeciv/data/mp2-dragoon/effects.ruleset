@@ -8225,6 +8225,16 @@ reqs    =
       "UnitType", "Riflemen", "Local", TRUE
       "Gov", "Communism", "Player", TRUE
     }
+;COMMUNISM 5 shield discount Ground Troops
+[effect_communist_ground_troops]
+type    = "Unit_Build_Cost_Pct"
+value	  = -12
+reqs    =
+    {
+      "type", "name", "range", "present"
+      "UnitType", "Ground Troops", "Local", TRUE
+      "Gov", "Communism", "Player", TRUE
+    }
 ;COMMUNISM 10 shield discount "Sturmovik Effect".
 [effect_communist_dive_bombers]
 type    = "Unit_Build_Cost_Pct"

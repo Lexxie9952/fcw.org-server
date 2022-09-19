@@ -1899,7 +1899,8 @@ helptext      = _("\
 Ground Troops upgrade earlier infantry with better weaponry. The\
  upgrade cost for Riflemen and Alpine Troops is 4 gold.\
  Ground Troops can stay fortified while attacking, and veterans\
- enjoy a +⅓ move bonus.\
+ enjoy a +⅓ move bonus. \n\
+Under Communismm this unit costs 5 less.\
 ")
 
 [unit_fanatics]
