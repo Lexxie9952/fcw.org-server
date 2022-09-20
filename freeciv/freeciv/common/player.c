@@ -1023,6 +1023,7 @@ bool can_player_see_unit_at(const struct player *pplayer,
     // possible add later: Galley, Trireme, Longboat, Carrier (planes on deck)
     if (tunit != NULL 
         && (0 == strcmp("Wagon", utype_rule_name(unit_type_get(tunit)))
+        && (0 == strcmp("Boat"), utype_rule_name(unit_type_get(tunit)))
             || 0 == strcmp("Trawler", utype_rule_name(unit_type_get(tunit))))) {
        goto next_check;
      }
