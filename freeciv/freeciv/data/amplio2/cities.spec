@@ -168,5 +168,5 @@ tiles = { "row", "column", "tag"
 ; 10, 5, unused
  10, 6, "city.citadel_overlay"
  10, 7, "city.ziggurat_overlay"
-; 10, 8, "city.chichen_overlay"  ;uncomment when ready to use
+ 10, 8, "city.chichen_overlay"  ;uncomment when ready to use
 }
