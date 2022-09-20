@@ -3941,8 +3941,8 @@ roles         = ""
 helptext      = _("\
 The most advanced Fighter, with improved attack and longer range. Stealth Fighters can’t be seen unless adjacent\
  to an enemy. Stealth evasion gives a 25% bonus against all Anti-Air units, and reduces\
- SAM Batteries down to a smaller 25% bonus. A Stealth Fighter has no limit to the number\
- of attacks per turn it can do. \n\
+ SAM Batteries down to a smaller 25% bonus. A Stealth Fighter can do 3\
+ attacks per turn. \n\
 "), _("
 INTERCEPTOR：the Vigil order lets Stealth Fighters auto-attack adjacent Air units if they\
  have better attack odds. This unit can Vigil if it uses 4 move points or less. \n\
@@ -4003,7 +4003,7 @@ roles         = ""
 helptext      = _("\
 Stealth Multi-Fighters can’t be seen unless adjacent to an enemy. Stealth evasion gives a\
  25% bonus against all Anti-Air units, and reduces SAM Batteries down to a smaller 25% bonus.\
- A Stealth Multi-Fighter has no limit to the number of attacks per turn it can do, and can\
+ A Stealth Multi-Fighter can do 2 attacks per turn, and can\
  Vigil any tile it occupies. \n\
 "), _("
 INTERCEPTOR：the Vigil order lets Stealth Fighters auto-attack adjacent Air units if they\
@@ -4028,7 +4028,7 @@ sound_fight   = "f_stealth_bomber"
 sound_fight_alt = "Bomb Strike"
 build_cost    = 160
 pop_cost      = 0
-attack        = 19 
+attack        = 19
 defense       = 5
 hitpoints     = 20
 firepower     = 2
