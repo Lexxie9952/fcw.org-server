@@ -740,6 +740,7 @@ function pregame_settings()
       + "<div id='pregame_settings_tabs-1'><table id='settings_table'> "
       + "<tr title='Ruleset version'><td>Ruleset:</td>"
       + "<td><select name='ruleset' id='ruleset'>"
+      + "<option value='mp2-elephant'>Multiplayer 2.5 (under development)</option>"
       + "<option value='mp2-dragoon'>Multiplayer 2.4 Dragoon</option>"
       + "<option value='mp2-caravel'>Multiplayer 2.3 Caravel</option>"
       + "<option value='mp2-brava'>Multiplayer 2.2 Brava</option>"

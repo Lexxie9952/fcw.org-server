@@ -49,6 +49,7 @@ const CITY_WALLS = 1,
       CITY_FORTIFICATIONS = 4,
       CITY_CITADEL = 8,
       CITY_SAM = 16;
+      CITY_ZIGGURAT = 32;
 
 var current_select_sprite = 0;
 var max_select_sprite = 4;
@@ -1670,6 +1671,7 @@ function get_city_sprite(pcity)
 {
   var tag;
   if (pcity['walls'] & CITY_CITADEL) tag = "city.citadel_overlay";
+  else if (pcity['walls'] & CITY_ZIGGURAT) tag = "city.ziggurat_overlay";
   else {
     var style_id = pcity['style'];
     if (style_id == -1) style_id = 0;   /* sometimes a player has no city_style. */
