@@ -6025,6 +6025,7 @@ bool unit_activity_handling_targeted(struct unit *punit,
                                      struct extra_type **new_target)
 {
   struct tile *pillage_tile = unit_tile(punit);
+  bool spend_unit = false; /* for suicide iPillage, e.g. Cruise Missile */
 
   if (!activity_requires_target(new_activity)) {
     unit_activity_handling(punit, new_activity);
@@ -6105,6 +6106,10 @@ bool unit_activity_handling_targeted(struct unit *punit,
                 if (punit->moves_left<0) punit->moves_left = 0;
                   punit->activity_count = 1000;  // force unit_activity_complete to iPillage (instant-finish activity)
                   unit_activity_complete(punit);
+                  // Successful Missiles will be spent after action consequences.
+                  if (unit_class_by_rule_name("Missile") == unit_class_get(punit)) {
+                    spend_unit = true;
+                  }
                   unit_did_action(punit); // iPillage, just like unit_move, needs an immediate real-time uwt timestamp.
               } 
 /*** END SUCCESSFUL iPILLAGE BLOCK ***/
@@ -6135,9 +6140,9 @@ bool unit_activity_handling_targeted(struct unit *punit,
                 }
                 else punit->moves_left -= pstats.iPillage_moves * SINGLE_MOVE; // always reduce moves left for single_target ops
 
-                /* Successful missiles are spent after pillaging the tile. Failed missiles are spent here. */
+                /* Failed missiles are spent after action consequences. */
                 if (unit_class_by_rule_name("Missile") == unit_class_get(punit)) {
-                  wipe_unit(punit, ULR_MISSILE, NULL);
+                  spend_unit = true;
                 } else {
                   if (punit->moves_left<0) punit->moves_left = 0;
                   // unit_activity_complete(..) was not called due to FAILED MISSION, so do house-keeping here:
@@ -6171,6 +6176,7 @@ bool unit_activity_handling_targeted(struct unit *punit,
                                     pillage_tile,
                                     tile_link(pillage_tile));
 
+            if (spend_unit) wipe_unit(punit, ULR_MISSILE, NULL);
         }
 /**** </end all PILLAGE ACTIONS> *****/        
         else if (new_activity == ACTIVITY_GEN_ROAD) {
