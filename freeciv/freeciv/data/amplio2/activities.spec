@@ -52,7 +52,7 @@ tiles = { "row", "column", "tag"
   2, 5, "unit.hideout"               ; Lexxie
   2, 6, "unit.fishing"               ; Lexxie
 
-  3, 0, "unit.irrigate"
+  3, 0, "unit.irrigate"              ; Lexxie, should be named "cultivate"
   3, 1, "unit.plant"                 ; Lexxie
   3, 2, "unit.transform"             ; Lexxie
   3, 3, "unit.pollution"             ; Lexxie

@@ -1473,7 +1473,9 @@ function get_unit_activity_sprite(punit)
     case ACTIVITY_CULTIVATE:
        return {"key"      : "unit.irrigate",
                "offset_x" : unit_activity_offset_x,
-               "offset_y" : - unit_activity_offset_y};
+               "offset_y" : - unit_activity_offset_y,
+               "connect" : ((punit['orders_length']>0) ? true : false) 
+              };
 
     case ACTIVITY_GOTO:
         return {"key" : "unit.goto",
