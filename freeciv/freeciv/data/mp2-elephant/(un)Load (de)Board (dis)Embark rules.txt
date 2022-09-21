@@ -1,0 +1,112 @@
+Load/Unload Board/Deboard Rules 
+============================================================================
+THESE ARE GOALS TO IMPLEMENT FOR THE MIGRATION FROM CLIENT HARD-CODING TO 
+USING THE RULESET FOR TRANSPORT LOGISTICS CONTROL.
+
+Transport swapping
+============================================================================
+Transport swapping at sea between WaterVessels OR between RiverShip class on a river: uses all moves
+EXCEPT:    LandAirSea, uses 1 5/9 moves. can't be done if cargo has no moves left
+
+Disembarking and Embarking
+=============================================================================
+Disembarking LandAirSea to adjacent transport on blank sea tile should cost 1 5/9 moves, not 1 move.
+
+"Unload" can be thought of as "Disembark to same tile" and can get a twin actionenabler
+  in all cases where Disembark adjacent is allowed, with same move_cost.
+
+Wagon type:
+  Disembarking allowed for all at full cost to all units (except LandAirSea)
+    This means making an "Unload" enabler for emulating "Disembark to same tile"
+    LandAirSea costs 1 move for each.
+
+Truck type:
+  Disallowed except for Foot Soldiers, for whom it costs full moves. 
+  This means making an "Unload" enabler for emulating "Disembark to same tile"
+    LandAirSea costs 1 move for each.
+
+LandRail class:
+  Disallowed except for Foot Soldiers, costs full moves. 
+    This means making an "Unload" enabler for emulating "Disembark to same tile"
+    LandAirSea costs 1 move for each.
+
+Helicopter class:
+  Allowed only for "Foot" (and Artillery?) types, at full cost (emulating disembark to same tile)
+
+
+Boarding/Loading
+=============================================================================
+note: if it's legal cargo server already allows it. If not, it doesn't.
+Forbid only cases the ruleset wants to "outlaw":
+
+Trucks
+   Boarding on a blank tile (no base or city) is illegal except for "Foot" soldiers
+
+Trains (LandRail class)
+   Boarding on a blank tile (no base or city) is illegal except for "Foot soldiers" and Zeppelins
+
+Helicopter class:
+  Loading allowed for all legal cargo, anywhere? The rescue pick-up rule was nerfed,
+	but can be reconsidered one more time. Analyse it.
+
+
+===============================================================================
+Deboard/Unloading:
+
+Wagons and Trucks (LandRoad class)
+  Allowed at no cost in ALL bases and cities for all cargo types.
+  was Disallowed on blank tile to all except LandAirSea (change cost from 0 to 1 move)
+    now allowed to all, at full cost (emulates disembark to adjacent)
+
+Trains (LandRail)
+  Allowed at no cost in cities for all units.
+  Allowed at no cost in a base or quay.
+  was Disallowed on blank tile to all except LandAirSea (change cost from 0 to 1move)
+    now allowed to Foot Soldiers at full cost (emulates disembark to adjacent)
+
+Sea Class:
+  Allowed in all cases at no cost, where Sea units are allowed to go: City, Naval Base.
+
+Rivership:
+  Unloading in City/Quay/Naval Base always legal, at no cost.
+  Unloading in other bases and blank tiles was disallowed.
+  was Disallowed on blank tile to all except LandAirSea (change cost from 0 to 1 move)
+    now allowed to Foot Soldiers at full cost (emulates disembark to adjacent)
+
+Helicopter class:
+  Allowed in city, naval base, or airbase, for all legal cargo, at no cost.
+  Allowed to blank tile for "Foot" and Artillery types, at full cost (emulating disembark to same tile)
+    LandAirSea (cost 1 move)
+
+==================================================================================
+What will change/simplify in unit helptext, documentation, and logistics charts:
+
+Transport swapping rules simplified/changed for all and LandAirSea.
+Disembarking rules for Marines swapping at sea.
+UnitType "Goods" is not limited to load on commerce units only.
+Logistic charts will change "Step of" to "Disembark" and show unload as "all moves" instead of "all"
+LandAirSea unloading emulates disembarking to same tile at 1 move cost.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
