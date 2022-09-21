@@ -180,6 +180,16 @@ function show_intelligence_report_embassy(pplayer)
         dplst['nations'].push(nations[players[i]['nation']]['adjective']);
       }
     });
+  } else if (client_is_observer() && is_supercow()) {
+    var dplst = {
+      state: "Embassy",
+      nations: []
+    }
+    for (let plr=0; plr<players.length; plr++) {
+      if (pplayer.real_embassy[selected_player]) {
+        dplst['nations'].push(nations[players[plr]['nation']]['adjective']);
+      }
+    }
   }
 
   $("#intel_dialog").html(Handlebars.templates['intel'](intel_data));
