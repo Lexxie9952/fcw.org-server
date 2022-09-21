@@ -1682,6 +1682,7 @@ actor_reqs    =
       "UnitFlag",     "Capturer",      "Local",  TRUE
       "MinMoveFrags", "1",             "Local",  TRUE
       "UnitState",    "OnLivableTile", "Local",  TRUE
+      "UnitState",    "Transported",   "Local",  FALSE
       "MaxUnitsOnTile","1",            "Local",  FALSE ; At least 2 units needed for genocidal operation
       ;-------------------------------------------------
       "DiplRel",      "Foreign",       "Local",  TRUE  ; Must be at war and foreign city
