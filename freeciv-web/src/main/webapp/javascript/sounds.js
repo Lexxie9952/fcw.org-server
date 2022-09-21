@@ -99,6 +99,7 @@ function unit_move_sound_play(unit)
   if ( unit['movesleft'] < full_moves )  { 
     switch(ptype['name']) {
       case "Armor":
+        break;
       case "Armor II":
         move_sound = "pm_armor.ogg"
         break;
