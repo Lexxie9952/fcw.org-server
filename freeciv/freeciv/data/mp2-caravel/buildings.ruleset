@@ -2727,7 +2727,8 @@ Women's Suffrage brings equality and happiness to half the population, resulting
  in +1 happy in every city with Republic and Democracy. On the other hand, once\
  this Wonder is achieved by any player in the world, any Republic or Democracy\
  that does NOT have it, will suffer +1 unhappy citizen, as vocal dissidents will\
- arise and demand the adoption of this progressive advancement.\
+ arise and demand the adoption of this progressive advancement. \n\
+ Requires Republic or Democracy goverenment.\
 ")
 
 ;This has a zero width space in it to be the first one made.
@@ -2760,7 +2761,8 @@ Women's Suffrage brings equality and happiness to half the population, resulting
  in +1 happy in every city with Republic and Democracy. On the other hand, once\
  this Wonder is achieved by any player in the world, any Republic or Democracy\
  that does NOT have it, will suffer +1 unhappy citizen, as vocal dissidents will\
- arise and demand the adoption of this progressive advancement!\
+ arise and demand the adoption of this progressive advancement! \n\
+ Requires Republic or Democracy goverenment.\
 ")
 
 [building_ziggurat]
