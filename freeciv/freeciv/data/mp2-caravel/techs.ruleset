@@ -621,7 +621,7 @@ req2     = "Code of Laws"
 flags    = ""
 graphic     = "a.monarchy"
 graphic_alt = "-"
-helptext = _("Obsoletes Chand Baori, Ziggurat. Allows government Monarchy.")
+helptext = _("Obsoletes Ziggurat. Reduces Chand Baori. Allows government Monarchy.")
 
 [advance_monotheism]
 name     = _("Monotheism")
