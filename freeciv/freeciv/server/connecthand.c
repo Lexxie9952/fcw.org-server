@@ -651,10 +651,19 @@ void send_conn_info_remove(struct conn_list *src, struct conn_list *dest)
 static int can_take_idler_turns(void)
 {
   // Keep this code identical with pregame.js:can_take_idler_turns() **************************** !!!
-  /* Turns 1-12: replace idle 3. T12+ increase idle cutoff until max cutoff of 10 */
-  int threshold = 3;
-  if (game.info.turn > 12) threshold += (game.info.turn - 12);
-  if (threshold > 10) threshold = 10;
+  /* Turns 1-5:   replace idle 2.
+     Turns 6-20:  replace idle 3.
+     Turns 21-25: replace idle 4.
+     Turns 26-30: replace idle 5.
+     Turns 31-35: replace idle 6.
+     Turns 36+    replace idle 7. */
+
+  int threshold = 2;
+  if (game.info.turn >= 6 && game.info.turn <= 20) threshold = 3;
+  else if (game.info.turn >= 20 && game.info.turn < 25) threshold = 4;  
+  else if (game.info.turn >= 25 && game.info.turn < 30) threshold = 5;
+  else if (game.info.turn >= 30 && game.info.turn < 35) threshold = 6;
+  else if (game.info.turn >= 35) threshold = 7;
   // </end identical code notes>
 
   return threshold;

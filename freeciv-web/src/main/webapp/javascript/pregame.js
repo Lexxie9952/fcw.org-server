@@ -357,11 +357,20 @@ function pick_nation_ongoing_longturn()
 **************************************************************************/
 function can_take_idler_turns()
 {
-  // Keep this code identical with connecthand.c.:can_take_idler_turns() !!!
-  /* Turns 1-12: replace idle 3. T12+ increase idle cutoff until max cutoff of 10 */
-  var threshold = 3;
-  if (game_info.turn > 12) threshold += (game_info.turn - 12);
-  if (threshold > 10) threshold = 10;
+  // Keep this code identical with connecthand.c:can_take_idler_turns() ************************* !!!
+  /* Turns 1-5:   replace idle 2.
+     Turns 6-20:  replace idle 3.
+     Turns 21-25: replace idle 4.
+     Turns 26-30: replace idle 5.
+     Turns 31-35: replace idle 6.
+     Turns 36+    replace idle 7. */
+
+  var threshold = 2;
+  if (game_info.turn >= 6 && game_info.turn <= 20) threshold = 3;
+  else if (game_info.turn >= 20 && game_info.turn < 25) threshold = 4;  
+  else if (game_info.turn >= 25 && game_info.turn < 30) threshold = 5;
+  else if (game_info.turn >= 30 && game_info.turn < 35) threshold = 6;
+  else if (game_info.turn >= 35) threshold = 7;
   // </end identical code notes>
 
   return threshold;
