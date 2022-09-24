@@ -1729,8 +1729,8 @@ function city_name_dialog(suggested_name, unit_id) {
 				        click: function() {
 						var name = alphanumeric_cleaner_city_names($("#city_name_req").val());
 						if (name.length == 0 || name.length >= MAX_LEN_CITYNAME - 6
-						    || encodeURIComponent(name).length  >= MAX_LEN_CITYNAME - 6) {
-						  swal("City name is invalid. Please try a different shorter name.");
+						    || encodeURIComponent(name).length  >= MAX_LEN_CITYNAME - 3) {
+						  swal("City name is invalid. Please try a shorter name.");
               setSwalTheme();
 						  return;
 						}
@@ -1755,9 +1755,10 @@ function city_name_dialog(suggested_name, unit_id) {
   $('#city_name_dialog').keyup(function(e) {
     if (e.keyCode == 13) {
       var name = alphanumeric_cleaner_city_names($("#city_name_req").val());
+
       if (name.length == 0 || name.length >= MAX_LEN_CITYNAME - 6
-        || encodeURIComponent(name).length  >= MAX_LEN_CITYNAME - 6) {
-        swal("City name is invalid. Please try a different shorter name.");
+        || encodeURIComponent(name).length  >= MAX_LEN_CITYNAME - 3) {
+        swal("City name is invalid. Please try a shorter name.");
         setSwalTheme();
         return;
       }
@@ -2222,9 +2223,9 @@ function rename_city()
 					text: "Ok",
 				        click: function() {
 						var name = alphanumeric_cleaner_city_names($("#city_name_req").val());
-						if (name.length == 0 || name.length >= MAX_LEN_NAME - 4
-						    || encodeURIComponent(name).length  >= MAX_LEN_NAME - 4) {
-						  swal("City name is invalid");
+						if (name.length == 0 || name.length >= MAX_LEN_NAME - 6
+						    || encodeURIComponent(name).length  >= MAX_LEN_NAME - 3) {
+						  swal("City name is invalid. Please try a shorter name.");
               setSwalTheme();
 						  return;
 						}
@@ -2245,6 +2246,14 @@ function rename_city()
   $('#city_name_dialog').keyup(function(e) {
     if (e.keyCode == 13) {
       var name = alphanumeric_cleaner_city_names($("#city_name_req").val());
+
+      if (name.length == 0 || name.length >= MAX_LEN_CITYNAME - 6
+        || encodeURIComponent(name).length  >= MAX_LEN_CITYNAME - 3) {
+        swal("City name is invalid. Please try a shorter name.");
+        setSwalTheme();
+        return;
+      }
+
       var packet = {"pid" : packet_city_rename, "name" : encodeURIComponent(name), "city_id" : active_city['id'] };
       send_request(JSON.stringify(packet));
       $("#city_name_dialog").remove();
