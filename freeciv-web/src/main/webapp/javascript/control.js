@@ -82,7 +82,7 @@ var rally_active = false;     // modifies goto_active to be setting a rally poin
 // Transitional state var remembers rally_active in Go...And mode (rally_active pathing off while dialog is up):
 var old_rally_active = false;
 const RALLY_PERSIST = 2;    // value for rally_active indicating a persistent rally point will be set */
-// The default virtual utype for rally pathing. Mech.Inf in mp2c. Mounted Land class in other rules 
+// The "dumb default placeholder" utype for rally pathing. City production utype comes first, Armor comes next, this would come as a fall-thru only.  
 const RALLY_DEFAULT_UTYPE_ID = 22; 
 var rally_virtual_utype_id = RALLY_DEFAULT_UTYPE_ID; // which utype to use when requesting rally path
 var rally_city_id = null; // city being told to set a rally point 
@@ -3964,8 +3964,13 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
         if (pcity != null) {  // rally points need origin city
           rally_active = shift ? RALLY_PERSIST : 1; // 1==temporary, 2==permanent rally
           rally_city_id = pcity['id']; // set rally city
-          if (pcity['production_kind'] == VUT_UTYPE) rally_virtual_utype_id = pcity['production_value'];
-          else rally_virtual_utype_id = RALLY_DEFAULT_UTYPE_ID;
+          let ptype = get_next_unittype_city_has_queued(pcity);
+          if (ptype) {
+            rally_virtual_utype_id = ptype.id;
+          } else {
+            rally_virtual_utype_id = utype_id_by_name("Armor"); // land class, high move_rate, no igzoc: best default for unknown utype
+            if (rally_virtual_utype_id === null) rally_virtual_utype_id = RALLY_DEFAULT_UTYPE_ID;
+          }
           if (alt) select_last_action(); // defer activate_rally_goto() until last-action picked
           else activate_rally_goto(pcity);
         }
@@ -4702,17 +4707,19 @@ function activate_rally_goto(pcity/*, persist*/)
 
   /* Set the virtual unit for pathing: use the type of unit being produced if city is 
      producing unit, otherwise default to a high move rate land unit */
-  if (pcity['production_kind'] == VUT_UTYPE) {
-    rally_virtual_utype_id = pcity['production_value'];
+  var ptype = get_next_unittype_city_has_queued(pcity);
+  if (ptype) {
+    rally_virtual_utype_id = ptype.id;
   } 
-  /* Heuristic: if a city NOT making a unit is given a rally point, it's impossible to know a utype
-   * for optimal goto-pathing. In this case the least potential for failure is a non-IgZoc land unit
+  /* Heuristic: if a city with NO unit in worklist is given a rally point, it's impossible to know a
+   * utype for optimal goto-pathing. In this case the least potential for failure is a non-IgZoc land unit
    * with high move points, as it will 1) avoid all illegal paths, 2) minimise instances of "inefficient"
    * paths where, e.g., a land unit with high move points stupidly goes on hills or mountains because 
-   * a low move point unit would have ended its turn there. 
-   * This unit is Mech.Inf in mp2c and mounted Land in other rulesets. TODO: this could be set
-   * somewhere at ruleset load to find the highest move point Land unit who isn't IgZoc */
-  else rally_virtual_utype_id = RALLY_DEFAULT_UTYPE_ID;
+   * a low move point unit would have ended its turn there. */
+  else {
+    rally_virtual_utype_id = utype_id_by_name("Armor");
+    if (rally_virtual_utype_id === null) rally_virtual_utype_id = RALLY_DEFAULT_UTYPE_ID;
+  }
 
   /* Set the rally city for pathing */
   /* Candidate for removal because we set rally_city_id much earlier so that we can use ALT
@@ -7495,19 +7502,28 @@ function update_goto_path(goto_packet)
     return;
   }
   var ptile;
-
+  var movesleft = 0;
+  var ptype;
   var punit = units[goto_packet['unit_id']];
 
-  // Get start tile: either punit location or pcity location:
-  if (goto_packet['unit_id'] == 0) { // flag for rally path
+  if (punit) {
+    ptype = unit_type(punit);
+    movesleft = punit.movesleft;
+    ptile = index_to_tile(punit['tile']);
+  } // Get start tile: either punit location or pcity location:
+  else if (goto_packet['unit_id'] == 0) { // flag for rally path
     var pcity = cities[rally_city_id];
     if (pcity == null) { // if no unit nor city then abort
       return; 
     }
     // If we got here we have a city and are doing a rally path
     ptile = city_tile(pcity);
-  } else {
-    ptile = index_to_tile(punit['tile']);
+    ptype = get_next_unittype_city_has_queued(pcity);
+    if (!ptype) {
+      movesleft = 2 * SINGLE_MOVE; // rallies with an unknown unittype move_rate default to a path made for move_rate 2
+    } else {
+      movesleft = ptype.move_rate;
+    }
   }
   if (ptile == null) return;
 
@@ -7522,12 +7538,12 @@ function update_goto_path(goto_packet)
   }
   if (renderer == RENDERER_2DCANVAS) {
     // First turn boundary waypoint is your own tile if you have no moves left
-    goto_way_points[ptile.index] = punit.movesleft ? 0 : SOURCE_WAYPOINT;
+    goto_way_points[ptile.index] = movesleft ? 0 : SOURCE_WAYPOINT;
 
     var turn;
     var old_turn = goto_packet['turn'][0];
     var old_tile=null;
-    var pathstring = ""
+    //var pathstring = ""
     var upcoming = false; // the way we draw goto lines or the way the server marks turn-changes, idk, but we have to advance it by one.
     for (var i = 0; i < goto_packet['dir'].length; i++) {
       if (ptile == null) break;
@@ -7550,7 +7566,7 @@ function update_goto_path(goto_packet)
       if (turn && turn-old_turn>0) {
         upcoming = true;
       }
-      pathstring += (i+"."+turn+(upcoming?" *("+goto_way_points[ptile.index]+")  ":" -("+goto_way_points[ptile.index]+")  "))
+      //pathstring += (i+"."+turn+(upcoming?" *("+goto_way_points[ptile.index]+")  ":" -("+goto_way_points[ptile.index]+")  "))
       //---------------------------------------------------
       if (dir == -1) { /* Assume that this means refuel. */
         refuel++;

@@ -1127,6 +1127,28 @@ function get_city_production_type(pcity)
   return null;
 }
 
+/**************************************************************************
+ Returns the next unittype the city has queued, or null if it has none.
+**************************************************************************/
+function get_next_unittype_city_has_queued(pcity)
+{
+  if (pcity == null) return null;
+
+  var ptype = null;
+
+  if (pcity['production_kind'] == VUT_UTYPE) {
+    ptype = unit_types[pcity['production_value']];
+    return ptype;
+  } else if (pcity['worklist'].length) {
+    for (let i=0; i<pcity['worklist'].length; i++) {
+      if (pcity['worklist'][i]['kind'] == VUT_UTYPE) {
+        ptype = unit_types[pcity['worklist'][i]['value']];
+        return ptype;
+      }
+    }
+  }
+  return null;
+}
 
 /**************************************************************************
  Returns the number of turns to complete current city production.
