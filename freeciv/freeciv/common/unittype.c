@@ -2543,10 +2543,8 @@ void utype_get_extra_stats(struct extra_unit_stats *pstats,
   /* This bitfield needs some preparations: the server multiplies the value
    * in units.ruleset by SINGLE_MOVE when loading the utype data. This makes
    * this a non-ideal var for storing bitfield since:
-   (1) we lose bit resolution (in 60 frags: 32 down to 26: BIT25 is our max)
-   (2) we just assume SINGLE_MOVE is 9 (MP2), but can't know what it is
-       without moving these funcs into /server, since /common doesn't have
-       access to SINGLE_MOVE */
+    we lose bit resolution (in 60 frags: 32 down to 26: BIT25 is our max) */
+
   int BB = ptype->paratroopers_mr_sub / SINGLE_MOVE;        
 
   /* extra_unit_stats are currently embedded in paratroopers_mr_sub,
