@@ -639,22 +639,31 @@ adv_want settler_evaluate_improvements(struct unit *punit,
                   if (tile_has_extra(ptile, pold) && pold != pextra) {
                     struct road_type *po_road = extra_road_get(pold);
 
+                    float po_road_cost = real_road_move_cost(po_road, punit, NULL, NULL);
+
                     /* This ignores the fact that new road may be native to units that
                      * old road is not. */
-                    if (po_road->move_cost < old_move_cost) {
+                  //if (po_road->move_cost < old_move_cost) { << old code
+                    if (po_road_cost < old_move_cost) {
                       old_move_cost = po_road->move_cost;
                     }
                   }
                 } extra_type_by_cause_iterate_end;
 
-                if (proad->move_cost < old_move_cost) {
-                  if (proad->move_cost >= terrain_control.move_fragments) {
-                    mc_divisor = proad->move_cost / terrain_control.move_fragments;
+              float proad_cost = real_road_move_cost(proad, punit, NULL, NULL);
+              //if (proad->move_cost < old_move_cost) { << old code
+                if (proad_cost < old_move_cost) {
+                //if (proad->move_cost >= terrain_control.move_fragments) { << old code
+                  if (proad_cost >= terrain_control.move_fragments) {
+                  //mc_divisor = proad->move_cost / terrain_control.move_fragments; << old code
+                    mc_divisor = proad_cost / terrain_control.move_fragments;
                   } else {
-                    if (proad->move_cost == 0) {
+                  //if (proad->move_cost == 0) { << old code
+                    if (proad_cost == 0) {
                       mc_multiplier = 2;
                     } else {
-                      mc_multiplier = 1 - proad->move_cost;
+                    //mc_multiplier = 1 - proad->move_cost; << old code
+                      mc_multiplier = 1 - proad_cost;
                     }
                     mc_multiplier += old_move_cost;
                   }

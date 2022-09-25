@@ -140,6 +140,11 @@ bool road_provides_move_bonus(const struct road_type *proad);
 int compare_road_move_cost(const struct extra_type *const *p,
                            const struct extra_type *const *q);
 
+float real_road_move_cost(const struct road_type *proad,
+                          const struct unit *punit,
+                          const struct unit_type *punittype,
+                          const struct tile *t1);
+
 /* Initialization and iteration */
 void road_type_init(struct extra_type *pextra, int idx);
 void road_integrators_cache_init(void);

@@ -725,8 +725,12 @@ static int get_connect_road(const struct tile *src_tile, enum direction8 dir,
   /* Special cases: get_MC function doesn't know that we would have built
    * a road (railroad) on src tile by that time.
    * We assume that settler building the road can also travel it. */
+
+  float proad_cost = real_road_move_cost(proad, NULL, NULL, NULL);
+
   if (tile_has_road(dest_tile, proad)) {
-    move_cost = proad->move_cost;
+  //move_cost = proad->move_cost; << old code
+    move_cost = proad_cost;
   }
 
   move_cost = MIN(move_cost, param->move_rate);
@@ -759,7 +763,8 @@ static int get_connect_road(const struct tile *src_tile, enum direction8 dir,
   /* *dest_cost == -1 means we haven't reached dest until now */
 
   if (*dest_cost != -1) {
-    if (proad->move_cost > 0) {
+  //if (proad->move_cost > 0) {   << old code
+    if (proad_cost > 0) {
       if (total_extra > *dest_extra 
           || (total_extra == *dest_extra && total_cost >= *dest_cost)) {
         /* No, this path is worse than what we already have */
@@ -777,7 +782,7 @@ static int get_connect_road(const struct tile *src_tile, enum direction8 dir,
   *dest_cost = total_cost;
   *dest_extra = total_extra;
   
-  return (proad->move_cost > 0 ? 
+  return (proad_cost > 0 ? 
 	  total_extra * PF_TURN_FACTOR + total_cost : 
 	  total_cost * PF_TURN_FACTOR + total_extra);
 }

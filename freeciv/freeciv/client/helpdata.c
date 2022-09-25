@@ -3909,12 +3909,21 @@ void helptext_extra(char *buf, size_t bufsz, struct player *pplayer,
     if (proad->move_cost == 0) {
       CATLSTR(buf, bufsz, _("%s Allows infinite movement.\n"), BULLET);
     } else {
-      cat_snprintf(buf, bufsz,
-                   /* TRANS: "MP" = movement points. Second %s may have a
-                    * fractional part. */
-                   _("%s Movement cost along %s is %s MP.\n"), BULLET,
-                   extra_name_translation(pextra),
-                   move_points_text(proad->move_cost, TRUE));
+      if (road_has_flag(proad, RF_PASSIVE_MOVEMENT)) {
+          cat_snprintf(buf, bufsz,
+                      /* TRANS: "MP" = movement points. Second %s may have a
+                        * fractional part. */
+                      _("%s Movement cost along %s is 1/%d of unit's move rate.\n"), BULLET,
+                      extra_name_translation(pextra),
+                      proad->move_cost);
+      } else {
+          cat_snprintf(buf, bufsz,
+                      /* TRANS: "MP" = movement points. Second %s may have a
+                        * fractional part. */
+                      _("%s Movement cost along %s is %s MP.\n"), BULLET,
+                      extra_name_translation(pextra),
+                      move_points_text(proad->move_cost, TRUE));
+      }
     }
   }
 

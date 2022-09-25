@@ -78,13 +78,91 @@ int compare_road_move_cost(const struct extra_type *const *p,
   const struct road_type *proad = extra_road_get(*p);
   const struct road_type *qroad = extra_road_get(*q);
 
-  if (proad->move_cost > qroad->move_cost) {
+  float pcost = real_road_move_cost(proad, NULL, NULL, NULL);
+  float qcost = real_road_move_cost(qroad, NULL, NULL, NULL);
+
+  if (pcost > qcost) {
+        // if (proad->move_cost > qroad->move_cost) { << old code
     return -1; /* q is faster */
-  } else if (proad->move_cost == qroad->move_cost) {
+  } else if (pcost == qcost) {
+        // if (proad->move_cost == qroad->move_cost) { << old code
     return 0;
   } else {
     return 1; /* p is faster */
   }
+}
+
+/************************************************************************//**
+  This function can be thought of as a general wrapper for interpreting 
+  proad->move_cost for specific contexts that only know about 1 or zero
+  tiles. Or, it is like map.c::tile_move_cost_ptrs() but for the
+  move_cost of a road only evaluated for one tile, with more optional
+  contexts to evaluate it but not necessarily needing all the contexts
+  the former function needs.
+  
+  Since some road types are "PassiveMovement", this returns the real road
+  move cost. punit, punittype, and ptile can be NULL but provide accuracy
+  for real in-game calcs. Returns as a float in case comparisons using
+  this function split hairs over fractions of a move_frag.
+****************************************************************************/
+float real_road_move_cost(const struct road_type *proad,
+                          const struct unit *punit,
+                          const struct unit_type *punittype,
+                          const struct tile *t1)
+{
+  int igter = 0; /* default to 0==false */
+
+  if (punittype) {
+    if (!uclass_has_flag(utype_class(punittype), UCF_TERRAIN_SPEED))
+      return SINGLE_MOVE;
+    /* we have a punittype with UCF_TERRAIN_SPEED. Find out IGTER: */
+    if (utype_has_flag(punittype, UTYF_IGTER)) igter = MOVE_COST_IGTER;
+  }
+
+/* Process normal road-types first then leave: */
+  if (!road_has_flag(proad, RF_PASSIVE_MOVEMENT)) {
+    /* if IGTER unit, return the lesser of igter_cost or proad->move_cost */
+    return igter ? (igter < proad->move_cost ? igter : proad->move_cost) : proad->move_cost; 
+  }
+
+/* If we got here, we have the wonderful case of a road with PASSIVE 
+    move_cost. This is more like a distance value: a passve road with move_cost==6
+    means a unit using the road can travel 6 tiles down these roads before
+    expending all move points. (i.e. it uses 1/6 of its total moves on the road.) */
+
+/* 2 moves is a typical median land unit, good for situations like AI
+   evaluating general worth of a road without caring about a utype */
+  int umr = 2 * SINGLE_MOVE; /* default to 2 if there is no utype */
+
+/* If we know more, then a real unit is doing pathfinding or something crucial,
+  and we WANT exact accuracy. No rounding even! */ 
+  if (punit != NULL) {
+    umr = unit_move_rate(punit);
+  } else if (punittype != NULL) {
+    umr = punittype->move_rate;
+  }
+  float cost = (float)umr / proad->move_cost;
+
+/* An IGTER unit may have a lower cost than the road, AND will be <=
+    terrain cost, so here is where we grab that result and leave: */
+  if (igter) {
+    if (igter < cost) return igter;
+  }
+
+/* If we don't know about a specific tile just return the move_cost: */
+  if (t1 == NULL) {
+    return cost;
+  }
+
+/* If we know a specfic tile: there is the possibility that the road's move
+    cost is GREATER than that of the terrain. If so, the unit uses the terrain
+    move_cost rather than the road move_cost: */ 
+
+  int ter_cost = game.server.move_cost_in_frags 
+                 ? tile_terrain(t1)->movement_cost
+                 : tile_terrain(t1)->movement_cost * SINGLE_MOVE;
+
+  return (cost < ter_cost ? cost : ter_cost);
 }
 
 /************************************************************************//**

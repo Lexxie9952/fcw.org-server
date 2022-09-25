@@ -345,20 +345,28 @@ static void texai_tile_worker_task_select(struct player *pplayer,
 
           if (tile_has_extra(ptile, poe) && poe != tgt) {
             if (road_provides_move_bonus(pold)
-                && pold->move_cost < old_move_cost) {
-              old_move_cost = pold->move_cost;
+              //&& pold->move_cost < old_move_cost) { << old code
+                && real_road_move_cost(pold, NULL, NULL, ptile) < old_move_cost) {
+            //old_move_cost = pold->move_cost; << old code
+              old_move_cost = real_road_move_cost(pold, NULL, NULL, ptile)
             }
           }
         } extra_type_by_cause_iterate_end;
 
-        if (proad->move_cost < old_move_cost) {
-          if (proad->move_cost >= terrain_control.move_fragments) {
-            mc_divisor = proad->move_cost / terrain_control.move_fragments;
+        float pcost = real_road_move_cost(proad, NULL, NULL, ptile);
+     // if (proad->move_cost < old_move_cost) { << old code
+        if (pcost < old_move_cost) {
+     //   if (proad->move_cost >= terrain_control.move_fragments) { << old code
+          if (pcost >= terrain_control.move_fragments) {
+          //mc_divisor = proad->move_cost / terrain_control.move_fragments; << old code
+            mc_divisor = pcost / terrain_control.move_fragments;
           } else {
-            if (proad->move_cost == 0) {
+          //if (proad->move_cost == 0) { << old code
+            if (pcost == 0) {
               mc_multiplier = 2;
             } else {
-              mc_multiplier = 1 - proad->move_cost;
+            //mc_multiplier = 1 - proad->move_cost;
+              mc_multiplier = 1 - pcost;
             }
             mc_multiplier += old_move_cost;
           }

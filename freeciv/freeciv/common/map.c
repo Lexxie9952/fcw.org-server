@@ -38,6 +38,8 @@
 
 #include "map.h"
 
+//#include "../server/notify.h"  // for debug
+
 struct startpos {
   struct tile *location;
   bool exclude;
@@ -780,6 +782,10 @@ bool terrain_surroundings_allow_change(const struct tile *ptile,
 
   May also be used with punit == NULL, in which case punit
   tests are not done (for unit-independent results).
+
+  This already evaluates real_road_move_cost() even better than that
+  function because it has more info, so doesn't need to call that
+  wrapper.
 ***********************************************************************/
 int tile_move_cost_ptrs(const struct civ_map *nmap,
                         const struct unit *punit,
@@ -794,6 +800,7 @@ int tile_move_cost_ptrs(const struct civ_map *nmap,
   bool cardinality_checked = FALSE;
   bool cardinal_move BAD_HEURISTIC_INIT(FALSE);
   bool ri;
+  bool igter = utype_has_flag(punittype, UTYF_IGTER);
 
   /* Try to exit early for detectable conditions */
   if (!uclass_has_flag(pclass, UCF_TERRAIN_SPEED)) {
@@ -803,8 +810,7 @@ int tile_move_cost_ptrs(const struct civ_map *nmap,
   } else if (!is_native_tile_to_class(pclass, t2)) {
     /* Loading to transport or entering port.
      * UTYF_IGTER units get move benefit. */
-    return (utype_has_flag(punittype, UTYF_IGTER)
-            ? MOVE_COST_IGTER : SINGLE_MOVE);
+    return (igter ? MOVE_COST_IGTER : SINGLE_MOVE);
 
   } else if (!is_native_tile_to_class(pclass, t1)) {
     if (game.info.slow_invasions
@@ -824,8 +830,7 @@ int tile_move_cost_ptrs(const struct civ_map *nmap,
     } else {
       /* Disembarking from transport or leaving port.
        * UTYF_IGTER units get move benefit. */
-      return (utype_has_flag(punittype, UTYF_IGTER)
-              ? MOVE_COST_IGTER : SINGLE_MOVE);
+        return (igter ? MOVE_COST_IGTER : SINGLE_MOVE);
     }
   }  /* if (on transport) && !(beach-lander) && !(in a city) && !(uclass_flag terrain_speed)
       * && (from native tile)...Then:  We have a terrain limited (i.e. land) unit with no
@@ -905,16 +910,15 @@ int tile_move_cost_ptrs(const struct civ_map *nmap,
     int proad_cost = proad->move_cost;
     /* If passive passenger on road, e.g. (boat on) river, (train on) rails,
        then move_cost is the divisor of unit's move rate */
-    if (punit != NULL && road_has_flag(proad, RF_PASSIVE_MOVEMENT)) {
-
+    if (road_has_flag(proad, RF_PASSIVE_MOVEMENT)) {
       proad_cost = umr / proad->move_cost;
-      // Banker's rounding for rulesets whose frag systems don't divide evenly
-      if (umr % proad->move_cost > 0) {
-        if (punit->moves_left % 2 > 0) {
-          proad_cost++;
-        }
-      }
-
+      /* LATER: proad_cost could have Banker's rounding for rulesets whose frag systems don't
+         divide evenly, such that proad_cost rounds up or down at ratio of occurences that 
+         comes out right. However, ruleset designers should be aware to use a "highly composite
+         number"(*) for move_fragments, in rulesets using passive movement, and for the move cost
+         of the particular passive road type to always divide evenly into the total move frags
+         of the units who can use it.
+         (*) (https://en.wikipedia.org/wiki/Highly_composite_number) */
     }
 
     /* We check the destination tile first, as that's
@@ -928,14 +932,9 @@ int tile_move_cost_ptrs(const struct civ_map *nmap,
       extra_type_list_iterate(proad->integrators, iextra) {
         struct road_type *sroad = extra_road_get(iextra);
         int sroad_cost = sroad->move_cost;
-        if (punit != NULL && road_has_flag(sroad, RF_PASSIVE_MOVEMENT)) {
+        if (road_has_flag(sroad, RF_PASSIVE_MOVEMENT)) {
           sroad_cost = umr / sroad->move_cost;
-          // Banker's rounding for rulesets whose frag systems don't divide evenly
-          if (umr % sroad->move_cost > 0) {
-            if (punit->moves_left % 2 > 0) {
-              sroad_cost++;
-            }
-          }
+          // Banker's rounding would go here also.
         }
 
         /* We have no unrestricted infra related check here,
