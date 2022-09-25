@@ -6225,6 +6225,14 @@ value	= 1
      }
 
 ;************************************************************************ Pyramids
+[effect_pyramid_visible]
+type    = "Visible_Walls"
+value	= 64
+reqs	=
+    { "type",     "name",           "range", "present"
+      "Building", "Pyramids",       "City",   TRUE
+      "MinSize",  "20",             "City",   FALSE    ; disappears in post-modern metropolis age
+    }
 [effect_pyramids]
 type    = "Growth_Food"
 value	= 25
