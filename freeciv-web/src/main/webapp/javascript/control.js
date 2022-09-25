@@ -6666,12 +6666,14 @@ function key_unit_road(user_select_type)
   var road_types = [];
 
   var funits = get_units_in_focus();
+  if (!funits) return;
+
   for (var i = 0; i < funits.length; i++) {
     var punit = funits[i];
     var ptile = index_to_tile(punit['tile']);
     if (user_select_type) road_types.push(user_select_type)
     else road_types = get_what_roads_are_legal(punit, ptile);
-    if (road_types.length > 0) {
+    if (road_types && road_types.length > 0) {
       request_new_unit_activity(punit, ACTIVITY_GEN_ROAD, road_types[0]);
       remove_unit_id_from_waiting_list(punit['id']);
       deactivate_goto(false);
@@ -6708,8 +6710,9 @@ function button_unit_road_type(rtype)
 function get_what_roads_are_legal(punit, ptile)
 {
   var road_list = [];
-  var cant_bridge_river = tile_has_extra(ptile, EXTRA_RIVER) && !tech_known("Bridge Building");
-  var can_rail = tech_known("Railroad");
+  const has_river = tile_has_extra(ptile, EXTRA_RIVER);
+  const knows_bridges = tech_known("Bridge Building");  
+  const can_rail = tech_known("Railroad");
 
   const hwy_rules = client_rules_flag[CRF_EXTRA_HIGHWAY];
   
@@ -6756,14 +6759,15 @@ function get_what_roads_are_legal(punit, ptile)
 //......  
   if (!tile_has_extra(ptile, EXTRA_ROAD)) { //  (!hwy_rules || !automobile) && !road
     if (!hwy_rules) { // !hwy_rules && automobile && !road
-      if (!cant_bridge_river)
+      if (!has_river || knows_bridges)
         road_list.push(extras['Road']['id']);
       return road_list;
     }
 //......  
     else if (!tile_has_extra(ptile, EXTRA_HIGHWAY)) { // hwy_rules && !automobile && !highway && !road
-      if (!cant_bridge_river) return null;
-        road_list.push(extras['Road']['id']);
+      if (has_river && !knows_bridges) return null;
+      
+      road_list.push(extras['Road']['id']);
       return road_list;       
     } // else { (hwy_rules && !automobile && highway && !road) == make rail, fall thru to last block: }
   }
