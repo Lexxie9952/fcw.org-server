@@ -6434,7 +6434,7 @@ reqs	=
 ;************************************************************************ Ziggurat
 [effect_ziggurat_visible]
 type    = "Visible_Walls"
-value	= 4
+value	= 32
 reqs	=
     { "type",     "name",           "range", "present"
       "Building", "Ziggurat",       "City",   TRUE
