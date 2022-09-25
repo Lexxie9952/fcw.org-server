@@ -1,6 +1,6 @@
 # Server commands to make multiplayer-evo Freeciv rules
 #
 
-rulesetdir mp2-dragoon
+rulesetdir mp2-elephant
 
 # changed game settings are defined in game.ruleset
