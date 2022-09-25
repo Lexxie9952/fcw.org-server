@@ -2373,8 +2373,11 @@ PACKET_GOTO_PATH = 288; sc, dsend
   UNIT unit_id;
   UINT16 length;
   DIRECTION dir[MAX_LEN_ROUTE:length];
+  SINT16 turn[MAX_LEN_ROUTE:length];
   TILE dest;
   UINT32 turns;
+  UINT32 total_mc;
+  SINT32 movesleft;
 end
 
 PACKET_INFO_TEXT_REQ = 289; cs, dsend

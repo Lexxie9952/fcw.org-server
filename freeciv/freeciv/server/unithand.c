@@ -15,6 +15,7 @@
 #include <fc_config.h>
 #endif
 
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -3747,16 +3748,14 @@ static void do_path_req(struct player *pplayer, struct unit *punit, int goal)
 
   if (path) {
     int total_mc = 0;
-
     p.length = path->length - 1;
-
     old_tile = path->positions[0].tile;
 
     for (i = 0; i < path->length - 1; i++) {
       struct tile *new_tile = path->positions[i + 1].tile;
       int dir;
 
-      total_mc += path->positions[1].total_MC;
+      total_mc = path->positions[i+1].total_MC;
       if (same_pos(new_tile, old_tile)) {
         dir = -1;
       } else {
@@ -3764,13 +3763,19 @@ static void do_path_req(struct player *pplayer, struct unit *punit, int goal)
       }
       old_tile = new_tile;
       p.dir[i] = dir;
-
+      p.turn[i] = path->positions[i+1].turn; // turns to arrive at this tile
     }
     pf_path_destroy(path);
-    /* FIXME: 27July2021 cazfi identified div by zero was crash error code. 
-       This is the only division in the function */
+    /* 27July2021 cazfi identified div by zero was crash error code. This
+       was the only division operaton in the function and it fixed it.*/
     if (unit_move_rate(punit)) {
-      p.turns = total_mc / unit_move_rate(punit);
+      int moves_spent = (unit_move_rate(punit) - punit->moves_left);
+      /* NB: Running out of moves doesn't always mean an extra turn to reach target. It could
+         be a "movesleft=0 arrival". ceil(turns)-1 gives correct #turns for arrival @ target. */
+      float turns = ceil((float)(total_mc + moves_spent) / (float)unit_move_rate(punit))-1;
+      p.turns = turns;
+      p.total_mc = total_mc;
+      p.movesleft = punit->moves_left - total_mc;
     } else {
       log_verbose("do_path_req()"
           " %s (id=%d) %s. moverate=0 would cause div by zero",
