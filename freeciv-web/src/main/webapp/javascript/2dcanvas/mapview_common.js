@@ -541,10 +541,11 @@ function put_one_element(pcanvas, layer, ptile, pedge, pcorner, punit,
 {
   var tile_sprs = fill_sprite_array(layer, ptile, pedge, pcorner, punit, pcity, citymode);
 
+  /*
   var fog = (ptile != null && draw_fog_of_war
-	      && TILE_KNOWN_UNSEEN == tile_get_known(ptile));
+	      && TILE_KNOWN_UNSEEN == tile_get_known(ptile));*/
 
-  put_drawn_sprites(pcanvas, canvas_x, canvas_y, tile_sprs, fog);
+  put_drawn_sprites(pcanvas, canvas_x, canvas_y, tile_sprs, ptile);
 }
 
 
@@ -552,7 +553,7 @@ function put_one_element(pcanvas, layer, ptile, pedge, pcorner, punit,
 /**************************************************************************
   Draw an array of drawn sprites onto the canvas.
 **************************************************************************/
-function put_drawn_sprites(pcanvas, canvas_x, canvas_y, pdrawn, fog)
+function put_drawn_sprites(pcanvas, canvas_x, canvas_y, pdrawn, ptile)
 {
   for (var i = 0; i < pdrawn.length; i++) {
     var offset_x = 0, offset_y = 0;
@@ -568,8 +569,8 @@ function put_drawn_sprites(pcanvas, canvas_x, canvas_y, pdrawn, fog)
       mapview_put_border_line(pcanvas, pdrawn[i]['dir'], pdrawn[i]['color'], pdrawn[i]['color2'], pdrawn[i]['color3'], canvas_x, canvas_y);
     } /* else if (pdrawn[i]['key'] == "territory" ) {
       mapview_territory_fill(pcanvas, pdrawn[i]['color'], canvas_x, canvas_y);
-    } */ else if (pdrawn[i]['key'] == "goto_line" ) {
-      mapview_put_goto_line(pcanvas, pdrawn[i]['goto_dir'], canvas_x, canvas_y);
+    } */ else if (pdrawn[i]['key'] == "goto_line" && ptile!=null) {
+      mapview_put_goto_line(pcanvas, pdrawn[i]['goto_dir'], canvas_x, canvas_y, ptile.index);
     } else if (pdrawn[i]['key'] == "tile_label" ) {
       mapview_put_tile_label(pcanvas, pdrawn[i]['tile'], canvas_x + offset_x, canvas_y + offset_y);
     } else if (pdrawn[i]['scale']) {

@@ -117,6 +117,8 @@ var resize_enabled = true;
 var goto_request_map = {};
 var goto_turns_request_map = {};
 var current_goto_turns = 0;
+var goto_path_skip_count = 0;  // prevents overfast oversensitive changing of unit panel to goto panel, because even the slightest click trggers millsecond of goto mode
+const goto_path_trigger = 4;   // # of repeated calls to diplay goto_info_panel in unit info, before triggering to display it (fixes goto-drag being oversensitive in ms after the click)
 var waiting_units_list = [];
 var show_citybar = true;
 var context_menu_active = true;
@@ -1010,7 +1012,6 @@ function ask_server_for_actions(punit)
 **************************************************************************/
 function action_selection_no_longer_in_progress(old_actor_id)
 {
-  //console.log("    actor: %d recorded as no selection in progress.",old_actor_id)
   /* IDENTITY_NUMBER_ZERO is accepted for cases where the unit is gone
    * without a trace. */
   if (old_actor_id != action_selection_in_progress_for
@@ -1540,6 +1541,7 @@ function update_unit_order_commands()
   $("#order_airbase").hide();
   $("#order_radar").hide();
   $("#order_road").hide();
+  $("#order_hwy").hide();
   $("#order_seabridge").hide();
   $("#order_railroad").hide();
   $("#order_mine").hide();
@@ -1637,18 +1639,17 @@ function update_unit_order_commands()
     punit = funits[i];
     ptype = unit_type(punit);
     var worker_type = false; // Handles civ2civ3 + mp2: these units have same orders as workers (join city already handled above):
-    var infra_type = false;
-    if (ptype['name'] == "Workers" || (ptype['name'] == "Migrants" && !client_rules_flag[CRF_MP2])
+
+    if ( (ptype['name'] == "Workers" || ptype['name'] == "Workers II") 
+      || ptype['name'] == "Engineers"
       || (ptype['name'] == "Tribesmen" && client_rules_flag[CRF_MP2_C])
-      || (ptype['name'] == "Trawler")
-      || (ptype['name'] =="Proletarians" && governments[client.conn.playing['government']]['name']=="Communism")) {
+      || ptype['name'] == "Settlers"
+      || ptype['name'] == "Founders"
+      || ptype['name'] == "Trawler"
+      || (ptype['name'] =="Proletarians" && governments[client.conn.playing['government']]['name']=="Communism")
+      || (ptype['name'] == "Migrants" && !client_rules_flag[CRF_MP2])) {
 
         worker_type = true;
-        infra_type = true;
-    } else if (ptype['name'] == "Settlers"
-              || ptype['name'] == "Founders" 
-              || ptype['name'] == "Engineers") {
-      infra_type = true;
     }
 
 
@@ -1730,16 +1731,16 @@ function update_unit_order_commands()
     /* Currently iterating unit is able to build bases on this tile? */
     const NOT_TRIBESMEN      = ptype['name'] != "Tribesmen"
     const UNIT_CAN_HIDEOUT   = CAN_TILE_HIDEOUT   && HIDEOUT_TECH   && NOT_TRIBESMEN && utype_has_flag(ptype,UTYF_FOOTSOLDIER);
-    const UNIT_CAN_FORT      = CAN_TILE_FORT      && FORT_TECH      && NOT_TRIBESMEN && (worker_type || infra_type || (ptype['name'] == "Legion" && client_rules_flag[CRF_LEGION_WORK]) || (ptype['name'] == "Marines" && client_rules_flag[CRF_MARINE_BASES])) && ptype['name'] != "Trawler";
-    const UNIT_CAN_FORTRESS  = CAN_TILE_FORTRESS  && FORTRESS_TECH  && NOT_TRIBESMEN && (worker_type || infra_type || (ptype['name'] == "Legion" && client_rules_flag[CRF_LEGION_WORK])) && ptype['name'] != "Trawler";
-    const UNIT_CAN_NAVALBASE = CAN_TILE_NAVALBASE && NAVALBASE_TECH && NOT_TRIBESMEN && (worker_type || infra_type || (ptype['name'] == "Legion" && client_rules_flag[CRF_LEGION_WORK])) && can_build_naval_base(punit,ptile);
-    const UNIT_CAN_CASTLE    = CAN_TILE_CASTLE    && CASTLE_TECH    && NOT_TRIBESMEN && (worker_type || infra_type);
-    const UNIT_CAN_BUNKER    = CAN_TILE_BUNKER    && BUNKER_TECH    && NOT_TRIBESMEN && (worker_type || infra_type);
-    const UNIT_CAN_AIRBASE   = CAN_TILE_AIRBASE   && AIRBASE_TECH   && NOT_TRIBESMEN && (worker_type || infra_type || (ptype['name'] == "Marines" && client_rules_flag[CRF_MARINE_BASES])) && ptype['name'] != "Settlers";
-    const UNIT_CAN_BUOY      = CAN_TILE_BUOY      && BUOY_TECH      && NOT_TRIBESMEN && (worker_type || infra_type) && ptype['name'] != "Settlers";
-    const UNIT_CAN_FISHTRAP  = CAN_TILE_FISHTRAP  && FISHTRAP_TECH  && NOT_TRIBESMEN && (worker_type || infra_type);
-    const UNIT_CAN_RADAR     = CAN_TILE_RADAR     && RADAR_TECH     && NOT_TRIBESMEN && (worker_type || infra_type) && ptype['name'] != "Settlers";
-    const UNIT_CAN_WATCHTOWER= CAN_TILE_WATCHTOWER&& WATCHTOWER_TECH&& NOT_TRIBESMEN && (worker_type || infra_type || (ptype['name'] == "Legion" && client_rules_flag[CRF_LEGION_WORK]) || (ptype['name'] == "Marines" && client_rules_flag[CRF_MARINE_BASES])) && !(UNIT_CAN_RADAR || UNIT_CAN_AIRBASE) && ptype['name'] != "Trawler";
+    const UNIT_CAN_FORT      = CAN_TILE_FORT      && FORT_TECH      && NOT_TRIBESMEN && (worker_type || (ptype['name'] == "Legion" && client_rules_flag[CRF_LEGION_WORK]) || (ptype['name'] == "Marines" && client_rules_flag[CRF_MARINE_BASES])) && ptype['name'] != "Trawler";
+    const UNIT_CAN_FORTRESS  = CAN_TILE_FORTRESS  && FORTRESS_TECH  && NOT_TRIBESMEN && (worker_type || (ptype['name'] == "Legion" && client_rules_flag[CRF_LEGION_WORK])) && ptype['name'] != "Trawler";
+    const UNIT_CAN_NAVALBASE = CAN_TILE_NAVALBASE && NAVALBASE_TECH && NOT_TRIBESMEN && (worker_type || (ptype['name'] == "Legion" && client_rules_flag[CRF_LEGION_WORK])) && can_build_naval_base(punit,ptile);
+    const UNIT_CAN_CASTLE    = CAN_TILE_CASTLE    && CASTLE_TECH    && NOT_TRIBESMEN && (worker_type);
+    const UNIT_CAN_BUNKER    = CAN_TILE_BUNKER    && BUNKER_TECH    && NOT_TRIBESMEN && (worker_type);
+    const UNIT_CAN_AIRBASE   = CAN_TILE_AIRBASE   && AIRBASE_TECH   && NOT_TRIBESMEN && (worker_type || (ptype['name'] == "Marines" && client_rules_flag[CRF_MARINE_BASES])) && ptype['name'] != "Settlers";
+    const UNIT_CAN_BUOY      = CAN_TILE_BUOY      && BUOY_TECH      && NOT_TRIBESMEN && (worker_type) && ptype['name'] != "Settlers";
+    const UNIT_CAN_FISHTRAP  = CAN_TILE_FISHTRAP  && FISHTRAP_TECH  && NOT_TRIBESMEN && (worker_type);
+    const UNIT_CAN_RADAR     = CAN_TILE_RADAR     && RADAR_TECH     && NOT_TRIBESMEN && (worker_type) && ptype['name'] != "Settlers";
+    const UNIT_CAN_WATCHTOWER= CAN_TILE_WATCHTOWER&& WATCHTOWER_TECH&& NOT_TRIBESMEN && (worker_type || (ptype['name'] == "Legion" && client_rules_flag[CRF_LEGION_WORK]) || (ptype['name'] == "Marines" && client_rules_flag[CRF_MARINE_BASES])) && !(UNIT_CAN_RADAR || UNIT_CAN_AIRBASE) && ptype['name'] != "Trawler";
     const UNIT_CAN_DEEPDIVE  = CAN_TILE_DEEPDIVE && ptype['name'] == "Missile Submarine";
     // ******************************************************************************************************************* </END Base Logic setup> ***
     if (UNIT_CAN_HIDEOUT) {
@@ -1782,7 +1783,7 @@ function update_unit_order_commands()
     }
     if (UNIT_CAN_AIRBASE) {
       unit_actions["airbase"] = {name: "Build Airbase (shift-E)"};
-      if (worker_type || infra_type) { 
+      if (worker_type) { 
         if (show_order_buttons==2) $("#order_airbase").show(); // Uncommon order for infra units.
       } else $("#order_airbase").show(); // Marines always want to see it.
     } else if (UNIT_CAN_RADAR) {
@@ -1835,8 +1836,6 @@ function update_unit_order_commands()
       }
     }
     //---------------------------------------------------------------------------------------------------
-
-
     // Figure out default of whether pillage is legal and show it, before applying special rules later
     if (get_what_can_unit_pillage_from(punit, ptile).length > 0
          && (pcity == null || city_owner_player_id(pcity) !== client.conn.playing.playerno)) {
@@ -1846,9 +1845,7 @@ function update_unit_order_commands()
             $("#order_pillage").prop('title', pillage_title+" (shift-P)");
             $("#order_pillage").show();
             unit_actions["pillage"] = {name: pillage_title+" (shift-P)"};
-    } else {
-            $("#order_pillage").hide();
-    }
+    } else $("#order_pillage").hide();
 
     // Whether to show "no orders" or "cancel orders", default, before applying special rules later
     if (punit.activity != ACTIVITY_IDLE || punit.ai || punit.has_orders) {
@@ -1862,19 +1859,44 @@ function update_unit_order_commands()
 
     // All Settler types have similar types or orders and rules for whether to show those orders:
     // TO DO:  this should be checking for the FLAG "Settlers" in the ptype which indicates who can do the follow build/road/mine/etc. actions:
-    if (infra_type || worker_type) {
+    if (worker_type) {
       if (ptype['name'] == "Settlers") unit_actions["autosettlers"] = {name: "Auto settler (A)"};
       else if (ptype['name'] == "Engineers") unit_actions["autosettlers"] = {name: "Auto engineers (A)"};
-      else if (worker_type == true) unit_actions["autosettlers"] = {name: "Auto workers (A)"};
+      else unit_actions["autosettlers"] = {name: "Auto workers (A)"};
 
-      if (show_order_buttons==1) $("#order_pillage").hide(); // not frequently used order for settler types
-      if (show_order_buttons==1) $("#order_noorders").hide();  //not frequently used order
-
-      /*console.log("\nRoad test: !thx(r)=="+!tile_has_extra(ptile, EXTRA_ROAD));
-      //console.log("Road test: type(SB)=="+(typeof EXTRA_SEABRIDGE !== "undefined"));
-      //console.log("Road test: thx(sb)=="+tile_has_extra(ptile, EXTRA_SEABRIDGE));*/
-
-      if (!tile_has_extra(ptile, EXTRA_ROAD)) {
+      var rtypes = get_what_roads_are_legal(punit, ptile);
+      if (rtypes) {
+        for (var rd = 0; rd < rtypes.length; rd++) {
+          let r_hotkey = (rd==0 ? " (R)" : ""); // multiple roads can't all use R, the first (most frequently used) road gets the "R" key
+          // CAN'T do switch(){case} on possibly undefined types...so don't change it
+          if (rtypes[rd] == (EXTRA_ROAD)) {
+            $("#order_road").show();
+            unit_actions["road"] = {name: "Road"+r_hotkey};
+          }
+          else if (client_rules_flag[CRF_EXTRA_HIGHWAY] && rtypes[rd] == (EXTRA_HIGHWAY)) {
+            $("#order_hwy").show();
+            unit_actions["highway"] = {name: "Highway"+r_hotkey};
+          }
+          else if (rtypes[rd] == (EXTRA_RAIL)) {
+            $("#order_railroad").show();
+            unit_actions['railroad'] = {name: "Railroad"+r_hotkey};
+          }
+          else if (client_rules_flag[CRF_MAGLEV] && rtypes[rd] == (EXTRA_MAGLEV)) {
+            $("#order_maglev").show();
+            unit_actions['maglev'] = {name: "MagLev"+r_hotkey};
+          }
+          else if (client_rules_flag[CRF_SEABRIDGE] && rtypes[rd] == (EXTRA_SEABRIDGE)) {
+            $("#order_seabridge").show();
+            unit_actions["road"] = {name: "Sea Bridge"+r_hotkey};
+          }
+          else if (rtypes[rd] == (EXTRA_RIVER)) {
+            $("#order_well").show();
+            unit_actions["road"] = {name: "dig Well"+r_hotkey};          
+          }        
+        }
+      }
+          
+        /* old code, keep in case of bugs 16Sept2022
         if ( !client_rules_flag[CRF_SEABRIDGE] || !tile_has_extra(ptile, EXTRA_SEABRIDGE)) {
           if (is_ocean_tile(ptile)) {        // an ocean tile with no sea bridge extra or ruleset: can't build roads
               $("#order_road").hide();
@@ -1912,11 +1934,10 @@ function update_unit_order_commands()
       if (tile_has_extra(ptile, EXTRA_RIVER) && !tech_known('Bridge Building')) {
         $("#order_road").hide();
       }
+      */
 
       $("#order_fortify").hide();
-      if (show_order_buttons==1) $("#order_explore").hide(); // not frequently used button
-      if (show_order_buttons==2) $("#order_sentry").show(); // not frequently used for settler types
-      if (show_order_buttons==2) $("#order_auto_settlers").show(); // not frequently used button
+
       if ( (terrain_name == 'Hills' || terrain_name == 'Mountains') && !tile_has_extra(ptile, EXTRA_MINE)) {
         $("#order_mine").show();
         unit_actions["mine"] =  {name: "Mine (M)"};
@@ -1963,6 +1984,15 @@ function update_unit_order_commands()
         $("#order_forest_remove").hide();
         $("#order_irrigate").hide();
         $("#order_build_farmland").hide();
+      }
+
+      if (show_order_buttons==1) {    // not frequently used orders for worker types
+        $("#order_pillage").hide();   
+        $("#order_noorders").hide();
+        $("#order_explore").hide();
+      } else if (show_order_buttons==2) {
+        $("#order_sentry").show();
+        $("#order_auto_settlers").show();  
       }
     } // ********************************************************************************************* </END Settler/infra actions block>
      // Handle all things non-Settler types may have in common here: ********************************************************************
@@ -2800,7 +2830,6 @@ function copy_tile_target_for_prod(canvas_x, canvas_y)
 {
   if (client.conn.playing == null) return;
 
-  //console.log("copy_tile_target_for_prod(..))")
   var ptile = canvas_pos_to_tile(canvas_x, canvas_y);
   if (ptile == null || client.conn.playing == null) return;
 
@@ -2859,7 +2888,6 @@ function copy_tile_target_for_prod(canvas_x, canvas_y)
 function paste_tile_target_for_prod(canvas_x, canvas_y)
 {
   if (client.conn.playing == null) return;
-  //console.log("paste_tile_target_for_prod(..))")
 
   // Do legality checks:
   if (!city_paste_target || client.conn.playing == null)
@@ -2941,7 +2969,8 @@ function do_map_click(ptile, qtype, first_time_called)
   var pcity = tile_city(ptile);
   var player_has_own_unit_present = false;
 
-  //console.log("do_map_click(...) called.");///
+  // Each new click resets this counter
+  goto_path_skip_count=0;
 
   // User can safely finish dragging map and releasing on ANY tile without incurring an action.
   if (real_mouse_move_mode == true) return;
@@ -3054,7 +3083,6 @@ function do_map_click(ptile, qtype, first_time_called)
 
   // HANDLE GOTO ACTIVE CLICKS ------------------------------------------------------------------------------------------------
   if (goto_active) {
-    // console.log("GO TO IS ACTIVE!");
     if (current_focus.length > 0) {
       if (pcity) { // User clicked GOTO city tile.
         // This info prevents quick double-tap GOTOs from popping an unwanted contextmenu or city dialog:
@@ -3101,7 +3129,6 @@ function do_map_click(ptile, qtype, first_time_called)
         // people on touch devices, etc., from being able to do legal manual movements to adjacent tiles:
         var tile_dx = ptile['x'] - old_tile['x'];
         var tile_dy = ptile['y'] - old_tile['y'];
-        //console.log("dx:"+tile_dx+", dy:"+tile_dy);
 
         /* Override server GOTO pathfinding bugs that report false illegal actions and thus disallow mobile device
         *  users from making legal moves. There is no risk in the override attempting a manual move command to an adjacent
@@ -3114,7 +3141,6 @@ function do_map_click(ptile, qtype, first_time_called)
         * to the next tile, that uses less moves by going to another tile first (e.g. stepping onto a river before going to Forest river)
         * in which case we wouldn't want to override it because (1) it HAS a legal path and (2) it's a superior path using less moves
         */
-        //console.log("goto_path, goto_path.length == "+goto_path+", "+goto_path.length);
 
         // True goto_path.length is 1 less for units with fuel, they "falsely" report it as +1 higher:
         var true_goto_path_length;
@@ -3184,8 +3210,6 @@ function do_map_click(ptile, qtype, first_time_called)
           continue;  // we did our override and simulated an arrow keypress. no need for other handling, just go on to the next unit
         }
 
-        //console.log("Attempting a GO TO to a non-adjacent tile.")
-
         // user did not click adjacent tile, so make sure it's not a null goto_path before handling the goto
         if (goto_path == null) { // Exception: nuke order allows specifying occupied tile to nuke.
           continue;  // null goto_path, do not give this unit a goto command, go on to the next unit
@@ -3215,9 +3239,7 @@ function do_map_click(ptile, qtype, first_time_called)
 
         /* Add each individual order. */
         packet['orders'] = [];
-        // console.log(goto_path);
         for (var i = 0; i < goto_path['length']; i++) {
-          //console.log("Fpath[%d]",i)
           /* TODO: Have the server send the full orders instead of just the
            * dir part. Use that data in stead. */
 
@@ -3238,11 +3260,8 @@ function do_map_click(ptile, qtype, first_time_called)
           order['action'] = ACTION_COUNT;
 
           packet['orders'][i] = Object.assign({}, order);
-          //console.log(packet['orders'])
         }
         if (patrol_mode) for (var j = goto_path['length']-1; j >=0; j--) {
-          //console.log("Bpath[%d]",i)
-
             if (goto_path['dir'][j] == -1) {
               // A refuel path on the way is a refuel path on the way back?
               order['order'] = ORDER_FULL_MP;
@@ -3260,9 +3279,7 @@ function do_map_click(ptile, qtype, first_time_called)
             order['action'] = ACTION_COUNT;
   
             packet['orders'][i++] = Object.assign({}, order);
-            //console.log(packet['orders'])
         }
-        if (patrol_mode) console.log(packet);
 
         if (goto_last_order != ORDER_LAST && !patrol_mode) {
           /* The final order is specified. */
@@ -3320,10 +3337,6 @@ function do_map_click(ptile, qtype, first_time_called)
         if (connect_active) {
           // reconstruct the packet
           packet = create_connect_packet(packet);
-          // reset/clear connect mode
-          connect_active = false;
-          connect_activity = ACTIVITY_LAST;
-          connect_extra = -1;
         }
         /* Send the order to move using the orders system. */
         send_request(JSON.stringify(packet));
@@ -3342,6 +3355,12 @@ function do_map_click(ptile, qtype, first_time_called)
           });
         }
 
+      }
+      if (connect_active) {    // If were were in connect mode, clear it after all units iterated their connect orders:
+        // reset/clear connect mode
+        connect_active = false;
+        connect_activity = ACTIVITY_LAST;
+        connect_extra = -1;
       }
       clear_goto_tiles();
 
@@ -3407,7 +3426,6 @@ function do_map_click(ptile, qtype, first_time_called)
   else {
     if (pcity != null) { //if city clicked
       if (player_can_see_inside_city(pcity) && !mouse_click_mod_key['shiftKey']) { // if allowed to look inside and not shift-clicking
-        //console.log("Clicked a city we're allowed to see inside...");
         if (sunits != null && sunits.length > 0 //if units inside
             && sunits[0]['activity'] == ACTIVITY_IDLE //if unit idle/selectable
             && sunits[0]['owner'] == client.conn.playing.playerno  // if foreign-allied occupant we don't want to select the unit
@@ -3441,15 +3459,12 @@ function do_map_click(ptile, qtype, first_time_called)
                       " and for some reason we're still not showing the city dialog.");
           return;
       }
-      //console.log("Clicked a non-domestic city or shift-clicked domestic. Not showing dialog.  goto_active=="+goto_active);
       //return;  //this return-command only happened if clicking a foreign city, bypassing all ability below to click your
       //own unit on a tile that's not your city (such as, a foreign city)
 
       // special case: goto was active and foreign city was clicked, it would have done a return before.
       // TO DO: test if go to on a foreign allied city still works !
     }
-
-    //console.log("Click resulted in arriving at this stage, past city checks and handling.");
 
     if (sunits != null && sunits.length == 0) {
       // Clicked on a tile with no units:
@@ -3865,11 +3880,13 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
       } else if ( (ctrl&&alt)) {
         the_event.preventDefault(); // override possible browser shortcut
         key_unit_go_and(shift);
+        goto_path_skip_count = goto_path_trigger + 1;
       }
       else if (current_focus.length > 0) {
         activate_goto();
         delayed_goto_active = false;
         if (shift) delayed_goto_active = true;
+        goto_path_skip_count = goto_path_trigger + 1;
       }
     break;
 
@@ -4364,8 +4381,12 @@ function handle_context_menu_callback(key)
       key_unit_road();
       break;
 
+    case "highway":
+      button_unit_road_type("Highway");
+      break;
+
     case "railroad":
-      key_unit_road();
+      button_unit_road_type("Railroad");
       break;
 
     case "maglev":
@@ -4763,7 +4784,6 @@ function activate_goto_last(last_order, last_action)
 **************************************************************************/
 function deactivate_goto(will_advance_unit_focus)
 {
-  //console.log("deactivate_goto(%s) called!",will_advance_unit_focus);
   goto_active = false;
   delayed_goto_active = false;
   rally_active = false;
@@ -5312,35 +5332,26 @@ Select all units of same type either globally or on same continent
 **************************************************************************/
 function key_select_same_global_type(continent_only)
 {
-  //console.log("key_select_same_type_on_continent");
-
   if (current_focus != null && current_focus.length>0) {
     var punit = current_focus[0];
     var ptile = index_to_tile(punit['tile']);
     var ptype = punit['type'];
-
-    //console.log(unit_types[ptype]['name']+" selected on continent "+ptile['continent']);
 
     save_last_unit_focus();
 
     current_focus = [];  // clear focus to start adding new units to selection
     unit_may_have_lost_focus();
 
-    //console.log(units.length+" is units.length");
     // check every unit in the world
     for (var unit_id in units) {
       var aunit = units[unit_id];
-      //console.log("Checking unit "+unit_id+", which is a "+unit_types[aunit['type']]['name']+" on continent "+tiles[aunit['tile']]['continent'] );
       // if unit belong to player
       if ( aunit['owner'] == client.conn.playing.playerno ) {
-          //console.log("...owner check passed.");
           // ...and unit is on same continent as original unit
           if ( (tiles[aunit['tile']]['continent']==ptile['continent']) || !continent_only ) {
-              //console.log("......continent check passed.");
               // ...and unit is of same type as original unit
               if ( unit_types[aunit['type']]['name'] == unit_types[ptype]['name'] ) {
                 // add to current selection
-                //console.log(".........type check passed.");
                 current_focus.push(units[unit_id]);
               }
             }
@@ -5404,8 +5415,6 @@ function key_unit_show_cargo()
   if (!sunits || sunits.length == 0)
     return;
 
-  //console.log("Going through selected units.")
-
   save_last_unit_focus();
 
   //var funits = get_units_in_focus();
@@ -5417,13 +5426,11 @@ function key_unit_show_cargo()
     // selected units might be on different tiles, so recalc these for each iterated sunit.
     var ptile = index_to_tile(sunits[s]['tile']);
     var units_on_tile = tile_units(ptile);
-    //console.log("  sunits["+s+"]");
 
     stype = unit_type(sunits[s]);
 
     // Is selected unit a transporter? If so, put all its cargo into new_current_focus;
     if (stype.transport_capacity > 0) {
-      //console.log("  sunits["+s+"] is a transporter");
       for (var i = 0; i < units_on_tile.length; i++) {
         var punit = units_on_tile[i];
         if (punit['transported'] && punit['transported_by'] == sunits[s]['id']) {
@@ -5432,7 +5439,6 @@ function key_unit_show_cargo()
       }
     }
     else {
-      //console.log("  sunits["+s+"] is NOT a transporter");
       // if non-transport unit us selected, player wants to activate all cargo units on tile!
       new_current_focus = []; // clean up to avoid double-popped units, then push everything once and leave!
       for (var i = 0; i < units_on_tile.length; i++) {
@@ -5795,15 +5801,19 @@ function key_unit_irrigate()
   for (var i = 0; i < funits.length; i++) {
     var punit = funits[i];
 
-    /* MP2-D onward: "I" for irrigate, when done on ocean tiles, means,
-       to lay a Fishtrap: */
-    if (client_rules_flag[CRF_MP2_D] && is_ocean_tile(unit_tile(punit))) {
-        const punit = funits[i];
-        request_new_unit_activity(punit, ACTIVITY_BASE, EXTRA_FISHTRAP);
-    } else {  // Normal irrigation of land;
-      /* EXTRA_NONE -> server decides */
-      request_new_unit_activity(punit, ACTIVITY_IRRIGATE, EXTRA_NONE);
-    }
+      // Normal irrigation of land;
+      if (tile_terrain(unit_tile(punit))['cultivate_time'] > 0) {
+          request_new_unit_activity(punit, ACTIVITY_CULTIVATE, EXTRA_NONE);
+      } 
+      else {
+        /* MP2-D onward: "I" for irrigate, when done on ocean tiles, means to lay a Fishtrap: */
+        if (client_rules_flag[CRF_MP2_D] && is_ocean_tile(unit_tile(punit))) {
+          request_new_unit_activity(punit, ACTIVITY_BASE, EXTRA_FISHTRAP);
+        } 
+        else { /* EXTRA_NONE -> server decides */
+          request_new_unit_activity(punit, ACTIVITY_IRRIGATE, EXTRA_NONE);
+        }
+      }
     // Focused unit got orders, make sure not on waiting_list now:
     remove_unit_id_from_waiting_list(punit['id']);
   }
@@ -5874,15 +5884,10 @@ function key_unit_connect(extra_id)
 function create_connect_packet(packet)
 {
   if (!packet) return;
-  var order = {
-    "order"      : ORDER_LAST,
-    "activity"   : ACTIVITY_LAST,
-    "sub_target" : 0,
-    "action"     : ACTION_COUNT,
-    "dir"        : -1
-  }
-    
-  var new_packet = {   // Copy the meta data from original packet
+
+  var upgrade_extra;   // Will be set for each tile on path, to tell it what extra to make.
+   
+  var new_packet = {   // Our new packet starts with meta-data from original packet. orders[] and length will be adjusted.
           "pid"      : packet['pid'],
           "unit_id"  : packet['unit_id'],
           "src_tile" : packet['src_tile'],
@@ -5893,33 +5898,69 @@ function create_connect_packet(packet)
   new_packet['orders'] = [];
 
   var punit = units[packet['unit_id']];
-  var ptile = tiles[punit['tile']];
+  var ptile = tiles[punit['tile']];      // Will iterate to each step on the path as we insert orders
   var length = new_packet['length'];
+  // Set to true AFTER order for first tile in path gets irrigated... 
+  var first_irr_given = false; //... after first irr order, we assume onward there will be an adjacent water source:
 
-  // Reconstruct packet with an order before each move, and one at the end.
-  for (i = 0; i < packet['length'] + 1; i++) {
-    var upgrade_extra = extra_dep(punit, ptile, connect_extra);
-    //console.log("upgrade_extra=="+upgrade_extra)
-    // insert order before each move
-    if (upgrade_extra != CONNECT_ACTION_ILLEGAL) {
+  /* Adjust packet with: (1) an order to make an extra before each move, and 
+                         (2) an order after the last move to make that extra. */
+  for (i = 0; i < packet['length'] + 1 /*+1:order on arrival tile*/; i++) {
+    // Get which extra type to make for each iterative update of ptile's location:
+    upgrade_extra = extra_dep(punit, ptile, connect_extra, first_irr_given);
+    // Create a blank template for the order we will construct to do on this tile before order_move to next tile:
+    let order = {
+      "order"      : ORDER_LAST,
+      "activity"   : connect_activity,
+      "sub_target" : 0,
+      "action"     : ACTION_COUNT,
+      "dir"        : -1
+    }
+
+    /* Irrigation orders first need cultivation to be done on Forest/Jungle/Swamp. 
+       (Then the irrigation order is inserted next, on the same tile.) */
+    if (connect_activity == ACTIVITY_IRRIGATE) {
+      if (upgrade_extra != CONNECT_ACTION_ILLEGAL) {
+        first_irr_given = true;
+      }
+      else if (terrains[ptile.terrain]['name'] == "Forest" 
+            || terrains[ptile.terrain]['name'] == "Swamp"
+            || terrains[ptile.terrain]['name'] == "Jungle") {
+        // better to create the cultivate as the injected insertion before the irrigate and move,
+        // keeps the order var clean and we can increment a (length_add) that goes length+length_add at the end
+        // TO DO: it right here!
+        let cultivate_order = {
+          "order"      : ORDER_ACTIVITY,
+          "activity"   : ACTIVITY_CULTIVATE,
+          "sub_target" : 0,
+          "action"     : ACTION_COUNT,
+          "dir"        : 0,
+          "target"     : -1
+        }
+        length++;  // Make room for the extra injected cultivation order
+        new_packet['orders'].push(Object.assign({}, cultivate_order)); // inject cultivation
+
+        /* After the Cultivation order, we know EXTRA_IRRIGATION can now go on top*, so let's inject that order
+           order right after the cultivation (*assuming a water source, but that's order-giver responsiblity) */
+        upgrade_extra = EXTRA_IRRIGATION; // CONNECT_ACTION_ILLEGAL would make it cultivate then go to next tile sans irrigating.
+        first_irr_given = true;
+      }
+    }
+    
+// STEP ONE. Insert PRE-MOVE order(s) (if we have any), before each move:
+    if (upgrade_extra != CONNECT_ACTION_ILLEGAL) {  // No order if road/irrigate impossible.
       order['order'] = ORDER_ACTIVITY;
       order['dir']   = 0; // Not a move
-
-      /* TODO: when we have ACTIVITY_CULTIVATE, function extra_dep() will figure out we're on forest
-       *  or swamp and return -2 flag for this code to activate. For now, connect-irrigation will
-       * just walk right over forests and swamps. */
-      if (upgrade_extra == -2) { // catch case of irrigate swamp or forest: i.e., drain or chop
-        //order['activity'] = ACTIVITY_CULTIVATE;
-      } 
-      else order['activity'] = connect_activity;
-
       order['target'] = -1; // Could set a connect_target for advanced commands
 
       if (upgrade_extra == EXTRA_ROAD
           || upgrade_extra == EXTRA_RIVER
-          || upgrade_extra == EXTRA_FARMLAND
           || upgrade_extra == EXTRA_RAIL
-          || (typeof EXTRA_MAGLEV !== "undefined" && upgrade_extra == EXTRA_MAGLEV))
+          || (client_rules_flag[CRF_EXTRA_HIGHWAY] && upgrade_extra == EXTRA_HIGHWAY)
+          || (client_rules_flag[CRF_SEABRIDGE] && upgrade_extra == EXTRA_SEABRIDGE)
+          || (typeof EXTRA_MAGLEV !== "undefined" && upgrade_extra == EXTRA_MAGLEV)
+          || upgrade_extra == EXTRA_FARMLAND
+          || upgrade_extra == EXTRA_IRRIGATION)
         order['sub_target'] = upgrade_extra;
       else order['sub_target'] = 0; // Could set a connect_target for advanced commands
       order['action'] = ACTION_COUNT; // Could set a connect_ACTION for more commands
@@ -5929,81 +5970,66 @@ function create_connect_packet(packet)
     else {
       length--; // since illegal order not inserted, cut one from length
     }
-    // Now insert original packet move order
-    if (i < packet['length']) {
-      new_packet['orders'].push(packet['orders'][i]);
 
-      ptile = mapstep(ptile, packet['orders'][i]['dir']); // iterate tile for next check
+// STEP TWO: Now insert original packet move order IFF we haven't already arrived on last tile to do the final creation of the last extra_id
+    if (i < packet['length']) {                           // IFF this isn't the last tile
+      packet['orders'][i].order = ORDER_MOVE;               // override ORDER_ACTION_MOVE because it aborts subsequent other orders
+      new_packet['orders'].push(packet['orders'][i]);       // Inject move order
+      ptile = mapstep(ptile, packet['orders'][i]['dir']);   // iterate ptile for next check
     }
   }
+
+  // Since we injected extra orders along the goto path, fix the length val
   new_packet['length'] = length;
+
   return new_packet;
 }
 
 /**************************************************************************
   Figures out which extra to make for the Connect command on each tile
+  first_call is for connect_activity to know if it CAN'T assume the last
+  irrigaton created a water source for the current tile.
 **************************************************************************/
-function extra_dep(punit, ptile, extra_id)
+function extra_dep(punit, ptile, extra_id, irrigated_before)
 {
-  if (extra_id == EXTRA_ROAD && unit_type(punit)['name']=="Well-Digger")
-    extra_id = EXTRA_RIVER;
+  var assume_water_near = irrigated_before; //can't assume previous tile in connect path was irrigated if it's the first tile in path
+  
+  if (extra_id == EXTRA_ROAD) {  
+    var possible_roads = get_what_roads_are_legal(punit, ptile);
+    if (possible_roads.length) extra_id = possible_roads[0]; 
+    else extra_id = CONNECT_ACTION_ILLEGAL;
 
-  //console.log("extra_dep called with extra_id=="+extra_id)
-  if (extra_id == EXTRA_ROAD) {
-    //console.log("  checking river and BB")
-    // TODO: if (tile_has_river && !tile_has_road && !player has bridge building), return -1
-    // "magic number" extra so it won't abort on the tile OR if that doesn't work
-    // create_connect_packet will just see the -1 flag to simple NOT insert an order at that position
-    if (tile_has_extra(ptile, EXTRA_RIVER)) {
-      //console.log("    tile has river")
-      if (player_invention_state(client.conn.playing, tech_id_by_name('Bridge Building')) < TECH_KNOWN)
-        if (!tile_has_extra(ptile, EXTRA_ROAD)) {
-          //console.log("      no road: RETURN NULL")
-          return CONNECT_ACTION_ILLEGAL; // null flag means don't break sequence with an impossible order
-        }
-    }
-    
-    if (!tile_has_extra(ptile, EXTRA_ROAD))
-      return EXTRA_ROAD; // The server smartly skips over if same type already on the tile.
-    if (player_invention_state(client.conn.playing, tech_id_by_name('Railroad')) < TECH_KNOWN)
-      return EXTRA_ROAD;
-    if (!tile_has_extra(ptile, EXTRA_RAIL))
-      return EXTRA_RAIL;
-    if (!client_rules_flag[CRF_MAGLEV])
-      return EXTRA_RAIL;
-    if (player_invention_state(client.conn.playing, tech_id_by_name('Superconductors')) < TECH_KNOWN)
-      return EXTRA_RAIL;
-
-    return EXTRA_MAGLEV;
-  }
-  // Well-Digger makes rivers, not roads:
-  else if (extra_id == EXTRA_RIVER) {
-    if (tile_has_extra(ptile, EXTRA_RIVER)) {
-      return CONNECT_ACTION_ILLEGAL;  // already has a river, skip it
-    }
-    return EXTRA_RIVER;
+    return extra_id;
   }
 
   else if (extra_id == EXTRA_IRRIGATION) {
-    //console.log("  checking irrigation")
-    var can_irr = can_irrigate(punit, ptile);
+    var can_irr = can_irrigate(punit, ptile, assume_water_near); /* true = assume water near, since we just irrigated last tile */
+    const refrigeration = tech_known("Refrigeration");
+
     // No refrigeration: irrigate or skip tile are the only choices:
-    if (player_invention_state(client.conn.playing, tech_id_by_name('Refrigeration')) < TECH_KNOWN) {
-      if (can_irr) return EXTRA_IRRIGATION;
-      else return CONNECT_ACTION_ILLEGAL; // skip this tile: later, some kind of special code for chop forest or drain swamp; will probably have to change activity not just extra though.
+    if (!refrigeration) {
+      if (can_irr && tile_terrain(ptile)['name'] != "Swamp" // TODO:when drain swamp/cut jungle get their own orders names we remove this
+          && tile_terrain(ptile)['name'] != "Jungle") {
+            return EXTRA_IRRIGATION;
+      }
+      else return CONNECT_ACTION_ILLEGAL;
     }
-    // Refrigeration: irrigate or skip a tile with no irrigation...
+    // From here on we know we have Refrigeration:
     if (!tile_has_extra(ptile, EXTRA_IRRIGATION)) {
-      if (can_irr && tile_terrain(ptile)['name'] != "Swamp") return EXTRA_IRRIGATION;  // swamp thinks it can be irrigated but server thinks it can't? or we just didn't figure out special packet setup for it.
-      else return CONNECT_ACTION_ILLEGAL; // skip this tile: later, some kind of special code for chop forest or drain swamp; will probably have to change activity not just extra though.
+      //can_irrigate() currently returns false positive for swamp because it's our orders button and order name for cultivate on swap
+      if (can_irr && tile_terrain(ptile)['name'] != "Swamp" // TODO:when drain swamp/cut jungle get their own orders names we remove this
+          && tile_terrain(ptile)['name'] != "Jungle") {
+            return EXTRA_IRRIGATION;
+      } 
+      else return CONNECT_ACTION_ILLEGAL;
     }
     // or make Farmland if possible
     if (tile_has_extra(ptile, EXTRA_IRRIGATION) && !tile_has_extra(ptile, EXTRA_FARMLAND))
       return EXTRA_FARMLAND;
-    // nothing is possible, skip tile:
     else return CONNECT_ACTION_ILLEGAL;
   }
 
+  // (We can get here if some other extra_id was passed through):
   return extra_id;
 }
 
@@ -6118,7 +6144,6 @@ function key_unit_pillage()
     } 
     var pstats = unit_get_extra_stats(punit);
     var tgt = get_what_can_unit_pillage_from(punit, null);
-    //if (tgt) console.log("Unit can pillage "+tgt.length+" targets: "+tgt);
     if (tgt.length > 0) {
       // handle iPillage of multiple targets:
       if (pstats.iPillage_random_targets) {
@@ -6291,13 +6316,17 @@ function can_build_sea_bridge(punit, ptile)
 function can_build_maglev(punit, ptile)
 {
   const seabridge_rules = (typeof EXTRA_SEABRIDGE !== "undefined");
+  const hwy_rules = client_rules_flag[CRF_EXTRA_HIGHWAY];
   
   return ((typeof EXTRA_MAGLEV !== "undefined")
+      &&  tech_known('Superconductors')  // 99% of the time you don't have it
       &&  (punit != null && ptile != null)
       &&  (!tile_has_extra(ptile, EXTRA_MAGLEV))
 
       && (!client_rules_flag[CRF_MP2_D]  // MP2D on requires road or seabridge under it
-          || (tile_has_extra(ptile, EXTRA_ROAD) || tile_has_extra(ptile, EXTRA_SEABRIDGE))
+          || (tile_has_extra(ptile, EXTRA_ROAD)
+          || (hwy_rules && tile_has_extra(ptile, EXTRA_HIGHWAY))
+          || (seabridge_rules && tile_has_extra(ptile, EXTRA_SEABRIDGE)))
          )
 
       && (!is_ocean_tile(ptile) 
@@ -6305,7 +6334,6 @@ function can_build_maglev(punit, ptile)
          )
 
       &&  (unit_can_do_action(punit, ACTION_ROAD))
-      &&  tech_known('Superconductors')
          );
 }
 
@@ -6434,17 +6462,23 @@ function can_build_quay(punit, ptile)
 
 /**************************************************************************
  Check whether a unit can literally "Irrigate" a tile:
-   The "irrigate" command per se, NOT "chop forest" or "build farmland"
+   The "irrigate" command per se, NOT "chop forest" or "build farmland".
+
+   ** assume_water_near is for connect irrigation, where a later tile which
+   currently has no water source, will likely get it from the connected
+   irrigaton on previous adjacet tiles
 **************************************************************************/
-function can_irrigate(punit, ptile)
+function can_irrigate(punit, ptile, assume_water_near)
 {
+  if (!assume_water_near) assume_water_near = false;
   // For performance, check simple things first and exit with results
   if (punit == null || ptile == null)
     return false;
   if (!unit_can_do_action(punit, ACTION_IRRIGATE))
     return false;
 
-  // Can always change swamp/jungle to grass:
+  /* Can always change swamp/jungle to grass. Technically it's "cultivate",
+     not "irrigate", but it's the name of the command and orders button for it. */
   var terrain_name = tile_terrain(ptile)['name'];
   if (terrain_name=="Swamp" || terrain_name=="Jungle")
     return true;
@@ -6456,6 +6490,7 @@ function can_irrigate(punit, ptile)
                       || terrain_name == 'Deep Ocean'
                       || terrain_name == 'Forest' // Chop Forest command is different
                       || terrain_name == 'Glacier'
+                      || terrain_name == 'Arctic'
                       );
   invalid_terrain = invalid_terrain || tile_has_extra(ptile, EXTRA_IRRIGATION); // Farmland is separate command
   if (invalid_terrain)
@@ -6466,11 +6501,12 @@ function can_irrigate(punit, ptile)
       || (tile_has_extra(ptile, EXTRA_OASIS) && (client_rules_flag[CRF_OASIS_IRRIGATE]))
       || ((client_rules_flag[CRF_MP2_C]) && tile_has_extra(ptile, EXTRA_CANAL))
       || ((client_rules_flag[CRF_MP2_C]) && tile_has_extra(ptile, EXTRA_WATERWAY))
-      || (chand_baori && tile_city(ptile));
+      || (chand_baori && tile_city(ptile))
+      || assume_water_near;
   // If no water on occupied tile, check cardinally adjacent:
   if (!water_near) {
     const start_dir = chand_baori ? 0 : 1;
-    const end_dir = chand_baori ? 6 : 7;
+    const end_dir = chand_baori ? 7 : 6;
 
     for (var dir = start_dir; dir <= end_dir; dir++) {
       if (!chand_baori && (dir==2 || dir==5))
@@ -6625,46 +6661,124 @@ function key_unit_fishtrap()
 /**************************************************************************
  Tell the units in focus to build road or railroad.
 **************************************************************************/
-function key_unit_road()
+function key_unit_road(user_select_type)
 {
+  var road_types = [];
+
   var funits = get_units_in_focus();
   for (var i = 0; i < funits.length; i++) {
     var punit = funits[i];
     var ptile = index_to_tile(punit['tile']);
-
-    if (unit_types[punit['type']]['name'] == "Well-Digger") {
-      request_new_unit_activity(punit, ACTIVITY_GEN_ROAD, extras['River']['id']);
-      remove_unit_id_from_waiting_list(punit['id']); // Unit received orders, don't ask orders later
-    }
-    else if (is_ocean_tile(ptile)) {
-      if (can_build_sea_bridge(punit,ptile) && !tile_has_extra(ptile, EXTRA_SEABRIDGE)) {
-         request_new_unit_activity(punit, ACTIVITY_GEN_ROAD, extras['Sea Bridge']['id']);
-         remove_unit_id_from_waiting_list(punit['id']); // Unit received orders, don't ask orders later
-      }
-      else if (typeof EXTRA_SEABRIDGE !== "undefined" && tile_has_extra(ptile, EXTRA_SEABRIDGE)
-               && !tile_has_extra(ptile, EXTRA_RAIL)) {
-          request_new_unit_activity(punit, ACTIVITY_GEN_ROAD, extras['Railroad']['id']);
-          remove_unit_id_from_waiting_list(punit['id']); // Unit received orders, don't ask orders later
-      }
-      else if (can_build_maglev(punit, ptile)) {
-        request_new_unit_activity(punit, ACTIVITY_GEN_ROAD, extras['Maglev']['id']);
-        remove_unit_id_from_waiting_list(punit['id']); // Unit received orders, don't ask orders later
-      }
-    }
-    else if (!tile_has_extra(ptile, EXTRA_ROAD)) {
-      request_new_unit_activity(punit, ACTIVITY_GEN_ROAD, extras['Road']['id']);
-      remove_unit_id_from_waiting_list(punit['id']); // Unit received orders, don't ask orders later
-    } else if (!tile_has_extra(ptile, EXTRA_RAIL)) {
-      request_new_unit_activity(punit, ACTIVITY_GEN_ROAD, extras['Railroad']['id']);
-      remove_unit_id_from_waiting_list(punit['id']); // Unit received orders, don't ask orders later
-    } else if (can_build_maglev(punit, ptile)) {
-      request_new_unit_activity(punit, ACTIVITY_GEN_ROAD, extras['Maglev']['id']);
-      remove_unit_id_from_waiting_list(punit['id']); // Unit received orders, don't ask orders later
+    if (user_select_type) road_types.push(user_select_type)
+    else road_types = get_what_roads_are_legal(punit, ptile);
+    if (road_types.length > 0) {
+      request_new_unit_activity(punit, ACTIVITY_GEN_ROAD, road_types[0]);
+      remove_unit_id_from_waiting_list(punit['id']);
+      deactivate_goto(false);
+      setTimeout(update_unit_focus, update_focus_delay);
     }
   }
-  deactivate_goto(false);
-  setTimeout(update_unit_focus, update_focus_delay);
 }
+
+/**************************************************************************
+ Only needed for road_types that can be a second non-default choice.
+ 'R' does default, but player may want another road-type from a button
+ or context menu.
+**************************************************************************/
+function button_unit_road_type(rtype)
+{
+  /* Have to pass as a string because orders.jsp has no access to 
+    which ruleset loaded which EXTRA_'s. */
+  switch (rtype) {
+    case "Railroad":
+      key_unit_road(EXTRA_RAIL);
+      break;
+    case "Highway":
+      key_unit_road(EXTRA_HIGHWAY);
+      break;
+    case "Maglev": 
+      key_unit_road(EXTRA_MAGLEV);
+    break;
+  }
+}
+
+/**************************************************************************
+ Helper function for above and unit orders context menu + buttons 
+**************************************************************************/
+function get_what_roads_are_legal(punit, ptile)
+{
+  var road_list = [];
+  var cant_bridge_river = tile_has_extra(ptile, EXTRA_RIVER) && !tech_known("Bridge Building");
+  var can_rail = tech_known("Railroad");
+
+  const hwy_rules = client_rules_flag[CRF_EXTRA_HIGHWAY];
+  
+  if (unit_types[punit['type']]['name'] == "Well-Digger") {
+    if (!tile_has_extra(ptile, EXTRA_RIVER)
+        && !is_ocean_tile(ptile)) {
+          road_list.push(extras['River']['id']);
+    }
+    return road_list;
+  }
+//......
+  else if (typeof EXTRA_SEABRIDGE !== "undefined" && is_ocean_tile(ptile)) {
+    if (can_build_sea_bridge(punit,ptile)) {
+      road_list.push(extras['Sea Bridge']['id']);
+    } else if (tile_has_extra(ptile, EXTRA_SEABRIDGE)) { 
+      if (can_build_maglev(punit, ptile)) {
+        road_list.push(extras['Maglev']['id']);
+      }
+      if (!tile_has_extra(ptile, EXTRA_RAIL)) {
+        if (can_rail) road_list.push(extras['Railroad']['id']); 
+      }
+    }
+    return road_list;
+  }
+//......  
+  else if (hwy_rules && tech_known("Automobile")) {  // hwy_rules && automobile
+    if (!tile_has_extra(ptile, EXTRA_ROAD) && !tile_has_extra(ptile, EXTRA_HIGHWAY)) {  // (hwy_rules && automobile) && !highway && !road
+      road_list.push(extras['Highway']['id']);
+      return road_list;
+    }
+    else { // (hwy_rules && automobile) && (highway || road)
+      if (can_build_maglev(punit, ptile)) {
+        road_list.push(extras['Maglev']['id']);                              
+      }
+      if (!tile_has_extra(ptile, EXTRA_RAIL)) { // (hwy_rules && automobile) && (highway || road) && !rail
+        if (can_rail) road_list.push(extras['Railroad']['id']);
+      } 
+      if (tile_has_extra(ptile, EXTRA_ROAD)) {  // (hwy_rules && automobile) && road && !highway >>>> replace road with hwy.
+        road_list.push(extras['Highway']['id']);                               
+      }
+      return road_list;
+    }
+  }
+//......  
+  if (!tile_has_extra(ptile, EXTRA_ROAD)) { //  (!hwy_rules || !automobile) && !road
+    if (!hwy_rules) { // !hwy_rules && automobile && !road
+      if (!cant_bridge_river)
+        road_list.push(extras['Road']['id']);
+      return road_list;
+    }
+//......  
+    else if (!tile_has_extra(ptile, EXTRA_HIGHWAY)) { // hwy_rules && !automobile && !highway && !road
+      if (!cant_bridge_river) return null;
+        road_list.push(extras['Road']['id']);
+      return road_list;       
+    } // else { (hwy_rules && !automobile && highway && !road) == make rail, fall thru to last block: }
+  }
+//......
+  if (can_build_maglev(punit, ptile)) { // (!hwy_rules || !automobile) && road && !rail && highway ==?
+    road_list.push(extras['Maglev']['id']);
+  }
+  if (!tile_has_extra(ptile, EXTRA_RAIL)) { // (!hwy_rules || !automobile) && road && !rail && highway ==?
+    if (can_rail) road_list.push(extras['Railroad']['id']);
+  }
+  // What we know: There's a road, not a rail, and there are EITHER no highways in the ruleset OR we lack the tech.
+
+  return road_list;
+}
+
 /**************************************************************************
  Tell the units in focus to build maglev. Separated from key_unit_road
  because it's possible to build MagLev without road/rail in some 
@@ -7261,8 +7375,6 @@ function key_paste_link_under_cursor()
 ****************************************************************************/
 function request_goto_path(unit_id, dst_x, dst_y)
 {
-  //console.log("   request_goto_path("+dst_x+","+dst_y+") is " + request_goto_path.caller);
-
   if (goto_request_map[unit_id + "," + dst_x + "," + dst_y] == null) {
     goto_request_map[unit_id + "," + dst_x + "," + dst_y] = true;
 
@@ -7283,8 +7395,6 @@ function request_goto_path(unit_id, dst_x, dst_y)
 ****************************************************************************/
 function request_rally_path(city_id, dst_x, dst_y)
 {
-  //console.log("   request_rally_path("+dst_x+","+dst_y+") is " + request_rally_path.caller);
-
   if (goto_request_map["0" + "," + dst_x + "," + dst_y] == null) {
     goto_request_map["0" + "," + dst_x + "," + dst_y] = true;
 
@@ -7306,7 +7416,6 @@ function request_rally_path(city_id, dst_x, dst_y)
 ****************************************************************************/
 function check_request_goto_path()
 {
-  //console.log("   check_request_goto_path called by " + check_request_goto_path.caller.toString().substring(1,35));
   var ptile;
   // TO DO: function only called if goto_active so we can remove check for that
   if (goto_active && current_focus.length > 0
@@ -7368,10 +7477,19 @@ function check_request_goto_path()
 ****************************************************************************/
 function update_goto_path(goto_packet)
 {
-  //console.log("   update_goto_path caller is " + update_goto_path.caller);
+  goto_way_points = {};  // Clear old waypoints
 
-  if (goto_packet['unit_id'] === undefined) return;
-  //console.log(goto_packet);
+  if (goto_packet['unit_id'] === undefined) {
+    if (goto_active && !rally_active) {
+      if (current_focus.length > 0) {
+        focus_unit_id = current_focus[0]['id'];
+      }
+      if (!rally_active && focus_unit_id) {
+        update_goto_path_panel(0,0,0,units[focus_unit_id].movesleft);
+      }
+    }
+    return;
+  }
   var ptile;
 
   var punit = units[goto_packet['unit_id']];
@@ -7393,20 +7511,51 @@ function update_goto_path(goto_packet)
   var refuel = 0;
 
   // Don't bother checking goto for same tile unit is on
-  if (ptile==goaltile) return;
-
+  if (ptile==goaltile) {
+    // Just change the unit goto info for the pathing and return
+    if (!rally_active) update_goto_path_panel(0,0,0,punit.movesleft);
+    return;
+  }
   if (renderer == RENDERER_2DCANVAS) {
+    // First turn boundary waypoint is your own tile if you have no moves left
+    goto_way_points[ptile.index] = punit.movesleft ? 0 : SOURCE_WAYPOINT;
+
+    var turn;
+    var old_turn = goto_packet['turn'][0];
+    var old_tile=null;
+    var pathstring = ""
+    var upcoming = false; // the way we draw goto lines or the way the server marks turn-changes, idk, but we have to advance it by one.
     for (var i = 0; i < goto_packet['dir'].length; i++) {
       if (ptile == null) break;
       var dir = goto_packet['dir'][i];
 
+      //-------------------------------------------------
+      turn = goto_packet['turn'][i];
+      if (upcoming) {
+        upcoming = false;
+        goto_way_points[ptile.index] = SOURCE_WAYPOINT;
+        if (old_tile) goto_way_points[old_tile.index] = DEST_WAYPOINT; // prevent overwrite
+      } else if (i==goto_packet['dir'].length -1) { // very last turn boundary has no tile after so we prematurely compute it
+        if (turn && turn-old_turn>0) {
+          goto_way_points[ptile.index] = DEST_WAYPOINT;
+        }
+      } else if (i!=0) { // no turn boundary in all cases except first tile when you have no moves left
+        goto_way_points[ptile.index] = 0;
+      } 
+
+      if (turn && turn-old_turn>0) {
+        upcoming = true;
+      }
+      pathstring += (i+"."+turn+(upcoming?" *("+goto_way_points[ptile.index]+")  ":" -("+goto_way_points[ptile.index]+")  "))
+      //---------------------------------------------------
       if (dir == -1) { /* Assume that this means refuel. */
         refuel++;
         continue;
       }
-
       ptile['goto_dir'] = dir;
+      old_tile = ptile;
       ptile = mapstep(ptile, dir);
+      old_turn = turn;
     }
   } else {
     webgl_render_goto_line(ptile, goto_packet['dir']);
@@ -7418,15 +7567,37 @@ function update_goto_path(goto_packet)
   goto_turns_request_map[goto_packet['unit_id'] + "," + goaltile['x'] + "," + goaltile['y']]
 	  = current_goto_turns;
 
-  if (current_goto_turns !== "undefined") {
-    var path_length = goto_packet['length'];
-
+  if (current_goto_turns !== "undefined" && punit) {
+    let path_length = goto_packet['length'];
     // Fuel units inject extra non-path 'refuel data' in the goto_packet: +++
     if (refuel) path_length -= refuel;  // remove "refuel path steps" from path_length
-
-    $("#active_unit_info").html("Path: "+path_length+" tiles");
+  
+    //let turns = Math.ceil(goto_packet['total_mc']/unit_type(punit)['move_rate'])-1;  << former client_side calc assumed full moves left (which we could correct if we wanted) and that the unit had no move bonus (which we can't correct for paths of 2 turns or more because only the server knows move bonuses!)
+    let turns = current_goto_turns;
+    if (turns<0) turns = 0;
+    let movecost = goto_packet['total_mc'];
+    //let remaining = parseInt(punit.movesleft - movecost);     THIS WORKS but let's try the server for getting info on multi-turn paths?
+    let remaining = goto_packet['movesleft'];
+    update_goto_path_panel(movecost,path_length,turns,remaining);
   }
   update_mouse_cursor();
+}
+function update_goto_path_panel(goto_move_cost, path_length, turns, remaining)
+{
+  /* Prevent oversensitive replacing of unit stats panel when we aren't in goto
+     mode; caused by every click potentially being the start of a goto drag. */ 
+  if (!goto_active) return;
+  if (enable_goto_drag) {
+    goto_path_skip_count++;
+    if (goto_path_skip_count>goto_path_trigger) goto_path_skip_count=0;
+    else return;
+  }
+
+  $("#active_unit_info").html("<span style='color:#9d9;font-size:90%'><b>"+move_points_text(goto_move_cost, false, true)+"</b></span> <span style='color:#ddd;font-size:90%'>move"+(parseInt(goto_move_cost/SINGLE_MOVE)>1 ? "s" : "")+"</span><br>"
+  +( (turns>0) ? ("<span style='color:#"+(turns<1?"fd5":"f76")+";font-size:90%'><b>"+turns+"</b></span> <span style='color:#ddd;font-size:90%'> turn"+(turns>=2?"s":"")+"</span>"):"<span style='color:#bbb;font-size:90%'>in range</span>")
+  +"<span style='font-size:90%;margin-left:auto;float:right;margin-right:20px;color:#7af'><span style='color:#eee'>t</span><b>"+path_length+"</b></span> <span style='color:#ddd;font-size:90%'></span><br>"
+  +"<span style='font-size:90%;color:#"+(remaining>=0&&turns<1?"d7f":"f55")+"'><b>"+(remaining>=0?move_points_text(remaining, false, true):"&#8211")+"</b></span> <span style='color:#ddd;font-size:90%'> left"+"</span><br>"
+  );
 }
 
 /****************************************************************************

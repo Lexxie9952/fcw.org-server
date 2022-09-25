@@ -37,6 +37,9 @@ const CMDM_POLLUTION      = 5;   // pollution
 const CMDM_CORRUPTION     = 6;   // corruption 
 const CMDM_LAST           = 7;   // marks end of city_map_display_mode enum
 
+const SOURCE_WAYPOINT     = 1;
+const DEST_WAYPOINT       = 2;
+
 var tileset_images = [];
 var sprites = {};
 var loaded_images = 0;
@@ -803,15 +806,18 @@ function mapview_territory_fill(pcanvas, color, canvas_x, canvas_y) {
 
 
 /**************************************************************************
-...
+...Draws GOTO lines, RALLY lines, existing GOTO orders, and CONNECT
+activities (road/irrigate). new_turn is whether the goto path end/begins
+a turn on that tile, which lets us know to draw the dot differently.
 **************************************************************************/
-function mapview_put_goto_line(pcanvas, dir, canvas_x, canvas_y)
+function mapview_put_goto_line(pcanvas, dir, canvas_x, canvas_y, tile_index)
 {
   var x0 = canvas_x + (tileset_tile_width / 2);
   var y0 = canvas_y + (tileset_tile_height / 2);
   var x1 = x0 + GOTO_DIR_DX[dir] * (tileset_tile_width / 2);
   var y1 = y0 + GOTO_DIR_DY[dir] * (tileset_tile_height / 2);
 
+  var new_turn = goto_way_points[tile_index];
   // Use colours according to active goto or tile/unit info
   var colors = goto_active ? goto_colors_active : goto_colors_info;
   if (connect_active) {
@@ -833,22 +839,43 @@ function mapview_put_goto_line(pcanvas, dir, canvas_x, canvas_y)
   pcanvas.stroke();
   // Main cyan line
   pcanvas.strokeStyle = 'rgba('+colors[1]+')';
+  //if (new_turn) pcanvas.strokeStyle = 'rgba(225,47,0)';
   pcanvas.lineWidth = 6;
   pcanvas.beginPath();
   pcanvas.moveTo(x0, y0);
   pcanvas.lineTo(x1, y1);
   pcanvas.stroke();
-  // Waypoint circles
-  pcanvas.lineWidth = 12;
-  pcanvas.strokeStyle = 'rgba('+colors[2]+')';
+
+  /* Waypoint circles - each segment draws 2 tile-waypoint circles, one on source and one on dest. Source overdraws the last dest and dest
+    will get overdrawn by the next source (exception of start-path and end-path points.) But we do not want to color both waypoint circles
+    with an indicator for a new turn, only the one tile where it happens. */
+  
+    // Source waypoint circle
+  if (new_turn & SOURCE_WAYPOINT) {         
+    pcanvas.lineWidth = 17;
+    pcanvas.strokeStyle = 'rgba(225,47,0)';
+  } else {  
+    pcanvas.lineWidth = 12;
+    pcanvas.strokeStyle = 'rgba('+colors[2]+')';
+  }
   pcanvas.beginPath();
   pcanvas.moveTo(x0, y0);
   pcanvas.lineTo(x0, y0);
   pcanvas.stroke();
+
+  // Dest waypoint circle
+ if (new_turn & DEST_WAYPOINT) {         
+    pcanvas.lineWidth = 17;
+    pcanvas.strokeStyle = 'rgba(225,47,0)';
+  } else {  
+    pcanvas.lineWidth = 12;
+    pcanvas.strokeStyle = 'rgba('+colors[2]+')';
+  }
   pcanvas.beginPath();
   pcanvas.moveTo(x1, y1);
   pcanvas.lineTo(x1, y1);
   pcanvas.stroke();
+ 
   // Waypoint inner dots
   pcanvas.lineWidth = 4;
   pcanvas.strokeStyle = 'rgba('+colors[3]+')';

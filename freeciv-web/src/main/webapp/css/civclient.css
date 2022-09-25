@@ -1405,7 +1405,7 @@ body:not(.mobile) .ui-dialog.unit_dialog {
   color: white;
   background-color: rgba(0, 0, 0, 0.65);
   font-size: 86%;
-  line-height: 15px;
+  line-height: 1.06;
 }
 
 #active_unit_info span {

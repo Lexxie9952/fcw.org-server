@@ -20,6 +20,7 @@
 
 var map = {};
 var tiles = {};
+var goto_way_points = {};
 
 var DIR8_NORTHWEST = 0;
 var DIR8_NORTH = 1;
