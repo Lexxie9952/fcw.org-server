@@ -14,6 +14,7 @@ artists = "
   b.appian_way
   b.apollo_program
   b.chand_baori
+  b.chichen_itza
   b.citadel_aleppo
   b.colossus
   b.commissariat
@@ -47,6 +48,7 @@ artists = "
   b.roman_colosseum
   b.seti_program
   b.sphinx
+  b.sun_tzus_war_academy
   b.statue_of_liberty
   b.statue_of_zeus
   b.sun_tzus_war_academy
@@ -65,7 +67,6 @@ artists = "
 
   Paul Zastoupil
   b.asmiths_trading_co
-  b.sun_tzus_war_academy
 
   PD images
   b.hoover_dam
