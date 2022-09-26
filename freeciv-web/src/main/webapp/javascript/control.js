@@ -6997,6 +6997,7 @@ function request_unit_autosettlers(punit)
   if (punit != null ) {
     request_unit_cancel_orders(punit);
     action_decision_clear_want(punit['id']);
+    request_new_unit_activity(punit, ACTIVITY_IDLE, EXTRA_NONE);
     var packet = {"pid" : packet_unit_autosettlers, "unit_id" : punit['id']};
     send_request(JSON.stringify(packet));
   }
