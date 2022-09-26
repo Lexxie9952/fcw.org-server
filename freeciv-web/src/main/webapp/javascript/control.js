@@ -1467,6 +1467,8 @@ function update_unit_order_commands()
   {
     $("#game_unit_orders_default").hide();
     return;
+  } else {
+    chand_baori = has_wonder("Chand Baori");
   }
 
   var i, r;
