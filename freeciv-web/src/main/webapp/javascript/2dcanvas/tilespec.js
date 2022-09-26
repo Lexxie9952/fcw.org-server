@@ -50,7 +50,12 @@ const CITY_WALLS = 1,
       CITY_CITADEL = 8,
       CITY_SAM = 16;
       CITY_ZIGGURAT = 32,
-      CITY_PYRAMID = 64;
+      CITY_PYRAMID = 64,
+      CITY_ANGKOR_WAT = 128,
+      CITY_HANGING_GARDEN = 256,
+      CITY_CHICHEN_ITZA = 512,
+      CITY_MAUSOLEUM = 1024,
+      CITY_HAMMURABI = 2048;
 
 var current_select_sprite = 0;
 var max_select_sprite = 4;
@@ -362,6 +367,8 @@ function fill_sprite_array(layer, ptile, pedge, pcorner, punit, pcity, citymode)
         layer_sprite = get_city_coastal_overlay_sprite(pcity);
         if (layer_sprite) sprite_array.push(layer_sprite);
         layer_sprite = get_city_sam_battery_overlay_sprite(pcity);
+        if (layer_sprite) sprite_array.push(layer_sprite);
+        layer_sprite = get_city_wonder_overlay_sprite(pcity);
         if (layer_sprite) sprite_array.push(layer_sprite);
 
         if (polluted) sprite_array.push({"key" : "grid.pollute_icon"}); //pollution icon clearly over top
@@ -1662,7 +1669,14 @@ function get_city_sam_battery_overlay_sprite(pcity) {
   }
   return null; // no underlay.
 }
-
+// For wonder sprites that sit on top of the city graphic
+function get_city_wonder_overlay_sprite(pcity) {
+  if ((pcity['walls'] & CITY_HAMMURABI)) {
+    return {"key": "city.hammurabi", "offset_x" : -16, "offset_y" : -24};
+  }
+  // more can go here later, including even logic of which to show together or not
+  return null; // no underlay.
+}
  /*
 /****************************************************************************
   Return the sprite in the city_sprite listing that corresponds to this
@@ -1673,9 +1687,14 @@ function get_city_sam_battery_overlay_sprite(pcity) {
 function get_city_sprite(pcity)
 {
   var tag;
+  // Wonders that define the entire sprite of the city go here...
   if (pcity['walls'] & CITY_CITADEL) tag = "city.citadel_overlay";
   else if (pcity['walls'] & CITY_ZIGGURAT) tag = "city.ziggurat_overlay";
   else if (pcity['walls'] & CITY_PYRAMID) tag = "city.pyramid_overlay";
+  else if (pcity['walls'] & CITY_ANGKOR_WAT) tag = "city.angkor_overlay";
+  else if (pcity['walls'] & CITY_HANGING_GARDEN) tag = "city.hgarden_overlay";
+  else if (pcity['walls'] & CITY_CHICHEN_ITZA) tag = "city.chichen_overlay";
+  else if (pcity['walls'] & CITY_MAUSOLEUM) tag = "city.mausoleum_overlay";
   else {
     var style_id = pcity['style'];
     if (style_id == -1) style_id = 0;   /* sometimes a player has no city_style. */

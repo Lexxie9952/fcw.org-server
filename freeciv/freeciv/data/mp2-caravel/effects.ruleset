@@ -38,7 +38,6 @@ reqs	=
     { "type", "name", "range", "present"
       "UnitType", "Medium Bomber", "Local", TRUE
     }
-
 ; EXAMPLE OF HOW TO USE NEW Unit_Unhappy_Cost EFFECT, almost same 
 ; as the above effect (don't use both!)
 ;[effect_medium_bomber_field_unit_minus_one]
@@ -4695,6 +4694,18 @@ reqs    =
       "UnitType", "Pikemen", "Local", TRUE 
     }
 ;************************************************************************ Angkor Wat
+[effect_angkor_wat_visible]
+type    = "Visible_Walls"
+value	= 128
+reqs	=
+    { "type",     "name",           "range", "present"
+      "Building",  "Angkor Wat",    "City",   TRUE
+      "Gov",      "Democracy",      "Player", FALSE
+      "Gov",      "Theocracy",      "Player", FALSE
+      "Gov",      "Communism",      "Player", FALSE
+      "Gov",      "Nationalism",    "Player", FALSE
+    }
+
 [effect_angkor_wat_free_tile_bonus_monarchy]  ;free celebration tile output
 type    = "Output_Inc_Tile"
 value   = 1
@@ -4986,6 +4997,13 @@ reqs =
 
 ;IrrigationSource of city is in game.ruleset
 ;************************************************************************ Code of Hammurabi
+[effect_hammurabi_visible]
+type    = "Visible_Walls"
+value	= 2048
+reqs	=
+    { "type",     "name",                  "range", "present"
+      "Building", "Code of Hammurabi",     "City",  TRUE
+    }
 [effect_hammurabi_corruption_1]
 type    = "Output_Waste"
 value	= -11 ; 37-11 = 26
@@ -5144,6 +5162,14 @@ value	= 1
 ;************************************************************************ Fusion Reactor
 ; see POWER PLANTS section
 ;************************************************************************ Hanging Gardens
+[effect_hanging_gardens_visible]
+type    = "Visible_Walls"
+value	= 256
+reqs	=
+    { "type",     "name",              "range", "present"
+      "Building",  "Hanging Gardens",  "City",   TRUE
+    }
+
 [effect_hanging_gardens]
 type    = "Make_Happy"
 value	= 2
@@ -5382,6 +5408,14 @@ reqs	=
       "OutputType", "Trade", "Local"
     }
 ;************************************************************************ Mausoleum
+[effect_mausoleum_visible]
+type    = "Visible_Walls"
+value	= 1024
+reqs	=
+    { "type",     "name",                  "range", "present"
+      "Building", "Mausoleum of Mausolos", "City", TRUE
+    }
+
 ; ╭╯╭╯╭╯╭╯╭╯╭╯ Devs: THIS IS WHY REQS NEED TO BE ABLE TO DO "OR" LOGIC!
 ; .....................................
 ; EFFECT CHART:   CH SC CW GW   result 

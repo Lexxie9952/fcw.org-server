@@ -4920,6 +4920,17 @@ reqs	=
     }
 
 ;************************************************************************ Angkor Wat
+[effect_angkor_wat_visible]
+type    = "Visible_Walls"
+value	= 128
+reqs	=
+    { "type",     "name",           "range", "present"
+      "Building",  "Angkor Wat",    "City",   TRUE
+      "Gov",      "Democracy",      "Player", FALSE
+      "Gov",      "Communism",      "Player", FALSE
+      "Gov",      "Nationalism",    "Player", FALSE
+    }
+
 [effect_angkor_wat_free_tile_celeb_bonus]  ;free celebration tile output
 type    = "Output_Inc_Tile"  ; monarchy and theocracy
 value   = 1
@@ -5241,6 +5252,13 @@ reqs	=
 ;Great Wall bonus excluded in Great Wall effects
 
 ;************************************************************************ Code of Hammurabi
+[effect_hammurabi_visible]
+type    = "Visible_Walls"
+value	= 2048
+reqs	=
+    { "type",     "name",                  "range", "present"
+      "Building", "Code of Hammurabi",     "City",  TRUE
+    }
 [effect_hammurabi_corruption_1]
 type    = "Output_Waste"
 value	= -11 ; 37-11 = 26
@@ -5436,6 +5454,14 @@ value	= 1
 ;************************************************************************ Fusion Reactor
 ; see POWER PLANTS section
 ;************************************************************************ Hanging Gardens
+[effect_hanging_gardens_visible]
+type    = "Visible_Walls"
+value	= 256
+reqs	=
+    { "type",     "name",              "range", "present"
+      "Building",  "Hanging Gardens",  "City",   TRUE
+    }
+
 [effect_hanging_gardens]
 type    = "Make_Happy"
 value	= 2
@@ -5636,6 +5662,14 @@ reqs	=
       "OutputType", "Trade", "Local"
     }
 ;************************************************************************ Mausoleum
+[effect_mausoleum_visible]
+type    = "Visible_Walls"
+value	= 1024
+reqs	=
+    { "type",     "name",                  "range", "present"
+      "Building", "Mausoleum of Mausolos", "City", TRUE
+    }
+
 ; ╭╯╭╯╭╯╭╯╭╯╭╯ Devs: THIS IS WHY REQS NEED TO BE ABLE TO DO "OR" LOGIC!
 ; .....................................
 ; EFFECT CHART:   CH SC CW GW   result 

@@ -147,6 +147,7 @@ tiles = { "row", "column", "tag"
  8,  7, "city.modern_wall_2"
  8,  8, "city.modern_wall_3"
  8,  9, "city.modern_wall_4"
+ 8, 10, "city.hammurabi"      ;overlay but not replacement
 ;[S]
  9,  0, "city.postmodern_city_0"
  9,  1, "city.postmodern_city_1"
@@ -160,13 +161,17 @@ tiles = { "row", "column", "tag"
  9,  8, "city.postmodern_wall_3"
  9,  9, "city.postmodern_wall_4"
  ;Lexxie
+ 9, 10, "city.mausoleum_overlay" ; replaces whole city graphic
+ ;Lexxiee
  10, 0, "city.coastal_overlay"
  10, 1, "city.coastal_underlay"
  10, 2, "city.fortifications_overlay"
  10, 3, "city.fortifications_underlay"
  10, 4, "city.sam_overlay"
- 10, 5, "city.pyramid_overlay"
- 10, 6, "city.citadel_overlay"
- 10, 7, "city.ziggurat_overlay"
- 10, 8, "city.chichen_overlay"  ;uncomment when ready to use
+ 10, 5, "city.pyramid_overlay"  ; replaces whole city graphic
+ 10, 6, "city.citadel_overlay"  ; replaces whole city graphic
+ 10, 7, "city.ziggurat_overlay" ; replaces whole city graphic
+ 10, 8, "city.chichen_overlay"  ; replaces whole city graphic
+ 10, 9, "city.angkor_overlay"   ; replaces whole city graphic 
+ 10, 10,"city.hgarden_overlay"  ; replaces whole city graphic 
 }
