@@ -5140,6 +5140,14 @@ reqs =
       "Activity", "Road",          "Local", TRUE
     }
 ;************************************************************************ Chand Baori
+[effect_chand_baori_visible]
+type    = "Visible_Walls"
+value	= 4096
+reqs	=
+    { "type",     "name",           "range", "present"
+      "Building", "Chand Baori",    "City",   TRUE
+      "MinSize",  "20",             "City",   FALSE    ; disappears in post-modern metropolis age
+    }
 [effect_chand_baori]
 type    = "Output_Penalty_Tile"
 value = 3 ; 3+3 = 6; i.e., gone for fruit but in place for irrigated deer.
@@ -6311,6 +6319,15 @@ reqs    =
     }
 ;entertainer effect handled in the elvis effects section.
 ;************************************************************************ Sphinx
+[effect_sphinx_visible]
+type    = "Visible_Walls"
+value	= 8192
+reqs	=
+    { "type",     "name",           "range", "present"
+      "Building", "The Sphinx",     "City",   TRUE
+      "Gov",      "Despotism",      "Player", TRUE
+      "MinSize",  "20",             "City",   FALSE    ; disappears in post-modern metropolis age
+    }
 [effect_sphinx_tile]
 type    = "Output_Penalty_Tile"
 value = 100

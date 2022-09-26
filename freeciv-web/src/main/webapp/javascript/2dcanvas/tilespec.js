@@ -55,7 +55,9 @@ const CITY_WALLS = 1,
       CITY_HANGING_GARDEN = 256,
       CITY_CHICHEN_ITZA = 512,
       CITY_MAUSOLEUM = 1024,
-      CITY_HAMMURABI = 2048;
+      CITY_HAMMURABI = 2048,
+      CITY_CHAND_BAORI = 4096,
+      CITY_SPHINX = 8192;
 
 var current_select_sprite = 0;
 var max_select_sprite = 4;
@@ -354,8 +356,12 @@ function fill_sprite_array(layer, ptile, pedge, pcorner, punit, pcity, citymode)
       // Due to visibility difficulty, city tiles ALWAYS show highlighted pollution
       if (pcity != null) {
         if (polluted) sprite_array.push({"key" : "grid.pollute_ring"}); //ring under city "wraps" around it
-        
-        var layer_sprite = get_city_fortifications_underlay_sprite(pcity);   // underlays (coastal defence, fortifications)
+
+        var layer_sprite = get_city_wonder_underlay_sprite(pcity);
+        if (layer_sprite) sprite_array.push(layer_sprite);
+        sprite_array = sprite_array.concat(layer_sprite);
+
+        layer_sprite = get_city_fortifications_underlay_sprite(pcity);   // underlays (coastal defence, fortifications)
         if (layer_sprite) sprite_array.push(layer_sprite);
         layer_sprite = get_city_coastal_underlay_sprite(pcity);
         if (layer_sprite) sprite_array.push(layer_sprite);
@@ -1668,6 +1674,21 @@ function get_city_sam_battery_overlay_sprite(pcity) {
     return {"key": "city.sam_overlay", "offset_x" : -16, "offset_y" : -24};
   }
   return null; // no underlay.
+}
+// For wonder sprites that sit on top of the city graphic
+function get_city_wonder_underlay_sprite(pcity) {
+  var result = [];
+
+  // TOP LEFT: only show one by priority
+  if ((pcity['walls'] & CITY_SPHINX)) {
+    result.push({"key": "city.sphinx_underlay", "offset_x" : -16, "offset_y" : -24});
+  }
+  // BOTTOM LEFT: only show one by priority:
+  if ((pcity['walls'] & CITY_CHAND_BAORI)) {
+    result.push({"key": "city.chand_baori_underlay", "offset_x" : -16, "offset_y" : -24});
+  }
+  // more can go here later, including the other corners and some logic of which to show together
+  return result; // no underlay.
 }
 // For wonder sprites that sit on top of the city graphic
 function get_city_wonder_overlay_sprite(pcity) {
