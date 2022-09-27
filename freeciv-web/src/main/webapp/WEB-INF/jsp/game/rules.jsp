@@ -143,7 +143,7 @@
     <b>Clarification:</b>
   </div>
     <div style="font-size:85%">
-    11. Idle players can lose their nations on: turns 1-13: idle 3 turns; turns 14,15,16: idle 4,5,6 turns; turns 17,18,19: 7,8,9 turns. turn 20 onward: 10 turns. <br>
+    11. Idle players can lose their nations on: Turns 1-5: idle 2 turns; Turn 6: idle 3 turns; Turn 20: idle 4. T25: idle 5; T30: idle 6; T35: idle 7.<br>
     12. Players are allowed to ask for account deletion to change their name, to prevent the same feuds and alliances in every game or for other data protection reasons. <br>
     13. Delegation should be a last resort, should not last too long, nor happen too frequently. GM will arbitrate complaints.<br>
     13.1 One delegation per player is allowed, only if the delegate plans to come back, and only up to a week without special permission <br>
