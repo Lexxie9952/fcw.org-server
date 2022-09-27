@@ -406,7 +406,9 @@ var freemoji = [
 'appianway',
 'asmith',
 'chandbaori',
+'citadelofaleppo',
 'colossus',
+'commissariatofagriculture',
 'copernicusobservatory',
 'cureforcancer',
 'ecclesiasticalpalace',
@@ -437,6 +439,7 @@ var freemoji = [
 'oracle',
 'palace',
 'paxdei',
+'propagandaministry',
 'pyramids',
 'shakespearestheater',
 'sphinx',
@@ -524,6 +527,7 @@ var freemoji = [
 'proletarians',
 'migrants',
 'workers',
+'workersii',
 'engineers',
 
 //landcomerce
@@ -535,8 +539,11 @@ var freemoji = [
 'freight',
 //other
 'explorer',
+'scout',
 //diplomatic
+'emissary',
 'diplomat',
+'patriarch',
 'spy',
 
 //FOOT
@@ -547,12 +554,13 @@ var freemoji = [
 'legion',
 'musketeers',
 'falconeers',
-//'fanatics',
 'zealots',
 'riflemen',
 'partisan',
 'alpinetroops',
 'marines',
+'fanatics',
+'groundtroops',
 'paratroopers',
 'mechanizedinfantry',
 
@@ -564,17 +572,20 @@ var freemoji = [
 'crusaders',
 'dragoons',
 'cavalry',
+'lightarmor',
 'armor',
 'armorii',
 
 //BALLISTIC
 'catapult',
 'siegeram',
+'ballista',
 'cannon',
 'artillery',
 'howitzer',
 'anti-aircraftartillery',
 'mobilesam',
+'magnumturret',
 
 //FLIGHT
 'balloon',
@@ -589,6 +600,7 @@ var freemoji = [
 "multi-fighter",
 'groundstrikefighter',
 'stealthfighter',
+'stealthmulti-fighter',
 'mediumbomber',
 'heavybomber',
 'strategicbomber',
@@ -609,21 +621,25 @@ var freemoji = [
 'galleon',
 'frigate',
 'cargoship',
-'ironclad',
 'transport',
+'trawler',
+'ironclad',
 'destroyer',
 'cruiser',
 'submarine',
+'missilesubmarine',
 'missiledestroyer',
 'aegiscruiser',
 'battleship',
 'carrier',
 
 //BOMB MISSILE
+'bombs',
 'atombomb',
 'hydrogenbomb',
 'doomsdaybomb',
 'cruisemissile',
+'anti-ballisticmissile',
 'nuclearmissile',
 'tacticalnuke',
 
