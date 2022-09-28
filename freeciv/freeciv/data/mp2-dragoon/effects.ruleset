@@ -871,8 +871,8 @@ reqs    =
 
 [effect_terrain_bonus_river]
 type   = "Terrain_Defend_Add_Bonus"
-value = 50
- reqs	=
+value  = 50
+reqs	 =
     { "type",          "name",           "range"
       "Extra",         "River",          "Local"
       "UnitClassFlag", "TerrainDefense", "Local"
@@ -889,12 +889,21 @@ reqs    =
     }
 [effect_city_helicopter_first_arrival_in_city]
 type    = "Unit_Recover"
-value   = 9 ; 9+1 = 10
+value   = 9 ; 9 + 1(min.heal) = 10
 reqs    =
     { "type",          "name",         "range", "present"
       "UnitClass",     "Helicopter",   "Local", TRUE
       "CityTile",      "Center",       "Local", TRUE
       "UnitState",     "MovedThisTurn","Local", TRUE
+    }
+[effect_city_helicopter_resting_in_city_min10hp]
+type    = "Unit_Recover"
+value   = 2 ; 2 + (33% of 20 [rest in city])=6 + (10% of 20 [resting])=2 = 10hp
+reqs    =
+    { "type",          "name",         "range", "present"
+      "UnitClass",     "Helicopter",   "Local", TRUE
+      "CityTile",      "Center",       "Local", TRUE
+      "UnitState",     "MovedThisTurn","Local", FALSE
     }
 
 ;Kill off Tribesmen after 100AD for those with no Chand Baori
@@ -7828,6 +7837,7 @@ reqs    =
       "Action",        "Transport Board", "Local", TRUE
       "UnitClassFlag", "DelayLoad",       "Local", TRUE      ; Does not affect Aircraft
       "UnitType",      "Marines",         "Local", FALSE     ; Does not affect Marines
+      "UnitType",      "Bombs",           "Local", FALSE     ; prevent 2/3 TiredAttack by loading up a Bomb. 
     }
 [effect_action_success_move_cost_deboard]
 type    = "Action_Success_Actor_Move_Cost"
