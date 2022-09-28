@@ -549,7 +549,7 @@ flags         = "Unreachable", "DoesntOccupyTile"
 ; "IgTer"       = use constant move cost defined in igter_cost (terrain.ruleset)
 ;                 rather than terrain/road etc cost, unless terrain cost is
 ;                 less
-; "OneAttack"	  = can only make a single attack, regardless of movement points
+; "OneAttack"	  = can only make a single attack, regardless of movement points. SLATED FOR DEPRECATION IN 3.1
 ; "FieldUnit"	  = cause unhappiness even when not being aggressive
 ; "BeachLander" = won’t lose all its movement when moving from non-native
 ;                 terrain to native terrain even if slow_invasions is on.
@@ -5218,8 +5218,8 @@ bonuses       =
      "Missile",      "DefenseDividerPct", 89, TRUE    ; 65.5% vs. conventional missiles, 74.25% vet vs. green
      "Nuclear",      "DefenseDividerPct", -34, TRUE   ; 40% vs. nuclear missles, 50% as vet
    }
-flags         = "NeverProtects", "OneAttack", "HasNoZOC", "Unbribable",
-                "CantReachAir", "Missile", "NeverBlocked", "AlwaysAttackClass1", "MultiSlot"
+flags         = "NeverProtects", "HasNoZOC", "Unbribable", "CantReachAir",
+                "Missile", "NeverBlocked", "AlwaysAttackClass1", "MultiSlot"
 roles         = ""
 helptext      = _("\
 ABMs intercept enemy missiles. Because there is seldom enough time to\
@@ -5271,13 +5271,13 @@ bonuses       =
      "AntiAir",      "DefenseMultiplierPct", -99, TRUE   ; AAA, Mobile SAM, AEGIS
      "NonMil",       "DefenseMultiplierPct", -99, TRUE   ; all NonMil units
      "AirAttacker",  "DefenseMultiplierPct", -99, TRUE   ; Aircraft (including Bombers)
-     "FieldUnit",    "DefenseMultiplierPct",  99, TRUE   ; Cancel out overlapped double-penalty on Missiles and Bombers.
+     "FieldUnit",    "DefenseMultiplierPct",  99, TRUE   ; Cancel out overlapped double-penalty on Bombers.
      "Nuclear",      "DefenseMultiplierPct", -99, TRUE   ; Nuclear don't have double-penalty so cancel out the cancellation on line above.
    ; Now, we undo all the above and set D:1 for the case of being intercepted by an ABM:
      "Missile",      "DefenseMultiplierPct", 99, TRUE
    }
-flags         = "NeverProtects", "FieldUnit", "OneAttack", "HasNoZOC", "Unbribable",
-                "CantReachAir", "Missile", "NeverBlocked", "WillNever", "ProvokingClass1"
+flags         = "NeverProtects", "HasNoZOC", "Unbribable", "CantReachAir",
+                "Missile", "NeverBlocked", "WillNever", "ProvokingClass1"
 roles         = ""
 veteran_names =
   _("?vet_rank:basic"),
@@ -5342,7 +5342,7 @@ bonuses       =
    ; Now, we undo all the above and set D:1 for the case of being intercepted by an ABM:
      "Missile",      "DefenseMultiplierPct", 99, TRUE
    }
-flags         = "NeverProtects", "FieldUnit", "OneAttack", "Nuclear", "HasNoZOC", "Unbribable",
+flags         = "NeverProtects", "FieldUnit", "Nuclear", "HasNoZOC", "Unbribable",
                 "NeverBlocked", "WillNever", "NoVeteran", "ProvokingClass1"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
@@ -5403,7 +5403,7 @@ bonuses       =
    ; Now, we undo all the above and set D:1 for the case of being intercepted by an ABM:
      "Missile",      "DefenseMultiplierPct", 99, TRUE
    }
-flags         = "NeverProtects", "FieldUnit", "OneAttack", "Nuclear", "HasNoZOC", "Unbribable",
+flags         = "NeverProtects", "FieldUnit", "Nuclear", "HasNoZOC", "Unbribable",
                 "NeverBlocked", "WillNever", "NoVeteran", "ProvokingClass1"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
@@ -5448,8 +5448,8 @@ uk_shield     = 0
 uk_food       = 0
 uk_gold       = 1
 targets       = "LandRail", "LandRoad"
-flags         = "NeverProtects", "OneAttack", "HasNoZOC", "Unbribable",
-                "WillNever", "NoVeteran", "MultiSlot", "CantReachAir", "Missile"
+flags         = "NeverProtects", "HasNoZOC", "Unbribable", "WillNever",
+                "NoVeteran", "MultiSlot", "CantReachAir", "Missile"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
 veteran_base_raise_chance = 0
@@ -5498,7 +5498,7 @@ uk_food       = 0
 uk_gold       = 0
 targets       = "Balloon", "Helicopter", "Air", "AirProtect", "Air_High_Altitude", "Missile", "Submarine", "LandRail", "LandRoad", "Space", "Zeppelin"
 disembarks    = "Air", "Air_High_Altitude"
-flags         = "NeverProtects", "FieldUnit", "OneAttack", "Nuclear", "HasNoZOC", "Unbribable",
+flags         = "NeverProtects", "FieldUnit", "Nuclear", "HasNoZOC", "Unbribable",
                 "NeverBlocked", "WillNever", "NoVeteran"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
@@ -5546,7 +5546,7 @@ uk_food       = 0
 uk_gold       = 0
 targets       = "Balloon", "Helicopter", "Air", "AirProtect", "Air_High_Altitude", "Missile", "Submarine", "LandRail", "LandRoad", "Space", "Zeppelin"
 disembarks    = "Air", "Air_High_Altitude"
-flags         = "NeverProtects", "FieldUnit", "OneAttack", "Nuclear", "HasNoZOC", "Unbribable",
+flags         = "NeverProtects", "FieldUnit", "Nuclear", "HasNoZOC", "Unbribable",
                 "NeverBlocked", "WillNever", "NoVeteran"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
@@ -5597,7 +5597,7 @@ uk_food       = 0
 uk_gold       = 0
 targets       = "Balloon", "Helicopter", "Air", "AirProtect", "Air_High_Altitude", "Missile", "Submarine", "LandRail", "LandRoad", "Space", "Zeppelin"
 disembarks    = "Air", "Air_High_Altitude"
-flags         = "NeverProtects", "FieldUnit", "OneAttack", "Nuclear", "HasNoZOC", "Unbribable",
+flags         = "NeverProtects", "FieldUnit", "Nuclear", "HasNoZOC", "Unbribable",
                 "NeverBlocked", "WillNever", "Unique", "NoVeteran"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")

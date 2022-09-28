@@ -62,7 +62,10 @@ and can now be built with veteran levels.
 15. Carriers price reduce, 150. Carry 12.
 16. default start with 4 tribesmen not 3 - help boost early despotism and bronze age even more: combat/defense, work, buidings, wonders!
 17. "Russian Doll" rule, wagons and trucks can't board transports while they're carring their own cargo.
-18.  
+18. Cruise Missiles aren't field units. This penalty goes back to an earlier simpler less realistic game. At this point in MP2 evolution,
+   making a CM a field unit causing unhappiness in every Aegis Cruiser carrying it, it's like Cannons getting extra unhappiness for each
+   cannonball they carry.
+19. 
 
 
 
