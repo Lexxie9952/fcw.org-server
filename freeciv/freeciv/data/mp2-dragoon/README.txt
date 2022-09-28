@@ -1,5 +1,6 @@
+<img src='https://static.wikia.nocookie.net/freeciv/images/2/2a/Mp2dragoon_large.png'>
 <b><a href="http://freeciv.fandom.com/wiki/Multiplayer_II:_Dragoon,_Game_Manual" target="_blank">Full Game Manual, MP2-Dragoon</a></b>
-<u>Useful supplements to the in-game manual</u> <i>(from the Full Game Manual)</i>:
+<u>Useful supplements to the in-game manual</u>:
 <a href="http://freeciv.fandom.com/wiki/Combat.mp2d" target="_blank">Combat</a>
 <a href="http://freeciv.fandom.com/wiki/Economy.mp2d" target="_blank">Economy</a>
 <a href="http://freeciv.fandom.com/wiki/Diplomacy.mp2d" target="_blank">Diplomacy</a>
@@ -16,14 +17,15 @@
 <a href="http://freeciv.fandom.com/wiki/Diplomatic_Action_Chart.mp2" target="_blank">Diplomatic Odds Charts</a>
 <a href="http://freeciv.fandom.com/wiki/Vigil_engagement_chart.mp2c" target="_blank">Vigil Engagement Chart</a>
 <a href="http://freeciv.fandom.com/wiki/Hotkeys.mp" target="_blank">Hotkeys and Mouse Control</a>
-
-The MP2 Dragoon ruleset is the fourth official release of the Multiplayer-Evolution II ruleset. Multiplayer II Evolution rulesets are modernized rulesets to take advantage of cutting-edge advancements in Freeciv Server development. Earlier versions are closer to a version of Civ 2 that has been perfected for massive multiplayer game balance. Later versions evolve to import features, improvements, and novel ideas from all other versions of Freeciv, later versions of the commercial series, as well as original ideas from experienced players.
-
-<u>Major changes to MP2-Dragoon include</u>:
-• Food needed to grow cities: now shaves several turns from growth, and softens dynamics that discouraged cities of size 3-5 in the early game.
-— <u>rules  s1  s2  s3  s4  s5  s6  s7  s8  s9</u>...
-— MP2C:  20  30  40  50  60  70  70  70  70...
-— MP2D:  15  20  25  31  37  45  53  60  60...
+<hr color="#998">
+MP2 Dragoon is the 4th release of Multiplayer-Evolution II. MP2 games take full advantage of Freeciv development advances. Early versions are like a modernized Civ 2 balanced for massive multiplayer games. Later versions keep the same DNA yet evolve in balance, realism, and sophistication. New players can start with <b>MP2.1 Avant-garde</b>, then progress to the advanced releases.
+<hr color="#998"><div>
+<big>Major changes to MP2-Dragoon include</big>:
+• Food needed to grow cities matches pace of a 120 turn game and is more permissive of cities over size 2 in the Bronze Age.<table style="margin-top:-45px; margin-bottom:-5px; padding-left:30px; padding-right:20px; border-spacing:0px; text-align:center; background:#79ff7580; color:#000; border:solid 1px #000; border-radius:13px">
+<tbody><tr><td></td><td>size 1</td><td>size 2</td><td>size 3</td><td>size 4</td><td>size 5</td><td>size 6</td><td>size 7</td><td>size 8+</td></tr>
+<tr><td>MP2 Caravel</td><td style="padding: 3px 15px; color:#eea; border:1px solid #000">20</td><td style="padding: 3px 15px; color:#eea; border:1px solid #000">30</td><td style="padding: 3px 15px; color:#eea; border:1px solid #000">40</td><td style="padding: 3px 15px; color:#eea; border:1px solid #000">50</td><td style="padding: 3px 15px; color:#eea; border:1px solid #000">60</td><td style="padding: 3px 15px; color:#eea; border:1px solid #000">70</td><td style="padding: 3px 15px; color:#eea; border:1px solid #000">70</td><td style="padding: 3px 15px; color:#eea; border:1px solid #000">70</td></tr>
+<tr><td>MP2 Dragoon</td><td style="padding: 3px 15px; color:#ffe; border:1px solid #000">15</td><td style="padding: 3px 15px; color:#ffe; border:1px solid #000">20</td><td style="padding: 3px 15px; color:#ffe; border:1px solid #000">25</td><td style="padding: 3px 15px; color:#ffe; border:1px solid #000">31</td><td style="padding: 3px 15px; color:#ffe; border:1px solid #000">37</td><td style="padding: 3px 15px; color:#ffe; border:1px solid #000">45</td><td style="padding: 3px 15px; color:#ffe; border:1px solid #000">53</td><td style="padding: 3px 15px; color:#ffe; border:1px solid #000">60</td></tr>
+</tbody></table>
 • Rapture is possible in all modern governments with different rates and conditions
 • Corruption reduction from buildings/wonders improved for small-, mid-size cities
 • "Goods" unit enhanced to broaden the flexibility of ancient economies
@@ -47,3 +49,4 @@ For more details, see links below:
 <a href="http://freeciv.fandom.com/wiki/Design_Log.mp2d#Multiplayer_II:_Dragoon_Design_Log" target="_blank">MP2 Dragoon Design Log</a>
 
 <img style="margin-left:auto;margin-right:auto;display:block" src='/images/chapter_mark.png'>
+</div>
