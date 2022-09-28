@@ -2109,7 +2109,7 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-flags         = "FieldUnit", "OneAttack", "AirAttacker", "HasNoZOC", "Unbribable", "NeverProtects", "NeverBlocked"
+flags         = "FieldUnit", "AirAttacker", "HasNoZOC", "Unbribable", "NeverProtects", "NeverBlocked"
 roles         = ""
 helptext      = _("\
 The Cruise Missile can strike deep into enemy territory. It cannot attack\
@@ -2145,7 +2145,7 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-flags         = "FieldUnit", "OneAttack", "Nuclear", "HasNoZOC", "Unbribable", "NeverProtects", "NeverBlocked"
+flags         = "FieldUnit", "Nuclear", "HasNoZOC", "Unbribable", "NeverProtects", "NeverBlocked"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
 veteran_base_raise_chance = 0

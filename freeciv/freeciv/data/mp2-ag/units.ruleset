@@ -3549,7 +3549,7 @@ uk_food       = 0
 uk_gold       = 0
 embarks       = "Submarine"
 disembarks    = "Submarine"
-flags         = "NeverProtects", "FieldUnit", "OneAttack", "HasNoZOC", "Unbribable",
+flags         = "NeverProtects", "FieldUnit", "HasNoZOC", "Unbribable",
                 "CantReachAir", "Missile", "NeverBlocked", "WillNever"
 roles         = ""
 helptext      = _("\
@@ -3589,7 +3589,7 @@ uk_food       = 0
 uk_gold       = 0
 targets       = "Balloon", "Helicopter", "Air", "AirProtect", "AirPillage", "Missile", "Submarine"
 disembarks    = "Air", "AirPillage"
-flags         = "NeverProtects", "FieldUnit", "OneAttack", "Nuclear", "HasNoZOC", "Unbribable",
+flags         = "NeverProtects", "FieldUnit", "Nuclear", "HasNoZOC", "Unbribable",
                 "NeverBlocked", "WillNever", "NoVeteran"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
@@ -3636,7 +3636,7 @@ uk_food       = 0
 uk_gold       = 0
 targets       = "Balloon", "Helicopter", "Air", "AirProtect", "AirPillage", "Missile", "Submarine"
 disembarks    = "Air", "AirPillage"
-flags         = "NeverProtects", "FieldUnit", "OneAttack", "Nuclear", "HasNoZOC", "Unbribable",
+flags         = "NeverProtects", "FieldUnit", "Nuclear", "HasNoZOC", "Unbribable",
                 "NeverBlocked", "WillNever", "NoVeteran"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
@@ -3686,7 +3686,7 @@ uk_food       = 0
 uk_gold       = 0
 targets       = "Balloon", "Helicopter", "Air", "AirProtect", "AirPillage", "Missile", "Submarine"
 disembarks    = "Air", "AirPillage"
-flags         = "NeverProtects", "FieldUnit", "OneAttack", "Nuclear", "HasNoZOC", "Unbribable",
+flags         = "NeverProtects", "FieldUnit", "Nuclear", "HasNoZOC", "Unbribable",
                 "NeverBlocked", "WillNever", "Unique", "NoVeteran"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
@@ -3737,7 +3737,7 @@ uk_gold       = 0
 embarks       = "Submarine"
 disembarks    = "Submarine"
 targets       = "Balloon", "Helicopter", "Air", "AirProtect", "AirPillage", "Missile", "Submarine"
-flags         = "NeverProtects", "FieldUnit", "OneAttack", "Nuclear", "HasNoZOC", "Unbribable",
+flags         = "NeverProtects", "FieldUnit", "Nuclear", "HasNoZOC", "Unbribable",
                 "NeverBlocked", "WillNever", "NoVeteran"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
@@ -3784,7 +3784,7 @@ uk_gold       = 0
 embarks       = "Submarine"
 disembarks    = "Submarine"
 targets       = "Balloon", "Helicopter", "Air", "AirProtect", "AirPillage", "Missile", "Submarine"
-flags         = "NeverProtects", "FieldUnit", "OneAttack", "Nuclear", "HasNoZOC", "Unbribable",
+flags         = "NeverProtects", "FieldUnit", "Nuclear", "HasNoZOC", "Unbribable",
                 "NeverBlocked", "WillNever", "NoVeteran"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")

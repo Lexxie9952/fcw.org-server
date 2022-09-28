@@ -3256,7 +3256,7 @@ uk_food       = 0
 uk_gold       = 0
 embarks       = "Submarine"
 disembarks    = "Submarine"
-flags         = "NeverProtects", "FieldUnit", "OneAttack", "HasNoZOC", "Unbribable", "CantReachAir", "Missile", "NeverBlocked"
+flags         = "NeverProtects", "FieldUnit", "HasNoZOC", "Unbribable", "CantReachAir", "Missile", "NeverBlocked"
 roles         = ""
 helptext      = _("\
 A Cruise Missile can strike distant targets. It\
@@ -3295,7 +3295,7 @@ uk_food       = 0
 uk_gold       = 0
 targets       = "Balloon", "Helicopter", "Air", "AirProtect", "AirPillage", "Missile", "Submarine"
 disembarks    = "Air", "AirPillage"
-flags         = "NeverProtects", "FieldUnit", "OneAttack", "Nuclear", "HasNoZOC", "Unbribable",
+flags         = "NeverProtects", "FieldUnit", "Nuclear", "HasNoZOC", "Unbribable",
                 "NeverBlocked", "NoVeteran"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
@@ -3341,7 +3341,7 @@ uk_gold       = 0
 embarks       = "Submarine"
 disembarks    = "Submarine"
 targets       = "Balloon", "Helicopter", "Air", "AirProtect", "AirPillage", "Missile", "Submarine"
-flags         = "NeverProtects", "FieldUnit", "OneAttack", "Nuclear", "HasNoZOC", "Unbribable", "NeverBlocked"
+flags         = "NeverProtects", "FieldUnit", "Nuclear", "HasNoZOC", "Unbribable", "NeverBlocked"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
 veteran_base_raise_chance = 0

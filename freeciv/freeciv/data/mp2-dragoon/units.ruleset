@@ -5227,7 +5227,7 @@ bonuses       =
      "Missile",      "DefenseDividerPct", 89, TRUE    ; 65.5% vs. conventional missiles, 74.25% vet vs. green
      "Nuclear",      "DefenseDividerPct", -34, TRUE   ; 40% vs. nuclear missles, 50% as vet
    }
-flags         = "NeverProtects", "OneAttack", "HasNoZOC", "Unbribable",
+flags         = "NeverProtects", "HasNoZOC", "Unbribable",
                 "CantReachAir", "Missile", "NeverBlocked", "AlwaysAttackClass1", "MultiSlot"
 roles         = ""
 helptext      = _("\
@@ -5285,7 +5285,7 @@ bonuses       =
    ; Now, we undo all the above and set D:1 for the case of being intercepted by an ABM:
      "Missile",      "DefenseMultiplierPct", 99, TRUE
    }
-flags         = "NeverProtects", "FieldUnit", "OneAttack", "HasNoZOC", "Unbribable",
+flags         = "NeverProtects", "FieldUnit", "HasNoZOC", "Unbribable",
                 "CantReachAir", "Missile", "NeverBlocked", "WillNever", "ProvokingClass1"
 roles         = ""
 veteran_names =
@@ -5351,7 +5351,7 @@ bonuses       =
    ; Now, we undo all the above and set D:1 for the case of being intercepted by an ABM:
      "Missile",      "DefenseMultiplierPct", 99, TRUE
    }
-flags         = "NeverProtects", "FieldUnit", "OneAttack", "Nuclear", "HasNoZOC", "Unbribable",
+flags         = "NeverProtects", "FieldUnit", "Nuclear", "HasNoZOC", "Unbribable",
                 "NeverBlocked", "WillNever", "NoVeteran", "ProvokingClass1"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
@@ -5412,7 +5412,7 @@ bonuses       =
    ; Now, we undo all the above and set D:1 for the case of being intercepted by an ABM:
      "Missile",      "DefenseMultiplierPct", 99, TRUE
    }
-flags         = "NeverProtects", "FieldUnit", "OneAttack", "Nuclear", "HasNoZOC", "Unbribable",
+flags         = "NeverProtects", "FieldUnit", "Nuclear", "HasNoZOC", "Unbribable",
                 "NeverBlocked", "WillNever", "NoVeteran", "ProvokingClass1"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
@@ -5457,7 +5457,7 @@ uk_shield     = 0
 uk_food       = 0
 uk_gold       = 1
 targets       = "LandRail", "LandRoad"
-flags         = "NeverProtects", "OneAttack", "HasNoZOC", "Unbribable",
+flags         = "NeverProtects", "HasNoZOC", "Unbribable",
                 "WillNever", "NoVeteran", "MultiSlot", "CantReachAir", "Missile"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
@@ -5507,7 +5507,7 @@ uk_food       = 0
 uk_gold       = 0
 targets       = "Balloon", "Helicopter", "Air", "AirProtect", "Air_High_Altitude", "Missile", "Submarine", "LandRail", "LandRoad", "Space", "Zeppelin"
 disembarks    = "Air", "Air_High_Altitude"
-flags         = "NeverProtects", "FieldUnit", "OneAttack", "Nuclear", "HasNoZOC", "Unbribable",
+flags         = "NeverProtects", "FieldUnit", "Nuclear", "HasNoZOC", "Unbribable",
                 "NeverBlocked", "WillNever", "NoVeteran"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
@@ -5555,7 +5555,7 @@ uk_food       = 0
 uk_gold       = 0
 targets       = "Balloon", "Helicopter", "Air", "AirProtect", "Air_High_Altitude", "Missile", "Submarine", "LandRail", "LandRoad", "Space", "Zeppelin"
 disembarks    = "Air", "Air_High_Altitude"
-flags         = "NeverProtects", "FieldUnit", "OneAttack", "Nuclear", "HasNoZOC", "Unbribable",
+flags         = "NeverProtects", "FieldUnit", "Nuclear", "HasNoZOC", "Unbribable",
                 "NeverBlocked", "WillNever", "NoVeteran"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
@@ -5606,7 +5606,7 @@ uk_food       = 0
 uk_gold       = 0
 targets       = "Balloon", "Helicopter", "Air", "AirProtect", "Air_High_Altitude", "Missile", "Submarine", "LandRail", "LandRoad", "Space", "Zeppelin"
 disembarks    = "Air", "Air_High_Altitude"
-flags         = "NeverProtects", "FieldUnit", "OneAttack", "Nuclear", "HasNoZOC", "Unbribable",
+flags         = "NeverProtects", "FieldUnit", "Nuclear", "HasNoZOC", "Unbribable",
                 "NeverBlocked", "WillNever", "Unique", "NoVeteran"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
