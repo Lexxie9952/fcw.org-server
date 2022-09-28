@@ -568,8 +568,20 @@ int get_total_attack_power(const struct unit *attacker,
   int mod;
   int attackpower = get_attack_power(attacker);
 
+  mod = 100 + get_tile_bonus(unit_tile(defender), attacker, EFT_ATTACK_BONUS);
+
+/* FORMER CODE, which was wrong...
   mod = 100 + get_unittype_bonus(unit_owner(attacker), unit_tile(defender),
                                  unit_type_get(attacker), EFT_ATTACK_BONUS);
+  WHY WE MUST USE get_tile_bonus() instead. get_unittype_bonus() can't
+  evaluate all kinds of details in the req scope FOR NO GOOD REASON, such as
+  unit-specific details such as MinMoveFrags, UnitState, etc. EXAMPLES of
+  why get_tile_bonus() is needed: an attack bonus for a unit IFF it's
+  already fortified, or a bonus/penalty if the unit is transported or 
+  !transported, or has < or > a certain number of MinMoveFrags (e.g.,
+  a stronger 'tired attack' penalty or a 'charge' or 'ambush' bonus), 
+  or is OnDomesticTile and fights stronger for the Homeland, etc.                              
+*/
 
   return attackpower * mod / 100;
 }
