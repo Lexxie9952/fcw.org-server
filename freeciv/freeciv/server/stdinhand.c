@@ -3484,8 +3484,15 @@ bool observe_command(struct connection *caller, char *str, bool check)
                 pconn->username,
                 player_name(pplayer));
     } else {
-      cmd_reply(CMD_OBSERVE, caller, C_OK, _("%s now observes"),
-                pconn->username);
+      if (is_longturn()) {
+        /* An observer in longturn lets us know our player slots are full, and,
+           if the person chats, that he's not a real player to take seriously. */
+        cmd_reply(CMD_OBSERVE, caller, C_OK, _("%s now observes"),
+                  pconn->username);
+      } else {
+        /* Minimize all bothering distractions to players in singleplayer games */
+        cmd_reply(CMD_OBSERVE, caller, C_OK, " ");
+      }
     }
   }
 
