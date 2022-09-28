@@ -3651,7 +3651,7 @@ Helicopters are the Air Cavalry of modern armies. They can attack multiple targe
 "), _("\
 For each turn not ended in a City, Base, or Carrier, 1hp is lost. +1 move\
  is awarded if starting a turn in a City or Airbase. Whether resting or not,\
- all Helicopter types regain 10hp the first turn-change spent in a city. \n\
+ all Helicopter types regain 10hp if turn-change is spent in a city. \n\
 "), _("\
 Helicopters fly low to avoid Interception. This invites attacks by ground units from\
  Riflemen onward. They are unreachable to Artillery types and get +50% defense\
