@@ -321,7 +321,7 @@ function unit_can_deboard(punit)
   if (pclass == "Helicopter") return true;
   if (pclass == "Missile") return true;
 
-  if (pclass.startsWith("Land")) {
+  if (pclass.includes("Land")) {
     if (is_ocean_tile(ptile)) return false;
   }
 
@@ -335,7 +335,7 @@ function unit_can_deboard(punit)
   }
   // AG onward:
   if ( (tclass.rule_name == "Helicopter" || tclass.rule_name.startsWith("Air"))
-        && (pclass.startsWith("Land") || pclass == "Bomb") ) {
+        && (pclass.includes("Land") || pclass == "Bomb") ) {
     // NB:Land could only be on a Transport Helicopter or Airplane utype.
     if (!tile_has_extra(ptile, EXTRA_AIRBASE)) return false;
     return true;
@@ -403,7 +403,7 @@ function unit_could_possibly_load(punit, ptype, ttype, tclass)
 
   // Transported units can't swap transports except under some conditions:
   // TO DO: when actionenabler_load is in server, we can put all this in game.ruleset actionenablers.
-  if ( (pclass.startsWith("Land") || pclass=="Cargo") && punit['transported']) {
+  if ( (pclass.includes("Land") || pclass=="Cargo") && punit['transported']) {
 
     var from_unit  = units[punit['transported_by']]; // unit currently transporting the cargo who wants to swap transports
     var from_class = get_unit_class(from_unit);      // unit_class of the transport currently transporting the cargo
@@ -516,7 +516,7 @@ function unit_could_possibly_load(punit, ptype, ttype, tclass)
     //the transport type is one who can't carry missiles:
     return false;
   }
-  else if (pclass.startsWith("Land")) {   // Land, LandNoKill, LandAirSea, LandRail, LandRoad
+  else if (pclass.includes("Land")) {   // Land, LandNoKill, LandAirSea, LandRail, LandRoad, Big Land
     //console.log("  Land* CHECK ON: tclass.rulename =="+tclass.rule_name);
     if (tclass.rule_name == "Land") return false; // can't load on Caravans, the only Land class with cargo capacity.
     if (tclass.rule_name == "Submarine") return false;
