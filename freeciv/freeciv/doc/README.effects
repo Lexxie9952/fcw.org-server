@@ -122,7 +122,7 @@ UnitState is "Transported", "Transporting", "OnNativeTile", "OnLivableTile",
 Activity is "Idle", "Pollution", "Mine", "Irrigate", "Fortified", "Fortress", "Sentry",
 "Pillage", "Goto", "Explore", "Transform", "Fortifying", "Fallout", "Base", "Road",
 "Convert", ["Cultivate"] (Irrigate), or ["Plant"] (Mine).
-MinMoveFrags is the minimum move fragments the unit must have left.
+MinMoveFrags is the minimum move fragments the unit must have left: ">=". To evaluate "<" use MinMoveFrags with a "FALSE".
 MinCalFrag is the minimum sub-year division the calendar must have reached,
 if enabled (see [calendar].fragments in game.ruleset).
 ServerSetting is if a Boolean server setting is enabled. The setting must be
