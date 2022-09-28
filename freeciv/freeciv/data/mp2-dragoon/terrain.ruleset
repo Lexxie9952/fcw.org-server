@@ -2308,6 +2308,7 @@ generated      = FALSE
 reqs           =
     { "type", "name", "range", "present"
       "TerrainFlag", "Low Land", "Local", TRUE
+      "TerrainClass", "Oceanic", "CAdjacent", FALSE    ;Prevents second-priority waterway from going first
       "ExtraFlag", "WaterwaySource", "CAdjacent", TRUE
       "Tech", "Engineering", "Player", TRUE
       "UnitFlag", "CanRoad", "Local", TRUE
