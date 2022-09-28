@@ -124,7 +124,7 @@ genus		= "Improvement"
 reqs	=
     { "type", "name", "range"
       "Tech", "Seafaring", "Player"
-      "TerrainClass", "Oceanic", "Adjacent"
+      "TerrainClass", "Oceanic", "City"
     }
 graphic	= "b.harbour"
 graphic_alt	= "-"
