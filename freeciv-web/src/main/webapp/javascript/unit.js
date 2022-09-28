@@ -496,7 +496,11 @@ function unit_could_possibly_load(punit, ptype, ttype, tclass)
         && tclass.rule_name != "LandRail"
         && tclass.rule_name != "LandRoad" ) return false;
     if (ttype.cargo[0]==0) return false; // any "Bomber" who can't carry bombs.
-  } 
+  }
+  else if (pclass == "Bomb2") { // Conventional Bombs can't use land transport because we don't allow "flying trucks" to do bombing raids.
+    if (!ttype.name.includes("Bomber")) return false;
+    if (ttype.cargo[0]==0) return false; // any "Bomber" who can't carry bombs.
+  }
   else if (pclass == "Missile") {
     if (ttype.name=="Missile Destroyer" ||
         ttype.name=="AEGIS Cruiser" ||
@@ -540,9 +544,10 @@ function unit_could_possibly_load(punit, ptype, ttype, tclass)
       if (ttype.name == "Carrier") return false;
       if (ttype.name == "Helicopter") return false; // transport heli allowed
     }
-    if (pclass == "LandRoad" || pclass =="LandRail") {
+    if (pclass == "LandRoad") {
       if (tclass.rule_name == "Helicopter") return false;
     }
+    //LandRail already disqualified as never cargo, way above.
   }
   else if (pclass == "Balloon") {
     if (tclass.rule_name == "LandRail") return true;
