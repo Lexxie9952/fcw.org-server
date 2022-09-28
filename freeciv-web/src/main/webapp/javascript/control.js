@@ -6426,7 +6426,7 @@ function can_build_canal(punit, ptile)
                    (client_rules_flag[CRF_MP2_C] && tile_has_extra(tile1, EXTRA_CANAL)) // a canal is CAdj.
                 ) {
           water_near = EXTRA_WATERWAY; // this is a double code for TRUE and what kind of canal can be made
-          break;
+          //break; DON'T BREAK BECAUSE OTHERWISE WE WON'T CHECK IF THE PREFERABLE CANAL IS POSSIBLE IN OTHER ADJACENT DIRECTIONS!
         }
     }
   }
