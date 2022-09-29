@@ -631,6 +631,7 @@ var freemoji = [
 'missiledestroyer',
 'aegiscruiser',
 'battleship',
+'lightcarrier',
 'carrier',
 
 //BOMB MISSILE
