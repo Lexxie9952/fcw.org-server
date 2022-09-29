@@ -7045,7 +7045,7 @@ function request_unit_build_city()
 
             swal({
               title: 'Add '+ptype['name']+' to \n'+target_city['name']+'?',
-              text: 'Unit will add +1 population and re-arrange citizen tile workers.',
+              text: 'Unit will add +'+ptype['city_size']+' population and re-arrange citizen tile workers.',
               type: 'info',
               background: '#a19886',
               showCancelButton: true,
