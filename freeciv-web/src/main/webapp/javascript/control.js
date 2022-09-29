@@ -7610,7 +7610,7 @@ function update_goto_path_panel(goto_move_cost, path_length, turns, remaining)
   /* Prevent oversensitive replacing of unit stats panel when we aren't in goto
      mode; caused by every click potentially being the start of a goto drag. */ 
   if (!goto_active) return;
-  if (enable_goto_drag) {
+  if (enable_goto_drag && path_length==0) {
     goto_path_skip_count++;
     if (goto_path_skip_count>goto_path_trigger) goto_path_skip_count=0;
     else return;
