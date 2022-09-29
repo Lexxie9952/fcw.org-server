@@ -2132,7 +2132,7 @@ reqs           =
     }
 build_time     = 3
 removal_time   = 0
-native_to      = "Land", "LandNoKill", "LandAirSea", "LandRail", "Big Land"
+native_to      = "Land", "LandNoKill", "LandAirSea", "Big Land"
 hidden_by      = "Naval Base"
 flags          = "NativeTile", "AutoOnCityCenter"
 helptext       = _("\
