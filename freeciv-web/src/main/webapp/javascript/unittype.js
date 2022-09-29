@@ -59,7 +59,7 @@ const UCF_BORDERPOLICE = UCF_USER_FLAG_5;
 const UCF_CARGO_RESTRAINED = UCF_USER_FLAG_6;
 const UCF_WATER_VESSEL = UCF_USER_FLAG_7;
 const UCF_DELAYLOAD = UCF_USER_FLAG_8;         // Fractional move points spent to load or unload this unit.
-const UCF_UNLOADONCE = UCF_USER_FLAG9;         // Loses 2/3 moves when unloaded, uses no moves to load
+const UCF_UNLOADONCE = UCF_USER_FLAG_9;        // Loses 2/3 moves when unloaded, uses no moves to load
 // 12 IS MAX userflags for classes!
 
 // Unit flags
