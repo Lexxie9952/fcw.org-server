@@ -632,9 +632,9 @@ flags         = "Unreachable", "DoesntOccupyTile"
 ; "OddsAttackClass1"  = Unit will attack ProvokingClass1 if odds are better than defending
 ; "OddsAttackClass2"  = Unit will attack ProvokingClass2 if odds are better than defending
 ; "OddsAttackClass3"  = Unit will attack ProvokingClass3 if odds are better than defending
-; "AlwaysAttackClass1"= Unit always attacks ProvokingClass1 unless alone in a city with <90% odds to win.
-; "AlwaysAttackClass2"= Unit always attacks ProvokingClass2 unless alone in a city with <90% odds to win.
-; "AlwaysAttackClass3"= Unit always attacks ProvokingClass3 unless alone in a city with <90% odds to win.
+; "AlwaysAttackClass1"= Unit always attacks ProvokingClass1 unless < 25% or alone in a city with <90% odds to win. see:unittools.c::unit_survive_autoattack()
+; "AlwaysAttackClass2"= Unit always attacks ProvokingClass2 unless < 25% or alone in a city with <90% odds to win.
+; "AlwaysAttackClass3"= Unit always attacks ProvokingClass3 unless < 25% or alone in a city with <90% odds to win.
 ;—————————————————————————————————————————————————————————————————————————————————————
 ;| Autoattack may happen based on which flags attacker and defender have:
 ;|
@@ -3766,8 +3766,8 @@ Multi-Fighters are fitted for mission versatility.\
  They are sturdy, defend better, and have two turns of fuel. They are\
  good for escorting bombers, pursuing enemy bombers on long range\
  missions, defensive ground support, naval missions, reconnaissance,\
- and interception. A Multi-Fighter can vigil at any range, and can\
- do a maximum of 2 attacks per turn. \n\
+ and interception. On its first turn of fuel, a Multi-Fighter can vigil\
+ at any range, and can do a maximum of 2 attacks per turn. \n\
 "), _("
 INTERCEPTOR：the Vigil order lets Multi-Fighters auto-attack adjacent Air units if they\
  have better attack odds. This unit can Vigil if it has 1 turn of fuel or more. \n\
