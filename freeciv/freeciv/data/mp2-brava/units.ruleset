@@ -2082,7 +2082,7 @@ uk_happy      = 0
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-flags         = "HasNoZOC", "NoVeteran", "Unbribable", "Expellable", "NeverProtects", "CanEscape", "Provoking"
+flags         = "HasNoZOC", "NoVeteran", "Unbribable", "Expellable", "NeverProtects", "CanEscape", "Provoking", "NonMil"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
 veteran_base_raise_chance = 0
