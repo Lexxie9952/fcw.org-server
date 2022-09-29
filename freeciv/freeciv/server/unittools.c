@@ -4232,11 +4232,15 @@ static bool unit_survive_autoattack(struct unit *punit)
                TILE_XY(unit_tile(punit)), penemywin,
                1.0 - punitwin, abort_threshold);
 #endif
-      // Note: this puts the unit off vigil, which we think is fine to limit # of auto-attacks:
+      // Note: this puts the unit off vigil:
       unit_activity_handling(penemy, ACTIVITY_IDLE);
       action_auto_perf_unit_do(AAPC_UNIT_MOVED_ADJ,
                                penemy, unit_owner(punit), NULL,
                                tgt_tile, tile_city(tgt_tile), punit, NULL);
+      if (game.server.autoattack_style == AA_ADVANCED) {
+        // Back on vigil
+        unit_activity_handling(penemy, ACTIVITY_VIGIL);
+      }
 
     } else {
         notify_player(unit_owner(penemy), unit_tile(punit), E_UNIT_ORDERS, ftc_server,
