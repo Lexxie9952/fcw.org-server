@@ -4168,7 +4168,8 @@ static bool unit_survive_autoattack(struct unit *punit)
     struct tile *ptile = unit_tile(penemy);
     struct unit *enemy_defender = get_defender(punit, ptile);
     double punitwin, penemywin;
-    double threshold = 0.25;
+    double abort_threshold = 0.25;                 /* game.server.autoattack_abort_odds   TODO-should be server setting */
+    double attack_anyway_threshold = 0.8333333;    /* game.server.autoattack_always_odds  TODO-should be server setting */
     struct tile *tgt_tile = unit_tile(punit);
 
      // Make a reference copy for use.
@@ -4181,7 +4182,7 @@ static bool unit_survive_autoattack(struct unit *punit)
 
     if (tile_city(ptile) && unit_list_size(ptile->units) == 1) {
       /* Don't leave city defenseless */
-      threshold = 0.90;
+      abort_threshold = 0.90;                       /* game.server.autoattack_lone_city_odds  TODO-should be server setting */
     }
 
     if (NULL != enemy_defender) {
@@ -4207,8 +4208,8 @@ static bool unit_survive_autoattack(struct unit *punit)
     penemywin = action_prob_to_0_to_1_pessimist(peprob->prob);
 
     /* Do the attack if the conditions for autoattack are fulfilled: */
-    if ( (penemywin > 1.0 - punitwin || (will_attack == AA_ALWAYS))
-         && penemywin > threshold) {
+    if ( (penemywin > 1.0 - punitwin || (will_attack == AA_ALWAYS) || penemywin > attack_anyway_threshold)
+         && penemywin > abort_threshold) {
 
         notify_player(unit_owner(penemy), unit_tile(punit), E_UNIT_ORDERS, ftc_server,
               _("[`anger`] Your %s %s engaged %s %s %s %s while under vigil."),
@@ -4229,7 +4230,7 @@ static bool unit_survive_autoattack(struct unit *punit)
       log_test("AA %s -> %s (%d,%d) %.2f > %.2f && > %.2f",
                unit_rule_name(penemy), unit_rule_name(punit),
                TILE_XY(unit_tile(punit)), penemywin,
-               1.0 - punitwin, threshold);
+               1.0 - punitwin, abort_threshold);
 #endif
       // Note: this puts the unit off vigil, which we think is fine to limit # of auto-attacks:
       unit_activity_handling(penemy, ACTIVITY_IDLE);
@@ -4248,7 +4249,7 @@ static bool unit_survive_autoattack(struct unit *punit)
       log_test("!AA %s -> %s (%d,%d) %.2f > %.2f && > %.2f",
                unit_rule_name(penemy), unit_rule_name(punit),
                TILE_XY(unit_tile(punit)), penemywin,
-               1.0 - punitwin, threshold);
+               1.0 - punitwin, abort_threshold);
 #endif
       continue;
     }
