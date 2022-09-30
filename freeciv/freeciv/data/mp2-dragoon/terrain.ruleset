@@ -1609,12 +1609,6 @@ act_gfx_alt    = "-"
 act_gfx_alt2   = "-"
 rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
-disappearance_chance    = 5000
-disappearance_reqs = 
-    { "type",           "name",          "range", "present"
-       "MaxUnitsOnTile", "0",            "Local", TRUE
-       "ExtraFlag",      "NoStackDeath", "Local", FALSE ; will not disappear if there's a base or ruins there.
-    }
 reqs           =
     { "type", "name",            "range","present", "quiet"
 ; Hard contradiction between Tile Claim and Hideout is necessary so that
