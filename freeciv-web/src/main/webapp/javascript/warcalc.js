@@ -173,7 +173,7 @@ function warcalc_compute_role_strength(my_uid, their_uid)
     }
     their_hp  = punit['hp'];
     their_fp  = ptype['firepower'];
-    their_str = utype_real_base_attack_strength(ptype); // ptype['attack_strength'];;
+    their_str = utype_real_base_attack_strength(ptype);
     their_str *= (power_fact/100);
     if (their_str-Math.trunc(their_str))
     their_str = trim_decimals(their_str);
@@ -185,7 +185,7 @@ function warcalc_compute_role_strength(my_uid, their_uid)
     ptype = unit_types[punit['type']];
     power_fact = warcalc_get_defense_bonus(punit);
     my_hp  = punit['hp'];
-    my_str = utype_real_base_defense_strength(ptype); // ptype['defense_strength']; 
+    my_str = utype_real_base_defense_strength(ptype);
     my_fp  = ptype['firepower'];
 
     my_str *= (power_fact/100);
@@ -230,7 +230,7 @@ function warcalc_set_default_vals(punit)
     }
     my_hp  = punit['hp'];
     // accounts for wrong hard-coded assumption that v0 is always power_fact=100:
-    my_str = (power_fact == 100) ? utype_real_base_attack_strength(ptype) : ptype['attack_strength'];
+    my_str = (power_fact == 100) ? utype_real_base_attack_strength(ptype) : utype_attack_power(ptype);
     my_fp  = ptype['firepower'];
     my_uid = punit['id'];
 
@@ -242,7 +242,7 @@ function warcalc_set_default_vals(punit)
   else {
     power_fact = warcalc_get_defense_bonus(punit);
     their_hp  = punit['hp'];
-    their_str = (power_fact == 100) ? utype_real_base_defense_strength(ptype) : ptype['defense_strength'];
+    their_str = (power_fact == 100) ? utype_real_base_defense_strength(ptype) : utype_defense_power(ptype);
     their_fp  = ptype['firepower'];
     their_uid = punit['id'];
 

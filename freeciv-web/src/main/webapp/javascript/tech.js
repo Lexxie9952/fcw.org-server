@@ -1034,8 +1034,8 @@ function show_tech_info_dialog(tech_name, unit_type_id, improvement_id)
    
      message += "<b>Unit info</b>: " + cleaned_text(punit_type['helptext']) + "<br>"
      + "</b><br>Cost: <b>" + punit_type['build_cost']
-     + "</b><br>Attack: <b>" + utype_real_base_attack_strength(punit_type)//+ punit_type['attack_strength']
-     + "</b><br>Defense: <b>" + utype_real_base_defense_strength(punit_type) //+ punit_type['defense_strength']
+     + "</b><br>Attack: <b>" + utype_real_base_attack_strength(punit_type)
+     + "</b><br>Defense: <b>" + utype_real_base_defense_strength(punit_type)
      + "</b><br>Firepower: <b>" + punit_type['firepower']
      + "</b><br>Hitpoints: <b>" + punit_type['hp']
      + "</b><br>Moves: <b>" + move_rate

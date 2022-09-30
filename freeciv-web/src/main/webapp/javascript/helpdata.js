@@ -533,8 +533,7 @@ function generate_help_text(key)
     msg += span1 + "Cost: " + span_end + span2 + punit_type['build_cost'] + div_end;
     // ATTACK
     msg += "<div"+flex+" id='utype_fact_attack_str'>";
-      // hack to make manual properly display decimal attack strength on this unit
-      //var as = punit_type['attack_strength'];
+      // Make manual properly display decimal attack strength on this unit
       // Display base attack relative to v0 vet power which may be non-100:
       var as = fractionalize(utype_real_base_attack_strength(punit_type));
       if (pstats.max_attacks>0) {
@@ -543,7 +542,6 @@ function generate_help_text(key)
     msg += span1 + "Attack: " + span_end + span2 + as + div_end;
     // DEFENSE
     msg += "<div"+flex+" id='utype_fact_defense_str'>";
-      //var ds = punit_type['defense_strength'];
       // Display base attack relative to v0 vet power which may be non-100:
       var ds = fractionalize(utype_real_base_defense_strength(punit_type));
     msg += span1 + "Defense: " + span_end + span2 + ds + div_end;

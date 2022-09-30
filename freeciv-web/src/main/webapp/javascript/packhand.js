@@ -1040,6 +1040,7 @@ function handle_ruleset_control(packet)
     client_rules_flag[i] = false; // reset, maybe loading new rules
 
   client_rules_flag[CRF_MINOR_NUKES]=true; // all known rules have 3x3 fission nukes at this time
+  client_rules_flag[CRF_GRANULAR_COMBAT_STRENGTH] = 1; // Defaults to non-granular combat strength, i.e., strength = strength / 1;
 
   var rules = ruleset_control['name'];
 
@@ -1118,6 +1119,7 @@ function handle_ruleset_control(packet)
       client_rules_flag[CRF_MP2_E] = true;
       client_rules_flag[CRF_EXTRA_WATCHTOWER] = true;
       client_rules_flag[CRF_EXTRA_HIGHWAY] = true;
+      client_rules_flag[CRF_GRANULAR_COMBAT_STRENGTH] = 10; // all combat scores are 10x to allow for gradations of 0.1
     case "MP2 Dragoon":
       client_rules_flag[CRF_MP2_D] = true;
     case "MP2 Caravel":
@@ -1230,6 +1232,10 @@ function handle_ruleset_control(packet)
 **************************************************************************/
 function handle_non_integer_combat_scores(key)
 {
+  /*TODO: when there are no longturn MP2C and MP2D games we can
+   rip out this junky function by converting both of those rulesets
+   to 10x granularity just like MP2E. We just need a way to handle
+   Falconeers and Dive Bomber also, I guess. */
   if (unit_types[key]['name']=="Falconeers") {
     unit_types[key].defense_strength *= 0.5;
   }
@@ -2743,8 +2749,8 @@ function handle_ruleset_multiplier(packet)
 var warcalc_server_reply = false;
 function handle_warcalc_reply(packet)
 {
-  var a   = packet['attack_strength'];
-  var d   = packet['defend_strength'];
+  var a   = packet['attack_strength'] / client_rules_flag[CRF_GRANULAR_COMBAT_STRENGTH];
+  var d   = packet['defend_strength'] / client_rules_flag[CRF_GRANULAR_COMBAT_STRENGTH];
   var afp = packet['atk_mod_fp'];
   var dfp = packet['def_mod_fp'];
 

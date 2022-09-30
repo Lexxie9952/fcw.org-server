@@ -8066,8 +8066,8 @@ function update_active_units_dialog()
       active_uinfo += "<span>&nbsp;H:<span style='color:lightpink;font-size:110%'><b>"
       + aunit['hp'] + " </b> </span> </span>" + unit_name; // unit name after Moves and HP for mobile
     } else { // normal non-mobile text:
-        active_uinfo += "<span title='Attack'>A:<span style='color:gainsboro;font-size:100%;'><b>"+utype_real_base_attack_strength(ptype) //+ ptype['attack_strength']   // make terser titles to avoid cramped clutter (Lexxie)
-        + "</b></span></span> <span title='Defense'>D:<span style='color:gainsboro;font-size:100%;'><b>"+utype_real_base_defense_strength(ptype)//+ ptype['defense_strength']
+        active_uinfo += "<span title='Attack'>A:<span style='color:gainsboro;font-size:100%;'><b>"+utype_real_base_attack_strength(ptype) // make terser titles to avoid cramped clutter (Lexxie)
+        + "</b></span></span> <span title='Defense'>D:<span style='color:gainsboro;font-size:100%;'><b>"+utype_real_base_defense_strength(ptype)
         + "</b></span></span> <span title='Firepower'>FP:<span style='color:gainsboro;font-size:100%;'><b>" + ptype['firepower']
         + "</b></span></span> <span title='Health'>H:<span style='color:lightpink;font-size:120%;'><b>"
         + aunit['hp'] + "</b></span></span>"; //<span style='color:gainsboro;font-size:85%;'>/" + ptype['hp'] + "</span></span>";

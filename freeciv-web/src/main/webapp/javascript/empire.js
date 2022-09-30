@@ -577,7 +577,7 @@ function empire_unitcity_screen(wide_screen,narrow_screen,small_screen,
 
         var ptype = unit_type(punit);
 
-        // Tally the HP * defense_strength for all units present in city
+        // Tally the HP * defense strength for all units present in city
         // Get veteran power factor for punit
         var power_fact = warcalc_get_defense_bonus(punit);
         if (unit_has_class_flag(punit, UCF_TERRAIN_DEFENSE)) {
@@ -585,7 +585,7 @@ function empire_unitcity_screen(wide_screen,narrow_screen,small_screen,
           // land units and land units are the only units with terrain bonuses.
             power_fact *= 1.5;
         }
-        sumHPD[city_id] += (power_fact/100)*(parseInt(punit['hp'],10) * parseInt(ptype['defense_strength'],10) * parseInt(ptype['firepower'],10));
+        sumHPD[city_id] += (power_fact/100)*(parseInt(punit['hp'],10) * parseInt(utype_defense_power(ptype),10) * parseInt(ptype['firepower'],10));
         //-------------------------------------------------------------------
 
         // Generate micro-sprite   

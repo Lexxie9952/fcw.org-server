@@ -69,13 +69,14 @@ const CRF_NO_BASES_ON_RIVERS       = 29;
 const CRF_2X_MOVES                 = 30;
 const CRF_EXTRA_WATCHTOWER         = 31;
 const CRF_EXTRA_HIGHWAY            = 32;
-const CRF_MP2                      = 33; // rules flags for "minimum" mp2 ruleset, for when new feature came in.
-const CRF_MP2_A                    = 34; 
-const CRF_MP2_B                    = 35;
-const CRF_MP2_C                    = 36;
-const CRF_MP2_D                    = 37;
-const CRF_MP2_E                    = 38;
-const CRF_LAST                     = 39;
+const CRF_GRANULAR_COMBAT_STRENGTH = 33; // How much to divide combat values for granularity. Instead of true/false, contains the actual divisor.
+const CRF_MP2                      = 34; // rules flags for "minimum" mp2 ruleset, for when new feature came in.
+const CRF_MP2_A                    = 35; 
+const CRF_MP2_B                    = 36;
+const CRF_MP2_C                    = 37;
+const CRF_MP2_D                    = 38;
+const CRF_MP2_E                    = 39;
+const CRF_LAST                     = 40;
 
 var graphic_theme_path;
 

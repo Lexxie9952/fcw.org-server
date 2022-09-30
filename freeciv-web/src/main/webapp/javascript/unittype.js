@@ -342,15 +342,31 @@ function get_utypes_from_tech(tech_id)
   return result;
 }
 
+/**************************************************************************
+ Wrapper for getting a unit's attack strength. Do NOT access
+ punit.attack_strength directly.
+ *************************************************************************/
+function utype_attack_power(ptype) {
+  return ptype['attack_strength'] / client_rules_flag[CRF_GRANULAR_COMBAT_STRENGTH];
+}
+/**************************************************************************
+ Wrapper for getting a unit's defense strength. Do NOT access
+ punit.defense_strength directly.
+ *************************************************************************/
+ function utype_defense_power(ptype) {
+   return ptype['defense_strength'] / client_rules_flag[CRF_GRANULAR_COMBAT_STRENGTH]; 
+ }
 /************************************************************************ 
- * Returns the REAL base attack strength of a unit based on its v0 vet
+ * Returns the base attack strength of a unit based on its v0 vet
  * power level.
 *************************************************************************/
 function utype_real_base_attack_strength(ptype) {
   // no custom power_fact means default of 100%:
-  if (ptype.power_fact[0] === undefined) return ptype.attack_strength;
+  if (ptype.power_fact[0] === undefined) {
+    return utype_attack_power(ptype);
+  }
 
-  var adjusted = ptype.attack_strength * ptype.power_fact[0];
+  var adjusted = utype_attack_power(ptype) * ptype.power_fact[0];
   // round to 3 decimals
   adjusted *= 10; // already 100x higher from power_fect, so make 1000x
   adjusted = Math.round(adjusted) / 1000;
@@ -361,9 +377,11 @@ function utype_real_base_attack_strength(ptype) {
 *************************************************************************/
 function utype_real_base_defense_strength(ptype) {
   // no custom power_fact means default of 100%:
-  if (ptype.power_fact[0] === undefined) return ptype.defense_strength;
+  if (ptype.power_fact[0] === undefined) {
+    return utype_defense_power(ptype);
+  }
 
-  var adjusted = ptype.defense_strength * ptype.power_fact[0];
+  var adjusted = utype_defense_power(ptype) * ptype.power_fact[0];
   // round to 3 decimals
   adjusted *= 10; // already 100x higher from power_fect, so make 1000x
   adjusted = Math.round(adjusted) / 1000;
