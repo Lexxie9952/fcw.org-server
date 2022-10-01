@@ -439,7 +439,10 @@ bool is_building_replaced(const struct city *pcity,
 /* functions to know the bonuses a certain effect is granting */
 int get_world_bonus(enum effect_type effect_type);
 int get_player_bonus(const struct player *plr, enum effect_type effect_type);
-int get_city_bonus(const struct city *pcity, enum effect_type effect_type);
+int get_city_bonus(const struct city *pcity, 
+                   enum effect_type effect_type,
+/* SEND V_COUNT for vision_layer if not relevant to scope */
+                    enum vision_layer vision_layer);
 int get_city_specialist_output_bonus(const struct city *pcity,
 				     const struct specialist *pspecialist,
 				     const struct output_type *poutput,
@@ -462,9 +465,11 @@ int get_building_bonus(const struct city *pcity,
 		       const struct impr_type *building,
 		       enum effect_type effect_type);
 int get_unittype_bonus(const struct player *pplayer,
-		       const struct tile *ptile, /* pcity is implied */
-		       const struct unit_type *punittype,
-		       enum effect_type effect_type);
+		                   const struct tile *ptile, /* pcity is implied */
+		                   const struct unit_type *punittype,
+		                   enum effect_type effect_type,
+/* SEND V_COUNT for vision_layer if not relevant to scope */
+                       enum vision_layer vision_layer);
 int get_unit_bonus(const struct unit *punit, enum effect_type effect_type);
 int get_tile_bonus(const struct tile *ptile, const struct unit *punit,
                    enum effect_type etype);
@@ -491,7 +496,9 @@ int get_target_bonus_effects(struct effect_list *plist,
                              const struct output_type *target_output,
                              const struct specialist *target_specialist,
                              const struct action *target_action,
-                             enum effect_type effect_type);
+                             enum effect_type effect_type,
+/* SEND V_COUNT for vision_layer if not relevant to scope */
+                             enum vision_layer vision_layer);
 
 bool building_has_effect(const struct impr_type *pimprove,
 			 enum effect_type effect_type);

@@ -941,7 +941,7 @@ int city_production_unit_veteran_level(struct city *pcity,
                                        const struct unit_type *punittype)
 {
   int levels = get_unittype_bonus(city_owner(pcity), pcity->tile, punittype,
-                                  EFT_VETERAN_BUILD);
+                                  EFT_VETERAN_BUILD, V_COUNT);
   int max_levels = utype_veteran_levels(punittype) - 1;
 
   levels = CLIP(0, levels, max_levels);
@@ -976,7 +976,7 @@ bool can_city_build_improvement_direct(const struct city *pcity,
 
   return are_reqs_active(city_owner(pcity), NULL, pcity, NULL,
                          pcity->tile, NULL, NULL, NULL, NULL, NULL,
-                         &(pimprove->reqs), RPT_CERTAIN);
+                         &(pimprove->reqs), RPT_CERTAIN, V_COUNT);
 }
 
 /**********************************************************************//**
@@ -1014,7 +1014,7 @@ bool can_city_build_improvement_later(const struct city *pcity,
     if (is_req_unchanging(preq)
         && !is_req_active(city_owner(pcity), NULL, pcity, NULL,
                           pcity->tile, NULL, NULL, NULL, NULL, NULL,
-                          preq, RPT_POSSIBLE)) {
+                          preq, RPT_POSSIBLE, V_COUNT)) {
       return FALSE;
     }
   } requirement_vector_iterate_end;
@@ -1037,7 +1037,7 @@ bool can_city_build_unit_direct(const struct city *pcity,
   if (!are_reqs_active(city_owner(pcity), NULL,
                        pcity, NULL, city_tile(pcity), NULL, punittype,
                        NULL, NULL, NULL,
-                       &punittype->build_reqs, RPT_CERTAIN)) {
+                       &punittype->build_reqs, RPT_CERTAIN, V_COUNT)) {
     return FALSE;
   }
 
@@ -1155,7 +1155,7 @@ bool can_city_build_later(const struct city *pcity,
 **************************************************************************/
 int city_unit_slots_available(const struct city *pcity)
 {
-  int max = get_city_bonus(pcity, EFT_UNIT_SLOTS);
+  int max = get_city_bonus(pcity, EFT_UNIT_SLOTS, V_COUNT);
   int current;
 
   current = 0;
@@ -1174,7 +1174,7 @@ bool city_can_use_specialist(const struct city *pcity,
 {
   return are_reqs_active(city_owner(pcity), NULL, pcity, NULL,
                          NULL, NULL, NULL, NULL, NULL, NULL,
-			 &specialist_by_number(type)->reqs, RPT_POSSIBLE);
+			 &specialist_by_number(type)->reqs, RPT_POSSIBLE, V_COUNT);
 }
 
 /**********************************************************************//**
@@ -1437,7 +1437,7 @@ int city_tile_output(const struct city *pcity, const struct tile *ptile,
       prod += pterrain->mining_shield_incr
         * get_target_bonus_effects(NULL, pplayer, NULL, pcity, NULL,
                                    ptile, NULL, NULL, NULL, NULL, NULL,
-                                   EFT_MINING_PCT)
+                                   EFT_MINING_PCT, V_COUNT)
         / 100;
     }
     break;
@@ -1446,7 +1446,7 @@ int city_tile_output(const struct city *pcity, const struct tile *ptile,
       prod += pterrain->irrigation_food_incr
         * get_target_bonus_effects(NULL, pplayer, NULL, pcity, NULL,
                                    ptile, NULL, NULL, NULL, NULL, NULL,
-                                   EFT_IRRIGATION_PCT)
+                                   EFT_IRRIGATION_PCT, V_COUNT)
         / 100;
     }
     break;
@@ -1699,7 +1699,7 @@ enum city_build_result city_build_here_test(const struct tile *ptile,
 **************************************************************************/
 bool is_capital(const struct city *pcity)
 {
-  return (get_city_bonus(pcity, EFT_CAPITAL_CITY) > 0);
+  return (get_city_bonus(pcity, EFT_CAPITAL_CITY, V_COUNT) > 0);
 }
 
 /**********************************************************************//**
@@ -1707,7 +1707,7 @@ bool is_capital(const struct city *pcity)
 **************************************************************************/
 bool is_gov_center(const struct city *pcity)
 {
-  return (get_city_bonus(pcity, EFT_GOV_CENTER) > 0);
+  return (get_city_bonus(pcity, EFT_GOV_CENTER, V_COUNT) > 0);
 }
 
 /**********************************************************************//**
@@ -1719,11 +1719,11 @@ bool city_got_defense_effect(const struct city *pcity,
 {
   if (!attacker) {
     /* Any defense building will do */
-    return get_city_bonus(pcity, EFT_DEFEND_BONUS) > 0;
+    return get_city_bonus(pcity, EFT_DEFEND_BONUS, V_COUNT) > 0;
   }
 
   return get_unittype_bonus(city_owner(pcity), pcity->tile, attacker,
-                            EFT_DEFEND_BONUS) > 0;
+                            EFT_DEFEND_BONUS, V_COUNT) > 0;
 }
 
 /**********************************************************************//**
@@ -1768,7 +1768,7 @@ int city_celebrate_size(const struct city *pcity)
   return game.info.celebratesize +
     get_target_bonus_effects(NULL, city_owner(pcity), NULL, pcity, NULL,
                              city_tile(pcity), NULL, NULL, NULL, NULL, NULL,
-                             EFT_CELEBRATE_SIZE_ADD);
+                             EFT_CELEBRATE_SIZE_ADD, V_COUNT);
 }
 
 /**********************************************************************//**
@@ -1789,7 +1789,7 @@ bool is_rapture_turn(const struct city *pcity, int idx)
   int idx2 = idx-1;
 
   float rate;
-  int rate_pm = get_city_bonus(pcity, EFT_RAPTURE_RATE_PM);
+  int rate_pm = get_city_bonus(pcity, EFT_RAPTURE_RATE_PM, V_COUNT);
 
   if (rate_pm) {
     rate = rate_pm;
@@ -1820,7 +1820,7 @@ int city_would_rapture(const struct city *pcity)
   int code = 0;
 
   if (pcity->rapture > 0 && pcity->surplus[O_FOOD] > 0
-      && get_city_bonus(pcity, EFT_RAPTURE_GROW) > 0) {
+      && get_city_bonus(pcity, EFT_RAPTURE_GROW, V_COUNT) > 0) {
 
     bool now   = is_rapture_turn(pcity, pcity->rapture);
     bool next  = is_rapture_turn(pcity, pcity->rapture+1);
@@ -1846,7 +1846,7 @@ bool city_rapture_grow(const struct city *pcity)
      function is called after .was_happy was updated. */
 
   if (pcity->rapture > 0 && pcity->surplus[O_FOOD] > 0
-      && get_city_bonus(pcity, EFT_RAPTURE_GROW) > 0) {
+      && get_city_bonus(pcity, EFT_RAPTURE_GROW, V_COUNT) > 0) {
 
     return is_rapture_turn(pcity, pcity->rapture);
   }
@@ -1855,7 +1855,7 @@ bool city_rapture_grow(const struct city *pcity)
 /* old code that does not use is_rapture_turn(..):
   return (pcity->rapture > 0 && pcity->surplus[O_FOOD] > 0
 	  && (pcity->rapture % game.info.rapturedelay) == 0
-          && get_city_bonus(pcity, EFT_RAPTURE_GROW) > 0);
+          && get_city_bonus(pcity, EFT_RAPTURE_GROW, V_COUNT) > 0);
 */
 }
 
@@ -2229,8 +2229,8 @@ int city_turns_to_grow(const struct city *pcity)
 **************************************************************************/
 bool city_can_grow_to(const struct city *pcity, int pop_size)
 {
-  return (get_city_bonus(pcity, EFT_SIZE_UNLIMIT) > 0
-          || pop_size <= get_city_bonus(pcity, EFT_SIZE_ADJ));
+  return (get_city_bonus(pcity, EFT_SIZE_UNLIMIT, V_COUNT) > 0
+          || pop_size <= get_city_bonus(pcity, EFT_SIZE_ADJ, V_COUNT));
 }
 
 /**********************************************************************//**
@@ -2456,16 +2456,16 @@ int get_city_tithes_bonus(const struct city *pcity)
 {
   int tithes_bonus = 0;
 
-  if (get_city_bonus(pcity, EFT_HAPPINESS_TO_GOLD) <= 0) {
+  if (get_city_bonus(pcity, EFT_HAPPINESS_TO_GOLD, V_COUNT) <= 0) {
     return 0;
   }
 
-  tithes_bonus += get_city_bonus(pcity, EFT_MAKE_CONTENT);
-  tithes_bonus += get_city_bonus(pcity, EFT_FORCE_CONTENT);
+  tithes_bonus += get_city_bonus(pcity, EFT_MAKE_CONTENT, V_COUNT);
+  tithes_bonus += get_city_bonus(pcity, EFT_FORCE_CONTENT, V_COUNT);
   /* Was wrongly excluded: MAKE_HAPPY causes content also: */
-  tithes_bonus += get_city_bonus(pcity, EFT_MAKE_HAPPY);
+  tithes_bonus += get_city_bonus(pcity, EFT_MAKE_HAPPY, V_COUNT);
   /* NO_UNHAPPY causes content also: */
-  if (get_city_bonus(pcity, EFT_NO_UNHAPPY)) {
+  if (get_city_bonus(pcity, EFT_NO_UNHAPPY, V_COUNT)) {
     /* This strength of this effect scales with city size */
     tithes_bonus += pcity->size;
   }
@@ -2760,7 +2760,7 @@ static inline void citizen_content_buildings(struct city *pcity)
   citizens *content = &pcity->feel[CITIZEN_CONTENT][FEELING_EFFECT];
   citizens *unhappy = &pcity->feel[CITIZEN_UNHAPPY][FEELING_EFFECT];
   citizens *angry = &pcity->feel[CITIZEN_ANGRY][FEELING_EFFECT];
-  int faces = get_city_bonus(pcity, EFT_MAKE_CONTENT);
+  int faces = get_city_bonus(pcity, EFT_MAKE_CONTENT, V_COUNT);
 
   /* make people content (but not happy):
      get rid of angry first, then make unhappy content. */
@@ -2786,7 +2786,7 @@ static inline void citizen_happiness_nationality(struct city *pcity)
   citizens *unhappy = &pcity->feel[CITIZEN_UNHAPPY][FEELING_NATIONALITY];
 
   if (game.info.citizen_nationality) {
-    int pct = get_city_bonus(pcity, EFT_ENEMY_CITIZEN_UNHAPPY_PCT);
+    int pct = get_city_bonus(pcity, EFT_ENEMY_CITIZEN_UNHAPPY_PCT, V_COUNT);
 
     if (pct > 0) {
       int enemies = 0;
@@ -2882,7 +2882,7 @@ static inline void citizen_happy_wonders(struct city *pcity)
   citizens *content = &pcity->feel[CITIZEN_CONTENT][FEELING_FINAL];
   citizens *unhappy = &pcity->feel[CITIZEN_UNHAPPY][FEELING_FINAL];
   citizens *angry = &pcity->feel[CITIZEN_ANGRY][FEELING_FINAL];
-  int bonus = get_city_bonus(pcity, EFT_MAKE_HAPPY);
+  int bonus = get_city_bonus(pcity, EFT_MAKE_HAPPY, V_COUNT);
 
   /* First create happy citizens from content, then from unhappy
    * citizens; we cannot help angry citizens here. */
@@ -2898,14 +2898,14 @@ static inline void citizen_happy_wonders(struct city *pcity)
   }
   /* The rest falls through and lets unhappy people become content. */
 
-  if (get_city_bonus(pcity, EFT_NO_UNHAPPY) > 0) {
+  if (get_city_bonus(pcity, EFT_NO_UNHAPPY, V_COUNT) > 0) {
     *content += *unhappy + *angry;
     *unhappy = 0;
     *angry = 0;
     return;
   }
 
-  bonus += get_city_bonus(pcity, EFT_FORCE_CONTENT);
+  bonus += get_city_bonus(pcity, EFT_FORCE_CONTENT, V_COUNT);
 
   /* get rid of angry first, then make unhappy content */
   while (bonus > 0 && *angry > 0) {
@@ -2957,12 +2957,12 @@ int city_pollution_types(const struct city *pcity, int shield_total,
   int prod, pop, mod;
 
   /* Add one one pollution per shield, multipled by the bonus. */
-  prod = 100 + get_city_bonus(pcity, EFT_POLLU_PROD_PCT);
+  prod = 100 + get_city_bonus(pcity, EFT_POLLU_PROD_PCT, V_COUNT);
   prod = shield_total * MAX(prod, 0) / 100;
 
   /* Add one pollution per citizen for baseline combined bonus (100%). */
-  pop = (100 + get_city_bonus(pcity, EFT_POLLU_POP_PCT))
-      * (100 + get_city_bonus(pcity, EFT_POLLU_POP_PCT_2))
+  pop = (100 + get_city_bonus(pcity, EFT_POLLU_POP_PCT, V_COUNT))
+      * (100 + get_city_bonus(pcity, EFT_POLLU_POP_PCT_2, V_COUNT))
       / 100;
   pop = (city_size_get(pcity) * MAX(pop, 0)) / 100;
 
@@ -3019,7 +3019,7 @@ static int get_trade_illness(const struct city *pcity)
 **************************************************************************/
 static int get_city_health(const struct city *pcity)
 {
-  return get_city_bonus(pcity, EFT_HEALTH_PCT);
+  return get_city_bonus(pcity, EFT_HEALTH_PCT, V_COUNT);
 }
 
 /**********************************************************************//**
@@ -3098,7 +3098,7 @@ bool city_had_recent_plague(const struct city *pcity)
 **************************************************************************/
 int city_build_slots(const struct city *pcity)
 {
-  return get_city_bonus(pcity, EFT_CITY_BUILD_SLOTS);
+  return get_city_bonus(pcity, EFT_CITY_BUILD_SLOTS, V_COUNT);
 }
 
 /**********************************************************************//**
@@ -3108,7 +3108,7 @@ int city_build_slots(const struct city *pcity)
 **************************************************************************/
 int city_airlift_max(const struct city *pcity)
 {
-  return get_city_bonus(pcity, EFT_AIRLIFT);
+  return get_city_bonus(pcity, EFT_AIRLIFT, V_COUNT);
 }
 
 /**********************************************************************//**
@@ -3161,7 +3161,7 @@ inline void set_city_production(struct city *pcity)
         trade_base_between_cities(pcity, game_city_by_number(proute->partner));
       proute->value = trade_from_route(pcity, proute, value);
       pcity->prod[O_TRADE] += proute->value
-        * (100 + get_city_bonus(pcity, EFT_TRADEROUTE_PCT)) / 100;
+        * (100 + get_city_bonus(pcity, EFT_TRADEROUTE_PCT, V_COUNT)) / 100;
     } else {
       proute->value = 0;
     }
@@ -3234,13 +3234,13 @@ int city_unit_unhappiness(struct unit *punit, int *free_unhappy)
     }
     /* Non-aggressive Field unit: let ruleset differentiate happy_cost for aggressive
        vs. non-aggressive field units */
-    happy_cost -= get_unittype_bonus(plr, unit_tile(punit), ut, EFT_PEACEFUL_FIELDUNIT_BONUS); 
+    happy_cost -= get_unittype_bonus(plr, unit_tile(punit), ut, EFT_PEACEFUL_FIELDUNIT_BONUS, V_COUNT); 
   }
 
   /* Ruleset conditions for increased/decreased unhappy cost */
   happy_cost += get_unit_bonus(punit, EFT_UNIT_UNHAPPY_COST); 
   /* Last step, reduce by MAKE_CONTENT_MIL_PER */
-  happy_cost -= get_city_bonus(pcity, EFT_MAKE_CONTENT_MIL_PER);
+  happy_cost -= get_city_bonus(pcity, EFT_MAKE_CONTENT_MIL_PER, V_COUNT);
 
   if (happy_cost <= 0) {
     return 0;
@@ -3296,10 +3296,10 @@ static inline void city_support(struct city *pcity)
 
   /* military units in this city (need _not_ be home city) can make
    * unhappy citizens content */
-  martial_law_each = get_city_bonus(pcity, EFT_MARTIAL_LAW_EACH);
+  martial_law_each = get_city_bonus(pcity, EFT_MARTIAL_LAW_EACH, V_COUNT);
   if (martial_law_each > 0) {
     int count = 0;
-    int martial_law_max = get_city_bonus(pcity, EFT_MARTIAL_LAW_MAX);
+    int martial_law_max = get_city_bonus(pcity, EFT_MARTIAL_LAW_MAX, V_COUNT);
 
     unit_list_iterate(pcity->tile->units, punit) {
       if ((count < martial_law_max || martial_law_max == 0)
@@ -3312,7 +3312,7 @@ static inline void city_support(struct city *pcity)
     pcity->martial_law = CLIP(0, count * martial_law_each, MAX_CITY_SIZE);
   }
 
-  free_unhappy = get_city_bonus(pcity, EFT_MAKE_CONTENT_MIL);
+  free_unhappy = get_city_bonus(pcity, EFT_MAKE_CONTENT_MIL, V_COUNT);
   unit_list_iterate(pcity->units_supported, punit) {
     pcity->unit_happy_upkeep += city_unit_unhappiness(punit, &free_unhappy);
     output_type_iterate(o) {

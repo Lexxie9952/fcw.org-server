@@ -322,7 +322,7 @@ static bool are_road_reqs_fulfilled(const struct road_type *proad,
     if (beginning) {
       if (!are_reqs_active(pplayer, tile_owner(ptile), NULL, NULL, ptile,
                            punit, utype, NULL, NULL, NULL,
-                           &proad->first_reqs, RPT_POSSIBLE)) {
+                           &proad->first_reqs, RPT_POSSIBLE, V_COUNT)) {
         return FALSE;
       }
     }
@@ -330,7 +330,7 @@ static bool are_road_reqs_fulfilled(const struct road_type *proad,
 
   return are_reqs_active(pplayer, tile_owner(ptile), NULL, NULL, ptile,
                          punit, utype, NULL, NULL, NULL,
-                         &pextra->reqs, RPT_POSSIBLE);
+                         &pextra->reqs, RPT_POSSIBLE, V_COUNT);
 }
 
 /************************************************************************//**
@@ -521,7 +521,7 @@ bool is_native_tile_to_road(const struct road_type *proad,
 
   return are_reqs_active(NULL, NULL, NULL, NULL, ptile,
                          NULL, NULL, NULL, NULL, NULL,
-                         &pextra->reqs, RPT_POSSIBLE);
+                         &pextra->reqs, RPT_POSSIBLE, V_COUNT);
 }
 
 /************************************************************************//**

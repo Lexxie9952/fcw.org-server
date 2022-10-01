@@ -2536,7 +2536,8 @@ static void illegal_action(struct player *pplayer,
                                            NULL,
                                            NULL,
                                            action_by_number(stopped_action),
-                                           EFT_ILLEGAL_ACTION_MOVE_COST);
+                                           EFT_ILLEGAL_ACTION_MOVE_COST,
+                                           V_COUNT);
 
   actor->moves_left = MAX(0, actor->moves_left - punishment_mp);
 
@@ -2623,7 +2624,7 @@ void handle_unit_action_query(struct connection *pc,
                                       unit_owner(punit), game_city_by_number(pactor->homecity),
                                       NULL,  unit_tile(punit), pactor, unit_type_get(pactor),
                                       NULL, NULL, action_by_number(ACTION_SPY_BRIBE_UNIT),
-                                      EFT_ACTOR_BRIBE_COST_PCT)) / 100;
+                                      EFT_ACTOR_BRIBE_COST_PCT, V_COUNT)) / 100;
       dsend_packet_unit_action_answer(pc,
                                       actor_id, target_id,
                                       cost,
@@ -2648,7 +2649,7 @@ void handle_unit_action_query(struct connection *pc,
                                           city_owner(pcity), game_city_by_number(pactor->homecity),
                                           NULL, city_tile(pcity), pactor, unit_type_get(pactor),
                                           NULL, NULL, action_by_number(action_type),
-                                          EFT_ACTOR_INCITE_COST_PCT)) / 100;
+                                          EFT_ACTOR_INCITE_COST_PCT, V_COUNT)) / 100;
       incite_cost = MAX(0, incite_cost);   
       dsend_packet_unit_action_answer(pc,
                                       actor_id, target_id,
@@ -4319,7 +4320,7 @@ static bool unit_bombard(struct unit *punit, struct tile *ptile,
   
     if (pcity
         && city_size_get(pcity) > 1
-        && get_city_bonus(pcity, EFT_UNIT_NO_LOSE_POP) <= 0
+        && get_city_bonus(pcity, EFT_UNIT_NO_LOSE_POP, V_COUNT) <= 0
         // && ( !(game.server.killcitizen_pct>0 && game.server.killcitizen_pct<100)
         //    || (fc_rand(100) < game.server.killcitizen_pct) )
         && kills_citizen_after_attack(punit)) {
@@ -4764,7 +4765,7 @@ static bool do_attack(struct unit *punit, struct tile *def_tile,
   if (pdefender->hp <= 0
       && (pcity = tile_city(def_tile))
       && city_size_get(pcity) > 1
-      && get_city_bonus(pcity, EFT_UNIT_NO_LOSE_POP) <= 0) {
+      && get_city_bonus(pcity, EFT_UNIT_NO_LOSE_POP, V_COUNT) <= 0) {
 
         if (kills_citizen_after_attack(punit)) {
           // For non-obvious values of killcitizen_pct, report whether city lost population.
@@ -5017,7 +5018,7 @@ static bool do_unit_strike_city_building(const struct player *act_player,
                                          tgt_city, NULL, NULL,
                                          act_unit, unit_type_get(act_unit),
                                          NULL, NULL, paction,
-                                         EFT_ACTION_ODDS_PCT))
+                                         EFT_ACTION_ODDS_PCT, V_COUNT))
              / 100);
 
     /* Roll the dice. */

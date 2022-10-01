@@ -258,7 +258,8 @@ int unit_shield_value(const struct unit *punit,
                                         NULL, NULL, NULL,
                                         punit, punittype,
                                         NULL, NULL, paction,
-                                        EFT_UNIT_SHIELD_VALUE_PCT))
+                                        EFT_UNIT_SHIELD_VALUE_PCT,
+                                        V_COUNT))
             / 100);
 
   return value;
@@ -395,9 +396,11 @@ bool is_field_unit(const struct unit *punit)
 
 
 /**********************************************************************//**
-  Is the unit one that is invisible on the map. A unit is invisible if
-  it has the UTYF_PARTIAL_INVIS flag or if it transported by a unit with
-  this flag.
+  Is the unit one that is invisible on the map? A unit is invisible if
+  its vision_layer is set to one of the hard-coded layers deemed to be
+  so by fiat (currently V_INVIS ("Stealth") and V_SUBSURFACE ("Subsurface") 
+  ... OR if the unit is transported by a unit whose vision_layer is one
+  of those.
 
   FIXME: Should the transports recurse all the way?
 **************************************************************************/
@@ -502,11 +505,11 @@ int get_activity_rate(const struct unit *punit)
   float work_bonus_rate = (float)get_target_bonus_effects(NULL, unit_owner(punit), NULL,
                                   tile_city(ptile), NULL, ptile, punit,
                                   unit_type_get(punit), NULL, NULL, NULL,
-                                  EFT_UNIT_WORK_FRAG_BONUS);
+                                  EFT_UNIT_WORK_FRAG_BONUS, V_COUNT);
   float work_bonus_pct = (float)get_target_bonus_effects(NULL, unit_owner(punit), NULL,
                                   tile_city(ptile), NULL, ptile, punit,
                                   unit_type_get(punit), NULL, NULL, NULL,
-                                  EFT_UNIT_WORK_PCT)/100;
+                                  EFT_UNIT_WORK_PCT, V_COUNT)/100;
 
    float move_rate = (float)unit_type_get(punit)->move_rate;
    // Add work_bonus_rate and/or multiple by work_bonus_pct:
@@ -2260,7 +2263,8 @@ int unit_pays_mp_for_action(const struct action *paction,
                                     ? tile_city(unit_tile(punit)) : NULL,
                                   NULL, unit_tile(punit),
                                   punit, unit_type_get(punit), NULL, NULL,
-                                  paction, EFT_ACTION_SUCCESS_MOVE_COST);
+                                  paction, EFT_ACTION_SUCCESS_MOVE_COST,
+                                  V_COUNT);
 
   mpco += utype_pays_mp_for_action_base(paction, unit_type_get(punit));
 
@@ -2285,7 +2289,8 @@ bool is_losing_hp(const struct unit *punit)
 bool unit_type_is_losing_hp(const struct player *pplayer,
                             const struct unit_type *punittype)
 {
-  return get_unittype_bonus(pplayer, NULL, punittype, EFT_UNIT_RECOVER)
+  return get_unittype_bonus(pplayer, NULL, punittype, EFT_UNIT_RECOVER,
+                            V_COUNT)
     < (punittype->hp *
        utype_class(punittype)->hp_loss_pct / 100);
 }
@@ -2387,7 +2392,7 @@ int unit_bribe_cost(struct unit *punit, struct player *briber)
                                       NULL, ptile,
                                       punit, unit_type_get(punit), NULL, NULL,
                                       NULL,
-                                      EFT_UNIT_BRIBE_COST_PCT))
+                                      EFT_UNIT_BRIBE_COST_PCT, V_COUNT))
        / 100;
 
   /* Veterans are not cheap. */

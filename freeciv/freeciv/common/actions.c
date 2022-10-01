@@ -3368,12 +3368,12 @@ static bool is_enabler_active(const struct action_enabler *enabler,
                          actor_building, actor_tile,
                          actor_unit, actor_unittype,
                          actor_output, actor_specialist, NULL,
-                         &enabler->actor_reqs, RPT_CERTAIN)
+                         &enabler->actor_reqs, RPT_CERTAIN, V_COUNT)
       && are_reqs_active(target_player, actor_player, target_city,
                          target_building, target_tile,
                          target_unit, target_unittype,
                          target_output, target_specialist, NULL,
-                         &enabler->target_reqs, RPT_CERTAIN);
+                         &enabler->target_reqs, RPT_CERTAIN, V_COUNT);
 }
 
 /**********************************************************************//**
@@ -3987,7 +3987,7 @@ static struct act_prob ap_dipl_battle_win(const struct unit *pattacker,
                                          tile_city(pdefender->tile), NULL,
                                          pdefender->tile, NULL, NULL, NULL,
                                          NULL, NULL,
-                                         EFT_SPY_RESISTANT) / 100;
+                                         EFT_SPY_RESISTANT, V_COUNT) / 100;
   }
 
   /* Convert to action probability */
@@ -5378,7 +5378,7 @@ static bool is_target_possible(const action_id wanted_action,
                         target_building, target_tile,
                         target_unit, target_unittype,
                         target_output, target_specialist, NULL,
-                        &enabler->target_reqs, RPT_POSSIBLE)) {
+                        &enabler->target_reqs, RPT_POSSIBLE, V_COUNT)) {
       return TRUE;
     }
   } action_enabler_list_iterate_end;

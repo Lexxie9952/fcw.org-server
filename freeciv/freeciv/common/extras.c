@@ -417,7 +417,7 @@ bool player_can_build_extra(const struct extra_type *pextra,
 
   return are_reqs_active(pplayer, tile_owner(ptile), NULL, NULL, ptile,
                          NULL, NULL, NULL, NULL, NULL, &pextra->reqs,
-                         RPT_POSSIBLE);
+                         RPT_POSSIBLE, V_COUNT);
 }
 
 /************************************************************************//**
@@ -480,7 +480,7 @@ bool can_build_extra(const struct extra_type *pextra,
 
   return are_reqs_active(pplayer, tile_owner(ptile), NULL, NULL, ptile,
                          punit, unit_type_get(punit), NULL, NULL, NULL, &pextra->reqs,
-                         RPT_CERTAIN);
+                         RPT_CERTAIN, V_COUNT);
 }
 
 /************************************************************************//**
@@ -530,7 +530,7 @@ bool player_can_remove_extra(const struct extra_type *pextra,
   /* For huts, it's not checked if player has any non-HUT_NOTHING units */
   return are_reqs_active(pplayer, tile_owner(ptile), NULL, NULL, ptile,
                          NULL, NULL, NULL, NULL, NULL, &pextra->rmreqs,
-                         RPT_POSSIBLE);
+                         RPT_POSSIBLE, V_COUNT);
 }
 
 /************************************************************************//**
@@ -548,7 +548,7 @@ bool can_remove_extra(struct extra_type *pextra,
 
   return are_reqs_active(unit_owner(punit), tile_owner(ptile), NULL, NULL,
                          ptile, punit, unit_type_get(punit), NULL, NULL,
-                         NULL, &pextra->rmreqs, RPT_CERTAIN);
+                         NULL, &pextra->rmreqs, RPT_CERTAIN, V_COUNT);
 }
 
 /************************************************************************//**
@@ -596,7 +596,7 @@ bool is_native_tile_to_extra(const struct extra_type *pextra,
 
   return are_reqs_active(NULL, NULL, NULL, NULL, ptile,
                          NULL, NULL, NULL, NULL, NULL,
-                         &pextra->reqs, RPT_POSSIBLE);
+                         &pextra->reqs, RPT_POSSIBLE, V_COUNT);
 }
 
 /************************************************************************//**
@@ -644,7 +644,7 @@ bool unit_can_enter_hut(const struct unit *punit,
     if (tile_has_extra(ptile, extra)
     && are_reqs_active(unit_owner(punit), tile_owner(ptile), NULL, NULL,
                        ptile, NULL, NULL, NULL, NULL, NULL, &extra->rmreqs,
-                       RPT_POSSIBLE)){
+                       RPT_POSSIBLE, V_COUNT)){
       return TRUE;
     }
   } extra_type_by_rmcause_iterate_end;
@@ -665,7 +665,7 @@ bool unit_can_displace_hut(const struct unit *punit,
     if (tile_has_extra(ptile, extra)
     && are_reqs_active(unit_owner(punit), tile_owner(ptile), NULL, NULL,
                        ptile, NULL, NULL, NULL, NULL, NULL, &extra->rmreqs,
-                       RPT_POSSIBLE)){
+                       RPT_POSSIBLE, V_COUNT)){
       return TRUE;
     }
   } extra_type_by_rmcause_iterate_end;
@@ -1011,7 +1011,7 @@ bool can_extra_appear(const struct extra_type *pextra, const struct tile *ptile)
     && !extra_conflicting_on_tile(pextra, ptile)
     && are_reqs_active(NULL, tile_owner(ptile), NULL, NULL, ptile,
                        NULL, NULL, NULL, NULL, NULL,
-                       &pextra->appearance_reqs, RPT_CERTAIN);
+                       &pextra->appearance_reqs, RPT_CERTAIN, V_COUNT);
 }
 
 /************************************************************************//**
@@ -1024,7 +1024,7 @@ bool can_extra_disappear(const struct extra_type *pextra, const struct tile *pti
     && can_extra_be_removed(pextra, ptile)
     && are_reqs_active(NULL, tile_owner(ptile), NULL, NULL, ptile,
                        NULL, NULL, NULL, NULL, NULL,
-                       &pextra->disappearance_reqs, RPT_CERTAIN);
+                       &pextra->disappearance_reqs, RPT_CERTAIN, V_COUNT);
 }
 
 /************************************************************************//**

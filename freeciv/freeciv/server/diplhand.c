@@ -199,10 +199,10 @@ void handle_diplomacy_accept_treaty_req(struct player *pplayer,
 
         if (!are_reqs_active(pplayer, pother,
                              NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
-                             &(info->giver_reqs), RPT_POSSIBLE)
+                             &(info->giver_reqs), RPT_POSSIBLE, V_COUNT)
             || !are_reqs_active(pother, pplayer,
                                 NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
-                                &(info->receiver_reqs), RPT_POSSIBLE)) {
+                                &(info->receiver_reqs), RPT_POSSIBLE, V_COUNT)) {
           log_error("Requirements of a clause between %s and %s not fullfilled",
                     player_name(pplayer), player_name(pother));
           return;
@@ -354,10 +354,10 @@ void handle_diplomacy_accept_treaty_req(struct player *pplayer,
 
         if (!are_reqs_active(pother, pplayer,
                              NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
-                             &(info->giver_reqs), RPT_POSSIBLE)
+                             &(info->giver_reqs), RPT_POSSIBLE, V_COUNT)
             || !are_reqs_active(pplayer, pother,
                                 NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
-                                &(info->receiver_reqs), RPT_POSSIBLE)) {
+                                &(info->receiver_reqs), RPT_POSSIBLE, V_COUNT)) {
           notify_player(pplayer, NULL, E_DIPLOMACY, ftc_server,
                         _("Clause requirements are no longer fulfilled. "
                           "Treaty with %s canceled!"),

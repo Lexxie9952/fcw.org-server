@@ -1180,7 +1180,7 @@ void dai_build_adv_override(struct ai_type *ait, struct city *pcity,
 **************************************************************************/
 bool dai_assess_military_unhappiness(struct city *pcity)
 {
-  int free_unhappy = get_city_bonus(pcity, EFT_MAKE_CONTENT_MIL);
+  int free_unhappy = get_city_bonus(pcity, EFT_MAKE_CONTENT_MIL, V_COUNT);
   int unhap = 0;
 
   /* bail out now if happy_cost is 0 */

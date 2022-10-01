@@ -28,7 +28,7 @@
 ****************************************************************************/
 int city_culture(const struct city *pcity)
 {
-  return pcity->history + get_city_bonus(pcity, EFT_PERFORMANCE);
+  return pcity->history + get_city_bonus(pcity, EFT_PERFORMANCE, V_COUNT);
 }
 
 /************************************************************************//**
@@ -36,7 +36,7 @@ int city_culture(const struct city *pcity)
 ****************************************************************************/
 int city_history_gain(const struct city *pcity)
 {
-  return get_city_bonus(pcity, EFT_HISTORY)
+  return get_city_bonus(pcity, EFT_HISTORY, V_COUNT)
     + pcity->history * game.info.history_interest_pml / 1000;
 }
 

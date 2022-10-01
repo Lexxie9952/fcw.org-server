@@ -109,7 +109,7 @@ bool player_can_build_base(const struct base_type *pbase,
 
   return are_reqs_active(pplayer, tile_owner(ptile), NULL, NULL, ptile,
                          NULL, NULL, NULL, NULL, NULL,
-                         &pextra->reqs, RPT_POSSIBLE);
+                         &pextra->reqs, RPT_POSSIBLE, V_COUNT);
 }
 
 /************************************************************************//**
@@ -127,7 +127,7 @@ bool can_build_base(const struct unit *punit, const struct base_type *pbase,
 
   return are_reqs_active(pplayer, tile_owner(ptile), NULL, NULL,
                          ptile, punit, unit_type_get(punit), NULL, NULL, NULL,
-                         &pextra->reqs, RPT_CERTAIN);
+                         &pextra->reqs, RPT_CERTAIN, V_COUNT);
 }
 
 /************************************************************************//**

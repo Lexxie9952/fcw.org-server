@@ -387,6 +387,28 @@ typedef int Unit_Class_id;
 #define SPECENUM_COUNT  IG_COUNT
 #include "specenum_gen.h"
 
+/* Used in the network protocol. */
+#define SPECENUM_NAME vision_layer
+#define SPECENUM_VALUE0 V_MAIN
+#define SPECENUM_VALUE0NAME "Main"
+#define SPECENUM_VALUE1 V_INVIS
+#define SPECENUM_VALUE1NAME "Stealth"
+#define SPECENUM_VALUE2 V_SUBSURFACE
+#define SPECENUM_VALUE2NAME "Subsurface"
+/*
+#define SPECENUM_VALUE3 V_SUPERSURFACE      // Low and fast: Helicopters, Cruise Missiles, B-58 etc.
+#define SPECENUM_VALUE3NAME "Supersuface"
+#define SPECENUM_VALUE4 V_DEEP              // Bathypelagic, 1000m+ depth
+#define SPECENUM_VALUE4NAME "Deep"
+#define SPECENUM_VALUE5 V_STRATOSPHERE      // Stratosphere and higher: Spy Planes, Satellites
+#define SPECENUM_VALUE5NAME "Stratosphere"
+.
+NOTE adding a new layer requires changes to unit.c::is_hiding_unit() and many other hard-
+coded places, do a global search for V_INVIS, etc., and add it in all those places.
+*/
+#define SPECENUM_COUNT V_COUNT
+#include "specenum_gen.h"
+
 /* A server setting + its value. */
 typedef int ssetv;
 
@@ -425,6 +447,7 @@ typedef union {
   enum ai_level ai_level;
   enum citytile_type citytile;
   enum citystatus_type citystatus;
+  enum vision_layer vlayer;
   int minsize;
   int minculture;
   int minforeignpct;
@@ -556,6 +579,8 @@ typedef union {
 #define SPECENUM_VALUE44NAME "MinForeignPct"
 #define SPECENUM_VALUE45 VUT_ACTIVITY
 #define SPECENUM_VALUE45NAME "Activity"
+#define SPECENUM_VALUE46 VUT_VISIONLAYER
+#define SPECENUM_VALUE46NAME "VisionLayer"
 /* Keep this last. */
 #define SPECENUM_COUNT VUT_COUNT
 #include "specenum_gen.h"
@@ -1016,16 +1041,6 @@ enum spaceship_place_type {
 #define SPECENUM_VALUE2NAME "Nation"
 #include "specenum_gen.h"
 
-/* Used in the network protocol. */
-#define SPECENUM_NAME vision_layer
-#define SPECENUM_VALUE0 V_MAIN
-#define SPECENUM_VALUE0NAME "Main"
-#define SPECENUM_VALUE1 V_INVIS
-#define SPECENUM_VALUE1NAME "Stealth"
-#define SPECENUM_VALUE2 V_SUBSURFACE
-#define SPECENUM_VALUE2NAME "Subsurface"
-#define SPECENUM_COUNT V_COUNT
-#include "specenum_gen.h"
 
 typedef float adv_want;
 #define ADV_WANT_PRINTF "%f"

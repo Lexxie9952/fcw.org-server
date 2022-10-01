@@ -1610,7 +1610,7 @@ struct city *find_nearest_safe_city(struct unit *punit)
 
     /* Note the unit owner may be different from the city owner. */
     if (0 == get_unittype_bonus(unit_owner(punit), ptile, unit_type_get(punit),
-                               EFT_HP_REGEN)) {
+                               EFT_HP_REGEN, V_COUNT)) {
       /* If we cannot regen fast our hit points here, let's make some
        * penalty. */
       cur *= 3;
@@ -2653,8 +2653,8 @@ static void dai_set_defenders(struct ai_type *ait, struct player *pplayer)
     int total_attack = def_ai_city_data(pcity, ait)->danger;
     bool emergency = FALSE;
     int count = 0;
-    int mart_max = get_city_bonus(pcity, EFT_MARTIAL_LAW_MAX);
-    int mart_each = get_city_bonus(pcity, EFT_MARTIAL_LAW_EACH);
+    int mart_max = get_city_bonus(pcity, EFT_MARTIAL_LAW_MAX, V_COUNT);
+    int mart_each = get_city_bonus(pcity, EFT_MARTIAL_LAW_EACH, V_COUNT);
     int martless_unhappy = pcity->feel[CITIZEN_UNHAPPY][FEELING_NATIONALITY]
       + pcity->feel[CITIZEN_ANGRY][FEELING_NATIONALITY];
     int entertainers = 0;
@@ -2783,7 +2783,7 @@ const struct impr_type *utype_needs_improvement(const struct unit_type *putype,
     if (is_req_active(city_owner(pcity), NULL,
                       pcity, NULL, city_tile(pcity), NULL,
                       putype, NULL, NULL, NULL,
-                      preq, RPT_CERTAIN)) {
+                      preq, RPT_CERTAIN, V_COUNT)) {
       /* Already there. */
       continue;
     }

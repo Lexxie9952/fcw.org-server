@@ -925,7 +925,7 @@ static void sg_special_set(struct tile *ptile, bv_extras *extras, char ch,
                      || extra_base_get(candidate)->border_sq <= 0)
                     && are_reqs_active(NULL, tile_owner(vtile), NULL, NULL, vtile,
                                        NULL, NULL, NULL, NULL, NULL, &candidate->reqs,
-                                       RPT_POSSIBLE)) {
+                                       RPT_POSSIBLE, V_COUNT)) {
                   pextra = candidate;
                   break;
                 }

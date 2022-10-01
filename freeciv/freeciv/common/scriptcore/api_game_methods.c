@@ -274,7 +274,8 @@ int api_methods_city_inspire_partisans(lua_State *L, City *self, Player *inspire
      * instead of inspirer. */
     return get_target_bonus_effects(NULL, inspirer, NULL, self, NULL,
                                     city_tile(self), NULL, NULL, NULL,
-                                    NULL, NULL, EFT_INSPIRE_PARTISANS);
+                                    NULL, NULL, EFT_INSPIRE_PARTISANS,
+                                    V_COUNT);
   }
 
   return 0;

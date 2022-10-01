@@ -347,7 +347,8 @@ static void dai_choose_trade_route(struct ai_type *ait, struct city *pcity,
                                    NULL, NULL,
                                    NULL, NULL,
                                    action_by_number(trade_action),
-                                   EFT_TRADE_REVENUE_BONUS);
+                                   EFT_TRADE_REVENUE_BONUS,
+                                   V_COUNT);
 
   /* Be mercy full to players with small amounts. Round up. */
   income = ceil((float)income * pow(2.0, (double)bonus / 1000.0));

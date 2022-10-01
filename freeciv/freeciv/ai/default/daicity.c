@@ -582,7 +582,7 @@ static void dai_spend_gold(struct ai_type *ait, struct player *pplayer)
 
     if (is_unit_choice_type(bestchoice.type)
         && utype_is_cityfounder(bestchoice.value.utype)) {
-      if (get_city_bonus(pcity, EFT_GROWTH_FOOD) == 0
+      if (get_city_bonus(pcity, EFT_GROWTH_FOOD, V_COUNT) == 0
           && bestchoice.value.utype->pop_cost > 0
           && city_size_get(pcity) <= bestchoice.value.utype->pop_cost) {
         /* Don't buy settlers in cities that cannot afford the population cost. */
@@ -699,7 +699,7 @@ static int unit_foodbox_cost(struct unit *punit)
     int i;
 
     /* The default is to lose 100%.  The growth bonus reduces this. */
-    int foodloss_pct = 100 - get_city_bonus(pcity, EFT_GROWTH_FOOD);
+    int foodloss_pct = 100 - get_city_bonus(pcity, EFT_GROWTH_FOOD, V_COUNT);
 
     foodloss_pct = CLIP(0, foodloss_pct, 100);
     fc_assert_ret_val(pcity != NULL, -1);
@@ -1326,7 +1326,7 @@ static bool adjust_wants_for_reqs(struct ai_type *ait,
     const bool active = is_req_active(pplayer, NULL, pcity, pimprove,
                                       pcity->tile, NULL, NULL, NULL, NULL,
                                       NULL,
-                                      preq, RPT_POSSIBLE);
+                                      preq, RPT_POSSIBLE, V_COUNT);
 
     if (VUT_ADVANCE == preq->source.kind && preq->present && !active) {
       /* Found a missing technology requirement for this improvement. */
@@ -1644,7 +1644,7 @@ static void adjust_improvement_wants_by_effects(struct ai_type *ait,
         continue;
       }
       if (!is_req_active(pplayer, NULL, pcity, pimprove, NULL, NULL, NULL,
-                         NULL, NULL, NULL, preq, RPT_POSSIBLE)) {
+                         NULL, NULL, NULL, preq, RPT_POSSIBLE, V_COUNT)) {
 	active = FALSE;
 	if (VUT_ADVANCE == preq->source.kind && preq->present) {
           /* This missing requirement is a missing tech requirement.
@@ -1741,7 +1741,7 @@ static void adjust_improvement_wants_by_effects(struct ai_type *ait,
         if (!is_req_active(pplayer, NULL, pcity, pimprove,
                            city_tile(pcity), NULL, NULL, NULL, NULL,
                            NULL,
-                           preq, RPT_POSSIBLE)) {
+                           preq, RPT_POSSIBLE, V_COUNT)) {
           active = FALSE;
           break;
         }
@@ -2032,7 +2032,7 @@ Impr_type_id dai_find_source_building(struct city *pcity,
           }
         } else if (utype != NULL
                    && !is_req_active(city_owner(pcity), NULL, pcity, NULL, city_tile(pcity),
-                                     NULL, utype, NULL, NULL, NULL, preq, RPT_POSSIBLE)) {
+                                     NULL, utype, NULL, NULL, NULL, preq, RPT_POSSIBLE, V_COUNT)) {
           /* Effect requires other kind of unit than what we are interested about */
           wrong_unit = TRUE;
           break;

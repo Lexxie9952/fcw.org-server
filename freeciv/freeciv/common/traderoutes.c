@@ -50,7 +50,7 @@ static struct goods_type goods[MAX_GOODS_TYPES];
 *************************************************************************/
 int max_trade_routes(const struct city *pcity)
 {
-  int eft = get_city_bonus(pcity, EFT_MAX_TRADE_ROUTES);
+  int eft = get_city_bonus(pcity, EFT_MAX_TRADE_ROUTES, V_COUNT);
 
   return CLIP(0, eft, MAX_TRADE_ROUTES);
 }
@@ -523,7 +523,7 @@ int get_caravan_enter_city_trade_bonus(const struct city *pc1,
                                    action_by_number(establish_trade ?
                                                       ACTION_TRADE_ROUTE :
                                                       ACTION_MARKETPLACE),
-                                   EFT_TRADE_REVENUE_BONUS);
+                                   EFT_TRADE_REVENUE_BONUS, V_COUNT);
 
   /* Be mercy full to players with small amounts. Round up. */
   tb = ceil((float)tb * pow(2.0, (double)bonus / 1000.0));
@@ -690,7 +690,7 @@ bool goods_can_be_provided(struct city *pcity, struct goods_type *pgood,
   return are_reqs_active(city_owner(pcity), NULL,
                          pcity, NULL, city_tile(pcity),
                          punit, ptype, NULL, NULL, NULL,
-                         &pgood->reqs, RPT_CERTAIN);
+                         &pgood->reqs, RPT_CERTAIN, V_COUNT);
 }
 
 /*********************************************************************//**

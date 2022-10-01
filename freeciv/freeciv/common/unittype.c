@@ -1071,7 +1071,8 @@ int utype_pays_mp_for_action_estimate(const struct action *paction,
                                   tile_city(post_action_tile),
                                   NULL, tgt_tile,
                                   NULL, putype, NULL, NULL,
-                                  paction, EFT_ACTION_SUCCESS_MOVE_COST);
+                                  paction, EFT_ACTION_SUCCESS_MOVE_COST,
+                                  V_COUNT);
 
   return mpco;
 }
@@ -1095,7 +1096,8 @@ int utype_build_shield_cost(const struct city *pcity,
   }
 
   base = punittype->build_cost
-    * (100 + get_unittype_bonus(owner, ptile, punittype, EFT_UNIT_BUILD_COST_PCT)) / 100;
+    * (100 + get_unittype_bonus(owner, ptile, punittype,
+                                EFT_UNIT_BUILD_COST_PCT, V_COUNT)) / 100;
 
   return MAX(base * game.info.shieldbox / 100, 1);
 }
@@ -1153,7 +1155,8 @@ int utype_buy_gold_cost(const struct city *pcity,
   }
 
   cost = cost
-    * (100 + get_unittype_bonus(owner, ptile, punittype, EFT_UNIT_BUY_COST_PCT))
+    * (100 + get_unittype_bonus(owner, ptile, punittype,
+       EFT_UNIT_BUY_COST_PCT, V_COUNT))
     / 100;
 
   return cost;
@@ -1652,7 +1655,7 @@ bool can_player_build_unit_direct(const struct player *p,
     }
     if (!is_req_active(p, NULL,
                        NULL, NULL, NULL, NULL, punittype, NULL, NULL, NULL,
-                       preq, RPT_CERTAIN)) {
+                       preq, RPT_CERTAIN, V_COUNT)) {
       return FALSE;
     }
   } requirement_vector_iterate_end;

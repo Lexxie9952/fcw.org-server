@@ -802,7 +802,8 @@ void transfer_city_units(struct player *pplayer, struct player *pvictim,
       }
     } else {
       int rehome_pct = get_target_bonus_effects(NULL,unit_owner(vunit),pplayer,NULL,NULL,
-                        unit_tile(vunit),vunit,unit_type_get(vunit),NULL,NULL,NULL,EFT_REHOME_PCT);
+                        unit_tile(vunit),vunit,unit_type_get(vunit),NULL,NULL,NULL,
+                        EFT_REHOME_PCT, V_COUNT);
 /*       notify_player(unit_owner(vunit), unit_tile(vunit),E_UNIT_LOST_MISC,ftc_server,
                    _("[`dice`] Rehome probability = %d%%"),rehome_pct);*/
       if (rehome_pct>0 && fc_rand(100) < rehome_pct) {
@@ -955,7 +956,8 @@ static int raze_city(struct city *pcity, struct player *ptaker)
     int razechance = game.server.razechance * (100
                    + get_target_bonus_effects(NULL, ptaker, NULL, pcity, pimprove,
                                               city_tile(pcity), NULL, NULL, NULL,
-                                              NULL, NULL, EFT_RAZE_BUILDING_PCT))
+                                              NULL, NULL, EFT_RAZE_BUILDING_PCT,
+                                              V_COUNT))
                    / 100 + razeadd;
     /* DEBUG TESTING               
     notify_player(ptaker, city_tile(pcity), E_IMP_BUILD, ftc_server,
@@ -1565,7 +1567,7 @@ void create_city(struct player *pplayer, struct tile *ptile,
      hard-coding that no bonus on food_stock can occur for a new city,
      which is clearly the most influential/important time to have it. */
   int initial_food_pct = 
-    CLIP (0, get_city_bonus(pcity, EFT_GROWTH_FOOD), 100);
+    CLIP (0, get_city_bonus(pcity, EFT_GROWTH_FOOD, V_COUNT), 100);
   pcity->food_stock = (city_granary_size(1)
                        * initial_food_pct) / 100;
 
@@ -1710,7 +1712,8 @@ void remove_city(struct city *pcity)
   unit_list_iterate_safe(pcity->units_supported, punit) {
     struct city *new_home_city = tile_city(unit_tile(punit));
     int rehome_pct = get_target_bonus_effects(NULL,unit_owner(punit),NULL,NULL,
-                        NULL,unit_tile(punit),punit,unit_type_get(punit),NULL,NULL,NULL,EFT_REHOME_PCT);
+                        NULL,unit_tile(punit),punit,unit_type_get(punit),NULL,NULL,NULL,
+                        EFT_REHOME_PCT, V_COUNT);
     if (rehome_pct>0 && fc_rand(100) < rehome_pct) { // Handle case where EFT_REHOME_PCT allows a re-home 
         new_home_city = find_closest_city(unit_tile(punit),game_city_by_number(punit->homecity),unit_owner(punit),
                               false,false,true,true,false,unit_class_get(punit));
@@ -1962,8 +1965,8 @@ static int conquered_city_loses_pop(struct city *pcity, struct unit *punit)
      further tune or override certain behaviours ...
 
   if (killer) {
-     num_killed += get_unit_bonus(punit, EFT_???));
-     num_killed -= get_city_bonus(pcity, EFT_???)
+     num_killed += get_unit_bonus(punit, EFT_???, V_COUNT);
+     num_killed -= get_city_bonus(pcity, EFT_???, V_COUNT)
     ... etc...
   } else num_killed = 0;
 
@@ -2166,7 +2169,7 @@ bool unit_conquer_city(struct unit *punit, struct city *pcity)
      and we had to choose the former
      See sentence #3 at https://civilization.fandom.com/wiki/Civil_disorder_(Civ2) */
   // For now, allow rulesets to specifically turn it off with EFT_GULAG:
-  //if (!game.server.disorder_in_conquered && !get_city_bonus(pcity, EFT_???) {
+  //if (!game.server.disorder_in_conquered && !get_city_bonus(pcity, EFT_???, V_COUNT) {
     if (game.server.fulldisorder) {
       if (punit->owner != pcity->original) {
         /* Conquered city starts with 1 turn lawless/disorder (not more) */
@@ -2202,7 +2205,7 @@ bool unit_conquer_city(struct unit *punit, struct city *pcity)
 ****************************************************************************/
 static int city_got_citywalls(const struct city *pcity)
 {
-  int walls = get_city_bonus(pcity, EFT_VISIBLE_WALLS);
+  int walls = get_city_bonus(pcity, EFT_VISIBLE_WALLS, V_COUNT);
 
   return walls > 0 ? walls : 0;
 }
@@ -2641,7 +2644,7 @@ void package_city(struct city *pcity, struct packet_city_info *packet,
 
 #ifdef FREECIV_WEB // freeciv web doesn't have /common files to go figure out trade_route bonus percent, the final trade value should just come in packet
     tri_packet->value = proute->value
-        * (100 + get_city_bonus(pcity, EFT_TRADEROUTE_PCT)) / 100;   ////////// test outgoing packets contain adjusted trade value with bonuses
+        * (100 + get_city_bonus(pcity, EFT_TRADEROUTE_PCT, V_COUNT)) / 100;   ////////// test outgoing packets contain adjusted trade value with bonuses
 #endif
 
     tri_packet->direction = proute->dir;
@@ -2693,7 +2696,7 @@ void package_city(struct city *pcity, struct packet_city_info *packet,
 
   packet->walls = city_got_citywalls(pcity);
   packet->style = pcity->style;
-  packet->city_image = get_city_bonus(pcity, EFT_CITY_IMAGE);
+  packet->city_image = get_city_bonus(pcity, EFT_CITY_IMAGE, V_COUNT);
   packet->steal = pcity->steal;
 
   if (pcity->cm_parameter) {
@@ -2796,7 +2799,7 @@ bool update_dumb_city(struct player *pplayer, struct city *pcity)
   bool happy = city_happy(pcity);
   bool unhappy = city_unhappy(pcity);
   int style = pcity->style;
-  int city_image = get_city_bonus(pcity, EFT_CITY_IMAGE);
+  int city_image = get_city_bonus(pcity, EFT_CITY_IMAGE, V_COUNT);
 
   BV_CLR_ALL(improvements);
   improvement_iterate(pimprove) {
@@ -3062,7 +3065,8 @@ int do_sell_building(struct player *pplayer, struct city *pcity,
     sale_pct = (float)
       get_target_bonus_effects(NULL, pplayer, NULL, pcity, pimprove, 
                               city_tile(pcity), NULL, NULL, NULL,
-                              NULL, NULL, EFT_IMPROVEMENT_SALE_PCT);
+                              NULL, NULL, EFT_IMPROVEMENT_SALE_PCT,
+                              V_COUNT);
 
     int price = ((float)impr_sell_gold(pimprove)
                                 * (100 + sale_pct) + ROUND) / 100;
@@ -3427,7 +3431,7 @@ void city_landlocked_sell_coastal_improvements(struct tile *ptile)
                || VUT_TERRAINCLASS == preq->source.kind)
               && !is_req_active(city_owner(pcity), NULL, pcity, NULL,
                                 NULL, NULL, NULL, NULL, NULL, NULL,
-				preq, TRUE)) 
+				preq, TRUE, V_COUNT)) 
     {
       int price = do_sell_building(pplayer, pcity, pimprove, "landlocked");
       notify_player(pplayer, tile1, E_IMP_SOLD, ftc_server,
@@ -3452,8 +3456,11 @@ void city_landlocked_sell_coastal_improvements(struct tile *ptile)
 ****************************************************************************/
 void city_refresh_vision(struct city *pcity)
 {
-  v_radius_t vision_radius_sq =
-      V_RADIUS(get_city_bonus(pcity, EFT_CITY_VISION_RADIUS_SQ), 2, 2);
+  v_radius_t vision_radius_sq = V_RADIUS(
+   (short int) get_city_bonus(pcity, EFT_CITY_VISION_RADIUS_SQ, V_MAIN),
+   (short int) get_city_bonus(pcity, EFT_CITY_VISION_RADIUS_SQ, V_INVIS),
+   (short int) get_city_bonus(pcity, EFT_CITY_VISION_RADIUS_SQ, V_SUBSURFACE)
+  );
 
   vision_change_sight(pcity->server.vision, vision_radius_sq);
   ASSERT_VISION(pcity->server.vision);
@@ -3481,7 +3488,7 @@ bool city_map_update_radius_sq(struct city *pcity)
   int city_tiles_old, city_tiles_new;
   int city_radius_sq_old = city_map_radius_sq_get(pcity);
   int city_radius_sq_new = game.info.init_city_radius_sq
-                           + get_city_bonus(pcity, EFT_CITY_RADIUS_SQ);
+                           + get_city_bonus(pcity, EFT_CITY_RADIUS_SQ, V_COUNT);
 
   /* check minimum / maximum allowed city radii */
   city_radius_sq_new = CLIP(CITY_MAP_MIN_RADIUS_SQ, city_radius_sq_new,

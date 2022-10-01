@@ -87,10 +87,10 @@ int utype_move_rate(const struct unit_type *utype, const struct tile *ptile,
     /* Add on effects bonus (Magellan's Expedition, Lighthouse, Nuclear Power). */
     if (game.server.move_bonus_in_frags) {
       /* ruleset awards move bonuses in frags */
-      move_rate += get_unittype_bonus(pplayer, ptile, utype, EFT_MOVE_BONUS);
+      move_rate += get_unittype_bonus(pplayer, ptile, utype, EFT_MOVE_BONUS, V_COUNT);
     } else {
       /* ruleset awards move bonuses in whole moves */
-      move_rate += (get_unittype_bonus(pplayer, ptile, utype, EFT_MOVE_BONUS)
+      move_rate += (get_unittype_bonus(pplayer, ptile, utype, EFT_MOVE_BONUS, V_COUNT)
                   * SINGLE_MOVE);
     }
   }

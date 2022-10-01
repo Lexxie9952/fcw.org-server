@@ -109,7 +109,7 @@ UnitFlag:      Local
 UnitState:     Local                                                   "Transported", "OnLivableTile", "Transporting", "OnDomesticTile", "HasHomeCity",
                                                                        "OnNativeTile", New in 3.1: "InNativeExtra", "MovedThisTurn"; FCW: "Fortified" (deprecated, use "Activity")
 UnitType:      Local
-
+VisionLayer:   Local                                                    "Main", "Stealth", "Subsurface"
 
 MinSize is the minimum size of a city required.
 AI is ai player difficulty level.
@@ -264,6 +264,20 @@ City_Unhappy_Size
 
 City_Vision_Radius_Sq
     Increase city vision radius in squared distance by amount tiles.
+        **** IMPORTANT NOTE **
+        This effect will add to ALL vision layers of MAIN,
+        STEALTH, and SUBSURFACE if you don't limit it with the reqs.
+        For normal V_MAIN vision effects be sure to add the req
+        "VisionLayer", "Main", "Local" [, TRUE]
+        Otherwise the vision bonus will apply to the radius of seeing subs and
+        stealth aircraft too! Since in most rulesets, cities can see
+        adjacent stealth/submarine units, be sure put in an effect for
+        that vision also (value=2 will show adjacent only). See other
+        rulesets for examples of this and Unit_Vision_Radius_Sq also.
+        *
+        Besides "Main" which is normal standard vision, there are:
+        "Subsurface" - Submarines
+        "Stealth" - Stealth Aircraft
 
 Civil_War_Chance
     Base chance in per cent of a nation being split by civil war when its
@@ -748,6 +762,23 @@ Unit_Upkeep_Free_Per_City
 
 Unit_Vision_Radius_Sq
     Increase unit vision radius in squared distance by amount tiles.
+        **** IMPORTANT NOTE **
+        This effect will add to ALL vision layers of MAIN, STEALTH, and SUBSURFACE
+        if you don't limit it with the reqs. For normal "Main" layer vision effects,
+        be sure to add the req "VisionLayer", "Main", "Local" [, TRUE].
+        Otherwise the vision bonus will apply to all layers!!  NOTE THAT "Stealth"
+        and "Subsurface" layers have a hard-coded default vision_radius_sq of 2
+        UNLESS the unit's vision_sq_radius on the "Main" layer is less than 2, in
+        which case its vision_radius_sq on these layers will match that of "Main"
+        layer. The 2 can be reduced to 1 or 0 by applying a negative bonus under
+        this effect. For example, Unit_Vision_Radius_Sq val=-2 would make all units
+        on the layer totally invisible! Whereas a val of 2 would make the in-game
+        vision_radus_sq go to 2+2=4. See other rulesets for examples of this and
+        City_Vision_Radius_Sq also.
+        *
+        Besides "Main" which is normal standard vision, there are:
+        "Subsurface" - Submarines
+        "Stealth" - Stealth Aircraft
 
 Unit_Work_Frag_Bonus
     Adds a number of move fragments to the unit's work rate which accumulates

@@ -276,7 +276,7 @@ static void dai_tech_effect_values(struct ai_type *ait, struct player *pplayer)
               continue;
             }
             if (!is_req_active(pplayer, NULL, pcity, NULL, NULL, NULL, NULL,
-                               NULL, NULL, NULL, preq, RPT_POSSIBLE)) {
+                               NULL, NULL, NULL, preq, RPT_POSSIBLE, V_COUNT)) {
               active = FALSE;
               break; /* presence doesn't matter for inactive effects. */
 
@@ -420,7 +420,7 @@ struct unit_type *dai_wants_defender_against(struct ai_type *ait,
           && !can_player_build_improvement_direct(pplayer, building)) {
         requirement_vector_iterate(&building->reqs, preq) {
           if (!is_req_active(pplayer, NULL, pcity, building, city_tile(pcity),
-                             NULL, deftype, NULL, NULL, NULL, preq, RPT_CERTAIN)) {
+                             NULL, deftype, NULL, NULL, NULL, preq, RPT_CERTAIN, V_COUNT)) {
 
             if (VUT_ADVANCE == preq->source.kind && preq->present) {
               int iimprtech = advance_number(preq->source.value.advance);

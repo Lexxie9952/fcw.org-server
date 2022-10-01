@@ -541,7 +541,7 @@ static bool is_effect_prevented(const struct player *target_player,
                           target_building, target_tile,
                           target_unit, target_unittype,
                           target_output, target_specialist, NULL,
-                          preq, REVERSED_RPT(prob_type))) {
+                          preq, REVERSED_RPT(prob_type), V_COUNT)) {
       return TRUE;
     }
   } requirement_vector_iterate_end;
@@ -609,7 +609,8 @@ int get_target_bonus_effects(struct effect_list *plist,
                              const struct output_type *target_output,
                              const struct specialist *target_specialist,
                              const struct action *target_action,
-                             enum effect_type effect_type)
+                             enum effect_type effect_type,
+                             enum vision_layer vision_layer)
 {
   int bonus = 0;
 
@@ -620,7 +621,8 @@ int get_target_bonus_effects(struct effect_list *plist,
                         target_building, target_tile,
                         target_unit, target_unittype,
                         target_output, target_specialist, target_action,
-			&peffect->reqs, RPT_CERTAIN)) {
+			                  &peffect->reqs, RPT_CERTAIN,
+                        vision_layer)) {
       /* This code will add value of effect. If there's multiplier for 
        * effect and target_player aren't null, then value is multiplied
        * by player's multiplier factor. */
@@ -655,7 +657,7 @@ int get_world_bonus(enum effect_type effect_type)
   return get_target_bonus_effects(NULL,
                                   NULL, NULL, NULL, NULL, NULL, NULL, NULL,
                                   NULL, NULL, NULL,
-				  effect_type);
+				  effect_type, V_COUNT);
 }
 
 /**********************************************************************//**
@@ -671,13 +673,14 @@ int get_player_bonus(const struct player *pplayer,
   return get_target_bonus_effects(NULL,
                                   pplayer, NULL, NULL, NULL,
                                   NULL, NULL, NULL, NULL, NULL,
-                                  NULL, effect_type);
+                                  NULL, effect_type, V_COUNT);
 }
 
 /**********************************************************************//**
   Returns the effect bonus at a city.
 **************************************************************************/
-int get_city_bonus(const struct city *pcity, enum effect_type effect_type)
+int get_city_bonus(const struct city *pcity, enum effect_type effect_type,
+		   enum vision_layer vlayer)
 {
   if (!initialized) {
     return 0;
@@ -686,7 +689,7 @@ int get_city_bonus(const struct city *pcity, enum effect_type effect_type)
   return get_target_bonus_effects(NULL,
                                   city_owner(pcity), NULL, pcity, NULL,
                                   city_tile(pcity), NULL, NULL, NULL, NULL,
-                                  NULL, effect_type);
+                                  NULL, effect_type, vlayer);
 }
 
 /**********************************************************************//**
@@ -704,7 +707,7 @@ int get_city_specialist_output_bonus(const struct city *pcity,
                                   city_owner(pcity), NULL, pcity, NULL,
                                   NULL, NULL, NULL, poutput, pspecialist,
                                   NULL,
-				  effect_type);
+				  effect_type, V_COUNT);
 }
 
 /**********************************************************************//**
@@ -728,7 +731,7 @@ int get_city_tile_output_bonus(const struct city *pcity,
   return get_target_bonus_effects(NULL,
                                   city_owner(pcity), NULL, pcity, NULL,
                                   ptile, NULL, NULL, poutput, NULL, NULL,
-				  effect_type);
+				  effect_type, V_COUNT);
 }
 
 /**********************************************************************//**
@@ -748,7 +751,7 @@ int get_tile_output_bonus(const struct city *pcity,
   return get_target_bonus_effects(NULL,
                                   pplayer, NULL, pcity, NULL,
                                   ptile, NULL, NULL, poutput, NULL, NULL,
-                                  effect_type);
+                                  effect_type, V_COUNT);
 }
 
 /**********************************************************************//**
@@ -767,7 +770,7 @@ int get_player_output_bonus(const struct player *pplayer,
   fc_assert_ret_val(effect_type != EFT_COUNT, 0);
   return get_target_bonus_effects(NULL, pplayer, NULL, NULL, NULL, NULL,
                                   NULL, NULL, poutput, NULL, NULL,
-                                  effect_type);
+                                  effect_type, V_COUNT);
 }
 
 /**********************************************************************//**
@@ -787,7 +790,7 @@ int get_city_output_bonus(const struct city *pcity,
   return get_target_bonus_effects(NULL, city_owner(pcity), NULL, pcity,
                                   NULL, NULL, NULL, NULL, poutput, NULL,
                                   NULL,
-                                  effect_type);
+                                  effect_type, V_COUNT);
 }
 
 /**********************************************************************//**
@@ -806,7 +809,7 @@ int get_building_bonus(const struct city *pcity,
                                   city_owner(pcity), NULL, pcity,
 				  building,
 				  NULL, NULL, NULL, NULL,
-                                  NULL, NULL, effect_type);
+                                  NULL, NULL, effect_type, V_COUNT);
 }
 
 /**********************************************************************//**
@@ -818,9 +821,10 @@ int get_building_bonus(const struct city *pcity,
   here.
 **************************************************************************/
 int get_unittype_bonus(const struct player *pplayer,
-		       const struct tile *ptile,
-		       const struct unit_type *punittype,
-		       enum effect_type effect_type)
+		                   const struct tile *ptile,
+		                   const struct unit_type *punittype,
+		                   enum effect_type effect_type,
+                       enum vision_layer vision_layer)
 {
   struct city *pcity;
 
@@ -839,7 +843,8 @@ int get_unittype_bonus(const struct player *pplayer,
   return get_target_bonus_effects(NULL,
                                   pplayer, NULL, pcity, NULL, ptile,
                                   NULL, punittype, NULL,
-                                  NULL, NULL, effect_type);
+                                  NULL, NULL, effect_type,
+                                  vision_layer);
 }
 
 /**********************************************************************//**
@@ -860,7 +865,8 @@ int get_unit_bonus(const struct unit *punit, enum effect_type effect_type)
                                   NULL, unit_tile(punit),
                                   punit, unit_type_get(punit), NULL, NULL,
                                   NULL,
-                                  effect_type);
+                                  effect_type,
+                                  V_COUNT);
 }
 
 /**********************************************************************//**
@@ -892,7 +898,7 @@ int get_tile_bonus(const struct tile *ptile, const struct unit *punit,
                                   punit,
                                   utype,
                                   NULL, NULL, NULL,
-                                  etype);
+                                  etype, V_COUNT);
 }
 
 /**********************************************************************//**
@@ -913,7 +919,7 @@ int get_player_bonus_effects(struct effect_list *plist,
   return get_target_bonus_effects(plist,
                                   pplayer, NULL, NULL, NULL,
                                   NULL, NULL, NULL, NULL, NULL, NULL,
-				  effect_type);
+				  effect_type, V_COUNT);
 }
 
 /**********************************************************************//**
@@ -935,7 +941,7 @@ int get_city_bonus_effects(struct effect_list *plist,
   return get_target_bonus_effects(plist,
                                   city_owner(pcity), NULL, pcity, NULL,
                                   NULL, NULL, NULL, poutput, NULL, NULL,
-				  effect_type);
+				  effect_type, V_COUNT);
 }
 
 /**********************************************************************//**
@@ -998,7 +1004,7 @@ int get_potential_improvement_bonus(const struct impr_type *pimprove,
 
         if (!is_req_active(city_owner(pcity), NULL, pcity, pimprove,
                            NULL, NULL, NULL, NULL, NULL, NULL,
-                           preq, prob_type)) {
+                           preq, prob_type, V_COUNT)) {
           useful = FALSE;
           break;
         } 

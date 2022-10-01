@@ -73,7 +73,7 @@ static int get_tile_value(struct tile *ptile)
       if (road_can_be_built(proad, roaded)
           && are_reqs_active(NULL, NULL, NULL, NULL, roaded,
                              NULL, start_worker, NULL, NULL, NULL,
-                             &pextra->reqs, RPT_CERTAIN)) {
+                             &pextra->reqs, RPT_CERTAIN, V_COUNT)) {
         tile_add_extra(roaded, pextra);
       }
     } extra_type_by_cause_iterate_end;

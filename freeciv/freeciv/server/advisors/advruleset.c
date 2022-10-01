@@ -80,7 +80,7 @@ void adv_units_ruleset_init(void)
       if (peffect->value > 0) {
         requirement_vector_iterate(&peffect->reqs, preq) {
           if (!is_req_active(NULL, NULL, NULL, NULL, NULL, NULL, ptype,
-                             NULL, NULL, NULL, preq, RPT_POSSIBLE)) {
+                             NULL, NULL, NULL, preq, RPT_POSSIBLE, V_COUNT)) {
             ptype->adv.igwall = FALSE;
             break;
           }

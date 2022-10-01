@@ -750,7 +750,7 @@ pft_fill_utype_default_parameter(struct pf_parameter *parameter,
                                  struct player *powner)
 {
   int veteran_level = get_unittype_bonus(powner, pstart_tile, punittype,
-                                         EFT_VETERAN_BUILD);
+                                         EFT_VETERAN_BUILD, V_COUNT);
 
   if (veteran_level >= utype_veteran_levels(punittype)) {
     veteran_level = utype_veteran_levels(punittype) - 1;

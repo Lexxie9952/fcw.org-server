@@ -1055,7 +1055,7 @@ next_check:
     return TRUE;
   }
 
-  /* Hiding units are only seen by the V_INVIS fog layer. */
+  /* Hiding units are only seen on the V_INVIS or V_SUBSURFACE layers. */
   return fc_funcs->player_tile_vision_get(ptile, pplayer,
                                           unit_type_get(punit)->vlayer);
 
@@ -1614,7 +1614,7 @@ enum casus_belli_range casus_belli_range_for(const struct player *offender,
                                NULL, offender_utype,
                                NULL, NULL,
                                paction,
-                               outcome);
+                               outcome, V_COUNT);
 
   if (casus_belli_amount >= CASUS_BELLI_OUTRAGE) {
     /* International outrage: This isn't just between the offender and the

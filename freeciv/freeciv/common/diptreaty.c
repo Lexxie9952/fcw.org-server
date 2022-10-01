@@ -204,10 +204,10 @@ bool add_clause(struct Treaty *ptreaty, struct player *pfrom,
 
   if (!are_reqs_active(pfrom, pto,
                       NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
-                      &clause_infos[type].giver_reqs, RPT_POSSIBLE)
+                      &clause_infos[type].giver_reqs, RPT_POSSIBLE, V_COUNT)
       || !are_reqs_active(pto, pfrom,
                           NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
-                          &clause_infos[type].receiver_reqs, RPT_POSSIBLE)) {
+                          &clause_infos[type].receiver_reqs, RPT_POSSIBLE, V_COUNT)) {
     return FALSE;
   }
 

@@ -119,7 +119,7 @@ bv_extras get_tile_infrastructure_set(const struct tile *ptile,
         if (tile_has_extra(ptile, pdependant)) {
           if (!are_reqs_active(NULL, NULL, NULL, NULL, missingset,
                                NULL, NULL, NULL, NULL, NULL,
-                               &pdependant->reqs, RPT_POSSIBLE)) {
+                               &pdependant->reqs, RPT_POSSIBLE, V_COUNT)) {
             dependency = TRUE;
             break;
           }

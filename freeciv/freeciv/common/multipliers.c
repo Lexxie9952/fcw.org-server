@@ -137,5 +137,5 @@ struct multiplier *multiplier_by_rule_name(const char *name)
 bool multiplier_can_be_changed(struct multiplier *pmul, struct player *pplayer)
 {
   return are_reqs_active(pplayer, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
-                         NULL, &pmul->reqs, RPT_CERTAIN);
+                         NULL, &pmul->reqs, RPT_CERTAIN, V_COUNT);
 }

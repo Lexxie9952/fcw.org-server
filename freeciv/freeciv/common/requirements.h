@@ -111,17 +111,19 @@ bool does_req_contradicts_reqs(const struct requirement *req,
 bool requirement_vector_contradiction_clean(struct requirement_vector *vec);
 
 bool is_req_active(const struct player *target_player,
-		   const struct player *other_player,
-		   const struct city *target_city,
-		   const struct impr_type *target_building,
-		   const struct tile *target_tile,
+		               const struct player *other_player,
+		               const struct city *target_city,
+		               const struct impr_type *target_building,
+		               const struct tile *target_tile,
                    const struct unit *target_unit,
                    const struct unit_type *target_unittype,
-		   const struct output_type *target_output,
-		   const struct specialist *target_specialist,
+		               const struct output_type *target_output,
+		               const struct specialist *target_specialist,
                    const struct action *target_action,
-		   const struct requirement *req,
-                   const enum   req_problem_type prob_type);
+		               const struct requirement *req,
+                   const enum req_problem_type prob_type,
+/* SEND V_COUNT for vision_layer if not relevant to scope */
+                   const enum vision_layer vision_layer);
 bool are_reqs_active(const struct player *target_player,
                      const struct player *other_player,
                      const struct city *target_city,
@@ -133,7 +135,9 @@ bool are_reqs_active(const struct player *target_player,
                      const struct specialist *target_specialist,
                      const struct action *target_action,
                      const struct requirement_vector *reqs,
-                     const enum   req_problem_type prob_type);
+                     const enum req_problem_type prob_type,
+/* SEND V_COUNT for vision_layer if not relevant to scope */
+                     const enum vision_layer vision_layer);
 
 bool is_req_unchanging(const struct requirement *req);
 

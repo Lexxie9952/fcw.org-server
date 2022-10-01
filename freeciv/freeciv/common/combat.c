@@ -368,7 +368,7 @@ void get_modified_firepower(const struct unit *attacker,
    */
   if (unit_has_type_flag(attacker, UTYF_BADWALLATTACKER)
       && get_unittype_bonus(unit_owner(defender), unit_tile(defender),
-                            unit_type_get(attacker), EFT_DEFEND_BONUS) > 0) {
+                            unit_type_get(attacker), EFT_DEFEND_BONUS, V_COUNT) > 0) {
     *att_fp = 1;
   }
 
@@ -437,7 +437,8 @@ struct city *sdi_try_defend(const struct player *owner,
                                                    pcity, NULL, ptile,
                                                    NULL, NULL,
                                                    NULL, NULL, NULL,
-                                                   EFT_NUKE_PROOF)) {
+                                                   EFT_NUKE_PROOF,
+                                                   V_COUNT)) {
       return pcity;
     }
   } square_iterate_end;
@@ -458,7 +459,8 @@ bool is_tile_nuke_proof(const struct tile *ptile)
   /* Set initial resistance value of the tile */
   int val = get_target_bonus_effects(NULL, NULL, NULL, tile_city(ptile),
                                        NULL, ptile, NULL, NULL, NULL,
-                                       NULL, NULL, EFT_TILE_NUKE_PROOF);
+                                       NULL, NULL, EFT_TILE_NUKE_PROOF,
+                                       V_COUNT);
 
   bool success = fc_rand(100) < val; /* successful vs nuke detonation? */
 
@@ -476,7 +478,8 @@ bool is_tile_nuke_proof(const struct tile *ptile)
                                        NULL,
                                        NULL,
                                        NULL,
-                                       EFT_TILE_NUKE_PROOF);
+                                       EFT_TILE_NUKE_PROOF,
+                                       V_COUNT);
     
     success |= (fc_rand(100) < tmp);
   } unit_list_iterate_safe_end; 
@@ -617,7 +620,7 @@ static int defense_multiplication(const struct unit_type *att_type,
 
     /* This applies even if pcity is NULL. */
     mod = 100 + get_unittype_bonus(def_player, ptile,
-                                   att_type, EFT_DEFEND_BONUS);
+                                   att_type, EFT_DEFEND_BONUS, V_COUNT);
     defensepower = MAX(0, defensepower * mod / 100);
 
     defense_divider_pct = 100 + combat_bonus_against(att_type->bonuses,
@@ -636,7 +639,7 @@ static int defense_multiplication(const struct unit_type *att_type,
       + get_target_bonus_effects(NULL, unit_owner(def), NULL,
                                 tile_city(ptile), NULL, ptile, def,
                                 unit_type_get(def), NULL, NULL, NULL,
-                                EFT_FORTIFY_DEFENSE_BONUS)) / 100;
+                                EFT_FORTIFY_DEFENSE_BONUS, V_COUNT)) / 100;
 
   return defensepower;
 }

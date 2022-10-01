@@ -3967,7 +3967,7 @@ pf_reverse_map_utype_pos(struct pf_reverse_map *pfrm,
   struct pf_parameter *param = &pfrm->template;
   const struct player *pplayer = param->owner;
   int veteran_level = get_unittype_bonus(pplayer, ptile, punittype,
-                                         EFT_VETERAN_BUILD);
+                                         EFT_VETERAN_BUILD, V_COUNT);
 
   if (veteran_level >= utype_veteran_levels(punittype)) {
     veteran_level = utype_veteran_levels(punittype) - 1;

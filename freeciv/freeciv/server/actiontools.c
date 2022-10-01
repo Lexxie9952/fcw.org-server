@@ -84,7 +84,7 @@ void action_success_target_pay_mp(struct action *paction,
         unit_tile(target) ? tile_city(unit_tile(target)) : NULL,
         NULL, unit_tile(target), target, unit_type_get(target),
         NULL, NULL, paction,
-        EFT_ACTION_SUCCESS_TARGET_MOVE_COST);
+        EFT_ACTION_SUCCESS_TARGET_MOVE_COST, V_COUNT);
 
     target->moves_left = MAX(0, target->moves_left - spent_mp);
     send_unit_info(NULL, target);
@@ -1093,7 +1093,7 @@ action_auto_perf_unit_sel(const enum action_auto_perf_cause cause,
                         NULL, NULL, unit_tile(actor),
                         actor, unit_type_get(actor),
                         output, NULL, NULL,
-                        &autoperformer->reqs, RPT_CERTAIN)) {
+                        &autoperformer->reqs, RPT_CERTAIN, V_COUNT)) {
       /* Select this action auto performer. */
       return autoperformer;
     }

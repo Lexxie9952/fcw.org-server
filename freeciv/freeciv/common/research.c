@@ -309,7 +309,8 @@ static bool reqs_may_activate(const struct player *target_player,
                               const struct specialist *target_specialist,
                               const struct action *target_action,
                               const struct requirement_vector *reqs,
-                              const enum   req_problem_type prob_type)
+                              const enum   req_problem_type prob_type,
+                              const enum vision_layer vision_layer)
 {
   requirement_vector_iterate(reqs, preq) {
     if (is_req_unchanging(preq)
@@ -317,7 +318,7 @@ static bool reqs_may_activate(const struct player *target_player,
                           target_building, target_tile,
                           target_unit, target_unittype,
                           target_output, target_specialist, target_action,
-                          preq, prob_type)) {
+                          preq, prob_type, vision_layer)) {
       return FALSE;
     }
   } requirement_vector_iterate_end;
@@ -348,7 +349,8 @@ research_allowed(const struct research *presearch,
                                    const struct specialist *tspe,
                                    const struct action *tact,
                                    const struct requirement_vector *reqs,
-                                   const enum   req_problem_type ptype))
+                                   const enum req_problem_type ptype,
+                                   const enum vision_layer vlayer))
 {
   struct advance *adv;
 
@@ -361,7 +363,8 @@ research_allowed(const struct research *presearch,
 
   research_players_iterate(presearch, pplayer) {
     if (reqs_eval(pplayer, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
-                  NULL, NULL, &(adv->research_reqs), RPT_CERTAIN)) {
+                  NULL, NULL, &(adv->research_reqs),
+                  RPT_CERTAIN, V_COUNT)) {
       /* It is enough that one player that shares research is allowed to
        * research it.
        * Reasoning: Imagine a tech with that requires a nation in the

@@ -91,7 +91,7 @@ struct unit_type *dai_choose_defender_versus(struct city *pcity,
       double want, loss, cost = utype_build_shield_cost(pcity, punittype);
       struct unit *defender;
       int veteran = get_unittype_bonus(city_owner(pcity), pcity->tile, punittype,
-                                       EFT_VETERAN_BUILD);
+                                       EFT_VETERAN_BUILD, V_COUNT);
 
       defender = unit_virtual_create(pplayer, pcity, punittype, veteran);
       defense = get_total_defense_power(attacker, defender);
@@ -403,7 +403,7 @@ static unsigned int assess_danger_unit(const struct city *pcity,
 
   danger = adv_unit_att_rating(punit);
   mod = 100 + get_unittype_bonus(city_owner(pcity), ptile,
-                                 punittype, EFT_DEFEND_BONUS);
+                                 punittype, EFT_DEFEND_BONUS, V_COUNT);
   return danger * 100 / MAX(mod, 1);
 }
 
@@ -986,7 +986,8 @@ static void process_attacker_want(struct ai_type *ait,
                                                    NULL, city_tile(pcity),
                                                    NULL, punittype, NULL,
                                                    NULL, NULL,
-                                                   EFT_VETERAN_BUILD);
+                                                   EFT_VETERAN_BUILD,
+                                                   V_COUNT);
       /* Cost (shield equivalent) of gaining these techs. */
       /* FIXME? Katvrr advises that this should be weighted more heavily in big
        * danger. */
@@ -1472,9 +1473,10 @@ struct adv_choice *military_advisor_choose_build(struct ai_type *ait,
   }
 
   if (martial_need
-      && unit_list_size(pcity->tile->units) < get_city_bonus(pcity, EFT_MARTIAL_LAW_MAX)) {
+      && unit_list_size(pcity->tile->units) < get_city_bonus(pcity, 
+                                              EFT_MARTIAL_LAW_MAX, V_COUNT)) {
     martial_value = dai_content_effect_value(pplayer, pcity,
-                                             get_city_bonus(pcity, EFT_MARTIAL_LAW_EACH),
+                                             get_city_bonus(pcity, EFT_MARTIAL_LAW_EACH, V_COUNT),
                                              1, FEELING_FINAL);
   }
 
@@ -1571,7 +1573,7 @@ struct adv_choice *military_advisor_choose_build(struct ai_type *ait,
           if (urgency == 0
               && uchoice.value.utype->defense_strength == 1) {
             /* FIXME: check other reqs (unit class?) */
-            if (get_city_bonus(pcity, EFT_HP_REGEN) > 0) {
+            if (get_city_bonus(pcity, EFT_HP_REGEN, V_COUNT) > 0) {
               /* unlikely */
               uchoice.want = MIN(49, danger);
             } else {

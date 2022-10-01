@@ -753,7 +753,8 @@ bool diplomat_bribe(struct player *pplayer, struct unit *pdiplomat,
                                       NULL,
                                       NULL,
                                       paction,
-                                      EFT_ACTOR_BRIBE_COST_PCT))
+                                      EFT_ACTOR_BRIBE_COST_PCT,
+                                      V_COUNT))
        / 100;
 
   /* If player doesn't have enough gold, can't bribe. */
@@ -1262,7 +1263,8 @@ bool diplomat_incite(struct player *pplayer, struct unit *pdiplomat,
                                       NULL,
                                       NULL,
                                       paction,
-                                      EFT_ACTOR_INCITE_COST_PCT))
+                                      EFT_ACTOR_INCITE_COST_PCT,
+                                      V_COUNT))
        / 100;
   revolt_cost = MAX(0, revolt_cost);
   /* If player doesn't have enough gold, can't incite a revolt. */
@@ -1575,7 +1577,7 @@ bool diplomat_sabotage(struct player *pplayer, struct unit *pdiplomat,
      * City Walls, then there is a 50% chance of getting caught.
      */
     vulnerability -= (vulnerability
-                      * get_city_bonus(pcity, EFT_SABOTEUR_RESISTANT)
+                      * get_city_bonus(pcity, EFT_SABOTEUR_RESISTANT, V_COUNT)
                       / 100);
     if (vulnerability<0) vulnerability=0; // prevents "false positive" from fc_rand()
     int your_roll = (int)fc_rand(100);
@@ -1753,7 +1755,7 @@ bool spy_steal_gold(struct player *act_player, struct unit *act_unit,
 
   /* The upper limit on how much gold the thief can steal. */
   gold_take = (tgt_player->economic.gold
-               * get_city_bonus(tgt_city, EFT_MAX_STOLEN_GOLD_PM))
+               * get_city_bonus(tgt_city, EFT_MAX_STOLEN_GOLD_PM, V_COUNT))
               / 1000;
 
   /* How much to actually take. 1 gold is the smallest amount that can be
@@ -2057,7 +2059,7 @@ static bool diplomat_was_caught(struct player *act_player,
                                        tgt_city, NULL, NULL,
                                        act_unit, unit_type_get(act_unit),
                                        NULL, NULL, act,
-                                       EFT_ACTION_ODDS_PCT))
+                                       EFT_ACTION_ODDS_PCT, V_COUNT))
            / 100);
   /* The Action_Resist_Pct effect modifies the odds. The advantage of using this
    * WITH Action_Odds_Pct: the target player can also modify the odds.
@@ -2068,7 +2070,7 @@ static bool diplomat_was_caught(struct player *act_player,
                                        tgt_city, NULL, NULL,
                                        act_unit, unit_type_get(act_unit),
                                        NULL, NULL, act,
-                                       EFT_ACTION_RESIST_PCT))
+                                       EFT_ACTION_RESIST_PCT, V_COUNT))
            / 100);
 
   odds += action_odds;
@@ -2178,7 +2180,7 @@ static bool diplomat_success_vs_defender(struct unit *pattacker,
                                        tile_city(pdefender_tile), NULL,
                                        pdefender_tile, NULL, NULL, NULL,
                                        NULL, NULL,
-                                       EFT_SPY_RESISTANT) / 100;
+                                       EFT_SPY_RESISTANT, V_COUNT) / 100;
   if (chance<0) chance=0; // fc_rand 100% of time gives false result if chance < 0
   int your_roll = (int)fc_rand(100);
   notify_player(unit_owner(pattacker), NULL,

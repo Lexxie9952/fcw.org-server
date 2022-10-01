@@ -375,7 +375,8 @@ void unit_versus_unit(struct unit *attacker, struct unit *defender,
                                         NULL,
                                         NULL,
                                         NULL,
-                                        EFT_COMBAT_ROUNDS);
+                                        EFT_COMBAT_ROUNDS,
+                                        V_COUNT);
 
 /* DEBUG TESTS
   notify_player(unit_owner(attacker), NULL, E_UNIT_ACTION_FAILED, ftc_server, 
@@ -1605,7 +1606,8 @@ void place_partisans(struct tile *pcenter, struct player *powner,
                                         NULL,
                                         NULL,
                                         NULL,
-                                        EFT_VETERAN_BUILD);
+                                        EFT_VETERAN_BUILD,
+                                        V_COUNT);
 #endif
 
   while (count-- > 0
@@ -2003,6 +2005,11 @@ void transform_unit(struct unit *punit, const struct unit_type *to_unit,
   int old_fu = utype_fuel(old_type),
       new_fu = utype_fuel(to_unit),
       cur_fu = punit->fuel;
+  /* Stash a copy of which players can see the unit prior to upgrade/convert. */
+  bv_player unit_was_visible;
+  players_iterate(vplayer) {
+    BV_SET_VAL(unit_was_visible, player_index(vplayer), can_player_see_unit(vplayer, punit));
+  } players_iterate_end;
 
   if (!is_free) {
     pplayer->economic.gold -=
@@ -2047,6 +2054,18 @@ void transform_unit(struct unit *punit, const struct unit_type *to_unit,
   conn_list_do_buffer(pplayer->connections);
 
   unit_refresh_vision(punit);
+
+  /*\  If punit switched from invisible to visible vlayer or vice versa
+  ~*~  (or vradius changed from a vlayer change, then record the change.
+  \*/
+  players_iterate(vplayer) {
+    const bool is_seen  = can_player_see_unit(vplayer, punit);
+    const bool was_seen = BV_ISSET(unit_was_visible, player_index(vplayer)); 
+    if (is_seen && !was_seen)
+       BV_SET(punit->server.moving->can_see_unit, player_index(vplayer));
+    else if (was_seen && !is_seen) 
+       unit_goes_out_of_sight(vplayer, punit);
+  } players_iterate_end;
 
   CALL_PLR_AI_FUNC(unit_transformed, pplayer, punit, old_type);
   CALL_FUNC_EACH_AI(unit_info, punit);
@@ -2846,7 +2865,8 @@ void kill_unit(struct unit *pkiller, struct unit *punit, bool vet)
                                           NULL,
                                           NULL,
                                           action_by_number(ACTION_ATTACK),
-                                          EFT_STACK_ESCAPE_PCT);
+                                          EFT_STACK_ESCAPE_PCT,
+                                          V_COUNT);
             // Escape Charm. +1% odds for each move point more the defender has over attacker:                                 
             escape_chance += ((vunit->moves_left - pkiller->moves_left) / SINGLE_MOVE);
           
@@ -3853,7 +3873,7 @@ static void unit_enter_hut(struct unit *punit)
     if (tile_has_extra(ptile, pextra)
         && are_reqs_active(pplayer, tile_owner(ptile), NULL, NULL, ptile,
                            NULL, NULL, NULL, NULL, NULL, &pextra->rmreqs,
-                           RPT_CERTAIN)
+                           RPT_CERTAIN, V_COUNT)
        ) {
       hut = TRUE;
       /* FIXME: are all enter-removes extras worth counting? */
@@ -5725,16 +5745,20 @@ bool execute_orders(struct unit *punit, const bool fresh)
 int get_unit_vision_at(struct unit *punit, const struct tile *ptile,
                        enum vision_layer vlayer)
 {
-  const int base = (unit_type_get(punit)->vision_radius_sq
-                    + get_unittype_bonus(unit_owner(punit), ptile,
-                                         unit_type_get(punit),
-                                         EFT_UNIT_VISION_RADIUS_SQ));
+  const int base = unit_type_get(punit)->vision_radius_sq;
+  const int bonus = get_unittype_bonus(unit_owner(punit), ptile,
+                                       unit_type_get(punit),
+                                       EFT_UNIT_VISION_RADIUS_SQ, vlayer);
   switch (vlayer) {
   case V_MAIN:
-    return MAX(0, base);
+   /* Take base V_MAIN vradius but not < 0, add the bonus, then return
+      vradius not less than 0. */
+    return MAX(0, MAX(0, base) + bonus);
   case V_INVIS:
   case V_SUBSURFACE:
-    return CLIP(0, base, 2);
+   /* Take base V_MAIN vradius but not > 2, add bonus not < than -2, then
+      return vradius not less than 0. */
+    return MAX(0, (CLIP(0, base, 2) + MAX(-2, bonus)));
   case V_COUNT:
     break;
   }

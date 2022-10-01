@@ -585,8 +585,8 @@ static bool is_req_knowable(const struct player *pow_player,
     }
   }
 
-  if (req->source.kind == VUT_ACTION
-      || req->source.kind == VUT_OTYPE) {
+  if (req->source.kind == VUT_ACTION || req->source.kind == VUT_OTYPE
+      || req->source.kind == VUT_VISIONLAYER) {
     /* This requirement type is intended to specify the situation. */
     return TRUE;
   }
@@ -635,7 +635,7 @@ mke_eval_req(const struct player *pow_player,
 
   if (is_req_active(target_player, other_player, target_city,
                     target_building, target_tile, target_unit, target_unittype,
-                    target_output, target_specialist, NULL, req, prob_type)) {
+                    target_output, target_specialist, NULL, req, prob_type, V_COUNT)) {
     return TRI_YES;
   } else {
     return TRI_NO;

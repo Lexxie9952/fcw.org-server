@@ -82,7 +82,7 @@ adv_want dai_content_effect_value(const struct player *pplayer,
 {
   adv_want v = 0;
 
-  if (get_city_bonus(pcity, EFT_NO_UNHAPPY) <= 0) {
+  if (get_city_bonus(pcity, EFT_NO_UNHAPPY, V_COUNT) <= 0) {
     int i;
     int max_converted = pcity->feel[CITIZEN_UNHAPPY][FEELING_FINAL];
 
@@ -242,14 +242,14 @@ adv_want dai_effect_value(struct player *pplayer, struct government *gov,
     v += dai_content_effect_value(pplayer, pcity, amount, c, FEELING_EFFECT);
     break;
   case EFT_MAKE_CONTENT_MIL_PER:
-    if (get_city_bonus(pcity, EFT_NO_UNHAPPY) <= 0) {
+    if (get_city_bonus(pcity, EFT_NO_UNHAPPY, V_COUNT) <= 0) {
       v += MIN(pcity->feel[CITIZEN_UNHAPPY][FEELING_FINAL] + get_entertainers(pcity),
 	       amount) * 25;
       v += MIN(amount, 5) * c;
     }
     break;
   case EFT_MAKE_CONTENT_MIL:
-    if (get_city_bonus(pcity, EFT_NO_UNHAPPY) <= 0) {
+    if (get_city_bonus(pcity, EFT_NO_UNHAPPY, V_COUNT) <= 0) {
       v += pcity->feel[CITIZEN_UNHAPPY][FEELING_FINAL] * amount
         * MAX(unit_list_size(pcity->units_supported), 0) * 2;
       v += c * MAX(amount + 2, 1);
@@ -379,7 +379,7 @@ adv_want dai_effect_value(struct player *pplayer, struct government *gov,
     /* Note we look up the SIZE_UNLIMIT again right below.  This could
      * be avoided... */
     if (amount > 0) {
-      if (get_city_bonus(pcity, EFT_SIZE_UNLIMIT) <= 0) {
+      if (get_city_bonus(pcity, EFT_SIZE_UNLIMIT, V_COUNT) <= 0) {
         amount = 20; /* really big city */
       }
     } else {
@@ -389,8 +389,8 @@ adv_want dai_effect_value(struct player *pplayer, struct government *gov,
     }
     fc__fallthrough; /* there not being a break here is deliberate, mind you */
   case EFT_SIZE_ADJ:
-    if (get_city_bonus(pcity, EFT_SIZE_UNLIMIT) <= 0) {
-      const int aqueduct_size = get_city_bonus(pcity, EFT_SIZE_ADJ);
+    if (get_city_bonus(pcity, EFT_SIZE_UNLIMIT, V_COUNT) <= 0) {
+      const int aqueduct_size = get_city_bonus(pcity, EFT_SIZE_ADJ, V_COUNT);
       int extra_food = pcity->surplus[O_FOOD];
 
       if (city_granary_size(city_size_get(pcity)) == pcity->food_stock) {
@@ -647,7 +647,7 @@ adv_want dai_effect_value(struct player *pplayer, struct government *gov,
     trait = ai_trait_get_value(TRAIT_TRADER, pplayer);
     v += amount
       * (pow(2.0,
-             (double) get_city_bonus(pcity, EFT_TRADE_REVENUE_BONUS) / 1000.0)
+             (double) get_city_bonus(pcity, EFT_TRADE_REVENUE_BONUS, V_COUNT) / 1000.0)
          + c)
       * trait
       / TRAIT_DEFAULT_VALUE;
@@ -843,6 +843,7 @@ bool dai_can_requirement_be_met_in_city(const struct requirement *preq,
   case VUT_ACTION:
   case VUT_GOOD:
   case VUT_MINCALFRAG:
+  case VUT_VISIONLAYER:
   case VUT_COUNT:
     /* No sensible implementation possible with data available. */
     break;

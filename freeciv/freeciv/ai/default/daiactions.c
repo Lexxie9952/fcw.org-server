@@ -170,7 +170,8 @@ adv_want dai_action_value_unit_vs_city(struct action *paction,
                                       NULL,
                                       NULL,
                                       action_by_number(ACTION_SPY_INCITE_CITY),
-                                      EFT_ACTOR_INCITE_COST_PCT))
+                                      EFT_ACTOR_INCITE_COST_PCT,
+                                      V_COUNT))
        / 100;
     incite_cost = MAX(0, incite_cost);
     dai_calc_data(actor_player, NULL, &expenses, NULL);
@@ -351,7 +352,7 @@ int dai_action_choose_sub_tgt_unit_vs_city(struct action *paction,
       int impr_vul = pimprove->sabotage;
 
       impr_vul -= (impr_vul
-                   * get_city_bonus(target_city, EFT_SABOTEUR_RESISTANT)
+                   * get_city_bonus(target_city, EFT_SABOTEUR_RESISTANT, V_COUNT)
                    / 100);
 
       /* Can't be better than 100% */

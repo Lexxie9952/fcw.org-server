@@ -222,7 +222,8 @@ void dai_choose_diplomat_offensive(struct ai_type *ait,
                                       NULL,
                                       NULL,
                                       action_by_number(ACTION_SPY_INCITE_CITY),
-                                      EFT_ACTOR_INCITE_COST_PCT))
+                                      EFT_ACTOR_INCITE_COST_PCT,
+                                      V_COUNT))
        / 100;
     incite_cost = MAX(0, incite_cost);
     unit_virtual_destroy(punit);
@@ -541,7 +542,8 @@ static void find_city_to_diplomat(struct player *pplayer, struct unit *punit,
                                       NULL,
                                       NULL,
                                       action_by_number(ACTION_SPY_INCITE_CITY),
-                                      EFT_ACTOR_INCITE_COST_PCT))
+                                      EFT_ACTOR_INCITE_COST_PCT,
+                                      V_COUNT))
        / 100;
     incite_cost = MAX(0, incite_cost);
     can_incite = (incite_cost < INCITE_IMPOSSIBLE_COST)
@@ -723,7 +725,7 @@ static bool dai_diplomat_bribe_nearby(struct ai_type *ait,
                                       unit_owner(pvictim), game_city_by_number(punit->homecity),
                                       NULL,  unit_tile(pvictim), punit, unit_type_get(punit),
                                       NULL, NULL, action_by_number(ACTION_SPY_BRIBE_UNIT),
-                                      EFT_ACTOR_BRIBE_COST_PCT)) / 100;
+                                      EFT_ACTOR_BRIBE_COST_PCT, V_COUNT)) / 100;
     if (!threat) {
       /* Don't empty our treasure without good reason! */
       gold_avail = pplayer->economic.gold - dai_gold_reserve(pplayer);

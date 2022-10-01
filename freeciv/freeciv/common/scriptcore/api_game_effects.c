@@ -74,5 +74,5 @@ int api_effects_city_bonus(lua_State *L, City *pcity, const char *effect_type)
   if (!effect_type_is_valid(etype)) {
     return 0;
   }
-  return get_city_bonus(pcity, etype);
+  return get_city_bonus(pcity, etype, V_COUNT);
 }

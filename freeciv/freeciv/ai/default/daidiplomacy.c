@@ -781,7 +781,7 @@ static int dai_war_desire(struct ai_type *ait, struct player *pplayer,
     want += pcity->surplus[O_TRADE] * 6;
 
     /* FIXME: This might be buggy if it ignores unmet UnitClass reqs. */
-    fear += get_city_bonus(pcity, EFT_DEFEND_BONUS);
+    fear += get_city_bonus(pcity, EFT_DEFEND_BONUS, V_COUNT);
 
     city_built_iterate(pcity, pimprove) {
       int cost = impr_build_shield_cost(pcity, pimprove);

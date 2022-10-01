@@ -581,7 +581,7 @@ static void city_turn_notify(const struct city *pcity,
     turns_growth = (city_granary_size(city_size_get(pcity))
                     - pcity->food_stock - 1) / pcity->surplus[O_FOOD];
 
-    if (0 == get_city_bonus(pcity, EFT_GROWTH_FOOD)
+    if (0 == get_city_bonus(pcity, EFT_GROWTH_FOOD, V_COUNT)
         && 0 < get_current_construction_bonus(pcity, EFT_GROWTH_FOOD,
                                               RPT_CERTAIN)
         && 0 < pcity->surplus[O_SHIELD]) {
@@ -1007,7 +1007,7 @@ void city_repair_size(struct city *pcity, int change)
 **************************************************************************/
 static int granary_savings(const struct city *pcity)
 {
-  int savings = get_city_bonus(pcity, EFT_GROWTH_FOOD);
+  int savings = get_city_bonus(pcity, EFT_GROWTH_FOOD, V_COUNT);
 
   return CLIP(0, savings, 100);
 }
@@ -1255,8 +1255,9 @@ static bool city_populate(struct city *pcity, struct player *nationality)
     // Hangry: Nothing makes people more upset than starving:
     if (game.server.hangry) {
       // but they're quiet about it in the gulag:
-      int gulag = get_city_bonus(pcity, EFT_GULAG);
-      int gulag_force = pcity->martial_law + get_city_bonus(pcity, EFT_MAKE_CONTENT_MIL);
+      int gulag = get_city_bonus(pcity, EFT_GULAG, V_COUNT);
+      int gulag_force = pcity->martial_law 
+                      + get_city_bonus(pcity, EFT_MAKE_CONTENT_MIL, V_COUNT);
       /* Disorder from Famine conditions:
          1. No gulag effect = don't suppress disorder
          2. gulag_force < gulag effect. don't suppress disorder.
@@ -1326,7 +1327,7 @@ static bool worklist_item_postpone_req_vec(struct universal *target,
 
   requirement_vector_iterate(build_reqs, preq) {
     if (!is_req_active(pplayer, NULL, pcity, NULL, NULL, NULL, NULL,
-                       NULL, NULL, NULL, preq, RPT_POSSIBLE)) {
+                       NULL, NULL, NULL, preq, RPT_POSSIBLE, V_COUNT)) {
       known = TRUE;
       switch (preq->source.kind) {
       case VUT_ADVANCE:
@@ -1915,6 +1916,7 @@ static bool worklist_item_postpone_req_vec(struct universal *target,
       case VUT_TERRAINALTER: /* XXX could do this in principle */
       case VUT_CITYTILE:
       case VUT_CITYSTATUS:
+      case VUT_VISIONLAYER:
         /* Will only happen with a bogus ruleset. */
         log_error("worklist_change_build_target() has bogus preq");
         break;
@@ -2466,7 +2468,7 @@ static bool city_build_building(struct player *pplayer, struct city *pcity)
     int bonus_permille = get_target_bonus_effects(NULL, pplayer, NULL,
                           pcity, pimprove, city_tile(pcity), NULL,
                           NULL, NULL, NULL, NULL,
-                          EFT_COINAGE_BONUS_PM);
+                          EFT_COINAGE_BONUS_PM, V_COUNT);
     double coinage = pcity->before_change_shields*(1000+bonus_permille);
     // Round to nearest int with 0.5 randomly decided up or down:
     coinage = (coinage / 1000) + (double)(499.000000001+fc_rand(2))/1000; 
@@ -3439,7 +3441,7 @@ int city_incite_cost(struct player *pplayer, struct city *pcity)
     cost = cost_per_citizen * (natives + 0.7 * third_party + 0.5 * tgt_cit); 
   }
 
-  cost += (cost * get_city_bonus(pcity, EFT_INCITE_COST_PCT)) / 100;
+  cost += (cost * get_city_bonus(pcity, EFT_INCITE_COST_PCT, V_COUNT)) / 100;
   cost /= 100;
 
   if (cost >= INCITE_IMPOSSIBLE_COST) {
@@ -3597,7 +3599,7 @@ static void update_city_activity(struct city *pcity)
     /* 3 = Raptured now and can rapture next turn. */
     if (pcity->rapture_status & 2) { /* status of 2||3 may notify */
       /* If/when rapture is never delayed, this message is redundant. */
-      int rrate = get_city_bonus(pcity, EFT_RAPTURE_RATE_PM);   
+      int rrate = get_city_bonus(pcity, EFT_RAPTURE_RATE_PM, V_COUNT);   
       bool redundant = game.info.rapturedelay == 1 && (rrate == 0 || rrate == 1000);
       if (!redundant) {
         notify_player(pplayer, city_tile(pcity), E_CITY_NORMAL, ftc_server,
@@ -3696,7 +3698,7 @@ static void update_city_activity(struct city *pcity)
       }
     }
 
-    revolution_turns = get_city_bonus(pcity, EFT_REVOLUTION_UNHAPPINESS);
+    revolution_turns = get_city_bonus(pcity, EFT_REVOLUTION_UNHAPPINESS, V_COUNT);
     if (city_unhappy(pcity) || city_is_hangry) {
 
       pcity->anarchy++;
@@ -3945,7 +3947,7 @@ static float city_migration_score(struct city *pcity)
   }
 
   /* take into account effects */
-  score *= (1.0 + get_city_bonus(pcity, EFT_MIGRATION_PCT) / 100.0);
+  score *= (1.0 + get_city_bonus(pcity, EFT_MIGRATION_PCT, V_COUNT) / 100.0);
 
   log_debug("[M] %s score: %.3f", city_name_get(pcity), score);
 

@@ -273,26 +273,27 @@ static bool sanity_check_req_set(int reqs_of_type[], int local_reqs_of_type[],
   if (rc > 1 && preq->present) {
     /* Multiple requirements of the same type */
     switch (preq->source.kind) {
-     case VUT_GOVERNMENT:
-     case VUT_UTYPE:
-     case VUT_UCLASS:
-     case VUT_ACTION:
-     case VUT_ACTIVITY:
-     case VUT_OTYPE:
-     case VUT_SPECIALIST:
-     case VUT_MINSIZE: /* Breaks nothing, but has no sense either */
-     case VUT_MINFOREIGNPCT:
-     case VUT_MINMOVES: /* Breaks nothing, but has no sense either */
-     case VUT_MINVETERAN: /* Breaks nothing, but has no sense either */
-     case VUT_MINHP: /* Breaks nothing, but has no sense either */
-     case VUT_MINYEAR:
-     case VUT_MINCALFRAG:
-     case VUT_AI_LEVEL:
-     case VUT_TERRAINALTER: /* Local range only */
-     case VUT_CITYTILE:
-     case VUT_STYLE:
-     case VUT_IMPR_GENUS:
-     case VUT_CITYSTATUS:
+      case VUT_GOVERNMENT:
+      case VUT_UTYPE:
+      case VUT_UCLASS:
+      case VUT_ACTION:
+      case VUT_ACTIVITY:
+      case VUT_OTYPE:
+      case VUT_SPECIALIST:
+      case VUT_MINSIZE: /* Breaks nothing, but has no sense either */
+      case VUT_MINFOREIGNPCT:
+      case VUT_MINMOVES: /* Breaks nothing, but has no sense either */
+      case VUT_MINVETERAN: /* Breaks nothing, but has no sense either */
+      case VUT_MINHP: /* Breaks nothing, but has no sense either */
+      case VUT_MINYEAR:
+      case VUT_MINCALFRAG:
+      case VUT_AI_LEVEL:
+      case VUT_TERRAINALTER: /* Local range only */
+      case VUT_CITYTILE:
+      case VUT_STYLE:
+      case VUT_IMPR_GENUS:
+      case VUT_CITYSTATUS:
+      case VUT_VISIONLAYER:
        /* There can be only one requirement of these types (with current
         * range limitations)
         * Requirements might be identical, but we consider multiple
