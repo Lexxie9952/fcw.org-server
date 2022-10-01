@@ -6668,7 +6668,7 @@ function key_unit_fishtrap()
 }
 
 /**************************************************************************
- Tell the units in focus to build road or railroad.
+ Tell the units in focus to build best available road-type
 **************************************************************************/
 function key_unit_road(user_select_type)
 {
@@ -6722,8 +6722,11 @@ function get_what_roads_are_legal(punit, ptile)
   const has_river = tile_has_extra(ptile, EXTRA_RIVER);
   const knows_bridges = tech_known("Bridge Building");  
   const can_rail = tech_known("Railroad");
-
   const hwy_rules = client_rules_flag[CRF_EXTRA_HIGHWAY];
+  /* Usually only 1 type of road is legal. But with Highways or Maglev tech, 2 types can be legal.
+     In such case, we make the road-type you're already making pushed last to last of legal roads,
+     so that hitting 'R' twice will fall through to the next legal road type */
+  const roading_already = punit.activity == ACTIVITY_GEN_ROAD ? punit.activity_tgt : false;
   
   if (unit_types[punit['type']]['name'] == "Well-Digger") {
     if (!tile_has_extra(ptile, EXTRA_RIVER)
@@ -6736,7 +6739,7 @@ function get_what_roads_are_legal(punit, ptile)
   else if (typeof EXTRA_SEABRIDGE !== "undefined" && is_ocean_tile(ptile)) {
     if (can_build_sea_bridge(punit,ptile)) {
       road_list.push(extras['Sea Bridge']['id']);
-    } else if (tile_has_extra(ptile, EXTRA_SEABRIDGE)) { 
+    } else if (tile_has_extra(ptile, EXTRA_SEABRIDGE) && roading_already != EXTRA_MAGLEV) { 
       if (can_build_maglev(punit, ptile)) {
         road_list.push(extras['Maglev']['id']);
       }
@@ -6744,6 +6747,9 @@ function get_what_roads_are_legal(punit, ptile)
         if (can_rail) road_list.push(extras['Railroad']['id']); 
       }
     }
+
+    if (!road_list.includes(roading_already)) road_list.push(roading_already); // push legal road you're already doing last
+    
     return road_list;
   }
 //......  
@@ -6753,15 +6759,18 @@ function get_what_roads_are_legal(punit, ptile)
       return road_list;
     }
     else { // (hwy_rules && automobile) && (highway || road)
-      if (can_build_maglev(punit, ptile)) {
-        road_list.push(extras['Maglev']['id']);                              
+      if (can_build_maglev(punit, ptile) && roading_already != EXTRA_MAGLEV) {
+        road_list.push(extras['Maglev']['id']);                       
       }
-      if (!tile_has_extra(ptile, EXTRA_RAIL)) { // (hwy_rules && automobile) && (highway || road) && !rail
+      if (!tile_has_extra(ptile, EXTRA_RAIL) && roading_already != EXTRA_RAIL) { // (hwy_rules && automobile) && (highway || road) && !rail
         if (can_rail) road_list.push(extras['Railroad']['id']);
       } 
       if (tile_has_extra(ptile, EXTRA_ROAD)) {  // (hwy_rules && automobile) && road && !highway >>>> replace road with hwy.
-        road_list.push(extras['Highway']['id']);                               
+        road_list.push(extras['Highway']['id']);
       }
+
+      if (!road_list.includes(roading_already)) road_list.push(roading_already); // push legal road you're already doing last
+
       return road_list;
     }
   }
@@ -6781,13 +6790,15 @@ function get_what_roads_are_legal(punit, ptile)
     } // else { (hwy_rules && !automobile && highway && !road) == make rail, fall thru to last block: }
   }
 //......
-  if (can_build_maglev(punit, ptile)) { // (!hwy_rules || !automobile) && road && !rail && highway ==?
+  if (can_build_maglev(punit, ptile) && roading_already != EXTRA_MAGLEV) { // (!hwy_rules || !automobile) && road && !rail && highway ==?
     road_list.push(extras['Maglev']['id']);
   }
   if (!tile_has_extra(ptile, EXTRA_RAIL)) { // (!hwy_rules || !automobile) && road && !rail && highway ==?
     if (can_rail) road_list.push(extras['Railroad']['id']);
   }
   // What we know: There's a road, not a rail, and there are EITHER no highways in the ruleset OR we lack the tech.
+
+  if (!road_list.includes(roading_already)) road_list.push(roading_already); // push legal road you're already doing last
 
   return road_list;
 }
