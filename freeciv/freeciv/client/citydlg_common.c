@@ -755,7 +755,7 @@ void get_city_dialog_output_text(const struct city *pcity,
       /* TRANS: Trade partner unknown to client */
       const char *name = trade_city ? city_name_get(trade_city) : _("(unknown)");
       int value = proute->value
-        * (100 + get_city_bonus(pcity, EFT_TRADEROUTE_PCT)) / 100;
+        * (100 + get_city_bonus(pcity, EFT_TRADEROUTE_PCT, V_COUNT)) / 100;
 
       switch (proute->dir) {
       case RDIR_BIDIRECTIONAL:
@@ -789,7 +789,7 @@ void get_city_dialog_output_text(const struct city *pcity,
       int base = city_sum_total(sum), bonus = 100;
       struct effect_list *plist = effect_list_new();
 
-      (void) get_city_bonus_effects(plist, pcity, output, eft[priority]);
+      (void) get_city_bonus_effects(plist, pcity, output, eft[priority], V_COUNT);
 
       effect_list_iterate(plist, peffect) {
 	char buf2[512];
@@ -910,7 +910,7 @@ void get_city_dialog_illness_text(const struct city *pcity,
 
   plist = effect_list_new();
 
-  (void) get_city_bonus_effects(plist, pcity, NULL, EFT_HEALTH_PCT);
+  (void) get_city_bonus_effects(plist, pcity, NULL, EFT_HEALTH_PCT, V_COUNT);
 
   effect_list_iterate(plist, peffect) {
     char buf2[512];
@@ -994,7 +994,7 @@ void get_city_dialog_culture_text(const struct city *pcity,
 
   plist = effect_list_new();
 
-  (void) get_city_bonus_effects(plist, pcity, NULL, EFT_PERFORMANCE);
+  (void) get_city_bonus_effects(plist, pcity, NULL, EFT_PERFORMANCE, V_COUNT);
 
   effect_list_iterate(plist, peffect) {
     char buf2[512];

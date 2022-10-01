@@ -616,7 +616,7 @@ static SDL_Surface *create_unit_surface(struct unit *punit, bool support,
     int happy_cost;
     SDL_Rect dest;
 
-    free_unhappy = get_city_bonus(pCityDlg->pCity, EFT_MAKE_CONTENT_MIL);
+    free_unhappy = get_city_bonus(pCityDlg->pCity, EFT_MAKE_CONTENT_MIL, V_COUNT);
     happy_cost = city_unit_unhappiness(punit, &free_unhappy);
 
     i = punit->upkeep[O_SHIELD] + punit->upkeep[O_FOOD] +
@@ -2174,7 +2174,7 @@ static void redraw_happiness_city_dialog(const struct widget *pCityWindow,
 	pSurf = NULL;
 	count = 0;
 
-        get_city_bonus_effects(sources, pCity, NULL, EFT_MAKE_CONTENT);
+        get_city_bonus_effects(sources, pCity, NULL, EFT_MAKE_CONTENT, V_COUNT);
 
         effect_list_iterate(sources, psource) {
 
@@ -2289,7 +2289,7 @@ static void redraw_happiness_city_dialog(const struct widget *pCityWindow,
       if (j == 4) { /* wonders effect */
 	count = 0;
 
-        get_city_bonus_effects(sources, pCity, NULL, EFT_MAKE_HAPPY);
+        get_city_bonus_effects(sources, pCity, NULL, EFT_MAKE_HAPPY, V_COUNT, V_COUNT);
         effect_list_iterate(sources, psource) {
 
           pTmp = get_building_surface(get_building_for_effect(psource->type));
@@ -2307,7 +2307,7 @@ static void redraw_happiness_city_dialog(const struct widget *pCityWindow,
 
         effect_list_clear(sources);
 
-        get_city_bonus_effects(sources, pCity, NULL, EFT_FORCE_CONTENT);
+        get_city_bonus_effects(sources, pCity, NULL, EFT_FORCE_CONTENT, V_COUNT);
 
         effect_list_iterate(sources, psource) {
 
@@ -2325,7 +2325,7 @@ static void redraw_happiness_city_dialog(const struct widget *pCityWindow,
 
         effect_list_clear(sources);
 
-        get_city_bonus_effects(sources, pCity, NULL, EFT_NO_UNHAPPY);
+        get_city_bonus_effects(sources, pCity, NULL, EFT_NO_UNHAPPY, V_COUNT);
 
         effect_list_iterate(sources, psource) {
           pTmp = get_building_surface(get_building_for_effect(psource->type));
@@ -2344,7 +2344,7 @@ static void redraw_happiness_city_dialog(const struct widget *pCityWindow,
 
         FREESURFACE(pSurf);
 
-        get_city_bonus_effects(sources, pCity, NULL, EFT_MAKE_HAPPY);
+        get_city_bonus_effects(sources, pCity, NULL, EFT_MAKE_HAPPY, V_COUNT);
 
         effect_list_iterate(sources, psource) {
           pTmp = get_building_surface(get_building_for_effect(psource->type));
@@ -2357,7 +2357,7 @@ static void redraw_happiness_city_dialog(const struct widget *pCityWindow,
         } effect_list_iterate_end;
         effect_list_clear(sources);
 
-        get_city_bonus_effects(sources, pCity, NULL, EFT_FORCE_CONTENT);
+        get_city_bonus_effects(sources, pCity, NULL, EFT_FORCE_CONTENT, V_COUNT);
 
         effect_list_iterate(sources, psource) {
           pTmp = get_building_surface(get_building_for_effect(psource->type));
@@ -2370,7 +2370,7 @@ static void redraw_happiness_city_dialog(const struct widget *pCityWindow,
         } effect_list_iterate_end;
         effect_list_clear(sources);
 
-        get_city_bonus_effects(sources, pCity, NULL, EFT_NO_UNHAPPY);
+        get_city_bonus_effects(sources, pCity, NULL, EFT_NO_UNHAPPY, V_COUNT);
 
         effect_list_iterate(sources, psource) {
           pTmp = get_building_surface(get_building_for_effect(psource->type));
@@ -3003,7 +3003,7 @@ static void redraw_city_dialog(struct city *pCity)
 
   /* food stock */
 
-  if (get_city_bonus(pCity, EFT_GROWTH_FOOD) > 0) {
+  if (get_city_bonus(pCity, EFT_GROWTH_FOOD, V_COUNT) > 0) {
     /* with granary */
     /* stocks label */
     copy_chars_to_utf8_str(pstr, _("Stock"));

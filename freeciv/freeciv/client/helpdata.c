@@ -1678,7 +1678,7 @@ static bool help_is_extra_buildable(struct extra_type *pextra,
 
   return are_reqs_active(NULL, NULL, NULL, NULL, NULL,
                          NULL, ptype, NULL, NULL, NULL, &pextra->reqs,
-                         RPT_POSSIBLE);
+                         RPT_POSSIBLE, V_COUNT);
 }
 
 /************************************************************************//**
@@ -1689,7 +1689,7 @@ static bool help_is_extra_cleanable(struct extra_type *pextra,
 {
   return are_reqs_active(NULL, NULL, NULL, NULL, NULL,
                          NULL, ptype, NULL, NULL, NULL, &pextra->rmreqs,
-                         RPT_POSSIBLE);
+                         RPT_POSSIBLE, V_COUNT);
 }
 
 /************************************************************************//**
@@ -4259,7 +4259,7 @@ void helptext_government(char *buf, size_t bufsz, struct player *pplayer,
         world_value = 
           get_target_bonus_effects(NULL, NULL, NULL, NULL, NULL, NULL,
                                    NULL, unittype, potype, NULL, NULL,
-                                   peffect->type);
+                                   peffect->type, V_COUNT);
         net_value = peffect->value + world_value;
       }
 

@@ -2120,7 +2120,7 @@ static void city_dialog_update_supported_units(struct city_dialog *pdialog)
   struct unit_node_vector *nodes;
   int n, m, i;
   gchar *buf;
-  int free_unhappy = get_city_bonus(pdialog->pcity, EFT_MAKE_CONTENT_MIL);
+  int free_unhappy = get_city_bonus(pdialog->pcity, EFT_MAKE_CONTENT_MIL, V_COUNT);
 
   if (NULL != client.conn.playing
       && city_owner(pdialog->pcity) != client.conn.playing) {

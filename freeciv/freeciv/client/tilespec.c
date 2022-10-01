@@ -2830,7 +2830,7 @@ static struct sprite *get_city_sprite(const struct city_sprite *city_sprite,
      * versions where information was not saved to savegame - this should
      * give us right answer of what city looked like by the time it was
      * put under FoW. */
-    img_index = get_city_bonus(pcity, EFT_CITY_IMAGE);
+    img_index = get_city_bonus(pcity, EFT_CITY_IMAGE, V_COUNT);
   }
   img_index = CLIP(0, img_index, num_thresholds - 1);
 
@@ -5208,7 +5208,7 @@ static int fill_grid_sprite_array(const struct tileset *t,
               + get_target_bonus_effects(NULL, unit_owner(pfocus_unit), NULL,
                                          NULL, NULL, utile, NULL, NULL,
                                          NULL, NULL, NULL,
-                                         EFT_CITY_RADIUS_SQ);
+                                         EFT_CITY_RADIUS_SQ, V_COUNT);
 
             if (city_tile_to_city_map(&dummy_x, &dummy_y, radius,
                                       utile, tile)) {

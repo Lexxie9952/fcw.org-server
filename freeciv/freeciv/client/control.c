@@ -1397,7 +1397,7 @@ bool can_unit_do_connect(struct unit *punit,
         /* This tile has road, can unit build road to other tiles too? */
         return are_reqs_active(NULL, NULL, NULL, NULL, NULL,
                                punit, unit_type_get(punit), NULL, NULL, NULL,
-                               &tgt->reqs, RPT_POSSIBLE);
+                               &tgt->reqs, RPT_POSSIBLE, V_COUNT);
       }
 
       /* To start connect, unit must be able to build road to this
@@ -1418,7 +1418,7 @@ bool can_unit_do_connect(struct unit *punit,
     if (tile_has_extra(ptile, tgt)) {
       return are_reqs_active(NULL, NULL, NULL, NULL, NULL,
                              punit, unit_type_get(punit), NULL, NULL, NULL,
-                             &tgt->reqs, RPT_POSSIBLE);
+                             &tgt->reqs, RPT_POSSIBLE, V_COUNT);
     }
 
     return pterrain == pterrain->irrigation_result

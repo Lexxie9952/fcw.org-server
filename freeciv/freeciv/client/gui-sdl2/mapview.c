@@ -652,9 +652,9 @@ void redraw_unit_info_label(struct unit_list *punitlist)
              * provided by *building* named *Barracks*. Similar assumptions for
              * other effects. */
 	    if (pplayers_allied(client.conn.playing, pOwner)) {
-	      barrack = (get_city_bonus(pCity, EFT_LAND_REGEN) > 0);
-	      airport = (get_city_bonus(pCity, EFT_AIR_VETERAN) > 0);
-	      port = (get_city_bonus(pCity, EFT_SEA_VETERAN) > 0);
+	      barrack = (get_city_bonus(pCity, EFT_LAND_REGEN, V_COUNT) > 0);
+	      airport = (get_city_bonus(pCity, EFT_AIR_VETERAN, V_COUNT) > 0);
+	      port = (get_city_bonus(pCity, EFT_SEA_VETERAN, V_COUNT) > 0);
 	    }
 
 	    if (citywall || barrack || airport || port) {

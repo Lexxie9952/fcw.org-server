@@ -1681,7 +1681,7 @@ const char *text_happiness_buildings(const struct city *pcity)
   struct effect_list *plist = effect_list_new();
   static struct astring str = ASTRING_INIT;
 
-  get_city_bonus_effects(plist, pcity, NULL, EFT_MAKE_CONTENT);
+  get_city_bonus_effects(plist, pcity, NULL, EFT_MAKE_CONTENT, V_COUNT);
   if (0 < effect_list_size(plist)) {
     struct astring effects = ASTRING_INIT;
 
@@ -1712,7 +1712,7 @@ const char *text_happiness_nationality(const struct city *pcity)
   astr_add_line(&str, _("Nationality: "));
 
   if (game.info.citizen_nationality) {
-    if (get_city_bonus(pcity, EFT_ENEMY_CITIZEN_UNHAPPY_PCT) > 0) {
+    if (get_city_bonus(pcity, EFT_ENEMY_CITIZEN_UNHAPPY_PCT, V_COUNT) > 0) {
       struct player *owner = city_owner(pcity);
 
       citizens_foreign_iterate(pcity, pslot, nationality) {
@@ -1745,9 +1745,9 @@ const char *text_happiness_wonders(const struct city *pcity)
   struct effect_list *plist = effect_list_new();
   static struct astring str = ASTRING_INIT;
 
-  get_city_bonus_effects(plist, pcity, NULL, EFT_MAKE_HAPPY);
-  get_city_bonus_effects(plist, pcity, NULL, EFT_FORCE_CONTENT);
-  get_city_bonus_effects(plist, pcity, NULL, EFT_NO_UNHAPPY);
+  get_city_bonus_effects(plist, pcity, NULL, EFT_MAKE_HAPPY, V_COUNT);
+  get_city_bonus_effects(plist, pcity, NULL, EFT_FORCE_CONTENT, V_COUNT);
+  get_city_bonus_effects(plist, pcity, NULL, EFT_NO_UNHAPPY, V_COUNT);
   if (0 < effect_list_size(plist)) {
     struct astring effects = ASTRING_INIT;
 
@@ -1902,14 +1902,14 @@ const char *text_happiness_cities(const struct city *pcity)
 ****************************************************************************/
 const char *text_happiness_units(const struct city *pcity)
 {
-  int mlmax = get_city_bonus(pcity, EFT_MARTIAL_LAW_MAX);
-  int uhcfac = get_city_bonus(pcity, EFT_UNHAPPY_FACTOR);
+  int mlmax = get_city_bonus(pcity, EFT_MARTIAL_LAW_MAX, V_COUNT);
+  int uhcfac = get_city_bonus(pcity, EFT_UNHAPPY_FACTOR, V_COUNT);
   static struct astring str = ASTRING_INIT;
 
   astr_clear(&str);
 
   if (mlmax > 0) {
-    int mleach = get_city_bonus(pcity, EFT_MARTIAL_LAW_EACH);
+    int mleach = get_city_bonus(pcity, EFT_MARTIAL_LAW_EACH, V_COUNT);
     if (mlmax == 100) {
       astr_add_line(&str, "%s", _("Unlimited martial law in effect."));
     } else {
