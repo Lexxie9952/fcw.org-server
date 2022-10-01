@@ -650,11 +650,11 @@ void found_new_tech(struct research *presearch, Tech_type_id tech_found,
       if (A_UNSET == next_tech) {
         notify_research(presearch, NULL, E_TECH_LEARNED, ftc_server,
                         _("[`techs/%s`] Learned %s.<br><span style='cursor:pointer' onclick='click_tech_tab()'>[`bulb`] Scientists ask what to research next.</span>"),
-                        advance_name, advance_name);
+                        (next_tech == A_FUTURE ? "futuretech" : advance_name), advance_name);
       } else {
         notify_research(presearch, NULL, E_TECH_LEARNED, ftc_server,
                         _("[`techs/%s`] Learned %s.<br>[`bulb`] Our scientists' new goal is %s."),
-                        advance_name, advance_name,
+                        (next_tech == A_FUTURE ? "futuretech" : advance_name), advance_name,
                         research_advance_name_translation(presearch,
                                                           next_tech));
       }
