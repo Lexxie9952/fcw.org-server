@@ -4436,6 +4436,9 @@ function handle_context_menu_callback(key)
       key_unit_irrigate();
       break;
 
+    case "castle":
+    case "bunker":  
+    case "buoy":
     case "fort":
     case "fortress":
       key_unit_fortress();
