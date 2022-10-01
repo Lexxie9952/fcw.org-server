@@ -359,17 +359,49 @@ function unit_can_deboard(punit)
   return true;
 }
 /**************************************************************************
+  This function returns TRUE if the unit_class of utype is on the list
+  of "legal" cargo classes for ttype. (Each unit_type has an array of 4
+  bytes which are a bitfield for (up to) 32 unit_classes which ttype is
+  technically allowed to have as cargo. What we don't know is if the 
+  ruleset actonenablers or other mechanics prevent a given utype
+  from actually boarding/embarking. Nevertheless, knowing if it's in the
+  list of legal cargo classes is good info. 
+**************************************************************************/
+function utype_is_a_cargo_class_for_ttype(ptype, ttype)
+{
+  const pclass_id = ptype.unit_class_id;
+  let cargo_bit_val = 2 ** pclass_id;
+  let cargo_array_index = 0;
+  while (cargo_bit_val > 128) {
+    cargo_array_index ++;
+    cargo_bit_val = cargo_bit_val >> 8;
+  }
+  
+  return (ttype.cargo[cargo_array_index] & cargo_bit_val);
+}
+/**************************************************************************
   Returns FALSE iff we definitely know the unit can't load on this type
   of transporter. Returning true only means we don't know if it can't:
-  The server won't tell us for sure. Knowing the unit CAN'T load is a 
+  The server won't tell us for sure because of actionenablers which may
+  limit legal cargo from boarding. But knowing the unit CAN'T load is a 
   pragmatic way to prevent long GUI lists of invalid transport candidates
-  to load onto. It generalises what's true for the mainstream rulesets.
-  It should be circumvented/ignored in non-mainstream rulesets.
+  to load onto.
 **************************************************************************/
 function unit_could_possibly_load(punit, ptype, ttype, tclass)
 {
-  //console.log("Checking "+ptype.name+" onto "+ttype.name);
   if (!punit || !ptype || !ttype || !tclass) return false;
+
+  const ptype_is_valid_cargo_class = 
+      utype_is_a_cargo_class_for_ttype(ptype, ttype);
+
+  // Immedately reject cargo not on the list of legal cargo classes for ttype:
+  if (!ptype_is_valid_cargo_class) return false;
+  /* Non-MP2 rulesets are ultra-simpleton without special exceptions to balance
+     and fine-tune mechanics, exploits, etc. If utype is a legal cargo class
+     for ttype, return true and we're done */
+  if (!client_rules_flag[CRF_MP2]) return ptype_is_valid_cargo_class;
+
+  //console.log("Checking "+ptype.name+" onto "+ttype.name);
 
   var pclass = get_unit_class_name(punit);
   var ptile = tiles[punit['tile']];
@@ -445,14 +477,21 @@ function unit_could_possibly_load(punit, ptype, ttype, tclass)
   }
   //////////// End of handling for already-transported units doing a transport-swap ///////////////////////
 
-  //console.log("2, can_load == "+can_load);
+/**************************************************************************************************************************
+ * LARGE CHUNKS OF THE CODE BELOW IS RENDERED REDUNDANT BY THE ADDITION OF utype_is_a_cargo_class_for_ttype(ptype, ttype),
+ * which is infinitely better than immense logic cascades trying to handle every case with hard-coding. So it's 
+ * commented as of now (1.Oct.2022) and slated for deletion in 6 months after we discover we're bug free and everything
+ * works great.
+ * ********************************************************************************************************************** */
 
   // Disqualify all units who can never be cargo.
+/* Should be handled by utype is legal cargo check at top.
   if (pclass == "Sea" ||
-      pclass == "LandImmobile" ||
       pclass == "RiverShip" ||
       pclass == "Submarine" ||
       pclass == "Trireme" ||
+      // 👆🏻 ships, non-ships 👇🏻
+      pclass == "LandImmobile" ||
       pclass == "LandRail" ||
       pclass == "Space") {
       // Trawler is exception who can "rescue tug" sea units.
@@ -463,11 +502,15 @@ function unit_could_possibly_load(punit, ptype, ttype, tclass)
       }  
       return false;
   }
+*/
 
-  // Disqualify all units who can never be transports
+// Disqualify all units who can never be transports
+/* Should be handled by utype is legal cargo check at top.
   if (ttype.transport_capacity <= 0)
     return false;
+*/
 
+/* Should be handled by utype is legal cargo check at top.
   if (pclass == "Cargo") {
     if (ptype.rule_name=="Freight") {
       if (tclass.rule_name != "LandRail"
@@ -491,23 +534,31 @@ function unit_could_possibly_load(punit, ptype, ttype, tclass)
       if (tclass.rule_name == "Cargo") return false;
     }
   }
+*/
+
+/* Should be handled by utype is legal cargo check at top.
   else if (pclass == "Bomb") {
     if (!ttype.name.includes("Bomber") 
         && tclass.rule_name != "LandRail"
         && tclass.rule_name != "LandRoad" ) return false;
     if (ttype.cargo[0]==0) return false; // any "Bomber" who can't carry bombs.
   }
+  */
+   /* Should be handled by utype is legal cargo check at top.
   else if (pclass == "Bomb2") { // Conventional Bombs can't use land transport because we don't allow "flying trucks" to do bombing raids.
     if (!ttype.name.includes("Bomber")) return false;
     if (ttype.cargo[0]==0) return false; // any "Bomber" who can't carry bombs.
   }
+*/
+
+/* Should be handled by utype is legal cargo check at top.
   else if (pclass == "Missile") {
     if (ttype.name=="Missile Destroyer" ||
         ttype.name=="AEGIS Cruiser" ||
         (tclass.rule_name=="Submarine" && !client_rules_flag[CRF_MP2_D]) ||
         ttype.name=="Missile Submarine" ||
         ttype.name=="Mobile SAM" ||
-        ttype.name=="Carrier") {
+        ttype.name.includes("Carrier")) {
           //starting in MP2D missiles must load in a city or be a transport swap
           if (client_rules_flag[CRF_MP2_D]) { 
             if (tile_city(ptile)) return true;
@@ -520,50 +571,87 @@ function unit_could_possibly_load(punit, ptype, ttype, tclass)
     //the transport type is one who can't carry missiles:
     return false;
   }
-  else if (pclass.includes("Land")) {   // Land, LandNoKill, LandAirSea, LandRail, LandRoad, Big Land
-    //console.log("  Land* CHECK ON: tclass.rulename =="+tclass.rule_name);
+*/
+
+  // MP2D onward, missiles can only board in a city or a transport swap at sea.
+  if (pclass == "Missile") {
+    if (client_rules_flag[CRF_MP2_D]) { 
+      //if (unit_has_moved(punit)) return false;  TODO: totally prevent double-move exploits from missiles, here and in ruleset
+      if (tile_city(ptile)) return true;
+      else if (can_load) return true;
+      //else if (tile_has_extra(EXTRA_AIRBASE)) return true;   
+        /* TODO: Airbase is a native place for missile where it should be able to board but then you could shoot a nuke out to
+         * an airbase and then board an AEGIS on a canal there who takes it to another one etc. So this waits for the 
+         * !unit_has_moved(missile_unit) req to be implemented here and in ruleset */ 
+      else return false;
+    }
+  }
+
+
+  // Land, LandNoKill, LandAirSea, LandRoad, Big Land:   (LandRail already disqualified as never cargo above.)
+  else if (pclass.includes("Land")) {
+
+/* Should be handled by utype is legal cargo check at top.
     if (tclass.rule_name == "Land") return false; // can't load on Caravans, the only Land class with cargo capacity.
     if (tclass.rule_name == "Submarine") return false;
+*/
+
+    // Special actionenabler rules in MP2, only slow units can use Trucks and Trains:
     if (tclass.rule_name == "LandRail" || tclass.rule_name == "LandRoad") {  
       if (utype_real_base_move_rate(ptype) >= 3 * SINGLE_MOVE) return false; // Equality: units with <3 moves can use wagon/train/truck
-      //if (!unit_has_type_flag(punit, UTYF_FOOTSOLDIER)) return false; //used to be foot only, now it's line above
     }
+    // Special rules in MP2: diplomat types on Airplanes are only legal Land class allowed on it.
     if (tclass.rule_name == "Air") {
       if (ttype.name != "Airplane" || !unit_has_type_flag(punit, UTYF_DIPLOMAT))
         return false;
       // We got here if a diplomat type is trying to board an Airplane. That's
       // currently the only legal way for "Land" to load on "Air". (MP2-AG rev2)
     }
+
+/* Should be handled by utype is legal cargo check at top.
     if (tclass.rule_name == "AirPillage") return false;
     if (tclass.rule_name == "Air_High_Altitude") return false;
     if (ttype.name == "AEGIS Cruiser") return false;
     if (ttype.name == "Mobile SAM") return false;
     if (ttype.name == "Missile Destroyer") return false;
-  
+*/
+
+/* Should be handled by utype is legal cargo check at top.
     if (pclass != "LandAirSea") {
-      if (ttype.name == "Carrier") return false;
+      if (ttype.name.includes("Carrier")) return false;
       if (ttype.name == "Helicopter") return false; // transport heli allowed
-    }
-    if (pclass == "LandRoad") {
+    } else if (ttype.name == "Light Carrier") return false; // Marines+AAA can't get on Light Carriers
+    if (pclass == "LandRoad") { // Big Land
       if (tclass.rule_name == "Helicopter") return false;
     }
-    //LandRail already disqualified as never cargo, way above.
+*/
   }
+
+/* Should be handled by utype is legal cargo check at top.
   else if (pclass == "Balloon") {
     if (tclass.rule_name == "LandRail") return true;
     if (tclass.rule_name == "RiverShip" && !(ttype.name == "Cargo Ship" || ttype.name == "Galleon")) return false;
-    if (tclass.rule_name == "Sea" && !(ttype.name == "Transport" || ttype.name == "Carrier")) 
+    if (tclass.rule_name == "Sea" && !(ttype.name == "Transport" || ttype.name.includes("Carrier"))) 
       return false;
   }
+*/
+
+/* Should be handled by utype is legal cargo check at top.
   else if (pclass == "Zeppelin") {
     if (ttype.name != "Carrier" && ttype.name != "Transport" && ttype.name != "Train")
       return false;
   }
+*/
+
+/* Should be handled by utype is legal cargo check at top.
   else if (pclass.startsWith("Air") || pclass == "Helicopter") {
-    //console.log("  Air*/heli/balloon CHECK ON: tclass.rulename =="+tclass.rule_name);
-    if (ttype.name != "Carrier") return false;
+    if (!ttype.name.includes("Carrier")) return false;
+    if (pclass == "Air_High_Altitude" && ttype.name != "Carrier") return false;
   }
-  //console.log("  ..."+ptype.name+" on "+ttype.name+" is LEGAL !");  
+*/
+
+  //console.log("  ..."+ptype.name+" on "+ttype.name+" is LEGAL !");
+
   return true;
 }
 /**************************************************************************
