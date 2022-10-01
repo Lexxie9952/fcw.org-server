@@ -395,6 +395,15 @@ reqs    =
     { "type", "name", "range", "present"
       "VisionLayer", "Main", "Local", FALSE
     }
+; Helicopters have more vision
+[effect_helicopter_submarine_vision]
+type    = "Unit_Vision_Radius_Sq"
+value   = 6         ; 2 + 6 = 8. srtq(8) = 2.82 = 2x2 
+reqs    =
+    { "type",        "name",         "range"
+      "UnitClass",   "Helicopter",   "Local"
+      "VisionLayer", "Subsurface",   "Local"
+    }
 
 [effect_trade_routes]
 type    = "Max_Trade_Routes"

@@ -1411,7 +1411,8 @@ The Helicopter is a very powerful unit, as it can both fly and\
  conquer cities.  Care must be exercised, because Helicopters lose a\
  small amount of health for every turn not spent in a city or airbase\
  or on a Carrier, unless you have the United Nations wonder, and\
- Helicopters may be attacked by ground units.\
+ Helicopters may be attacked by ground units. \n\
+Helicopters can see 2 tiles, and also see Submarines from 2 tiles away.\
 ")
 
 [unit_stealth_fighter]
