@@ -6007,7 +6007,7 @@ function extra_dep(punit, ptile, extra_id, irrigated_before)
   var assume_water_near = irrigated_before; //can't assume previous tile in connect path was irrigated if it's the first tile in path
   
   if (extra_id == EXTRA_ROAD) {  
-    var possible_roads = get_what_roads_are_legal(punit, ptile);
+    var possible_roads = get_what_roads_are_legal(punit, ptile, true);
     if (possible_roads.length) extra_id = possible_roads[0]; 
     else extra_id = CONNECT_ACTION_ILLEGAL;
 
@@ -6719,17 +6719,24 @@ function button_unit_road_type(rtype)
 /**************************************************************************
  Helper function for above and unit orders context menu + buttons 
 **************************************************************************/
-function get_what_roads_are_legal(punit, ptile)
+function get_what_roads_are_legal(punit, ptile, connect_mode)
 {
   var road_list = [];
   const has_river = tile_has_extra(ptile, EXTRA_RIVER);
   const knows_bridges = tech_known("Bridge Building");  
   const can_rail = tech_known("Railroad");
   const hwy_rules = client_rules_flag[CRF_EXTRA_HIGHWAY];
-  /* Usually only 1 type of road is legal. But with Highways or Maglev tech, 2 types can be legal.
-     In such case, we make the road-type you're already making pushed last to last of legal roads,
-     so that hitting 'R' twice will fall through to the next legal road type */
-  const roading_already = punit.activity == ACTIVITY_GEN_ROAD ? punit.activity_tgt : false;
+  var roading_already = false;
+  /* In connect mode, we don't override road-type priority on distant tiles
+   * based on roading activity on current tile. */
+  if (!connect_mode) {
+  /* Usually only 1 type of road is legal. But with Highways or Maglev tech,
+   * 2 types can be legal. In such case, we make the road-type you're already
+   * making pushed last to the list of legal roads, so that hitting 'R' twice
+   * will fall through to the next legal road type */
+    roading_already = (punit.activity == ACTIVITY_GEN_ROAD) 
+                    ? punit.activity_tgt : false;
+  }
   
   if (unit_types[punit['type']]['name'] == "Well-Digger") {
     if (!tile_has_extra(ptile, EXTRA_RIVER)
@@ -6751,7 +6758,10 @@ function get_what_roads_are_legal(punit, ptile)
       }
     }
 
-    if (!road_list.includes(roading_already)) road_list.push(roading_already); // push legal road you're already doing last
+    if (!connect_mode && roading_already != false 
+      && !road_list.includes(roading_already)) {
+        road_list.push(roading_already); // push legal road you're already doing last
+    }
     
     return road_list;
   }
@@ -6772,7 +6782,10 @@ function get_what_roads_are_legal(punit, ptile)
         road_list.push(extras['Highway']['id']);
       }
 
-      if (!road_list.includes(roading_already)) road_list.push(roading_already); // push legal road you're already doing last
+      if (!connect_mode && roading_already != false 
+          && !road_list.includes(roading_already)) {
+            road_list.push(roading_already); // push legal road you're already doing last
+      }
 
       return road_list;
     }
@@ -6801,7 +6814,11 @@ function get_what_roads_are_legal(punit, ptile)
   }
   // What we know: There's a road, not a rail, and there are EITHER no highways in the ruleset OR we lack the tech.
 
-  if (!road_list.includes(roading_already)) road_list.push(roading_already); // push legal road you're already doing last
+  // Push that road type we know is legal because you're already doing it, if it was deferred above:
+  if (!connect_mode && roading_already != false 
+      && !road_list.includes(roading_already)) {
+    road_list.push(roading_already);
+  }
 
   return road_list;
 }
