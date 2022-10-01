@@ -604,11 +604,12 @@ Veteran Levels for Warriors are the standard ruleset default:
 <pre class='firepower'>Firepower: 1</pre>
 <pre class='hitpoints'>Hitpoints: 10</pre>
 <pre class='obsolete'>Obsolete by: Pikemen</pre>
-<pre class='helptext'><b class='unit_desc'>The Phalanx is armored infantry, excellent for city defense and holding tactical positions. Phalanxes can do standard attacks and Rumble attacks while remaining fortified. 
+<pre class='helptext'><b class='unit_desc'>The Phalanx is armored infantry, excellent for defensively holding tactical positions：a Phalanx gets a 50% attack bonus if it has not moved. Phalanxes can also do standard attacks and Rumble attacks and remain fortified after the attack! 
 </b>
 <b class='unit_desc'>If a Phalanx hasn’t moved, it can Rumble Attack adjacent enemies. Rumbles are disciplined skirmish—not mortal combat. The formation gives the Phalanx little or no vulnerability. The trade-off is that the Phalanx can only thrust at a single target for 3 combat rounds. Rumble attacks are used to unsettle enemies: they can discourage fortifying into tactical positions, or weaken them prior to attacks from other units. The action uses 6⁄10 of a move point and doesn’t alter the fortified status of the Phalanx. 
 </b>
-<b class='unit_desc'>With the discovery of Conscription, Phalanxes can convert to Musketeers in any domestic city. The discovery of Banking changes upkeep from shields to gold.</b>
+<b class='unit_desc'>With the discovery of Conscription, Phalanxes can convert to Musketeers in any domestic city. The discovery of Banking changes upkeep from shields to gold. 
+</b>
 <hr style='border-top: 1px solid #000'>➤ Belongs to Land unit class.
   • Can occupy empty enemy cities.
   • Subject to zones of control.
@@ -2774,7 +2775,7 @@ AAA can convert to Mobile SAM for free after 9 turns of service. The order must 
 
 <pre class='cost'>Cost: 70 shields</pre>
 <pre class='upkeep'>Upkeep: 1 Shield, 1 Unhappy</pre>
-<pre class='moves'>Moves: 4</pre>
+<pre class='moves'>Moves: 3 1/3</pre>
 <pre class='vision'>Vision: 2.00 tiles</pre>
 <pre class='attack'>Attack: 12</pre>
 <pre class='defense'>Defense: 2</pre>
@@ -2830,9 +2831,9 @@ Veteran Levels for Howitzers are the standard ruleset default:
 <tr><td>veteran</td><td>150%</td><td>33%</td> <td>-</td></tr>  
 <tr><td>hardened</td><td>175%</td><td>20%</td> <td>-</td></tr>
 <tr><td>elite</td><td>200%</td><td>15%</td> <td>-</td></tr>
-<tr><td>crack</td><td>210%</td><td>15%</td> <td>+ 1/10</td></tr>
-<tr><td>master</td><td>220%</td><td>15%</td> <td>+ 1/10</td></tr>
-<tr><td>champion</td><td>230%</td><td>-</td><td>+ 1/10</td></tr></table>
+<tr><td>crack</td><td>210%</td><td>15%</td> <td>+ 1/6</td></tr>
+<tr><td>master</td><td>220%</td><td>15%</td> <td>+ 1/6</td></tr>
+<tr><td>champion</td><td>230%</td><td>-</td><td>+ 1/6</td></tr></table>
 <br><b style="font-family:Freeciv; font-size:larger">Transport Loading Logistics</b>
 <img src="/images/man/logistics_artillery_load.png">
 <b style="font-family:Freeciv; font-size:larger">Transport Unloading Logistics</b>
@@ -3022,9 +3023,10 @@ Veteran Levels for Fighters are the default for offensive Air units:
 <tr><td>ace</td><td>220%</td><td>10%</td> <td>+ 1</td></tr>
 <tr><td>top gun</td><td>230%</td><td>-</td><td>+ 1</td></tr></table>
 
-Fighter types on Vigil will (usually) engage the following units:
+Fighter-types on Vigil will (usually) engage the following units:
 <img src="/images/man/vigil_mp2d.png">
 * Note: Propeller-type fighters are unable to reach high altitude aircraft (Jet Bomber, Spy Plane.)
+<i>Vet levels and hitpoints may alter the decision to engage.</i>
 
 </pre>
 </div>
@@ -3085,9 +3087,10 @@ Veteran Levels for Escort Fighters have higher promotion odds than offensive Air
 <tr><td>ace</td><td>220%</td><td>15%</td> <td>+ 1</td></tr>
 <tr><td>top gun</td><td>230%</td><td>-</td><td>+ 1</td></tr></table>
 
-Fighter types on Vigil will (usually) engage the following units:
+Fighter-types on Vigil will (usually) engage the following units:
 <img src="/images/man/vigil_mp2d.png">
 * Note: Propeller-type fighters are unable to reach high altitude aircraft (Jet Bomber, Spy Plane.)
+<i>Vet levels and hitpoints may alter the decision to engage.</i>
 
 </pre>
 </div>
@@ -3457,7 +3460,7 @@ NOTE:  Due to game mechanics, Satellites block terrestrial movement over a tile.
 <pre class='helptext'><b class='unit_desc'>Transport Helicopters can carry three land units, which they can pick up from anywhere</b>
 <b class='unit_desc'>Foot and artillery types can unload by stepping off to any adjacent tile, but will lose all moves (except Marine types). Other types need a City, Airbase, or Naval Base to unload.</b>
 
-<b class='unit_desc'>Helicopters lose 1 hp for each turn not ended in a City, Base, or Carrier. +1 move is awarded if starting a turn in a City or Airbase. Whether resting or not, all Helicopter types regain 10hp the first turn-change spent in a city.</b>
+<b class='unit_desc'>Helicopters lose 1 hp for each turn not ended in a City, Base, or Carrier. +1 move is awarded if starting a turn in a City or Airbase. Whether resting or not, all Helicopter types regain 10hp if turn-change is spent in a city.</b>
 
 <b class='unit_desc'>All Helicopters can be attacked by land from Riflemen onward; by sea from Ironclad onward; get +50% defence vs. foot units; and are unreachable to artillery types. Unlike attack Helicopters, Transport Helicopters are intercepted by Fighters on vigil. Stack-Escape：60% odds to evade stack-death if attacker doesn’t have more moves than it does.</b>
 <hr style='border-top: 1px solid #000'>➤ Belongs to Helicopter unit class.
@@ -3610,9 +3613,10 @@ Veteran Levels for Jet Fighters are the default for offensive Air units:
 <tr><td>ace</td><td>220%</td><td>10%</td> <td>+ 1</td></tr>
 <tr><td>top gun</td><td>230%</td><td>-</td><td>+ 1</td></tr></table>
 
-Fighter types on Vigil will (usually) engage the following units:
+Fighter-types on Vigil will (usually) engage the following units:
 <img src="/images/man/vigil_mp2d.png">
 * Note: Propeller-type fighters are unable to reach high altitude aircraft (Jet Bomber, Spy Plane.)
+<i>Vet levels and hitpoints may alter the decision to engage.</i>
 
 </pre>
 </div>
@@ -3628,7 +3632,7 @@ Fighter types on Vigil will (usually) engage the following units:
 <pre class='firepower'>Firepower: 2</pre>
 <pre class='hitpoints'>Hitpoints: 20</pre>
 <pre class='obsolete'>Obsolete by: Stealth Multi-Fighter</pre>
-<pre class='helptext'><b class='unit_desc'>Multi-Fighters are fitted for mission versatility. They are sturdy, defend better, and have two turns of fuel. They are good for escorting bombers, pursuing enemy bombers on long range missions, defensive ground support, naval missions, reconnaissance, and interception. A Multi-Fighter can vigil at any range, and can do a maximum of two attacks per turn.</b>
+<pre class='helptext'><b class='unit_desc'>Multi-Fighters are fitted for mission versatility. They are sturdy, defend better, and have two turns of fuel. They are good for escorting bombers, pursuing enemy bombers on long range missions, defensive ground support, naval missions, reconnaissance, and interception. On its first turn of fuel, a Multi-Fighter can vigil at any range, and can do a maximum of two attacks per turn.</b>
 <b class='unit_desc'>
 INTERCEPTOR：the Vigil order lets Multi-Fighters auto-attack adjacent Air units if they have better attack odds. This unit can Vigil if it has 1 turn of fuel or more. 
 </b>
@@ -3671,9 +3675,10 @@ Veteran Levels for Multi-Fighters are the same as Escort Fighters:
 <tr><td>ace</td><td>220%</td><td>15%</td> <td>+ 1</td></tr>
 <tr><td>top gun</td><td>230%</td><td>-</td><td>+ 1</td></tr></table>
 
-Fighter types on Vigil will (usually) engage the following units:
+Fighter-types on Vigil will (usually) engage the following units:
 <img src="/images/man/vigil_mp2d.png">
 * Note: Propeller-type fighters are unable to reach high altitude aircraft (Jet Bomber, Spy Plane.)
+<i>Vet levels and hitpoints may alter the decision to engage.</i>
 
 </pre>
 </div>
@@ -3847,9 +3852,10 @@ Veteran Levels for Stealth Fighters are the default for offensive Air units:
 <tr><td>ace</td><td>220%</td><td>10%</td> <td>+ 1</td></tr>
 <tr><td>top gun</td><td>230%</td><td>-</td><td>+ 1</td></tr></table>
 
-Fighter types on Vigil will (usually) engage the following units:
+Fighter-types on Vigil will (usually) engage the following units:
 <img src="/images/man/vigil_mp2d.png">
 * Note: Propeller-type fighters are unable to reach high altitude aircraft (Jet Bomber, Spy Plane.)
+<i>Vet levels and hitpoints may alter the decision to engage.</i>
 
 </pre>
 </div>
@@ -3865,7 +3871,7 @@ Fighter types on Vigil will (usually) engage the following units:
 <pre class='firepower'>Firepower: 2</pre>
 <pre class='hitpoints'>Hitpoints: 20</pre>
 <pre class='obsolete'>Obsolete by: None</pre>
-<pre class='helptext'><b class='unit_desc'>Stealth Multi-Fighters can’t be seen unless adjacent to an enemy. Stealth evasion gives a 25% bonus against all Anti-Air units, and reduces SAM Batteries down to a smaller 25% bonus. A Stealth Multi-Fighter can do 2 attacks per turn, and can Vigil any tile it occupies. 
+<pre class='helptext'><b class='unit_desc'>Stealth Multi-Fighters can’t be seen unless adjacent to an enemy. Stealth evasion gives a 25% bonus against all Anti-Air units, and reduces SAM Batteries down to a smaller 25% bonus. A Stealth Multi-Fighter can do 2 attacks per turn, and on its first turn of fuel, can Vigil any tile it occupies. 
 </b><b class='unit_desc'>
 INTERCEPTOR：the Vigil order lets Stealth Multi-Fighters auto-attack adjacent Air units if they have better attack odds. 
 </b><b class='unit_desc'>
@@ -3910,9 +3916,10 @@ Veteran Levels for Stealth Multi-Fighters are the same as Multi-Fighters:
 <tr><td>ace</td><td>220%</td><td>15%</td> <td>+ 1</td></tr>
 <tr><td>top gun</td><td>230%</td><td>-</td><td>+ 1</td></tr></table>
 
-Fighter types on Vigil will (usually) engage the following units:
+Fighter-types on Vigil will (usually) engage the following units:
 <img src="/images/man/vigil_mp2d.png">
 * Note: Propeller-type fighters are unable to reach high altitude aircraft (Jet Bomber, Spy Plane.)
+<i>Vet levels and hitpoints may alter the decision to engage.</i>
 
 </pre>
 </div>
@@ -5036,6 +5043,54 @@ Veteran Levels for Missile Submarines:
 </pre>
 </div>
 <div class='item' id='utype86'>
+<h3 class='section'>Light Carrier</h3>
+
+<pre class='cost'>Cost: 100 shields</pre>
+<pre class='upkeep'>Upkeep: 1 Shield, 1 Unhappy</pre>
+<pre class='moves'>Moves: 11</pre>
+<pre class='vision'>Vision: 3.46 tiles</pre>
+<pre class='attack'>Attack: 10</pre>
+<pre class='defense'>Defense: 75</pre>
+<pre class='firepower'>Firepower: 2</pre>
+<pre class='hitpoints'>Hitpoints: 35</pre>
+<pre class='obsolete'>Obsolete by: None</pre>
+<pre class='helptext'><b class='unit_desc'>The Light Carrier can carry 5 aircraft or missiles. A Light Carrier’s small runway isn’t suited for Zeppelins, Jet Bombers, or Spy Planes. ABMs and Fighter-types can Vigil on Light Carriers if they have enough moves left. Light  Carriers have no ASW bonus against Submarines and require protection from other warships.</b>
+  <hr style='border-top: 1px solid #000'>➤ Belongs to Sea unit class.
+  • <b style="color:#9aa">Crew Repair</b>Automatically repairs 3 hitpoints each turn, regardless of movement.
+  • Speed is not affected by terrain.
+  • Does not get defense bonuses from terrain.
+  • Not subject to zones of control.
+  • Slowed down while damaged.
+  • <b style="color:#9aa">Cannot</b> perform attacks on Land or cities.
+➤ <b>2× defense bonus</b> if attacked by Marines or Anti-Aircraft Artillery.
+➤ Unable to attack air units.
+➤ Can carry and refuel up to 5 Helicopter, Air, AirProtect, or Balloon units.
+  • Cargo not visible except to allies.
+➤ Can only attack units on native tiles.
+➤ <b style="color:#9aa">PORT PENALTY</b>: If attacked in a city, firepower is set to 1 and firepower of attacker is doubled.
+➤ May impose a zone of control on its adjacent tiles.
+  • <b style="color:#9aa">Prevents enemy cities from working the tile it's on.</b>
+➤ Can attack against Submarine units, which are usually not reachable.
+➤ Can attack against Helicopter units, which are usually not reachable.
+➤ Attacking with fractional move points gives fractional attack power.
+➤ Can <b style="color:#9aa">Pillage</b>
+➤ May acquire veteran status.
+  • Veterans have increased strength in combat.
+
+Veteran Levels for Carriers:
+<table class="vet_level">
+<tr><th>Veteran level</th><th>Power factor</th><th>Promotion Odds</th><th>Move bonus</th></tr>
+<tr><hr style="border-top: 1px solid #000"></tr>
+<tr><td>green</td><td>100%</td><td>50%</td> <td>-</td></tr>
+<tr><td>veteran</td><td>150%</td><td>33%</td> <td>-</td></tr>  
+<tr><td>hardened</td><td>175%</td><td>20%</td> <td>-</td></tr>
+<tr><td>elite</td><td>200%</td><td>15%</td> <td>-</td></tr>
+<tr><td>crack</td><td>210%</td><td>15%</td> <td>+ 1</td></tr>
+<tr><td>master</td><td>220%</td><td>15%</td> <td>+ 1</td></tr>
+<tr><td>sea wolf</td><td>230%</td><td>-</td><td>+ 1</td></tr></table>
+</pre>
+</div>
+<div class='item' id='utype87'>
 <h3 class='section'>Carrier</h3>
 
 <pre class='cost'>Cost: 155 shields</pre>
@@ -5047,8 +5102,7 @@ Veteran Levels for Missile Submarines:
 <pre class='firepower'>Firepower: 2</pre>
 <pre class='hitpoints'>Hitpoints: 40</pre>
 <pre class='obsolete'>Obsolete by: None</pre>
-<pre class='helptext'><b class='unit_desc'>The Carrier is a mobile airport that can carry Air units, Helicopters, AAA, Marines, and Missiles. Fighters can Vigil on a Carrier if they have enough moves left. Carriers are very expensive and thus, usually protected by a fleet of scouts and escorts. 
-<b class='unit_desc'>Carriers are very expensive and thus, usually protected by a fleet of scouts and escorts.</b>
+<pre class='helptext'><b class='unit_desc'>The Carrier is a mobile airport that can carry Air units, Helicopters, AAA, Marines, and Missiles. ABMs and Fighter-types can Vigil on a Carrier if they have enough moves left. Carriers are expensive and have no ASW bonus against Submarines. Thus, they are usually protected by a fleet of scouts and escorts. 
 </b>
 <b class='unit_desc'>Stack-Chief：(1) Will not die if other units in its stack die. (2) Other units escaping Stack Death aren’t forced to other tiles.</b>
 <hr style='border-top: 1px solid #000'>➤ Belongs to Sea unit class.
@@ -5087,7 +5141,7 @@ Veteran Levels for Carriers:
 <tr><td>sea wolf</td><td>230%</td><td>-</td><td>+ 1</td></tr></table>
 </pre>
 </div>
-<div class='item' id='utype87'>
+<div class='item' id='utype88'>
   <h3 class='section'>Anti-Ballistic Missile</h3>
 
 <pre class='cost'>Cost: 35 shields</pre>
@@ -5137,7 +5191,7 @@ Attack Odds for Anti-Ballistic Missiles:
 <tr><td>Tactical Nuke</td><td>40%</td><td>50%</td></tr></table>
 </pre>
 </div>
-<div class='item' id='utype88'>
+<div class='item' id='utype89'>
 <h3 class='section'>Cruise Missile</h3>
 
 <pre class='cost'>Cost: 60 shields</pre>
@@ -5181,7 +5235,7 @@ Via the Pillage commmand, a Cruise Missile has a 60% chance to strike and destro
 
 </pre>
 </div>
-<div class='item' id='utype89'>
+<div class='item' id='utype90'>
 <h3 class='section'>Nuclear Missile</h3>
 
 <pre class='cost'>Cost: 160 shields</pre>
@@ -5219,7 +5273,7 @@ Via the Pillage commmand, a Cruise Missile has a 60% chance to strike and destro
 ➤ Will never achieve veteran status.
 </pre>
 </div>
-<div class='item' id='utype90'>
+<div class='item' id='utype91'>
 <h3 class='section'>Tactical Nuke</h3>
 
 <pre class='cost'>Cost: 140 shields</pre>
@@ -5258,7 +5312,7 @@ If you have Fusion Power and the Manhattan Project was built, a Tactical Nuke ca
 ➤ Will never achieve veteran status.
 </pre>
 </div>
-<div class='item' id='utype91'>
+<div class='item' id='utype92'>
 <h3 class='section'>Bombs</h3>
 
 <pre class='cost'>Cost: 25 shields</pre>
@@ -5292,7 +5346,7 @@ Bombs can only be moved by bombers or the airlift order. They can’t attack fro
 ➤ Will never achieve veteran status.
 </pre>
 </div>  
-<div class='item' id='utype92'>
+<div class='item' id='utype93'>
 <h3 class='section'>Atom Bomb</h3>
 
 <pre class='cost'>Cost: 150 shields</pre>
@@ -5329,7 +5383,7 @@ Bombs can only be moved by bombers or the airlift order. They can’t attack fro
 ➤ Will never achieve veteran status.
 </pre>
 </div>
-<div class='item' id='utype93'>
+<div class='item' id='utype94'>
 <h3 class='section'>Hydrogen Bomb</h3>
 
 <pre class='cost'>Cost: 190 shields</pre>
@@ -5369,7 +5423,7 @@ If you have Fusion Power and the Manhattan Project was built, a Hydrogen Bomb ca
 ➤ Will never achieve veteran status.
 </pre>
 </div>
-<div class='item' id='utype94'>
+<div class='item' id='utype95'>
 <h3 class='section'>Doomsday Bomb</h3>
 
 <pre class='cost'>Cost: 1000 shields</pre>
@@ -5411,7 +5465,7 @@ If you have Fusion Power and the Manhattan Project was built, a Doomsday Bomb ca
 ➤ Will never achieve veteran status.
 </pre>
 </div>
-<div class='item' id='utype95'>
+<div class='item' id='utype96'>
 <h3 class='section'>Emissary</h3>
 
 <pre class='cost'>Cost: 24 shields</pre>
@@ -5481,7 +5535,7 @@ Emissaries have their own veteran levels:
 <tr><td>manus regis</td><td>135%</td><td>-</td><td>+ 1/3</td></tr></table>
 </pre>
 </div>
-<div class='item' id='utype96'>
+<div class='item' id='utype97'>
 <h3 class='section'>Diplomat</h3>
 
 <pre class='cost'>Cost: 30 shields</pre>
@@ -5551,7 +5605,7 @@ Diplomats have their own veteran levels:
 <tr><td>plenipotentiary</td><td>135%</td><td>-</td><td>+ 1/3</td></tr></table>
 </pre>
 </div>
-<div class='item' id='utype97'>
+<div class='item' id='utype98'>
 <h3 class='section'>Spy</h3>
 
 <pre class='cost'>Cost: 35 shields</pre>
@@ -5624,7 +5678,7 @@ Spies have their own veteran levels:
 <tr><td>spymaster</td><td>135%</td><td>-</td><td>+ 1/3</td></tr></table>
 </pre>
 </div>
-<div class='item' id='utype98'>
+<div class='item' id='utype99'>
 <h3 class='section'>Patriarch</h3>
 
 <pre class='cost'>Cost: 55 shields</pre>
@@ -5693,7 +5747,7 @@ The Patriarch has his own veteran level:
 <tr><td style='color: #f68'>chosen one</td><td>125%</td><td>0%</td> <td>-</td></tr>
 </pre>
 </div>
-<div class='item' id='utype99'>
+<div class='item' id='utype100'>
 <h3 class='section'>Wagon</h3>
 
 <pre class='cost'>Cost: 25 shields</pre>
@@ -5739,7 +5793,7 @@ Read the help on Caravans to see what Commerce units can do.</b>
 ➤ Will never achieve veteran status. 
 </pre>
 </div>
-<div class='item' id='utype100'>
+<div class='item' id='utype101'>
 <h3 class='section'>Caravan</h3>
 
 <pre class='cost'>Cost: 30 shields</pre>
@@ -5805,7 +5859,7 @@ Caravans have their own veteran levels:
 <img src="/images/man/logistics_generic_unload.png">
 </pre>
 </div>
-<div class='item' id='utype101'>
+<div class='item' id='utype102'>
 <h3 class='section'>Train</h3>
 
 <pre class='cost'>Cost: 35 shields</pre>
@@ -5854,7 +5908,7 @@ Electricity and Combustion each give Trains the ability to travel +5 more tiles,
 ➤ Will never achieve veteran status.
 </pre>
 </div>  
-<div class='item' id='utype102'>
+<div class='item' id='utype103'>
 <h3 class='section'>Truck</h3>
 
 <pre class='cost'>Cost: 50 shields</pre>
@@ -5897,7 +5951,7 @@ Electricity and Combustion each give Trains the ability to travel +5 more tiles,
 ➤ <b style="color:#9aa">Expellable</b>: can be expelled from foreign tiles.
 </pre>
 </div>
-<div class='item' id='utype103'>
+<div class='item' id='utype104'>
 <h3 class='section'>Goods</h3>
 
 <pre class='cost'>Cost: 20 shields</pre>
@@ -5940,7 +5994,7 @@ Electricity and Combustion each give Trains the ability to travel +5 more tiles,
   • does not count as an extra unit on tile to prevent capture. 
 </pre>
 </div>
-<div class='item' id='utype104'>
+<div class='item' id='utype105'>
   <h3 class='section'>Freight</h3>
   
 <pre class='cost'>Cost: 25 shields</pre>
@@ -5983,7 +6037,7 @@ Electricity and Combustion each give Trains the ability to travel +5 more tiles,
   • does not count as an extra unit on tile to prevent capture. 
 </pre>
 </div>
-<div class='item' id='utype105'>
+<div class='item' id='utype106'>
 <h3 class='section'>Leader</h3>
 
 <pre class='cost'>Cost: 10 shields</pre>
@@ -6028,7 +6082,7 @@ Electricity and Combustion each give Trains the ability to travel +5 more tiles,
 </pre>
 </div>
 
-<div class='item' id='utype106'>
+<div class='item' id='utype107'>
 <h3 class='section'>Queen</h3>
 
 <pre class='cost'>Cost: 10 shields</pre>
@@ -6072,7 +6126,7 @@ Electricity and Combustion each give Trains the ability to travel +5 more tiles,
 ➤ Will never achieve veteran status.
 </pre>
 </div>
-<div class='item' id='utype107'>
+<div class='item' id='utype108'>
 <h3 class='section'>Barbarian Leader</h3>
 
 <pre class='cost'>Cost: 40 shields</pre>
@@ -6105,7 +6159,7 @@ Electricity and Combustion each give Trains the ability to travel +5 more tiles,
 ➤ Will never achieve veteran status.
 </pre>
 </div>
-<div class='item' id='utype108'>
+<div class='item' id='utype109'>
 <h3 class='section'>Well-Digger</h3>
 
 <pre class='cost'>Cost: 5 shields</pre>
@@ -6152,7 +6206,7 @@ This unit can dig wells to create irrigation sources. It will cost its home city
 <img src="/images/man/logistics_generic_unload.png">
 </pre>
 </div>
-<div class='item' id='utype109'>
+<div class='item' id='utype110'>
 <h3 class='section'>Magnum Turret</h3>
 
 <pre class='cost'>Cost: 160 shields</pre>
