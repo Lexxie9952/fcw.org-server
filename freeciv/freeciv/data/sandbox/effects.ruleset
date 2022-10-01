@@ -371,6 +371,18 @@ reqs    =
 [effect_city_vision]
 type    = "City_Vision_Radius_Sq"
 value   = 5
+reqs    =
+    { "type", "name", "range"
+      "VisionLayer", "Main", "Local"
+    }
+; Stealth or Subsurface can only be seen when adjacent
+[effect_city_vision_layers]
+type    = "City_Vision_Radius_Sq"
+value   = 2
+reqs    =
+    { "type", "name", "range", "present"
+      "VisionLayer", "Main", "Local", FALSE
+    }
 
 ; 5 + 5 = 10
 [effect_city_vision_1]
@@ -379,6 +391,7 @@ value   = 5
 reqs    =
     { "type", "name", "range"
       "Tech", "Electricity", "Player"
+      "VisionLayer", "Main", "Local"
     }
 
 ; Vision benefit from mountains (for every land unit)

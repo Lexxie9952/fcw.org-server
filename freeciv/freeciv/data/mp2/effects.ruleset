@@ -178,6 +178,7 @@ reqs    =
     { "type",      "name",      "range"
       "Terrain",   "Mountains", "Local"
       "UnitClass", "Land",      "Local"
+      "VisionLayer", "Main", "Local"
     }
 [effect_mountains_vision_1]
 type    = "Unit_Vision_Radius_Sq"
@@ -186,6 +187,7 @@ reqs    =
     { "type",      "name",      "range"
       "Terrain",   "Mountains", "Local"
       "UnitClass", "LandAirSea",      "Local"
+      "VisionLayer", "Main", "Local"
     }
 [effect_mountains_vision_2]
 type    = "Unit_Vision_Radius_Sq"
@@ -193,7 +195,8 @@ value   = 5
 reqs    =
     { "type",      "name",      "range"
       "Terrain",   "Mountains", "Local"
-      "UnitClass", "LandNoKill",      "Local"
+      "UnitClass", "LandNoKill", "Local"
+      "VisionLayer", "Main", "Local"
     }
 
 ; basic free tech upkeep
@@ -436,6 +439,7 @@ reqs    =
       "Extra", "Fortress", "tile"
       "Tech", "Invention", "Player"
       "UnitClass", "Land", "Local"
+      "VisionLayer", "Main", "Local"
     }
 [effect_fortress_vision_1]   ;Marines, AAA
 type    = "Unit_Vision_Radius_Sq"
@@ -445,6 +449,7 @@ reqs    =
       "Extra", "Fortress", "tile"
       "Tech", "Invention", "Player"
       "UnitClass", "LandAirSea", "Local"
+      "VisionLayer", "Main", "Local"
     }
 [effect_fortress_vision_2]     ;Knights
 type    = "Unit_Vision_Radius_Sq"
@@ -454,6 +459,7 @@ reqs    =
       "Extra", "Fortress", "tile"
       "Tech", "Invention", "Player"
       "UnitClass", "LandNoKill", "Local"
+      "VisionLayer", "Main", "Local"
     }
 
 ; Fortress HP regen
@@ -508,6 +514,7 @@ reqs    =
       "Extra", "Naval Base", "tile"
       "Tech", "Invention", "Player"
       "UnitClass", "Trireme", "Local"
+      "VisionLayer", "Main", "Local"
     }
 [effect_navbase_vision1]
 type    = "Unit_Vision_Radius_Sq"
@@ -517,6 +524,7 @@ reqs    =
       "Extra", "Naval Base", "tile"
       "Tech", "Invention", "Player"
       "UnitClass", "RiverShip", "Local"
+      "VisionLayer", "Main", "Local"
     }
 [effect_navbase_vision2]
 type    = "Unit_Vision_Radius_Sq"
@@ -526,6 +534,7 @@ reqs    =
       "Extra", "Naval Base", "tile"
       "Tech", "Invention", "Player"
       "UnitClass", "Sea", "Local"
+      "VisionLayer", "Main", "Local"
     }
 ; Naval Base HP regen
 [effect_navbase_hp_regen]
@@ -566,6 +575,18 @@ reqs    =
 [effect_city_vision]
 type    = "City_Vision_Radius_Sq"
 value   = 5
+reqs    =
+    { "type", "name", "range"
+      "VisionLayer", "Main", "Local"
+    }
+; Stealth or Subsurface can only be seen when adjacent
+[effect_city_vision_layers]
+type    = "City_Vision_Radius_Sq"
+value   = 2
+reqs    =
+    { "type", "name", "range", "present"
+      "VisionLayer", "Main", "Local", FALSE
+    }
 
 ;PERCENTAGE CHANCE OF STEALING A TECH WHEN CONQUERING A CITY.
 [effect_conquest_tech]                       
@@ -2967,6 +2988,7 @@ reqs	=
     { "type", "name", "range"
       "Tech", "Physics", "Player"
       "UnitClass", "Land", "Local"
+      "VisionLayer", "Main", "Local"
     }
 [effect_physics_vision_1]
 type    = "Unit_Vision_Radius_Sq"
@@ -2975,6 +2997,7 @@ reqs	=
     { "type", "name", "range"
       "Tech", "Physics", "Player"
       "UnitClass", "LandNoKill", "Local"
+      "VisionLayer", "Main", "Local"
     }
 [effect_physics_vision_2]
 type    = "Unit_Vision_Radius_Sq"
@@ -2983,6 +3006,7 @@ reqs	=
     { "type", "name", "range"
       "Tech", "Physics", "Player"
       "UnitClass", "Trireme", "Local"
+      "VisionLayer", "Main", "Local"
     }   
 [effect_physics_vision_3]
 type    = "Unit_Vision_Radius_Sq"
@@ -2991,6 +3015,7 @@ reqs	=
     { "type", "name", "range"
       "Tech", "Physics", "Player"
       "UnitClass", "RiverShip", "Local"
+      "VisionLayer", "Main", "Local"
     }  
 
 [effect_satellite_vision]  ;Vision benefit from satellite communication to land units
@@ -3000,6 +3025,7 @@ reqs    =
     { "type",      "name",      "range"
       "Tech", "Space Flight",   "Player"
       "UnitClass", "Land",      "Local"
+      "VisionLayer", "Main", "Local"
     }
 [effect_satellite_vision_1]  ;Vision benefit from satellite communication to land units (Marines)
 type    = "Unit_Vision_Radius_Sq"
@@ -3008,6 +3034,7 @@ reqs    =
     { "type",      "name",      "range"
       "Tech", "Space Flight",   "Player"
       "UnitClass", "LandAirSea",      "Local"
+      "VisionLayer", "Main", "Local"
     }
 [effect_satellite_vision_2]  ;Vision benefit from satellite communication to sea units
 type    = "Unit_Vision_Radius_Sq"
@@ -3016,6 +3043,7 @@ reqs    =
     { "type",      "name",      "range"
       "Tech", "Space Flight",   "Player"
       "UnitClass", "Sea",      "Local"
+      "VisionLayer", "Main", "Local"
     }
 [effect_satellite_vision_2a]  ;Vision benefit from satellite communication to sea units
 type    = "Unit_Vision_Radius_Sq"
@@ -3024,6 +3052,7 @@ reqs    =
     { "type",      "name",      "range"
       "Tech", "Space Flight",   "Player"
       "UnitClass", "Submarine",      "Local"
+      "VisionLayer", "Main", "Local"
     }
 [effect_satellite_vision_3]  ;Vision benefit from satellite communication to sea units
 type    = "Unit_Vision_Radius_Sq"
@@ -3032,6 +3061,7 @@ reqs    =
     { "type",      "name",      "range"
       "Tech", "Space Flight",   "Player"
       "UnitClass", "Air",      "Local"
+      "VisionLayer", "Main", "Local"
     }
 [effect_satellite_vision_3a]  ;Vision benefit from satellite communication to sea units
 type    = "Unit_Vision_Radius_Sq"
@@ -3040,13 +3070,15 @@ reqs    =
     { "type",      "name",      "range"
       "Tech", "Space Flight",   "Player"
       "UnitClass", "AirProtect",      "Local"
+      "VisionLayer", "Main", "Local"
     }
 [effect_satellite_vision_4]  ;Vision benefit from satellite communication to cities
 type    = "City_Vision_Radius_Sq"
 value   = 36
 reqs    =
     { "type",      "name",      "range"
-      "Tech", "Space Flight",   "Player"
+      "Tech", "Space Flight",   "Player
+      "VisionLayer", "Main", "Local"
     }
 
 [effect_agoge_move_bonus_1]
@@ -3518,6 +3550,7 @@ reqs	=
     { "type", "name", "range"
       "Building", "Lighthouse", "Player"
       "UnitClass", "Sea", "Local"
+      "VisionLayer", "Main", "Local"
     }
 [effect_lighthouse_3a]
 type    = "Unit_Vision_Radius_Sq"
@@ -3526,6 +3559,7 @@ reqs	=
     { "type", "name", "range"
       "Building", "Lighthouse", "Player"
       "UnitClass", "Submarine", "Local"
+      "VisionLayer", "Main", "Local"
     }
 [effect_lighthouse_4]
 type    = "Unit_Vision_Radius_Sq"
@@ -3534,6 +3568,7 @@ reqs	=
     { "type", "name", "range"
       "Building", "Lighthouse", "Player"
       "UnitClass", "Trireme", "Local"
+      "VisionLayer", "Main", "Local"
     }
 [effect_lighthouse_5]
 type    = "Unit_Vision_Radius_Sq"
@@ -3542,6 +3577,7 @@ reqs	=
     { "type", "name", "range"
       "Building", "Lighthouse", "Player"
       "UnitClass", "RiverShip", "Local"
+      "VisionLayer", "Main", "Local"
     }
 
 [effect_magellans_expedition]

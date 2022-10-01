@@ -114,6 +114,7 @@ reqs    =
       "Extra", "Fortress", "tile"
       "Tech", "Invention", "player"
       "UnitClass", "Land", "Local"
+      "VisionLayer", "Main", "Local"
     }
 
 ; Vision benefit from fortress watchtowers to Big Land units
@@ -125,6 +126,7 @@ reqs    =
       "Extra", "Fortress", "tile"
       "Tech", "Invention", "player"
       "UnitClass", "Big Land", "Local"
+      "VisionLayer", "Main", "Local"
     }
 
 ; basic free tech upkeep
@@ -2562,6 +2564,18 @@ value   = 100
 [effect_city_vision_0]
 type    = "City_Vision_Radius_Sq"
 value   = 2
+reqs    =
+    { "type", "name", "range"
+      "VisionLayer", "Main", "Local"
+    }
+; Stealth or Subsurface can only be seen when adjacent
+[effect_city_vision_layers]
+type    = "City_Vision_Radius_Sq"
+value   = 2
+reqs    =
+    { "type", "name", "range", "present"
+      "VisionLayer", "Main", "Local", FALSE
+    }
 
 ; City radius 2 - radius is sqrt(2+3) = 2.24
 [effect_city_radius_1]
@@ -2587,6 +2601,7 @@ value   = 3
 reqs    =
     { "type", "name", "range"
       "MinSize", "3", "City"
+      "VisionLayer", "Main", "Local"
     }
 
 ; City radius 3 - radius is sqrt(2+3+5) = 3.16
@@ -2616,6 +2631,7 @@ reqs    =
     { "type", "name", "range"
       "MinSize", "10", "City"
       "Tech", "Railroad", "Player"
+      "VisionLayer", "Main", "Local"
     }
 
 ; City radius 3 - (1)+1 build slots
@@ -2661,6 +2677,7 @@ reqs    =
       "Tech", "Railroad", "Player"
       "Building", "Mass Transit", "City"
       "Building", "Super Highways", "City"
+      "VisionLayer", "Main", "Local"
     }
 
 ; City radius 4 - (1+1)+1 build slots

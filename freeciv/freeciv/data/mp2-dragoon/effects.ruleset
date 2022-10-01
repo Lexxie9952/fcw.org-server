@@ -610,6 +610,7 @@ reqs    =
     { "type",          "name",         "range"
       "Terrain",       "Mountains",    "Local"
       "UnitClassFlag", "TerrainSpeed", "Local" ;all Land__ classes
+      "VisionLayer", "Main", "Local"
     }
 [effect_hills_vision]
 type    = "Unit_Vision_Radius_Sq"
@@ -618,6 +619,7 @@ reqs    =
     { "type",      "name",      "range"
       "Terrain",   "Hills", "Local"
       "UnitClassFlag", "TerrainSpeed", "Local" ;all Land__ classes
+      "VisionLayer", "Main", "Local"
     }
 
 ; basic free tech upkeep
@@ -1075,6 +1077,7 @@ reqs    =
       "Extra",         "Fortress",     "tile"
       "Tech",          "Invention",    "Player"
       "UnitClassFlag", "TerrainSpeed", "Local"   ;all Land_ classes
+      "VisionLayer",   "Main", "Local"
     }
 [effect_castle_vision]
 type    = "Unit_Vision_Radius_Sq"
@@ -1084,6 +1087,7 @@ reqs    =
       "Extra",         "Castle",       "tile"
       "Tech",          "Invention",    "Player"
       "UnitClassFlag", "TerrainSpeed", "Local"   ;all Land_ classes
+      "VisionLayer",   "Main", "Local"
     }
 [effect_navalbase_vision]
 type    = "Unit_Vision_Radius_Sq"
@@ -1093,6 +1097,7 @@ reqs    =
       "Extra",         "Naval Base",   "tile"
       "Tech",          "Invention",    "Player"
       "UnitClassFlag", "TerrainSpeed", "Local"   ;all Land_ classes
+      "VisionLayer", "Main", "Local"
     }
 
 ; Fortress types, HP regen --------------------------------------------
@@ -1157,6 +1162,7 @@ reqs    =
       "Extra",         "Naval Base",  "tile"
       "Tech",          "Invention",   "Player"
       "UnitClassFlag", "WaterVessel", "Local"
+      "VisionLayer", "Main", "Local"
     }
 ; Naval Base HP regen
 [effect_navbase_hp_regen]
@@ -1200,7 +1206,18 @@ reqs    =
 [effect_city_vision]
 type    = "City_Vision_Radius_Sq"
 value   = 5
-
+reqs    =
+    { "type", "name", "range"
+      "VisionLayer", "Main", "Local"
+    }
+; Stealth or Subsurface can only be seen when adjacent
+[effect_city_vision_layers]
+type    = "City_Vision_Radius_Sq"
+value   = 2
+reqs    =
+    { "type", "name", "range", "present"
+      "VisionLayer", "Main", "Local", FALSE
+    }
 ;PERCENTAGE CHANCE OF STEALING A TECH WHEN CONQUERING A CITY.
 [effect_conquest_tech]                       
 type    = "Conquest_Tech_Pct"
@@ -1233,6 +1250,7 @@ reqs =
       "type",      "name",      "range"
       "UnitType",  "Tribesmen", "Local"
       "MinYear",   "-2000",     "World"
+      "VisionLayer", "Main", "Local"
     }
 ;------------------------------------------------------
 [effect_scout_mapmaking_bonus]
@@ -4687,6 +4705,7 @@ reqs	=
       "Tech",          "Physics",      "Player", TRUE
       "UnitClassflag", "TerrainSpeed", "Local",  TRUE 
       "UnitClass",     "LandAirSea",   "Local",  FALSE
+      "VisionLayer", "Main", "Local"
 
     }
 [effect_physics_vision_2]
@@ -4696,6 +4715,7 @@ reqs	=
     { "type", "name", "range"
       "Tech", "Physics", "Player"
       "UnitClass", "Trireme", "Local"
+      "VisionLayer", "Main", "Local"
     }   
 [effect_physics_vision_3]
 type    = "Unit_Vision_Radius_Sq"
@@ -4704,6 +4724,7 @@ reqs	=
     { "type", "name", "range"
       "Tech", "Physics", "Player"
       "UnitClass", "RiverShip", "Local"
+      "VisionLayer", "Main", "Local"
     }  
 [effect_satellite_vision]  ;Vision benefit from satellite communication to Land units
 type    = "Unit_Vision_Radius_Sq"
@@ -4712,6 +4733,7 @@ reqs    =
     { "type",          "name",         "range"
       "Tech",          "Space Flight", "Player"
       "UnitClassFlag", "TerrainSpeed", "Local"
+      "VisionLayer", "Main", "Local"
     }
 [effect_satellite_vision_2]  ;Vision benefit from satellite communication to sea units
 type    = "Unit_Vision_Radius_Sq"
@@ -4720,6 +4742,7 @@ reqs    =
     { "type",          "name",         "range"
       "Tech",          "Space Flight", "Player"
       "UnitClassFlag", "WaterVessel",  "Local"
+      "VisionLayer", "Main", "Local"
     }
 [effect_satellite_vision_3]  ;Vision benefit from satellite communication to sea units
 type    = "Unit_Vision_Radius_Sq"
@@ -4728,6 +4751,7 @@ reqs    =
     { "type",      "name",      "range"
       "Tech", "Space Flight",   "Player"
       "UnitClass", "Air",      "Local"
+      "VisionLayer", "Main", "Local"
     }
 [effect_satellite_vision_3a]  ;Vision benefit from satellite communication to sea units
 type    = "Unit_Vision_Radius_Sq"
@@ -4736,6 +4760,7 @@ reqs    =
     { "type",      "name",      "range"
       "Tech", "Space Flight",   "Player"
       "UnitClass", "AirProtect",      "Local"
+      "VisionLayer", "Main", "Local"
     }
 [effect_satellite_vision_4]  ;Vision benefit from satellite communication to cities
 type    = "City_Vision_Radius_Sq"
@@ -4743,6 +4768,7 @@ value   = 36
 reqs    =
     { "type",      "name",      "range"
       "Tech", "Space Flight",   "Player"
+      "VisionLayer", "Main", "Local"
     }
 [effect_radar_vision]
 type    = "City_Vision_Radius_Sq"
@@ -4751,6 +4777,7 @@ reqs    =
     { "type",      "name",      "range"
       "Tech", "Radar",   "Player"
       "Building", "Radar Tower", "City"
+      "VisionLayer", "Main", "Local"
     }
 ;[effect_radar_vision2]
 ;type    = "Unit_Vision_Radius_Sq"
@@ -4759,6 +4786,7 @@ reqs    =
 ;    { "type",  "name",     "range",  "present"
 ;      "Extra", "Airbase",  "tile",   TRUE
 ;      "Tech",  "Radar",    "Player", TRUE
+;      "VisionLayer", "Main", "Local"
 ;      "MaxUnitsOnTile", "0", "Local", FALSE ;occupied base
 ;    }
 ;-------------------------------------------------------------</end Vision Bonuses>
@@ -5624,6 +5652,7 @@ reqs	=
     { "type", "name", "range"
       "Building", "Lighthouse", "Player"
       "UnitClassFlag", "WaterVessel", "Local"
+      "VisionLayer", "Main", "Local"
     }
 [effect_lighthouse_3]
 type    = "HP_Regen"
