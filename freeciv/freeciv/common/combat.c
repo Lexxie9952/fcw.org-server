@@ -700,9 +700,7 @@ int get_virtual_defense_power(const struct unit_type *att_type,
 }
 
 /*******************************************************************//**
- return the modified defense power of a unit.
- An veteran aegis cruiser in a mountain city with SAM and SDI defense 
- being attacked by a missile gets defense 288.
+ Return the total modified defense power of a unit.
 ***********************************************************************/
 int get_total_defense_power(const struct unit *attacker,
 			    const struct unit *defender)
