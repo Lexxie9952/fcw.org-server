@@ -1637,12 +1637,12 @@ native_to      = "Trireme", "RiverShip", "Sea", "Submarine", "Balloon", "Zeppeli
                  "Land", "LandRoad", "Cargo", "LandAirSea", "LandNoKill", "Helicopter"
 flags          = "NativeTile", "NoStackDeath", "Refuel", "FortressHeal"
 helptext       = _("\
-Naval bases are coastal Fortresses with ocean access. They allow ships to enter and\ 
- receive a 2x bonus from superior fortifications. Naval\
- Bases are built on top of Forts. All other units get the benefits of a Fortress. \n\
-"), _("
-NOTE: Naval bases are the only location where ships can be sure to avoid stack death without\
- suffering a defense disadvantage.\ 
+Naval bases are coastal Fortresses with ocean access. Naval Bases are built on top of\
+ Forts. They allow ships to enter and receive a 2x bonus from coastal weaponry and\
+ fortifications. All other units get the benefits of a Fortress. \n\
+Naval bases are the only location where ships can be sure to avoid stack-death without\
+ suffering the “Pearl Harbor” penalty of A:FPx2 D:FP1 \n\
+Naval bases can see submarines at a distance of 2 tiles, in cardinal directions.\
 ")
 
 [extra_castle]

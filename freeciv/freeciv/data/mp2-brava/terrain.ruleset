@@ -1557,7 +1557,8 @@ Naval bases are coastal Fortresses with ocean access. They allow ships to enter 
  Bases are built into Fortresses--all other units get the benefits of a Fortress.\
 "), _("
 NOTE: Naval bases are the only location where ships can be sure to avoid stack death without\
- suffering a defense disadvantage.\ 
+ suffering a defense disadvantage. \n\
+Naval bases can see submarines at a distance of 2 tiles, in cardinal directions.\
 ")
 
 [extra_airbase]
