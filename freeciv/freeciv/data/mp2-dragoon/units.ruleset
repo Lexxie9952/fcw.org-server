@@ -78,16 +78,30 @@ flags =
     _("Workers")
   }
 
+; RESERVED User-UCF's: these can be included by creators to immediately access special 
+; deluxe game mechanics for any of their ruleset unit_classes. Currently the only 
+; reserved user-UCF is the "Missile" UCF, which tells the server to spend the unit after
+; Pillage, and destroy the unit if its transporter is lost (unless in a city or native
+; base or co-existing on a tile with another transport who has remaining capacity to
+; 'save' the cargo unit.). For your ruleset to opt in to using a reserved user-UCF,
+; simply include the following uncommented line in your "custom unit class flags", below:
+;
+;  _("Missile"), _("Unit is destroyed after attack, pillage, or loss of its transporter.")
+;
+; __________________________________________________________________________
 ; Names for custom unit class flags. There can be up to 12 of these.
 ; name          = rule name; In some circumstances user may see this
 ;                 as part of some sentences, so try to make it descriptive
 ;                 and sensible.
 ; helptxt       = displayed in the help for unit types belonging to a class
 ;                 with this flag (optional)
+;___________________________________________________________________________
 class_flags =
   { "name", "helptxt"
+;RESERVED:
+     _("Missile"), _("Unit is destroyed after attack, pillage, or loss of its transporter.")
+;CUSTOM:
     _("AttFromNonNative"), _("Can launch attack from non-native tiles.")
-    _("Missile")
     _("CanPillage")
     _("Airliftable"), _("Can be airlifted if it has remaining moves.")
     _("BorderPolice"), _("Military units from this class can peacefully expel certain foreign units.")
@@ -5227,9 +5241,17 @@ bonuses       =
    { "flag", "type", "value", "quiet"
      "Missile",      "DefenseDividerPct", 89, TRUE    ; 65.5% vs. conventional missiles, 74.25% vet vs. green
      "Nuclear",      "DefenseDividerPct", -34, TRUE   ; 40% vs. nuclear missles, 50% as vet
+     ; Basically we need to emulate 0 defense while still having defense, in order to engineer having odds of evading ABMs.
+     ; Thus, we decrease Base Defense to 0.001 by giving 99% penalty on all unit_types:
+     "CantReachAir", "DefenseMultiplierPct", -999, TRUE   ; all military Land, Sea, Missiles, Bombers, EXCEPT AAA, Mobile SAM, AEGIS
+     "AntiAir",      "DefenseMultiplierPct", -999, TRUE   ; AAA, Mobile SAM, AEGIS
+     "AirAttacker",  "DefenseMultiplierPct", -999, TRUE   ; Aircraft (including Bombers)
+     "Nuclear",      "DefenseMultiplierPct", -999, TRUE   ; Nuclear don't have double-penalty so cancel out the cancellation on line above.
+   ; Now, we undo all the above and set D:1 for the case of being intercepted by an ABM:
+     "Missile",      "DefenseMultiplierPct", 999, TRUE
    }
-flags         = "NeverProtects", "HasNoZOC", "Unbribable",
-                "CantReachAir", "Missile", "NeverBlocked", "AlwaysAttackClass1", "MultiSlot"
+flags         = "NeverProtects", "HasNoZOC", "Unbribable", "CantReachAir", "BadCityDefender",
+                "Missile", "NeverBlocked", "AlwaysAttackClass1", "MultiSlot"
 roles         = ""
 helptext      = _("\
 ABMs intercept enemy missiles. Because there is seldom enough time to\
