@@ -6281,7 +6281,7 @@ function unit_can_vigil(punit)
           return true;
       break;
       case "Anti-Ballistic Missile":
-        if (tile_city(ptile) || punit['transported'])
+        if (tile_city(ptile) || punit['transported'] || tile_has_extra(EXTRA_AIRBASE))
           return true;
         break;
     }
