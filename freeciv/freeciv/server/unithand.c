@@ -6114,6 +6114,7 @@ bool unit_activity_handling_targeted(struct unit *punit,
                   unit_activity_complete(punit);
                   // Successful Missiles will be spent after action consequences.
                   if (uclass_has_user_unit_class_flag_named(unit_class_get(punit), "Missile")) {
+                    // "Missile" user-UCF is a RUUCF. See unittype.h
                     spend_unit = true;
                   }
                   unit_did_action(punit); // iPillage, just like unit_move, needs an immediate real-time uwt timestamp.
@@ -6148,6 +6149,7 @@ bool unit_activity_handling_targeted(struct unit *punit,
 
                 /* Failed missiles are spent after action consequences. */
                 if (uclass_has_user_unit_class_flag_named(unit_class_get(punit), "Missile")) {
+                  // "Missile" user-UCF is a RUUCF. See unittype.h
                   spend_unit = true;
                 } else {
                   if (punit->moves_left<0) punit->moves_left = 0;

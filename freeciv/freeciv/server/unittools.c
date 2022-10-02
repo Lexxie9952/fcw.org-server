@@ -2357,6 +2357,50 @@ static void unit_lost_with_transport(const struct player *pplayer,
 }
 
 /**********************************************************************//**
+  Returns true if generally, a pcargo unit would die if its transport died
+  on the current tile pcargo occupies. NOTE: Even if this function returns
+  "generally" true, unit might not ACTUALLY die: e.g, there may be another
+  transport on the tile which might save the unit by taking it as cargo.
+  This function was created as a generalized nexus for this game logic.
+  It will eventually handle all the more complex rules of whether cargo
+  units are lost by the destruction of their transporting unit.
+**************************************************************************/
+static bool unit_dies_when_transport_dies(struct unit *pcargo)
+{
+  struct tile *ptile = unit_tile(pcargo);
+
+  /* Reduce processing, handle simplest case first. */
+  if (!can_unit_exist_at_tile(&(wld.map), pcargo, ptile)) {
+    return true; /* doomed */
+  }
+
+  /* "Missile" user-UCF is a RUUCF. See unittype.h */
+  if (uclass_has_user_unit_class_flag_named(
+             unit_class_get(pcargo), "Missile")) {
+
+    /* Missiles on transports in cities don't die. */
+    if (tile_city(ptile)) return false; /* saved */
+
+    /* Missiles in native bases don't die. */
+    const struct unit_type *ptype = unit_type_get(pcargo);
+    extra_type_by_cause_iterate(EC_BASE, pextra) {
+      if (tile_has_extra(ptile, pextra) 
+          && is_native_extra_to_utype(pextra, ptype)) {
+        return false; /*saved*/
+      }
+    } extra_type_by_cause_iterate_end;
+
+    /* Missile is on a transport out in the open seas or country. If its
+     * transport is lost, the missile is lost! Fixes lots of cases like, e.g.,
+     * sinking a ship with missiles on it, leaving the missiles floating in
+     * the air because they were native to all terrain types. */
+    return true; /* doomed */
+  }
+
+  return false; /* saved */
+}
+
+/**********************************************************************//**
   Remove the unit, and passengers if it is a carrying any. Remove the
   _minimum_ number, eg there could be another boat on the square.
 **************************************************************************/
@@ -2364,7 +2408,7 @@ static void wipe_unit_full(struct unit *punit, bool transported,
                            enum unit_loss_reason reason,
                            struct player *killer)
 {
-  struct tile *ptile = unit_tile(punit);
+  //struct tile *ptile = unit_tile(punit);
   struct player *pplayer = unit_owner(punit);
   const struct unit_type *putype_save = unit_type_get(punit); /* for notify messages */
   struct unit_list *helpless = unit_list_new();
@@ -2402,7 +2446,7 @@ static void wipe_unit_full(struct unit *punit, bool transported,
       if (!can_unit_unload(pcargo, punit)) {
         unit_list_prepend(helpless, pcargo);
       } else {
-        if (!can_unit_exist_at_tile(&(wld.map), pcargo, ptile)) {
+        if (unit_dies_when_transport_dies(pcargo)) {
           unit_list_prepend(imperiled, pcargo);
         } else {
         /* These units do not need to be saved. */

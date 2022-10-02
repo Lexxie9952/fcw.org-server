@@ -86,6 +86,34 @@ struct ai_type;
 #define SPECENUM_VALUE11 UCF_KILLCITIZEN
 #define SPECENUM_VALUE11NAME N_("?uclassflag:KillCitizen")
 
+/* RESERVED user-UCF's (RUUCF). What is a RUUCF? It's any user-UCF
+ * that has _a specific name_ which will trigger various special and
+ * detailed game mechanics for any unit_class that has a user-UCF
+ * with that specially reserved name.
+ * 
+ * The necessity of having reserved RUUCF's is caused by deprecation
+ * of various legacy hard-coded UCF's such as UCF_MISSILE. This is 
+ * not a bad thing. It's BRILLIANT to gain the ability to opt in to
+ * special game mechanics via user-UCF's that access those mechanics
+ * simply by a custom user UCF that bears the reserved name. Q:How is it
+ * different from just having a #define'd UCF? A: It's really not, EXCEPT
+ * it avoids expanding the list of hard-coded UCF's, and allows the
+ * quick creation of nearly infinite special mechanics on thy fly
+ * without the creation of a single #define'd and hard-coded UCF. Of
+ * course, just as with hard-coded #define'd UCF's, it's important to
+ * inventory the list of RUUCF's in this file, here, below:  
+ * -------------------------------------------------------------------*/
+
+/* List of RESERVED user-UCF names and their special mechanics:
+ *
+ * (Rulesets can simply add a user-UCF with the "reserved user-UCF" name
+ * in order for a ruleset uclass to OPT IN to concrete game mechanics.)
+ *
+ * "Missile" - is spent after pillage and is destroyed when its transporter
+ *             is destroyed (unless it can be saved by being in a city,
+ *             native base/extra, or co-habiting a tile with another
+ *             transporter with extra capacity to take it.)
+*/
 #define SPECENUM_VALUE12 UCF_USER_FLAG_1
 #define SPECENUM_VALUE13 UCF_USER_FLAG_2
 #define SPECENUM_VALUE14 UCF_USER_FLAG_3
