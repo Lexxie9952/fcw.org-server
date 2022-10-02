@@ -2907,6 +2907,7 @@ extra          = "Hideout"
 gui_type       = "Other"
 border_sq      = -1
 vision_main_sq = 2
+vision_subs_sq = 0
 
 [base_deep_dive_hideout]
 extra          = "Depth"
@@ -2917,23 +2918,27 @@ border_sq      = -1
 extra          = "Tile Claim"
 gui_type       = "Other"
 border_sq      = 0
+vision_subs_sq = 0
 
 [base_fishtrap]
 extra          = "Fishtrap"
 gui_type       = "Other"
 border_sq      = -1
+vision_subs_sq = 0
 
 [base_fort]
 extra          = "Fort"
 gui_type       = "Fortress"
 border_sq      = -1
 vision_main_sq = 4
+vision_subs_sq = 0
 
 [base_fortress]
 extra          = "Fortress"
 gui_type       = "Fortress"
 border_sq      = 4
 vision_main_sq = 4
+vision_subs_sq = 0
 flags          = "NoAggressive"
 
 [base_castle]
@@ -2941,6 +2946,7 @@ extra          = "Castle"
 gui_type       = "Fortress"
 border_sq      = 5
 vision_main_sq = 15
+vision_subs_sq = 0
 flags          = "NoAggressive"
 
 [base_bunker]
@@ -2948,16 +2954,19 @@ extra          = "Bunker"
 gui_type       = "Fortress"
 border_sq      = 4
 vision_main_sq = 4
+vision_subs_sq = 0
 flags          = "NoAggressive"
 
 [base_airbase]
 extra          = "Airbase"
 gui_type       = "Airbase"
+vision_subs_sq = 0
 
 [base_radar]
 extra          = "Radar"
 gui_type       = "Airbase"
 vision_main_sq = 30
+vision_subs_sq = 0
 
 [base_buoy]
 extra          = "Buoy"

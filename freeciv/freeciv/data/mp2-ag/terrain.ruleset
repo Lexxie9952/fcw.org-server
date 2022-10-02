@@ -2199,33 +2199,39 @@ extra          = "Hideout"
 gui_type       = "Other"
 border_sq      = -1
 vision_main_sq = 2
+vision_subs_sq = 0
 
 [base_fort]
 extra          = "Fort"
 gui_type       = "Fortress"
 border_sq      = -1
 vision_main_sq = 4
+vision_subs_sq = 0
 
 [base_fortress]
 extra          = "Fortress"
 gui_type       = "Fortress"
 border_sq      = 4
 vision_main_sq = 4
+vision_subs_sq = 0
 flags          = "NoAggressive"
 
 [base_airbase]
 extra          = "Airbase"
 gui_type       = "Airbase"
+vision_subs_sq = 0
 
 [base_radar]
 extra          = "Radar"
 gui_type       = "Airbase"
 vision_main_sq = 30
+vision_subs_sq = 0
 
 [base_buoy]
 extra          = "Buoy"
 gui_type       = "Fortress"
 vision_main_sq = 5
+vision_subs_sq = 0
 
 [base_navalbase]
 extra          = "Naval Base"
