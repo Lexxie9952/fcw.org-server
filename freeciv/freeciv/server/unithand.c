@@ -6113,7 +6113,7 @@ bool unit_activity_handling_targeted(struct unit *punit,
                   punit->activity_count = 1000;  // force unit_activity_complete to iPillage (instant-finish activity)
                   unit_activity_complete(punit);
                   // Successful Missiles will be spent after action consequences.
-                  if (unit_class_by_rule_name("Missile") == unit_class_get(punit)) {
+                  if (uclass_has_user_unit_class_flag_named(unit_class_get(punit), "Missile")) {
                     spend_unit = true;
                   }
                   unit_did_action(punit); // iPillage, just like unit_move, needs an immediate real-time uwt timestamp.
@@ -6147,7 +6147,7 @@ bool unit_activity_handling_targeted(struct unit *punit,
                 else punit->moves_left -= pstats.iPillage_moves * SINGLE_MOVE; // always reduce moves left for single_target ops
 
                 /* Failed missiles are spent after action consequences. */
-                if (unit_class_by_rule_name("Missile") == unit_class_get(punit)) {
+                if (uclass_has_user_unit_class_flag_named(unit_class_get(punit), "Missile")) {
                   spend_unit = true;
                 } else {
                   if (punit->moves_left<0) punit->moves_left = 0;

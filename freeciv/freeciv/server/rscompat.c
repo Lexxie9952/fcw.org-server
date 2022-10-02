@@ -169,7 +169,7 @@ bool rscompat_names(struct rscompat_info *info)
       const char *name;
       const char *helptxt;
     } new_class_flags_31[] = {
-      { N_("Missile"), N_("Unit is destroyed when it attacks") },
+      { N_("Missile"), N_("Unit is destroyed aftert attack, pillage, or loss of its transporter.") },
       { N_("CanPillage"), N_("Can pillage tile improvements.") },
     };
 
