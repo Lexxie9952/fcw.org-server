@@ -443,7 +443,7 @@ Feudalism with Construction lets them build Castles. Steel lets them build Bunke
 • v1 do 6 turns of work in 5 turns (Journeyman); 
 • v2 do 5 turns of work in 4 turns (Foreman); 
 • v3 do 4 turns of work in 3 turns (Master Workman). 
-These bonuses stack with other work rate bonuses. A small movement bonus also increases efficiency, as they can step onto nearby rough terrain without losing all moves. 
+These bonuses stack with other work rate bonuses. A small movement bonus also increases efficiency, as they can step onto nearby rough terrain without losing all moves.
 
 In other respects, this unit is identical to Workers I. </b>
 <b class='unit_desc'>Masonry lets Workers build Forts. Construction lets them build Fortresses and Oil Wells. Engineering lets them build Canals and Naval Bases. Feudalism with Construction lets them build Castles. Steel lets them build Bunkers and Sea Bridges. Radio lets them build Airbases and Buoys, which Settlers cannot. Workers must be on a ship to build Buoys. </b>
@@ -1390,7 +1390,7 @@ Marines have stronger veteran levels unique to their unit type. They also have h
 <pre class='firepower'>Firepower: 1</pre>
 <pre class='hitpoints'>Hitpoints: 20</pre>
 <pre class='obsolete'>Obsolete by: None</pre>
-<pre class='helptext'><b class='unit_desc'>Ground Troops upgrade earlier infantry with better weaponry. The upgrade cost for Riflemen and Alpine Troops is 4 gold. Ground Troops can stay fortified while attacking, and veterans enjoy a +⅓ move bonus.</b>
+<pre class='helptext'><b class='unit_desc'>Ground Troops upgrade earlier infantry with better weaponry. The upgrade cost for Riflemen and Alpine Troops is 4 gold. Ground Troops can stay fortified while attacking, and veterans enjoy a +⅓ move bonus.
 Under Communism this unit costs 5 less.</b>
 <hr style='border-top: 1px solid #000'>➤ Belongs to Land unit class.
   • Can occupy empty enemy cities.
@@ -2484,6 +2484,18 @@ VIGIL：the Vigil order lets Ballistae automatically Range-Attack adjacent milit
   • Gets the 50% defensive bonus automatically while in cities.
 ➤ May acquire veteran status.
   • Veterans have increased strength in combat.
+
+Veteran Levels for Ballistae are the standard ruleset default:
+<table class="vet_level">
+<tr><th>Veteran level</th><th>Power factor</th><th>Promotion Odds</th><th>Move bonus</th></tr>
+<tr><hr style="border-top: 1px solid #000"></tr>
+<tr><td>green</td><td>100%</td><td>50%</td> <td>-</td></tr>
+<tr><td>veteran</td><td>150%</td><td>33%</td> <td>-</td></tr>  
+<tr><td>hardened</td><td>175%</td><td>20%</td> <td>-</td></tr>
+<tr><td>elite</td><td>200%</td><td>15%</td> <td>-</td></tr>
+<tr><td>crack</td><td>210%</td><td>15%</td> <td>+ 1/10</td></tr>
+<tr><td>master</td><td>220%</td><td>15%</td> <td>+ 1/10</td></tr>
+<tr><td>champion</td><td>230%</td><td>-</td><td>+ 1/10</td></tr></table>
 </pre>
 </div>
 <div class='item' id='utype40'>
@@ -2734,7 +2746,7 @@ AAA can convert to Mobile SAM for free after 9 turns of service. The order must 
 ➤ <b style="color:#9aa">Unblockable</b>: unreachable units can't block its attacks on reachable units.
 ➤ May be obtained by conversion of Anti-Aircraft Artillery.
 ➤ Anti-Air bonus of this unit is less effective against Stealth, which has a 25% bonus against this unit.
-➤ Can carry and refuel up to 2 Missile units.
+➤ Can carry and refuel up to 3 Missile units.
   • Cargo not visible except to allies.
 ➤ May impose a zone of control on its adjacent tiles.
   • <b style="color:#9aa">Prevents enemy cities from working the tile it's on.</b>
@@ -2942,7 +2954,7 @@ Stack-Escape：60% odds to evade stack-death if attacker doesn’t have more mov
 ➤ <b style="color:#9aa">STACK ESCAPE</b>: 60% odds to escape if stack defender loses, if attacker doesn’t have more moves than it does.
 ➤ Never imposes a zone of control.
 ➤ <b style="color:#9aa">INTERCEPTED</b> by Fighter types on Vigil: they auto-attack if they have better odds attacking than defending.
-➤ Can carry 1 Emissary, Diplomat, or Spy.
+➤ Can carry 1 Emissary, Diplomat, Spy, or commerce cargo unit.
   • Cargo cannot be loaded or unloaded except in a City or an Airbase.
   • Cargo not visible except to allies.
 ➤ Unit has to be in a City, Airbase, or on a Carrier after 2 turns.
@@ -3183,7 +3195,7 @@ Stack-Escape：60% odds to evade stack-death if attacker doesn’t have more mov
 ➤ Anti-Air units have bonuses against this unit.
 ➤ <b style="color:#9aa">STACK ESCAPE</b>: 60% odds to escape if stack defender loses, if attacker doesn’t have more moves than it does.
 ➤ Unable to attack Air units.
-➤ Can carry and refuel 1 Bombs unit.
+➤ Can carry and refuel 1 “Bombs” unit.
   • Can't carry nuclear bombs.
   • Cargo cannot be loaded except in a city or a base native to this transport.
   • Cargo not visible except to allies.
@@ -3463,8 +3475,8 @@ NOTE:  Due to game mechanics, Satellites block terrestrial movement over a tile.
 ➤ Loses 1hp for every turn in the air.
 ➤ Gets +1 move point if starting its turn in a City or Airbase.
 ➤ The first turn spent in a city, all Helicopter types regain 10hp.
-➤ Can carry up to 3 qualifying Land units.
-  • Some cargo cannot be loaded or unloaded except in a City or a Base native to this transport.
+➤ Can carry up to 3  Land, LandNoKill, LandAirSea, or Big Land units.
+  • Some types of cargo units cannot be loaded or unloaded except in a City or a Base native to this transport.
   • Cargo not visible except to allies.
 ➤ Never imposes a zone of control.
 ➤ <b style="color:#9aa">Can't be bribed</b>.
@@ -3498,7 +3510,7 @@ Veteran Levels for Helicopter types:
 <pre class='obsolete'>Obsolete by: None</pre>
 <pre class='helptext'><b class='unit_desc'>Helicopters are the Air Cavalry of modern armies. They can attack multiple targets and conquer cities. Unaffected by terrain, they are good for Partisan suppression. They can transport Marines and AAA and are thus well-suited for commando ops.
 </b>
-<b class='unit_desc'>For each turn not ended in a City, Base, or Carrier, 1hp is lost. +1 move is awarded if starting a turn in a City or Airbase. The first turn spent in a city, all Helicopter types regain 10hp.
+<b class='unit_desc'>For each turn not ended in a City, Base, or Carrier, 1hp is lost. +1 move is awarded if starting a turn in a City or Airbase. Whether resting or not, all Helicopter types regain 10hp for each turn-change spent in a city.
 </b>
 <b class='unit_desc'>Helicopters fly low to avoid Interception. This invites attacks by ground units from Riflemen onward. They are unreachable to Artillery types and get +50% defense vs. foot units. Helicopters can be attacked by Sea from Ironclad onward.
 Helicopters can retaliate 3 rounds against Special Unit Attacks.
@@ -3985,7 +3997,8 @@ Veteran Levels for Stealth Bombers are the default for offensive Air units:
   • Not subject to zones of control.
   • Slowed down while damaged.
 ➤ Can help build a Wonder in any non-hostile city.
-➤ Can carry 1 Land, LandNoKill, or LandAirSea unit.
+➤ Can help build a Wonder in any non-hostile city.
+➤ Can carry 1 Land, LandNoKill, LandAirSea, Big Land, or commerce cargo unit.
   • Cargo not visible except to allies.
 ➤ Must stay next to safe coast.
 ➤ <b style="color:#9aa">PORT PENALTY</b>: If attacked in a city, firepower is set to 1 and firepower of attacker is doubled.
@@ -4048,7 +4061,7 @@ Veteran Levels for Boats:
 ➤ Can enter foreign territory regardless of peace treaty.
 ➤ Can help build a Wonder in any non-hostile city.
 ➤ Unable to attack air units.
-➤ Can carry up to 2 Land, LandNoKill, or LandAirSea units.
+➤ Can carry 2 Land, LandNoKill, LandAirSea, LandRoad, Big Land, or commerce cargo units.
   • Cargo not visible except to allies.
 ➤ Can only attack units on native tiles.
   • Battle will last 15 combat rounds, which may or may not result in a victor.
@@ -4105,7 +4118,7 @@ Veteran Levels for Triremes:
   • Not subject to zones of control.
   • Slowed down while damaged.
 ➤ Unable to attack air units.
-➤ Can carry 1 Land, LandNoKill, or LandAirSea unit.
+➤ Can carry 1 Land, LandNoKill, LandAirSea, LandRoad, or Big Land unit.
   • Cargo not visible except to allies.
 ➤ <b style="color:#9aa">Can Attack reachable targets on land tiles.</b>
   • Battle will last 15 combat rounds, which may or may not result in a victor.
@@ -4155,7 +4168,7 @@ Veteran Levels for Longboat:
 ➤ Can enter foreign territory regardless of peace treaty.
 ➤ Can help build a Wonder in any non-hostile city.
 ➤ Unable to attack air units.
-➤ Can carry up to 2 Land, LandNoKill, or LandAirSea units.
+➤ Can carry up to 2 Land, LandNoKill, LandAirSea, LandRoad, Big Land, or commerce cargo units.
   • Cargo not visible except to allies.
 ➤ Can only attack units on native tiles.
   • Battle will last 15 combat rounds, which may or may not result in a victor.
@@ -4211,7 +4224,7 @@ Veteran Levels for Galleys:
   • Not subject to zones of control.
   • Slowed down while damaged.
 ➤ Unable to attack air units.
-➤ Can carry up to 3 Land, LandNoKill, or LandAirSea units.
+➤ Can carry up to 3 Land, LandNoKill, LandAirSea, LandRoad, or Big Land units.
   • Cargo not visible except to allies.
 ➤ <b style="color:#9aa">Can Attack reachable targets on land tiles.</b>
   • Battle will last 15 combat rounds, which may or may not result in a victor.
@@ -4305,7 +4318,7 @@ Veteran Levels for Ram Ships:
   • Slowed down while damaged.
 ➤ Can enter foreign territory regardless of peace treaty.
 ➤ Unable to attack air units.
-➤ Can carry up to 3 Land, LandNoKill, or LandAirSea units.
+➤ Can carry up to 3 Land, LandNoKill, LandAirSea, LandRoad, Big Land, or commerce cargo units.
   • Cargo not visible except to allies.
 ➤ <b style="color:#9aa">Can Attack reachable targets on land tiles.</b>
   • Battle will last 15 combat rounds, which may or may not result in a victor.
@@ -4361,7 +4374,7 @@ Veteran Levels for Caravels:
 ➤ Can enter foreign territory regardless of peace treaty.
 ➤ <b style="color:#9aa">STACK ESCAPE</b>: 60% odds to escape if stack defender loses, if attacker doesn’t have more moves than it does.
 ➤ Unable to attack air units.
-➤ Can carry up to 4 Land, LandNoKill, LandAirSea, or Balloon units.
+➤ Can carry up to 4 Land, LandNoKill, LandAirSea, LandRoad, Big Land, Balloon, or commerce cargo units.
   • Cargo not visible except to allies.
 ➤ <b style="color:#9aa">Can Attack reachable targets on land tiles.</b>
   • Battle will last 15 combat rounds, which may or may not result in a victor.
@@ -4411,7 +4424,7 @@ Veteran Levels for Galleons:
 ➤ <b>2× defense bonus</b> if attacked by Marines or Anti-Aircraft Artillery.
 ➤ <b style="color:#9aa">STACK ESCAPE</b>: 60% odds to escape if stack defender loses, if attacker doesn’t have more moves than it does.
 ➤ Unable to attack air units.
-➤ Can carry up to 2 Land, LandNoKill, or LandAirSea units.
+➤ Can carry up to 2 Land, LandNoKill, LandAirSea, LandRoad, or Big Land units.
   • Cargo not visible except to allies.
 ➤ <b style="color:#9aa">Can Attack reachable targets on land tiles.</b>
   • Battle will result in a victor.
@@ -4476,7 +4489,7 @@ Towed ships lose all moves after release.</b>
     * must be adjacent to a Fish resource
     * must NOT be cardinally adjacent to another Fishtrap
 ➤ Can clean Pollution or Fallout from river tiles.
-➤ Can carry and refuel 1 Cargo, Land, LandNoKill, LandAirSea, or LandRoad unit.
+➤ Can carry and refuel 1 Trireme, Rivership, Sea, Land, LandNoKill, LandAirSea, LandRoad unit, Big Land, or commerce cargo unit.
   • <b style="color:#9aa">Cargo is visible to all nations who can see the Trawler.</b>
 ➤ <b style="color:#9aa">Can "tow" a ship or submarine as cargo.</b>
   • Can't tow other Trawlers.
@@ -4512,7 +4525,7 @@ Towed ships lose all moves after release.</b>
   • Not subject to zones of control.
   • Slowed down while damaged.
 ➤ Can help build a Wonder in any non-hostile city.
-➤ Can carry and refuel up to 4 Land, LandNoKill, LandAirSea, or Balloon units.
+➤ Can carry and refuel up to 4 Land, LandNoKill, LandAirSea, LandRoad, Big Land, Balloon, or commerce cargo units.
   • Cargo not visible except to allies.
 ➤ <b style="color:#9aa">PORT PENALTY</b>: If attacked in a city, firepower is set to 1 and firepower of attacker is doubled.
 ➤ Never imposes a zone of control.
@@ -4554,7 +4567,7 @@ Towed ships lose all moves after release.</b>
   • Slowed down while damaged.
 ➤ <b>2× defense bonus</b> if attacked by Marines or Anti-Aircraft Artillery.
 ➤ <b style="color:#9aa">STACK ESCAPE</b>: 60% odds to escape if stack defender loses, if attacker doesn’t have more moves than it does.
-➤ Can carry and refuel up to 8 Land, LandNoKill, LandAirSea, or Balloon units.
+➤ Can carry and refuel up to 8 Land, LandNoKill, LandAirSea, LandRoad, Big Land, Balloon, Zeppelin, or commerce cargo units.
   • Cargo not visible except to allies.
 ➤ <b style="color:#9aa">PORT PENALTY</b>: If attacked in a city, firepower is set to 1 and firepower of attacker is doubled.
 ➤ May impose a zone of control on its adjacent tiles.
@@ -4648,7 +4661,7 @@ Stack-Escape：67% odds to evade stack-death if attacker doesn’t have more mov
   • Does not get defense bonuses from terrain.
   • Not subject to zones of control.
   • Slowed down while damaged.
-➤ <b>4× defense bonus</b> if attacked by Submarine.
+➤ <b>4× defense bonus</b> if attacked by Submarine or Missile Submarine.
 ➤ <b>2× defense bonus</b> if attacked by Marines or Anti-Aircraft Artillery.
 ➤ <b style="color:#9aa">STACK ESCAPE</b>: 67% odds to escape if stack defender loses, if attacker doesn’t have more moves than it does.
 ➤ <b>Unable to attack air units.</b>
@@ -4700,7 +4713,7 @@ Veteran Levels for Destroyers:
   • Does not get defense bonuses from terrain.
   • Not subject to zones of control.
   • Slowed down while damaged.
-➤ <b>2× defense bonus</b> if attacked by Submarine.
+➤ <b>2× defense bonus</b> if attacked by Submarine or Missile Submarine.
 ➤ <b>2× defense bonus</b> if attacked by Marines or Anti-Aircraft Artillery.
 ➤ <b style="color:#9aa">STACK ESCAPE</b>: 60% odds to escape if stack defender loses, if attacker doesn’t have more moves than it does.
 ➤ <b>Unable to attack air units.</b>
@@ -4754,7 +4767,7 @@ Stack-Escape：67% odds to evade stack-death if attacker doesn’t have more mov
   • Does not get defense bonuses from terrain.
   • Not subject to zones of control.
   • Slowed down while damaged.
-➤ <b>2× defense bonus</b> if attacked by Submarine.
+➤ <b>2× defense bonus</b> if attacked by Submarine or Missile Submarine.
 ➤ <b>2× defense bonus</b> if attacked by Marines or Anti-Aircraft Artillery.
 ➤ <b>2× defense bonus</b> if attacked by Aircraft, Helicopter, or Cruise Missile.
 ➤ <b style="color:#9aa">STACK ESCAPE</b>: 67% odds to escape if stack defender loses, if attacker doesn’t have more moves than it does.
@@ -4810,7 +4823,7 @@ Veteran Levels for Missile Destroyers:
   • Not subject to zones of control.
   • Slowed down while damaged.
 ➤ <b style="color:#9aa">3× defense bonus</b> if attacked by Aircraft, Helicopter, or Cruise Missile.
-➤ <b>2× defense bonus</b> if attacked by Submarine.
+➤ <b>2× defense bonus</b> if attacked by Submarine or Missile Submarine.
 ➤ <b>2× defense bonus</b> if attacked by Marines or Anti-Aircraft Artillery.
 ➤ <b style="color:#9aa">STACK ESCAPE</b>: 60% odds to escape if stack defender loses, if attacker doesn’t have more moves than it does.
 ➤ Anti-Air bonus of this unit is less effective against Stealth, which has a 25% bonus against this unit.
@@ -4868,11 +4881,10 @@ Stack-Chief：(1) Will not die if other units in its stack die. (2) Other units 
   • Does not get defense bonuses from terrain.
   • Not subject to zones of control.
   • Slowed down while damaged.
-➤ <b>2× defense bonus</b> if attacked by Submarine.
+➤ <b>2× defense bonus</b> if attacked by Submarine or Missile Submarine.
 ➤ <b>2× defense bonus</b> if attacked by Marines or Anti-Aircraft Artillery.
 ➤ <b style="color:#9aa">STACK-CHIEF</b>: Does not die if a defender on the same tile dies. Units escaping stack death aren't forced to adjacent tiles.
 ➤ <b>Unable to attack air units.</b>
-➤ <b style="color:#9aa">Unblockable</b>: unreachable units can't block its attacks on reachable units.
 ➤ <b style="color:#9aa">Can Attack reachable targets on land tiles.</b>
   • Battle will last 20 combat rounds, which may or may not result in a victor.
   • Chance of attacker promotion is half frequency: 2 battles required for same chance of promotion as 1 sea battle. 
@@ -4923,7 +4935,7 @@ Veteran Levels for Battleship:
 <pre class='obsolete'>Obsolete by: Missile Submarine</pre>
 <pre class='helptext'><b class='unit_desc'>Submarines are strong attackers but weak defenders. They are unreachable by Air units, but do not block air attacks on surface ships. Submarines can’t attack units on shore. 
 
-Submarines can’t be seen by other players unless they have a unit or city adjacent to it,  or a naval base adjacent or cardinally 2 tiles distant. 
+Submarines can’t be seen by other players unless they have：a buoy cardinally adjacent, a unit or city adjacent to it, or a naval base adjacent or cardinally 2 tiles distant. 
 </b>
 <b class='unit_desc'>Submarines have superior attrition rates when attacking in numbers. Attacks cost no move points (except those incurred by taking damage.) They excel at hit-and-run against weaker ships. They have a minimum speed of 5 when damaged. </b>
 <b class='unit_desc'>
@@ -4981,12 +4993,14 @@ Veteran Levels for Submarines:
 <pre class='firepower'>Firepower: 2</pre>
 <pre class='hitpoints'>Hitpoints: 30</pre>
 <pre class='obsolete'>Obsolete by: None</pre>
-<pre class='helptext'><b class='unit_desc'>A Missile Submarine is an upgraded Submarine. It gains 2hp, greater defense, and capacity for 4 Missiles. It can’t be seen except by an adjacent unit or city; or naval base adjacent or at a cardinal distance of 2 tiles. The DIVE DEEP order makes Missile Submarines completely invisible to adjacent units on the following turn：enemies only discover it if moving directly to its tile, at which point they may attack. Diving deep can only be done in Deep Ocean while the Missile Submarine stays quietly in place. 
+<pre class='helptext'><b class='unit_desc'>A Missile Submarine is an upgraded Submarine. It gains 2hp, greater defense, and capacity for 4 Missiles. 
+
+Missile Submarines can’t be seen except by an adjacent unit or city; buoy cardinally adjacent, or naval base adjacent or at a cardinal distance of 2 tiles.</b>
+<b class='unit_desc'>The DIVE DEEP order makes a Missile Submarine completely invisible to adjacent units on the following turn：enemies only discover it if moving directly to its tile, at which point they may attack. Diving deep can only be done in Deep Ocean while the Missile Submarine stays quietly in place. 
 Missile Submarines are unreachable by Air units, but don’t block air attacks on surface ships. 
 </b>
 <b class='unit_desc'>Attacks cost no move points (except those incurred by taking damage.) Minimum speed is 5, when damaged.
-</b>
-<b class='unit_desc'>
+</b><b class='unit_desc'>
 Stack-Escape：75% odds to evade stack-death if attacker doesn’t have more moves than it does.</b>
 <hr style='border-top: 1px solid #000'>➤ Belongs to Submarine unit class.
   • <b style="color:#9aa">Invisible</b> except when next to an enemy unit or city.
@@ -5006,6 +5020,7 @@ Stack-Escape：75% odds to evade stack-death if attacker doesn’t have more mov
   • Other Submarines joining the tile will automatically dive deep to join it at depth.
 ➤ Attack value reduced against some ships.
 ➤ Unable to attack air units.
+➤ Can carry and refuel up to 4 Missile units.
 ➤ Can only attack units on native tiles.
 ➤ <b style="color:#9aa">PORT PENALTY</b>: If attacked in a city, firepower is set to 1 and firepower of attacker is doubled.
 ➤ May impose a zone of control on its adjacent tiles.
@@ -5056,7 +5071,7 @@ Veteran Levels for Missile Submarines:
 ➤ <b>2× defense bonus</b> if attacked by Marines or Anti-Aircraft Artillery.
 ➤ <b style="color:#9aa">STACK-CHIEF</b>: Does not die if a defender on the same tile dies. Units escaping stack death aren't forced to adjacent tiles.
 ➤ Unable to attack air units.
-➤ Can carry and refuel up to 10 Missile, LandAirSea, Helicopter, Air, Air_High_Altitude, AirProtect, or Balloon units.
+➤ Can carry and refuel up to 10 Missile, LandAirSea, Helicopter, Air, Air_High_Altitude, AirProtect, Balloon, or Zeppelin units.
   • Cargo not visible except to allies.
 ➤ Can only attack units on native tiles.
 ➤ <b style="color:#9aa">PORT PENALTY</b>: If attacked in a city, firepower is set to 1 and firepower of attacker is doubled.
@@ -5801,8 +5816,8 @@ All Commerce units can carry Goods as cargo.</b>
 <pre class='obsolete'>Obsolete by: None</pre>
 <pre class='helptext'><b class='unit_desc'>Trains are Commerce units with a bonus：they allow units with less than 3 move points to travel your rails at distances comparable to other units. Transport logistics for Trains are more restricted than for Wagons and Trucks. Except for Foot soldiers, all units need to be in a city to get on or off a Train. 
 Foot Soldiers use Trains the same as Wagons and Trucks, and can: 
-  1. Board anywhere; 
-  2. Deboard in a Base or Quay; 
+  1. Board anywhere (1/3 move); 
+  2. Deboard in a Base or Quay (1/3 move); 
   3. Disembark outside a City (loses all moves.) 
 
 On non-allied foreign rails, Trains incur full terrain movement cost. Pre-gunpowder units can’t attack Trains. 

@@ -2337,6 +2337,7 @@ Veteran Levels for Howitzers are the standard ruleset default:
 NOTE: GOTO disallows unit loss from lack of fuel. You can override this by ordering moves to adjacent tiles.</b>    
 <hr style='border-top: 1px solid #000'>➤ Belongs to Balloon unit class.
   • Speed is not affected by terrain.
+  • Not able to enter terrain type 'Mountains'.
   • Does not get defense bonuses from terrain.
   • Not subject to zones of control.
   • <b style="color:#9aa">Unreachable</b>. Units before Riflemen and Ironclad can't attack this one.
@@ -2433,8 +2434,8 @@ Airplanes can Stack-Escape：a 60% chance to escape a killed stack if they have 
 ➤ <b style="color:#9aa">STACK ESCAPE</b>: 60% odds to escape if stack defender loses, if it has more moves left than attacker.
 ➤ Never imposes a zone of control.
 ➤ <b style="color:#9aa">INTERCEPTED</b> by Fighter types on Vigil: they auto-attack if they have better odds attacking than defending.
-➤ Can carry and refuel 1 Diplomat or Spy.
-  • Cargo cannot be loaded or unloaded except in a City or a Airbase.
+➤ Can carry 1 Diplomat, Spy, or commerce cargo unit.
+  • Cargo cannot be loaded or unloaded except in a City or an Airbase.
 ➤ Unit has to be in a City, Airbase, or on a Carrier after 2 turns.
 ➤ <b style="color:#9aa">Can't be bribed</b>.
 ➤ <b style="color:#9aa">Can't be sabotaged</b>.
@@ -3313,7 +3314,7 @@ Veteran Levels for Stealth Bombers are the default for offensive Air units:
   • Not subject to zones of control.
   • Slowed down while damaged.
 ➤ Can help build a Wonder in any non-hostile city.
-➤ Can carry and refuel 1 Land, LandNoKill, or LandAirSea unit.
+➤ Can carry and refuel 1 Land, LandNoKill, or LandAirSea, or commerce cargo unit.
 ➤ Must stay next to safe coast.
 ➤ <b style="color:#9aa">PORT PENALTY</b>: If attacked in a city, firepower is set to 1 and firepower of attacker is doubled.
 ➤ A non-military unit:
@@ -3372,7 +3373,7 @@ Veteran Levels for Boats:
   • Slowed down while damaged.
 ➤ Can help build a Wonder in any non-hostile city.
 ➤ Unable to attack air units.
-➤ Can carry and refuel up to 2 Land, LandNoKill, or LandAirSea units.
+➤ Can carry 2 Land, LandNoKill, LandAirSea, LandRoad, or commerce cargo units.
 ➤ <b style="color:#9aa">PORT PENALTY</b>: If attacked in a city, firepower is set to 1 and firepower of attacker is doubled.
 ➤ May impose a zone of control on its adjacent tiles.
   • <b style="color:#9aa">Doesn't prevent enemy cities from working the tile it's on.</b>
@@ -3427,7 +3428,7 @@ Veteran Levels for Triremes:
   • Can attack units on non-native tiles.
   • Can launch attack from non-native tiles.
 ➤ Unable to attack air units.
-➤ Can carry and refuel 1 Land, LandNoKill, or LandAirSea unit.
+➤ Can carry and refuel 1 Land, LandNoKill, LandAirSea, or LandRoad unit.
 ➤ <b style="color:#9aa">PORT PENALTY</b>: If attacked in a city, firepower is set to 1 and firepower of attacker is doubled.
 ➤ May impose a zone of control on its adjacent tiles.
   • <b style="color:#9aa">Prevents enemy cities from working the tile it's on.</b>
@@ -3472,7 +3473,7 @@ Veteran Levels for Longboat:
   • Slowed down while damaged.
 ➤ Can help build a Wonder in any non-hostile city.
 ➤ Unable to attack air units.
-➤ Can carry and refuel up to 2 Land, LandNoKill, or LandAirSea units.
+➤ Can carry up to 2 Land, LandNoKill, LandAirSea, LandRoad, or commerce cargo units.
 ➤ Can only attack units on native tiles.
 ➤ <b style="color:#9aa">PORT PENALTY</b>: If attacked in a city, firepower is set to 1 and firepower of attacker is doubled.
 ➤ May impose a zone of control on its adjacent tiles.
@@ -3527,7 +3528,7 @@ Veteran Levels for Galleys:
   • Can attack units on non-native tiles.
   • Can launch attack from non-native tiles.
 ➤ Unable to attack air units.
-➤ Can carry and refuel up to 3 Land, LandNoKill, or LandAirSea units.
+➤ Can carry up to 3 Land, LandNoKill, LandAirSea, or LandRoad, units.
 ➤ <b style="color:#9aa">PORT PENALTY</b>: If attacked in a city, firepower is set to 1 and firepower of attacker is doubled.
 ➤ May impose a zone of control on its adjacent tiles.
   • <b style="color:#9aa">Prevents enemy cities from working the tile it's on.</b>
@@ -3616,7 +3617,7 @@ Veteran Levels for Ram Ships:
   • Can attack units on non-native tiles.
   • Can launch attack from non-native tiles.
 ➤ Unable to attack air units.
-➤ Can carry and refuel up to 3 Land, LandNoKill, or LandAirSea units.
+➤ Can carry up to 3 Land, LandNoKill, LandAirSea, LandRoad, or commerce cargo units.
 ➤ <b style="color:#9aa">PORT PENALTY</b>: If attacked in a city, firepower is set to 1 and firepower of attacker is doubled.
 ➤ May impose a zone of control on its adjacent tiles.
   • <b style="color:#9aa">Doesn't prevent enemy cities from working the tile it's on.</b>
@@ -3669,7 +3670,7 @@ Veteran Levels for Caravels:
   • Can launch attack from non-native tiles.
 ➤ <b style="color:#9aa">STACK ESCAPE</b>: 60% odds to escape if stack defender loses, if it has more moves left than attacker.
 ➤ Unable to attack air units.
-➤ Can carry and refuel up to 4 Land, LandNoKill, LandAirSea, or Balloon units.
+➤ Can carry up to 4 Land, LandNoKill, LandAirSea, LandRoad, Balloon, or commerce cargo units.
 ➤ <b style="color:#9aa">PORT PENALTY</b>: If attacked in a city, firepower is set to 1 and firepower of attacker is doubled.
 ➤ May impose a zone of control on its adjacent tiles.
   • <b style="color:#9aa">Doesn't prevent enemy cities from working the tile it's on.</b>
@@ -3718,7 +3719,7 @@ Veteran Levels for Galleons:
 ➤ <b>2× defense bonus</b> if attacked by Marines or Anti-Aircraft Artillery.
 ➤ <b style="color:#9aa">STACK ESCAPE</b>: 60% odds to escape if stack defender loses, if it has more moves left than attacker.
 ➤ Unable to attack air units.
-➤ Can carry and refuel up to 2 Land, LandNoKill, or LandAirSea units.
+➤ Can carry up to 2 Land, LandNoKill, LandAirSea, or LandRoad units.
 ➤ <b style="color:#9aa">PORT PENALTY</b>: If attacked in a city, firepower is set to 1 and firepower of attacker is doubled.
 ➤ May impose a zone of control on its adjacent tiles.
   • <b style="color:#9aa">Prevents enemy cities from working the tile it's on.</b>
@@ -3762,7 +3763,7 @@ Veteran Levels for Frigates:
   • Slowed down while damaged.
   • Can launch attack from non-native tiles.
 ➤ Can help build a Wonder in any non-hostile city.
-➤ Can carry and refuel up to 4 Land, LandNoKill, LandAirSea, or Balloon units.
+➤ Can carry and refuel up to 4 Land, LandNoKill, LandAirSea, LandRoad, Balloon, or commerce cargo units.
 ➤ <b style="color:#9aa">PORT PENALTY</b>: If attacked in a city, firepower is set to 1 and firepower of attacker is doubled.
 ➤ Never imposes a zone of control.
 ➤ A non-military unit:
@@ -3802,7 +3803,7 @@ Veteran Levels for Frigates:
   • Slowed down while damaged.
 ➤ <b>2× defense bonus</b> if attacked by Marines or Anti-Aircraft Artillery.
 ➤ <b style="color:#9aa">STACK ESCAPE</b>: 60% odds to escape if stack defender loses, if it has more moves left than attacker.
-➤ Can carry and refuel up to 8 Land, LandNoKill, LandAirSea, or Balloon units.
+➤ Can carry and refuel up to 8 Land, LandNoKill, LandAirSea, LandRoad, Balloon, Zeppelin, or commerce cargo units.
 ➤ <b style="color:#9aa">PORT PENALTY</b>: If attacked in a city, firepower is set to 1 and firepower of attacker is doubled.
 ➤ May impose a zone of control on its adjacent tiles.
   • Prevents enemy cities from working its tile.
