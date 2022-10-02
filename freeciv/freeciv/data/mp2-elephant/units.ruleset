@@ -78,22 +78,37 @@ flags =
     _("Workers")
   }
 
+; RESERVED User-UCF's: these can be included by creators to immediately access special 
+; deluxe game mechanics for any of their ruleset unit_classes. Currently the only 
+; reserved user-UCF is the "Missile" UCF, which tells the server to spend the unit after
+; Pillage, and destroy the unit if its transporter is lost (unless in a city or native
+; base or co-existing on a tile with another transport who has remaining capacity to
+; 'save' the cargo unit.). For your ruleset to opt in to using a reserved user-UCF,
+; simply include the following uncommented line in your "custom unit class flags", below:
+;
+;  _("Missile"), _("Unit is destroyed after attack, pillage, or loss of its transporter.")
+;
+; __________________________________________________________________________
 ; Names for custom unit class flags. There can be up to 12 of these.
 ; name          = rule name; In some circumstances user may see this
 ;                 as part of some sentences, so try to make it descriptive
 ;                 and sensible.
 ; helptxt       = displayed in the help for unit types belonging to a class
 ;                 with this flag (optional)
+;___________________________________________________________________________
 class_flags =
   { "name", "helptxt"
+;RESERVED:
+     _("Missile"), _("Unit is destroyed after attack, pillage, or loss of its transporter.")
+;CUSTOM:
     _("AttFromNonNative"), _("Can launch attack from non-native tiles.")
-    _("Missile")
-    _("CanPillage")
+    _("CanPillage"), _("Can pillage tile improvements.")
     _("Airliftable"), _("Can be airlifted if it has remaining moves.")
     _("BorderPolice"), _("Military units from this class can peacefully expel certain foreign units.")
     _("CargoRestrained"), _("Can’t attack as Cargo. Must first deboard or disembark.")
     _("WaterVessel")
     _("DelayLoad"), _("Fractional move points spent to load or unload this unit.")
+    _("UnloadOnce"), _("Loses 2/3 moves when unloaded.")
   }
 
 [veteran_system]
@@ -157,7 +172,7 @@ veteran_move_bonus = 0, 0, 0, 0, 6, 6, 6
 ; "CanOccupyCity"     = Military units of this class can occupy enemy cities
 ; "BuildAnywhere"     = Unit Class can be built even in the middle of non-native terrain
 ; "Unreachable"       = Unit Class can be attacked only by units explicitly listing this
-;                       class in its 'targets', unless on a city or native base.
+;                       class in their 'targets', unless on a city or native base.
 ;                       For class members which are transports, cargo cannot load/
 ;                       unload except in a city or native base, unless that unit
 ;                       explicitly lists this class in its 'embarks'/'disembarks'.
@@ -209,7 +224,7 @@ name          = _("?unitclass:Bomb")
 min_speed     = 1
 hp_loss_pct   = 0
 hut_behavior  = "Frighten"
-flags         = "Unreachable", "DoesntOccupyTile", "Airliftable", "DelayLoad"
+flags         = "Unreachable", "DoesntOccupyTile", "Airliftable", "DelayLoad", "UnloadOnce"
 helptext      = _("\
   • Can be airlifted from a suitable city.\
 ")
@@ -220,7 +235,7 @@ min_speed     = 1
 hp_loss_pct   = 0
 hut_behavior  = "Frighten"
 flags         = "BuildAnywhere", "Missile", "Unreachable", "DoesntOccupyTile", "Airliftable",
-                "AttackNonNative", "DelayLoad"
+                "AttackNonNative", "DelayLoad", "UnloadOnce"
 helptext      = _("\
   • Can be airlifted from a suitable city.\
 ")
@@ -379,9 +394,6 @@ flags         = "Unreachable", "DoesntOccupyTile"
 ;")
 
 ; This class is for air units that can also protect a stack.
-; (Fighters) — technically a separate AirProtect class is not needed, but
-; Fighters also have Border Police abilities, and a separate class
-; facilitates future adjustments and balancing in an isolated class.
 [unitclass_air_protect]
 name          = _("?unitclass:AirProtect")
 min_speed     = 1
@@ -635,7 +647,7 @@ flags         = "Unreachable", "DoesntOccupyTile"
 ; "OddsAttackClass1"  = Unit will attack ProvokingClass1 if odds are better than defending
 ; "OddsAttackClass2"  = Unit will attack ProvokingClass2 if odds are better than defending
 ; "OddsAttackClass3"  = Unit will attack ProvokingClass3 if odds are better than defending
-; "AlwaysAttackClass1"= Unit always attacks ProvokingClass1 unless alone in a city with <90% odds to win.
+; "AlwaysAttackClass1"= Unit always attacks ProvokingClass1 unless < 25% or alone in a city with <90% odds to win. see:unittools.c::unit_survive_autoattack()
 ; "AlwaysAttackClass2"= Unit always attacks ProvokingClass2 unless alone in a city with <90% odds to win.
 ; "AlwaysAttackClass3"= Unit always attacks ProvokingClass3 unless alone in a city with <90% odds to win.
 ;—————————————————————————————————————————————————————————————————————————————————————
@@ -1328,9 +1340,10 @@ disembarks    = "LandRoad", "LandRail", "Helicopter"
 flags         = "FootSoldier", "CantReachAir", "Settlers", "CanHide", "MultiSlot", "Shield2Gold", "WillNever", "Bombarder"
 roles         = "DefendGood", "FirstBuild", "HutTech"
 helptext      = _("\
-The Phalanx is armored infantry, excellent for city defense and holding\
- tactical positions. Phalanxes can do standard attacks and Rumble attacks\
- while remaining fortified. \n\
+The Phalanx is armored infantry, excellent for defensively holding\
+ tactical positions：a Phalanx gets a 50% attack bonus if it has not\
+ moved. Phalanxes can also do standard attacks and Rumble attacks\
+ and remain fortified after the attack! \n\
  "), _("\
 If a Phalanx hasn’t moved, it can Rumble Attack adjacent enemies. Rumbles are\
  disciplined skirmish—not mortal combat. The formation gives the Phalanx little\
@@ -1341,7 +1354,7 @@ If a Phalanx hasn’t moved, it can Rumble Attack adjacent enemies. Rumbles are\
  the fortified status of the Phalanx. \n\
 "), _("\
 With the discovery of Conscription, Phalanxes can convert to Musketeers in any\
- domestic city. The discovery of Banking changes upkeep from shields to gold.\
+ domestic city. The discovery of Banking changes upkeep from shields to gold. \n\
 ")
 bombard_rate = 3
 
@@ -2823,7 +2836,7 @@ attack        = 120
 defense       = 20
 hitpoints     = 30
 firepower     = 2
-move_rate     = 4
+move_rate     = 3
 vision_radius_sq = 4
 transport_cap = 0
 fuel          = 0
@@ -2838,6 +2851,11 @@ disembarks    = "Helicopter"
 targets       = "Balloon", "LandRail", "Zeppelin"
 flags         = "CantReachAir", "Bombarder", "AvidAttacker" ;autoattacks (!NonMil) targets instead of "Provoking" targets
 roles         = "AttackStrongStartUnit"
+veteran_names = _("green"), _("veteran"), _("hardened"), _("elite"), _("crack"), _("master"), _("champion")
+veteran_base_raise_chance = 50, 33, 20, 15, 15, 15, 0
+veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
+veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
+veteran_move_bonus = 20, 20, 20, 20, 30, 30, 30
 helptext      = _("\
 Howitzers are upgraded Artillery with a terrifying increase to mobility and attack\
  strength. City Walls are completely ineffective against Howitzers. \n\
@@ -3569,7 +3587,8 @@ Transport Helicopters can carry three land units, which they can pick up from an
 "), _("\
  All Helicopters can be attacked by land from Riflemen onward; by sea from Ironclad\
  onward; get +50% defence vs. foot units; and are unreachable to artillery types.\
- Unlike attack Helicopters, Transport Helicopters are intercepted by Fighters on vigil.\
+ Unlike attack Helicopters, Transport Helicopters are intercepted by Fighters on vigil. \n\
+ Helicopter-types can see Submarines at a distance of 2 tiles. \n\
  Stack-Escape：60% odds to evade stack-death if attacker doesn’t have more moves than it does.\
 ")
 
@@ -3630,11 +3649,12 @@ roles         = ""
 helptext      = _("\
 Helicopters are the Air Cavalry of modern armies. They can attack multiple targets\
  and conquer cities. Unaffected by terrain, they are good for Partisan suppression.\
- They can transport Marines and AAA and are thus well-suited for commando ops. \n\
+ They can transport Marines and AAA and are thus well-suited for commando ops.\
+ Helicopter-types can see Submarines at a distance of 2 tiles.\n\
 "), _("\
 For each turn not ended in a City, Base, or Carrier, 1hp is lost. +1 move\
  is awarded if starting a turn in a City or Airbase. Whether resting or not,\
- all Helicopter types regain 10hp if they spend turn-change in city. \n\
+ all Helicopter types regain 10hp for each turn-change spent in a city. \n\
 "), _("\
 Helicopters fly low to avoid Interception. This invites attacks by ground units from\
  Riflemen onward. They are unreachable to Artillery types and get +50% defense\
@@ -3749,8 +3769,8 @@ Multi-Fighters are fitted for mission versatility.\
  They are sturdy, defend better, and have two turns of fuel. They are\
  good for escorting bombers, pursuing enemy bombers on long range\
  missions, defensive ground support, naval missions, reconnaissance,\
- and interception. A Multi-Fighter can vigil at any range, and can\
- do a maximum of 2 attacks per turn. \n\
+ and interception. On its first turn of fuel, a Multi-Fighter can vigil\
+ at any range, and can do a maximum of 2 attacks per turn. \n\
 "), _("
 INTERCEPTOR：the Vigil order lets Multi-Fighters auto-attack adjacent Air units if they\
  have better attack odds. This unit can Vigil if it has 1 turn of fuel or more. \n\
@@ -3986,7 +4006,7 @@ roles         = ""
 helptext      = _("\
 Stealth Multi-Fighters can’t be seen unless adjacent to an enemy. Stealth evasion gives a\
  25% bonus against all Anti-Air units, and reduces SAM Batteries down to a smaller 25% bonus.\
- A Stealth Multi-Fighter can do 2 attacks per turn, and can\
+ A Stealth Multi-Fighter can do 2 attacks per turn, and on its first turn of fuel, can\
  Vigil any tile it occupies. \n\
 "), _("
 INTERCEPTOR：the Vigil order lets Stealth Fighters auto-attack adjacent Air units if they\
@@ -5059,13 +5079,16 @@ veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
 veteran_move_bonus = 0, 0, 0, 0, 60, 60, 60
 roles         = "Hunter"
 helptext      = _("\
-Submarines are strong attackers but weak defenders.\
- They are unreachable by Air units, but do not block air attacks on surface ships.\
- Submarines can’t attack units on shore. Submarines can’t be seen by other players\
- unless they have a unit or city adjacent to it. \ 
+Submarines are strong attackers but weak defenders. They are unreachable by Air units,\
+ but do not block air attacks on surface ships. Submarines can’t attack units on shore. \n\n
+Submarines can’t be seen by other players unless they have：a buoy cardinally\
+ adjacent, an air unit or city adjacent, a Destroyer or more modern naval unit adjacent,\
+ a naval base adjacent or cardinally 2 tiles distant, or a helicopter 2 tiles distant.\
+ See the chart in Help >> Units >> Submarine. \n\
 "), _("\
-Submarines have superior attrition rates when attacking in numbers. They excel\
- at hit-and-run against weaker ships. They have a minimum speed of 5 when damaged. \
+Submarines have superior attrition rates when attacking in numbers. Attacks cost no move\
+ points (except those incurred by taking damage.) They excel at hit-and-run against weaker\
+ ships. They have a minimum speed of 5 when damaged. \
 "), _("
 Stack-Escape：75% odds to evade stack-death if attacker doesn’t have more moves than it does.\
 ")
@@ -5120,15 +5143,75 @@ veteran_move_bonus = 0, 0, 0, 0, 60, 60, 60
 roles         = "Hunter"
 helptext      = _("\
 A Missile Submarine is an upgraded Submarine. It gains 2hp, greater defense, and capacity\
- for 4 Missiles. It can’t be seen except by an adjacent unit or city. The DIVE DEEP order\
- makes Missile Submarines completely invisible to adjacent units on the following turn：\
- enemies only discover it if moving directly to its tile, at which point they may\
- attack. It can only be done in Deep Ocean while the Missile Submarine stays quietly in place. \n\
+ for 4 Missiles. \n\
+Missile Submarines can’t be seen by other players unless they have：\
+ a buoy cardinally adjacent, an air unit or city adjacent, a naval base adjacent\
+ or cardinally 2 tiles distant, or a helicopter 2 tiles distant. See the chart in\
+ Help >> Units >> Submarine.\
+"), _("\
+The DIVE DEEP order makes Missile Submarines completel invisible to adjacent units on the\
+ following turn：Enemies only discover it if moving directly to its tile, at which point they may\
+ attack. Diving deep can only be done in Deep Ocean while the Missile Submarine stays quietly in place. \n\
 Missile Submarines are unreachable by Air units, but don’t block air attacks on surface ships. \n\
 "), _("\
-Minimum speed is 5, when damaged.\n\
+Attacks cost no move points (except those incurred by taking damage.) Minimum speed is 5,\
+ when damaged. \n\
 "), _("
 Stack-Escape：75% odds to evade stack-death if attacker doesn’t have more moves than it does.\
+")
+
+[unit_light_carrier]
+name          = _("Light Carrier")
+class         = "Sea"
+tech_req      = "Radio.2"
+obsolete_by   = "None"
+graphic       = "u.light_carrier"
+graphic_alt   = "-"
+sound_move    = "m_carrier"
+sound_move_alt = "m_generic"
+sound_fight   = "f_carrier"
+sound_fight_alt = "f_generic"
+build_cost    = 100
+pop_cost      = 0
+attack        = 10
+defense       = 75
+hitpoints     = 35
+firepower     = 2
+move_rate     = 11
+vision_radius_sq = 12
+transport_cap = 5
+fuel          = 0
+uk_happy      = 1
+uk_shield     = 1
+uk_food       = 0
+uk_gold       = 0
+targets       = "Balloon", "Submarine", "Helicopter", "Zeppelin"
+cargo         = "Air", "AirProtect", "Helicopter", "Balloon", "Missile"
+bonuses       =
+   { "flag", "type", "value"
+     "NonNativeAttack", "DefenseMultiplier", 1    
+   }
+flags         = "BadCityDefender", "Only_Native_Attack",
+                "CantReachAir", "WillNever", "ProvokingClass2"
+veteran_names =
+  _("?vet_rank:green"),
+  _("?vet_rank:veteran"),
+  _("?vet_rank:hardened"),
+  _("?vet_rank:elite"),
+  _("?vet_rank:crack"),
+  _("?vet_rank:master"),
+  _("?vet_rank:sea wolf")
+veteran_base_raise_chance = 50, 33, 20, 15, 15, 15, 0
+veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
+veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
+veteran_move_bonus = 0, 0, 0, 0, 60, 60, 60
+roles         = ""
+helptext      = _("\
+The Light Carrier can carry 5 aircraft or missiles.\
+ A Light Carrier’s small runway isn’t suited for Zeppelins, Jet Bombers, or Spy Planes.\
+ ABMs and Fighter-types can Vigil on Light Carriers if they have enough moves left. Light \
+ Carriers have no ASW bonus against Submarines and require protection from other\
+ warships.\
 ")
 
 [unit_carrier]
@@ -5136,7 +5219,7 @@ name          = _("Carrier")
 class         = "Sea"
 tech_req      = "Advanced Flight"
 obsolete_by   = "None"
-graphic       = "u.carrier"
+graphic       = "u.carrier_o"
 graphic_alt   = "-"
 sound_move    = "m_carrier"
 sound_move_alt = "m_generic"
@@ -5179,8 +5262,9 @@ veteran_move_bonus = 0, 0, 0, 0, 60, 60, 60
 roles         = ""
 helptext      = _("\
 The Carrier is a mobile airport that can carry Air units, Helicopters, AAA, Marines, and Missiles.\
- Fighters can Vigil on a Carrier if they have enough moves left. Carriers are very expensive and thus,\
- usually protected by a fleet of scouts and escorts. \n\
+ ABMs and Fighter-types can Vigil on a Carrier if they have enough moves left. Carriers are expensive\
+ and have no ASW bonus against Submarines. Thus, they are usually protected by a fleet of scouts and\
+ escorts. \n\
 "), _("\
 Stack-Chief：(1) Will not die if other units in its stack die. (2) Other units escaping Stack Death aren’t forced to other tiles.\
 ")
@@ -5217,8 +5301,16 @@ bonuses       =
    { "flag", "type", "value", "quiet"
      "Missile",      "DefenseDividerPct", 89, TRUE    ; 65.5% vs. conventional missiles, 74.25% vet vs. green
      "Nuclear",      "DefenseDividerPct", -34, TRUE   ; 40% vs. nuclear missles, 50% as vet
+     ; Basically we need to emulate 0 defense while still having defense, in order to engineer having odds of evading ABMs.
+     ; Thus, we decrease Base Defense to 0.001 by giving 99% penalty on all unit_types:
+     "CantReachAir", "DefenseMultiplierPct", -999, TRUE   ; all military Land, Sea, Missiles, Bombers, EXCEPT AAA, Mobile SAM, AEGIS
+     "AntiAir",      "DefenseMultiplierPct", -999, TRUE   ; AAA, Mobile SAM, AEGIS
+     "AirAttacker",  "DefenseMultiplierPct", -999, TRUE   ; Aircraft (including Bombers)
+     "Nuclear",      "DefenseMultiplierPct", -999, TRUE   ; Nuclear don't have double-penalty so cancel out the cancellation on line above.
+   ; Now, we undo all the above and set D:1 for the case of being intercepted by an ABM:
+     "Missile",      "DefenseMultiplierPct", 999, TRUE
    }
-flags         = "NeverProtects", "HasNoZOC", "Unbribable", "CantReachAir",
+flags         = "NeverProtects", "HasNoZOC", "Unbribable", "CantReachAir", "BadCityDefender",
                 "Missile", "NeverBlocked", "AlwaysAttackClass1", "MultiSlot"
 roles         = ""
 helptext      = _("\
@@ -5487,7 +5579,7 @@ attack        = 1000
 defense       = 0
 hitpoints     = 10
 firepower     = 1
-move_rate     = 2
+move_rate     = 1
 vision_radius_sq = 0
 transport_cap = 0
 fuel          = 1
@@ -5505,11 +5597,11 @@ veteran_names = _("green")
 veteran_base_raise_chance = 0
 veteran_work_raise_chance = 0
 veteran_power_fact = 100
-veteran_move_bonus = 0
+veteran_move_bonus = 20
 roles         = ""
 helptext      = _("\
 If you have Nuclear Fission and the Manhattan Project has been built by any player, you can make Atom Bombs.\
- A Bomber can drop it within two tiles of its location. Unload the bomb and fly the Bomber out of range, then\
+ A Bomber can drop it within two tiles of its location. Disembark the bomb and fly the Bomber out of range, then\
  attack the target (or detonate by pressing D twice.) The blast destroys ALL cardinally adjacent tiles, and might destroy a tile improvement on each tile (×2 at ground zero). City population\
  is reduced by half. Land tiles may get nuclear fallout. \
 "), _("\
@@ -5535,7 +5627,7 @@ attack        = 1000
 defense       = 0
 hitpoints     = 10
 firepower     = 1
-move_rate     = 2
+move_rate     = 1
 vision_radius_sq = 0
 transport_cap = 0
 fuel          = 1
@@ -5553,7 +5645,7 @@ veteran_names = _("green")
 veteran_base_raise_chance = 0
 veteran_work_raise_chance = 0
 veteran_power_fact = 100
-veteran_move_bonus = 0
+veteran_move_bonus = 20
 roles         = ""
 helptext      = _("\
 Hydrogen Bombs make Atom Bombs seem tame. Any unprotected city at Ground Zero will be absolutely annihilated.\
@@ -5586,7 +5678,7 @@ attack        = 1000
 defense       = 0
 hitpoints     = 30
 firepower     = 1
-move_rate     = 2
+move_rate     = 1
 vision_radius_sq = 0
 transport_cap = 0
 fuel          = 1
@@ -5604,7 +5696,7 @@ veteran_names = _("green")
 veteran_base_raise_chance = 0
 veteran_work_raise_chance = 0
 veteran_power_fact = 100
-veteran_move_bonus = 0
+veteran_move_bonus = 20
 roles         = ""
 helptext      = _("\
 The Doomsday Bomb is the mother of all bombs. Blast area is about 100 tiles.\

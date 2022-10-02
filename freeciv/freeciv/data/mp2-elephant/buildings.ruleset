@@ -124,7 +124,7 @@ genus		= "Improvement"
 reqs	=
     { "type", "name", "range"
       "Tech", "Seafaring", "Player"
-      "TerrainClass", "Oceanic", "City"
+      "TerrainClass", "Oceanic", "Adjacent"
     }
 graphic	= "b.harbour"
 graphic_alt	= "-"
@@ -673,7 +673,7 @@ graphic_alt	= "-"
 obsolete_by	=
     { "type", "name", "range"
     }
-build_cost	= 65
+build_cost	= 75
 upkeep		= 2
 sabotage	= 100
 sound		= "b_coastal_defense"
@@ -1436,14 +1436,15 @@ sound_alt	= "w_generic"
 helptext	= _("\
 The Agōgē creates a culture of extreme fitness, and is famous for\
  vigilant patrols, secret shortcut trails, and battle readiness.\
- All your foot soldiers get +⅓ move. Phalanx and Pikemen receive a\
- +50% attack bonus. Phalanx promotions are 50% more frequent, and\
+ All your foot soldiers get +⅓ move. Phalanx receive the\
+ +50% attack bonus even after moving, and Pikemen will get\
+ the bonus too. Phalanx promotions are 50% more frequent, and\
  their cost is reduced by 3 shields. \n\
 "), _("
 In the city with the Agōgē, a Barracks is not needed to make veteran\
  land units. If you have a Barracks, then Phalanxes will be made at\
  +2 veteran level; but other units will still be made with +1 veteran\
- level. \ 
+ level. \
 "), _("
 In all your cities, Foot units begin their turn with +1 move. \n\n\
 Obsolete by：Gunpowder.\

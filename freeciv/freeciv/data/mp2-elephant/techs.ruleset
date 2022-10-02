@@ -117,7 +117,7 @@ flags =
 [advance_advanced_flight]
 name     = _("Advanced Flight")
 req1     = "Radio"
-req2     = "Machine Tools"
+req2     = "Mass Production"
 flags    = ""
 graphic     = "a.advanced_flight"
 graphic_alt = "-"
@@ -1051,5 +1051,5 @@ req2     = "None"
 flags    = "Specialization"
 graphic     = "a.space_flight"  ;this pic won't be shown in the tech tree but will show in other places
 graphic_alt = "-"
-cost = 1230
+cost = 2460
 helptext = _("Missile transporters are created with 1 free ABM.")

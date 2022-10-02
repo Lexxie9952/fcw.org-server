@@ -430,7 +430,7 @@ end
 
 signal.connect("building_built", "building_built_callback")
 
--- Mobile SAMs get free ABMs if Space.2 is known
+-- Mobile SAMs, AEGIS, M.Destroyer, Missile Sub, and Carrier get free ABMs if Space.2 is known
 function unit_built_callback(u, city)
   local owner = u.owner
   local utype = find.unit_type('Anti-Ballistic Missile')
@@ -438,7 +438,7 @@ function unit_built_callback(u, city)
   local req_tech = find.tech_type("Space.2")
   local created_ABM
   if owner:knows_tech(req_tech) then  
-    if u.utype:rule_name() == "Mobile SAM" or u.utype:rule_name() == "AEGIS Cruiser" or u.utype:rule_name() == "Missile Destroyer" or u.utype:rule_name() == "Missile Submarine" or u.utype:rule_name() == "Carrier" then
+    if u.utype:rule_name() == "Mobile SAM" or u.utype:rule_name() == "AEGIS Cruiser" or u.utype:rule_name() == "Missile Destroyer" or u.utype:rule_name() == "Missile Submarine" or u.utype:rule_name() == "Carrier" or u.utype:rule_name() == "Light Carrier" then
       created_ABM = edit.create_unit_full(owner, u.tile, utype, 0, city, 1, 1, u) 
       if created_ABM then
         --edit.unit_kill(created_ABM, "killed", owner)

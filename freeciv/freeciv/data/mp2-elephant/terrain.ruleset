@@ -1600,12 +1600,6 @@ act_gfx_alt    = "-"
 act_gfx_alt2   = "-"
 rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
-disappearance_chance    = 5000
-disappearance_reqs = 
-    { "type",           "name",          "range", "present"
-       "MaxUnitsOnTile", "0",            "Local", TRUE
-       "ExtraFlag",      "NoStackDeath", "Local", FALSE ; will not disappear if there's a base or ruins there.
-    }
 reqs           =
     { "type", "name",            "range","present", "quiet"
 ; Hard contradiction between Tile Claim and Hideout is necessary so that
@@ -1627,7 +1621,6 @@ removal_time   = 0
 ;conflicts      = "Fortress", "Naval Base", "Castle", "Bunker"
 defense_bonus  = 0
 native_to      = "Land", "LandAirSea", "LandNoKill", "Big Land"
-;hidden_by      = "Fortress", "Naval Base", "Castle", "Bunker"
 flags          = "ShowFlag", "NativeTile"
 helptext       = _("\
 A Tile Claim asserts sovereignty over a tile. Tile Claims can be made in\
@@ -1663,7 +1656,6 @@ build_time     = 3
 removal_time   = 0
 conflicts      = "Bunker", "Castle", "Radar"
 native_to      = "Land", "LandAirSea", "LandNoKill"
-hidden_by      = "Castle", "Bunker"
 flags          = "NativeTile"
 helptext       = _("\
 Watchtowers provide vision of the surrounding terrain.\
@@ -1789,7 +1781,8 @@ Naval bases are coastal Fortresses with ocean access. Naval Bases are built on t
  Forts. They allow ships to enter and receive a 2x bonus from coastal weaponry and\
  fortifications. All other units get the benefits of a Fortress. \n\
 Naval bases are the only location where ships can be sure to avoid stack-death without\
- suffering the “Pearl Harbor” penalty of A:FP2 D:FP1\ 
+ suffering the “Pearl Harbor” penalty of A:FPx2 D:FP1 \n\
+Naval bases can see submarines at a distance of 2 tiles, in cardinal directions.\
 ")
 
 [extra_castle]
@@ -2013,7 +2006,6 @@ reqs           =
 build_time     = 2
 removal_time   = 0
 native_to      = "Land", "LandRoad", "LandAirSea", "LandNoKill", "Big Land", "Trireme", "Cargo", "Balloon", "Zeppelin", "RiverShip"
-;hidden_by      = ""
 flags          = "NativeTile"
 helptext       = _("\
 Quays improve logistics on rivers. River and Canal traffic can deboard\
@@ -2055,7 +2047,7 @@ reqs           =
 build_time     = 0
 removal_time   = 0
 native_to      = "Land", "LandRoad", "LandAirSea", "LandNoKill", "Big Land", "Trireme", "Cargo", "Balloon", "Zeppelin", "RiverShip"
-;hidden_by      = ""
+hidden_by      = "Road", "Highway"
 flags          = "NativeTile", "AutoOnCityCenter"
 helptext       = _("\
 Quays in cities allow exiting the city to an adjacent road with only 1⁄₃ move point.\
@@ -2083,7 +2075,7 @@ build_time     = 0
 removal_time   = 0
 conflicts      = "Highway"
 native_to      = "Land", "LandNoKill", "LandAirSea", "LandRoad", "Big Land"
-hidden_by      = "Railroad", "Maglev", "Naval Base"
+hidden_by      = "Railroad", "Maglev"
 flags          = "AutoOnCityCenter", "NativeTile", "Railable"
 bridged_over   = "River"
 helptext       = _("\
@@ -2116,7 +2108,6 @@ reqs           =
 build_time     = 0
 removal_time   = 0
 native_to      = "Land", "LandNoKill", "LandAirSea", "LandRoad", "Big Land"
-hidden_by      = "Railroad", "Maglev", "Naval Base"
 flags          = "AutoOnCityCenter", "NativeTile", "Railable"
 bridged_over   = "River"
 helptext       = _("\
@@ -2149,7 +2140,6 @@ reqs           =
 build_time     = 3
 removal_time   = 0
 native_to      = "Land", "LandNoKill", "LandAirSea", "LandRail", "Big Land" ;NB:by making this non-native we could equalize movement without "Train" unit 
-hidden_by      = "Maglev", "Naval Base"
 flags          = "AutoOnCityCenter", "NativeTile"
 bridged_over   = "River"
 helptext       = _("\
@@ -2185,8 +2175,7 @@ reqs           =
     }
 build_time     = 3
 removal_time   = 0
-native_to      = "Land", "LandNoKill", "LandAirSea", "LandRail", "Big Land"
-hidden_by      = "Naval Base"
+native_to      = "Land", "LandNoKill", "LandAirSea", "Big Land"
 flags          = "NativeTile", "AutoOnCityCenter"
 helptext       = _("\
 With Superconductors, you may build MAGnetic LEVitation tracks.\
@@ -2365,6 +2354,7 @@ generated      = FALSE
 reqs           =
     { "type", "name", "range", "present"
       "TerrainFlag", "Low Land", "Local", TRUE
+      "TerrainClass", "Oceanic", "CAdjacent", FALSE    ;Prevents second-priority waterway from going first
       "ExtraFlag", "WaterwaySource", "CAdjacent", TRUE
       "Tech", "Engineering", "Player", TRUE
       "UnitFlag", "CanRoad", "Local", TRUE
@@ -2972,39 +2962,46 @@ extra          = "Hideout"
 gui_type       = "Other"
 border_sq      = -1
 vision_main_sq = 2
+vision_subs_sq = 0
 
 [base_deep_dive_hideout]
 extra          = "Depth"
 gui_type       = "Other"
 border_sq      = -1
+vision_main_sq = 0
 
 [base_tileclaim]
 extra          = "Tile Claim"
 gui_type       = "Other"
 border_sq      = 0
+vision_subs_sq = 0
 
 [base_fishtrap]
 extra          = "Fishtrap"
 gui_type       = "Other"
 border_sq      = -1
+vision_subs_sq = 0
 
 [base_watchtower]
 extra          = "Watchtower"
 gui_type       = "Airbase"
 border_sq      = 0
 vision_main_sq = 15
+vision_subs_sq = 0
 
 [base_fort]
 extra          = "Fort"
 gui_type       = "Fortress"
 border_sq      = -1
 vision_main_sq = 4
+vision_subs_sq = 0
 
 [base_fortress]
 extra          = "Fortress"
 gui_type       = "Fortress"
 border_sq      = 4
 vision_main_sq = 4
+vision_subs_sq = 0
 flags          = "NoAggressive"
 
 [base_castle]
@@ -3012,6 +3009,7 @@ extra          = "Castle"
 gui_type       = "Fortress"
 border_sq      = 5
 vision_main_sq = 20
+vision_subs_sq = 0
 flags          = "NoAggressive"
 
 [base_bunker]
@@ -3019,16 +3017,19 @@ extra          = "Bunker"
 gui_type       = "Fortress"
 border_sq      = 4
 vision_main_sq = 4
+vision_subs_sq = 0
 flags          = "NoAggressive"
 
 [base_airbase]
 extra          = "Airbase"
 gui_type       = "Airbase"
+vision_subs_sq = 0
 
 [base_radar]
 extra          = "Radar"
 gui_type       = "Airbase"
 vision_main_sq = 30
+vision_subs_sq = 0
 
 [base_buoy]
 extra          = "Buoy"
