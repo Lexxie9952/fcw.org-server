@@ -49,4 +49,5 @@ tiles = { "row", "column", "tag"
   1,  8, "u.turret_guns_o"            ; Lexxie
   1,  9, "u.armor_ii_o"               ; Lexxie, GB
   1, 10, "u.armor_o"                  ; Nemo, Lexxie
+  2,  0, "u.pbomber_o"                ; Lexxie
 }

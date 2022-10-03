@@ -605,6 +605,7 @@ var freemoji = [
 'heavybomber',
 'strategicbomber',
 'jetbomber',
+'penetrationbomber',
 'stealthbomber',
 'transporthelicopter',
 'helicopter',
