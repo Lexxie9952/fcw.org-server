@@ -296,10 +296,22 @@ Combat_Rounds
     Local tile reqs resolve to the tile the battle is fought on; that is,
     the defender's tile. Thus a ruleset can reduce combat_rounds for 
     contexts like non-native attacks, attacking vs. mountains, etc.
+    If this and Defender_Combat_Rounds are both in effect, the stronger
+    effect takes precedence (i.e. the one with the least rounds.)
+    Also see: Defender_Combat_Rounds
 
 Conquest_Tech_Pct
     Percent chance that a player conquering a city learns a tech from the
     former owner.
+
+Defender_Combat_Rounds
+    Maximum number of rounds combat lasts. Unit is the defender. Zero and
+    negative values mean that combat continues until either side dies.
+    Local tile reqs resolve to the tile the battle is fought on; that is,
+    the defender's tile. If this and "Combat_Rounds" are both in effect,
+    the stronger effect takes precedence (i.e. the one with the least
+    rounds.)
+    Also see: Combat_Rounds
 
 Defend_Bonus
     Multiplies defensive bonuses of units. Any unit requirements on this effect
@@ -728,6 +740,11 @@ Unit_Bribe_Cost_Pct
     Increases unit bribe cost by amount percent. Requirements are from the
     point of view of the target unit, not the briber. See also,
     "Actor_Bribe_Cost_Pct".
+
+Unit_Min_Speed
+    Adjusts base min_speed of the unit (from its unit_class) by amount.
+    if "move_bonus_in_frags" server setting is on, this is in frags,
+    otherwise full move points.
 
 Unit_No_Lose_Pop
     No population lost when a city's defender is lost.

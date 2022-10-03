@@ -584,6 +584,8 @@ adv_want dai_effect_value(struct player *pplayer, struct government *gov,
   case EFT_TRADE_REVENUE_BONUS:
   case EFT_TILE_WORKABLE:
   case EFT_COMBAT_ROUNDS:
+  case EFT_DEFENDER_COMBAT_ROUNDS:
+  case EFT_UNIT_MIN_SPEED:
   case EFT_ILLEGAL_ACTION_MOVE_COST:
   case EFT_CASUS_BELLI_CAUGHT:
   case EFT_CASUS_BELLI_SUCCESS:

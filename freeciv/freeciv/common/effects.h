@@ -372,9 +372,14 @@ extern "C" {
 /* Modifies the chance the actor will raze buildings when conquering cities */
 #define SPECENUM_VALUE143 EFT_RAZE_BUILDING_PCT
 #define SPECENUM_VALUE143NAME "Raze_Building_Pct"
-
-
-/* FCW does not have /common and needs to hard code any changes or re-ordering of the above in effects.js */
+/* Modifies COMBAT_ROUNDS from defending unit's req-scope perspective. See README.effects */ 
+#define SPECENUM_VALUE144 EFT_DEFENDER_COMBAT_ROUNDS
+#define SPECENUM_VALUE144NAME "Defender_Combat_Rounds"
+/* Adjusts the unit's base min_speed from its unit_class, by amount */
+#define SPECENUM_VALUE145 EFT_UNIT_MIN_SPEED
+#define SPECENUM_VALUE145NAME "Unit_Min_Speed"
+/* 🖐🏻 ******* 👆🏻👇🏻 
+ * FCW does not have /common and needs to hard code any changes or re-ordering of the above in effects.js */
 /********************************************************************************************************~*/
 /* keep this last */
 #define SPECENUM_COUNT EFT_COUNT

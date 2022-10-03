@@ -40,11 +40,10 @@
 //#include "../server/notify.h"   // use for debug
 
 /************************************************************************//**
-  This function calculates the move rate of the unit, taking into account
-  the penalty for reduced hitpoints, the active effects, and any veteran
-  bonuses.
-
-  'utype' and 'pplayer' must be set. 'ptile' can be NULL.
+  This function calculates the move_rate of the unit, accounting for the
+  penalty of reduced hitpoints, active effects, and any veteran bonus.
+  'utype' and 'pplayer' must be set. 'ptile' can be NULL. 'punit' can be
+  NULL; if provided, it adds bonuses at the req-scope of the specific unit.
 ****************************************************************************/
 int utype_move_rate(const struct unit_type *utype, const struct tile *ptile,
                     const struct player *pplayer, int veteran_level,
@@ -53,7 +52,6 @@ int utype_move_rate(const struct unit_type *utype, const struct tile *ptile,
   const struct unit_class *uclass;
   const struct veteran_level *vlevel;
   int base_move_rate, move_rate;
-  float rounded_move_rate;  // don't make a unit with 1.88 moves get 1 move ;)
 
   fc_assert_ret_val(NULL != utype, 0);
   fc_assert_ret_val(NULL != pplayer, 0);
@@ -65,40 +63,23 @@ int utype_move_rate(const struct unit_type *utype, const struct tile *ptile,
   move_rate = base_move_rate;
 
   if (uclass_has_flag(uclass, UCF_DAMAGE_SLOWS)) {
-    /* Scale the MP based on how many HP the unit has...
-     * Rounding is required!! Or multiple rounding errors keep compounding!
-     * (e.g., damaged unit lost frag from round error, attacked then lost
-     * frag from round error, defended then lost frag from round error.)
-     * Rounding to nearest whole averages to zero error over time, with a
-     * max.error of 0.5frag instead of 0.88frag[9fr] or .83frag[6fr]) */
-    rounded_move_rate = ((float)move_rate * (float)hitpoints) / (float)utype->hp + 0.50;
-    move_rate = (int)rounded_move_rate;
+    /* Scale MP to the unit HP. Avoid compound multi-truncation rounding errors */
+    move_rate = (int)(((float)move_rate * (float)hitpoints) / (float)utype->hp + 0.50);
   }
 
-  // If we know the punit, be inclusive of other effects (e.g., UnitState, DiplRel)
-  if (punit) {  
-    if (game.server.move_bonus_in_frags) {
-      move_rate += get_unit_bonus(punit, EFT_MOVE_BONUS);
-    } else {
-      move_rate += (get_unit_bonus(punit, EFT_MOVE_BONUS) * SINGLE_MOVE);
-    }
-  } 
-  else { // Otherwise we can only get bonuses for unittype
-    /* Add on effects bonus (Magellan's Expedition, Lighthouse, Nuclear Power). */
-    if (game.server.move_bonus_in_frags) {
-      /* ruleset awards move bonuses in frags */
-      move_rate += get_unittype_bonus(pplayer, ptile, utype, EFT_MOVE_BONUS, V_COUNT);
-    } else {
-      /* ruleset awards move bonuses in whole moves */
-      move_rate += (get_unittype_bonus(pplayer, ptile, utype, EFT_MOVE_BONUS, V_COUNT)
-                  * SINGLE_MOVE);
-    }
-  }
-
+  const int mfactor = game.server.move_bonus_in_frags ? 1 : SINGLE_MOVE;
+  move_rate += punit ? get_unit_bonus(punit, EFT_MOVE_BONUS) * mfactor
+                     : get_unittype_bonus(pplayer, ptile, utype, EFT_MOVE_BONUS,
+                                          V_COUNT) * mfactor;
+  const int min_speed_bonus = punit 
+                      ? get_unit_bonus(punit, EFT_UNIT_MIN_SPEED) * mfactor
+                      : get_unittype_bonus(pplayer, ptile, utype,
+                                           EFT_UNIT_MIN_SPEED, V_COUNT) * mfactor;
+  const int min_speed = MAX(0, uclass->min_speed + min_speed_bonus);
   /* Don't let the move_rate be less than min_speed unless the base_move_rate is
    * also less than min_speed. */
-  if (move_rate < uclass->min_speed) {
-    move_rate = MIN(uclass->min_speed, base_move_rate);
+  if (move_rate < min_speed) {
+    move_rate = MIN(min_speed, base_move_rate);
   }
 
   return move_rate;

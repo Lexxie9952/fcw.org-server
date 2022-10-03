@@ -326,7 +326,8 @@ void unit_versus_unit(struct unit *attacker, struct unit *defender,
   int attack_firepower, defense_firepower;
   struct player *plr1 = unit_owner(attacker);
   struct player *plr2 = unit_owner(defender);
-  int max_rounds;
+  int max_rounds;           /* EFT_COMBAT_ROUNDS */
+  int defender_max_rounds;  /* EFT_DEFENDER_COMBAT_ROUNDS */
   int rounds;
 
   struct extra_unit_stats pstats;   // TO DO, this should be separate structure for attack modifier stats.
@@ -337,6 +338,7 @@ void unit_versus_unit(struct unit *attacker, struct unit *defender,
   get_modified_firepower(attacker, defender,
 			 &attack_firepower, &defense_firepower);
 
+/* DEBUG
   log_verbose("attack:%d, defense:%d, attack firepower:%d, "
               "defense firepower:%d", attackpower, defensepower,
               attack_firepower, defense_firepower);
@@ -344,6 +346,7 @@ void unit_versus_unit(struct unit *attacker, struct unit *defender,
   log_verbose("attack:%d, defense:%d, attack firepower:%d, "
             "defense firepower:%d", attackpower, defensepower,
             attack_firepower, defense_firepower);   
+*/
 
 /* debug
   notify_player(plr1, NULL, E_UNIT_ACTION_FAILED, ftc_server,
@@ -363,11 +366,11 @@ void unit_versus_unit(struct unit *attacker, struct unit *defender,
 
   
   /* Combat_Rounds tests the defended tile rather than attacker tile,
-   * so that, e.g., it can be reduced during non-native engagements. */
+   * because that's where the combat is really happening. */
   max_rounds = get_target_bonus_effects(NULL,
                                         unit_owner(attacker),
                                         unit_owner(defender),
-                                        unit_tile(defender) ? tile_city(unit_tile(defender)) : NULL, /*based on tile attacke*/
+                                        unit_tile(defender) ? tile_city(unit_tile(defender)) : NULL,
                                         NULL,
                                         unit_tile(defender), // consistency: same tile used in get_total_attack_power() above.
                                         attacker,
@@ -377,14 +380,30 @@ void unit_versus_unit(struct unit *attacker, struct unit *defender,
                                         NULL,
                                         EFT_COMBAT_ROUNDS,
                                         V_COUNT);
-
-/* DEBUG TESTS
-  notify_player(unit_owner(attacker), NULL, E_UNIT_ACTION_FAILED, ftc_server, 
-               _("ATK FP = %d\nATK POW = %d\nmax_rounds = %d"), 
-                 attack_firepower,
-                 attackpower,
-                 max_rounds);
-*/
+  /* There may be the case of an elusive defender unit_type or such,
+   * which limits the combat_rounds from defender's perspective: */                                      
+  defender_max_rounds 
+             = get_target_bonus_effects(NULL,
+                                        unit_owner(defender),
+                                        unit_owner(attacker),
+                                        unit_tile(defender) ? tile_city(unit_tile(defender)) : NULL,
+                                        NULL,
+                                        unit_tile(defender),
+                                        defender,
+                                        unit_type_get(defender),
+                                        NULL,
+                                        NULL,
+                                        NULL,
+                                        EFT_DEFENDER_COMBAT_ROUNDS,
+                                        V_COUNT);
+/* The stronger of the two  effects is obviously whichever reduces
+   combat_rounds the most. So let the stronger effect be the winner,
+   and discard the weaker. The tricky part is to treat zero and negative
+   numbers as "higher" since <=0 really means infinite rounds: */
+max_rounds = MIN(defender_max_rounds, max_rounds) <= 0  
+           ? MAX(defender_max_rounds, max_rounds) 
+           : MIN(defender_max_rounds, max_rounds);
+  
   for (rounds = 0;
        *att_hp > 0 && *def_hp > 0
          && (max_rounds <= 0 || max_rounds > rounds);
@@ -401,7 +420,7 @@ void unit_versus_unit(struct unit *attacker, struct unit *defender,
   if (*def_hp < 0) {
     *def_hp = 0;
   }
-  // Re-fortify those whose attributes specifiy it:
+  // Re-fortify those whose attributes specify it:
   if (attacker->changed_from == ACTIVITY_FORTIFIED) {
     if (pstats.attack_stay_fortified) { // TODO: later will not share this struct/member with bombard
       attacker->activity = ACTIVITY_FORTIFIED;
@@ -452,9 +471,10 @@ void unit_bombs_unit(struct unit *attacker, struct unit *defender,
   defensepower *= (100 + def_pstats->fortified_def_mod);
   defensepower /= 100; */
 
+/* DEBUG
   log_verbose("attack:%d, defense:%d, attack firepower:%d, "
               "defense firepower:%d", attackpower, defensepower,
-              attack_firepower, defense_firepower);
+              attack_firepower, defense_firepower); */
 
   player_update_last_war_action(plr1);
   player_update_last_war_action(plr2);
