@@ -822,6 +822,13 @@ reqs    =
     { "type", "name", "range"
       "UnitType", "Stealth Bomber", "Local"
     }
+[effect_pbomber_stack_escape_odds]
+type    = "Stack_Escape_Pct"
+value   = 7 ; 60% → 67%
+reqs    =
+    { "type", "name", "range"
+      "UnitType", "Penetration Bomber", "Local"
+    }
 [effect_spy_plane_stack_escape_odds]
 type    = "Stack_Escape_Pct"
 value   = 15 ; 60% → 75%
@@ -5649,7 +5656,6 @@ value	= 40  ;84 70::56 42 28 21
 reqs	=
     { "type",     "name",        "range"
       "Building", "JTIDS",       "Player"
-      "UnitFlag", "FootSoldier", "Local"
       "UnitType", "Marines",     "Local"
     }
 ;************************************************************************ J.S. Bach
@@ -5703,6 +5709,21 @@ reqs	=
       "Building", "Genghis Khan's Equestrian School", "Player", TRUE
       "UnitFlag", "Horse", "Local", TRUE 
     }
+;[effect_parthian_shot]
+;type = "Defender_Combat_Rounds"    ;tested and works !
+;value = 5
+;reqs =
+;    { "type", "name", "range", "present"
+;      "UnitFlag", "Horse", "Local", TRUE 
+;    }
+;[effect_parthian_shot2]
+;type = "Unit_Min_Speed"
+;value = 120 ; 120+60=180. 180/60=3mp.  ;tested and works !                  
+;reqs =
+;    { "type", "name", "range", "present"
+;      "UnitFlag", "Horse", "Local", TRUE 
+;    }
+
 ;************************************************************************ Lighthouse
 [effect_lighthouse]
 type    = "Move_Bonus"

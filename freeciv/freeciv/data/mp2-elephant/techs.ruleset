@@ -371,7 +371,7 @@ flags    = ""
 graphic     = "a.environmentalism"
 graphic_alt = "-"
 helptext = _("Reduces pollution from population by half.")
-cost = 8040
+cost = 8000
 
 [advance_espionage]
 name     = _("Espionage")
@@ -489,7 +489,7 @@ req2     = "Computers"
 flags    = ""
 graphic     = "a.laser"
 graphic_alt = "-"
-cost = 5790
+cost = 5800
 helptext = _("Gives nuke resistance to AEGIS and Mobile SAM.")
 
 [advance_leadership]
@@ -724,7 +724,7 @@ req2     = "Robotics"
 graphic     = "a.plastics"
 graphic_alt = "-"
 helptext = _("Obsoletes Armor. +25% population pollution.")
-cost = 7860
+cost = 7900
 
 [advance_polytheism]
 name     = _("Polytheism")
@@ -894,7 +894,7 @@ req2     = "Space Flight"
 flags    = ""
 graphic     = "a.superconductors"
 graphic_alt = "-"
-cost = 7750
+cost = 7800
 helptext = _("Allows MagLev.")
 
 [advance_tactics]
@@ -1051,5 +1051,5 @@ req2     = "None"
 flags    = "Specialization"
 graphic     = "a.space_flight"  ;this pic won't be shown in the tech tree but will show in other places
 graphic_alt = "-"
-cost = 2460
+cost = 6300
 helptext = _("Missile transporters are created with 1 free ABM.")

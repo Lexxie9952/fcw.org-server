@@ -3894,6 +3894,64 @@ Stack-Escape：60% odds to evade stack-death if attacker doesn’t have more mov
  can override this by moving to adjacent tiles.\
 ")
 
+[unit_penetration_bomber]
+name          = _("Penetration Bomber")
+class         = "Air_High_Altitude"                   
+tech_req      = "Space.2"           
+obsolete_by   = "None"                   
+graphic       = "u.pbomber_o"
+graphic_alt   = "-"
+sound_move    = "m_stealth_bomber"
+sound_move_alt = "m_bomber"
+sound_fight   = "f_stealth_bomber"
+sound_fight_alt = "Bomb Strike"
+build_cost    = 155
+pop_cost      = 0
+attack        = 165
+defense       = 20
+hitpoints     = 20
+firepower     = 2
+move_rate     = 29
+vision_radius_sq = 12
+transport_cap = 2
+fuel          = 1
+paratroopers_mr_sub = 132270 ;010,00000,01,0100,011,1,0 - max_ATKs=2, bbd_retal_rate=0, iPill_rand_tgts=0, iPill_odds=-4 pentads=80%, iPill_moves=3, iPillage=1, ATK_Stay_Fortified=0
+;NOTE：iPillage changes in rules require client_rules_flag and get_what_can_unit_pillage_from() changes.
+uk_happy      = 1
+uk_shield     = 1
+uk_food       = 0
+uk_gold       = 0
+targets       = "LandRail"
+cargo         = "Bomb2", "Bomb"
+flags         = "FieldUnit", "Unbribable", "AirAttacker", "HasNoZOC", "CanEscape",
+                "CantReachAir", "NeverProtects", "Provoking", "WillNever"
+veteran_names =
+  _("?vet_rank:green"),
+  _("?vet_rank:veteran"),
+  _("?vet_rank:hardened"),
+  _("?vet_rank:elite"),
+  _("?vet_rank:crack"),
+  _("?vet_rank:ace"),
+  _("?vet_rank:top gun")
+veteran_base_raise_chance = 40, 25, 16, 10, 10, 10, 0
+veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
+veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
+veteran_move_bonus = 0, 0, 0, 0, 60, 60, 60
+roles         = ""
+helptext      = _("\
+Before Stealth Bombers were engineered, high tech air forces devised a different way\
+ to strike and escape：extreme speed. Penetration Bombers are bombers with a special\
+ role: ultrasonic strike missions on deep interior targets. With only 1 turn of fuel,\
+ total range is inferior to other bombers. But a top speed of Mach 2 gives a single-turn\
+ range of 29 tiles. Top speed is too fast to be intercepteted by anything other than a\
+ Stealth Fighter! Penetration Bombers can Bomb Strike, a targeted instant-Pillage which\
+ costs 3 move points. May carry 2 Bombs. Maximum attacks per turn：2.\ 
+"), _("
+Stack-Escape：67% odds to evade stack-death if attacker doesn’t have more moves than it does.\
+ NOTE：GOTO disallows unit loss from lack of fuel. You\
+ can override this by moving to adjacent tiles.\
+")
+
 [unit_stealth_fighter]
 name          = _("Stealth Fighter")
 class         = "AirProtect"
