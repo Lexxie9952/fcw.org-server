@@ -84,7 +84,7 @@ pythagorean_diagonal = FALSE
 ; There is no resources in the middle of the oceans, only near coast
 ocean_resources = FALSE
 
-; /* <-- avoid gettext warnings
+; /* <— avoid gettext warnings
 ;
 ; The individual terrain types, one per section.
 ; Roughly sorted by identifier.
@@ -123,26 +123,26 @@ ocean_resources = FALSE
 ; road_time            = time to build roads; if 0, cannot build any roads.
 ;                        Nonzero values only affect extras with build_time 0.
 ; irrigation_result    = result of 'irrigate' activity; one of:
-;                        "no"  -- cannot irrigate
-;                        "yes" -- can build extra
-;                        terrain section -- irrigation changes to that terrain
+;                        "no"  — cannot irrigate
+;                        "yes" — can build extra
+;                        terrain section — irrigation changes to that terrain
 ; irrigation_food_incr = increment to food if tile is 100% irrigated
 ;                        (actual bonus controlled by Irrigation_Pct effect)
 ; irrigation_time      = time for 'irrigate' activity; if 0, cannot irrigate
 ;                        Nonzero values only affect extras with build_time 0.
 ;                        Such extras can modify time with build_time_factor.
 ; mining_result        = result of 'mine' activity; one of:
-;                        "no"  -- cannot mine
-;                        "yes" -- can build extra
-;                        terrain section -- mining changes to that terrain
+;                        "no"  — cannot mine
+;                        "yes" — can build extra
+;                        terrain section — mining changes to that terrain
 ; mining_shield_incr   = increment to shields if tile is 100% mined
 ;                        (actual bonus controlled by Mining_Pct effect)
 ; mining_time          = time for 'mine' activity; if 0, cannot mine
 ;                        Nonzero values only affect extras with build_time 0.
 ;                        Such extras can modify time with build_time_factor.
 ; transform_result     = result of transformation; one of:
-;                        "no"  -- cannot transform
-;                        terrain section -- transformation changes to that
+;                        "no"  — cannot transform
+;                        terrain section — transformation changes to that
 ;                          terrain
 ; transform_time       = time to transform; if 0, cannot transform
 ; pillage_time         = time to pillage extra from the tile (0 = impossible)
@@ -153,9 +153,9 @@ ocean_resources = FALSE
 ;                        Nonzero values only affect extras with removal_time 0.
 ; animal               = unit type that can appear as animal on the terrain
 ; warmer_wetter_result = result of global warming for wet terrains; one of:
-;                        "no"  -- no change; does not count for warming
-;                        "yes" -- no change; counts for warming
-;                        terrain section -- warming changes to that terrain
+;                        "no"  — no change; does not count for warming
+;                        "yes" — no change; counts for warming
+;                        terrain section — warming changes to that terrain
 ; warmer_drier_result  = result of global warming for dry terrains;
 ;                        see warmer_wetter_result
 ; cooler_wetter_result = result of nuclear winter for wet terrains;
@@ -209,7 +209,7 @@ ocean_resources = FALSE
 ; helptext             = optional help text string; should escape all raw
 ;                        newlines so that xgettext parsing works
 ;
-; */ <-- avoid gettext warnings
+; */ <— avoid gettext warnings
 
 ; MAPGEN terrain deployment method:  ZONES, PARAMETERS. VALUES.
 ; 1. ZONES are pre-decided definitions of regions over the map.
@@ -861,7 +861,7 @@ helptext             = _("\
 No unit can enter this terrain, nor can any city work its tiles.\
 ")
 
-; /* <-- avoid gettext warnings
+; /* <— avoid gettext warnings
 ;
 ; Resource types:
 ;
@@ -879,7 +879,7 @@ No unit can enter this terrain, nor can any city work its tiles.\
 ; shield               = increased shield production
 ; trade                = increased trade production
 ;
-; */ <-- avoid gettext warnings
+; */ <— avoid gettext warnings
 
 [resource_gold]
 extra       = "Gold"
@@ -1070,7 +1070,7 @@ ui_name_base_airbase = _("?gui_type:Build Airbase")
 ; ui_name_base_other refers to all bases that have gui_type "Other"
 ui_name_base_other = _("?gui_type:Make Tile Claim/Hideout")
 
-; /* <-- avoid gettext warnings
+; /* <— avoid gettext warnings
 ;
 ; Each extra, including bases, roads, and resource, must have a section here.
 ; Bases, roads, and resources have additional sections for their specific features.
@@ -1192,7 +1192,7 @@ ui_name_base_other = _("?gui_type:Make Tile Claim/Hideout")
 ; helptext                = optional help text string; should escape all raw
 ;                           newlines so that xgettext parsing works
 ;
-; */ <-- avoid gettext warnings
+; */ <— avoid gettext warnings
 
 [extra_irrigation]
 name           = _("Irrigation")
@@ -1249,10 +1249,10 @@ reqs           =
      "Extra",       "Buoy",          "Local",     FALSE
      "Extra",       "Fish",          "Local",     FALSE
      "Extra",       "Whales",        "Local",     FALSE
-;-------------------
+;—————————-
      "Extra",       "Fishtrap",      "CAdjacent", FALSE 
      "Extra",       "Fish",          "Adjacent",  TRUE
-;-------------------
+;—————————-
      "UnitFlag",    "Settlers",      "Local",     TRUE
      "Tech",        "Refrigeration", "Player",    TRUE
     }
@@ -1262,7 +1262,7 @@ conflicts      = "Fish", "Whales", "Buoy"
 helptext       = _("\
 Fishtraps become available with Refrigeration technology. Any Worker-type\
  transported at sea can make one. A Fishtrap provides +2 food to its tile.\
- Any Fish adjacent to the tile will also be raised to +6 food output and\
+ Any Fish adjacent to the tile will also be raised by +2 food output and\
  gain +1 trade. Fishtraps must be made adjacent to Fish, but cannot be made\
  cardinally adjacent to each other. Nor can they be built directly on a tile
  with Fish, Whales, or a Buoy.\
@@ -1355,8 +1355,8 @@ Settlers, or Engineers with the \"clean pollution\" order.\
 Pollution from production is likely to start becoming important as \
 your civilization becomes more industrialized, giving you buildings \
 such as Factory and Coal Plant which boost production. Replacing a \
-Coal Plant with cleaner forms of energy -- a Hydro Plant / Hoover \
-Dam, Nuclear Plant, or Solar Plant -- will reduce pollution from \
+Coal Plant with cleaner forms of energy — a Hydro Plant / Hoover \
+Dam, Nuclear Plant, or Solar Plant — will reduce pollution from \
 production, as will a Recycling Center or knowledge of \
 Environmentalism. \n\
 "), _("\
@@ -1371,7 +1371,7 @@ appearing each turn. \n\
 "), _("\
 When an unused tile becomes polluted, there is the temptation to avoid \
 the effort of cleaning it; but the spread of pollution has far more \
-terrible results than the immediate economic impact -- every polluted \
+terrible results than the immediate economic impact — every polluted \
 tile increases the chance of global warming. Each time global warming \
 advances, the entire world loses coastal land to the sea and to jungles \
 and swamps, and inland tiles are lost to desert. This tends to \
@@ -1573,23 +1573,15 @@ unit_seen      = "Hidden"
 native_to      = "Submarine"
 flags          = "NativeTile"
 helptext       = _("\
-Modern submarines capable of greater depth can go near the bottom\
- of the ocean floor, where they are all but undetectable as long as\
- they turn their engines off and do not move. In Freeciv this is\
- represented by “Building Depth”, creating a virtual extra on\
- the tile which makes all units on the tile hidden, even to\
- adjacent units. Missile Submarines at depth may still be attacked,\
- but can only be discovered by a unit going directly to their tile.\
- Only one Missile Submarine on the tile is required to “Build Depth”,\
- and any other submarines coming to the tile are assumed to join it\
- at depth.\
- Depth can only be achieved in Deep Ocean by Missile Submarines.\
- The tile cannot have a Buoy or Fishtrap. The depth associated to\
- Submarines on a tile will remain as long they remain on the tile\
- at each turn change. That is: a Submarine may leave on scouting\
- and return to the tile, where it will automatically achieve\
- invisible depth upon arrival. The only way to know if there are\
- Submarines hiding at depth is to move a unit onto the tile. \n\
+helptext       = _("\
+In Deep Ocean, modern submarines can dive deep to be undetected.\
+“Building Depth” affects the tile so all Submarine class units are\
+hidden to adjacent units! They can still be attacked, but can’t be\
+discovered unless moving into the tile. A Missile Submarine is required\
+to “Build Depth”; other subs on the tile will join it at depth. The\
+tile can’t have a Buoy or Fishtrap. The depth associated to the tile\
+remains if any submarines are on it at turn change. A submarine may\
+leave and return, automatically achieving depth on arrival.\
 ")
 
 
@@ -1615,7 +1607,7 @@ reqs           =
 ;     "Extra",   "Fortress",     "Local",  FALSE, FALSE  ; removing a base. no conflicts seen yet but we can
 ;     "Extra",   "Castle",       "Local",  FALSE, FALSE  ; bring it back if any found.
 ;     "Extra",   "Bunker",       "Local",  FALSE, FALSE
-;-------------------
+;—————————-
       "UnitFlag", "CanClaim",    "Local",  TRUE,  FALSE
       "UnitFlag", "CanHide",     "Local",  FALSE, FALSE
       "TerrainClass", "Land",    "Local",  TRUE,  FALSE  ; Can't claim sea tiles on a boat.
@@ -1631,9 +1623,9 @@ helptext       = _("\
 A Tile Claim asserts sovereignty over a tile. Tile Claims can be made in\
  domestic territory with a single diplomatic unit. Non-domestic territory\
  requires adjacency to an existing Tile Claim, and the Diplomat must be\
- supported by another unit when making the claim. NOTE: if a claimed\
- tile is unoccupied, foreign units entering the tile will take\
- possession of it for their own nation.\
+ supported by another unit. Claiming foreign tiles gives casus belli.\
+ If a claimed tile is unoccupied, foreign units entering the tile will take\
+ possession of it for their own nation, also giving casus belli.\
 ")
 
 [extra_fort]
@@ -1671,10 +1663,9 @@ flags          = "NativeTile", "NoStackDeath"  ;, "Refuel"
 helptext       = _("\
 Forts are rapidly built fortifications which give Land units +33% defense\
  against Land and Sea units. Defending units are lost one at a time instead\
- of the entire stack dying. A fort is necessary to start building a Fortress. \n\
+ of the entire stack dying. A fort is necessary to start building a Fortress. \
 "), _("
-TIP: Forts make great outposts for keeping watch on your borders. Be careful--\
-an unmanned Fort can be claimed by a foreign unit.\ 
+Be careful—an unmanned Fort can be claimed by a foreign unit.\ 
 ")
 
 [extra_fortress]
@@ -1710,10 +1701,9 @@ hidden_by      = "Castle", "Bunker"
 flags          = "NativeTile", "Refuel", "NoStackDeath", "FortressHeal"
 helptext       = _("\
 Fortresses are improvements built on top of Forts which greatly improve defense:\
- the general bonus against most land unit attacks is 2x. \n\
-A Land unit remaining in a Fortress for a whole turn without moving recovers a\
- quarter of its hit points. With Invention, Fortresses gain watchtowers from which\
- land units can see farther. \n\
+ the bonus against most land attackers is 2x. \n\
+A Land unit remaining in a Fortress for a whole turn without moving recovers an\
+ additional 25% of its hit points. With Invention, Fortresses can see farther. \n\
 "), _("\
 Units in a Fortress die one at a time instead of the entire stack being lost.\
  Diplomatic units get a 25% defense bonus in diplomatic fights.\
@@ -1792,10 +1782,9 @@ flags          = "NativeTile", "Refuel", "NoStackDeath", "FortressHeal"
 helptext       = _("\
 Before the age of Gunpowder, Castles were built as fortresses with an \
 administration center. Construction on them can only begin once the \
-underlying Fortress is complete. \n\
-"), _("\
-The Castle and its surrounding area is ruled by a vassal with a high \
-degree of autonomy. This makes a Castle able to control terrain far from \
+underlying Fortress is complete. Units inside can’t be seen, and \
+are immune to Siege Rams. The high towers on castles provide \
+excellent vision. Castles can also control much terrain far from \
 the borders of its nation’s cities.\
 ")
 
@@ -1833,7 +1822,8 @@ flags          = "NativeTile", "Refuel", "NoStackDeath", "FortressHeal"
 helptext       = _("\
 Bunkers are underground Fortresses made of concrete and steel, \
 immune to air and missile attacks. In some respects they are the \
-modern equivalent of a Castle.\
+modern equivalent of a Castle. Units inside can’t be seen and are \
+90% resistant to nuclear blasts.\
 ")
 
 [extra_airbase]
@@ -1863,10 +1853,11 @@ native_to      = "Air", "Balloon", "Zeppelin", "Helicopter", "Missile", "Bomb", 
 conflicts      = "Castle", "Bunker"
 flags          = "Refuel", "NoStackDeath"
 helptext       = _("\
-Airbases allow your air units to land and refuel outside cities. \
-Air units in an airbase may be attacked by land units. \n\
+Airbases allow air units outside cities to land, refuel, and repair. \
+Air units in an airbase may be attacked by land units, but are \
+immune to stack-death. \
 "), _("\
-Units can paradrop from this tile.\
+Paratroopers can paradrop from airbases.\
 ")
 
 [extra_radar]
@@ -1897,7 +1888,7 @@ removal_time   = 0
 native_to      = "Air", "Balloon", "Zeppelin", "Helicopter", "Missile", "Bomb", "AirProtect", "Air_High_Altitude"
 flags          = "Refuel"
 helptext       = _("\
-With the available tech, Radar can be added to an Airbase, which significantly increases its vision.\
+With the available tech, Radar can be added to an Airbase, significantly increasing its vision.\
 ")
 
 [extra_buoy]
@@ -1982,19 +1973,15 @@ native_to      = "Land", "LandRoad", "LandAirSea", "LandNoKill", "Big Land", "Tr
 ;hidden_by      = ""
 flags          = "NativeTile"
 helptext       = _("\
-Quays are structures on both sides of rivers, where boats dock parallel to the river\
- bank for quick loading and unloading. River and Canal traffic can directly offload\
- onto a quay. Quays have built-in infrastructure to ferry units across a\
- river——the ancient way to cross rivers before the advent of Bridge Building.\
- Passing from a road to a quay or a quay to a road uses 2⁄₃ move point. (Cargo\
- units must first deboard the transport carrying them.) A quay can equally be placed\
- on a canal and will behave the same as on a river. A quay in a city allows exiting to\
- an adjacent road for only 1⁄₃ move point. \n\
-"), _("
-TIP: Quays can boost transportational logistics for ancient civilizations who build\
- on rivers. Don’t be tempted to make too many Quays. The ability to unload on a\
- river may help an enemy do a surprise attack.\ 
-"), _("Moves needed to cross a river to a tile on the other side:\n
+Quays improve logistics on rivers. River and Canal traffic can deboard\
+ to a quay for 1⁄₃ move instead of disembarking for full moves onto adjacent\
+ tiles. Quays let units ferry across\
+ rivers——the ancient way to cross without a bridge!\
+ Moving from road-to-quay or quay-to-road uses 2⁄₃ move point.\
+ Quays can also be put on Canals. In cities they allow moving to\
+ adjacent roads for only 1⁄₃ move. \
+"), _("Don’t make too many Quays. The ability to unload on rivers helps enemies do surprise attacks.\ 
+"), _("Moves needed to cross a river to a tile on the other side:\n\
 ⁶⁄₃ moves: No infrastructure.\n\
 ⁴⁄₃ moves: Quay connected to roads.\n\
 2⁄₃ moves: Bridge connected to roads.\n\
@@ -2055,8 +2042,8 @@ hidden_by      = "Railroad", "Maglev"
 flags          = "AutoOnCityCenter", "NativeTile", "Railable"
 bridged_over   = "River"
 helptext       = _("\
-Roads allow your land units to move more quickly, and on some terrain,\
- also provide a trade bonus. \n\
+Roads allow your land units to move more quickly, and on Flatland terrain,\
+ also provides a trade output bonus to its tile. \n\
 "), _("\
 Building roads on river tiles requires knowledge of Bridge Building.\
  City center tiles automatically get roads (unless they are on a river\
@@ -2089,15 +2076,15 @@ flags          = "AutoOnCityCenter", "NativeTile"
 bridged_over   = "River"
 helptext       = _("\
 Once you learn Railroad technology, you may upgrade your roads to\
- railroads. Units travel three times faster along railroads than\
- along roads. \n\
+ railroads. Units travel three times faster along Railroads than\
+ along Roads. \n\
 "), _("\
-A railroad also increases any shield resources produced by a tile.\
- A tile whose road is upgraded to a railroad retains any trade bonus\
- from the road as well. \n\
+Railroads increase tile shield output by 50% (rounded down).\
+ A tile whose road is upgraded to rails retains the trade bonus\
+ from the road. \
 "), _("\
-City center tiles with roads are automatically upgraded to railroads\
- when you learn the Railroad technology.\
+City center tiles are automatically upgraded with railroads\
+ when you acquire Railroad technology.\
 ")
 
 [extra_maglev]
@@ -2123,12 +2110,12 @@ removal_time   = 0
 native_to      = "Land", "LandNoKill", "LandAirSea", "Big Land"
 flags          = "NativeTile", "AutoOnCityCenter"
 helptext       = _("\
-With Superconductors, you may build MAGnetic LEVitation tracks\
- on tiles. Land units expend no movement points\
- when riding a MagLev; you may ride indefinitely. \n\
+With Superconductors, you may build MAGnetic LEVitation tracks.\
+ Land units expend no movement points\
+ when riding MagLevs; you may ride indefinitely. \n\
 "), _("\
-City center tiles with railroads are automatically upgraded to MagLev\
- when you learn about Superconductors.\
+City center tiles are automatically upgraded to MagLev\
+ when you acquire Superconductor tech.\
 ")
 
 [extra_river]
@@ -2160,13 +2147,13 @@ removal_time = 0
 flags          = "NativeTile", "Quayable", "IrrigationSource", "WaterwaySource"
 native_to      = "Land", "LandNoKill", "LandAirSea", "Trireme", "RiverShip" ;NOTE: "Big Land" doesn't use rivers like a road 
 helptext       = _("\
-Any land terrain type may have a River on it.  A River adds 1\
- trade to the resources produced by that tile. It also adds +0.50 to\
- the tile defense bonus. Finally, land units may move cardinally along\
- a River and use 1/3 move point. \n\
+A River adds +1 trade to the output of a tile, and +0.50 to\
+ the terrain defense bonus. Non-motorized units can move\
+ cardinally adjacent along rivers for 1/3 move point.\
 "), _("\
-Roads, railroads and MagLev can only be built on River tiles if your\
- civilization has learned Bridge Building technology.\
+Roads can be built on rivers after you acquire Bridge Building technology.\
+ On Flatland, this gives an additional +1 trade on top of the trade bonus\
+ from the river.\
 ")
 
 [extra_sea_bridge]
@@ -2194,8 +2181,9 @@ removal_time   = 0
 native_to      = "Land", "LandNoKill", "LandAirSea", "LandRoad", "Big Land"
 flags          = "NativeTile", "Railable"
 helptext          = _("\
-Sea Bridges are engineering marvels which span lakes and seas to connect them for \
-land traffic. They must be built cardinally adjacent to land.\
+Sea Bridges span lakes and seas. They must be built cardinally\
+ adjacent to land. Railroads and MagLev can be built on top, and\
+ ships can pass under them. By itself, a Sea Bridge counts as a Road.\
 ")
 
 [extra_walls]
@@ -2242,13 +2230,13 @@ defense_bonus  = 0
 native_to      = "Land", "LandNoKill", "LandAirSea", "LandRoad", "Big Land"
 flags          = "NativeTile"
 helptext          = _("\
-If you own the Great Wall, Walls can be built on land not held by a foreign
- nation. Walls can’t be built on Mountains, Swamp, Rivers, or Bases. \n\n\
+If you own the Great Wall, Walls can be built on land not held by a foreign\
+ nation. Walls can’t be built on Mountains, Swamp, Rivers, or Bases.\
  Domestic units on the Walls get a free defense bonus of 1.5×. When fortified,\
- 2.25×. \n\ 
-Foreign units caught on Walls with no move points are considered vulnerable from\
- climbing and scaling, and suffer a -50% defense penalty. Non-allied land units\
- lose all moves when entering or exiting a tile occupied by Walls.\
+ 2.25×. \ 
+In foreign territory, non-allied land units lose all moves when entering or exiting\
+ a tile occupied by Walls. Foreign units caught on Walls with no move points are\
+ considered vulnerable from climbing and scaling, and suffer a -50% defense penalty. \
 ")
 
 [extra_canal]
@@ -2276,8 +2264,11 @@ removal_time   = 0
 native_to      = "Trireme", "Sea", "RiverShip", "Land", "LandAirSea", "LandNoKill", "Helicopter", "Submarine" ; not native to "Big Land", like River
 flags          = "NativeTile", "Quayable", "IrrigationSource", "WaterwaySource"
 helptext          = _("\
-Canals allow ships to travel through land tiles. Canals can be built on \
-low land tiles only, and not far inland.\
+Canals are a canal-type that allows all ships to travel over land tiles. Canals can be \
+built on Lowlands only. They require an Ocean or Lake as an adjacent water source. \n\
+* A Waterway is a second canal-type that can use ocean-sourced Canals and Rivers as a \
+water source. \n\
+All canal-types enable Irrigation and Quays, but give no tile output bonus.\
 ")
 [extra_canal2]
 name           = _("Waterway")
@@ -2305,7 +2296,15 @@ removal_time   = 0
 native_to      = "Trireme", "Sea", "RiverShip", "Land", "LandAirSea", "LandNoKill", "Helicopter", "Submarine" ; not native to "Big Land", like River
 flags          = "NativeTile", "Quayable", "IrrigationSource"
 helptext          = _("\
-Waterways are navigational channels that connect canals with rivers. Essentially, they're the same as canals.\
+Waterways are an inland canal-type. They’re the same as a Canal, but can use \
+Rivers and ocean-sourced Canals as their water source. Unlike a Canal, however, \
+they can’t serve as a water source for any canal-types. However, Waterways allow \
+for dredging a river into a full-length canal system able to accomodate modern \
+naval ships. \n\
+On tiles where you can build both Canals and Waterways, it’s better to build a Canal, \
+since a Canal can serve as a water source for extending the length of your canal system. \
+The rare exception would be if you didn’t want an enemy to be able to connect a \
+Waterway into your canal system!\
 ")
 
 [extra_gold]
@@ -2878,7 +2877,7 @@ appearance_reqs =
       "Extra",   "Hippopotamus","Adjacent", FALSE
     }
 
-; /* <-- avoid gettext warnings
+; /* <— avoid gettext warnings
 ;
 ; Base types:
 ;
@@ -2896,7 +2895,7 @@ appearance_reqs =
 ;   - "NoAggressive"      = Units inside are not considered aggressive if there`s
 ;                           friendly city within 3 tiles
 ;
-; */ <-- avoid gettext warnings
+; */ <— avoid gettext warnings
 
 [base_hideout]
 extra          = "Hideout"
@@ -2909,6 +2908,7 @@ vision_subs_sq = 0
 extra          = "Depth"
 gui_type       = "Other"
 border_sq      = -1
+vision_subs_sq = 0
 
 [base_tileclaim]
 extra          = "Tile Claim"
@@ -2941,7 +2941,7 @@ flags          = "NoAggressive"
 extra          = "Castle"
 gui_type       = "Fortress"
 border_sq      = 5
-vision_main_sq = 15
+vision_main_sq = 20
 vision_subs_sq = 0
 flags          = "NoAggressive"
 
@@ -2979,7 +2979,7 @@ vision_subs_sq = 4
 flags          = "NoAggressive"
 
 
-; /* <-- avoid gettext warnings
+; /* <— avoid gettext warnings
 ;
 ; Road types:
 ;
@@ -3040,7 +3040,7 @@ flags          = "NoAggressive"
 ;                              how roads work with railroads.
 ;                           if this flag is given to lower move cost road (B):
 ;                              the move cost from A to B and B to A will be the 
-;                              destination cost -- that is, asymmetric; BUT 
+;                              destination cost — that is, asymmetric; BUT 
 ;                              type B will have symmetric move costs integrating
 ;                              with roads of lower move cost than itself.
 ;                           if this flag is not used:
@@ -3052,9 +3052,17 @@ flags          = "NoAggressive"
 ;                            This flag allows you to create "terrain obstacle" extras that 
 ;                            slow enemy movement (including IGTER units) when the extra
 ;                            is encountered by an unfriendly unit on non-allied foreign
-;                            territory.  
+;                            territory.
+;   - "PassiveMovement"   = The move cost on this terrain comes from a passive infra
+;                           source; e.g., rivers cost less move_frags because of
+;                           boats on which the actor unit becomes a PASSIVE passenger.
+;                           in other words move_cost is a divisor of the actor unit's
+;                           move_rate. This means that the "move_cost" value really
+;                           reflects the max moves any unit can make while "passively"
+;                           using it. This solves age-old problem of the trains and boats
+;                           that horsemen used, being twice as fast as for warriors.
 
-; */ <-- avoid gettext warnings
+; */ <— avoid gettext warnings
 
 [road_road]
 extra          = "Road"
@@ -3138,7 +3146,7 @@ flags          = "UnrestrictedInfra"
 
 [road_walls]
 extra          = "Walls"
-move_cost      = 1000
+move_cost      = 65535
 trade_incr     = 0
 food_bonus     = 0
 shield_bonus   = 0
