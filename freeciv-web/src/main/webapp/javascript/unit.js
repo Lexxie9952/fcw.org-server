@@ -279,10 +279,7 @@ function unit_has_cargo_room(punit) {
 function unit_can_deboard(punit)
 {
   if (!punit) return false;
-  var rules = ruleset_control['name'];
-  if ( !rules.startsWith("Avant-garde") 
-       && rules != "Multiplayer-Evolution ruleset"
-       && !rules.startsWith("MP2") )  // from MP2 Brava onward all MP2 rules start with "MP2"
+  if (!client_rules_flag[CRF_MP2]) 
     return true; // no actionenabler restrictions on other rulesets
   //****************************************************************** */
   var tunit=null,ttype=null,tclass=null;
@@ -292,16 +289,17 @@ function unit_can_deboard(punit)
     tclass = unit_classes[ttype.unit_class_id];
   } else return false; // not even loaded!
   //****************************************************************** */
-  var quay_rules = client_rules_flag[CRF_EXTRA_QUAY];
+  if (pcity) return true;  // It's the one and only place you always can!
+  //****************************************************************** */
+  const quay_rules = client_rules_flag[CRF_EXTRA_QUAY];
   var ptype = unit_type(punit);
   var ptile = index_to_tile(punit['tile']);
-  var terrain_name = tile_terrain(ptile)['name'];
   if (ptile == null) return false;
   var pcity = tile_city(ptile);
   var pclass = get_unit_class_name(punit);
+  //var terrain_name = tile_terrain(ptile)['name'];
   //****************************************************************** */
   // COMMON
-  if (pcity) return true;
   /* UTYF_MARINES flag is a mishmash intersection of old capabilities of Marines programmed first as a hard-coded server flag, 
    * next migrated over to a custom ruleset flag, and now is a confused holdover for backward compatibility to older rulesets.
    * The whole thing is getting deprecated so it can be split into several flags handling distinctly DIFFERENT behaviours instead
@@ -328,7 +326,6 @@ function unit_can_deboard(punit)
   // currently decided it can unload in airbase also, below. 
   //if (pclass == "Bomb") return false; // only allowed in city, handled above.
 
-  // MP2:
   if (!quay_rules) {
     if (tile_has_extra(ptile, EXTRA_RIVER)) return false;
     return true;
