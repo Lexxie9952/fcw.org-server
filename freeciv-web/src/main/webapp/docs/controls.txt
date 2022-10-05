@@ -51,7 +51,7 @@ The current and complete list of Freeciv-web controls can be found here:<br>
 
 <tr><td><img src="/images/orders/forest_remove_default.png"></td><td><span class="vctr">Cultivate (Chop Forest)</td><td><span class="hotkey">i</span></span></td></tr>
 
-<tr><td><img src="/images/orders/vigil.png"></td><td><span class="vctr"> Vigil</td><td><span class="hotkey">Shift-I</span></span></td></tr>
+<tr><td><img src="/images/orders/vigil.png"></td><td><span class="vctr"> Vigil</td><td><span class="hotkey">shift-I</span></span></td></tr>
 
 <tr><td><img src="/images/orders/no_orders.png"></td><td><span class="vctr"> No orders</td><td><span class="hotkey">j</span></span></td></tr>
 
