@@ -1575,15 +1575,13 @@ native_to      = "Submarine"
 flags          = "NativeTile"
 helptext       = _("\
 In Deep Ocean, modern submarines can dive deep to be undetected.\
- “Building Depth” affects the tile so all Submarines\
- are hidden to adjacent units! They can still\
- be attacked, but can’t be discovered unless moving into\
- the tile. A Missile Submarine is required to “Build Depth”;\
- other subs on the tile will join it at depth.\
- The tile cannot have a Buoy or Fishtrap. The depth associated to\
- the tile remains if subs are on it at turn change.\
- A submarine may leave and return, automatically achieving\
- depth on arrival.\
+“Building Depth” affects the tile so all Submarine class units are\
+hidden to adjacent units! They can still be attacked, but can’t be\
+discovered unless moving into the tile. A Missile Submarine is required\
+to “Build Depth”; other subs on the tile will join it at depth. The\
+tile can’t have a Buoy or Fishtrap. The depth associated to the tile\
+remains if any submarines are on it at turn change. A submarine may\
+leave and return, automatically achieving depth on arrival.\
 ")
 
 
@@ -1735,9 +1733,9 @@ hidden_by      = "Castle", "Bunker"
 flags          = "NativeTile", "Refuel", "NoStackDeath", "FortressHeal"
 helptext       = _("\
 Fortresses are improvements built on top of Forts which greatly improve defense:\
- the bonus against most land unit attacks is 2x. \n\
-A Land unit remaining in a Fortress for a whole turn without moving recovers a\
- quarter of its hit points. With Invention, Fortresses can see farther. \n\
+ the bonus against most land attackers is 2x. \n\
+A Land unit remaining in a Fortress for a whole turn without moving recovers an\
+ additional 25% of its hit points. With Invention, Fortresses can see farther. \n\
 "), _("\
 Units in a Fortress die one at a time instead of the entire stack being lost.\
  Diplomatic units get a 25% defense bonus in diplomatic fights.\
@@ -2078,8 +2076,9 @@ hidden_by      = "Railroad", "Maglev"
 flags          = "AutoOnCityCenter", "NativeTile", "Railable"
 bridged_over   = "River"
 helptext       = _("\
-Roads allow your land units to move more quickly, and on some terrain,\
- also provide a trade bonus. \n\
+Roads allow your land units to move more quickly, costing 1/3 move point\
+ to travel from one road to another road. On Flatland terrain, they also\
+ provide a trade bonus to the tile if it is used by a city. \n\
 "), _("\
 Building roads on river tiles requires knowledge of Bridge Building.\
  City center tiles automatically get roads (unless they are on a river\
@@ -2110,11 +2109,13 @@ native_to      = "Land", "LandNoKill", "LandAirSea", "LandRoad", "Big Land"
 flags          = "AutoOnCityCenter", "NativeTile", "Railable"
 bridged_over   = "River"
 helptext       = _("\
-Roads allow your land units to move more quickly, and on some terrain,\
- also provide a trade bonus. \n\
+Highways allow your land units to move more quickly. On Flatland terrain,\
+ they also provide a trade bonus to the tile if it is used by a city. \n\
 "), _("\
-Highways are superior paved roads allowing faster movement.\
- City centers automatically get highways after you get Automobile tech.\
+Highways are faster than roads, using 1/4 move-point instead of 1/3. Motorized\
+ units actually move faster and farther on highways (24 tiles) than railroads\
+ (20 tiles). Foot units gain +2 range to 8 tiles. City centers automatically get\
+ Highways after you research Automobile tech.\
 ")
 
 [extra_railroad]
@@ -2142,9 +2143,9 @@ native_to      = "Land", "LandNoKill", "LandAirSea", "LandRail", "Big Land" ;NB:
 flags          = "AutoOnCityCenter", "NativeTile"
 bridged_over   = "River"
 helptext       = _("\
-Railroad tech lets you upgrade roads to\
- railroads. Units travel 3x faster on rails than\
- on roads. \
+Railroad tech lets you upgrade Roads to Railroads. Units use 1/20th of their\
+ full move_rate when using rails. This effectively gives all land units a range of\
+ 20 tiles when using rails.\
 "), _("\
 Railroads increase tile shield output by 50% (rounded down).\
  A tile whose road is upgraded to rails retains the trade bonus\
@@ -2178,8 +2179,8 @@ native_to      = "Land", "LandNoKill", "LandAirSea", "Big Land"
 flags          = "NativeTile", "AutoOnCityCenter"
 helptext       = _("\
 With Superconductors, you may build MAGnetic LEVitation tracks.\
- Land units expend no movement points\
- when riding MagLevs; you may ride indefinitely. \n\
+ Land units expend 1/60th of their full move_rate when riding\
+ MagLevs; giving a maximum range of 60 tiles. \n\
 "), _("\
 City center tiles are automatically upgraded to MagLev\
  when you acquire Superconductor tech.\
@@ -2214,15 +2215,15 @@ removal_time = 0
 flags          = "NativeTile", "Quayable", "IrrigationSource", "WaterwaySource"
 native_to      = "Land", "LandNoKill", "LandAirSea", "Trireme", "RiverShip" ;NOTE: "Big Land" doesn't use rivers like a road 
 helptext       = _("\
-A River adds +1\
- trade to the output of a tile, and +0.50 to\
- the terrain defense bonus. Land units with full move points\
+A River adds +1 trade to the output of a tile, and +0.50 to\
+ the terrain defense bonus. Non-motorized units with full move points\
  can move 6 tiles along a River, regardless of their move rate.\
- That is, units use 1/6th of their full move_rate on each river\
+ That is, units use 1/6th of their full move rate on each river\
  tile.\
 "), _("\
-Roads can be built on rivers only if you\
- acquire Bridge Building technology.\
+Roads can be built on rivers after you acquire Bridge Building technology.\
+ On Flatland, this gives an additional +1 trade on top of the trade bonus\
+ from the river.\
 ")
 
 [extra_sea_bridge]
@@ -2252,7 +2253,7 @@ flags          = "NativeTile", "Railable"
 helptext          = _("\
 Sea Bridges span lakes and seas. They must be built cardinally\
  adjacent to land. Railroads and MagLev can be built on top, and\
- ships can pass under them. By itself, a Sea Bridge counts as a road.\
+ ships can pass under them. By itself, a Sea Bridge counts as a Road.\
 ")
 
 [extra_walls]
@@ -2303,9 +2304,9 @@ If you own the Great Wall, Walls can be built on land not held by a foreign\
  nation. Walls can’t be built on Mountains, Swamp, Rivers, or Bases.\
  Domestic units on the Walls get a free defense bonus of 1.5×. When fortified,\
  2.25×. \ 
-Non-allied land units lose all moves when entering or exiting a tile occupied by\
- Walls. Foreign units caught on Walls with no move points are considered vulnerable\
- from climbing and scaling, and suffer a -50% defense penalty. \
+In foreign territory, non-allied land units lose all moves when entering or exiting\
+ a tile occupied by Walls. Foreign units caught on Walls with no move points are\
+ considered vulnerable from climbing and scaling, and suffer a -50% defense penalty. \
 ")
 
 [extra_canal]
@@ -2333,9 +2334,11 @@ removal_time   = 0
 native_to      = "Trireme", "Sea", "RiverShip", "Land", "LandAirSea", "LandNoKill", "Helicopter", "Submarine" ; not native to "Big Land", like River
 flags          = "NativeTile", "Quayable", "IrrigationSource", "WaterwaySource"
 helptext          = _("\
-Canals allow all ships to travel through land tiles. Canals can be built on \
-low lands only. They require an adjacent water source—an ocean, river, or an \
-ocean-sourced canal. Canals allow irrigation and quays; but they do not give a +1 trade bonus.\
+Canals are a canal-type that allows all ships to travel over land tiles. Canals can be \
+built on Lowlands only. They require an Ocean or Lake as an adjacent water source. \n\
+* A Waterway is a second canal-type that can use ocean-sourced Canals and Rivers as a \
+water source. \n\
+All canal-types enable Irrigation and Quays, but give no tile output bonus.\
 ")
 [extra_canal2]
 name           = _("Waterway")
@@ -2363,7 +2366,15 @@ removal_time   = 0
 native_to      = "Trireme", "Sea", "RiverShip", "Land", "LandAirSea", "LandNoKill", "Helicopter", "Submarine" ; not native to "Big Land", like River
 flags          = "NativeTile", "Quayable", "IrrigationSource"
 helptext          = _("\
-Waterways are inland canals whose water source can be rivers or ocean-sourced canals. Essentially, they’re the same as canals.\
+Waterways are an inland canal-type. They’re the same as a Canal, but can use \
+Rivers and ocean-sourced Canals as their water source. Unlike a Canal, however, \
+they can’t serve as a water source for any canal-types. However, Waterways allow \
+for dredging a river into a full-length canal system able to accomodate modern \
+naval ships. \n\
+On tiles where you can build both Canals and Waterways, it’s better to build a Canal, \
+since a Canal can serve as a water source for extending the length of your canal system. \
+The rare exception would be if you didn’t want an enemy to be able to connect a \
+Waterway into your canal system!\
 ")
 
 [extra_gold]
@@ -2664,7 +2675,7 @@ act_gfx_alt2   = "-"
 rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
 
-[extra_bonus]
+[extra_shield]
 name           = _("Resources")
 category       = "Resource"
 causes         = "Resource"
@@ -2967,6 +2978,7 @@ vision_subs_sq = 0
 extra          = "Depth"
 gui_type       = "Other"
 border_sq      = -1
+vision_subs_sq = 0
 vision_main_sq = 0
 
 [base_tileclaim]
