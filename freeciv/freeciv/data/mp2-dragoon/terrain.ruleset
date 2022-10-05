@@ -1573,7 +1573,6 @@ unit_seen      = "Hidden"
 native_to      = "Submarine"
 flags          = "NativeTile"
 helptext       = _("\
-helptext       = _("\
 In Deep Ocean, modern submarines can dive deep to be undetected.\
 “Building Depth” affects the tile so all Submarine class units are\
 hidden to adjacent units! They can still be attacked, but can’t be\
