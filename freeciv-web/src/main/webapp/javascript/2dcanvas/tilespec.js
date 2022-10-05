@@ -1515,6 +1515,12 @@ function get_unit_activity_sprite(punit)
             "offset_x" : unit_activity_offset_x,
             "offset_y" : - unit_activity_offset_y};
         }
+      } else if (client_rules_flag[CRF_MP2_D]) {
+        if (tile_has_extra(tiles[punit['tile']], EXTRA_DEEPDIVE) && get_unit_class_name(punit) == "Submarine") {
+          return {"key" : "unit.sentry_hidden",
+            "offset_x" : unit_activity_offset_x,
+            "offset_y" : - unit_activity_offset_y};
+        }
       }
       return {"key" : "unit.sentry",
           "offset_x" : unit_activity_offset_x,
@@ -2788,8 +2794,8 @@ function create_unit_offset_arrays()
           mx -= 4;  my -= 6;
           break;       
       case "Stealth Bomber":
-          dx -= 19; dy -= 5;  
-          vx -= 53; vy += 1;
+          dx -= 31; dy -= 4;  
+          vx -= 45; vy += 4;
           mx -= 2;  my -= 1;
           break;
       case "Stealth Fighter":
