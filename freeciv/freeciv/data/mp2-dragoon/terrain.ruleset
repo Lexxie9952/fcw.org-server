@@ -1527,21 +1527,17 @@ unit_seen      = "Hidden"
 native_to      = "Land", "LandAirSea", "LandNoKill", "Big Land", "Helicopter"
 flags          = "NativeTile", "NoStackDeath"
 helptext       = _("\
-Since the dawn of time, camouflaged and concealed terrain has been\
- enhanced to make Hideouts. Usually the intent is to evade an\
- aggressor or to set an ambush. Hideouts can only be put in Forests,\
- Swamps, Mountains, and Jungle. Warrior Code must be known. Tile must\
- be Friendly or Unclaimed. Only a Foot soldier alone on a tile can make a Hideout. Only\
- Land units and Helicopters can hide in them. Other types will be seen. Invisibility\
- and prevention of stack-death are the two bonuses of a Hideout. Hideouts can’t stack with\
- other bases. Hideouts are invisible to anyone not occupying the tile with\
- a Land unit. For each turn it is unoccupied, a Hideout has a 15% chance\
- of being lost to the elements of nature, unless its built in the ruins\
- of a former city. The only way to know if there is a Hideout on a tile is\
- to move a Land unit onto it. \n\
+Since the dawn of time, concealed terrain was\
+ used for Hideouts, to evade\
+ aggressors or set ambushes. Hideouts can be made by Foot Soldiers in Forests,\
+ Swamps, Mountains, and Jungle. Warrior Code must be known. Tile must be\
+ Friendly or Unclaimed. Only Land units and Helicopters are hidden.\
+ Other units are seen. Units inside are immune to killstack. Hideouts can’t\
+ exist with other bases. For each turn it is unoccupied, a Hideout has a\
+ 15% chance of disappearing, unless built on ruins. The only way to know if\
+ a tile has a Hideout is to have a Land unit inside. \
 "), _("
-TIP: Hideouts are good for guarding a border or setting a trap for\
- intruders. Be careful! An abandoned Hideout can be used against you!\ 
+Be careful! An abandoned Hideout can be used against you!\ 
 ")
 
 [extra_deep_dive_hideout]
