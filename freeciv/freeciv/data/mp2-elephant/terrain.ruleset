@@ -1530,14 +1530,13 @@ flags          = "NativeTile", "NoStackDeath"
 helptext       = _("\
 Since the dawn of time, concealed terrain was\
  used for Hideouts, to evade\
- aggressors or set ambushes. Hideouts can be put in Forests,\
- Swamps, Mountains, and Jungle. Warrior Code must be known. Tile must\
- be Friendly or Unclaimed. Only a Foot soldier can make a Hideout. Only\
- Land units and Helicopters are hidden. Other units are seen. Units inside\
- are immune to killstack. Hideouts can’t exist with other bases. For each\
- turn it is unoccupied, a Hideout has a 15% chance of disappearing, unless\
- built on ruins. The only way to know if a tile has a Hideout is\
- to have a Land unit inside. \
+ aggressors or set ambushes. Hideouts can be made by Foot Soldiers in Forests,\
+ Swamps, Mountains, and Jungle. Warrior Code must be known. Tile must be\
+ Friendly or Unclaimed. Only Land units and Helicopters are hidden.\
+ Other units are seen. Units inside are immune to killstack. Hideouts can’t\
+ exist with other bases. For each turn it is unoccupied, a Hideout has a\
+ 15% chance of disappearing, unless built on ruins. The only way to know if\
+ a tile has a Hideout is to have a Land unit inside. \
 "), _("
 Be careful! An abandoned Hideout can be used against you!\ 
 ")

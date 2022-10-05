@@ -3010,7 +3010,7 @@ cargo         = "Land", "Cargo"
 helptext      = _("\
 Airplanes can carry a diplomatic unit or a Freight unit. They can land in any domestic\
  or allied city. For diplomatic missions to non-allied nations, an empty Airbase must be available for landing.\
- Airplanes have two turns of fuel. Each new aviation tech upgrades range by +2 moves per turn. \n\
+ Airplanes have two turns of fuel. Each new aviation tech upgrades range by +1 move per turn. \n\
 "), _("
 Stack-Escape：60% odds to evade stack-death if attacker doesn’t have more moves than it does.\
  NOTE：GOTO disallows unit loss from lack of fuel. You\
@@ -3395,7 +3395,7 @@ sound_move    = "m_awacs"
 sound_move_alt = "m_generic"
 sound_fight   = "f_awacs"
 sound_fight_alt = "f_generic"
-build_cost    = 140
+build_cost    = 130
 pop_cost      = 0
 attack        = 0
 defense       = 10
@@ -5266,7 +5266,7 @@ veteran_move_bonus = 0, 0, 0, 0, 60, 60, 60
 roles         = ""
 helptext      = _("\
 The Light Carrier can carry 5 aircraft or missiles.\
- A Light Carrier’s small runway isn’t suited for Zeppelins, Jet Bombers, or Spy Planes.\
+ A Light Carrier’s small runway isn’t suited for Zeppelins, Jet Bombers, Penetration Bombers, or Spy Planes.\
  ABMs and Fighter-types can Vigil on Light Carriers if they have enough moves left. Light \
  Carriers have no ASW bonus against Submarines and require protection from other\
  warships.\
