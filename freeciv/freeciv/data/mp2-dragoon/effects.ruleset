@@ -62,7 +62,6 @@ reqs	=
 target_reqs = 
     { "type",      "name", "range", "present"
     }
-
 ; Non-native battles limited by combat_rounds don't usually 
 ; result in a victor, and often the attacker uses multiple 
 ; attack moves on a single defender, which artificially 
@@ -610,16 +609,16 @@ reqs    =
     { "type",          "name",         "range"
       "Terrain",       "Mountains",    "Local"
       "UnitClassFlag", "TerrainSpeed", "Local" ;all Land__ classes
-      "VisionLayer", "Main", "Local"
+      "VisionLayer",   "Main",         "Local"
     }
 [effect_hills_vision]
 type    = "Unit_Vision_Radius_Sq"
 value   = 3
 reqs    =
-    { "type",      "name",      "range"
-      "Terrain",   "Hills", "Local"
-      "UnitClassFlag", "TerrainSpeed", "Local" ;all Land__ classes
-      "VisionLayer", "Main", "Local"
+    { "type",           "name",         "range"
+      "Terrain",        "Hills",        "Local"
+      "UnitClassFlag",  "TerrainSpeed", "Local" ;all Land__ classes
+      "VisionLayer",    "Main",         "Local"
     }
 
 ; basic free tech upkeep
@@ -1077,7 +1076,7 @@ reqs    =
       "Extra",         "Fortress",     "tile"
       "Tech",          "Invention",    "Player"
       "UnitClassFlag", "TerrainSpeed", "Local"   ;all Land_ classes
-      "VisionLayer",   "Main", "Local"
+      "VisionLayer",   "Main",         "Local"
     }
 [effect_castle_vision]
 type    = "Unit_Vision_Radius_Sq"
@@ -1087,7 +1086,7 @@ reqs    =
       "Extra",         "Castle",       "tile"
       "Tech",          "Invention",    "Player"
       "UnitClassFlag", "TerrainSpeed", "Local"   ;all Land_ classes
-      "VisionLayer",   "Main", "Local"
+      "VisionLayer",   "Main",         "Local"
     }
 [effect_navalbase_vision]
 type    = "Unit_Vision_Radius_Sq"
@@ -1097,7 +1096,7 @@ reqs    =
       "Extra",         "Naval Base",   "tile"
       "Tech",          "Invention",    "Player"
       "UnitClassFlag", "TerrainSpeed", "Local"   ;all Land_ classes
-      "VisionLayer", "Main", "Local"
+      "VisionLayer",   "Main",         "Local"
     }
 
 ; Fortress types, HP regen --------------------------------------------
@@ -1155,14 +1154,14 @@ reqs    =
 
 ; ****************** NAVAL BASE ******************************
 [effect_navbase_vision]
-type    = "Unit_Vision_Radius_Sq"
+type    = "Unit_Vision_Radius_Sq"   ;NB:land units handled in fortress section
 value   = 8   
 reqs    =
     { "type",          "name",        "range"
       "Extra",         "Naval Base",  "tile"
       "Tech",          "Invention",   "Player"
       "UnitClassFlag", "WaterVessel", "Local"
-      "VisionLayer", "Main", "Local"
+      "VisionLayer",   "Main",        "Local"
     }
 ; Naval Base HP regen
 [effect_navbase_hp_regen]
@@ -1218,6 +1217,7 @@ reqs    =
     { "type", "name", "range", "present"
       "VisionLayer", "Main", "Local", FALSE
     }
+
 ;PERCENTAGE CHANCE OF STEALING A TECH WHEN CONQUERING A CITY.
 [effect_conquest_tech]                       
 type    = "Conquest_Tech_Pct"
@@ -1247,10 +1247,10 @@ type = "Unit_Vision_Radius_Sq"
 value = -1
 reqs =
     {
-      "type",      "name",      "range"
-      "UnitType",  "Tribesmen", "Local"
-      "MinYear",   "-2000",     "World"
-      "VisionLayer", "Main", "Local"
+      "type",        "name",      "range"
+      "UnitType",    "Tribesmen", "Local"
+      "MinYear",     "-2000",     "World"
+      "VisionLayer", "Main",      "Local"
     }
 ;------------------------------------------------------
 [effect_scout_mapmaking_bonus]
@@ -4703,29 +4703,28 @@ value	= 4
 reqs	=
     { "type",          "name",         "range",  "present"
       "Tech",          "Physics",      "Player", TRUE
-      "UnitClassflag", "TerrainSpeed", "Local",  TRUE 
+      "UnitClassflag", "TerrainSpeed", "Local",  TRUE   ;!Sea, !Air classes
       "UnitClass",     "LandAirSea",   "Local",  FALSE
-      "VisionLayer", "Main", "Local"
-
+      "VisionLayer",   "Main",         "Local",  TRUE
     }
 [effect_physics_vision_2]
 type    = "Unit_Vision_Radius_Sq"
 value	= 4
 reqs	=
-    { "type", "name", "range"
-      "Tech", "Physics", "Player"
-      "UnitClass", "Trireme", "Local"
-      "VisionLayer", "Main", "Local"
-    }   
+    { "type",        "name",    "range"
+      "Tech",        "Physics", "Player"
+      "UnitClass",   "Trireme", "Local"
+      "VisionLayer", "Main",    "Local"
+    }
 [effect_physics_vision_3]
 type    = "Unit_Vision_Radius_Sq"
 value	= 4
 reqs	=
-    { "type", "name", "range"
-      "Tech", "Physics", "Player"
-      "UnitClass", "RiverShip", "Local"
-      "VisionLayer", "Main", "Local"
-    }  
+    { "type",        "name",      "range"
+      "Tech",        "Physics",   "Player"
+      "UnitClass",   "RiverShip", "Local"
+      "VisionLayer", "Main",      "Local"
+    }
 [effect_satellite_vision]  ;Vision benefit from satellite communication to Land units
 type    = "Unit_Vision_Radius_Sq"
 value   = 7
@@ -4733,7 +4732,7 @@ reqs    =
     { "type",          "name",         "range"
       "Tech",          "Space Flight", "Player"
       "UnitClassFlag", "TerrainSpeed", "Local"
-      "VisionLayer", "Main", "Local"
+      "VisionLayer",   "Main",         "Local"
     }
 [effect_satellite_vision_2]  ;Vision benefit from satellite communication to sea units
 type    = "Unit_Vision_Radius_Sq"
@@ -4742,52 +4741,52 @@ reqs    =
     { "type",          "name",         "range"
       "Tech",          "Space Flight", "Player"
       "UnitClassFlag", "WaterVessel",  "Local"
-      "VisionLayer", "Main", "Local"
+      "VisionLayer",   "Main",         "Local"
     }
 [effect_satellite_vision_3]  ;Vision benefit from satellite communication to sea units
 type    = "Unit_Vision_Radius_Sq"
 value   = 7
 reqs    =
-    { "type",      "name",      "range"
-      "Tech", "Space Flight",   "Player"
-      "UnitClass", "Air",      "Local"
-      "VisionLayer", "Main", "Local"
+    { "type",        "name",         "range"
+      "Tech",        "Space Flight", "Player"
+      "UnitClass",   "Air",          "Local"
+      "VisionLayer", "Main",         "Local"
     }
 [effect_satellite_vision_3a]  ;Vision benefit from satellite communication to sea units
 type    = "Unit_Vision_Radius_Sq"
 value   = 7
 reqs    =
-    { "type",      "name",      "range"
-      "Tech", "Space Flight",   "Player"
-      "UnitClass", "AirProtect",      "Local"
-      "VisionLayer", "Main", "Local"
+    { "type",        "name",         "range"
+      "Tech",        "Space Flight", "Player"
+      "UnitClass",   "AirProtect",   "Local"
+      "VisionLayer", "Main",         "Local"
     }
 [effect_satellite_vision_4]  ;Vision benefit from satellite communication to cities
 type    = "City_Vision_Radius_Sq"
 value   = 36
 reqs    =
-    { "type",      "name",      "range"
-      "Tech", "Space Flight",   "Player"
-      "VisionLayer", "Main", "Local"
+    { "type",        "name",           "range"
+      "Tech",        "Space Flight",   "Player"
+      "VisionLayer", "Main",           "Local"
     }
 [effect_radar_vision]
 type    = "City_Vision_Radius_Sq"
 value   = 50 ;7 cardinal, 5 diagonal
 reqs    =
-    { "type",      "name",      "range"
-      "Tech", "Radar",   "Player"
-      "Building", "Radar Tower", "City"
-      "VisionLayer", "Main", "Local"
+    { "type",        "name",        "range"
+      "Tech",        "Radar",       "Player"
+      "Building",    "Radar Tower", "City"
+      "VisionLayer", "Main",        "Local"
     }
 ;[effect_radar_vision2]
 ;type    = "Unit_Vision_Radius_Sq"
 ;value   = 16
 ;reqs    =
 ;    { "type",  "name",     "range",  "present"
-;      "Extra", "Airbase",  "tile",   TRUE
-;      "Tech",  "Radar",    "Player", TRUE
-;      "VisionLayer", "Main", "Local"
+;      "Extra", "Airbase",  "tile",    TRUE
+;      "Tech",  "Radar",    "Player",  TRUE
 ;      "MaxUnitsOnTile", "0", "Local", FALSE ;occupied base
+;      "VisionLayer", "Main", "Local", TRUE
 ;    }
 ;-------------------------------------------------------------</end Vision Bonuses>
 
@@ -5582,7 +5581,6 @@ value	= 40  ;84 70::56 42 28 21
 reqs	=
     { "type",     "name",        "range"
       "Building", "JTIDS",       "Player"
-      "UnitFlag", "FootSoldier", "Local"
       "UnitType", "Marines",     "Local"
     }
 ;************************************************************************ J.S. Bach
@@ -5649,10 +5647,10 @@ reqs	=
 type    = "Unit_Vision_Radius_Sq"
 value	= 6
 reqs	=
-    { "type", "name", "range"
-      "Building", "Lighthouse", "Player"
+    { "type",          "name",        "range"
+      "Building",      "Lighthouse",  "Player"
       "UnitClassFlag", "WaterVessel", "Local"
-      "VisionLayer", "Main", "Local"
+      "VisionLayer",   "Main",        "Local"
     }
 [effect_lighthouse_3]
 type    = "HP_Regen"
@@ -7866,7 +7864,7 @@ reqs    =
       "Action",        "Transport Board", "Local", TRUE
       "UnitClassFlag", "DelayLoad",       "Local", TRUE      ; Does not affect Aircraft
       "UnitType",      "Marines",         "Local", FALSE     ; Does not affect Marines
-      "UnitType",      "Bombs",           "Local", FALSE     ; prevent 2/3 TiredAttack by loading up a Bomb. 
+      "UnitClassFlag", "UnloadOnce",      "Local", FALSE     ; prevent 2/3 TiredAttack by loading up a Bomb; inability to uses nuke-bombs after loading them.
     }
 [effect_action_success_move_cost_deboard]
 type    = "Action_Success_Actor_Move_Cost"
@@ -7885,6 +7883,38 @@ reqs    =
       "Action",        "Transport Unload", "Local", TRUE
       "UnitClassFlag", "DelayLoad",        "Local", TRUE      ; Does not affect Aircraft
       "UnitType",      "Marines",          "Local", FALSE     ; Does not affect Marines
+    }
+;Bombs can't be used after a double-move double-cargo run, so unloading has to ensure half of all moves are gone
+;so the Bomb wouldn't be able to load up after two cargo hauls. Nukes have 1 1/3 moves (to allow disembark),
+;and conventional have 1 move. 
+[effect_action_success_move_cost_unload_bombs]
+type    = "Action_Success_Target_Move_Cost"   ; "Local" scope on unit pertains to target, not actor.
+value   = 3360                                ; 20+20 = 2/3, which is double cost for unload since it has no cost for load, and keeps 
+reqs    =                                     ; both Bomb and Bomb2 classes only able to do one cargo haul.
+    { "type",          "name",             "range", "present"
+      "Action",        "Transport Unload", "Local", TRUE
+      "UnitClassFlag", "UnloadOnce",       "Local", TRUE
+    }
+[effect_action_success_move_cost_deboard_bombs]
+type    = "Action_Success_Actor_Move_Cost"    ; "Local" scope on unit pertains to target, not actor.
+value   = 3360                                  ; 20+20 = 2/3, which is double cost for unload since it has no cost for load, and keeps 
+reqs    =                                     ; both Bomb and Bomb2 classes only able to do one cargo haul.
+    { "type",          "name",              "range", "present"
+      "Action",        "Transport Deboard", "Local", TRUE
+      "UnitClassFlag", "UnloadOnce",        "Local", TRUE
+    }
+;For uniform consistency, all Bombs have same behavior (except nuke has to unload and have movesleft to attack before detonating so the
+;Bomber can be spared). So, nuclear bombs can be hauled by truck/train ONCE before used, and we have to create that same dynamic for
+;conv.Bombs. In every case conv.Bombs have >0mp and <1 mp, they'll have 1/3 because of 2/3 move_cost unloading. Which means tired_attack
+;at 33% strength. Which means giving them a 3x bonus to even it out, since we don't want to F around with Bombs having tired_attack,
+;which would be stupid.
+[effect_bombs_dont_have_tired_attack]
+type    = "Attack_Bonus"
+value   = 200                                 ; 33% + 200%*33% = 100% 
+reqs    =
+    { "type",          "name",             "range", "present"
+      "UnitType",      "Bombs",            "Local", TRUE       ; conventional bomb
+      "MinMoveFrags",  "3361",             "Local", FALSE      ; Bombs can only have 3 states for 'movesleft': 1 move, 1/3 move, or 0 moves.
     }
 
 ;[effect_action_success_siege_ram_city_walls]
@@ -7928,6 +7958,7 @@ reqs    =
       "Action", "Expel Unit", "Local", TRUE
     }
 
+;************************ THIS WAS FINALLY IMPLEMENTED IN MP2E.
 ;TODO: We no longer need bitfields for move cost of SUA and could code the move cost in here
 [effect_action_success_move_cost_bombard]
 type    = "Action_Success_Actor_Move_Cost"
@@ -8250,28 +8281,27 @@ reqs    =
 type    = "Move_Bonus"
 value	  = 9
 reqs    =
-    {
-      "type", "name", "range", "present"
-      "UnitType", "Light Armor", "Local", TRUE
-      "Gov", "Nationalism", "Player", TRUE
-    }    
+    { "type",     "name",        "range"
+      "Gov",      "Nationalism", "Player"
+      "UnitType", "Light Armor", "Local"
+    }
 [effect_armor_movement_nationalism]
 type    = "Move_Bonus"
 value	  = 9
 reqs    =
     {
-      "type", "name", "range", "present"
-      "UnitType", "Armor", "Local", TRUE
-      "Gov", "Nationalism", "Player", TRUE
-    }    
+      "type",     "name",        "range"
+      "UnitType", "Armor",       "Local"
+      "Gov",      "Nationalism", "Player"
+    }
 [effect_armor2_movement_nationalism]
 type    = "Move_Bonus"
 value	  = 9
 reqs    =
     {
-      "type", "name", "range", "present"
-      "UnitType", "Armor II", "Local", TRUE
-      "Gov", "Nationalism", "Player", TRUE
+      "type",     "name",        "range"
+      "UnitType", "Armor II",    "Local"
+      "Gov",      "Nationalism", "Player"
     }
 ; Police Stations Cost less 
 [effect_nationalism_cheaper_police_stations]

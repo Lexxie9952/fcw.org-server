@@ -1781,7 +1781,7 @@ actor_reqs    =
 target_reqs = 
     { "type",          "name",          "range", "present"
       "Extra",        "Bunker",         "Local", FALSE
-    }  
+    }
 
 ;-----------------------------------------------------------------------NATIVE ATTACKS
 ;-----------------------------------------------------------all Land___ except LandAirSea
@@ -3251,12 +3251,40 @@ actor_reqs    =
     { "type",          "name",          "range", "present"
       "UnitClassFlag", "TerrainSpeed",  "Local", FALSE  ;not Land
       "UnitClassFlag", "WaterVessel",   "Local", FALSE  ;not Sea
+      "UnitClassFlag", "UnloadOnce",    "Local", FALSE  ;not Bombs
       "DiplRel",       "Armistice",     "Local", FALSE
       "DiplRel",       "War",           "Local", FALSE
       "DiplRel",       "Cease-fire",    "Local", FALSE
       "DiplRel",       "Peace",         "Local", FALSE
       "DiplRel",       "Never met",     "Local", FALSE
     }
+; Bombs are complicated. They have zero move cost to load, which is necessary to allow them to load up and be used
+; on the turn they're created. They have a double move cost for unload, which evens it out to prevent double-hauling
+; them across the planet for a distant bombing mission. PROBLEM IS: "Transport Board" allows loading while already
+; transported in the other actionenablers. And we don't want it to or it would be nightmare micromanaged
+; deboard-first-now-board extra keystrokes all over the place and a rethinking of all our move costs for such things.
+; However, for Bombs only, by charging nothing to board, double-charging deboarding, and disallowing boarding while
+; transported, everything works out peachy. You can double-haul any bomb but not use it this turn. You can single-haul
+; a conventional bomb and use it this turn (with no tired attack because conv.Bombs don't have it), you can single-haul a
+; nuclear bomb and use it this turn. You can load either, on the turn it's made, onto a Bomber and be ready for action
+; at full moves.
+[actionenabler_board_bombs]  
+action        = "Transport Board"
+actor_reqs    =
+    { "type",          "name",          "range", "present"
+      "UnitClassFlag", "TerrainSpeed",  "Local", FALSE  ;not Land
+      "UnitClassFlag", "WaterVessel",   "Local", FALSE  ;not Sea
+      "UnitFlag",      "AirAttacker",   "Local", FALSE  ;not Air
+      "UnitClass",     "Missile",       "Local", FALSE  ;not Missile
+      "UnitClassFlag", "UnloadOnce",    "Local", TRUE   ;only Bombs are left
+      "UnitState",     "Transported",   "Local", FALSE  
+      "DiplRel",       "Armistice",     "Local", FALSE
+      "DiplRel",       "War",           "Local", FALSE
+      "DiplRel",       "Cease-fire",    "Local", FALSE
+      "DiplRel",       "Peace",         "Local", FALSE
+      "DiplRel",       "Never met",     "Local", FALSE
+    }
+
 [actionenabler_board_universal_land_units]
 action        = "Transport Board"
 actor_reqs    =

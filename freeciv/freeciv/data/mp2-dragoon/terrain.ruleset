@@ -1969,7 +1969,6 @@ reqs           =
 build_time     = 2
 removal_time   = 0
 native_to      = "Land", "LandRoad", "LandAirSea", "LandNoKill", "Big Land", "Trireme", "Cargo", "Balloon", "Zeppelin", "RiverShip"
-;hidden_by      = ""
 flags          = "NativeTile"
 helptext       = _("\
 Quays improve logistics on rivers. River and Canal traffic can deboard\
@@ -2030,9 +2029,9 @@ act_gfx_alt2   = "-"
 rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
 reqs           =
-    { "type", "name", "range"
-      "UnitFlag", "CanRoad", "Local"
-      "TerrainClass", "Land", "Local"
+    { "type",         "name",       "range"
+      "UnitFlag",     "CanRoad",    "Local"
+      "TerrainClass", "Land",       "Local"
     }
 build_time     = 0
 removal_time   = 0
@@ -2042,7 +2041,7 @@ flags          = "AutoOnCityCenter", "NativeTile", "Railable"
 bridged_over   = "River"
 helptext       = _("\
 Roads allow your land units to move more quickly, and on Flatland terrain,\
- also provides a trade output bonus to its tile. \n\
+ also provide a trade output bonus to the tile. \n\
 "), _("\
 Building roads on river tiles requires knowledge of Bridge Building.\
  City center tiles automatically get roads (unless they are on a river\
@@ -2074,8 +2073,8 @@ native_to      = "Land", "LandNoKill", "LandAirSea", "LandRail", "Big Land" ;NB:
 flags          = "AutoOnCityCenter", "NativeTile"
 bridged_over   = "River"
 helptext       = _("\
-Once you learn Railroad technology, you may upgrade your roads to\
- railroads. Units travel three times faster along Railroads than\
+Railroad tech lets you upgrade Roads to Railroads.\
+ Units travel three times faster along Railroads than\
  along Roads. \n\
 "), _("\
 Railroads increase tile shield output by 50% (rounded down).\
@@ -2110,7 +2109,7 @@ native_to      = "Land", "LandNoKill", "LandAirSea", "Big Land"
 flags          = "NativeTile", "AutoOnCityCenter"
 helptext       = _("\
 With Superconductors, you may build MAGnetic LEVitation tracks.\
- Land units expend no movement points\
+ Land units expend no move-points\
  when riding MagLevs; you may ride indefinitely. \n\
 "), _("\
 City center tiles are automatically upgraded to MagLev\

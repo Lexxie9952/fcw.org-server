@@ -108,6 +108,7 @@ class_flags =
     _("CargoRestrained"), _("Can’t attack as Cargo. Must first deboard or disembark.")
     _("WaterVessel")
     _("DelayLoad"), _("Fractional move points spent to load or unload this unit.")
+    _("UnloadOnce"), _("Loses 2/3 moves when unloaded.")
   }
 
 [veteran_system]
@@ -171,7 +172,7 @@ veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
 ; "CanOccupyCity"     = Military units of this class can occupy enemy cities
 ; "BuildAnywhere"     = Unit Class can be built even in the middle of non-native terrain
 ; "Unreachable"       = Unit Class can be attacked only by units explicitly listing this
-;                       class in its 'targets', unless on a city or native base.
+;                       class in their 'targets', unless on a city or native base.
 ;                       For class members which are transports, cargo cannot load/
 ;                       unload except in a city or native base, unless that unit
 ;                       explicitly lists this class in its 'embarks'/'disembarks'.
@@ -223,7 +224,7 @@ name          = _("?unitclass:Bomb")
 min_speed     = 1
 hp_loss_pct   = 0
 hut_behavior  = "Frighten"
-flags         = "Unreachable", "DoesntOccupyTile", "Airliftable", "DelayLoad"
+flags         = "Unreachable", "DoesntOccupyTile", "Airliftable", "DelayLoad", "UnloadOnce"
 helptext      = _("\
   • Can be airlifted from a suitable city.\
 ")
@@ -234,7 +235,7 @@ min_speed     = 1
 hp_loss_pct   = 0
 hut_behavior  = "Frighten"
 flags         = "BuildAnywhere", "Missile", "Unreachable", "DoesntOccupyTile", "Airliftable",
-                "AttackNonNative", "DelayLoad"
+                "AttackNonNative", "DelayLoad", "UnloadOnce"
 helptext      = _("\
   • Can be airlifted from a suitable city.\
 ")
@@ -1914,7 +1915,7 @@ Ground Troops upgrade earlier infantry with better weaponry. The\
  upgrade cost for Riflemen and Alpine Troops is 4 gold.\
  Ground Troops can stay fortified while attacking, and veterans\
  enjoy a +⅓ move bonus. \n\
-Under Communismm this unit costs 5 less.\
+Under Communism this unit costs 5 less.\
 ")
 
 [unit_fanatics]
@@ -5483,8 +5484,8 @@ uk_shield     = 0
 uk_food       = 0
 uk_gold       = 1
 targets       = "LandRail", "LandRoad"
-flags         = "NeverProtects", "HasNoZOC", "Unbribable",
-                "WillNever", "NoVeteran", "MultiSlot", "CantReachAir", "Missile"
+flags         = "NeverProtects", "HasNoZOC", "Unbribable", "WillNever",
+                "NoVeteran", "MultiSlot", "CantReachAir", "Missile"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
 veteran_base_raise_chance = 0
@@ -5522,7 +5523,7 @@ attack        = 100
 defense       = 0
 hitpoints     = 10
 firepower     = 1
-move_rate     = 2
+move_rate     = 1
 vision_radius_sq = 0
 transport_cap = 0
 fuel          = 1
@@ -5540,11 +5541,11 @@ veteran_names = _("green")
 veteran_base_raise_chance = 0
 veteran_work_raise_chance = 0
 veteran_power_fact = 100
-veteran_move_bonus = 0
+veteran_move_bonus = 3
 roles         = ""
 helptext      = _("\
 If you have Nuclear Fission and the Manhattan Project has been built by any player, you can make Atom Bombs.\
- A Bomber can drop it within two tiles of its location. Unload the bomb and fly the Bomber out of range, then\
+ A Bomber can drop it within two tiles of its location. Disembark the bomb and fly the Bomber out of range, then\
  attack the target (or detonate by pressing D twice.) The blast destroys ALL cardinally adjacent tiles, and might destroy a tile improvement on each tile (×2 at ground zero). City population\
  is reduced by half. Land tiles may get nuclear fallout. \
 "), _("\
@@ -5570,7 +5571,7 @@ attack        = 100
 defense       = 0
 hitpoints     = 10
 firepower     = 1
-move_rate     = 2
+move_rate     = 1
 vision_radius_sq = 0
 transport_cap = 0
 fuel          = 1
@@ -5588,7 +5589,7 @@ veteran_names = _("green")
 veteran_base_raise_chance = 0
 veteran_work_raise_chance = 0
 veteran_power_fact = 100
-veteran_move_bonus = 0
+veteran_move_bonus = 3
 roles         = ""
 helptext      = _("\
 Hydrogen Bombs make Atom Bombs seem tame. Any unprotected city at Ground Zero will be absolutely annihilated.\
@@ -5621,7 +5622,7 @@ attack        = 100
 defense       = 0
 hitpoints     = 30
 firepower     = 1
-move_rate     = 2
+move_rate     = 1
 vision_radius_sq = 0
 transport_cap = 0
 fuel          = 1
@@ -5639,7 +5640,7 @@ veteran_names = _("green")
 veteran_base_raise_chance = 0
 veteran_work_raise_chance = 0
 veteran_power_fact = 100
-veteran_move_bonus = 0
+veteran_move_bonus = 3
 roles         = ""
 helptext      = _("\
 The Doomsday Bomb is the mother of all bombs. Blast area is about 100 tiles.\
