@@ -189,7 +189,7 @@ struct terrain {
 
   enum terrain_class tclass;
 
-  int movement_cost; /* whole MP, not scaled by SINGLE_MOVE */
+  int movement_cost; /* whole MP, or scaled by SINGLE_MOVE if game.server.move_cost_in_frags == true */
   int defense_bonus; /* % defense bonus - defaults to zero */
 
   int output[O_LAST];
