@@ -6361,8 +6361,7 @@ value	= 8192
 reqs	=
     { "type",     "name",           "range", "present"
       "Building", "The Sphinx",     "City",   TRUE
-      "Gov",      "Despotism",      "Player", TRUE
-      "MinSize",  "20",             "City",   FALSE    ; disappears in post-modern metropolis age
+      "Tech",     "Philosophy",     "Player", FALSE
     }
 [effect_sphinx_tile]
 type    = "Output_Penalty_Tile"
