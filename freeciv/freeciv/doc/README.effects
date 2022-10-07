@@ -102,6 +102,7 @@ TerrainAlter:  Local                                                   "CanMine"
                                                                        of mining/irrigation or a positive road building time.
 TerrainClass:  Local, Adjacent, CAdjacent, Traderoute, City            Either "Land" or "Oceanic"
 TerrainFlag:   Local, Adjacent, CAdjacent, Traderoute, City
+Tile:           <deprecated; use "Local">
 Topology:      World
 UnitClass:     Local
 UnitClassFlag: Local
