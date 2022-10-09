@@ -698,6 +698,10 @@ function move_points_text(moves, make_fraction, small)
     var simplified_fraction = fraction_reduce(numerator, denominator);
     numerator = simplified_fraction.numerator;
     denominator = simplified_fraction.denominator;
+    if (denominator == 1) { // 10079/10080 moves comes back as "1/1"
+      moves = numerator * SINGLE_MOVE;
+      numerator = 0;
+    }
 
     if (Math.floor(moves / SINGLE_MOVE) > 0 && numerator>0) {
       result = "" + Math.floor(moves / SINGLE_MOVE) 
