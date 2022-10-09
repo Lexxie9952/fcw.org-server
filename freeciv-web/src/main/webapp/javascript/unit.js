@@ -289,12 +289,12 @@ function unit_can_deboard(punit)
     tclass = unit_classes[ttype.unit_class_id];
   } else return false; // not even loaded!
   //****************************************************************** */
+  var ptile = index_to_tile(punit['tile']);
   var pcity = tile_city(ptile);
   if (pcity) return true;  // It's the one and only place you always can!
   //****************************************************************** */
   const quay_rules = client_rules_flag[CRF_EXTRA_QUAY];
   var ptype = unit_type(punit);
-  var ptile = index_to_tile(punit['tile']);
   if (ptile == null) return false;
   var pclass = get_unit_class_name(punit);
   //var terrain_name = tile_terrain(ptile)['name'];
