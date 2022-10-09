@@ -77,6 +77,13 @@ var last_focus = null;    // last unit in focus before focus change
 
 // GOTO, RALLY, misc. state vars when in a request-goto-path mode:
 var goto_active = false;  // state for selecting goto target for a unit
+const blank_goto_segment = {           // if building a goto path segment, this stores the info we need 
+  "start_tile": -1,            // the tile.index of the start tile of the last segment
+  "moves_left_initially": -1,  // moves_left on the start tile of the last segment
+  "fuel_left_initially": -1,   // fuel_left  "   "    "    "   "   "   "     "
+  "saved_path": []             // path, in dirs, from punit.tile to the start tile of the last segment
+};
+var goto_segment = blank_goto_segment;
 var patrol_mode = false;  // repeat goto_path forward then backward
 var rally_active = false;     // modifies goto_active to be setting a rally point
 // Transitional state var remembers rally_active in Go...And mode (rally_active pathing off while dialog is up):
@@ -1378,6 +1385,12 @@ function clear_all_modes()
   user_last_subtarget = null;
   goto_last_order = ORDER_LAST;
   goto_last_action = ACTION_COUNT;
+}
+function clear_goto_segment() {
+  goto_segment = blank_goto_segment;
+}
+function is_goto_segment_active() {
+  return (goto_segment.start_tile > -1);
 }
 
 /**************************************************************************
@@ -3097,6 +3110,9 @@ function do_map_click(ptile, qtype, first_time_called)
         /* Get the path the server sent using PACKET_GOTO_PATH. */
         var goto_path = goto_request_map[punit['id'] + "," + ptile['x'] + "," + ptile['y']];
 
+        // NOTE: this is untested for what it does about length reported too high for fuel units, will each segment neeed to be higher?
+        if (is_goto_segment_active()) goto_path = merged_goto_packet(goto_path);
+
         if (goto_path) { // touch devices don't have a goto_path until they call this function twice. see: if (touch_device) below
           // Client circumvents FC Server has buggy GOTO for units which have UTYF_COAST + fuel:
           if (unit_has_type_flag(punit, UTYF_COAST) && punit['fuel']>0 && !delayed_goto_active /*&& goto_path !== "undefined"*/) {
@@ -4148,6 +4164,18 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
     */
   }
   switch (key_code) {
+    /*
+    case 9:   // Tab key = save goto path up to tile shown, start a new path segment after it.
+      the_event.preventDefault();
+      if (get_units_in_focus().length > 1) {
+         Could be different paths for multiple units, can't stash it all.
+           TODO: if all goto_paths are the same and there's a way to check,
+           OR all units are same move_rate AND same move bonuses, we can allow it 
+        break;
+      }
+      start_goto_path_segment();
+      break;
+    */
     case 46: // DEL key
       if (user_marking_mode) { // Reset chalkboard
         myGameVars = {};
@@ -4574,6 +4602,7 @@ function activate_goto()
   var action = ACTION_COUNT;
 
   clear_goto_tiles();
+  clear_goto_segment();   // Wipe out any previous path segment/waypoints
   // Clear state vars so it's ready to immediately path to cursor
   prev_mouse_x = null;   prev_mouse_y = null;   prev_goto_tile = null;
   if (user_last_action) {
@@ -4581,6 +4610,79 @@ function activate_goto()
     action = user_last_action;
   }
   activate_goto_last(order, action);
+}
+
+/**************************************************************************
+  Called when hitting tab during GOTO to freeze a waypoint and the path
+  to that waypoint, then build a new path segment from that tile onward
+**************************************************************************/
+function start_goto_path_segment()
+{
+  if (!goto_active || rally_active) return;
+
+  var punit = current_focus[0];
+  var ptile = canvas_pos_to_tile(mouse_x, mouse_y);
+
+  // Grab a copy of the path that got us here to the tile we clicked TAB on:
+  var prior_goto_packet;
+  if (goto_request_map[punit.id + "," + ptile.x + "," + ptile.y]) {
+    prior_goto_packet = goto_request_map[punit.id + "," + ptile.x + "," + ptile.y]; // REFERENCE not copy!
+  }
+  //var current_goto_turns = goto_packet['turns'];
+  /*goto_turns_request_map[goto_packet['unit_id'] + "," + goaltile['x'] + "," + goaltile['y']]
+	  = current_goto_turns; */   // <<<<<<< in case we end up needing this, this is an array stashing some data too
+
+  if (!prior_goto_packet || prior_goto_packet.length == 0) {
+    console.log("Error, hit tab for a waypoint when there's no goto_request_map for punit to that tile.");
+     return;
+  } else console.log("We grabbed a reference ptr to our goto_path!!")
+
+  // Stash path to this point, pushing it to any existing waypoint-paths made earlier:
+  if (goto_segment.saved_path.length) { // Append to prior path
+    // JSON stuff makes a "deep copy" of the array
+    goto_segment.saved_path = merge_goto_path_segments(goto_segment.saved_path, prior_goto_packet); 
+  } else { // Make a new path
+    goto_segment.saved_path = JSON.parse(JSON.stringify(prior_goto_packet));
+  }
+  // Stash the starting tile for this new goto path segment!
+  goto_segment.start_tile = ptile['index'];
+  // Stash moves and fuel to this point 
+  goto_segment.moves_left_initially = prior_goto_packet['movesleft'];
+  goto_segment.fuel_left_initially = prior_goto_packet['fuelleft'];
+}
+/**************************************************************************
+  Takes a new goto_packet and merges it to an old one to make a unified
+  single path stored in a single goto_packet-compatible object
+**************************************************************************/
+function merge_goto_path_segments(old_packet, new_packet)
+{
+  // Deep copy the old packet
+  var result_packet = JSON.parse(JSON.stringify(old_packet));
+  // Put the ending information into it:
+  result_packet['dest'] = new_packet['dest'];
+  result_packet['turns'] += new_packet['turns']; // since we started with the moves_left of old packet, ok iff that # is >=0 ?
+  result_packet['total_mc'] += new_packet['total_mc'];
+  result_packet['movesleft'] = new_packet['movesleft'];
+  result_packet['length'] += new_packet['length'];
+  result_packet['fuelleft'] = new_packet['fuelleft'];
+  if (result_packet['dir'] && result_packet['dir'].length
+      && new_packet['dir'] && new_packet['dir'].length) {
+    result_packet['dir'] = result_packet['dir'].concat(new_packet['dir']); // makes a new copy
+  }
+  if (new_packet['turn'] && new_packet['turn'].length) {
+    for (var i=0; i<new_packet['turn'].length; i++) {
+      result_packet['turn'].push(new_packet['turn'][i] + old_packet['turns']) 
+    }
+  }
+  console.log("We did a merge: old,new,result:");
+  console.log(old_packet);
+  console.log(new_packet);
+  console.log(result_packet);
+
+  return result_packet;
+}
+function merged_goto_packet(new_packet) {
+  return merge_goto_path_segments(goto_segment.saved_path, new_packet); 
 }
 
 /**************************************************************************
@@ -7424,7 +7526,10 @@ function request_goto_path(unit_id, dst_x, dst_y)
     goto_request_map[unit_id + "," + dst_x + "," + dst_y] = true;
 
     var packet = {"pid" : packet_goto_path_req, "unit_id" : unit_id,
-                  "goal" : map_pos_to_tile(dst_x, dst_y)['index']};
+                  "goal" : map_pos_to_tile(dst_x, dst_y)['index'],
+                  "start" : (goto_segment.start_tile ? goto_segment.start_tile : -1),
+                  "moves_left_initially": goto_segment.moves_left_initially,
+                  "fuel_left_initially": goto_segment.fuel_left_initially};
     send_request(JSON.stringify(packet));
     current_goto_turns = null;
     $("#unit_text_details").html("Choose unit goto");
@@ -7522,7 +7627,12 @@ function check_request_goto_path()
 ****************************************************************************/
 function update_goto_path(goto_packet)
 {
-  goto_way_points = {};  // Clear old waypoints
+  console.log("update_goto_path() called");
+  var merge = is_goto_segment_active();
+  if (!merge) {
+    goto_way_points = {};  // Clear old waypoints IFF it's a new path only
+  }
+  var merged_packet = merge ? merge_goto_path_segments(goto_segment.saved_path, goto_packet) : goto_packet;
 
   if (goto_packet['unit_id'] === undefined) {
     if (goto_active && !rally_active) {
@@ -7530,6 +7640,7 @@ function update_goto_path(goto_packet)
         focus_unit_id = current_focus[0]['id'];
       }
       if (!rally_active && focus_unit_id) {
+        console.log("::no unit_id fallthru::");
         update_goto_path_panel(0,0,0,units[focus_unit_id].movesleft);
       }
     }
@@ -7543,6 +7654,7 @@ function update_goto_path(goto_packet)
   if (punit) {
     ptype = unit_type(punit);
     movesleft = punit.movesleft;
+    //ptile = merge ? index_to_tile(goto_segment.start_tile) : ptile = index_to_tile(punit['tile']);  << this works on NON-merged packet data to draw only a segment
     ptile = index_to_tile(punit['tile']);
   } // Get start tile: either punit location or pcity location:
   else if (goto_packet['unit_id'] == 0) { // flag for rally path
@@ -7575,21 +7687,21 @@ function update_goto_path(goto_packet)
     goto_way_points[ptile.index] = movesleft ? 0 : SOURCE_WAYPOINT;
 
     var turn;
-    var old_turn = goto_packet['turn'][0];
+    var old_turn = merged_packet['turn'][0];
     var old_tile=null;
     //var pathstring = ""
     var upcoming = false; // the way we draw goto lines or the way the server marks turn-changes, idk, but we have to advance it by one.
-    for (var i = 0; i < goto_packet['dir'].length; i++) {
+    for (var i = 0; i < merged_packet['dir'].length; i++) {
       if (ptile == null) break;
-      var dir = goto_packet['dir'][i];
+      var dir = merged_packet['dir'][i];
 
       //-------------------------------------------------
-      turn = goto_packet['turn'][i];
+      turn = merged_packet['turn'][i];
       if (upcoming) {
         upcoming = false;
         goto_way_points[ptile.index] = SOURCE_WAYPOINT;
         if (old_tile) goto_way_points[old_tile.index] = DEST_WAYPOINT; // prevent overwrite
-      } else if (i==goto_packet['dir'].length -1) { // very last turn boundary has no tile after so we prematurely compute it
+      } else if (i==merged_packet['dir'].length -1) { // very last turn boundary has no tile after so we prematurely compute it
         if (turn && turn-old_turn>0) {
           goto_way_points[ptile.index] = DEST_WAYPOINT;
         }
@@ -7615,9 +7727,9 @@ function update_goto_path(goto_packet)
     webgl_render_goto_line(ptile, goto_packet['dir']);
   }
 
+  goto_request_map[goto_packet['unit_id'] + "," + goaltile['x'] + "," + goaltile['y']] = goto_packet
   current_goto_turns = goto_packet['turns'];
 
-  goto_request_map[goto_packet['unit_id'] + "," + goaltile['x'] + "," + goaltile['y']] = goto_packet;
   goto_turns_request_map[goto_packet['unit_id'] + "," + goaltile['x'] + "," + goaltile['y']]
 	  = current_goto_turns;
 
