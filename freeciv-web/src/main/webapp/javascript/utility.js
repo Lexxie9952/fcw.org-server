@@ -78,6 +78,14 @@ function XOR(a,b) {
  Reduce a fraction by finding the Greatest Common Divisor and dividing by it.
 ****************************************************************************/
 function fraction_reduce(numerator,denominator) {
+  /* For highly composite movefrag systems immune to rounding errors,
+   * we don't want to see 2/168 move points. Round UP to the nearest
+   * 60th (since a micro movefrag is still able to do an action). */
+  if (denominator > 60) {
+    numerator = Math.ceil(numerator / denominator * 60);
+    denominator = 60;
+    // This will now (probably) get fraction reduced to a simpler fraction.
+  }
   var gcd = function gcd(a,b){
     return b ? gcd(b, a%b) : a;
   };
