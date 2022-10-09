@@ -145,7 +145,7 @@ struct unit {
 
   int upkeep[O_LAST]; /* unit upkeep with regards to the homecity */
 
-  int moves_left;
+  long moves_left;
   int hp;
   int veteran;
   int fuel;

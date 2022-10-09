@@ -787,15 +787,15 @@ bool terrain_surroundings_allow_change(const struct tile *ptile,
   function because it has more info, so doesn't need to call that
   wrapper.
 ***********************************************************************/
-int tile_move_cost_ptrs(const struct civ_map *nmap,
+long tile_move_cost_ptrs(const struct civ_map *nmap,
                         const struct unit *punit,
                         const struct unit_type *punittype,
                         const struct player *pplayer,
                         const struct tile *t1, const struct tile *t2)
 {
   const struct unit_class *pclass = utype_class(punittype);
-  int cost;
-  int penalty = 0; // unload penalty from game.info.unload_override
+  long cost;
+  long penalty = 0; // unload penalty from game.info.unload_override
 
   bool cardinality_checked = FALSE;
   bool cardinal_move BAD_HEURISTIC_INIT(FALSE);
@@ -901,7 +901,7 @@ int tile_move_cost_ptrs(const struct civ_map *nmap,
   }
   if (rri_active) goto finish; /* skip extra processing and revoke IGTER */
 
-  int umr = (punit != NULL) 
+  long umr = (punit != NULL) 
           ? unit_move_rate(punit)  // includes bonuses/hp/etc.
           : utype_move_rate(punittype, NULL, pplayer, 0, punittype->hp, NULL);
                     
@@ -1017,7 +1017,7 @@ int tile_move_cost_ptrs(const struct civ_map *nmap,
                        || is_move_cardinal(nmap, t1, t2));
     }
     if (!cardinal_move) {
-      return (int) (cost * 1.41421356f + penalty);
+      return (long) (cost * 1.41421356f + penalty);
     }
   }
 

@@ -344,7 +344,7 @@ static inline bool pf_move_possible(const struct tile *src,
   Use with a TB callback to prevent passing through occupied tiles.
   Does not permit passing through non-native tiles without transport.
 ****************************************************************************/
-static int normal_move(const struct tile *src,
+static long normal_move(const struct tile *src,
                        enum pf_move_scope src_scope,
                        const struct tile *dst,
                        enum pf_move_scope dst_scope,
@@ -363,7 +363,7 @@ static int normal_move(const struct tile *src,
   Use with a TB callback to prevent passing through occupied tiles.
   Does not permit passing through non-native tiles without transport.
 ****************************************************************************/
-static int overlap_move(const struct tile *src,
+static long overlap_move(const struct tile *src,
                         enum pf_move_scope src_scope,
                         const struct tile *dst,
                         enum pf_move_scope dst_scope,
@@ -381,14 +381,14 @@ static int overlap_move(const struct tile *src,
 /************************************************************************//**
   A cost function for amphibious movement.
 ****************************************************************************/
-static int amphibious_move(const struct tile *ptile,
+static long amphibious_move(const struct tile *ptile,
                            enum pf_move_scope src_scope,
                            const struct tile *ptile1,
                            enum pf_move_scope dst_scope,
                            const struct pf_parameter *param)
 {
   struct pft_amphibious *amphibious = param->data;
-  int cost, scale;
+  long cost, scale;
 
   if (PF_MS_TRANSPORT & src_scope) {
     if (PF_MS_TRANSPORT & dst_scope) {
@@ -429,13 +429,13 @@ static int amphibious_move(const struct tile *ptile,
 /************************************************************************//**
   Extra cost call back for amphibious movement
 ****************************************************************************/
-static int amphibious_extra_cost(const struct tile *ptile,
+static long amphibious_extra_cost(const struct tile *ptile,
                                  enum known_type known,
                                  const struct pf_parameter *param)
 {
   struct pft_amphibious *amphibious = param->data;
   const bool ferry_move = is_native_tile(amphibious->sea.utype, ptile);
-  int cost, scale;
+  long cost, scale;
 
   if (known == TILE_UNKNOWN) {
     /* We can travel almost anywhere */
@@ -596,7 +596,7 @@ static int get_closest_safe_tile_distance(const struct tile *src_tile,
       continue;
     }
     if (is_possible_base_fuel(ptile, param)) {
-      return map_vector_to_real_distance(x, y);
+      return (long)map_vector_to_real_distance(x, y);
     }
   } iterate_outward_dxy_end;
 
@@ -608,11 +608,11 @@ static int get_closest_safe_tile_distance(const struct tile *src_tile,
 /************************************************************************//**
   Position-dangerous callback for air units.
 ****************************************************************************/
-static int get_fuel_moves_left_req(const struct tile *ptile,
+static long get_fuel_moves_left_req(const struct tile *ptile,
                                    enum known_type known,
                                    const struct pf_parameter *param)
 {
-  int dist, max;
+  long dist, max;
 
   if (is_possible_base_fuel(ptile, param)) {
     return 0;
@@ -999,7 +999,7 @@ void pft_fill_reverse_parameter(struct pf_parameter *parameter,
 ****************************************************************************/
 void pft_fill_amphibious_parameter(struct pft_amphibious *parameter)
 {
-  const int move_rate = parameter->land.move_rate * parameter->sea.move_rate;
+  const long move_rate = parameter->land.move_rate * parameter->sea.move_rate;
 
   parameter->sea.cargo_depth = 1;
   BV_SET(parameter->sea.cargo_types, utype_index(parameter->land.utype));

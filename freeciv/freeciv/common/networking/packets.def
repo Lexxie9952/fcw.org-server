@@ -323,7 +323,7 @@ type GOLD               = UINT32
 type HP                 = UINT8
 type PERCENT            = UINT8
 # units of TERRAIN_CONTROL.move_fragments
-type MOVEFRAGS          = UINT16
+type MOVEFRAGS          = UINT32
 type PHASE              = SINT16
 type TURN               = SINT16
 type XYSIZE             = UINT16
@@ -2364,9 +2364,13 @@ PACKET_WEB_RULESET_UNIT_ADDITION = 258; sc, lsend
 end
 
 # used for showing GOTO path in web client.
+# last 3 params only used when start >=0; used for starting from a waypoint to make a path segment
 PACKET_GOTO_PATH_REQ = 287; cs, dsend
   UNIT unit_id;
   TILE goal;
+  TILE start;
+  SINT32 moves_left_initially;
+  SINT16 fuel_left_initially;
 end
 
 PACKET_GOTO_PATH = 288; sc, dsend
@@ -2378,6 +2382,7 @@ PACKET_GOTO_PATH = 288; sc, dsend
   UINT32 turns;
   UINT32 total_mc;
   SINT32 movesleft;
+  SINT16 fuelleft;
 end
 
 PACKET_INFO_TEXT_REQ = 289; cs, dsend

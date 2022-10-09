@@ -711,7 +711,7 @@ int look_for_charge(struct ai_type *ait, struct player *pplayer,
   const int toughness = adv_unit_def_rating_basic_squared(punit);
   int def, best_def = -1;
   /* Arbitrary: 3 turns. */
-  const int max_move_cost = 3 * unit_move_rate(punit);
+  const long max_move_cost = 3 * unit_move_rate(punit);
 
   *aunit = NULL;
   *acity = NULL;
@@ -2832,7 +2832,7 @@ static void dai_manage_barbarian_leader(struct ai_type *ait,
   struct pf_map *pfm;
   struct pf_reverse_map *pfrm;
   struct unit *worst_danger;
-  int move_cost, best_move_cost;
+  long move_cost, best_move_cost;
   int body_guards;
   bool alive = TRUE;
 
@@ -2944,7 +2944,7 @@ static void dai_manage_barbarian_leader(struct ai_type *ait,
   do {
     safest_tile = leader_tile;
 
-    UNIT_LOG(LOG_DEBUG, leader, "Barbarian leader: moves left: %d.",
+    UNIT_LOG(LOG_DEBUG, leader, "Barbarian leader: moves left: %ld.",
              leader->moves_left);
 
     adjc_iterate(&(wld.map), leader_tile, near_tile) {
@@ -2956,7 +2956,7 @@ static void dai_manage_barbarian_leader(struct ai_type *ait,
       if (PF_IMPOSSIBLE_MC != move_cost
           && move_cost > best_move_cost) {
         UNIT_LOG(LOG_DEBUG, leader,
-                 "Barbarian leader: safest is (%d, %d), safeness %d",
+                 "Barbarian leader: safest is (%d, %d), safeness %ld",
                  TILE_XY(near_tile), best_move_cost);
         best_move_cost = move_cost;
         safest_tile = near_tile;

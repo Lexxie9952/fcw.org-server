@@ -439,7 +439,7 @@ static int stack_risk(const struct tile *ptile,
   Avoiding tall stacks *all* along a path is useful because a unit following a
   path might have to stop early because of ZoCs.
 **************************************************************************/
-static int prefer_short_stacks(const struct tile *ptile,
+static long prefer_short_stacks(const struct tile *ptile,
                                enum known_type known,
                                const struct pf_parameter *param)
 {

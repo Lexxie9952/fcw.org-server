@@ -779,7 +779,7 @@ static bool dai_diplomat_bribe_nearby(struct ai_type *ait,
     } else {
       /* usually because we ended move early due to another unit */
       UNIT_LOG(LOG_DIPLOMAT, punit, "could not bribe target (%d, %d), "
-               " %d moves left", TILE_XY(pos.tile), punit->moves_left);
+               " %ld moves left", TILE_XY(pos.tile), punit->moves_left);
       return FALSE;
     }
   } pf_map_positions_iterate_end;

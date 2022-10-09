@@ -5656,9 +5656,16 @@ static bool sg_load_player_unit(struct loaddata *loading,
   sg_warn_ret_val(secfile_lookup_int(loading->file, &punit->homecity,
                                      "%s.homecity", unitstr), FALSE,
                   "%s", secfile_error());
-  sg_warn_ret_val(secfile_lookup_int(loading->file, &punit->moves_left,
+  
+  /* DANGER, loads a long from an int; but at this point likely not a huge_val
+   * after all factors and calculations stripped it down to simple move_frags:
+     TODO: savegame compat for long ints */
+  int tmp;
+  sg_warn_ret_val(secfile_lookup_int(loading->file, &tmp,
                                      "%s.moves", unitstr), FALSE,
                   "%s", secfile_error());
+  punit->moves_left = tmp;
+
   sg_warn_ret_val(secfile_lookup_int(loading->file, &punit->fuel,
                                      "%s.fuel", unitstr), FALSE,
                   "%s", secfile_error());
@@ -6292,7 +6299,10 @@ static void sg_save_player_units(struct savedata *saving,
 
     secfile_insert_bool(saving->file, punit->done_moving,
                         "%s.done_moving", buf);
-    secfile_insert_int(saving->file, punit->moves_left, "%s.moves", buf);
+    /* DANGER, saves a long as an int; but at this point likely not a huge_val
+     * after all factors and calculations stripped it down to simple move_frags:
+     TODO: savegame compat for long ints */
+    secfile_insert_int(saving->file, (int)punit->moves_left, "%s.moves", buf);
     secfile_insert_int(saving->file, punit->fuel, "%s.fuel", buf);
     secfile_insert_int(saving->file, punit->server.birth_turn,
                       "%s.born", buf);

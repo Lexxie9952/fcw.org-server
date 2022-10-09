@@ -1077,7 +1077,7 @@ bool auto_settler_setup_work(struct player *pplayer, struct unit *punit,
       } else if (alive) {
         UNIT_LOG(LOG_DEBUG, punit,
                  "didn't start work yet; got to (%d, %d) with "
-                 "%d move frags left", TILE_XY(unit_tile(punit)),
+                 "%ld move frags left", TILE_XY(unit_tile(punit)),
                  punit->moves_left);
       }
     } else {

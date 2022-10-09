@@ -347,7 +347,7 @@ static void dai_hunter_try_launch(struct ai_type *ait,
           if (victim == target) {
             sucker = victim;
             UNIT_LOG(LOGLEVEL_HUNT, missile, "found primary target %d(%d, %d)"
-                     " dist %d", victim->id, TILE_XY(unit_tile(victim)),
+                     " dist %ld", victim->id, TILE_XY(unit_tile(victim)),
                      move_cost);
             break; /* Our target! Get him!!! */
           }

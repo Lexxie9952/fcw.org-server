@@ -51,7 +51,7 @@
  */
 struct part {
   struct tile *start_tile, *end_tile;
-  int end_moves_left, end_fuel_left;
+  long end_moves_left, end_fuel_left;
   struct pf_path *path;
   struct pf_map *map;
 };
@@ -678,14 +678,14 @@ static bool is_non_allied_city_adjacent(const struct player *pplayer,
 
   param->data should contain the result of get_activity_rate(punit).
 ****************************************************************************/
-static int get_connect_road(const struct tile *src_tile, enum direction8 dir,
+static long get_connect_road(const struct tile *src_tile, enum direction8 dir,
                             const struct tile *dest_tile,
                             int src_cost, int src_extra,
                             int *dest_cost, int *dest_extra,
                             const struct pf_parameter *param)
 {
-  int activity_time, move_cost, moves_left;
-  int total_cost, total_extra;
+  long activity_time, move_cost, moves_left;
+  long total_cost, total_extra;
   struct road_type *proad;
 
   if (tile_get_known(dest_tile, param->owner) == TILE_UNKNOWN) {
@@ -793,14 +793,14 @@ static int get_connect_road(const struct tile *src_tile, enum direction8 dir,
 
   param->data should contain the result of get_activity_rate(punit) / 10.
 ****************************************************************************/
-static int get_connect_irrig(const struct tile *src_tile,
+static long get_connect_irrig(const struct tile *src_tile,
                              enum direction8 dir,
                              const struct tile *dest_tile,
                              int src_cost, int src_extra,
                              int *dest_cost, int *dest_extra,
                              const struct pf_parameter *param)
 {
-  int activity_time, move_cost, moves_left, total_cost;
+  long activity_time, move_cost, moves_left, total_cost;
 
   if (tile_get_known(dest_tile, param->owner) == TILE_UNKNOWN) {
     return -1;

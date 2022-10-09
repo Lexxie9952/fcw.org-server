@@ -394,7 +394,7 @@ int aiferry_avail_boats(struct ai_type *ait, struct player *pplayer)
   call-back.  Doesn't care for enemy/neutral tiles, these should be
   excluded using a TB call-back.
 **************************************************************************/
-static int combined_land_sea_move(const struct tile *src_tile,
+static long combined_land_sea_move(const struct tile *src_tile,
                                   enum pf_move_scope src_scope,
                                   const struct tile *tgt_tile,
                                   enum pf_move_scope dst_scope,
@@ -421,7 +421,7 @@ static int combined_land_sea_move(const struct tile *src_tile,
   EC callback to account for the cost of sea moves by a ferry hurrying to 
   pick our unit up.
 **************************************************************************/
-static int sea_move(const struct tile *ptile, enum known_type known,
+static long sea_move(const struct tile *ptile, enum known_type known,
                     const struct pf_parameter *param)
 {
   if (is_ocean_tile(ptile)) {
@@ -561,7 +561,7 @@ int aiferry_find_boat(struct ai_type *ait, struct unit *punit,
 
           if (turns < best_turns) {
             UNIT_LOG(LOGLEVEL_FINDFERRY, punit, 
-                     "Found a potential boat %s[%d](%d,%d)(moves left: %d)",
+                     "Found a potential boat %s[%d](%d,%d)(moves left: %ld)",
                      unit_rule_name(aunit), aunit->id,
                      TILE_XY(unit_tile(aunit)), aunit->moves_left);
             if (path) {
@@ -683,7 +683,7 @@ bool dai_amphibious_goto_constrained(struct ai_type *ait,
         int ferry_id = ferry->id;
 
 	UNIT_LOG(LOG_DEBUG, passenger, "Our boat has arrived "
-		 "[%d](moves left: %d)", ferry->id, ferry->moves_left);
+		 "[%d](moves left: %ld)", ferry->id, ferry->moves_left);
 	UNIT_LOG(LOG_DEBUG, passenger, "Disembarking to (%d,%d)",
 		 TILE_XY(next_tile));
 	/* Land leg */
@@ -845,7 +845,7 @@ bool aiferry_gobyboat(struct ai_type *ait, struct player *pplayer,
       struct unit *bodyguard = aiguard_guard_of(ait, punit);
 
       UNIT_LOG(LOGLEVEL_GOBYBOAT, punit, 
-	       "got boat[%d](moves left: %d), going (%d,%d)",
+	       "got boat[%d](moves left: %ld), going (%d,%d)",
                ferryboat->id, ferryboat->moves_left, TILE_XY(dest_tile));
       aiferry_psngr_meet_boat(ait, punit, ferryboat);
 
@@ -1211,7 +1211,7 @@ void dai_manage_ferryboat(struct ai_type *ait, struct player *pplayer,
   }
 
   UNIT_LOG(LOGLEVEL_FERRY, punit, "Ferryboat is not carrying anyone "
-	   "(moves left: %d).", punit->moves_left);
+	   "(moves left: %ld).", punit->moves_left);
   aiferry_make_available(ait, punit);
   unit_activity_handling(punit, ACTIVITY_IDLE);
   dai_unit_new_task(ait, punit, AIUNIT_NONE, NULL);
@@ -1219,7 +1219,7 @@ void dai_manage_ferryboat(struct ai_type *ait, struct player *pplayer,
 
   /* Try to find passengers */
   if (aiferry_findcargo(ait, punit)) {
-    UNIT_LOG(LOGLEVEL_FERRY, punit, "picking up cargo (moves left: %d)",
+    UNIT_LOG(LOGLEVEL_FERRY, punit, "picking up cargo (moves left: %ld)",
 	     punit->moves_left);
     if (dai_unit_goto(ait, punit, punit->goto_tile)) {
       if (is_tiles_adjacent(unit_tile(punit), punit->goto_tile)

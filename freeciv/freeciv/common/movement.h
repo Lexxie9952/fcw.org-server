@@ -23,8 +23,8 @@ extern "C" {
 
 #define SINGLE_MOVE     (terrain_control.move_fragments)
 #define MOVE_COST_IGTER (terrain_control.igter_cost)
-/* packets.def MOVEFRAGS */
-#define MAX_MOVE_FRAGS  65535
+/* packets.def MOVEFRAGS is unsigned 4294967295 but let's play safe in case we sign it later */
+#define MAX_MOVE_FRAGS 2147483647
 
 struct unit_type;
 struct terrain;
@@ -50,11 +50,11 @@ enum unit_move_result {
   MR_NOT_ALLOWED
 };
 
-int utype_move_rate(const struct unit_type *utype, const struct tile *ptile,
+long utype_move_rate(const struct unit_type *utype, const struct tile *ptile,
                     const struct player *pplayer, int veteran_level,
                     int hitpoints, const struct unit *punit);
-int unit_move_rate(const struct unit *punit);
-int utype_unknown_move_cost(const struct unit_type *utype);
+long unit_move_rate(const struct unit *punit);
+long utype_unknown_move_cost(const struct unit_type *utype);
 
 bool unit_can_defend_here(const struct civ_map *nmap, const struct unit *punit);
 bool can_attack_non_native(const struct unit_type *utype);

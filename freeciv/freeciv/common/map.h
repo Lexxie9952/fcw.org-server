@@ -276,7 +276,7 @@ bool is_move_cardinal(const struct civ_map *nmap,
                       const struct tile *src_tile,
 		      const struct tile *dst_tile);
 
-int tile_move_cost_ptrs(const struct civ_map *nmap,
+long tile_move_cost_ptrs(const struct civ_map *nmap,
                         const struct unit *punit,
                         const struct unit_type *punittype,
                         const struct player *pplayer,
@@ -286,7 +286,7 @@ int tile_move_cost_ptrs(const struct civ_map *nmap,
   The cost to move punit from where it is to tile x,y.
   It is assumed the move is a valid one, e.g. the tiles are adjacent.
 ***************************************************************/
-static inline int map_move_cost_unit(const struct civ_map *nmap,
+static inline long map_move_cost_unit(const struct civ_map *nmap,
                                      struct unit *punit,
                                      const struct tile *ptile)
 {
@@ -298,7 +298,7 @@ static inline int map_move_cost_unit(const struct civ_map *nmap,
 /***************************************************************
   Move cost between two tiles
 ***************************************************************/
-static inline int map_move_cost(const struct civ_map *nmap,
+static inline long map_move_cost(const struct civ_map *nmap,
                                 const struct player *pplayer,
                                 const struct unit_type *punittype,
                                 const struct tile *src_tile,

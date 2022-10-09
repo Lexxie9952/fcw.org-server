@@ -45,13 +45,13 @@
   'utype' and 'pplayer' must be set. 'ptile' can be NULL. 'punit' can be
   NULL; if provided, it adds bonuses at the req-scope of the specific unit.
 ****************************************************************************/
-int utype_move_rate(const struct unit_type *utype, const struct tile *ptile,
+long utype_move_rate(const struct unit_type *utype, const struct tile *ptile,
                     const struct player *pplayer, int veteran_level,
                     int hitpoints, const struct unit *punit)
 {
   const struct unit_class *uclass;
   const struct veteran_level *vlevel;
-  int base_move_rate, move_rate;
+  long base_move_rate, move_rate;
 
   fc_assert_ret_val(NULL != utype, 0);
   fc_assert_ret_val(NULL != pplayer, 0);
@@ -89,7 +89,7 @@ int utype_move_rate(const struct unit_type *utype, const struct tile *ptile,
   This function calculates the move rate of the unit. See utype_move_rate()
   for further details.
 ****************************************************************************/
-int unit_move_rate(const struct unit *punit)
+long unit_move_rate(const struct unit *punit)
 {
   fc_assert_ret_val(NULL != punit, 0);
 
@@ -104,10 +104,10 @@ int unit_move_rate(const struct unit *punit)
   The returned value is usually cached into utype->unknown_move_cost and
   used in the path-finding module.
 ****************************************************************************/
-int utype_unknown_move_cost(const struct unit_type *utype)
+long utype_unknown_move_cost(const struct unit_type *utype)
 {
   const struct unit_class *uclass = utype_class(utype);
-  int move_cost;
+  long move_cost;
 
   if (!uclass_has_flag(uclass, UCF_TERRAIN_SPEED)) {
     /* Unit is not subject to terrain movement costs. */

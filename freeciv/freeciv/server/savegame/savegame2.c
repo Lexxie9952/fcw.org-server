@@ -3792,9 +3792,15 @@ static bool sg_load_player_unit(struct loaddata *loading,
   sg_warn_ret_val(secfile_lookup_int(loading->file, &punit->homecity,
                                      "%s.homecity", unitstr), FALSE,
                   "%s", secfile_error());
-  sg_warn_ret_val(secfile_lookup_int(loading->file, &punit->moves_left,
+  /* DANGER, loads a long from an int; but at this point likely not a huge_val
+   * after all factors and calculations stripped it down to simple move_frags:
+     TODO: savegame compat for long ints */
+  int tmp;
+  sg_warn_ret_val(secfile_lookup_int(loading->file, &tmp, 
                                      "%s.moves", unitstr), FALSE,
                   "%s", secfile_error());
+  punit->moves_left = tmp;
+
   sg_warn_ret_val(secfile_lookup_int(loading->file, &punit->fuel,
                                      "%s.fuel", unitstr), FALSE,
                   "%s", secfile_error());

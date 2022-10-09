@@ -268,7 +268,7 @@ extern "C" {
  * calculation. See definition of total_CC above.
  * The number is chosen to be much larger than 0 and much smaller
  * than MAX_INT (and a power of 2 for easy multiplication). */
-#define PF_TURN_FACTOR  65536
+#define PF_TURN_FACTOR  (long)65536
 
 /* =========================== Structures ================================ */
 
@@ -314,16 +314,16 @@ enum pf_move_scope {
 
 /* Full specification of a position and time to reach it. */
 struct pf_position {
-  struct tile *tile;     /* The tile. */
-  int turn;              /* The number of turns to the target. */
-  int moves_left;       /* The number of moves left the unit would have when
+  struct tile *tile;    /* The tile. */
+  int turn;             /* The number of turns to the target. */
+  long moves_left;      /* The number of moves left the unit would have when
                          * reaching the tile. */
   int fuel_left;        /* The number of turns of fuel left the unit would
                          * have when reaching the tile. It is always set to
                          * 1 when unit types are not fueled. */
 
-  int total_MC;         /* Total MC to reach this point */
-  int total_EC;         /* Total EC to reach this point */
+  long total_MC;         /* Total MC to reach this point */
+  long total_EC;         /* Total EC to reach this point */
 
   enum direction8 dir_to_next_pos; /* Used only in 'struct pf_path'. */
   enum direction8 dir_to_here; /* Where did we come from. */
@@ -347,8 +347,8 @@ struct pf_parameter {
   const struct civ_map *map;
   struct tile *start_tile;      /* Initial position */
 
-  int moves_left_initially;
-  int fuel_left_initially;      /* Ignored for non-air units. */
+  long moves_left_initially;
+  long fuel_left_initially;      /* Ignored for non-air units. */
   /* Set if the unit is transported. */
   const struct unit_type *transported_by_initially;
   /* See unit_cargo_depth(). */
@@ -356,7 +356,7 @@ struct pf_parameter {
   /* All cargo unit types. */
   bv_unit_types cargo_types;
 
-  int move_rate;                /* Move rate of the virtual unit */
+  long move_rate;               /* Move rate of the virtual unit */
   int fuel;                     /* Should be 1 for units without fuel. */
 
   const struct unit_type *utype;
@@ -368,7 +368,7 @@ struct pf_parameter {
    * direction 'dir'. Note that the callback can calculate 'to_tile' by
    * itself based on 'from_tile' and 'dir'. Excessive information 'to_tile'
    * is provided to ease the implementation of the callback. */
-  int (*get_MC) (const struct tile *from_tile,
+  long (*get_MC) (const struct tile *from_tile,
                  enum pf_move_scope src_move_scope,
                  const struct tile *to_tile,
                  enum pf_move_scope dst_move_scope,
@@ -391,7 +391,7 @@ struct pf_parameter {
   /* Callback which can be used to provide extra costs depending on the
    * tile. Can be NULL. It can be assumed that the implementation of
    * "path_finding.h" will cache this value. */
-  int (*get_EC) (const struct tile *ptile, enum known_type known,
+  long (*get_EC) (const struct tile *ptile, enum known_type known,
                  const struct pf_parameter *param);
 
   /* Callback which determines whether an action would be performed at
@@ -427,7 +427,7 @@ struct pf_parameter {
 
   /* If this callback is non-NULL and returns the required moves left to
    * move to this tile and to leave the position safely. Can be NULL. */
-  int (*get_moves_left_req) (const struct tile *ptile, enum known_type,
+  long (*get_moves_left_req) (const struct tile *ptile, enum known_type,
                              const struct pf_parameter *param);
 
   /* This is a jumbo callback which overrides all previous ones.  It takes
@@ -449,11 +449,11 @@ struct pf_parameter {
    * - if new costs are better, record them in to_cost/to_extra and return
    *   the cost-of-the-path which is the overall measure of goodness of the
    *   path (less is better) and used to order newly discovered locations. */
-  int (*get_costs) (const struct tile *from_tile,
+  long (*get_costs) (const struct tile *from_tile,
                     enum direction8 dir,
                     const struct tile *to_tile,
-                    int from_cost, int from_extra,
-                    int *to_cost, int *to_extra,
+                    long from_cost, long from_extra,
+                    long *to_cost, long *to_extra,
                     const struct pf_parameter *param);
 
   /* User provided data. Can be used to attach arbitrary information
@@ -477,7 +477,7 @@ struct pf_map *pf_map_new(const struct pf_parameter *parameter)
 void pf_map_destroy(struct pf_map *pfm);
 
 /* Method A) functions. */
-int pf_map_move_cost(struct pf_map *pfm, struct tile *ptile);
+long pf_map_move_cost(struct pf_map *pfm, struct tile *ptile);
 struct pf_path *pf_map_path(struct pf_map *pfm, struct tile *ptile)
                 fc__warn_unused_result;
 bool pf_map_position(struct pf_map *pfm, struct tile *ptile,
@@ -487,7 +487,7 @@ bool pf_map_position(struct pf_map *pfm, struct tile *ptile,
 /* Method B) functions. */
 bool pf_map_iterate(struct pf_map *pfm);
 struct tile *pf_map_iter(struct pf_map *pfm);
-int pf_map_iter_move_cost(struct pf_map *pfm);
+long pf_map_iter_move_cost(struct pf_map *pfm);
 struct pf_path *pf_map_iter_path(struct pf_map *pfm)
                 fc__warn_unused_result;
 void pf_map_iter_position(struct pf_map *pfm, struct pf_position *pos);
@@ -524,10 +524,10 @@ struct pf_reverse_map *pf_reverse_map_new_for_city(const struct city *pcity,
                        fc__warn_unused_result;
 void pf_reverse_map_destroy(struct pf_reverse_map *prfm);
 
-int pf_reverse_map_utype_move_cost(struct pf_reverse_map *pfrm,
+long pf_reverse_map_utype_move_cost(struct pf_reverse_map *pfrm,
                                    const struct unit_type *punittype,
                                    struct tile *ptile);
-int pf_reverse_map_unit_move_cost(struct pf_reverse_map *pfrm,
+long pf_reverse_map_unit_move_cost(struct pf_reverse_map *pfrm,
                                   const struct unit *punit);
 bool pf_reverse_map_utype_position(struct pf_reverse_map *pfrm,
                                    const struct unit_type *punittype,
@@ -564,7 +564,7 @@ if (COND_from_start || pf_map_iterate((ARG_pfm))) {                         \
  * NAME_tile - The name of the iterator to use (type struct tile *). This
  *             is defined inside the macro.
  * NAME_cost - The name of the variable containing the move cost info (type
- *             integer).  This is defined inside the macro.
+ *             long).  This is defined inside the macro.
  * COND_from_start - A boolean value (or equivalent, it can be a function)
  *                   which indicate if the start tile should be iterated or
  *                   not. */
@@ -573,7 +573,7 @@ if (COND_from_start || pf_map_iterate((ARG_pfm))) {                         \
 if (COND_from_start || pf_map_iterate((ARG_pfm))) {                         \
   struct pf_map *_MY_pf_map_ = (ARG_pfm);                                   \
   struct tile *NAME_tile;                                                   \
-  int NAME_cost;                                                            \
+  long NAME_cost;                                                            \
   do {                                                                      \
     NAME_tile = pf_map_iter(_MY_pf_map_);                                   \
     NAME_cost = pf_map_iter_move_cost(_MY_pf_map_);
