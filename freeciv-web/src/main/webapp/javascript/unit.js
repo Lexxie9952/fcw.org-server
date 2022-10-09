@@ -339,7 +339,7 @@ function unit_can_deboard(punit)
     /* could also unload in city and naval base -- already checked above */
   }
   // Brava onward:
-  if (tclass.rule_name == "LandRail"
+  if (tclass.rule_name == "LandRail" || (ttype.name == "Mechanized Infantry")
       || tclass.rule_name == "LandRoad") { // Foot soldiers can deboard from Train/Truck on any Base or Quay.
     if (tile_has_extra(ptile, EXTRA_AIRBASE)) return true;
     if (quay_rules && tile_has_extra(ptile, EXTRA_QUAY)) return true;
@@ -592,6 +592,10 @@ function unit_could_possibly_load(punit, ptype, ttype, tclass)
     if (tclass.rule_name == "Land") return false; // can't load on Caravans, the only Land class with cargo capacity.
     if (tclass.rule_name == "Submarine") return false;
 */
+    if (client_rules_flag[CRF_MP2_E] && ttype.name == "Mechanized Infatry") {
+      if (unit_has_type_flag(punit, UTYF_FOOTSOLDIER)) return true;
+      else if (ptype.name == "Anti-Aicraft Artillery") return true;
+    }
 
     // Special actionenabler rules in MP2, only slow units can use Trucks and Trains:
     if (tclass.rule_name == "LandRail" || tclass.rule_name == "LandRoad") {  
