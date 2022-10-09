@@ -3697,8 +3697,13 @@ static bool city_build(struct player *pplayer, struct unit *punit,
 
 /**********************************************************************//**
   This function handles GOTO and RALLY path requests from the client.
+  IFF start_tile > -1 then moves_left_initially, fuel_left_initially, and
+  start_tile are used to create a path segment starting at start_tile;
+  otherwise unit_tile(punit) is assumed for a fresh goto path. 
 **************************************************************************/
-static void do_path_req(struct player *pplayer, struct unit *punit, int goal)
+static void do_path_req(struct player *pplayer, struct unit *punit, 
+                        int goal, int start_tile, int moves_left_initially,
+                        int fuel_left_initially)
 {
   if (NULL == punit) {
     /* Shouldn't happen */
@@ -3707,6 +3712,11 @@ static void do_path_req(struct player *pplayer, struct unit *punit, int goal)
     return;
   }
 
+/* DEBUG
+notify_player(pplayer, NULL, E_UNIT_ACTION_FAILED, ftc_server,
+_("1[`anger`] dpr: start:%d, mli:%d, fli:%d"),
+start, moves_left_initially, fuel_left_initially);
+*/
   int unit_id = punit->id;
 
   struct tile *ptile = index_to_tile(&(wld.map), goal);
@@ -3743,12 +3753,30 @@ static void do_path_req(struct player *pplayer, struct unit *punit, int goal)
 
   /* Use path-finding to find a goto path. */
   pft_fill_unit_parameter(&parameter, punit);
+
+  /* Set up pf_parameter for user requested path segment, if requested */
+  if (start_tile > -1) {
+    parameter.start_tile = index_to_tile(&(wld.map), start_tile);
+    parameter.moves_left_initially = moves_left_initially;
+    if (utype_fuel(unit_type_get(punit))) {
+      parameter.fuel_left_initially = fuel_left_initially;  
+    }
+/*    
+notify_player(pplayer, NULL, E_UNIT_ACTION_FAILED, ftc_server,
+_("1[`anger`] parameter: start:%d, mli:%d, fli:%d"),
+parameter.start_tile, parameter.moves_left_initially, parameter.fuel_left_initially);
+*/
+  }
   pfm = pf_map_new(&parameter);
   path = pf_map_path(pfm, ptile);
   pf_map_destroy(pfm);
-
+/*
+notify_player(pplayer, NULL, E_UNIT_ACTION_FAILED, ftc_server,
+_("1[`anger`] parameter: start:%d, mli:%d, fli:%d"),
+parameter.start_tile, parameter.moves_left_initially, parameter.fuel_left_initially);
+*/
   if (path) {
-    int total_mc = 0;
+    int total_mc = 0, fuel_left = 0;
     p.length = path->length - 1;
     old_tile = path->positions[0].tile;
 
@@ -3757,6 +3785,7 @@ static void do_path_req(struct player *pplayer, struct unit *punit, int goal)
       int dir;
 
       total_mc = path->positions[i+1].total_MC;
+      fuel_left = path->positions[i+1].fuel_left;
       if (same_pos(new_tile, old_tile)) {
         dir = -1;
       } else {
@@ -3770,13 +3799,16 @@ static void do_path_req(struct player *pplayer, struct unit *punit, int goal)
     /* 27July2021 cazfi identified div by zero was crash error code. This
        was the only division operaton in the function and it fixed it.*/
     if (unit_move_rate(punit)) {
-      int moves_spent = (unit_move_rate(punit) - punit->moves_left);
+      int moves_at_start = moves_left_initially > -1 ? moves_left_initially : punit->moves_left;
+      int moves_spent = (unit_move_rate(punit) - moves_at_start);
       /* NB: Running out of moves doesn't always mean an extra turn to reach target. It could
          be a "movesleft=0 arrival". ceil(turns)-1 gives correct #turns for arrival @ target. */
       float turns = ceil((float)(total_mc + moves_spent) / (float)unit_move_rate(punit))-1;
       p.turns = turns;
       p.total_mc = total_mc;
-      p.movesleft = punit->moves_left - total_mc;
+      p.movesleft = moves_at_start - total_mc;
+      /* fuel_left on last tile of path will be needed if this becomes a segment of a composite path*/
+      p.fuelleft = fuel_left;
     } else {
       log_verbose("do_path_req()"
           " %s (id=%d) %s. moverate=0 would cause div by zero",
@@ -3794,10 +3826,13 @@ static void do_path_req(struct player *pplayer, struct unit *punit, int goal)
 /**********************************************************************//**
   This function handles GOTO path requests from the client.
 **************************************************************************/
-void handle_goto_path_req(struct player *pplayer, int unit_id, int goal)
+void handle_goto_path_req(struct player *pplayer, int unit_id, int goal,
+                          int start, int moves_left_initially,
+                          int fuel_left_initially)
 {
   struct unit *punit = player_unit_by_number(pplayer, unit_id);
-  do_path_req(pplayer, punit, goal);
+  do_path_req(pplayer, punit, goal, start, moves_left_initially,
+              fuel_left_initially);
 }
 /**********************************************************************//**
   This function handles RALLY path requests from the client.
@@ -3829,7 +3864,7 @@ void handle_rally_path_req(struct player *pplayer, int city_id,
   punit->moves_left = utype->move_rate; // full moves
   punit->moved = false; // fresh
 
-  do_path_req(pplayer, punit, goal);
+  do_path_req(pplayer, punit, goal, -1, -1, -1);
 
   unit_virtual_destroy(punit); // clean-up virtual unit
 }
