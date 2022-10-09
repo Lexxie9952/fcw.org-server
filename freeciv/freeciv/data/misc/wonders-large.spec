@@ -45,6 +45,7 @@ artists = "
   b.propaganda_ministry
   b.pyramids
   b.olympics
+  b.panama_canal
   b.roman_colosseum
   b.seti_program
   b.sphinx
@@ -113,6 +114,7 @@ sprites =
 		"b.michelangelos_chapel", "wonders/michelangelos_chapel"
                 "b.olympics", "wonders/olympics"
 		"b.oracle", "wonders/oracle"
+                "b.panama_canal", "wonders/panama_canal",
                 "b.pasteur_institute", "wonders/pasteur_institute"
                 "b.pax_dei", "wonders/pax_dei"
                 "b.propaganda_ministry", "wonders/propagandaministry"
