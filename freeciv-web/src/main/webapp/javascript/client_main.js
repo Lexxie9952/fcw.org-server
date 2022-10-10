@@ -296,7 +296,7 @@ function show_new_game_message()
       "exploring the land around you with your explorer,\n" +
       "and using your settlers to find a good place to build\n" +
       "a city. Click on units to get a list of available orders. \n" +
-      "To move your units around, carefully drag the units to the \n" +
+      "To move a unit around, carefully drag the unit to the \n" +
       "place you want it to go.\n" +
       "Please join the <a href='https://discord.gg/Zj8UQSN' target='_new'>community Discord chat server</a>.\n"+
       "Good luck, and have a lot of fun!";
