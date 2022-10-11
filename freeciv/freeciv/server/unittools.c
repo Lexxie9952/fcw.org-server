@@ -4899,6 +4899,29 @@ bool unit_move_real(struct unit *punit, struct tile *pdesttile, int move_cost,
   unit_cargo_iterate(punit, pcargo) {
     pdata = unit_move_data(pcargo, psrctile, pdesttile);
     unit_move_data_list_append(plist, pdata);
+    /* Each cargo unit loses moves proportionate to the moves lost by
+     * the transport. If the transport took a year to get somewhere,
+     * the cargo also waited all year to get there. Finally, a solution to
+     * double-haul move problems. EFT_PASSENGER_MOVE_COST_BP as 0 leaves it 
+     * legacy, 100 for full real proportonality, or somewhere in between
+     * if you want to leave lenience for disembark or starting an activity.
+     * Notice utype_move_rate() is used for the pcargo because it might be
+     * on an illegal tile while transported, or going over a penalty
+     * tile like mountains, and these shouldn't apply to it while it's
+     * passive cargo in a different transporter. Not recommended for
+     * rulesets with low movefrags; recommended to use a large highly
+     * composite number for movefrags. */
+    pcargo->moved = TRUE;
+    double cargo_move_rate = utype_move_rate(unit_type_get(pcargo),
+                                           NULL, unit_owner(pcargo),
+                                           pcargo->veteran, pcargo->hp,
+                                           NULL);  
+    pcargo->moves_left = (double)pcargo->moves_left + 0.5 /*move_frag round*/ 
+                       - ((double)move_cost/(double)unit_move_rate(punit))
+                       * cargo_move_rate;
+           /* * get_unit_bonus(pcargo, EFT_PASSENGER_MOVE_COST_BP) / 10080 */
+    pcargo->moves_left = MAX(0, pcargo->moves_left);                         
+                                                      
   } unit_cargo_iterate_end;
 
   /* Get data for 'punit'. */

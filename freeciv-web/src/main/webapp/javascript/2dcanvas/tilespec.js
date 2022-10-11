@@ -1488,6 +1488,7 @@ function get_unit_activity_sprite(punit)
        return {"key"      : "unit.irrigate",
                "offset_x" : unit_activity_offset_x,
                "offset_y" : - unit_activity_offset_y,
+               /*flag to also push a connect sprite on top */
                "connect" : ((punit['orders_length']>0) ? true : false) 
               };
 
@@ -1543,22 +1544,34 @@ function get_unit_activity_sprite(punit)
                              "unit.plant" :
                              tileset_extra_id_activity_graphic_tag(act_tgt),
               "offset_x" : unit_activity_offset_x,
-              "offset_y" : - unit_activity_offset_y};
+              "offset_y" : - unit_activity_offset_y,
+              /*flag to also push a connect sprite on top */ 
+              "connect" : ((punit['orders_length']>0) ? true : false)
+              };
 
     case ACTIVITY_PLANT:
        return {"key"      : "unit.plant",
                "offset_x" : unit_activity_offset_x,
-               "offset_y" : - unit_activity_offset_y};
+               "offset_y" : - unit_activity_offset_y,
+               /*flag to also push a connect sprite on top */ 
+               "connect" : ((punit['orders_length']>0) ? true : false)
+               };
 
     case ACTIVITY_BASE:
       return {"key" : tileset_extra_id_activity_graphic_tag(act_tgt),
               "offset_x" : unit_activity_offset_x,
-              "offset_y" : - unit_activity_offset_y};
+              "offset_y" : - unit_activity_offset_y,
+              /*flag to also push a connect sprite on top */ 
+              "connect" : ((punit['orders_length']>0) ? true : false)
+              };
 
     case ACTIVITY_PILLAGE:
       return {"key" : "unit.pillage",
           "offset_x" : unit_activity_offset_x,
-          "offset_y" : - unit_activity_offset_y};
+          "offset_y" : - unit_activity_offset_y,
+          /*flag to also push a connect sprite on top */ 
+          "connect" : ((punit['orders_length']>0) ? true : false)
+          };
 
     case ACTIVITY_VIGIL:
         return {"key" : "unit.vigil",
@@ -1573,17 +1586,26 @@ function get_unit_activity_sprite(punit)
     case ACTIVITY_TRANSFORM:
       return {"key" : "unit.transform",
           "offset_x" : unit_activity_offset_x,
-          "offset_y" : - unit_activity_offset_y};
+          "offset_y" : - unit_activity_offset_y,
+          /*flag to also push a connect sprite on top */ 
+          "connect" : ((punit['orders_length']>0) ? true : false)
+          };
 
     case ACTIVITY_POLLUTION:
         return {"key" : "unit.pollution",
             "offset_x" : unit_activity_offset_x,
-            "offset_y" : - unit_activity_offset_y};
+            "offset_y" : - unit_activity_offset_y,
+            /*flag to also push a connect sprite on top */ 
+            "connect" : ((punit['orders_length']>0) ? true : false)
+            };
   
     case ACTIVITY_FALLOUT:
       return {"key" : "unit.fallout",
           "offset_x" : unit_activity_offset_x,
-          "offset_y" : - unit_activity_offset_y};
+          "offset_y" : - unit_activity_offset_y,
+          /*flag to also push a connect sprite on top */ 
+          "connect" : ((punit['orders_length']>0) ? true : false)
+          };
 
     case ACTIVITY_CONVERT:
         return {"key" : "unit.convert",
