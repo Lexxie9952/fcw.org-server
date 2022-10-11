@@ -558,6 +558,25 @@ Peaceful_Field_Unit_Bonus
         when stationed abroad (Hun mercenaries, BioTerror/Chemical Warfare Unit,
         etc.)
 
+Passenger_Move_Cost_Bp
+   🔷BACKGROUND:______________________________________________________________________________________
+    Ride a ship for 24 hours and get off: you AND the ship lost all your moves for the day. Legacy
+    Rulesets suffer "double-move exploits." Realism is not the highest goal for games, but one realist
+    fix isn't always worse than many hacks patching move costs and legality for transportation.
+   🔷EFFECT VALUES:___________________________________________________________________________________
+    Effect value is measured in SA Basis Points, i.e. 10080 = 100% (used instead of 10k since it's
+    _superabundant_, the best numbers for killing rounding error!) It's recommended for rulesets to
+    use this effect with "superabundant" or "highly composite" move_fragments (e.g., 12,60,360,10080).
+    🔷HOW TO USE THE EFFECT:___________________________________________________________________________
+      🔸 A value of 10080 = the same % of the Cargo's move_rate is spent per move as the Transport.
+         Cargo on a Transport that uses half its moves will also lose half its moves.
+      🔸 A value of 5040 makes the Cargo's move-points decay at half the % rate of the Transport's.
+         If a Transport uses all its moves, the Cargo will have half its moves left.
+      🔸 A value of 0 means Cargo incurs no cost at being transported. (DEFAULT. Legacy rulesets.)
+      🔸 Values over 10080 will consume more moves for the Cargo than for the Transport.
+      🔸 Negative values would give the Cargo extra moves while being transported.
+      🔸 Multiple active effects will add together, increasing the move-point decay for Cargo.
+
 Performance
     Value is how much performance type culture city produces.
 

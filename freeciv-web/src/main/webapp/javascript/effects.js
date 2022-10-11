@@ -22,7 +22,7 @@ var effects = {};
 // This file is commented out in a form that will assist in its eventual 
 // incorporation into FCW client features.
 
-/*
+
 const EFT_TECH_PARASITE = 0;
 
 const EFT_AIRLIFT = 1;
@@ -182,8 +182,8 @@ const EFT_TILE_NUKE_PROOF = 142
 const EFT_RAZE_BUILDING_PCT = 143;
 const EFT_DEFENDER_COMBAT_ROUNDS = 144;
 const EFT_UNIT_MIN_SPEED = 145;
-const EFT_LAST = 146;
-*/
+const EFT_PASSENGER_MOVE_COST_BP = 146;
+const EFT_LAST = 147;
 
 // var initialized = FALSE;
 

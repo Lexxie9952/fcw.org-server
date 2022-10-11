@@ -4918,8 +4918,8 @@ bool unit_move_real(struct unit *punit, struct tile *pdesttile, int move_cost,
                                            NULL);  
     pcargo->moves_left = (double)pcargo->moves_left + 0.5 /*move_frag round*/ 
                        - ((double)move_cost/(double)unit_move_rate(punit))
-                       * cargo_move_rate;
-           /* * get_unit_bonus(pcargo, EFT_PASSENGER_MOVE_COST_BP) / 10080 */
+                       * cargo_move_rate
+                       * get_unit_bonus(pcargo, EFT_PASSENGER_MOVE_COST_BP) / 10080;
     pcargo->moves_left = MAX(0, pcargo->moves_left);                         
                                                       
   } unit_cargo_iterate_end;

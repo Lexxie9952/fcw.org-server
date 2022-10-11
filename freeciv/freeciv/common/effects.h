@@ -378,6 +378,10 @@ extern "C" {
 /* Adjusts the unit's base min_speed from its unit_class, by amount */
 #define SPECENUM_VALUE145 EFT_UNIT_MIN_SPEED
 #define SPECENUM_VALUE145NAME "Unit_Min_Speed"
+/* Marines using a Transport all day can lose a % of their move_rate like the Transport 
+ * itself. Measured in SA Basis Points (10080 instead of 10000). See README.effects */
+#define SPECENUM_VALUE146 EFT_PASSENGER_MOVE_COST_BP
+#define SPECENUM_VALUE146NAME "Passenger_Move_Cost_Bp"
 /* 🖐🏻 ******* 👆🏻👇🏻 
  * FCW does not have /common and needs to hard code any changes or re-ordering of the above in effects.js */
 /********************************************************************************************************~*/
