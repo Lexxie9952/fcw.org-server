@@ -238,12 +238,13 @@ function unit_can_do_action(punit, act_id)
 }
 
 /**************************************************************************
-  Return TRUE iff this unit has cargo capacity and that capacity is not 
-  already full from other units transported by it.
+  Returns postive integer (which evaluates the same as TRUE), if this unit
+  has remaining cargo capacity. The number returned is the number of free
+  cargo slots available.
 **************************************************************************/
-function unit_has_cargo_room(punit) {
+function unit_cargo_room(punit) {
   if (!punit) {
-    console.log("Error: unit_has_cargo_room(..) was asked the capacity of a null unit.")
+    console.log("Error: unit_cargo_room(..) was asked the capacity of a null unit.")
     return true; // before we had this function, we always assumed true anyway
   }
   var ptype = unit_type(punit);
@@ -255,16 +256,18 @@ function unit_has_cargo_room(punit) {
   var cargo_units = 0;
 
   // Count how many units on this tile are on this transport.
-  for (var u=0; u < units_on_tile.length; u++) {
-    if (units_on_tile[u]['transported_by']==transport_id) {
-      cargo_units++;
+  if (units_on_tile) {
+    for (var u=0; u < units_on_tile.length; u++) {
+      if (units_on_tile[u]['transported_by']==transport_id) {
+        cargo_units++;
+      }
     }
   }
 
   if (cargo_units >= transport_capacity) {
-    return false;
+    return 0;
   }
-  return true;
+  return transport_capacity - cargo_units;
 }
 
 /**************************************************************************
@@ -297,6 +300,7 @@ function unit_can_deboard(punit)
   var ptype = unit_type(punit);
   if (ptile == null) return false;
   var pclass = get_unit_class_name(punit);
+  if (pclass == "Bomb2") return false; // The one unit you never wanna "drop off", except in a city, ;)
   //var terrain_name = tile_terrain(ptile)['name'];
   //****************************************************************** */
   // COMMON
@@ -432,46 +436,50 @@ function unit_could_possibly_load(punit, ptype, ttype, tclass)
 
   // Transported units can't swap transports except under some conditions:
   // TO DO: when actionenabler_load is in server, we can put all this in game.ruleset actionenablers.
-  if ( (pclass.includes("Land") || pclass=="Cargo") && punit['transported']) {
+  if (punit['transported']) {
+    if ( (pclass.includes("Land") || pclass=="Cargo") && punit['transported']) {
 
-    var from_unit  = units[punit['transported_by']]; // unit currently transporting the cargo who wants to swap transports
-    var from_class = get_unit_class(from_unit);      // unit_class of the transport currently transporting the cargo
-    var from_type = unit_type(from_unit);
+      var from_unit  = units[punit['transported_by']]; // unit currently transporting the cargo who wants to swap transports
+      var from_class = get_unit_class(from_unit);      // unit_class of the transport currently transporting the cargo
+      var from_type = unit_type(from_unit);
 
-    // Can "transport swap" where 1) unloading then loading again is legal anyway (cities, naval bases, quays) ...
-    if (tile_city(ptile)) can_load = true;
-    else if (unit_can_deboard(punit)) can_load = true; // When deboarding is legal, don't force micro-managing an extra step to unload.
-    //commented out: e.g., Riflemen can't necessarily get off a Heli on a Quay.
-    //else if (typeof EXTRA_NAVALBASE !== undefined && tile_has_extra(EXTRA_NAVALBASE)) can_load = true;
-    //else if (client_rules_flag[CRF_EXTRA_QUAY] && tile_has_extra(EXTRA_QUAY)) can_load=true;    
-    // ... 2) in ships who have neither moved more than 4 moves NOR moved more than half their moves;
-    else if (from_class.rule_name == "Trireme" 
-          || from_class.rule_name == "RiverShip"
-          || from_class.rule_name == "Sea"
-          || from_class.rule_name == "Boat")
-    {
-        var from_unit_move_rate = from_type['move_rate']; // get base move_rate of transporter
-        // MP2 and up, adjust move rates for Lighthouse and Nuclear Power:
-        if (client_rules_flag[CRF_MP2]) {
-          if (player_has_wonder(unit_owner(from_unit).playerno, improvement_id_by_name(B_LIGHTHOUSE))) {
-            from_unit_move_rate += 2*SINGLE_MOVE;
-          }
-          if ((player_invention_state(unit_owner(from_unit), tech_id_by_name('Nuclear Power')) == TECH_KNOWN)) {
-            from_unit_move_rate += 2*SINGLE_MOVE;
-          }
-        } // end check for: Lighthouse / Nuclear Power
+      // Can "transport swap" where 1) unloading then loading again is legal anyway (cities, naval bases, quays) ...
+      if (tile_city(ptile)) can_load = true;
+      else if (unit_can_deboard(punit)) can_load = true; // When deboarding is legal, don't force micro-managing an extra step to unload.
+      //commented out: e.g., Riflemen can't necessarily get off a Heli on a Quay.
+      //else if (typeof EXTRA_NAVALBASE !== undefined && tile_has_extra(EXTRA_NAVALBASE)) can_load = true;
+      //else if (client_rules_flag[CRF_EXTRA_QUAY] && tile_has_extra(EXTRA_QUAY)) can_load=true;    
+      // ... 2) in ships who have neither moved more than 4 moves NOR moved more than half their moves;
+      else if (from_class.rule_name == "Trireme" 
+            || from_class.rule_name == "RiverShip"
+            || from_class.rule_name == "Sea"
+            || from_class.rule_name == "Boat")
+      {
+          var from_unit_move_rate = from_type['move_rate']; // get base move_rate of transporter
+          // MP2 and up, adjust move rates for Lighthouse and Nuclear Power:
+          if (client_rules_flag[CRF_MP2]) {
+            if (player_has_wonder(unit_owner(from_unit).playerno, improvement_id_by_name(B_LIGHTHOUSE))) {
+              from_unit_move_rate += 2*SINGLE_MOVE;
+            }
+            if ((player_invention_state(unit_owner(from_unit), tech_id_by_name('Nuclear Power')) == TECH_KNOWN)) {
+              from_unit_move_rate += 2*SINGLE_MOVE;
+            }
+          } // end check for: Lighthouse / Nuclear Power
 
-        // if unit has used no more than 4 moves...
-        if (from_unit.movesleft >= from_unit_move_rate - 4*SINGLE_MOVE ) {
-          // ...AND unit has half moves left or more:
-          if (from_unit.movesleft >= from_unit_move_rate/2) {
-            can_load = true;
+          // if unit has used no more than 4 moves...
+          if (from_unit.movesleft >= from_unit_move_rate - 4*SINGLE_MOVE ) {
+            // ...AND unit has half moves left or more:
+            if (from_unit.movesleft >= from_unit_move_rate/2) {
+              can_load = true;
+            }
           }
-        }
+      }
+      // Every other scenario of transport-swapping Land/Cargo class is not allowed: hinder double-move exploit).
+      if (!can_load) return false; // Must unload from current transport first.
     }
-    // Every other scenario of transport-swapping is not allowed: hinder double-move exploit).
-    if (!can_load) return false; // Must unload from current transport first.
+    else if (pclass.includes("Bomb")) return false; // No bomb-swapping in mid-air or beaming up from a truck/train!
   }
+
   //////////// End of handling for already-transported units doing a transport-swap ///////////////////////
 
 /**************************************************************************************************************************
@@ -621,7 +629,7 @@ function unit_could_possibly_load(punit, ptype, ttype, tclass)
     if (pclass != "LandAirSea") {
       if (ttype.name.includes("Carrier")) return false;
       if (ttype.name == "Helicopter") return false; // transport heli allowed
-    } else if (ttype.name == "Light Carrier") return false; // Marines+AAA can't get on Light Carriers
+    }
     if (pclass == "LandRoad") { // Big Land
       if (tclass.rule_name == "Helicopter") return false;
     }
