@@ -20,7 +20,6 @@
 
 var map = {};
 var tiles = {};
-var goto_way_points = {};
 
 var DIR8_NORTHWEST = 0;
 var DIR8_NORTH = 1;
@@ -468,25 +467,4 @@ function dir_ccw(dir)
     return DIR8_WEST;
   }
   return -1;
-}
-
-/**************************************************************************
- Removes goto lines and clears goto tiles.
-**************************************************************************/
-function clear_goto_tiles()
-{
-  if (renderer == RENDERER_2DCANVAS) {
-    for (var x = 0; x < map['xsize']; x++) {
-      for (var y = 0; y < map['ysize']; y++) {
-        tiles[x + y * map['xsize']]['goto_dir'] = null;
-      }
-    }
-  } else {
-    if (scene != null && goto_lines != null) {
-      for (var i = 0; i < goto_lines.length; i++) {
-        scene.remove(goto_lines[i]);
-      }
-      goto_lines = [];
-    }
-  }
 }

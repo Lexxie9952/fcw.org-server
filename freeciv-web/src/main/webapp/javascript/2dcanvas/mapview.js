@@ -59,6 +59,10 @@ var goto_colors_active = ["0,10,40,1","30,208,255,1","2,26,45,1","197,243,255,1"
 var goto_colors_info   = ["40,10,0,.91","255,208,30,.91","45,26,2,.91","255,243,197,.91"]; // tile/unit info
 var goto_colors_road   = ["40,10,0,.91","168,84,15,.91","65,18,2,.91","255,213,167,.91"];    // connect road
 var goto_colors_irr    = ["0,40,10,1","128,208,84,1","25,45,15,1","150,255,123,1"];    // connect irrigation
+var goto_colors_canal  = ["198,198,198,1","46,80,248,1","0,0,71,1","198,198,198,1"];        // connect canal
+var goto_colors_mine   = ["144,111,57,1","20,15,9,1","125,125,95,1","182,182,156,1"];        // connect mine
+var goto_colors_pillage= ["254,252,6,1","253,75,1,1","0,0,0,1","255,117,0,1"];            // connect pillage
+
 var goto_colors_rally = {
                       1: ["0,40,10,1","230,240,230,1","0,54,10,1","143,255,155,1"],  // temporary rally path
                       2: ["40,0,10,1","240,230,230,1","54,0,10,1","255,143,155,1"]};// persistent rally path
@@ -823,6 +827,11 @@ function mapview_put_goto_line(pcanvas, dir, canvas_x, canvas_y, tile_index)
   if (connect_active) {
     if (connect_extra==EXTRA_ROAD) colors = goto_colors_road;
     else if (connect_extra==EXTRA_IRRIGATION) colors=goto_colors_irr;
+    else if (client_rules_flag[CRF_CANALS] && connect_extra==EXTRA_CANAL) {
+      colors=goto_colors_canal;
+    }
+    else if (connect_activity == ACTIVITY_PILLAGE) colors = goto_colors_pillage;
+    else if (connect_extra == EXTRA_MINE) colors=goto_colors_mine;
   } else if (rally_active) {
     colors = goto_colors_rally[rally_active];
   } else if (patrol_mode) {
