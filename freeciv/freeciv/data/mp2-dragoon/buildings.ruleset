@@ -62,9 +62,9 @@ format_version=20
 ;                      the building just sets off a turn counter which the ruleset
 ;                      can create its own effects for. See the Pax Dei wonder
 ;                      for an example of one way this can be used.
-; "User_Flag_1"      = A custom user flag one can use if serveral kinds of 
+; "User_Flag_1"      = A custom user flag one can use if several kinds of 
 ;                      buildings make the same effect.
-; "User_Flag_2"      = A custom user flag one can use if serveral kinds of 
+; "User_Flag_2"      = A custom user flag one can use if several kinds of 
 ;                      buildings make the same effect.
 ; */ <-- avoid gettext warnings
 

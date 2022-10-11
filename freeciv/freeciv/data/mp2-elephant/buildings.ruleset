@@ -62,9 +62,9 @@ format_version=20
 ;                      the building just sets off a turn counter which the ruleset
 ;                      can create its own effects for. See the Pax Dei wonder
 ;                      for an example of one way this can be used.
-; "User_Flag_1"      = A custom user flag one can use if serveral kinds of 
+; "User_Flag_1"      = A custom user flag one can use if several kinds of 
 ;                      buildings make the same effect.
-; "User_Flag_2"      = A custom user flag one can use if serveral kinds of 
+; "User_Flag_2"      = A custom user flag one can use if several kinds of 
 ;                      buildings make the same effect.
 ; */ <-- avoid gettext warnings
 
@@ -2604,7 +2604,8 @@ The Sphinx is said to watch over all citizens to ensure they are good.\
  the city it’s built. As a shared work of community art and culture, it\
  adds +1 luxury. In addition, it reduces corruption in the city by half.\
  (If there is any corruption at all, it’s reduced by a minimum of 1.) \n\
-Obsolete by：Philosophy.\
+You can build the Sphinx while in Despotism. Its effects last until the\
+ discovery of Philosophy.\
 ")
 
 ;this should be wonder #65 if we counted correctly and need it for the "statue hack" to determine if player can get gov.
