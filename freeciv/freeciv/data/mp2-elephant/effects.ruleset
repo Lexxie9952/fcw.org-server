@@ -29,6 +29,8 @@ format_version=20
 ;
 ; */ <-- avoid gettext warnings
 
+
+; ***************************************************************************************************************** SOFT FIELD UNIT 
 ; Med. Bomber is a "Soft Field Unit." If non-aggressively deployed, 0 unhappy in Republic,
 ; 1 unhappy in Democracy:
 [effect_medium_bomber_field_unit_minus_one]
@@ -47,8 +49,48 @@ reqs	=
 ;    { "type", "name", "range", "present"
 ;      "UnitType", "Medium Bomber", "Local", TRUE
 ;      "UnitState","OnDomesticTile","Local", TRUE 
-;    }   
+;    }
 
+; ****************************************************************************************************************** COMBAT ROUNDS 
+; Combat_rounds Tribesmen
+[effect_combat_rounds_tribesmen]
+type    = "Combat_Rounds"
+value   = 10
+reqs	=
+    { "type", "name", "range", "present"
+      "UnitType", "Tribesmen", "Local", TRUE
+    }
+;[effect_parthian_shot]
+;type = "Defender_Combat_Rounds"    ;tested and works !
+;value = 5
+;reqs =
+;    { "type", "name", "range", "present"
+;      "UnitFlag", "Horse", "Local", TRUE 
+;    }
+;[effect_parthian_shot2]
+;type = "Unit_Min_Speed"
+;value = 120 ; 120+60=180. 180/60=3mp.  ;tested and works !                  
+;reqs =
+;    { "type", "name", "range", "present"
+;      "UnitFlag", "Horse", "Local", TRUE 
+;    }
+; Combat_rounds for ancient ships
+[effect_combat_rounds_riverships]
+type    = "Combat_Rounds"
+value   = 15
+reqs	=
+    { "type", "name", "range", "present"
+      "UnitClass", "RiverShip", "Local", TRUE
+      "UnitType", "Frigate", "Local", FALSE
+      "UnitType", "Ram Ship", "Local", FALSE
+    }
+[effect_combat_rounds_trireme]
+type    = "Combat_Rounds"
+value   = 15
+reqs	=
+    { "type", "name", "range", "present"
+      "UnitType", "Trireme", "Local", TRUE
+    }
 ; Combat_rounds, modern sea units attacking land
 [effect_combat_rounds_shore_bombardment]
 type    = "Combat_Rounds"
@@ -62,7 +104,6 @@ reqs	=
 target_reqs = 
     { "type",      "name", "range", "present"
     }
-
 ; Non-native battles limited by combat_rounds don't usually 
 ; result in a victor, and often the attacker uses multiple 
 ; attack moves on a single defender, which artificially 
@@ -95,32 +136,6 @@ reqs	=
       "UnitType",  "Transport", "Local", FALSE ; just in case we give it A1 some day.
       "TerrainClass", "Land",   "Local", TRUE  ; Attack_Bonus resolves to defender's tile.
     }
-
-; Combat_rounds Tribesmen
-[effect_combat_rounds_tribesmen]
-type    = "Combat_Rounds"
-value   = 10
-reqs	=
-    { "type", "name", "range", "present"
-      "UnitType", "Tribesmen", "Local", TRUE
-    }
-; Combat_rounds for ancient ships
-[effect_combat_rounds_riverships]
-type    = "Combat_Rounds"
-value   = 15
-reqs	=
-    { "type", "name", "range", "present"
-      "UnitClass", "RiverShip", "Local", TRUE
-      "UnitType", "Frigate", "Local", FALSE
-      "UnitType", "Ram Ship", "Local", FALSE
-    }
-[effect_combat_rounds_trireme]
-type    = "Combat_Rounds"
-value   = 15
-reqs	=
-    { "type", "name", "range", "present"
-      "UnitType", "Trireme", "Local", TRUE
-    }
 [effect_combat_rounds_zeppelin]
 type    = "Combat_Rounds"
 value   = 20
@@ -128,9 +143,28 @@ reqs	=
     { "type",     "name",     "range", "present"
       "UnitType", "Zeppelin", "Local", TRUE
     }
+;Takes 4 units on vigil to get a kill. TODO: somehow overridden by Stealth Fighter. Override code starts at like -1000: (code+1000)*-1
+[effect_penetration_bomber_defending_combat_rounds]
+type = "Defender_Combat_Rounds"    ;tested and works !
+value = 5
+reqs =
+    { "type",     "name",               "range", "present"
+      "UnitType", "Penetration Bomber", "Local", TRUE 
+    }
+;*********************************************************************************************************************** UNIT_MIN_SPEEDS
+[effect_foot_soldier_min_speed_one_and_a_half_mp]
+type = "Unit_Min_Speed"
+value = 5040 ;5040/10080 +0.5mp ; 30+60=90. 90/60=1.5mp.                
+reqs =
+    { "type", "name", "range", "present"
+      "UnitFlag", "FootSoldier", "Local", TRUE 
+    }
 
+;*********************************************************************************************************************** CHEATING AI
 ; Cheating AI effects are in separate file
 *include "default/ai_effects.ruleset"
+
+;*********************************************************************************************************************** UNHAPPY EFFECTS
 
 [effect_unhappysize]
 type    = "City_Unhappy_Size"
@@ -880,8 +914,8 @@ reqs    =
 
 [effect_terrain_bonus_river]
 type   = "Terrain_Defend_Add_Bonus"
-value = 50
- reqs	=
+value  = 50
+reqs	 =
     { "type",          "name",           "range"
       "Extra",         "River",          "Local"
       "UnitClassFlag", "TerrainDefense", "Local"
@@ -1231,10 +1265,11 @@ reqs    =
 type    = "Conquest_Tech_Pct"
 value   = 100
 
+;*********************************************************************** MOVE BONUSES
 ;Tribesmen------------------------------------------
 [effect_tribesmen_first_three_turns]
 type = "Move_Bonus"
-value = 20
+value = 3360
 reqs =
     {
       "type",      "name",      "range", "present"
@@ -1243,7 +1278,7 @@ reqs =
     }
 [effect_tribesmen_slow]
 type = "Move_Bonus"
-value = -20
+value = -3360
 reqs =
     {
       "type",      "name",      "range"
@@ -1263,7 +1298,7 @@ reqs =
 ;------------------------------------------------------
 [effect_scout_mapmaking_bonus]
 type    = "Move_Bonus"
-value	  = 40
+value	  = 6720
 reqs    =
     {
       "type", "name", "range", "present"
@@ -1273,32 +1308,30 @@ reqs    =
 ;------------------------------------------------------
 [effect_small_boats_faster_on_rivers_1]
 type    = "Move_Bonus"
-value	  = 60
+value	  = 10080
 reqs    =
     {
-      "type", "name", "range", "present"
-      "UnitType", "Boat", "Local", TRUE
-      "Extra", "River", "Adjacent", TRUE
-      "TerrainClass", "Oceanic", "Local", FALSE 
+      "type",         "name",    "range",    "present"
+      "UnitType",     "Boat",    "Local",    TRUE
+      "Extra",        "River",   "Adjacent", TRUE
+      "TerrainClass", "Oceanic", "Local",    FALSE 
     }
 [effect_small_boats_faster_on_rivers_2]
 type    = "Move_Bonus"
-value	  = 60
+value	  = 10080
 reqs    =
     {
-      "type", "name", "range", "present"
-      "UnitType", "Trireme", "Local", TRUE
-      "Extra", "River", "Adjacent", TRUE
-      "TerrainClass", "Oceanic", "Local", FALSE 
+      "type",         "name",    "range",    "present"
+      "UnitType",     "Trireme", "Local",    TRUE
+      "Extra",        "River",   "Adjacent", TRUE
+      "TerrainClass", "Oceanic", "Local",    FALSE 
     }
-
-
 ;------------------------------------------------------
 
 ;Freshly fueled full hp helicopters get +1 move per turn
 [effect_fresh_helicopter]
 type    = "Move_Bonus"
-value	= 60
+value	= 10080
 reqs	=
     { "type", "name", "range"
       "UnitClass", "Helicopter", "Local"
@@ -1307,7 +1340,7 @@ reqs	=
 ;Freshly fueled full hp helicopters get +1 move per turn
 [effect_fresh_helicopter2]
 type    = "Move_Bonus"
-value	= 60
+value	= 10080
 reqs	=
     { "type", "name", "range"
       "UnitClass", "Helicopter", "Local"
@@ -1317,7 +1350,7 @@ reqs	=
 ; Nuclear power gives +2 moves to sea units (+1 if Lighthouse in effect)
 [effect_nuclear_powered_ships]
 type    = "Move_Bonus"
-value	= 60
+value	= 10080
 reqs	=
     { "type",          "name",          "range"
       "Tech",          "Nuclear Power", "Player"
@@ -1325,12 +1358,75 @@ reqs	=
     }
 [effect_nuclear_powered_ships2]
 type    = "Move_Bonus"
-value	= 60
+value	= 10080
 reqs	=
     { "type",          "name",          "range", "present"
       "Tech",          "Nuclear Power", "Player", TRUE
       "Building",      "Lighthouse",    "Player", FALSE
       "UnitClassFlag", "WaterVessel",   "Local",  TRUE
+    }
+;*********************************************************************** </end> MOVE BONUSES
+
+;...
+
+;*********************************************************************** TRANSPORTED UNIT MOVE COSTS
+;As other things liberalize we may observe setting this at 0 is OP exploitive and go for like, idk,
+;1/3, 1/2, or 2/3 mp. Then again not necessary if the 1/3 is built into a board/load cost.
+[effect_military_land_base_passenger_cost_50] ;except Marines/AAA
+type    = "Passenger_Move_Cost_Bp"
+value	= 5040
+reqs	=
+    { "type",          "name",          "range", "present"
+      "UnitClassFlag", "TerrainSpeed",  "Local", TRUE      ; all Land units
+      "UnitFlag",      "Infra",         "Local", FALSE     ; except worker types  
+      "UnitFlag",      "NonMil",        "Local", FALSE     ; except NonMil types
+      "UnitClass",     "LandAirSea",    "Local", FALSE     ; except Marines, AAA. (AAA slated to vigil on ships)
+;BASE RATE of 50% while transported:
+;Military land units who aren't LandAirSea.
+;
+;FULL MOVES while transported = Civilian, Marines, AAA 
+;NON-LAND,
+;Marines, AAA,
+;Worker-types, Tribesmen, Migrant-types, Scouts, Balloons, Airplanes, Emissary, Diplomat, Spy, Patriarch
+;Wagon, Caravan, Train, Truck, Goods, Freight, Leader.
+    }
+
+; Siege: 0.5mp, Mounted: 1 mp. Motor: 1.5 mp. Absolutely great. Could get rewrite after deboard liberalization?
+; Basically we want them to have 1mp left same as Foot soldiers, but a penalty for Artillery-Truck tricks or a
+; micro-bonus for Motor works just fine.
+[effect_non_footsoldier_military_passenger_cost_75]
+type    = "Passenger_Move_Cost_Bp"
+value	= 2520   ; 5040 + 2520 = 7560 / 10080 = 75%
+reqs	=
+    { "type",          "name",          "range", "present"
+      "UnitClassFlag", "TerrainSpeed",  "Local", TRUE      ; all Land units at least 50% passenger move cost
+      "UnitFlag",      "FootSoldier",   "Local", FALSE     ; not worker types  
+      "UnitFlag",      "NonMil",        "Local", FALSE     ; not NonMil types
+      "UnitClass",     "LandAirSea",    "Local", FALSE     ; Marines no; AAA need to vigil on Transports
+    }
+
+;Ships only transported by Trawlers and have full disembark costs; not needed until we liberalize deboarding everywhere...
+;which we should, since the units are already losing their mp from transportation!
+;[effect_ships_transported]
+
+;Missiles should never incur cost, it's not germaine to their nature.
+;Bombs don't incur cost because not germaine / we have the other system working for them.
+
+;Aircraft is a bit more complex, as it diminishes naval power to some extent and could even 
+;disallow vigil if you didn't set it before moving! Perhaps auto-sentry on ships should be
+;scripted to auto-vigil. Losing half for a unit that never lost anything seems plenty for now. 
+[effect_aircraft_transported_passenger_move_cost]
+type    = "Passenger_Move_Cost_Bp"
+value	= 5040
+reqs	=
+    { "type",          "name",          "range", "present"
+      "UnitClassFlag", "TerrainSpeed",  "Local", FALSE     ; No land units
+      "UnitClassFlag", "WaterVessel",   "Local", FALSE     ; No ships
+      "UnitClassFlag", "Missile",       "Local", FALSE     ; NO missiles or similar classes
+      "UnitClassFlag", "UnloadOnce",    "Local", FALSE     ; not Bomb or Bomb2
+      "MinMoveFrags",  "35280",         "Local", TRUE      ; only subtract if >3.5 moves_left...
+      ; ... preserves ability to fly off carrier, strike, return, or strike 2-3 times from on the carrier.
+      ;We could just do 'AirAttacker" but doesn't handle civilian aircraft
     }
 
 ;************************************* GOVERNMENT CORRUPTION
@@ -3547,7 +3643,7 @@ reqs	=
 ;sedentary culture and loss of game-start move bonus.
 [effect_sedentary_people_are_slow]
 type = "Move_Bonus"
-value = 20
+value = 3360
 reqs =
     {
       "type",      "name",   "range",  "present"
@@ -4727,7 +4823,7 @@ reqs	=
     { "type",          "name",         "range",  "present"
       "VisionLayer",   "Subsurface",   "Local",  TRUE
     }
-[effect_base_effect_subs_visible_adjacent]   ; i.e., ALL AIR UNITS, ALL "Sea" class units from Destroyer onward
+[effect_base_effect_subs_visible_adjacent]   ; i.e., ALL AIRCRAFT, ALL "Sea" class units from Destroyer onward
 type    = "Unit_Vision_Radius_Sq"
 value	= 2 ; Now give adjacent vision back to the right units
 reqs	=
@@ -4735,12 +4831,15 @@ reqs	=
       "UnitClassflag", "TerrainSpeed", "Local",  FALSE      ;except land
       "UnitClass",     "RiverShip",    "Local",  FALSE
       "UnitClass",     "Trireme",      "Local",  FALSE
+      "UnitClass",     "Missile",      "Local",  FALSE
+      "UnitClass",     "Space",        "Local",  FALSE
+      "UnitClass",     "Bomb",         "Local",  FALSE
+      "UnitClass",     "Bomb2",        "Local",  FALSE
       "UnitType",      "Transport",    "Local",  FALSE
       "UnitType",      "Ironclad",     "Local",  FALSE
       "VisionLayer",   "Subsurface",   "Local",  TRUE
     }
 ;********************************************************************************* VISION BONUSES (non-wonder)
-
 [effect_telegraph_border_vision]
 type    = "Border_Vision"
 value   = 1
@@ -4768,7 +4867,7 @@ reqs	=
       "Tech",        "Physics", "Player"
       "UnitClass",   "Trireme", "Local"
       "VisionLayer", "Main",    "Local"
-    }   
+    }
 [effect_physics_vision_3]
 type    = "Unit_Vision_Radius_Sq"
 value	= 4
@@ -4777,7 +4876,7 @@ reqs	=
       "Tech",        "Physics",   "Player"
       "UnitClass",   "RiverShip", "Local"
       "VisionLayer", "Main",      "Local"
-    }  
+    }
 [effect_satellite_vision]  ;Vision benefit from satellite communication to Land units
 type    = "Unit_Vision_Radius_Sq"
 value   = 7
@@ -4843,7 +4942,7 @@ reqs    =
 ;    }
 [effect_helicopter_submarine_vision]
 type    = "Unit_Vision_Radius_Sq"
-value   = 6         ; 2 + 6 = 8. srtq(8) = 2.82 = 2x2 
+value   = 6         ; 2 + 6 = 8. sqrt(8) = 2.82 = 2x2 square
 reqs    =
     { "type",        "name",         "range"
       "UnitClass",   "Helicopter",   "Local"
@@ -4854,7 +4953,7 @@ reqs    =
 ;********************************************************************************* MOVE BONUSES
 [effect_airplane_range_1]
 type    = "Move_Bonus"
-value	= 120
+value	= 10080
 reqs	=
     { "type", "name", "range"
       "Tech", "Radio", "Player"
@@ -4862,7 +4961,7 @@ reqs	=
     }
 [effect_airplane_range_2]
 type    = "Move_Bonus"
-value	= 120
+value	= 10080
 reqs	=
     { "type", "name", "range"
       "Tech", "Advanced Flight", "Player"
@@ -4870,7 +4969,7 @@ reqs	=
     }
 [effect_airplane_range_3]
 type    = "Move_Bonus"
-value	= 120
+value	= 10080
 reqs	=
     { "type", "name", "range"
       "Tech", "Radar", "Player"
@@ -4878,7 +4977,7 @@ reqs	=
     }
 [effect_airplane_range_4]
 type    = "Move_Bonus"
-value	= 120
+value	= 10080
 reqs	=
     { "type", "name", "range"
       "Tech", "Rocketry", "Player"
@@ -4886,7 +4985,7 @@ reqs	=
     }
 [effect_airplane_range_5]
 type    = "Move_Bonus"
-value	= 120
+value	= 10080
 reqs	=
     { "type", "name", "range"
       "Tech", "Space Flight", "Player"
@@ -4894,7 +4993,7 @@ reqs	=
     }
 [effect_airplane_range_6]
 type    = "Move_Bonus"
-value	= 120
+value	= 10080
 reqs	=
     { "type", "name", "range"
       "Tech", "Avionics", "Player"
@@ -4902,7 +5001,7 @@ reqs	=
     }
 [effect_rail_electricity_no_combustion]
 type    = "Move_Bonus"
-value	= 63
+value	= 10584                                          ;in 60 frag system this was 63, needs testing.
 reqs	=
     { "type",      "name",          "range", "present"
       "Tech",      "Electricity",   "Player",TRUE
@@ -4912,7 +5011,7 @@ reqs	=
     }
 [effect_rail_combustion]
 type    = "Move_Bonus"
-value	= 126
+value	= 21168                                           ;in 60 frag system this was 126, needs testing
 reqs	=
     { "type",      "name",          "range", "present"
       "Tech",      "Combustion",    "Player",TRUE
@@ -4921,7 +5020,7 @@ reqs	=
     }
 [effect_automobile_light_armor]
 type    = "Move_Bonus"
-value	= 60
+value	= 10080
 reqs	=
     { "type", "name", "range"
       "Tech", "Automobile", "Player"
@@ -4939,7 +5038,7 @@ reqs	=
 ;************************************************************************ Agoge of Sparta
 [effect_agoge_move_bonus_1]
 type    = "Move_Bonus"
-value	= 20
+value	= 3360
 reqs	=
     { "type", "name", "range", "present"
       "Building", "Agōgē of Sparta", "Player", TRUE
@@ -4947,7 +5046,7 @@ reqs	=
     }
 [effect_agoge_move_bonus_2]
 type    = "Move_Bonus"
-value	= 40    ; 3/9 + 6/9 = 1  (20/60 + 40/60 = 1)
+value	= 6720    ; 3/9 + 6/9 = 1  (20/60 + 40/60 = 1)
 reqs	=
     { "type", "name", "range", "present"
       "Building", "Agōgē of Sparta", "Player", TRUE
@@ -4960,12 +5059,12 @@ value   = 50
 reqs    =
     { "type", "name", "range", "present"
       "Building", "Agōgē of Sparta", "Player", TRUE
-      "UnitType", "Phalanx", "Local", TRUE 
+      "UnitType", "Phalanx",         "Local",  TRUE
     }
 ; This is NOT an Agoge effect but belongs here so we can manage them together.
 ; Agoge gives the "Phalanx fortified attack bonus" to Phalanxes even if not
 ; fortified.
-[effect_phalanx_fortified_attack_if_not_agoge]
+[effect_phalanx_unmoved_attack_if_not_agoge]
 type    = "Attack_Bonus"
 value	= 50
 reqs	=
@@ -4981,6 +5080,15 @@ reqs    =
     { "type", "name", "range", "present"
       "Building", "Agōgē of Sparta", "Player", TRUE
       "UnitType", "Pikemen", "Local", TRUE 
+    }
+[effect_pikemen_unmoved_attack_if_not_agoge]
+type    = "Attack_Bonus"
+value	= 50
+reqs	=
+    { "type",          "name",            "range", "present"
+      "Building",      "Agōgē of Sparta", "Player", FALSE
+      "UnitType",      "Phalanx",         "Local",  TRUE 
+      "UnitState",     "MovedThisTurn",   "Local",  FALSE
     }
 [effect_agoge_phalanx_discount]
 type    = "Unit_Build_Cost_Pct"
@@ -5163,7 +5271,7 @@ reqs    =
     }
 [effect_appian_move_bonus_foot_soldier1]  ; bonus for unclaimed territory
 type    = "Move_Bonus"
-value   = 20
+value   = 3360
 reqs =
     { "type",     "name",          "range","present"
       "Building", "Appian Way",    "Player",TRUE
@@ -5173,7 +5281,7 @@ reqs =
     }
 [effect_appian_move_bonus_foot_soldier2]  ; bonus for national territory
 type    = "Move_Bonus"
-value   = 20
+value   = 3360
 reqs =
     { "type",     "name",          "range","present"
       "Building", "Appian Way",    "Player",TRUE
@@ -5183,7 +5291,7 @@ reqs =
     }
 [effect_appian_move_bonus_chariot1]
 type    = "Move_Bonus"
-value   = 40
+value   = 6720
 reqs =
     { "type",     "name",          "range", "present"
       "Building", "Appian Way",    "Player", TRUE
@@ -5193,7 +5301,7 @@ reqs =
     }
 [effect_appian_move_bonus_chariot2]
 type    = "Move_Bonus"
-value   = 40
+value   = 6720
 reqs =
     { "type",     "name",          "range", "present"
       "Building", "Appian Way",    "Player", TRUE
@@ -5203,7 +5311,7 @@ reqs =
     }
 [effect_appian_move_bonus_wagon1]
 type    = "Move_Bonus"
-value   = 20
+value   = 3360
 reqs =
     { "type",     "name",          "range","present"
       "Building", "Appian Way",    "Player",TRUE
@@ -5213,7 +5321,7 @@ reqs =
     }
 [effect_appian_move_bonus_wagon2]
 type    = "Move_Bonus"
-value   = 20
+value   = 3360
 reqs =
     { "type",     "name",          "range","present"
       "Building", "Appian Way",    "Player",TRUE
@@ -5223,7 +5331,7 @@ reqs =
     }
 [effect_appian_move_workers1]
 type    = "Move_Bonus"
-value   = 20
+value   = 3360
 reqs =
     { "type",     "name",          "range","present"
       "Building", "Appian Way",    "Player",TRUE
@@ -5233,7 +5341,7 @@ reqs =
     }
 [effect_appian_move_workers2]
 type    = "Move_Bonus"
-value   = 20
+value   = 3360
 reqs =
     { "type",     "name",          "range","present"
       "Building", "Appian Way",    "Player",TRUE
@@ -5703,31 +5811,16 @@ reqs	=
 ;************************************************************************ Genghis Khan
 [effect_genghis_khans_equestrian_school]
 type    = "Move_Bonus"
-value	= 60
+value	= 10080
 reqs	=
     { "type", "name", "range", "present"
       "Building", "Genghis Khan's Equestrian School", "Player", TRUE
       "UnitFlag", "Horse", "Local", TRUE 
     }
-;[effect_parthian_shot]
-;type = "Defender_Combat_Rounds"    ;tested and works !
-;value = 5
-;reqs =
-;    { "type", "name", "range", "present"
-;      "UnitFlag", "Horse", "Local", TRUE 
-;    }
-;[effect_parthian_shot2]
-;type = "Unit_Min_Speed"
-;value = 120 ; 120+60=180. 180/60=3mp.  ;tested and works !                  
-;reqs =
-;    { "type", "name", "range", "present"
-;      "UnitFlag", "Horse", "Local", TRUE 
-;    }
-
 ;************************************************************************ Lighthouse
 [effect_lighthouse]
 type    = "Move_Bonus"
-value	= 120
+value	= 20160
 reqs	=
     { "type", "name", "range"
       "Building", "Lighthouse", "Player"
@@ -5763,7 +5856,7 @@ reqs	=
 ;Magellan gives +1 move to nations without Lighthouse
 [effect_magellan_minor_lighthouse_effect]
 type    = "Move_Bonus"
-value	= 60
+value	= 10080
 reqs	=
     { "type",      "name",                  "range", "present"
       "Building",  "Magellan's Expedition", "Player", TRUE
@@ -6451,8 +6544,7 @@ value	= 8192
 reqs	=
     { "type",     "name",           "range", "present"
       "Building", "The Sphinx",     "City",   TRUE
-      "Gov",      "Despotism",      "Player", TRUE
-      "MinSize",  "20",             "City",   FALSE    ; disappears in post-modern metropolis age
+      "Tech",     "Philosophy",     "Player", FALSE
     }
 [effect_sphinx_tile]
 type    = "Output_Penalty_Tile"
@@ -7948,7 +8040,7 @@ reqs    =
 ;movement:
 [effect_action_success_move_cost_board]
 type    = "Action_Success_Actor_Move_Cost"
-value   = 20
+value   = 3360
 reqs    =
     { "type",          "name",            "range", "present"
       "Action",        "Transport Board", "Local", TRUE
@@ -7958,7 +8050,7 @@ reqs    =
     }
 [effect_action_success_move_cost_deboard]
 type    = "Action_Success_Actor_Move_Cost"
-value   = 20
+value   = 3360
 reqs    =
     { "type",          "name",              "range", "present"
       "Action",        "Transport Deboard", "Local", TRUE
@@ -7967,7 +8059,7 @@ reqs    =
     }
 [effect_action_success_move_cost_transport_unload]
 type    = "Action_Success_Target_Move_Cost"   ; "Local" scope on unit pertains to target, not actor.
-value   = 20
+value   = 3360
 reqs    =
     { "type",          "name",             "range", "present"
       "Action",        "Transport Unload", "Local", TRUE
@@ -7979,7 +8071,7 @@ reqs    =
 ;and conventional have 1 move. 
 [effect_action_success_move_cost_unload_bombs]
 type    = "Action_Success_Target_Move_Cost"   ; "Local" scope on unit pertains to target, not actor.
-value   = 20                                  ; 20+20 = 2/3, which is double cost for unload since it has no cost for load, and keeps 
+value   = 3360                                ; 20+20 = 2/3, which is double cost for unload since it has no cost for load, and keeps 
 reqs    =                                     ; both Bomb and Bomb2 classes only able to do one cargo haul.
     { "type",          "name",             "range", "present"
       "Action",        "Transport Unload", "Local", TRUE
@@ -7987,7 +8079,7 @@ reqs    =                                     ; both Bomb and Bomb2 classes only
     }
 [effect_action_success_move_cost_deboard_bombs]
 type    = "Action_Success_Actor_Move_Cost"    ; "Local" scope on unit pertains to target, not actor.
-value   = 20                                  ; 20+20 = 2/3, which is double cost for unload since it has no cost for load, and keeps 
+value   = 3360                                  ; 20+20 = 2/3, which is double cost for unload since it has no cost for load, and keeps 
 reqs    =                                     ; both Bomb and Bomb2 classes only able to do one cargo haul.
     { "type",          "name",              "range", "present"
       "Action",        "Transport Deboard", "Local", TRUE
@@ -8004,12 +8096,12 @@ value   = 200                                 ; 33% + 200%*33% = 100%
 reqs    =
     { "type",          "name",             "range", "present"
       "UnitType",      "Bombs",            "Local", TRUE       ; conventional bomb
-      "MinMoveFrags",  "21",               "Local", FALSE      ; Bombs can only have 3 states for 'movesleft': 1 move, 1/3 move, or 0 moves.
+      "MinMoveFrags",  "3361",             "Local", FALSE      ; Bombs can only have 3 states for 'movesleft': 1 move, 1/3 move, or 0 moves.
     }
 
 ;[effect_action_success_siege_ram_city_walls]
 ;type    = "Action_Success_Actor_Move_Cost"
-;value   = 60     ; 1 move
+;value   = 10080     ; 1 move
 ;reqs    =
 ;    { "type", "name", "range", "present"
 ;      "Action", "Targeted Sabotage City Escape", "Local", TRUE
@@ -8018,7 +8110,7 @@ reqs    =
 
 [effect_action_success_move_cost_embassy]
 type    = "Action_Success_Actor_Move_Cost"
-value   = 20      ; 1/3 move
+value   = 3360      ; 1/3 move
 reqs    =
     { "type", "name", "range", "present"
       "Action", "Establish Embassy", "Local", TRUE
@@ -8026,7 +8118,7 @@ reqs    =
 
 [effect_action_success_move_cost_investigate]
 type    = "Action_Success_Actor_Move_Cost"
-value   = 20      ; 1/3 move
+value   = 3360      ; 1/3 move
 reqs    =
     { "type", "name", "range", "present"
       "Action", "Investigate City", "Local", TRUE
@@ -8034,7 +8126,7 @@ reqs    =
 
 [effect_action_success_move_cost_capture]
 type    = "Action_Success_Actor_Move_Cost"
-value   = 40      ; 2/3 move
+value   = 6720      ; 2/3 move
 reqs    =
     { "type", "name", "range", "present"
       "Action", "Capture Units", "Local", TRUE
@@ -8042,7 +8134,7 @@ reqs    =
 
 [effect_action_success_move_cost_expel]
 type    = "Action_Success_Actor_Move_Cost"
-value   = 40      ; 2/3 move
+value   = 6720      ; 2/3 move
 reqs    =
     { "type", "name", "range", "present"
       "Action", "Expel Unit", "Local", TRUE
@@ -8052,7 +8144,7 @@ reqs    =
 ;We no longer need bitfields for move cost of SUA and can code the move cost here:
 [effect_action_success_move_cost_bombard_phalanx]
 type    = "Action_Success_Actor_Move_Cost"
-value   = 35    ; 35 + 1 = 36 = 36/60 = 0.6p (1 in bitfield prevents loss of all moves)
+value   = 6047;  6047+1=6048 = 6048/10080 = .6mp    ; 35 + 1 = 36 = 36/60 = 0.6mp (nonzero bitfield prevents loss of all moves)
 reqs    =
     { "type",     "name",              "range", "present"
       "UnitType", "Phalanx",           "Local", TRUE
@@ -8060,7 +8152,7 @@ reqs    =
     }
 [effect_action_success_move_cost_bombard_archers]
 type    = "Action_Success_Actor_Move_Cost"
-value   = 95    ; 95 + 1 = 96 = 96/60 = 1.6mp (1 in bitfield prevents loss of all moves)
+value   = 16127 ;+1=16128/10080=1.6mp    ; 95 + 1 = 96 = 96/60 = 1.6mp (1 in bitfield prevents loss of all moves)
 reqs    =
     { "type",     "name",              "range", "present"
       "UnitType", "Archers",           "Local", TRUE
@@ -8068,7 +8160,7 @@ reqs    =
     }
 [effect_action_success_move_cost_bombard_legion]
 type    = "Action_Success_Actor_Move_Cost"
-value   = 59    ; 59 + 1 = 60 = 60/60 = 1mp (1 in bitfield prevents loss of all moves)
+value   = 10079 ;+1=10080=1mp    ; 59 + 1 = 60 = 60/60 = 1mp (1 in bitfield prevents loss of all moves)
 reqs    =
     { "type",     "name",              "range", "present"
       "UnitType", "Legion",            "Local", TRUE
@@ -8076,7 +8168,7 @@ reqs    =
     }
 [effect_action_success_move_cost_bombard_zealots]
 type    = "Action_Success_Actor_Move_Cost"
-value   = 95    ; 95 + 1 = 96 = 96/60 = 1.6mp (1 in bitfield prevents loss of all moves)
+value   = 16127 ;+1 = 1.6mp    ; 95 + 1 = 96 = 96/60 = 1.6mp (1 in bitfield prevents loss of all moves)
 reqs    =
     { "type",     "name",              "range", "present"
       "UnitType", "Zealots",           "Local", TRUE
@@ -8084,7 +8176,7 @@ reqs    =
     }
 [effect_action_success_move_cost_bombard_marines]
 type    = "Action_Success_Actor_Move_Cost"
-value   = 95    ; 95 + 1 = 96 = 96/60 = 1.6mp (1 in bitfield prevents loss of all moves)
+value   = 16127 ;+1 = 1.6mp     ; 95 + 1 = 96 = 96/60 = 1.6mp (1 in bitfield prevents loss of all moves)
 reqs    =
     { "type",     "name",              "range", "present"
       "UnitType", "Marines",           "Local", TRUE
@@ -8092,7 +8184,7 @@ reqs    =
     }
 [effect_action_success_move_cost_bombard_fanatics]
 type    = "Action_Success_Actor_Move_Cost"
-value   = 95    ; 95 + 1 = 96 = 96/60 = 1.6mp (1 in bitfield prevents loss of all moves)
+value   = 16127 ;+1 = 1.6mp     ; 95 + 1 = 96 = 96/60 = 1.6mp (1 in bitfield prevents loss of all moves)
 reqs    =
     { "type",     "name",              "range", "present"
       "UnitType", "Fanatics",          "Local", TRUE
@@ -8100,7 +8192,7 @@ reqs    =
     }
 [effect_action_success_move_cost_bombard_siege_ram]
 type    = "Action_Success_Actor_Move_Cost"
-value   = 95    ; 95 + 1 = 96 = 96/60 = 1.6mp (1 in bitfield prevents loss of all moves)
+value   = 16127 ;+1 = 1.6mp     ; 95 + 1 = 96 = 96/60 = 1.6mp (1 in bitfield prevents loss of all moves)
 reqs    =
     { "type",     "name",              "range", "present"
       "UnitType", "Siege Ram",           "Local", TRUE
@@ -8108,7 +8200,7 @@ reqs    =
     }
 [effect_action_success_move_cost_bombard_zeppelin]
 type    = "Action_Success_Actor_Move_Cost"
-value   = 119    ; 119 + 1 = 120 = 120/60 = 2mp  (1 in bitfield prevents loss of all moves)
+value   = 20159    ; 119 + 1 = 120 = 120/60 = 2mp  (1 in bitfield prevents loss of all moves)
 reqs    =
     { "type",     "name",              "range", "present"
       "UnitType", "Zeppelin",           "Local", TRUE
@@ -8116,7 +8208,7 @@ reqs    =
     }
 [effect_action_success_move_cost_bombard_battleship]
 type    = "Action_Success_Actor_Move_Cost"
-value   = 299    ; 299 + 1 = 300 = 300/60 = 5mp (1 in bitfield prevents loss of all moves)
+value   = 50399 ;+1=50400/10080 = 5mp    ; 299 + 1 = 300 = 300/60 = 5mp (1 in bitfield prevents loss of all moves)
 reqs    =
     { "type",     "name",              "range", "present"
       "UnitType", "Battleship",        "Local", TRUE
@@ -8124,7 +8216,7 @@ reqs    =
     }
 [effect_action_success_move_cost_bombard_magnum_turret]
 type    = "Action_Success_Actor_Move_Cost"
-value   = 59    ; 59 + 1 = 60 (1 in bitfield prevents loss of all moves)
+value   = 10079    ; 59 + 1 = 60 (1 in bitfield prevents loss of all moves)
 reqs    =
     { "type",     "name",              "range", "present"
       "UnitType", "Magnum Turret",     "Local", TRUE
@@ -8132,7 +8224,7 @@ reqs    =
     }
 [effect_action_success_move_cost_bombard2_magnum_turret]
 type    = "Action_Success_Actor_Move_Cost"
-value   = 59    ; 59 + 1 = 60 (1 in bitfield prevents loss of all moves)
+value   = 10079    ; 59 + 1 = 60 (1 in bitfield prevents loss of all moves)
 reqs    =
     { "type",     "name",              "range", "present"
       "UnitType", "Magnum Turret",     "Local", TRUE
@@ -8144,7 +8236,7 @@ reqs    =
 ;=============================================================================================== iPillage move cost 
 ;[effect_action_success_move_cost_iPillage_]
 ;type    = "Action_Success_Actor_Move_Cost"
-;value   = 95    ; 95 + 1 = 96 (1 in bitfield prevents loss of all moves)
+;value   = 16127    ; 95 + 1 = 96 (1 in bitfield prevents loss of all moves)
 ;reqs    =
 ;    { "type",     "name",              "range", "present"
 ;      "UnitType", "Armor",             "Local", TRUE
@@ -8155,7 +8247,7 @@ reqs    =
 ;Expelled units lose all move points.
 [effect_action_success_move_cost_expelled]
 type    = "Action_Success_Target_Move_Cost"
-value   = 65535
+value   = 999999
 reqs    =
     { "type", "name", "range", "present"
       "Action", "Expel Unit", "Local", TRUE
@@ -8164,7 +8256,7 @@ reqs    =
 ;Hit and run bonus of subs, attack has no move cost (except damage to the sub)
 [effect_action_success_move_cost_sub_attack]
 type    = "Action_Success_Actor_Move_Cost"
-value   = -60
+value   = -10080
 reqs    =
     { "type",          "name",            "range", "present"
       "Action",        "Attack",          "Local", TRUE
@@ -8177,62 +8269,62 @@ reqs    =
 ;(similar to what happens to move points upgrading Cav to Armor)
 [effect_action_success_tugging_trawler_move_penalty_board_1]
 type    = "Action_Success_Target_Move_Cost"
-value   = 60
+value   = 10080
 reqs    =
     { "type",          "name",            "range"
       "Action",        "Transport Board", "Local"
       "UnitType",      "Trawler",         "Local"
-      "MinMoveFrags",  "180",              "Local"
+      "MinMoveFrags",  "30240",           "Local"
     }
 [effect_action_success_tugging_trawler_move_penalty_board_2]
 type    = "Action_Success_Target_Move_Cost"
-value   = 60
+value   = 10080
 reqs    =
     { "type",          "name",            "range"
       "Action",        "Transport Board", "Local"
       "UnitType",      "Trawler",         "Local"
-      "MinMoveFrags",  "360",              "Local"
+      "MinMoveFrags",  "60480",           "Local"
     }
 [effect_action_success_tugging_trawler_move_penalty_board_3]
 type    = "Action_Success_Target_Move_Cost"
-value   = 60
+value   = 10080
 reqs    =
     { "type",          "name",            "range"
       "Action",        "Transport Board", "Local"
       "UnitType",      "Trawler",         "Local"
-      "MinMoveFrags",  "540",              "Local"
+      "MinMoveFrags",  "90720",           "Local"
     }
 [effect_action_success_tugging_trawler_move_penalty_embark_1]
 type    = "Action_Success_Target_Move_Cost"
-value   = 60
+value   = 10080
 reqs    =
     { "type",          "name",             "range"
       "Action",        "Transport Embark", "Local"
       "UnitType",      "Trawler",          "Local"
-      "MinMoveFrags",  "120",               "Local"
+      "MinMoveFrags",  "20160",            "Local"
     }
 [effect_action_success_tugging_trawler_move_penalty_embark_2]
 type    = "Action_Success_Target_Move_Cost"
-value   = 60
+value   = 10080
 reqs    =
     { "type",          "name",             "range"
       "Action",        "Transport Embark", "Local"
       "UnitType",      "Trawler",          "Local"
-      "MinMoveFrags",  "240",               "Local"
+      "MinMoveFrags",  "40320",            "Local"
     }
 [effect_action_success_tugging_trawler_move_penalty_embark_3]
 type    = "Action_Success_Target_Move_Cost"
-value   = 60
+value   = 10080
 reqs    =
     { "type",          "name",             "range"
       "Action",        "Transport Embark", "Local"
       "UnitType",      "Trawler",          "Local"
-      "MinMoveFrags",  "360",               "Local"
+      "MinMoveFrags",  "60480",            "Local"
     }
 ;TODO WHEN IMPLEMENTED: "Transport Load" WILL NEED need Actor_Success_Actor_Move_Cost <<<<<<<<<<<<<<<<<<<<<< **
 ;[effect_action_success_tugging_trawler_move_penalty_load]
 ;type    = "Action_Success_Target_Move_Cost"
-;value   = 180
+;value   = 30240
 ;reqs    =
 ;    { "type",          "name",           "range"
 ;      "Action",        "Transport Load", "Local"
@@ -8245,63 +8337,63 @@ reqs    =
 ;and unload.
 [effect_action_success_release_tugging_speed_recoup_1]
 type    = "Action_Success_Target_Move_Cost"
-value   = -60 ;returns 1 move if done towing while moves are left
+value   = -10080 ;returns 1 move if done towing while moves are left
 reqs    =
     { "type",          "name",              "range"
       "Action",        "Transport Deboard", "Local"
       "UnitType",      "Trawler",           "Local"
-      "MinMoveFrags",  "120",                "Local"
+      "MinMoveFrags",  "20160",             "Local"
     }
 [effect_action_success_release_tugging_speed_recoup_2]
 type    = "Action_Success_Target_Move_Cost"
-value   = -60 ;returns 1 move if done towing while moves are left
+value   = -10080 ;returns 1 move if done towing while moves are left
 reqs    =
     { "type",          "name",              "range"
       "Action",        "Transport Deboard", "Local"
       "UnitType",      "Trawler",           "Local"
-      "MinMoveFrags",  "240",                "Local"
+      "MinMoveFrags",  "40320",             "Local"
     }
 [effect_action_success_release_tugging_speed_recoup_3]  ;Trawler was loaded but never moved, goes back to 9.
 type    = "Action_Success_Target_Move_Cost"
-value   = -60 ;returns 1 move if done towing while moves are left
+value   = -10080 ;returns 1 move if done towing while moves are left
 reqs    =
     { "type",          "name",              "range"
       "Action",        "Transport Deboard", "Local"
       "UnitType",      "Trawler",           "Local"
-      "MinMoveFrags",  "360",                "Local"
+      "MinMoveFrags",  "60480",             "Local"
     }
 ;...
 [effect_action_success_release_tugging_speed_recoup_4]
 type    = "Action_Success_Actor_Move_Cost"
-value   = -60 ;returns 1 move if done towing while moves are left
+value   = -10080 ;returns 1 move if done towing while moves are left
 reqs    =
     { "type",          "name",             "range"
       "Action",        "Transport Unload", "Local"
       "UnitType",      "Trawler",          "Local"
-      "MinMoveFrags",  "120",               "Local"
+      "MinMoveFrags",  "20160",            "Local"
     }
 [effect_action_success_release_tugging_speed_recoup_5]
 type    = "Action_Success_Actor_Move_Cost"
-value   = -60 ;returns 1 move if done towing while moves are left
+value   = -10080 ;returns 1 move if done towing while moves are left
 reqs    =
     { "type",          "name",             "range"
       "Action",        "Transport Unload", "Local"
       "UnitType",      "Trawler",          "Local"
-      "MinMoveFrags",  "240",               "Local"
+      "MinMoveFrags",  "40320",            "Local"
     }
 [effect_action_success_release_tugging_speed_recoup_6]   ;Trawler was loaded but never moved, goes back to 9.
 type    = "Action_Success_Actor_Move_Cost"
-value   = -60 ;returns 1 move if done towing while moves are left
+value   = -10080 ;returns 1 move if done towing while moves are left
 reqs    =
     { "type",          "name",             "range"
       "Action",        "Transport Unload", "Local"
       "UnitType",      "Trawler",          "Local"
-      "MinMoveFrags",  "360",               "Local"
+      "MinMoveFrags",  "60480",            "Local"
     }
 ;...
 [effect_tugging_trawler_has_6_moves_at_TC]
 type    = "Move_Bonus"
-value   = -180
+value   = -30240
 reqs    =
     { "type",          "name",         "range"
       "UnitType",      "Trawler",      "Local"
@@ -8311,7 +8403,7 @@ reqs    =
 ;No Double Move Attacks by tugging your warships farther.
 [effect_disembarking_from_trawler_lost_moves]
 type    = "Action_Success_Actor_Move_Cost"
-value   = 65535
+value   = 999999
 reqs    =
     { "type",          "name",                "range"
       "UnitClassFlag", "WaterVessel",         "Local"
@@ -8319,7 +8411,7 @@ reqs    =
     }
 [effect_deboarding_from_trawler_lost_moves]
 type    = "Action_Success_Actor_Move_Cost"
-value   = 65535
+value   = 999999
 reqs    =
     { "type",          "name",              "range"
       "UnitClassFlag", "WaterVessel",       "Local"
@@ -8327,7 +8419,7 @@ reqs    =
     }
 [effect_unloading_from_trawler_lost_moves]
 type    = "Action_Success_Target_Move_Cost"
-value   = 65535
+value   = 999999
 reqs    =
     { "type",          "name",              "range"
       "UnitClassFlag", "WaterVessel",       "Local"
@@ -8341,7 +8433,7 @@ reqs    =
 ; The Well-Digger can move 3 before you know Pottery or Alphabet.
 [effect_welldigger_movement]
 type    = "Move_Bonus"
-value	  = -180
+value	  = -30240
 reqs    =
     {
       "type", "name", "range", "present"
@@ -8350,7 +8442,7 @@ reqs    =
     }
 [effect_welldigger_movement_1]
 type    = "Move_Bonus"
-value	  = -180
+value	  = -30240
 reqs    =
     {
       "type", "name", "range", "present"
@@ -8444,7 +8536,7 @@ reqs    =
 ;NATIONALISM WORKER-TYPES MOVE BONUS
 [effect_worker_movement_nationalism]
 type    = "Move_Bonus"
-value	  = 6                   ; 6 frags = 1 rail-tlle move, same as before
+value	  = 1008 ; 1/10th a move=1 rail tile move cost                   ; 6 frags = 1 rail-tlle move, same as before
 reqs    =
     {
       "type", "name", "range", "present"
@@ -8463,29 +8555,29 @@ reqs    =
 ;NATIONALISM ARMOR MOVE BONUS
 [effect_light_armor_movement_nationalism]
 type    = "Move_Bonus"
-value	= 60
-reqs	=
+value	  = 10080
+reqs    =
     { "type",     "name",        "range"
       "Gov",      "Nationalism", "Player"
       "UnitType", "Light Armor", "Local"
     }
 [effect_armor_movement_nationalism]
 type    = "Move_Bonus"
-value	  = 60
+value	  = 10080
 reqs    =
     {
-      "type", "name", "range"
-      "UnitType", "Armor", "Local"
-      "Gov", "Nationalism", "Player"
-    }    
+      "type",     "name",        "range"
+      "UnitType", "Armor",       "Local"
+      "Gov",      "Nationalism", "Player"
+    }
 [effect_armor2_movement_nationalism]
 type    = "Move_Bonus"
-value	  = 60
+value	  = 10080
 reqs    =
     {
-      "type", "name", "range"
-      "UnitType", "Armor II", "Local"
-      "Gov", "Nationalism", "Player"
+      "type",     "name",        "range"
+      "UnitType", "Armor II",    "Local"
+      "Gov",      "Nationalism", "Player"
     }
 ; Police Stations Cost less 
 [effect_nationalism_cheaper_police_stations]
@@ -8510,7 +8602,7 @@ reqs    =
 ;Proletarians useless unless communist.
 [effect_proletarian_movement_penalty]
 type    = "Move_Bonus"
-value	  = -120
+value	  = -20160
 reqs    =
     {
       "type", "name", "range", "present"
@@ -8519,7 +8611,7 @@ reqs    =
     }
 [effect_proletarian_work_rate_penalty]
 type    = "Unit_Work_Frag_Bonus"
-value	  = -120
+value	  = -20160
 reqs    =
     {
       "type", "name", "range", "present"
@@ -8530,7 +8622,7 @@ reqs    =
 ;COMMUNISM 5 shield discount Riflemen
 [effect_communist_riflemen]
 type    = "Unit_Build_Cost_Pct"
-value	  = -12
+value	  = -14
 reqs    =
     {
       "type", "name", "range", "present"
@@ -8540,7 +8632,7 @@ reqs    =
 ;COMMUNISM 5 shield discount Ground Troops
 [effect_communist_ground_troops]
 type    = "Unit_Build_Cost_Pct"
-value	  = -12
+value	  = -14
 reqs    =
     {
       "type", "name", "range", "present"

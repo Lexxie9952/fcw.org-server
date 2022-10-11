@@ -272,7 +272,7 @@ will_never = "WillNever"
 if_attacker =
     { "type",         "name",      "range", "present"
       "DiplRel",      "War",       "Local",  TRUE
-      "MinMoveFrags", "60",         "Local",  TRUE
+      "MinMoveFrags", "10080",         "Local",  TRUE
       "UnitFlag",     "WillNever", "Local",  FALSE  ;replaces: will_never="WillNever"
     }
 
@@ -672,7 +672,7 @@ actor_reqs    =
       "UnitFlag",     "Spy",           "Local", TRUE
       "UnitType",     "Siege Ram",     "Local", TRUE
       "UnitState",    "OnLivableTile", "Local", TRUE
-      "MinMoveFrags", "60",             "Local", TRUE
+      "MinMoveFrags", "10080",             "Local", TRUE
     }
 
 [actionenabler_sabotage_city_production]
@@ -1315,7 +1315,7 @@ actor_reqs    =
       "UnitType",     "Phalanx",      "Local", TRUE
       "UnitState",    "Transported",  "Local", FALSE
       "UnitState",    "Fortified",    "Local", TRUE ;"Activity","Fortified","Local",TRUE ;3.1 version, which we now have working also.
-      "MinMoveFrags", "60",           "Local", TRUE
+      "MinMoveFrags", "10080",        "Local", TRUE
       "DiplRel",      "War",          "Local", TRUE
    }
 target_reqs    =
@@ -1335,7 +1335,7 @@ actor_reqs    =
       "UnitType",     "Phalanx",      "Local", TRUE
       "UnitState",    "Transported",  "Local", FALSE
       "UnitState",    "MovedThisTurn","Local", FALSE
-      "MinMoveFrags", "60",           "Local", TRUE
+      "MinMoveFrags", "10080",        "Local", TRUE
       "DiplRel",      "War",          "Local", TRUE
    }
 target_reqs    =
@@ -1376,7 +1376,7 @@ actor_reqs    =
       "UnitFlag",     "Bombarder",    "Local", TRUE
       "UnitType",     "Siege Ram",    "Local", TRUE
       "UnitState",    "Transported",  "Local", FALSE
-      "MinMoveFrags", "60",           "Local", TRUE
+      "MinMoveFrags", "10080",        "Local", TRUE
       "DiplRel",      "War",          "Local", TRUE
    }
 target_reqs    =
@@ -1392,7 +1392,7 @@ actor_reqs    =
       "UnitFlag",     "Bombarder",    "Local", TRUE
       "UnitType",     "Siege Ram",    "Local", TRUE
       "UnitState",    "Transported",  "Local", FALSE
-      "MinMoveFrags", "60",            "Local", TRUE
+      "MinMoveFrags", "10080",         "Local", TRUE
       "DiplRel",      "War",          "Local", TRUE
    }
 target_reqs    =
@@ -2466,7 +2466,7 @@ target_reqs    =
 #      "DiplRel",        "War",            "Local", TRUE
 #      "UnitFlag",       "FootSoldier",    "Local", TRUE         ; FootSoldiers only
 #      "UnitFlag",       "Capturer",       "Local", TRUE         ; Capturers only
-#      "MinMoveFrags",   "120",             "Local", TRUE        ; At least 2 move points (redundant insurance with req below)
+#      "MinMoveFrags",   "20160",          "Local", TRUE        ; At least 2 move points (redundant insurance with req below)
 #      "UnitState",      "MovedThisTurn",  "Local", FALSE        ; Has not acted/moved this turn
 #      "UnitState",      "OnLivableTile",  "Local", FALSE        ; This enabler is an exceeption only for non-Marines on transport, not all-terrain units
 #      "NationGroup",    "Barbarian",      "Player",FALSE
@@ -3901,7 +3901,7 @@ set =
       "spaceship_travel_time", 225, FALSE
       "specials", 350, FALSE
       "startpos", "DEFAULT", FALSE
-      "startunits", "DDDDwwwtuccU", "FALSE"  ;4 Tribesmen, 3 Workers, 1 Caravan, 1 Founders, 2 Settlers, 1 Well-Digger
+      "startunits", "DDDwwwtuccU", "FALSE"  ;3 Tribesmen, 3 Workers, 1 Caravan, 1 Founders, 2 Settlers, 1 Well-Digger
       "steepness", 20, FALSE
       "techleak", 50, FALSE
       "techlossforgiveness", 200, FALSE

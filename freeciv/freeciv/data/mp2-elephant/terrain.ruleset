@@ -72,10 +72,28 @@ min_start_native_area = 0
 
 ; How many fragments each movement point has.
 ; For example road movement costs are relative to this.
-move_fragments = 60
+move_fragments = 10080
+;         1008	1/10
+;         2016	1/5
+;         2520	1/4
+;         3360	1/3      ************
+;         5040  1/2
+;         6048	3/5 , 6/10
+;         6720	2/3      ************
+;         7560	3/4
+;         20160	2
+;         30240	3
+;         40320	4
+;         50400	5
+;         60480	6
+;         70560	7
+;         80640	8
+;         90720	9
+;         100800	10
+;         110880	11
 
 ; How many move_fragments IgTer unit movement costs
-igter_cost = 20
+igter_cost = 3360
 
 ; Whether diagonal movement has increased cost (no effect with hex topology)
 ; The cost increase is more accurate with larger values for move_fragments
@@ -238,7 +256,7 @@ graphic              = "lake"
 graphic_alt          = "coast"
 identifier           = "+"
 class                = "Oceanic"
-movement_cost        = 60
+movement_cost        = 10080
 defense_bonus        = 0
 food                 = 1
 shield               = 0
@@ -280,7 +298,7 @@ graphic              = "coast"
 graphic_alt          = "-"
 identifier           = " "
 class                = "Oceanic"
-movement_cost        = 60
+movement_cost        = 10080
 defense_bonus        = 0
 food                 = 1
 shield               = 0
@@ -323,7 +341,7 @@ graphic              = "floor"
 graphic_alt          = "coast"
 identifier           = ":"
 class                = "Oceanic"
-movement_cost        = 60
+movement_cost        = 10080
 defense_bonus        = 0
 food                 = 1
 shield               = 0
@@ -365,7 +383,7 @@ graphic              = "plains"
 graphic_alt          = "-"
 identifier           = "p"
 class                = "Land"
-movement_cost        = 60
+movement_cost        = 10080
 defense_bonus        = 0
 food                 = 1
 shield               = 1
@@ -410,7 +428,7 @@ graphic              = "grassland"
 graphic_alt          = "-"
 identifier           = "g"
 class                = "Land"
-movement_cost        = 60
+movement_cost        = 10080
 defense_bonus        = 0
 food                 = 2
 shield               = 0
@@ -456,7 +474,7 @@ graphic              = "forest"
 graphic_alt          = "-"
 identifier           = "f"
 class                = "Land"
-movement_cost        = 120
+movement_cost        = 20160
 defense_bonus        = 33
 food                 = 1
 shield               = 2
@@ -506,7 +524,7 @@ graphic              = "swamp"
 graphic_alt          = "-"
 identifier           = "s"
 class                = "Land"
-movement_cost        = 120
+movement_cost        = 20160
 defense_bonus        = 33
 food                 = 1
 shield               = 0
@@ -552,7 +570,7 @@ graphic              = "desert"
 graphic_alt          = "-"
 identifier           = "d"
 class                = "Land"
-movement_cost        = 60
+movement_cost        = 10080
 defense_bonus        = 0
 food                 = 0
 shield               = 1
@@ -602,7 +620,7 @@ graphic              = "jungle"
 graphic_alt          = "-"
 identifier           = "j"
 class                = "Land"
-movement_cost        = 120
+movement_cost        = 20160
 defense_bonus        = 50
 food                 = 1
 shield               = 1
@@ -646,7 +664,7 @@ graphic              = "hills"
 graphic_alt          = "-"
 identifier           = "h"
 class                = "Land"
-movement_cost        = 120
+movement_cost        = 20160
 defense_bonus        = 100
 food                 = 1
 shield               = 0
@@ -694,7 +712,7 @@ graphic              = "mountains"
 graphic_alt          = "-"
 identifier           = "m"
 class                = "Land"
-movement_cost        = 180
+movement_cost        = 30240
 defense_bonus        = 200
 food                 = 0
 shield               = 1
@@ -740,7 +758,7 @@ graphic              = "tundra"
 graphic_alt          = "-"
 identifier           = "t"
 class                = "Land"
-movement_cost        = 60
+movement_cost        = 10080
 defense_bonus        = 0
 food                 = 1
 shield               = 0
@@ -783,7 +801,7 @@ graphic              = "arctic"
 graphic_alt          = "-"
 identifier           = "a"
 class                = "Land"
-movement_cost        = 120
+movement_cost        = 20160
 defense_bonus        = 0
 food                 = 0
 shield               = 0
@@ -2077,8 +2095,8 @@ flags          = "AutoOnCityCenter", "NativeTile", "Railable"
 bridged_over   = "River"
 helptext       = _("\
 Roads allow your land units to move more quickly, costing 1/3 move point\
- to travel from one road to another road. On Flatland terrain, they also\
- provide a trade bonus to the tile if it is used by a city. \n\
+ to travel from one road to another road. On Flatland terrain, they\
+ also provide a trade output bonus to the tile. \n\
 "), _("\
 Building roads on river tiles requires knowledge of Bridge Building.\
  City center tiles automatically get roads (unless they are on a river\
@@ -2179,8 +2197,8 @@ native_to      = "Land", "LandNoKill", "LandAirSea", "Big Land"
 flags          = "NativeTile", "AutoOnCityCenter"
 helptext       = _("\
 With Superconductors, you may build MAGnetic LEVitation tracks.\
- Land units expend 1/60th of their full move_rate when riding\
- MagLevs; giving a maximum range of 60 tiles. \n\
+ Land units expend 1/40th of their full move_rate when riding\
+ MagLevs; giving a maximum range of 40 tiles. \n\
 "), _("\
 City center tiles are automatically upgraded to MagLev\
  when you acquire Superconductor tech.\
@@ -2334,7 +2352,8 @@ removal_time   = 0
 native_to      = "Trireme", "Sea", "RiverShip", "Land", "LandAirSea", "LandNoKill", "Helicopter", "Submarine" ; not native to "Big Land", like River
 flags          = "NativeTile", "Quayable", "IrrigationSource", "WaterwaySource"
 helptext          = _("\
-Canals are a canal-type that allows all ships to travel over land tiles. Canals can be \
+Canals are a canal-type allowing all ships to travel over land tiles. They provide \
+the same move bonus to land units as a River does. Canals can be \
 built on Lowlands only. They require an Ocean or Lake as an adjacent water source. \n\
 * A Waterway is a second canal-type that can use ocean-sourced Canals and Rivers as a \
 water source. \n\
@@ -3144,7 +3163,7 @@ flags          = "NoAggressive"
 
 [road_road]
 extra          = "Road"
-move_cost      = 20
+move_cost      = 3360
 food_incr      = 0
 shield_incr    = 0
 trade_incr     = 1
@@ -3157,7 +3176,7 @@ flags          = "UnrestrictedInfra"
 
 [road_highway]
 extra          = "Highway"
-move_cost      = 12
+move_cost      = 2240
 food_incr      = 0
 shield_incr    = 0
 trade_incr     = 1
@@ -3169,7 +3188,7 @@ flags          = "UnrestrictedInfra"
 
 [road_quay]
 extra          = "Quay"
-move_cost      = 40
+move_cost      = 6720
 food_incr      = 0
 shield_incr    = 0
 trade_incr     = 0
@@ -3181,7 +3200,7 @@ flags          = "IntegrateCostUp"       ; moving to or from other road type use
 
 [road_city_quay]
 extra          = "Quay​"  ; "Quay"+0-width space = quay on city
-move_cost      = 40
+move_cost      = 6720
 food_incr      = 0
 shield_incr    = 0
 trade_incr     = 0
@@ -3206,7 +3225,7 @@ flags          = "PassiveMovement"
 
 [road_maglev]
 extra          = "Maglev"
-move_cost      = 60             ; "PassiveMovement" i.e., everyone gets 60 moves on it
+move_cost      = 40             ; "PassiveMovement" i.e., everyone gets 40 moves on it
 food_incr      = 0
 shield_incr    = 0
 trade_incr     = 0
@@ -3227,7 +3246,7 @@ flags          = "River", "UnrestrictedInfra", "PassiveMovement"
 
 [road_sea_bridge]
 extra          = "Sea Bridge"
-move_cost      = 20
+move_cost      = 3360
 move_mode      = "Cardinal"
 trade_incr     = 0
 food_bonus     = 0
@@ -3238,7 +3257,7 @@ flags          = "UnrestrictedInfra"
 
 [road_walls]
 extra          = "Walls"
-move_cost      = 65535
+move_cost      = 999999
 trade_incr     = 0
 food_bonus     = 0
 shield_bonus   = 0
@@ -3261,4 +3280,3 @@ move_mode         = "Cardinal"
 integrates        = "River", "Canal"
 compat_special    = "None"
 flags             = "PassiveMovement"
-
