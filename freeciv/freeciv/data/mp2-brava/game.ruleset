@@ -1533,11 +1533,21 @@ actor_reqs    =
       "UnitFlag",      "CanHide",      "Local",   FALSE
       "UnitType",      "Proletarians", "Local",   FALSE
       "UnitState",     "Transported",  "Local",   TRUE
+      "DiplRel",       "Foreign",      "Local",   FALSE
+    }
+[actionenabler_road2] ; can't road while transported in foreign lands
+action        = "Build Road"
+actor_reqs    =
+    { "type",          "name",         "range",   "present"
+      "UnitFlag",      "Settlers",     "Local",   TRUE
+      "UnitFlag",      "CanHide",      "Local",   FALSE
+      "UnitType",      "Proletarians", "Local",   FALSE
+      "UnitState",     "Transported",  "Local",   TRUE
     }
 target_reqs    =
-    { "type",       "name",    "range", "present"
-        "CityTile", "Claimed", "Local", FALSE
-    }
+     { "type",           "name",    "range", "present"
+       "CityTile",       "Claimed", "Local",  FALSE
+     }
 [actionenabler_road2_sea_bridge]
 action        = "Build Road"
 actor_reqs    =
@@ -1562,6 +1572,16 @@ actor_reqs    =
       "UnitState",     "Transported",  "Local",   FALSE    ; Prevent quay exploit
     }
 [actionenabler_road_prole1] ; can't road while transported in foreign lands
+action        = "Build Road"
+actor_reqs    =
+    { "type",          "name",         "range",   "present"
+      "UnitFlag",      "Settlers",     "Local",   TRUE
+      "UnitType",      "Proletarians", "Local",   TRUE
+      "Gov",           "Communism",    "Player",  TRUE
+      "UnitState",     "Transported",  "Local",   TRUE
+      "DiplRel",       "Foreign",      "Local",   FALSE   
+    }
+[actionenabler_road_prole2] ; can't road while transported in foreign lands
 action        = "Build Road"
 actor_reqs    =
     { "type",          "name",         "range",   "present"
