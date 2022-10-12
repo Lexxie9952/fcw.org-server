@@ -2704,11 +2704,22 @@ actor_reqs    =
       "UnitFlag",      "CanHide",      "Local",   FALSE
       "UnitFlag",      "CanClaim",     "Local",   FALSE
       "UnitState",     "Transported",  "Local",   TRUE
+      "DiplRel",       "Foreign",      "Local",   FALSE
+    }
+[actionenabler_road2] ; can't road while transported in foreign lands
+action        = "Build Road"
+actor_reqs    =
+    { "type",          "name",         "range",   "present"
+      "UnitFlag",      "Settlers",     "Local",   TRUE
+      "UnitFlag",      "CanHide",      "Local",   FALSE
+      "UnitFlag",      "CanClaim",     "Local",   FALSE
+      "UnitState",     "Transported",  "Local",   TRUE
     }
 target_reqs    =
-    { "type",       "name",    "range", "present"
-        "CityTile", "Claimed", "Local", FALSE
-    }
+     { "type",           "name",    "range", "present"
+       "CityTile",       "Claimed", "Local",  FALSE
+     }
+
 [actionenabler_road2_sea_bridge]
 action        = "Build Road"
 actor_reqs    =
