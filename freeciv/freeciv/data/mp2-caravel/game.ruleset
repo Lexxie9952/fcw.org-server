@@ -2263,7 +2263,6 @@ actor_reqs    =
       "UnitFlag",      "CanHide",      "Local", FALSE
       "UnitFlag",      "CanClaim",     "Local", FALSE
       "UnitType",      "Tribesmen",    "Local", FALSE
-      "UnitType",      "Proletarians", "Local", FALSE
     }
 [actionenabler_cultivate_tribesmen]
 action        = "Cultivate"
@@ -2272,14 +2271,6 @@ actor_reqs    =
       "UnitFlag",      "Settlers",     "Local", TRUE
       "UnitType",      "Tribesmen",    "Local", TRUE
       "MinYear",       "-2000",        "World", FALSE   ; they get old
-    }
-[actionenabler_cultivate_prole]
-action        = "Cultivate"
-actor_reqs    =
-    { "type",          "name",         "range", "present"
-      "UnitFlag",      "Settlers",     "Local",  TRUE
-      "UnitType",      "Proletarians", "Local",  TRUE
-      "Gov",           "Communism",    "Player", TRUE
     }
 
 [actionenabler_plant_outside_city]
@@ -2290,7 +2281,6 @@ actor_reqs    =
       "UnitFlag",      "CanHide",     "Local", FALSE
       "UnitFlag",      "CanClaim",    "Local", FALSE
       "UnitType",      "Tribesmen",   "Local", FALSE 
-      "UnitType",      "Proletarians","Local", FALSE
       "UnitFlag",      "Well-Digger", "Local", FALSE
       "CityTile",      "Center",      "Local", FALSE
     }
@@ -2303,15 +2293,7 @@ actor_reqs    =
       "CityTile",      "Center",      "Local", FALSE
       "MinYear",       "-2000",       "World", FALSE   ; they get old
     }
-[actionenabler_plant_outside_city_prole]
-action        = "Plant"
-actor_reqs    =
-    { "type",          "name",        "range",  "present"
-      "UnitFlag",      "Settlers",    "Local",  TRUE
-      "UnitType",      "Proletarians","Local",  TRUE
-      "Gov",           "Communism",   "Player", TRUE
-      "CityTile",      "Center",      "Local",  FALSE
-    }
+
 [actionenabler_plant_inside_city] ;you can't plant a forest in an existing city
 action        = "Plant"
 actor_reqs    =
@@ -2320,7 +2302,6 @@ actor_reqs    =
       "UnitFlag",      "CanHide",     "Local", FALSE
       "UnitFlag",      "CanClaim",    "Local", FALSE
       "UnitFlag",      "Well-Digger", "Local", FALSE
-      "UnitType",      "Proletarians","Local", FALSE
       "CityTile",      "Center",      "Local", TRUE
       "Terrain",       "Grassland",   "Local", FALSE
       "Terrain",       "Plains",      "Local", FALSE
@@ -2403,7 +2384,6 @@ actor_reqs    =
       "UnitFlag",      "Settlers",     "Local",   TRUE
       "UnitFlag",      "CanHide",      "Local",   FALSE
       "UnitFlag",      "CanClaim",     "Local",   FALSE
-      "UnitType",      "Proletarians", "Local",   FALSE
       "UnitType",      "Tribesmen",    "Local",   FALSE
       "UnitState",     "Transported",  "Local",   FALSE    ; Prevent quay exploit
     }
@@ -2414,7 +2394,6 @@ actor_reqs    =
       "UnitFlag",      "Settlers",     "Local",   TRUE
       "UnitFlag",      "CanHide",      "Local",   FALSE
       "UnitFlag",      "CanClaim",     "Local",   FALSE
-      "UnitType",      "Proletarians", "Local",   FALSE
       "UnitState",     "Transported",  "Local",   TRUE
     }
 target_reqs    =
@@ -2429,7 +2408,6 @@ actor_reqs    =
       "UnitFlag",      "CanHide",      "Local",   FALSE
       "UnitFlag",      "CanClaim",     "Local",   FALSE
       "Tech",          "Steel",        "Player",  TRUE
-      "UnitType",      "Proletarians", "Local",   FALSE
       "UnitType",      "Tribesmen",    "Local",   FALSE
     }
 target_reqs    =
@@ -2445,42 +2423,6 @@ actor_reqs    =
       "UnitType",      "Tribesmen",    "Local",   TRUE
       "UnitState",     "Transported",  "Local",   FALSE  ; Prevent quay exploit
       "MinYear",       "-2000",        "World",   FALSE   ; they get old
-    }
-[actionenabler_road_prole]
-action        = "Build Road"
-actor_reqs    =
-    { "type",          "name",         "range",   "present"
-      "UnitFlag",      "Settlers",     "Local",   TRUE
-      "UnitType",      "Proletarians", "Local",   TRUE
-      "Gov",           "Communism",    "Player",  TRUE
-      "UnitState",     "Transported",  "Local",   FALSE    ; Prevent quay exploit
-    }
-[actionenabler_road_prole1] ; can't road while transported in foreign lands
-action        = "Build Road"
-actor_reqs    =
-    { "type",          "name",         "range",   "present"
-      "UnitFlag",      "Settlers",     "Local",   TRUE
-      "UnitType",      "Proletarians", "Local",   TRUE
-      "Gov",           "Communism",    "Player",  TRUE
-      "UnitState",     "Transported",  "Local",   TRUE    
-    }
-target_reqs    =
-    { "type",       "name",    "range", "present"
-        "CityTile", "Claimed", "Local", FALSE
-    }
-[actionenabler_road_prole2_sea_bridge]
-action        = "Build Road"
-actor_reqs    =
-    { "type",          "name",         "range",   "present"
-      "UnitFlag",      "Settlers",     "Local",   TRUE
-      "UnitType",      "Proletarians", "Local",   TRUE
-      "Tech",          "Explosives",   "Player",  TRUE
-      "Gov",           "Communism",    "Player",  TRUE
-    }
-target_reqs    =
-    { "type",         "name",    "range",    "present"
-      "TerrainClass", "Oceanic", "Local",    TRUE
-      "TerrainClass", "Land",    "CAdjacent",TRUE
     }
 [actionenabler_legion_road]
 action        = "Build Road"
@@ -2508,7 +2450,6 @@ action        = "Build Base"
 actor_reqs    =
     { "type",          "name",            "range", "present"
       "UnitFlag",      "CanFortress",     "Local", TRUE
-      "UnitType",      "Proletarians",    "Local", FALSE
       "UnitType",      "Marines",         "Local", FALSE
       "UnitFlag",      "Well-Digger",     "Local", FALSE
     }
@@ -2522,14 +2463,6 @@ actor_reqs    =
       "UnitFlag",      "CanFortress",     "Local", TRUE
     }
 
-[actionenabler_base_prole]
-action        = "Build Base"
-actor_reqs    =
-    { "type",          "name",            "range", "present"
-      "UnitFlag",      "CanFortress",     "Local",  TRUE
-      "UnitType",      "Proletarians",    "Local",  TRUE
-      "Gov",           "Communism",       "Player", TRUE
-     }
 [actionenabler_build_hideout_domestic]
 action        = "Build Base"
 actor_reqs    =
@@ -2608,7 +2541,6 @@ actor_reqs    =
       "UnitFlag",      "Well-Digger",  "Local",   FALSE
       "UnitFlag",      "CanHide",      "Local",   FALSE
       "UnitFlag",      "CanClaim",     "Local",   FALSE
-      "UnitType",      "Proletarians", "Local",   FALSE
       "UnitType",      "Tribesmen",    "Local",   FALSE
     }
 target_reqs    =
@@ -2627,43 +2559,17 @@ actor_reqs    =
 target_reqs    =
     { "type",        "name", "range", "present"
       "TerrainFlag", "Oil",  "Local", FALSE
-    }  
-[actionenabler_mining_prole]
-action        = "Build Mine"
-actor_reqs    =
-    { "type",          "name",         "range",   "present"
-      "UnitFlag",      "Settlers",     "Local",   TRUE
-      "UnitType",      "Proletarians", "Local",   TRUE
-      "Gov",           "Communism",    "Player",  TRUE
-    }
-target_reqs    =
-    { "type",        "name", "range", "present"
-      "TerrainFlag", "Oil",  "Local", FALSE
     }
 
-[actionenabler_desert_oil]
+[actionenabler_desert_mining]
 action        = "Build Mine"
 actor_reqs    =
     { "type",          "name",         "range",   "present"
       "UnitFlag",      "Settlers",     "Local",   TRUE
       "UnitFlag",      "CanHide",      "Local",   FALSE
       "UnitFlag",      "CanClaim",     "Local",   FALSE
-      "UnitType",      "Proletarians", "Local",   FALSE
       "UnitType",      "Tribesmen",    "Local",   FALSE
       "UnitFlag",      "Well-Digger",  "Local",   FALSE
-      "Tech",          "Construction", "Player",  TRUE
-    }
-target_reqs    =
-    { "type",    "name",         "range"
-      "Terrain", "Desert",       "Local"
-    }
-[actionenabler_desert_oil_prole]
-action        = "Build Mine"
-actor_reqs    =
-    { "type",          "name",         "range",   "present"
-      "UnitFlag",      "Settlers",     "Local",   TRUE
-      "UnitType",      "Proletarians", "Local",   TRUE
-      "Gov",           "Communism",    "Player",  TRUE
       "Tech",          "Construction", "Player",  TRUE
     }
 target_reqs    =
@@ -2678,7 +2584,6 @@ actor_reqs    =
       "UnitFlag",      "Settlers",     "Local",   TRUE
       "UnitFlag",      "CanHide",      "Local",   FALSE
       "UnitFlag",      "CanClaim",     "Local",   FALSE
-      "UnitType",      "Proletarians", "Local",   FALSE
       "UnitFlag",      "Well-Digger",  "Local",   FALSE
       "UnitType",      "Tribesmen",    "Local",   FALSE
       "Tech",          "Refining",     "Player",  TRUE
@@ -2687,19 +2592,7 @@ target_reqs    =
     { "type",    "name",     "range"
       "Terrain", "Glacier",  "Local"
     }
-[actionenabler_arctic_oil_prole]
-action        = "Build Mine"
-actor_reqs    =
-    { "type",          "name",         "range",   "present"
-      "UnitFlag",      "Settlers",     "Local",   TRUE
-      "Gov",           "Communism",    "Player",  TRUE
-      "UnitType",      "Proletarians", "Local",   TRUE
-      "Tech",          "Refining",     "Player",  TRUE
-    }
-target_reqs    =
-    { "type",    "name",     "range"
-      "Terrain", "Glacier",  "Local"
-    }
+
 
 [actionenabler_irrigate_welldigger]
 action        = "Build Irrigation"
@@ -2739,7 +2632,6 @@ actor_reqs    =
       "UnitFlag",      "Well-Digger",  "Local", FALSE
       "UnitFlag",      "CanHide",      "Local", FALSE
       "UnitFlag",      "CanClaim",     "Local", FALSE
-      "UnitType",      "Proletarians", "Local", FALSE
       "UnitType",      "Tribesmen",    "Local", FALSE
     }
 target_reqs    =
@@ -2755,7 +2647,6 @@ actor_reqs    =
       "UnitFlag",      "Well-Digger",  "Local", FALSE
       "UnitFlag",      "CanHide",      "Local", FALSE
       "UnitFlag",      "CanClaim",     "Local", FALSE
-      "UnitType",      "Proletarians", "Local", FALSE
       "UnitType",      "Tribesmen",    "Local", FALSE
     }
 target_reqs    =
@@ -2786,19 +2677,6 @@ target_reqs    =
     { "type",        "name",     "range", "present"
       "TerrainClass", "Oceanic", "Adjacent", TRUE
     }
-[actionenabler_irrigate_src_ocean_prole]
-action        = "Build Irrigation"
-actor_reqs    =
-    { "type",          "name",         "range", "present"
-      "UnitFlag",      "Settlers",     "Local", TRUE
-      "UnitType",      "Proletarians", "Local", TRUE
-      "Gov",           "Communism",    "Player",TRUE
-    }
-target_reqs    =
-    { "type",        "name",     "range", "present"
-      "TerrainClass", "Oceanic", "CAdjacent", TRUE
-    }
- 
 [actionenabler_irrigate_from_source]
 action        = "Build Irrigation"
 actor_reqs    =
@@ -2806,7 +2684,6 @@ actor_reqs    =
       "UnitFlag",      "Settlers",     "Local", TRUE
       "UnitFlag",      "CanHide",      "Local", FALSE
       "UnitFlag",      "CanClaim",     "Local", FALSE
-      "UnitType",      "Proletarians", "Local", FALSE
       "UnitType",      "Tribesmen",    "Local", FALSE
       "UnitFlag",      "Well-Digger",  "Local", FALSE
     }
@@ -2822,7 +2699,6 @@ actor_reqs    =
       "UnitFlag",      "Settlers",     "Local", TRUE
       "UnitFlag",      "CanHide",      "Local", FALSE
       "UnitFlag",      "CanClaim",     "Local", FALSE
-      "UnitType",      "Proletarians", "Local", FALSE
       "UnitFlag",      "Well-Digger",  "Local", FALSE
     }
 target_reqs    =
@@ -2841,73 +2717,8 @@ target_reqs    =
     { "type",    "name",     "range", "present"
       "ExtraFlag", "IrrigationSource", "CAdjacent", TRUE
     }
-[actionenabler_irrigate_from_source_prole]
-action        = "Build Irrigation"
-actor_reqs    =
-    { "type",          "name",         "range", "present"
-      "UnitFlag",      "Settlers",     "Local", TRUE
-      "UnitType",      "Proletarians", "Local", TRUE
-      "Gov",           "Communism",    "Player",TRUE
-    }
-target_reqs    =
-    { "type",    "name",     "range", "present"
-      "ExtraFlag", "IrrigationSource", "CAdjacent", TRUE
-    }
-;NO LONGER NEEDED NOW THAT WE USE IrrigationSource flag:
-;[actionenabler_irrigate_src_oasis]
-;action        = "Build Irrigation"
-;actor_reqs    =
-;    { "type",          "name",         "range", "present"
-;      "UnitFlag",      "Settlers",     "Local", TRUE
-;      "UnitFlag",      "CanHide",      "Local", FALSE
-;      "UnitFlag",      "CanClaim",     "Local", FALSE
-;      "UnitType",      "Proletarians", "Local", FALSE
-;      "UnitFlag",      "Well-Digger",  "Local", FALSE
-;    }
-;target_reqs    =
-;    { "type",    "name",     "range", "present"
-;      "Extra",   "Oasis",    "CAdjacent", TRUE
-;    }    
-;[actionenabler_irrigate_src_oasis_prole]
-;action        = "Build Irrigation"
-;actor_reqs    =
-;    { "type",          "name",         "range", "present"
-;      "UnitFlag",      "Settlers",     "Local", TRUE
-;      "UnitType",      "Proletarians", "Local", TRUE
-;      "Gov",           "Communism",    "Player",TRUE
-;    }
-;target_reqs    =
-;    { "type",    "name",     "range", "present"
-;      "Extra",   "Oasis",    "CAdjacent", TRUE
-;    }    
-; 
-;[actionenabler_irrigate_src_irrigation]
-;action        = "Build Irrigation"
-;actor_reqs    =
-;    { "type",          "name",         "range", "present"
-;      "UnitFlag",      "Settlers",     "Local", TRUE
-;      "UnitFlag",      "Well-Digger",  "Local", FALSE
-;      "UnitType",      "Proletarians", "Local", FALSE
-;      "UnitFlag",      "CanHide",      "Local", FALSE
-;      "UnitFlag",      "CanClaim",     "Local", FALSE
-;    }
-;target_reqs    =
-;    { "type",    "name",       "range", "present"
-;      "Extra",   "Irrigation", "CAdjacent", TRUE
-;    }
-;[actionenabler_irrigate_src_irrigation_prole]
-;action        = "Build Irrigation"
-;actor_reqs    =
-;    { "type",          "name",         "range", "present"
-;      "UnitFlag",      "Settlers",     "Local", TRUE
-;      "UnitType",      "Proletarians", "Local", TRUE
-;      "Gov",           "Communism",    "Player",TRUE
-;    }
-;target_reqs    =
-;    { "type",    "name",       "range", "present"
-;      "Extra",   "Irrigation", "CAdjacent", TRUE
-;    }
 
+;**************************************************************************** Board Deboard Unload Disembark Embark
 [actionenabler_deboard]
 action        = "Transport Deboard"
 actor_reqs    =

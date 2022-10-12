@@ -8322,25 +8322,36 @@ reqs    =
   ;    "UnitFlag", "NonMil",      "Local",  FALSE  ;can't seem to access this.
     } 
 ;******** COMMUNISM EFFECTS ****************************************
+;*** useless Proletarians if (!commmunist) *****
 ;Proletarians useless unless communist.
 [effect_proletarian_movement_penalty]
 type    = "Move_Bonus"
-value	  = -18
+value	  = -19  ; -2 1/9 i.e., none
 reqs    =
     {
-      "type", "name", "range", "present"
-      "UnitType", "Proletarians", "Local", TRUE
-      "Gov", "Communism", "Player", FALSE
+      "type",     "name",          "range", "present"
+      "UnitType", "Proletarians",  "Local",  TRUE
+      "Gov",      "Communism",     "Player", FALSE
+    }
+[effect_proletarian_min_speed]  ; overrides unitclass minspeed
+type    = "Unit_Min_Speed"
+value	  = -9    ; 1-1: i.e., none
+reqs    =
+    {
+      "type",     "name",         "range", "present"
+      "UnitType", "Proletarians", "Local",  TRUE
+      "Gov",      "Communism",    "Player", FALSE
     }
 [effect_proletarian_work_rate_penalty]
 type    = "Unit_Work_Frag_Bonus"
 value	  = -18
 reqs    =
     {
-      "type", "name", "range", "present"
-      "UnitType", "Proletarians", "Local", TRUE
-      "Gov", "Communism", "Player", FALSE
+      "type",     "name",          "range", "present"
+      "UnitType", "Proletarians",  "Local",  TRUE
+      "Gov",      "Communism",     "Player", FALSE
     }
+;***************************************************
 
 ;COMMUNISM 5 shield discount Riflemen
 [effect_communist_riflemen]
