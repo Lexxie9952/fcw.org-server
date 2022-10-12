@@ -1961,12 +1961,12 @@ reqs           =
     { "type",        "name",       "range", "present", "quiet"
       "ExtraFlag",   "Quayable",   "Local",  TRUE,      FALSE
       "Tech",        "Pottery",    "Player", TRUE,      FALSE
-      "TerrainClass","Land",       "Local",  TRUE,      FALSE
-      "UnitFlag",    "CanFortress","Local",  TRUE,      TRUE
+      "TerrainClass","Land",       "Local",  TRUE,      FALSE ; NOT Trawlers or Missile Subs.
+      "UnitFlag",    "CanRoad",    "Local",  TRUE,      TRUE  ; All infra types + Legions
       "Extra",       "Hideout",    "Local",  FALSE,     TRUE
       "CityTile",    "Center",     "Local",  FALSE,     TRUE  ; distinct quay extra goes on cities to enable conditional logic
     }
-build_time     = 2
+build_time     = 1
 removal_time   = 0
 native_to      = "Land", "LandRoad", "LandAirSea", "LandNoKill", "Big Land", "Trireme", "Cargo", "Balloon", "Zeppelin", "RiverShip"
 flags          = "NativeTile"
@@ -2004,7 +2004,7 @@ reqs           =
       "ExtraFlag",   "Quayable",   "Local",  TRUE,      FALSE
       "Tech",        "Pottery",    "Player", TRUE,      FALSE
       "TerrainClass","Land",       "Local",  TRUE,      FALSE
-      "UnitFlag",    "CanFortress","Local",  TRUE,      TRUE
+      "UnitFlag",    "CanRoad",    "Local",  TRUE,      TRUE
       "Extra",       "Hideout",    "Local",  FALSE,     TRUE
     }
 build_time     = 0

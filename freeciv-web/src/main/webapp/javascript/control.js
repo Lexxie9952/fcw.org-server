@@ -6490,7 +6490,9 @@ function can_build_quay(punit, ptile)
   const domestic = (ptile['owner'] == client.conn.playing.playerno)
   var ptype = unit_type(punit);
 
-  if (ptype['name'] == "Tribesmen") return false;
+  if (!client_rules_flag[CRF_MP2_D] && ptype['name'] == "Tribesmen") {
+    return false;
+  }
   else if (ptype['name'] == "Legion") {
     if ( (domestic) && !tile_has_extra(ptile, EXTRA_FORT) )
       return false;

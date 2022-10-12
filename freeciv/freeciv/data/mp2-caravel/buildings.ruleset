@@ -1558,7 +1558,7 @@ sound_alt	= "w_generic"
 helptext	= _("\
 Chand Baori can only be built during your first Despotism regime. All city\
  centers become irrigation sources, and you can irrigate diagonal to any irrigation\
- source. Your Tribesmen can still irrigate after turn 20. \
+ source. Your Tribesmen can still work after turn 20. \
 Chand Baori’s home city gets a free well on the city center (i.e., river). \n\n\
 "), _("\
 During Despotism, Chand Baori gets two more bonuses:\n(1) In its city\
