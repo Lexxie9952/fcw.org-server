@@ -24,13 +24,7 @@ var mouse_x;
 var mouse_y;
 var prev_mouse_x;
 var prev_mouse_y;
-var prev_goto_tile;
 var mclick_tile;    // keeps track of what tile was middle clicked
-/* # of times to force request_goto_path on the same tile: performance hack to prevent constant requests on the same tile.
- * We used to constantly request_goto_path on the same tile because the first couple of times didn't give enough time to
- * properly construct a clean path: */
-const FORCE_CHECKS_AGAIN = -4;
-const LAST_FORCED_CHECK = -1;  // When FORCE_CHECKS_AGAIN++ arrives at this value, we stop requesting goto paths for the same tile
 
 // Prevent quick double-clicking for GOTO city, from doing context menu or city dialog:
 var LAST_GOTO_TILE = null;       // Last tile clicked on for a GOTO order

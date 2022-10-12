@@ -28,6 +28,13 @@ var rally_city_id = null;                 // City being asked to set a rally poi
 var delayed_goto_active = false;          // Modifies goto_active state to give a delayed goto command
 var paradrop_active = false;
 var airlift_active = false;
+/* # of times to force request_goto_path on the same tile: performance hack to prevent constant requests on the same tile.
+ * We used to constantly request_goto_path on the same tile because the first couple of times didn't give enough time to
+ * properly construct a clean path: */
+const FORCE_CHECKS_AGAIN = -4;
+const LAST_FORCED_CHECK = -1;  // When FORCE_CHECKS_AGAIN++ arrives at this value, we stop requesting goto paths for the same tile
+var prev_goto_tile;            // counter for above
+
 /* States for Connect Orders (worker roads/irrigates along path) */
 var connect_active = false;               // indicates that goto_active goto_path is for connect mode
 var connect_extra = -1;                   // type of EXTRA to make, e.g., EXTRA_ROAD, EXTRA_IRRIGATION
@@ -405,27 +412,29 @@ function show_goto_path(goto_packet)
 }
 
 /****************************************************************************
-...
+  When goto_active or rally_active, we periodically check mouse position
+  to see if we should query the server for an updated goto path.
 ****************************************************************************/
 function check_request_goto_path()
 {
   var ptile;
-  // TO DO: the 'else if' block below is identical except for request_rally_path(), we can clean this up big time.
-  if (goto_active && current_focus.length > 0
-      && (prev_mouse_x != mouse_x || prev_mouse_y != mouse_y || prev_goto_tile<=LAST_FORCED_CHECK)) {
+  const do_new_check = (prev_mouse_x != mouse_x || prev_mouse_y != mouse_y || prev_goto_tile<=LAST_FORCED_CHECK);
+  var do_goto_check = goto_active && current_focus.length > 0 && do_new_check;
+  var do_rally_check = !do_goto_check && rally_active && do_new_check;
 
-    if (renderer == RENDERER_2DCANVAS) {
-      ptile = canvas_pos_to_tile(mouse_x, mouse_y);
-    } else {
-      ptile = webgl_canvas_pos_to_tile(mouse_x, mouse_y);
-    }
-
+  if (do_goto_check || do_rally_check) {
+    ptile = (renderer == RENDERER_2DCANVAS) ? canvas_pos_to_tile(mouse_x, mouse_y)
+                                            : webgl_canvas_pos_to_tile(mouse_x, mouse_y);
     if (ptile != null) {
       if (ptile['tile'] != prev_goto_tile) {
-        clear_goto_tiles(); // TODO: goto tiles should not be in tiles[tild_id][goto_dir] which takes forever to clear, but their own array instead
-        /* Send request for goto_path to server. */
-        for (var i = 0; i < current_focus.length; i++) {
-          request_goto_path(current_focus[i]['id'], ptile['x'], ptile['y']);
+        clear_goto_tiles(); // TODO: goto tiles should not be in tiles[tile_id][goto_dir] which takes forever to clear, but their own array instead
+        /* Send request for path to server. */
+        if (do_rally_check) {
+          request_rally_path(rally_city_id, ptile['x'], ptile['y']);
+        } else { // normal goto
+          for (var i = 0; i < current_focus.length; i++) {
+            request_goto_path(current_focus[i]['id'], ptile['x'], ptile['y'])              
+          }
         }
       }
       // We don't want to constantly request the same tile if it hasn't changed, but we used to do that because sometimes
@@ -439,29 +448,7 @@ function check_request_goto_path()
       else prev_goto_tile = FORCE_CHECKS_AGAIN; // ... request_goto_path x more times before blocking requests on the same tile.
     }
   }
-  // SAME AS ABOVE BUT FOR PATHING A CITY RALLY POINT:
-  else if (rally_active && (prev_mouse_x != mouse_x || prev_mouse_y != mouse_y || prev_goto_tile<=LAST_FORCED_CHECK)) {
 
-  ptile = canvas_pos_to_tile(mouse_x, mouse_y);
-
-  if (ptile != null) {
-    if (ptile['tile'] != prev_goto_tile) {
-      clear_goto_tiles(); // TO DO: goto tiles should not be in tiles[tild_id][goto_dir] which takes forever to clear, but their own array instead
-      /* Send request for goto_path to server. */
-      request_rally_path(rally_city_id, ptile['x'], ptile['y']);
-    }
-    // We don't want to constantly request the same tile if it hasn't changed, but we used to do that because sometimes
-    // the first request_rally_path+clear_goto_tiles didn't have time(?) to clean old paths and construct a new path properly:
-    if (prev_goto_tile <= LAST_FORCED_CHECK) {
-      prev_goto_tile ++;
-      if (prev_goto_tile > LAST_FORCED_CHECK) {
-        if (ptile) prev_goto_tile = ptile['tile']; // Flag to not make continuous server requests for the same tile.
-      }
-    } // FLAG to force request_rally_path more times to clean path redraw glitch.  FORCE_CHECKS_AGAIN can be tuned to -x which forces...
-    else prev_goto_tile = FORCE_CHECKS_AGAIN; // ... request_rally_path x more times before blocking requests on the same tile.
-  }
-}
   prev_mouse_x = mouse_x;
   prev_mouse_y = mouse_y;
 }
-
