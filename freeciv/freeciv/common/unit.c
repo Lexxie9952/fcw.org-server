@@ -511,7 +511,7 @@ int get_activity_rate(const struct unit *punit)
                                   unit_type_get(punit), NULL, NULL, NULL,
                                   EFT_UNIT_WORK_PCT, V_COUNT)/100;
 
-   float move_rate = (float)unit_type_get(punit)->move_rate;
+   float move_rate = (float)unit_type_get(punit)->move_rate; /* sans Move_Bonus */
    // Add work_bonus_rate and/or multiple by work_bonus_pct:
    move_rate = (move_rate + work_bonus_rate) * (1.0 + work_bonus_pct) + .1; //round up 
                                                              
