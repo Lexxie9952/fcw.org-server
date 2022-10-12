@@ -1140,10 +1140,20 @@ type = "Unit_Vision_Radius_Sq"
 value = -1
 reqs =
     {
-      "type",      "name",      "range"
-      "UnitType",  "Tribesmen", "Local"
-      "MinYear",   "-2000",     "World"
-      "VisionLayer", "Main", "Local"
+      "type",        "name",      "range"
+      "UnitType",    "Tribesmen", "Local"
+      "MinYear",     "-2000",     "World"
+      "VisionLayer", "Main",      "Local"
+    }
+[effect_tribesmen_work_rate_penalty]
+type    = "Unit_Work_Frag_Bonus"
+value	  = -9  ; +1/3 is vet move bonus not figured to work rate
+reqs    =
+    {
+      "type",     "name",        "range", "present"
+      "UnitType", "Tribesmen",   "Local",  TRUE
+      "Building", "Chand Baori", "Player", FALSE
+      "MinYear",  "-2000",       "World",  TRUE
     }
 ;------------------------------------------------------
 

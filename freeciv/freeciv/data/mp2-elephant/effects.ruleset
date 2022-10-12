@@ -1295,6 +1295,16 @@ reqs =
       "MinYear",     "-2000",     "World"
       "VisionLayer", "Main",      "Local"
     }
+[effect_tribesmen_work_rate_penalty]
+type    = "Unit_Work_Frag_Bonus"
+value	  = -10080  ; +1/3 is vet move bonus not figured to work rate
+reqs    =
+    {
+      "type",     "name",        "range", "present"
+      "UnitType", "Tribesmen",   "Local",  TRUE
+      "Building", "Chand Baori", "Player", FALSE
+      "MinYear",  "-2000",       "World",  TRUE
+    }
 ;------------------------------------------------------
 [effect_scout_mapmaking_bonus]
 type    = "Move_Bonus"

@@ -2262,15 +2262,6 @@ actor_reqs    =
       "UnitFlag",      "Settlers",     "Local", TRUE
       "UnitFlag",      "CanHide",      "Local", FALSE
       "UnitFlag",      "CanClaim",     "Local", FALSE
-      "UnitType",      "Tribesmen",    "Local", FALSE
-    }
-[actionenabler_cultivate_tribesmen]
-action        = "Cultivate"
-actor_reqs    =
-    { "type",          "name",         "range", "present"
-      "UnitFlag",      "Settlers",     "Local", TRUE
-      "UnitType",      "Tribesmen",    "Local", TRUE
-      "MinYear",       "-2000",        "World", FALSE   ; they get old
     }
 
 [actionenabler_plant_outside_city]
@@ -2280,18 +2271,8 @@ actor_reqs    =
       "UnitFlag",      "Settlers",    "Local", TRUE
       "UnitFlag",      "CanHide",     "Local", FALSE
       "UnitFlag",      "CanClaim",    "Local", FALSE
-      "UnitType",      "Tribesmen",   "Local", FALSE 
       "UnitFlag",      "Well-Digger", "Local", FALSE
       "CityTile",      "Center",      "Local", FALSE
-    }
-[actionenabler_plant_outside_city_tribesmen]
-action        = "Plant"
-actor_reqs    =
-    { "type",          "name",        "range", "present"
-      "UnitFlag",      "Settlers",    "Local", TRUE
-      "UnitType",      "Tribesmen",   "Local", TRUE 
-      "CityTile",      "Center",      "Local", FALSE
-      "MinYear",       "-2000",       "World", FALSE   ; they get old
     }
 
 [actionenabler_plant_inside_city] ;you can't plant a forest in an existing city
@@ -2384,7 +2365,6 @@ actor_reqs    =
       "UnitFlag",      "Settlers",     "Local",   TRUE
       "UnitFlag",      "CanHide",      "Local",   FALSE
       "UnitFlag",      "CanClaim",     "Local",   FALSE
-      "UnitType",      "Tribesmen",    "Local",   FALSE
       "UnitState",     "Transported",  "Local",   FALSE    ; Prevent quay exploit
     }
 [actionenabler_road1] ; can't road while transported in foreign lands
@@ -2408,21 +2388,11 @@ actor_reqs    =
       "UnitFlag",      "CanHide",      "Local",   FALSE
       "UnitFlag",      "CanClaim",     "Local",   FALSE
       "Tech",          "Steel",        "Player",  TRUE
-      "UnitType",      "Tribesmen",    "Local",   FALSE
     }
 target_reqs    =
     { "type",         "name",    "range",    "present"
       "TerrainClass", "Oceanic", "Local",    TRUE
       "TerrainClass", "Land",    "CAdjacent",TRUE
-    }
-[actionenabler_road_tribesmen]
-action        = "Build Road"
-actor_reqs    =
-    { "type",          "name",         "range",   "present"
-      "UnitFlag",      "Settlers",     "Local",   TRUE
-      "UnitType",      "Tribesmen",    "Local",   TRUE
-      "UnitState",     "Transported",  "Local",   FALSE  ; Prevent quay exploit
-      "MinYear",       "-2000",        "World",   FALSE   ; they get old
     }
 [actionenabler_legion_road]
 action        = "Build Road"
@@ -2541,20 +2511,6 @@ actor_reqs    =
       "UnitFlag",      "Well-Digger",  "Local",   FALSE
       "UnitFlag",      "CanHide",      "Local",   FALSE
       "UnitFlag",      "CanClaim",     "Local",   FALSE
-      "UnitType",      "Tribesmen",    "Local",   FALSE
-    }
-target_reqs    =
-    { "type",        "name", "range", "present"
-      "TerrainFlag", "Oil",  "Local", FALSE
-    }
-[actionenabler_mining_tribesmen]
-action        = "Build Mine"
-actor_reqs    =
-    { "type",          "name",         "range",   "present"
-      "UnitFlag",      "Settlers",     "Local",   TRUE
-      "UnitType",      "Tribesmen",    "Local",   TRUE
-      "UnitState",     "Transported",  "Local",   FALSE
-      "MinYear",       "-2000",        "World",   FALSE   ; they get old
     }
 target_reqs    =
     { "type",        "name", "range", "present"
@@ -2632,7 +2588,6 @@ actor_reqs    =
       "UnitFlag",      "Well-Digger",  "Local", FALSE
       "UnitFlag",      "CanHide",      "Local", FALSE
       "UnitFlag",      "CanClaim",     "Local", FALSE
-      "UnitType",      "Tribesmen",    "Local", FALSE
     }
 target_reqs    =
     { "type",        "name",     "range", "present"
@@ -2647,31 +2602,6 @@ actor_reqs    =
       "UnitFlag",      "Well-Digger",  "Local", FALSE
       "UnitFlag",      "CanHide",      "Local", FALSE
       "UnitFlag",      "CanClaim",     "Local", FALSE
-      "UnitType",      "Tribesmen",    "Local", FALSE
-    }
-target_reqs    =
-    { "type",        "name",     "range", "present"
-      "TerrainClass", "Oceanic", "Adjacent", TRUE
-    }
-[actionenabler_irrigate_src_ocean_tribesmen]
-action        = "Build Irrigation"
-actor_reqs    =
-    { "type",          "name",         "range", "present"
-      "UnitFlag",      "Settlers",     "Local", TRUE
-      "UnitType",      "Tribesmen",    "Local", TRUE
-      "MinYear",       "-2000",        "World", FALSE ; they get old
-    }
-target_reqs    =
-    { "type",        "name",     "range", "present"
-      "TerrainClass", "Oceanic", "CAdjacent", TRUE
-    }
-[actionenabler_irrigate_src_ocean_tribesmen_chand_baori]
-action        = "Build Irrigation"
-actor_reqs    =
-    { "type",          "name",         "range", "present"
-      "Building",      "Chand Baori",  "Player", TRUE
-      "UnitFlag",      "Settlers",     "Local", TRUE
-      "UnitType",      "Tribesmen",    "Local", TRUE
     }
 target_reqs    =
     { "type",        "name",     "range", "present"
@@ -2684,7 +2614,6 @@ actor_reqs    =
       "UnitFlag",      "Settlers",     "Local", TRUE
       "UnitFlag",      "CanHide",      "Local", FALSE
       "UnitFlag",      "CanClaim",     "Local", FALSE
-      "UnitType",      "Tribesmen",    "Local", FALSE
       "UnitFlag",      "Well-Digger",  "Local", FALSE
     }
 target_reqs    =
@@ -2704,18 +2633,6 @@ actor_reqs    =
 target_reqs    =
     { "type",    "name",     "range", "present"
       "ExtraFlag", "IrrigationSource", "Adjacent", TRUE
-    }
-[actionenabler_irrigate_from_source_tribesmen]
-action        = "Build Irrigation"
-actor_reqs    =
-    { "type",          "name",         "range", "present"
-      "UnitFlag",      "Settlers",     "Local", TRUE
-      "UnitType",      "Tribesmen",    "Local", TRUE
-      "MinYear",       "-2000",        "World", FALSE ; they get old
-    }
-target_reqs    =
-    { "type",    "name",     "range", "present"
-      "ExtraFlag", "IrrigationSource", "CAdjacent", TRUE
     }
 
 ;**************************************************************************** Board Deboard Unload Disembark Embark
