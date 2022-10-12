@@ -1,16 +1,10 @@
 <u>OBJECTIVES</u>:
-• The main purpose is to get a gameplay more similar to civ3, keeping the combat system from civ2.
-• This ruleset is designed to be simpler and more beginner friendly than the classic rules, and less of a disadvantage when you do not
+• Civ2Civ3 strives to be more similar to Civ3, but with the combat system from Civ2.
+• To be simpler and more beginner friendly than the classic rules, and less of a disadvantage when you do not
   play optimally. It may, however, hurt you in learning good habits for more advanced rulesets.
-• Removed the rules that allowed a sudden boost: mainly rapture growth, national trade routes, and the big bonuses from some governments.
-
-The result should be a simpler and more linear development of your cities, and a slower paced gameplay. With governments that keep a similar balance along the different ages.
-
-<u>INFO</u>:
-• Cheating AI level was adjusted for these rules:
-  CHEATING AI: +40% Science, Luxury, Gold and Production, +40 AI love,
-  +40% Veteran chance, +40% Bribe and Incite costs, -20% Pollution,
-  +1 Content per city, no food penalty from units.
+• Remove rapture growth, trade routes, and the big bonuses from some governments.
+• A simpler more linear development for cities, with slower paced gameplay.
+• Governments that keep a similar balance along the different ages.
 
 The following is a full list of changes compared to classic ruleset...
 
@@ -414,6 +408,12 @@ FULL LIST OF WONDERS
 • (#)"Apollo Program" 600: Enables space race for Every Nation. Makes entire map permanently visible for the owner.
 
 Special "Cold War" effect: if Manhattan Project and United Nations were built, every nation with nuclear power receives the Has_Senate effect, until the Apollo Program is finished. 
+
+<u>INFO</u>:
+• Cheating AI level was adjusted for these rules:
+  CHEATING AI: +40% Science, Luxury, Gold and Production, +40 AI love,
+  +40% Veteran chance, +40% Bribe and Incite costs, -20% Pollution,
+  +1 Content per city, no food penalty from units.
 
 <u>THANKS</u>:
 Original developer David Fernandez (Bardo).

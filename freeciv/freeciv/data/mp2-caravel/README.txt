@@ -3,7 +3,6 @@
 <a href="http://freeciv.fandom.com/wiki/Combat.mp2c" target="_blank">Combat</a>
 <a href="http://freeciv.fandom.com/wiki/Economy.mp2c" target="_blank">Economy</a>
 <a href="http://freeciv.fandom.com/wiki/Diplomacy.mp2c" target="_blank">Diplomacy</a>
-<a href="http://freeciv.fandom.com/wiki/Zones_of_control" target="_blank">Zone of Control (ZOC)</a>
 <a href="https://freeciv.fandom.com/wiki/Cities.mp2c#City_Output_Sequence" target="_blank">City Output Sequence</a>
 <a href="http://freecivweb.fandom.com/wiki/Strategy_Guide" target='_blank'>Multiplayer Strategy Guide</a>
 <u>Charts:</u>
