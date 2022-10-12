@@ -129,7 +129,6 @@ function tile_init(tile)
   tile['claimer'] = null;
   tile['worked'] = null;
   tile['spec_sprite'] = null;
-  tile['goto_dir'] = null;
   tile['nuke'] = 0;
   return tile;
 }

@@ -7624,7 +7624,7 @@ function popit_req(ptile, goto_only)
           goto_request_map[gpath_key]['length'] --;
         } else { // add dir to path array
           dirs.push(dir);
-          ptile['goto_dir'] = dir;
+          goto_dirs[ptile.index] = dir;
           ptile = mapstep(ptile,dir);
         }
       }

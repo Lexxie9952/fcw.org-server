@@ -49,6 +49,7 @@ var goto_last_order = -1;
 var goto_last_action = -1;
 
 /* Vars which store info about an active GOTO mode: */
+var goto_dirs = [];                       // Keeps track of each tile on the map, if a goto path goes through it, which direction it goes.
 var goto_request_map = {};                // Key is "unit.id,dest.x,dest.y". Caches packets for paths from server for this unit to dest so as mouse moves around we don't over-ping the server for the same paths repeatedly. If player clicks the dest while goto_active, it will also pull this map when generated the real goto order to fire off.
 var goto_turns_request_map = {};          // Legacy relic appears to be residual var no longer used, slated for deletion ?
 var current_goto_turns = 0;               // # of turns path has up to this point; from most recent goto_req packet, probably should be cleaned up with other vars named differently
@@ -95,12 +96,17 @@ function clear_goto_segment() {
 **************************************************************************/
 function clear_goto_tiles()
 {
+  /* old way, > 5x performance cost 
   if (renderer == RENDERER_2DCANVAS) {
     for (var x = 0; x < map['xsize']; x++) {
       for (var y = 0; y < map['ysize']; y++) {
         tiles[x + y * map['xsize']]['goto_dir'] = null;
       }
     }
+  } */
+  if (renderer == RENDERER_2DCANVAS) {
+    const num_tiles = map['xsize'] * map['ysize'];
+    goto_dirs = Array(num_tiles).fill(null);
   } else {
     if (scene != null && goto_lines != null) {
       for (var i = 0; i < goto_lines.length; i++) {
@@ -124,7 +130,7 @@ function is_goto_segment_active() {
   same tile from appearing twice or more in the same goto_path. Although
   often it would work, we're conservatvely restricting it for sanity:
     (1) it's inefficient to revisit the same tile later in the path,
-    (2) tiles[index]['goto_dir'] only stores one dir for a tile, not 2.
+    (2) goto_dirs[tile.index] only stores one dir for a tile, not 2.
     (3) 'dest' in the key of goto_request_map could cause overwrite error
         if dest ends on a tile that has a previous goto_request_map, tho
         we could fix that (probably we already did).
@@ -250,7 +256,7 @@ function merge_goto_path_segments(old_packet, new_packet, punit)
 
 /****************************************************************************
   Show the GOTO path in the unit_goto_path packet. Ultimately this means
-  putting ptile['goto_dir'] = dir, after we figure out all our other logic.
+  putting goto_dirs[tindex] = dir, after we figure out all our other logic.
 ****************************************************************************/
 function update_goto_path(goto_packet)
 {
@@ -353,7 +359,7 @@ function update_goto_path(goto_packet)
         refuel++;
         continue;
       }
-      ptile['goto_dir'] = dir;
+      goto_dirs[ptile.index] = dir;
       old_tile = ptile;
       ptile = mapstep(ptile, dir);
       old_turn = turn;
@@ -427,7 +433,7 @@ function check_request_goto_path()
                                             : webgl_canvas_pos_to_tile(mouse_x, mouse_y);
     if (ptile != null) {
       if (ptile['tile'] != prev_goto_tile) {
-        clear_goto_tiles(); // TODO: goto tiles should not be in tiles[tile_id][goto_dir] which takes forever to clear, but their own array instead
+        clear_goto_tiles();
         /* Send request for path to server. */
         if (do_rally_check) {
           request_rally_path(rally_city_id, ptile['x'], ptile['y']);

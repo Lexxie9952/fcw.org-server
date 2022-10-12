@@ -556,7 +556,7 @@ function fill_sprite_array(layer, ptile, pedge, pcorner, punit, pcity, citymode)
       break;
 
     case LAYER_GOTO:
-      if (ptile != null && ptile['goto_dir'] != null) {
+      if (ptile != null && goto_dirs[ptile.index] != null) {
         sprite_array = sprite_array.concat(fill_goto_line_sprite_array(ptile));
       }
 
@@ -1041,7 +1041,7 @@ function get_user_mark_sprite(index) {
 ***********************************************************************/
 function fill_goto_line_sprite_array(ptile)
 {
-  return {"key" : "goto_line", "goto_dir" : ptile['goto_dir']};
+  return {"key" : "goto_line", "goto_dir" : goto_dirs[ptile.index]};
 }
 
 /**********************************************************************
