@@ -1683,7 +1683,6 @@ function update_unit_order_commands()
     /* Tile requirements for base to possibly exist there */
     const CAN_TILE_HIDEOUT   = !pcity && !oceanic && HIDEOUTS   && !TILE_HAS_HIDEOUT && !does_tile_have_base(ptile) && (!QUAYS || !tile_has_extra(ptile,EXTRA_QUAY))
                                   && (ptile['owner']==UNCLAIMED_LAND || ptile['owner'] == client.conn.playing.playerno)
-                                  && (tile_units(ptile).length==1)
                                   && (terrain_name=='Mountains' || terrain_name=='Forest' || terrain_name == 'Jungle' || terrain_name == 'Swamp')
                                   && !(TILE_HAS_RIVER && NO_RIVER_BASE);
     const CAN_TILE_FORT      = !pcity && !oceanic && FORTS      && !TILE_HAS_FORT && !TILE_HAS_OVERFORT && !(TILE_HAS_RIVER && NO_RIVER_BASE);
