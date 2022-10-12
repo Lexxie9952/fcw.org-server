@@ -58,7 +58,7 @@ const CURV_GOLD_PER_SHIELD= 4;
 const CURV_FOREIGNERS     = 5;
 const CURV_TURN_FOUNDED   = 6;
 const CURV_LAST           = 7;
-const clkmsg = "\n\nClick column to change info category.";
+const clkmsg = "\n\nClick top to sort.\nClick column BELOW to set info type";
 const CURV_icons = ["/images/city_user_row.png",
                     "/images/corrupt.png",
                     "/images/pollution.png",
@@ -66,7 +66,7 @@ const CURV_icons = ["/images/city_user_row.png",
                     "/images/goldpershield.png",
                     "/images/foreigner.png",
                     "/images/stone_henge.png"];
-const CURV_title = ["User Info Column:\nClick column below to choose",
+const CURV_title = ["User Info Column:\nClick top to sort\nClick column BELOW to choose",
                     "Corruption"+clkmsg,
                     "Pollution Probability"+clkmsg,
                     "Trade from Trade Routes"+clkmsg,
