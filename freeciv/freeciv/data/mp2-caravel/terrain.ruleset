@@ -1449,7 +1449,7 @@ reqs           =
       "Extra",   "Bunker",    "Local", FALSE,    FALSE
       "Extra",   "Airbase",   "Local", FALSE,    FALSE
       "Extra",   "Fort",      "Local", FALSE,    FALSE
-      "Extra",   "Quay",      "Local", FALSE,    FALSE
+      "Extra",   "Quay",      "Local", FALSE,    FALSE ; "Quay"+0-width space = CityTile, already prevented
     }
 disappearance_reqs = 
     { "type",           "name", "range",  "present"
