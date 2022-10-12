@@ -1376,6 +1376,7 @@ static bool worklist_item_postpone_req_vec(struct universal *target,
                             preq->source.value.building));
           script_server_signal_emit(signal_name, ptarget,
                                     pcity, "need_building");
+          success = FALSE;
         } else {
           notify_player(pplayer, city_tile(pcity),
                         E_CITY_CANTBUILD, ftc_server,

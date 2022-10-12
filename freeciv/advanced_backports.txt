@@ -41,4 +41,11 @@ aa5cc416df38aa7baa8ae113f0b7ed4eb9f5dcd6 2021-10-17          Unchanged and compl
 1673a1244ebd084fa288c66da661b36bfa70964e 2021-12-11	         Lua: Add government information to Player object
 https://osdn.net/projects/freeciv/ticket/44158#preview ...
 ...                                      2022-03-23          No upstream commit yet
+                                         2019-11-11
+HACKED A BUG CAUSED IN cityturn.c::worklist_change_build_target() removal of checks for improvement req for units resulted in a "false postponement"
+where it was reported postponed but wasn't and became the actual prod target even though not allowed, leading to exploits. HACK-PATCH-FIX is 
+a "return false" in worklist_item_postpone_req_vec which is ironic because FALSE means to cancel and not postpone, but because of some other
+bug in the commit id (below), actually makes it postpone, which was the desired behaviour we wanted.
+0a92b6869180ae94dd23840f9ed36716bc1431d9
+...
 
