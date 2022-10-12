@@ -62,7 +62,7 @@ Building:      World, Alliance, Team, Player, Continent, Traderoute,
                City, Local
 BuildingGenus: Local                                                   "GreatWonder", "SmallWonder", "Improvement", "Special"
 CityStatus:    Traderoute, City,                                       "OwnedByOriginal"
-CityTile:      Local, Adjacent, CAdjacent                              "Center" or "Claimed" (the tile is within borders of any nation [not ur own?])
+CityTile:      Local, Adjacent, CAdjacent                              "Center" or "Claimed" (the tile is within borders of ANY nation -search "Claimed" below
 
 DiplRel:       World, Alliance, Team, Player, Local                    "Armistice", "War", "Cease-fire", "Peace", "Alliance", "Never met", "Team",
                                                                        "Gives shared vision", "Receives shared vision", "Hosts embassy", "Has embassy",
@@ -116,6 +116,12 @@ MinSize is the minimum size of a city required.
 AI is ai player difficulty level.
 TerrainClass is either "Land" or "Oceanic".
 CityTile is either "Center" (city center) or "Claimed" (owned).
+Requirement is:                         fulfilled when the tile is:
+                                     | domestic | unclaimed | foreign
+"CityTile","Claimed", "Local", TRUE  | yes      | no        | yes
+"CityTile","Claimed", "Local", FALSE | no       | yes       | no
+------------------------------------------------------------------------
+
 DiplRel is a diplomatic relationship.
 MaxUnitsOnTile is about the number of units present on a tile.
 UnitState is "Transported", "Transporting", "OnNativeTile", "OnLivableTile",
@@ -900,6 +906,11 @@ Requirement is                          fulfilled when the tile is
                                      | domestic | unclaimed | foreign
 "DiplRel", "Foreign", "Local", TRUE  | no       | no        | yes
 "DiplRel", "Foreign", "Local", FALSE | yes      | no        | no
+"CityTile","Claimed", "Local", TRUE  | yes      | no        | yes
+"CityTile","Claimed", "Local", FALSE | no       | yes       | no
+------------------------------------------------------------------------
+But I want "not in foreign territory"| yes      | yes       | no  << requires OR-ING 2 enablers/effects, one for claimed=false, one for foreign=false
+
 
 The MaxUnitsOnTile requirement type
 -----------------------------------
