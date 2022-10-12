@@ -1612,7 +1612,7 @@ function update_unit_order_commands()
 
     if ( (ptype['name'] == "Workers" || ptype['name'] == "Workers II") 
       || ptype['name'] == "Engineers"
-      || (ptype['name'] == "Tribesmen" && client_rules_flag[CRF_MP2_C])
+      || (ptype['name'] == "Tribesmen" && client_rules_flag[CRF_MP2_C] && (game_info.turn<21 || chand_baori))
       || ptype['name'] == "Settlers"
       || ptype['name'] == "Founders"
       || ptype['name'] == "Trawler"
@@ -6491,7 +6491,8 @@ function can_build_quay(punit, ptile)
   const domestic = (ptile['owner'] == client.conn.playing.playerno)
   var ptype = unit_type(punit);
 
-  if (ptype['name'] == "Legion") {
+  if (ptype['name'] == "Tribesmen") return false;
+  else if (ptype['name'] == "Legion") {
     if ( (domestic) && !tile_has_extra(ptile, EXTRA_FORT) )
       return false;
   }
