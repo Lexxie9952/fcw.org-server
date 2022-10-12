@@ -3076,9 +3076,9 @@ reqs    =
 type    = "City_Vision_Radius_Sq"
 value   = 36
 reqs    =
-    { "type",      "name",      "range"
-      "Tech", "Space Flight",   "Player
-      "VisionLayer", "Main", "Local"
+    { "type",        "name",           "range"
+      "Tech",        "Space Flight",   "Player"
+      "VisionLayer", "Main",           "Local"
     }
 
 [effect_agoge_move_bonus_1]
