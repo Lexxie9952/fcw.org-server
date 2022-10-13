@@ -2013,7 +2013,7 @@ function handle_begin_turn(packet)
   if (!observing) {
     $("#turn_done_button").button("option", "disabled", false);
     $("#turn_done_button").css({"background-color":"#000f", "opacity":1, "color":"#ddd", "border-color": "#edd5"});
-    if (is_small_screen()) {
+    if (is_small_screen() || (!is_longturn() && browser.opera && fullscreen)) {
       $("#turn_done_button").button("option", "label", "Done");
     } else {
       $("#turn_done_button").button("option", "label", "Turn Done");
