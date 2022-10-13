@@ -21,6 +21,25 @@
 var doubletaptimer = 0;
 var touch_start_x;
 var touch_start_y;
+/* Recently some browsers RARELY start acting glitchy and not processing map clicks. 
+   Are they so fast, (or bog down too slow?), or are sensitive or touchy, or perhaps it's
+   device specific to certain mice or touchpads, or some hacky state-machine code
+   triggering extra fires of the event will happen when the browser is unusually fast/laggy?
+   Whatever the reason, on *rare* occasion, chromium-based browsers (not Firefox) will
+   start making 5 calls to update_mouse_cursor() BEFORE the click from the last mouse event
+   is able to finish do_map_click(). (Always fixed by rebooting computer). 
+
+   Normally, the temporary state var mapview_mouse_movement gets temporarily set to true when
+   a click is made, to figure out if later we're going to start map dragging. And gets reset 
+   to false after do_map_click() is processed. However, if update_mouse_cursor() is called
+   and that var is true, this results in real_mouse_move_mode = true, to set map dragging
+   mode on. If real_mouse_move_mode is set true before do_map_click() is called, then
+   this results in do_map_click() quickly exiting out of itself when it hits:  
+       if (real_mouse_move_mode == true) return;
+   , and therefore not able to process the original click event! The answer is to freeze all
+   calls to update_mouse_cursor() when a click event gets started, so it has time to finish
+   processing. Which is what the var below does.... */
+var freeze_update_mouse_cursor = false; 
 
 var map_select_setting_enabled = true;
 var map_select_check = false;
@@ -197,7 +216,7 @@ function mapview_mouse_down(e)
           && map_drag_enabled             // can't drag if user disabled the mode
           && !came_from_context_menu) {   // we don't start a drag if coming out of context menu
          
-          mapview_mouse_movement = true; // if you clicked out of a context menu, don't do map drag
+          set_mapview_mouse_movement(); // if you clicked out of a context menu, don't do map drag
       }
     }
     touch_start_x = mouse_x;
@@ -223,6 +242,23 @@ function mapview_mouse_down(e)
     // The context menu blocks the right-click mouse up event on some browsers. 
     context_menu_active = false;
   }
+}
+/****************************************************************************
+  This function sets the temporary state var mapview_mouse_movement used 
+  to later figure out whether to set real_mouse_move_mode to turn on 
+  map dragging mode. Because of how some browsers RARELY behave, it also
+  sets a state var to FREEZE update_mouse_cursor() from firing BEFORE
+  the previous mouse-click event was able to finish processing; see longer
+  comment at start of this file.
+****************************************************************************/
+function set_mapview_mouse_movement()
+{
+  mapview_mouse_movement = true;
+  freeze_update_mouse_cursor = true;
+  setTimeout(function(){
+    //console.log("unfreezing");
+    freeze_update_mouse_cursor = false;
+  }, 250);
 }
 
 /****************************************************************************

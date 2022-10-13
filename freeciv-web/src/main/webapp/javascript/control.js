@@ -483,6 +483,10 @@ function mouse_moved_cb(e)
 ****************************************************************************/
 function update_mouse_cursor()
 {
+  if (freeze_update_mouse_cursor !== false) {
+    //console.log("avoiding update_mouse_cursor because of freeze")
+    return;
+  }
   if (tech_dialog_active && !touch_device) {
     update_tech_dialog_cursor();
     real_mouse_move_mode = false;  // since this code returns before we set it false (below), make sure it's false
