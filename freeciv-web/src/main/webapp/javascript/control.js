@@ -8140,7 +8140,7 @@ function openFullscreen() {
      }
     return;
   }
-  fullscreen = !fullscreen;
+  fullscreen = true;
   if (browser.opera) fix_opera_full_screen();
   if (elem.requestFullscreen) {
     elem.requestFullscreen();
