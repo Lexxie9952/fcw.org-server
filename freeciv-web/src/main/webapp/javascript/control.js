@@ -412,9 +412,7 @@ function mouse_moved_cb(e)
 
   mouse_x = 0;
   mouse_y = 0;
-  /* if (!e) {
-    e = window.event;
-  } INTERNET EXPLORER deprecated */
+
   if (e.pageX || e.pageY) {
     mouse_x = e.pageX;
     mouse_y = e.pageY;
