@@ -29,6 +29,20 @@ var antialiasing_setting = true;
 var update_player_info_pregame_queued = false;
 var password_reset_count = 0;
 var google_user_token = null;
+/* uncomment specific browsers as needed for correcting client behavior based
+   on whatever quirks they have, then make a detector and set the var in 
+   check_browser_compatibility, below */
+var browser = {
+  "opera": false,
+  "ie": false /*,
+  "firefox": false,
+  "chrome": false,
+  "chromium": false,
+  "edge": false,
+  "brave": false,
+  "safari": false,
+  "vivaldi": false */
+}
 
 /****************************************************************************
   ...
@@ -100,19 +114,19 @@ function observe()
 ****************************************************************************/
 function check_browser_compatibility()
 {
-  /* 
-    var isOpera = (!!window.opr && !!opr.addons) || !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0; // Opera 8.0+
-    var isFirefox = typeof InstallTrigger !== 'undefined';  // Firefox 1.0+
+   
+  browser.opera = (!!window.opr && !!opr.addons) || !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0; // Opera 8.0+
+  /*  var isFirefox = typeof InstallTrigger !== 'undefined';  // Firefox 1.0+
     // Safari 3.0+ "[object HTMLElementConstructor]" 
     var isSafari = /constructor/i.test(window.HTMLElement) || (function (p) { return p.toString() === "[object SafariRemoteNotification]"; })(!window['safari'] || (typeof safari !== 'undefined' && safari.pushNotification));
   */
-  var isIE = /* @cc_on!@ || */ !!document.documentMode;  // Internet Explorer 6-11
+  browser.ie = /* @cc_on!@ || */ !!document.documentMode;  // Internet Explorer 6-11
   /*
     var isEdge = !isIE && !!window.StyleMedia;   // Edge 20+
     var isChrome = !!window.chrome && (!!window.chrome.webstore || !!window.chrome.runtime);  // Chrome 1 - 71
     var isBlink = (isChrome || isOpera) && !!window.CSS;   // Blink engine detection
   */
-  if (isIE) {
+  if (browser.ie) {
     swal({   
       title: "INCOMPATIBLE BROWSER",   
       text: "Internet Explorer is not supported. Freeciv-Web is a game with video graphics that " +
