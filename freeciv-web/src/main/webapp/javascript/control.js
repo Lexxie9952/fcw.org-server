@@ -1304,7 +1304,7 @@ function advance_unit_focus(same_type)
     update_active_units_dialog();
     $("#game_unit_orders_default").hide();
 
-    if (touch_device || is_small_screen())
+    if (touch_device || is_small_screen() || (!is_longturn() && browser.opera && fullscreen))
     {
       $("#turn_done_button").button("option", "label", "<i class='fa fa-check-circle-o' style='color: green;'aria-hidden='true'></i>Done");
     } else {
@@ -8140,7 +8140,8 @@ function openFullscreen() {
      }
     return;
   }
-
+  fullscreen = !fullscreen;
+  if (browser.opera) fix_opera_full_screen();
   if (elem.requestFullscreen) {
     elem.requestFullscreen();
   } else if (elem.webkitRequestFullscreen) { /* Safari */

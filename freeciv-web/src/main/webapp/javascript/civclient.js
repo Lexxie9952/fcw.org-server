@@ -21,7 +21,7 @@ client.conn = {};
 
 var client_frozen = false;
 var phase_start_time = 0;
-
+var fullscreen = false;
 var debug_active = false;
 var autostart = false;
 
@@ -608,17 +608,23 @@ function update_turn_change_timer()
   } else {
     turn_change_elapsed = 0;
     if (is_small_screen()) {
-      $("#turn_done_button").button("option", "label", "Done");
-      $("#turn_done_button").css("font-size", "90%");
-      $("#turn_done_button_div").css("padding-right","0px");
-      $("#turn_done_button").css("padding-left", "3px");
-      $("#turn_done_button").css("padding-right", "3px");
+      set_small_turn_done_button();
     }
     else {
-      $("#turn_done_button").button("option", "label", "Turn Done");
-      $("#turn_done_button_div").css("padding-right","1px");
+      set_large_turn_done_button();
     } 
   }
+}
+function set_small_turn_done_button() {
+  $("#turn_done_button").button("option", "label", "Done");
+  $("#turn_done_button").css("font-size", "90%");
+  $("#turn_done_button_div").css("padding-right","0px");
+  $("#turn_done_button").css("padding-left", "3px");
+  $("#turn_done_button").css("padding-right", "3px");
+}
+function set_large_turn_done_button() {
+  $("#turn_done_button").button("option", "label", "Turn Done");
+  $("#turn_done_button_div").css("padding-right","1px");
 }
 
 /**************************************************************************
@@ -668,9 +674,21 @@ function send_surrender_game()
 function show_fullscreen_window()
 {
   if (BigScreen.enabled) {
+    fullscreen = !fullscreen;
     BigScreen.toggle();
+    if (browser.opera) fix_opera_full_screen()
   } else {
    show_dialog_message('Fullscreen', 'Press F11 for fullscreen mode.');
+  }
+}
+/* Because opera has a bug in it */
+function fix_opera_full_screen() 
+{
+  if (browser.opera && !is_longturn()) {
+    var mtop = fullscreen ? 37 : 0;
+    $("#turn_done_button_div").css("top",mtop)
+    if (fullscreen) set_small_turn_done_button();
+    else set_large_turn_done_button();
   }
 }
 
