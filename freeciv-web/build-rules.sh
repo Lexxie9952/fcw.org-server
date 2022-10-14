@@ -1,7 +1,7 @@
 #!/bin/bash
 # builds Freeciv-web, copies the war file to Tomcat and builds the selected rulesets.
 
-RULESETS=(civ2civ3 civ1 civ2 mp2 sandbox webperimental experimental alien mp2c-japan classic multiplayer mpplus mp2-ag mp2-brava mp2-caravel mp2-dragoon mp2-elephant)
+RULESETS=(civ2civ3 civ1 civ2 mp2 sandbox webperimental experimental alien classic classicplus multiplayer mpplus mp2-ag mp2-brava mp2-caravel mp2-dragoon mp2-elephant)
 TOPDIR="$( cd ../"$( dirname "${BASH_SOURCE[0]}" )" > /dev/null && pwd )"
 
 printf "\n**********************************************************************\n"
