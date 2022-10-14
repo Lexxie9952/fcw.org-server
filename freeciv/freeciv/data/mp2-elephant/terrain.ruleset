@@ -2130,10 +2130,10 @@ helptext       = _("\
 Highways allow your land units to move more quickly. On Flatland terrain,\
  they also provide a trade bonus to the tile if it is used by a city. \n\
 "), _("\
-Highways are faster than roads, using 1/4 move-point instead of 1/3. Motorized\
- units actually move faster and farther on highways (24 tiles) than railroads\
- (20 tiles). Foot units gain +2 range to 8 tiles. City centers automatically get\
- Highways after you research Automobile tech.\
+Highways are 1.5× faster than roads, using 2/9 move-point instead of 1/3. Motorized\
+ units actually move faster and farther on highways than railroads (27 tiles).\
+ Foot units gain +3 range to 9 tiles. Mounted units go from 12 to 18 tiles in range.\
+ City centers automatically get Highways after you research Automobile tech.\
 ")
 
 [extra_railroad]
