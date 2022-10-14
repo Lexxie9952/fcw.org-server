@@ -1590,8 +1590,9 @@ struct unit *unit_occupies_tile(const struct tile *ptile,
 /**********************************************************************//**
   Is this square controlled by the pplayer?
 
-  Here "is_my_zoc" means essentially a square which is *not* adjacent to an
-  enemy unit (that has a ZOC) on a terrain that has zoc rules.
+  Here "is_my_zoc" means essentially a tile which is *not* adjacent to an
+  enemy ZOC unit _who is native_ to that tile's terrain, and that tile's
+  terrain has ZOC rules.
 
   Since this function is also used in the client, it has to deal with some
   client-specific features, like FoW and the fact that the client cannot 
@@ -1613,18 +1614,34 @@ bool is_my_zoc(const struct player *pplayer, const struct tile *ptile0,
     }
 
     pcity = is_non_allied_city_tile(ptile, pplayer);
+    /* Cities are land (non-native to ocean); so exert no ZOC over ocean. *
+     * Rulesets with ocean cities? We can uncomment the exception if the  *
+     * dev deities decide to do so for that case.                         */
     if (pcity != NULL) {
-      if ((srv && unit_list_size(ptile->units) > 0)
-          || (!srv && (pcity->client.occupied
-                       || TILE_KNOWN_UNSEEN == tile_get_known(ptile, pplayer)))) {
-        /* Occupied enemy city, it doesn't matter if units inside have
-         * UTYF_NOZOC or not. Fogged city is assumed to be occupied. */
-        return FALSE;
+      /* Putting the next if() as an && in the line above triggers the
+         else{} in such a way that breaks with the rule that the ZOC a
+         city exerts will not reveal what kind of unit(s) inside. 
+         We currently chose nested check because: 1. Cities
+         are native to land not sea, 2. The rule that cities don't do
+         ZOC over ocean is consistent and ultra-simple, 3. Ships are
+         docked as BadCityDefenders, 4. Aircraft are on the ground, and
+         5. This prevents exploits to check whether the city's (lone?)
+         defender is of a certain type (likely BadCityDefefender!) */
+      if (!is_ocean_tile(ptile0) /* || is_ocean_tile(ptile) (ocean city)*/) {
+        if ((srv && unit_list_size(ptile->units) > 0)
+            || (!srv && (pcity->client.occupied
+                        || TILE_KNOWN_UNSEEN == tile_get_known(ptile, pplayer)))) {
+          /* Occupied enemy city, it doesn't matter if units inside have
+          * UTYF_NOZOC or not. Fogged city is assumed to be occupied. */
+          return FALSE;
+        } /* occupied city: always ZOC over land, never ZOC over sea */
       }
     } else {
       unit_list_iterate(ptile->units, punit) {
         if (!pplayers_allied(unit_owner(punit), pplayer)
-            && !unit_has_type_flag(punit, UTYF_NOZOC)) {
+            && !unit_has_type_flag(punit, UTYF_NOZOC)
+            /* Can't exert ZOC upon tiles non-native to the unit! */
+            && is_native_tile_to_class(unit_class_get(punit), ptile0)) {
           return FALSE;
         }
       } unit_list_iterate_end;
