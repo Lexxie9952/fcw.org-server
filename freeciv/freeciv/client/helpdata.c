@@ -1785,10 +1785,10 @@ char *helptext_unit(char *buf, size_t bufsz, struct player *pplayer,
   }
   if (!uclass_has_flag(pclass, UCF_ZOC)) {
     /* TRANS: indented unit class property, preserve leading spaces */
-    CATLSTR(buf, bufsz, _("  %s Not subject to zones of control.\n"), BULLET);
+    CATLSTR(buf, bufsz, _("  %s IGNORES Zones of Control.\n"), BULLET);
   } else if (!utype_has_flag(utype, UTYF_IGZOC)) {
     /* TRANS: indented unit class property, preserve leading spaces */
-    CATLSTR(buf, bufsz, _("  %s Subject to zones of control.\n"), BULLET);
+    CATLSTR(buf, bufsz, _("  %s RESTRICTED by Zones of Control.\n"), BULLET);
   }
   if (uclass_has_flag(pclass, UCF_DAMAGE_SLOWS)) {
     /* TRANS: indented unit class property, preserve leading spaces */
@@ -2376,14 +2376,13 @@ char *helptext_unit(char *buf, size_t bufsz, struct player *pplayer,
                  move_points_text(terrain_control.igter_cost, TRUE));
   }
   if (utype_has_flag(utype, UTYF_NOZOC)) {
-    CATLSTR(buf, bufsz, _("%s Never imposes a zone of control.\n"), BULLET_BIG);
+    CATLSTR(buf, bufsz, _("%s Imposes NO Zone of Control.\n"), BULLET_BIG);
   } else {
-    CATLSTR(buf, bufsz, _("%s May impose a zone of control on its adjacent "
-                          "tiles.\n"), BULLET_BIG);
+    CATLSTR(buf, bufsz, _("%s IMPOSES Zone of Control on adjacent tiles.\n"),
+                          BULLET_BIG);
   }
   if (utype_has_flag(utype, UTYF_IGZOC)) {
-    CATLSTR(buf, bufsz, _("%s Not subject to zones of control imposed "
-                          "by other units.\n"), BULLET_BIG);
+    CATLSTR(buf, bufsz, _("%s IGNORES Zones of Control.\n"), BULLET_BIG);
   }
   if (utype_has_flag(utype, UTYF_NOSTACKDEATH)) {
     CATLSTR(buf, bufsz, _("%s Does not die when units in its stack die.\n"), BULLET_BIG);
@@ -3376,11 +3375,11 @@ void helptext_terrain(char *buf, size_t bufsz, struct player *pplayer,
   }
   if (terrain_has_flag(pterrain, TER_NO_ZOC)) {
     CATLSTR(buf, bufsz,
-            _("%s Units on this terrain neither impose zones of control "
+            _("%s Units on this terrain neither impose Zones of Control "
               "nor are restricted by them.\n"), BULLET);
   } else {
     CATLSTR(buf, bufsz,
-            _("%s Units on this terrain may impose a zone of control, or "
+            _("%s Units on this terrain may impose a Zone of Control, or "
               "be restricted by one.\n"), BULLET);
   }
   if (terrain_has_flag(pterrain, TER_NO_FORTIFY)) {
