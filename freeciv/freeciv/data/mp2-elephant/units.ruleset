@@ -321,14 +321,12 @@ name          = _("?unitclass:Sea")
 min_speed     = 4
 hp_loss_pct   = 0
 flags         = "DamageSlows", "AttackNonNative", "AttFromNonNative", "CanPillage", "WaterVessel",
-                "CargoRestrained" ;can't attack while being towed by Trawler
+                "ZOC", "CargoRestrained" ;can't attack while being towed by Trawler
 helptext      = _("\
   • Crew Repair：each turn, regardless of movement, recovers 10% of its hit points (rounded down).\
 ")
 
-; Separating the Submarine class finally allows it to be unreachable by Air. The old Submarine was 
-; far too offensively overpowered while simultaneously almost useless from ultra-vulnerability to Air units.
-; Because it is now Unreachable, any unit able to attack it needs this class in its targets.
+; Separating the Submarine class allows it to be unreachable by Air. NOTE: not subject to ZOC.
 [unitclass_submarine]
 name          = _("?unitclass:Submarine")
 min_speed     = 5
@@ -340,6 +338,7 @@ helptext      = _("\
   • Crew Repair：each turn, regardless of movement, recovers 3 hit points.\
 ")
 
+;Not subject to ZOC
 [unitclass_trireme]
 name          = _("?unitclass:Trireme")
 min_speed     = 3
@@ -347,13 +346,14 @@ hp_loss_pct   = 0
 flags         = "DamageSlows", "AttFromNonNative", "WaterVessel",
                 "CargoRestrained" ;can't attack while being towed by Trawler
 
+;Subject to ZOC but could be individually IgZOC'd
 [unitclass_rivership]
 ; /* Extra class providing ability to travel rivers */
 name          = _("?unitclass:RiverShip")
 min_speed     = 3
 hp_loss_pct   = 0
 flags         = "DamageSlows", "AttackNonNative", "AttFromNonNative", "WaterVessel",
-                "CargoRestrained" ;can't attack while being towed by Trawler
+                "ZOC", "CargoRestrained" ;can't attack while being towed by Trawler
 
 [unitclass_heli]
 name          = _("?unitclass:Helicopter")
@@ -4299,7 +4299,7 @@ uk_food       = 0
 uk_gold       = 0
 cargo         = "Land", "LandNoKill", "LandAirSea", "Big Land", "Cargo"
 flags         = "BadCityDefender", "HelpWonder", "TradeRoute", "CoastStrict", "NonMil", 
-                "NonProvoking", "HasNoZOC", "ProvokingClass2"
+                "NonProvoking", "HasNoZOC", "IgZOC", "ProvokingClass2"
 veteran_names =
   _("?vet_rank:green"),
   _("?vet_rank:veteran"),
@@ -4351,8 +4351,8 @@ uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
 cargo         = "Land", "LandNoKill", "LandAirSea", "Big Land", "LandRoad", "Cargo"
-flags         = "BadCityDefender", "CantReachAir", "HelpWonder", "ProvokingClass2",
-                "TradeRoute", "Coast", "WillNever", "NonMil", "NonMilAttack"
+flags         = "BadCityDefender", "CantReachAir", "HelpWonder", "HasNoZOC", "IgZOC",
+                "TradeRoute", "Coast", "WillNever", "NonMil", "NonMilAttack", "ProvokingClass2"
 veteran_names =
   _("?vet_rank:green"),
   _("?vet_rank:veteran"),
@@ -4457,7 +4457,7 @@ uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
 cargo         = "Land", "LandNoKill", "LandAirSea", "Big Land", "LandRoad", "Cargo"
-flags         = "BadCityDefender", "CantReachAir", "HelpWonder", "ProvokingClass2",
+flags         = "BadCityDefender", "CantReachAir", "HelpWonder", "HasNoZOC", "IgZOC", "ProvokingClass2",
                 "Traderoute", "Only_Native_Attack", "WillNever", "NonMil", "NonMilAttack"
 veteran_names =
   _("?vet_rank:green"),
@@ -4605,7 +4605,7 @@ uk_food       = 0
 uk_gold       = 0
 cargo         = "Land", "LandNoKill", "LandAirSea", "Big Land", "LandRoad", "Cargo"
 flags         = "BadCityDefender", "CantReachAir", "Traderoute", "WillNever", 
-                "NonMil", "NonMilAttack", "ProvokingClass2"
+                "NonMil", "NonMilAttack", "HasNoZOC", "ProvokingClass2"
 veteran_names =
   _("?vet_rank:green"),
   _("?vet_rank:veteran"),
@@ -4658,7 +4658,7 @@ uk_food       = 0
 uk_gold       = 0
 targets       = "LandRail"
 cargo         = "Land", "LandNoKill", "LandAirSea", "Big Land", "Balloon", "LandRoad", "Cargo"
-flags         = "BadCityDefender", "CanEscape", "CantReachAir", "WillNever",
+flags         = "BadCityDefender", "CanEscape", "CantReachAir", "WillNever", "HasNoZOC",
                 "NonMil", "NonMilAttack", "ProvokingClass2"
 veteran_names =
   _("?vet_rank:green"),
@@ -4770,7 +4770,7 @@ cargo         = "Land", "LandNoKill", "LandAirSea", "Big Land", "LandRoad", "Car
                 "RiverShip", "Sea", "Submarine", "Trireme"
 flags         = "Settlers", "Infra", "CanRoad", "CanFortress", "Cant_Pillage", "NonMil", "NonProvoking",
                 "HasNoZOC", "NoVeteran", "Capturable", "Expellable", "BadCityDefender",
-                "Airbase" ;for buoys
+                "Airbase", "HasNoZOC" ;Airbase for buoys
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
 veteran_base_raise_chance = 0
@@ -4866,7 +4866,7 @@ bonuses       =
    { "flag", "type", "value"
      "NonNativeAttack", "DefenseMultiplier", 1    
    }
-flags         = "BadCityDefender", "CanEscape", "ProvokingClass2"
+flags         = "BadCityDefender", "CanEscape", "HasNoZOC", "ProvokingClass2"
 veteran_names =
   _("?vet_rank:green"),
   _("?vet_rank:veteran"),
@@ -5256,7 +5256,7 @@ bonuses       =
    { "flag", "type", "value"
      "Submarine", "DefenseMultiplier", 1
    }
-flags         = "NeverProtects", "BadCityDefender", "Only_Native_Attack",
+flags         = "NeverProtects", "BadCityDefender", "Only_Native_Attack", "HasNoZOC", "IgZOC",
                 "Submarine", "CanEscape", "CantReachAir", "WillNever", "ProvokingClass2"
 veteran_names =
   _("?vet_rank:green"),
@@ -5319,7 +5319,7 @@ bonuses       =
      "Submarine", "DefenseMultiplier", 1
    }
 flags         = "NeverProtects", "BadCityDefender", "Only_Native_Attack",
-                "Settlers", "CanFortress", "Airbase", ;for building "Depth"
+                "Settlers", "CanFortress", "HasNoZOC", "IgZOC", "Airbase", ;for building "Depth"
                 "Submarine", "CanEscape", "CantReachAir", "WillNever", "ProvokingClass2"
 veteran_names =
   _("?vet_rank:green"),
