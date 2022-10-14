@@ -691,6 +691,8 @@ function ruledir_from_ruleset_name(ruleset_name, fall_back_dir)
   switch (ruleset_name) {
     case "Classic ruleset":
       return "classic";
+    case "Classic+ ruleset":
+      return "classicplus";
     case "Civ2Civ3 ruleset":
       return "civ2civ3";
     case "Multiplayer ruleset":
@@ -770,8 +772,9 @@ function pregame_settings()
       + "<option value='mp2-ag'>Multiplayer 2.1 Avant-garde</option>"
       + "<option value='mpplus'>Multiplayer+ 1.1</option>"
       + "<option value='multiplayer'>Multiplayer 1.0</option>"
-      + "<option value='civ2civ3'>Civ2Civ3</option>"
+      + "<option value='classicplus'>Classic+ 1.1</option>"
       + "<option value='classic'>Classic</option>"
+      + "<option value='civ2civ3'>Civ2Civ3</option>"
       + "<option value='civ2'>Civilisation II</option>"
       + "<option value='civ1'>Civilisation I</option>"
       + "</select><a id='ruleset_description'></a></td></tr>"

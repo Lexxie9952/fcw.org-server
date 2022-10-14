@@ -1100,6 +1100,26 @@ function handle_ruleset_control(packet)
       client_rules_flag[CRF_CARGO_HEURISTIC]=true;
       client_rules_flag[CRF_NO_UNIT_GOLD_UPKEEP]=true;
       client_rules_flag[CRF_NO_WASTE]=true;
+      break;
+    case "Classic+ ruleset":
+      client_rules_flag[CRF_CARGO_HEURISTIC]=true;
+      client_rules_flag[CRF_NO_UNIT_GOLD_UPKEEP]=true;
+      client_rules_flag[CRF_NO_WASTE]=true;
+      client_rules_flag[CRF_CLASSIC_PLUS]=true;
+      client_rules_flag[CRF_OASIS_IRRIGATE]=true;
+      client_rules_flag[CRF_LEGION_WORK]=true;
+      client_rules_flag[CRF_MASONRY_FORT]=true;
+      client_rules_flag[CRF_CANALS]=true;
+      client_rules_flag[CRF_PACTS_SANS_EMBASSY]=true;
+      client_rules_flag[CRF_EXTRA_QUAY]=true;
+      client_rules_flag[CRF_MINOR_NUKES]=true;
+      client_rules_flag[CRF_MAJOR_NUKES]=true;
+      client_rules_flag[CRF_BSHIP_BOMBARD]=true;
+      client_rules_flag[CRF_TRIREME_FUEL]=true;
+      client_rules_flag[CRF_2X_MOVES]=true;
+      client_rules_flag[CRF_GRANULAR_COMBAT_STRENGTH] = 10;
+      client_rules_flag[CRF_SEABRIDGE]=true;
+      client_rules_flag[CRF_EXTRA_WATCHTOWER]=true;
     break;
 
     case "Civ2Civ3 ruleset":
