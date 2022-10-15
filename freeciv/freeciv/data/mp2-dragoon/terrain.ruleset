@@ -2317,6 +2317,7 @@ act_gfx_alt    = "-"
 act_gfx_alt2   = "-"
 rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
+helptext = "Gold provides an enormous +8 trade"
 
 [extra_iron]
 name           = _("Iron")
@@ -2345,6 +2346,7 @@ appearance_reqs =
       "Extra",   "Coal",     "Adjacent", FALSE
       "Extra",   "Wine",     "Adjacent", FALSE
     }
+helptext = "Iron gives 3 shields; +5 if mined. A city on Iron can be mined and still collect +1 food."
 
 [extra_elk]
 name           = _("Elk")
@@ -2374,6 +2376,7 @@ appearance_reqs =
       "Extra",   "Wheat",    "Adjacent", FALSE
       "Extra",   "Pheasant", "Adjacent", FALSE
     }
+helptext = "Elk provide lots of food and production and can be irrigated."
 
 [extra_furs]
 name           = _("Furs")
@@ -2411,6 +2414,7 @@ appearance_reqs =
       "Extra",   "Silk",     "Adjacent", FALSE
       "Extra",   "Pheasant", "Adjacent", FALSE
     }
+helptext = "Furs provide surplus food, +1 shield, and a large trade bonus."
 
 [extra_coal]
 name           = _("Coal")
@@ -2424,6 +2428,7 @@ act_gfx_alt    = "-"
 act_gfx_alt2   = "-"
 rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
+helptext = "Coal mines provide a massive plenitude of production in any age."
 
 [extra_fish]
 name           = _("Fish")
@@ -2437,6 +2442,7 @@ act_gfx_alt    = "-"
 act_gfx_alt2   = "-"
 rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
+helptext = "Fish provide food and trade which increase with government, Harbors, and Fishtraps."
 
 [extra_fruit]
 name           = _("Fruit")
@@ -2450,6 +2456,7 @@ act_gfx_alt    = "-"
 act_gfx_alt2   = "-"
 rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
+helptext = "Fruits provides a copious food, and substantial trade—with no work required."
 
 [extra_gems]
 name           = _("Gems")
@@ -2479,6 +2486,7 @@ appearance_reqs =
       "Extra",   "Wine",     "Adjacent", FALSE
       "Extra",   "Silk",     "Adjacent", FALSE
     }
+helptext = "Gems rival wine and gold in producing high trade and wealth."
 
 [extra_rubber]
 name           = _("Rubber")
@@ -2507,6 +2515,7 @@ appearance_reqs =
       "Extra",   "Gems",     "Adjacent", FALSE
       "Extra",   "Resources","Adjacent", FALSE
     }
+helptext = "Rubber gives good production and a small trade bonus."
 
 [extra_buffalo]
 name           = _("Buffalo")
@@ -2520,6 +2529,7 @@ act_gfx_alt    = "-"
 act_gfx_alt2   = "-"
 rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
+helptext = "Buffalo supply a sizeable resource bonus to production."
 
 [extra_wheat]
 name           = _("Wheat")
@@ -2533,6 +2543,7 @@ act_gfx_alt    = "-"
 act_gfx_alt2   = "-"
 rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
+helptext = "Wheat supplies ample food to boost population growth."
 
 [extra_oasis]
 name           = _("Oasis")
@@ -2562,6 +2573,7 @@ appearance_reqs =
       "Extra",   "Wheat",    "Adjacent", FALSE
       "Extra",   "Fruit",    "Adjacent", FALSE
     }
+helptext = "An Oasis supplies as much food as Wheat and serves as an irrigation source."
 
 [extra_peat]
 name           = _("Peat")
@@ -2589,6 +2601,7 @@ appearance_reqs =
       "Extra",   "Peat",     "Adjacent", FALSE
       "Extra",   "Resources","Adjacent", FALSE
     }
+helptext = "Peat gives superior production and requires no work to collect."
 
 [extra_pheasant]
 name           = _("Pheasant")
@@ -2602,6 +2615,7 @@ act_gfx_alt    = "-"
 act_gfx_alt2   = "-"
 rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
+helptext = "Pheasants give the extra food needed for forest peoples to thrive."
 
 [extra_bonus]
 name           = _("Resources")
@@ -2615,6 +2629,7 @@ act_gfx_alt    = "-"
 act_gfx_alt2   = "-"
 rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
+helptext = "Resources are valuable materials found beneath the surface of Grasslands."
 
 [extra_ivory]
 name           = _("Ivory")
@@ -2641,6 +2656,7 @@ appearance_reqs =
       "MinYear", "-3900",    "World",    FALSE
       "Extra",   "Ivory",    "CAdjacent",FALSE
     }
+helptext = "Ivory provides has high trade value, with a small boost in production."
 
 [extra_silk]
 name           = _("Silk")
@@ -2654,6 +2670,7 @@ act_gfx_alt    = "-"
 act_gfx_alt2   = "-"
 rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
+helptext = "Silk can provide a city adequate production and a nice trade bonus."
 
 [extra_spice]
 name           = _("Spice")
@@ -2681,6 +2698,7 @@ appearance_reqs =
       "Extra",   "Peat",     "Adjacent", FALSE
       "Extra",   "Resources","Adjacent", FALSE
     }
+helptext = "Spices are coveted food sources that generate high trade."
 
 [extra_whales]
 name           = _("Whales")
@@ -2694,6 +2712,7 @@ act_gfx_alt    = "-"
 act_gfx_alt2   = "-"
 rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
+helptext = "Whales provide +1 food, +1 production, and a maritime trade bonus."
 
 [extra_wine]
 name           = _("Wine")
@@ -2707,6 +2726,8 @@ act_gfx_alt    = "-"
 act_gfx_alt2   = "-"
 rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
+helptext = "Wine gives +4 trade and the opportunity to mine the hills for more production."
+
 
 [extra_oil]
 name           = _("Oil")
@@ -2733,6 +2754,7 @@ rmact_gfx_alt  = "-"
 ;      "MinYear", "-3900",    "World",    FALSE
 ;      "Extra",   "Oil",      "CAdjacent",FALSE
 ;    }
+helptext = "Oil is a major production boost that improves with Oil Wells, railroads, and Refining tech."
 
 [extra_berries]
 name           = _("Berries")
@@ -2765,6 +2787,8 @@ appearance_reqs =
       "Extra",   "Silk",     "Adjacent", FALSE
       "Extra",   "River",    "Local",    FALSE ;Forests need help to have less non-trade tiles
     }
+helptext = "Berries from the forest give food and trade, as well as shields from forest lumber."
+
 
 ; ************ WANDERING WILD ANIMAL RESOURCES ************************
 [extra_deer]
@@ -2790,6 +2814,7 @@ appearance_reqs =
       "MinYear", "-2200", "World", FALSE
       "Extra", "Deer", "Adjacent", FALSE
     }
+helptext = "Deer wander in herds and when they come near you city, they can provide a windfall in bonus food."
 
 [extra_wild_boar]
 name           = _("Wild Boar")
@@ -2814,6 +2839,7 @@ appearance_reqs =
       "MinYear", "-2200", "World", FALSE
       "Extra", "Wild Boar", "Adjacent", FALSE
     }
+helptext = "Wild Boars roam the forest at random, and provide more food than Pheasants."
 
 [extra_mtn_goat]
 name           = _("Mountain Goat")
@@ -2849,6 +2875,7 @@ appearance_reqs =
       "MinYear", "-2200",     "World", FALSE
       "Extra", "Mountain Goat","Adjacent", FALSE
     }
+helptext = "Mountain Goats wander Mountains and adjacent hills, and are a good source of bonus food."
 
 [extra_hippo]
 name           = _("Hippopotamus")
@@ -2874,6 +2901,7 @@ appearance_reqs =
       "MinYear", "-2200",       "World", FALSE
       "Extra",   "Hippopotamus","Adjacent", FALSE
     }
+helptext = "Hippos are occasionally found on Desert Rivers, and provide copious meat and some production materials."
 
 ; /* <— avoid gettext warnings
 ;
@@ -2907,6 +2935,7 @@ extra          = "Depth"
 gui_type       = "Other"
 border_sq      = -1
 vision_subs_sq = 0
+vision_main_sq = 0
 
 [base_tileclaim]
 extra          = "Tile Claim"
