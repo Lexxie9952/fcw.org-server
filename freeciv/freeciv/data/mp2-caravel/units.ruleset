@@ -4661,7 +4661,7 @@ If you have Fusion Power and the Manhattan Project was built, a Doomsday Bomb\
 "), _("\
 The Fallout from a Doomsday Bomb is a sure ticket to Nuclear Winter.\
 ")
-bombard_rate = 27    ; radius = sqrt(25) = 5.19
+bombard_rate = 35    ; radius = sqrt(35) = 5.91
 
 [unit_nuclear_missile]
 name          = _("Nuclear Missile")
