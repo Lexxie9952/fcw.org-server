@@ -6504,10 +6504,11 @@ function can_build_quay(punit, ptile)
       &&  (punit != null && ptile != null)
       &&  !tile_has_extra(ptile, EXTRA_QUAY)
       &&  !(typeof EXTRA_QUAY2 !== "undefined" && tile_has_extra(ptile, EXTRA_QUAY2) ) // can't put quay on a quay2 in a city
-      &&  !tile_has_extra(ptile, EXTRA_)
+      &&  (!client_rules_flag[CRF_EXTRA_HIDEOUT] || !tile_has_extra(ptile, EXTRA_))
       &&  (tile_has_extra(ptile, EXTRA_RIVER)
-           || tile_has_extra(ptile, EXTRA_CANAL)
-           || tile_has_extra(ptile, EXTRA_WATERWAY))
+           || (client_rules_flag[CRF_CANALS]  
+              && (tile_has_extra(ptile, EXTRA_CANAL) || tile_has_extra(ptile, EXTRA_WATERWAY)))
+          )
       &&  unit_can_do_action(punit, ACTION_ROAD)
       &&  tech_known('Pottery')
          );
