@@ -245,8 +245,16 @@ function improve_tile_info_dialog(message)
 
     if (ttype['road_time'])
       added_text += "&nbsp;&nbsp; <span class='highlight_roading'>Road:<b>" + Math.ceil(ttype['road_time']/wt)+"</b></span>";
+
+    var resource_present = extras[tile_resource(mclick_tile)];
+    var resource_text = resource_present 
+                      ? "<br><img class='v' src='/images/e/_"
+                        + freemoji_name_from_universal(ttype.name)
+                        + freemoji_name_from_universal(resource_present.name)+".png'>"
+                        + cleaned_text(resource_present.helptext + "<br><br>") 
+                      : "<br><br>";
     
-    added_text += "<br>" + cleaned_text(ttype['helptext'])+"<br><br>";
+    added_text += "<br>" + cleaned_text(ttype['helptext'])+resource_text;
   }
   
   // Warcalc odds.
