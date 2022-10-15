@@ -1068,7 +1068,7 @@ function pregame_settings()
 
   /* Make the long ruleset description available in the pregame. The
    * ruleset's README isn't located at the player's computer. */
-  $('#ruleset_description').html(" <span title='Ruleset summary' style='color:#9cd; cursor:help'><u>Rules Help</u></span>");
+  $('#ruleset_description').html(" <span title='Ruleset summary' style='color:#9cd; cursor:help'><u>Description</u></span>");
   $('#ruleset_description').click(show_ruleset_description_full);
 
   $('#ruleset').change(function() {
