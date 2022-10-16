@@ -6768,6 +6768,8 @@ function get_what_roads_are_legal(punit, ptile, connect_mode)
   const knows_bridges = tech_known("Bridge Building");  
   const can_rail = tech_known("Railroad");
   const hwy_rules = client_rules_flag[CRF_EXTRA_HIGHWAY];
+  const maglev_rules = client_rules_flag[CRF_MAGLEV];
+
   var roading_already = false;
   /* In connect mode, we don't override road-type priority on distant tiles
    * based on roading activity on current tile. */
@@ -6791,12 +6793,12 @@ function get_what_roads_are_legal(punit, ptile, connect_mode)
   else if (typeof EXTRA_SEABRIDGE !== "undefined" && is_ocean_tile(ptile)) {
     if (can_build_sea_bridge(punit,ptile)) {
       road_list.push(extras['Sea Bridge']['id']);
-    } else if (tile_has_extra(ptile, EXTRA_SEABRIDGE) && roading_already != EXTRA_MAGLEV) { 
-      if (can_build_maglev(punit, ptile)) {
-        road_list.push(extras['Maglev']['id']);
-      }
-      if (!tile_has_extra(ptile, EXTRA_RAIL)) {
-        if (can_rail) road_list.push(extras['Railroad']['id']); 
+    } else if (tile_has_extra(ptile, EXTRA_SEABRIDGE) && (!maglev_rules || roading_already != EXTRA_MAGLEV)) { 
+        if (can_build_maglev(punit, ptile)) {
+          road_list.push(extras['Maglev']['id']);
+        }
+        if (!tile_has_extra(ptile, EXTRA_RAIL)) {
+          if (can_rail) road_list.push(extras['Railroad']['id']); 
       }
     }
 
