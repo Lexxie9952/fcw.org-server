@@ -2660,7 +2660,7 @@ uk_food       = 0
 uk_gold       = 0
 flags         = "TradeRoute", "HelpWonder", "IgZOC", "NonMil", "HasNoZOC",
                 "Capturable", "Expellable", "Cant_Pillage"
-roles         = ""
+roles         = "TradeStartUnit"
 helptext      = _("\
 Caravans are versatile and rugged Commerce units.\
  Commerce units can help build Wonders and can establish trade routes\
