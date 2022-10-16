@@ -2216,7 +2216,7 @@ reqs	=
 
 [effect_lighthouse]
 type    = "Move_Bonus"
-value	= 1
+value	= 2
 reqs	=
     { "type", "name", "range"
       "Building", "Lighthouse", "Player"
@@ -2237,7 +2237,7 @@ reqs	=
 
 [effect_lighthouse_trireme_move]
 type    = "Move_Bonus"
-value	= 1
+value	= 2
 reqs	=
     { "type", "name", "range"
       "Building", "Lighthouse", "Player"

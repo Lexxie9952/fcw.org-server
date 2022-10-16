@@ -1556,7 +1556,7 @@ sabotage	= 0
 sound		= "w_lighthouse"
 sound_alt	= "w_generic"
 helptext	= _("\
-Gives all your sea units 1 additional movement point. Makes all your\
+Gives all your sea units 2 additional move-points. Makes all your\
  new military sea units veterans (for all your cities).\
  Obsolete by: Magnetism.\
 ")
