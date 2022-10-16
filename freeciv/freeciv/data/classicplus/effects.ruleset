@@ -135,12 +135,30 @@ reqs    =
     { "type",   "name",         "range", "present"
       "Action", "Upgrade Unit", "Local", TRUE
     }
-; *************************************************************************
-
+; ************************************************************************* VISION
+; Vision benefit from mountains (for every land unit)
+[effect_mountains_vision]
+type    = "Unit_Vision_Radius_Sq"
+value   = 2                        ; 8+2=10, range of 3 minus 3 in each corner (+12 tiles)    
+reqs    =
+    { "type",          "name",         "range"
+      "Terrain",       "Mountains",    "Local"
+      "UnitClassFlag", "TerrainSpeed", "Local" ;all Land__ classes
+      "VisionLayer",   "Main",         "Local"
+    }
+[effect_hills_vision]
+type    = "Unit_Vision_Radius_Sq"
+value   = 1                        ; 8 +1 = 9, 2x2 +1 tile in each cadj dir
+reqs    =
+    { "type",           "name",         "range"
+      "Terrain",        "Hills",        "Local"
+      "UnitClassFlag",  "TerrainSpeed", "Local" ;all Land__ classes
+      "VisionLayer",    "Main",         "Local"
+    }
 ; Vision benefit from fortress watchtowers
 [effect_fortress_vision]
 type    = "Unit_Vision_Radius_Sq"
-value   = 8
+value   = 2                       ; 8 +2 = 10, 3x3 -3 tiles in each corner 
 reqs    =
     { "type", "name", "range"
       "Extra", "Fortress", "tile"
@@ -969,23 +987,13 @@ reqs	=
 
 [effect_city_walls]
 type    = "Defend_Bonus"
-value	= 200
+value	= 100
 reqs	=
     { "type", "name", "range", "present"
       "Building", "City Walls", "City", TRUE
       "UnitClass", "Land", "Local", TRUE
       "Building", "Great Wall", "Player", FALSE
       "UnitType", "Howitzer", "Local", FALSE
-    }
-
-[effect_city_walls_0]
-type    = "Defend_Bonus"
-value	= 200
-reqs	=
-    { "type", "name", "range", "present"
-      "Building", "City Walls", "City", TRUE
-      "UnitClass", "Helicopter", "Local", TRUE
-      "Building", "Great Wall", "Player", FALSE
     }
 
 [effect_city_walls_1]
@@ -1048,25 +1056,31 @@ reqs	=
       "OutputType", "Trade", "Local", TRUE
       "Building", "Palace", "City", FALSE
     }
-
-;[effect_courthouse_1]
-;type    = "Waste_Pct"
-;value	= 50
-;reqs	=
-;    { "type", "name", "range", "present"
-;      "Building", "Courthouse", "City", TRUE
-;      "Building", "Palace", "City", FALSE
-;    }
-
+; If there is corruption, a Courthouse is never worthless: it will always reduce at least 1 corruption.
+[effect_courthouse_corruption2]
+type    = "Output_Waste_Min_Reduce"
+value	= 1
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Courthouse", "City", TRUE
+      "OutputType", "Trade", "Local", TRUE
+    }
+; Removes output penalties (Despotism/Anarchy) for cities with courthouses
+[effect_courthouse_tile_corruption]
+type    = "Output_Penalty_Tile"
+value   = 100
+reqs	=
+    { "type",     "name",       "range"
+      "Building", "Courthouse", "City"
+    }
 [effect_courthouse_2]
 type    = "Make_Content"
 value	= 1
 reqs	=
     { "type", "name", "range"
-      "Gov", "Democracy", "Player"
+;      "Gov", "Democracy", "Player"        ; all govs get it, Democracy doesn't need an exclusive buff here.
       "Building", "Courthouse", "City"
     }
-
 [effect_courthouse_3]
 type    = "Incite_Cost_Pct"
 value	= 300
@@ -1075,7 +1089,6 @@ reqs	=
       "Building", "Courthouse", "City", TRUE
       "MaxUnitsOnTile", "0", "Local", FALSE
     }
-
 [effect_incite_cost_empty_courthouse]
 type = "Incite_Cost_Pct"
 value = 100
@@ -1084,6 +1097,111 @@ reqs	=
       "MaxUnitsOnTile", "0", "Local", TRUE
       "Building", "Courthouse", "City", TRUE
     }
+[effect_courthouse_hostile_diplomat0]
+type	= "Action_Odds_Pct"
+value	= -25 ;// -25*.8 = -20
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Courthouse", "City", TRUE
+      "Action", "Steal Tech", "Local", TRUE
+    }
+[effect_courthouse_hostile_diplomat_1]
+type	= "Action_Odds_Pct"
+value	= -25         ;// -25*.8 = -20
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Courthouse", "City", TRUE
+      "Action", "Steal Tech Escape Expected", "Local", TRUE
+    }
+[effect_courthouse_hostile_diplomat_2]
+type	= "Action_Odds_Pct"
+value	= -25       ;// -25*.8 = -20
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Courthouse", "City", TRUE
+      "Action", "Targeted Steal Tech", "Local", TRUE
+    }
+[effect_courthouse_hostile_diplomat_3]
+type	= "Action_Odds_Pct"
+value	= -25     ;// -25*.8 = -20
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Courthouse", "City", TRUE
+      "Action", "Targeted Steal Tech Escape Expected", "Local", TRUE
+    }
+[effect_courthouse_hostile_diplomat_4]
+type	= "Action_Odds_Pct"
+value	= -25     ;// -25*.8 = -20
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Courthouse", "City", TRUE
+      "Action", "Sabotage City", "Local", TRUE
+    }
+[effect_courthouse_hostile_diplomat_5]
+type	= "Action_Odds_Pct"
+value	= -25     ;// -25*.8 = -20
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Courthouse", "City", TRUE
+      "Action", "Sabotage City Escape", "Local", TRUE
+    }
+[effect_courthouse_hostile_diplomat_6]
+type	= "Action_Odds_Pct"
+value	= -25     ;// -25*.8 = -20
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Courthouse", "City", TRUE
+      "Action", "Targeted Sabotage City", "Local", TRUE
+    }
+[effect_courthouse_hostile_diplomat_7]
+type	= "Action_Odds_Pct"
+value	= -25     ;// -25*.8 = -20
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Courthouse", "City", TRUE
+      "Action", "Targeted Sabotage City Escape", "Local", TRUE
+    }
+[effect_courthouse_hostile_diplomat_8]
+type	= "Action_Odds_Pct"
+value	= -25                      ;40 minus 25%*80 = 20%
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Courthouse", "City", TRUE
+      "Action", "Steal Maps Escape", "Local", TRUE
+    }
+[effect_courthouse_hostile_diplomat_9]
+type	= "Action_Odds_Pct"
+value	= -25                      ;40 minus 25%*80 = 20%
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Courthouse", "City", TRUE
+      "Action", "Steal Maps", "Local", TRUE
+    }
+[effect_courthouse_hostile_diplomat_10]
+type	= "Action_Odds_Pct"
+value	= -25                      ;40 minus 25%*80 = 20%
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Courthouse", "City", TRUE
+      "Action", "Poison City Escape", "Local", TRUE
+    }
+[effect_courthouse_hostile_diplomat_11]
+type	= "Action_Odds_Pct"
+value	= -25                      ;40 minus 25%*80 = 20%
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Courthouse", "City", TRUE
+      "Action", "Incite City", "Local", TRUE
+    }
+[effect_courthouse_hostile_diplomat_12]
+type	= "Action_Odds_Pct"
+value	= -25                      ;40 minus 25%*80 = 20%
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Courthouse", "City", TRUE
+      "Action", "Incite City Escape", "Local", TRUE
+    }
+
 
 [effect_diplomat_defense_fortress]
 type    = "Spy_Resistant"
@@ -1329,17 +1447,17 @@ reqs	=
       "OutputType", "Trade", "Local"
     }
 
-;[effect_palace_1]
-;type    = "Waste_Pct"
-;value	= 50
-;reqs	=
-;    { "type", "name", "range"
-;      "Building", "Palace", "City"
-;    }
-
 [effect_palace_2]
 type    = "Spy_Resistant"
 value	= 50
+reqs	=
+    { "type", "name", "range"
+      "Building", "Palace", "City"
+    }
+
+[effect_palace_happy]
+type    = "Make_Happy"
+value	= 1
 reqs	=
     { "type", "name", "range"
       "Building", "Palace", "City"
@@ -1387,6 +1505,90 @@ reqs =
       "Gov", "Monarchy", "Player"
       "Building", "Palace", "City"
       "OutputType", "Shield", "Local"
+    }
+[effect_palace_theocracy]
+type    = "Output_Bonus"
+value   = 50
+reqs    =
+    { "type", "name", "range", "present", "quiet"
+      "Gov", "Theocracy", "Player", TRUE, TRUE
+      "Building", "Palace", "City", TRUE, FALSE
+      "OutputType", "Gold", "Local", TRUE, FALSE
+    }
+
+[effect_ecclesiastical_palace]
+type    = "Output_Waste_Pct"
+value   = 60
+reqs    =
+    { "type", "name", "range", "present"
+      "Building", "Ecclesiastical Palace", "City", TRUE
+      "OutputType", "Trade", "Local", TRUE
+    }
+
+[effect_ecclesiastical_palace_2]
+type    = "Spy_Resistant"
+value   = 50
+reqs    =
+    { "type", "name", "range", "present"
+      "Building", "Ecclesiastical Palace", "City", TRUE
+    }
+[effect_ecclestiastical_palace_3]
+type    = "Make_Happy"
+value	= 1
+reqs	=
+    { "type", "name", "range"
+      "Building", "Ecclesiastical Palace", "City"
+    }
+[effect_ecclesiastical_palace_4]
+type    = "Veteran_Build"
+value	= 1
+reqs	=
+    { "type",     "name",                  "range", "present"
+      "Building", "Ecclesiastical Palace", "City",  TRUE
+      "UnitFlag", "Fanatic",               "Local", TRUE  ;Zealots and Fanatics
+      "UnitFlag", "NonMil",                "Local", FALSE
+    }
+[effect_ecclesiastical_palace_gov_center]
+type    = "Gov_Center"
+value	= 1
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Ecclesiastical Palace", "City", TRUE
+      "Building", "Palace", "City", FALSE
+    }
+[effect_ecclesiastical_palace_despotism]
+type    = "Output_Bonus"
+value   = 75
+reqs    =
+    { "type", "name", "range", "present", "quiet"
+      "Gov", "Despotism", "Player", TRUE, TRUE
+      "Building", "Ecclesiastical Palace", "City", TRUE, FALSE
+      "OutputType", "Gold", "Local", TRUE, FALSE
+    }
+[effect_ecclesiastical_palace_monarchy]
+type    = "Output_Bonus"
+value   = 50
+reqs    =
+    { "type", "name", "range", "present", "quiet"
+      "Gov", "Monarchy", "Player", TRUE, TRUE
+      "Building", "Ecclesiastical Palace", "City", TRUE, FALSE
+      "OutputType", "Gold", "Local", TRUE, FALSE
+    }
+[effect_ecclesiastical_palace_theocracy]
+type    = "Output_Bonus"
+value   = 50
+reqs    =
+    { "type", "name", "range", "present", "quiet"
+      "Gov", "Theocracy", "Player", TRUE, TRUE
+      "Building", "Ecclesiastical Palace", "City", TRUE, FALSE
+      "OutputType", "Gold", "Local", TRUE, FALSE
+    }
+[effect_ecclesiastical_palace_2_sabotage]
+type    = "Building_Saboteur_Resistant"
+value	= 50
+reqs	=
+    { "type", "name", "range"
+      "Building", "Ecclesiastical Palace", "City"
     }
 
 [effect_police_station]
@@ -1557,6 +1759,14 @@ reqs	=
     { "type", "name", "range"
       "Building", "SAM Battery", "City"
       "UnitClass", "Air", "Local"
+    }
+[effect_sam_battery_helicopter]
+type    = "Defend_Bonus"
+value	= 100
+reqs	=
+    { "type", "name", "range"
+      "Building", "SAM Battery", "City"
+      "UnitClass", "Helicopter", "Local"
     }
 
 [effect_sdi_defense]
@@ -1883,23 +2093,13 @@ reqs	=
 
 [effect_great_wall]
 type    = "Defend_Bonus"
-value	= 200
+value	= 100
 reqs	=
     { "type", "name", "range", "present"
       "Building", "Great Wall", "Player", TRUE
       "UnitClass", "Land", "Local", TRUE
       "CityTile", "Center", "Local", TRUE
       "UnitType", "Howitzer", "Local", FALSE
-    }
-
-[effect_great_wall_0]
-type    = "Defend_Bonus"
-value	= 200
-reqs	=
-    { "type", "name", "range"
-      "Building", "Great Wall", "Player"
-      "UnitClass", "Helicopter", "Local"
-      "CityTile", "Center", "Local"
     }
 
 [effect_great_wall_1]
@@ -2395,16 +2595,6 @@ reqs	=
       "UnitFlag", "Cities", "Local"
     }
 
-[effect_illegal_action_move_cost_base]
-type	= "Illegal_Action_Move_Cost"
-value	= 1
-reqs	=
-    { "type", "name", "range", "present"
-      "Action", "Found City", "Local", FALSE
-      "Action", "Join City", "Local", FALSE
-      "Action", "Transport Board", "Local", FALSE
-    }
-
 [effect_incident_caught_steal_tech]
 type	= "Casus_Belli_Caught"
 value	= 1
@@ -2587,6 +2777,16 @@ value   = 100
 reqs    =
     { "type", "name", "range"
       "BuildingGenus", "GreatWonder", "Local"
+    }
+; Double buy cost for Small Wonders except Palaces
+[effect_small_wonder_buy_cost]
+type    = "Building_Buy_Cost_Pct"
+value   = 100
+reqs    =
+    { "type", "name", "range", "present"
+      "BuildingGenus", "SmallWonder", "Local", TRUE
+      "Building", "Palace", "Local", FALSE
+      "Building", "Ecclesiastical Palace", "Local", FALSE
     }
 
 [effect_action_success_move_cost_embassy]
