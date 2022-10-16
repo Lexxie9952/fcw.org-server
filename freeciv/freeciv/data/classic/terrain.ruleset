@@ -1593,6 +1593,7 @@ act_gfx_alt    = "-"
 act_gfx_alt2   = "-"
 rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
+helptext = "Gold provides an enormous +8 trade"
 
 [extra_iron]
 name           = _("Iron")
@@ -1606,6 +1607,7 @@ act_gfx_alt    = "-"
 act_gfx_alt2   = "-"
 rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
+helptext = "Iron givese 3 shields; +5 if mined. A city on Iron can be mined and still collect +1 food."
 
 [extra_game]
 name           = _("?animals:Game")
@@ -1619,6 +1621,7 @@ act_gfx_alt    = "-"
 act_gfx_alt2   = "-"
 rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
+helptext = "Game provides lots of food and can be irrigated."
 
 [extra_furs]
 name           = _("Furs")
@@ -1632,6 +1635,7 @@ act_gfx_alt    = "-"
 act_gfx_alt2   = "-"
 rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
+helptext = "Furs provide surplus food and a trade bonus."
 
 [extra_coal]
 name           = _("Coal")
@@ -1645,6 +1649,7 @@ act_gfx_alt    = "-"
 act_gfx_alt2   = "-"
 rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
+helptext = "Coal mines provide a massive plenitude of production in any age."
 
 [extra_fish]
 name           = _("Fish")
@@ -1658,6 +1663,8 @@ act_gfx_alt    = "-"
 act_gfx_alt2   = "-"
 rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
+helptext = "Fish provide food and trade which increase with government, Harbors, and Fishtraps."
+
 
 [extra_fruit]
 name           = _("Fruit")
@@ -1671,6 +1678,7 @@ act_gfx_alt    = "-"
 act_gfx_alt2   = "-"
 rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
+helptext = "Fruit provides copious food—with no work required."
 
 [extra_gems]
 name           = _("Gems")
@@ -1684,6 +1692,8 @@ act_gfx_alt    = "-"
 act_gfx_alt2   = "-"
 rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
+helptext = "Gems rival wine and gold in producing high trade and wealth."
+
 
 [extra_buffalo]
 name           = _("Buffalo")
@@ -1697,6 +1707,7 @@ act_gfx_alt    = "-"
 act_gfx_alt2   = "-"
 rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
+helptext = "Buffalo supply a sizeable resource bonus to production."
 
 [extra_wheat]
 name           = _("Wheat")
@@ -1710,6 +1721,7 @@ act_gfx_alt    = "-"
 act_gfx_alt2   = "-"
 rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
+helptext = "Wheat supplies ample food to boost population growth."
 
 [extra_oasis]
 name           = _("Oasis")
@@ -1723,6 +1735,7 @@ act_gfx_alt    = "-"
 act_gfx_alt2   = "-"
 rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
+helptext = "An Oasis supplies as much food as Wheat."
 
 [extra_peat]
 name           = _("Peat")
@@ -1736,6 +1749,7 @@ act_gfx_alt    = "-"
 act_gfx_alt2   = "-"
 rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
+helptext = "Peat gives superior production and requires no work to collect."
 
 [extra_pheasant]
 name           = _("Pheasant")
@@ -1749,6 +1763,7 @@ act_gfx_alt    = "-"
 act_gfx_alt2   = "-"
 rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
+helptext = "Pheasants give the extra food needed for forest peoples to thrive."
 
 [extra_bonus]
 name           = _("Resources")
@@ -1762,6 +1777,7 @@ act_gfx_alt    = "-"
 act_gfx_alt2   = "-"
 rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
+helptext = "Resources are valuable materials found beneath the surface of Grasslands."
 
 [extra_ivory]
 name           = _("Ivory")
@@ -1775,6 +1791,7 @@ act_gfx_alt    = "-"
 act_gfx_alt2   = "-"
 rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
+helptext = "Ivory provides has high trade value."
 
 [extra_silk]
 name           = _("Silk")
@@ -1788,6 +1805,7 @@ act_gfx_alt    = "-"
 act_gfx_alt2   = "-"
 rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
+helptext = "Silk can provide a city adequate production and a nice trade bonus."
 
 [extra_spice]
 name           = _("Spice")
@@ -1801,6 +1819,7 @@ act_gfx_alt    = "-"
 act_gfx_alt2   = "-"
 rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
+helptext = "Spices are coveted food sources that generate high trade."
 
 [extra_whales]
 name           = _("Whales")
@@ -1814,6 +1833,7 @@ act_gfx_alt    = "-"
 act_gfx_alt2   = "-"
 rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
+helptext = "Whales provide +1 food, +1 production, and a maritime trade bonus."
 
 [extra_wine]
 name           = _("Wine")
@@ -1827,6 +1847,7 @@ act_gfx_alt    = "-"
 act_gfx_alt2   = "-"
 rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
+helptext = "Wine gives +4 trade and the opportunity to mine the hills for more production."
 
 [extra_oil]
 name           = _("Oil")
@@ -1840,6 +1861,8 @@ act_gfx_alt    = "-"
 act_gfx_alt2   = "-"
 rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
+helptext = "Oil is a major production boost that improves with Oil Wells and railroads."
+
 
 ; /* <-- avoid gettext warnings
 ;
