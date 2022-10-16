@@ -255,7 +255,7 @@ req2     = "Industrialization"
 flags    = ""
 graphic     = "a.communism"
 graphic_alt = "-"
-helptext = _("-1 Effect for Cathedral, Michelangelos Chapel.")
+helptext = _("-1 Effect for Cathedral, Michelangelos Chapel. Allows gov. Communism.")
 
 [advance_computers]
 name     = _("Computers")
@@ -301,6 +301,7 @@ flags    = ""
 graphic     = "a.democracy"
 graphic_alt = "-"
 cost = 875
+helptext = _("Allows government Democracy.")
 
 [advance_economics]
 name     = _("Economics")
@@ -605,6 +606,7 @@ req2     = "Code of Laws"
 flags    = ""
 graphic     = "a.monarchy"
 graphic_alt = "-"
+helptext = _("Allows government Monarchy.")
 
 [advance_monotheism]
 name     = _("Monotheism")
@@ -612,9 +614,9 @@ req1     = "Philosophy"
 req2     = "Polytheism"
 flags    = ""
 graphic     = "a.monotheism"
-helptext = _("Obsoletes Elephants.")
 graphic_alt = "-"
 cost = 415
+helptext = _("Obsoletes Elephants.")
 
 [advance_mysticism]
 name     = _("Mysticism")
@@ -858,6 +860,7 @@ req2     = "Literacy"
 flags    = ""
 graphic     = "a.the_republic"
 graphic_alt = "-"
+helptext = _("Allows government Republic.")
 
 [advance_the_wheel]
 name     = _("The Wheel")
