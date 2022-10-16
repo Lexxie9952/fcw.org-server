@@ -235,7 +235,7 @@ value   = 100
 ; Nuclear power gives +1 moves to sea units
 [effect_nuclear_powered_boats]
 type    = "Move_Bonus"
-value	= 1
+value	= 2
 reqs	=
     { "type", "name", "range"
       "Tech", "Nuclear Power", "Player"

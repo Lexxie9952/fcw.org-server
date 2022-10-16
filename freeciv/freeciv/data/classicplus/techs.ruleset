@@ -176,7 +176,7 @@ req2     = "Construction"
 flags    = "Bridge"
 graphic     = "a.bridge_building"
 graphic_alt = "-"
-helptext = _("Allows roads to be built on river tiles.")
+helptext = _("Allows roads on rivers.")
 
 [advance_bronze_working]
 name     = _("Bronze Working")
@@ -598,7 +598,7 @@ req2     = "Electronics"
 flags    = ""
 graphic     = "a.nuclear_power"
 graphic_alt = "-"
-helptext = _("+1 move for Sea units.")
+helptext = _("+2 moves for Sea units.")
 
 [advance_philosophy]
 name     = _("Philosophy")
@@ -732,7 +732,7 @@ graphic_alt = "-"
 [advance_stealth]
 name     = _("Stealth")
 req1     = "Superconductors"
-req2     = "Advanced Flight"
+req2     = "Stealth"
 flags    = ""
 graphic     = "a.stealth"
 graphic_alt = "-"
