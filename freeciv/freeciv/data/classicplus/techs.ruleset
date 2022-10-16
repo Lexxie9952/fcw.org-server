@@ -348,7 +348,7 @@ helptext = _("Obsoletes Workers.")
 
 [advance_feudalism]
 name     = _("Feudalism")
-req1     = "Warrior Code"
+req1     = "Iron Working"
 req2     = "Monarchy"
 flags    = ""
 graphic     = "a.feudalism"
@@ -365,8 +365,8 @@ helptext = _("Obsoletes Colossus, decreases one-time Traderoute revenue.")
 
 [advance_fusion_power]
 name     = _("Fusion Power")
-req1     = "Nuclear Power"
-req2     = "Superconductors"
+req1     = "Superconductors"
+req2     = "None"
 flags    = ""
 graphic     = "a.fusion_power"
 graphic_alt = "-"
@@ -391,7 +391,7 @@ helptext = _("Obsoletes Explorer. Globally unlocks defensive partisans.")
 [advance_gunpowder]
 name     = _("Gunpowder")
 req1     = "Invention"
-req2     = "Iron Working"
+req2     = "Feudalism"
 flags    = ""
 graphic     = "a.gunpowder"
 graphic_alt = "-"
@@ -621,8 +621,8 @@ graphic_alt = "-"
 
 [advance_plastics]
 name     = _("Plastics")
-req1     = "Refining"
-req2     = "Space Flight"
+req1     = "Space Flight"
+req2     = "Robotics"
 graphic     = "a.plastics"
 graphic_alt = "-"
 helptext = _("+25% population pollution.")
@@ -646,7 +646,7 @@ graphic_alt = "-"
 [advance_radio]
 name     = _("Radio")
 req1     = "Flight"
-req2     = "Electricity"
+req2     = "Miniaturization"
 flags    = ""
 graphic     = "a.radio"
 graphic_alt = "-"
@@ -664,7 +664,7 @@ helptext = _("Obsoletes Hanging Gardens. Allows Railroads. Less Trade revenue.")
 [advance_recycling]
 name     = _("Recycling")
 req1     = "Mass Production"
-req2     = "Democracy"
+req2     = "None"
 flags    = ""
 graphic     = "a.recycling"
 graphic_alt = "-"
@@ -732,7 +732,7 @@ graphic_alt = "-"
 [advance_stealth]
 name     = _("Stealth")
 req1     = "Superconductors"
-req2     = "Stealth"
+req2     = "Space Flight"
 flags    = ""
 graphic     = "a.stealth"
 graphic_alt = "-"
@@ -757,8 +757,8 @@ graphic_alt = "-"
 
 [advance_superconductors]
 name     = _("Superconductors")
-req1     = "Nuclear Power"
-req2     = "Laser"
+req1     = "Laser"
+req2     = "None"
 flags    = ""
 graphic     = "a.superconductors"
 graphic_alt = "-"

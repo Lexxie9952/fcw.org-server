@@ -71,6 +71,8 @@ Added Crusaders.
 Caravans 30 shields.
 Added Jet Fighter
 Added Elephants
+Cleaned up tech tree, redundant reqs and a few bad paths 
+
 
 things to implement
       client_rules_flag[CRF_CARGO_HEURISTIC]=true;
