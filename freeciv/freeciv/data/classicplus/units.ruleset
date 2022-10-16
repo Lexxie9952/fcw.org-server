@@ -195,11 +195,7 @@ veteran_move_bonus = 0, 0, 0, 0, 10080, 10080, 10080
 ; **********************************************************************************
 ; **********************************************************************************
 ; missile flag not class, indicates suicide explosion and possibly other things.
-[unitclass_cargo]
-name          = _("?unitclass:Cargo")
-min_speed     = 1
-hp_loss_pct   = 0
-flags         = "BuildAnywhere", "ZOC", "TerrainSpeed", "DelayLoad"
+
 [unitclass_missile]
 ; /* TRANS: Unit class: used adjectivally */
 name          = _("?unitclass:Missile")
@@ -215,7 +211,7 @@ min_speed     = 1
 hp_loss_pct   = 0
 flags         = "TerrainSpeed", "DamageSlows", "CanOccupyCity", "BuildAnywhere",
                 "CollectRansom", "ZOC", "CanFortify", "CanPillage",
-                "TerrainDefense", "KillCitizen", "Airliftable"
+                "TerrainDefense", "KillCitizen", "Airliftable", "BorderPolice"
 helptext      = _("\
   * Can be airlifted from a suitable city.\
 ")
@@ -233,7 +229,7 @@ name          = _("?unitclass:Trireme")
 min_speed     = 2
 hp_loss_pct   = 0
 flags         = "DamageSlows", "AttFromNonNative", "WaterVessel"
-;Subject to ZOC but could be individually IgZOC'd
+
 [unitclass_rivership]
 ; /* Extra class providing ability to travel rivers */
 name          = _("?unitclass:RiverShip")
@@ -469,10 +465,6 @@ flags         = "Unreachable", "DoesntOccupyTile"
 ; "NeverProtects" = doesn’t protect reachable units on its tile from enemy
 ; "NeverBlocked"  = still not implemented in upstream Freeciv
 ; "MultiSlot"     = still not implemented in upstream Freeciv
-
-
-
-
 ; "NeverProtects" = doesn't protect reachable units on its tile from enemy
 ;                 attackers, even if the unreachableprotects server setting
 ;                 is enabled and the unit class is unreachable
@@ -565,7 +557,8 @@ uk_happy      = 0
 uk_shield     = 1
 uk_food       = 1
 uk_gold       = 0
-flags         = "Settlers", "Infra", "CanRoad", "CanFortress", "NonMil", "HasNoZOC", "AddToCity", "Cities", "Cant_Fortify"
+flags         = "Settlers", "Infra", "CanRoad", "CanFortress", "NonMil", "HasNoZOC",
+                "AddToCity", "Cities", "Cant_Fortify", "Expellable"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
 veteran_base_raise_chance = 0
@@ -612,7 +605,8 @@ uk_happy      = 0
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-flags         = "Settlers", "Infra", "Cant_Fortify", "NonMil", "HasNoZOC", "Airbase", "CanFortress"
+flags         = "Settlers", "Infra", "CanRoad", "Cant_Fortify", "NonMil",
+                "HasNoZOC", "Capturable", "Airbase", "CanFortress", "Expellable"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
 veteran_base_raise_chance = 0
@@ -654,7 +648,8 @@ uk_happy      = 0
 uk_shield     = 0
 uk_food       = 2
 uk_gold       = 0
-flags         = "Cant_Fortify", "NonMil", "HasNoZOC", "AddToCity", "Capturable", "Expellable", "Cant_Pillage"
+flags         = "Cant_Fortify", "NonMil", "HasNoZOC", "AddToCity",
+                "Capturable", "Expellable", "Cant_Pillage", "Expellable"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
 veteran_base_raise_chance = 0
@@ -693,7 +688,8 @@ uk_happy      = 0
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-flags         = "Settlers", "Infra", "CanRoad", "CanFortress", "NonMil", "HasNoZOC", "Transform", "Airbase", "Cant_Fortify"
+flags         = "Settlers", "Infra", "CanRoad", "CanFortress", "NonMil",
+                "HasNoZOC", "Transform", "Airbase", "Cant_Fortify", "Expellable"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
 veteran_base_raise_chance = 0
@@ -775,7 +771,7 @@ uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
 flags         = "CantReachAir"
-roles         = "DefendGood", "DefendGoodStartUnit", "FirstBuild"
+roles         = "DefendGood", "DefendGoodStartUnit", "FirstBuild", "Hut"
 helptext      = _("\
 The Phalanx is armored infantry, suitable for defending your cities \
 and holding tactical positions.
@@ -806,12 +802,13 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-flags         = "CantReachAir", "Bombarder"
+flags         = "CantReachAir", "Bombarder", "Capturer"
 roles         = "DefendOk", "DefendOkStartUnit"
 helptext      = _("\
 Archers fight with bows and arrows and have a good offensive\
- value as well as decent defense. Archers can do ranged attack\
+ value as well as decent defense. Archers can do volley attacks\
  for 2 rounds on every unit on a tile from a distance of 2 tiles.\
+ If not transported, they can even hit units on Ocean tiles.\
 ")
 bombard_rate = 2
 bombard_max_range = 2
@@ -841,8 +838,8 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-flags         = "CantReachAir", "CanRoad", "CanFortress"
-roles         = "DefendOk", "DefendOkStartUnit", "Hut", "BarbarianBuild", "BarbarianSea"
+flags         = "CantReachAir", "CanRoad", "CanFortress", "Capturer", "Settlers"
+roles         = "DefendOk", "DefendOkStartUnit", "BarbarianBuild", "BarbarianSea"
 helptext      = _("\
 Legions are heavily armed well disciplined soldiers with excellent offensive strength.\
  They are famous for their engineering abilities：with the required\
@@ -913,7 +910,7 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-flags         = "CantReachAir"
+flags         = "CantReachAir", "Capturer"
 roles         = "DefendGood", "DefendGoodStartUnit", "FirstBuild", "HutTech",
                 "BarbarianTech", "BarbarianBuildTech", "BarbarianSeaTech"
 helptext      = _("\
@@ -988,7 +985,7 @@ uk_happy      = 1
 uk_shield     = 0
 uk_food       = 0
 uk_gold       = 1
-flags         = "CantReachAir"
+flags         = "CantReachAir", "Capturer"
 roles         = "DefendGood", "DefendGoodStartUnit", "FirstBuild"
 helptext      = _("\
 Riflemen are World War-era infantry, very good\
@@ -1058,7 +1055,7 @@ uk_happy      = 1
 uk_shield     = 0
 uk_food       = 0
 uk_gold       = 1
-flags         = "IgTer", "CantReachAir"
+flags         = "IgTer", "CantReachAir", "Capturer"
 roles         = "DefendGood", "DefendGoodStartUnit"
 helptext      = _("\
 Alpine Troops are highly mobile units as well as\
@@ -1090,7 +1087,7 @@ uk_happy      = 1
 uk_shield     = 0
 uk_food       = 0
 uk_gold       = 1
-flags         = "NonNativeAttack", "CantReachAir"
+flags         = "NonNativeAttack", "CantReachAir", "Capturer"
 roles         = "DefendOk", "DefendOkStartUnit", "BarbarianSeaTech"
 helptext      = _("\
 Marines are infantry who are experts at marine warfare.\
@@ -1127,7 +1124,6 @@ helptext      = _("\
 Ground Troops upgrade earlier infantry with better weaponry.\
 ")
 
-
 [unit_paratroopers]
 name          = _("Paratroopers")
 class         = "Land"
@@ -1153,7 +1149,7 @@ uk_happy      = 1
 uk_shield     = 0
 uk_food       = 0
 uk_gold       = 1
-flags         = "Paratroopers", "CantReachAir"
+flags         = "Paratroopers", "CantReachAir", "Capturer"
 roles         = "DefendOk", "DefendOkStartUnit"
 helptext      = _("\
 Paratroopers are experts at airborne attacks. \
@@ -1198,6 +1194,38 @@ helptext      = _("\
 The Mechanized Infantry has the strongest defensive strength\
  of any land unit, but is only available near the end of the\
  technology tree.\
+")
+
+[unit_scout]
+name          = _("Scout")
+class         = "Land"
+tech_req      = "Horseback Riding"
+obsolete_by   = "Partisan"
+graphic       = "u.scout"
+graphic_alt   = "u.explorer"
+sound_move    = "m_explorer"
+sound_move_alt = "m_generic"
+sound_fight   = "f_explorer"
+sound_fight_alt = "f_generic"
+build_cost    = 18
+pop_cost      = 0
+attack        = 0
+defense       = 10
+hitpoints     = 10
+firepower     = 1
+move_rate     = 2
+vision_radius_sq = 10
+transport_cap = 0
+fuel          = 0
+uk_happy      = 0
+uk_shield     = 0
+uk_food       = 0
+uk_gold       = 0
+flags         = "IgTer", "IgZOC", "NonMil", "HasNoZOC", "Capturable", "Expellable"
+roles         = "Explorer", "ExplorerStartUnit"
+helptext      = _("\
+Scouts are brave individuals that are very useful for\
+ mapping unknown territory. They have excellent vision.\
 ")
 
 [unit_horsemen]
@@ -1258,7 +1286,7 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-flags         = "Horse", "CantReachAir"
+flags         = "Horse", "CantReachAir", "Capturer"
 roles         = "AttackFastStartUnit", "Hut", "Hunter"
 helptext      = _("\
 Chariots are horse-pulled war wagons, stronger\
@@ -1290,11 +1318,45 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-flags         = "Horse", "CantReachAir"
+flags         = "Horse", "CantReachAir", "Capturer"
 roles         = "AttackFastStartUnit", "HutTech", "BarbarianTech",
                 "BarbarianBuildTech", "BarbarianSeaTech", "Hunter"
 helptext      = _("\
 Knights are mounted and heavily armored warriors.\
+")
+
+[unit_crusaders]
+name          = _("Crusaders")
+class         = "Land"
+tech_req      = "Monotheism"
+obsolete_by   = "Dragoons"
+graphic       = "u.crusaders"
+graphic_alt   = "-"
+sound_move    = "m_crusaders"
+sound_move_alt = "m_generic"
+sound_fight   = "f_crusaders"
+sound_fight_alt = "f_generic"
+build_cost    = 38
+pop_cost      = 0
+attack        = 50
+defense       = 15
+hitpoints     = 10
+firepower     = 1
+move_rate     = 4
+vision_radius_sq = 4
+transport_cap = 0
+fuel          = 0
+uk_happy      = 1
+uk_shield     = 1
+uk_food       = 0
+uk_gold       = 0
+flags         = "Horse", "Capturer", "CantReachAir"
+roles         = "AttackFastStartUnit"
+helptext      = _("\
+Crusaders are mounted warriors driven by a higher cause.\
+ They have superior attack to Knights, but are less adept at\
+ defense. They are ideally suited for leading the charge in\
+ offensive campaigns.\
 ")
 
 [unit_dragoons]
@@ -1322,7 +1384,7 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-flags         = "Horse", "CantReachAir"
+flags         = "Horse", "CantReachAir", "Capturer"
 roles         = "AttackFastStartUnit", "BarbarianBuildTech", "BarbarianSeaTech",
                 "Hunter"
 helptext      = _("\
@@ -1354,7 +1416,7 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-flags         = "CantReachAir"
+flags         = "CantReachAir", "Capturer"
 roles         = "AttackFastStartUnit", "Hunter"
 helptext      = _("\
 Cavalry are mounted and highly trained soldiers.\
@@ -1771,14 +1833,20 @@ uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
 cargo         = "Land"
-flags         = "BadCityDefender", "Provoking", "CantReachAir", "HasNoZOC",
-                "Coast"
-
+flags         = "BadCityDefender", "CantReachAir", "HelpWonder",
+                "TradeRoute", "Coast", "HasNoZOC", "NonMil", "NonMilAttack"
 roles         = "Ferryboat", "FerryStartUnit"
 helptext      = _("\
-The Trireme is your first boat unit. It can act\
- as a transport ship and has rudimentary offensive\
- capabilities, but may not enter deep ocean tiles.\
+Triremes are used for exploration, transport, and Commerce.\
+ The entry on Caravan explains what Commerce units may do.\
+"), _("
+Triremes can enter Deep Ocean, but there is risk：they must end every second\
+ turn on river, coastline, or a city—or else be lost at sea. They can attack\
+ and travel on rivers, but can’t attack the shore.\
+"), _("
+Like most ancient sea units, when it initiates combat there will be 15 rounds\
+ of combat and 15 total hp lost between both units. This may or may not\
+ result in a victor. Triremes do not cause unhappiness.\
 ")
 
 [unit_caravel]
@@ -2274,7 +2342,8 @@ uk_happy      = 0
 uk_shield     = 0
 uk_food       = 0
 uk_gold       = 0
-flags         = "Diplomat", "IgZOC", "NonMil", "HasNoZOC", "Provoking"
+flags         = "Diplomat", "IgZOC", "NonMil", "HasNoZOC",
+                "Provoking", "Expellable", "Cant_Pillage"
 veteran_names =
 ; /* TRANS: diplomatic rank. */
   _("?diplomatic_rank:attaché"),
@@ -2382,7 +2451,7 @@ uk_shield     = 0
 uk_food       = 0
 uk_gold       = 0
 flags         = "Diplomat", "IgZOC", "NonMil", "HasNoZOC", "Spy",
-                "Provoking"
+                "Provoking", "Expellable"
 veteran_names =
 ; /* TRANS: Spy veteran level */
   _("?spy_level:informant"),
@@ -2451,13 +2520,16 @@ uk_happy      = 0
 uk_shield     = 0
 uk_food       = 0
 uk_gold       = 0
-flags         = "TradeRoute", "HelpWonder", "IgZOC", "NonMil", "HasNoZOC"
+flags         = "TradeRoute", "HelpWonder", "IgZOC", "NonMil", "HasNoZOC",
+                "Capturable", "Expellable", "Cant_Pillage"
 roles         = ""
 helptext      = _("\
-A Caravan carries goods or material for trading with distant cities\
+A Caravan is a Cocarries goods or material for trading with distant cities\
  and foreign countries, or to help build wonders in your cities.\
 "), _("\
-Caravans can establish trade routes with your own cities or those of other\
+Caravans are versatile and rugged Commerce units.\
+Commerce units can help build Wonders and\
+ can establish trade routes with your own cities or those of other\
  nations (even enemies) by traveling to them. A route's ongoing revenue\
  is doubled if the two cities involved are on different continents, and\
  doubled again if the cities are from different civilizations. This last\
@@ -2503,42 +2575,11 @@ uk_happy      = 0
 uk_shield     = 0
 uk_food       = 0
 uk_gold       = 0
-flags         = "TradeRoute", "HelpWonder", "IgZOC", "NonMil", "HasNoZOC"
+flags         = "TradeRoute", "HelpWonder", "IgZOC", "NonMil",
+                "HasNoZOC", "Capturable", "Cant_Pillage"
 roles         = ""
 helptext      = _("\
 The Freight unit replaces the Caravan, and moves at twice the speed.\
-")
-
-[unit_scout]
-name          = _("Scout")
-class         = "Land"
-tech_req      = "Horseback Riding"
-obsolete_by   = "Partisan"
-graphic       = "u.scout"
-graphic_alt   = "u.explorer"
-sound_move    = "m_explorer"
-sound_move_alt = "m_generic"
-sound_fight   = "f_explorer"
-sound_fight_alt = "f_generic"
-build_cost    = 18
-pop_cost      = 0
-attack        = 0
-defense       = 10
-hitpoints     = 10
-firepower     = 1
-move_rate     = 2
-vision_radius_sq = 16
-transport_cap = 0
-fuel          = 0
-uk_happy      = 0
-uk_shield     = 0
-uk_food       = 0
-uk_gold       = 0
-flags         = "IgTer", "IgZOC", "NonMil", "HasNoZOC"
-roles         = "Explorer", "ExplorerStartUnit"
-helptext      = _("\
-Scouts are brave individuals that are very useful for\
- mapping unknown territory. They have excellent vision.\
 ")
 
 [unit_leader]
