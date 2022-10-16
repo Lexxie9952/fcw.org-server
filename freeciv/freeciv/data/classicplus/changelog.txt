@@ -22,17 +22,20 @@ Balloons and Zeppelins
 Everything but Sea and Zeppelins can be airlifted.
 Cost of Early foot units decreased 20%, Pikemen onward approx -10%
 Cost of Early mounted units and some other units, -10%
-Trireme cost 20. Tech req alphabet, can go on rivers.
-   can enter Deep Ocean, but run out of fuel if not near shore on T2
-   They can attack and travel on rivers, but can’t attack the shore.
-   Triremes can do trade routes and help build wonders. Triremes do not cause unhappiness.
-Caravel now A2 D2 cost 30, M7, can go on rivers.
-Wood boats can travel on rivers.
-Galleon A2 D3, Frigate A4 D3
-AEGIS can carry 5 missiles and is 3x defense vs air.
-Battleships can bombard 3 rounds
-Carrier cost 150 carries 10.
-Bship:Cruiser:Destroyer 10:11:12
+Project Poseidon Lite
+   Trireme cost 20. Tech req alphabet, can go on rivers.
+      can enter Deep Ocean, but run out of fuel if not near shore on T2
+      They can attack and travel on rivers, but can’t attack the shore.
+      Triremes can do trade routes and help build wonders. Triremes do not cause unhappiness.
+   Caravel now A4 D4 cost 30, M7, can go on rivers.
+   Wood boats can travel on rivers.
+   Galleon A2 D3, Frigate A4 D3
+   Added Galley and War Galley
+Project Neptune Lite
+   AEGIS can carry 5 missiles and is 3x defense vs air.
+   Battleships can bombard 3 rounds
+   Carrier cost 150 carries 10.
+   Bship:Cruiser:Destroyer 10:11:12
 Paratroopers range increased to 14, approx sqrt.2 to keep good ratio for 1x range.
 Explorer changed to Scout, available with Horseback riding, cost reduced to 18,
    has better vision.
@@ -65,7 +68,9 @@ Fixed City walls to real classic 2x defense, and changed SAM Battery
    to get 2x vs helicopter.
 Added Ecclesiastical Palace.
 Added Crusaders.
-
+Caravans 30 shields.
+Added Jet Fighter
+Added Elephants
 
 things to implement
       client_rules_flag[CRF_CARGO_HEURISTIC]=true;

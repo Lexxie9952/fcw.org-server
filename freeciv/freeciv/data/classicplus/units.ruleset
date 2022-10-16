@@ -808,7 +808,8 @@ helptext      = _("\
 Archers fight with bows and arrows and have a good offensive\
  value as well as decent defense. Archers can do volley attacks\
  for 2 rounds on every unit on a tile from a distance of 2 tiles.\
- If not transported, they can even hit units on Ocean tiles.\
+ To volley from a range of 2, use the DO command. If not transported,\
+ they can even hit units on Ocean tiles.\
 ")
 bombard_rate = 2
 bombard_max_range = 2
@@ -1293,6 +1294,39 @@ Chariots are horse-pulled war wagons, stronger\
  but more expensive than horsemen.\
 ")
 
+[unit_elephants]
+name          = _("Elephants")
+class         = "Land"
+tech_req      = "Polytheism"
+obsolete_by   = "Crusaders"
+graphic       = "u.elephants"
+graphic_alt   = "-"
+sound_move    = "m_elephants"
+sound_move_alt = "m_generic"
+sound_fight   = "f_elephants"
+sound_fight_alt = "f_generic"
+build_cost    = 36
+pop_cost      = 0
+attack        = 40
+defense       = 10
+hitpoints     = 10
+firepower     = 1
+move_rate     = 4
+vision_radius_sq = 4
+transport_cap = 0
+fuel          = 0
+uk_happy      = 1
+uk_shield     = 1
+uk_food       = 0
+uk_gold       = 0
+flags         = "Horse", "Capturer", "CantReachAir"
+roles         = "AttackFastStartUnit"
+helptext      = _("\
+Elephants are towering animals trained for war. Their mobility and formidable\
+ attack strength make them excellent for offensive engagements, but they\
+ defend poorly against most units.\
+")
+
 [unit_knights]
 name          = _("Knights")
 class         = "Land"
@@ -1343,7 +1377,7 @@ defense       = 15
 hitpoints     = 10
 firepower     = 1
 move_rate     = 4
-vision_radius_sq = 4
+vision_radius_sq = 8
 transport_cap = 0
 fuel          = 0
 uk_happy      = 1
@@ -1661,6 +1695,41 @@ Escort Fighters are large fighters with high fuel capacity. Higher mass and\
  good for long-range missions, defensive air support, and escorting bombers.\
 ")
 
+[unit_jet_fighter]
+name          = _("Jet Fighter")
+class         = "AirProtect"
+tech_req      = "Space Flight"
+obsolete_by   = "None"
+graphic       = "u.jet_fighter"
+graphic_alt   = "-"
+sound_move    = "m_jet_fighter"
+sound_move_alt = "m_stealth_fighter"
+sound_fight   = "f_jet_fighter"
+sound_fight_alt = "f_stealth_fighter"
+build_cost    = 70
+pop_cost      = 0
+attack        = 70
+defense       = 60
+hitpoints     = 20
+firepower     = 2
+move_rate     = 24
+vision_radius_sq = 32
+transport_cap = 0
+fuel          = 1
+uk_happy      = 0
+uk_shield     = 1
+uk_food       = 0
+uk_gold       = 0
+targets       = "Air", "AirProtect", "Balloon", "Zeppelin"
+bonuses       =
+   { "flag", "type", "value"
+   }
+flags         = "AirAttacker", "Unbribable", "HasNoZOC", "AirProtector", "Provoking"
+roles         = ""
+helptext      = _("\
+Jet Fighters upgrade the Fighter with improved attack, defense, and range.\
+")
+
 [unit_bomber]
 name          = _("Heavy Bomber")
 class         = "Air"
@@ -1849,6 +1918,75 @@ Like most ancient sea units, when it initiates combat there will be 15 rounds\
  result in a victor. Triremes do not cause unhappiness.\
 ")
 
+[unit_galley]
+name          = _("Galley")
+class         = "RiverShip"
+tech_req      = "Seafaring"
+obsolete_by   = "Caravel"
+graphic       = "u.galley"
+graphic_alt   = "-"
+sound_move    = "m_galley"
+sound_move_alt = "m_trireme"
+sound_fight   = "f_trireme"
+sound_fight_alt = "f_generic"
+build_cost    = 30
+pop_cost      = 0
+attack        = 20
+defense       = 20
+hitpoints     = 10
+firepower     = 1
+move_rate     = 6
+vision_radius_sq = 8
+transport_cap = 2
+fuel          = 0
+uk_happy      = 0
+uk_shield     = 1
+uk_food       = 0
+uk_gold       = 0
+cargo         = "Land"
+flags         = "BadCityDefender", "CantReachAir", "HelpWonder",
+                "Traderoute", "Only_Native_Attack", "NonMil", "NonMilAttack"
+roles         = "Ferryboat", "FerryStartUnit", "BarbarianBoat"
+helptext      = _("\
+The Galley is an all-purpose sea unit and upgrades the Trireme. It has decent\
+ combat strength, can transport, and is a Commerce unit. The entry on Caravan\
+ explains what Commerce units may do. Galleys can attack and travel on rivers,\
+ but can’t attack the shore. Galleys do not cause unhappiness.\
+")
+
+[unit_war_galley]
+name          = _("War Galley")
+class         = "RiverShip"
+tech_req      = "Astronomy"
+obsolete_by   = "Caravel"
+graphic       = "u.war_galley"
+graphic_alt   = "-"
+sound_move    = "m_war_galley"
+sound_move_alt = "m_trireme"
+sound_fight   = "f_trireme"
+sound_fight_alt = "f_generic"
+build_cost    = 40
+pop_cost      = 0
+attack        = 30
+defense       = 30
+hitpoints     = 10
+firepower     = 1
+move_rate     = 6
+vision_radius_sq = 8
+transport_cap = 3
+fuel          = 0
+uk_happy      = 1
+uk_shield     = 1
+uk_food       = 0
+uk_gold       = 0
+cargo         = "Land"
+flags         = "BadCityDefender", "CantReachAir"
+roles         = "BarbarianBoat", "Hunter"
+helptext      = _("\
+The War Galley has improved offense, defense, and cargo capacity, but lacks commerce\
+ ability. War Galleys can attack and travel on rivers, and do shore attacks from the sea.\
+")
+
 [unit_caravel]
 name          = _("Caravel")
 class         = "RiverShip"
@@ -1862,8 +2000,8 @@ sound_fight   = "f_caravel"
 sound_fight_alt = "f_generic"
 build_cost    = 30
 pop_cost      = 0
-attack        = 20
-defense       = 20
+attack        = 40
+defense       = 40
 hitpoints     = 10
 firepower     = 1
 move_rate     = 7
@@ -1878,8 +2016,8 @@ cargo         = "Land"
 flags         = "BadCityDefender", "Provoking"
 roles         = "Ferryboat", "FerryStartUnit", "BarbarianBoat"
 helptext      = _("\
-The Caravel replaces the Trireme and can enter\
- any ocean tile.\
+The Caravel is a powerful warship with high transport capacity,
+ and upgrades all previous ships.\
 ")
 
 [unit_galleon]
@@ -2506,7 +2644,7 @@ sound_move    = "m_caravan"
 sound_move_alt = "m_generic"
 sound_fight   = "f_caravan"
 sound_fight_alt = "f_generic"
-build_cost    = 50
+build_cost    = 30
 pop_cost      = 0
 attack        = 0
 defense       = 10
@@ -2524,30 +2662,22 @@ flags         = "TradeRoute", "HelpWonder", "IgZOC", "NonMil", "HasNoZOC",
                 "Capturable", "Expellable", "Cant_Pillage"
 roles         = ""
 helptext      = _("\
-A Caravan is a Cocarries goods or material for trading with distant cities\
- and foreign countries, or to help build wonders in your cities.\
-"), _("\
 Caravans are versatile and rugged Commerce units.\
-Commerce units can help build Wonders and\
- can establish trade routes with your own cities or those of other\
- nations (even enemies) by traveling to them. A route's ongoing revenue\
- is doubled if the two cities involved are on different continents, and\
- doubled again if the cities are from different civilizations. This last\
- condition means the net benefit to your civilization of a trade route\
- is the same regardless of whether you own both cities or only one of\
- them; if you only own one city, trade in each city is doubled, but you\
+ Commerce units can help build Wonders and can establish trade routes\
+ with your own cities or those of other nations (even enemies) by traveling\
+ to them. A route's ongoing revenue is doubled if the two cities involved\
+ are on different continents, and doubled again if the cities are from different\
+ civilizations. This last condition means the net benefit to your civilization\
+ of a trade route is the same regardless of whether you own both cities or only\
+ one of them; if you only own one city, trade in each city is doubled, but you\
  only get the benefit from one end of the route.\
 "), _("\
 Initially cities can support a maximum of two trade routes. Knowledge of\
  the technologies Magnetism and The Corporation each increase this limit\
  by one; knowing both allows cities to support four trade routes each.\
 "), _("\
-Every Caravan that is used to build a wonder will add 50 shields\
+Every Caravan that is used to build a wonder will add 30 shields\
  towards the production of the wonder.\
-"), _("\
-TIP:  You can stockpile a stack of Caravans in advance and bring\
- them all into a city where you have started to build a wonder,\
- and finish it in only one turn!\
 ")
 
 [unit_freight]
