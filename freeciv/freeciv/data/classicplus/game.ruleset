@@ -85,8 +85,8 @@ food_cost        = 2
 ;   if city_size > num_inis;
 ;     city_granary_size = (granary_food_ini[num_inis] +
 ;        granary_food_inc * (city_size - num_inis)) * foodbox / 100
-granary_food_ini = 20
-granary_food_inc = 10
+granary_food_ini  = 15, 20, 24, 30, 36, 44, 52, 60
+granary_food_inc = 0
 
 ; City center minimum outputs
 min_city_center_food    = 1
@@ -294,14 +294,14 @@ bombard_max_range = 1
 ; the actor unit. The special value "unlimited" lifts the maximum distance
 ; restriction. The maximum distance can`t be smaller than the minimum
 ; distance.
-bombard_2_max_range = 1
+bombard_2_max_range = 2
 
 ; The maximum distance from the actor unit to the target of the "Bombard 3"
 ; action. The value 1 means that the targets must be on a tile adjacent to
 ; the actor unit. The special value "unlimited" lifts the maximum distance
 ; restriction. The maximum distance can`t be smaller than the minimum
 ; distance.
-bombard_3_max_range = 1
+bombard_3_max_range = 3
 
 ; The maximum distance from the actor unit to the target of the
 ; "Explode Nuclear" action. The value 0 means that the target tile must be
@@ -430,6 +430,12 @@ ui_name_airlift_unit = _("%sAirlift to City%s")
 
 ; /* TRANS: _Attack (100% chance of success). */
 ui_name_attack = _("%sAttack%s")
+
+; /* TRANS: _Bombard (100% chance of success). */
+ui_name_bombard = _("%sSpecial Attack%s")
+
+; /* TRANS: _Bombard (100% chance of success). */
+ui_name_bombard_2 = _("%sSpecial Attack%s")
 
 ; /* TRANS: _Explode Missile (100% chance of success). */
 ui_name_suicide_attack = _("%sExplode Missile%s")
@@ -772,6 +778,61 @@ actor_reqs    =
       "UnitFlag", "EvacuateFirst", "Local", FALSE
     }
 
+[actionenabler_archer_volley]
+action = "Bombard 2"
+actor_reqs    =
+    { "type",         "name",         "range", "present"
+      "UnitFlag",     "Bombarder",    "Local", TRUE
+      "UnitType",     "Archers",      "Local", TRUE
+      "UnitState",    "Transported",  "Local", TRUE
+      "MinMoveFrags", "1",            "Local", TRUE
+      "DiplRel",      "War",          "Local", TRUE
+   }
+target_reqs    =
+    { "type",     "name",         "range","present"
+      "CityTile", "Center",       "Local", FALSE
+      "Extra",    "Fortress",     "Local", FALSE
+      "TerrainClass", "Oceanic",  "Local", FALSE
+    }
+;Can hit Oceanic but not while transported.
+[actionenabler_archer_volley2]
+action = "Bombard 2"
+actor_reqs    =
+    { "type",         "name",         "range", "present"
+      "UnitFlag",     "Bombarder",    "Local", TRUE
+      "UnitType",     "Archers",      "Local", TRUE
+      "UnitState",    "Transported",  "Local", FALSE
+      "MinMoveFrags", "1",            "Local", TRUE
+      "DiplRel",      "War",          "Local", TRUE
+   }
+target_reqs    =
+    { "type",     "name",         "range","present"
+      "CityTile", "Center",       "Local", FALSE
+      "Extra",    "Fortress",     "Local", FALSE
+    }
+
+;CAPTURING LAND UNITS a "Capturer" must get a "Capturable" but not on a mountain.
+[actionenabler_capture]
+action = "Capture Units"
+actor_reqs    =
+    { "type",   "name", "range", "present"
+      "UnitFlag", "Capturer", "Local", TRUE
+      "UnitState", "Transported", "Local", FALSE
+;     "DiplRel", "War", "Local", TRUE             ;NAH 
+      "MinMoveFrags", "1", "Local", TRUE
+      "DiplRel", "Foreign", "Local", TRUE
+      "DiplRel", "Alliance", "Local", FALSE
+    }
+target_reqs    =
+    { "type",   "name", "range", "present"
+      "UnitFlag", "Capturable", "Local", TRUE
+      "CityTile", "Center", "Local", FALSE
+      "Terrain", "Mountains", "Local", FALSE
+      "MaxUnitsOnTile", "1", "Local", TRUE
+      "Extra", "Fort", "Local", FALSE
+      "Extra", "Fortress", "Local", FALSE
+    }
+
 [actionenabler_build_city_pioneer]
 action = "Found City"
 actor_reqs    =
@@ -802,6 +863,30 @@ actor_reqs    =
       "UnitFlag", "AddToCity", "Local", TRUE
       "DiplRel", "Foreign", "Local", FALSE
       "MinMoveFrags", "1", "Local", TRUE
+    }
+
+;Land expel: must be not on a mountain
+[actionenabler_border_police]
+action = "Expel Unit"
+actor_reqs    =
+    { "type",          "name",           "range", "present"
+      "UnitClassFlag", "BorderPolice",   "Local",  TRUE
+      "UnitFlag",      "NonMil",         "Local",  FALSE      ;Non-Military land class can't expel
+      "UnitType",      "Warriors",       "Local",  FALSE      ;Warriors are too weak to expel
+      "UnitState",     "OnDomesticTile", "Local",  TRUE
+      "UnitState",     "OnNativeTile",   "Local",  TRUE       ;Transported units can expel on rivers but not from ocean
+      "DiplRel",       "Foreign",        "Local",  TRUE
+      "DiplRel",       "Team",           "Local",  FALSE
+      "DiplRel",       "Alliance",       "Local",  FALSE
+;     "DiplRel",       "War",           "Local",  FALSE        ;NAH, you could expel anyone if you wanted.
+      "MinMoveFrags",  "1",              "Local",  TRUE
+    }
+target_reqs    =
+    { "type",          "name",           "range", "present"
+      "UnitFlag",      "Expellable",     "Local", TRUE
+      "UnitState",     "OnDomesticTile", "Local",  FALSE
+      "Terrain",       "Mountains",      "Local",  FALSE        ;Can't expel people hiding in the mountains
+      "MaxUnitsOnTile", "1", "Local", TRUE
     }
 
 [actionenabler_nuke]
@@ -977,6 +1062,7 @@ action        = "Cultivate"
 actor_reqs    =
     { "type",          "name",         "range", "present"
       "UnitFlag",      "Settlers",     "Local", TRUE
+      "UnitFlag",      "NonMil",       "Local", TRUE
     }
 
 [actionenabler_plant]
@@ -984,13 +1070,15 @@ action        = "Plant"
 actor_reqs    =
     { "type",          "name",         "range", "present"
       "UnitFlag",      "Settlers",     "Local", TRUE
+      "UnitFlag",      "NonMil",       "Local", TRUE
     }
 
 [actionenabler_pillage]
 action        = "Pillage"
 actor_reqs    =
-    { "type",          "name",         "range"
-      "UnitClassFlag", "CanPillage",   "Local"
+    { "type",          "name",         "range", "present"
+      "UnitClassFlag", "CanPillage",   "Local", TRUE
+      "UnitFlag",      "Cant_Pillage", "Local", FALSE
     }
 [actionenabler_clean_pollution]
 action        = "Clean Pollution"
@@ -1019,8 +1107,31 @@ actor_reqs    =
 [actionenabler_road]
 action        = "Build Road"
 actor_reqs    =
-    { "type",          "name",         "range"
-      "UnitFlag",      "Settlers",     "Local"
+    { "type",          "name",         "range", "present"
+      "UnitFlag",      "Settlers",     "Local", TRUE
+      "UnitFlag",      "CanRoad",      "Local", TRUE
+      "UnitType",      "Legion",       "Local", FALSE
+    }
+[actionenabler_legion_road]
+action        = "Build Road"
+actor_reqs    =
+    { "type",          "name",          "range",   "present"
+      "UnitFlag",      "Settlers",      "Local",   TRUE
+      "UnitType",      "Legion",        "Local",   TRUE
+      "UnitFlag",      "CanRoad",       "Local",   TRUE
+      "UnitState",     "OnDomesticTile","Local",   FALSE
+      "UnitState",     "Transported",   "Local",   FALSE    ; Prevent quay exploit
+    }
+; Don't force legions to road BEFORE making a fortress 
+; from fortress being "domestic national territory"
+[actionenabler_legion_road2]
+action        = "Build Road"
+actor_reqs    =
+    { "type",          "name",          "range",   "present"
+      "UnitFlag",      "Settlers",      "Local",   TRUE
+      "UnitType",      "Legion",        "Local",   TRUE
+      "UnitFlag",      "CanRoad",       "Local",   TRUE
+      "Extra",         "Fort",          "Local",   TRUE
     }
 
 [actionenabler_base]
@@ -1028,6 +1139,7 @@ action        = "Build Base"
 actor_reqs    =
     { "type",          "name",         "range"
       "UnitFlag",      "Settlers",     "Local"
+      "UnitFlag",      "CanFortress",  "Local"
     }
 
 [actionenabler_mining]
@@ -1035,6 +1147,7 @@ action        = "Build Mine"
 actor_reqs    =
     { "type",          "name",         "range"
       "UnitFlag",      "Settlers",     "Local"
+      "UnitFlag",      "NonMil",       "Local"
     }
 target_reqs    =
     { "type",        "name", "range", "present"
@@ -1047,6 +1160,7 @@ actor_reqs    =
     { "type",     "name",         "range"
       "UnitFlag", "Settlers",     "Local"
       "Tech",     "Construction", "Player"
+      "UnitFlag",      "NonMil",   "Local"
     }
 target_reqs    =
     { "type",    "name",         "range"
@@ -1059,6 +1173,7 @@ actor_reqs    =
     { "type",     "name",     "range"
       "UnitFlag", "Settlers", "Local"
       "Tech",     "Refining", "Player"
+      "UnitFlag", "NonMil",   "Local"
     }
 target_reqs    =
     { "type",    "name",     "range"
@@ -1070,32 +1185,23 @@ action        = "Build Irrigation"
 actor_reqs    =
     { "type",          "name",         "range"
       "UnitFlag",      "Settlers",     "Local"
+      "UnitFlag",      "NonMil",       "Local"
     }
 target_reqs    =
     { "type",        "name",     "range"
       "TerrainClass", "Oceanic", "CAdjacent"
     }
 
-[actionenabler_irrigate_src_river]
+[actionenabler_irrigate_src]
 action        = "Build Irrigation"
 actor_reqs    =
     { "type",          "name",         "range"
       "UnitFlag",      "Settlers",     "Local"
+      "UnitFlag",      "NonMil",       "Local"
     }
 target_reqs    =
     { "type",    "name",     "range"
-      "Extra",   "River",    "CAdjacent"
-    }
-
-[actionenabler_irrigate_src_irrigation]
-action        = "Build Irrigation"
-actor_reqs    =
-    { "type",          "name",         "range"
-      "UnitFlag",      "Settlers",     "Local"
-    }
-target_reqs    =
-    { "type",    "name",       "range"
-      "Extra",   "Irrigation", "CAdjacent"
+      "ExtraFlag", "IrrigationSource", "CAdjacent"
     }
 
 [actionenabler_deboard]
