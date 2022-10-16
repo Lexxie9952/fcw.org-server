@@ -133,7 +133,7 @@ function _deflua_hut_reveal_map(unit)
 
   notify.event(owner, unit.tile, E.HUT_MAP,
                _("You find a map of the surrounding terrain."))
-  for revealtile in unit.tile:circle_iterate(30) do
+  for revealtile in unit.tile:circle_iterate(63) do
     revealtile:show(owner)
   end
 end
@@ -143,25 +143,21 @@ function _deflua_hut_enter_callback(unit)
   local chance = random(0, 13)
   local alive = true
 
-  if chance == 0 then
+  if chance == 0 or chance == 1 then
+    _deflua_hut_get_gold(unit, 10)
+  elseif chance == 2 or chance == 3 then
     _deflua_hut_get_gold(unit, 25)
-  elseif chance == 1 or chance == 2 or chance == 3 then
-    _deflua_hut_get_gold(unit, 50)
   elseif chance == 4 then
-    _deflua_hut_get_gold(unit, 100)
-  elseif chance == 5 or chance == 6 or chance == 7 then
+    _deflua_hut_get_gold(unit, 50)
+  elseif chance == 5 or chance == 6 then
     _deflua_hut_get_tech(unit)
-  elseif chance == 8 or chance == 9 then
+  elseif chance == 7 or chance == 8 then
     if not _deflua_hut_get_mercenaries(unit) then
       _deflua_hut_consolation_prize(unit)
     end
-  elseif chance == 10 then
+  elseif chance == 9 then
     alive = _deflua_hut_get_barbarians(unit)
-  elseif chance == 11 then
-    if not _deflua_hut_get_city(unit) then
-      _deflua_hut_consolation_prize(unit)
-    end
-  elseif chance == 12 or chance == 13 then
+  else
     _deflua_hut_reveal_map(unit)
   end
 
