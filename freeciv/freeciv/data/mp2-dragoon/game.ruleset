@@ -474,6 +474,9 @@ ui_name_spy_attack = _("Eliminate %sSpy%s")
 ; /* TRANS: _Bombard (100% chance of success). */
 ui_name_bombard = _("%sSpecial Attack%s")
 
+; /* TRANS: _Bombard (100% chance of success). */
+ui_name_bombard_2 = _("%sSpecial Attack%s")
+
 ; /* TRANS: _Explode (100% chance of success). */
 ui_name_suicide_attack = _("%sExplode%s")
 
