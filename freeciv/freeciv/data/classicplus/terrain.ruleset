@@ -742,7 +742,7 @@ food                 = 1
 shield               = 0
 trade                = 0
 resources            = "Elk", "Furs"
-road_trade_incr_pct  = 0
+road_trade_incr_pct  = 100
 base_time            = 1
 road_time            = 2
 irrigation_result    = "yes"
@@ -1023,8 +1023,8 @@ shield      = 3 ; glacier used to have 4
 [resource_berries]
 extra       = "Berries"
 identifier  = "@"
-;food        = 1
-;trade       = 2  ;added in effects because only generated resources tied to a terrain type can access this var
+food        = 1
+trade       = 2
 # forest, forested.
 
 [extraui]
@@ -1647,7 +1647,6 @@ reqs           =
       "ExtraFlag",   "Quayable",   "Local",  TRUE,      FALSE
       "Tech",        "Pottery",    "Player", TRUE,      FALSE
       "TerrainClass","Land",       "Local",  TRUE,      FALSE
-      "UnitFlag",    "CanRoad",    "Local",  TRUE,      TRUE
     }
 build_time     = 0
 removal_time   = 0
@@ -1875,6 +1874,7 @@ act_gfx_alt    = "-"
 act_gfx_alt2   = "-"
 rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
+helptext = "Gold provides an enormous +8 trade"
 
 [extra_iron]
 name           = _("Iron")
@@ -1888,6 +1888,7 @@ act_gfx_alt    = "-"
 act_gfx_alt2   = "-"
 rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
+helptext = "Iron givese 3 shields; +5 if mined. A city on Iron can be mined and still collect +1 food."
 
 [extra_elk]
 name           = _("Elk")
@@ -1901,6 +1902,7 @@ act_gfx_alt    = "-"
 act_gfx_alt2   = "-"
 rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
+helptext = "Elk provide lots of food and production and can be irrigated."
 
 [extra_furs]
 name           = _("Furs")
@@ -1914,6 +1916,7 @@ act_gfx_alt    = "-"
 act_gfx_alt2   = "-"
 rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
+helptext = "Furs provide surplus food, +1 shield, and a large trade bonus."
 
 [extra_coal]
 name           = _("Coal")
@@ -1927,6 +1930,7 @@ act_gfx_alt    = "-"
 act_gfx_alt2   = "-"
 rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
+helptext = "Coal mines provide a massive plenitude of production in any age."
 
 [extra_fish]
 name           = _("Fish")
@@ -1940,6 +1944,8 @@ act_gfx_alt    = "-"
 act_gfx_alt2   = "-"
 rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
+helptext = "Fish provide food and trade which increase with government, Harbors, and Fishtraps."
+
 
 [extra_fruit]
 name           = _("Fruit")
@@ -1953,6 +1959,7 @@ act_gfx_alt    = "-"
 act_gfx_alt2   = "-"
 rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
+helptext = "Fruit provides copious food, and substantial trade—with no work required."
 
 [extra_gems]
 name           = _("Gems")
@@ -1966,6 +1973,8 @@ act_gfx_alt    = "-"
 act_gfx_alt2   = "-"
 rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
+helptext = "Gems rival wine and gold in producing high trade and wealth."
+
 [extra_rubber]
 name           = _("Rubber")
 category       = "Resource"
@@ -1978,6 +1987,7 @@ act_gfx_alt    = "-"
 act_gfx_alt2   = "-"
 rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
+helptext = "Rubber gives good production and a small trade bonus."
 
 [extra_buffalo]
 name           = _("Buffalo")
@@ -1991,6 +2001,7 @@ act_gfx_alt    = "-"
 act_gfx_alt2   = "-"
 rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
+helptext = "Buffalo supply a sizeable resource bonus to production."
 
 [extra_wheat]
 name           = _("Wheat")
@@ -2004,6 +2015,7 @@ act_gfx_alt    = "-"
 act_gfx_alt2   = "-"
 rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
+helptext = "Wheat supplies ample food to boost population growth."
 
 [extra_oasis]
 name           = _("Oasis")
@@ -2018,6 +2030,7 @@ act_gfx_alt2   = "-"
 rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
 flags          = "IrrigationSource"
+helptext = "An Oasis supplies as much food as Wheat and serves as an irrigation source."
 
 [extra_peat]
 name           = _("Peat")
@@ -2031,6 +2044,7 @@ act_gfx_alt    = "-"
 act_gfx_alt2   = "-"
 rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
+helptext = "Peat gives superior production and requires no work to collect."
 
 [extra_pheasant]
 name           = _("Pheasant")
@@ -2044,6 +2058,7 @@ act_gfx_alt    = "-"
 act_gfx_alt2   = "-"
 rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
+helptext = "Pheasants give the extra food needed for forest peoples to thrive."
 
 [extra_shield]
 name           = _("Resources")
@@ -2057,6 +2072,7 @@ act_gfx_alt    = "-"
 act_gfx_alt2   = "-"
 rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
+helptext = "Resources are valuable materials found beneath the surface of Grasslands."
 
 [extra_ivory]
 name           = _("Ivory")
@@ -2070,6 +2086,7 @@ act_gfx_alt    = "-"
 act_gfx_alt2   = "-"
 rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
+helptext = "Ivory provides has high trade value, with a small boost in production."
 
 [extra_silk]
 name           = _("Silk")
@@ -2083,6 +2100,7 @@ act_gfx_alt    = "-"
 act_gfx_alt2   = "-"
 rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
+helptext = "Silk can provide a city adequate production and a nice trade bonus."
 
 [extra_spice]
 name           = _("Spice")
@@ -2096,6 +2114,7 @@ act_gfx_alt    = "-"
 act_gfx_alt2   = "-"
 rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
+helptext = "Spices are coveted food sources that generate high trade."
 
 [extra_whales]
 name           = _("Whales")
@@ -2109,6 +2128,7 @@ act_gfx_alt    = "-"
 act_gfx_alt2   = "-"
 rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
+helptext = "Whales provide +1 food, +1 production, and a maritime trade bonus."
 
 [extra_wine]
 name           = _("Wine")
@@ -2122,6 +2142,7 @@ act_gfx_alt    = "-"
 act_gfx_alt2   = "-"
 rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
+helptext = "Wine gives +4 trade and the opportunity to mine the hills for more production."
 
 [extra_oil]
 name           = _("Oil")
@@ -2130,14 +2151,16 @@ causes         = "Resource"
 ;rmcauses       = ""
 graphic        = "ts.oil"
 graphic_alt    = "-"
+helptext = "Oil is a major production boost that improves with Oil Wells, railroads, and Refining tech."
 
 [extra_berries]
 name           = _("Berries")
 category       = "Resource"
-causes         = "Resource", "Appear"
+causes         = "Resource"
 ;rmcauses       = ""
 graphic        = "ts.berries"
 graphic_alt    = "ts.gold"
+helptext = "Berries from the forest give food and trade, as well as shields from forest lumber."
 
 ; /* <— avoid gettext warnings
 ;
@@ -2163,26 +2186,28 @@ graphic_alt    = "ts.gold"
 extra          = "Watchtower"
 gui_type       = "Airbase"
 border_sq      = 0
-vision_main_sq = 15
+vision_main_sq = 13
 vision_subs_sq = 0
+
 [base_fort]
 extra          = "Fort"
 gui_type       = "Fortress"
 border_sq      = -1
-vision_main_sq = 4
+vision_main_sq = 8
 vision_subs_sq = 0
 
 [base_fortress]
 extra          = "Fortress"
 gui_type       = "Fortress"
 border_sq      = 5
-vision_main_sq = 4
+vision_main_sq = 8
 vision_subs_sq = 0
 flags          = "NoAggressive"
 
 [base_airbase]
 extra          = "Airbase"
 gui_type       = "Airbase"
+vision_main_sq = 4
 vision_subs_sq = 0
 
 [base_buoy]
@@ -2335,6 +2360,7 @@ trade_incr_const = 1
 compat_special = "River"
 integrates     = "Canal", "Waterway"
 flags          = "River", "UnrestrictedInfra"
+
 [road_sea_bridge]
 extra          = "Sea Bridge"
 move_cost      = 3360
