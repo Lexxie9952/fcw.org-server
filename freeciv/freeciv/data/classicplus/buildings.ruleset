@@ -1390,6 +1390,41 @@ Works as a City Wall in all your cities.\
 ; Civ2 also doubles attack -vs- barbs,
 ; and enemies are forced to offer cease-fire or peace.
 
+[building_code_of_hammurabi]
+name		= _("Code of Hammurabi")
+genus		= "SmallWonder"
+reqs	=
+    { "type",     "name",               "range",  "present", "quiet", "survives"
+      "Tech",     "Alphabet",           "Player", TRUE,      FALSE,   FALSE
+      "Tech",     "Democracy",          "Player", FALSE,     FALSE,   FALSE
+      "Building", "Code of Hammurabi",  "Player", FALSE,     TRUE,    FALSE
+;requires 23Sept2021 changes to requirements.c, so obsolete wonders don't re-enable others
+    }
+graphic	= "b.hammurabi"
+graphic_alt	= "-"
+obsolete_by	=
+    { "type", "name", "range"
+      "Tech", "Democracy", "Player"
+    }
+build_cost	= 130
+upkeep		= 0
+sabotage	= 0
+sound		= "w_hammurabi"
+sound_alt	= "w_generic"
+helptext	= _("\
+The Code of Hammurabi is a first step toward legal organized\
+ civilization. It is a primitive version of later societal\
+ advancements. In some ways, this Wonder closes the gap\
+ between Despotism and Monarchy by exactly half. \n\
+Improvements to Despotism：\n\
+  • base corruption is 26% (was 37%) \n\
+  • distance corruption is 3% (was 4%) \n\
+  • penalties eliminated on Lowland tiles. \n\
+Other bonuses：\n\
+  • awards blueprints for Code of Laws (or Writing if the former is known.) \n\
+  • cities with no Temple get +1 content citizen.
+")
+;
 [building_hanging_gardens]
 name		= _("Hanging Gardens")
 genus		= "GreatWonder"
@@ -1753,6 +1788,36 @@ helptext	= _("\
 Makes all angry and unhappy citizens content in the city where it\
  is located, including citizens unhappy about military activity.\
  Obsolete by: None.\
+")
+
+[building_sphinx]
+name    = _("The Sphinx")
+genus		= "SmallWonder"
+reqs	=
+    { "type",      "name",                  "range", "present", "quiet"
+       "Gov",      "Despotism",             "Player", TRUE,      FALSE
+       "Tech",     "Philosophy",            "Player", FALSE,     TRUE
+       "Building", "The Sphinx",            "Player", FALSE,     TRUE
+    }
+graphic	= "b.sphinx"
+graphic_alt	= "-"
+obsolete_by	=
+    { "type", "name", "range"
+      "Tech", "Philosophy", "Player"
+    }
+build_cost	= 70
+upkeep		= 0
+sabotage	= 0
+sound		= "w_sphinx"
+sound_alt	= "w_generic"
+helptext	= _("\
+The Sphinx is said to watch over all citizens to ensure they are good.\
+ The result is loss of tile corruption penalties on all worked tiles in\
+ the city it’s built. As a shared work of community art and culture, it\
+ adds +1 luxury. In addition, it reduces corruption in the city by half.\
+ (If there is any corruption at all, it’s reduced by a minimum of 1.) \n\
+You can build the Sphinx while in Despotism. Its effects last until the\
+ discovery of Philosophy.\
 ")
 
 [building_statue_of_liberty]

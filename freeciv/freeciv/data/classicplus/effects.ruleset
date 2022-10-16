@@ -1012,6 +1012,13 @@ reqs	=
       "Building", "City Walls", "City"
     }
 
+[effect_coastal_defense_visible]
+type    = "Visible_Walls"
+value	= 2      ; 2 is for coastal
+reqs	=
+    { "type", "name", "range"
+      "Building", "Coastal Defense", "City"
+    }
 [effect_coastal_defense]
 type    = "Defend_Bonus"
 value	= 100
@@ -1020,7 +1027,6 @@ reqs	=
       "Building", "Coastal Defense", "City"
       "UnitClass", "Sea", "Local"
     }
-
 [effect_coastal_defense_trireme]
 type    = "Defend_Bonus"
 value	= 100
@@ -1752,6 +1758,13 @@ reqs	=
       "OutputType", "Science", "Local"
     }
 
+[effect_sam_battery_visible]
+type    = "Visible_Walls"
+value	= 16
+reqs	=
+    { "type", "name", "range"
+      "Building", "SAM Battery", "City"
+    }
 [effect_sam_battery]
 type    = "Defend_Bonus"
 value	= 100
@@ -1945,7 +1958,33 @@ reqs    =
     { "type", "name", "range"
       "Extra", "Irrigation", "Local"
     }
-
+; Desert with river (and no Oasis) gets 1 extra food from irrigation (total 2)
+; ("Nile floods" effect)
+[effect_irrigation_2]
+type    = "Irrigation_Pct"
+value   = 100
+reqs    =
+  { "type", "name", "range", "present"
+  "Terrain", "Desert", "Local", TRUE
+  "Extra", "River", "Local", TRUE
+  "Extra", "Oasis", "Local", FALSE
+  "Extra", "Irrigation", "Local", TRUE
+  }
+; ...same for city centers
+[effect_irrigation_3]
+type    = "Irrigation_Pct"
+value   = 100
+reqs    =
+  { "type", "name", "range", "present"
+  "Terrain", "Desert", "Local", TRUE
+  "Extra", "River", "Local", TRUE
+  "Extra", "Oasis", "Local", FALSE
+  "CityTile", "Center", "Local", TRUE
+;  "Extra", "Irrigation", "Local", FALSE
+  "TerrainAlter", "CanIrrigate", "Local", TRUE
+  "Extra", "Mine", "Local", FALSE
+  "Extra", "Oil Well", "Local", FALSE
+  }
 [effect_irrigation_center]
 type    = "Irrigation_Pct"
 value	= 100
@@ -2117,7 +2156,64 @@ reqs	=
     { "type", "name", "range"
       "Building", "Great Wall", "Player"
     }
-
+;************************************************************************ Code of Hammurabi
+[effect_hammurabi_visible]
+type    = "Visible_Walls"
+value	= 2048
+reqs	=
+    { "type",     "name",                  "range", "present"
+      "Building", "Code of Hammurabi",     "City",  TRUE
+    }
+[effect_hammurabi_corruption_1]
+type    = "Output_Waste"
+value	= -11 ; 37-11 = 26
+reqs	=
+    { "type", "name", "range"
+      "Gov", "Despotism", "Player"
+      "Building", "Code of Hammurabi", "Player"
+      "OutputType", "Trade", "Local"
+    }
+[effect_hammurabi_corruption_2]
+type    = "Output_Waste_By_Distance"
+value	= -100 ; 400-100 = 300
+reqs	=
+    { "type", "name", "range"
+      "Gov", "Despotism", "Player"
+      "Building", "Code of Hammurabi", "Player"
+      "OutputType", "Trade", "Local"
+    }
+[effect_hammurabi_tile_bonus]  ; Code of Hammurabi removes tile penalty on lowlands tiles
+type    = "Output_Penalty_Tile"
+value   = 100
+reqs	=
+    { "type",         "name",            "range",   "present"
+      "Gov",          "Despotism",       "Player",  TRUE
+      "Building",     "Code of Hammurabi","Player", TRUE
+      "TerrainFlag",  "Low Land",         "Local",  TRUE
+    }
+[effect_hammurabi_content_no_temple]
+type    = "Make_Content"
+value	= 1
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Code of Hammurabi", "Player", TRUE
+      "Building", "Temple", "City", FALSE
+    }
+[effect_hammurabi_culture]
+type    = "History"
+value	= 1
+reqs	=
+    { "type", "name", "range"
+      "Building", "Code of Hammurabi", "City"
+    }
+;*********************************************************************************
+[effect_hanging_gardens_visible]
+type    = "Visible_Walls"
+value	= 256
+reqs	=
+    { "type",     "name",              "range", "present"
+      "Building",  "Hanging Gardens",  "City",   TRUE
+    }
 [effect_hanging_gardens]
 type    = "Make_Happy"
 value	= 1
@@ -2126,7 +2222,6 @@ reqs	=
       "Building", "Hanging Gardens", "Player", TRUE
       "Building", "Hanging Gardens", "City", FALSE
     }
-
 [effect_hanging_gardens_1]
 type    = "Make_Happy"
 value	= 3
@@ -2333,6 +2428,14 @@ reqs	=
       "Building", "Oracle", "Player"
     }
 
+[effect_pyramid_visible]
+type    = "Visible_Walls"
+value	= 64
+reqs	=
+    { "type",     "name",           "range", "present"
+      "Building", "Pyramids",       "City",   TRUE
+      "MinSize",  "20",             "City",   FALSE    ; disappears in post-modern metropolis age
+    }
 [effect_pyramids]
 type    = "Growth_Food"
 value	= 25
@@ -2358,6 +2461,48 @@ reqs	=
     { "type", "name", "range"
       "Building", "Shakespeare's Theatre", "City"
     }
+;************************************************************************ Sphinx
+[effect_sphinx_visible]
+type    = "Visible_Walls"
+value	= 8192
+reqs	=
+    { "type",     "name",           "range", "present"
+      "Building", "The Sphinx",     "City",   TRUE
+      "Tech",     "Philosophy",     "Player", FALSE
+    }
+[effect_sphinx_tile]
+type    = "Output_Penalty_Tile"
+value = 100
+reqs	=
+    { "type",     "name",       "range"
+      "Building", "The Sphinx", "City"
+    }
+[effect_sphinx_luxury]
+type    = "Output_Add_Tile"
+value = 1
+reqs	=
+    { "type",       "name",        "range"
+      "Building",   "The Sphinx",  "City"
+      "CityTile",   "Center",      "Local"
+      "OutputType", "Luxury",      "Local" 
+    }
+[effect_sphinx_corruption]
+type    = "Output_Waste_Pct"
+value	= 60
+reqs	=
+    { "type",       "name",       "range" 
+      "Building",   "The Sphinx", "City" 
+      "OutputType", "Trade",      "Local" 
+    }
+[effect_sphinx_corruption1]
+type    = "Output_Waste_Min_Reduce"
+value	= 1    ; if there is corruption, then at least 1 corruption will be removed
+reqs	=
+    { "type",       "name",       "range" 
+      "Building",   "The Sphinx", "City" 
+      "OutputType", "Trade",      "Local" 
+    }
+;****************************************************************************
 
 [effect_statue_of_liberty]
 type    = "Any_Government"
