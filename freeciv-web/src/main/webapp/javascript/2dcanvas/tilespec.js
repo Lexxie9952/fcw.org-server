@@ -1881,14 +1881,13 @@ function get_tile_river_like_sprite(ptile, extra, prefix, abort_outlets)
   // have it.
   if (typeof EXTRA_NAVALBASE === 'undefined') var EXTRA_NAVALBASE = EXTRA_NONE;
 
-
   // TO DO: if these are predefined it might be less processing time. Rulesets could have any
   // combination of Canal, Waterway, or Navalbase, and this just assumes what we've done with
   // MP2 and AG. 
   // Handle "integrates" feature of roads. Has to be hard-coded until server gives this info.
 
   // Ruleset with Naval base but no Waterway (old MP2):
-  if (typeof EXTRA_WATERWAY === 'undefined') {
+  if (client_rules_flag[CRF_CANALS] && typeof EXTRA_WATERWAY === 'undefined') {
     // process in order of frequency
     if (extra == EXTRA_RIVER) {
       extra2 = EXTRA_NAVALBASE;
