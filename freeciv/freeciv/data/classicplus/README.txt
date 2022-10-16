@@ -12,7 +12,7 @@ Classic+ is a refresh of Classic to incorporate years of experience, as well as 
 
 The original Classic ruleset has a long history. It started before Civilization II&trade; came out. After Civ2, Classic became a synthesis of three things. Civilization I, which it was built from, new features from Civilization II&trade; that were better, a few improvements from other Civ3, and a touch of salt and spice. The result is a Classic Civilization experience that is more "classic" than any of the original games—in some people's view at least! 
 
-Classic+ starts with Classic and stays true to its spirit, with some better graphics, sounds, bug fixes, units, and some fun new features.
+Classic+ starts with Classic and stays true to its spirit, with some better graphics, sounds, bug fixes, units, and some fun new features. Since Classic+ has to stay true to original Classic, the extra features are intended more as a transition and gateway drug into the world of MP2 rulesets.
 
 After getting your feet wet with Classic+, you are encouraged to try more modern rulesets, such as:
 
