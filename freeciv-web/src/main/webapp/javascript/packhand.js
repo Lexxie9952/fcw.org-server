@@ -1120,6 +1120,7 @@ function handle_ruleset_control(packet)
       client_rules_flag[CRF_GRANULAR_COMBAT_STRENGTH] = 10;
       client_rules_flag[CRF_SEABRIDGE]=true;
       client_rules_flag[CRF_EXTRA_WATCHTOWER]=true;
+      client_rules_flag[CRF_SPECIAL_UNIT_ATTACKS]=true;
     break;
 
     case "Civ2Civ3 ruleset":
