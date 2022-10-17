@@ -2810,7 +2810,11 @@ static bool city_build_unit(struct player *pplayer, struct city *pcity)
         // i, utype_name_translation(utype));
       }
 
-      punit = city_create_unit(pcity, utype);
+      /* Multislot units also need to be checked for build legality,
+       * otherwise you can make Howitzers in the feudal age! */
+      if (can_city_build_unit_direct(pcity, utype)) {
+        punit = city_create_unit(pcity, utype);
+      } else punit = NULL;
 
       /* Check if the city still exists (script might have removed it).
        * If not, we assume any effects / announcements done below were
@@ -2834,31 +2838,31 @@ static bool city_build_unit(struct player *pplayer, struct city *pcity)
                         utype_name_translation(utype), city_link(pcity),
                         utype_name_translation(utype));
         }
-      }
 
-      /* After we created the unit remove the citizen. This will also
-       * rearrange the worker to take into account the extra resources
-       * (food) needed. */
-      if (pop_cost > 0) {
-        city_reduce_size(pcity, pop_cost, NULL, "unit_built");
-      }
+        /* After we created the unit remove the citizen. This will also
+        * rearrange the worker to take into account the extra resources
+        * (food) needed. */
+        if (pop_cost > 0) {
+          city_reduce_size(pcity, pop_cost, NULL, "unit_built");
+        }
 
-      /* to eliminate micromanagement, we only subtract the unit's cost */
-      pcity->before_change_shields -= unit_shield_cost;
-      pcity->shield_stock -= unit_shield_cost;
+        /* to eliminate micromanagement, we only subtract the unit's cost */
+        pcity->before_change_shields -= unit_shield_cost;
+        pcity->shield_stock -= unit_shield_cost;
 
-      if (pop_cost > 0) {
-        /* Additional message if the unit has population cost. */
-        notify_player(pplayer, city_tile(pcity), E_UNIT_BUILT_POP_COST,
-                      ftc_server,
-                      /* TRANS: "<unit> cost... <city> shrinks..."
-                       * Plural in "%d population", not "size %d". */
-                      PL_("[`minus`] [`%s`] %s cost %d population. %s shrinks to size %d.",
-                          "[`minus`] [`%s`] %s cost %d population. %s shrinks to size %d.",
-                          pop_cost),
-                      utype_name_translation(utype),
-                      utype_name_translation(utype), pop_cost,
-                      city_link(pcity), city_size_get(pcity));
+        if (pop_cost > 0) {
+          /* Additional message if the unit has population cost. */
+          notify_player(pplayer, city_tile(pcity), E_UNIT_BUILT_POP_COST,
+                        ftc_server,
+                        /* TRANS: "<unit> cost... <city> shrinks..."
+                        * Plural in "%d population", not "size %d". */
+                        PL_("[`minus`] [`%s`] %s cost %d population. %s shrinks to size %d.",
+                            "[`minus`] [`%s`] %s cost %d population. %s shrinks to size %d.",
+                            pop_cost),
+                        utype_name_translation(utype),
+                        utype_name_translation(utype), pop_cost,
+                        city_link(pcity), city_size_get(pcity));
+        }
       }
 
       if (i != 0 && worklist_length(pwl) > 0) {
