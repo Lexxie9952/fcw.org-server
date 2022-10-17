@@ -2626,6 +2626,8 @@ static bool city_build_building(struct player *pplayer, struct city *pcity)
 static struct unit *city_create_unit(struct city *pcity,
                                      const struct unit_type *utype)
 {
+  if (!pcity || !utype) return NULL;   // 17Oct2022 attempt to avoid segfault
+
   struct player *pplayer = city_owner(pcity);
   struct unit *punit;
   int saved_unit_id;
@@ -2634,6 +2636,14 @@ static struct unit *city_create_unit(struct city *pcity,
                       city_production_unit_veteran_level(pcity, utype),
                       pcity->id, 0);
   pplayer->score.units_built++;
+  if (!punit) {
+          notify_conn(game.est_connections, city_tile(pcity),
+                  E_WONDER_WILL_BE_BUILT, ftc_server,
+                  _("Notice: %s in %s creating illegal segfault. Report to admin immediately!"),
+                  utype_name_translation(utype), 
+                  city_link(pcity));
+    return NULL;              // 17Oct2022 line below was segfault:
+  }
   saved_unit_id = punit->id;
 
   /* If city has a rally point set, give the unit a move order. */
