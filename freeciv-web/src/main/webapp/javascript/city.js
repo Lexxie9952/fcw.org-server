@@ -1459,6 +1459,7 @@ function can_city_build_now(pcity, kind, value)
 **************************************************************************/
 function can_city_build_later(pcity, kind, value)
 {
+  const gov_id = city_owner(pcity).government
   var can_build_later = false;
   var can_build = can_city_build_now(pcity, kind, value)
   var req_num = undefined;
@@ -2761,8 +2762,6 @@ function city_worklist_dialog(pcity)
 **************************************************************************/
 function populate_worklist_production_choices(pcity)    
 {
-  //const gov_id = players[client.conn.playing.playerno].government;
-  const gov_id = city_owner(pcity).government
   var small = is_small_screen();
   var can_build = false;
   var can_build_later = false;
