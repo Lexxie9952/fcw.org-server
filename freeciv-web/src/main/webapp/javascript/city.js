@@ -1366,17 +1366,6 @@ function generate_production_list(pcity)
 }
 
 /**************************************************************************
-  Return whether given city can build given unit, ignoring whether unit
-  is obsolete.
-**************************************************************************/
-function can_city_build_unit_direct(pcity, punittype)
-{
-  /* TODO: implement*/
-  return true;
-}
-
-
-/**************************************************************************
   Return whether given city can build given unit; returns FALSE if unit is
   obsolete.
 **************************************************************************/
@@ -1386,14 +1375,16 @@ function can_city_build_unit_now(pcity, punittype_id)
           && pcity['can_build_unit'][punittype_id] == "1");
 }
 
-
 /**************************************************************************
   Return whether given city can build given building; returns FALSE if
   the building is obsolete.
 **************************************************************************/
 function can_city_build_improvement_now(pcity, pimprove_id)
 {
+  if (pimprove_id === null || pimprove_id === undefined) return false;
+
   return (pcity != null && pcity['can_build_improvement'] != null
+          && !city_has_building(pcity, pimprove_id) //redundant insurance for line below
           && pcity['can_build_improvement'][pimprove_id] == "1");
 }
 /**************************************************************************
@@ -1403,6 +1394,8 @@ function can_city_build_improvement_now(pcity, pimprove_id)
 **************************************************************************/
 function can_city_queue_improvement(pcity, pimprove_id)
 {
+  if (pimprove_id === null || pimprove_id === undefined) return false;
+
   // City CAN'T queue what it already has:
   if (city_has_building(pcity, pimprove_id)) return false;
   // Don't show items already queued:
@@ -1430,6 +1423,27 @@ function can_city_queue_improvement(pcity, pimprove_id)
   return false;
 }
 /**************************************************************************
+  Return whether given city can queue given item to worklist
+**************************************************************************/
+function can_city_queue_item(pcity, kind, value)
+{
+  var can_build = can_city_build_now(pcity, kind, value);
+  var can_build_later = can_city_build_later(pcity, kind, value);
+
+    // Suppress improvements already in queue (except Coinage)
+    if (can_build && kind==VUT_IMPROVEMENT) {
+      if (improvements[value]['name'] != "Coinage" 
+          && (city_has_building_in_queue(pcity, value)
+          || city_has_building(pcity, value))
+          ) {
+        
+        return false;
+      }
+    }
+
+    return (can_build | can_build_later);
+}
+/**************************************************************************
   Return whether given city can build given item.
 **************************************************************************/
 function can_city_build_now(pcity, kind, value)
@@ -1440,10 +1454,91 @@ function can_city_build_now(pcity, kind, value)
        : can_city_build_improvement_now(pcity, value));
 }
 /**************************************************************************
+  Return whether given city can build the item very soon because upcoming
+  research or a pre-req building in the queue ahead of it.
+**************************************************************************/
+function can_city_build_later(pcity, kind, value)
+{
+  var can_build_later = false;
+  var can_build = can_city_build_now(pcity, kind, value)
+  var req_num = undefined;
+
+  // Suppress improvements already in queue (except Coinage)
+  if (can_build && kind==VUT_IMPROVEMENT) {
+    if (improvements[value]['name'] != "Coinage" 
+        && city_has_building_in_queue(pcity, value)) {
+          can_build_later=false;
+    }
+  }
+  else if (!can_build && techs[client.conn.playing['researching']]) { // player must be researching something
+    if (kind == VUT_IMPROVEMENT) {
+      if (improvements[value]['reqs'].length > 0 && client.conn.playing['researching'] ) {
+        /* FIX: former code assumed improvements[value]['reqs'][0]['kind'] == 1 (tech req kind), and that the 
+           ruleset has the tech req first. What this code does now is loop through all reqs looking for kind==1,
+           find the index of that req instead of hard-coding req index 0. This fixes bugs such as a req that
+           building 56 is not present in req index 0 was interpreted as improvement had tech 56 as a req, so if
+           researching tech 56, it would falsely show this improvement as "can_build_later."
+        ....................
+        Briefly tested fix which replaces hardcoded [0] with [req_num] for testing a positive tech requirement of
+        the improvement. Replaced the [0] with [req_num] in the code block below it...*/
+        for (req_index=0; req_index<improvements[value]['reqs'].length; req_index++) {
+          if (improvements[value]['reqs'][req_index]['kind'] == 1
+              && improvements[value]['reqs'][req_index]['present'] == true) {
+
+              // found a req that positively requires presence/possession of a tech; record the req_num and exit
+              req_num = req_index;
+              break;
+          }
+        } 
+        if (req_num !== undefined) { // <end fix> 
+          if (improvements[value]['reqs'][req_num]['value'] == techs[client.conn.playing['researching']]['id']) {
+            if (!city_has_building_in_queue(pcity, value)) {
+              // check if there is second req blocking this (i.e. req for coastal/river)
+              if (improvements[value]['reqs'].length > 1) {
+                //second req type, 1==tech, 3==building, 14=coastal, 23=river adjacency
+                var req_type = improvements[value]['reqs'][1]['kind'];
+                // TODO: this lazy heuristic hack disqualifies all req_type>3 because checking for coastal is 14
+                // but checking for other common stuff is almost always kind 1,2,3. TODO, a big chain of req type
+                // checking in a separate function for seeing which reqs are fulfilled, gradually expanded as 
+                // made necessary by rulesets...
+                if (req_type > 3) can_build_later = false; // forbid unusual reqs (avoid showing illegal choices)
+                else can_build_later = true;
+              } else can_build_later = true; // no second req, so show item
+            }
+          }
+        } 
+      }
+    } else if (kind == VUT_UTYPE) {
+      // Player is researching the tech for the unit, so we usually will let them queue it later in list:
+      if (unit_types[value]['tech_requirement'] == techs[client.conn.playing['researching']]['id']) {
+        if (unit_types[value].gov_requirement < GOV_LAST && unit_types[value].gov_requirement != gov_id) {
+          /* ...unless there is also a Govt req for it, e.g., Fanatics, and they aren't the right Gov:  */
+          can_build_later = false;
+        } 
+        else can_build_later = true;
+        /* ...unless it's a ship and someone wants to hard-code for checking landlocked, river, canal, ocean, and compare to 
+           unit_class native types and all that jazz which gets very complex and performance laggy for every unit in the list:  */ 
+        var class_name = unit_classes[unit_types[value]['unit_class_id']]['name'].replace("?unitclass:","");
+        if (class_name == "Sea" || class_name == "RiverShip" || class_name == "Submarine" || class_name == "Trireme") 
+          can_build_later = false;
+      }
+    }
+  }
+  // Special case: tech reqs met but required building not present; add to list if the pre-req building is in the worklist
+  if (!can_build && kind == VUT_IMPROVEMENT) {
+    if (can_city_queue_improvement(pcity, value))
+      can_build_later = true;
+  }
+
+  return can_build_later;
+}
+/**************************************************************************
   Return TRUE iff the city has this building in it.
 **************************************************************************/
 function city_has_building(pcity, improvement_id)
 {
+  if (improvement_id === null || improvement_id === undefined) return false;
+
   return 0 <= improvement_id && improvement_id < ruleset_control.num_impr_types
     && pcity['improvements'] && pcity['improvements'].isSet(improvement_id);
 }
@@ -1452,6 +1547,7 @@ function city_has_building(pcity, improvement_id)
 **************************************************************************/
 function city_has_building_in_queue(pcity, improvement_id)
 {
+  if (improvement_id === null || improvement_id === undefined) return false;
   if (pcity == null || pcity['worklist'] == null) return false;
 
   // Go through each item in worklist looking for improvement
@@ -2668,6 +2764,8 @@ function populate_worklist_production_choices(pcity)
   //const gov_id = players[client.conn.playing.playerno].government;
   const gov_id = city_owner(pcity).government
   var small = is_small_screen();
+  var can_build = false;
+  var can_build_later = false;
 
   if (!sorted_improvements.length) build_sorted_improvements_array();
 
@@ -2685,7 +2783,7 @@ function populate_worklist_production_choices(pcity)
     // Don't show units if user clicked option to only show improvements
     if (kind == VUT_UTYPE && opt_show_improvements_only) continue;
 
-    var can_build = can_city_build_now(pcity, kind, value);
+    can_build = can_city_build_now(pcity, kind, value);
 
     // SUPPRESSIONS of improvements from the list:
     if (can_build && kind==VUT_IMPROVEMENT) {
@@ -2696,72 +2794,9 @@ function populate_worklist_production_choices(pcity)
       }
     }
 
-    var can_build_later = false; // flag for items buildable after tech discovery or making a pre-req building
+    // flag for items buildable after tech discovery or making a pre-req building
+    can_build_later = can_city_build_later(pcity, kind, value); 
 
-    // Let player add illegal choices which are legal after discovering current research
-    let req_num = undefined;
-    if (!can_build && techs[client.conn.playing['researching']]) { // player must be researching something
-      if (kind == VUT_IMPROVEMENT) {
-        // TODO: this whole block of code should be turned into function city_can_build_soon(improv_id,city_id)
-        if (improvements[value]['reqs'].length > 0 && client.conn.playing['researching'] ) {
-          /* FIX: former code assumed improvements[value]['reqs'][0]['kind'] == 1 (tech req kind), and that the 
-             ruleset has the tech req first. What this code does now is loop through all reqs looking for kind==1,
-             find the index of that req instead of hard-coding req index 0. This fixes bugs such as a req that
-             building 56 is not present in req index 0 was interpreted as improvement had tech 56 as a req, so if
-             researching tech 56, it would falsely show this improvement as "can_build_later."
-          ....................
-          Briefly tested fix which replaces hardcoded [0] with [req_num] for testing a positive tech requirement of
-          the improvement. Replaced the [0] with [req_num] in the code block below it...*/
-          for (req_index=0; req_index<improvements[value]['reqs'].length; req_index++) {
-            if (improvements[value]['reqs'][req_index]['kind'] == 1
-                && improvements[value]['reqs'][req_index]['present'] == true) {
-
-                // found a req that positively requires presence/possession of a tech; record the req_num and exit
-                req_num = req_index;
-                break;
-            }
-          } 
-          if (req_num !== undefined) { // <end fix> 
-            if (improvements[value]['reqs'][req_num]['value'] == techs[client.conn.playing['researching']]['id']) {
-              if (!city_has_building_in_queue(pcity, value)) {
-                // check if there is second req blocking this (i.e. req for coastal/river)
-                if (improvements[value]['reqs'].length > 1) {
-                  //second req type, 1==tech, 3==building, 14=coastal, 23=river adjacency
-                  var req_type = improvements[value]['reqs'][1]['kind'];
-                  // TODO: this lazy heuristic hack disqualifies all req_type>3 because checking for coastal is 14
-                  // but checking for other common stuff is almost always kind 1,2,3. TODO, a big chain of req type
-                  // checking in a separate function for seeing which reqs are fulfilled, gradually expanded as 
-                  // made necessary by rulesets...
-                  if (req_type > 3) can_build_later = false; // forbid unusual reqs (avoid showing illegal choices)
-                  else can_build_later = true;
-                } else can_build_later = true; // no second req, so show item
-              }
-            }
-          } 
-        }
-      } else if (kind == VUT_UTYPE) {
-        // Player is researching the tech for the unit, so we usually will let them queue it later in list:
-        if (unit_types[value]['tech_requirement'] == techs[client.conn.playing['researching']]['id']) {
-          if (unit_types[value].gov_requirement < GOV_LAST && unit_types[value].gov_requirement != gov_id) {
-            /* ...unless there is also a Govt req for it, e.g., Fanatics, and they aren't the right Gov:  */
-            can_build_later = false;
-          } 
-          else can_build_later = true;
-          /* ...unless it's a ship and someone wants to hard-code for checking landlocked, river, canal, ocean, and compare to 
-             unit_class native types and all that jazz which gets very complex and performance laggy for every unit in the list:  */ 
-          var class_name = unit_classes[unit_types[value]['unit_class_id']]['name'].replace("?unitclass:","");
-          if (class_name == "Sea" || class_name == "RiverShip" || class_name == "Submarine" || class_name == "Trireme") 
-            can_build_later = false;
-          // TODO: make the above block re-usable in a separate function so super panel and empire tabs use it too.  
-        }
-      }
-    }
-    // Special case: tech reqs met but required building not present; add to list if the pre-req building is in the worklist
-    if (!can_build && kind == VUT_IMPROVEMENT) {
-      if (can_city_queue_improvement(pcity, production_list[a]['value']))
-        can_build_later = true;
-    }
-  
     if (can_build || can_build_later || opt_show_unreachable_items) {
       production_html += "<tr class='prod_choice_list_item kindvalue_item"
        + (can_build ? "" : " cannot_build_item")
@@ -2788,6 +2823,7 @@ function populate_worklist_production_choices(pcity)
        }
           //moved above production_html += "<td class='prod_choice_cost'>" + production_list[a]['build_cost'] + "</td></tr>";
      }
+
   }
   production_html += "</table>";
 
@@ -3063,9 +3099,10 @@ function send_city_worklist_add(city_id, kind, value)
     return;
   }
 
-  pcity['worklist'].push({"kind" : kind, "value" : value});
-
-  send_city_worklist(city_id);
+  if (can_city_queue_item(pcity, kind, value)) {
+    pcity['worklist'].push({"kind" : kind, "value" : value});
+    send_city_worklist(city_id);
+  }
 }
 
 /**************************************************************************
@@ -3073,11 +3110,17 @@ function send_city_worklist_add(city_id, kind, value)
 **************************************************************************/
 function city_change_production()
 {
-  if (production_selection.length === 1) {
-    send_city_change(active_city['id'], production_selection[0].kind,
-                     production_selection[0].value);
+  var kind = production_selection[0].kind;
+  var value = production_selection[0].value;
 
-    unselect_improvements();
+  if (production_selection.length === 1) {
+    if (can_city_build_now(active_city, kind, value)) {
+
+          send_city_change(active_city['id'], production_selection[0].kind,
+                          production_selection[0].value);
+
+          unselect_improvements();
+    }
   }
   // default this prod selection for mass-selection change prod button:
   set_mass_prod_city(active_city['id']);
@@ -3091,9 +3134,18 @@ function city_change_production()
 function city_add_to_worklist()
 {
   if (production_selection.length > 0) {
+
+    for (var i=0; i<production_selection.length; i++) {
+      let kind = production_selection[i].kind;
+      let value = production_selection[i].value;
+    
+      if (!can_city_queue_item(active_city, kind, value)) {
+        return;  // Don't add illegal items to worklist!
+      }
+    }
+
     active_city['worklist'] = active_city['worklist'].concat(production_selection);
     send_city_worklist(active_city['id']);
-
     unselect_improvements();
   }
 }
@@ -3104,7 +3156,7 @@ function city_add_to_worklist()
 *************************************************************************/
 function unselect_improvements()
 {
-    /* only units remain selected in right panel after adding to worklist,
+   /* only units remain selected in right panel after adding to worklist,
     * because you might want to add more of them. Buildings already
     * queued should be removed: */
    production_selection = production_selection.filter(function(element, index, arr){
@@ -3120,6 +3172,10 @@ function unselect_improvements()
 *************************************************************************/
 function city_add_improv_to_worklist(city_id, z)
 {
+  if (!can_city_queue_item(cities[city_id], kind, value)) {
+    return;  // Don't add illegal items to worklist!
+  }
+
   //console.log("city_add_improv_to_worklist("+cities[city_id]['name']+","+improvements[z]['name']+")");
   send_city_worklist_add(city_id, 3, z); //3=worklist genus code for improvement
 
@@ -3186,6 +3242,15 @@ function handle_current_worklist_direct_remove()
 **************************************************************************/
 function city_insert_in_worklist()
 {
+  for (var j=0; j<production_selection.length; j++) {
+    var kind = production_selection[j].kind;
+    var value = production_selection[j].value;
+
+    if (!can_city_queue_item(active_city, kind, value)) {
+      return;  // Don't add illegal items to worklist!
+    }
+  }
+
   var count = Math.min(production_selection.length, MAX_LEN_WORKLIST);
   if (count === 0) return;
 
@@ -3288,6 +3353,15 @@ function city_exchange_worklist_task()
 {
   var prod_l = production_selection.length;
   if (prod_l === 0) return;
+
+  for (var j=0; j<production_selection.length; j++) {
+    var kind = production_selection[j].kind;
+    var value = production_selection[j].value;
+
+    if (!can_city_queue_item(active_city, kind, value)) {
+      return;  // Don't add illegal items to worklist!
+    }
+  }
 
   var i;
   var same = true;
