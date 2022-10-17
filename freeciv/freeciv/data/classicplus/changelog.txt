@@ -71,7 +71,9 @@ Added Crusaders.
 Caravans 30 shields.
 Added Jet Fighter
 Added Elephants
-Cleaned up tech tree, redundant reqs and a few bad paths 
+Cleaned up tech tree, redundant reqs and a few bad paths
+Added Code of Hammurabi and The Sphinx
+Added Nile River bonus effects
 
 
 things to implement
