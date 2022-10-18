@@ -1492,7 +1492,7 @@ reqs           =
     }
 build_time     = 5
 removal_time   = 0
-defense_bonus  = 67
+defense_bonus  = 100
 native_to      = "Land", "Helicopter", "Balloon", "Zeppelin"
 flags          = "NativeTile", "Refuel", "NoStackDeath", "FortressHeal"
 helptext       = _("\

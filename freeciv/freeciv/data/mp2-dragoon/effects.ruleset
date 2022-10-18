@@ -1069,7 +1069,7 @@ reqs    =
     }
 ; ****** ^^ defense_bonus_correctives ^^ *************************************
 
-; Vision benefit from fortress watchtowers
+; Vision benefit from fortress
 [effect_fortress_vision]
 type    = "Unit_Vision_Radius_Sq"
 value   = 8   

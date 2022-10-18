@@ -155,14 +155,24 @@ reqs    =
       "UnitClassFlag",  "TerrainSpeed", "Local" ;all Land__ classes
       "VisionLayer",    "Main",         "Local"
     }
-; Vision benefit from fortress watchtowers
+; Vision benefit from fortress
 [effect_fortress_vision]
 type    = "Unit_Vision_Radius_Sq"
 value   = 2                       ; 8 +2 = 10, 3x3 -3 tiles in each corner 
 reqs    =
     { "type", "name", "range"
-      "Extra", "Fortress", "tile"
+      "Extra", "Fortress", "Local"
       "Tech", "Invention", "player"
+      "UnitClass", "Land", "Local"
+      "VisionLayer", "Main", "Local"
+    }
+; Vision benefit from watchtower
+[effect_watchtower_vision]
+type    = "Unit_Vision_Radius_Sq"
+value   = 9                       ; 8 +9 = 17, giving 1 more tile than unoccupied 
+reqs    =
+    { "type", "name", "range"
+      "Extra", "Watchtower", "Local"
       "UnitClass", "Land", "Local"
       "VisionLayer", "Main", "Local"
     }
@@ -189,6 +199,23 @@ reqs    =
     { "type", "name", "range"
       "Extra", "Fortress", "Tile"
       "UnitClass", "Land", "Local"
+    }
+[effect_fort_defense]
+type    = "Defend_Bonus"
+value   = 33
+reqs    =
+    { "type",      "name",             "range", "present"
+      "Extra",     "Fort",             "Local", TRUE  
+      "Extra",     "Fortress",         "Local", FALSE ; Fortress calculated separately even if a fort is under it.
+    }
+; Fort HP regen
+[effect_fort_hp_regen]
+type    = "HP_Regen"
+value   = 10
+reqs    =
+    { "type",          "name",         "range"
+      "Extra",         "Fort",         "Tile"
+      "UnitClassFlag", "TerrainSpeed", "Local" ; all Land_ classes
     }
 
 ; Base vision range - radius of vision is sqrt(5) = 2.24
