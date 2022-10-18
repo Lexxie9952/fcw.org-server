@@ -282,7 +282,7 @@ function unit_cargo_room(punit) {
 function unit_can_deboard(punit)
 {
   if (!punit) return false;
-  if (!client_rules_flag[CRF_MP2]) 
+  if (!client_rules_flag[CRF_DEBOARD_RESTRICT]) 
     return true; // no actionenabler restrictions on other rulesets
   //****************************************************************** */
   var tunit=null,ttype=null,tclass=null;

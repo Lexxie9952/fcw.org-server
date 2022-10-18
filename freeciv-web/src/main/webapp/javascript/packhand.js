@@ -1059,6 +1059,7 @@ function handle_ruleset_control(packet)
       client_rules_flag[CRF_EXTRA_QUAY]=true;
       client_rules_flag[CRF_MAJOR_NUKES]=true; // ruleset has them and server setting to disallow them
       client_rules_flag[CRF_SURGICAL_PILLAGE]=true;
+      client_rules_flag[CRF_DEBOARD_RESTRICT]=true;
       $("#order_airbase").attr("title", "Build Airbase/Radar (Shift-E)");
 
     case "Multiplayer-Evolution ruleset":
@@ -1102,6 +1103,7 @@ function handle_ruleset_control(packet)
       client_rules_flag[CRF_NO_WASTE]=true;
       break;
     case "Classic+ ruleset":
+      client_rules_flag[CRF_DEBOARD_RESTRICT]=true;
       client_rules_flag[CRF_CARGO_HEURISTIC]=true;
       client_rules_flag[CRF_NO_UNIT_GOLD_UPKEEP]=true;
       client_rules_flag[CRF_NO_WASTE]=true;
