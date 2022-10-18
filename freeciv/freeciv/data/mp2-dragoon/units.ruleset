@@ -4140,7 +4140,7 @@ Boats were used pre-historically for exploration,\
  near shore. Boats can carry one unit and do ancient\
  commerce：building Wonders or setting up Trade Routes.\
  Early bartering may help you advance faster or create\
- relations with ancient neighbors.\
+ relations with ancient neighbors. Everyone can see a Boat’s cargo.\
 ")
 
 [unit_trireme]
@@ -5918,7 +5918,7 @@ Wagons are the first Commerce unit that can travel by land. Compared to a Carava
 "), _("\
 Wagons allow units with less than 3 move points to travel your roads faster.\
  Any cargo can board a Wagon anywhere; but needs a city, quay, or base to deboard.\
- Cargo can disembark anywhere, but it uses up all move points. \n\
+ Cargo can disembark anywhere, but it uses up all move points. Everyone can see a Wagon’s cargo.\n\
 Read the help on Caravans to see what Commerce units can do.\
 ")
 
