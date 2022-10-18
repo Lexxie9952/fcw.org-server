@@ -3684,6 +3684,8 @@ set =
       "nuclearwinter_percent", 50, FALSE
       "nukes_minor", "ENABLED", FALSE      ; set to DISABLED to completely disallow nuclear detonations
       "nukes_major", "ENABLED", FALSE      ; set to DISABLED to disallow nuclear fusion weapons
+      "partisan_max_spawns", 2, FALSE      ; each city can spawn max. of 2 times
+      "partisan_turns", 2, FALSE           ; each city can spawn again 2 turns after last spawn
       "polarstrip", "DISABLED", FALSE      ; blocks making horizontal polar strips on most generators
       "razechance", 14, FALSE              ; each building has 1/7 chance to be lost/razed during a conquest (server default is 1/5)
       "revolen", 1, FALSE

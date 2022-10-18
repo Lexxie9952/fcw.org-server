@@ -2036,6 +2036,8 @@ set =
       "nuclearwinter_percent", 20, FALSE
       "nukes_minor", "ENABLED", FALSE      ; set to DISABLED to completely disallow nuclear detonations
       "nukes_major", "DISABLED", TRUE      ; set to ENABLED to allow nuclear fusion weapons
+      "partisan_max_spawns", 3, FALSE      ; each city can spawn max. of 3 times
+      "partisan_turns", 1, FALSE           ; each city can spawn again 1 turns after last spawn
       "revolen", 1, FALSE
       "separatepoles", FALSE, FALSE
       "slot_control", FALSE, TRUE          ; multiple units per turn

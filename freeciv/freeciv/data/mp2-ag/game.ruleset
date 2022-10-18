@@ -2263,6 +2263,8 @@ set =
       "landmass", 63, FALSE
       "minplayers", 0, FALSE
       "move_bonus_in_frags", "ENABLED", TRUE   ;locked
+      "partisan_max_spawns", 3, FALSE      ; each city can spawn max. of 3 times
+      "partisan_turns", 1, FALSE           ; each city can spawn again 1 turns after last spawn
       "nationset", "all", FALSE 
       "nuclearwinter_percent", 20, FALSE
       "nukes_minor", "ENABLED", FALSE      ; set to DISABLED to completely disallow nuclear detonations

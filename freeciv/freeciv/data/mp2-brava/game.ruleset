@@ -2370,6 +2370,8 @@ set =
       "nuclearwinter_percent", 15, FALSE
       "nukes_minor", "ENABLED", FALSE      ; set to DISABLED to completely disallow nuclear detonations
       "nukes_major", "ENABLED", FALSE      ; set to DISABLED to disallow nuclear fusion weapons
+      "partisan_max_spawns", 3, FALSE      ; each city can spawn max. of 3 times
+      "partisan_turns", 1, FALSE           ; each city can spawn again 1 turns after last spawn
       "polarstrip", "DISABLED", FALSE      ; blocks making horizontal polar strips on most generators
       "revolen", 1, FALSE
       "restrictinfra", "ENABLED", FALSE    ; required for mp2 mechanics.
