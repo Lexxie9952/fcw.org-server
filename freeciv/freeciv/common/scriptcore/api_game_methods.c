@@ -30,6 +30,7 @@
 #include "map.h"
 #include "movement.h"
 #include "nation.h"
+#include "player.h"
 #include "research.h"
 #include "tech.h"
 #include "terrain.h"
@@ -268,14 +269,33 @@ int api_methods_city_inspire_partisans(lua_State *L, City *self, Player *inspire
       inspired = TRUE;
     }
   }
+  /* Other mechanics preventing inspiration go here. Currently, disallow
+   * faux enemies and violations of max spawns and spawn frequency. */
+  if (inspired) {
+    if (gives_shared_vision(self->owner, inspirer)
+        || gives_shared_vision(inspirer, self->owner)
+        || BV_ISSET(self->owner->server.really_gives_vision, player_index(inspirer))
+        || BV_ISSET(inspirer->server.really_gives_vision, player_index(self->owner))
+        || (self->partisan_spawn_turn + game.server.partisan_turns > game.info.turn)
+        || (self->partisan_spawn_count >= game.server.partisan_max_spawns)) {
+
+      inspired = FALSE;
+    }
+  }
 
   if (inspired) {
     /* Cannot use get_city_bonus() as it would use city's current owner
      * instead of inspirer. */
-    return get_target_bonus_effects(NULL, inspirer, NULL, self, NULL,
-                                    city_tile(self), NULL, NULL, NULL,
-                                    NULL, NULL, EFT_INSPIRE_PARTISANS,
-                                    V_COUNT);
+    int will_spawn = get_target_bonus_effects(NULL, inspirer, NULL, self, NULL,
+                                             city_tile(self), NULL, NULL, NULL,
+                                             NULL, NULL, EFT_INSPIRE_PARTISANS,
+                                             V_COUNT);
+    if (will_spawn > 0) { /* record iff spawn */
+      self->partisan_spawn_turn = game.info.turn;
+      self->partisan_spawn_count++;
+    }
+
+     return will_spawn;
   }
 
   return 0;

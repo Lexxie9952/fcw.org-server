@@ -1798,6 +1798,27 @@ static struct setting settings[] = {
            GAME_MAX_NUCLEAR_WINTER_PERCENT,
            GAME_DEFAULT_NUCLEAR_WINTER_PERCENT)
 
+    GEN_INT("partisan_max_spawns", game.server.partisan_max_spawns,
+           SSET_RULES_FLEXIBLE, SSET_MILITARY, SSET_RARE, ALLOW_NONE, ALLOW_CTRL,
+           N_("Maximum number of partisan spawns per city"),
+           N_("This setting regulates the maximum number of times a city can spawn "
+           "partisans, before the recruitment base is depleted, and it can no longer " 
+           "generate partisans."), NULL, NULL, NULL,
+           GAME_MIN_PARTISAN_MAX_SPAWNS,
+           GAME_MAX_PARTISAN_MAX_SPAWNS,
+           GAME_DEFAULT_PARTISAN_MAX_SPAWNS)
+
+    GEN_INT("partisan_turns", game.server.partisan_turns,
+        SSET_RULES_FLEXIBLE, SSET_MILITARY, SSET_RARE, ALLOW_NONE, ALLOW_CTRL,
+        N_("Number of turns before a city can spawn partisans again"),
+        N_("This setting sets how frequently a city can spawn partisans. For "
+        "example: 0 = unlimited spawns on the same turn; 1 = must wait a "
+        "turn between spawnings, 10 = must wait ten turns to spawn again. " 
+        "generate partisans."), NULL, NULL, NULL,
+        GAME_MIN_PARTISAN_TURNS,
+        GAME_MAX_PARTISAN_TURNS,
+        GAME_DEFAULT_PARTISAN_TURNS)
+
   GEN_INT("pax_dei_counter", game.server.pax_dei_counter,
            SSET_RULES_FLEXIBLE, SSET_MILITARY, SSET_RARE, ALLOW_BASIC, ALLOW_CTRL, // let GM reset it after re-load .sav game
            N_("Pax Dei counter"),

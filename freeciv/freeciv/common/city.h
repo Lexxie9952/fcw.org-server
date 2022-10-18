@@ -365,6 +365,12 @@ struct city {
                                    calculated within the server and send to
                                    the clients as the clients do not have all
                                    information about the trade cities */
+  int partisan_spawn_turn;      /* not saved but should be; last turn with a
+                                   partisan spawn; regulates unnatural situations
+                                   like "partisan factories" */
+  int partisan_spawn_count;     /* not saved but should be; total number of spawns
+                                   city has had */
+
   int turn_plague;              /* last turn with an illness in the city */
   int city_radius_sq;           /* current squared city radius */
 

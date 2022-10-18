@@ -190,6 +190,8 @@ struct civ_game {
       int num_phases;
       int occupychance;
       int onsetbarbarian;
+      int partisan_max_spawns;
+      int partisan_turns;
       bool pax_dei_set;
       int pax_dei_counter;
       int pingtime;
@@ -471,6 +473,14 @@ extern struct world wld;
 #define GAME_DEFAULT_NUCLEAR_WINTER_PERCENT 100 // controls threshold/likelihood for it to happen
 #define GAME_MIN_NUCLEAR_WINTER_PERCENT 1   
 #define GAME_MAX_NUCLEAR_WINTER_PERCENT 10000
+
+#define GAME_DEFAULT_PARTISAN_MAX_SPAWNS 50000   // Maximum num. of times each city can spawn partisans
+#define GAME_MIN_PARTISAN_MAX_SPAWNS 0
+#define GAME_MAX_PARTISAN_MAX_SPAWNS 50000
+
+#define GAME_DEFAULT_PARTISAN_TURNS 0             // #turns city must wait before it can spawn again, 0=none
+#define GAME_MIN_PARTISAN_TURNS 0
+#define GAME_MAX_PARTISAN_TURNS 5000
 
 #define GAME_DEFAULT_PAX_DEI_COUNTER  13  // Number of turns of Pax Dei counter when wonder is first built.
 #define GAME_MIN_PAX_DEI_COUNTER      0

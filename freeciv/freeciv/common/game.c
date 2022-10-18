@@ -415,6 +415,8 @@ static void game_defaults(bool keep_ruleset_value)
     game.server.nuclear_winter_percent = GAME_DEFAULT_NUCLEAR_WINTER_PERCENT;
     game.server.nukes_minor       = GAME_DEFAULT_NUKES_MINOR;
     game.server.nukes_major       = GAME_DEFAULT_NUKES_MAJOR;
+    game.server.partisan_max_spawns = GAME_DEFAULT_PARTISAN_MAX_SPAWNS;
+    game.server.partisan_turns    = GAME_DEFAULT_PARTISAN_TURNS;
     game.server.pax_dei_set       = GAME_DEFAULT_PAX_DEI_SET;
     game.server.pax_dei_counter   = GAME_DEFAULT_PAX_DEI_COUNTER;
     game.server.plrcolormode      = GAME_DEFAULT_PLRCOLORMODE;
