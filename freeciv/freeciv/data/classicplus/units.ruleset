@@ -242,7 +242,7 @@ flags         = "DamageSlows", "AttackNonNative", "AttFromNonNative", "WaterVess
 name          = _("?unitclass:Helicopter")
 min_speed     = 1
 hp_loss_pct   = 5
-flags         = "CanOccupyCity", "CollectRansom", "Airliftable"
+flags         = "CanOccupyCity", "CollectRansom", "Airliftable", "Unreachable"
 
 [unitclass_air]
 ; /* TRANS: Unit class: used adjectivally */
@@ -462,7 +462,6 @@ flags         = "Unreachable", "DoesntOccupyTile"
 ;                 the "CanKillEscaping" unit type flag.
 ; "CanKillEscaping" = an attack from this unit ignores the "CanEscape" unit
 ;                 type flag.
-; "NeverProtects" = doesn’t protect reachable units on its tile from enemy
 ; "NeverBlocked"  = still not implemented in upstream Freeciv
 ; "MultiSlot"     = still not implemented in upstream Freeciv
 ; "NeverProtects" = doesn't protect reachable units on its tile from enemy
@@ -646,7 +645,7 @@ fuel          = 0
 city_size     = 1
 uk_happy      = 0
 uk_shield     = 0
-uk_food       = 2
+uk_food       = 1
 uk_gold       = 0
 flags         = "Cant_Fortify", "NonMil", "HasNoZOC", "AddToCity",
                 "Capturable", "Expellable", "Cant_Pillage", "Expellable"
@@ -798,6 +797,7 @@ move_rate     = 2
 vision_radius_sq = 8
 transport_cap = 0
 fuel          = 0
+city_size     = 0
 uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
@@ -986,6 +986,7 @@ uk_happy      = 1
 uk_shield     = 0
 uk_food       = 0
 uk_gold       = 1
+targets       = "Balloon", "Helicopter"
 flags         = "CantReachAir", "Capturer"
 roles         = "DefendGood", "DefendGoodStartUnit", "FirstBuild"
 helptext      = _("\
@@ -1056,6 +1057,7 @@ uk_happy      = 1
 uk_shield     = 0
 uk_food       = 0
 uk_gold       = 1
+targets       = "Balloon", "Helicopter"
 flags         = "IgTer", "CantReachAir", "Capturer"
 roles         = "DefendGood", "DefendGoodStartUnit"
 helptext      = _("\
@@ -1088,7 +1090,8 @@ uk_happy      = 1
 uk_shield     = 0
 uk_food       = 0
 uk_gold       = 1
-flags         = "NonNativeAttack", "CantReachAir", "Capturer"
+targets       = "Balloon", "Helicopter", "Zeppelin"
+flags         = "NonNativeAttack", "CantReachAir", "Capturer", "BeachLander"
 roles         = "DefendOk", "DefendOkStartUnit", "BarbarianSeaTech"
 helptext      = _("\
 Marines are infantry who are experts at marine warfare.\
@@ -1119,6 +1122,7 @@ uk_happy      = 1
 uk_shield     = 0
 uk_food       = 0
 uk_gold       = 1
+targets       = "Balloon", "Helicopter", "Zeppelin"
 flags         = "Capturer", "CantReachAir"
 roles         = "DefendOk", "DefendOkStartUnit"
 helptext      = _("\
@@ -1150,6 +1154,7 @@ uk_happy      = 1
 uk_shield     = 0
 uk_food       = 0
 uk_gold       = 1
+targets       = "Balloon", "Helicopter", "Zeppelin"
 flags         = "Paratroopers", "CantReachAir", "Capturer"
 roles         = "DefendOk", "DefendOkStartUnit"
 helptext      = _("\
@@ -1189,6 +1194,7 @@ uk_happy      = 1
 uk_shield     = 0
 uk_food       = 1
 uk_gold       = 0
+targets       = "Balloon", "Helicopter", "Zeppelin"
 flags         = "CantReachAir"
 roles         = "DefendGood", "DefendGoodStartUnit"
 helptext      = _("\
@@ -1450,6 +1456,7 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
+targets       = "Balloon", "Helicopter"
 flags         = "CantReachAir", "Capturer"
 roles         = "AttackFastStartUnit", "Hunter"
 helptext      = _("\
@@ -1481,6 +1488,7 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
+targets       = "Balloon", "Helicopter", "Zeppelin"
 flags         = "CantReachAir"
 roles         = "AttackFastStartUnit", "Hunter"
 helptext      = _("\
@@ -1547,6 +1555,7 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
+targets       = "Balloon"
 flags         = "CantReachAir"
 roles         = "AttackStrongStartUnit", "BarbarianTech", "BarbarianBuildTech"
 helptext      = _("\
@@ -1581,6 +1590,7 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
+targets       = "Balloon", "Zeppelin"
 flags         = "CantReachAir"
 roles         = "AttackStrongStartUnit"
 helptext      = _("\
@@ -1614,6 +1624,7 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
+targets       = "Balloon", "Zeppelin"
 flags         = "CantReachAir"
 roles         = "AttackStrongStartUnit"
 helptext      = _("\
@@ -1622,11 +1633,115 @@ Howitzers are upgraded artillery with improved\
  They can shoot over city walls, ignoring their effect.\
 ")
 
+[unit_balloon]
+name          = _("Balloon")
+class         = "Balloon"
+tech_req      = "Chemistry"
+obsolete_by   = "Zeppelin"
+graphic       = "u.balloon"
+graphic_alt   = "-"
+sound_move    = "m_balloon"
+sound_move_alt = "m_trireme"
+sound_fight   = "f_warrior"
+sound_fight_alt = "f_generic"
+build_cost    = 25
+pop_cost      = 0
+attack        = 0
+defense       = 0
+hitpoints     = 10
+firepower     = 1
+move_rate     = 5
+vision_radius_sq = 17
+transport_cap = 0
+fuel          = 2
+uk_happy      = 0
+uk_shield     = 0
+uk_food       = 0
+uk_gold       = 0
+flags         = "Unbribable", "HasNoZOC", "NeverProtects", "NonMil",
+                "NonProvoking", "NoVeteran", "SentryAlways"
+; No veteran levels (level name is never displayed)
+veteran_names = _("green")
+veteran_base_raise_chance = 0
+veteran_work_raise_chance = 0
+veteran_power_fact = 100
+veteran_move_bonus = 0
+roles         = ""
+helptext      = _("\
+Balloons gather intel on potential battle areas. They have great vision and\
+ are unreachable by units prior to Riflemen and Ironclads. They can stay in\
+ the air for one Turn Change before landing in a City, Base, Quay, or transport\
+ unit with cargo capacity of 4+. Balloons give sentry reports of nearby unit\
+ movements even when not on sentry. Balloons do not block units under them\
+ from being attacked, and can’t fly over mountains.\
+"), _("
+NOTE：GOTO disallows unit loss from lack of fuel. You\
+ can override this by moving to adjacent tiles.\
+")
+
+[unit_zeppelin]
+name          = _("Zeppelin")
+class         = "Zeppelin"
+tech_req      = "Combustion"
+obsolete_by   = "None"
+graphic       = "u.zeppelin"
+graphic_alt   = "-"
+sound_move    = "m_balloon"
+sound_move_alt = "m_trireme"
+sound_fight   = "f_musketeers"
+sound_fight_alt = "f_riflemen"
+build_cost    = 50
+pop_cost      = 0
+attack        = 20
+defense       = 10
+hitpoints     = 20
+firepower     = 2
+move_rate     = 7
+vision_radius_sq = 24
+transport_cap = 0
+fuel          = 7
+city_size     = 0
+uk_happy      = 0
+uk_shield     = 0
+uk_food       = 0
+uk_gold       = 0
+flags         = "Unbribable", "AirAttacker", "HasNoZOC", "NeverProtects",
+                "Bombarder", "Provoking", "SentryAlways", "CantReachAir"
+veteran_names =
+  _("?vet_rank:green"),
+  _("?vet_rank:veteran"),
+  _("?vet_rank:hardened"),
+  _("?vet_rank:elite"),
+  _("?vet_rank:crack"),
+  _("?vet_rank:ace"),
+  _("?vet_rank:top gun")
+veteran_base_raise_chance = 50, 33, 20, 15, 15, 15, 0
+veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
+veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
+veteran_move_bonus = 0, 0, 0, 0, 10080, 10080, 10080
+roles         = ""
+helptext      = _("\
+As new technology inspires the upgrade of Balloons, the Zeppelin appears.\
+ In theory, it can be used for tactical advantage in combat. However,\
+ vulnerability and cost make it better for intel. Besides a standard attack,\
+ it can do a limited attack engagement with bombs for 4 rounds. It has 7 turns\
+ of fuel so can stay out for many turns before landing in a City, Quay, Fortress, Naval Base,\
+ Airbase, or transport with 6+ capacity. \n\
+Zeppelins have great vision and are unreachable by units prior to Marines and\
+ Destroyers. Zeppelins do not block units under them from being attacked. Zeppelins\
+ give sentry reports of nearby unit movements even when not on sentry. Unlike\
+ Balloons, they can fly over Mountains.\
+"), _("
+NOTE：GOTO disallows unit loss from lack of fuel. You\
+ can override this by moving to adjacent tiles.\
+")
+bombard_rate = 4
+
 [unit_fighter]
 name          = _("Fighter")
 class         = "AirProtect"
 tech_req      = "Flight"
-obsolete_by   = "Stealth Fighter"
+obsolete_by   = "Jet Fighter"
 graphic       = "u.fighter"
 graphic_alt   = "-"
 sound_move    = "m_fighter"
@@ -1647,12 +1762,12 @@ uk_happy      = 0
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-targets       = "Air", "Missile"
+targets       = "Air", "AirProtect", "Missile", "Balloon", "Helicopter", "Zeppelin"
 bonuses       =
    { "flag", "type", "value"
      "Helicopter", "DefenseDividerPct", 50
    }
-flags         = "AirAttacker"
+flags         = "AirAttacker", "AirProtector", "Unbribable", "HasNoZOC"
 roles         = ""
 helptext      = _("\
 Fighters are your first airborne units. They can\
@@ -1664,7 +1779,7 @@ Fighters are your first airborne units. They can\
 name          = _("Escort Fighter")
 class         = "AirProtect"
 tech_req      = "Radio"
-obsolete_by   = "Stealth Fighter"
+obsolete_by   = "Jet Fighter"
 graphic       = "u.escort_fighter"
 graphic_alt   = "u.fighter"
 sound_move    = "m_escort_fighter"
@@ -1686,6 +1801,10 @@ uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
 targets       = "Air", "AirProtect", "Missile", "Balloon", "Helicopter", "Zeppelin"
+bonuses       =
+   { "flag", "type", "value"
+     "Helicopter", "DefenseDividerPct", 50
+   }
 flags         = "AirAttacker", "Unbribable", "HasNoZOC", "AirProtector"
 roles         = ""
 helptext      = _("\
@@ -1720,9 +1839,10 @@ uk_happy      = 0
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-targets       = "Air", "AirProtect", "Balloon", "Zeppelin"
+targets       = "Air", "AirProtect", "Missile", "Balloon", "Helicopter", "Zeppelin"
 bonuses       =
    { "flag", "type", "value"
+     "Helicopter", "DefenseDividerPct", 50
    }
 flags         = "AirAttacker", "Unbribable", "HasNoZOC", "AirProtector", "Provoking"
 roles         = ""
@@ -1732,6 +1852,7 @@ Jet Fighters upgrade the Fighter with improved attack, defense, and range.\
 
 [unit_bomber]
 name          = _("Heavy Bomber")
+rule_name     = "Bomber"
 class         = "Air"
 tech_req      = "Advanced Flight"
 obsolete_by   = "Stealth Bomber"
@@ -1755,7 +1876,7 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-flags         = "FieldUnit", "OneAttack", "AirAttacker", "HasNoZOC"
+flags         = "FieldUnit", "OneAttack", "AirAttacker", "HasNoZOC", "NeverProtects", "CantReachAir", "Unbribable"
 roles         = ""
 helptext      = _("\
 Bombers are specialized airborne units that may\
@@ -1789,21 +1910,25 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
+targets       = "Balloon", "Zeppelin", "Helicopter"
 cargo         = "Land"
-flags         = "FieldUnit", "Helicopter", "AirAttacker"
+flags         = "FieldUnit", "Helicopter", "AirAttacker", "Unbribable", "NeverProtects", "CantReachAir"
 roles         = ""
 helptext      = _("\
 The Helicopter is a very powerful unit, as it can both fly, conquer cities,\
- and transport a Land unit. Care must be exercised, because Helicopters lose a\
+ and transport a Land unit. Land units must board and deboard inside a\
+ city or native base, but may attack from inside the helicopter.\
+ Care must be exercised, because Helicopters lose a\
  small amount of health for every turn not spent in a city or airbase\
  or Carrier, unless you have the United Nations wonder.\
- Helicopters may be attacked by ground units. \n\
+ Helicopters may be attacked by surface units starting with Riflemen, Cavalary,
+ and Ironclad. Artillery-types cannot attack it. \n\
 Helicopters can see Submarines from 2 tiles away.\
 ")
 
 [unit_stealth_fighter]
 name          = _("Stealth Fighter")
-class         = "Air"
+class         = "AirProtect"
 tech_req      = "Stealth"
 obsolete_by   = "None"
 graphic       = "u.stealth_fighter"
@@ -1826,17 +1951,17 @@ uk_happy      = 0
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-targets       = "Air", "Missile"
+targets       = "Air", "AirProtect", "Missile", "Balloon", "Helicopter", "Zeppelin"
 bonuses       =
    { "flag", "type", "value"
-     "Helicopter", "DefenseDivider", 1
-     "Helicopter", "Firepower1", 1
+     "Helicopter", "DefenseDividerPct", 50
    }
 vision_layer  = "Stealth"
-flags         = "AirAttacker"
+flags         = "AirAttacker", "Unbribable", "HasNoZOC", "AirProtector",
+                "CanEscape"
 roles         = ""
 helptext      = _("\
-An improved Fighter, with improved attack and a higher movement\
+An improved Jet Fighter, with improved attack and a higher movement\
  radius.\
 ")
 
@@ -1865,9 +1990,10 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
+targets       = "Balloon", "Zeppelin"
 vision_layer  = "Stealth"
-flags         = "FieldUnit", "OneAttack", "AirAttacker",
-                "HasNoZOC"
+flags         = "FieldUnit", "OneAttack", "AirAttacker", "CantReachAir",
+                "HasNoZOC", "Unbribable", "NeverProtects", "CanEscape"
 roles         = ""
 helptext      = _("\
 An improved Bomber, with improved attack and a higher movement\
@@ -1879,7 +2005,7 @@ An improved Bomber, with improved attack and a higher movement\
 name          = _("Trireme")
 class         = "Trireme"
 tech_req      = "Alphabet"
-obsolete_by   = "Caravel"
+obsolete_by   = "Galley"
 graphic       = "u.trireme"
 graphic_alt   = "-"
 sound_move    = "m_trireme"
@@ -2013,7 +2139,7 @@ uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
 cargo         = "Land"
-flags         = "BadCityDefender", "Provoking"
+flags         = "BadCityDefender", "Provoking", "CantReachAir"
 roles         = "Ferryboat", "FerryStartUnit", "BarbarianBoat"
 helptext      = _("\
 The Caravel is a powerful warship with high transport capacity,
@@ -2046,7 +2172,7 @@ uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
 cargo         = "Land"
-flags         = "BadCityDefender", "Provoking"
+flags         = "BadCityDefender", "Provoking", "CantReachAir"
 roles         = "Ferryboat", "FerryStartUnit", "BarbarianBoat"
 helptext      = _("\
 The Galleon is a pure transport ship and cannot\
@@ -2080,7 +2206,7 @@ uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
 cargo         = "Land"
-flags         = "BadCityDefender", "Provoking"
+flags         = "BadCityDefender", "Provoking", "CantReachAir"
 roles         = "Hunter"
 helptext      = _("\
 The Frigate is a highly versatile boat unit,\
@@ -2113,7 +2239,8 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-flags         = "BadCityDefender"
+targets       = "Balloon", "Helicopter"
+flags         = "BadCityDefender", "CantReachAir"
 roles         = "Hunter"
 helptext      = _("\
 The Ironclad is an armored ship that is\
@@ -2146,7 +2273,8 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-flags         = "BadCityDefender"
+targets       = "Balloon", "Helicopter", "Zeppelin"
+flags         = "BadCityDefender", "CantReachAir"
 roles         = "Hunter"
 helptext      = _("\
 An improved Ironclad, with better combat streength, speed, and vision.\
@@ -2180,7 +2308,8 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-flags         = "BadCityDefender"
+targets       = "Balloon", "Helicopter", "Zeppelin"
+flags         = "BadCityDefender", "CantReachAir"
 roles         = "DefendGood", "DefendGoodStartUnit"
 helptext      = _("\
 The Cruiser is a strong offensive boat unit.\
@@ -2211,6 +2340,7 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
+targets       = "Balloon", "Helicopter", "Zeppelin"
 cargo         = "Missile"
 bonuses       =
    { "flag", "type", "value"
@@ -2221,13 +2351,13 @@ roles         = "DefendGood", "DefendGoodStartUnit"
 helptext      = _("\
 The AEGIS Cruiser is equipped with an advanced defensive\
  missile system for 3x defense against air attackers. It\
- can also carry 5 missiles.\
+ can also carry 5 missiles. It is able to attack aircraft.\
 ")
 
 [unit_battleship]
 name          = _("Battleship")
 class         = "Sea"
-tech_req      = "Automobile"
+tech_req      = "Refining"
 obsolete_by   = "None"
 graphic       = "u.battleship"
 graphic_alt   = "-"
@@ -2245,15 +2375,17 @@ move_rate     = 10
 vision_radius_sq = 16
 transport_cap = 0
 fuel          = 0
+city_size     = 0
 uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-flags         = "BadCityDefender", "Bombarder"
+targets       = "Balloon", "Helicopter", "Zeppelin"
+flags         = "BadCityDefender", "Bombarder", "CantReachAir"
 roles         = ""
 helptext      = _("\
-The Battleship is the supreme naval unit with\
- excellent offensive and defensive values. It can\
+The Battleship is the supreme naval unit with excellent\
+ offensive and defensive strength. It can attack, or\
  Bombard for 3 rounds of combat to soften defenses.\
 ")
 bombard_rate = 3
@@ -2261,7 +2393,7 @@ bombard_rate = 3
 [unit_submarine]
 name          = _("Submarine")
 class         = "Sea"
-tech_req      = "Combustion"
+tech_req      = "Automobile"
 obsolete_by   = "None"
 graphic       = "u.submarine"
 graphic_alt   = "-"
@@ -2283,9 +2415,10 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
+targets       = "Balloon"
 cargo         = "Missile"
 vision_layer  = "Subsurface"
-flags         = "BadCityDefender", "Provoking", "Only_Native_Attack"
+flags         = "BadCityDefender", "Provoking", "Only_Native_Attack", "CantReachAir"
 roles         = "Hunter"
 helptext      = _("\
 Traveling under the surface of the ocean, Submarines have\
@@ -2319,8 +2452,9 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
+targets       = "Balloon", "Helicopter", "Zeppelin"
 cargo         = "Air", "Missile", "Helicopter"
-flags         = "BadCityDefender", "Only_Native_Attack", "Provoking"
+flags         = "BadCityDefender", "Only_Native_Attack", "Provoking", "CantReachAir"
 roles         = ""
 helptext      = _("\
 The Carrier is a mobile airport.\
@@ -2388,7 +2522,8 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-flags         = "FieldUnit", "OneAttack", "AirAttacker", "HasNoZOC"
+targets       = "Balloon", "Helicopter", "Zeppelin"
+flags         = "FieldUnit", "OneAttack", "AirAttacker", "HasNoZOC", "Unbribable", "NeverBlocked", "CantReachAir"
 roles         = ""
 helptext      = _("\
 The Cruise Missile is a long-distance missile\
@@ -2399,7 +2534,8 @@ TIP:  A handful of these can successfully keep the waters around\
 ")
 
 [unit_nuclear]
-name          = _("Nuclear")
+name          = _("Nuclear Missile")
+rule_name     = "Nuclear"
 class         = "Missile"
 tech_req      = "Rocketry"
 obsolete_by   = "None"
@@ -2423,7 +2559,8 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-flags         = "FieldUnit", "OneAttack", "Nuclear", "HasNoZOC"
+targets       = "Balloon", "Helicopter", "Zeppelin", "Air", "AirProtect"
+flags         = "FieldUnit", "OneAttack", "Nuclear", "HasNoZOC", "Unbribable", "NeverBlocked"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
 veteran_base_raise_chance = 0
@@ -2820,7 +2957,7 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-flags         = "HasNoZOC"
+flags         = "HasNoZOC", "Unbribable", "HasNoZOC", "NeverProtects"
 roles         = ""
 helptext      = _("\
 The AWACS (Airborne Warning and Control System) is an airplane with an \

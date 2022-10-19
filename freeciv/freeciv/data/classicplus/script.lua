@@ -96,3 +96,27 @@ function place_map_labels()
 end
 
 signal.connect("map_generated", "place_map_labels")
+
+function building_built_callback(building, city)
+
+  -- Grant Code of Laws when the wonder Code of Hammurabi is built.
+  if building:rule_name() == "Code of Hammurabi" then
+    local player = city.owner
+    local city_name = city.name
+    local gained = nil;
+
+    if player:give_tech(find.tech_type("Code of Laws"), -1, false, "hut") then
+      notify.player(player, "The Code of Hammurabi provides Code of Laws technology.")
+    elseif player:give_tech(find.tech_type("Writing"), -1, false, "hut") then
+      notify.player(player, "The Code of Hammurabi provides Writing technology.")
+    else
+      notify.player(player, "The Code of Hammurabi improves law and order throughout the land.")
+    end
+
+    return false
+  end
+  -- continue processing
+  return false
+end
+
+signal.connect("building_built", "building_built_callback")

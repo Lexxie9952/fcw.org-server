@@ -36,9 +36,8 @@ name = _("Classic+ ruleset")
 
 ; Summary of the ruleset
 summary = _("\
-Classic+ Freeciv ruleset. \
-In addition to the ruleset, server settings also affect \
-games rules.\n\
+Classic+ Freeciv ruleset. \n\
+This ruleset is the same as the Classic manual links below, *** EXCEPT *** for what's listed in the changelog at bottom.\n\
 ")
 
 ; Detailed description
@@ -572,22 +571,79 @@ target_reqs  =
       "NationGroup", "Barbarian", "Player", FALSE
     }
 
-[actionenabler_establish_embassy_spy]
-action       = "Establish Embassy"
+; ************************ ESTABLISH EMBASSY ***********************
+; normal establish embassy--if not at war 
+[actionenabler_diplomat_establish_embassy]
+action       = "Establish Embassy Stay"
 actor_reqs    =
-    { "type",         "name",          "range"
-      "UnitFlag",     "Spy",           "Local"
-      "UnitState",    "OnLivableTile", "Local"
-      "MinMoveFrags", "1",             "Local"
-      "DiplRel",      "Foreign",       "Local"
+    { "type",         "name",          "range", "present"
+      "UnitFlag",     "Diplomat",      "Local", TRUE
+      "UnitFlag",     "Spy",           "Local", FALSE
+      "UnitState",    "OnLivableTile", "Local", TRUE
+      "UnitState",    "Transported",   "Local", FALSE
+      "MinMoveFrags", "1",             "Local", TRUE
+      "DiplRel",      "Foreign",       "Local", TRUE
+      "DiplRel",      "War",           "Local", FALSE 
     }
 target_reqs  =
     { "type",        "name",      "range",  "present"
       "NationGroup", "Barbarian", "Player", FALSE
     }
+; Diplomat: if at war, theocracy will block embassy: do a cease-fire first!
+[actionenabler_diplomat_establish_embassy_war]
+action       = "Establish Embassy Stay"
+actor_reqs    =
+    { "type",         "name",          "range", "present"
+      "UnitFlag",     "Diplomat",      "Local", TRUE
+      "UnitFlag",     "Spy",           "Local", FALSE
+      "UnitState",    "OnLivableTile", "Local", TRUE
+      "UnitState",    "Transported",   "Local", FALSE
+      "MinMoveFrags", "1",             "Local", TRUE
+      "DiplRel",      "Foreign",       "Local", TRUE
+      "DiplRel",      "War",           "Local", TRUE 
+    }
+target_reqs  =
+    { "type",        "name",              "range",   "present"
+      "NationGroup", "Barbarian",         "Player",  FALSE
+      "Gov",         "Theocracy",         "Player",  FALSE
+    }
 
-[actionenabler_investigate_city]
-action       = "Investigate City Spend Unit"
+; SPY: normal establish embassy--if not at war 
+[actionenabler_establish_embassy_spy]
+action       = "Establish Embassy"
+actor_reqs    =
+    { "type",         "name",          "range", "present"
+      "UnitFlag",     "Spy",           "Local", TRUE
+      "UnitState",    "OnLivableTile", "Local", TRUE
+      "UnitState",    "Transported",   "Local", FALSE
+      "MinMoveFrags", "1",             "Local", TRUE
+      "DiplRel",      "Foreign",       "Local", TRUE
+      "DiplRel",      "War",           "Local", FALSE 
+    }
+target_reqs  =
+    { "type",        "name",      "range",  "present"
+      "NationGroup", "Barbarian", "Player", FALSE
+    }
+;if at war, theocracy will block embassy: do a cease-fire first!
+[actionenabler_establish_embassy_spy_war]
+action       = "Establish Embassy"
+actor_reqs    =
+    { "type",         "name",          "range", "present"
+      "UnitFlag",     "Spy",           "Local", TRUE
+      "UnitState",    "OnLivableTile", "Local", TRUE
+      "UnitState",    "Transported",   "Local", FALSE
+      "MinMoveFrags", "1",             "Local", TRUE
+      "DiplRel",      "Foreign",       "Local", TRUE
+      "DiplRel",      "War",           "Local", TRUE 
+    }
+target_reqs  =
+    { "type",        "name",          "range",    "present"
+      "NationGroup", "Barbarian",     "Player",   FALSE
+      "Gov",         "Theocracy",     "Player",   FALSE
+    }
+
+[actionenabler_investigate_city_diplomat_spy]
+action       = "Investigate City"
 actor_reqs    =
     { "type",   "name", "range", "present"
       "UnitFlag", "Diplomat", "Local", TRUE
@@ -596,15 +652,30 @@ actor_reqs    =
       "DiplRel", "Foreign", "Local", TRUE
       "UnitFlag", "Spy", "Local", FALSE
     }
-
-[actionenabler_investigate_city_spy]
+[actionenabler_investigate_city_tribesmen_scout]
 action       = "Investigate City"
 actor_reqs    =
-    { "type",   "name", "range"
-      "UnitFlag", "Spy", "Local"
-      "UnitState", "OnLivableTile", "Local"
-      "MinMoveFrags", "1", "Local"
-      "DiplRel", "Foreign", "Local"
+    { "type",         "name",          "range", "present"
+      "UnitFlag",     "IgTer",         "Local", TRUE
+      "UnitFlag",     "NonMil",        "Local", TRUE
+      "UnitState",    "OnLivableTile", "Local", TRUE
+      "MinMoveFrags", "1",             "Local", TRUE
+      "DiplRel",      "Foreign",       "Local", TRUE
+      "UnitState",    "Transported",   "Local", FALSE
+    }
+[actionenabler_investigate_city_partisan]
+action       = "Investigate City"
+actor_reqs    =
+    { "type",         "name",          "range", "present"
+      "UnitType",     "Partisan",      "Local", TRUE
+      "UnitState",    "OnLivableTile", "Local", TRUE
+      "MinMoveFrags", "1",             "Local", TRUE
+      "DiplRel",      "Foreign",       "Local", TRUE
+      "UnitState",    "Transported",   "Local", FALSE
+    }
+target_reqs   =
+    { "type",       "name",            "range", "present"
+      "CityStatus", "OwnedByOriginal", "City",  FALSE
     }
 
 [actionenabler_poison_city]
@@ -753,11 +824,24 @@ action = "Help Wonder"
 actor_reqs    =
     { "type",   "name", "range", "present"
       "UnitFlag", "HelpWonder", "Local", TRUE
+      "UnitState", "Transporting", "Local", FALSE ; avoids bug where land cargo "drowns" even on land terrain
       "DiplRel", "Foreign", "Local", FALSE
     }
 target_reqs    =
     { "type",   "name", "range"
       "BuildingGenus", "GreatWonder", "Local"
+    }
+[actionenabler_help_build_small_wonder]
+action = "Help Wonder"
+actor_reqs    =
+    { "type",   "name", "range", "present"
+      "UnitFlag", "HelpWonder", "Local", TRUE
+      "UnitState", "Transporting", "Local", FALSE ; avoids bug where land cargo "drowns" even on land terrain
+      "DiplRel", "Foreign", "Local", FALSE
+    }
+target_reqs    =
+    { "type",   "name", "range"
+      "BuildingGenus", "SmallWonder", "Local"
     }
 
 [actionenabler_recycle_unit]
@@ -810,6 +894,36 @@ target_reqs    =
       "CityTile", "Center",       "Local", FALSE
       "Extra",    "Fortress",     "Local", FALSE
     }
+;Zeppelins can bomb
+[actionenabler_zeppelin_bomb]
+action = "Bombard"
+actor_reqs    =
+    { "type",         "name",           "range", "present"
+      "UnitFlag",     "Bombarder",      "Local",  TRUE
+      "UnitType",     "Zeppelin",       "Local",  TRUE
+      "MinMoveFrags", "1",              "Local",  TRUE
+      "DiplRel",      "War",            "Local",  TRUE
+   }
+target_reqs    =
+    { "type",   "name", "range", "present"
+;      "CityTile",  "Center",      "Local", FALSE
+      "UnitClass", "Air",         "Local", FALSE
+      "UnitClass", "AirProtect",  "Local", FALSE
+      "UnitClass", "Missile",     "Local", FALSE
+      "UnitClass", "Helicopter",  "Local", FALSE
+      "UnitClass", "Balloon",     "Local", FALSE
+      "UnitClass", "Zeppelin",    "Local", FALSE
+    }
+;Battleships can do bombardment
+[actionenabler_battleship_bombard]
+action = "Bombard 2"
+actor_reqs    =
+    { "type",         "name",         "range", "present"
+      "UnitFlag",     "Bombarder",    "Local", TRUE
+      "UnitType",     "Battleship",   "Local", TRUE
+      "MinMoveFrags", "1",            "Local", TRUE
+      "DiplRel",      "War",          "Local", TRUE
+   }
 
 ;CAPTURING LAND UNITS a "Capturer" must get a "Capturable" but not on a mountain.
 [actionenabler_capture]
@@ -1045,7 +1159,7 @@ actor_reqs    =
 action = "Airlift Unit"
 actor_reqs    =
     { "type",          "name",         "range", "present"
-      "UnitClass",     "Land",         "Local", TRUE
+      "UnitClassFlag", "Airliftable",  "Local", TRUE
       "UnitState",     "Transporting", "Local", FALSE
       "MinMoveFrags",  "1",            "Local", TRUE
     }

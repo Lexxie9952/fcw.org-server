@@ -443,7 +443,7 @@ mining_result        = "Forest"
 mining_shield_incr   = 0
 mining_time          = 10
 transform_result     = "Hills"
-transform_time       = 24
+transform_time       = 30
 pillage_time         = 1
 clean_pollution_time = 3
 clean_fallout_time   = 3
@@ -930,8 +930,8 @@ trade       = 5
 [resource_rubber]
 extra       = "Rubber"
 identifier  = "^"
-;shield       = 2
-;trade        = 2      ;added in effects because only generated resources tied to a terrain type can access this var
+shield       = 2
+trade        = 2
 # jungle.
 
 ; "h" reserved for strategic horses
@@ -1763,6 +1763,7 @@ Any land terrain type may have a River on it.  A River adds 1 trade to the\
 Roads and railroads can only be built on River tiles if your\
  civilization has learned Bridge Building technology.\
 ")
+
 [extra_sea_bridge]
 name           = _("Sea Bridge")
 category       = "Infra"

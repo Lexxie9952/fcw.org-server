@@ -338,7 +338,7 @@ sabotage	= 50
 sound		= "b_city_walls"
 sound_alt	= "b_generic"
 helptext	= _("\
-City Walls make it easier to defend a city.  They triple the defense\
+City Walls make it easier to defend a city.  They double the defense\
  strength of units within the city against attacks from land units.\
  They are ineffective against airborne and sea units as well\
  as Howitzers.  City Walls also prevent the loss of population which\
@@ -1254,7 +1254,7 @@ graphic_alt	= "-"
 obsolete_by	=
     { "type", "name", "range"
     }
-build_cost	= 200
+build_cost	= 100
 upkeep		= 0
 sabotage	= 0
 sound		= "w_copernicus_observatory"
