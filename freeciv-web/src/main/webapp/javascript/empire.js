@@ -2062,7 +2062,6 @@ function empire_keyboard_listener(ev)
 
   if (C_S_RUNNING != client_state()) return;
 
-  // if (!ev) ev = window.event; INTERNET EXPLORER DEPRECATED 
   var keyboard_key = String.fromCharCode(ev.keyCode);
   var key_code = ev.keyCode;
 

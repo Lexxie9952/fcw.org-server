@@ -1571,7 +1571,7 @@ function update_unit_order_commands()
       $("#order_build_city").hide();
     }
 
-    if (ptype['name'] == "Explorer") {
+    if (ptype['name'] == "Explorer" || ptype['name'] == "Scout") {
       if (enable_autoexplore) {
         unit_actions["explore"] = {name: "Auto Explore (X)"};
         $("#order_explore").show();
@@ -2129,7 +2129,7 @@ function update_unit_order_commands()
       $("#order_upgrade").show();
     }
 
-    if (ptype != null && ptype['name'] != "Explorer" && enable_autoexplore) {
+    if (ptype != null && ptype['name'] != "Explorer" && ptype['name'] != "Scout" && enable_autoexplore) {
       unit_actions["explore"] = {name: "Auto explore (X)"};
     }
 
@@ -3572,7 +3572,6 @@ function global_keyboard_listener(ev)
 
   if (C_S_RUNNING != client_state()) return;
 
-  /* if (!ev) ev = window.event; INTERNET EXPLORER DEPRECATED */
   var keyboard_key = String.fromCharCode(ev.keyCode);
 
   if (TAB_MAP === $("#tabs").tabs("option", "active")) {
