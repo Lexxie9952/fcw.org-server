@@ -1,5 +1,6 @@
 /mapimg define 'zoom=2:map=tcub:turns=5:format=png'
 cmdlevel ctrl first
+rulesetdir classicplus
 set topology WRAPX
 set nationset all
 set compresstype xz
