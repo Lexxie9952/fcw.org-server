@@ -2165,12 +2165,19 @@ move_cost      = 3
 move_mode      = "Cardinal"
 trade_incr_const = 1
 compat_special = "River"
-integrates    = "Canal"
+integrates     = "Canal", "Waterway"
 flags          = "River", "UnrestrictedInfra"
 
 [road_canal]
 extra             = "Canal"
 move_cost         = 9
 move_mode         = "Cardinal"
-integrates        = "River"
+integrates        = "River", "Waterway"
+compat_special    = "None"
+
+[road_waterway]
+extra             = "Waterway"
+move_cost         = 9
+move_mode         = "Cardinal"
+integrates        = "River", "Canal"
 compat_special    = "None"
