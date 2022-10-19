@@ -37,7 +37,7 @@ After getting your feet wet with Classic+, you are encouraged to try more modern
    All "crazy luck" awards/penalties are less likely, while...
    Chance to discover a large map now has higher odds</li>
 <li>Courthouses make +1 content for all govs, provide bonuses against diplomatic actions, eliminate tile corruption, and cost 10 less</li>
-<li>Reverted to City Walls to original 2x defense (3x if land unit inside with free fortify bonus). (Was: 3x, 4.5x)</li>
+<li>Reverted City Walls to original 2x defense (3x if land unit inside with free fortify bonus). (Was: 3x, 4.5x)</li>
 <li>Reverted SAM Battery to original 2x against Helicopter (Was: City Walls)</li>
 <li>Added Ecclesiastical Palace</li>
 <li>Copernicus costs 100 (was 200). Now it's +66% more than a Library for a building that's effectively the same (was 3.33x cost)</li>
@@ -50,7 +50,7 @@ New resource Berries added
 New resource Rubber added
 Jungle and Tundra resources buffed to make those terrains less uninhabitable
 Gold now produces +8 trade (previous 0/1/6 made it an inferior resource)</li>
-<li>Units who disembark from ships to adjacent tiles from ships lose all their moves, except Marines</li>
+<li>Units who disembark to adjacent tiles from ships lose all their moves, except Marines</li>
 <li>Quay added. Requires Pottery. It's ferry infrastructure for crossing rivers with 2/3 move points. Allows cargo units to deboard or be unloaded from ships without disembarking (which loses all moves)</li>
 <li>Canal added. Requires Engineering. Allows all ships to travel through it.</li>
 </ul><h3><u><b>UNITS</u></b></h3><ul style='font-family:Helvetica'><li>Added Fanatics</li>

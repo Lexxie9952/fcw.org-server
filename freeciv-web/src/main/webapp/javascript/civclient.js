@@ -438,7 +438,7 @@ function init_common_intro_dialog() {
   ($.getUrlVar('action') != "multi" 
      ? 
      "<u>Starting a game confirms consent with our <a href='https://www.freecivweb.org/rules'>Terms of Service</a>.</u><br><br>"+
-     "<b>WARNING:</b> Default rules for Singleplayer are Classic.</b><br><br>"+
+     "<b>WARNING:</b> Default rules for Singleplayer are now <b><u>Classic+.</u></b><br><br>"+
      "<u>All rulesets are suitable for Singleplayer.</u><br><br>"+
      "<b>NOTE:</b> Rulesets named 'Multiplayer' are simply the more modern rulesets that work well with any number of players.<br>"+
      "You can play Singleplayer with a Multiplayer ruleset if you wish to improve for multiplayer games with other humans.<br>"+
