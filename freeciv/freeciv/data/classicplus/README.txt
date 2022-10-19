@@ -17,9 +17,9 @@ After getting your feet wet with Classic+, you are encouraged to try more modern
 <img style="margin-left:auto;margin-right:auto;display:block" src='/images/chapter_mark.png'>
 <h2>Changelog:</h2><ul style='font-family:Helvetica'><li>Tech costs changed to Classic+ formula:  each tech has its own cost and is not tied to previous tech costs</li>
 <li>Cleaned up tech tree, redundant reqs and a few bad paths</li>
-<li>Bulbs earned into a research target stay assigned to that research target. Tech Targets can be switched with multiple progress in multiple techs</li>
+<li>Bulbs researched into a tech stay assigned to that research target. Tech targets can be switched with multiple progress in multiple techs</li>
 <li>All units get 2x moves, 2x vision: improves pace and playability</li>
-<li>Cease-fire and peace can be established with another player within "contactturns" of meeting or having adjacent units.
+<li>Cease-fire and peace can be established with another player within 10 turns (<code>contactturns</code>) of meeting or having adjacent units.
   All other pacts still require an embassy</li>
 <li>Added Theocracy government from MP2 (somewhat like Civ2 Fundamentalism but better)</li>
 <li>Railroads use 1/9 move point and aren't infinite</li>
@@ -29,18 +29,17 @@ After getting your feet wet with Classic+, you are encouraged to try more modern
 <li>Added the Fort as a weaker base prior to the Fortress. Gives 1.33x defense</li>
 <li>Fortress first requires a Fort to be built underneath.</li>
 <li>Airbases heal aircraft 25% per turn, same as Fortress for Land units.</li>
-<li>Foodbox put very close to MP2D but a little closer to the range of Civ2Civ3, for simplicity and better pace:
-   granary_food_ini  = 15, 20, 24, 30, 36, 44, 52, 60</li>
+<li>City food growth requirements reduced for better pace: 15, 20, 24, 30, 36, 44, 52, 60</li>
 <li>Huts were balanced better
    Huts don't give cities
    Hut mercenaries are phalanx not legion
    All "crazy luck" awards/penalties are less likely, while...
    Chance to discover a large map now has higher odds</li>
 <li>Courthouses make +1 content for all govs, provide bonuses against diplomatic actions, eliminate tile corruption, and cost 10 less</li>
-<li>Reverted City Walls to original 2x defense (3x if land unit inside with free fortify bonus). (Was: 3x, 4.5x)</li>
+<li>Reverted City Walls to original 2x defense (Land units still get free-fortify 1.5x for total 3x). (Was: 4.5x)</li>
 <li>Reverted SAM Battery to original 2x against Helicopter (Was: City Walls)</li>
 <li>Added Ecclesiastical Palace</li>
-<li>Copernicus costs 100 (was 200). Now it's +66% more than a Library for a building that's effectively the same (was 3.33x cost)</li>
+<li>Copernicus costs 100 (was 200). It still costs a little more than a Library for the same bonus (was 3.33x cost)</li>
 <li>Reverted Cure for Cancer to +1 Happy in all cities (was +1 forced content)</li>
 <li>Added Code of Hammurabi and The Sphinx</li>
 <li>Added Nile River bonus effects: desert rivers make +2 food if irrigated. Manually irrigated on a city, +3 food</li>
@@ -51,7 +50,8 @@ New resource Rubber added
 Jungle and Tundra resources buffed to make those terrains less uninhabitable
 Gold now produces +8 trade (previous 0/1/6 made it an inferior resource)</li>
 <li>Units who disembark to adjacent tiles from ships lose all their moves, except Marines</li>
-<li>Quay added. Requires Pottery. It's ferry infrastructure for crossing rivers with 2/3 move points. Allows cargo units to deboard or be unloaded from ships without disembarking (which loses all moves)</li>
+<li>Quay added. Requires Pottery. It's ferry infrastructure for crossing rivers with cost of 2/3 move-points.
+Allows cargo units to deboard or be unloaded from ships for free (without disembarking, which loses all moves)</li>
 <li>Canal added. Requires Engineering. Allows all ships to travel through it.</li>
 </ul><h3><u><b>UNITS</u></b></h3><ul style='font-family:Helvetica'><li>Added Fanatics</li>
 <li>Added Ground Troops, which upgrade Riflemen and Alpine Troops in the later game</li>
@@ -82,7 +82,7 @@ Gold now produces +8 trade (previous 0/1/6 made it an inferior resource)</li>
 <li>Legions can build Forts and Fortresses, and roads outside domestic territory</li>
 <li>Paratroopers paradrop range is 14 tiles</li>
 <li>Scout replaces Explorer. Available with Horseback riding. Cost reduced to 18, has better vision, can Investigate City</li>
-<li>Start units are 3 Workers, 3 Settlers, 1 Caravan, 1 Ccout. Changeable with <code> /set startunits</code></li>
+<li>Start units are 3 Workers, 3 Settlers, 1 Caravan, 1 Scout. Changeable with <code> /set startunits</code></li>
 <li>Added Migrants, a population unit only, not a Worker. Can transfer population from overpopulated cities to smaller</li>
 <li>Partisans are upkeep free, home free, and can investigate conquered/occupied cities</li>
 <li>Diplomats don't get spent, used, or lost when doing Investigate City</li>

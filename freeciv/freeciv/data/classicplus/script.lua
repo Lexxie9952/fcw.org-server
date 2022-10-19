@@ -120,3 +120,14 @@ function building_built_callback(building, city)
 end
 
 signal.connect("building_built", "building_built_callback")
+
+function turn_callback(turn, year)
+  if turn == 1 then
+    notify.event(nil, nil, E.SCRIPT,
+_("<b>Welcome to the Classic+ ruleset!</b>\n\
+This ruleset is a modernized version of Classic. \
+See the changes in Help >> Manual >> Changelog. \nHave fun!\n\
+"))
+  end
+end
+signal.connect('turn_begin', 'turn_callback')
