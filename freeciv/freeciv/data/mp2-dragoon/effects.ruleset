@@ -7956,7 +7956,7 @@ reqs    =
 
 [effect_action_success_move_cost_capture]
 type    = "Action_Success_Actor_Move_Cost"
-value   = 6      ; 1 move
+value   = 6      ; 2/3 move
 reqs    =
     { "type", "name", "range", "present"
       "Action", "Capture Units", "Local", TRUE
