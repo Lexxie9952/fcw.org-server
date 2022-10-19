@@ -6449,8 +6449,8 @@ function can_build_canal(punit, ptile)
 
   // Check for water near:
   for (var dir = 0; dir < 8; dir++) {
-    // MP2C only allows CAdjacent on ALL checks below:
-    if (client_rules_flag[CRF_MP2_C] && !is_cardinal_dir(dir)) continue;
+    // Line below now assuming all rulesets have consistent canal reqs 19.Oct.2022
+    if (!is_cardinal_dir(dir)) continue;
     /* Check if there is adjacent ocean/deep ocean/lake */
     var tile1 = mapstep(ptile, dir);
     if (tile1 != null && terrains[tile1['terrain']] != null) {
@@ -6461,11 +6461,9 @@ function can_build_canal(punit, ptile)
           water_near = EXTRA_CANAL;  // this is a double code for TRUE and what kind of canal can be made
           break;
         }
-        // MP2ag onward can build EXTRA_WATERWAY:
-        else if ( (client_rules_flag[CRF_EXTRA_QUAY]/* MP2ag+ */ && tile_has_extra(tile1, EXTRA_RIVER))  // a river is adjecent
-                          ||                              // OR...
-                   (client_rules_flag[CRF_MP2_C] && tile_has_extra(tile1, EXTRA_CANAL)) // a canal is CAdj.
-                ) {
+        // Line below now assuming all rulesets have consistent canal reqs 19.Oct.2022
+        else if (tile_has_extra(tile1, EXTRA_RIVER) 
+                 || tile_has_extra(tile1, EXTRA_CANAL)) { // a WATERWAY source is CAdj.
           water_near = EXTRA_WATERWAY; // this is a double code for TRUE and what kind of canal can be made
           //break; DON'T BREAK BECAUSE OTHERWISE WE WON'T CHECK IF THE PREFERABLE CANAL IS POSSIBLE IN OTHER ADJACENT DIRECTIONS!
         }

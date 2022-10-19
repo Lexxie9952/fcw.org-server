@@ -37,7 +37,8 @@ flags =
 extra_flags =
   { "name", "helptxt"
       _("Quayable"), _("Allows Quays to be built.")
-      _("IrrigationSource"), _("Allows Irrigation.")            
+      _("IrrigationSource"), _("Allows Irrigation.")
+      _("WaterwaySource"), _("Is a water source for inland Canals.")
   }
 
 [parameters]
@@ -1132,6 +1133,7 @@ build_time     = 0
 removal_time   = 0
 conflicts      = "Mine", "Oil Well"
 hidden_by      = "Farmland"
+flags          = "IrrigationSource"
 helptext       = _("\
 Irrigating a suitable tile causes it to produce extra food each turn. Most\
  tiles yield +1 extra food. A desert river that does not already benefit\
@@ -1312,6 +1314,7 @@ reqs           =
 build_time     = 0
 removal_time   = 0
 conflicts      = "Mine", "Oil Well"
+flags          = "IrrigationSource"
 helptext       = _("\
 Once Refrigeration is known, irrigation systems can be upgraded to \
 farmland by irrigating them a second time; if the city working the tile \
@@ -1812,7 +1815,7 @@ reqs           =
     }
 build_time = 2
 removal_time = 0
-flags          = "NativeTile", "Quayable", "IrrigationSource"
+flags          = "NativeTile", "Quayable", "IrrigationSource", "WaterwaySource"
 native_to      = "Land", "LandNoKill", "LandAirSea", "Trireme", "RiverShip"
 helptext       = _("\
 Any land terrain type may have a River on it.  A River adds 1\
@@ -1840,17 +1843,20 @@ generated      = FALSE
 reqs           =
     { "type", "name", "range", "present"
       "TerrainFlag", "Low Land", "Local", TRUE
-      "TerrainClass", "Oceanic", "Adjacent", TRUE
+      "TerrainClass", "Oceanic", "CAdjacent", TRUE
       "Tech", "Engineering", "Player", TRUE
       "UnitFlag", "CanRoad", "Local", TRUE
     }
 build_time     = 10
 removal_time   = 0
 native_to      = "Trireme", "Sea", "RiverShip", "Land", "LandAirSea", "LandNoKill", "Helicopter", "Submarine"
-flags          = "NativeTile", "Quayable"
+flags          = "NativeTile", "Quayable", "IrrigationSource", "WaterwaySource"
 helptext          = _("\
-Canals allow ships to travel through land tiles. Canals can be built on \
-low land tiles only, and not far inland.\
+Canals are a canal-type that allows all ships to travel over land tiles. Canals can be \
+built on Lowlands only. They require an Ocean or Lake as an adjacent water source. \n\
+* A Waterway is a second canal-type that can use ocean-sourced Canals and Rivers as a \
+water source. \n\
+All canal-types enable Irrigation and Quays, but give no tile output bonus.\
 ")
 [extra_canal2]
 name           = _("Waterway")
@@ -1868,16 +1874,25 @@ generated      = FALSE
 reqs           =
     { "type", "name", "range", "present"
       "TerrainFlag", "Low Land", "Local", TRUE
-      "Extra", "River", "Adjacent", TRUE
+      "TerrainClass", "Oceanic", "CAdjacent", FALSE    ;Prevents second-priority waterway from going first
+      "ExtraFlag", "WaterwaySource", "CAdjacent", TRUE
       "Tech", "Engineering", "Player", TRUE
       "UnitFlag", "CanRoad", "Local", TRUE
     }
 build_time     = 10
 removal_time   = 0
 native_to      = "Trireme", "Sea", "RiverShip", "Land", "LandAirSea", "LandNoKill", "Helicopter", "Submarine"
-flags          = "NativeTile", "Quayable"
+flags          = "NativeTile", "Quayable", "IrrigationSource"
 helptext          = _("\
-Waterways are navigational channels that connect canals with rivers. Essentially, they're the same as canals.\
+Waterways are an inland canal-type. They’re the same as a Canal, but can use \
+Rivers and ocean-sourced Canals as their water source. Unlike a Canal, however, \
+they can’t serve as a water source for any canal-types. However, Waterways allow \
+for dredging a river into a full-length canal system able to accomodate modern \
+naval ships. \n\
+On tiles where you can build both Canals and Waterways, it’s better to build a Canal, \
+since a Canal can serve as a water source for extending the length of your canal system. \
+The rare exception would be if you didn’t want an enemy to be able to connect a \
+Waterway into your canal system!\
 ")
 
 [extra_gold]
@@ -2057,6 +2072,7 @@ act_gfx_alt    = "-"
 act_gfx_alt2   = "-"
 rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
+flags          = "IrrigationSource"
 
 [extra_peat]
 name           = _("Peat")

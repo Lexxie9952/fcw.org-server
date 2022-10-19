@@ -34,9 +34,11 @@ flags =
 ;                 and sensible.
 ; helptxt       = displayed in the help for extra types with this flag
 ;                 (optional)
-;extra_flags =
-;  { "name", "helptxt"
-;  }
+extra_flags =
+  { "name", "helptxt"
+      _("IrrigationSource"), _("Allows Irrigation.")
+      _("WaterwaySource"), _("Is a water source for inland Canals.")
+  }
 
 [parameters]
 
@@ -1124,6 +1126,7 @@ build_time     = 0
 removal_time   = 0
 conflicts      = "Mine", "Oil Well"
 hidden_by      = "Farmland"
+flags          = "IrrigationSource"
 helptext       = _("\
 Irrigating a suitable tile causes it to produce extra food each turn. Most\
  tiles yield +1 extra food. A desert river that does not already benefit\
@@ -1304,6 +1307,7 @@ reqs           =
 build_time     = 0
 removal_time   = 0
 conflicts      = "Mine", "Oil Well"
+flags          = "IrrigationSource"
 helptext       = _("\
 Once Refrigeration is known, irrigation systems can be upgraded to \
 farmland by irrigating them a second time; if the city working the tile \
@@ -1666,11 +1670,11 @@ reqs           =
     }
 build_time = 2
 removal_time = 0
-flags          = "NativeTile"
+flags          = "NativeTile", "IrrigationSource", "WaterwaySource"
 native_to      = "Land", "LandNoKill", "LandAirSea", "Trireme", "RiverShip"
 helptext       = _("\
 Any land terrain type may have a River on it.  A River adds 1\
- trade to the resources produced by that tile.  It also increases a tile's\
+ trade to the resources produced by that tile.  It also increases the tile\
  defense factor by 50%.  Finally, land units may move along a River (but\
  not diagonally) for fast travel.\
 "), _("\
@@ -1694,17 +1698,56 @@ generated      = FALSE
 reqs           =
     { "type", "name", "range", "present"
       "TerrainFlag", "Low Land", "Local", TRUE
-      "TerrainClass", "Oceanic", "Adjacent", TRUE
+      "TerrainClass", "Oceanic", "CAdjacent", TRUE
       "Tech", "Engineering", "Player", TRUE
       "UnitFlag", "Settlers", "Local", TRUE
     }
 build_time     = 10
 removal_time   = 0
 native_to      = "Trireme", "Sea", "RiverShip", "Land", "LandAirSea", "LandNoKill", "Helicopter", "Submarine"
-flags          = "NativeTile"
+flags          = "NativeTile", "IrrigationSource", "WaterwaySource"
 helptext          = _("\
-Canals allow ships to travel through land tiles. Canals can be built on \
-low land tiles only, and not far inland.\
+Canals are a canal-type that allows all ships to travel over land tiles. Canals can be \
+built on Lowlands only. They require an Ocean or Lake as an adjacent water source. \n\
+* A Waterway is a second canal-type that can use ocean-sourced Canals and Rivers as a \
+water source. \n\
+All canal-types enable Irrigation, but give no tile output bonus.\
+")
+[extra_canal2]
+name           = _("Waterway")
+category       = "Infra"
+causes         = "Road"
+rmcauses       = "Pillage"
+graphic        = "road.canal"
+graphic_alt    = "road.river"
+activity_gfx   = "unit.canal"
+act_gfx_alt    = "unit.convert"
+act_gfx_alt2   = "unit.airstrip"
+rmact_gfx      = "None"
+rmact_gfx_alt  = "-"
+generated      = FALSE
+reqs           =
+    { "type", "name", "range", "present"
+      "TerrainFlag", "Low Land", "Local", TRUE
+      "TerrainClass", "Oceanic", "CAdjacent", FALSE    ;Prevents second-priority waterway from going first
+      "ExtraFlag", "WaterwaySource", "CAdjacent", TRUE
+      "Tech", "Engineering", "Player", TRUE
+      "UnitFlag", "Settlers", "Local", TRUE
+    }
+build_time     = 10
+removal_time   = 0
+native_to      = "Trireme", "Sea", "RiverShip", "Land", "LandAirSea", "LandNoKill", "Helicopter", "Submarine"
+flags          = "NativeTile", "IrrigationSource"
+helptext          = _("\
+Waterways are an inland canal-type. They’re the same as a Canal, but can use \
+Rivers and ocean-sourced Canals as their water source. Unlike a Canal, however, \
+they can’t serve as a water source for any canal-types. However, Waterways allow \
+for dredging a river into a full-length canal system able to accomodate modern \
+naval ships. \n\
+On tiles where you can build both Canals and Waterways, it’s better to build a Canal, \
+since a Canal can serve as a water source for extending the length of your canal system. \
+The rare exception would be if you didn’t want an enemy to be able to connect a \
+Waterway into your canal system!\
 ")
 
 [extra_gold]
@@ -1862,6 +1905,7 @@ act_gfx_alt    = "-"
 act_gfx_alt2   = "-"
 rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
+flags          = "IrrigationSource"
 
 [extra_peat]
 name           = _("Peat")

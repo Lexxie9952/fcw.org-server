@@ -1515,7 +1515,7 @@ target_reqs    =
       "TerrainClass", "Oceanic", "CAdjacent", TRUE
     }
  
-[actionenabler_irrigate_src_river]
+[actionenabler_irrigate_src_river] ;canal and waterway too
 action        = "Build Irrigation"
 actor_reqs    =
     { "type",          "name",         "range", "present"
@@ -1526,9 +1526,10 @@ actor_reqs    =
     }
 target_reqs    =
     { "type",    "name",     "range", "present"
-      "Extra",   "River",    "CAdjacent", TRUE
+      "ExtraFlag", "IrrigationSource", "CAdjacent", TRUE
+;      "Extra",   "River",    "CAdjacent", TRUE
     }
-[actionenabler_irrigate_src_river_prole]
+[actionenabler_irrigate_src_river_prole] ;canal and water way too
 action        = "Build Irrigation"
 actor_reqs    =
     { "type",          "name",         "range", "present"
@@ -1538,7 +1539,8 @@ actor_reqs    =
     }
 target_reqs    =
     { "type",    "name",     "range", "present"
-      "Extra",   "River",    "CAdjacent", TRUE
+      "ExtraFlag", "IrrigationSource", "CAdjacent", TRUE
+;      "Extra",   "River",    "CAdjacent", TRUE
     }
 
 [actionenabler_irrigate_src_oasis]
