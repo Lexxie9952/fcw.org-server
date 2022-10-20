@@ -433,25 +433,6 @@ void auto_arrange_workers(struct city *pcity)
 ABOVE removed Jan2021 for server-side CMA patch */
       set_default_city_manager(&cmp, pcity); // new func for setting default
   }
-  /* BELOW removed Jan2021 for server-side CMA patch
-  cmp.factor[O_SHIELD] = 5;
-  cmp.factor[O_TRADE] = 0; // Trade only provides gold/science.
-  cmp.factor[O_GOLD] = 2;
-  cmp.factor[O_LUXURY] = 0; // Luxury only influences happiness.
-  cmp.factor[O_SCIENCE] = 2;
-  cmp.happy_factor = 0;
-
-  if (city_granary_size(city_size_get(pcity)) == pcity->food_stock) {
-    cmp.minimal_surplus[O_FOOD] = 0;
-  } else {
-    cmp.minimal_surplus[O_FOOD] = 1;
-  }
-  cmp.minimal_surplus[O_SHIELD] = 1;
-  cmp.minimal_surplus[O_TRADE] = 0;
-  cmp.minimal_surplus[O_GOLD] = -FC_INFINITY;
-  cmp.minimal_surplus[O_LUXURY] = 0;
-  cmp.minimal_surplus[O_SCIENCE] = 0;
-  ABOVE removed Jan2021 for server-side CMA patch */
 
   /* This must be after city_refresh() so that the result gets created for the right
    * city radius */
@@ -470,16 +451,17 @@ ABOVE removed Jan2021 for server-side CMA patch */
                     _("[`redx`] Governor of %s failed to meet goals and resigned."),
                     city_link(pcity));
       
-      // Don't keep the solution of an incompetent governor.
-      set_default_city_manager(&cmp, pcity); // new func for setting default
-      cmr = cm_result_new(pcity);
+      /* Switch to default parameters, and try with them */
+      set_default_city_manager(&cmp, pcity);
       cm_query_result(pcity, &cmp, cmr, FALSE);
     }
-    /* Drop surpluses and try again. */
-    cmp.minimal_surplus[O_FOOD] = 0;
-    cmp.minimal_surplus[O_SHIELD] = 0;
-    cmp.minimal_surplus[O_GOLD] = -FC_INFINITY;
-    cm_query_result(pcity, &cmp, cmr, FALSE);
+    if (!cmr->found_a_valid) {
+      /* Drop surpluses and try again. */
+      cmp.minimal_surplus[O_FOOD] = 0;
+      cmp.minimal_surplus[O_SHIELD] = 0;
+      cmp.minimal_surplus[O_GOLD] = -FC_INFINITY;
+      cm_query_result(pcity, &cmp, cmr, FALSE);
+    }
   }
   if (!cmr->found_a_valid) {
     /* Emergency management.  Get _some_ result.  This doesn't use
