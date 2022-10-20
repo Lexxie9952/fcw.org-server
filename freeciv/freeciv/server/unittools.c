@@ -3589,30 +3589,30 @@ static void do_nuke_tile(struct player *pplayer, struct tile *ptile,
     // Reduce city size by half.
 
     // Half of one is zero: DESTROY IT (but not on first pass)
-    if (city_size_get(pcity) == 1 && !suppress) {
-      if (pcity) {
-        int saved_id = pcity->id;
+    if (pcity && city_size_get(pcity) == 1 && !suppress) {
+      int saved_id = pcity->id;
 
-        notify_player(city_owner(pcity), ptile, E_CITY_NUKED, ftc_server,
-          _("[`skull`] %s was annihilated by a nuclear detonation."),
-            city_link(pcity));
+      notify_player(city_owner(pcity), ptile, E_CITY_NUKED, ftc_server,
+        _("[`skull`] %s was annihilated by a nuclear detonation."),
+          city_link(pcity));
 
-        if (city_owner(pcity) != pplayer) {
-          notify_player(pplayer, ptile, E_CITY_NUKED, ftc_server,
-          _("[`nuclearexplosion`] %s was annihilated by a nuclear detonation."),
-            city_link(pcity));
-        }
-        script_server_signal_emit("city_destroyed", pcity, city_owner(pcity), pplayer);
-        /* We cant't be sure of city existence after running some script */
-        if (city_exist(saved_id)) {
-          remove_city(pcity);
-        }
+      if (city_owner(pcity) != pplayer) {
+        notify_player(pplayer, ptile, E_CITY_NUKED, ftc_server,
+        _("[`nuclearexplosion`] %s was annihilated by a nuclear detonation."),
+          city_link(pcity));
+      }
+      script_server_signal_emit("city_destroyed", pcity, city_owner(pcity), pplayer);
+      /* We cant't be sure of city existence after running some script */
+      if (city_exist(saved_id)) {
+        remove_city(pcity);
       }
     }
     // Reduce size by nuke_pop_loss_pct
     else {
       pop_loss = (game.info.nuke_pop_loss_pct * city_size_get(pcity)) / 100;
-      city_reduce_size(pcity, pop_loss, pplayer, "nuke");
+      if (city_reduce_size(pcity, pop_loss, pplayer, "nuke")) {
+        send_city_info(NULL, pcity);
+      }
       update_tile_knowledge(ptile);
     }
   }
