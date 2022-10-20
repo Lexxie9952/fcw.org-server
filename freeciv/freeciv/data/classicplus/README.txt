@@ -78,6 +78,7 @@ Allows cargo units to deboard or be unloaded from ships for free (without disemb
 <li>Cost of early Foot units decreased 20%</li>
 <li>Cost of Foot units from Pikemen onward decreased 10%</li>
 <li>Cost of early Mounted units and some other units, -10%</li>
+<li>Starting with Riflemen, upkeep on Foot Soldiers is 1 gold instead of 1 shield</li>
 <li>Phalanx and Pikemen attack at 1.5 (was 1)</li>
 <li>Legions can build Forts and Fortresses, and roads outside domestic territory</li>
 <li>Paratroopers paradrop range is 14 tiles</li>
