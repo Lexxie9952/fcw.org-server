@@ -1270,9 +1270,16 @@ static bool city_populate(struct city *pcity, struct player *nationality)
 
 /**********************************************************************//**
   Examine an unbuildable build target from a city's worklist to see if it
-  can be postponed. Returns FALSE if it never can't be build and should be
-  cancelled or if the city is gone. Handles the postponing and returns TRUE
-  if the item can be posponed.
+  can be postponed. Returns:
+  
+  FALSE - it never can be built and should be cancelled (or city is gone.)
+  
+  TRUE - Items can be postponed (and this function handled postponing.)
+  
+  NB:This function has DIFFERENCES from UPSTREAM: HACK-PATCHES to
+  avoid exploits. Newer upstream code is desired; but it's request to notify
+  FCW so FCW can run anti-exploit tests after. Hack-patches are commented
+  so we can test if newer versions maintain anti-exploitability. --FCW
 **************************************************************************/
 static bool worklist_item_postpone_req_vec(struct universal *target,
                                            struct city *pcity,
@@ -1358,6 +1365,12 @@ static bool worklist_item_postpone_req_vec(struct universal *target,
                             preq->source.value.building));
           script_server_signal_emit(signal_name, ptarget,
                                     pcity, "need_building");
+          /* HACK-PATCH: absence of req'd bldg gave postpone message
+             followed by the city continuing to make illegal unit
+             instead of postponing, then exploited by players to
+             speed production with gold purchase on cheaper illegal
+             units, shuffling those shields into next queued legal
+             unit on the turn after */                          
           success = FALSE;
         } else {
           notify_player(pplayer, city_tile(pcity),
@@ -2025,14 +2038,15 @@ static bool worklist_item_postpone_req_vec(struct universal *target,
   } requirement_vector_iterate_end;
 
   if (!known) {
-    /* This shouldn't happen...
-       FIXME: make can_city_build_improvement_now() return a reason enum. */
+    /* This shouldn't happen... but,
+       IT DOES happen from the same item queued multiple times, and that 
+       means purge it, don't postpone it. */
     notify_player(pplayer, city_tile(pcity),
                   E_CITY_CANTBUILD, ftc_server,
-                  _("%s can't build %s from the worklist; "
-                    "reason unknown! Postponing..."),
+                  _("%s can't build %s from the worklist. Purging..."),
                   city_link(pcity),
                   tgt_name);
+    success = FALSE;
   }
 
   return success;
@@ -2474,6 +2488,15 @@ static bool city_build_building(struct player *pplayer, struct city *pcity)
                   city_improvement_name_translation(pcity, pimprove));
     script_server_signal_emit("building_cant_be_built", pimprove, pcity,
                               "unavailable");
+
+    /* NEVER allow city to keep unavailable target! */
+    worklist_change_build_target(pplayer, pcity);
+    /* w_c_b_t() works in nice normal conditions, but... */
+    if (pcity->production.kind == VUT_IMPROVEMENT 
+        && pcity->production.value.building == pimprove) {
+          /* Fallback for nasty mean cases e.g., queued 100x times! */
+          advisor_choose_build(pplayer, pcity);
+    }
     return TRUE;
   }
   if (pcity->shield_stock >= impr_build_shield_cost(pcity, pimprove)) {
@@ -2481,10 +2504,10 @@ static bool city_build_building(struct player *pplayer, struct city *pcity)
 
     if (is_small_wonder(pimprove)) {
       city_list_iterate(pplayer->cities, wcity) {
-	if (city_has_building(wcity, pimprove)) {
-	  city_remove_improvement(wcity, pimprove);
-	  break;
-	}
+        if (city_has_building(wcity, pimprove)) {
+          city_remove_improvement(wcity, pimprove);
+          break;
+        }
       } city_list_iterate_end;
     }
 
@@ -2663,6 +2686,61 @@ static struct unit *city_create_unit(struct city *pcity,
 }
 
 /**********************************************************************//**
+  If city builds unavailable unit_type AND worklist is empty AND we're in
+  the phase of city_build_unit(), AND city_build_unit couldn't upgrade it
+  to legal type (BUT it's not an obsolete unit that's still allowed to
+  finish), then and only then... postponing or purging won't work because
+  no substitute target replacement.
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
+  Supplies the most similar buildable utype so caller can switch target
+  to it. (Formerly, player was informed it's an unavailable target but was
+  allowed to engage in exploits like buying unavailable target (at cheaper
+  gold cost!) and other dirty tricks.
+**************************************************************************/
+static const struct unit_type *city_find_similar_legal_utype(
+                                             struct city *pcity,
+                                             const struct unit_type *u)
+{
+  struct unit_type *role_utype = NULL; /* the new utype */
+
+  /* Go through every role the utype has, get best_role_unit of that role */
+  for (int i=L_FIRST; i<=L_LAST; i++) {
+    if (utype_has_role(u, i)) {
+      role_utype = best_role_unit(pcity, i);
+      break;
+    }
+  }
+
+  /* Couldn't find one. Cascade through fallbacks: */
+  if (!role_utype) {
+    role_utype = best_role_unit(pcity, L_FIRSTBUILD);
+
+    if (!role_utype) {
+      role_utype = best_role_unit(pcity, L_DEFEND_GOOD);
+    } else return role_utype;
+
+    if (!role_utype) {
+      role_utype = best_role_unit(pcity, L_DEFEND_OK);
+    } else return role_utype;
+
+    /* Getting desperate, pick anything now! */
+    if (!role_utype) {
+      for (int i=L_FIRST; i<=L_LAST; i++) {
+        if ((role_utype = best_role_unit(pcity, i))) {
+          break;
+        }
+      }
+    } else return role_utype;
+    
+    /* Not our fault: ruleset has NO legal utype roles! */
+    if (!role_utype) {
+      return NULL;
+    }
+  }
+
+  return role_utype;
+}
+/**********************************************************************//**
   Build city units. Several units can be built in one turn if the effect
   City_Build_Slots is used.
   Returns FALSE when the city is removed, TRUE otherwise.
@@ -2695,15 +2773,34 @@ static bool city_build_unit(struct player *pplayer, struct city *pcity)
   if (!can_city_build_unit_direct(pcity, utype)
       && !is_barbarian(pplayer)) {
     notify_player(pplayer, city_tile(pcity), E_CITY_CANTBUILD, ftc_server,
-                  _("[`warning`] %s is building %s, which is currently unavailable."),
-                  city_link(pcity), utype_name_translation(utype));
+                  _("[`no`] %s is building %s, which %s currently unavailable."),
+                  city_link(pcity), utype_name_translation(utype),
+                  (is_word_plural(utype_name_translation(utype)) ? "are" : "is"));
 
     /* Log before signal emitting, so pointers are certainly valid */
     log_verbose("%s %s tried to build %s, which is not available.",
                 nation_rule_name(nation_of_city(pcity)),
                 city_name_get(pcity), utype_rule_name(utype));
-    script_server_signal_emit("unit_cant_be_built", utype, pcity,
-                              "unavailable");
+    
+     script_server_signal_emit("unit_cant_be_built", utype, pcity,
+                              "unavailable"); 
+
+    /* NEVER allow city to build an unavailable target */
+    if (worklist_change_build_target(pplayer, pcity)) {
+      // Message for postponement was done in w_c_b_t() call
+    } else {
+      const struct unit_type *newtype = 
+                     city_find_similar_legal_utype(pcity, utype);
+
+      if (newtype) {
+        notify_player(pplayer, city_tile(pcity), E_CITY_CANTBUILD, ftc_server,
+        _("[`warning`] In %s, advisor switched %s to %s."),
+        city_link(pcity), utype_name_translation(utype),
+         utype_name_translation(newtype));
+        pcity->production.value.utype = newtype;
+      } /* else { Shouldn't happen. } */
+    }
+    
     return city_exist(saved_city_id);
   }
 
