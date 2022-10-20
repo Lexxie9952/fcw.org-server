@@ -349,15 +349,27 @@ void really_handle_city_buy(struct player *pplayer, struct city *pcity)
     return;
   }
 
+  /* City with an illegal target! Don't allow illegal-buy exploits: */
+  if (!can_city_build_direct(pcity, &pcity->production)) {
+    char prod[256];
+    universal_name_translation(&pcity->production, prod, sizeof(prod));
+    notify_player(pplayer, pcity->tile, E_BAD_COMMAND, ftc_server,
+                  _("[`no`] %s lacks requirements to buy or build %s."),
+                  city_link(pcity), prod);
+    return;
+  }
+
   if (VUT_UTYPE == pcity->production.kind && pcity->anarchy != 0 && pcity->hangry != 0) {
     notify_player(pplayer, pcity->tile, E_BAD_COMMAND, ftc_server,
-                  _("[`mad`] Can't buy units when city is in disorder."));
+                  _("[`mad`] %s can't buy units while lawless."),
+                  city_link(pcity));
     return;
   }
   if (game.server.fulldisorder && VUT_IMPROVEMENT == pcity->production.kind 
       && pcity->anarchy != 0 && pcity->hangry != 0) {
     notify_player(pplayer, pcity->tile, E_BAD_COMMAND, ftc_server,
-                  _("[`mad`] Can't buy buildings when city is in disorder."));
+                  _("[`mad`] %s can't buy buildings while lawless."),
+                  city_link(pcity));
     return;
   }
 
