@@ -2010,7 +2010,7 @@ disembarks    = "LandRoad", "LandRail", "Helicopter"
 targets       = "Balloon", "Helicopter", "LandRail", "Zeppelin"
 flags         = "MultiSlot", "FootSoldier", "Capturer",
                 "CantReachAir", "Settlers", "CanHide", "WillNever"
-roles         = "DefendOk", "DefendOkStartUnit"
+roles         = "DefendOk", "DefendOkStartUnit", "FirstBuild"
 
 veteran_names =
   _("?vet_rank:green"),
