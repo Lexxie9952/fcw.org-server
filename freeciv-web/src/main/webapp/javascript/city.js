@@ -1430,9 +1430,9 @@ function can_city_queue_item(pcity, kind, value)
   var can_build = can_city_build_now(pcity, kind, value);
   var can_build_later = can_city_build_later(pcity, kind, value);
 
-    // Suppress improvements already in queue (except Coinage)
+    // Suppress improvements already in queue (except Coinage and Space Parts)
     if (can_build && kind==VUT_IMPROVEMENT) {
-      if (improvements[value]['name'] != "Coinage" 
+      if (improvements[value]['genus'] != GENUS_SPECIAL 
           && (city_has_building_in_queue(pcity, value)
           || city_has_building(pcity, value))
           ) {
@@ -1464,9 +1464,9 @@ function can_city_build_later(pcity, kind, value)
   var can_build = can_city_build_now(pcity, kind, value)
   var req_num = undefined;
 
-  // Suppress improvements already in queue (except Coinage)
+  // Suppress improvements already in queue (except Coinage and Space Parts)
   if (can_build && kind==VUT_IMPROVEMENT) {
-    if (improvements[value]['name'] != "Coinage" 
+    if (improvements[value]['genus'] != GENUS_SPECIAL
         && city_has_building_in_queue(pcity, value)) {
           can_build_later=false;
     }
@@ -2786,8 +2786,8 @@ function populate_worklist_production_choices(pcity)
 
     // SUPPRESSIONS of improvements from the list:
     if (can_build && kind==VUT_IMPROVEMENT) {
-      // Suppress improvements already in queue (except Coinage)
-      if (improvements[value]['name'] != "Coinage" 
+      // Suppress improvements already in queue (except Coinage and Space Parts)
+      if (improvements[value]['genus'] != GENUS_SPECIAL
           && city_has_building_in_queue(pcity, value)) {
             can_build=false;
       }
@@ -3160,8 +3160,9 @@ function unselect_improvements()
     * queued should be removed: */
    production_selection = production_selection.filter(function(element, index, arr){
     if (arr[index].kind == VUT_UTYPE) return element;
-    // Coinage isn't a real building: it could go in multiple worklist slots
-    if (arr[index].kind == VUT_IMPROVEMENT && improvements[arr[index].value]['name'] == "Coinage")
+    // Coinage and Space parts can go in multiple worklist slots
+    if (arr[index].kind == VUT_IMPROVEMENT 
+        && improvements[arr[index].value]['genus'] == GENUS_SPECIAL)
       return element;
   });
 }
