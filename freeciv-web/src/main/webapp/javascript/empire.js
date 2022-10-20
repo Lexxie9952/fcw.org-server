@@ -1164,6 +1164,13 @@ function handle_improv_clipboard(event, kind, z)
   if (event.ctrlKey) {   // future command
   }
   else if (event.shiftKey) {   // append to clipboard
+    // No multiple appending of same building:
+    if (kind == VUT_IMPROVEMENT) {
+      if (empire_worklist_clipboard.some(e => (e.kind === kind && e.value === z))
+          && improvements[z].genus != GENUS_SPECIAL) { // !(Coinage || Space parts)
+        return;
+      }
+    }
     empire_worklist_clipboard.push({"kind": kind, "value": z});
   }
   else {                  // replace (copy to) clipboard 

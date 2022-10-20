@@ -293,7 +293,7 @@ var LAND_AND_SEA_BARBARIAN = 4;
 const GENUS_GREAT_WONDER = 0;
 const GENUS_SMALL_WONDER = 1; // genus <= GENUS_SMALL_WONDER means it's a wonder
 const GENUS_IMPROVEMENT = 2;
-const GENUS_COINAGE = 3;
+const GENUS_SPECIAL = 3; // coinage and spaceship parts
 
 const TECH_USER_1 = 32;
 const TECH_SPECIAL_TECH = 32; // reserved for cul-de-sac "specialization" techs which enhance what a parent tech can do 
