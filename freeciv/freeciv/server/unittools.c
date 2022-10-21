@@ -584,6 +584,8 @@ void player_restore_units(struct player *pplayer)
   do_upgrade_effects(pplayer);
 
   unit_list_iterate_safe(pplayer->units, punit) {
+    const struct unit_type *utype = unit_type_get(punit);
+    bool coastal = utype_has_flag(utype, UTYF_COAST);
 
     /* 2) Modify unit hitpoints. Helicopters can even lose them. */
     unit_restore_hitpoints(punit);
@@ -609,7 +611,7 @@ void player_restore_units(struct player *pplayer)
       continue; /* Continue iterating... */
     }
 
-    /* 4) Rescue planes if needed */
+    /* 4) Rescue fuel units if needed */
     if (utype_fuel(unit_type_get(punit))) {
       /* Shall we emergency return home on the last vapors? */
 
@@ -620,10 +622,10 @@ void player_restore_units(struct player *pplayer)
           && !is_unit_being_refueled(punit)) {
         struct unit *carrier;
 
-         /* auto-refuel is not a UWT event but we can't let it change
-            the previous UWT timestamp: therefore we will reset it to
-            whatever UWT timestamp it had before the auto-return */
-         time_t original_timestamp = punit->server.action_timestamp;
+        /* auto-refuel is not a UWT event but we can't let it change
+          the previous UWT timestamp: therefore we will reset it to
+          whatever UWT timestamp it had before the auto-return */
+        time_t original_timestamp = punit->server.action_timestamp;
 
         carrier = transporter_for_unit(punit);
         if (carrier) {
@@ -683,11 +685,18 @@ void player_restore_units(struct player *pplayer)
                 /* Auto-refuel is not a human-enacted move so does not incur UWT: */
                 punit->server.action_timestamp = original_timestamp;
 
-                notify_player(pplayer, unit_tile(punit),
-                              E_UNIT_ORDERS, ftc_server,
-                              _("[`fuel`] Your %s %s has returned to refuel."),
-                              UNIT_EMOJI(punit), unit_link(punit));
-	              }
+                if (coastal) {
+                   notify_player(pplayer, unit_tile(punit),
+                                E_UNIT_ORDERS, ftc_server,
+                                _("[`spiral`] Your %s %s has returned to safe coast."),
+                                UNIT_EMOJI(punit), unit_link(punit));
+                } else {
+                    notify_player(pplayer, unit_tile(punit),
+                                E_UNIT_ORDERS, ftc_server,
+                                _("[`fuel`] Your %s %s has returned to refuel."),
+                                UNIT_EMOJI(punit), unit_link(punit));
+                }
+              }
               pf_path_destroy(path);
               break;
             }
@@ -697,7 +706,7 @@ void player_restore_units(struct player *pplayer)
           if (!alive) {
             /* Unit died trying to move to refuel point. */
             return;
-	  }
+	        }
         }
       }
 
@@ -714,12 +723,23 @@ void player_restore_units(struct player *pplayer)
 
   /* 7) Check if there are air units without fuel */
   unit_list_iterate_safe(pplayer->units, punit) {
+    /* This code inserted without an*/
+    const struct unit_type *utype = unit_type_get(punit);
+
     if (punit->fuel <= 0 && utype_fuel(unit_type_get(punit))) {
-      notify_player(pplayer, unit_tile(punit), E_UNIT_LOST_MISC, ftc_server,
-                    _("[`warning`]Your %s %s %s lost when %s ran out of fuel."),
-                    unit_tile_link(punit), UNIT_EMOJI(punit),
-                    (is_unit_plural(punit) ? "were" : "was"),
-                    (is_unit_plural(punit) ? "they" : "it"));
+      if (utype_has_flag(utype, UTYF_COAST)) {
+        notify_player(pplayer, unit_tile(punit), E_UNIT_LOST_MISC, ftc_server,
+                      _("[`warning`]Your %s %s strayed from coast for %d turns, and %s lost at sea!"),
+                      unit_tile_link(punit), UNIT_EMOJI(punit),
+                      utype_fuel(unit_type_get(punit)),
+                      (is_unit_plural(punit) ? "were" : "was"));
+      } else {
+        notify_player(pplayer, unit_tile(punit), E_UNIT_LOST_MISC, ftc_server,
+                      _("[`warning`]Your %s %s %s lost when %s ran out of fuel."),
+                      unit_tile_link(punit), UNIT_EMOJI(punit),
+                      (is_unit_plural(punit) ? "were" : "was"),
+                      (is_unit_plural(punit) ? "they" : "it"));
+      }
       wipe_unit(punit, ULR_FUEL, NULL);
     } 
   } unit_list_iterate_safe_end;
@@ -1975,6 +1995,7 @@ bool is_unit_being_refueled(const struct unit *punit)
 
 /**********************************************************************//**
   Can unit refuel on tile. Considers also carrier capacity on tile.
+  FIXME: Rename funnction, as it's not only for air units anymore.
 **************************************************************************/
 bool is_airunit_refuel_point(const struct tile *ptile,
                              const struct player *pplayer,
@@ -1987,6 +2008,12 @@ bool is_airunit_refuel_point(const struct tile *ptile,
   }
 
   if (NULL != is_allied_city_tile(ptile, pplayer)) {
+    return TRUE;
+  }
+
+  /* Coastal-fueled units refuel on safe ocean tiles */
+  if (utype_has_flag(unit_type_get(punit), UTYF_COAST) 
+      && is_safe_ocean(&(wld.map), ptile)) {
     return TRUE;
   }
 
