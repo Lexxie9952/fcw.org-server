@@ -665,7 +665,7 @@ var freemoji = [
   '_junglefruit',
   '_tundrafurs',
   '_junglegems',
-' _mountainsgold',
+  '_mountainsgold',
 'grassland',
   '_grasslandresources',
 'hills',
