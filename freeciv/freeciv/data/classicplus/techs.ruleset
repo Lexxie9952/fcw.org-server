@@ -651,7 +651,6 @@ graphic_alt = "-"
 helptext = _("Allows Quays.")
 cost = 24
 
-
 [advance_radio]
 name     = _("Radio")
 req1     = "Flight"

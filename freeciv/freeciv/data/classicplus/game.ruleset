@@ -35,10 +35,7 @@ name = _("Classic+ ruleset")
 ;alt_dir = ""
 
 ; Summary of the ruleset
-summary = _("\
-Classic+ Freeciv ruleset. \n\
-This ruleset is the same as the Classic manual links below, *** EXCEPT *** for what's listed in the changelog at bottom.\n\
-")
+summary = _("\Classic+ is the same as the Classic links below except the upgrades are in the Changelog at bottom.")
 
 ; Detailed description
 ; When updating this, update also desciption_file in [ruledit] section to match

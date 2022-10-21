@@ -100,7 +100,7 @@ reqs    =
       "Specialist", "taxman", "Local"
       "OutputType", "gold", "Local"
     }
-; *************************** Ruleset Fortify Bonus *********************** 
+; *************************** Ruleset Fortify and River Bonus *********************** 
 [effect_fortified]
 type    = "Fortify_Defense_Bonus"
 value   = 50
@@ -118,6 +118,15 @@ reqs    =
       "Activity",      "Fortified",    "Local", FALSE
       "UnitClassFlag", "CanFortify",   "Local", TRUE
       "UnitFlag",      "Cant_Fortify", "Local", FALSE
+    }
+
+[effect_terrain_bonus_river]
+type   = "Terrain_Defend_Add_Bonus"
+value  = 50
+reqs	 =
+    { "type",          "name",           "range"
+      "Extra",         "River",          "Local"
+      "UnitClassFlag", "TerrainDefense", "Local"
     }
 ; ****************************** RECYCLE SHIELDS **************************
 [effect_unit_shield_value_recycle]

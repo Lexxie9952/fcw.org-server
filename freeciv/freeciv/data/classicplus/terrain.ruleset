@@ -1740,7 +1740,7 @@ rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
 buildable      = TRUE
 generated      = TRUE
-defense_bonus  = 50
+;defense_bonus  = 50   reverted to +0.50 additive bonus like Civ1,2
 reqs           =
     { "type", "name", "range", "present"
       "TerrainClass", "Land", "Local", TRUE
