@@ -723,7 +723,6 @@ void player_restore_units(struct player *pplayer)
 
   /* 7) Check if there are air units without fuel */
   unit_list_iterate_safe(pplayer->units, punit) {
-    /* This code inserted without an*/
     const struct unit_type *utype = unit_type_get(punit);
 
     if (punit->fuel <= 0 && utype_fuel(unit_type_get(punit))) {
