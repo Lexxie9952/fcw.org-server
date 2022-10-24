@@ -136,24 +136,24 @@ function is_goto_segment_active() {
         we could fix that (probably we already did).
 **************************************************************************/
 function is_tile_already_in_goto_segment(tile_index) {
-  console.log("New segment request for tile %d:",tile_index);
-  var debug_str = "Ask new seg @ tile "+tile_index+" || ";
+  //console.log("New segment request for tile %d:",tile_index);
+  //var debug_str = "Ask new seg @ tile "+tile_index+" || ";
 
   if (goto_segment['saved_path'] 
       && goto_segment['saved_path']['tile'] 
       && goto_segment['saved_path']['tile'].length) {
 
     for (i=0; i<goto_segment['saved_path']['tile'].length; i++) {
-      debug_str += goto_segment['saved_path']['tile'][i] + ":" + dir_get_name(goto_segment['saved_path']['dir'][i]) +" "
+      //debug_str += goto_segment['saved_path']['tile'][i] + ":" + dir_get_name(goto_segment['saved_path']['dir'][i]) +" "
       if (goto_segment['saved_path']['tile'][i] == tile_index) {
-        console.log(debug_str);
-        console.log("*** Error, segment start already in saved_path");
+        //console.log(debug_str);
+        //console.log("*** Error, segment start already in saved_path");
         return true;
       }
     }
-    console.log(debug_str);
+    //console.log(debug_str);
   }
-  console.log(debug_str+" No existing saved_path.")
+  //console.log(debug_str+" No existing saved_path.")
   return false;
 }
 
@@ -180,7 +180,9 @@ function start_goto_path_segment()
   if (!prior_goto_packet || prior_goto_packet.length == 0) {
     console.log("Error, hit tab for a waypoint when there's no goto_request_map for punit to that tile.");
      return;
-  } else console.log("Retrieved an existing path before new segment.")
+  } else {
+    //console.log("Retrieved an existing path before new segment.")
+  }
 
   current_goto_turns = prior_goto_packet['turns'];
 
@@ -244,22 +246,19 @@ function merge_goto_path_segments(old_packet, new_packet, punit)
   if (!punit) punit = current_focus[0];
   result_packet['tile'] = [];
   result_packet['tile'].push(punit['tile']);
-
-  var debug_str = "merge: ";
+  //var debug_str = "merge: ";
 
   for (i=1; i<result_packet['dir'].length; i++) {
-    /*console.log("mapstep(t:%d,d:%d)",result_packet['tile'][i-1],
-                                     result_packet['dir'][i-1])*/
-
-  debug_str += "t:" + i + "."  + result_packet['tile'][i-1]
-            + dir_get_name(result_packet['dir'][i-1]) + ", ";
-  result_packet['tile'].push(mapstep(index_to_tile(result_packet['tile'][i-1]),
-                                       result_packet['dir'][i-1])['index']);
+    //debug_str += "t:" + i + "."  + result_packet['tile'][i-1]
+    //          + dir_get_name(result_packet['dir'][i-1]) + ", ";
+    result_packet['tile'].push(mapstep(index_to_tile(result_packet['tile'][i-1]),
+                                        result_packet['dir'][i-1])['index']);
   }
-  debug_str += "t:" + i + "."  + result_packet['tile'][i-1]
-            + dir_get_name(result_packet['dir'][i-1]) + "."; 
+  // TODO: remove debug_str stuff for better performance
+  //debug_str += "t:" + i + "."  + result_packet['tile'][i-1]
+  //          + dir_get_name(result_packet['dir'][i-1]) + "."; 
 
-  console.log(debug_str);
+  //console.log(debug_str);
 
   return result_packet;
 }
