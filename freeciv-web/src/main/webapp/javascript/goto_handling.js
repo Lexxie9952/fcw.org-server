@@ -196,6 +196,16 @@ function start_goto_path_segment()
   // Stash moves and fuel to this point 
   goto_segment.moves_left_initially = prior_goto_packet['movesleft'];
   goto_segment.fuel_left_initially = prior_goto_packet['fuelleft'];
+
+  /* goto_segment.saved_path is going to be concatted on with future 
+   * goto_request_maps, so we have to clear the current goto_request_map
+   * to handle the case of moving mouse around in the same tile (which
+   * deliberately RE-USES any existing goto_request_map in order to not
+   * over-query the server for goto_paths we've already requested and 
+   * got information on, and therefore would concat the same goto_request_map
+   * for this waypoint on top of itself!: the dreaded "squiggle on same
+   * tile problem, finally solved!") */
+  goto_request_map = {};
 }
 
 /**************************************************************************
