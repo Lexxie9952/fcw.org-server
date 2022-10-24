@@ -37,7 +37,7 @@ Quays let cargo units deboard or be unloaded for free (without disembarking, whi
 Berries added 2/2/2. Forest resource.
 Rubber added 1/3/3. Jungle resource.
 Jungle and Tundra output buffed to become slightly more habitable
-Gold now produces +8 trade (previous 0/1/6 made it an inferior resource)</li>
+Gold now produces +8 trade (previous 0/1/6 was an inferior resource)</li>
 <li>Added Nile River bonus effects: desert rivers make +2 food if irrigated. Manually irrigated on a city, +3 food</li>
 <li>Huts better balanced:
    Huts don't give cities
