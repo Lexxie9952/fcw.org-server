@@ -2999,7 +2999,7 @@ static bool city_build_stuff(struct player *pplayer, struct city *pcity)
     }
     else {
       const struct impr_type *pimprove = pcity->production.value.building;
-      add_message = pcity->hangry ? _("famine") : _("disorder");
+      add_message = pcity->hangry ? _("famine") : _("lawlessness");
       notify_player(pplayer, city_tile(pcity), E_CITY_CANTBUILD, ftc_server,
             /* TRANS: <city> is finished building <unit/building>. */
             _("[`warning`] Recent %s in %s halts construction on %s."),
@@ -3013,7 +3013,7 @@ static bool city_build_stuff(struct player *pplayer, struct city *pcity)
     }
     else {
       const struct unit_type *utype = pcity->production.value.utype;
-      add_message = pcity->hangry ? _("famine") : _("disorder");
+      add_message = pcity->hangry ? _("famine") : _("lawlessness");
       notify_player(pplayer, city_tile(pcity), E_CITY_CANTBUILD, ftc_server,
             /* TRANS: <city> is finished building <unit/building>. */
             _("[`warning`] Recent %s in %s halts production of %s."),
