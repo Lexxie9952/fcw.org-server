@@ -115,8 +115,8 @@ The current and complete list of Freeciv-web controls can be found here:<br>
 <br>
 <img src="/images/orders/hide_button.png"><span class="vctr"> Hide Orders Buttons: &emsp;(use PREFS to show again)</span>
 
-
-<h2>Keyboard Shortcuts for Units</h2><table class="ctrls_tbl"><tr><td><tr><td><span class="hotkey">  a</span></td><td> (a)uto-settler  (settler/worker units)</td></tr>
+<h2>Keyboard Shortcuts for Units</h2><table class="ctrls_tbl"><tr><td><span class="hotkey">TAB (&#11134;)</span></td><td> SET and LOCK a <b>waypoint</b> for <b>GOTO</b> path on this tile</td></tr>
+<tr><td><span class="hotkey">  a</span></td><td> (a)uto-settler  (settler/worker units)</td></tr>
 <tr><td><span class="hotkey">shift-A</span></td><td> (A)ctivate (show/select) cargo units on transport </td></tr>
 <tr><td><span class="hotkey">ctrl-A</span></td><td> (A)uto-attack - attack when moving, without asking</td></tr>
 <tr><td><span class="hotkey">  b</span></td><td> (b)uild city  (settler units)</td></tr>
