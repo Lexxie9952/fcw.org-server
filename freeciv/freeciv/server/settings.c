@@ -1813,8 +1813,8 @@ static struct setting settings[] = {
         N_("Number of turns before a city can spawn partisans again"),
         N_("This setting sets how frequently a city can spawn partisans. For "
         "example: 0 = unlimited spawns on the same turn; 1 = must wait a "
-        "turn between spawnings, 10 = must wait ten turns to spawn again. " 
-        "generate partisans."), NULL, NULL, NULL,
+        "turn between spawnings, 10 = must wait ten turns to spawn again. "),
+        NULL, NULL, NULL,
         GAME_MIN_PARTISAN_TURNS,
         GAME_MAX_PARTISAN_TURNS,
         GAME_DEFAULT_PARTISAN_TURNS)
