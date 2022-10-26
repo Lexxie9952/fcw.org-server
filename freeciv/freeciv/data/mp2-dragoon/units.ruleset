@@ -891,7 +891,8 @@ Tribesmen can explore, moving over terrain with no penalty. They don’t obey\
  or exert ZOC. They can build roads, quays, irrigate, or mine at half the rate\
  of Workers. \n\
 Tribesmen can make basic diplomatic contact and freely Investigate\
- cities. They can carry Goods and enter nations with whom you are at Peace.\
+ cities. They can carry Goods and enter nations with whom you are at Peace;\
+ cargo is visible to everyone.\
  They can do primitive combat—they can’t conquer cities and only attack for\
  10 combat rounds. \n\
 Tribesmen help build nations by recycling into city production with\

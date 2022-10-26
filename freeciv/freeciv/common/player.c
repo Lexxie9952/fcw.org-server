@@ -1018,12 +1018,13 @@ bool can_player_see_unit_at(const struct player *pplayer,
       && !pplayers_allied(pplayer, unit_owner(punit))) {
 #ifdef FREECIV_WEB
     /* TODO: is_cargo_visible based on EFT or just a new var in unit_type */
-    // currently, ugly hack waiting for the above:
+    // currently, ugly placeholder hack waiting for the above:
     const struct unit *tunit = unit_transport_get(punit);
     // possible add later: Galley, Trireme, Longboat, Carrier (planes on deck)
     if (tunit != NULL 
         && ( 0 == strcmp("Wagon", utype_rule_name(unit_type_get(tunit)))
              ||  0 == strcmp("Boat",  utype_rule_name(unit_type_get(tunit)))
+             ||  0 == strcmp("Tribesmen",  utype_rule_name(unit_type_get(tunit)))
              ||  0 == strcmp("Trawler", utype_rule_name(unit_type_get(tunit))) )
         ) {
        goto next_check;
