@@ -3801,9 +3801,9 @@ parameter.start_tile, parameter.moves_left_initially, parameter.fuel_left_initia
     if (unit_move_rate(punit)) {
       int moves_at_start = moves_left_initially > -1 ? moves_left_initially : punit->moves_left;
       int moves_spent = (unit_move_rate(punit) - moves_at_start);
-      /* NB: Running out of moves doesn't always mean an extra turn to reach target. It could
-         be a "movesleft=0 arrival". ceil(turns)-1 gives correct #turns for arrival @ target. */
-      float turns = ceil((float)(total_mc + moves_spent) / (float)unit_move_rate(punit))-1;
+      /* NB: Running out of moves doesn't always mean an extra turn to reach target. It could be
+         a "movesleft=0 arrival". MAX(0,ceil(turns)-1) gives correct #turns for arrival @ target. */
+      float turns = MAX(0, ceil((float)(total_mc + moves_spent) / (float)unit_move_rate(punit))-1);
       p.turns = turns;
       p.total_mc = total_mc;
       p.movesleft = moves_at_start - total_mc;
