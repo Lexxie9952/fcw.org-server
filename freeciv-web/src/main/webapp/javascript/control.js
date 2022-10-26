@@ -7593,6 +7593,7 @@ function popit_req(ptile, goto_only)
     var packet = {"pid" : packet_info_text_req, "visible_unit" : punit_id,
                   "loc" : ptile['index'], "focus_unit": focus_unit_id};
     send_request(JSON.stringify(packet));
+    if (DEBUG_SHORT_PACKETS) console.log("%cTile Index: %c%d",'color: #FF6','color: #FFF',ptile.index)
   }
 
   // IF middle-clicked a tile that: 1) has unit(s), 2) has GO TO orders; THEN: show the path(s)
