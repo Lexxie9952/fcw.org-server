@@ -110,15 +110,16 @@ function websocket_init()
        if (DEBUG_LOG_PACKETS) {
         console.log("*** INCOMING PACKET>>>>>"+event.data);
       } else if (DEBUG_SHORT_PACKETS) {
-        var pid = jQuery.parseJSON(event.data)[0]['pid']
+        var data = jQuery.parseJSON(event.data)
+        let index = (data.length > 1) ? 1 : 0
+        var pid = data[index]['pid']
         var ptitle = getKeyByValue(packet_names, pid);
         // Only print infos from packet pids we defined in packhand.js:packet_names
         if (pid>1 && ptitle) {
-          console.log("****** IN (%s): %s", pid, ptitle);
           if (DEBUG_EXPAND_PACKETS && pid>1) {
             var my_obj = JSON.parse(event.data);
-            console.log(my_obj);
-          }
+            console.log("%c***IN (%s): %s: %s", 'color: #8D8', pid, ptitle, JSON.stringify(my_obj[index]));
+          } else console.log("****** IN (%s): %s", pid, ptitle);
         }
       }
         
