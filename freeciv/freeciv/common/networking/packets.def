@@ -2378,11 +2378,14 @@ PACKET_GOTO_PATH = 288; sc, dsend
   UINT16 length;
   DIRECTION dir[MAX_LEN_ROUTE:length];
   SINT16 turn[MAX_LEN_ROUTE:length];
+  SINT16 arrival_turn[MAX_LEN_ROUTE:length];
   TILE dest;
   UINT32 turns;
+  UINT32 arrival_turns;
   UINT32 total_mc;
   SINT32 movesleft;
   SINT16 fuelleft;
+  UINT32 moverate;
 end
 
 PACKET_INFO_TEXT_REQ = 289; cs, dsend

@@ -3705,29 +3705,24 @@ static void do_path_req(struct player *pplayer, struct unit *punit,
                         int goal, int start_tile, int moves_left_initially,
                         int fuel_left_initially)
 {
-  if (NULL == punit) {
-    /* Shouldn't happen */
-    log_error("do_path_req()"
-              " invalid unit");
+  if (NULL == punit) { /* Shouldn't happen */
+    log_error("do_path_req() invalid unit");
     return;
   }
 
-/* DEBUG
-notify_player(pplayer, NULL, E_UNIT_ACTION_FAILED, ftc_server,
-_("1[`anger`] dpr: start:%d, mli:%d, fli:%d"),
-start, moves_left_initially, fuel_left_initially);
-*/
   int unit_id = punit->id;
-
   struct tile *ptile = index_to_tile(&(wld.map), goal);
-  struct pf_parameter parameter;
-  struct pf_map *pfm;
-  struct pf_path *path;
-  struct tile *old_tile;
-  int i = 0;
-  struct packet_goto_path p;
-
-  if (NULL == ptile) {
+  int umr = unit_move_rate(punit);
+  
+  /* Insurance: catch possible bad calls from clients: */  
+  if (umr <= 0) {
+    log_verbose("do_path_req()"
+        " %s (id=%d) %s. moverate<=0 would cause error or div by zero",
+        unit_rule_name(punit),
+        unit_id,
+        nation_rule_name(nation_of_unit(punit)));
+    return;
+  } else if (NULL == ptile) {
     /* Shouldn't happen */
     log_error("do_path_req()"
               " invalid %s (%d) tile (%d,%d)",
@@ -3735,9 +3730,7 @@ start, moves_left_initially, fuel_left_initially);
               unit_id,
               TILE_XY(ptile));
     return;
-  }
-
-  if (!is_player_phase(unit_owner(punit), game.info.phase)) {
+  } else if (!is_player_phase(unit_owner(punit), game.info.phase)) {
     /* Client is out of sync, ignore */
     log_verbose("do_path_req()"
                 " invalid %s (%d) %s != phase %d",
@@ -3748,33 +3741,36 @@ start, moves_left_initially, fuel_left_initially);
     return;
   }
 
+/* Success. Process info to send to client: */
+  struct pf_parameter parameter;
+  struct pf_map *pfm;
+  struct pf_path *path;
+  struct tile *old_tile;
+  int i = 0;
+  struct packet_goto_path p;
   p.unit_id = punit->id;
   p.dest = tile_index(ptile);
+  p.moverate = umr; /* Web clients don't know bonus/penalty adjustments */
+  int moves_at_start = moves_left_initially != FC_NEG_HUGE
+                     ? moves_left_initially : punit->moves_left;
+  int moves_spent = umr - moves_at_start; /* moves already used this turn */
 
   /* Use path-finding to find a goto path. */
   pft_fill_unit_parameter(&parameter, punit);
 
-  /* Set up pf_parameter for user requested path segment, if requested */
+  /* If user requested path segment, set up pf_parameter for it: */
   if (start_tile > -1) {
     parameter.start_tile = index_to_tile(&(wld.map), start_tile);
-    parameter.moves_left_initially = moves_left_initially;
+    parameter.moves_left_initially = moves_at_start;
     if (utype_fuel(unit_type_get(punit))) {
       parameter.fuel_left_initially = fuel_left_initially;  
     }
-/*    
-notify_player(pplayer, NULL, E_UNIT_ACTION_FAILED, ftc_server,
-_("1[`anger`] parameter: start:%d, mli:%d, fli:%d"),
-parameter.start_tile, parameter.moves_left_initially, parameter.fuel_left_initially);
-*/
   }
+
   pfm = pf_map_new(&parameter);
   path = pf_map_path(pfm, ptile);
   pf_map_destroy(pfm);
-/*
-notify_player(pplayer, NULL, E_UNIT_ACTION_FAILED, ftc_server,
-_("1[`anger`] parameter: start:%d, mli:%d, fli:%d"),
-parameter.start_tile, parameter.moves_left_initially, parameter.fuel_left_initially);
-*/
+
   if (path) {
     int total_mc = 0, fuel_left = 0;
     p.length = path->length - 1;
@@ -3787,41 +3783,35 @@ parameter.start_tile, parameter.moves_left_initially, parameter.fuel_left_initia
       total_mc = path->positions[i+1].total_MC;
       fuel_left = path->positions[i+1].fuel_left;
       if (same_pos(new_tile, old_tile)) {
-        dir = -1;
+        dir = -1; /* refuel layover */
       } else {
         dir = get_direction_for_step(&(wld.map), old_tile, new_tile);
       }
       old_tile = new_tile;
       p.dir[i] = dir;
-      p.turn[i] = path->positions[i+1].turn; // turns to arrive at this tile
+      p.turn[i] = path->positions[i+1].turn; // "Turns-SPENT" to arrive at this tile.
+      /* Calculate arrival turn at the tile: */
+      float turns = MAX(0, ceil((float)(total_mc + moves_spent) / (float)umr)-1);
+      p.arrival_turn[i] = turns;
     }
     pf_path_destroy(path);
-    /* 27July2021 cazfi identified div by zero was crash error code. This
-       was the only division operaton in the function and it fixed it.*/
-    if (unit_move_rate(punit)) {
-      int moves_at_start = moves_left_initially > -1 ? moves_left_initially : punit->moves_left;
-      int moves_spent = (unit_move_rate(punit) - moves_at_start);
-      /* NB: Running out of moves doesn't always mean an extra turn to reach target. It could be
-         a "movesleft=0 arrival". MAX(0,ceil(turns)-1) gives correct #turns for arrival @ target. */
-      float turns = MAX(0, ceil((float)(total_mc + moves_spent) / (float)unit_move_rate(punit))-1);
-      p.turns = turns;
-      p.total_mc = total_mc;
-      p.movesleft = moves_at_start - total_mc;
-      /* fuel_left on last tile of path will be needed if this becomes a segment of a composite path*/
-      p.fuelleft = fuel_left;
-    } else {
-      log_verbose("do_path_req()"
-          " %s (id=%d) %s. moverate=0 would cause div by zero",
-          unit_rule_name(punit),
-          unit_id,
-          nation_rule_name(nation_of_unit(punit)));
-      p.turns = 999;
-    }
-    send_packet_goto_path(pplayer->current_conn, &p);
 
-  } else {
-    return;
+    /* "Turns-SPENT" to arrive at dest-tile != "turns to arrival" -- You can arrive
+    *  on the same turn with moves_left==0, yet SPENT a "whole turn of movement": */
+    p.turns = p.turn[p.length - 1];
+    /* Running out of moves doesn't always mean an extra turn to reach dest-tile. It could be
+      a "movesleft==0 arrival". MAX(0,ceil(turns)-1) gives correct #turns for arrival @ dest. */
+    float arrive_turns = MAX(0, ceil((float)(total_mc + moves_spent) / (float)umr)-1);
+    p.arrival_turns = arrive_turns;
+    p.total_mc = total_mc;
+    p.movesleft = moves_at_start - total_mc;
+    /* fuel_left on last tile of path will be needed if this becomes a segment of a composite path*/
+    p.fuelleft = fuel_left;
+
+    send_packet_goto_path(pplayer->current_conn, &p);
   }
+
+  return;
 }
 /**********************************************************************//**
   This function handles GOTO path requests from the client.
