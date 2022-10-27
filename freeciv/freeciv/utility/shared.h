@@ -34,6 +34,9 @@ extern "C" {
 /* Use FC_INFINITY to denote that a certain event will never occur or
    another unreachable condition. */
 #define FC_INFINITY    	(1000 * 1000 * 1000)
+/* Use FC_NEG_HUGE as a special flag or state-status in vars which
+   expect valid large values in both positive and negative ranges. */
+#define FC_NEG_HUGE -2147483648 /* maximum negative val for SINT32 */
 
 #ifndef FREECIV_TESTMATIC
 /* Initialize something for the sole purpose of silencing false compiler warning
