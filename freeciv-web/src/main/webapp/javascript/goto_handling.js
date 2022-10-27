@@ -34,6 +34,7 @@ var airlift_active = false;
 const FORCE_CHECKS_AGAIN = -4;
 const LAST_FORCED_CHECK = -1;  // When FORCE_CHECKS_AGAIN++ arrives at this value, we stop requesting goto paths for the same tile
 var prev_goto_tile;            // counter for above
+var last_dest = null;          // Only used if DEBUG_SHORT_PACKETS is on; helps us watch construction of goto segments/paths 
 
 /* States for Connect Orders (worker roads/irrigates along path) */
 var connect_active = false;               // indicates that goto_active goto_path is for connect mode
@@ -54,12 +55,13 @@ var goto_request_map = {};                // Key is "unit.id,dest.x,dest.y". Cac
 var goto_turns_request_map = {};          // Legacy relic appears to be residual var no longer used, slated for deletion ?
 var current_goto_turns = 0;               // # of turns path has up to this point; from most recent goto_req packet, probably should be cleaned up with other vars named differently
 var goto_way_points = {};                 // For multi-turn gotos, records which tiles a unit end its turn on, using tile index as key
+var goto_from_tile = {};                  // For sanity when drawing goto lines, knowing the tile we came from reduces logical complexity by 32x
 
 /* In user-built paths, this stores the concatenation of decisions up to the point where user is still "indecisively" selecting the next segment */
 var goto_segment = {           // If building a goto path segment, this stores the info we need 
   "unit_id": -1,
-  "start_tile": -1,            // The tile_index of the START tile of the LAST (newly-being-selected-and-not-yet-concatenated) segment
-  "moves_left_initially": -1,  // moves_left on the start tile of the new segment
+  "start_tile": -1,                     // The tile_index of the START tile of the LAST (newly-being-selected-and-not-yet-concatenated) segment
+  "moves_left_initially": FC_NEG_HUGE,  // moves_left on the start tile of the new segment; FC_NEG_HUGE means "use punit.movesleft"
   "fuel_left_initially": -1,   // fuel_left  "   "    "    "   "   "   "     "
   "saved_path": []             /* Contains all path info for any prior user-built pathing 
   * from punit.tile up to the start tile of a newly-being-selected path segment: i.e., this
@@ -85,10 +87,10 @@ var goto_segment = {           // If building a goto path segment, this stores t
 function clear_goto_segment() {
   goto_segment = {           // if building a goto path segment, this stores the info we need
     "unit_id": -1,
-    "start_tile": -1,            // the tile.index of the start tile of the last segment
-    "moves_left_initially": -1,  // moves_left on the start tile of the last segment
-    "fuel_left_initially": -1,   // fuel_left  "   "    "    "   "   "   "     "
-    "saved_path": []             // path, in dirs, from punit.tile to the start tile of the last segment
+    "start_tile": -1,                     // the tile.index of the start tile of the last segment
+    "moves_left_initially": FC_NEG_HUGE,  // moves_left on the start tile of the last segment
+    "fuel_left_initially": -1,            // fuel_left  "   "    "    "   "   "   "     "
+    "saved_path": []                      // path, in dirs, from punit.tile to the start tile of the last segment
   };
 }
 /**************************************************************************
@@ -156,13 +158,30 @@ function is_tile_already_in_goto_segment(tile_index) {
   //console.log(debug_str+" No existing saved_path.")
   return false;
 }
-
 /**************************************************************************
-  Called when hitting tab during GOTO to freeze a waypoint and the path
-  to that waypoint, as a BASE-PATH on which new goto path requestss will
-  build AS IF the unit is already on that tile with the moves_left and
+  Called when hitting 'g' or tab during GOTO to set a user waypoint
+**************************************************************************/
+function request_goto_waypoint() {
+  if (rally_active) return; // TODO: add support for rally pathing too
+  if (!goto_active && !connect_active) return;
+
+  if (get_units_in_focus().length > 1) {
+    // Could be different paths for multiple units, can't stash it all.
+    return;
+  }
+  if (!is_tile_already_in_goto_segment(canvas_pos_to_tile(mouse_x, mouse_y)['tile'])) {
+    /* We only start a new segment IFF: it's a single unit getting the order,
+     * the start_tile of the new segment is not in any existing segment */
+    start_goto_path_segment();
+  }
+}
+/**************************************************************************
+  Called by request_goto_waypoint() to do the actual work. Locks and 
+  freezes a waypoint and prior path to that waypoint, into the pathing as
+  a BASE-PATH which all new goto path requests will concatenate upon as if
+  the unit is already on the waypoint-tile with the moves_left and 
   fuel_left it will have when arriving there. i.e., save-path-up-to-here
-  and let me select a path from there to add to it.
+  and let me select a path from here to add to it.
 **************************************************************************/
 function start_goto_path_segment()
 {
@@ -224,41 +243,67 @@ function merged_goto_packet(new_packet, punit) {
 **************************************************************************/
 function merge_goto_path_segments(old_packet, new_packet, punit)
 {
-  // Deep copy the old packet
+  // Deep copy the old packet, don't clone a reference to it.
   var result_packet = JSON.parse(JSON.stringify(old_packet));
   // Put the ending information into it:
   result_packet['dest'] = new_packet['dest'];
-  result_packet['turns'] += new_packet['turns']; // since we started with the moves_left of old packet, ok iff that # is >=0 ?
+  result_packet['turns'] = new_packet['turns']; // movesleft propagates into next segment request and server sends us updated turns in next packet
+  result_packet['arrival_turns'] = new_packet['arrival_turns'];
   result_packet['total_mc'] += new_packet['total_mc'];
   result_packet['movesleft'] = new_packet['movesleft'];
   result_packet['length'] += new_packet['length'];
   result_packet['fuelleft'] = new_packet['fuelleft'];
+  result_packet['moverate'] = new_packet['moverate'];
   if (result_packet['dir'] && result_packet['dir'].length
       && new_packet['dir'] && new_packet['dir'].length) {
     result_packet['dir'] = result_packet['dir'].concat(new_packet['dir']); // makes a new copy
   }
   if (new_packet['turn'] && new_packet['turn'].length) {
     for (var i=0; i<new_packet['turn'].length; i++) {
-      result_packet['turn'].push(new_packet['turn'][i] + old_packet['turns']) 
+      result_packet['turn'].push(new_packet['turn'][i]/* + old_packet['turns']*/) 
     }
   }
-  // Log every tile in the path.
+  if (new_packet['arrival_turn'] && new_packet['arrival_turn'].length) {
+    for (var i=0; i<new_packet['arrival_turn'].length; i++) {
+      result_packet['arrival_turn'].push(new_packet['arrival_turn'][i]) 
+    }
+  }
+  /* Log every tile in the path */
   if (!punit) punit = current_focus[0];
   result_packet['tile'] = [];
   result_packet['tile'].push(punit['tile']);
-  //var debug_str = "merge: ";
 
-  for (i=1; i<result_packet['dir'].length; i++) {
-    //debug_str += "t:" + i + "."  + result_packet['tile'][i-1]
-    //          + dir_get_name(result_packet['dir'][i-1]) + ", ";
-    result_packet['tile'].push(mapstep(index_to_tile(result_packet['tile'][i-1]),
-                                        result_packet['dir'][i-1])['index']);
+  for (var i=1; i<result_packet['dir'].length; i++) {
+    const index = i-1;
+    var dir = result_packet['dir'][index];
+
+    /* Handle waypoint-refueling layovers */
+    let ptile = mapstep(index_to_tile(result_packet['tile'][index]), dir)/*['index'];*/
+    if (!ptile || dir < 0) {
+      if (index >= 0) { // refueling layover on same tile
+        result_packet['tile'].push(result_packet['tile'][index])
+      } else { // no path yet, earliest possible tile is start tile
+        result_packet['tile'].push(punit.tile)
+      }
+    }
+    /* Normal processing, no layover tile: */
+    else {
+      result_packet['tile'].push(mapstep(index_to_tile(result_packet['tile'][index]),
+                                  dir)['index']);
+    }
   }
-  // TODO: remove debug_str stuff for better performance
-  //debug_str += "t:" + i + "."  + result_packet['tile'][i-1]
-  //          + dir_get_name(result_packet['dir'][i-1]) + "."; 
 
-  //console.log(debug_str);
+  result_packet['tile'].push(new_packet['dest']);  
+
+  /* DEBUG */
+  if (DEBUG_SHORT_PACKETS) {
+    if (last_dest != new_packet.dest) { // suppress redundant debug messages
+      last_dest = new_packet.dest;
+      console.log("%cSEG1: %s",'color: #4AA',JSON.stringify(old_packet))
+      console.log("%cSEG2: %s",'color: #7CC',JSON.stringify(new_packet))
+      console.log("%cS1+2: %s",'color: #9FF',JSON.stringify(result_packet))
+    }
+  }
 
   return result_packet;
 }
@@ -274,6 +319,7 @@ function update_goto_path(goto_packet)
 
   if (!join_to_existing_segment) {
     goto_way_points = {};       // Clear old waypoints IFF it's a new path only
+    goto_from_tile = {};
   } else goto_request_map = {}; // Insurance: stashing multiple grm's in join-mode could make circularity/overwrite issues.
 
   var goto_path_packet = (join_to_existing_segment && punit) 
@@ -326,7 +372,6 @@ function update_goto_path(goto_packet)
   if (ptile == null) return;
   var goaltile = index_to_tile(goto_packet['dest']);
 /* </end SET THE START AND DEST TILE> */
-  var refuel = 0;
 
   // Don't bother checking goto for same tile unit is on
   if (ptile==goaltile) {
@@ -334,66 +379,74 @@ function update_goto_path(goto_packet)
     if (!rally_active) update_goto_path_panel(0,0,0,punit.movesleft);
     return;
   }
+
+/* This code block does 3 things:
+    1. Calculate and record where to draw the turn boundary markers on the path.
+    2. Skip over "invalid dirs" in the path: i.e., refueling layovers.
+    3. Record goto_dirs so mapview can draw a lines for each tile. */
+  var refuel = 0;
   if (renderer == RENDERER_2DCANVAS) {
-    // First turn boundary waypoint is your own tile if you have no moves left
-    goto_way_points[ptile.index] = movesleft ? 0 : SOURCE_WAYPOINT;
-
-    var turn;
-    var old_turn = goto_path_packet['turn'][0];
+    goto_way_points[ptile.index] = movesleft ? 0 : SOURCE_WAYPOINT; // no moves_left on src_tile = turn boundary
     var old_tile=null;
-    var upcoming = false; // the way we draw goto lines or the way the server marks turn-changes, idk, but we have to advance it by one.
-    for (var i = 0; i < goto_path_packet['dir'].length; i++) {
+    var old_turn_boundary = false;
+    for (let i = 0; i < goto_path_packet['dir'].length; i++) {
       if (ptile == null) break;
-      var dir = goto_path_packet['dir'][i];
+      let dir = goto_path_packet['dir'][i];
+      let turn_boundary = (goto_path_packet['turn'][i] != goto_path_packet['arrival_turn'][i])
 
-      //-------------------------------------------------
-      turn = goto_path_packet['turn'][i];
-      if (upcoming) {
-        upcoming = false;
-        goto_way_points[ptile.index] = SOURCE_WAYPOINT;
-        if (old_tile) goto_way_points[old_tile.index] = DEST_WAYPOINT; // prevent overwrite
-      } else if (i==goto_path_packet['dir'].length -1) { // very last turn boundary has no tile after so we prematurely compute it
-        if (turn && turn-old_turn>0) {
-          goto_way_points[ptile.index] = DEST_WAYPOINT;
-        }
-      } else if (i!=0) { // no turn boundary in all cases except first tile when you have no moves left
+      if (i != 0) {
+        //goto_way_points[ptile.index] &= ~DEST_WAYPOINT;
         goto_way_points[ptile.index] = 0;
-      } 
-
-      if (turn && turn-old_turn>0) {
-        upcoming = true;
       }
-      //---------------------------------------------------
-      if (dir == -1) { /* Assume that this means refuel. */
+      if (old_turn_boundary) {
+        if (old_tile) goto_way_points[old_tile.index] |= DEST_WAYPOINT; // prevent overwrite
+      }
+      if (i == goto_path_packet['dir'].length - 1) { // does last tile needs terminus turn-boundary marker?
+          if (turn_boundary) goto_way_points[ptile.index] |= DEST_WAYPOINT;
+          // Uncomment me if erroneous turn boundary markers ever happen on last tile:
+          //else goto_way_points[ptile.index] = 0;
+      }/*
+      else if (i != 0) { // No turn boundary (except src_tile if unit has no movesleft)
+        goto_way_points[ptile.index] = 0;
+      }*/
+      /* DEBUG missing turn boundary markers OR markers that shouldn't be there:
+      console.log("i:%d == gpp.len-1 %d ... tb:%s draw_dest:%d",
+                  i,goto_path_packet['dir'].length-1,turn_boundary,goto_way_points[ptile.index])*/
+
+      old_turn_boundary = turn_boundary;
+      
+      if (dir == -1) {
         refuel++;
         continue;
       }
       goto_dirs[ptile.index] = dir;
       old_tile = ptile;
       ptile = mapstep(ptile, dir);
-      old_turn = turn;
+      goto_from_tile[ptile.index] = old_tile.index;
+      if (ptile && turn_boundary) goto_way_points[ptile.index] |= SOURCE_WAYPOINT;
     }
   } else {
     webgl_render_goto_line(ptile, goto_packet['dir']);
   }
+/* </end code block does 3 things> */
 
   goto_request_map[goto_packet['unit_id'] + "," + goaltile['x'] + "," + goaltile['y']] = goto_packet
-  current_goto_turns = goto_packet['turns'];
+  current_goto_turns = goto_path_packet['arrival_turns'];
 
+  /* This line is legacy relic that can be ignored and eventually deleted 
   goto_turns_request_map[goto_packet['unit_id'] + "," + goaltile['x'] + "," + goaltile['y']]
-	  = current_goto_turns;
+	  = current_goto_turns; */
 
   if (current_goto_turns !== "undefined" && punit) {
-    let path_length = goto_packet['length'];
+    let path_length = goto_path_packet['length'];
     // Fuel units inject extra non-path 'refuel data' in the goto_packet: +++
     if (refuel) path_length -= refuel;  // remove "refuel path steps" from path_length
   
-    //let turns = Math.ceil(goto_packet['total_mc']/unit_type(punit)['move_rate'])-1;  << former client_side calc assumed full moves left (which we could correct if we wanted) and that the unit had no move bonus (which we can't correct for paths of 2 turns or more because only the server knows move bonuses!)
     let turns = current_goto_turns;
     if (turns<0) turns = 0;
-    let movecost = goto_packet['total_mc'];
+    let movecost = goto_path_packet['total_mc'];
     //let remaining = parseInt(punit.movesleft - movecost);     THIS WORKS but let's try the server for getting info on multi-turn paths?
-    let remaining = goto_packet['movesleft'];
+    let remaining = goto_path_packet['movesleft'];
     update_goto_path_panel(movecost,path_length,turns,remaining);
   }
   update_mouse_cursor();
