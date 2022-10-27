@@ -3861,10 +3861,14 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
         goto_path_skip_count = goto_path_trigger + 1;
       }
       else if (current_focus.length > 0) {
-        activate_goto();
-        delayed_goto_active = false;
-        if (shift) delayed_goto_active = true;
-        goto_path_skip_count = goto_path_trigger + 1;
+        if (!goto_active && !connect_active && !rally_active) {
+          activate_goto();
+          delayed_goto_active = false;
+          if (shift) delayed_goto_active = true;
+          goto_path_skip_count = goto_path_trigger + 1;
+        } else { // 'g' while pathing requests a goto-waypoint
+          request_goto_waypoint();
+        }
       }
     break;
 
@@ -4134,17 +4138,7 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
   switch (key_code) {
     case 9:   // Tab key = save goto path up to tile shown, start a new path segment after it.
       the_event.preventDefault();
-      if (get_units_in_focus().length > 1) {
-        /* Could be different paths for multiple units, can't stash it all.
-           TODO: if all goto_paths are the same and there's a way to check,
-           OR all units are same move_rate AND same move bonuses, we can allow it */
-        break;
-      }
-      if (!is_tile_already_in_goto_segment(canvas_pos_to_tile(mouse_x, mouse_y)['tile'])) {
-        /* We only start a new segment IFF: it's a single unit getting the order,
-         * the start_tile of the new segment is not in any existing segment */
-        start_goto_path_segment();
-      }
+      request_goto_waypoint();
       break;
     
     case 46: // DEL key

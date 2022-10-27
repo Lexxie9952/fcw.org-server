@@ -128,6 +128,7 @@ The current and complete list of Freeciv-web controls can be found here:<br>
 <tr><td><span class="hotkey">  f</span></td><td> (f)ortify unit  (military units)</td></tr>
 <tr><td><span class="hotkey">shift-F</span></td><td> build (F)ort, fortress, castle, or bunker</td></tr>
 <tr><td><span class="hotkey">  g</span></td><td> (g)o to tile  (then left-click mouse to select target tile)</td></tr>
+<tr><td><span class="hotkey">  g</span></td><td> add a (g)o-to waypoint  (when in go-to mode)</td></tr>
 <tr><td><span class="hotkey">shift-G</span></td><td> delayed (G)oto (at turn change, reqs: unit with less than full moves)</td></tr>
 <tr><td><span class="hotkey">ctrl-alt-g</span></td><td> (g)o and do action</td></tr>
 <tr><td><span class="hotkey">ctrl-alt-G</span></td><td> delayed (G)o and do action (at turn change)</td></tr>
