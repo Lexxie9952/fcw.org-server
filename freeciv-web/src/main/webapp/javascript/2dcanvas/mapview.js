@@ -811,8 +811,9 @@ function mapview_territory_fill(pcanvas, color, canvas_x, canvas_y) {
 
 /**************************************************************************
 ...Draws GOTO lines, RALLY lines, existing GOTO orders, and CONNECT
-activities (road/irrigate). new_turn is whether the goto path end/begins
-a turn on that tile, which lets us know to draw the dot differently.
+activities (road/irrigate). mark_new_turn is whether the goto path 
+ends/begins a turn on that tile, which lets us know to whether to draw
+a normal tile dot or a turn boundary waypoint marker
 **************************************************************************/
 function mapview_put_goto_line(pcanvas, dir, canvas_x, canvas_y, tile_index)
 {
@@ -821,7 +822,8 @@ function mapview_put_goto_line(pcanvas, dir, canvas_x, canvas_y, tile_index)
   var x1 = x0 + GOTO_DIR_DX[dir] * (tileset_tile_width / 2);
   var y1 = y0 + GOTO_DIR_DY[dir] * (tileset_tile_height / 2);
 
-  var new_turn = goto_way_points[tile_index];
+  var mark_new_turn = goto_way_points[tile_index];
+  var last_turn_marker = goto_way_points[goto_from_tile[tile_index]];
   // Use colours according to active goto or tile/unit info
   var colors = goto_active ? goto_colors_active : goto_colors_info;
   if (connect_active) {
@@ -848,7 +850,6 @@ function mapview_put_goto_line(pcanvas, dir, canvas_x, canvas_y, tile_index)
   pcanvas.stroke();
   // Main cyan line
   pcanvas.strokeStyle = 'rgba('+colors[1]+')';
-  //if (new_turn) pcanvas.strokeStyle = 'rgba(225,47,0)';
   pcanvas.lineWidth = 6;
   pcanvas.beginPath();
   pcanvas.moveTo(x0, y0);
@@ -859,8 +860,8 @@ function mapview_put_goto_line(pcanvas, dir, canvas_x, canvas_y, tile_index)
     will get overdrawn by the next source (exception of start-path and end-path points.) But we do not want to color both waypoint circles
     with an indicator for a new turn, only the one tile where it happens. */
   
-    // Source waypoint circle
-  if (new_turn & SOURCE_WAYPOINT) {         
+  // Source waypoint circle
+  if ((mark_new_turn & SOURCE_WAYPOINT) || last_turn_marker & DEST_WAYPOINT) {         
     pcanvas.lineWidth = 17;
     pcanvas.strokeStyle = 'rgba(225,47,0)';
   } else {  
@@ -872,8 +873,8 @@ function mapview_put_goto_line(pcanvas, dir, canvas_x, canvas_y, tile_index)
   pcanvas.lineTo(x0, y0);
   pcanvas.stroke();
 
-  // Dest waypoint circle
- if (new_turn & DEST_WAYPOINT) {         
+ // Dest waypoint circle
+ if (mark_new_turn & DEST_WAYPOINT) {         
     pcanvas.lineWidth = 17;
     pcanvas.strokeStyle = 'rgba(225,47,0)';
   } else {  
