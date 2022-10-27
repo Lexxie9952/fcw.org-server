@@ -82,7 +82,7 @@ long utype_move_rate(const struct unit_type *utype, const struct tile *ptile,
     move_rate = MIN(min_speed, base_move_rate);
   }
 
-  return move_rate;
+  return MAX(0, move_rate);
 }
 
 /************************************************************************//**
