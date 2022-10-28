@@ -459,7 +459,16 @@ static long amphibious_extra_cost(const struct tile *ptile,
   }
   return cost;
 }
-
+/************************************************************************//**
+  Extra cost call back for general movement.
+****************************************************************************/
+static long general_extra_cost(const struct tile *ptile,
+                               enum known_type known,
+                               const struct pf_parameter *param)
+{
+  /* Makes tiebreakers go to shorter path lengths */
+  return 1;
+}
 
 /* ===================== Tile Behaviour Callbacks ==================== */
 
@@ -659,7 +668,7 @@ pft_fill_default_parameter(struct pf_parameter *parameter,
 {
   parameter->map = &(wld.map);
   parameter->get_TB = NULL;
-  parameter->get_EC = NULL;
+  parameter->get_EC = general_extra_cost;
   parameter->is_pos_dangerous = NULL;
   parameter->get_moves_left_req = NULL;
   parameter->get_costs = NULL;
