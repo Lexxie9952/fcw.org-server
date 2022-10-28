@@ -43,6 +43,7 @@
 /* server */
 #include "citytools.h"
 #include "diplhand.h"
+#include "handchat.h"
 #include "maphand.h"
 #include "notify.h"
 #include "srv_log.h"
@@ -108,6 +109,24 @@ static void dai_diplo_notify(struct player *pplayer, const char *text, ...)
     lsend_packet_chat_msg(dest, &packet);
     /* Add to the event cache. */
     event_cache_add_for_player(&packet, pplayer);
+  }
+}
+/******************************************************************//**
+  Send a diplomatic chat-style message from AI player to human player
+**********************************************************************/
+static void dai_diplo_chat(struct player *ai_player,
+                           struct player *aplayer, 
+                           const char *text, ...)
+{
+  if (diplomacy_verbose) {
+    char message[500];
+    va_list ap;
+
+    va_start(ap, text);
+    fc_vsnprintf(message, sizeof(message), text, ap);
+    va_end(ap);
+
+    ai_chat_msg_to_player(ai_player, aplayer, message);
   }
 }
 
@@ -348,7 +367,7 @@ static int dai_goldequiv_clause(struct ai_type *ait,
   case CLAUSE_CEASEFIRE:
     /* Don't do anything in away mode */
     if (has_handicap(pplayer, H_AWAY)) {
-      dai_diplo_notify(aplayer, _("*%s (AI)* In away mode AI can't sign such a treaty."),
+      dai_diplo_notify(aplayer, _("*%s (A.I.)* In away mode AI can't sign such a treaty."),
                        player_name(pplayer));
       worth = -BIG_NUMBER;
       break;
@@ -358,9 +377,9 @@ static int dai_goldequiv_clause(struct ai_type *ait,
      * ceasefire. */
     if ((penemy = get_allied_with_enemy_player(pplayer, aplayer))
         && pclause->type != CLAUSE_CEASEFIRE) {
-      dai_diplo_notify(aplayer, _("*%s (AI)* First break alliance with %s, %s."),
-                       player_name(pplayer), player_name(penemy),
-                       player_name(aplayer));
+      dai_diplo_chat(pplayer, aplayer, _("First break alliance with %s, %s."),
+                     player_name(penemy),
+                     player_name(aplayer));
       worth = -BIG_NUMBER;
       break;
     }
@@ -368,10 +387,10 @@ static int dai_goldequiv_clause(struct ai_type *ait,
     /* He was allied with an enemy at the begining of the turn. */
     if (adip->is_allied_with_enemy
         && pclause->type != CLAUSE_CEASEFIRE) {
-      dai_diplo_notify(aplayer, _("*%s (AI)* I would like to see you keep your "
-                                  "distance from %s for some time, %s."),
-                       player_name(pplayer), player_name(adip->is_allied_with_enemy),
-                       player_name(aplayer));
+      dai_diplo_chat(pplayer, aplayer, _("I would like to see you keep your "
+                     "distance from %s for some time, %s."),
+                     player_name(adip->is_allied_with_enemy),
+                     player_name(aplayer));
       worth = -BIG_NUMBER;
       break;
     }
@@ -382,15 +401,13 @@ static int dai_goldequiv_clause(struct ai_type *ait,
         = player_diplstate_get(pplayer, aplayer);
 
       if (!pplayers_non_attack(pplayer, aplayer)) {
-        dai_diplo_notify(aplayer, _("*%s (AI)* Let us first cease hostilities, %s."),
-                         player_name(pplayer),
-                         player_name(aplayer));
+        dai_diplo_chat(pplayer, aplayer, _("Let us first cease hostilities, %s."),
+                       player_name(aplayer));
         worth = -BIG_NUMBER;
       } else if (ds->type == DS_CEASEFIRE && ds->turns_left > 4) {
-        dai_diplo_notify(aplayer, _("*%s (AI)* I wish to see you keep the current "
-                                    "ceasefire for a bit longer first, %s."),
-                         player_name(pplayer), 
-                         player_name(aplayer));
+        dai_diplo_chat(pplayer, aplayer, _("I wish to see you keep the current "
+                       "ceasefire for a bit longer first, %s."),
+                       player_name(aplayer));
         worth = -BIG_NUMBER;
       } else if (adip->countdown >= 0 || adip->countdown < -1) {
         worth = -BIG_NUMBER; /* but say nothing */
@@ -410,10 +427,8 @@ static int dai_goldequiv_clause(struct ai_type *ait,
                        - ai->diplomacy.req_love_for_alliance);
       }
       if (pplayer->ai_common.love[player_index(aplayer)] < MAX_AI_LOVE / 10) {
-        dai_diplo_notify(aplayer, _("*%s (AI)* I simply do not trust you with an "
-                                    "alliance yet, %s."),
-                         player_name(pplayer),
-                         player_name(aplayer));
+        dai_diplo_chat(pplayer, aplayer, _("I simply do not trust you with an "
+                       "alliance yet, %s."), player_name(aplayer));
         worth = -BIG_NUMBER;
       }
       DIPLO_LOG(ait, LOG_DIPL, pplayer, aplayer, "ally clause worth %d", worth);
@@ -504,8 +519,7 @@ static int dai_goldequiv_clause(struct ai_type *ait,
 
     if (!offer || city_owner(offer) != giver) {
       /* City destroyed or taken during negotiations */
-      dai_diplo_notify(aplayer, _("*%s (AI)* I do not know the city you mention."),
-                       player_name(pplayer));
+      dai_diplo_chat(pplayer, aplayer, _("I do not know the city you mention."));
       worth = 0;
       DIPLO_LOG(ait, LOG_DEBUG, pplayer, aplayer, "city destroyed during negotiations");
     } else if (give) {
@@ -534,10 +548,8 @@ static int dai_goldequiv_clause(struct ai_type *ait,
     if (give) {
       if (ds_after == DS_ALLIANCE) {
         if (!shared_vision_is_safe(pplayer, aplayer)) {
-          dai_diplo_notify(aplayer,
-                           _("*%s (AI)* Sorry, sharing vision with you "
-                             "is not safe."),
-                           player_name(pplayer));
+          dai_diplo_chat(pplayer, aplayer, _("Sorry, sharing vision "
+                         "with you is not safe."));
 	  worth = -BIG_NUMBER;
 	} else {
           worth = 0;
@@ -651,9 +663,8 @@ void dai_treaty_evaluate(struct ai_type *ait, struct player *pplayer,
     /* AI complains about the treaty which was proposed, unless the AI
      * made the proposal. */
     if (pplayer != ptreaty->plr0) {
-      dai_diplo_notify(aplayer, _("*%s (AI)* This deal was not very good for us, %s!"),
-                       player_name(pplayer),
-                       player_name(aplayer));
+      dai_diplo_chat(pplayer, aplayer, _("This deal was not very good for us, %s!"),
+                     player_name(aplayer));
     }
     DIPLO_LOG(ait, LOG_DIPL2, pplayer, aplayer, "balance was bad: %d", 
               total_balance);
@@ -674,25 +685,21 @@ static void dai_treaty_react(struct ai_type *ait,
   switch (pclause->type) {
     case CLAUSE_ALLIANCE:
       if (adip->is_allied_with_ally) {
-        dai_diplo_notify(aplayer, _("*%s (AI)* Welcome into our alliance %s!"),
-                         player_name(pplayer),
-                         player_name(aplayer));
+        dai_diplo_chat(pplayer, aplayer, _("Welcome into our alliance %s!"),
+                       player_name(aplayer));
       } else {
-        dai_diplo_notify(aplayer, _("*%s (AI)* Yes, may we forever stand united, %s."),
-                         player_name(pplayer),
-                         player_name(aplayer));
+        dai_diplo_chat(pplayer, aplayer, _("Yes, may we forever stand united, %s."),
+                       player_name(aplayer));
       }
       DIPLO_LOG(ait, LOG_DIPL, pplayer, aplayer, "become allies");
       break;
     case CLAUSE_PEACE:
-      dai_diplo_notify(aplayer, _("*%s (AI)* Yes, peace in our time!"),
-                       player_name(pplayer));
+      dai_diplo_chat(pplayer, aplayer, _("Yes, peace in our time!"));
       DIPLO_LOG(ait, LOG_DIPL, pplayer, aplayer, "sign peace treaty");
       break;
     case CLAUSE_CEASEFIRE:
-      dai_diplo_notify(aplayer, _("*%s (AI)* Agreed. No more hostilities, %s."),
-                       player_name(pplayer),
-                       player_name(aplayer));
+      dai_diplo_chat(pplayer, aplayer, _("Agreed. No more hostilities, %s."),
+                     player_name(aplayer));
       DIPLO_LOG(ait, LOG_DIPL, pplayer, aplayer, "sign ceasefire");
       break;
     default:
@@ -956,19 +963,13 @@ void dai_diplomacy_first_contact(struct ai_type *ait, struct player *pplayer,
   }
 
   if (wants_ceasefire) {
-    dai_diplo_notify(aplayer,
-                     _("*%s (AI)* Greetings %s! May we suggest a ceasefire "
-                       "while we get to know each other better?"),
-                     player_name(pplayer),
-                     player_name(aplayer));
+    dai_diplo_chat(pplayer, aplayer, _("Greetings %s! May we suggest a ceasefire "
+                  "while we get to know each other better?"), player_name(aplayer));
     clear_old_treaty(pplayer, aplayer);
     dai_diplomacy_suggest(pplayer, aplayer, CLAUSE_CEASEFIRE, FALSE, 0);
   } else {
-    dai_diplo_notify(aplayer,
-                     _("*%s (AI)* I found you %s! Now make it worth my "
-                       "letting you live, or be crushed."),
-                     player_name(pplayer),
-                     player_name(aplayer));
+    dai_diplo_chat(pplayer, aplayer, _("I found you %s! Now make it worth my "
+                   "letting you live, or be crushed."), player_name(aplayer));
   }
 }
 
@@ -1281,43 +1282,32 @@ static void dai_go_to_war(struct ai_type *ait, struct player *pplayer,
 
   switch (reason) {
   case DAI_WR_SPACE:
-    dai_diplo_notify(target, _("*%s (AI)* Space will never be yours. "),
-                     player_name(pplayer));
+    dai_diplo_chat(pplayer, target, _("Space will never be yours. "));
     adip->countdown = -10;
     break;
   case DAI_WR_BEHAVIOUR:
-    dai_diplo_notify(target,
-                     _("*%s (AI)* I have tolerated your vicious antics "
-                       "long enough! To war!"),
-                     player_name(pplayer));
+    dai_diplo_chat(pplayer, target, _("I have tolerated your vicious antics "
+                   "long enough! To war!"));
     adip->countdown = -20;
     break;
   case DAI_WR_NONE:
-    dai_diplo_notify(target, _("*%s (AI)* Peace in ... some other time."),
-                     player_name(pplayer));
+    dai_diplo_chat(pplayer, target, _("Peace in ... some other time."));
     adip->countdown = -10;
     break;
   case DAI_WR_HATRED:
-    dai_diplo_notify(target,
-                     _("*%s (AI)* Finally I get around to you! Did "
-                       "you really think you could get away with your crimes?"),
-                     player_name(pplayer));
+    dai_diplo_chat(pplayer, target, _("Finally I get around to you! Did "
+                   "you really think you could get away with your crimes?"));
     adip->countdown = -20;
     break;
   case DAI_WR_EXCUSE:
-    dai_diplo_notify(target,
-                     _("*%s (AI)* Your covert hostilities brought "
-                       "this war upon you!"),
-                     player_name(pplayer));
+    dai_diplo_chat(pplayer, target, _("Your covert hostilities brought "
+                   "this war upon you!"));
     adip->countdown = -20;
     break;
   case DAI_WR_ALLIANCE:
     if (adip->at_war_with_ally) {
-      dai_diplo_notify(target,
-                       _("*%s (AI)* Your aggression against %s was "
-                         "your last mistake!"),
-                       player_name(pplayer),
-                       player_name(adip->at_war_with_ally));
+      dai_diplo_chat(pplayer, target, _("Your aggression against %s was "
+                     "your last mistake!"), player_name(adip->at_war_with_ally));
       adip->countdown = -3;
     } else {
       /* Ooops! */
@@ -1397,93 +1387,82 @@ static void war_countdown(struct ai_type *ait, struct player *pplayer,
 
     switch (reason) {
     case DAI_WR_SPACE:
-      dai_diplo_notify(ally,
-                       PL_("*%s (AI)* We will be launching an all-out war "
-                           "against %s in %d turn to stop the spaceship "
-                           "launch.",
-                           "*%s (AI)* We will be launching an all-out war "
-                           "against %s in %d turns to stop the spaceship "
-                           "launch.",
-                           countdown),
-                       player_name(pplayer),
-                       player_name(target),
-                       countdown);
-      dai_diplo_notify(ally,
-                       _("*%s (AI)* Your aid in this matter will be expected. "
-                         "Long live our glorious alliance!"),
-                       player_name(pplayer));
+      dai_diplo_chat(pplayer, ally,
+                     PL_("We will be launching an all-out war "
+                         "against %s in %d turn to stop the spaceship "
+                         "launch.",
+                         "*We will be launching an all-out war "
+                         "against %s in %d turns to stop the spaceship "
+                         "launch.",
+                         countdown), 
+                     player_name(target),
+                     countdown);
+      dai_diplo_chat(pplayer, ally,
+                       _("Your aid in this matter will be expected. "
+                         "Long live our glorious alliance!"));
       break;
     case DAI_WR_BEHAVIOUR:
     case DAI_WR_EXCUSE:
-      dai_diplo_notify(ally,
-                       PL_("*%s (AI)* %s has grossly violated his treaties "
-                           "with us for own gain.  We will answer in force in "
-                           "%d turn and expect you to honor your alliance "
-                           "with us and do likewise!",
-                           "*%s (AI)* %s has grossly violated his treaties "
-                           "with us for own gain.  We will answer in force in "
-                           "%d turns and expect you to honor your alliance "
-                           "with us and do likewise!", countdown),
-                       player_name(pplayer),
-                       player_name(target),
-                       countdown);
+      dai_diplo_chat(pplayer, ally,
+                    PL_("%s has grossly violated his treaties "
+                        "with us for own gain.  We will answer in force in "
+                        "%d turn and expect you to honor your alliance "
+                        "with us and do likewise!",
+                        "*%s has grossly violated his treaties "
+                        "with us for own gain.  We will answer in force in "
+                        "%d turns and expect you to honor your alliance "
+                        "with us and do likewise!", countdown),
+                    player_name(target),
+                    countdown);
       break;
     case DAI_WR_NONE:
-      dai_diplo_notify(ally,
-                       PL_("*%s (AI)* We intend to pillage and plunder the rich "
-                           "civilization of %s. We declare war in %d turn.",
-                           "*%s (AI)* We intend to pillage and plunder the rich "
-                           "civilization of %s. We declare war in %d turns.",
-                           countdown), 
-                       player_name(pplayer),
-                       player_name(target),
-                       countdown);
-      dai_diplo_notify(ally,
-                       _("*%s (AI)* If you want a piece of the loot, feel "
-                         "free to join in the action!"),
-                       player_name(pplayer));
+      dai_diplo_chat(pplayer, ally,
+                    PL_("We intend to pillage and plunder the rich "
+                        "civilization of %s. We declare war in %d turn.",
+                        "*We intend to pillage and plunder the rich "
+                        "civilization of %s. We declare war in %d turns.",
+                        countdown), 
+                    player_name(target),
+                    countdown);
+      dai_diplo_chat(pplayer, ally, _("If you want a piece of the loot, "
+                    "feel free to join in the action!"));
       break;
     case DAI_WR_HATRED:
-      dai_diplo_notify(ally,
-                       PL_("*%s (AI)* We have had it with %s. Let us tear this "
-                           "pathetic civilization apart. We declare war in "
-                           "%d turn.",
-                           "*%s (AI)* We have had it with %s. Let us tear this "
-                           "pathetic civilization apart. We declare war in "
-                           "%d turns.",
-                           countdown),
-                       player_name(pplayer),
-                       player_name(target),
-                       countdown);
-      dai_diplo_notify(ally,
-                       _("*%s (AI)* As our glorious allies, we expect your "
-                         "help in this war."),
-                       player_name(pplayer));
+      dai_diplo_chat(pplayer, ally,
+                    PL_("We have had it with %s. Let us tear this "
+                        "pathetic civilization apart. We declare war in "
+                        "%d turn.",
+                        "*We have had it with %s. Let us tear this "
+                        "pathetic civilization apart. We declare war in "
+                        "%d turns.",
+                        countdown),
+                    player_name(target),
+                    countdown);
+      dai_diplo_chat(pplayer, ally, _("As our glorious allies, we expect "
+                    "your help in this war."));
       break;
     case DAI_WR_ALLIANCE:
       if (WAR(ally, target)) {
-        dai_diplo_notify(ally,
-                         PL_("*%s (AI)* We will honor our alliance and declare "
-                             "war on %s in %d turn.  Hold on - we are coming!",
-                             "*%s (AI)* We will honor our alliance and declare "
-                             "war on %s in %d turns.  Hold on - we are coming!",
-                             countdown),
-                         player_name(pplayer),
-                         player_name(target),
-                         countdown);
+        dai_diplo_chat(pplayer, ally,
+                      PL_("We will honor our alliance and declare "
+                          "war on %s in %d turn.  Hold on - we are coming!",
+                          "*We will honor our alliance and declare "
+                          "war on %s in %d turns.  Hold on - we are coming!",
+                          countdown),
+                      player_name(target),
+                      countdown);
       } else if (adip->at_war_with_ally) {
-        dai_diplo_notify(ally,
-                         PL_("*%s (AI)* We will honor our alliance with %s and "
-                             "declare war on %s in %d turns.  We expect you to "
-                             "do likewise.",
-                             "*%s (AI)* We will honor our alliance with %s and "
-                             "declare war on %s in %d turns.  We expect you to "
-                             "do likewise.",
-                             countdown),
-                         player_name(pplayer), 
-                         player_name(adip->at_war_with_ally),
-                         player_name(target),
-                         countdown);
+        dai_diplo_chat(pplayer, ally,
+                      PL_("We will honor our alliance with %s and "
+                          "declare war on %s in %d turns.  We expect you to "
+                          "do likewise.",
+                          "*We will honor our alliance with %s and "
+                          "declare war on %s in %d turns.  We expect you to "
+                          "do likewise.",
+                          countdown),
+                      player_name(adip->at_war_with_ally),
+                      player_name(target),
+                      countdown);
       } else {
         fc_assert(FALSE); /* Huh? */
       }
@@ -1552,11 +1531,9 @@ void dai_diplomacy_actions(struct ai_type *ait, struct player *pplayer)
       if (aplayer->spaceship.state == SSHIP_LAUNCHED
           && adv->dipl.spacerace_leader == aplayer
           && pplayers_allied(pplayer, aplayer)) {
-        dai_diplo_notify(aplayer,
-                         _("*%s (AI)* Your attempt to conquer space for "
-                           "yourself alone betrays your true intentions, and I "
-                           "will have no more of our alliance!"),
-                         player_name(pplayer));
+        dai_diplo_chat(pplayer, aplayer, _("Your attempt to conquer space for "
+                      "yourself alone betrays your true intentions, and I "
+                      "will have no more of our alliance!"));
 	handle_diplomacy_cancel_pact(pplayer, player_number(aplayer),
 				     CLAUSE_ALLIANCE);
         if (gives_shared_vision(pplayer, aplayer)) {
@@ -1568,14 +1545,10 @@ void dai_diplomacy_actions(struct ai_type *ait, struct player *pplayer)
 		 && adip->warned_about_space == 0) {
         pplayer->ai_common.love[player_index(aplayer)] -= MAX_AI_LOVE / 10;
         adip->warned_about_space = 10 + fc_rand(6);
-        dai_diplo_notify(aplayer,
-                         _("*%s (AI)* Your attempt to unilaterally "
-                           "dominate outer space is highly offensive."),
-                         player_name(pplayer));
-        dai_diplo_notify(aplayer,
-                         _("*%s (AI)* If you do not stop constructing your "
-                           "spaceship, I may be forced to take action!"),
-                         player_name(pplayer));
+        dai_diplo_chat(pplayer, aplayer, _("Your attempt to unilaterally "
+                      "dominate outer space is highly offensive."));
+        dai_diplo_chat(pplayer, aplayer, _("If you do not stop constructing your "
+                      "spaceship, I may be forced to take action!"));
       }
       if (aplayer->spaceship.state == SSHIP_LAUNCHED
           && aplayer == adv->dipl.spacerace_leader) {
@@ -1692,10 +1665,8 @@ void dai_diplomacy_actions(struct ai_type *ait, struct player *pplayer)
         if (!pplayers_allied(pplayer, aplayer)) {
           remove_shared_vision(pplayer, aplayer);
         } else if (!shared_vision_is_safe(pplayer, aplayer)) {
-          dai_diplo_notify(aplayer,
-                           _("*%s (AI)* Sorry, sharing vision with you "
-                             "is no longer safe."),
-                           player_name(pplayer));
+          dai_diplo_chat(pplayer, aplayer, _("Sorry, sharing vision with you "
+                        "is no longer safe."));
           remove_shared_vision(pplayer, aplayer);
         }
       }
@@ -1763,31 +1734,27 @@ void dai_diplomacy_actions(struct ai_type *ait, struct player *pplayer)
           /* Count down patience toward AI player (one that can have spam > 0) 
            * at the same speed as toward human players. */
           if (adip->ally_patience == 0) {
-            dai_diplo_notify(aplayer,
-                             _("*%s (AI)* Greetings our most trustworthy "
-                               "ally. We call upon you to destroy our enemy, %s."), 
-                             player_name(pplayer),
-                             player_name(target));
+            dai_diplo_chat(pplayer, aplayer, _("Greetings our most trustworthy "
+                          "ally. We call upon you to destroy our enemy, %s."), 
+                          player_name(target));
             adip->ally_patience--;
           } else if (adip->ally_patience == -1) {
             if (fc_rand(5) == 1) {
-              dai_diplo_notify(aplayer,
-                               _("*%s (AI)* Greetings ally, I see you have not yet "
-                                 "made war with our enemy, %s. Why do I need to remind "
-                                 "you of your promises?"),
-                               player_name(pplayer),
+              dai_diplo_chat(pplayer, aplayer,
+                             _("Greetings ally, I see you have not yet "
+                              "made war with our enemy, %s. Why do I need to remind "
+                              "you of your promises?"),
                                player_name(target));
               adip->ally_patience--;
             }
           } else {
             if (fc_rand(5) == 1) {
-              dai_diplo_notify(aplayer,
-                               _("*%s (AI)* Dishonored one, we made a pact of "
-                                 "alliance, and yet you remain at peace with our mortal "
-                                 "enemy, %s! This is unacceptable; our alliance is no "
-                                 "more!"),
-                               player_name(pplayer),
-                               player_name(target));
+              dai_diplo_chat(pplayer, aplayer,
+                            _("Dishonored one, we made a pact of "
+                              "alliance, and yet you remain at peace with our mortal "
+                              "enemy, %s! This is unacceptable; our alliance is no "
+                              "more!"),
+                            player_name(target));
               DIPLO_LOG(ait, LOG_DIPL2, pplayer, aplayer, "breaking useless alliance");
               /* to peace */
               handle_diplomacy_cancel_pact(pplayer, player_number(aplayer),
@@ -1814,10 +1781,9 @@ void dai_diplomacy_actions(struct ai_type *ait, struct player *pplayer)
         clear_old_treaty(pplayer, aplayer);
         dai_diplomacy_suggest(pplayer, aplayer, CLAUSE_ALLIANCE, FALSE, 0);
         adip->asked_about_alliance = is_human(aplayer) ? 13 : 0;
-        dai_diplo_notify(aplayer,
-                         _("*%s (AI)* Greetings friend, may we suggest "
-                           "making a common cause and join in an alliance?"), 
-                         player_name(pplayer));
+        dai_diplo_chat(pplayer, aplayer,
+                      _("Greetings friend, may we suggest "
+                        "making a common cause and join in an alliance?"));
         break;
 
       case DS_CEASEFIRE:
@@ -1831,10 +1797,9 @@ void dai_diplomacy_actions(struct ai_type *ait, struct player *pplayer)
         clear_old_treaty(pplayer, aplayer);
         dai_diplomacy_suggest(pplayer, aplayer, CLAUSE_PEACE, FALSE, 0);
         adip->asked_about_peace = is_human(aplayer) ? 12 : 0;
-        dai_diplo_notify(aplayer,
-                         _("*%s (AI)* Greetings neighbor, may we suggest "
-                           "more peaceful relations?"),
-                         player_name(pplayer));
+        dai_diplo_chat(pplayer, aplayer,
+                      _("Greetings neighbor, may we suggest "
+                        "more peaceful relations?"));
         break;
 
       case DS_NO_CONTACT: /* but we do have embassy! weird. */
@@ -1848,10 +1813,9 @@ void dai_diplomacy_actions(struct ai_type *ait, struct player *pplayer)
         clear_old_treaty(pplayer, aplayer);
         dai_diplomacy_suggest(pplayer, aplayer, CLAUSE_CEASEFIRE, FALSE, 0);
         adip->asked_about_ceasefire = is_human(aplayer) ? 9 : 0;
-        dai_diplo_notify(aplayer,
-                         _("*%s (AI)* We grow weary of this constant "
-                           "bloodshed. May we suggest a cessation of hostilities?"), 
-                         player_name(pplayer));
+        dai_diplo_chat(pplayer, aplayer,
+                      _("We grow weary of this constant "
+                        "bloodshed. May we suggest a cessation of hostilities?"));
         break;
 
       case DS_ARMISTICE:
@@ -2011,12 +1975,11 @@ static void dai_incident_war(struct player *violator, struct player *victim)
           if (!pplayers_allied(pplayer, ally)) {
             continue;
           }
-          dai_diplo_notify(ally,
-                           _("*%s (AI)* We have been savagely attacked by "
-                             "%s, and we need your help! Honor our glorious "
-                             "alliance and your name will never be forgotten!"),
-                           player_name(victim),
-                           player_name(violator));
+          dai_diplo_chat(victim, ally,
+                        _("We have been savagely attacked by "
+                          "%s, and we need your help! Honor our glorious "
+                          "alliance and your name will never be forgotten!"),
+                        player_name(violator));
         } players_iterate_alive_end;
       }
     }

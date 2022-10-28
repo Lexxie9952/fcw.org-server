@@ -16,5 +16,7 @@
 struct connection;
 
 void handle_chat_msg_req(struct connection *pc, const char *message);
+void ai_chat_msg_to_player(struct player *psource, struct player *pdest,
+                           char *text);
 
 #endif  /* FC__HANDCHAT_H */

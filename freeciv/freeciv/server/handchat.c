@@ -271,6 +271,58 @@ static void chat_msg_to_player(struct connection *sender,
 }
 
 /**********************************************************************//**
+  AI sends private message to multi-connected player.
+**************************************************************************/
+void ai_chat_msg_to_player(struct player *psource, struct player *pdest,
+                           char *text)
+{
+  struct packet_chat_msg packet;
+  char *sender_name = psource->name;
+  char sender_flag[MAX_LEN_CHAT_NAME], dest_flag[MAX_LEN_CHAT_NAME];
+
+  struct connection *dest = NULL;       /* The 'pdest' user. */
+  struct event_cache_players *players = event_cache_player_add(NULL, pdest);
+
+  text = skip_leading_spaces(text);
+  fc_snprintf(sender_flag, sizeof(sender_flag), "[`flag/%s`]",
+              nation_of_player(psource)->flag_graphic_str);
+
+  /* Find the user of the player 'pdest'. */
+  conn_list_iterate(pdest->connections, pconn) {
+    if (!pconn->observer) {
+      /* Found it! */
+      dest = pconn;
+      break;
+    }
+  } conn_list_iterate_end;
+
+  if (dest != NULL) form_chat_flag(dest, dest_flag, sizeof(dest_flag));
+  else dest_flag[0] = '\0';
+
+  /* Send the message to destination. */
+  if (NULL != dest) {
+    send_chat_msg(dest, NULL, ftc_any, E_CHAT_MSG_PRIVATE_RCVD,
+                  "<span class='cht_prv_sndr'>%s %s (A.I.)</span><span class='arwr'></span><br>%s",
+                   sender_flag, sender_name, text);
+  }//color="#caa3b3"
+
+  /* Send the message to player observers. */
+  package_chat_msg(&packet, NULL, ftc_any, E_CHAT_MSG_PRIVATE_RCVD, 
+                   "%s %s (A.I.)<span class='arwr'></span>%s %s:<br>%s", sender_flag, sender_name,
+                    player_name(pdest), dest_flag, text);
+  conn_list_iterate(pdest->connections, pconn) {
+    if (pconn != dest) {
+      send_packet_chat_msg(pconn, &packet);
+    }
+  } conn_list_iterate_end;
+
+  /* Add player to event cache. */
+  players = event_cache_player_add(players, psource);
+
+  event_cache_add_for_players(&packet, players);
+}
+
+/**********************************************************************//**
   Send private message to player allies.
 **************************************************************************/
 static void chat_msg_to_allies(struct connection *sender, char *msg)
