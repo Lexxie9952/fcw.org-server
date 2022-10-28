@@ -65,7 +65,12 @@ and can now be built with veteran levels.
     more availability for early wonder choices and/or less penalty for pursuing them instead of new-gov-rush.
 14. Mausoleum 170 - cheaper is another civil wonder bonus of it.
 15. Carriers price reduce, 150. Carry 12.
-16.  
+16. The ocean becomes ZOC enabled, but is a separate zone from ZOC-land. Units do NOT impose ZOC onto tiles they themselves can't go.
+    This means typically, ships and land units can't impose ZOC on each other. The exceptions are 'shared domains' where both
+      types can go:  canals, naval bases, and rivers (wood ships only). Impacts are:
+         a. Sea tactics can be deepened. Former lack of sea tactics from 2x movemement + igZOC replaced with interesting depth.
+         b. Nations can protect their rivers better by imposing ZOC along them.
+         c. Conversely, ships on rivers can enforce prevention of land unit crossings.
 17. "Russian Doll" rule, wagons and trucks can't board transports while they're carring their own cargo.
 18. Cruise Missiles aren't field units. This penalty goes back to an earlier simpler less realistic game. At this point in MP2 evolution,
    making a CM a field unit causing unhappiness in every Aegis Cruiser carrying it, it's like Cannons getting extra unhappiness for each
