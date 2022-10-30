@@ -111,15 +111,16 @@ function websocket_init()
         console.log("*** INCOMING PACKET>>>>>"+event.data);
       } else if (DEBUG_SHORT_PACKETS) {
         var data = jQuery.parseJSON(event.data)
-        let index = (data.length > 1) ? 1 : 0
-        var pid = data[index]['pid']
-        var ptitle = getKeyByValue(packet_names, pid);
-        // Only print infos from packet pids we defined in packhand.js:packet_names
-        if (pid>1 && ptitle) {
-          if (DEBUG_EXPAND_PACKETS && pid>1) {
-            var my_obj = JSON.parse(event.data);
-            console.log("%c***IN (%s): %s: %s", 'color: #8D8', pid, ptitle, JSON.stringify(my_obj[index]));
-          } else console.log("****** IN (%s): %s", pid, ptitle);
+        for (let index=0; index < data.length; index++) {
+          var pid = data[index]['pid']
+          var ptitle = getKeyByValue(packet_names, pid);
+          // Only print infos from packet pids we defined in packhand.js:packet_names
+          if (ptitle) {
+            if (DEBUG_EXPAND_PACKETS) {
+              var my_obj = JSON.parse(event.data);
+              console.log("%c***IN (%s): %s: %s", 'color: #8D8', pid, ptitle, JSON.stringify(my_obj[index]));
+            } else console.log("****** IN (%s): %s", pid, ptitle);
+          }
         }
       }
         
