@@ -2044,11 +2044,12 @@ function update_unit_order_commands()
       $("#order_paradrop").hide();
     }
 
-    if (pcity == null || punit['homecity'] === 0 || punit['homecity'] === pcity['id']) {
+    if (pcity == null || punit['homecity'] === pcity['id'] 
+        || (punit['homecity'] === 0 && !unit_has_type_flag(punit, UTYF_TRADEROUTE))) {
       $("#order_change_homecity").hide();
     } else if (pcity != null && punit['homecity'] != pcity['id']) {
       $("#order_change_homecity").show();
-      unit_actions["homecity"] = {name: "Homecity (H)"};
+      unit_actions["homecity"] = {name: "Set home city (H)"};
     }
 
     if (pcity != null && city_has_building(pcity, improvement_id_by_name(B_AIRPORT_NAME))) {

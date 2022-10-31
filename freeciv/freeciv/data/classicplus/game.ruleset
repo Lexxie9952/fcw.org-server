@@ -1125,6 +1125,15 @@ actor_reqs    =
       "UnitState", "HasHomeCity", "Local", TRUE
       "DiplRel",   "Foreign",  "Local", FALSE
     }
+; Allow no-home caravans to be "homed" so they can be used for a Trade Route:
+[actionenabler_change_home_commerce]
+action = "Home City"
+actor_reqs    =
+    { "type",      "name",        "range", "present"
+      "UnitFlag",  "NoHome",      "Local", FALSE
+      "UnitFlag",  "TradeRoute",  "Local", TRUE
+      "DiplRel",   "Foreign",  "Local", FALSE
+    }
 
 [actionenabler_paradrop_base]
 action = "Paradrop Unit"
