@@ -406,7 +406,7 @@ static int dai_goldequiv_clause(struct ai_type *ait,
         worth = -BIG_NUMBER;
       } else if (ds->type == DS_CEASEFIRE && ds->turns_left > 4) {
         dai_diplo_chat(pplayer, aplayer, _("I wish to see you keep the current "
-                       "ceasefire for a bit longer first, %s."),
+                       "cease-fire for a bit longer first, %s."),
                        player_name(aplayer));
         worth = -BIG_NUMBER;
       } else if (adip->countdown >= 0 || adip->countdown < -1) {
@@ -685,7 +685,7 @@ static void dai_treaty_react(struct ai_type *ait,
   switch (pclause->type) {
     case CLAUSE_ALLIANCE:
       if (adip->is_allied_with_ally) {
-        dai_diplo_chat(pplayer, aplayer, _("Welcome into our alliance %s!"),
+        dai_diplo_chat(pplayer, aplayer, _("Welcome into our alliance, %s!"),
                        player_name(aplayer));
       } else {
         dai_diplo_chat(pplayer, aplayer, _("Yes, may we forever stand united, %s."),
@@ -698,8 +698,23 @@ static void dai_treaty_react(struct ai_type *ait,
       DIPLO_LOG(ait, LOG_DIPL, pplayer, aplayer, "sign peace treaty");
       break;
     case CLAUSE_CEASEFIRE:
-      dai_diplo_chat(pplayer, aplayer, _("Agreed. No more hostilities, %s."),
-                     player_name(aplayer));
+      if (pplayer->ai_common.love[player_index(aplayer)]<0) {
+        if (fc_rand(2)) {
+          dai_diplo_chat(pplayer, aplayer, _("So be it, %s! Unless you disrespect us, we will "
+                                            "honor this cease-fire for %d turns."),
+                                            player_name(aplayer), game.server.ceasefirelength);
+        } else {
+            dai_diplo_chat(pplayer, aplayer, _("Agreed. No hostilities, %s."),
+                                               player_name(aplayer));
+        }
+      } else if (fc_rand(2)) {
+          dai_diplo_chat(pplayer, aplayer, _("%s, we trust you will honor cessation of hostilities. "
+                                              "Let's see how we might build relations."), player_name(aplayer));
+
+      } else {
+          dai_diplo_chat(pplayer, aplayer, _("%s, you can trust us to keep our end of the agreement."),
+                                             player_name(aplayer));
+      }
       DIPLO_LOG(ait, LOG_DIPL, pplayer, aplayer, "sign ceasefire");
       break;
     default:
@@ -963,13 +978,31 @@ void dai_diplomacy_first_contact(struct ai_type *ait, struct player *pplayer,
   }
 
   if (wants_ceasefire) {
-    dai_diplo_chat(pplayer, aplayer, _("Greetings %s! May we suggest a ceasefire "
-                  "while we get to know each other better?"), player_name(aplayer));
+    int msg = fc_rand(3);
+    if (msg==2) {
+      dai_diplo_chat(pplayer, aplayer, _("Greetings, %s! May we suggest a cease-fire "
+                    "while we get to know each other better?"), player_name(aplayer));
+    } else if (msg) {
+      dai_diplo_chat(pplayer, aplayer, _("Hail, %s! Will you agree to a %d-turn period of "
+                    "cease-fire for our mutual benefit?"), 
+                    player_name(aplayer),
+                    game.server.ceasefirelength);
+    } else {
+      dai_diplo_chat(pplayer, aplayer, _("Salutations, %s! Our nation offers you "
+                    "%d turns of non-hostility, to explore possible relatons."),
+                    player_name(aplayer),
+                    game.server.ceasefirelength);
+    }
     clear_old_treaty(pplayer, aplayer);
     dai_diplomacy_suggest(pplayer, aplayer, CLAUSE_CEASEFIRE, FALSE, 0);
   } else {
-    dai_diplo_chat(pplayer, aplayer, _("I found you %s! Now make it worth my "
-                   "letting you live, or be crushed."), player_name(aplayer));
+    if (fc_rand(2)) {
+      dai_diplo_chat(pplayer, aplayer, _("The time has finally come, %s! Make it worth my "
+                    "letting you live, or be crushed!"), player_name(aplayer));
+    } else {
+      dai_diplo_chat(pplayer, aplayer, _("%s, you may beg for cease-fire if you pay years of steady "
+                    "tribute and gifts worthy of my greatness."), player_name(aplayer));
+    }
   }
 }
 
@@ -1813,9 +1846,81 @@ void dai_diplomacy_actions(struct ai_type *ait, struct player *pplayer)
         clear_old_treaty(pplayer, aplayer);
         dai_diplomacy_suggest(pplayer, aplayer, CLAUSE_CEASEFIRE, FALSE, 0);
         adip->asked_about_ceasefire = is_human(aplayer) ? 9 : 0;
-        dai_diplo_chat(pplayer, aplayer,
-                      _("We grow weary of this constant "
-                        "bloodshed. May we suggest a cessation of hostilities?"));
+        int msg = fc_rand(5);
+        int love = pplayer->ai_common.love[player_index(aplayer)];
+        if (love<0) {
+          switch (msg) {
+            case 0:
+              dai_diplo_chat(pplayer, aplayer,
+                          _("War with our nation is a bad idea for you. We charitably "
+                            "offer you a period of cease-fire for %d turns."),
+                            game.server.ceasefirelength);
+              break;
+            case 1:
+              dai_diplo_chat(pplayer, aplayer,
+                          _("You should reconsider the consequences of a war with us. "
+                            "A cease-fire of %d turns will spare your people. Deal?"),
+                            game.server.ceasefirelength);
+              break;
+            case 2:
+              dai_diplo_chat(pplayer, aplayer,
+                          _("%s, select wisely from the choices we offer. Cease-fire "
+                            "for %d turns, or a shameful and bloody defeat?"),
+                            player_name(aplayer),
+                            game.server.ceasefirelength);
+              break;
+            case 3:
+              dai_diplo_chat(pplayer, aplayer,
+                          _("%s, we are prepared to crush you like a bug under the shoe, if "
+                            "you do not agree to cease-fire."),
+                            player_name(aplayer));
+              break;
+            case 4:
+              dai_diplo_chat(pplayer, aplayer,
+                          _("Although we shall surely defeat you if you persist in war, we "
+                            "graciously offer a %d turn cessation of hostilities."),
+                            game.server.ceasefirelength);
+              break;
+          }
+        }
+        else {
+          switch (msg) {
+            case 0:
+              dai_diplo_chat(pplayer, aplayer,
+                          _("%s, we should both reconsider the consequences of being at war. "
+                            "May we suggest a cease-fire of %d turns?"),
+                            player_name(aplayer),
+                            game.server.ceasefirelength);
+              break;
+            case 1:
+              dai_diplo_chat(pplayer, aplayer,
+                          _("%s, war is good for neither of us at this time. "
+                            "Will you accept our offer of a %d-turn cease-fire?"),
+                            player_name(aplayer),
+                            game.server.ceasefirelength);
+              break;
+            case 2:
+              dai_diplo_chat(pplayer, aplayer,
+                          _("We dislike war and bloodshed. If you feel the same, shall we "
+                            "agree upon a cease-fire of %d turns?"),
+                            game.server.ceasefirelength);
+              break;
+            case 3:
+              dai_diplo_chat(pplayer, aplayer,
+                          _("%s, there is no reason for our two great nations to be at war. "
+                            "Shall we try a cease-fire and build good relations?"),
+                            player_name(aplayer),
+                            game.server.ceasefirelength);
+              break;
+            case 4:
+              dai_diplo_chat(pplayer, aplayer,
+                          _("%s, my nation offers you a cessation of hostilities for %d "
+                            "turns. Do you agree?"),
+                            player_name(aplayer),
+                            game.server.ceasefirelength);
+              break;
+          }   
+        }
         break;
 
       case DS_ARMISTICE:
