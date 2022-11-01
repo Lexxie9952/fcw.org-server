@@ -6,8 +6,6 @@ printf "./vremake.sh: VAGRANT version. Re-builds server executables.\n"
 printf "Important: Use ./remake.sh on deployed server installations.\n"
 printf "**********************************************************************\n"
 
-CFLAGS="-g"
-
 cd /vagrant/freeciv && ./prepare_freeciv.sh && cd build && make install && cd ../../scripts && ./stop-freeciv-web.sh && ./start-freeciv-web.sh
 
 # let user know when it's finished
