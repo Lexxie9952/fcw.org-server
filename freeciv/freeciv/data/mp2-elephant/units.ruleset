@@ -3378,7 +3378,7 @@ bonuses       =
    { "flag", "type", "value"
    }
 flags         = "FieldUnit", "Unbribable", "AirAttacker", "HasNoZOC", "CanEscape",
-                "CantReachAir", "NeverProtects", "Provoking", "WillNever"
+                "CantReachAir", "NeverProtects", "Provoking", "WillNever", "BadCityDefender"
 veteran_names =
   _("?vet_rank:green"),
   _("?vet_rank:veteran"),
@@ -3438,7 +3438,7 @@ bonuses       =
    { "flag", "type", "value"
    }
 flags         = "FieldUnit", "Unbribable", "AirAttacker", "HasNoZOC", "CanEscape",
-                "CantReachAir", "NeverProtects", "Provoking", "WillNever"
+                "CantReachAir", "NeverProtects", "Provoking", "WillNever", "BadCityDefender"
 veteran_names =
   _("?vet_rank:green"),
   _("?vet_rank:veteran"),
@@ -3498,7 +3498,7 @@ bonuses       =
    { "flag", "type", "value"
    }
 flags         = "FieldUnit", "Unbribable", "AirAttacker", "HasNoZOC", "CanEscape",
-                "CantReachAir", "NeverProtects", "Provoking", "WillNever"
+                "CantReachAir", "NeverProtects", "Provoking", "WillNever", "BadCityDefender"
 veteran_names =
   _("?vet_rank:green"),
   _("?vet_rank:veteran"),
@@ -3590,7 +3590,7 @@ uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
 vision_layer  = "Stealth"
-flags         = "HasNoZOC", "NoVeteran", "Unbribable", "NeverProtects", "CanEscape", "Provoking", "WillNever", "SentryAlways"
+flags         = "HasNoZOC", "NoVeteran", "Unbribable", "NeverProtects", "CanEscape", "Provoking", "WillNever", "SentryAlways", "BadCityDefender"
 veteran_names =
   _("?vet_rank:green"),
   _("?vet_rank:veteran"),
@@ -4006,7 +4006,7 @@ uk_gold       = 0
 targets       = "LandRail"
 cargo         = "Bomb2", "Bomb"
 flags         = "FieldUnit", "Unbribable", "AirAttacker", "HasNoZOC", "CanEscape",
-                "CantReachAir", "NeverProtects", "Provoking", "WillNever"
+                "CantReachAir", "NeverProtects", "Provoking", "WillNever", "BadCityDefender"
 veteran_names =
   _("?vet_rank:green"),
   _("?vet_rank:veteran"),
@@ -4062,7 +4062,7 @@ uk_gold       = 0
 targets       = "LandRail"
 cargo         = "Bomb2", "Bomb"
 flags         = "FieldUnit", "Unbribable", "AirAttacker", "HasNoZOC", "CanEscape",
-                "CantReachAir", "NeverProtects", "Provoking", "WillNever"
+                "CantReachAir", "NeverProtects", "Provoking", "WillNever", "BadCityDefender"
 veteran_names =
   _("?vet_rank:green"),
   _("?vet_rank:veteran"),
@@ -4248,7 +4248,7 @@ bonuses       =
    }
 vision_layer  = "Stealth"
 cargo         = "Bomb2", "Bomb"
-flags         = "FieldUnit", "AirAttacker", "HasNoZOC", "Unbribable",
+flags         = "FieldUnit", "AirAttacker", "HasNoZOC", "Unbribable", "BadCityDefender"
                 "CanEscape", "CantReachAir", "NeverProtects", "Provoking", "WillNever"
 veteran_names =
   _("?vet_rank:green"),

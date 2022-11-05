@@ -124,5 +124,6 @@ and can now be built with veteran levels.
 41. FootSoldiers who didn't receive discounts in MP2C get ~10% discount. Musket:27, Riflemen:35, Partisan: 40, Alpine:45,
     Marines:50, Ground Troops:35, Paratroopers:50.
 42. Passenger Transport costs: 0% land civilian and AAA/Marines; 50% Foot Soldiers; 75% land military non-foot; 50% + won't subtract if <= 3 moves left (aircraft, preserves vigil)
-
+43. Spy Plane and Bombers (except Dive Bomber) are BadCityDefender. This adjusts the fact some have defensive capabilities in the air but
+    are poor defenders to scramble for city defense.
 
