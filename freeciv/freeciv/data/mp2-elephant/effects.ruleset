@@ -4645,6 +4645,17 @@ reqs	=
       "OutputType", "Trade", "Local"
     }
 
+[effect_super_highways2]
+type    = "Output_Per_Tile"
+value	= 50
+reqs	=
+    { "type",       "name",           "range", "present"
+      "Extra",      "Highway",        "Local", TRUE
+      "Extra",      "Road",           "Local", FALSE ;shouldn't happen; but insurance.
+      "Building",   "Super Highways", "City",  TRUE
+      "OutputType", "Trade",          "Local", TRUE
+    }
+
 ; Super Highways increase logistical efficiency to
 ; get more use out of an airport in size 12+ city.
 [effect_super_highways_airlift_facilitation]
