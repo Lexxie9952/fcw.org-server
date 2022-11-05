@@ -515,10 +515,10 @@ function update_mouse_cursor()
     /* show move map cursor */
     $("#canvas_div").css("cursor", "move");
     real_mouse_move_mode = true;
-  } else if ( (goto_active||rally_active) && current_goto_turns != null) {
+  } else if ( (goto_active||rally_active) && legal_goto_path) {
     /* show goto cursor */
     $("#canvas_div").css("cursor", "crosshair");
-  } else if ( (goto_active||rally_active) && current_goto_turns == null) {
+  } else if ( (goto_active||rally_active) && !legal_goto_path) {
     /* show invalid goto cursor*/
     $("#canvas_div").css("cursor", "not-allowed");
   } else if (pcity != null && client.conn.playing != null && player_can_see_inside_city(pcity)) {

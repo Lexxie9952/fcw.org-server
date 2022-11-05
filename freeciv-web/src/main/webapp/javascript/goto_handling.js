@@ -53,7 +53,8 @@ var goto_last_action = -1;
 var goto_dirs = [];                       // Keeps track of each tile on the map, if a goto path goes through it, which direction it goes.
 var goto_request_map = {};                // Key is "unit.id,dest.x,dest.y". Caches packets for paths from server for this unit to dest so as mouse moves around we don't over-ping the server for the same paths repeatedly. If player clicks the dest while goto_active, it will also pull this map when generated the real goto order to fire off.
 var goto_turns_request_map = {};          // Legacy relic appears to be residual var no longer used, slated for deletion ?
-var current_goto_turns = 0;               // # of turns path has up to this point; from most recent goto_req packet, probably should be cleaned up with other vars named differently
+var current_goto_turns = 0;               // # of turns path has up to this point; from most recent goto_req packet; can be excised/removed: no longer used for global purposes
+var legal_goto_path = null;               // set to true if last goto packet was a valid goto path; tells goto mode whether to show crosshair or "not allowed" mouse cursor
 var goto_way_points = {};                 // For multi-turn gotos, records which tiles a unit end its turn on, using tile index as key
 var goto_from_tile = {};                  // For sanity when drawing goto lines, knowing the tile we came from reduces logical complexity by 32x
 
@@ -117,6 +118,7 @@ function clear_goto_tiles()
       goto_lines = [];
     }
   }
+  legal_goto_path = null;
 }
 /**************************************************************************
  Whether any user-built path concatenation has been stashed as the
@@ -326,6 +328,7 @@ function update_goto_path(goto_packet)
                        ? merged_goto_packet(goto_packet, punit) 
                        : goto_packet;
 
+  legal_goto_path = goto_packet.length !== undefined;
   /* No unit_id means rally_active or path has no length. This block is
      required to show the goto info when path_len is 0 on the start tile,
      so player can see the original moves/fuel left @ start: */
