@@ -369,7 +369,7 @@ hp_loss_pct   = 0
 hut_behavior  = "Frighten"
 flags         = "Unreachable", "DoesntOccupyTile", "Airliftable"
 
-; This class is for air units that can pillage terrain (i.e. Jet Bomber)
+; This class is for air units unreachable by propeller fighters
 [unitclass_air_high_altitude]
 name          = _("?unitclass:Air_High_Altitude")
 min_speed     = 1
@@ -4053,7 +4053,7 @@ move_rate     = 29
 vision_radius_sq = 12
 transport_cap = 2
 fuel          = 1
-paratroopers_mr_sub = 132270 ;010,00000,01,0100,011,1,0 - max_ATKs=2, bbd_retal_rate=0, iPill_rand_tgts=0, iPill_odds=-4 pentads=80%, iPill_moves=3, iPillage=1, ATK_Stay_Fortified=0
+paratroopers_mr_sub = 131726 ;010,00000,01,0100,011,1,0 - max_ATKs=2, bbd_retal_rate=0, iPill_rand_tgts=1, iPill_odds=-4 pentads=80%, iPill_moves=3, iPillage=1, ATK_Stay_Fortified=0
 ;NOTE：iPillage changes in rules require client_rules_flag and get_what_can_unit_pillage_from() changes.
 uk_happy      = 1
 uk_shield     = 1
@@ -4081,8 +4081,8 @@ Before Stealth Bombers were engineered, high tech air forces devised a different
  to strike and escape：extreme speed. Penetration Bombers are bombers with a special\
  role: ultrasonic strike missions on deep interior targets. With only 1 turn of fuel,\
  total range is inferior to other bombers. But a top speed of Mach 2 gives a single-turn\
- range of 29 tiles. Top speed is too fast to be intercepteted by anything other than a\
- Stealth Fighter! Penetration Bombers can Bomb Strike, a targeted instant-Pillage which\
+ range of 29 tiles. Top speed is so fast that interceptors only get 5 combat rounds against\
+ this unit. Penetration Bombers can Bomb Strike, a targeted instant-Pillage which\
  costs 3 move points. May carry 2 Bombs. Maximum attacks per turn：2.\ 
 "), _("
 Stack-Escape：67% odds to evade stack-death if attacker doesn’t have more moves than it does.\
