@@ -2650,6 +2650,13 @@ actor_reqs    =
       "UnitType", "Jet Bomber",        "Local", TRUE
       "MinMoveFrags", "1",             "Local", TRUE
     }
+[actionenabler_pillage3b]
+action        = "Pillage"
+actor_reqs    =
+    { "type",     "name",              "range", "present"
+      "UnitType", "Penetration Bomber","Local", TRUE
+      "MinMoveFrags", "1",             "Local", TRUE
+    }
 [actionenabler_pillage4]
 action        = "Pillage"
 actor_reqs    =

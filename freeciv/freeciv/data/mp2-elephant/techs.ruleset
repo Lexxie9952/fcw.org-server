@@ -1022,7 +1022,7 @@ req2     = "Tactics"
 flags    = "Specialization"
 graphic     = "a.combustion" ;this pic won't be shown in the tech tree but will show in other places
 graphic_alt = "-"
-cost = 610
+cost = 1200
 helptext = _("Obsoletes Cavalry.")
 
 
@@ -1051,5 +1051,5 @@ req2     = "None"
 flags    = "Specialization"
 graphic     = "a.space_flight"  ;this pic won't be shown in the tech tree but will show in other places
 graphic_alt = "-"
-cost = 6300
+cost = 3600
 helptext = _("Missile transporters are created with 1 free ABM.")
