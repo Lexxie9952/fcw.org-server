@@ -5356,7 +5356,7 @@ value   = 3360
 reqs =
     { "type",     "name",          "range","present"
       "Building", "Appian Way",    "Player",TRUE
-      "UnitFlag", "Infra",         "Local", TRUE
+      "UnitFlag", "Workers",       "Local", TRUE
       "UnitType", "Legion",        "Local", FALSE ;Legions already got a bonus above.
       "CityTile", "Claimed",       "Local", FALSE
     }

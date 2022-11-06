@@ -105,7 +105,7 @@ and can now be built with veteran levels.
    Transport Helicopters also
 30. Land units, early sea units cannot see adjacent submarines. All air units, and all military ships from Destroyer onward, can see adjacent subs.
 31. Space.2 cost is now 6300 bulbs
-32. New unit Penetration Bomber - has bonus of only 5 combat rounds when attacking (4 attacks to kill), not a huge deal for manual 
+32. New unit Penetration Bomber - has bonus of only 5 combat rounds when defending (4 attacks to kill), not a huge deal for manual 
       interception (which usually doesn't happen on a 1 fuel unit), but can be a godsend for vigil interceptions, requiring 4 to knock it out
       this feature wasn't documented in the unit yet and the whole thing needs careful rethinking as it's bit OP in some ways and UnP in 
       other ways and needs to seek its special role and cost a little better, the goal is EQUALITY in usefulness to JBomber but just in a 
