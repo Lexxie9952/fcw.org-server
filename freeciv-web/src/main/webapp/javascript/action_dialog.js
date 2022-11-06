@@ -22,10 +22,8 @@
 var actions = {};
 var auto_attack = false;
 var active_dialogs = [];
-
 var action_selection_restart = false;
 var did_not_decide = false;
-
 
 var action_images = {
    2: "e/eyes",                          // investigate city
@@ -391,7 +389,6 @@ function act_sel_click_function(parent_id,
   /* Actions which "consume" the unit's attention, so it will advance
    * focus even if there are moves left: */
   case ACTION_FORTIFY:
-  case ACTION_PILLAGE:
   case ACTION_ROAD:
   case ACTION_BASE:
   case ACTION_MINE:
@@ -407,6 +404,21 @@ function act_sel_click_function(parent_id,
       //FIXME: if there are two selected units getting same command eg.,Fortify, it doesn't advance
       setTimeout(update_unit_focus, update_focus_delay * 1.2);
     };
+  /* Pillage requires extra processing in cases the unit will iPillage random targets */
+  case ACTION_PILLAGE:
+    return function() {
+      let extra_stats = unit_get_extra_stats(units[actor_unit_id]);
+      /* for random target iPillage, unit won't hit multiple targets if sent server's suggested tgt_id, sub_tgt_id, etc. */
+      if (extra_stats.iPillage && extra_stats.iPillage_random_targets) {
+        key_unit_pillage();
+      } else {
+        request_unit_do_action(action_id, actor_unit_id, tgt_id, sub_tgt_id);
+      }
+      remove_action_selection_dialog(parent_id, actor_unit_id);
+      // Extra time to read witness successful action, since pop-up removal is distracting:
+      //FIXME: if there are two selected units getting same command, it doesn't advance
+      setTimeout(update_unit_focus, update_focus_delay * 1.2);
+    }
   case ACTION_ATTACK:
     return function() {
       request_unit_do_action(action_id, actor_unit_id, tgt_id, sub_tgt_id);
@@ -803,15 +815,19 @@ function popup_action_selection(actor_unit, action_probabilities,
   var SP = client_rules_flag[CRF_SURGICAL_PILLAGE];
   var SUA = client_rules_flag[CRF_SPECIAL_UNIT_ATTACKS];
 
-  // This section does override names for surgical pillage:
+  // This section does override names for iPillage:
   if (SP) {
     if (unit_can_iPillage(actor_unit)) {
       for (button_id in buttons) {
         if (buttons[button_id].html.includes("Pillage (100%)")) {
-          var odds = (unit_get_extra_stats(actor_unit).iPillage_odds + actor_unit['veteran'] * 5);
+          let extra_stats = unit_get_extra_stats(actor_unit);
+          var odds = (extra_stats.iPillage_odds + actor_unit['veteran'] * 5);
           buttons[button_id].html = buttons[button_id].html.replace("Pillage (100%)", unit_get_pillage_name(actor_unit)
-          + " (" + odds + "%)");
-          buttons[button_id].title = "The probability of success is 80%";
+            + " (" + odds + "%)");
+          buttons[button_id].title = ""+odds+"% iPillage odds\n"+extra_stats.iPillage_moves+" move-points cost";
+          if (extra_stats.iPillage_random_targets) {
+            buttons[button_id].title += "\n"+extra_stats.iPillage_random_targets+" random targets destroyed";
+          }
         }
       }
     }
