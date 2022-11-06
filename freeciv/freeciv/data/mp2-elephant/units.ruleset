@@ -4248,7 +4248,7 @@ bonuses       =
    }
 vision_layer  = "Stealth"
 cargo         = "Bomb2", "Bomb"
-flags         = "FieldUnit", "AirAttacker", "HasNoZOC", "Unbribable", "BadCityDefender"
+flags         = "FieldUnit", "AirAttacker", "HasNoZOC", "Unbribable", "BadCityDefender",
                 "CanEscape", "CantReachAir", "NeverProtects", "Provoking", "WillNever"
 veteran_names =
   _("?vet_rank:green"),
