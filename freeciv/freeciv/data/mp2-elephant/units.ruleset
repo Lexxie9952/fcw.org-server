@@ -6169,7 +6169,7 @@ veteran_power_fact = 100
 veteran_move_bonus = 3360
 helptext      = _("\
 Wagons are the first Commerce unit that can travel by land. Compared to a Caravan, they are defenseless.\
- They must stay on roads and quays; or flat grasslands, plains, and tundra. Wagons are useful for\
+ They must stay on roads and quays; or land bases. Wagons are useful for\
  transporting slower units. Wagons have 3⅓ move points, giving a range of 10 tiles on roads. \n\ 
 "), _("\
 Wagons allow units with less than 3 move points to travel your roads faster.\
