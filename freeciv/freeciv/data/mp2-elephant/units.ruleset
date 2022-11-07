@@ -2745,25 +2745,23 @@ bonuses       =
    }
 roles         = ""
 helptext      = _("\
-Ballistae don’t conventionally attack. Ranged Attack fires\
- massive bolts through enemy formations for 5 rounds,\
- targeting up to 2 units who can’t conventionally retaliate.\
- This may also target Ocean tiles. They must have all their\
- move points to do attack, and can't target Fortresses\
- or Cities. Though they only have A10 accuracy, 5FP causes 5× damage. \n\
+Ballistae can only do Ranged Attack, firing massive bolts through enemy\
+ ranks for 5 rounds. This targets and possibly kills 2 units who can’t\
+ conventionally retaliate, both of which may die. The Ballista’s A1 5FP is\
+ deadlier than an equivalent A5 1FP unit. Ballistae must have all move-points\
+ to attack. They can target Ocean tiles but not Fortresses or Cities. \n\
 "), _("
-When conventionally defending against foot and mounted units,\
- Ballistae defend at 20% defense strength (D2). This roughly cancels\
- the 5× damage, making them like a D10 defender. However, a lucky hit\
- or strong defensive terrain can reveal the 5FP as very effective.\
- Against other attackers, the 5× damage is a deadly deterrent. \n\ 
+When conventionally defending against foot and mounted units, Ballistae defend\
+ at 1/5 strength. However, on defensive terrain it can still be fatal — only 2\
+ successful combat rounds kill most attackers. Attacking ships and Ballistic\
+ face the full D1 5FP—a deadly deterrent. \n\
 "), _("
-Ballistae excel at degrading forts and well-fortified tiles. Defensively,\
- they are capable of Special Unit Defense, reciprocating against ranged\
- attacks with their own retaliatory attack. \n\
+Ballistae excel at degrading forts and well-fortified tiles. They can do\
+Special Unit Defense, retaliating against ranged attacks with lethal force. \n\
 "), _("
 VIGIL：the Vigil order lets Ballistae automatically Range-Attack adjacent military units\
- if they have better attack odds. Can be done in cities or bases if it has used no moves. \n\
+ if they have better attack odds. Vigil can only be done in cities or bases if the Ballista\
+ has used no moves.\
 ")
 bombard_rate = 5
 
