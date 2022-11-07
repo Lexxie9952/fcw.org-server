@@ -1492,20 +1492,15 @@ function utype_get_extra_stats(ptype) {
   // by 5%. 15x5=75 so this gives us a range from 100% down to 25%, by fives.
   pstats.iPillage_odds = 100 - 5 * pstats.iPillage_odds;
   
-  // bombard_retaliate_rounds came as 5 bits with 32 possible values,
-  // encoding up to 30 retaliation rounds and 2 other possibilities for 
-  // NONE or infinite. Raw ruleset bitfield comes in as follows:
-  //    0=none, 1=infinite, 2-31 = number of rounds (minus one)
-  // This is then converted to more understandable values below, which are:
-  //    0=none, -1=infinite, 1=30 = exact number of rounds.
-  if (pstats.bombard_retaliate_rounds > 0) { // 0 == none == no mod done
-    // adjust other values:
-    pstats.bombard_retaliate_rounds--; // 2-31 become 1-30 
-    // an original value of 1 for infinite becomes 0, set it now:
-    if (pstats.bombard_retaliate_rounds==0) {
-      pstats.bombard_retaliate_rounds=1000; // "infinite" rounds
-    }
-  }
+  /* bombard_retaliate_rounds came as 5 bits with 32 possible values.
+   * 0==no retaliate. bit 16=2^4=0b10000 can be reserved as a mega
+   * multiplier to get values higher than 31 by sacrificing resolution
+   * past 15 combat_rounds. How we choose to implement this is delayed
+   * until the day we need it (and assuming we still don't use hacky
+   * bit fields!))
+  if (pstats.bombard_retaliate_rounds & 16) {
+    pstats.bombard_retaliate_rounds *= MEGA_MULTIPLE; // for example
+  } */
 
   return pstats;
 }

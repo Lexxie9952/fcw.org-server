@@ -4186,12 +4186,12 @@ static bool unit_bombard(struct unit *punit, struct tile *ptile,
     // for re-usability of code, construct bombard_stats from retaliation stats:
     bombard_rate = estats.bombard_retaliate_rounds;
     pstats.bombard_stay_fortified = true; // defenders never lose fortify
-    pstats.bombard_move_cost = 0;
-    // pstats->bombard_primary_targets = retaliator uses same val as its bombard_stats
-    // pstats->bombard_primary_kills =   retaliator uses same val as its bombard_stats
-    // pstats->bombard_atk_mod =         retaliator uses same val as its bombard_stats
-    // The above 3 stats can be set on units who still can't initiate bombard, to inform
-    // how they behave in retaliatory bombard.
+    pstats.bombard_move_cost = 0; // defenders don't lose moves
+    /* bombard_primary_targets = retaliator uses same val as its bombard_stats
+     * bombard_primary_kills =   retaliator uses same val as its bombard_stats
+     * bombard_atk_mod =         retaliator uses same val as its bombard_stats
+     * The above 3 stats need to be set in the ruleset for units who don't 
+     * initiate bombard, to inform how they behave in retaliatory bombard. */
   } 
   // Now the retaliator is all set up to look like the attacker, in this function
 
