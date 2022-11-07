@@ -3404,8 +3404,26 @@ static bool do_unit_change_homecity(struct unit *punit,
     notify_player(city_owner(pcity), city_tile(pcity), E_UNIT_BUILT,
                   ftc_server,
                   /* TRANS: other player ... unit type ... city name. */
-                  _("[`gift`] %s transferred control over a %s %s to you in %s."),
+                  _("[`gift`] %s transferred control over %s %s to you in %s."),
                   giver,
+                  unit_tile_link(punit),
+                  UNIT_EMOJI(punit),
+                  city_link(pcity));
+    /* Notify the giver about tte transfer. */
+    notify_player(old_owner, city_tile(pcity), E_UNIT_BUILT,
+                  ftc_server,
+                  /* TRANS: other player ... unit type ... city name. */
+                  _("[`gift`] You transferred control of %s %s to %s in %s."),
+                  unit_tile_link(punit),
+                  UNIT_EMOJI(punit),
+                  player_name(pcity->owner),
+                  city_link(pcity));
+  } else if (punit->homecity == pcity->id) {
+    /* Notify off successful change of home. */
+    notify_player(old_owner, city_tile(pcity), E_UNIT_BUILT,
+                  ftc_server,
+                  /* TRANS: other player ... unit type ... city name. */
+                  _("[`rehome`] Home city of %s %s set to %s."),
                   unit_tile_link(punit),
                   UNIT_EMOJI(punit),
                   city_link(pcity));
