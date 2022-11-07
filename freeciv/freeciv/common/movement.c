@@ -135,8 +135,11 @@ long utype_unknown_move_cost(const struct unit_type *utype)
   terrain_type_iterate(pterrain) {
     if (BV_ISSET_ANY(pterrain->native_to)
         && !is_native_to_class(uclass, pterrain, NULL)) {
-      /* Units that may encounter unsuitable terrain explore less. */
-      move_cost *= 2;
+      /* Units that may encounter unsuitable terrain explore less.
+         Current +=1 is superior to former *= 2 because everything
+         performs same or better with a micro-malus, especially
+         goto_turns. */
+      move_cost += 1;
       break;
     }
   } terrain_type_iterate_end;
@@ -554,7 +557,7 @@ bool unit_can_move_to_tile(const struct civ_map *nmap,
        enter_enemy_city is false. When enter_enemy_city is true a non
        peaceful city is also accepted.
     9) There is no non-allied unit blocking (zoc) [or igzoc is true].
-   10) Triremes cannot move out of sight from land.
+   10) STRICT COAST cannot move out of sight from land.
    11) It is not the territory of a player we are at peace with.
    12) The unit is unable to disembark from current transporter.
    13) The unit is making a non-native move (e.g. lack of road)
