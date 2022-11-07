@@ -84,14 +84,28 @@ bool adv_unit_execute_path(struct unit *punit, struct pf_path *path)
   const bool is_plr_ai = is_ai(unit_owner(punit));
   int i;
 
+  bool fuel_unit = utype_fuel(unit_type_get(punit)) > 0;
+  bool coast_fuel = fuel_unit && unit_has_type_flag(punit, UTYF_COAST);
+
   /* We start with i = 1 for i = 0 is our present position */
   for (i = 1; i < path->length; i++) {
     struct tile *ptile = path->positions[i].tile;
     int id = punit->id;
+    bool first_move = (i == 1), last_pos = (i == path->length - 1);
 
     if (same_pos(unit_tile(punit), ptile)) {
-      UNIT_LOG(LOG_DEBUG, punit, "execute_path: waiting this turn");
-      return TRUE;
+    /* Fuel units formerly aborted on the first tile of the path if it's
+       a city/base/safe_coast. New logic makes it so that:
+       1. Coast-fuel units only stop to wait on last tile of path (instead
+       of first safe_coast they find.)
+       2. Fuel units never wait on first tile iff they haven't moved. */
+       if (fuel_unit && (first_move && !last_pos) && !punit->moved) {
+        /* Don't abort before the first move! */
+       }
+       else if (last_pos || !coast_fuel) {
+        UNIT_LOG(LOG_DEBUG, punit, "execute_path: waiting this turn");
+        return TRUE;
+       }
     }
 
     /* We use ai_unit_move() for everything but the last step
