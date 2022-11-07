@@ -27,11 +27,13 @@ var ui_update_bulbs_info = false;   // Bulb information
 //
 var DEBUG_LOG_PACKETS = false;    // verbose packet logging
 var DEBUG_SHORT_PACKETS = false;  // show terse packet log
+//var DEBUG_SHORT_PACKETS = true;   // show terse packet log
 var DEBUG_EXPAND_PACKETS = true;  // log expandable packet under terse packet
 var DEBUG_ACTION_PACKETS = false; // for debugging outgoing actions only 
 //
 var DEBUG_PICK_NATION = false;    // for debugging longturn pick nation issues
 var DEBUG_UNITS = false;          // console log tools for debugging unit issues
+//var DEBUG_UNITS = true;           // console log tools for debugging unit issues
 var DEBUG_FOCUS = false;          // for debugging advancing unit focus glitches
 //
 /* Prevent hard-coded checking of extras from failing in rulesets 
