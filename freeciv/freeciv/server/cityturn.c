@@ -2640,6 +2640,9 @@ static struct unit *city_create_unit(struct city *pcity,
   punit = create_unit(pplayer, pcity->tile, utype,
                       city_production_unit_veteran_level(pcity, utype),
                       pcity->id, 0);
+  /* Set newly built units to non-moved status. UGLY HACK PATCH for bug in
+     unittools.c::create_unit_full(): punit->moved = (moves_left >= 0); */                    
+  punit->moved = false;
   pplayer->score.units_built++;
   if (!punit) {
           notify_conn(game.est_connections, city_tile(pcity),

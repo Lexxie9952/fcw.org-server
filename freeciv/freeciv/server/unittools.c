@@ -2194,6 +2194,9 @@ struct unit *create_unit_full(struct player *pplayer, struct tile *ptile,
    * and not moved; else the unit has had something happen
    * to it (eg, bribed) which we treat as equivalent to moved.
    * (Otherwise could pass moved arg too...)  --dwp */
+  /* TODO: this is resulting in newly made units with all their
+     moves left to be registerd as moved. If we fix this later,
+     then remove the hack-patch in city_create_unit(). */ 
   punit->moved = (moves_left >= 0);
 
   unit_list_prepend(pplayer->units, punit);
