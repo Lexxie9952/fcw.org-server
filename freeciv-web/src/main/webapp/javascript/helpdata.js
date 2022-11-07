@@ -521,6 +521,7 @@ function generate_help_text(key)
     var span1 = "<span style='flex:"+flx_tab+";'>";
     //var span2 = "<span style='font-weight:bold; color:#48F;'>";
     var span2 = "<span style='font-family:Arial; font-weight:bold; color:#48F;'>";
+    var span2_small = "<span style='font-family:Arial; font-weight:bold; font-size:90%; color:#48F;'>";
     var span_end = "</span>";
     var div_end = "</span></div>"
 
@@ -593,13 +594,24 @@ function generate_help_text(key)
       msg += div_end;
     }
     // BOMBARD
-    if (utype_has_flag(punit_type, UTYF_BOMBARDER)) {
+    if (utype_has_flag(punit_type, UTYF_BOMBARDER)
+        || punit_type.bombard_rate > 0) {
       var bombard_name = utype_get_bombard_name(punit_type);
       msg += "<div"+flex+" id='utype_fact_bombard'>";
-      msg += span1 + bombard_name.replace(" ", "&nbsp;") +":&nbsp;&nbsp;"+ span_end + span2;
+      msg += span1 + bombard_name.replace(" ", "&nbsp;") +":&nbsp;&nbsp;"+ span_end + span2_small;
 
       msg += punit_type['bombard_rate'] 
-          + (punit_type['bombard_rate'] > 1 ? " rounds. " : "round.");
+          + (punit_type['bombard_rate'] > 1 ? " rounds. " : " round. ");
+
+      if (pstats.bombard_retaliate_rounds) {
+        if (pstats.bombard_retaliate_rounds == punit_type['bombard_rate']) {
+          msg += "(+SUD). "
+        } else {
+          msg += "(" + pstats.bombard_retaliate_rounds;
+          msg += (pstats.bombard_retaliate_rounds > 1 ? " rounds SUD). " : " round SUD). ");
+        }
+      }
+
       if (bstats.bombard_primary_targets) {
         msg += bstats.bombard_primary_targets;
         msg += (bstats.bombard_primary_targets > 1 ? " targets. " : " target. ");
@@ -607,9 +619,16 @@ function generate_help_text(key)
       else 
         msg += "ALL targets. ";
 
-      if (bstats.bombard_move_cost)
-        msg += move_points_text(bstats.bombard_move_cost, false)
-            + (bstats.bombard_move_cost > SINGLE_MOVE ? " moves." : " move.");
+      if (bstats.bombard_primary_kills) {
+        msg += bstats.bombard_primary_kills;
+        msg += (bstats.bombard_primary_kills > 1 ? " kills. " : " kill. ");
+      }
+      else
+        msg += "No kills. "
+
+      if (punit_type.bombard_move_cost)
+        msg += move_points_text(punit_type.bombard_move_cost, false)
+            + (punit_type.bombard_move_cost > SINGLE_MOVE ? " moves." : " move.");
       else 
         msg += move_points_text(punit_type['move_rate'], false)+" moves.";
       

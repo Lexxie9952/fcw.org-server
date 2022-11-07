@@ -185,6 +185,59 @@ const EFT_UNIT_MIN_SPEED = 145;
 const EFT_PASSENGER_MOVE_COST_BP = 146;
 const EFT_LAST = 147;
 
+/**********************************************************************//**
+  Looks for Action_Success_Actor_Move_Cost effects for the
+  Bombard action, then adds it to the ptype data for bombard move cost.
+  This is because we can no longer support bitfields for suchc costs
+  after going to highly composite move costs. 
+**************************************************************************/
+function set_bombard_move_costs()
+{
+  // Grab the array of Action_Success_Actor_Move_Cost effects:
+  var actor_costs = effects[EFT_ACTION_SUCCESS_MOVE_COST];
+
+  /* Set bombard_move_cost for everything that may not have an
+     Action_Success_Actor_Move_Cost. utypes that do have an effect-
+     defined move cost will recalc and replace the data further below. */
+  for (var ptype_id in unit_types) {
+    let ptype = unit_types[ptype_id];
+    let bstats = utype_get_bombard_stats(ptype);
+    ptype.bombard_move_cost = bstats.bombard_move_cost;
+  }
+
+  // Go through each Action_Success_Actor_Move_Cost:
+  for (let eft=0; eft < actor_costs.length; eft++) {
+    var ptype_id = null;
+    var move_cost = null;
+
+    // Find all A_S_A_M_C associated to ACTION_BOMBARD, and get the UnitType: 
+    for (let req=0; req < actor_costs[eft].reqs.length; req++) {
+      let kind = actor_costs[eft].reqs[req].kind;
+      let val  = actor_costs[eft].reqs[req].value;
+      switch (kind) {
+        case VUT_UTYPE:
+          ptype_id = val;
+          break;
+        case VUT_ACTION:
+          if (val == ACTION_BOMBARD 
+              || val == ACTION_BOMBARD2
+              || val == ACTION_BOMBARD3) {
+            move_cost = actor_costs[eft].effect_value;
+          } 
+          break;
+      }
+    }
+
+    // If we have a Bombard cost for a utype, inject this value into our utype data:
+    if (ptype_id && move_cost) {
+      let ptype = unit_types[ptype_id];
+      let bstats = utype_get_bombard_stats(ptype);
+      unit_types[ptype_id].bombard_move_cost = bstats.bombard_move_cost + move_cost;
+    }
+  }
+
+}
+
 // var initialized = FALSE;
 
 /**************************************************************************
