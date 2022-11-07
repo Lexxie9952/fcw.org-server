@@ -270,6 +270,25 @@ extern "C" {
  * than MAX_INT (and a power of 2 for easy multiplication). */
 #define PF_TURN_FACTOR  (long)65536
 
+/* How much EC (extra cost) is penalized for non-cardinal path directions.
+   Use as a tiebreaker to favor cardinal movement (since if all else is
+   equal, cardinal movement is superior.) This also ends the agony of paths
+   needlessly favoring diagonal paths, which:
+      a. create paths visually harder to track
+      b. have greater pythagorean and "human-perceived" distance
+      c. have midpoints which stray farther from desired direction
+      d. more likely to stray from borders or safe areas
+      e. expose the unit to more NEW tiles (5 instead of 3) and thus,
+      f. more danger of auto-attacks by unseen units
+      g. greater likelihood of being detected by sentry               */
+#define PF_DIAG_PENALTY 1
+/* How often to apply PF_DIAG_PENALTY. 0=NEVER. 100=ALWAYS. Use smaller
+   numbers to even out server's intrinsic bias for diagonal directions.
+   Use high but sub-100 numbers to tune out inferiority of diagonal pathing
+   and to simulate straight paths in all 360 degrees instead of
+   'polygonal edge' pathings. */
+#define PF_CARDINAL_BIAS_PCT 83
+
 /* =========================== Structures ================================ */
 
 /* Specifies the type of the action. */
@@ -306,10 +325,10 @@ enum tile_behavior {
 
 /* Specifies the possibility to move from/to a tile. */
 enum pf_move_scope {
-  PF_MS_NONE = 0,
-  PF_MS_NATIVE = 1 << 0,
-  PF_MS_CITY = 1 << 1,
-  PF_MS_TRANSPORT = 1 << 2
+  PF_MS_NONE = 0,               // 0
+  PF_MS_NATIVE = 1 << 0,        // 1
+  PF_MS_CITY = 1 << 1,          // 2
+  PF_MS_TRANSPORT = 1 << 2      // 4
 };
 
 /* Full specification of a position and time to reach it. */

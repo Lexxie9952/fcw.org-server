@@ -31,6 +31,9 @@
 
 #include "path_finding.h"
 
+/* DEBUG */
+#include "../server/notify.h"
+
 /* For explanations on how to use this module, see "path_finding.h". */
 
 #define SPECPQ_TAG map_index
@@ -38,6 +41,8 @@
 #define SPECPQ_PRIORITY_TYPE long
 #include "specpq.h"
 #define INITIAL_QUEUE_SIZE 100
+/* Generates a unique seed for any {X,Y} coordinates on a freeciv map: */
+#define CONST_SEED(X, Y)  srand((X*32769) + Y)
 
 #ifdef FREECIV_DEBUG
 /* Extra checks for debugging. */
@@ -267,6 +272,7 @@ static inline bool pf_normal_node_init(struct pf_normal_map *pfnm,
   const struct pf_parameter *params = pf_map_parameter(PF_MAP(pfnm));
   enum known_type node_known_type;
   enum pf_action action;
+  bool civilian_final_tile_is_nonallied_city = false;
 
 #ifdef PF_DEBUG
   fc_assert(NS_UNINIT == node->status);
@@ -283,6 +289,11 @@ static inline bool pf_normal_node_init(struct pf_normal_map *pfnm,
   }
   node->node_known_type = node_known_type;
 
+  /* For non-omniscient goto_path_req, server only blocks access to
+     illegal tiles if player knows they're illegal: */
+  bool blind_to_illegality = !params->omniscience 
+                             && node_known_type < TILE_KNOWN_SEEN;
+
   /* Establish the tile behavior. */
   if (NULL != params->get_TB) {
     node->behavior = params->get_TB(ptile, node_known_type, params);
@@ -291,7 +302,7 @@ static inline bool pf_normal_node_init(struct pf_normal_map *pfnm,
     }
 #ifdef ZERO_VARIABLES_FOR_SEARCHING
   } else {
-    /* The default. */
+    /* Nodes are zeroed by fc_calloc(), so are already this value: */
     node->behavior = TB_NORMAL;
 #endif
   }
@@ -311,47 +322,67 @@ static inline bool pf_normal_node_init(struct pf_normal_map *pfnm,
         }
       }
     }
-    /* else, Civilian: can go anywhere EXCEPT the tile of a non-allied city UNLESS
-       the city is the last tile in the path: Establish embassy / trade route, etc.
-       TODO: add one more condition if it's the final tile, some kind of 
-       unit_can_do_action_when_arriving_at_tile(). This would prevent workers
-       et al., from getting valid goto paths whose final tile is a non-allied city.
-       NOTE: method below is FAR superior to old bug that allowed ANY civilian
-       to path over ANY city for ALL start,middle,final tiles of a path:      */
-    else if (tile_city(ptile) && ptile != final_tile) {
+    /* else, Civilian: can go anywhere EXCEPT the tile of a non-allied city, UNLESS
+       the city is the last tile in the path (and they can do an action there):
+       Establish embassy / trade route, etc. fixes edge case in upstream_1Nov2022
+       allowing ANY civilian to path over ANY city for all start, middle, and final
+       tiles of a path: */
+    else if (tile_city(ptile)) {
       if (!pplayers_allied(params->owner, tile_city(ptile)->owner)) {
-        if (params->start_tile != ptile) {
-          /* Civilians can't go through non-allied cities */
-          node->behavior = TB_IGNORE;
-          return FALSE;
-        } else if (TB_NORMAL == node->behavior) {
-          node->behavior = TB_IGNORE;
-        }
+        if (ptile != final_tile) { /* final tile may have a legal non-path-blocking action which we check later */
+          if (params->start_tile != ptile) {
+            /* Civilians can't go through non-allied cities */
+            node->behavior = TB_IGNORE;
+            return FALSE;
+          } else if (TB_NORMAL == node->behavior) {
+            node->behavior = TB_IGNORE;
+          }
+        } else civilian_final_tile_is_nonallied_city = true; /* used later for a final action on the tile */
       }
-    }
+    } /* TODO: this stuff should have been caught by block below but wasn't. */
 
     /* Test the possibility to perform an action. */
     if (NULL != params->get_action) {
       action = params->get_action(ptile, node_known_type, params);
-      if (PF_ACTION_IMPOSSIBLE == action) {
-        /* Maybe overwrite node behavior. */
+
+      if (PF_ACTION_IMPOSSIBLE == action) { /* a move to this tile is: an attack or conquest, and the unit can't attack or conquer */
         if (params->start_tile != ptile) {
           node->behavior = TB_IGNORE;
-          return FALSE;
+          return FALSE; /* can't enter, can't go through */
         } else if (TB_NORMAL == node->behavior) {
           node->behavior = TB_IGNORE;
         }
         action = PF_ACTION_NONE;
-      } else if (PF_ACTION_NONE != action
-                 && TB_DONT_LEAVE != node->behavior) {
-        /* Overwrite node behavior. */
-        node->behavior = TB_DONT_LEAVE;
+      } 
+      else {
+        if (PF_ACTION_NONE != action /* an attack/conquer/diplo/caravan action is wanted on this tile */
+                  && TB_DONT_LEAVE != node->behavior) {
+          /* On unseen tiles, we don't omnisciently KNOW we can't leave, unless we believe there's a city there */
+          if (!blind_to_illegality || (tile_city(ptile) && node_known_type >= TILE_KNOWN_UNSEEN)) {
+            /* If in an allied city you can do help wonder/traderoute, behavior != TB_DONT_LEAVE.
+               Currently it seems other code is fixing this case. If we need this, it's here. 
+               Don't forget the other 2 pf_node__init functions! 
+            if (!is_allied_city_tile(ptile, params->owner) */
+              node->behavior = TB_DONT_LEAVE; /* Can enter to do the action, but not path through */
+          }
+        }
+        /* Original code forgot that it doesn't throw ZOC for city-centers on the final tile of a
+           path (maybe to allow a final action?) But in upstream_1Nov2022 this causes a bug where
+           civilians who can NOT do an action are able to path with final_tile into a non-allied
+           city! If we fix whatever reasoning throws (get_zoc == ZOC_MINE) for this case, we likely
+           create other bugs. Making params->get_action throw PF_ACTION_IMPOSSIBLE in this case,
+           would fix the need for this hack. */
+        else if (!blind_to_illegality                     // (must know there's a city there)
+                 && civilian_final_tile_is_nonallied_city // end of path for civilian is non-allied city
+                 && PF_ACTION_NONE == action) {           // unit can do no action
+          node->behavior = TB_IGNORE;                     // therefore, unit can't path to this tile.
+          return FALSE;
+        }
       }
       node->action = action;
 #ifdef ZERO_VARIABLES_FOR_SEARCHING
     } else {
-      /* Nodes are allocated by fc_calloc(), so should be already set to
-       * 0. */
+      /* Nodes are zeroed by fc_calloc(), so are already this value: */
       node->action = PF_ACTION_NONE;
 #endif
     }
@@ -383,32 +414,104 @@ static inline bool pf_normal_node_init(struct pf_normal_map *pfnm,
         && NULL == tile_city(ptile)
         && !terrain_has_flag(tile_terrain(ptile), TER_NO_ZOC)
         && !params->get_zoc(params->owner, ptile, params->map)) {
+/* v2.2 is clean and careful in order to avoid former edge-case failures: */
+          // Units on a non-city tile that's not our ZOC:
+          if (unit_list_size(ptile->units) > 0) {
+
+            // Non-allied units are on tile:
+            if (is_non_allied_unit_tile(ptile, params->owner)) {
+              // Tile needs an action and unit can do it:
+              if (node->action) {
+                node->behavior = TB_DONT_LEAVE;
+                // other code needs misnomer "ZOC_ALLIED" to path to a final action tile */
+                node->zoc_number = ptile == final_tile ? ZOC_ALLIED : ZOC_NO;
+              }
+              // Unit can't do actions to enemy; ⛔NO ENTRY⛔ ever:
+              else {
+                node->behavior = TB_IGNORE;
+                node->zoc_number = ZOC_NO;
+                return FALSE;
+              }
+            }
+
+            // Allied units are on the tile, an exception which negates ZOC_NO:
+            else {
+              node->zoc_number = ZOC_ALLIED;
+            }
+          }
+          
+          // No units on a non-city tile that's not our ZOC:
+          else {
+            node->zoc_number = ZOC_NO;
+          }
+//if (ptile->index == 1110) notify_player(params->owner, ptile, E_BAD_COMMAND, ftc_server, "DEBUG: Tile == 1110 is ZOC_NO!");
+/* v2.1 is an untested fix-up of the 99% working v2.0, in case v2.2 is found to fail somewhere:
+          // units on a non-city tile that's not our zoc:
+          if (unit_list_size(ptile->units) > 0) {
+
+            // non-allied units are on tile:
+            if (is_non_allied_unit_tile(ptile, params->owner)) {
+              node->zoc_number = ZOC_NO;
+              // non-final tile, forget pathing through this:
+              if (ptile != final_tile) {
+                node->behavior = TB_IGNORE; // TB_DONT_LEAVE instead?
+                return FALSE;
+              }
+              // final tile:
+              else {
+                // final tile with a doable action:
+                if (node->action) { 
+                  node->behavior = TB_DONT_LEAVE;
+                }
+                // final tile with no doable action:
+                else {
+                  node->behavior = TB_IGNORE; // TB_DONT_LEAVE instead?
+                  return FALSE;
+                }
+              }
+            }
+            // allied units on tile:
+            else {
+              node->zoc_number = ZOC_ALLIED;
+            }
+          } 
+          // no units on a tile that's not our ZOC
+          else {
+            node->zoc_number = ZOC_NO;
+          }
+*/
+/* v2.0 that worked for everything except non-fuel unit going to a final tile
+   occcupied by an enemy unit it should be able to attack. Fixable by some easy
+   easy little patch probably:
+          if (unit_list_size(ptile->units) > 0) {
+            if (is_non_allied_unit_tile(ptile, params->owner)) {
+              node->zoc_number = ZOC_NO;
+              if (ptile != final_tile) {
+                node->behavior = TB_IGNORE;
+                return FALSE;
+              }
+            } else {
+              node->zoc_number = ZOC_ALLIED;
+            }
+          } else {
+            node->zoc_number = ZOC_NO;
+          }
+*/
+/* v1.0 had edge-case failures from a bad logic-redux on 20 complex dependencies.
+   Pepeto wrongly deduced that "units on tile must be my allies" would handle all cases:
       node->zoc_number = (0 < unit_list_size(ptile->units)
-                          ? ZOC_ALLIED : ZOC_NO);
-      /* this was a way to check zoc_purity but if zoc_purity was
-         on, it was disallowing pathing to the final enemy occupied tile
-         even if that would be an action like bribe or attack. if we 
-         figure out why, we could re-implement this method instead of
-         the zoc_purity_disallowed() function:
-      if (game.server.zoc_purity) {
-        if (unit_list_size(ptile->units)>0) {
-          node->zoc_number = (is_allied_unit_tile_zoc_pure(ptile,params->owner)
-                ? ZOC_ALLIED : ZOC_NO);
-        }
-      }*/               
-
-
+                            ? ZOC_ALLIED : ZOC_NO);
+*/
 #ifdef ZERO_VARIABLES_FOR_SEARCHING
     } else {
-      /* Nodes are allocated by fc_calloc(), so should be already set to
-       * 0. */
+      /* Nodes are zeroed by fc_calloc(), so are already this value: */
       node->zoc_number = ZOC_MINE;
 #endif
     }
-  } else {
+  } else { /* tile visibility is TILE_UNKNOWN. This means mode != omniscient */
     node->move_scope = PF_MS_NATIVE;
 #ifdef ZERO_VARIABLES_FOR_SEARCHING
-    /* Nodes are allocated by fc_calloc(), so  should be already set to 0. */
+    /* Nodes are zeroed by fc_calloc(), so are already this value: */
     node->action = PF_ACTION_NONE;
     node->zoc_number = ZOC_MINE;
 #endif
@@ -419,11 +522,16 @@ static inline bool pf_normal_node_init(struct pf_normal_map *pfnm,
     node->extra_tile = params->get_EC(ptile, node_known_type, params);
 #ifdef ZERO_VARIABLES_FOR_SEARCHING
   } else {
-    /* Nodes are allocated by fc_calloc(), so  should be already set to 0. */
+    /* Nodes are zeroed by fc_calloc(), so are already this value: */
     node->extra_tile = 0;
 #endif
   }
 
+/* DEBUG 
+if (ptile->index == 1110) {
+notify_conn(NULL, NULL, E_SETTING, ftc_any,_("Tile%d returns TRUE: zoc==%d,TB==%d,EC==%ld,ms%d,act:%d"),
+    ptile->index,node->zoc_number, node->behavior, node->extra_tile, node->move_scope, node->action);
+} */
   return TRUE;
 }
 
@@ -637,7 +745,7 @@ static bool zoc_purity_disallowed(int zoc_num_src,
                                   struct tile *tile1, 
                                   const struct player *pplayer)
 {
-/* (zoc_num_srv != ZOC_MINE && zoc_num_dest == ZOC_ALLIED) is synonymous
+/* (zoc_num_src != ZOC_MINE && zoc_num_dest == ZOC_ALLIED) is synonymous
    with ZOC_NO, IFF there are no friendly non-igzoc units on the tile, (UNLESS
    the final tile which we may be only doing an action upon instead of actual
    movement */
@@ -721,6 +829,14 @@ static bool pf_normal_map_iterate(struct pf_map *pfm)
       long cost;
       long extra = 0;
 
+      /* Adjust for intrinsic diagonal bias. Any (x,y) always gets same
+        seed for consistency with no interference to fc_rand state. */
+      if (!is_cardinal_dir(dir)) {
+        CONST_SEED(tindex, tindex1);
+        if ((rand() % (100)) < PF_CARDINAL_BIAS_PCT)
+          extra += PF_DIAG_PENALTY;
+      }
+
       /* As for the previous position, 'tile1', 'node1' and 'tindex1' are
        * defining the adjacent position. */
 
@@ -750,40 +866,6 @@ static bool pf_normal_map_iterate(struct pf_map *pfm)
         if (zoc_purity_disallowed(node->zoc_number,node1->zoc_number,tile,tile1,pplayer))
           continue;  // forbidden
       }
-      /*
-      if (game.server.zoc_purity) {
-        if (node->zoc_number != ZOC_MINE && node1->zoc_number == ZOC_ALLIED) {
-          if (unit_list_size(tile1->units)>0) { // units on tile - likely unneeded: ZOC_ALLIED only happens with units on tile
-            if (!is_allied_unit_tile_allowing_movement(tile1, pplayer)) {  // no allied non-igzoc units on tile
-              if (tile1 != final_tile) {  // not final tile of path (which would prompt action popup, not zoc movement blocking)
-                continue;
-              }
-              else {  // final tile with units on it, case handling is very different from normal:
-                      // 1. enemy unit:      allow because it attempts an action popup, not a movement
-                      // 2. friendly unit:   disallow because no allied non-igzoc unit is present
-                      // 3. non-allied city: allow (gives action-prompt or no action possible msg)
-                      // 4. allied city:     allow because movement into friendly cities is legal UNLESS
-                      // 5. allied city with non-allied units inside: disallow
-                      if ( (!tile_city(tile1) &&                     // city: movement inside or attempted action popup allowed
-                           !is_non_allied_unit_tile(tile1, pplayer)) // enemy on final tile: attempted action popup allowed
-                           // || (allied city with non-allied units inside it)
-                           // || our_own_unit - units are present and it's not non-allied so this term is superfluous?
-                         ) {
-                           // at this point, we know:
-                           //   zoc_purity is on,
-                           //   the proposed destination tile has no allied non-igzoc units on it,
-                           //   we're not coming from a tile with ZOC_MINE,
-                           //   we're on the final tile of the path,
-                           //   units are on the tile,
-                           //   they're not enemy units we could do an action on,
-                           //   there is no city there to do a final action on 
-                              continue;  // so it's an illegal path
-                         }
-              }
-            }
-          }
-        }
-      }*/
 
       /* Evaluate the cost of the move. */
       if (PF_ACTION_NONE != node1->action) {
@@ -822,7 +904,7 @@ static bool pf_normal_map_iterate(struct pf_map *pfm)
 
       /* Evaluate the extra cost if it's relevant */
       if (NULL != params->get_EC) {
-        extra = node->extra_cost;
+        extra += node->extra_cost;
         /* Add the cached value */
         extra += node1->extra_tile;
       }
@@ -1143,6 +1225,7 @@ static inline bool pf_danger_node_init(struct pf_danger_map *pfdm,
   const struct pf_parameter *params = pf_map_parameter(PF_MAP(pfdm));
   enum known_type node_known_type;
   enum pf_action action;
+  bool civilian_final_tile_is_nonallied_city = false;
 
 #ifdef PF_DEBUG
   fc_assert(NS_UNINIT == node->status);
@@ -1159,6 +1242,11 @@ static inline bool pf_danger_node_init(struct pf_danger_map *pfdm,
   }
   node->node_known_type = node_known_type;
 
+  /* For non-omniscient goto_path_req, server only blocks access to
+     illegal tiles if player knows they're illegal: */
+  bool blind_to_illegality = !params->omniscience 
+                              && node_known_type < TILE_KNOWN_SEEN;
+
   /* Establish the tile behavior. */
   if (NULL != params->get_TB) {
     node->behavior = params->get_TB(ptile, node_known_type, params);
@@ -1167,7 +1255,7 @@ static inline bool pf_danger_node_init(struct pf_danger_map *pfdm,
     }
 #ifdef ZERO_VARIABLES_FOR_SEARCHING
   } else {
-    /* The default. */
+    /* Nodes are zeroed by fc_calloc(), so are already this value: */
     node->behavior = TB_NORMAL;
 #endif
   }
@@ -1175,22 +1263,9 @@ static inline bool pf_danger_node_init(struct pf_danger_map *pfdm,
   if (TILE_UNKNOWN != node_known_type) {
     bool can_disembark;
 
-    /* Test if we can invade tile. */
-    if (!utype_has_flag(params->utype, UTYF_CIVILIAN)
-        && !player_can_invade_tile(params->owner, ptile)) {
-      /* Maybe overwrite node behavior. */
-      if (params->start_tile != ptile) {
-        node->behavior = TB_IGNORE;
-        return FALSE;
-      } else if (TB_NORMAL == node->behavior) {
-        node->behavior = TB_IGNORE;
-      }
-    }
-
-    /* Test the possibility to perform an action. */
-    if (NULL != params->get_action) {
-      action = params->get_action(ptile, node_known_type, params);
-      if (PF_ACTION_IMPOSSIBLE == action) {
+    /* Disallow military unit to invade tile that's illegal to invade */
+    if (!utype_has_flag(params->utype, UTYF_CIVILIAN)) {
+      if (!player_can_invade_tile(params->owner, ptile)) {
         /* Maybe overwrite node behavior. */
         if (params->start_tile != ptile) {
           node->behavior = TB_IGNORE;
@@ -1198,17 +1273,69 @@ static inline bool pf_danger_node_init(struct pf_danger_map *pfdm,
         } else if (TB_NORMAL == node->behavior) {
           node->behavior = TB_IGNORE;
         }
+      }
+    }
+    /* else, Civilian: can go anywhere EXCEPT the tile of a non-allied city, UNLESS
+       the city is the last tile in the path (and they can do an action there):
+       Establish embassy / trade route, etc. fixes edge case in upstream_1Nov2022
+       allowing ANY civilian to path over ANY city for all start, middle, and final
+       tiles of a path: */
+    else if (tile_city(ptile)) {
+      if (!pplayers_allied(params->owner, tile_city(ptile)->owner)) {
+        if (ptile != final_tile) { /* final tile may have a legal non-path-blocking action which we check later */
+          if (params->start_tile != ptile) {
+            /* Civilians can't go through non-allied cities */
+            node->behavior = TB_IGNORE;
+            return FALSE;
+          } else if (TB_NORMAL == node->behavior) {
+            node->behavior = TB_IGNORE;
+          }
+        } else civilian_final_tile_is_nonallied_city = true; /* used later for a final action on the tile */
+      }
+    } /* TODO: this stuff should have been caught by block below but wasn't. */
+
+    /* Test the possibility to perform an action. */
+    if (NULL != params->get_action) {
+      action = params->get_action(ptile, node_known_type, params);
+
+      if (PF_ACTION_IMPOSSIBLE == action) {
+        if (params->start_tile != ptile) {
+          node->behavior = TB_IGNORE;
+          return FALSE; /* can't enter, can't go through */
+        } else if (TB_NORMAL == node->behavior) {
+          node->behavior = TB_IGNORE;
+        }
         action = PF_ACTION_NONE;
-      } else if (PF_ACTION_NONE != action
-                 && TB_DONT_LEAVE != node->behavior) {
-        /* Overwrite node behavior. */
-        node->behavior = TB_DONT_LEAVE;
+      } 
+      else {
+        if (PF_ACTION_NONE != action /* an attack/conquer/diplo/caravan action is wanted on this tile */
+                  && TB_DONT_LEAVE != node->behavior) {
+          /* On unseen tiles, we don't omnisciently KNOW we can't leave, unless we believe there's a city there */
+          if (!blind_to_illegality || (tile_city(ptile) && node_known_type >= TILE_KNOWN_UNSEEN)) {
+            /* If in an allied city you can do help wonder/traderoute, behavior != TB_DONT_LEAVE.
+               Currently it seems other code is fixing this case. If we need this, it's here. 
+               Don't forget the other 2 pf_node__init functions! 
+            if (!is_allied_city_tile(ptile, params->owner) */
+              node->behavior = TB_DONT_LEAVE; /* Can enter to do the action, but not path through */
+          }
+        }
+        /* Original code forgot that it doesn't throw ZOC for city-centers on the final tile of a
+           path (maybe to allow a final action?) But in upstream_1Nov2022 this causes a bug where
+           civilians who can NOT do an action are able to path with final_tile into a non-allied
+           city! If we fix whatever reasoning throws (get_zoc == ZOC_MINE) for this case, we likely
+           create other bugs. Making params->get_action throw PF_ACTION_IMPOSSIBLE in this case,
+           would fix the need for this hack. */
+        else if (!blind_to_illegality                     // (must know there's a city there)
+                 && civilian_final_tile_is_nonallied_city // end of path for civilian is non-allied city
+                 && PF_ACTION_NONE == action) {           // unit can do no action
+          node->behavior = TB_IGNORE;                     // therefore, unit can't path to this tile.
+          return FALSE;
+        }
       }
       node->action = action;
 #ifdef ZERO_VARIABLES_FOR_SEARCHING
     } else {
-      /* Nodes are allocated by fc_calloc(), so should be already set to
-       * 0. */
+      /* Nodes are zeroed by fc_calloc(), so are already this value: */
       node->action = PF_ACTION_NONE;
 #endif
     }
@@ -1240,27 +1367,47 @@ static inline bool pf_danger_node_init(struct pf_danger_map *pfdm,
         && NULL == tile_city(ptile)
         && !terrain_has_flag(tile_terrain(ptile), TER_NO_ZOC)
         && !params->get_zoc(params->owner, ptile, params->map)) {
-      node->zoc_number = (0 < unit_list_size(ptile->units)
-                          ? ZOC_ALLIED : ZOC_NO);
-      ////
-      if (game.server.zoc_purity) {
-        if (unit_list_size(ptile->units)>0) {
-          node->zoc_number = (is_allied_unit_tile_zoc_pure(ptile,params->owner)
-                ? ZOC_ALLIED : ZOC_NO);
-        }
-      }       
+/* v2.2 is clean and careful in order to avoid former edge-case failures: */
+          // Units on a non-city tile that's not our ZOC:
+          if (unit_list_size(ptile->units) > 0) {
+
+            // Non-allied units are on tile:
+            if (is_non_allied_unit_tile(ptile, params->owner)) {
+              // Tile needs an action and unit can do it:
+              if (node->action) {
+                node->behavior = TB_DONT_LEAVE;
+                // other code needs misnomer "ZOC_ALLIED" to path to a final action tile */
+                node->zoc_number = ptile == final_tile ? ZOC_ALLIED : ZOC_NO;
+              }
+              // Unit can't do actions to enemy; ⛔NO ENTRY⛔ ever:
+              else {
+                node->behavior = TB_IGNORE;
+                node->zoc_number = ZOC_NO;
+                return FALSE;
+              }
+            }
+
+            // Allied units are on the tile, an exception which negates ZOC_NO:
+            else {
+              node->zoc_number = ZOC_ALLIED;
+            }
+          } 
+          
+          // No units on a non-city tile that's not our ZOC:
+          else {
+            node->zoc_number = ZOC_NO;
+          }
 
 #ifdef ZERO_VARIABLES_FOR_SEARCHING
     } else {
-      /* Nodes are allocated by fc_calloc(), so should be already set to
-       * 0. */
+      /* Nodes are zeroed by fc_calloc(), so are already this value: */
       node->zoc_number = ZOC_MINE;
 #endif
     }
   } else {
     node->move_scope = PF_MS_NATIVE;
 #ifdef ZERO_VARIABLES_FOR_SEARCHING
-    /* Nodes are allocated by fc_calloc(), so  should be already set to 0. */
+    /* Nodes are zeroed by fc_calloc(), so are already these values: */
     node->action = PF_ACTION_NONE;
     node->zoc_number = ZOC_MINE;
 #endif
@@ -1271,14 +1418,13 @@ static inline bool pf_danger_node_init(struct pf_danger_map *pfdm,
     node->extra_tile = params->get_EC(ptile, node_known_type, params);
 #ifdef ZERO_VARIABLES_FOR_SEARCHING
   } else {
-    /* Nodes are allocated by fc_calloc(), so should be already set to 0. */
+    /* Nodes are zeroed by fc_calloc(), so are already this value: */
     node->extra_tile = 0;
 #endif
   }
 
 #ifdef ZERO_VARIABLES_FOR_SEARCHING
-  /* Nodes are allocated by fc_calloc(), so should be already set to
-   * FALSE. */
+  /* Nodes are zeroed by fc_calloc(), so are already FALSE: */
   node->waited = FALSE;
 #endif
 
@@ -1670,6 +1816,14 @@ static bool pf_danger_map_iterate(struct pf_map *pfm)
         long cost;
         long extra = 0;
 
+        /* Adjust for intrinsic diagonal bias. Any (x,y) always gets same
+          seed for consistency with no interference to fc_rand state. */
+        if (!is_cardinal_dir(dir)) {
+          CONST_SEED(tindex, tindex1);
+          if ((rand() % (100)) < PF_CARDINAL_BIAS_PCT)
+            extra += PF_DIAG_PENALTY;
+        }
+
         /* As for the previous position, 'tile1', 'node1' and 'tindex1' are
          * defining the adjacent position. */
 
@@ -1741,7 +1895,7 @@ static bool pf_danger_map_iterate(struct pf_map *pfm)
 
         /* Evaluate the extra cost of the destination, if it's relevant. */
         if (NULL != params->get_EC) {
-          extra = node1->extra_tile + node->extra_cost;
+          extra += node1->extra_tile + node->extra_cost;
         }
 
         /* Update costs and add to queue, if this is a better route
@@ -2193,6 +2347,7 @@ static inline bool pf_fuel_node_init(struct pf_fuel_map *pffm,
   const struct pf_parameter *params = pf_map_parameter(PF_MAP(pffm));
   enum known_type node_known_type;
   enum pf_action action;
+  bool civilian_final_tile_is_nonallied_city = false;
 
 #ifdef PF_DEBUG
   fc_assert(NS_UNINIT == node->status);
@@ -2209,6 +2364,11 @@ static inline bool pf_fuel_node_init(struct pf_fuel_map *pffm,
   }
   node->node_known_type = node_known_type;
 
+  /* For non-omniscient goto_path_req, server only blocks access to
+     illegal tiles if player knows they're illegal: */
+  bool blind_to_illegality = !params->omniscience 
+                              && node_known_type < TILE_KNOWN_SEEN;
+
   /* Establish the tile behavior. */
   if (NULL != params->get_TB) {
     node->behavior = params->get_TB(ptile, node_known_type, params);
@@ -2217,7 +2377,7 @@ static inline bool pf_fuel_node_init(struct pf_fuel_map *pffm,
     }
 #ifdef ZERO_VARIABLES_FOR_SEARCHING
   } else {
-    /* The default. */
+    /* Nodes are zeroed by fc_calloc(), so are already this value: */
     node->behavior = TB_NORMAL;
 #endif
   }
@@ -2225,24 +2385,9 @@ static inline bool pf_fuel_node_init(struct pf_fuel_map *pffm,
   if (TILE_UNKNOWN != node_known_type) {
     bool can_disembark;
 
-    /* Test if we can invade tile. */
-    if (!utype_has_flag(params->utype, UTYF_CIVILIAN)
-        && !player_can_invade_tile(params->owner, ptile)) {
-      /* Maybe overwrite node behavior. */
-      if (params->start_tile != ptile) {
-        node->behavior = TB_IGNORE;
-        return FALSE;
-      } else if (TB_NORMAL == node->behavior) {
-        node->behavior = TB_IGNORE;
-      }
-    }
-
-    /* Test the possibility to perform an action. */
-    if (NULL != params->get_action
-        && PF_ACTION_NONE != (action =
-                              params->get_action(ptile, node_known_type,
-                                                 params))) {
-      if (PF_ACTION_IMPOSSIBLE == action) {
+    /* Disallow military unit to invade tile that's illegal to invade */
+    if (!utype_has_flag(params->utype, UTYF_CIVILIAN)) {
+      if (!player_can_invade_tile(params->owner, ptile)) {
         /* Maybe overwrite node behavior. */
         if (params->start_tile != ptile) {
           node->behavior = TB_IGNORE;
@@ -2250,21 +2395,58 @@ static inline bool pf_fuel_node_init(struct pf_fuel_map *pffm,
         } else if (TB_NORMAL == node->behavior) {
           node->behavior = TB_IGNORE;
         }
-        action = PF_ACTION_NONE;
-      } else if (TB_DONT_LEAVE != node->behavior) {
-        /* Overwrite node behavior. */
-        node->behavior = TB_DONT_LEAVE;
       }
-      node->action = action;
-#ifdef ZERO_VARIABLES_FOR_SEARCHING
-      node->moves_left_req = 0; /* Attack is always possible theorically. */
-#endif
+    }
+    /* else, Civilian: can go anywhere EXCEPT the tile of a non-allied city, UNLESS
+       the city is the last tile in the path (and they can do an action there):
+       Establish embassy / trade route, etc. fixes edge case in upstream_1Nov2022
+       allowing ANY civilian to path over ANY city for all start, middle, and final
+       tiles of a path: */
+    else if (tile_city(ptile)) {
+      if (!pplayers_allied(params->owner, tile_city(ptile)->owner)) {
+        if (ptile != final_tile) { /* final tile may have a legal non-path-blocking action which we check later */
+          if (params->start_tile != ptile) {
+            /* Civilians can't go through non-allied cities */
+            node->behavior = TB_IGNORE;
+            return FALSE;
+          } else if (TB_NORMAL == node->behavior) {
+            node->behavior = TB_IGNORE;
+          }
+        } else civilian_final_tile_is_nonallied_city = true; /* used later for a final action on the tile */
+      }
+    } /* TODO: this stuff should have been caught by block below but wasn't. */
+
+    /* Test the possibility to perform an action. */
+    if (NULL != params->get_action
+        && PF_ACTION_NONE != (action =
+                              params->get_action(ptile, node_known_type,
+                                                 params))) {
+      if (PF_ACTION_IMPOSSIBLE == action) { /* a move to this tile is: an attack or conquest, and the unit can't attack or conquer */
+        if (params->start_tile != ptile) {
+          node->behavior = TB_IGNORE;
+          return FALSE;
+        } else if (TB_NORMAL == node->behavior) {
+          node->behavior = TB_IGNORE;
+        }
+        action = PF_ACTION_NONE;
+      } else if (TB_DONT_LEAVE != node->behavior) { // && PF_ACTION_NONE != action (like the other node_init funcs have?)
+        /* On unseen tiles, we don't omnisciently KNOW we can't leave, unless we believe there's a city there */
+        if (!blind_to_illegality || (tile_city(ptile) && node_known_type >= TILE_KNOWN_UNSEEN)) {
+          node->behavior = TB_DONT_LEAVE; /* Can enter to do the action, but not path through */
+        }
+      }
+    } /* Original code forgot that it doesn't throw ZOC for city-centers on the final tile of a
+    path (maybe to allow a final action?) But in upstream_1Nov2022 this causes a bug where
+    civilians who can NOT do an action are able to path with final_tile into a non-allied
+    city! If we fix whatever reasoning throws (get_zoc == ZOC_MINE) for this case, we likely
+    create other bugs. Making params->get_action throw PF_ACTION_IMPOSSIBLE in this case,
+    would fix the need for this hack. */
+    else if (!blind_to_illegality                     // (must know there's a city there)
+              && civilian_final_tile_is_nonallied_city // end of path for civilian is non-allied city
+              && PF_ACTION_NONE == action) {           // unit can do no action
+      node->behavior = TB_IGNORE;                     // therefore, unit can't path to this tile.
+      return FALSE;
     } else {
-#ifdef ZERO_VARIABLES_FOR_SEARCHING
-      /* Nodes are allocated by fc_calloc(), so should be already set to
-       * 0. */
-      node->action = PF_ACTION_NONE;
-#endif
       node->moves_left_req =
         params->get_moves_left_req(ptile, node_known_type, params);
       if (PF_IMPOSSIBLE_MC == node->moves_left_req) {
@@ -2277,6 +2459,7 @@ static inline bool pf_fuel_node_init(struct pf_fuel_map *pffm,
         }
       }
     }
+    node->action = action;
 
     /* Test the possibility to move from/to 'ptile'. */
     node->move_scope = params->get_move_scope(ptile, &can_disembark,
@@ -2305,20 +2488,40 @@ static inline bool pf_fuel_node_init(struct pf_fuel_map *pffm,
         && NULL == tile_city(ptile)
         && !terrain_has_flag(tile_terrain(ptile), TER_NO_ZOC)
         && !params->get_zoc(params->owner, ptile, params->map)) {
-      node->zoc_number = (0 < unit_list_size(ptile->units)
-                          ? ZOC_ALLIED : ZOC_NO);
-      /* ////
-      if (game.server.zoc_purity) {
-        if (unit_list_size(ptile->units)>0) {
-          node->zoc_number = (is_allied_unit_tile_zoc_pure(ptile,params->owner)
-                ? ZOC_ALLIED : ZOC_NO);
-        }
-      }   */     
+/* v2.2 is clean and careful in order to avoid former edge-case failures: */
+          // Units on a non-city tile that's not our ZOC:
+          if (unit_list_size(ptile->units) > 0) {
+
+            // Non-allied units are on tile:
+            if (is_non_allied_unit_tile(ptile, params->owner)) {
+              // Tile needs an action and unit can do it:
+              if (node->action) {
+                node->behavior = TB_DONT_LEAVE;
+                // other code needs misnomer "ZOC_ALLIED" to path to a final action tile */
+                node->zoc_number = ptile == final_tile ? ZOC_ALLIED : ZOC_NO;
+              }
+              // Unit can't do actions to enemy; ⛔NO ENTRY⛔ ever:
+              else {
+                node->behavior = TB_IGNORE;
+                node->zoc_number = ZOC_NO;
+                return FALSE;
+              }
+            }
+
+            // Allied units are on the tile, an exception which negates ZOC_NO:
+            else {
+              node->zoc_number = ZOC_ALLIED;
+            }
+          } 
+          
+          // No units on a non-city tile that's not our ZOC:
+          else {
+            node->zoc_number = ZOC_NO;
+          }
 
 #ifdef ZERO_VARIABLES_FOR_SEARCHING
     } else {
-      /* Nodes are allocated by fc_calloc(), so should be already set to
-       * 0. */
+      /* Nodes are zeroed by fc_calloc(), so are already this value: */
       node->zoc_number = ZOC_MINE;
 #endif
     }
@@ -2337,7 +2540,7 @@ static inline bool pf_fuel_node_init(struct pf_fuel_map *pffm,
 
     node->move_scope = PF_MS_NATIVE;
 #ifdef ZERO_VARIABLES_FOR_SEARCHING
-    /* Nodes are allocated by fc_calloc(), so  should be already set to 0. */
+    /* Nodes are zeroed by fc_calloc(), so are already this value: */
     node->action = PF_ACTION_NONE;
     node->zoc_number = ZOC_MINE;
 #endif
@@ -2348,13 +2551,13 @@ static inline bool pf_fuel_node_init(struct pf_fuel_map *pffm,
     node->extra_tile = params->get_EC(ptile, node_known_type, params);
 #ifdef ZERO_VARIABLES_FOR_SEARCHING
   } else {
-    /* Nodes are allocated by fc_calloc(), so should be already set to 0. */
+    /* Nodes are zeroed by fc_calloc(), so are already this value: */
     node->extra_tile = 0;
 #endif
   }
 
 #ifdef ZERO_VARIABLES_FOR_SEARCHING
-  /* Nodes are allocated by fc_calloc(), so should be already set to 0. */
+  /* Nodes are zeroed by fc_calloc(), so are already this value: */
   node->pos = NULL;
   node->segment = NULL;
 #endif
@@ -2830,6 +3033,14 @@ static bool pf_fuel_map_iterate(struct pf_map *pfm)
         long cost_of_path, old_cost_of_path;
         struct pf_fuel_pos *pos;
 
+        /* Adjust for intrinsic diagonal bias. Any (x,y) always gets same
+          seed for consistency with no interference to fc_rand state. */
+        if (!is_cardinal_dir(dir)) {
+          CONST_SEED(tindex, tindex1);
+          if ((rand() % (100)) < PF_CARDINAL_BIAS_PCT)
+            extra += PF_DIAG_PENALTY;
+        }
+
         /* As for the previous position, 'tile1', 'node1' and 'tindex1' are
          * defining the adjacent position. */
 
@@ -2935,7 +3146,7 @@ static bool pf_fuel_map_iterate(struct pf_map *pfm)
 
         /* Evaluate the extra cost of the destination, if it's relevant. */
         if (NULL != params->get_EC) {
-          extra = node1->extra_tile + node->extra_cost;
+          extra += node1->extra_tile + node->extra_cost;
         }
 
         /* Update costs and add to queue, if this is a better route

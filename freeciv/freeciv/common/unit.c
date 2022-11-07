@@ -40,6 +40,9 @@
 #include "traderoutes.h"
 #include "unitlist.h"
 
+/* DEBUG 
+#include "../server/notify.h" */
+
 #include "unit.h"
 
 static bool is_real_activity(enum unit_activity activity);
@@ -1587,22 +1590,39 @@ struct unit *unit_occupies_tile(const struct tile *ptile,
   return NULL;
 }
 
-/**********************************************************************//**
-  Is this square controlled by the pplayer?
+/**************************************************************************//**
+  Is this tile in my ZOC (such that a unit native to it can enter it if it
+  has OR were to have, no units on it) ?
 
-  Here "is_my_zoc" means essentially a tile which is *not* adjacent to an
-  enemy ZOC unit _who is native_ to that tile's terrain, and that tile's
-  terrain has ZOC rules.
+  "is_my_zoc" means (1) a tile which is 𝑵𝑶𝑻 adjacent to an enemy ZOC unit
+  𝒘𝒉𝒐 𝒊𝒔 𝒏𝒂𝒕𝒊𝒗𝒆 to this tile's terrain OR this tile's terrain lacks
+  a "NoZOC" flag; 𝑨𝑵𝑫 (2) the tile is not blocked from entry due to occupation
+  by non-allied units. NB:#1 It may be uncertain whether condition (2) is part
+  of the definition of ZOC, but some functions (unknowingly?) assume it.
 
-  Since this function is also used in the client, it has to deal with some
-  client-specific features, like FoW and the fact that the client cannot 
-  see units inside enemy cities.
-**************************************************************************/
+  Also NB:#2 this returns the ZOC-value 𝒑𝒓𝒊𝒐𝒓 𝒕𝒐 𝒄𝒉𝒆𝒄𝒌𝒊𝒏𝒈 if an allied unit on
+  the tile would allow entry to the tile, so FAILS TO BE SYNONYMOUS WITH
+  the real concept of ZOC. Sure enough, it caused bugs before, so be careful.
+
+  Since this function is also used in the native client, it has to deal with
+  some client-specific features, like Fog-of-War and the fact that the client
+  cannot see units inside enemy cities. The web client can't use it because
+  is_server() will always be true and thus render omniscient goto pathing.
+  The web client therefore uses "is_my_zoc_client_goto(..)"
+
+  NB:#3 If you change this, also look at is_my_zoc_client_goto().
+******************************************************************************/
 bool is_my_zoc(const struct player *pplayer, const struct tile *ptile0,
                const struct civ_map *zmap)
 {
   struct terrain *pterrain;
   bool srv = is_server();
+
+  if (srv || tile_get_known(ptile0, pplayer) == TILE_KNOWN_SEEN) {
+    if (is_non_allied_unit_tile(ptile0, pplayer)) {
+      return FALSE;
+    } 
+  }
 
   square_iterate(zmap, ptile0, 1, ptile) {
     struct city *pcity;
@@ -1621,12 +1641,12 @@ bool is_my_zoc(const struct player *pplayer, const struct tile *ptile0,
       /* Putting the next if() as an && in the line above triggers the
          else{} in such a way that breaks with the rule that the ZOC a
          city exerts will not reveal what kind of unit(s) inside. 
-         We currently chose nested check because: 1. Cities
-         are native to land not sea, 2. The rule that cities don't do
-         ZOC over ocean is consistent and ultra-simple, 3. Ships are
-         docked as BadCityDefenders, 4. Aircraft are on the ground, and
-         5. This prevents exploits to check whether the city's (lone?)
-         defender is of a certain type (likely BadCityDefefender!) */
+         This also works with some other important nuances: 1. Cities
+         are 'native' to land not sea, 2. The rule that cities don't do
+         ZOC over ocean stays consistent and ultra-simple, 3. BadCityDefenders
+         and aircraft on the ground don't alter ocean-going movement
+         nor create complex edge cases, nor 4. reveal their (vulnerable)
+         presence in the city by exerting ZOC onto the water! */
       if (!is_ocean_tile(ptile0) /* || is_ocean_tile(ptile) (ocean city)*/) {
         if ((srv && unit_list_size(ptile->units) > 0)
             || (!srv && (pcity->client.occupied
@@ -1647,6 +1667,72 @@ bool is_my_zoc(const struct player *pplayer, const struct tile *ptile0,
       } unit_list_iterate_end;
     }
   } square_iterate_end;
+
+  return TRUE;
+}
+
+/**********************************************************************//**
+  Same as above for clients who must ask for server-side processing of
+  goto path requests. Needed because is_server() is always TRUE, and we
+  need non-omniscient goto paths.
+**************************************************************************/
+bool is_my_zoc_client_goto(const struct player *pplayer,
+                           const struct tile *ptile0,
+                           const struct civ_map *zmap)
+{
+  if (tile_get_known(ptile0, pplayer) == TILE_KNOWN_SEEN) {
+    if (is_non_allied_unit_tile(ptile0, pplayer)) {
+      return FALSE;
+    } 
+  }
+
+  square_iterate(zmap, ptile0, 1, ptile) {
+    bool non_allied_city = is_non_allied_city_tile(ptile, pplayer) != NULL;
+    enum known_type tile_vision = tile_get_known(ptile, pplayer);
+    
+    if (terrain_has_flag(tile_terrain(ptile), TER_NO_ZOC)
+        || (tile_vision == TILE_UNKNOWN) /* unknown == no ZOC */
+        /* Fogged == no ZOC, unless a non-allied city is shown: */
+        || (tile_vision == TILE_KNOWN_UNSEEN && !non_allied_city)) {
+      continue;
+    }
+
+    /* Non-alliied fogged or occupied city: ZOC over land not over sea */
+    if (non_allied_city) {
+      if (!is_ocean_tile(ptile0) /* || is_ocean_tile(ptile) //(ocean city)*/) {
+        if ((tile_vision == TILE_KNOWN_SEEN && unit_list_size(ptile->units) > 0)
+            || tile_vision == TILE_KNOWN_UNSEEN) {
+          return FALSE; /* Impose ZOC. */
+        }
+      }
+    } else {
+      unit_list_iterate(ptile->units, punit) {
+        if (!pplayers_allied(unit_owner(punit), pplayer)
+            && !unit_has_type_flag(punit, UTYF_NOZOC)
+            /* Can't exert ZOC upon tiles non-native to the unit! */
+            && is_native_tile_to_class(unit_class_get(punit), ptile0)) {
+          return FALSE;
+        }
+      } unit_list_iterate_end;
+    }
+  } square_iterate_end;
+
+  return TRUE;
+}
+
+/**********************************************************************//**
+  Version for igZoc units: path_finding.c uses ZOC as a synonym for
+  "may enter tile"; so igZoc needs to check for non-allied occupied tiles.
+**************************************************************************/
+bool is_my_zoc_client_goto_igzoc(const struct player *pplayer,
+                                 const struct tile *ptile0,
+                                 const struct civ_map *zmap)
+{
+  if (tile_get_known(ptile0, pplayer) == TILE_KNOWN_SEEN) {
+    if (is_non_allied_unit_tile(ptile0, pplayer)) {
+      return FALSE;
+    } 
+  }
 
   return TRUE;
 }

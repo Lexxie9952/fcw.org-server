@@ -3390,10 +3390,11 @@ static bool do_unit_change_homecity(struct unit *punit,
                                     struct city *pcity)
 {
   const char *giver = NULL;
+  struct player *old_owner = unit_owner(punit);
 
   if (unit_owner(punit) != city_owner(pcity)) {
     /* This is a gift. Tell the receiver. */
-    giver = player_name(unit_owner(punit));
+    giver = player_name(old_owner);
   }
 
   unit_change_homecity_handling(punit, pcity, TRUE);
@@ -3714,7 +3715,7 @@ static void do_path_req(struct player *pplayer, struct unit *punit,
   struct tile *ptile = index_to_tile(&(wld.map), goal);
   int umr = unit_move_rate(punit);
   
-  /* Insurance: catch possible bad calls from clients: */  
+  /* Catch bad calls from clients: */  
   if (umr <= 0) {
     log_verbose("do_path_req()"
         " %s (id=%d) %s. moverate<=0 would cause error or div by zero",
@@ -3741,7 +3742,7 @@ static void do_path_req(struct player *pplayer, struct unit *punit,
     return;
   }
 
-/* Success. Process info to send to client: */
+/* Proceed to fulfill path_req from client */
   struct pf_parameter parameter;
   struct pf_map *pfm;
   struct pf_path *path;
@@ -3754,17 +3755,27 @@ static void do_path_req(struct player *pplayer, struct unit *punit,
   int moves_at_start = moves_left_initially != FC_NEG_HUGE
                      ? moves_left_initially : punit->moves_left;
   int moves_spent = umr - moves_at_start; /* moves already used this turn */
+  int fuel_at_start = fuel_left_initially != -1
+                    ? fuel_left_initially : punit->fuel;
 
   /* Use path-finding to find a goto path. */
   pft_fill_unit_parameter(&parameter, punit);
+  bool fuel_unit = utype_fuel(unit_type_get(punit)) > 0;
 
   /* If user requested path segment, set up pf_parameter for it: */
   if (start_tile > -1) {
     parameter.start_tile = index_to_tile(&(wld.map), start_tile);
     parameter.moves_left_initially = moves_at_start;
-    if (utype_fuel(unit_type_get(punit))) {
-      parameter.fuel_left_initially = fuel_left_initially;  
+    if (fuel_unit) {
+      parameter.fuel_left_initially = fuel_at_start;  
     }
+  }
+  /* Pathing can't access info unavailable to player: */
+  parameter.omniscience = false;
+  if (unit_type_really_ignores_zoc(unit_type_get(punit))) {
+    parameter.get_zoc = is_my_zoc_client_goto_igzoc;
+  } else {
+    parameter.get_zoc = is_my_zoc_client_goto;
   }
 
   pfm = pf_map_new(&parameter);
@@ -3772,7 +3783,7 @@ static void do_path_req(struct player *pplayer, struct unit *punit,
   pf_map_destroy(pfm);
 
   if (path) {
-    int total_mc = 0, fuel_left = 0;
+    int total_mc = 0, fuel_left = 0, moves_left = 0;
     p.length = path->length - 1;
     old_tile = path->positions[0].tile;
 
@@ -3782,6 +3793,7 @@ static void do_path_req(struct player *pplayer, struct unit *punit,
 
       total_mc = path->positions[i+1].total_MC;
       fuel_left = path->positions[i+1].fuel_left;
+      moves_left = path->positions[i+1].moves_left; /* used for fuel units */
       if (same_pos(new_tile, old_tile)) {
         dir = -1; /* refuel layover */
       } else {
@@ -3799,14 +3811,28 @@ static void do_path_req(struct player *pplayer, struct unit *punit,
     /* "Turns-SPENT" to arrive at dest-tile != "turns to arrival" -- You can arrive
     *  on the same turn with moves_left==0, yet SPENT a "whole turn of movement": */
     p.turns = p.turn[p.length - 1];
-    /* Running out of moves doesn't always mean an extra turn to reach dest-tile. It could be
-      a "movesleft==0 arrival". MAX(0,ceil(turns)-1) gives correct #turns for arrival @ dest. */
+    /* Running out of moves doesn't always mean an extra turn to reach dest-tile. It could be a
+      "movesleft==0 arrival". MAX(0,ceil(arrive_turns)-1) yields #turns for arrival @ dest. */
     float arrive_turns = MAX(0, ceil((float)(total_mc + moves_spent) / (float)umr)-1);
     p.arrival_turns = arrive_turns;
     p.total_mc = total_mc;
-    p.movesleft = moves_at_start - total_mc;
-    /* fuel_left on last tile of path will be needed if this becomes a segment of a composite path*/
-    p.fuelleft = fuel_left;
+    /* exact fuel_left and movesleft on last tile of path are needed if this path becomes a segment of a composite path*/
+    if (fuel_unit) {
+      /* fuel units might refuel; we need to track legit "value at the tile" for path construction */
+      p.movesleft = moves_left;
+      /* path->positions[].fuel_left is a misnomer: pf_fuel_finalize_position_base() uses:
+         pos->fuel_left = (moves_left / move_rate). Thus, the "real" fuel_left will be 
+         +1 higher from trunc rounding. Boundary tile (moves_left % move_rate == 0)
+         is allowed to have 1 higher because technically you don't lose -1 fuel by
+         having 0 moves_left, but by the start of a new turn (according to how path-
+         finding works when we pass these values back when constructing path
+         segmnents.) */
+      p.fuelleft = fuel_left + 1;
+    } else { /* non-fuel units display moves_left in client as negatve for multi-turn moves */
+      p.movesleft = moves_at_start - total_mc;
+      p.fuelleft = 0;
+    }
+    /******************************************************************************************************************/ 
 
     send_packet_goto_path(pplayer->current_conn, &p);
   }
