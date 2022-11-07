@@ -3970,8 +3970,7 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
           var ptile = index_to_tile(pcity['tile']);
           if (pcity['rally_point_length']) popit_req(ptile, true);
         }
-      }
-      else key_unit_road();
+      } else if (!alt && !ctrl && !shift) key_unit_road();
     break;
 
     case 'S':

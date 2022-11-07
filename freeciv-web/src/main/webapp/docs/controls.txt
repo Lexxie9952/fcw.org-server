@@ -87,7 +87,7 @@ The current and complete list of Freeciv-web controls can be found here:<br>
 
 <tr><td><img src="/images/orders/road_default.png"></td><td><span class="vctr"> Build Road</td><td><span class="hotkey">r</span></span></td></tr>
 
-<tr><td><img src="/images/orders/railroad_default.png"></td><td><span class="vctr"> Build Railroad</td><td><span class="hotkey">r</span></span></td></tr>
+<tr><td><img src="/images/orders/railroad_default.png"></td><td><span class="vctr"> Build Railroad</td><td><span class="hotkey">r, shift-R (override other types)</span></span></td></tr>
 
 <tr><td><img src="/images/orders/maglev.png"></td><td><span class="vctr"> Build MagLev</td><td><span class="hotkey">r</span></span></td></tr>
 
@@ -158,6 +158,7 @@ The current and complete list of Freeciv-web controls can be found here:<br>
 <tr><td><span class="hotkey">  q</span></td><td> build (q)uay</td></tr>
 <tr><td><span class="hotkey">shift-Q</span></td><td> select all units from the (Q)ueue awaiting orders (also filters multi-selections)</td></tr>
 <tr><td><span class="hotkey">  r</span></td><td> build (r)oad/railroad  (settler/worker units)</td></tr>
+<tr><td><span class="hotkey">rr</span></td><td> build (r)ailroad only, not maglev</td></tr>
 <tr><td><span class="hotkey">alt-shift-R</span></td><td> connect roads along goto path</td></tr>
 <tr><td><span class="hotkey">  s</span></td><td> (s)entry unit</td></tr>
 <tr><td><span class="hotkey">shift-S</span></td><td> un(S)entry all units on tile</td></tr>
