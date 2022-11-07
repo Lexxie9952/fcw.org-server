@@ -42,6 +42,7 @@ var unit_bombard_attack_names = {
   "Zealots":       "Skirmish Assault",
   "Marines":       "Bazooka Attack",
   "Zeppelin":      "Bomb",
+  "Helicopter":    "Ranged Defense",
   "Battleship":    "Bombard",
   "Ballista":      "Ranged Attack",
   "Catapult":      "Bombard",

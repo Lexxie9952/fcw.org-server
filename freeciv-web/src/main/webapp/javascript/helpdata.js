@@ -633,6 +633,36 @@ function generate_help_text(key)
         msg += move_points_text(punit_type['move_rate'], false)+" moves.";
       
       msg += div_end;
+    } else if (pstats.bombard_retaliate_rounds) { // SUD ONLY: e.g., helicopter
+      var bombard_name = utype_get_bombard_name(punit_type);
+
+      msg += "<div"+flex+" id='utype_fact_bombard'>";
+      msg += span1 + bombard_name.replace(" ", "&nbsp;") +":&nbsp;&nbsp;"+ span_end + span2_small;
+
+      msg += "SUD: " + pstats.bombard_retaliate_rounds;
+      msg += (pstats.bombard_retaliate_rounds > 1 ? " rounds. " : " round. ");
+
+      if (bstats.bombard_primary_targets) {
+        msg += bstats.bombard_primary_targets;
+        msg += (bstats.bombard_primary_targets > 1 ? " targets. " : " target. ");
+      }
+      else 
+        msg += "ALL targets. ";
+
+      if (bstats.bombard_primary_kills) {
+        msg += bstats.bombard_primary_kills;
+        msg += (bstats.bombard_primary_kills > 1 ? " kills. " : " kill. ");
+      }
+      else
+        msg += "No kills. "
+
+      if (punit_type.bombard_move_cost)
+        msg += move_points_text(punit_type.bombard_move_cost, false)
+            + (punit_type.bombard_move_cost > SINGLE_MOVE ? " moves." : " move.");
+      else 
+        msg += " No move cost.";
+      
+      msg += div_end;
     }
 
     // IMPROVEMENT REQ
