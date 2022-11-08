@@ -576,8 +576,13 @@ function generate_help_text(key)
     // MIN_SPEED
     msg += "<div"+flex+" id='utype_fact_minspeed'>";
     msg += span1 + "Min_speed: " + span_end + span2;
-    if (utype_has_class_flag(punit_type, UCF_DAMAGE_SLOWS))
-      msg += move_points_text(punit_class['min_speed'],false);
+    if (utype_has_class_flag(punit_type, UCF_DAMAGE_SLOWS)) {
+      if (punit_type.min_speed) {
+        msg += move_points_text(punit_type['min_speed'],false); // see effects.js::effects_set_min_speeds()
+      } else { // shouldn't happen; compatabile with client prior to effects_set_min_speeds()
+        msg += move_points_text(punit_class['min_speed'],false);
+      }
+    }
     else msg += "100%";
     msg += div_end;
     // UPKEEP

@@ -191,24 +191,25 @@ const EFT_LAST = 147;
   This is because we can no longer support bitfields for suchc costs
   after going to highly composite move costs. 
 **************************************************************************/
-function set_bombard_move_costs()
+function effects_set_bombard_move_costs()
 {
-  // Grab the array of Action_Success_Actor_Move_Cost effects:
-  var actor_costs = effects[EFT_ACTION_SUCCESS_MOVE_COST];
-
   /* Set bombard_move_cost for everything that may not have an
-     Action_Success_Actor_Move_Cost. utypes that do have an effect-
-     defined move cost will recalc and replace the data further below. */
-  for (var ptype_id in unit_types) {
+     Action_Success_Actor_Move_Cost. utypes that do have an effect-defined
+     move_cost will recalc and replace the data further below. */
+  for (let ptype_id in unit_types) {
     let ptype = unit_types[ptype_id];
     let bstats = utype_get_bombard_stats(ptype);
     ptype.bombard_move_cost = bstats.bombard_move_cost;
   }
 
+  // Grab the array of Action_Success_Actor_Move_Cost effects:
+  var actor_costs = effects[EFT_ACTION_SUCCESS_MOVE_COST];
+  if (!actor_costs) return;
+
   // Go through each Action_Success_Actor_Move_Cost:
   for (let eft=0; eft < actor_costs.length; eft++) {
-    var ptype_id = null;
-    var move_cost = null;
+    let ptype_id = null;
+    let move_cost = null;
 
     // Find all A_S_A_M_C associated to ACTION_BOMBARD, and get the UnitType: 
     for (let req=0; req < actor_costs[eft].reqs.length; req++) {
@@ -235,7 +236,84 @@ function set_bombard_move_costs()
       unit_types[ptype_id].bombard_move_cost = bstats.bombard_move_cost + move_cost;
     }
   }
+}
 
+/**********************************************************************//**
+  Looks for EFT_UNIT_MIN_SPEED effects for units and adjusts their
+  ptype.min_speed record, which on the client is used in helptext.
+
+  Note that we are looking only for STATIC EFFECTS that set the base
+  min_speed for UnitTypes as different from their UnitClass min_speed.)
+  We ignore dynamic min_speed effects which may change from game context
+
+  We will consider STATIC EFFECTS to be those which have only one req which
+  targets a UnitType, UnitClass, or UnitFlag. Rulesets should keep that in
+  mind when making base min_speeds, or update this function accordingly. 
+  
+  The purpose of this function is only to better document base min_speed
+  for exceptional unit_types.  
+**************************************************************************/
+function effects_set_min_speeds()
+{
+  // First, set a default min_speed for all utypes
+  for (let ptype_id in unit_types) {
+    let ptype = unit_types[ptype_id];
+    let pclass = unit_classes[ptype.unit_class_id];
+    
+    if (utype_has_class_flag(ptype, UCF_DAMAGE_SLOWS)) {
+      unit_types[ptype_id].min_speed = pclass.min_speed;
+
+      /* If min_speed > move_rate then set to move_rate for cleaner docs:
+      if (unit_types[ptype_id].min_speed > utype_real_base_move_rate(ptype)) {
+        unit_types[ptype_id].min_speed = utype_real_base_move_rate(ptype);
+      } DECIDED NOT TO DO IT HERE BECAUSE we don't yet know if min_speed
+        will get adjusted further below. This should instead go in the
+        helpdata.js */
+    } else {
+      unit_types[ptype_id].min_speed = unit_types[ptype_id].move_rate;
+      // v0 move_bonus is actually integral to base ptype.move_rate, and is
+      // used for non-integer granularity in a utype move_rate:
+       unit_types[ptype_id].min_speed += unit_types[ptype_id].move_bonus[0];
+    }
+  }
+
+  var min_speed_effects = effects[EFT_UNIT_MIN_SPEED];
+  if (!min_speed_effects) return;
+
+  // Go through each Unit_Min_Speed effect, and if it's a static adjustment to
+  // base min_speed, integrate it into the min_speed of all affected ptypes:
+  for (let eft=0; eft < min_speed_effects.length; eft++) {
+    // A static adjustment to base min_speed only has 1 req defining the
+    // unit type(s). 2+ reqs means dynamic context, i.e. NOT base min_speed:
+    if (min_speed_effects[eft].reqs.length == 1) {
+      let kind = min_speed_effects[eft].reqs[0].kind;
+      let val  = min_speed_effects[eft].reqs[0].value;
+      switch (kind) {
+        case VUT_UTYPE:
+          let ptype_id = val;
+          unit_types[ptype_id].min_speed += min_speed_effects[eft].effect_value;
+          break;
+        case VUT_UCLASS:
+          let pclass_id = val;
+          // Adjust every utype.min_speed that belongs to this class
+          for (let ptype_id in unit_types) {
+            if (unit_types[ptype_id].unit_class_id == pclass_id) {
+              unit_types[ptype_id].min_speed += min_speed_effects[eft].effect_value;
+            }
+          }
+          break;
+        case VUT_UTFLAG:
+          let utype_flag = val;
+          // Adjust every utype.min_speed that has this utype flag
+          for (let ptype_id in unit_types) {
+            if (utype_has_flag(unit_types[ptype_id], utype_flag)) {
+              unit_types[ptype_id].min_speed += min_speed_effects[eft].effect_value;
+            }
+          }          
+          break;
+      }
+    }
+  }
 }
 
 // var initialized = FALSE;

@@ -2236,8 +2236,10 @@ function handle_rulesets_ready(packet)
   /* This is where the client can set itself up for how it will behave
      and/or handle itself relative to the particular ruleset. */
 
-  /* Gets and sets the costs of doing bombard actions for the helpdata on units */   
-  set_bombard_move_costs();
+  /* Get and set the costs of bombard actions for the helpdata on units */   
+  effects_set_bombard_move_costs();
+  /* Get and set the base min_speeds for the helpdata on units */   
+  effects_set_min_speeds();
 }
 
 function handle_single_want_hack_reply(packet)
