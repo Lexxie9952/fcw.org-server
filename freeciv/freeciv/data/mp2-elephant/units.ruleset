@@ -5583,7 +5583,7 @@ A Cruise Missile can strike distant targets. It can’t attack Air units, but Ai
  airbase, Missile Destroyer, AEGIS Cruiser, Missile Submarine, Carrier, or Mobile SAM. A Cruise Missile\
  can’t block attacks on other units on its tile. Via the Pillage command, a Cruise Missile has a 60%\
  chance to strike and destroy a tile improvement. You may select the target with the Do command, then\
- select Tile Target. \n\
+ select Tile Target.\
 ")
 
 [unit_nuclear_missile]
