@@ -656,23 +656,23 @@ flags         = "Unreachable", "DoesntOccupyTile"
 ;| autoattackstyle=0
 ;|                        attacker ⏩      
 ;| —————————————————————————————————————————        
-;| defender            ""      !if_attacker*
+;| defender          no_flag  !if_attacker*
 ;| —————————————————————————————————————————        
 ;| NonProvoking        N-       N-
-;| ""                  ODDS     N-
+;| no_flag             ODDS     N-
 ;| Provoking           YES      N-
 ;|
 ;| autoattackstyle=1
 ;|                        attacker ⏩      
 ;| ——————————————————————————————————————————————————————————————————————————————————
-;| defender         ""    AvidAttacker  O1   O2   O3    A1   A2   A3    !if_attacker*
+;| defender        |no_flag  AvidAttacker  O1   O2   O3    A1   A2   A3    !if_attacker*
 ;| ——————————————————————————————————————————————————————————————————————————————————
-;| NonProvoking     N-    N-            N-   N-   N-    N-   N-   N-    N-  
-;| ""               --    ODDS          --   --   --    --   --   --    N-  
-;| Provoking        ODDS  ODDS          ODDS ODDS ODDS  ODDS ODDS ODDS  N-  
-;| ProvokingClass1  --    ODDS          ODDS --   --    YES  --   --    N-
-;| ProvokingClass2  --    ODDS          --   ODDS --    --   YES  --    N-
-;| ProvokingClass3  --    ODDS          --   --   ODDS  --   --   YES   N-
+;| NonProvoking    | N-      N-            N-   N-   N-    N-   N-   N-    N-  
+;| no_flag         | --      ODDS          --   --   --    --   --   --    N-  
+;| Provoking       | ODDS    ODDS          ODDS ODDS ODDS  ODDS ODDS ODDS  N-  
+;| ProvokingClass1 | --      ODDS          ODDS --   --    YES  --   --    N-
+;| ProvokingClass2 | --      ODDS          --   ODDS --    --   YES  --    N-
+;| ProvokingClass3 | --      ODDS          --   --   ODDS  --   --   YES   N-
 ;| ——————————————————————————————————————————————————————————————————————————————————
 ;| notes:
 ;| O1-3 = OddsAttackClass1-3
