@@ -1312,7 +1312,7 @@ veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
 veteran_power_fact = 100, 150, 175, 250, 300, 350, 400
 veteran_move_bonus = 0, 0, 3360, 3360, 6720, 6720, 6720
 helptext      = _("\
-The Warrior is the weakest military unit, but can also be very cost effective. \n\
+The Warrior is the weakest foot soldier, but can also be very cost effective. \n\
 With the discovery of Conscription, Warriors can convert to Musketeers in any domestic city. \
 "), _("\
 \nThe discovery of Banking changes upkeep from shields to gold.\
