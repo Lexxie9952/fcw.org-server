@@ -469,10 +469,10 @@ sabotage	= 100
 sound		= "b_supermarket"
 sound_alt	= "b_generic"
 helptext	= _("\
-Increases the food resources by +100% on each farmland tile which\
- is being used by the city. An irrigable city centre tile receives an\
- immediate +50% bonus even without Farmland.\
- Farmland tiles are those which have been irrigated a second time. \n\
+Increases the food resources by +100% on each farmland tile\
+ used by the city. Farmland tiles are those which have been\
+ irrigated a second time. An irrigable city center tile receives an\
+ immediate +50% bonus without Farmland, and +100% with Farmland. \n\
 Communist government has these effects for free, and gets no bonus\
  from this building. \n\
 Odds of loss from razing are halved.\
