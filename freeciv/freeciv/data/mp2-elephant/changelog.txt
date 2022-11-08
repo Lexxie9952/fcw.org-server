@@ -13,10 +13,6 @@ Focus goals for MP2-Elephant
          to travel there and fortfy, begin work, etc.
    Re-evaluate terrain: move costs, defense bonuses, special penalties and other dynamics.
 
-   End virtual transportation. It's the only way for horses to not make virtual boats and rails faster. This means
-      making cheaper weaker transports to replace it, perhaps even free ones. This can allow us to enhance 
-      movement dynamics especially of rivers, even creating a ReverseRestrictInfra on them, etc.
-
    Granularity - while small integers like 1 and 2 are simpler, the power factor is 2/1 = 200%. Everything should 
       be elevated by a factor like 10 so that balance adjustments can properly come from small tweaks rather than
       always making new rules and exceptions to the rules. For MP2E, however, this is such a large jump that no 
@@ -110,19 +106,20 @@ and can now be built with veteran levels.
       this feature wasn't documented in the unit yet and the whole thing needs careful rethinking as it's bit OP in some ways and UnP in 
       other ways and needs to seek its special role and cost a little better, the goal is EQUALITY in usefulness to JBomber but just in a 
       different way allowing more tactical tools. Should maybe have max_attacks 1 or def. -1 less than JBomber.
-33. Foot Soldiers min.speed is 1.5 moves. This doesn'nt increase max range at all but GREATLY increases mobility inside their natural range. 
+33. Foot Soldiers min.speed is 1.5 moves. This doesn't increase max range at all but GREATLY increases mobility inside their natural range. 
      e.g., a foot unit with 2 moves can attack and still have a move fraction left to fortify or retreat a tile. Note the max_range to 
      min_speed ratio in original 1x is 1/1=100% actually more than 1.5/2 = 75% in 2x !! So this makes a lot of sense to improve for units
      plagued by mobility issues ever since 2x modification occurred. (see white paper)
-34. Destroy City requires 3 units (2 support units) to do. 
-35. AWACS cost adjust: 130, was 140. Attrition rate and other flight reconnaissance options disincentivized the cost.
-36. Each new aviation tech upgrades Airplane range by +1 move (was +2). 6 techs started making it almost a cheap AWACS.
+34. Foot Soldiers gain bigger move bonuses with vet levels. Standard is v0-1 = 0; v2-3 + 1/3; v4-6 +2/3
+35. FootSoldiers get improved promotion odds: 50 33 20 goes 85 50 33.
+36. FootSoldiers who didn't receive discounts in MP2C get ~10% discount. Musket:27, Riflemen:35, Partisan: 40, Alpine:45,
+    Marines:50, Ground Troops:35, Paratroopers:50.36. Destroy City requires 3 units (2 support units) to do. 
 37. Modern FootSoldiers (Paratrooper, Ground Troops, get A8)
-38. FootSoldiers get improved promotion odds: 50 33 20 goes 85 50 33. In addition they get +1/3 move bonus starting at v2, and +2/3 at v4.
-39. Mech.Inf get A7 attack, can carry one Foot Soldier or AAA.
-40. Marines, Ground Troops, and Paratroopers are simplified with same A8 D5.5; Marines however have stronger vet levels.
-41. FootSoldiers who didn't receive discounts in MP2C get ~10% discount. Musket:27, Riflemen:35, Partisan: 40, Alpine:45,
-    Marines:50, Ground Troops:35, Paratroopers:50.
+38. Mech.Inf get A7 attack, can carry one Foot Soldier or AAA.
+39. AWACS cost adjust: 130, was 140. Attrition rate and other flight reconnaissance options disincentivized the cost.
+40. Each new aviation tech upgrades Airplane range by +1 move (was +2). 6 techs started making it almost a cheap AWACS.
+41. Marines, Ground Troops, and Paratroopers are simplified with same A8 D5.5; Marines however have stronger vet levels.
+
 42. Passenger Transport costs: 0% land civilian and AAA/Marines; 50% Foot Soldiers; 75% land military non-foot; 50% + won't subtract if <= 3 moves left (aircraft, preserves vigil)
 43. Spy Plane and Bombers (except Dive Bomber) are BadCityDefender. This adjusts the fact some have defensive capabilities in the air but
     are poor defenders to scramble for city defense.
