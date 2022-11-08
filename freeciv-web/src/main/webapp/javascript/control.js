@@ -5980,6 +5980,7 @@ function create_connect_packet(packet)
           || upgrade_extra == EXTRA_FARMLAND
           || upgrade_extra == EXTRA_IRRIGATION
           || upgrade_extra == EXTRA_MINE
+          || upgrade_extra == EXTRA_OIL_WELL
           || upgrade_extra == EXTRA_NONE)
         order['sub_target'] = upgrade_extra;
       else order['sub_target'] = 0; // Could set a connect_target for advanced commands
@@ -6057,7 +6058,12 @@ function extra_dep(punit, ptile, extra_id, irrigated_before)
     if ((terrain_name == 'Hills' || terrain_name == 'Mountains') 
         && !tile_has_extra(ptile, EXTRA_MINE)) {
       return EXTRA_MINE;
-    } else return CONNECT_ACTION_ILLEGAL;
+    } 
+    else if ((terrain_name == 'Desert' || terrain_name == 'Arctic') 
+              && !tile_has_extra(ptile, EXTRA_OIL_WELL)) {
+      return EXTRA_OIL_WELL;
+    }
+    else return CONNECT_ACTION_ILLEGAL;
   }
   else if (extra_id == EXTRA_NONE * -1 && connect_activity == ACTIVITY_PILLAGE) {
     for (extra_id in extras) {
