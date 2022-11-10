@@ -2754,10 +2754,10 @@ Ballistae can only do Ranged Attack, firing massive bolts through enemy\
 When conventionally defending against foot and mounted units, Ballistae defend\
  at 1/5 strength. However, on defensive terrain it can still be fatal — only 2\
  successful combat rounds kill most attackers. Attacking ships and Ballistic\
- face the full D1 5FP—a deadly deterrent. \n\
+ units face the full D1 5FP—a deadly deterrent. \n\
 "), _("
 Ballistae excel at degrading forts and well-fortified tiles. They can do\
-Special Unit Defense, retaliating against ranged attacks with lethal force. \n\
+ Special Unit Defense, retaliating against ranged attacks with lethal force. \n\
 "), _("
 VIGIL：the Vigil order lets Ballistae automatically Range-Attack adjacent military units\
  if they have better attack odds. Vigil can only be done in cities or bases if the Ballista\
