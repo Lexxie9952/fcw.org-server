@@ -4369,7 +4369,7 @@ static bool unit_bombard(struct unit *punit, struct tile *ptile,
      BUT, Retaliation bombarders don't process any of this stuff. */
   if (!is_retaliation)  { 
   // bm_cost is bombard_move_cost if specified otherwise it's a OneAttack turn loss:
-    int bm_cost = (pstats.bombard_move_cost>0) ? pstats.bombard_move_cost : 999;
+    int bm_cost = (pstats.bombard_move_cost>0) ? pstats.bombard_move_cost : 1000000;
     punit->moves_left = (punit->moves_left - bm_cost > 0) 
                       ? (punit->moves_left - bm_cost) : 0;
 
