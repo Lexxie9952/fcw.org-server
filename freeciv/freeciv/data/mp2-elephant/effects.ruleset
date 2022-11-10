@@ -8230,7 +8230,7 @@ reqs    =
       "Action", "Expel Unit", "Local", TRUE
     }
 
-;=============================================================================================== BOMBARDS / Special Unit Attacks
+;===================================================================================================== MOVE COSTS: BOMBARDS / Special Unit Attacks
 ;We no longer need bitfields for move cost of SUA and can code the move cost here:
 [effect_action_success_move_cost_bombard_phalanx]
 type    = "Action_Success_Actor_Move_Cost"
@@ -8256,6 +8256,14 @@ reqs    =
       "UnitType", "Legion",            "Local", TRUE
       "Action",   "Bombard",           "Local", TRUE
     }
+[effect_action_success_move_cost_bombard_siege_ram]
+type    = "Action_Success_Actor_Move_Cost"
+value   = 16127 ;+1 = 1.6mp     ; 95 + 1 = 96 = 96/60 = 1.6mp (1 in bitfield prevents loss of all moves)
+reqs    =
+    { "type",     "name",              "range", "present"
+      "UnitType", "Siege Ram",           "Local", TRUE
+      "Action",   "Bombard",           "Local", TRUE
+    }
 [effect_action_success_move_cost_bombard_zealots]
 type    = "Action_Success_Actor_Move_Cost"
 value   = 16127 ;+1 = 1.6mp    ; 95 + 1 = 96 = 96/60 = 1.6mp (1 in bitfield prevents loss of all moves)
@@ -8278,14 +8286,6 @@ value   = 16127 ;+1 = 1.6mp     ; 95 + 1 = 96 = 96/60 = 1.6mp (1 in bitfield pre
 reqs    =
     { "type",     "name",              "range", "present"
       "UnitType", "Fanatics",          "Local", TRUE
-      "Action",   "Bombard",           "Local", TRUE
-    }
-[effect_action_success_move_cost_bombard_siege_ram]
-type    = "Action_Success_Actor_Move_Cost"
-value   = 16127 ;+1 = 1.6mp     ; 95 + 1 = 96 = 96/60 = 1.6mp (1 in bitfield prevents loss of all moves)
-reqs    =
-    { "type",     "name",              "range", "present"
-      "UnitType", "Siege Ram",           "Local", TRUE
       "Action",   "Bombard",           "Local", TRUE
     }
 [effect_action_success_move_cost_bombard_zeppelin]
@@ -8321,18 +8321,6 @@ reqs    =
       "Action",   "Bombard 2",         "Local", TRUE
     }
 ;=============================================================================================== </end> Bombards/SUA 
-
-
-;=============================================================================================== iPillage move cost 
-;[effect_action_success_move_cost_iPillage_]
-;type    = "Action_Success_Actor_Move_Cost"
-;value   = 16127    ; 95 + 1 = 96 (1 in bitfield prevents loss of all moves)
-;reqs    =
-;    { "type",     "name",              "range", "present"
-;      "UnitType", "Armor",             "Local", TRUE
-;      "Action",   "Pillage",           "Local", TRUE
-;    }
-;=============================================================================================== </end> iPillage move cost 
 
 ;Expelled units lose all move points.
 [effect_action_success_move_cost_expelled]
