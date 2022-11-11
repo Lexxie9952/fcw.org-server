@@ -886,7 +886,7 @@ function show_city_dialog(pcity)
   } else $('#rapture_citizen_panel').hide();
 
   //Shave pixels off citizen sprites in very large cities, to get them to fit:
-  var sp_adjust = (pcity['size']-32)/-5;
+  var sp_adjust = (pcity['size']-32)/-7;
   if (sp_adjust<0) $(".specialist_item").css("margin-left",sp_adjust+"px");
   else $(".specialist_item").css("margin-left","0px");
   
