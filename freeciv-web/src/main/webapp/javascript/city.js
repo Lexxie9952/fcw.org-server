@@ -871,7 +871,7 @@ function show_city_dialog(pcity)
   
   var rapture_citizen_html = "";
         
-  if (pcity['size']<41) // No room for totals panel showing happy/content/angry, in mega-large cities.
+  if (pcity['size']<41) { // No room for totals panel showing happy/content/angry, in mega-large cities.
     for (var i = 0; i < 4; i++) {      
         if (pcity['ppl_' + citizen_types[i]][FEELING_FINAL] > 0) {
           sprite = get_specialist_image_sprite("citizen." + citizen_types[i] + "_" + (Math.floor(i / 2)));
@@ -880,9 +880,10 @@ function show_city_dialog(pcity)
           + sprite['image-src'] + ");background-position:-" + sprite['tileset-x'] + "px -" + sprite['tileset-y'] + "px;  width: " + sprite['width'] + "px;height: " + sprite['height'] + "px;'>"
           +"</div><div style='float:left;height: "+sprite['height']+"px;margin-left:2px;'>"+pcity['ppl_' + citizen_types[i]][FEELING_FINAL]+"</div></div>";
         }
-   }
-  
-  $('#rapture_citizen_panel').html(rapture_citizen_html);
+    }
+    $('#rapture_citizen_panel').html(rapture_citizen_html);
+    $('#rapture_citizen_panel').show();
+  } else $('#rapture_citizen_panel').hide();
 
   //Shave pixels off citizen sprites in very large cities, to get them to fit:
   var sp_adjust = (pcity['size']-32)/-5;
