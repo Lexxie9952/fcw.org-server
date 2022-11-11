@@ -494,7 +494,7 @@ ABOVE removed Jan2021 for server-side CMA patch */
     notify_player(city_owner(pcity), city_tile(pcity),
                   E_CITY_CMA_RELEASE, ftc_server,
                   _("[`redx`] Malfeasant Governor was caught in %s: he failed meeting his goals without reporting it!"
-                  " Immediate change of tile allocation is recommended. Please report on %%%%Discord."),
+                  " Immediate change of tile allocation is recommended."),
                   city_link(pcity));
     if (pcity->cm_parameter) {
       free(pcity->cm_parameter);
