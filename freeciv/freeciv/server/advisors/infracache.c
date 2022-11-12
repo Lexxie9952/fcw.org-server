@@ -227,6 +227,14 @@ static int adv_calc_rmextra(const struct city *pcity, const struct tile *ptile,
     tile_remove_extra(vtile, pextra);
 
     goodness = city_tile_value(pcity, vtile, 0, 0);
+
+    /* 12Nov2022. Autosettlers were seriously undervaluing pollution and
+       fallout removal even less than transforming plains to grassland! 
+       Hack-patch here can be removed when the appropriate formulas are fixed: */
+    if (pextra->category == ECAT_NUISANCE) {
+      if (tile_has_extra(ptile, pextra)) goodness *= POLLUTION_WEIGHTING;
+    }
+
     tile_virtual_destroy(vtile);
   }
 
