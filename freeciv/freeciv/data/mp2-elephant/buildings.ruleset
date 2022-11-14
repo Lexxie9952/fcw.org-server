@@ -2628,11 +2628,15 @@ sabotage	= 0
 sound		= "w_statue_of_liberty"
 sound_alt	= "w_generic"
 helptext	= _("\
-Allows you to instantly change government, including governments not\
- yet researched by your civilization, and without the transition period\
- of Anarchy. It also allows unprovoked declaration of war regardless of\
- any Senate or United Nations. Democracies can’t fall into Anarchy from\
- two turns of city disorder. \n\
+Allows you to change government, including governments not\
+ yet researched by your civilization. When declaring a\
+ revolution, you will remain your current government for\
+ the rest of the turn, instead of undergoing Anarchy.\
+ The next turn you will transition to the new government. \n\
+The Statue of Liberty also allows unprovoked declaration of war\
+ regardless of any Senate or United Nations. Also, United Nations\
+ or Democracy doesn’t cause Anarchy from two turns of city\
+ disorder. \n\
 "), _("\
 This Wonder does not become obsolete.\
 ")

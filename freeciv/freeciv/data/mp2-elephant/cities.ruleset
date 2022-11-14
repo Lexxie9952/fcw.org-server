@@ -43,7 +43,7 @@ format_version=20
 ;
 ; */ <-- avoid gettext warnings
 
-[specialist_elvis]
+[specialist_entertainer]
 name            = _("Entertainers")
 ; (The original specialist names in the classic ruleset and derivatives were
 ; not designed to be user-visible.)
@@ -87,7 +87,7 @@ Each tax collector produces three extra gold for your treasury \
 per turn.\
 ")
 
-[specialist_worker]
+[specialist_laborer]
 name            = _("Laborer")
 ; (The original specialist names in the classic ruleset and derivatives were
 ; not designed to be user-visible.)
@@ -96,7 +96,7 @@ short_name	= _("?Laborer:L")
 graphic         = "specialist.worker"
 reqs		=
     { "type", "name", "range"
-; Nothing
+      "Building", "A.Smith's Trading Co.", "Player"
     }
 helptext        = _("\
 Each Laborer produces one production point for their city per turn. \
@@ -111,11 +111,11 @@ short_name	= _("?Merchant:M")
 graphic         = "specialist.merchant"
 reqs		=
     { "type", "name", "range"
-; Nothing
+      "Building", "A.Smith's Trading Co.", "Player"
     }
 helptext        = _("\
 Each Merchant produces two trade points for their city per turn.\
- Trade will then be partioned by your nation's tax rates into\
+ Trade will then be partitioned by your nation's tax rates into\
  Gold, Science, and Luxury.\
 ")
 
@@ -128,7 +128,7 @@ short_name	= _("?Farmer:F")
 graphic         = "specialist.farmer"
 reqs		=
     { "type", "name", "range"
-; Nothing
+      "Building", "A.Smith's Trading Co.", "Player"
     }
 helptext        = _("\
 Each Farmer provides one food for their city per turn. Yet each\
