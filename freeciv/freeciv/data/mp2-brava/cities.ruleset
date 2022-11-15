@@ -96,7 +96,7 @@ short_name	= _("?Laborer:L")
 graphic         = "specialist.worker"
 reqs		=
     { "type", "name", "range"
-; Nothing
+      "Building", "A.Smith's Trading Co.", "Player"
     }
 helptext        = _("\
 Each Laborer produces one production point for their city per turn. \
@@ -111,7 +111,7 @@ short_name	= _("?Merchant:M")
 graphic         = "specialist.merchant"
 reqs		=
     { "type", "name", "range"
-; Nothing
+      "Building", "A.Smith's Trading Co.", "Player"
     }
 helptext        = _("\
 Each Merchant produces two trade points for their city per turn.\
@@ -128,7 +128,7 @@ short_name	= _("?Farmer:F")
 graphic         = "specialist.farmer"
 reqs		=
     { "type", "name", "range"
-; Nothing
+      "Building", "A.Smith's Trading Co.", "Player"
     }
 helptext        = _("\
 Each Farmer provides one food for their city per turn. Yet each\
