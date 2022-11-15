@@ -46,6 +46,8 @@ struct cm_parameter {
 
   int factor[O_LAST];
   int happy_factor;
+   /* surplus[O_FOOD] above this val won't achieve faster growth: */
+  int max_food_needed;
 };
 
 /* A result which can examined. */

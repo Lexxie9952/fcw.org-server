@@ -33,6 +33,9 @@
 #include "map.h"
 #include "specialist.h"
 
+/* DEBUG */
+#include "../../server/notify.h"
+
 #include "cm.h"
 
 /*
@@ -53,13 +56,13 @@
  *
  * Unlike the original CM code, which used a dynamic programming approach,
  * this code uses a branch-and-bound approach.  The DP approach allowed
- * cacheing, but it was hard to guarantee the correctness of the cache, so
+ * caching, but it was hard to guarantee the correctness of the cache, so
  * it was usually tossed and recomputed.
  *
  * The B&B approach also allows a very simple greedy search, whereas the DP
  * approach required a lot of pre-computing.  And, it appears to be very
  * slightly faster.  It evaluates about half as many solutions, but each
- * candidate solution is more expensive due to the lack of cacheing.
+ * candidate solution is more expensive due to the lack of caching.
  *
  * We use highly specific knowledge about how the city computes its stats
  * in two places:
@@ -609,11 +612,30 @@ static struct cm_fitness compute_fitness(const int surplus[],
   fitness.sufficient = TRUE;
   fitness.weighted = 0;
 
+  /* Compute fitness of solution by summing each weighted output*/
   output_type_iterate(stat_index) {
-    fitness.weighted += surplus[stat_index] * parameter->factor[stat_index];
     if (surplus[stat_index] < parameter->minimal_surplus[stat_index]) {
-      fitness.sufficient = FALSE;
-      return worst_fitness(); // have to try to force it to reject.
+      return worst_fitness(); // Reject solutions under the min.
+    }
+    /* Weighting of non-food output is simple: (surplus * factor) */
+    if (stat_index != O_FOOD) {
+      fitness.weighted += surplus[stat_index] * parameter->factor[stat_index];
+    }
+    /* Food is valuable until it's not. Surplus food assisting growth gets full
+       weight. Excess food gets credited less. (Excess still has value: it may
+       allow a later specialist, or use of a mine, or insure against pollution */
+    else {
+      if (surplus[O_FOOD] <= parameter->max_food_needed) {
+        fitness.weighted += surplus[O_FOOD] * parameter->factor[O_FOOD];
+      } else {
+        /* Credit "useful food" at full weight: */
+        fitness.weighted += parameter->max_food_needed * parameter->factor[O_FOOD];
+        /* "Excess food" can be credited iff at reduced weight: */
+        if (parameter->factor[O_FOOD] > 1) {
+          /* Give only 1 "weight-point" for each excess food-point: */
+          fitness.weighted += (surplus[O_FOOD] - parameter->max_food_needed);
+        }
+      }
     }
   } output_type_iterate_end;
 
@@ -627,6 +649,8 @@ static struct cm_fitness compute_fitness(const int surplus[],
     fitness.sufficient = FALSE;
   }
 
+  /* Lux specialists may be needed to prevent disorder; others were
+     commanded by player to not be used: */
   if (num_nonlux_specialists && !parameter->allow_specialists) {
     return worst_fitness();
   }
@@ -1957,57 +1981,83 @@ static struct cm_state *cm_state_init(struct city *pcity, bool negative_ok)
 /************************************************************************//**
   Find the minimum food surplus needed to grow in the fewest number of turns.
   ...
-  FIXME: Make this work. Currently can do extreme evil like allow actual
-  food loss and starvation while the minimal_surplus has high positive 
-  value. NB: Seemed to work better in Monarchy than Despotism?
-  Even in Monarchy: 16/70. 8 food takes 6.75 (7 turns), 9 food takes 
-  6 turns. It overrode requirement of +9 food and replaced with +8.
+  FIXME: 12Nov2022. This is now fixed.
 ****************************************************************************/
 static int min_food_surplus_for_fastest_growth(struct cm_state *state)
 {
   struct city *pcity = state->pcity;
   int city_radius_sq = city_map_radius_sq_get(pcity);
   citizens city_size = city_size_get(pcity);
-  int max_surplus = -game.info.food_cost * city_size;
+  /* The "break-even" required to feed our people with no surplus.
+     NB: The city-center-tile-worker costs no food: */
+  int food_outlay = game.info.food_cost * city_size;
   bool is_celebrating = base_city_celebrating(pcity);
   citizens workers = city_size;
-  int food_needed = city_granary_size(city_size) - pcity->food_stock;
+  int growth_food = city_granary_size(city_size) - pcity->food_stock;
   int min_turns;
+  int max_food_output = 0;
+  int max_surplus = 0;
 
+  if (growth_food <= 0) {
+    return 0;
+  }
+
+/* DEBUG
+if (state->pcity->id == 162) notify_conn(game.est_connections, NULL, E_WONDER_WILL_BE_BUILT, ftc_server,  _("growth_food: %d, food_outlay: %d"),
+                                         growth_food, food_outlay);  */
+
+  /* This block ONLY gets the food-output from the free worker on the city center. */
   city_map_iterate(city_radius_sq, cindex, x, y) {
     struct tile *ptile = city_map_to_tile(pcity->tile, city_radius_sq, x, y);
     if (!ptile) {
       continue;
     }
     if (is_free_worked_index(cindex)) {
-      max_surplus += city_tile_output(pcity, ptile, is_celebrating, O_FOOD);
+      max_food_output += city_tile_output(pcity, ptile, is_celebrating, O_FOOD);
     }
   } city_map_iterate_end;
 
-  if (max_surplus <= 0) {
-    return max_surplus;
-  }
+/* DEBUG
+if (state->pcity->id == 162) notify_conn(game.est_connections, NULL, E_WONDER_WILL_BE_BUILT, ftc_server,  _("ccenter, food_output: %d"),
+                                         max_food_output); */
 
-  if (food_needed <= 0) {
-    return 0;
-  }
-
+  /* Now find out the max possible our citizens can add to that: */
   tile_type_vector_iterate(&state->lattice_by_prod[O_FOOD], ptype) {
     int num = tile_vector_size(&ptype->tiles);
 
     if (ptype->is_specialist || workers < num) {
-      max_surplus += workers * ptype->production[O_FOOD];
+      max_food_output += workers * ptype->production[O_FOOD];
       break;
     }
-    max_surplus += num * ptype->production[O_FOOD];
+    max_food_output += num * ptype->production[O_FOOD];
     workers -= num;
   } tile_type_vector_iterate_end;
 
-  /* min_turns will always be positive because if food_needed or
-   * max_surplus are non-positive, this function returns earlier. */
-  min_turns = (food_needed + max_surplus - 1) / max_surplus;
+  /* Tally in final city output bonuses: */
+  int bonus_food = (max_food_output * get_final_city_output_bonus(pcity, O_FOOD)/100)
+                   - max_food_output;
+  /* Finish our accounting: */
+  max_food_output += bonus_food;
+  max_surplus = max_food_output - food_outlay;
 
-  return (food_needed + min_turns - 1) / min_turns;
+/* DEBUG
+if (state->pcity->id == 162) notify_conn(game.est_connections, NULL, E_WONDER_WILL_BE_BUILT, ftc_server,  _("bonus: %d. max_food_output:%d. max_surplus: %d."),
+                                         bonus_food, max_food_output, max_surplus);   */
+
+/* This was formerly placed after it tabulated food from
+   the city center only, which was wrong. */
+  if (max_surplus <= 0) {
+    return max_surplus;
+  }
+
+  /* min_turns will always be positive because if growth_food or
+   * max_surplus are non-positive, this function returned earlier. */
+  min_turns = (growth_food + max_surplus - 1) / max_surplus;
+
+/* DEBUG
+if (state->pcity->id == 162) notify_conn(game.est_connections, NULL, E_WONDER_WILL_BE_BUILT, ftc_server,  _("min_turns: %d."),
+                                         min_turns); */
+  return (growth_food + min_turns - 1) / min_turns;
 }
 
 /************************************************************************//**
@@ -2027,9 +2077,13 @@ static void begin_search(struct cm_state *state,
   cm_copy_parameter(&state->parameter, parameter);
   sort_lattice_by_fitness(state, &state->lattice);
 
+  int min_food_for_max_growth = min_food_surplus_for_fastest_growth(state);
+  state->parameter.max_food_needed = min_food_for_max_growth;
   if (parameter->max_growth) {
-    state->parameter.minimal_surplus[O_FOOD] =
-        min_food_surplus_for_fastest_growth(state);
+    /* TODO: This technique still could use troubleshooting or deprecation;
+    fortunately the param->max_food_needed technique above is fulfilling
+    the same purpose better in all contexts tested so far. */
+    state->parameter.minimal_surplus[O_FOOD] = min_food_for_max_growth;
   }
 
   init_min_production(state);
@@ -2078,6 +2132,48 @@ static void cm_state_free(struct cm_state *state)
 }
 
 /************************************************************************//**
+  For performance, limits the max_count for cm_find_best_solution
+  based on some heuristics.
+****************************************************************************/
+static int get_heuristic_cm_max_loop_count(struct cm_state *state)
+{
+  struct city *pcity = state->pcity;
+  if (player_is_cpuhog(city_owner(pcity))) {
+    return CPUHOG_CM_MAX_LOOP;
+  }
+
+  // Usable specialist count of {0..3..6} >> {-0.15 .. 0 .. +0.15}
+  float spec_adj = -0.15;
+  specialist_type_iterate(spec) {
+    if (city_can_use_specialist(pcity, spec)) spec_adj += 0.05;
+  } specialist_type_iterate_end;
+
+  // Radius of {5,8,10} >> {0, +0.135, +0.225}
+  float rad_adj = (10 - pcity->city_radius_sq) * .045;
+  // Size of {1..30..70} >> {-0.44 .. +0.09 .. +0.29}
+  int csize = city_size_get(pcity);
+  float size_adj = (12.0 - csize) * -1; // s1 to s70 produces -11 to 59;
+  size_adj /= (size_adj < -1) ? 25 : 200;
+  
+  /* Adjust CM_MAX_LOOP between low range of 59% to high range of 166.5%.
+    If 27500==CM_MAX_LOOP: 16225 to 45787. Size 21 city (+0.045),
+    radius 8 (+0.135), 6 specialists (+0.15) = 1.33x = 36575 iterations */
+  int max_count = CM_MAX_LOOP * (1.0 + rad_adj + size_adj + spec_adj);
+
+  /* High iterations are wasted on the AI: */
+  if (is_ai(city_owner(pcity))) {
+    return MIN(CM_MAX_LOOP * .727, max_count); // .727 * 27500 == 20000
+  }
+
+/* DEBUG 
+  notify_conn(game.est_connections, NULL, E_WONDER_WILL_BE_BUILT, ftc_server, 
+          _("%s, size %d, spec_adj %f, gets %d iterations to finish."),
+          city_link(state->pcity), csize, spec_adj, max_count);
+*/
+  return max_count;
+}
+
+/************************************************************************//**
   Run B&B until we find the best solution.
 ****************************************************************************/
 static void cm_find_best_solution(struct cm_state *state,
@@ -2097,11 +2193,7 @@ static void cm_find_best_solution(struct cm_state *state,
   /* make a backup of the city to restore at the very end */
   memcpy(&backup, state->pcity, sizeof(backup));
 
-  if (player_is_cpuhog(city_owner(state->pcity))) {
-    max_count = CPUHOG_CM_MAX_LOOP;
-  } else {
-    max_count = CM_MAX_LOOP;
-  }
+  max_count = get_heuristic_cm_max_loop_count(state);
 
   result->aborted = FALSE;
 
@@ -2120,6 +2212,11 @@ static void cm_find_best_solution(struct cm_state *state,
     }
   }
 
+/* DEBUG 
+notify_conn(game.est_connections, NULL, E_WONDER_WILL_BE_BUILT, ftc_server, 
+            _("%s took %d iterations to finish."),
+            city_link(state->pcity), loop_count); */
+    
 #ifdef CM_LOOP_NO_LIMIT
   if (loop_count > max_count) {
     log_warn("It took %d iterations to finish.", loop_count);
