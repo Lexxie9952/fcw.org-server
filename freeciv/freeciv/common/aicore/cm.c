@@ -288,7 +288,10 @@ static double estimate_fitness(const struct cm_state *state,
 static bool choice_is_promising(struct cm_state *state, int newchoice,
                                 bool negative_ok);
 
-static int nonlux_specialists_in_solution(const struct cm_state *state,
+static bool cm_invalid_specialists(const struct cm_result *result,
+                                   struct cm_state *state);
+
+static bool invalid_specialists_in_solution(const struct cm_state *state,
                                    const struct partial_solution *soln);
 
 static int specialists_in_solution(const struct cm_state *state,
@@ -604,8 +607,7 @@ static struct cm_fitness worst_fitness(void)
   according to the weights and minimums given in the parameter.
 ****************************************************************************/
 static struct cm_fitness compute_fitness(const int surplus[],
-			    bool disorder, bool happy, int num_nonlux_specialists,
-					const struct cm_parameter *parameter)
+			    bool disorder, bool happy, const struct cm_parameter *parameter)
 {
   struct cm_fitness fitness;
 
@@ -647,12 +649,6 @@ static struct cm_fitness compute_fitness(const int surplus[],
 
   if (disorder && !parameter->allow_disorder) {
     fitness.sufficient = FALSE;
-  }
-
-  /* Lux specialists may be needed to prevent disorder; others were
-     commanded by player to not be used: */
-  if (num_nonlux_specialists && !parameter->allow_specialists) {
-    return worst_fitness();
   }
 
   return fitness;
@@ -834,8 +830,12 @@ static struct cm_fitness evaluate_solution(struct cm_state *state,
        + 1;
   }
 
-  return compute_fitness(surplus, disorder, happy,
-           nonlux_specialists_in_solution(state, soln), &state->parameter);
+  /* Quit immediately if invalid specialists in solution */
+  if (invalid_specialists_in_solution(state,soln)) {
+    return worst_fitness();
+  }
+
+  return compute_fitness(surplus, disorder, happy, &state->parameter);
 }
 
 /************************************************************************//**
@@ -861,9 +861,13 @@ static void convert_solution_to_result(struct cm_state *state,
 
   /* result->found_a_valid should be only true if it matches the
    *  parameter; figure out if it does */
-  fitness = compute_fitness(result->surplus, result->disorder, result->happy,
-                             cm_nonlux_result_specialists(result),
-                             &state->parameter);
+
+  if (cm_invalid_specialists(result, state)) {
+    fitness = worst_fitness();
+  } else {
+    fitness = compute_fitness(result->surplus, result->disorder, result->happy,
+                              &state->parameter);
+  }
 
   result->found_a_valid = fitness.sufficient;
 }
@@ -1593,23 +1597,36 @@ static int specialists_in_solution(const struct cm_state *state,
   return count;
 }
 /************************************************************************//**
-  return number of non-entertainer specialists used in partial solution:
-  allow_specialists still has to allow entertainers to prevent disorder !!
+  Return TRUE if invalid specialists are in the solution. i.e.:
+  * non-entertiner specialists if allow_specialists == FALSE
+  * farmer specialists if no_farmer == TRUE
 ****************************************************************************/
-static int nonlux_specialists_in_solution(const struct cm_state *state,
-                                   const struct partial_solution *soln)
+static bool invalid_specialists_in_solution(const struct cm_state *state,
+                                            const struct partial_solution *soln)
 {
-  int count = 0;
   int i;
 
+  /* If we don't forbid specialists, then we're not invalid. */
+  if (state->parameter.allow_specialists 
+      && !state->parameter.max_growth) /* temp. used as substitute for no_farmer because wasn't latter wasn't building into our return packets! */
+    return false;
+
+  /* Find non-entertainer and farmer specalists: */
   for (i = 0 ; i < num_types(state); i++) {
-    if (soln->worker_counts[i] > 0 && tile_type_get(state, i)->is_specialist
-        && tile_type_get(state, i)->spec /* only true for non-entertainers */) {
-      count += soln->worker_counts[i];
+    if (soln->worker_counts[i] > 0 && tile_type_get(state, i)->is_specialist) {
+      if (!state->parameter.allow_specialists) {
+        /* non-enterainer found and not allowed! */
+        if (tile_type_get(state, i)->spec) return true;
+      }
+      if (state->parameter.max_growth) { /* temp. used as substitute for no_farmer because wasn't latter wasn't building into our return packets! */
+        /* farmer found and not allowed! */
+        if (get_specialist_output(state->pcity, tile_type_get(state, i)->spec, O_FOOD))
+         return true;
+      }
     }
   }
 
-  return count;
+  return false;
 }
 
 /************************************************************************//**
@@ -1751,12 +1768,10 @@ static bool choice_is_promising(struct cm_state *state, int newchoice,
       return FALSE;
     }
   }
-  // Because !allow_specialists MEANS NO SPECIALISTS! (Damn it!)
-  if (!state->parameter.allow_specialists) {
-    if (nonlux_specialists_in_solution(state, &state->current)>0) {
-      beats_best = FALSE;
-    }
-  } 
+  // Invalid specialists MEAN NO! (Damn it!)
+  if (invalid_specialists_in_solution(state, &state->current)) {
+    beats_best = FALSE;
+  }
 
   if (!beats_best) {
     log_base(LOG_PRUNE_BRANCH, "--- pruning: best is better in all important ways");
@@ -2079,12 +2094,20 @@ static void begin_search(struct cm_state *state,
 
   int min_food_for_max_growth = min_food_surplus_for_fastest_growth(state);
   state->parameter.max_food_needed = min_food_for_max_growth;
-  if (parameter->max_growth) {
-    /* TODO: This technique still could use troubleshooting or deprecation;
+  /* TODO: This technique still could use troubleshooting or deprecation;
     fortunately the param->max_food_needed technique above is fulfilling
-    the same purpose better in all contexts tested so far. */
+    the same purpose better in all contexts tested so far. max_growth is now
+    being used as a substitute for the no_farmer member because it was not
+    getting built into the network protocol to return back in our packets...
+    Once that is fixed and being used as no_farmer, then we may reconsider
+    re-using this one day, if we ever get it working. In theory it varies
+    from parameter.max_food_needed because it does a HARD REPLACEMENT
+    on actual minimal_surplus[O_FOOD] in the governor's hard settings,
+    whereas the former simply WEIGHS any food output over the max_food_needed
+    as lower (or zero if factor[O_FOOD] is 1.)
+  if (parameter->max_growth) {
     state->parameter.minimal_surplus[O_FOOD] = min_food_for_max_growth;
-  }
+  }*/
 
   init_min_production(state);
 
@@ -2270,6 +2293,9 @@ bool cm_are_parameter_equal(const struct cm_parameter *const p1,
   if (p1->allow_disorder != p2->allow_disorder) {
     return FALSE;
   }
+  if (p1->no_farmer != p2->no_farmer) {
+    return FALSE;
+  }
   if (p1->allow_specialists != p2->allow_specialists) {
     return FALSE;
   }
@@ -2305,6 +2331,7 @@ void cm_init_parameter(struct cm_parameter *dest)
   dest->happy_factor = 1;
   dest->require_happy = FALSE;
   dest->allow_disorder = FALSE;
+  dest->no_farmer = FALSE;
   dest->allow_specialists = TRUE;
   dest->max_growth = FALSE;
 }
@@ -2323,6 +2350,7 @@ void cm_init_emergency_parameter(struct cm_parameter *dest)
   dest->happy_factor = 1;
   dest->require_happy = FALSE;
   dest->allow_disorder = TRUE;
+  dest->no_farmer = FALSE;
   dest->allow_specialists = TRUE;
   dest->max_growth = FALSE;
 }
@@ -2361,19 +2389,33 @@ int cm_result_specialists(const struct cm_result *result)
   return count;
 }
 /************************************************************************//**
-  Count the total number of non-entertainer specialists in the result
-  (allow_specialists has to allow entertainers to prevent disorder)
+  Returns true if the result is invalid from having illegal specialists
+  not allowed by the cm_parameter.
 ****************************************************************************/
-int cm_nonlux_result_specialists (const struct cm_result *result)
+static bool cm_invalid_specialists(const struct cm_result *result,
+                                   struct cm_state *state)
 {
-  int count = 0;
+  struct city *pcity = state->pcity;
+
+  /* If we allow specialists then we can't be invalid: */
+  if (state->parameter.allow_specialists
+      && !state->parameter.max_growth) /* temp. used as substitute for no_farmer because wasn't latter wasn't building into our return packets! */
+    return false;
 
   specialist_type_iterate(spec) {
-    if (spec==0) continue; // Entertainers needed for keeping order.
-    count += result->specialists[spec];
+    if (spec==0) continue; // Entertainers needed for keeping order
+
+    if (result->specialists[spec]) {
+      /* non-entertainer found and not allowed */
+      if (!state->parameter.allow_specialists) return true;
+      if (state->parameter.max_growth) { /* temp. used as substitute for no_farmer because wasn't latter wasn't building into our return packets! */
+        /* farmer found and not allowed! */
+        if (get_specialist_output(pcity, spec, O_FOOD)) return true;
+      }
+    }
   } specialist_type_iterate_end;
 
-  return count;
+  return false;
 }
 
 /************************************************************************//**

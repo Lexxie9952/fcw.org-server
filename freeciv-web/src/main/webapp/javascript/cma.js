@@ -25,7 +25,8 @@ var cma_val_sliders = [1,0,0,0,0,0];  // UI supplied values for cm_parameter['fa
 var cma_min_sliders = [1,0,0,0,0,0];  // UI supplied values for cm_parameter['minimal_surplus'][..]
 var cma_happy_slider = 0;
 var cma_celebrate = false;
-var cma_allow_disorder = false; 
+var cma_allow_disorder = false;
+var cma_no_farmer = false;
 var cma_allow_specialists = true;
 var cma_apply_once = false;
 var cma_enabled = false;
@@ -40,6 +41,7 @@ var _cma_min_sliders = [1,0,0,0,0,0];
 var _cma_happy_slider = 0;
 var _cma_celebrate = false;
 var _cma_allow_disorder = false; 
+var _cma_no_farmer = false;
 var _cma_allow_specialists = true;
 var _cma_max_growth = false;
 
@@ -141,9 +143,8 @@ function cma_init_data()
     cma_celebrate = pcity['cm_parameter']['require_happy'];
     cma_allow_specialists = pcity['cm_parameter']['allow_specialists'];
     cma_allow_disorder = pcity['cm_parameter']['allow_disorder'];
-
-    //FIX LATER: Deveopment testing, allow comparing results with it on vs off.
-    cma_max_growth = cma_allow_disorder; 
+    cma_no_farmer = pcity['cm_parameter']['max_growth']; /* temp. used as substitute for no_farmer because wasn't latter wasn't building into our return packets! */
+    //cma_max_growth = pcity['cm_parameter']['max_growth']; see above, unused param used instead for no_farmer (for now)
   }
   else {
     cma_set_default_city_manager(); // sets UI vars to server's CMA defaults
@@ -186,6 +187,9 @@ function create_cma_page()
 
   $("#cma_disorder").prop("checked", cma_allow_disorder);
   $("#cma_disorder").onchange = cma_user_input;
+
+  $("#cma_nofarmer").prop("checked", cma_no_farmer);
+  $("#cma_nofarmer").onchange = cma_user_input;
 
   // Update all UI that dynamically changes with enabled/disabled state:
   cma_set_title();
@@ -277,6 +281,7 @@ function update_cma_state()
   cma_celebrate = $("#cma_celebrate").prop("checked");
   cma_allow_specialists = !($("#cma_specialists").prop("checked")); //suppress=!allow
   cma_allow_disorder = $("#cma_disorder").prop("checked");
+  cma_no_farmer = $("#cma_nofarmer").prop("checked");
   update_cma_labels();
 }
 /**************************************************************************
@@ -333,9 +338,10 @@ function cma_set_title() {
 function request_new_cma() {
   var cm_parameter = {};
   cm_parameter['minimal_surplus'] = [...cma_min_sliders];
-  cm_parameter['max_growth'] = cma_max_growth;
+  // cm_parameter['max_growth'] = cma_max_growth; see below
   cm_parameter['require_happy'] = cma_celebrate;
   cm_parameter['allow_disorder'] = cma_allow_disorder;
+  cm_parameter['max_growth'] = cma_no_farmer; /* temp. used as substitute for no_farmer because wasn't latter wasn't building into our return packets! */
   cm_parameter['allow_specialists'] = cma_allow_specialists;
   cm_parameter['factor'] = [...cma_val_sliders];
   cm_parameter['happy_factor'] = cma_happy_slider;
@@ -366,9 +372,10 @@ function cma_set_default_city_manager()
   cma_val_sliders = [0,0,0,0,0,0];   
   cma_min_sliders = [0,0,0,0,0,0];  
   cma_celebrate = false;
-  cma_allow_disorder = false; 
+  cma_allow_disorder = false;
+  cma_no_farmer = false;
   cma_allow_specialists = true;
-  cma_max_growth = false; // Don't overdo food surplus if city grows @ TC
+  cma_max_growth = false; /* temp. used as substitute for no_farmer because wasn't latter wasn't building into our return packets! */
   
   if (pcity.size > 1) {
     if (pcity.size <= game_info.notradesize) {
@@ -415,6 +422,7 @@ function cma_copy_current() {
   _cma_happy_slider = cma_happy_slider;
   _cma_celebrate = cma_celebrate;
   _cma_allow_disorder  = cma_allow_disorder;
+  _cma_no_farmer = cma_no_farmer;
   _cma_allow_specialists = cma_allow_specialists;
   _cma_max_growth = cma_max_growth;
   $("#cma_unsaved_warning").html("On-screen settings copied to clipboard.")
@@ -437,6 +445,8 @@ function cma_paste_clipboard() {
   $("#cma_celebrate").prop("checked", _cma_celebrate);
   $("#cma_specialists").prop("checked", (!_cma_allow_specialists)); // suppress = !allow
   $("#cma_disorder").prop("checked", _cma_allow_disorder);
+  $("#cma_nofarmer").prop("checked", _cma_no_farmer);
+
   // Update all UI that dynamically changes with enabled/disabled state:
   cma_set_title();
   update_dynamic_UI();
@@ -452,9 +462,10 @@ function cma_paste_to_city_id(city_id, apply_once)
 {
   var cm_parameter = {};
   cm_parameter['minimal_surplus'] = [..._cma_min_sliders];
-  cm_parameter['max_growth'] = _cma_max_growth;  
+  //cm_parameter['max_growth'] = _cma_max_growth;  currently not used so used as a substitute for no_farmer
   cm_parameter['require_happy'] = _cma_celebrate;
   cm_parameter['allow_disorder'] = _cma_allow_disorder;
+  cm_parameter['max_growth'] = _cma_no_farmer; /* temp. used as substitute for no_farmer because wasn't latter wasn't building into our return packets! */
   cm_parameter['allow_specialists'] = _cma_allow_specialists;
   cm_parameter['factor'] = [..._cma_val_sliders];
   cm_parameter['happy_factor'] = _cma_happy_slider;
