@@ -1574,9 +1574,16 @@ function get_unit_activity_sprite(punit)
           };
 
     case ACTIVITY_VIGIL:
-        return {"key" : "unit.vigil",
-            "offset_x" : unit_activity_offset_x,
-            "offset_y" : - unit_activity_offset_y};
+        if (observing 
+           || (client.conn.playing != null
+               && (client.conn.playing.playerno == punit.owner
+                   || players[punit.owner]['gives_shared_vision'].isSet(client.conn.playing.playerno)))
+            ) {
+          return {"key" : "unit.vigil",
+              "offset_x" : unit_activity_offset_x,
+              "offset_y" : - unit_activity_offset_y};
+        }
+        break;
 
     case ACTIVITY_EXPLORE:
       return {"key" : "unit.auto_explore",
