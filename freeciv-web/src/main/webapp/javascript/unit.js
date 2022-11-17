@@ -378,6 +378,16 @@ function utype_is_a_cargo_class_for_ttype(ptype, ttype)
     cargo_array_index ++;
     cargo_bit_val = cargo_bit_val >> 8;
   }
+
+/* actionenabler overrides: ptype not actionenabled to board */
+  /* MP2E uclass:Land allowed on Mech.Inf; but only FootSolders actionenabled */
+  if (client_rules_flag[CRF_MP2_E]) {
+    if (!utype_has_flag(ptype, UTYF_FOOTSOLDIER)
+        && ttype.rule_name == "Mech. Inf.") {
+
+          return false;
+    }
+  }
   
   return (ttype.cargo[cargo_array_index] & cargo_bit_val);
 }
