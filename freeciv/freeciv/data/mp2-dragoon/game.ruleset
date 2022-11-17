@@ -3079,13 +3079,12 @@ actor_reqs    =
       "DiplRel",       "Never met",     "Local", FALSE
     }
 
-[actionenabler_board_universal_land_units]
+[actionenabler_board_all_land_units_except_LandRoad]
 action        = "Transport Board"
 actor_reqs    =
     { "type",          "name",          "range", "present"
       "UnitClassFlag", "TerrainSpeed",  "Local", TRUE   ;all Land
-      "UnitType",      "Wagon",         "Local", FALSE  ;russian doll exceptions
-      "UnitType",      "Truck",         "Local", FALSE  ;russian doll exceptions
+      "UnitClass",     "LandRoad",      "Local", FALSE  ;!LandRoad: prevent russian doll exceptions
       "DiplRel",       "Armistice",     "Local", FALSE
       "DiplRel",       "War",           "Local", FALSE
       "DiplRel",       "Cease-fire",    "Local", FALSE
@@ -3094,14 +3093,13 @@ actor_reqs    =
       "UnitType",      "Magnum Turret", "Local", FALSE ;Makes utype_can_do_action() render false so we don't show illegal orders buttons 
       "MinMoveFrags",  "1",             "Local", TRUE  ;limits double-move and "attack-and-haul".
     }
-; This is a fall-thru identical to enabler above except Truck and Wagon are allowed IFF !transporting
+; This is a fall-thru identical to enabler above except Truck/Wagon/Siege Ram are allowed IFF !transporting
 [actionenabler_board_wagons_and_trucks_as_cargo]
 action        = "Transport Board"
 actor_reqs    =
     { "type",          "name",          "range", "present"
       "UnitClassFlag", "TerrainSpeed",  "Local", TRUE   ;all Land
-;     "UnitType",      "Wagon",         "Local", FALSE  ;russian doll exceptions                        <<< *******
-;     "UnitType",      "Truck",         "Local", FALSE  ;russian doll exceptions                        <<< ******* 
+      "UnitClass",     "LandRoad",      "Local", TRUE   ;LandRoad only
       "DiplRel",       "Armistice",     "Local", FALSE
       "DiplRel",       "War",           "Local", FALSE
       "DiplRel",       "Cease-fire",    "Local", FALSE
@@ -3109,8 +3107,9 @@ actor_reqs    =
       "DiplRel",       "Never met",     "Local", FALSE
       "UnitType",      "Magnum Turret", "Local", FALSE ;don't show illegal orders buttons 
       "MinMoveFrags",  "1",             "Local", TRUE  ;limits double-move and "attack-and-haul".
-      "UnitState",      "Transporting", "Local", FALSE ; ideally whould be legal for commerce cargo      <<< *******
-    }    
+      "UnitState",      "Transporting", "Local", FALSE ;prevent russian doll exceptions               <<< *******
+    }
+
 [actionenabler_board_sea_trawler]       
 action        = "Transport Board"
 actor_reqs    =
