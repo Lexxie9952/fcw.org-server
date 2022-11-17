@@ -514,7 +514,9 @@ int base_get_attack_power(const struct unit_type *punittype,
   power = punittype->attack_strength * POWER_FACTOR
           * vlevel->power_fact / 100;
 
-  if (game.info.tired_attack && moves_left < SINGLE_MOVE) {
+  if (game.info.tired_attack && moves_left < SINGLE_MOVE
+      && !uclass_has_user_unit_class_flag_named(utype_class(punittype),
+                                                "NeverTired")) {
     power = (power * moves_left) / SINGLE_MOVE;
   }
 
