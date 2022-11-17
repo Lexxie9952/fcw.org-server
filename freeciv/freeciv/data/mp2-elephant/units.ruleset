@@ -287,8 +287,9 @@ helptext      = _("\
 name          = _("?unitclass:LandImmobile")
 min_speed     = 3
 hp_loss_pct   = 0
-flags         = "TerrainSpeed", "BuildAnywhere", "ZOC", "CanFortify", "TerrainDefense",
-                "AttFromNonNative", "AttackNonNative", "DelayLoad"
+flags         = "BuildAnywhere", "ZOC", "CanFortify", "TerrainDefense",
+                "AttFromNonNative", "AttackNonNative", "DelayLoad",
+                "TerrainSpeed"  ; so many effects and actionenablers use TerrainSpeed synonymously with land unit that we keep it to be safe
 
 [unitclass_landnokill]
 name          = _("?unitclass:LandNoKill")
