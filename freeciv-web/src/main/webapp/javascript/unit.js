@@ -448,7 +448,15 @@ function unit_could_possibly_load(punit, ptype, ttype, tclass)
   // Transported units can't swap transports except under some conditions:
   // TO DO: when actionenabler_load is in server, we can put all this in game.ruleset actionenablers.
   if (punit['transported']) {
-    if ( (pclass.includes("Land") || pclass=="Cargo") && punit['transported']) {
+    if (pclass.includes("Bomb")) {
+      if (!tile_city(ptile) && !tile_has_extra(ptile, EXTRA_AIRBASE))
+      return false; // No bomb-swapping in mid-air or beaming-up to Bomber from a truck or train!
+    }
+
+    if (client_rules_flag[CRF_MP2_E]) {
+      // Passenger Move cost handles everything except Bombs. No complex rules!!
+    }
+    else if ( (pclass.includes("Land") || pclass=="Cargo") && punit['transported']) {
 
       var from_unit  = units[punit['transported_by']]; // unit currently transporting the cargo who wants to swap transports
       var from_class = get_unit_class(from_unit);      // unit_class of the transport currently transporting the cargo
@@ -488,7 +496,6 @@ function unit_could_possibly_load(punit, ptype, ttype, tclass)
       // Every other scenario of transport-swapping Land/Cargo class is not allowed: hinder double-move exploit).
       if (!can_load) return false; // Must unload from current transport first.
     }
-    else if (pclass.includes("Bomb")) return false; // No bomb-swapping in mid-air or beaming up from a truck/train!
   }
 
   //////////// End of handling for already-transported units doing a transport-swap ///////////////////////
@@ -589,10 +596,26 @@ function unit_could_possibly_load(punit, ptype, ttype, tclass)
   }
 */
 
-  // MP2D onward, missiles can only board in a city or a transport swap at sea.
   if (pclass == "Missile") {
-    if (client_rules_flag[CRF_MP2_D]) { 
-      //if (unit_has_moved(punit)) return false;  TODO: totally prevent double-move exploits from missiles, here and in ruleset
+    // MP2E Missiles are nice and simple:
+    if (client_rules_flag[CRF_MP2_E]) {
+      if (tile_city(ptile)) return true;
+      // Any 'base' type as defined by no stack death:
+      if (tile_has_extra(ptile,EXTRA_) //hideout
+         || tile_has_extra(ptile,EXTRA_FORT)
+         || tile_has_extra(ptile,EXTRA_FORTRESS)
+         || tile_has_extra(ptile,EXTRA_NAVALBASE)
+         || tile_has_extra(ptile,EXTRA_CASTLE)
+         || tile_has_extra(ptile,EXTRA_BUNKER)
+         || tile_has_extra(ptile,EXTRA_AIRBASE)
+         || tile_has_extra(ptile,EXTRA_RUINS)) {
+
+        return true;
+      }
+      return false;
+    }
+    // MP2D Missiles can only board in a city or a transport swap at sea.
+    else if (client_rules_flag[CRF_MP2_D]) {
       if (tile_city(ptile)) return true;
       else if (can_load) return true;
       //else if (tile_has_extra(EXTRA_AIRBASE)) return true;   
