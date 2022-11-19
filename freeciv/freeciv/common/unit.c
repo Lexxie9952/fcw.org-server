@@ -753,6 +753,33 @@ bool could_unit_load(const struct unit *pcargo, const struct unit *ptrans)
     return FALSE;
   }
 
+  /* The action.c functions that check if ACTION_TRANSPORT_BOARD is legal for pcargo
+    on ptrans, they ultimately make calls to could_unit_load(). So, if this function
+    calls legality checks in action.c, we get recursion. Instead, we count on action.c
+    (AND everyone else) ultimately arriving here. Thus, this is the only place
+    we can check legality for Boarding enablers. */
+  bool found_enabler = FALSE;
+  action_enabler_list_iterate(action_enablers_for_action(ACTION_TRANSPORT_BOARD),
+                              enabler) {
+    if (is_enabler_active(enabler, unit_owner(pcargo), 
+                          tile_city(unit_tile(ptrans)), /* boarding happens @ target */
+                          NULL, unit_tile(ptrans),      /* boarding happens @ target */
+                          pcargo, unit_type_get(pcargo),
+                          NULL, NULL,
+                          unit_owner(ptrans), tile_city(unit_tile(ptrans)),
+                          NULL, unit_tile(ptrans),
+                          ptrans, unit_type_get(ptrans),
+                          NULL, NULL)) {
+      found_enabler = TRUE;
+      break;
+    }
+  } action_enabler_list_iterate_end;
+  if (!found_enabler) {
+    return FALSE;
+  }
+  /* TODO: should check ACTION_TRANSPORT_EMBARK from an adjacent tile? But this
+     function is speculating an arrival path here so not sure how to check that,
+     since Embark seems to only be enabled on adjacent tiles? */
   return TRUE;
 }
 

@@ -724,6 +724,30 @@ bool is_action_possible_on_city(action_id act_id,
                                 const struct player *actor_player,
                                 const struct city* target_city);
 
+/* 19November2022: while ideally this would be unexposed/static, some action
+   legality checks share use of functions external to actions.c which are also
+   used to check action legalites across the whole platform; e.g., 
+   unit.c::could_unit_load(). To avoid an infinite recursive tangle, as long
+   as functions outside action.c are used to render action legality, then
+   other files need a way to know whether actions are enbaled: */
+bool is_enabler_active(const struct action_enabler *enabler,
+			      const struct player *actor_player,
+			      const struct city *actor_city,
+			      const struct impr_type *actor_building,
+			      const struct tile *actor_tile,
+                              const struct unit *actor_unit,
+			      const struct unit_type *actor_unittype,
+			      const struct output_type *actor_output,
+			      const struct specialist *actor_specialist,
+			      const struct player *target_player,
+			      const struct city *target_city,
+			      const struct impr_type *target_building,
+			      const struct tile *target_tile,
+                              const struct unit *target_unit,
+			      const struct unit_type *target_unittype,
+			      const struct output_type *target_output,
+			      const struct specialist *target_specialist);
+
 bool action_maybe_possible_actor_unit(const action_id wanted_action,
                                       const struct unit* actor_unit);
 

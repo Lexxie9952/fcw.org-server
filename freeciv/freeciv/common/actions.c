@@ -91,24 +91,6 @@ static struct action *action_new(action_id id,
                                  const int max_distance,
                                  bool actor_consuming_always);
 
-static bool is_enabler_active(const struct action_enabler *enabler,
-			      const struct player *actor_player,
-			      const struct city *actor_city,
-			      const struct impr_type *actor_building,
-			      const struct tile *actor_tile,
-                              const struct unit *actor_unit,
-			      const struct unit_type *actor_unittype,
-			      const struct output_type *actor_output,
-			      const struct specialist *actor_specialist,
-			      const struct player *target_player,
-			      const struct city *target_city,
-			      const struct impr_type *target_building,
-			      const struct tile *target_tile,
-                              const struct unit *target_unit,
-			      const struct unit_type *target_unittype,
-			      const struct output_type *target_output,
-			      const struct specialist *target_specialist);
-
 static inline bool
 action_prob_is_signal(const struct act_prob probability);
 static inline bool
@@ -3346,7 +3328,7 @@ case ACTION_CLEAN_POLLUTION:
 /**********************************************************************//**
   Return TRUE iff the action enabler is active
 **************************************************************************/
-static bool is_enabler_active(const struct action_enabler *enabler,
+bool is_enabler_active(const struct action_enabler *enabler,
 			      const struct player *actor_player,
 			      const struct city *actor_city,
 			      const struct impr_type *actor_building,
