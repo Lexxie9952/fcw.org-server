@@ -109,6 +109,8 @@ class_flags =
     _("WaterVessel")
     _("DelayLoad"), _("Fractional move points spent to load or unload this unit.")
     _("UnloadOnce"), _("Loses 2/3 moves when unloaded.")
+    _("NeverTired"), _("Always atttacks at full strength; never tired attack.")
+    _("NoCarrierRefuel")  ; May not embark on transports outside city or native base; needed for pftools.c to not assume refuel tile.
   }
 
 [veteran_system]
@@ -214,7 +216,7 @@ name          = _("?unitclass:Missile")
 min_speed     = 1
 hp_loss_pct   = 0
 hut_behavior  = "Frighten"
-flags         = "Missile", "Unreachable", "DoesntOccupyTile", "Airliftable"
+flags         = "NeverTired", "Missile", "Unreachable", "DoesntOccupyTile", "Airliftable", "NoCarrierRefuel"
 helptext      = _("\
   • Can be airlifted from a suitable city.\
 ")
@@ -224,7 +226,7 @@ name          = _("?unitclass:Bomb")
 min_speed     = 1
 hp_loss_pct   = 0
 hut_behavior  = "Frighten"
-flags         = "Unreachable", "DoesntOccupyTile", "Airliftable", "DelayLoad", "UnloadOnce"
+flags         = "NeverTired", "Unreachable", "DoesntOccupyTile", "Airliftable", "DelayLoad", "UnloadOnce"
 helptext      = _("\
   • Can be airlifted from a suitable city.\
 ")
@@ -234,7 +236,7 @@ name          = _("?unitclass:Bomb2")
 min_speed     = 1
 hp_loss_pct   = 0
 hut_behavior  = "Frighten"
-flags         = "BuildAnywhere", "Missile", "Unreachable", "DoesntOccupyTile", "Airliftable",
+flags         = "NeverTired", "BuildAnywhere", "Missile", "Unreachable", "DoesntOccupyTile", "Airliftable",
                 "AttackNonNative", "DelayLoad", "UnloadOnce"
 helptext      = _("\
   • Can be airlifted from a suitable city.\
@@ -322,7 +324,7 @@ name          = _("?unitclass:Sea")
 min_speed     = 4
 hp_loss_pct   = 0
 flags         = "DamageSlows", "AttackNonNative", "AttFromNonNative", "CanPillage", "WaterVessel",
-                "ZOC", "CargoRestrained" ;can't attack while being towed by Trawler
+                "NeverTired", "ZOC", "CargoRestrained" ;can't attack while being towed by Trawler
 helptext      = _("\
   • Crew Repair：each turn, regardless of movement, recovers 10% of its hit points (rounded down).\
 ")
@@ -333,7 +335,7 @@ name          = _("?unitclass:Submarine")
 min_speed     = 5
 hp_loss_pct   = 0
 flags         = "DamageSlows", "AttackNonNative", "AttFromNonNative", "CanPillage", "Unreachable", "WaterVessel",
-                "CargoRestrained" ;can't attack while being towed by Trawler
+                "NeverTired", "CargoRestrained" ;can't attack while being towed by Trawler
 helptext      = _("\
   • Visibility bonus：not visible to other players unless they have a unit or city adjacent to it.\n\
   • Crew Repair：each turn, regardless of movement, recovers 3 hit points.\
@@ -345,7 +347,7 @@ name          = _("?unitclass:Trireme")
 min_speed     = 3
 hp_loss_pct   = 0
 flags         = "DamageSlows", "AttFromNonNative", "WaterVessel",
-                "CargoRestrained" ;can't attack while being towed by Trawler
+                "NeverTired", "CargoRestrained" ;can't attack while being towed by Trawler
 
 ;Subject to ZOC but could be individually IgZOC'd
 [unitclass_rivership]
@@ -354,13 +356,13 @@ name          = _("?unitclass:RiverShip")
 min_speed     = 3
 hp_loss_pct   = 0
 flags         = "DamageSlows", "AttackNonNative", "AttFromNonNative", "WaterVessel",
-                "ZOC", "CargoRestrained" ;can't attack while being towed by Trawler
+                "NeverTired", "ZOC", "CargoRestrained" ;can't attack while being towed by Trawler
 
 [unitclass_heli]
 name          = _("?unitclass:Helicopter")
 min_speed     = 1
 hp_loss_pct   = 5
-flags         = "Unreachable", "CanOccupyCity", "CollectRansom", "Airliftable"
+flags         = "NeverTired", "Unreachable", "CanOccupyCity", "CollectRansom", "Airliftable"
 
 ; This class is for air units that are unreachable but do not protect a stack.
 [unitclass_air]
@@ -368,7 +370,7 @@ name          = _("?unitclass:Air")
 min_speed     = 1
 hp_loss_pct   = 0
 hut_behavior  = "Frighten"
-flags         = "Unreachable", "DoesntOccupyTile", "Airliftable"
+flags         = "NeverTired", "Unreachable", "DoesntOccupyTile", "Airliftable"
 
 ; This class is for air units unreachable by propeller fighters
 [unitclass_air_high_altitude]
@@ -376,7 +378,7 @@ name          = _("?unitclass:Air_High_Altitude")
 min_speed     = 1
 hp_loss_pct   = 0
 hut_behavior  = "Frighten"
-flags         = "Unreachable", "DoesntOccupyTile", "Airliftable"
+flags         = "NeverTired", "Unreachable", "DoesntOccupyTile", "Airliftable"
 
 [unitclass_space]
 name          = _("?unitclass:Space")
@@ -400,7 +402,7 @@ name          = _("?unitclass:AirProtect")
 min_speed     = 1
 hp_loss_pct   = 0
 hut_behavior  = "Frighten"
-flags         = "Unreachable", "DoesntOccupyTile", "Airliftable", "BorderPolice"
+flags         = "NeverTired", "Unreachable", "DoesntOccupyTile", "Airliftable", "BorderPolice"
 helptext      = _("\
   • INTERCEPTOR：can be given the Vigil order to auto-attack adjacent Air units.\n\
   • AIR COVER：Most units who cannot attack this unit also cannot attack other units on the tile.\
@@ -417,7 +419,7 @@ name          = _("?unitclass:Zeppelin")
 min_speed     = 1
 hp_loss_pct   = 0
 hut_behavior  = "Frighten"
-flags         = "Unreachable", "DoesntOccupyTile"
+flags         = "NeverTired", "Unreachable", "DoesntOccupyTile"
 
 ; /* <-- avoid gettext warnings
 ;
@@ -5489,7 +5491,7 @@ uk_happy      = 0
 uk_shield     = 0
 uk_food       = 0
 uk_gold       = 1
-embarks       = "Submarine", "Sea", "Land", "Big Land"  ;since disallowing embark disallows "Transport Board" also, we must use actionenabler to disallow disembark
+;embarks       = "Submarine", "Sea", "Land", "Big Land"  ;since disallowing embark disallows "Transport Board" also, we must use actionenabler to disallow disembark
 disembarks    = "Submarine", "Sea", "Land", "Big Land"
 targets       = "Missile"
 bonuses       =
@@ -5518,7 +5520,11 @@ ABMs aren't very effective\
  against non-missiles. As a defensive unit, they cause no unhappiness; and\
  their upkeep is 1 gold. After required tech is known, 1 ABM is delivered free\
  to each newly built unit capable of carrying missilies. \n\
-Multislot: Under certain conditions, cities can make one (or more) multislot units per turn, plus one of any other type.\
+Multislot: Under certain conditions, cities can make one (or more) multislot units per turn, plus one of any other type. \n\n\
+*** Logistical Rules for ALL Missiles：\n\
+ A Missile must be transported by ending its turn in a city, or by Airlift, or as cargo on a\
+ Missile Destroyer, AEGIS Cruiser, Missile Submarine, Carrier, or Mobile SAM. Loading\
+ Missile cargo requires being in a city or any base-type where StackDeath does not occur.\
 ")
 
 [unit_cruise_missile]
@@ -5547,7 +5553,7 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-embarks       = "Submarine", "Sea", "Land", "Big Land"  ;since disallowing embark disallows "Transport Board" also, we must use actionenabler to disallow disembark
+;embarks       = "Submarine", "Sea", "Land", "Big Land"  ;since disallowing embark disallows "Transport Board" also, we must use actionenabler to disallow disembark
 disembarks    = "Submarine", "Sea", "Land", "Big Land"
 targets       = "LandRail", "Space"
 bonuses       =
@@ -5580,11 +5586,13 @@ veteran_power_fact = 100, 150, 175, 175, 175, 175, 175
 veteran_move_bonus = 0, 0, 0, 0, 0, 0, 0
 helptext      = _("\
 A Cruise Missile can strike distant targets. It can’t attack Air units, but Air units never block\
- a strike on reachable surface units. Cruise Missiles can be relocated by ending their turn on a city,\
- airbase, Missile Destroyer, AEGIS Cruiser, Missile Submarine, Carrier, or Mobile SAM. A Cruise Missile\
- can’t block attacks on other units on its tile. Via the Pillage command, a Cruise Missile has a 60%\
- chance to strike and destroy a tile improvement. You may select the target with the Do command, then\
- select Tile Target.\
+ a strike on reachable surface units. A Cruise Missile can’t block attacks on other units on its\
+ tile. Via the Pillage command, a Cruise Missile has a 60% chance to strike and destroy a tile\
+ improvement. You may select the target with the Do command, then select Tile Target. \n\n\
+*** Logistical Rules for ALL Missiles：\n\
+ A Missile must be transported by ending its turn in a city, or by Airlift, or as cargo on a\
+ Missile Destroyer, AEGIS Cruiser, Missile Submarine, Carrier, or Mobile SAM. Loading\
+ Missile cargo requires being in a city or any base-type where StackDeath does not occur.\
 ")
 
 [unit_nuclear_missile]
@@ -5643,7 +5651,11 @@ If you have Space Flight and the Manhattan Project has been built by any player,
  Nuclear blasts destroy ALL units in a 3×3 area, and up to 2 tile improvements on each tile (×2 at ground zero). City population is reduced by half. Land tiles may get nuclear fallout.\
  Fallout reduces tile output and increases risk of nuclear winter. \
 "), _("\
-If Fallout is cleaned on the turn it appears, the chance of nuclear winter is reduced.\
+If Fallout is cleaned on the turn it appears, the chance of nuclear winter is reduced. \n\n\
+*** Logistical Rules for ALL Missiles：\n\
+ A Missile must be transported by ending its turn in a city, or by Airlift, or as cargo on a\
+ Missile Destroyer, AEGIS Cruiser, Missile Submarine, Carrier, or Mobile SAM. Loading\
+ Missile cargo requires being in a city or any base-type where StackDeath does not occur.\
 ")
 bombard_rate = 0       ; default sq_radius of 2：every adjacent tile.
 

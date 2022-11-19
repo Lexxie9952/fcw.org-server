@@ -1419,20 +1419,19 @@ reqs	=
 ;which we should, since the units are already losing their mp from transportation!
 ;[effect_ships_transported]
 
-;Missiles should never incur cost, it's not germaine to their nature.
-;Bombs don't incur cost because not germaine / we have the other system working for them.
+;Bombs don't incur cost because due to their nature; we have the other system working for them.
 
-;Aircraft is a bit more complex, as it diminishes naval power to some extent and could even 
-;disallow vigil if you didn't set it before moving! Perhaps auto-sentry on ships should be
+;Aircraft + Missiles are a bit more complex, as it diminishes naval power to some extent and could
+;even disallow vigil if you didn't set it before moving! Perhaps auto-sentry on ships should be
 ;scripted to auto-vigil. Losing half for a unit that never lost anything seems plenty for now. 
-[effect_aircraft_transported_passenger_move_cost]
+[effect_aircraft_and_missile_transported_passenger_move_cost]
 type    = "Passenger_Move_Cost_Bp"
-value	= 5040
+value	= 5040   ; 5040 / 10080 = 50%
 reqs	=
     { "type",          "name",          "range", "present"
       "UnitClassFlag", "TerrainSpeed",  "Local", FALSE     ; No land units
       "UnitClassFlag", "WaterVessel",   "Local", FALSE     ; No ships
-      "UnitClassFlag", "Missile",       "Local", FALSE     ; NO missiles or similar classes
+;     "UnitClassFlag", "Missile",       "Local", FALSE     ; uncommenting gives full range to missiles
       "UnitClassFlag", "UnloadOnce",    "Local", FALSE     ; not Bomb or Bomb2
       "MinMoveFrags",  "35280",         "Local", TRUE      ; only subtract if >3.5 moves_left...
       ; ... preserves ability to fly off carrier, strike, return, or strike 2-3 times from on the carrier.
@@ -8105,19 +8104,6 @@ reqs    =                                     ; both Bomb and Bomb2 classes only
     { "type",          "name",              "range", "present"
       "Action",        "Transport Deboard", "Local", TRUE
       "UnitClassFlag", "UnloadOnce",        "Local", TRUE
-    }
-;For uniform consistency, all Bombs have same behavior (except nuke has to unload and have movesleft to attack before detonating so the
-;Bomber can be spared). So, nuclear bombs can be hauled by truck/train ONCE before used, and we have to create that same dynamic for
-;conv.Bombs. In every case conv.Bombs have >0mp and <1 mp, they'll have 1/3 because of 2/3 move_cost unloading. Which means tired_attack
-;at 33% strength. Which means giving them a 3x bonus to even it out, since we don't want to F around with Bombs having tired_attack,
-;which would be stupid.
-[effect_bombs_dont_have_tired_attack]
-type    = "Attack_Bonus"
-value   = 200                                 ; 33% + 200%*33% = 100% 
-reqs    =
-    { "type",          "name",             "range", "present"
-      "UnitType",      "Bombs",            "Local", TRUE       ; conventional bomb
-      "MinMoveFrags",  "3361",             "Local", FALSE      ; Bombs can only have 3 states for 'movesleft': 1 move, 1/3 move, or 0 moves.
     }
 
 ;********************************************************* MOVE COSTS: DIPLOMATIC, SIEGE RAMS

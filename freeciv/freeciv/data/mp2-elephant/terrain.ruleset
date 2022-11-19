@@ -1900,7 +1900,7 @@ reqs           =
     }
 build_time     = 3
 removal_time   = 0
-native_to      = "Air", "Balloon", "Zeppelin", "Helicopter", "Missile", "Bomb", "AirProtect", "Air_High_Altitude", "Cargo", "Bomb2"
+native_to      = "Air", "Balloon", "Zeppelin", "Helicopter", "Bomb", "AirProtect", "Air_High_Altitude", "Cargo", "Bomb2"
 conflicts      = "Castle", "Bunker"
 flags          = "Refuel", "NoStackDeath"
 helptext       = _("\
@@ -1937,7 +1937,7 @@ reqs           =
 build_time     = 5
 removal_time   = 0
 conflicts      = "Watchtower"
-native_to      = "Air", "Balloon", "Zeppelin", "Helicopter", "Missile", "Bomb", "AirProtect", "Air_High_Altitude"
+native_to      = "Air", "Balloon", "Zeppelin", "Helicopter", "Bomb", "AirProtect", "Air_High_Altitude"
 flags          = "Refuel"
 helptext       = _("\
 With the available tech, Radar can be added to an Airbase, significantly increasing its vision.\

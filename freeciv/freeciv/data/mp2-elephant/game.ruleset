@@ -3033,11 +3033,12 @@ target_reqs    =
       "UnitState", "Transporting", "Local"
     }
 
-[actionenabler_board_air_and_missile]  ;no move frag req for boarding for planes and missiles 
+[actionenabler_board_air]  ;no move frag req for boarding for planes
 action        = "Transport Board"
 actor_reqs    =
     { "type",          "name",          "range", "present"
       "UnitClassFlag", "TerrainSpeed",  "Local", FALSE  ;not Land
+      "UnitClass",     "Missile",       "Local", FALSE  ;not Missile
       "UnitClassFlag", "WaterVessel",   "Local", FALSE  ;not Sea
       "UnitClassFlag", "UnloadOnce",    "Local", FALSE  ;not Bombs
       "DiplRel",       "Armistice",     "Local", FALSE
@@ -3046,6 +3047,43 @@ actor_reqs    =
       "DiplRel",       "Peace",         "Local", FALSE
       "DiplRel",       "Never met",     "Local", FALSE
     }
+
+; Missiles have special rules. A missile launched this turn has strict options. It may: 
+; (1) Strike a target, or
+; (2) Board transport in any city or no-stack-death "base"
+; (3) Land in a friendly city (free airlift rule).
+; (4) Run out of fuel if not enough moves left to do (2) or (3) at TC processing.
+; Missiles boarding and transport swapping must be done in friendly city or base.
+; *************************************************************************************************************************
+;Missile can always board while in a city.
+[actionenabler_board_missile_1]
+action        = "Transport Board"
+actor_reqs    =
+    { "type",          "name",          "range", "present"
+      "UnitClass",     "Missile",       "Local", TRUE   ;Missiles only
+      "DiplRel",       "Armistice",     "Local", FALSE
+      "DiplRel",       "War",           "Local", FALSE
+      "DiplRel",       "Cease-fire",    "Local", FALSE
+      "DiplRel",       "Peace",         "Local", FALSE
+      "DiplRel",       "Never met",     "Local", FALSE
+      ;
+      "CityTile", "Center",             "Local", TRUE
+    }
+;Missile can board in bases.
+[actionenabler_board_missile_2]
+action        = "Transport Board"
+actor_reqs    =
+    { "type",          "name",          "range", "present"
+      "UnitClass",     "Missile",       "Local", TRUE   ;Missiles only
+      "DiplRel",       "Armistice",     "Local", FALSE
+      "DiplRel",       "War",           "Local", FALSE
+      "DiplRel",       "Cease-fire",    "Local", FALSE
+      "DiplRel",       "Peace",         "Local", FALSE
+      "DiplRel",       "Never met",     "Local", FALSE
+      ;
+      "ExtraFlag",     "NoStackDeath",  "Local", TRUE     ;; all major base types, NOT:Deep_Dive,Tile_Claim,Watchtower,Radar,Buoy,Quay
+    }
+
 ; Bombs are complicated. They have zero move cost to load, which is necessary to allow them to load up and be used
 ; on the turn they're created. They have a double move cost for unload, which evens it out to prevent double-hauling
 ; them across the planet for a distant bombing mission. PROBLEM IS: "Transport Board" allows loading while already
@@ -3200,20 +3238,6 @@ actor_reqs    =
     { "type",         "name",       "range", "present"
       "MinMoveFrags", "1",          "Local", TRUE
       "UnitClass",    "Missile",    "Local", FALSE
-      "DiplRel",      "Armistice",  "Local", FALSE
-      "DiplRel",      "War",        "Local", FALSE
-      "DiplRel",      "Cease-fire", "Local", FALSE
-      "DiplRel",      "Peace",      "Local", FALSE
-      "DiplRel",      "Never met",  "Local", FALSE
-    }
-;Missiles can board/embark only in cities or at TC throuogh "parachute catch" 
-[actionenabler_embark_missiles]
-action        = "Transport Embark"
-actor_reqs    =
-    { "type",         "name",       "range", "present"
-      "MinMoveFrags", "1",          "Local", TRUE
-      "UnitClass",    "Missile",    "Local", TRUE
-      "UnitState",    "Transported","Local", TRUE
       "DiplRel",      "Armistice",  "Local", FALSE
       "DiplRel",      "War",        "Local", FALSE
       "DiplRel",      "Cease-fire", "Local", FALSE

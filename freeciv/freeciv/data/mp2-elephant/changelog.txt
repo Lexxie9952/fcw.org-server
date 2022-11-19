@@ -119,8 +119,21 @@ and can now be built with veteran levels.
 39. AWACS cost adjust: 130, was 140. Attrition rate and other flight reconnaissance options disincentivized the cost.
 40. Each new aviation tech upgrades Airplane range by +1 move (was +2). 6 techs started making it almost a cheap AWACS.
 41. Marines, Ground Troops, and Paratroopers are simplified with same A8 D5.5; Marines however have stronger vet levels.
+42. Passenger Transport costs: 
+      0% land civilian and AAA/Marines; 
+      50% Foot Soldiers, Aircraft, Missiles
+      75% land military non-foot; 50% + won't subtract if <= 3 moves left (aircraft, preserves vigil)
 
-42. Passenger Transport costs: 0% land civilian and AAA/Marines; 50% Foot Soldiers; 75% land military non-foot; 50% + won't subtract if <= 3 moves left (aircraft, preserves vigil)
 43. Spy Plane and Bombers (except Dive Bomber) are BadCityDefender. This adjusts the fact some have defensive capabilities in the air but
     are poor defenders to scramble for city defense.
+44. Transport swapping rules greatly simplifed because of Passenger_Move_Cost.
+    a. Bombs can swap transports in cities and airbases.
+    b. Missiles can swap transports in cities and any no-stack-death base.
+    b. Every other unit, IF transported, can swap.
+45. Missiles have special rules. A missile launched this turn has strict options. It may: 
+ (1) Strike a target, or
+ (2) Board transport in any city or no-stack-death "base"
+ (3) Land in a friendly city (free short-range airlift rule).
+ (4) Run out of fuel if not enough moves left to do (2) or (3) at TC.
+Missiles boarding and transport swapping must be done in friendly city or base. No bases are native to missiles.
 
