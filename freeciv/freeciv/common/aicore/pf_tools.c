@@ -590,8 +590,11 @@ static bool is_possible_base_fuel(const struct tile *ptile,
     const struct unit_type *trans_utype = unit_type_get(ptrans);
 
     if (pf_transport_check(param, ptrans, trans_utype)
-        && (utype_can_freely_load(param->utype, trans_utype)
-            || tile_has_native_base(ptile, trans_utype))) {
+        && ( 
+              (utype_can_freely_load(param->utype, trans_utype) && !uclass_has_user_unit_class_flag_named(utype_class(param->utype),"NoCarrierRefuel"))
+               || tile_has_native_base(ptile, trans_utype)
+            )
+        ) {
       return TRUE;
     }
   } unit_list_iterate_end;

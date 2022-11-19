@@ -58,8 +58,10 @@ const UCF_AIRLIFTABLE = UCF_USER_FLAG_4;
 const UCF_BORDERPOLICE = UCF_USER_FLAG_5;
 const UCF_CARGO_RESTRAINED = UCF_USER_FLAG_6;
 const UCF_WATER_VESSEL = UCF_USER_FLAG_7;
-const UCF_DELAYLOAD = UCF_USER_FLAG_8;         // Fractional move points spent to load or unload this unit.
-const UCF_UNLOADONCE = UCF_USER_FLAG_9;        // Loses 2/3 moves when unloaded, uses no moves to load
+const UCF_DELAYLOAD = UCF_USER_FLAG_8;             // Fractional move points spent to load or unload this unit.
+const UCF_UNLOADONCE = UCF_USER_FLAG_9;            // Loses 2/3 moves when unloaded, uses no moves to load
+const UCF_NEVERTIRED = UCF_USER_FLAG_10;           // No tired attack; basically for non-land units
+const UCF_NOCARRIERREFUEL = UCF_USER_FLAG_11;      // pftools.c needed-flag to not assume illegal embark on carriers for pathfinding.
 // 12 IS MAX userflags for classes!
 
 // Unit flags
