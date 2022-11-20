@@ -5477,14 +5477,27 @@ bool execute_orders(struct unit *punit, const bool fresh)
     switch (order.order) {
     case ORDER_FULL_MP:
       if (punit->moves_left < unit_move_rate(punit)) {
-	/* If the unit doesn't have full MP then it just waits until the
-	 * next turn.  We assume that the next turn it will have full MP
-	 * (there's no check for that). */
-	punit->done_moving = TRUE;
-        log_debug("  waiting this turn");
-	send_unit_info(NULL, punit);
+        if (order.activity == ACTIVITY_GOTO && punit->moves_left > 0) {
+           /* ACTIVITY_GOTO encoded inside ORDER_FULL_MP overrides a wait: */
+          break;
+        }
+        else {
+        /* If the unit doesn't have full MP then it just waits until the
+        * next turn.  We assume that the next turn it will have full MP
+        * (there's no check for that). */
+          punit->done_moving = TRUE;
+          log_debug("  waiting this turn");
+          send_unit_info(NULL, punit);
+          break;
+        }
+      } else if (order.activity == ACTIVITY_SENTRY) {
+        /* ACTIVITY_SENTRY encoded inside ORDER_FULL_MP means forced wait.*/
+        punit->done_moving = TRUE;
+        send_unit_info(NULL, punit);
+        break;
       }
       break;
+
     case ORDER_ACTIVITY:
       activity = order.activity;
       {

@@ -3078,18 +3078,10 @@ function do_map_click(ptile, qtype, first_time_called)
               goto_path['length']--;     // correct the path length for the removed -1 "refuel dir"
             }
           } else if (delayed_goto_active) {
-            //if (unit_type(punit)['move_rate']==punit['movesleft']) {    didn't capture case of unmoved but damage_slows
-            if (!unit_has_moved(punit)) {
-                add_client_message(unit_type(punit)['name']+" must first move and have less than full moves left.");
-                goto_path = null; // cancel it so it doesn't move this turn by mistake
-                return;  // avoid possible adjacent tile goto override on a delayed goto
-              }
-              else {
-                // Gives non-fuel units the -1 (refuel) dir so they can have a kind of delayed GOTO also
-                goto_path['dir'].unshift(-1);
-                goto_path['length']++;  // correct for the path having an extra -1 "refuel dir" in it
-              }
-          }
+              // Gives non-fuel units the -1 (refuel) dir so they can have a kind of delayed GOTO also
+              goto_path['dir'].unshift(-1);
+              goto_path['length']++;  // correct for the path having an extra -1 "refuel dir" in it
+            }
         }
         // This is where we would normally check if the goto_path is null for unit s, and do a continue to move on to the next unit.
         // However, we might have a null path because of the GO TO BUG, in which case we allow a click on an adjacent
@@ -3218,9 +3210,16 @@ function do_map_click(ptile, qtype, first_time_called)
           /* TODO: Have the server send the full orders instead of just the
            * dir part. Use that data in stead. */
 
+          order['activity'] = ACTIVITY_LAST;
+
           if (goto_path['dir'][i] == -1) {
-            /* Assume that this means refuel. */
+            /* dir -1 means wait or refuel. */
             order['order'] = ORDER_FULL_MP;
+            if (i==0 && delayed_goto_active) {
+              /* ACTIVITY_SENTRY encoded inside an ORDER_FULL_MP tells FCW server to 
+                wait on this tile even if we have full move points: */
+              order['activity'] = ACTIVITY_SENTRY;
+            }
           } else if (i + 1 != goto_path['length'] || patrol_mode) {
             /* Don't try to do an action in the middle of the path. */
             order['order'] = ORDER_MOVE;
@@ -3230,7 +3229,6 @@ function do_map_click(ptile, qtype, first_time_called)
           }
 
           order['dir'] = goto_path['dir'][i];
-          order['activity'] = ACTIVITY_LAST;
           order['sub_target'] = 0;
           order['action'] = ACTION_COUNT;
 
@@ -3324,7 +3322,7 @@ function do_map_click(ptile, qtype, first_time_called)
           var has = is_word_plural(ptype['name']) ? "have" : "has";   
           message_log.update({
             event: E_BAD_COMMAND,
-            message: (  delayed_goto_active ? (ptype['name'] + " will move at turn change.") :
+            message: (  delayed_goto_active ? (ptype['name'] + " will move immediately after turn change.") :
                         (is_longturn() ? ptype['name'] + " " + has + " no moves left."
                                        : ptype['name'] + " " + has + " no moves left. Press turn done for the next turn."))
           });
