@@ -1350,8 +1350,7 @@ function unit_has_type_flag(punit, flag)
 
 /**************************************************************************
  Tries to determine as accurately as possible if the unit has moved.
- TODO: we're ignorant of whether bonuses like Lighthouse or Genghis Khan
- are active.
+ TODO: server knows this can can send it in unit_info packet.
  *************************************************************************/
 function unit_has_moved(punit)
 {
