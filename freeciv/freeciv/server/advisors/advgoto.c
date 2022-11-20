@@ -147,7 +147,7 @@ static bool adv_unit_move(struct unit *punit, struct tile *ptile)
 {
   struct player *pplayer = unit_owner(punit);
   struct unit *ptrans;
-  int mcost;
+  long mcost;
 
   /* if enemy, stop and give a chance for the human player to
      handle this case */

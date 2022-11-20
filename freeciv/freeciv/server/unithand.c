@@ -756,7 +756,7 @@ static bool do_disembark(struct player *act_player,
                          struct tile *tgt_tile,
                          const struct action *paction)
 {
-  int move_cost = map_move_cost_unit(&(wld.map), act_unit, tgt_tile);
+  long move_cost = map_move_cost_unit(&(wld.map), act_unit, tgt_tile);
 
   /* Sanity checks */
   fc_assert_ret_val(act_player, FALSE);
@@ -783,7 +783,7 @@ static bool do_unit_embark(struct player *act_player,
                            const struct action *paction)
 {
   struct tile *tgt_tile;
-  int move_cost;
+  long move_cost;
 
   /* Sanity checks */
   fc_assert_ret_val(act_player, FALSE);
@@ -3731,7 +3731,7 @@ static void do_path_req(struct player *pplayer, struct unit *punit,
 
   int unit_id = punit->id;
   struct tile *ptile = index_to_tile(&(wld.map), goal);
-  int umr = unit_move_rate(punit);
+  long umr = unit_move_rate(punit);
   
   /* Catch bad calls from clients: */  
   if (umr <= 0) {
@@ -3893,9 +3893,9 @@ void handle_rally_path_req(struct player *pplayer, int city_id,
   unit_tile_set(punit, ptile);
   /* Other stuff: */
   punit->id = 0; // Virtual unit id == 0
-  punit->homecity = 0; // homeless
-  punit->hp = 1; // not dead
-  punit->moves_left = utype->move_rate; // full moves
+  punit->homecity = 0; // homeless /////////////////////////////////////////////////////////// eh, should maybe be real city
+  punit->hp = 1; // not dead ///////////////////////////////////////////////////////////////// this would affect move_rate
+  punit->moves_left = utype->move_rate; // full moves *************************************** TODO: use unit_move_rate(punit) instead for bouses
   punit->moved = false; // fresh
 
   do_path_req(pplayer, punit, goal, -1, -1, -1);
@@ -4164,7 +4164,7 @@ static bool unit_bombard(struct unit *punit, struct tile *ptile,
 {
   struct player *pplayer = unit_owner(punit);
   struct city *pcity = tile_city(ptile);
-  int def_moves_used;
+  long def_moves_used;
   const struct unit_type *act_utype;
 
   /* Sanity check: The actor still exists. */
@@ -4338,7 +4338,7 @@ static bool unit_bombard(struct unit *punit, struct tile *ptile,
         // Attacker loses no hit points so suffers no injured-caused mp loss, but
         // defender indeed does. Note if defender is a retaliator, this will be
         // role reversal later when function is called again.
-        pdefender->moves_left = unit_move_rate(pdefender) - def_moves_used;  
+        pdefender->moves_left = unit_move_rate(pdefender) - def_moves_used; /////////////////////////////////////// should be -= def_moves_used ? 
         if (pdefender->moves_left<0) pdefender->moves_left = 0;
         send_unit_info(NULL, pdefender);
 
@@ -4369,7 +4369,7 @@ static bool unit_bombard(struct unit *punit, struct tile *ptile,
      BUT, Retaliation bombarders don't process any of this stuff. */
   if (!is_retaliation)  { 
   // bm_cost is bombard_move_cost if specified otherwise it's a OneAttack turn loss:
-    int bm_cost = (pstats.bombard_move_cost>0) ? pstats.bombard_move_cost : 1000000;
+    long bm_cost = (pstats.bombard_move_cost>0) ? pstats.bombard_move_cost : FC_INFINITY;
     punit->moves_left = (punit->moves_left - bm_cost > 0) 
                       ? (punit->moves_left - bm_cost) : 0;
 
@@ -4735,7 +4735,7 @@ static bool do_attack(struct unit *punit, struct tile *def_tile,
   char loser_link[MAX_LEN_LINK], winner_link[MAX_LEN_LINK];
   struct unit *ploser, *pwinner;
   struct city *pcity = NULL;
-  int moves_used, def_moves_used; 
+  long moves_used, def_moves_used; 
   int old_unit_vet, old_defender_vet, vet;
   int winner_id;
   struct player *pplayer = unit_owner(punit);
@@ -4997,8 +4997,8 @@ static bool do_attack(struct unit *punit, struct tile *def_tile,
     /* Hack: make sure the unit has enough moves_left for the move to succeed,
        and adjust moves_left to afterward (if successful). */
 
-    int old_moves = punit->moves_left;
-    int full_moves = unit_move_rate(punit);
+    long old_moves = punit->moves_left;
+    long full_moves = unit_move_rate(punit);
 
     punit->moves_left = full_moves;
     /* Post attack occupy move. */
@@ -5029,7 +5029,7 @@ static bool do_attack(struct unit *punit, struct tile *def_tile,
                                    ACTION_TRANSPORT_DISEMBARK2,
                                    ACT_REQ_RULES))
         || (unit_move_handling(punit, def_tile, FALSE, TRUE))) {
-      int mcost = MAX(0, full_moves - punit->moves_left - SINGLE_MOVE);
+      long mcost = MAX(0, full_moves - punit->moves_left - SINGLE_MOVE);
 
       /* Move cost is bigger of attack (SINGLE_MOVE) and occupying move costs.
        * Attack SINGLE_COST is already calculated in to old_moves. */
@@ -5193,7 +5193,7 @@ static bool do_unit_conquer_city(struct player *act_player,
 {
   bool success;
   struct tile *tgt_tile = city_tile(tgt_city);
-  int move_cost = map_move_cost_unit(&(wld.map), act_unit, tgt_tile);
+  long move_cost = map_move_cost_unit(&(wld.map), act_unit, tgt_tile);
   int tgt_city_id = tgt_city->id;
   struct player *tgt_player = city_owner(tgt_city);
   const char *victim_link = city_link(tgt_city);
@@ -5476,7 +5476,7 @@ bool unit_move_handling_real(struct unit *punit, struct tile *pdesttile,
       && can_unit_exist_at_tile(&(wld.map), punit, pdesttile)
       /* Don't override "Transport Disembark" or "Transport Disembark 2" */
       && !unit_transported(punit)) {
-    int move_cost = map_move_cost_unit(&(wld.map), punit, pdesttile);
+    long move_cost = map_move_cost_unit(&(wld.map), punit, pdesttile);
 
     /* May cause an incident */
     action_consequence_success(NULL, pplayer, unit_type_get(punit),

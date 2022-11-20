@@ -612,7 +612,7 @@ void dai_wonder_city_distance(struct ai_type *ait, struct player *pplayer,
   struct pf_parameter parameter;
   struct unit_type *punittype;
   struct unit *ghost;
-  int maxrange;
+  long maxrange;
   struct city *wonder_city = game_city_by_number(adv->wonder_city);
 
   city_list_iterate(pplayer->cities, acity) {

@@ -963,7 +963,7 @@ bool dai_unit_move(struct ai_type *ait, struct unit *punit, struct tile *ptile)
   int sanity = punit->id;
   struct player *pplayer = unit_owner(punit);
   const bool is_plr_ai = is_ai(pplayer);
-  int mcost;
+  long mcost;
 
   CHECK_UNIT(punit);
   fc_assert_ret_val_msg(is_tiles_adjacent(unit_tile(punit), ptile), FALSE,

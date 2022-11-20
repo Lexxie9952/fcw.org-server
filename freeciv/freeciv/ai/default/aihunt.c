@@ -434,7 +434,7 @@ int dai_hunter_manage(struct ai_type *ait, struct player *pplayer,
   bool is_virtual = (punit->id == 0);
   struct pf_parameter parameter;
   struct pf_map *pfm;
-  int limit = unit_move_rate(punit) * 6;
+  long limit = unit_move_rate(punit) * 6;
   struct unit_ai *unit_data = def_ai_unit_data(punit, ait);
   struct unit *original_target = game_unit_by_number(unit_data->target);
   int original_threat = 0, original_cost = 0;

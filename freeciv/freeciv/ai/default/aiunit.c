@@ -1122,7 +1122,7 @@ int find_something_to_kill(struct ai_type *ait, struct player *pplayer,
   struct unit *pdefender;       /* Enemy city defender. */
   int move_time;        /* Turns needed to target. */
   int reserves;
-  int max_move_cost = max_move_cost = 10 * unit_move_rate(punit);
+  long max_move_cost = max_move_cost = 10 * unit_move_rate(punit);
   int attack;           /* Our total attack value with reinforcements. */
   int victim_count;     /* Number of enemies there. */
   int needferry;        /* Cost of building a ferry boat. */
@@ -1588,7 +1588,7 @@ struct city *find_nearest_safe_city(struct unit *punit)
   struct pf_map *pfm;
   struct player *pplayer = unit_owner(punit);
   struct city *pcity, *best_city = NULL;
-  int best = FC_INFINITY, cur;
+  long best = FC_INFINITY, cur;
 
   pft_fill_unit_parameter(&parameter, punit);
   parameter.omniscience = !has_handicap(pplayer, H_MAP);
@@ -3319,7 +3319,7 @@ bool dai_unit_can_strike_my_unit(const struct unit *attacker,
   struct pf_parameter parameter;
   struct pf_map *pfm;
   const struct tile *ptarget = unit_tile(defender);
-  int max_move_cost = attacker->moves_left;
+  long max_move_cost = attacker->moves_left;
   bool able_to_strike = FALSE;
 
   pft_fill_unit_parameter(&parameter, attacker);

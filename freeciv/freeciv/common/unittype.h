@@ -848,10 +848,10 @@ bool utype_is_moved_to_tgt_by_action(const struct action *paction,
 bool utype_pays_for_regular_move_to_tgt(const struct action *paction,
                                         const struct unit_type *utype);
 
-int utype_pays_mp_for_action_base(const struct action *paction,
+long utype_pays_mp_for_action_base(const struct action *paction,
                                   const struct unit_type *putype);
 
-int utype_pays_mp_for_action_estimate(const struct action *paction,
+long utype_pays_mp_for_action_estimate(const struct action *paction,
                                       const struct unit_type *putype,
                                       const struct player *act_player,
                                       const struct tile *act_tile,

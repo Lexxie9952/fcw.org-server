@@ -1019,10 +1019,10 @@ bool utype_pays_for_regular_move_to_tgt(const struct action *paction,
   specified action will consume in the actor unit type without taking
   effects or regular moves into account.
 **************************************************************************/
-int utype_pays_mp_for_action_base(const struct action *paction,
+long utype_pays_mp_for_action_base(const struct action *paction,
                                   const struct unit_type *putype)
 {
-  int mpco = 0;
+  long mpco = 0;
 
   if (action_has_result(paction, ACTION_ATTACK)) {
     if (utype_has_flag(putype, UTYF_ONEATTACK)) {
@@ -1039,14 +1039,14 @@ int utype_pays_mp_for_action_base(const struct action *paction,
   Returns an estimate of the amount of movement points successfully
   performing the specified action will consume in the actor unit type.
 **************************************************************************/
-int utype_pays_mp_for_action_estimate(const struct action *paction,
+long utype_pays_mp_for_action_estimate(const struct action *paction,
                                       const struct unit_type *putype,
                                       const struct player *act_player,
                                       const struct tile *act_tile,
                                       const struct tile *tgt_tile)
 {
   const struct tile *post_action_tile;
-  int mpco = utype_pays_mp_for_action_base(paction, putype);
+  long mpco = utype_pays_mp_for_action_base(paction, putype);
 
   if (utype_is_moved_to_tgt_by_action(paction, putype)) {
     post_action_tile = tgt_tile;

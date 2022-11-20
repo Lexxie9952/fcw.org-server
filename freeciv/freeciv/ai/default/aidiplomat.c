@@ -84,7 +84,7 @@ static bool is_city_surrounded_by_our_spies(struct player *pplayer,
                                             struct city *pcity);
 
 static void find_city_to_diplomat(struct player *pplayer, struct unit *punit,
-                                  struct city **ctarget, int *move_dist,
+                                  struct city **ctarget, long *move_dist,
                                   struct pf_map *pfm);
 
 /**************************************************************************//**
@@ -187,7 +187,8 @@ void dai_choose_diplomat_offensive(struct ai_type *ait,
     struct pf_map *pfm;
     struct pf_parameter parameter;
     struct city *acity;
-    int want, loss, p_success, p_failure, time_to_dest;
+    int want, loss, p_success, p_failure;
+    long time_to_dest;
     int gain_incite = 0, gain_theft = 0, gain = 1;
     int incite_cost;
     struct unit *punit = unit_virtual_create(
@@ -306,7 +307,7 @@ void dai_choose_diplomat_offensive(struct ai_type *ait,
     if (want > choice->want) {
       log_base(LOG_DIPLOMAT_BUILD,
                "%s, %s: %s is desired with want %d to spy in %s (incite "
-               "want %d cost %d gold %d, tech theft want %d, ttd %d)",
+               "want %d cost %d gold %d, tech theft want %d, ttd %ld)",
                player_name(pplayer),
                city_name_get(pcity),
                utype_rule_name(ut),
@@ -495,7 +496,7 @@ static bool is_city_surrounded_by_our_spies(struct player *pplayer,
   if none available on this continent.  punit can be virtual.
 ******************************************************************************/
 static void find_city_to_diplomat(struct player *pplayer, struct unit *punit,
-                                  struct city **ctarget, int *move_dist,
+                                  struct city **ctarget, long *move_dist,
                                   struct pf_map *pfm)
 {
   bool has_embassy;
@@ -894,7 +895,7 @@ void dai_manage_diplomat(struct ai_type *ait, struct player *pplayer,
   /* If we are not busy, acquire a target. */
   if (unit_data->task == AIUNIT_NONE) {
     enum ai_unit_task task;
-    int move_dist; /* dummy */
+    long move_dist; /* dummy */
 
     find_city_to_diplomat(pplayer, punit, &ctarget, &move_dist, pfm);
 

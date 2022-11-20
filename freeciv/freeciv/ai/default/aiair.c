@@ -332,7 +332,7 @@ void dai_manage_airunit(struct ai_type *ait, struct player *pplayer,
 {
   struct tile *dst_tile = unit_tile(punit);
   /* Loop prevention */
-  int moves = punit->moves_left;
+  long moves = punit->moves_left;
   int id = punit->id;
   struct pf_parameter parameter;
   struct pf_map *pfm;

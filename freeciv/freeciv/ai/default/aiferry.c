@@ -400,7 +400,7 @@ static long combined_land_sea_move(const struct tile *src_tile,
                                   enum pf_move_scope dst_scope,
                                   const struct pf_parameter *param)
 {
-  int move_cost;
+  long move_cost;
 
   if (!((PF_MS_NATIVE | PF_MS_CITY) & dst_scope)) {
     /* Any-to-Sea */
