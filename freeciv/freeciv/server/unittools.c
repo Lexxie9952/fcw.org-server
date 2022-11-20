@@ -1282,7 +1282,7 @@ void unit_activity_complete(struct unit *punit)
 **************************************************************************/
 static void update_unit_activity(struct unit *punit, time_t now)
 {
-  struct player *pplayer = unit_owner(punit);
+  //struct player *pplayer = unit_owner(punit);
   enum unit_activity activity = punit->activity;
   int activity_rate = get_activity_rate_this_turn(punit);
   struct unit_wait *wait;
