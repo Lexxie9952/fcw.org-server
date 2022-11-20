@@ -4340,7 +4340,7 @@ static bool unit_bombard(struct unit *punit, struct tile *ptile,
         // Attacker loses no hit points so suffers no injured-caused mp loss, but
         // defender indeed does. Note if defender is a retaliator, this will be
         // role reversal later when function is called again.
-        pdefender->moves_left = unit_move_rate(pdefender) - def_moves_used; /////////////////////////////////////// should be -= def_moves_used ? 
+        pdefender->moves_left = unit_move_rate(pdefender) - def_moves_used;
         if (pdefender->moves_left<0) pdefender->moves_left = 0;
         send_unit_info(NULL, pdefender);
 
