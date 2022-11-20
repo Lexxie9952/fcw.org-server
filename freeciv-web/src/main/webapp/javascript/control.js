@@ -4557,6 +4557,19 @@ function handle_context_menu_callback(key)
 }
 
 /**************************************************************************
+  A wrapper for activate_goto() with an event to detect shift-click
+  for delayed_goto_active. Called when clicking the GOTO order button. 
+**************************************************************************/
+function activate_goto_button(ev)
+{
+  if (ev.shiftKey) {
+    delayed_goto_active = true;
+    add_client_message("Delayed "+(patrol_mode ? "patrol" : "GOTO")+" active");
+  }
+  activate_goto();
+}
+
+/**************************************************************************
   Activate a regular goto.
 **************************************************************************/
 function activate_goto()
@@ -7256,6 +7269,19 @@ function key_unit_disband()
   });
   setSwalTheme();
   deactivate_goto(false);
+}
+
+/**************************************************************************
+  Called when clicking the order button for Go..And. This is a wrapper
+  for key_unit_go_and() that allows clicking it with the shift key
+  to trigger delayed_goto_active.
+**************************************************************************/
+function unit_go_and_button(ev) {
+  if (ev.shiftKey) {
+    add_client_message("Delayed GO-AND active.");
+  }
+
+  key_unit_go_and(ev.shiftKey);
 }
 /**************************************************************************
   Activate "Go and..." action selection for GOTO and RALLY points

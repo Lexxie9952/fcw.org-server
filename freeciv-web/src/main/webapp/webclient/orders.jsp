@@ -1,14 +1,14 @@
 <div id="game_unit_orders_default">  
-  <div id="order_goand" class="order_button" title="Go to tile and do action (ctrl-alt-G)">
-    <span style="cursor:pointer" onclick="key_unit_go_and(false);"><img src="/images/orders/go_and.png" name="goand_button" alt="" border="0" width="30" height="30"></span>
+  <div id="order_goand" class="order_button" title="Go-and-Do action (ctrl-alt-G). Shift-click to delay.">
+    <span style="cursor:pointer" onclick="unit_go_and_button(event);"><img src="/images/orders/go_and.png" name="goand_button" alt="" border="0" width="30" height="30"></span>
   </div>
   
-  <div id="order_goto" class="order_button" title="Go to tile (G)">
-    <span style="cursor:pointer" onclick="activate_goto();"><img src="/images/orders/goto_default.png" name="goto_button" alt="" border="0" width="30" height="30"></span>
+  <div id="order_goto" class="order_button" title="Go to tile (G). Shift-click to delay.">
+    <span style="cursor:pointer" onclick="activate_goto_button(event);"><img src="/images/orders/goto_default.png" name="goto_button" alt="" border="0" width="30" height="30"></span>
   </div>
 
-  <div id="order_patrol" class="order_button not_mobile" title="Patrol (ctrl-P)">
-    <span style="cursor:pointer" onclick="patrol_mode=true;activate_goto();"><img src="/images/orders/patrol.png" name="patrol_button" alt="" border="0" width="30" height="30"></span>
+  <div id="order_patrol" class="order_button not_mobile" title="Patrol (ctrl-P). Shift-click to delay.">
+    <span style="cursor:pointer" onclick="patrol_mode=true;activate_goto_button(event);"><img src="/images/orders/patrol.png" name="patrol_button" alt="" border="0" width="30" height="30"></span>
   </div>
 
   <div id="order_upgrade" class="order_button not_mobile" title="Upgrade unit (U)">
