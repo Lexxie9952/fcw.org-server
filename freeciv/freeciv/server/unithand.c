@@ -3892,11 +3892,13 @@ void handle_rally_path_req(struct player *pplayer, int city_id,
   fc_assert(ptile);
   unit_tile_set(punit, ptile);
   /* Other stuff: */
-  punit->id = 0; // Virtual unit id == 0
-  punit->homecity = 0; // homeless /////////////////////////////////////////////////////////// eh, should maybe be real city
-  punit->hp = 1; // not dead ///////////////////////////////////////////////////////////////// this would affect move_rate
-  punit->moves_left = utype->move_rate; // full moves *************************************** TODO: use unit_move_rate(punit) instead for bouses
-  punit->moved = false; // fresh
+  punit->id = 0;                             // Virtual unit id == 0
+  punit->homecity = pcity->id;               // was: 0
+  punit->hp = utype->hp;                     // was: 1
+  punit->moved = false;                      // fresh and ready for bonuses, etc.
+  punit->tile = ptile;                       // was: unset
+  punit->veteran = city_production_unit_veteran_level(pcity, utype);
+  punit->moves_left = unit_move_rate(punit); // was: utype->move_rate
 
   do_path_req(pplayer, punit, goal, -1, -1, -1);
 
