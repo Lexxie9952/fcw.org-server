@@ -835,6 +835,21 @@ static void unit_restore_movepoints(struct player *pplayer, struct unit *punit)
 }
 
 /**********************************************************************//**
+  Iterate through all units for a player and restore their move points.
+  Has to be called before player/unit activities and orders processing
+  in order to avoid some units getting their mp refreshed AFTER another
+  player's units affected their mp.
+**************************************************************************/
+void update_unit_move_points(struct player *pplayer)
+{
+  unit_list_iterate_safe(pplayer->units, punit) {
+  /* Cache moves_left for later calculating of unit activity progress: */
+    punit->server.moves_left_at_start = punit->moves_left;
+    unit_restore_movepoints(pplayer, punit);
+  } unit_list_iterate_safe_end;
+}
+
+/**********************************************************************//**
   Iterate through all units and update them.
 **************************************************************************/
 void update_unit_activities(struct player *pplayer)
@@ -1272,8 +1287,9 @@ static void update_unit_activity(struct unit *punit, time_t now)
   int activity_rate = get_activity_rate_this_turn(punit);
   struct unit_wait *wait;
   time_t wake_up;
-  int moves_left_at_start = punit->moves_left;
-  //const struct unit_type *act_utype = unit_type_get(punit);
+  /* Value now has to be cached by update_unit_move_points() 
+  long moves_left_at_start = punit->moves_left; */
+  long moves_left_at_start = punit->server.moves_left_at_start;
   
   /* Fortify order has separate wait time setting (or lack thereof) */
   if (activity==ACTIVITY_FORTIFYING && (game.server.unitwaittime_style & UWT_FORTIFY) ) {
@@ -1282,7 +1298,12 @@ static void update_unit_activity(struct unit *punit, time_t now)
     wake_up = punit->server.action_timestamp + (time_t)game.server.unitwaittime;
   }
 
-  unit_restore_movepoints(pplayer, punit);
+  /* Now that Freeciv has actions from some units that affect the mp of others,
+     mp restoration must happen for all players' units prior to any other 
+     activity/order processing. See update_unit_move_points() called by
+     srv_main() prior to any other player/unit iterating.
+
+  unit_restore_movepoints(pplayer, punit); */
 
   switch (activity) {
   /*  These activities have no TC exploitability thus no uwt handling */
@@ -1668,7 +1689,7 @@ void place_partisans(struct tile *pcenter, struct player *powner,
   (If specified cost is -1, then teleportation costs all movement.)
 **************************************************************************/
 bool teleport_unit_to_city(struct unit *punit, struct city *pcity,
-                           int move_cost, bool verbose)
+                           long move_cost, bool verbose)
 {
   struct tile *src_tile = unit_tile(punit), *dst_tile = pcity->tile;
 
@@ -2969,7 +2990,7 @@ void kill_unit(struct unit *pkiller, struct unit *punit, bool vet)
               int curr_def_bonus;
               int def_bonus = 0;
               struct tile *dsttile = NULL;
-              int move_cost;
+              long move_cost;
 
               fc_assert(vunit->hp > 0);
 
@@ -4799,7 +4820,7 @@ static void unit_move_data_unref(struct unit_move_data *pdata)
  that aren't on a GOTO looping through a multi-tile voyage. See 
  unit_move_real for further explanation.
 **************************************************************************/
-bool unit_move(struct unit *punit, struct tile *pdesttile, int move_cost,
+bool unit_move(struct unit *punit, struct tile *pdesttile, long move_cost,
                struct unit *embark_to, bool find_embark_target,
                bool conquer_city_allowed)
 {
@@ -4827,7 +4848,7 @@ bool unit_move(struct unit *punit, struct tile *pdesttile, int move_cost,
 
   Returns TRUE iff unit still alive.
 **************************************************************************/
-bool unit_move_real(struct unit *punit, struct tile *pdesttile, int move_cost,
+bool unit_move_real(struct unit *punit, struct tile *pdesttile, long move_cost,
                struct unit *embark_to, bool find_embark_target,
                bool conquer_city_allowed, bool first_move)
 {
@@ -4944,12 +4965,29 @@ bool unit_move_real(struct unit *punit, struct tile *pdesttile, int move_cost,
     double cargo_move_rate = utype_move_rate(unit_type_get(pcargo),
                                            NULL, unit_owner(pcargo),
                                            pcargo->veteran, pcargo->hp,
-                                           NULL);  
-    pcargo->moves_left = (double)pcargo->moves_left + 0.5 /*move_frag round*/ 
+                                           NULL);
+
+/* BREAK GLASS IN CASE OF DEBUG
+    notify_player(pplayer, unit_tile(punit), E_UNIT_ORDERS, ftc_server,
+                  _("%s passive cargo moves_left = %.0lf - (%.0lf/%.0lf) * %.0lf * %.1lf = %.0lf "),
+                  unit_link(pcargo),
+                  (double)(pcargo->moves_left + 0.5),
+                  (double)(move_cost),
+                  (double)(unit_move_rate(punit)),
+                  cargo_move_rate,
+                  (double)get_unit_bonus(pcargo, EFT_PASSENGER_MOVE_COST_BP) / SINGLE_MOVE,
+
+                  (double)(pcargo->moves_left + 0.5   // move_frag round
                        - ((double)move_cost/(double)unit_move_rate(punit))
                        * cargo_move_rate
-                       * get_unit_bonus(pcargo, EFT_PASSENGER_MOVE_COST_BP) / 10080;
-    pcargo->moves_left = MAX(0, pcargo->moves_left);                         
+                       * get_unit_bonus(pcargo, EFT_PASSENGER_MOVE_COST_BP) / SINGLE_MOVE)
+                  ); */
+
+    pcargo->moves_left = (double)pcargo->moves_left + 0.5   // move_frag round 
+                       - ((double)move_cost/(double)unit_move_rate(punit))
+                       * cargo_move_rate
+                       * get_unit_bonus(pcargo, EFT_PASSENGER_MOVE_COST_BP) / SINGLE_MOVE;
+    pcargo->moves_left = MAX(0, pcargo->moves_left);
                                                       
   } unit_cargo_iterate_end;
 

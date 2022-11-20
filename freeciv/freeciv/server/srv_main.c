@@ -1355,7 +1355,18 @@ static void begin_phase(bool is_new_phase)
           }
         }
       }
-    } whole_map_iterate_end;    
+    } whole_map_iterate_end;
+    /* Due to passive transport move costs and other actors now 
+       able to do TC-processed actions which affect tgt_unit->moves_left,
+       move point restoration now has to happen for ALL players' units
+       before any single one is allowed to process activity/orders.
+       An ally's Carrier may move BEFORE we get move points restored
+       on a Fighter, yet the Fighter would need passenger move cost
+       deducted from its fully restored points and NOT get mp fully
+       restored AFTER moving! */
+    phase_players_iterate(pplayer) {
+      update_unit_move_points(pplayer);
+    } phase_players_iterate_end;
     phase_players_iterate(pplayer) {
       update_unit_activities(pplayer);
       flush_packets();

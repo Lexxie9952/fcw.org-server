@@ -109,6 +109,7 @@ bool is_airunit_refuel_point(const struct tile *ptile,
 /* turn update related */
 void player_restore_units(struct player *pplayer);
 void update_unit_activities(struct player *pplayer);
+void update_unit_move_points(struct player *pplayer);
 void execute_unit_orders(struct player *pplayer);
 void finalize_unit_phase_beginning(struct player *pplayer);
 
@@ -121,7 +122,7 @@ time_t scramble_uwt_stamp(time_t stamptime); /* removes predictability exploits 
 /* various */
 void place_partisans(struct tile *pcenter, struct player *powner,
                      int count, int sq_radius);
-bool teleport_unit_to_city(struct unit *punit, struct city *pcity, int move_cost,
+bool teleport_unit_to_city(struct unit *punit, struct city *pcity, long move_cost,
 			  bool verbose);
 void resolve_unit_stacks(struct player *pplayer, struct player *aplayer,
                          bool verbose);
@@ -179,10 +180,10 @@ void do_explore(struct unit *punit);
 bool do_paradrop(struct unit *punit, struct tile *ptile, const struct action *paction);
 void unit_transport_load_send(struct unit *punit, struct unit *ptrans);
 void unit_transport_unload_send(struct unit *punit);
-bool unit_move(struct unit *punit, struct tile *pdesttile, int move_cost,
+bool unit_move(struct unit *punit, struct tile *pdesttile, long move_cost,
                struct unit *embark_to, bool find_embark_target,
                bool conquer_city_allowed);
-bool unit_move_real(struct unit *punit, struct tile *pdesttile, int move_cost,
+bool unit_move_real(struct unit *punit, struct tile *pdesttile, long move_cost,
                struct unit *embark_to, bool find_embark_target,
                bool conquer_city_allowed, bool first_move);
 

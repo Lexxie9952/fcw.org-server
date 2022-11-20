@@ -249,6 +249,8 @@ struct unit {
       int action_turn;
       struct unit_move_data *moving;
 
+      long moves_left_at_start;  // moves left prior to restoration
+
       /* The unit is in the process of dying. */
       bool dying;
 
@@ -438,7 +440,7 @@ enum unit_upgrade_result unit_upgrade_info(const struct unit *punit,
                                            char *buf, size_t bufsz);
 bool unit_can_convert(const struct unit *punit);
 
-int unit_pays_mp_for_action(const struct action *paction,
+long unit_pays_mp_for_action(const struct action *paction,
                             const struct unit *punit);
 
 bool is_losing_hp(const struct unit *punit);
