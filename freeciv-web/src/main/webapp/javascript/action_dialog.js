@@ -1811,9 +1811,11 @@ function select_last_action()
   var dhtml   = "";
   var buttons = [];
   var ptype = current_focus.length ? unit_type(current_focus[0]) : null;
+  var actor_id = current_focus.length ? current_focus[0].id : -1;
   var uname = ptype ? ptype.name : null;
-  var can_vigil = ptype ? /*utype_has_flag(ptype, UTYF_NONPROVOKEVIGIL) || commented out because !moved_this_turn req*/ 
-                  uname.includes("Fighter") : true;
+  var can_vigil = ptype 
+                  ? (uname.includes("Fighter") || uname.includes("Anti-Ballistic Missile"))
+                  : true; /* unknown type may or may not be able to, assume true */
   const msub = (uname == "Missile Submarine") /* "DIVE DEEP" fools utype_can_do_action
 
   /* Reset dialog page. */
@@ -1912,14 +1914,16 @@ function select_last_action()
   buttons = add_action_last_button(buttons, ACTION_STEAL_MAPS, "Steal Map");
   buttons = add_action_last_button(buttons, ACTION_STEAL_MAPS_ESC, "Steal Map Escape");
   buttons = add_action_last_button(buttons, ACTION_TRANSFORM_TERRAIN);
-
- /* Currently disallowed until actionenablers can guarantee this is legal at the server level.
-   TODO: when ruleset has actionenablers regulating ACTION_TRANSPORT_UNLOAD legality, this button can return.
-  buttons = add_action_last_button(buttons, ACTION_TRANSPORT_UNLOAD);
-*/
+  /* TODO: As more rulesets get actionenabler support, add them to the conditional: */
+  if (actor_id > 0
+     && (client_rules_flag[CRF_MP2_D] || !client_rules_flag[CRF_MP2])
+     && unit_has_cargo(units[actor_id])) {
+    buttons = add_action_last_button(buttons, ACTION_TRANSPORT_UNLOAD, "Unload Cargo", ORDER_PERFORM_ACTION, null, actor_id, -1);
+  }
   buttons = add_action_last_button(buttons, ACTION_UPGRADE_UNIT);
-  if (can_vigil)
+  if (can_vigil) {
     buttons = add_action_last_button(buttons, ACTION_COUNT, "Vigil", ORDER_ACTIVITY, ACTIVITY_VIGIL, null, -1);
+  }
   buttons = add_action_last_button(buttons, ACTION_COUNT, "NO ACTION", ORDER_LAST);
   var close_button = {
     html: render_action_image_into_button("Cancel (𝗪)", "cancel"),
