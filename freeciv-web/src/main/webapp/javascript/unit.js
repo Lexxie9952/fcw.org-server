@@ -270,6 +270,21 @@ function unit_cargo_room(punit) {
   }
   return transport_capacity - cargo_units;
 }
+/**************************************************************************
+  Returns true if punit is carrying cargo
+**************************************************************************/
+function unit_has_cargo(punit) {
+  if (!punit) return false;
+  var units_on_tile = tile_units(unit_tile(punit));
+  if (units_on_tile) {
+    for (var u=0; u < units_on_tile.length; u++) {
+      if (units_on_tile[u]['transported_by'] == punit['id']) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
 
 /**************************************************************************
  * Return true if this unit can DEBOARD.
