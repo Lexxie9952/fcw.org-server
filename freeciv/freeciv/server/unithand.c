@@ -2479,6 +2479,15 @@ void illegal_action_msg(struct player *pplayer,
                   action_id_rule_name(explnat->blocker->id));
     break;
   case ANEK_UNKNOWN:
+    /* We can grow this into a switch-case if we get more illegal actions 
+       that need richer messaging: */
+    if (stopped_action == ACTION_TRANSPORT_UNLOAD) {
+          notify_player(pplayer, unit_tile(actor),
+                  event, ftc_server,
+                  _(" &nbsp;&nbsp; %s can't unload %s at this tile."),
+                  unit_name_translation(actor),
+                  UNIT_EMOJI(target_unit));
+    } else {
     notify_player(pplayer, unit_tile(actor),
                   event, ftc_server,
                   /* TRANS: action name.
@@ -2487,6 +2496,7 @@ void illegal_action_msg(struct player *pplayer,
                   unit_name_translation(actor),
                   (is_unit_plural(actor) ? "were" : "was"),                    
                   action_id_name_translation(stopped_action));
+    }
     break;
   }
 
@@ -2955,9 +2965,64 @@ bool unit_perform_action(struct player *pplayer,
                                             paction));
     break;
   case ACTION_TRANSPORT_UNLOAD:
-    ACTION_STARTED_UNIT_UNIT(action_type, actor_unit, punit,
-                             do_unit_unload(pplayer, actor_unit, punit,
-                                            paction));
+    /* Different callers are limited in which way they can smuggle in a flag.
+       A sub_tgt_id or target_id of -1, or target_id of self, flags us to unload all units */
+    if (target_id != -1 && (actor_id != target_id) && sub_tgt_id != -1) {
+      /* Unload a single specified target unit */
+      ACTION_STARTED_UNIT_UNIT(action_type, actor_unit, punit,
+                              do_unit_unload(pplayer, actor_unit, punit,
+                                              paction));
+    } else { /* attempt to ACTION_TRANSPORT_UNLOAD all cargo: */
+      bool success = false; /* Will return TRUE if at least one successful unload happened in the batch-unloading */
+      int *cargo_id = fc_calloc(unit_type_get(actor_unit)->transport_capacity+1, sizeof(int));
+      char unload_string[2048] = {'\0'};
+      int passengers = 0;
+
+      /* Get array list of cargo units and their count: */
+      unit_cargo_iterate(actor_unit, punit) {
+        if (!punit || !unit_is_alive(punit->id)) continue; /* skip over dead cargo */
+          cargo_id[passengers++] = punit->id;
+          /* build the unload message */
+          if (passengers > 1) strcat(unload_string, ",");
+          strcat(unload_string, UNIT_EMOJI(punit));
+      } unit_cargo_iterate_end;
+
+      notify_player(unit_owner(actor_unit), unit_tile(actor_unit), E_UNIT_BUILT,
+                ftc_server, _("%s #%d unloading %s"), 
+                unit_tile_link(actor_unit), actor_id, unload_string);
+
+      /* Attempt to unload each passenger: */
+      for (int i=0; i < passengers; i++) {
+        struct unit *pcargo = game_unit_by_number(cargo_id[i]);
+        if (!pcargo || !unit_is_alive(pcargo->id)) continue;
+
+        if (pcargo && is_action_enabled_unit_on_unit(action_type, actor_unit, pcargo)) {
+          script_server_signal_emit("action_started_unit_unit",
+                                    action_by_number(action_type), actor_unit, pcargo);
+          if (!actor_unit || !unit_is_alive(actor_id)) {
+            /* Actor unit destroyed during pre-action Lua. No actor, no action! */
+            FC_FREE(cargo_id);
+            return FALSE;
+          }
+          if (!pcargo || !unit_is_alive(pcargo->id)) {
+            /* Target unit was destroyed during pre-action Lua. */
+            continue; // Try the next cargo unit.
+          }
+          bool local_success = do_unit_unload(pplayer, actor_unit, pcargo, paction);
+          success = success || local_success; 
+          if (local_success) {
+            action_success_actor_price(paction, actor_id, actor_unit);
+            action_success_target_pay_mp(paction, pcargo->id, pcargo);
+          }
+        } else {
+          illegal_action(pplayer, actor_unit, action_type,
+                        pcargo ? unit_owner(pcargo) : NULL, NULL, NULL, pcargo,
+                        TRUE, requester);
+        }
+      }
+      FC_FREE(cargo_id);
+      return success;
+    }
     break;
   case ACTION_TRANSPORT_BOARD:
     ACTION_STARTED_UNIT_UNIT(action_type, actor_unit, punit,
