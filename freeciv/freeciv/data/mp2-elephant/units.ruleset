@@ -79,23 +79,29 @@ flags =
   }
 
 ; RESERVED User-UCF's: these can be included by creators to immediately access special 
-; deluxe game mechanics for any of their ruleset unit_classes. Currently the only 
-; reserved user-UCF is the "Missile" UCF, which tells the server to spend the unit after
-; Pillage, and destroy the unit if its transporter is lost (unless in a city or native
-; base or co-existing on a tile with another transport who has remaining capacity to
-; 'save' the cargo unit.). For your ruleset to opt in to using a reserved user-UCF,
-; simply include the following uncommented line in your "custom unit class flags", below:
-;
-;  _("Missile"), _("Unit is destroyed after attack, pillage, or loss of its transporter.")
-;
-; __________________________________________________________________________
+; deluxe game mechanics for any of their ruleset unit_classes. If a class has a user
+; unit class flag with a ";RESERVED:" indicator, specially coded mechanics inside the
+; server will apply to it. To access these mechanics, simply add a user class-flag with
+; the reserved name to the class_flags={} list below, then add it to any unit class.
+; ____________________________________________________________________________________________
 ; Names for custom unit class flags. There can be up to 12 of these.
 ; name          = rule name; In some circumstances user may see this
 ;                 as part of some sentences, so try to make it descriptive
 ;                 and sensible.
 ; helptxt       = displayed in the help for unit types belonging to a class
 ;                 with this flag (optional)
-;___________________________________________________________________________
+;______________________________________________________________________________________________
+; "Missile"           = SERVER CODED: Unit is spent after Pillage, and destroyed if its
+;                       transport is lost (unless inside a city, or native base, or co-existing
+;                       on a tile with another transport who has remaining capacity to 'save'
+;                       the cargo unit.). RULESET CODED: spent after attack.
+; "AttFromNonNative"  = RULESET CODED: Unit Class can launch attack from non-native tile (against
+;                       native one). This applies for both attacking from transport or
+;                       cities. If only some unit types of the class should
+;                       get this property, use type flag "NonNativeAttack"
+; "NoCarrierRefuel"  =  SERVER CODED: May not embark on transports outside city or native base; 
+;                       This is a hack-patch needed for pftools.c to not assume transports
+;                       with no legal Board/Embark enabler count as refuel tile.
 class_flags =
   { "name", "helptxt"
 ;RESERVED:
@@ -110,7 +116,8 @@ class_flags =
     _("DelayLoad"), _("Fractional move points spent to load or unload this unit.")
     _("UnloadOnce"), _("Loses 2/3 moves when unloaded.")
     _("NeverTired"), _("Always atttacks at full strength; never tired attack.")
-    _("NoCarrierRefuel")  ; May not embark on transports outside city or native base; needed for pftools.c to not assume refuel tile.
+;RESERVED:
+    _("NoCarrierRefuel")
   }
 
 [veteran_system]
@@ -187,10 +194,6 @@ veteran_move_bonus = 0, 0, 0, 0, 1008, 1008, 1008
 ;                       still work that tile
 ; "AttackNonNative"   = Unit Class can attack units on non-native tiles. Unit type
 ;                       flag "Only_Native_Attack" can override this
-; "AttFromNonNative"  = Unit Class can launch attack from non-native tile (against
-;                       native one). This applies for both attacking from transport or
-;                       cities. If only some unit types of the class should
-;                       get this property, use type flag "NonNativeAttack"
 ; "KillCitizen"       = Upon successful attack against a city, unit kills one
 ;                       citizen. The effect "Unit_No_Lose_Pop" and the server
 ;                       setting 'killcitizen' can disable this.
@@ -205,11 +208,203 @@ veteran_move_bonus = 0, 0, 0, 0, 1008, 1008, 1008
 ; **********************************************************************************
 ; **********************************************************************************
 ; missile flag not class, indicates suicide explosion and possibly other things.
+;
+; Class LIST:
+; Land, Big Land, LandNoKill, LandAirSea, LandImmobile, LandRail, LandRoad, Cargo
+; Trireme, RiverShip, Sea, Submarine:
+; Helicopter, Air, AirProtect, Air_High_Altitude, Balloon, Zeppelin
+; Missile, Bomb, Bomb2, Space
+;
+;                   Land bgLand LNK LAS Landim lRail lRoad Cargo   tREME rShip Sea Sub    Hel     Air aPRTCT AHH Bal Zep  Misl  Bomb Bomb2 Space     grouper
+;ZOC                 ✅   ✅   ✅  ✅   ✅    ✅    ✅   ✅  ➗ ⛔   ✅   ✅ ⛔➗  ⛔ ➗  ⛔   ⛔   ⛔ ⛔  ⛔➗ ⛔   ⛔   ⛔    ⛔      
+;TerrainSpeed        ✅   ✅   ✅  ✅   ✅    ✅    ✅   ✅  ➗ ⛔   ⛔   ⛔ ⛔➗  ⛔ ➗  ⛔   ⛔   ⛔ ⛔  ⛔➗ ⛔   ⛔   ⛔    ⛔       < Land
+;TerrainDefense      ✅   ✅   ✅  ✅   ✅    ✅    ✅   ⛔  ➗ ⛔   ⛔   ⛔ ⛔➗  ⛔ ➗  ⛔   ⛔   ⛔ ⛔  ⛔➗ ⛔   ⛔   ⛔    ⛔
+;Unreachable         ⛔   ⛔   ⛔  ⛔   ⛔    ✅    ⛔   ⛔  ➗ ⛔   ⛔   ⛔ ✅➗  ✅ ➗  ✅   ✅   ✅ ✅  ✅➗ ✅   ✅   ✅    ✅       
+;DamageSlows         ✅   ✅   ✅  ✅   ✅    ⛔    ✅   ⛔  ➗ ✅   ✅   ✅ ✅➗  ⛔ ➗  ⛔   ⛔   ⛔ ⛔  ⛔➗ ⛔   ⛔   ⛔    ⛔       
+;DoesntOccupyTile    ⛔   ⛔   ⛔  ⛔   ⛔    ⛔    ⛔   ⛔  ➗ ⛔   ⛔   ⛔ ⛔➗  ⛔ ➗  ✅   ✅   ✅ ✅  ✅➗ ✅   ✅   ✅    ✅       < Air !Heli
+;AttackNonNative     ⛔   ⛔   ⛔  ✅   ✅    ⛔    ⛔   ⛔  ➗ ⛔   ✅   ✅ ✅➗  ⛔ ➗  ⛔   ⛔   ⛔ ⛔  ⛔➗ ⛔   ⛔   ✅    ⛔
+;AttFromNonNative    ⛔   ⛔   ⛔  ✅   ✅    ⛔    ⛔   ⛔  ➗ ✅   ✅   ✅ ✅➗  ⛔ ➗  ⛔   ⛔   ⛔ ⛔  ⛔➗ ⛔   ⛔   ⛔    ⛔       
+;CanFortify          ✅   ✅   ✅  ✅   ✅    ⛔    ✅   ⛔  ➗ ⛔   ⛔   ⛔ ⛔➗  ⛔ ➗  ⛔   ⛔   ⛔ ⛔  ⛔➗ ⛔   ⛔   ⛔    ⛔ 
+;KillCitizen         ✅   ✅   ⛔  ✅   ✅    ✅    ✅   ✅  ➗ ⛔   ⛔   ⛔ ⛔➗  ⛔ ➗  ⛔   ⛔   ⛔ ⛔  ⛔➗ ⛔   ⛔   ⛔    ⛔
+;CanPillage          ✅   ✅   ✅  ✅   ⛔    ⛔    ⛔   ⛔  ➗ ⛔   ⛔   ✅ ✅➗  ⛔ ➗  ⛔   ⛔   ⛔ ⛔  ⛔➗ ⛔   ⛔   ⛔    ⛔
+;Airliftable         ✅   ✅   ✅  ✅   ⛔    ⛔    ⛔   ⛔  ➗ ⛔   ⛔   ⛔ ⛔➗  ✅ ➗  ✅   ✅   ✅ ✅  ⛔➗ ✅   ✅   ✅    ✅       < Air +Heli
+;BorderPolice        ✅   ✅   ✅  ✅   ⛔    ⛔    ⛔   ⛔  ➗ ⛔   ⛔   ⛔ ⛔➗  ⛔ ➗  ⛔   ✅   ⛔ ⛔  ⛔➗ ⛔   ⛔   ⛔    ⛔
+;CargoRestrained     ✅   ✅   ✅  ⛔   ⛔    ⛔    ✅   ⛔  ➗ ✅   ✅   ✅ ✅➗  ⛔ ➗  ⛔   ⛔   ⛔ ⛔  ⛔➗ ⛔   ⛔   ⛔    ⛔       
+;WaterVessel         ⛔   ⛔   ⛔  ⛔   ⛔    ⛔    ⛔   ⛔  ➗ ✅   ✅   ✅ ✅➗  ⛔ ➗  ⛔   ⛔   ⛔ ⛔  ⛔➗ ⛔   ⛔   ⛔    ⛔       < Ship-types
+;NeverTired          ⛔   ⛔   ⛔  ⛔   ⛔    ⛔    ⛔   ⛔  ➗ ✅   ✅   ✅ ✅➗  ✅ ➗  ✅   ✅   ✅ ✅  ✅➗ ✅   ✅   ✅    ✅       < !Land
+;CanOccupyCity       ✅   ✅   ✅  ✅   ⛔    ⛔    ⛔   ⛔  ➗ ⛔   ⛔   ⛔ ⛔➗  ✅ ➗  ⛔   ⛔   ⛔ ⛔  ⛔➗ ⛔   ⛔   ⛔    ⛔
+;BuildAnywhere       ✅   ✅   ✅  ✅   ✅    ✅    ✅   ✅  ➗ ⛔   ⛔   ⛔ ⛔➗  ⛔ ➗  ⛔   ⛔   ⛔ ⛔  ⛔➗ ⛔   ⛔   ✅    ⛔
+;CollectRansom       ✅   ✅   ✅  ✅   ⛔    ⛔    ⛔   ⛔  ➗ ⛔   ⛔   ⛔ ⛔➗  ✅ ➗  ⛔   ⛔   ⛔ ⛔  ⛔➗ ⛔   ⛔   ⛔    ⛔
+;DelayLoad           ✅   ✅   ✅  ✅   ✅    ✅    ✅   ✅  ➗ ⛔   ⛔   ⛔ ⛔➗  ⛔ ➗  ⛔   ⛔   ⛔ ⛔  ⛔➗ ⛔   ✅   ✅    ⛔       < Bombs (+Land)
+;NoCarrierRefuel     ⛔   ⛔   ⛔  ⛔   ⛔    ⛔    ⛔   ⛔  ➗ ⛔   ⛔   ⛔ ⛔➗  ⛔ ➗  ⛔   ⛔   ⛔ ⛔  ⛔➗ ✅   ⛔   ⛔    ⛔       < [Air !Missile]
+;-------------------------------------------------------------------------------------------------Land classes:
+[unitclass_land]
+name          = _("?unitclass:Land")
+min_speed     = 1
+hp_loss_pct   = 0
+flags         = "TerrainSpeed", "DamageSlows", "CanOccupyCity", "BuildAnywhere",
+                "CollectRansom", "ZOC", "CanFortify", "CanPillage",
+                "TerrainDefense", "KillCitizen", "Airliftable", "BorderPolice",
+                "CargoRestrained", "DelayLoad"
+helptext      = _("\
+  • Can be airlifted from a suitable city.\
+")
+
+[unitclass_bigland]
+name          = _("?unitclass:Big Land")
+min_speed     = 1
+hp_loss_pct   = 0
+flags         = "TerrainSpeed", "DamageSlows", "CanOccupyCity", "BuildAnywhere",
+                "CollectRansom", "ZOC", "CanFortify", "CanPillage",
+                "TerrainDefense", "KillCitizen", "Airliftable", "BorderPolice",
+                "CargoRestrained", "DelayLoad"
+helptext      = _("\
+  • Can be airlifted from a suitable city.\
+")
+
+[unitclass_landnokill]
+name          = _("?unitclass:LandNoKill")
+min_speed     = 1
+hp_loss_pct   = 0
+flags         = "TerrainSpeed", "DamageSlows", "CanOccupyCity", "BuildAnywhere",
+                "CollectRansom", "ZOC", "CanFortify", "CanPillage",
+                "TerrainDefense", "Airliftable", "BorderPolice",
+                "CargoRestrained", "DelayLoad"
+helptext      = _("\
+  • Does not reduce population when attacking city.\
+")
+
+[unitclass_landairsea] ;Multipurpose for land/air/sea attacks (i.e., Marines) include "Unreachable" in the "targets = " for individual units
+name          = _("?unitclass:LandAirSea")
+min_speed     = 1
+hp_loss_pct   = 0
+flags         = "TerrainSpeed", "DamageSlows", "CanOccupyCity", "BuildAnywhere",
+                "CollectRansom", "ZOC", "CanFortify", "CanPillage",
+                "TerrainDefense", "KillCitizen", "Airliftable", 
+                "AttackNonNative", "AttFromNonNative", "BorderPolice", "DelayLoad"
+helptext      = _("\
+  • Can attack from Ships and Helicopters.\
+")
+
+[unitclass_land_immobile]
+name          = _("?unitclass:LandImmobile")
+min_speed     = 3
+hp_loss_pct   = 0
+flags         = "BuildAnywhere", "ZOC", "CanFortify", "TerrainDefense",
+                "AttFromNonNative", "AttackNonNative", "DelayLoad",
+                "TerrainSpeed"  ; so many effects and actionenablers use TerrainSpeed synonymously with land unit that we keep it to be safe
+
+[unitclass_landrail]
+name          = _("?unitclass:LandRail")
+min_speed     = 4
+hp_loss_pct   = 0
+flags         = "Unreachable", "BuildAnywhere", "ZOC", "TerrainDefense", "TerrainSpeed", "DamageSlows", "DelayLoad"
+helptext      = _("\
+  • Only able to move on railroad tiles.\
+")
+
+[unitclass_landroad]
+name          = _("?unitclass:LandRoad")
+min_speed     = 3
+hp_loss_pct   = 0
+flags         = "BuildAnywhere", "ZOC", "TerrainDefense", "DamageSlows", "TerrainSpeed", "CanFortify",
+                "CargoRestrained", "DelayLoad"
+helptext      = _("\
+  • Only able to move on road tiles.\
+")
+
 [unitclass_cargo]
 name          = _("?unitclass:Cargo")
 min_speed     = 1
 hp_loss_pct   = 0
 flags         = "BuildAnywhere", "ZOC", "TerrainSpeed", "DelayLoad"
+
+;------------------------------------------------------------------------------------------------- WaterVessel:
+
+[unitclass_trireme]                                         ;Not subject to ZOC
+name          = _("?unitclass:Trireme")
+min_speed     = 3
+hp_loss_pct   = 0
+flags         = "DamageSlows", "AttFromNonNative", "WaterVessel",
+                "NeverTired", "CargoRestrained" ;can't attack while being towed by Trawler
+
+[unitclass_rivership]                                       ;Subject to ZOC but can be individually IgZOC'd
+; /* Extra class providing ability to travel rivers */
+name          = _("?unitclass:RiverShip")
+min_speed     = 3
+hp_loss_pct   = 0
+flags         = "DamageSlows", "AttackNonNative", "AttFromNonNative", "WaterVessel",
+                "NeverTired", "ZOC", "CargoRestrained" ;can't attack while being towed by Trawler
+
+[unitclass_sea]
+name          = _("?unitclass:Sea")
+min_speed     = 4
+hp_loss_pct   = 0
+flags         = "DamageSlows", "AttackNonNative", "AttFromNonNative", "CanPillage", "WaterVessel",
+                "NeverTired", "ZOC", "CargoRestrained" ;can't attack while being towed by Trawler
+helptext      = _("\
+  • Crew Repair：each turn, regardless of movement, recovers 10% of its hit points (rounded down).\
+")
+
+[unitclass_submarine]    ; Separating the Submarine class allows it to be unreachable by Air. NOTE: not subject to ZOC.
+name          = _("?unitclass:Submarine")
+min_speed     = 5
+hp_loss_pct   = 0
+flags         = "DamageSlows", "AttackNonNative", "AttFromNonNative", "CanPillage", "Unreachable", "WaterVessel",
+                "NeverTired", "CargoRestrained" ;can't attack while being towed by Trawler
+helptext      = _("\
+  • Visibility bonus：not visible to other players unless they have a unit or city adjacent to it.\n\
+  • Crew Repair：each turn, regardless of movement, recovers 3 hit points.\
+")
+
+;------------------------------------------------------------------------------------------------- Aircraft:
+
+[unitclass_heli]
+name          = _("?unitclass:Helicopter")
+min_speed     = 1
+hp_loss_pct   = 5
+flags         = "NeverTired", "Unreachable", "CanOccupyCity", "CollectRansom", "Airliftable"
+
+[unitclass_air]                ; This class is for air units that are unreachable but do not protect a stack.
+name          = _("?unitclass:Air")
+min_speed     = 1
+hp_loss_pct   = 0
+hut_behavior  = "Frighten"
+flags         = "NeverTired", "Unreachable", "DoesntOccupyTile", "Airliftable"
+
+[unitclass_air_protect]   ; This class is for air units that can also protect a stack.
+name          = _("?unitclass:AirProtect")
+min_speed     = 1
+hp_loss_pct   = 0
+hut_behavior  = "Frighten"
+flags         = "NeverTired", "Unreachable", "DoesntOccupyTile", "Airliftable", "BorderPolice"
+helptext      = _("\
+  • INTERCEPTOR：can be given the Vigil order to auto-attack adjacent Air units.\n\
+  • AIR COVER：Most units who cannot attack this unit also cannot attack other units on the tile.\
+")
+
+[unitclass_air_high_altitude]                                   ; This class is for air units unreachable by propeller fighters
+name          = _("?unitclass:Air_High_Altitude")
+min_speed     = 1
+hp_loss_pct   = 0
+hut_behavior  = "Frighten"
+flags         = "NeverTired", "Unreachable", "DoesntOccupyTile", "Airliftable"
+
+[unitclass_balloon]
+name          = _("?unitclass:Balloon")
+min_speed     = 1
+hp_loss_pct   = 0
+hut_behavior  = "Frighten"
+flags         = "NeverTired", "Unreachable", "DoesntOccupyTile", "Airliftable"
+
+[unitclass_zeppelin]
+name          = _("?unitclass:Zeppelin")
+min_speed     = 1
+hp_loss_pct   = 0
+hut_behavior  = "Frighten"
+flags         = "NeverTired", "Unreachable", "DoesntOccupyTile"
+
+;------------------------------------------------------------------------------------------------- Special Air:
 
 [unitclass_missile]
 name          = _("?unitclass:Missile")
@@ -242,151 +437,14 @@ helptext      = _("\
   • Can be airlifted from a suitable city.\
 ")
 
-[unitclass_landrail]
-name          = _("?unitclass:LandRail")
-min_speed     = 4
-hp_loss_pct   = 0
-flags         = "Unreachable", "BuildAnywhere", "ZOC", "TerrainDefense", "TerrainSpeed", "DamageSlows", "DelayLoad"
-helptext      = _("\
-  • Only able to move on railroad tiles.\
-")
-
-[unitclass_landroad]
-name          = _("?unitclass:LandRoad")
-min_speed     = 3
-hp_loss_pct   = 0
-flags         = "BuildAnywhere", "ZOC", "TerrainDefense", "DamageSlows", "TerrainSpeed", "CanFortify",
-                "CargoRestrained", "DelayLoad"
-helptext      = _("\
-  • Only able to move on road tiles.\
-")
-
-[unitclass_land]
-name          = _("?unitclass:Land")
-min_speed     = 1
-hp_loss_pct   = 0
-flags         = "TerrainSpeed", "DamageSlows", "CanOccupyCity", "BuildAnywhere",
-                "CollectRansom", "ZOC", "CanFortify", "CanPillage",
-                "TerrainDefense", "KillCitizen", "Airliftable", "BorderPolice",
-                "CargoRestrained", "DelayLoad"
-helptext      = _("\
-  • Can be airlifted from a suitable city.\
-")
-
-[unitclass_bigland]
-name          = _("?unitclass:Big Land")
-min_speed     = 1
-hp_loss_pct   = 0
-flags         = "TerrainSpeed", "DamageSlows", "CanOccupyCity", "BuildAnywhere",
-                "CollectRansom", "ZOC", "CanFortify", "CanPillage",
-                "TerrainDefense", "KillCitizen", "Airliftable", "BorderPolice",
-                "CargoRestrained", "DelayLoad"
-helptext      = _("\
-  • Can be airlifted from a suitable city.\
-")
-
-[unitclass_land_immobile]
-name          = _("?unitclass:LandImmobile")
-min_speed     = 3
-hp_loss_pct   = 0
-flags         = "BuildAnywhere", "ZOC", "CanFortify", "TerrainDefense",
-                "AttFromNonNative", "AttackNonNative", "DelayLoad",
-                "TerrainSpeed"  ; so many effects and actionenablers use TerrainSpeed synonymously with land unit that we keep it to be safe
-
-[unitclass_landnokill]
-name          = _("?unitclass:LandNoKill")
-min_speed     = 1
-hp_loss_pct   = 0
-flags         = "TerrainSpeed", "DamageSlows", "CanOccupyCity", "BuildAnywhere",
-                "CollectRansom", "ZOC", "CanFortify", "CanPillage",
-                "TerrainDefense", "Airliftable", "BorderPolice",
-                "CargoRestrained", "DelayLoad"
-helptext      = _("\
-  • Does not reduce population when attacking city.\
-")
-
-;Land units that are multipurpose for land/air/sea attacks (i.e., anti-aircraft, marines)
-;include "Unreachable" in the targets for individual units
-[unitclass_landairsea]
-name          = _("?unitclass:LandAirSea")
-min_speed     = 1
-hp_loss_pct   = 0
-flags         = "TerrainSpeed", "DamageSlows", "CanOccupyCity", "BuildAnywhere",
-                "CollectRansom", "ZOC", "CanFortify", "CanPillage",
-                "TerrainDefense", "KillCitizen", "Airliftable", 
-                "AttackNonNative", "AttFromNonNative", "BorderPolice", "DelayLoad"
-helptext      = _("\
-  • Can attack from Ships and Helicopters.\
-")
-
-[unitclass_sea]
-name          = _("?unitclass:Sea")
-min_speed     = 4
-hp_loss_pct   = 0
-flags         = "DamageSlows", "AttackNonNative", "AttFromNonNative", "CanPillage", "WaterVessel",
-                "NeverTired", "ZOC", "CargoRestrained" ;can't attack while being towed by Trawler
-helptext      = _("\
-  • Crew Repair：each turn, regardless of movement, recovers 10% of its hit points (rounded down).\
-")
-
-; Separating the Submarine class allows it to be unreachable by Air. NOTE: not subject to ZOC.
-[unitclass_submarine]
-name          = _("?unitclass:Submarine")
-min_speed     = 5
-hp_loss_pct   = 0
-flags         = "DamageSlows", "AttackNonNative", "AttFromNonNative", "CanPillage", "Unreachable", "WaterVessel",
-                "NeverTired", "CargoRestrained" ;can't attack while being towed by Trawler
-helptext      = _("\
-  • Visibility bonus：not visible to other players unless they have a unit or city adjacent to it.\n\
-  • Crew Repair：each turn, regardless of movement, recovers 3 hit points.\
-")
-
-;Not subject to ZOC
-[unitclass_trireme]
-name          = _("?unitclass:Trireme")
-min_speed     = 3
-hp_loss_pct   = 0
-flags         = "DamageSlows", "AttFromNonNative", "WaterVessel",
-                "NeverTired", "CargoRestrained" ;can't attack while being towed by Trawler
-
-;Subject to ZOC but could be individually IgZOC'd
-[unitclass_rivership]
-; /* Extra class providing ability to travel rivers */
-name          = _("?unitclass:RiverShip")
-min_speed     = 3
-hp_loss_pct   = 0
-flags         = "DamageSlows", "AttackNonNative", "AttFromNonNative", "WaterVessel",
-                "NeverTired", "ZOC", "CargoRestrained" ;can't attack while being towed by Trawler
-
-[unitclass_heli]
-name          = _("?unitclass:Helicopter")
-min_speed     = 1
-hp_loss_pct   = 5
-flags         = "NeverTired", "Unreachable", "CanOccupyCity", "CollectRansom", "Airliftable"
-
-; This class is for air units that are unreachable but do not protect a stack.
-[unitclass_air]
-name          = _("?unitclass:Air")
-min_speed     = 1
-hp_loss_pct   = 0
-hut_behavior  = "Frighten"
-flags         = "NeverTired", "Unreachable", "DoesntOccupyTile", "Airliftable"
-
-; This class is for air units unreachable by propeller fighters
-[unitclass_air_high_altitude]
-name          = _("?unitclass:Air_High_Altitude")
-min_speed     = 1
-hp_loss_pct   = 0
-hut_behavior  = "Frighten"
-flags         = "NeverTired", "Unreachable", "DoesntOccupyTile", "Airliftable"
-
 [unitclass_space]
 name          = _("?unitclass:Space")
 min_speed     = 60
 hp_loss_pct   = 0
 hut_behavior  = "Nothing"
-flags         = "Unreachable", "DoesntOccupyTile"
+flags         = "NeverTired", "Unreachable", "DoesntOccupyTile", "Airliftable"
 
+;....................
 ;[unitclass_virtual]
 ;name          = _("?unitclass:Virtual")
 ;min_speed     = 5
@@ -395,31 +453,7 @@ flags         = "Unreachable", "DoesntOccupyTile"
 ;helptext      = _("\
 ;  • Must end each turn on Destroyer class or AEGIS Cruiser.\
 ;")
-
-; This class is for air units that can also protect a stack.
-[unitclass_air_protect]
-name          = _("?unitclass:AirProtect")
-min_speed     = 1
-hp_loss_pct   = 0
-hut_behavior  = "Frighten"
-flags         = "NeverTired", "Unreachable", "DoesntOccupyTile", "Airliftable", "BorderPolice"
-helptext      = _("\
-  • INTERCEPTOR：can be given the Vigil order to auto-attack adjacent Air units.\n\
-  • AIR COVER：Most units who cannot attack this unit also cannot attack other units on the tile.\
-")
-[unitclass_balloon]
-name          = _("?unitclass:Balloon")
-min_speed     = 1
-hp_loss_pct   = 0
-hut_behavior  = "Frighten"
-flags         = "Unreachable", "DoesntOccupyTile", "Airliftable"
-
-[unitclass_zeppelin]
-name          = _("?unitclass:Zeppelin")
-min_speed     = 1
-hp_loss_pct   = 0
-hut_behavior  = "Frighten"
-flags         = "NeverTired", "Unreachable", "DoesntOccupyTile"
+;....................
 
 ; /* <-- avoid gettext warnings
 ;
