@@ -235,8 +235,9 @@ veteran_move_bonus = 0, 0, 0, 0, 1008, 1008, 1008
 ;CanOccupyCity       ✅   ✅   ✅  ✅   ⛔    ⛔    ⛔   ⛔  ➗ ⛔   ⛔   ⛔ ⛔➗  ✅ ➗  ⛔   ⛔   ⛔ ⛔  ⛔➗ ⛔   ⛔   ⛔    ⛔
 ;BuildAnywhere       ✅   ✅   ✅  ✅   ✅    ✅    ✅   ✅  ➗ ⛔   ⛔   ⛔ ⛔➗  ⛔ ➗  ⛔   ⛔   ⛔ ⛔  ⛔➗ ⛔   ⛔   ✅    ⛔
 ;CollectRansom       ✅   ✅   ✅  ✅   ⛔    ⛔    ⛔   ⛔  ➗ ⛔   ⛔   ⛔ ⛔➗  ✅ ➗  ⛔   ⛔   ⛔ ⛔  ⛔➗ ⛔   ⛔   ⛔    ⛔
-;DelayLoad           ✅   ✅   ✅  ✅   ✅    ✅    ✅   ✅  ➗ ⛔   ⛔   ⛔ ⛔➗  ⛔ ➗  ⛔   ⛔   ⛔ ⛔  ⛔➗ ⛔   ✅   ✅    ⛔       < Bombs (+Land)
+;DelayLoad           ✅   ✅   ✅  ✅*  ✅    ✅    ✅   ✅  ➗ ⛔   ⛔   ⛔ ⛔➗  ⛔ ➗  ⛔   ⛔   ⛔ ⛔  ⛔➗ ⛔   ✅   ✅    ⛔       < Bombs (+Land)
 ;NoCarrierRefuel     ⛔   ⛔   ⛔  ⛔   ⛔    ⛔    ⛔   ⛔  ➗ ⛔   ⛔   ⛔ ⛔➗  ⛔ ➗  ⛔   ⛔   ⛔ ⛔  ⛔➗ ✅   ⛔   ⛔    ⛔
+;* = utypes have known exceptions
 ;-------------------------------------------------------------------------------------------------Land classes:
 [unitclass_land]
 name          = _("?unitclass:Land")
