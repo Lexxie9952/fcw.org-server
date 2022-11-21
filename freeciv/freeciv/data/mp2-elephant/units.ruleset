@@ -236,7 +236,7 @@ veteran_move_bonus = 0, 0, 0, 0, 1008, 1008, 1008
 ;BuildAnywhere       ✅   ✅   ✅  ✅   ✅    ✅    ✅   ✅  ➗ ⛔   ⛔   ⛔ ⛔➗  ⛔ ➗  ⛔   ⛔   ⛔ ⛔  ⛔➗ ⛔   ⛔   ✅    ⛔
 ;CollectRansom       ✅   ✅   ✅  ✅   ⛔    ⛔    ⛔   ⛔  ➗ ⛔   ⛔   ⛔ ⛔➗  ✅ ➗  ⛔   ⛔   ⛔ ⛔  ⛔➗ ⛔   ⛔   ⛔    ⛔
 ;DelayLoad           ✅   ✅   ✅  ✅   ✅    ✅    ✅   ✅  ➗ ⛔   ⛔   ⛔ ⛔➗  ⛔ ➗  ⛔   ⛔   ⛔ ⛔  ⛔➗ ⛔   ✅   ✅    ⛔       < Bombs (+Land)
-;NoCarrierRefuel     ⛔   ⛔   ⛔  ⛔   ⛔    ⛔    ⛔   ⛔  ➗ ⛔   ⛔   ⛔ ⛔➗  ⛔ ➗  ⛔   ⛔   ⛔ ⛔  ⛔➗ ✅   ⛔   ⛔    ⛔       < [Air !Missile]
+;NoCarrierRefuel     ⛔   ⛔   ⛔  ⛔   ⛔    ⛔    ⛔   ⛔  ➗ ⛔   ⛔   ⛔ ⛔➗  ⛔ ➗  ⛔   ⛔   ⛔ ⛔  ⛔➗ ✅   ⛔   ⛔    ⛔
 ;-------------------------------------------------------------------------------------------------Land classes:
 [unitclass_land]
 name          = _("?unitclass:Land")
