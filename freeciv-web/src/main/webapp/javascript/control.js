@@ -3219,6 +3219,10 @@ function do_map_click(ptile, qtype, first_time_called)
               /* ACTIVITY_SENTRY encoded inside an ORDER_FULL_MP tells FCW server to 
                 wait on this tile even if we have full move points: */
               order['activity'] = ACTIVITY_SENTRY;
+            } else if (i==0 && mouse_click_mod_key['shiftKey']) {
+              /* ACTIVITY_GOTO encoded inside an ORDER_FULL_MP tells FCW server to 
+                override waits on this tile usually triggered by less than full move points: */
+              order['activity'] = ACTIVITY_GOTO;
             }
           } else if (i + 1 != goto_path['length'] || patrol_mode) {
             /* Don't try to do an action in the middle of the path. */

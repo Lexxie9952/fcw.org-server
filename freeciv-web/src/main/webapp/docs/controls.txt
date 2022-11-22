@@ -185,6 +185,7 @@ The current and complete list of Freeciv-web controls can be found here:<br>
 <tr><td><span class="hotkey">  9</span></td><td> move north-east (alt-o)</td></tr>
 <tr><td><span class="hotkey">double-tap drag</span></td><td> move unit </td></tr>
 <tr><td><span class="hotkey">shift-click</span></td><td>on adjacent tile during GOTO: make unit GOTO instead of MOVE</td></tr>
+<tr><td><span class="hotkey">shift-click</span></td><td>on any tile during GOTO: force unit to do GOTO without refuel stopover</td></tr>
 </table>
 <h2>Other Keyboard Shortcuts:</h2><table class="ctrls_tbl"><tr><td><span class="hotkey">b</span></td><td> Buy production in city under mouse cursor</td></tr>
 <tr><td><span class="hotkey">w</span></td><td> Return to map: close tab/window/pop-up</td></tr>
