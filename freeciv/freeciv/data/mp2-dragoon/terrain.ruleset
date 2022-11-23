@@ -1524,7 +1524,8 @@ disappearance_chance    = 1500     ; 1500/10000 = 15% per turn if unoccupied
 build_time     = 3
 removal_time   = 0
 unit_seen      = "Hidden"
-native_to      = "Land", "LandAirSea", "LandNoKill", "Big Land", "Helicopter"
+native_to      = "Land", "Big Land", "LandNoKill", "LandAirSea", "LandRoad", "LandRail",
+                 "Cargo", "Helicopter"
 flags          = "NativeTile", "NoStackDeath"
 helptext       = _("\
 Since the dawn of time, concealed terrain was\

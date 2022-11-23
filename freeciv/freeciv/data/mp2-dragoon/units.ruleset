@@ -68,7 +68,7 @@ flags =
     _("AntiAir"), _("Anti-Air bonus of this unit is less effective against Stealth, which has a 25% bonus against this unit.")
 ;;;   _("NeverBlocked"), _("Bypasses unreachable units when attacking a tile.")   ; UNCOMMENT THIS IF NOT USING LEXXIE’s PATCH FOR THIS FLAG
 ;;;    _("MultiSlot"), _("Cities with proper requirements can produce more than one of these per turn.") ;uncomment if you don’t have slot_control patch
-    _("CanHide"), _("In appropriate terrain, this unit can make a Hideout, which will conceal all land units on the tile.")
+    _("CanHide"), _("In appropriate terrain, this unit can make a Hideout, which conceals all land and helicopter units on the tile.")
     _("WillNever"), _("Can't vigil or auto-attack.")
 ;;;    _("TransportDefender"), _("Can defend while transported on non-native tiles.") ;uncomment if you don’t have TransportDefender patch
     _("NonMilAttack"), _("Has military capacity but for peaceful purposes, can enter territories with whom you are at Peace")
