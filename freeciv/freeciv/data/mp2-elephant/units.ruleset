@@ -3980,7 +3980,7 @@ move_rate     = 21
 vision_radius_sq = 12
 transport_cap = 0
 fuel          = 2
-paratroopers_mr_sub = 262322 ;100,00000,00,0101,100,1,0 - max_ATKs=4, bbd_retal_rate=0, iPill_rand_tgts=0, iPill_odds=-5 pentads=75%, iPill_moves=4, iPillage=1, ATK_Stay_Fortified=0
+paratroopers_mr_sub = 196786 ;011,00000,00,0101,100,1,0 - max_ATKs=4, bbd_retal_rate=0, iPill_rand_tgts=0, iPill_odds=-5 pentads=75%, iPill_moves=4, iPillage=1, ATK_Stay_Fortified=0
 ;NOTE：iPillage changes in rules require client_rules_flag and get_what_can_unit_pillage_from() changes.
 uk_happy      = 0
 uk_shield     = 1
@@ -4011,7 +4011,7 @@ Ground Strike Fighters upgrade the Dive Bomber. They can’t block attacks on ot
  units on their tile, nor engage against Fighters. However, like the Dive Bomber,\
  they can interdict ZoC over land tiles. High fuel capacity allows two turns in the\
  air. No unit can stop this unit from attacking surface units on a tile. This unit\
- has no limit to attacks per turn and can also do pinpointed surgical strikes to pillage tiles. This aircraft is a\
+ can attack 3 times per turn and can also do pinpointed surgical strikes to pillage tiles. This aircraft is a\
  specialized niche unit. It is not an interceptor. \n\
 Stack-Escape：60% odds to evade stack-death if attacker doesn’t have more moves than it does.\
  NOTE：GOTO prevents unit loss from lack of fuel. You\

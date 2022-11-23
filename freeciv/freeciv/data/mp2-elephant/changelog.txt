@@ -138,5 +138,5 @@ and can now be built with veteran levels.
 Missiles boarding and transport swapping must be done in friendly city or base. No bases are native to missiles.
 46. TiredAttack only applies to land units. Air and Sea weren't meant originally to have fractional moves_left but as it's now possible with
    the overhaul of the movement system, we keep things consistent with old rules and not add a complexity to worry about.
-
+47. GSF max attacks per turn: 3 (was 4)
 
