@@ -328,6 +328,9 @@ min_speed     = 3
 hp_loss_pct   = 0
 flags         = "DamageSlows", "AttFromNonNative", "WaterVessel",
                 "NeverTired", "CargoRestrained" ;can't attack while being towed by Trawler
+helptext      = _("\
+  • <b style=\'color:#9aa\'>Crew Repair</b>：each turn, regardless of movement, recovers 10% of its hit points.\
+")
 
 [unitclass_rivership]                                       ;Subject to ZOC but can be individually IgZOC'd
 ; /* Extra class providing ability to travel rivers */
@@ -336,6 +339,9 @@ min_speed     = 3
 hp_loss_pct   = 0
 flags         = "DamageSlows", "AttackNonNative", "AttFromNonNative", "WaterVessel",
                 "NeverTired", "ZOC", "CargoRestrained" ;can't attack while being towed by Trawler
+helptext      = _("\
+  • <b style=\'color:#9aa\'>Crew Repair</b>：each turn, regardless of movement, recovers 10% of its hit points.\
+")
 
 [unitclass_sea]
 name          = _("?unitclass:Sea")
@@ -344,7 +350,7 @@ hp_loss_pct   = 0
 flags         = "DamageSlows", "AttackNonNative", "AttFromNonNative", "CanPillage", "WaterVessel",
                 "NeverTired", "ZOC", "CargoRestrained" ;can't attack while being towed by Trawler
 helptext      = _("\
-  • Crew Repair：each turn, regardless of movement, recovers 10% of its hit points.\
+  • <b style=\'color:#9aa\'>Crew Repair</b>：each turn, regardless of movement, recovers 10% of its hit points.\
 ")
 
 [unitclass_submarine]    ; Separating the Submarine class allows it to be unreachable by Air. NOTE: not subject to ZOC.
@@ -355,7 +361,7 @@ flags         = "DamageSlows", "AttackNonNative", "AttFromNonNative", "CanPillag
                 "NeverTired", "CargoRestrained" ;can't attack while being towed by Trawler
 helptext      = _("\
   • Visibility bonus：not visible to other players unless they have a unit or city adjacent to it.\n\
-  • Crew Repair：each turn, regardless of movement, recovers 3 hit points.\
+  • <b style=\'color:#9aa\'>Crew Repair</b>：each turn, regardless of movement, recovers 3 hit points.\
 ")
 
 ;------------------------------------------------------------------------------------------------- Aircraft:
