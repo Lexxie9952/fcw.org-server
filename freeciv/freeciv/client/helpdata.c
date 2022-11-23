@@ -173,27 +173,36 @@ static bool insert_veteran_help(char *outbuf, size_t outlen,
       CATLSTR(outbuf, outlen, "\n\n");
     }
     /* raise_chance and work_raise_chance don't get to the client, so we
-     * can't report them */
+     * can't report them if !is_server() */
     CATLSTR(outbuf, outlen,
             /* TRANS: Header for fixed-width veteran level table.
              * TRANS: Translators cannot change column widths :(
              * TRANS: "Level name" left-justified, other two right-justified */
-            _("Veteran level      Power factor   Move bonus\n"));
-    CATLSTR(outbuf, outlen,
-            /* TRANS: Part of header for veteran level table. */
-            _("--------------------------------------------"));
+             is_server() 
+             ? _("<table class=\'vet_level\'><tbody><tr><th>Veteran level</th><th>Power factor</th><th>Promotion Odds</th><th>Move bonus</th></tr><tr></tr>")
+             : _("<table class=\'vet_level\'><tbody><tr><th>Veteran level</th><th>Power factor</th><th>Move bonus</th></tr><tr></tr>")
+             );
+
     for (i = 0; i < veteran->levels; i++) {
       const struct veteran_level *level = &veteran->definitions[i];
       const char *name = name_translation_get(&level->name);
-      /* Use get_internal_string_length() for correct alignment with
-       * multibyte character encodings */
-      cat_snprintf(outbuf, outlen,
-          "\n%s%*s %4d%% %12s",
-          name, MAX(0, 25 - (int)get_internal_string_length(name)), "",
-          level->power_fact,
-          /* e.g. "-    ", "+ 1/3", "+ 1    ", "+ 2 2/3" */
-          move_points_text_full(level->move_bonus, TRUE, "+ ", "-", TRUE));
+
+      if (is_server()) {
+        cat_snprintf(outbuf, outlen,
+            "<tr><td>%s</td><td>%4d%%</td><td>%4d%%</td><td>%12s</td></tr>",
+            name,
+            level->power_fact,
+            (level->base_raise_chance ? level->base_raise_chance : level->work_raise_chance), 
+            move_points_text_full(level->move_bonus, TRUE, "+ ", "&#8212", false));
+      } else {
+        cat_snprintf(outbuf, outlen,
+            "<tr><td>%s</td><td>%4d%%</td><td>%12s</td></tr>",
+            name,
+            level->power_fact,
+            move_points_text_full(level->move_bonus, TRUE, "+ ", "&#8212", false));
+      }
     }
+    CATLSTR(outbuf, outlen, _("</tbody></table>"));
     return TRUE;
   }
 }
@@ -1746,6 +1755,11 @@ char *helptext_unit(char *buf, size_t bufsz, struct player *pplayer,
   buf[0] = '\0';
 
   pclass = utype_class(utype);
+  struct bombard_stats bstats;
+  struct extra_unit_stats pstats;
+  utype_get_bombard_stats(&bstats, utype);
+  utype_get_extra_stats(&pstats, utype);
+
 /* Non-FCW layout puts helptext at the very bottom */  
 #ifdef FREECIV_WEB
   if (NULL != utype->helptext) {
@@ -1760,7 +1774,7 @@ char *helptext_unit(char *buf, size_t bufsz, struct player *pplayer,
 #endif
 
   cat_snprintf(buf, bufsz,
-               _("%s Belongs to %s unit class."), BULLET_BIG,
+               _("%s Belongs to <b style=\'color:#9aa\'>%s</b> unit class."), BULLET_BIG,
                uclass_name_translation(pclass));
   if (NULL != pclass->helptext) {
     strvec_iterate(pclass->helptext, text) {
@@ -1772,60 +1786,53 @@ char *helptext_unit(char *buf, size_t bufsz, struct player *pplayer,
   if (uclass_has_flag(pclass, UCF_CAN_OCCUPY_CITY)
       && !utype_has_flag(utype, UTYF_CIVILIAN)) {
     /* TRANS: indented unit class property, preserve leading spaces */
-    CATLSTR(buf, bufsz, _("  %s Can occupy empty enemy cities.\n"), BULLET);
+    CATLSTR(buf, bufsz, _("  %s <i style=\'color:#aa9\'>Can conquer empty enemy cities</i>\n"), BULLET);
   }
   if (!uclass_has_flag(pclass, UCF_TERRAIN_SPEED)) {
     /* TRANS: indented unit class property, preserve leading spaces */
-    CATLSTR(buf, bufsz, _("  %s Speed is not affected by terrain.\n"), BULLET);
+    CATLSTR(buf, bufsz, _("  %s <i style=\'color:#aa9\'>Speed is not affected by terrain</i>\n"), BULLET);
   }
   if (!uclass_has_flag(pclass, UCF_TERRAIN_DEFENSE)) {
     /* TRANS: indented unit class property, preserve leading spaces */
-    CATLSTR(buf, bufsz, _("  %s Does not get defense bonuses from terrain.\n"),
+    CATLSTR(buf, bufsz, _("  %s <b style=\'color:#caa\'>Does not get defense bonuses from terrain</b>\n"),
             BULLET);
-  }
-  if (!uclass_has_flag(pclass, UCF_ZOC)) {
-    /* TRANS: indented unit class property, preserve leading spaces */
-    CATLSTR(buf, bufsz, _("  %s IGNORES Zones of Control.\n"), BULLET);
-  } else if (!utype_has_flag(utype, UTYF_IGZOC)) {
-    /* TRANS: indented unit class property, preserve leading spaces */
-    CATLSTR(buf, bufsz, _("  %s RESTRICTED by Zones of Control.\n"), BULLET);
   }
   if (uclass_has_flag(pclass, UCF_DAMAGE_SLOWS)) {
     /* TRANS: indented unit class property, preserve leading spaces */
-    CATLSTR(buf, bufsz, _("  %s Slowed down while damaged.\n"), BULLET);
+    CATLSTR(buf, bufsz, _("  %s <i style=\'color:#aa9\'>Slowed down while damaged</i>\n"), BULLET);
   }
   if (uclass_has_flag(pclass, UCF_CAN_FORTIFY)
       && !utype_has_flag(utype, UTYF_CANT_FORTIFY)) {
     if (utype->defense_strength > 0) {
       CATLSTR(buf, bufsz,
               /* TRANS: indented unit class property, preserve leading spaces */
-              _("  %s Gets a 50%% defensive bonus while in cities.\n"), BULLET);
+              _("  %s Can <b style=\'color:#9aa\'>FORTIFY</b>, granting a 50%% defense bonus when not in "
+                "a city\n"), BULLET);
       CATLSTR(buf, bufsz,
               /* TRANS: indented unit class property, preserve leading spaces */
-              _("  %s May fortify, granting a 50%% defensive bonus when not in "
-                "a city.\n"), BULLET);
+              _("    * <i style=\'color:#aa9\'>Gets the 50%% defense bonus automatically while in cities</i>\n"));
     } else {
       CATLSTR(buf, bufsz,
               /* TRANS: indented unit class property, preserve leading spaces */
-              _("  %s May fortify to stay put.\n"), BULLET);
+              _("  %s <i style=\'color:#aa9\'>Fortify command orders unit to stay put. No defense bonus</i>\n"), BULLET);
     }
   }
   if (uclass_has_flag(pclass, UCF_UNREACHABLE)) {
     CATLSTR(buf, bufsz,
             /* TRANS: indented unit class property, preserve leading spaces */
-	    _("  %s Is unreachable. Most units cannot attack this one.\n"), BULLET);
+	    _("  %s <b style=\'color:#9aa\'>Unreachable.</b> Most units cannot attack this one\n"), BULLET);
     if (utype_has_flag(utype, UTYF_NEVER_PROTECTS)) {
       CATLSTR(buf, bufsz,
               /* TRANS: indented twice; preserve leading spaces */
-	      _("    \u25e6 Doesn't prevent enemy units from attacking other "
-                "units on its tile.\n"));
+	      _("    \u25e6 <i style=\'color:#baa\'>Doesn't prevent enemy units from attacking other "
+                "units on its tile</i>\n"));
     }
   }
   if (uclass_has_flag(pclass, UCF_DOESNT_OCCUPY_TILE)
       && !utype_has_flag(utype, UTYF_CIVILIAN)) {
     CATLSTR(buf, bufsz,
             /* TRANS: indented unit class property, preserve leading spaces */
-	    _("  %s Doesn't prevent enemy cities from working the tile it's on.\n"),
+	    _("  %s <b style=\'color:#9aa\'>Doesn't prevent enemy cities from working the tile it's on</b>\n"),
             BULLET);
   }
   if (can_attack_non_native(utype)) {
@@ -1838,11 +1845,29 @@ char *helptext_unit(char *buf, size_t bufsz, struct player *pplayer,
       const char *helptxt = unit_class_flag_helptxt(flagid);
 
       if (helptxt != NULL) {
-        CATLSTR(buf, bufsz, "%s", BULLET_SPACE);
-        CATLSTR(buf, bufsz, "%s", _(helptxt));
-        CATLSTR(buf, bufsz, "\n");
+        CATLSTR(buf, bufsz, "  %s", BULLET);
+        CATLSTR(buf, bufsz, " <i style=\'color:#aa9\'>%s</i>\n", _(helptxt));
       }
     }
+  }
+
+  if (!uclass_has_flag(pclass, UCF_ZOC)) {
+    /* TRANS: indented unit class property, preserve leading spaces */
+    CATLSTR(buf, bufsz, _("  %s <b style=\'color:#9ca\'>IGNORES Zones of Control</b>\n"), BULLET);
+  } else if (!utype_has_flag(utype, UTYF_IGZOC)) {
+    /* TRANS: indented unit class property, preserve leading spaces */
+    CATLSTR(buf, bufsz, _("  %s <b style=\'color:#9aa\'>RESTRICTED by Zones of Control</b>\n"), BULLET);
+  }
+
+  if (utype_has_flag(utype, UTYF_IGZOC) /* avoid double entry: */ && uclass_has_flag(pclass, UCF_ZOC)) {
+    CATLSTR(buf, bufsz, _("%s <b style=\'color:#9ca\'>IGNORES Zones of Control.</b>\n"), BULLET_BIG);
+  }
+
+  if (utype_has_flag(utype, UTYF_NOZOC)) {
+    CATLSTR(buf, bufsz, _("%s <b style=\'color:#9aa\'>Imposes NO Zone of Control.</b>\n"), BULLET_BIG);
+  } else {
+    CATLSTR(buf, bufsz, _("%s <b style=\'color:#b99\'>IMPOSES Zone of Control on adjacent native tiles.</b>\n"),
+                          BULLET_BIG);
   }
 
   /* The unit's combat bonuses. Won't mention that another unit type has a
@@ -1871,14 +1896,14 @@ char *helptext_unit(char *buf, size_t bufsz, struct player *pplayer,
       case CBONUS_DEFENSE_MULTIPLIER:
         cat_snprintf(buf, bufsz,
                      /* TRANS: percentage ... or-list of unit types */
-                     _("%s %dx defense bonus if attacked by %s.\n"),
+                     _("%s <b style=\'color:#9aa\'>%d\u00D7</b> defense bonus if attacked by <b style=\'color:#9ba\'>%s</b>.\n"),
                      BULLET_BIG, cbonus->value + 1,
                      astr_build_or_list(&list, against, targets));
         break;
       case CBONUS_DEFENSE_DIVIDER:
         cat_snprintf(buf, bufsz,
                      /* TRANS: defense divider ... or-list of unit types */
-                     _("%s %dx attack bonus when attacking %s.\n"),
+                     _("%s <b style=\'color:#9aa\'>%d\u00D7</b> attack bonus when attacking <b style=\'color:#9ba\'>%s</b>.\n"),
                      BULLET_BIG, cbonus->value + 1,
                      astr_build_or_list(&list, against, targets));
         break;
@@ -1893,13 +1918,13 @@ char *helptext_unit(char *buf, size_t bufsz, struct player *pplayer,
         if (cbonus->value<0) {
           cat_snprintf(buf, bufsz,
                        /* TRANS: percentage ... or-list of unit types */
-                       _("%s %d%% defense penalty if attacked by %s.\n"),
+                       _("%s %d%% defense penalty if attacked by <b style=\'color:#baa\'>%s</b>.\n"),
                        BULLET_BIG, cbonus->value,
                        astr_build_or_list(&list, against, targets));
         } else {
           cat_snprintf(buf, bufsz,
                        /* TRANS: percentage ... or-list of unit types */
-                       _("%s +%d%% defense bonus if attacked by %s.\n"),
+                       _("%s +%d%% defense bonus if attacked by <b style=\'color:#9ba\'>%s</b>.\n"),
                        BULLET_BIG, cbonus->value,
                        astr_build_or_list(&list, against, targets));
         }
@@ -1908,13 +1933,13 @@ char *helptext_unit(char *buf, size_t bufsz, struct player *pplayer,
         if (cbonus->value<0) {
           cat_snprintf(buf, bufsz,
                        /* TRANS: defense divider ... or-list of unit types */
-                       _("%s %d%% attack penalty when attacking %s.\n"),
+                       _("%s %d%% attack penalty when attacking <b style=\'color:#baa\'>%s.</b>\n"),
                        BULLET_BIG, cbonus->value,
                        astr_build_or_list(&list, against, targets));
         } else {
           cat_snprintf(buf, bufsz,
                        /* TRANS: defense divider ... or-list of unit types */
-                       _("%s +%d%% attack bonus when attacking %s.\n"),
+                       _("%s +%d%% attack bonus when attacking <b style=\'color:#9aa\'>%s.</b>\n"),
                        BULLET_BIG, cbonus->value,
                        astr_build_or_list(&list, against, targets));
         }
@@ -1930,22 +1955,34 @@ char *helptext_unit(char *buf, size_t bufsz, struct player *pplayer,
     req_text_insert_nl(buf, bufsz, pplayer, preq, VERB_DEFAULT,
                        BULLET_SPACE);
   } requirement_vector_iterate_end;
-  
   if (utype_has_flag(utype, UTYF_NEVER_BLOCKED)) {
     CATLSTR(buf, bufsz,
-      _("%s Can bypass unreachable units and attack reachable "
-        "units on the same tile.\n"), BULLET_BIG);
+      _("%s <b style=\'color:#9aa\'>Unblockable</b>: unreachable units can't block its "
+        "attacks reachable units.\n"), BULLET_BIG);
   }
   if (utype_has_flag(utype, UTYF_TRANSPORTDEFENDER)) {
     CATLSTR(buf, bufsz,
-      _("%s Can always defend while transported, even on non-native terrain.\n"), BULLET_BIG);
+      _("%s <b style=\'color:#9aa\'>TRANSPORT DEFENDER</b>: Can always defend while transported, even on non-native terrain.\n"), BULLET_BIG);
   }
   if (utype_has_flag(utype, UTYF_CANESCAPE)) {
-    CATLSTR(buf, bufsz, _("%s Has a chance to escape once stack defender is lost, if it has more moves left than attacker.\n"),
-            BULLET_BIG);
+    int escape_chance = 50 + get_target_bonus_effects(NULL,
+                                          NULL,
+                                          NULL,
+                                          NULL,
+                                          NULL,
+                                          NULL,
+                                          NULL,
+                                          utype,
+                                          NULL,
+                                          NULL,
+                                          action_by_number(ACTION_ATTACK),
+                                          EFT_STACK_ESCAPE_PCT,
+                                          V_COUNT);
+    CATLSTR(buf, bufsz, _("%s <b style=\'color:#9aa\'>STACK-ESCAPE</b>: <b style=\'color:#9ca\'>%d%%</b> base odds to escape a stack-kill, if attacker doesn't have more moves than it does.\n"),
+            BULLET_BIG, escape_chance);
   }
   if (utype_has_flag(utype, UTYF_CANKILLESCAPING)) {
-    CATLSTR(buf, bufsz, _("%s Will pursue escaping units and kill them.\n"),
+    CATLSTR(buf, bufsz, _("%s <b style=\'color:#9aa\'>ESCAPE-KILLER</b>: Pursues units escaping stack-death and kills them.\n"),
             BULLET_BIG);
   }
 
@@ -1953,8 +1990,8 @@ char *helptext_unit(char *buf, size_t bufsz, struct player *pplayer,
     CATLSTR(buf, bufsz, _("%s May not be built in cities.\n"), BULLET_BIG);
   }
   if (utype_has_flag(utype, UTYF_MULTISLOT)) {
-    CATLSTR(buf, bufsz, _("%s May use extra build slots: in some cases, cities "
-                          "may produce more than one of these per turn.\n"), BULLET_BIG);
+    CATLSTR(buf, bufsz, _("%s <b style=\'color:#9aa\'>Multislot</b>: Under certain conditions, cities can make one (or more) "
+                          "multislot unit(s) per turn, plus one of any other unit type.\n"), BULLET_BIG);
   }
   if (utype_has_flag(utype, UTYF_BARBARIAN_ONLY)) {
     CATLSTR(buf, bufsz, _("%s Only barbarians may build this.\n"), BULLET_BIG);
@@ -2020,7 +2057,7 @@ char *helptext_unit(char *buf, size_t bufsz, struct player *pplayer,
     CATLSTR(buf, bufsz, _("%s Never has a home city.\n"), BULLET_BIG);
   }
   if (utype_has_flag(utype, UTYF_SENTRYALWAYS)) {
-    CATLSTR(buf, bufsz, _("%s Always on Sentry: reports all enemy movement it sees.\n"), BULLET_BIG);
+    CATLSTR(buf, bufsz, _("%s <b style=\'color:#9aa\'>Reconnaissance</b>: reports visible enemy movement even if not sentried.\n"), BULLET_BIG);
   }
   if (utype_has_flag(utype, UTYF_GAMELOSS)) {
     CATLSTR(buf, bufsz, _("%s Losing this unit will lose you the game!\n"),
@@ -2028,24 +2065,13 @@ char *helptext_unit(char *buf, size_t bufsz, struct player *pplayer,
   }
   if (utype_has_flag(utype, UTYF_UNIQUE)) {
     CATLSTR(buf, bufsz,
-	    _("%s Each player may only have one of this type of unit.\n"),
-            BULLET_BIG);
-  }
-  for (flagid = UTYF_USER_FLAG_1 ; flagid <= UTYF_LAST_USER_FLAG; flagid++) {
-    if (utype_has_flag(utype, flagid)) {
-      const char *helptxt = unit_type_flag_helptxt(flagid);
-
-      if (helptxt != NULL) {
-        CATLSTR(buf, bufsz, "%s", BULLET_SPACE);
-        CATLSTR(buf, bufsz, "%s", _(helptxt));
-        CATLSTR(buf, bufsz, "\n");
-      }
-    }
+	    _("%s Each player may only have one %s.\n"), 
+            BULLET_BIG, utype_name_translation(utype));
   }
   if (utype->pop_cost > 0) {
     cat_snprintf(buf, bufsz,
-                 PL_("%s Costs %d population to build.\n",
-                     "%s Costs %d population to build.\n", utype->pop_cost),
+                 PL_("%s Costs <b style=\'color:#9aa\'>%d</b> population to build.\n",
+                     "%s Costs <b style=\'color:#9aa\'>%d</b> population to build.\n", utype->pop_cost),
                  BULLET_BIG, utype->pop_cost);
   }
   if (0 < utype->transport_capacity) {
@@ -2062,8 +2088,8 @@ char *helptext_unit(char *buf, size_t bufsz, struct player *pplayer,
 
     cat_snprintf(buf, bufsz,
                  /* TRANS: %s is a list of unit classes separated by "or". */
-                 PL_("%s Can carry and refuel %d %s unit.\n",
-                     "%s Can carry and refuel up to %d %s units.\n",
+                 PL_("%s Can carry and refuel %d <b style=\'color:#9aa\'>%s</b> unit.\n",
+                     "%s Can carry and refuel up to <b style=\'color:#9aa\'>%d</b> %s units.\n",
                      utype->transport_capacity), BULLET_BIG,
                  utype->transport_capacity, astr_str(&list));
     astr_free(&list);
@@ -2223,7 +2249,7 @@ char *helptext_unit(char *buf, size_t bufsz, struct player *pplayer,
     if (strvec_size(extras_vec) > 0) {
       strvec_to_and_list(extras_vec, &extras_and);
       /* TRANS: %s is list of extra types separated by ',' and 'and' */
-      cat_snprintf(buf, bufsz, _("%s Can build %s on tiles.\n"),
+      cat_snprintf(buf, bufsz, _("%s Can build <b>%s</b> on tiles.\n"),
                    BULLET_BIG, astr_str(&extras_and));
       strvec_clear(extras_vec);
     }
@@ -2237,14 +2263,14 @@ char *helptext_unit(char *buf, size_t bufsz, struct player *pplayer,
 
       if (strvec_size(extras_vec) > 0) {
         strvec_to_and_list(extras_vec, &extras_and);
-        cat_snprintf(buf, bufsz, _("%s Can build %s on tiles.\n"), BULLET_BIG,
+        cat_snprintf(buf, bufsz, _("%s Can build <b>%s</b> on tiles.\n"), BULLET_BIG,
                      astr_str(&extras_and));
         strvec_clear(extras_vec);
       }
     }
     if (univs_have_action_enabler(ACTION_PLANT, &for_utype, NULL)) {
       CATLSTR(buf, bufsz, _("%s Can convert terrain to another type by "
-                            "planting.\n"), BULLET_BIG);
+                            "<b style=\'color:#9aa\'>Planting</b>.\n"), BULLET_BIG);
     }
 
     if (utype_can_do_action(utype, ACTION_IRRIGATE)) {
@@ -2256,14 +2282,14 @@ char *helptext_unit(char *buf, size_t bufsz, struct player *pplayer,
 
       if (strvec_size(extras_vec) > 0) {
         strvec_to_and_list(extras_vec, &extras_and);
-        cat_snprintf(buf, bufsz, _("%s Can build %s on tiles.\n"), BULLET_BIG,
+        cat_snprintf(buf, bufsz, _("%s Can build <b>%s</b> on tiles.\n"), BULLET_BIG,
                      astr_str(&extras_and));
         strvec_clear(extras_vec);
       }
     }
     if (univs_have_action_enabler(ACTION_CULTIVATE, &for_utype, NULL)) {
       CATLSTR(buf, bufsz, _("%s Can convert terrain to another type by "
-                            "cultivating.\n"), BULLET_BIG);
+                            "<b style=\'color:#9aa\'>Cultivating.</b>\n"), BULLET_BIG);
     }
     if (univs_have_action_enabler(ACTION_TRANSFORM_TERRAIN, &for_utype, NULL)) {
       CATLSTR(buf, bufsz, _("%s Can transform terrain to another type.\n"),
@@ -2280,7 +2306,7 @@ char *helptext_unit(char *buf, size_t bufsz, struct player *pplayer,
 
     if (strvec_size(extras_vec) > 0) {
       strvec_to_and_list(extras_vec, &extras_and);
-      cat_snprintf(buf, bufsz, _("%s Can build %s on tiles.\n"),
+      cat_snprintf(buf, bufsz, _("%s Can build <b>%s</b> on tiles.\n"),
                    BULLET_BIG, astr_str(&extras_and));
       strvec_clear(extras_vec);
     }
@@ -2299,7 +2325,7 @@ char *helptext_unit(char *buf, size_t bufsz, struct player *pplayer,
     if (strvec_size(extras_vec) > 0) {
       strvec_to_and_list(extras_vec, &extras_and);
       /* TRANS: list of extras separated by "and" */
-      cat_snprintf(buf, bufsz, _("%s Can clean %s from tiles.\n"),
+      cat_snprintf(buf, bufsz, _("%s Can clean <b style=\'color:#9aa\'>%s</b> from tiles.\n"),
                    BULLET_BIG, astr_str(&extras_and));
       strvec_clear(extras_vec);
     }
@@ -2364,7 +2390,7 @@ char *helptext_unit(char *buf, size_t bufsz, struct player *pplayer,
   }
   if (utype_has_flag(utype, UTYF_BADCITYDEFENDER)) {
     CATLSTR(buf, bufsz,
-	    _("%s If attacked while in a city, firepower is set to 1 "
+	    _("%s <b style=\'color:#9aa\'>PORT PENALTY</b>: If attacked while in a city, firepower is set to 1 "
               "and firepower of attacker is doubled.\n"), BULLET_BIG);
   }
   if (utype_has_flag(utype, UTYF_IGTER)) {
@@ -2375,20 +2401,11 @@ char *helptext_unit(char *buf, size_t bufsz, struct player *pplayer,
                    "per tile).\n"), BULLET_BIG,
                  move_points_text(terrain_control.igter_cost, TRUE));
   }
-  if (utype_has_flag(utype, UTYF_NOZOC)) {
-    CATLSTR(buf, bufsz, _("%s Imposes NO Zone of Control.\n"), BULLET_BIG);
-  } else {
-    CATLSTR(buf, bufsz, _("%s IMPOSES Zone of Control on adjacent tiles.\n"),
-                          BULLET_BIG);
-  }
-  if (utype_has_flag(utype, UTYF_IGZOC)) {
-    CATLSTR(buf, bufsz, _("%s IGNORES Zones of Control.\n"), BULLET_BIG);
-  }
   if (utype_has_flag(utype, UTYF_NOSTACKDEATH)) {
-    CATLSTR(buf, bufsz, _("%s Does not die when units in its stack die.\n"), BULLET_BIG);
+    CATLSTR(buf, bufsz, _("%s <b style=\'color:#9aa\'>STACK-CHIEF</b>: Does not die when units in its stack die.\n"), BULLET_BIG);
   }
   if (utype_has_flag(utype, UTYF_STACKANCHOR)) {
-    CATLSTR(buf, bufsz, _("%s CanEscape units escaping stack-kill aren't forced to "
+    CATLSTR(buf, bufsz, _("%s <b style=\'color:#9aa\'>STACK-ANCHOR</b>: Units escaping stack-kill aren't forced to "
                           "flee to other tiles if this unit is present.\n"), BULLET_BIG);
   }
   if (utype_has_flag(utype, UTYF_STACKALONE)) {
@@ -2397,25 +2414,25 @@ char *helptext_unit(char *buf, size_t bufsz, struct player *pplayer,
   }
   if (utype_has_flag(utype, UTYF_CIVILIAN)) {
     CATLSTR(buf, bufsz,
-            _("%s A non-military unit:\n"), BULLET_BIG);
+            _("%s A <b style=\'color:#9aa\'>Civilian</b> unit:\n"), BULLET_BIG);
     CATLSTR(buf, bufsz,
             /* TRANS: indented; preserve leading spaces */
-            _("  %s Cannot attack.\n"), BULLET);
+            _("  <i style=\'color:#aa9\'>%s Cannot attack</i>\n"), BULLET);
     CATLSTR(buf, bufsz,
             /* TRANS: indented; preserve leading spaces */
-            _("  %s Doesn't impose martial law.\n"), BULLET);
+            _("  <i style=\'color:#aa9\'>%s Doesn't impose martial law</i>\n"), BULLET);
     CATLSTR(buf, bufsz,
             /* TRANS: indented; preserve leading spaces */
-            _("  %s Can enter foreign territory regardless of peace treaty.\n"),
+            _("  <i style=\'color:#aa9\'>%s Can enter foreign territory regardless of peace treaty</i>\n"),
             BULLET);
     CATLSTR(buf, bufsz,
             /* TRANS: indented; preserve leading spaces */
-            _("  %s Doesn't prevent enemy cities from working the tile it's on.\n"),
+            _("  <b style=\'color:#9aa\'>%s Doesn't prevent enemy cities from working the tile it's on</b>\n"),
             BULLET);
   }
   if (utype_has_flag(utype, UTYF_FIELDUNIT)) {
     CATLSTR(buf, bufsz,
-            _("%s A field unit: one unhappiness applies even when non-aggressive.\n"),
+            _("%s <b style=\'color:#9aa\'>Field unit</b>: unhappiness may apply even when non-aggressive.\n"),
             BULLET_BIG);
   }
   if (utype_has_flag(utype, UTYF_AVIDATTACKER)) {
@@ -2455,7 +2472,7 @@ char *helptext_unit(char *buf, size_t bufsz, struct player *pplayer,
     if (uclass_has_flag(target, UCF_UNREACHABLE)
         && BV_ISSET(utype->targets, uclass_index(target))) {
       cat_snprintf(buf, bufsz,
-                   _("%s Can attack against %s units, which are usually not "
+                   _("%s Can attack <b style=\'color:#9ba\'>%s</b> units, which are usually not "
                      "reachable.\n"), BULLET_BIG,
                    uclass_name_translation(target));
     }
@@ -2505,18 +2522,18 @@ char *helptext_unit(char *buf, size_t bufsz, struct player *pplayer,
       if (utype_has_flag(utype, UTYF_COAST)) {
         cat_snprintf(buf, bufsz,
                      /* TRANS: %s is a list of unit types separated by "or" */
-                     PL_("%s Unit has to be next to safe coast, in a city, a base, or on a %s"
+                     PL_("%s Unit has to be next to safe coast, in a city, a base, or on a <b style=\'color:#9ba\'>%s</b>"
                          " after %d turn.\n",
-                         "%s Unit has to be next to safe coast, in a city, a base, or on a %s"
+                         "%s Unit has to be next to safe coast, in a city, a base, or on a <b style=\'color:#9ba\'>%s</b>"
                          " after %d turns.\n",
                          fuel), BULLET_BIG,
                      astr_build_or_list(&list, types, i), fuel);
       } else {
         cat_snprintf(buf, bufsz,
                      /* TRANS: %s is a list of unit types separated by "or" */
-                     PL_("%s Unit has to be in a city, a base, or on a %s"
+                     PL_("%s Unit has to be in a city, a base, or on a <b style=\'color:#9ba\'>%s</b>"
                          " after %d turn.\n",
-                         "%s Unit has to be in a city, a base, or on a %s"
+                         "%s Unit has to be in a city, a base, or on a <b style=\'color:#9ba\'>%s</b>"
                          " after %d turns.\n",
                          fuel), BULLET_BIG,
                      astr_build_or_list(&list, types, i), fuel);
@@ -2526,18 +2543,19 @@ char *helptext_unit(char *buf, size_t bufsz, struct player *pplayer,
   }
 
   /* Auto attack immunity. (auto_attack.if_attacker ruleset setting) */
+/* Ruleset should handle this with a user UTYF
   if (server_setting_value_bool_get(
         server_setting_by_name("autoattack"))) {
     bool not_an_auto_attacker = TRUE;
 
     action_auto_perf_iterate(auto_action) {
       if (auto_action->cause != AAPC_UNIT_MOVED_ADJ) {
-        /* Not relevant for auto attack. */
+        // Not relevant for auto attack.
         continue;
       }
 
       if (requirement_fulfilled_by_unit_type(utype, &auto_action->reqs)) {
-        /* Can be forced to auto attack. */
+        // Can be forced to auto attack.
         not_an_auto_attacker = FALSE;
         break;
       }
@@ -2545,8 +2563,47 @@ char *helptext_unit(char *buf, size_t bufsz, struct player *pplayer,
 
     if (not_an_auto_attacker) {
       CATLSTR(buf, bufsz,
-              _("* Will never be forced (by the autoattack server setting)"
-                " to attack units moving to an adjacent tile.\n"));
+              _("%s Can not auto-attack"
+                " units moving to an adjacent tile.\n"), BULLET_BIG);
+    }
+  } */
+  for (flagid = UTYF_USER_FLAG_1 ; flagid <= UTYF_LAST_USER_FLAG; flagid++) {
+    if (utype_has_flag(utype, flagid)) {
+      const char *helptxt = unit_type_flag_helptxt(flagid);
+
+      if (helptxt != NULL) {
+        CATLSTR(buf, bufsz, "%s", BULLET_BIG);
+        CATLSTR(buf, bufsz, " %s", _(helptxt));
+        CATLSTR(buf, bufsz, "\n");
+      }
+    }
+  }
+  if (pstats.bombard_retaliate_rounds) {
+    cat_snprintf(buf, bufsz,
+              /* TRANS: %s is the action's ruleset defined ui name */
+              _("%s Can <b style=\'color:#9aa\'>Special Defend</b>\n"), BULLET_BIG);
+    cat_snprintf(buf, bufsz,
+              /* TRANS: %d is bombard rate. */
+              _("    <i style=\'color:#aa9\'>%s is retaliatory response to Special Attack</i>\n"), BULLET);
+    cat_snprintf(buf, bufsz,
+              /* TRANS: %d is bombard rate. */
+              _("    <i style=\'color:#aa9\'>%s %d combat rounds</i>\n"), BULLET,
+              pstats.bombard_retaliate_rounds);
+    cat_snprintf(buf, bufsz,
+              /* TRANS: %d is bombard rate. */
+              _("    <i style=\'color:#aa9\'>%s %d targets</i>\n"), BULLET,
+              bstats.bombard_primary_targets);
+    if (bstats.bombard_primary_kills) {
+      cat_snprintf(buf, bufsz,                    
+                    PL_("    <i style=\'color:#aa9\'>%s maximum of %d kill</i>\n",
+                        "    <i style=\'color:#aa9\'>%s maximum of %d kills</i>\n",
+                        bstats.bombard_primary_kills),
+                    BULLET,
+                    bstats.bombard_primary_kills);
+    } else {
+      cat_snprintf(buf, bufsz,
+                    _("    <i style=\'color:#aa9\'>%s "
+                    " defenders are only damaged, not killed</i>\n"), BULLET);
     }
   }
 
@@ -2567,7 +2624,7 @@ char *helptext_unit(char *buf, size_t bufsz, struct player *pplayer,
       /* Generic action information. */
       cat_snprintf(buf, bufsz,
                    /* TRANS: %s is the action's ruleset defined ui name */
-                   _("%s Can do the action \'%s\'.\n"), BULLET_BIG,
+                   _("%s Can <b style=\'color:#9aa\'>%s</b>\n"), BULLET_BIG,
                    action_id_name_translation(act));
 
       switch (action_id_get_target_kind(act)) {
@@ -2600,7 +2657,7 @@ char *helptext_unit(char *buf, size_t bufsz, struct player *pplayer,
                       * may be an adjective (that includes a space). The
                       * next is the name of the target kind.
                       * Example: is done to extras on foreign tiles */
-                     _("  %s is done to %s%s%s.\n"), BULLET,
+                     _("    <i style=\'color:#aa9\'>%s is done to %s%s%s</i>\n"), BULLET,
                      sub_target_text,
                      target_adjective,
                      _(action_target_kind_name(
@@ -2611,7 +2668,7 @@ char *helptext_unit(char *buf, size_t bufsz, struct player *pplayer,
         cat_snprintf(buf, bufsz,
                      /* TRANS: said about an action. %s is a unit type
                       * name. */
-                     _("  %s uses up the %s.\n"), BULLET,
+                     _("    <i style=\'color:#aa9\'>%s uses up the %s</i>\n"), BULLET,
                      utype_name_translation(utype));
       }
 
@@ -2619,7 +2676,7 @@ char *helptext_unit(char *buf, size_t bufsz, struct player *pplayer,
         cat_snprintf(buf, bufsz,
                      /* TRANS: The %s is a kind of battle defined in
                       * actions.h. Example: "diplomatic battle". */
-                     _("  %s can lead to a %s against a defender.\n"),
+                     _("    <i style=\'color:#aa9\'>%s can lead to a %s against a defender</i>\n"),
                      BULLET,
                      action_battle_kind_translated_name(
                        action_get_battle_kind(paction)));
@@ -2640,7 +2697,7 @@ char *helptext_unit(char *buf, size_t bufsz, struct player *pplayer,
         if (MAX_MOVE_FRAGS <= success_move_frag_cost) {
           /* A value this size takes all the actor unit's move fragments. */
           cat_snprintf(buf, bufsz,
-                       _("  * ends this unit's turn.\n"));
+                       _("    <i style=\'color:#aa9\'>%s ends this unit's turn</i>\n"), BULLET);
         }
       }
 
@@ -2660,13 +2717,13 @@ char *helptext_unit(char *buf, size_t bufsz, struct player *pplayer,
             cat_snprintf(buf, bufsz,
                          /* TRANS: distance between an actor unit and its
                           * target when performing a specific action. */
-                         _("  %s target must be at the same tile.\n"), BULLET);
+                         _("    <i style=\'color:#aa9\'>%s target must be at the same tile</i>\n"), BULLET);
           } else {
           cat_snprintf(buf, bufsz,
                        /* TRANS: distance between an actor unit and its
                         * target when performing a specific action. */
-                       PL_("  %s target must be exactly %d tile away.\n",
-                           "  %s target must be exactly %d tiles away.\n",
+                       PL_("    <i style=\'color:#aa9\'>%s target must be exactly %d tile away</i>\n",
+                           "    <i style=\'color:#aa9\'>%s target must be exactly %d tiles away</i>\n",
                            paction->min_distance), BULLET,
                        paction->min_distance);
           }
@@ -2677,13 +2734,13 @@ char *helptext_unit(char *buf, size_t bufsz, struct player *pplayer,
             cat_snprintf(buf, bufsz,
                          /* TRANS: distance between an actor unit and its
                           * target when performing a specific action. */
-                         _("  %s target can be anywhere.\n"), BULLET);
+                         _("    <i style=\'color:#aa9\'>%s target can be anywhere</i>\n"), BULLET);
           } else {
           cat_snprintf(buf, bufsz,
                        /* TRANS: distance between an actor unit and its
                         * target when performing a specific action. */
-                       PL_("  %s target must be at least %d tile away.\n",
-                           "  %s target must be at least %d tiles away.\n",
+                       PL_("    <i style=\'color:#aa9\'>%s target must be at least %d tile away</i>\n",
+                           "    <i style=\'color:#aa9\'>%s target must be at least %d tiles away</i>\n",
                            paction->min_distance), BULLET,
                        paction->min_distance);
           }
@@ -2693,8 +2750,8 @@ char *helptext_unit(char *buf, size_t bufsz, struct player *pplayer,
           cat_snprintf(buf, bufsz,
                        /* TRANS: distance between an actor unit and its
                         * target when performing a specific action. */
-                       PL_("  %s target can be max %d tile away.\n",
-                           "  %s target can be max %d tiles away.\n",
+                       PL_("    <i style=\'color:#aa9\'>%s target can be max %d tile away</i>\n",
+                           "    <i style=\'color:#aa9\'>%s target can be max %d tiles away</i>\n",
                            relative_max), BULLET,
                        relative_max);
         } else {
@@ -2703,8 +2760,8 @@ char *helptext_unit(char *buf, size_t bufsz, struct player *pplayer,
           cat_snprintf(buf, bufsz,
                        /* TRANS: distance between an actor unit and its
                         * target when performing a specific action. */
-                       PL_("  %s target must be between %d and %d tile away.\n",
-                           "  %s target must be between %d and %d tiles away.\n",
+                       PL_("    <i style=\'color:#aa9\'>%s target must be between %d and %d tile away</i>\n",
+                           "    <i style=\'color:#aa9\'>%s target must be between %d and %d tiles away</i>\n",
                            relative_max), BULLET,
                        paction->min_distance, relative_max);
         }
@@ -2768,9 +2825,9 @@ char *helptext_unit(char *buf, size_t bufsz, struct player *pplayer,
             struct astring list = ASTRING_INIT;
             cat_snprintf(buf, bufsz,
                          /* TRANS: successfully ... Peace, or Alliance  */
-                         _("  * %s performing this action during %s causes"
+                         _("    %s <i style=\'color:#aa9\'>%s doing this action during %s causes"
                            " international outrage: the whole world gets "
-                           "Casus Belli against you.\n"),
+                           "Casus Belli against you</i>\n"), BULLET,
                          _(casus_belli[i].hlp_text),
                          astr_build_or_list(&list, outrage_diplrel_names,
                                             outrage_diplrel_count));
@@ -2780,8 +2837,8 @@ char *helptext_unit(char *buf, size_t bufsz, struct player *pplayer,
             struct astring list = ASTRING_INIT;
             cat_snprintf(buf, bufsz,
                          /* TRANS: successfully ... Peace, or Alliance  */
-                         _("  * %s performing this action during %s gives"
-                           " the victim Casus Belli against you.\n"),
+                         _("    %s <i style=\'color:#aa9\'>%s doing this action during %s gives"
+                           " the victim Casus Belli against you</i>\n"), BULLET,
                          _(casus_belli[i].hlp_text),
                          astr_build_or_list(&list, victim_diplrel_names,
                                             victim_diplrel_count));
@@ -2796,84 +2853,127 @@ char *helptext_unit(char *buf, size_t bufsz, struct player *pplayer,
         cat_snprintf(buf, bufsz,
                      /* TRANS: the %d is the number of shields the unit can
                       * contribute. */
-                     _("  %s adds %d production.\n"), BULLET,
+                     _("    <i style=\'color:#aa9\'>%s adds %d production</i>\n"), BULLET,
                      utype_build_shield_cost_base(utype));
         break;
       case ACTION_HEAL_UNIT:
         cat_snprintf(buf, bufsz,
-                     _("  * restores up to 25%% of the target unit's"
-                       " hit points.\n"));
+                     _("    <i style=\'color:#aa9\'>%s restores up to 25%% of the target unit's"
+                       " hit points</i>\n"), BULLET);
         break;
       case ACTION_FOUND_CITY:
         if (game.scenario.prevent_new_cities) {
           cat_snprintf(buf, bufsz,
                        /* TRANS: is talking about an action. */
-                       _("  %s is disabled in the current game.\n"), BULLET);
+                       _("    %s is disabled in the current game.\n"), BULLET);
         }
         cat_snprintf(buf, bufsz,
                      /* TRANS: the %d is initial population. */
-                     PL_("  %s initial population: %d.\n",
-                         "  %s initial population: %d.\n",
+                     PL_("    <i style=\'color:#aa9\'>%s initial population: %d</i>\n",
+                         "    <i style=\'color:#aa9\'>%s initial population: %d</i>\n",
                          utype->city_size), BULLET,
                      utype->city_size);
         break;
       case ACTION_JOIN_CITY:
         cat_snprintf(buf, bufsz,
                      /* TRANS: the %d is population. */
-                     PL_("  %s max target size: %d.\n",
-                         "  %s max target size: %d.\n",
+                     PL_("    <i style=\'color:#aa9\'>%s max target size: %d</i>\n",
+                         "    <i style=\'color:#aa9\'>%s max target size: %d</i>\n",
                          game.info.add_to_size_limit - utype_pop_value(utype)),
                      BULLET,
                      game.info.add_to_size_limit - utype_pop_value(utype));
         cat_snprintf(buf, bufsz,
                      /* TRANS: the %d is the population added. */
-                     PL_("  %s adds %d population.\n",
-                         "  %s adds %d population.\n",
+                     PL_("    <i style=\'color:#aa9\'>%s adds %d population</i>\n",
+                         "    <i style=\'color:#aa9\'>%s adds %d population</i>\n",
                          utype_pop_value(utype)), BULLET,
                      utype_pop_value(utype));
+        break;
+      case ACTION_PILLAGE:
+        if (pstats.iPillage) {
+          cat_snprintf(buf, bufsz,
+                      _("    %s <b style=\'color:#9aa\'>iPillage</b>: can instantly destroy extras on tile</i>\n"), BULLET);          
+          cat_snprintf(buf, bufsz,
+                      _("      \u25e6 <i style=\'color:#aa9\'>%d%% odds of iPillage success per strike</i>\n"),
+                      pstats.iPillage_odds); 
+          if (pstats.iPillage_random_targets) {
+            cat_snprintf(buf, bufsz,
+                        _("      \u25e6 <i style=\'color:#aa9\'>up to %d random targets destroyed</i>\n"),
+                        pstats.iPillage_random_targets);             
+          }
+          cat_snprintf(buf, bufsz,
+            _("      \u25e6 <i style=\'color:#aa9\'>action consumes %d move-points</i>\n"),
+            pstats.iPillage_moves);        
+        }
         break;
       case ACTION_BOMBARD:
       case ACTION_BOMBARD2:
       case ACTION_BOMBARD3:
         cat_snprintf(buf, bufsz,
-                     /* TRANS: %d is bombard rate. */
-                     _("  %s %d per turn.\n"), BULLET,
+                     _("    <i style=\'color:#aa9\'>%s %d combat rounds</i>\n"), BULLET,
                      utype->bombard_rate);
-        cat_snprintf(buf, bufsz,
-                     /* TRANS: talking about bombard */
-                     _("  %s These attacks only damage (never kill),"
-                       " and damage all defenders on a tile, at no risk"
-                       " to the attacker.\n"), BULLET);
+
+        if (bstats.bombard_primary_targets) {
+          cat_snprintf(buf, bufsz,
+                       _("    <i style=\'color:#aa9\'>%s %d targets</i>\n"), BULLET,
+                       bstats.bombard_primary_targets);
+        } else {
+          cat_snprintf(buf, bufsz,
+                       _("    <i style=\'color:#aa9\'>%s "
+                       " targets all defenders on a tile</i>\n"), BULLET);
+        }
+        if (bstats.bombard_primary_kills) {
+          cat_snprintf(buf, bufsz,                       
+                       PL_("    <i style=\'color:#aa9\'>%s maximum of %d kill</i>\n",
+                           "    <i style=\'color:#aa9\'>%s maximum of %d kills</i>\n",
+                           bstats.bombard_primary_kills),
+                       BULLET,
+                       bstats.bombard_primary_kills);
+        } else {
+          cat_snprintf(buf, bufsz,
+                       _("    <i style=\'color:#aa9\'>%s "
+                       " defenders are only damaged, not killed</i>\n"), BULLET);
+        }
         break;
       case ACTION_UPGRADE_UNIT:
         cat_snprintf(buf, bufsz,
                      /* TRANS: %s is a unit type. */
-                     _("  %s upgraded to %s or, when possible, to the unit "
-                       "type it upgrades to.\n"), BULLET,
+                     _("    <i style=\'color:#aa9\'>%s upgrades to <b style=\'font-style:normal;color:#ccf\'>%s</b> or "
+                       "later upgradable types</i>\n"), BULLET,
                      utype_name_translation(utype->obsoleted_by));
         break;
       case ACTION_ATTACK:
       case ACTION_SUICIDE_ATTACK:
-        if (game.info.tired_attack) {
+        if (game.info.tired_attack && !uclass_has_user_unit_class_flag_named(pclass, "NeverTired")) {
           cat_snprintf(buf, bufsz,
-                       _("  %s weaker when tired. If performed with less "
+                       _("    <i style=\'color:#aa9\'>%s weaker when tired. If performed with less "
                          "than a single move point left the attack power "
-                         "is reduced accordingly.\n"), BULLET);
+                         "is reduced accordingly</i>\n"), BULLET);
+        } else {
+          cat_snprintf(buf, bufsz,
+                       _("    <i style=\'color:#aa9\'>%s attacks at full strength regardless of "
+                         "remaining moves left</i>\n"), BULLET);
         }
         if (action_has_result(paction, ACTION_ATTACK)
             && utype_has_flag(utype, UTYF_ONEATTACK)) {
           cat_snprintf(buf, bufsz,
-                       _("  %s ends this unit's turn.\n"), BULLET);
+                       _("    <i style=\'color:#aa9\'>%s ends this unit's turn</i>\n"), BULLET);
+        }
+        if (pstats.max_attacks) {
+          cat_snprintf(buf, bufsz,
+              _("    <i style=\'color:#aa9\'>%s maximum of <b style=\'color:#f88\'>%d</b> attacks per turn</i>\n"),
+              BULLET,
+              pstats.max_attacks);
         }
         break;
       case ACTION_CONVERT:
         cat_snprintf(buf, bufsz,
                      /* TRANS: %s is a unit type. "MP" = movement points. */
-                     PL_("  %s is converted into %s (takes %d MP).\n",
-                         "  %s is converted into %s (takes %d MP).\n",
-                         utype->convert_time), BULLET,
+                     PL_("    <i style=\'color:#aa9\'>%s converts to</i> %s (takes %d turn)\n",
+                         "    <i style=\'color:#aa9\'>%s converts to</i> %s (takes %d turns)\n",
+                         (utype->convert_time / (utype->move_rate/SINGLE_MOVE))), BULLET,
                      utype_name_translation(utype->converted_to),
-                     utype->convert_time);
+                     (utype->convert_time/(utype->move_rate/SINGLE_MOVE)));
         break;
       case ACTION_SPY_NUKE:
       case ACTION_SPY_NUKE_ESC:
@@ -2883,23 +2983,23 @@ char *helptext_unit(char *buf, size_t bufsz, struct player *pplayer,
         if (game.info.nuke_pop_loss_pct > 0) {
           cat_snprintf(buf, bufsz,
                        /* TRANS: percentage */
-                       _("  * %d%% of the population of each city inside"
-                         " the nuclear blast dies.\n"),
+                       _("    <i style=\'color:#aa9\'>* %d%% of the population of each city inside"
+                         " the nuclear blast dies</i>\n"),
                          game.info.nuke_pop_loss_pct);
         }
         if (game.info.nuke_defender_survival_chance_pct > 0) {
           cat_snprintf(buf, bufsz,
-                       _("  * all units caught in the open by the nuclear"
-                         " blast dies.\n"));
+                       _("    <i style=\'color:#aa9\'>* all units caught in the open by the nuclear"
+                         " blast die</i>\n"));
           cat_snprintf(buf, bufsz,
                        /* TRANS: percentage */
-                       _("  * a unit caught in the nuclear blast while"
-                         " inside a city has a %d%% chance of survival.\n"),
+                       _("    <i style=\'color:#aa9\'>* a unit caught in the nuclear blast while"
+                         " inside a city has a %d%% chance of survival</i>\n"),
                          game.info.nuke_defender_survival_chance_pct);
         } else {
           cat_snprintf(buf, bufsz,
-                       _("  * all units caught in the nuclear blast"
-                         " dies.\n"));
+                       _("    <i style=\'color:#aa9\'>* all units caught in the nuclear blast"
+                         " die</i>\n"));
         }
 
         break;
@@ -2934,7 +3034,7 @@ char *helptext_unit(char *buf, size_t bufsz, struct player *pplayer,
 
         cat_snprintf(buf, bufsz,
                      /* TRANS: %s is a list of actions separated by "or". */
-                     _("  %s can't be done if %s is legal.\n"), BULLET,
+                     _("    <i style=\'color:#aa9\'>%s can't be done if %s is legal</i>\n"), BULLET,
                      astr_build_or_list(&blist, blockers, i));
 
         astr_free(&blist);
@@ -2986,27 +3086,27 @@ char *helptext_unit(char *buf, size_t bufsz, struct player *pplayer,
         switch (action_by_number(act)->id) {
           case ACTION_CAPTURE_UNITS:
             cat_snprintf(buf, bufsz,
-                         _("%s Capturable: can be captured if"
+                         _("%s <b style=\'color:#9aa\'>Capturable</b>: can be captured if"
                            " conditions allow it.\n"), BULLET_BIG);
             break;
           case ACTION_EXPEL_UNIT:
             cat_snprintf(buf, bufsz,
-                         _("%s Expellable: can be expelled if"
-                           " conditions allow it.\n"), BULLET_BIG);
+                         _("%s <b style=\'color:#9aa\'>Expellable</b>: can be peacefully expelled"
+                           " from foreign tiles.\n"), BULLET_BIG);
         }
       }
     }
     /* Default: actions whose impossibility/illegality is more rare */
     else if (!vulnerable) {
       cat_snprintf(buf, bufsz,
-                   _("%s Immune to the action \'%s\'.\n"), BULLET_BIG,
+                   _("%s Immune to the action <b style=\'color:#9aa\'>%s</b>\n"), BULLET_BIG,
                    action_id_name_translation(act));
     }
   } action_iterate_end;
   if (!has_vet_levels) {
     /* Only mention this if the game generally does have veteran levels. */
     if (game.veteran->levels > 1) {
-      CATLSTR(buf, bufsz, _("%s Will never achieve veteran status.\n"),
+      CATLSTR(buf, bufsz, _("%s Can never become veteran.\n"),
               BULLET_BIG);
     }
   } else {
@@ -3021,42 +3121,50 @@ char *helptext_unit(char *buf, size_t bufsz, struct player *pplayer,
      * more specific here about whether veteran status can be acquired
      * through combat/missions/work. Should also take into account
      * UTYF_NO_VETERAN when writing this text. (Gna patch #4794) */
-    CATLSTR(buf, bufsz, _("%s May acquire veteran status.\n"), BULLET_BIG);
+    CATLSTR(buf, bufsz, _("%s May become <b style=\'color:#9aa\'>Veteran</b>\n"), BULLET_BIG);
     if (utype_veteran_has_power_bonus(utype)) {
       if (utype_can_do_action(utype, ACTION_ATTACK)
           || utype->defense_strength > 0) {
         CATLSTR(buf, bufsz,
                 /* TRANS: indented; preserve leading spaces */
-                _("  %s Veterans have increased strength in combat.\n"), BULLET);
+                _("    <i style=\'color:#aa9\'>%s Veterans have increased strength in combat</i>\n"), BULLET);
       }
       /* SUPERSPY always wins/escapes */
       if (utype_has_flag(utype, UTYF_DIPLOMAT)
           && !utype_has_flag(utype, UTYF_SUPERSPY)) {
         CATLSTR(buf, bufsz,
                 /* TRANS: indented; preserve leading spaces */
-                _("  %s Veterans have improved chances in diplomatic "
-                  "contests.\n"), BULLET);
+                _("    <i style=\'color:#aa9\'>%s Veterans have improved chances in diplomatic "
+                  "contests</i>\n"), BULLET);
         if (utype_may_do_escape_action(utype)) {
           CATLSTR(buf, bufsz,
                   /* TRANS: indented; preserve leading spaces */
-                  _("  %s Veterans are more likely to survive missions.\n"), BULLET);
+                  _("    <i style=\'color:#aa9\'>%s Veterans are more likely to survive missions</i>\n"), BULLET);
         }
       }
       if (utype_has_flag(utype, UTYF_SETTLERS)) {
         CATLSTR(buf, bufsz,
                 /* TRANS: indented; preserve leading spaces */
-                _("  %s Veterans work faster.\n"), BULLET);
+                _("    <i style=\'color:#aa9\'>%s Veterans work faster</i>\n"), BULLET);
       }
     }
   }
   if (strlen(buf) > 0) {
     CATLSTR(buf, bufsz, "\n");
   }
-  if (has_vet_levels && utype->veteran) {
+  if (has_vet_levels) {
     /* The case where the unit has only a single veteran level has already
      * been handled above, so keep quiet here if that happens */
-    if (insert_veteran_help(buf, bufsz, utype->veteran,
-            _("This type of unit has its own veteran levels:"), NULL)) {
+    char vet_title_header[256];
+    if (utype->veteran) {
+      sprintf(vet_title_header, "%s %s own veteran levels:<br><hr>",
+              utype_name_translation(utype),
+              (is_word_plural(utype_name_translation(utype)) ? "have their" : "has its"));
+    } else {
+      sprintf(vet_title_header, "Veteran levels for %s are the standard ruleset default:<br><hr>",
+              utype_name_translation(utype));
+    }
+    if (insert_veteran_help(buf, bufsz, utype_veteran_system(utype), vet_title_header, NULL)) {
       CATLSTR(buf, bufsz, "\n\n");
     }
   }
