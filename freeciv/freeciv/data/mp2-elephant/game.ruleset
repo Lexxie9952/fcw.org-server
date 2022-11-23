@@ -3127,7 +3127,7 @@ actor_reqs    =
     }
 target_reqs    =
     { "type",      "name",       "range", "present"
-      "UnitType",  "Mech. Inf.", "Local", FALSE        ;Mech.Inf. has specific restriction for FootSoldiers only.
+      "UnitType",  "Mech. Inf.", "Local", FALSE        ;Mech.Inf. has specific restriction for AAA and FootSoldiers only.
     }
 ; This is a fall-thru identical to enabler above except Truck/Wagon/Siege Ram are allowed IFF !transporting
 [actionenabler_board_wagons_and_trucks_as_cargo]
@@ -3143,15 +3143,13 @@ actor_reqs    =
       "DiplRel",       "Never met",     "Local", FALSE
       "UnitType",      "Magnum Turret", "Local", FALSE  ;don't show illegal orders buttons 
       "MinMoveFrags",  "1",             "Local", TRUE   ;limits double-move and "attack-and-haul".
-      "UnitState",      "Transporting", "Local", FALSE  ;prevent russian doll exceptions               <<< *******
+      "UnitState",     "Transporting", "Local", FALSE  ;prevent russian doll exceptions               <<< *******
     }
-[actionenabler_foot_units_boarding_mech_inf]
+[actionenabler_AAA_and_foot_units_boarding_mech_inf]
 action        = "Transport Board"
 actor_reqs    =
     { "type",          "name",          "range", "present"
-      "UnitClassFlag", "TerrainSpeed",  "Local", TRUE   ;all Land
       "UnitFlag",      "FootSoldier",   "Local", TRUE   ;Foot Soldiers only
-      "UnitClass",     "LandRoad",      "Local", FALSE  ;!LandRoad: prevent russian doll exceptions
       "DiplRel",       "Armistice",     "Local", FALSE
       "DiplRel",       "War",           "Local", FALSE
       "DiplRel",       "Cease-fire",    "Local", FALSE
@@ -3162,6 +3160,18 @@ actor_reqs    =
 target_reqs    =
     { "type",      "name",       "range", "present"
       "UnitType",  "Mech. Inf.", "Local", TRUE
+    }
+
+[actionenabler_board_landairsea]
+action        = "Transport Board"
+actor_reqs    =
+    { "type",      "name",          "range", "present"
+      "UnitClass", "LandAirSea",    "Local", TRUE
+      "DiplRel",   "Armistice",     "Local", FALSE
+      "DiplRel",   "War",           "Local", FALSE
+      "DiplRel",   "Cease-fire",    "Local", FALSE
+      "DiplRel",   "Peace",         "Local", FALSE
+      "DiplRel",   "Never met",     "Local", FALSE
     }
 
 [actionenabler_board_sea_trawler]       
@@ -3175,17 +3185,6 @@ actor_reqs    =
       "DiplRel",       "Peace",         "Local", FALSE
       "DiplRel",       "Never met",     "Local", FALSE
       "UnitState",     "MovedThisTurn", "Local", FALSE   ;Sea units may not have moved to get on trawler 
-    }
-[actionenabler_board_marines]
-action        = "Transport Board"
-actor_reqs    =
-    { "type",    "name",          "range", "present"
-      "UnitType","Marines",       "Local", TRUE 
-      "DiplRel", "Armistice",     "Local", FALSE
-      "DiplRel", "War",           "Local", FALSE
-      "DiplRel", "Cease-fire",    "Local", FALSE
-      "DiplRel", "Peace",         "Local", FALSE
-      "DiplRel", "Never met",     "Local", FALSE
     }
 
 ;This enabler can replace the one above if/when needed if "russian doll" exploits are discovered which should be stopped.
