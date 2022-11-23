@@ -112,7 +112,7 @@ class_flags =
     _("Airliftable"), _("Can be airlifted if it has remaining moves")
     _("BorderPolice"), _("Military units from this class can peacefully expel certain foreign units")
     _("CargoRestrained"), _("Can’t attack as Cargo. Must first deboard or disembark")
-    _("WaterVessel"), _("Crew Repair: recovers an extra +10% of its hit-points per turn regardless of movement")
+    _("WaterVessel")
     _("DelayLoad"), _("Loses 1/3 move when boarding or deboarding")
     _("UnloadOnce"), _("Loses 2/3 moves when unloaded")
     _("NeverTired"), _("Always atttacks at full strength; never tired attack")
@@ -344,7 +344,7 @@ hp_loss_pct   = 0
 flags         = "DamageSlows", "AttackNonNative", "AttFromNonNative", "CanPillage", "WaterVessel",
                 "NeverTired", "ZOC", "CargoRestrained" ;can't attack while being towed by Trawler
 helptext      = _("\
-  • Crew Repair：each turn, regardless of movement, recovers 10% of its hit points (rounded down).\
+  • Crew Repair：each turn, regardless of movement, recovers 10% of its hit points.\
 ")
 
 [unitclass_submarine]    ; Separating the Submarine class allows it to be unreachable by Air. NOTE: not subject to ZOC.
@@ -4390,7 +4390,7 @@ uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
 cargo         = "Land", "LandNoKill", "LandAirSea", "Big Land", "LandRoad", "Cargo"
-flags         = "BadCityDefender", "CantReachAir", "HelpWonder", "HasNoZOC", "IgZOC",
+flags         = "BadCityDefender", "CantReachAir", "HelpWonder", "HasNoZOC",                       ; <uclass ignores ZOC> "IgZOC",
                 "TradeRoute", "Coast", "WillNever", "NonMil", "NonMilAttack", "ProvokingClass2"
 veteran_names =
   _("?vet_rank:green"),

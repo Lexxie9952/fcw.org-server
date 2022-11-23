@@ -314,7 +314,7 @@ hp_loss_pct   = 0
 flags         = "DamageSlows", "AttackNonNative", "AttFromNonNative", "CanPillage", "WaterVessel",
                 "CargoRestrained" ;can't attack while being towed by Trawler
 helptext      = _("\
-  • Crew Repair：each turn, regardless of movement, recovers 10% of its hit points (rounded down).\
+  • Crew Repair：each turn, regardless of movement, recovers 10% of its hit points.\
 ")
 
 [unitclass_submarine]    ; Separating the Submarine class allows it to be unreachable by Air. NOTE: not subject to ZOC.
