@@ -395,12 +395,15 @@ function utype_is_a_cargo_class_for_ttype(ptype, ttype)
   }
 
 /* actionenabler overrides: ptype not actionenabled to board */
-  /* MP2E uclass:Land allowed on Mech.Inf; but only FootSolders actionenabled */
+  /* MP2E uclass:Land allowed on Mech.Inf; but only FootSolders and AAA are
+     actionenabled */
   if (client_rules_flag[CRF_MP2_E]) {
-    if (!utype_has_flag(ptype, UTYF_FOOTSOLDIER)
-        && ttype.rule_name == "Mech. Inf.") {
-
-          return false;
+    if (ttype.rule_name == "Mech. Inf.") {
+      if (utype_has_flag(ptype, UTYF_FOOTSOLDIER)
+          || ptype.name == "Anti-Aircraft Artillery") {
+            return true;
+          }
+      else return false;
     }
   }
   
@@ -648,12 +651,12 @@ function unit_could_possibly_load(punit, ptype, ttype, tclass)
 /* Should be handled by utype is legal cargo check at top.
     if (tclass.rule_name == "Land") return false; // can't load on Caravans, the only Land class with cargo capacity.
     if (tclass.rule_name == "Submarine") return false;
-*/
-    if (client_rules_flag[CRF_MP2_E] && ttype.name == "Mechanized Infatry") {
-      if (unit_has_type_flag(punit, UTYF_FOOTSOLDIER)) return true;
-      else if (ptype.name == "Anti-Aicraft Artillery") return true;
-    }
 
+    if (client_rules_flag[CRF_MP2_E] && ttype.name == "Mechanized Infantry") {
+      if (unit_has_type_flag(punit, UTYF_FOOTSOLDIER)) return true;
+      else if (ptype.name == "Anti-Aircraft Artillery") return true;
+    }
+*/
     // Special actionenabler rules in MP2, only slow units can use Trucks and Trains:
     if (tclass.rule_name == "LandRail" || tclass.rule_name == "LandRoad") {  
       if (utype_real_base_move_rate(ptype) >= 3 * SINGLE_MOVE) return false; // Equality: units with <3 moves can use wagon/train/truck
