@@ -107,15 +107,15 @@ class_flags =
 ;RESERVED:
      _("Missile"), _("Unit is destroyed after attack, pillage, or loss of its transporter.")
 ;CUSTOM:
-    _("AttFromNonNative"), _("Can launch attack from non-native tiles.")
-    _("CanPillage"), _("Can pillage tile improvements.")
-    _("Airliftable"), _("Can be airlifted if it has remaining moves.")
-    _("BorderPolice"), _("Military units from this class can peacefully expel certain foreign units.")
-    _("CargoRestrained"), _("Can’t attack as Cargo. Must first deboard or disembark.")
+    _("AttFromNonNative"), _("Can launch attack from non-native tiles")
+    _("CanPillage"), _("Can pillage tile improvements")
+    _("Airliftable"), _("Can be airlifted if it has remaining moves")
+    _("BorderPolice"), _("Military units from this class can peacefully expel certain foreign units")
+    _("CargoRestrained"), _("Can’t attack as Cargo. Must first deboard or disembark")
     _("WaterVessel")
-    _("DelayLoad"), _("Fractional move points spent to load or unload this unit.")
-    _("UnloadOnce"), _("Loses 2/3 moves when unloaded.")
-    _("NeverTired"), _("Always atttacks at full strength; never tired attack.")
+    _("DelayLoad"), _("Fractional move points spent to load or unload this unit")
+    _("UnloadOnce"), _("Loses 2/3 moves when unloaded")
+    _("NeverTired"), _("Always atttacks at full strength; never tired attack")
 ;RESERVED:
     _("NoCarrierRefuel")
   }
