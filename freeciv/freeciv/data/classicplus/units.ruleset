@@ -38,7 +38,7 @@ flags =
     _("Helicopter"), _("Loses 1hp for every turn in the air.\n
 Defends very badly against Fighters.")
     _("Submarine"), _("Cannot be seen unless adjacent.")
-    _("Unbribable"), _("Can’t be bribed.")
+    _("Unbribable")
     _("TradeRoute"), _("Can establish trade routes (must travel to target city).")
     _("HelpWonder"), _("Can help build a Wonder in any non-hostile city.")
     _("Capturer"),   _("Can capture some enemy units.")

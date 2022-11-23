@@ -44,7 +44,7 @@ flags =
     _("FootSoldier"), _("Knights defend at 2 when attacked by this unit.") ;uniformity
     _("Helicopter"), _("Defends very badly against Fighters.")
     _("Submarine"), _("Attack value reduced against some ships.") ;uniformity
-    _("Unbribable"), _("Can't be bribed.")
+    _("Unbribable")
     _("TradeRoute"), _("Can establish a foreign trade route (must travel to target city).") ;uniformity
     _("HelpWonder"), _("Can help build a Wonder in any non-hostile city.")
     _("Capturer"),   _("Can capture some enemy units.") ;uniformity
