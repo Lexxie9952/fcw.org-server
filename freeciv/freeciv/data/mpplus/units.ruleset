@@ -1338,7 +1338,7 @@ uk_gold       = 0
 flags         = ""
 roles         = "AttackFastStartUnit", "Hunter"
 helptext      = _("\
-Armors are motorized war wagons that are faster,\
+Armor is a motorized war wagon that is faster,\
  stronger, and can take more damage than any\
  mounted unit.\
 ")
