@@ -42,7 +42,7 @@ flags =
     _("AirAttacker"), _("Anti-Air units have a defense bonus against this unit.")
     _("Horse"), _("Attack value halved when attacking Pikemen.\n\
 ➤ Knights defend at 3 when attacked by this unit.")
-    _("FootSoldier"), _("Knights defend at 2 when attacked by this unit.")
+    _("FootSoldier")
     _("Helicopter"), _("Loses 1hp for every turn in the air.\n\
 ➤ Gets +1 move point if starting its turn in a City or Airbase.")
     _("Submarine"), _("Attack value reduced against some ships.")
