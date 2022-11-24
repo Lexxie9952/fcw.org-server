@@ -123,9 +123,8 @@ and can now be built with veteran levels.
       0% land civilian and AAA/Marines; 
       50% Foot Soldiers, Aircraft, Missiles
       75% land military non-foot; 50% + won't subtract if <= 3 moves left (aircraft, preserves vigil)
-
-43. Spy Plane and Bombers (except Dive Bomber) are BadCityDefender. This adjusts the fact some have defensive capabilities in the air but
-    are poor defenders to scramble for city defense.
+43. Spy Plane and Bombers (except Dive Bomber) are BadCityDefender. This adjusts the fact some have strong 
+    defensive capabilities in the air but are poor defenders to scramble for city defense.
 44. Transport swapping rules greatly simplifed because of Passenger_Move_Cost.
     a. Bombs can swap transports in cities and airbases.
     b. Missiles can swap transports in cities and any no-stack-death base.
@@ -139,4 +138,5 @@ Missiles boarding and transport swapping must be done in friendly city or base. 
 46. TiredAttack only applies to land units. Air and Sea weren't meant originally to have fractional moves_left but as it's now possible with
    the overhaul of the movement system, we keep things consistent with old rules and not add a complexity to worry about.
 47. GSF max attacks per turn: 3 (was 4)
-
+48. Spy Plane as defender limits to 5 combat rounds.
+49. 

@@ -143,8 +143,15 @@ reqs	=
     { "type",     "name",     "range", "present"
       "UnitType", "Zeppelin", "Local", TRUE
     }
-;Takes 4 units on vigil to get a kill. TODO: somehow overridden by Stealth Fighter. Override code starts at like -1000: (code+1000)*-1
+;Penetration Bomber and Spy Plane limit combat rounds from ultrasonic speed and/or altitude.
 [effect_penetration_bomber_defending_combat_rounds]
+type = "Defender_Combat_Rounds"    ;tested and works !
+value = 5
+reqs =
+    { "type",     "name",               "range", "present"
+      "UnitType", "Penetration Bomber", "Local", TRUE 
+    }
+[effect_spy_plane_defending_combat_rounds]
 type = "Defender_Combat_Rounds"    ;tested and works !
 value = 5
 reqs =

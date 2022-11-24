@@ -3089,10 +3089,9 @@ Balloons gather intel on potential battle areas. They have great vision and\
  the air for one Turn Change before landing in a City, Base, Quay, or transport\
  unit with cargo capacity of 4+. Balloons give sentry reports of nearby unit\
  movements even when not on sentry. Balloons do not block units under them\
- from being attacked, and can’t fly over mountains.\
+ from being attacked, and can’t fly over mountains.\n \
 "), _("
-NOTE：GOTO disallows unit loss from lack of fuel. You\
- can override this by moving to adjacent tiles.\
+GOTO forces layovers on refuel-tiles. To override, shift-click goal-tile or move one tile off the refuel spot.\
 ")
 
 [unit_zeppelin]
@@ -3146,10 +3145,9 @@ As new technology inspires the upgrade of Balloons, the Zeppelin appears.\
 Zeppelins have great vision and are unreachable by units prior to Marines and\
  Destroyers. Zeppelins do not block units under them from being attacked. Zeppelins\
  give sentry reports of nearby unit movements even when not on sentry. Unlike\
- Balloons, they can fly over Mountains.\
+ Balloons, they can fly over Mountains.\n \
 "), _("
-NOTE：GOTO disallows unit loss from lack of fuel. You\
- can override this by moving to adjacent tiles.\
+GOTO forces layovers on refuel-tiles. To override, shift-click goal-tile or move one tile off the refuel spot.\
 ")
 bombard_rate = 4
 
@@ -3192,9 +3190,8 @@ Airplanes can carry a diplomatic unit or a Freight unit. They can land in any do
  or allied city. For diplomatic missions to non-allied nations, an empty Airbase must be available for landing.\
  Airplanes have two turns of fuel. Each new aviation tech upgrades range by +1 move per turn. \n\
 "), _("
-Stack-Escape：60% odds to evade stack-death if attacker doesn’t have more moves than it does.\
- NOTE：GOTO disallows unit loss from lack of fuel. You\
- can override this by moving to adjacent tiles.\
+Stack-Escape：60% odds to evade stack-death if attacker doesn’t have more moves than it does.\n \
+GOTO forces layovers on refuel-tiles. To override, shift-click goal-tile or move one tile off the refuel spot.\
 ")
 
 [unit_fighter]
@@ -3249,9 +3246,8 @@ Fighters are the first offensive Air units. Their superior mobility and firepowe
 INTERCEPTOR：the Vigil order lets Fighters auto-attack adjacent Air units if they\
  have better attack odds. A Fighter can Vigil if it uses 2 move points or less. \n\
 "), _("
-Stack-Escape：60% odds to evade stack-death if attacker doesn’t have more moves than it does.\
- NOTE：GOTO disallows unit loss from lack of fuel. You\
- can override this by moving to adjacent tiles.\
+Stack-Escape：60% odds to evade stack-death if attacker doesn’t have more moves than it does.\n \
+GOTO forces layovers on refuel-tiles. To override, shift-click goal-tile or move one tile off the refuel spot.\
 ")
 
 [unit_escort_fighter]
@@ -3305,9 +3301,8 @@ Escort Fighters are large fighters with high fuel capacity. Higher mass and\
 INTERCEPTOR：the Vigil order lets Escort Fighters auto-attack adjacent Air units if they\
  have better attack odds. This unit can Vigil if it uses 3 move points or less. \n\
 "), _("
-Stack-Escape：60% odds to evade stack-death if attacker doesn’t have more moves than it does.\
- NOTE：GOTO disallows unit loss from lack of fuel. You\
- can override this by moving to adjacent tiles.\
+Stack-Escape：60% odds to evade stack-death if attacker doesn’t have more moves than it does.\n \
+GOTO forces layovers on refuel-tiles. To override, shift-click goal-tile or move one tile off the refuel spot.\
 ")
 
 [unit_dive_bomber]
@@ -3443,9 +3438,8 @@ The Medium Bomber is well suited for hitting a moderately strong target.\
 Republic:0   Democracy:1    (non-aggressive) \n\
 Republic:1   Democracy:2    (aggressive) \n\
 "), _("
-Stack-Escape：60% odds to evade stack-death if attacker doesn’t have more moves than it does.\
- NOTE：GOTO disallows unit loss from lack of fuel. You\
- can override this by moving to adjacent tiles.\
+Stack-Escape：60% odds to evade stack-death if attacker doesn’t have more moves than it does.\n \
+GOTO forces layovers on refuel-tiles. To override, shift-click goal-tile or move one tile off the refuel spot.\
 ")
 
 [unit_heavy_bomber]
@@ -3502,9 +3496,8 @@ Heavy Bombers are large and sturdy Bombers with larger payload and numerous gunn
 ➤ Unhappy effect for Field units: \n\
 Republic:1   Democracy:2 \n\
 "), _("
-Stack-Escape：60% odds to evade stack-death if attacker doesn’t have more moves than it does.\
- NOTE：GOTO disallows unit loss from lack of fuel. You\
- can override this by moving to adjacent tiles.\
+Stack-Escape：60% odds to evade stack-death if attacker doesn’t have more moves than it does.\n \
+GOTO forces layovers on refuel-tiles. To override, shift-click goal-tile or move one tile off the refuel spot.\
 ")
 
 [unit_strategic_bomber]
@@ -3559,9 +3552,8 @@ The Strategic Bomber can do two attacks per turn. Higher altitude offers a good 
  defense. It has considerably longer range, with one more turn of fuel. Upgraded payload enables\
  instant-Pillage bombing. May carry two Bombs. \n\
 "), _("
-Stack-Escape：60% odds to evade stack-death if attacker doesn’t have more moves than it does.\
- NOTE：GOTO disallows unit loss from lack of fuel. You\
- can override this by moving to adjacent tiles.\
+Stack-Escape：60% odds to evade stack-death if attacker doesn’t have more moves than it does.\n \
+GOTO forces layovers on refuel-tiles. To override, shift-click goal-tile or move one tile off the refuel spot.\
 ")
 
 [unit_awacs]
@@ -3601,9 +3593,8 @@ helptext      = _("\
 The AWACS has great fuel capacity for long range flights, and advanced radar that can determine\
  the location of enemy units over a wide area. The AWACS has 2 turns of fuel. \n\
 "), _("
-Stack-Escape：60% odds to evade stack-death if attacker doesn’t have more moves than it does.\
- NOTE：GOTO disallows unit loss from lack of fuel. You\
- can override this by moving to adjacent tiles.\
+Stack-Escape：60% odds to evade stack-death if attacker doesn’t have more moves than it does.\n \
+GOTO forces layovers on refuel-tiles. To override, shift-click goal-tile or move one tile off the refuel spot.\
 ")
 
 [unit_spy_plane]
@@ -3650,11 +3641,11 @@ helptext      = _("\
 The Spy Plane is an ultrasonic high altitude aircraft with long range. It gathers\
  intel over a wide area. Stealth technology makes it invisible, except to enemies on\
  adjacent tiles. Spy Planes have 2 turns of fuel. They are unreachable to primitive\
- propeller-based aircraft. \
+ propeller-based aircraft. The speed and altitude of the Spy Plane are such that\
+ attackers only get 5 combat rounds against this unit. \
 "), _("
-Stack-Escape：75% odds to evade stack-death if attacker doesn’t have more moves than it does.\
- NOTE：GOTO disallows unit loss from lack of fuel. You\
- can override this by moving to adjacent tiles.\
+Stack-Escape：75% odds to evade stack-death if attacker doesn’t have more moves than it does.\n \
+GOTO forces layovers on refuel-tiles. To override, shift-click goal-tile or move one tile off the refuel spot.\
 ")
 [unit_satellite]
 name          = _("Satellite")
@@ -3896,8 +3887,8 @@ Jet Fighters upgrade the Fighter with improved attack, defense, and range. A Jet
 INTERCEPTOR：the Vigil order lets Jet Fighters auto-attack adjacent Air units if they\
  have better attack odds. This unit can Vigil if it uses 3 move points or less. \n\
 "), _("
-Stack-Escape：60% odds to evade stack-death if attacker doesn’t have more moves than it does.\
- NOTE：GOTO disallows unit loss from lack of fuel. You can override this by moving to adjacent tiles.\
+Stack-Escape：60% odds to evade stack-death if attacker doesn’t have more moves than it does.\n \
+GOTO forces layovers on refuel-tiles. To override, shift-click goal-tile or move one tile off the refuel spot.\
 ")
 
 [unit_multi_fighter]
@@ -3955,8 +3946,8 @@ Multi-Fighters are fitted for mission versatility.\
 INTERCEPTOR：the Vigil order lets Multi-Fighters auto-attack adjacent Air units if they\
  have better attack odds. This unit can Vigil if it has 1 turn of fuel or more. \n\
 "), _("
-Stack-Escape：60% odds to evade stack-death if attacker doesn’t have more moves than it does.\
- NOTE：GOTO disallows unit loss from lack of fuel. You can override this by moving to adjacent tiles.\
+Stack-Escape：60% odds to evade stack-death if attacker doesn’t have more moves than it does.\n \
+GOTO forces layovers on refuel-tiles. To override, shift-click goal-tile or move one tile off the refuel spot.\
 ")
 
 [unit_ground_strike_fighter]
@@ -4069,9 +4060,8 @@ Jet Bombers are stratospheric long-range bombers with 3 turns of fuel：they can
  attacks per turn. Jet Bombers can Carpet Bomb, an\
  instant-Pillage of tiles from the air. May carry three Bombs. \ 
 "), _("
-Stack-Escape：60% odds to evade stack-death if attacker doesn’t have more moves than it does.\
- NOTE：GOTO disallows unit loss from lack of fuel. You\
- can override this by moving to adjacent tiles.\
+Stack-Escape：60% odds to evade stack-death if attacker doesn’t have more moves than it does.\n \
+GOTO forces layovers on refuel-tiles. To override, shift-click goal-tile or move one tile off the refuel spot.\
 ")
 
 [unit_penetration_bomber]
@@ -4127,9 +4117,8 @@ Before Stealth Bombers were engineered, high tech air forces devised a different
  this unit. Penetration Bombers can Bomb Strike, a targeted instant-Pillage which\
  costs 3 move points. May carry 2 Bombs. Maximum attacks per turn：2.\ 
 "), _("
-Stack-Escape：67% odds to evade stack-death if attacker doesn’t have more moves than it does.\
- NOTE：GOTO disallows unit loss from lack of fuel. You\
- can override this by moving to adjacent tiles.\
+Stack-Escape：67% odds to evade stack-death if attacker doesn’t have more moves than it does.\n \
+GOTO forces layovers on refuel-tiles. To override, shift-click goal-tile or move one tile off the refuel spot.\
 ")
 
 [unit_stealth_fighter]
@@ -4188,10 +4177,9 @@ The most advanced Fighter, with improved attack and longer range. Stealth Fighte
 INTERCEPTOR：the Vigil order lets Stealth Fighters auto-attack adjacent Air units if they\
  have better attack odds. This unit can Vigil if it uses 4 move points or less. \n\
 "), _("
-Stack-Escape：67% odds to evade stack-death if attacker doesn’t have more moves than it does.\
+Stack-Escape：67% odds to evade stack-death if attacker doesn’t have more moves than it does.\n \
 "), _("
-NOTE：GOTO disallows unit loss from lack of fuel. You\
- can override this by moving to adjacent tiles.\
+GOTO forces layovers on refuel-tiles. To override, shift-click goal-tile or move one tile off the refuel spot.\
 ")
 
 [unit_stealth_multifighter]
@@ -4250,10 +4238,9 @@ Stealth Multi-Fighters can’t be seen unless adjacent to an enemy. Stealth evas
 INTERCEPTOR：the Vigil order lets Stealth Fighters auto-attack adjacent Air units if they\
  have better attack odds. \n\
 "), _("
-Stack-Escape：67% odds to evade stack-death if attacker doesn’t have more moves than it does.\
+Stack-Escape：67% odds to evade stack-death if attacker doesn’t have more moves than it does.\n \
 "), _("
-NOTE：GOTO disallows unit loss from lack of fuel. You\
- can override this by moving to adjacent tiles.\
+GOTO forces layovers on refuel-tiles. To override, shift-click goal-tile or move one tile off the refuel spot.\
 ")
 
 [unit_stealth_bomber]
@@ -4312,9 +4299,8 @@ The deadliest Bomber, with improved attack and speed. Stealth Bombers can’t be
  a maximum of three attacks per turn. Stealth Bombers can Bomb Strike, an\
  instant-Pillage of tiles from the air. May carry two Bombs. \n\
 "), _("
-Stack-Escape：67% odds to evade stack-death if attacker doesn’t have more moves than it does.\
- NOTE：GOTO disallows unit loss from lack of fuel. You\
- can override this by moving to adjacent tiles.\
+Stack-Escape：67% odds to evade stack-death if attacker doesn’t have more moves than it does.\n \
+GOTO forces layovers on refuel-tiles. To override, shift-click goal-tile or move one tile off the refuel spot.\
 ")
 
 [unit_boat]
@@ -4424,7 +4410,8 @@ Like most ancient sea units, when it initiates combat there will be 15 rounds\
  result in a victor. Triremes do not cause unhappiness. \n\
 "), _("
 Triremes are well-suited for river travel and gain +1 move when starting\
- their turn on a river.\
+ their turn on a river.\n \
+GOTO forces layovers on coastal tiles. To override, shift-click goal-tile or move one tile off the refuel spot.\
 ")
 
 [unit_longboat]
