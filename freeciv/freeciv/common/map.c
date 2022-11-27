@@ -794,7 +794,7 @@ long tile_move_cost_ptrs(const struct civ_map *nmap,
                         const struct tile *t1, const struct tile *t2)
 {
   const struct unit_class *pclass = utype_class(punittype);
-  long cost;
+  long base_cost, cost;
   long penalty = 0; // unload penalty from game.info.unload_override
 
   bool cardinality_checked = FALSE;
@@ -872,6 +872,7 @@ long tile_move_cost_ptrs(const struct civ_map *nmap,
 
   cost = game.server.move_cost_in_frags ? tile_terrain(t2)->movement_cost
                                         : tile_terrain(t2)->movement_cost * SINGLE_MOVE;
+  base_cost = cost;  /* record what we started with */  
   ri = restrict_infra(pplayer, t1, t2);
   bool rri_active = false; // if ReverseRestrictInfra is in effect
 
@@ -887,6 +888,17 @@ long tile_move_cost_ptrs(const struct civ_map *nmap,
 
         struct road_type *proad = extra_road_get(pextra);
         bool rri = road_has_flag(proad, RF_REVERSE_RESTRICT_INFRA);
+        bool hard_ri_exit = road_has_flag(proad, RF_HARD_EXIT_RESTRICT_INFRA);
+        bool hard_ri_entry = road_has_flag(proad, RF_HARD_ENTRY_RESTRICT_INFRA);
+
+        /* A hard_ri flag means this tile uses all moves entering, or exiting, or both.
+          (e.g., river crossing); BUT, that's only the case if 'cost' isn't reduced by some
+          other lower road cost (including the road-type connecting to its own road-type) */
+        if (hard_ri_exit && src_has_road && cost == base_cost) {
+          cost = 999 * SINGLE_MOVE;
+        } else if (hard_ri_entry && dest_has_road && cost == base_cost) {
+          cost = 999 * SINGLE_MOVE;
+        }
 
         if (rri) {
           rri_active |= rri;

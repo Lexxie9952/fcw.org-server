@@ -36,13 +36,15 @@ extern "C" {
    enemy movement. [chevaux de frise,walls,ditches, etc.] */
 #define SPECENUM_VALUE5 RF_REVERSE_RESTRICT_INFRA
 #define SPECENUM_VALUE5NAME N_("ReverseRestrictInfra")
-/* Roads's move_cost=x translates as 1/x of actor unit's base move rate.
-   >> The move_cost becomes how many moves the unit can make on this road
-   type before running out of its (full) move points. 
-   >> e.g., the 'boat' assumed to be carrying units faster on rivers
-     doesn't move double speed for horsemen: everyone gets x moves */
+/* Road's move_cost=x translates as 1/x of actor unit's move rate.
+   >> The move_cost becomes how many moves the unit can make on this
+      road-type before running out of its (full) move points. */
 #define SPECENUM_VALUE6 RF_PASSIVE_MOVEMENT
 #define SPECENUM_VALUE6NAME N_("PassiveMovement")
+#define SPECENUM_VALUE7 RF_HARD_EXIT_RESTRICT_INFRA 
+#define SPECENUM_VALUE7NAME N_("HardExitRInfra")
+#define SPECENUM_VALUE8 RF_HARD_ENTRY_RESTRICT_INFRA 
+#define SPECENUM_VALUE8NAME N_("HardEntryRInfra")
 #define SPECENUM_COUNT RF_COUNT
 #define SPECENUM_BITVECTOR bv_road_flags
 #include "specenum_gen.h"
