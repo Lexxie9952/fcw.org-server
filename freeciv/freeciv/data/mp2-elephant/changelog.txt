@@ -46,15 +46,29 @@ and can now be built with veteran levels.
 2. Scout 10hp (was 8)
 3. AWACS 30hp (was 20), moved to Rocketry (post WW2 tech: give Escort Fighters a purpose in WW2)
 4. Rivers and Rails are now PASSIVE MOVEMENT: unit is assumed to be a passenger. Therefore Warriors, Horsemen, and Armor all move the same
-   speed down a river. (don't forget to make it so: BigLand needs native to river again, we took it out!)
+   speed down a river. This is 1/6 of mp. This only effects Land-type units, Sea units aren't TerrainSpeed and are always 1mp wherever
+   they go.
+   A. Rivers gain hard-entry and hard-exit flags, using all move points to go from non-river tile to river tile and vice versa, 
+   simulating to difficulty of crossing an unbridged/unquayed river.
+   B. Big Land units are native to rivers again. This implies certain differences and has certain reasons:
+   ** New PassiveMovement cost of 1/6 effectively makes a move along a river 1mp, so that all units get the same
+         "virtual boat speed" now. This is also the same move_speed as when  Big Land was non-native in mp2d. 
+         So why the change? Several differences:
+   ** Ends up using 1 move point when following a river to a forest/hill/mountain, instead of 2 or more.
+   ** Does allow movement onto mountain river.
+   ** Allows Big Land to incur the restrictinfra hard entry/exit penalty for crossing rivers
+   ** Allows coding the server so only units native-to-road-type get hard entry/exit, thus
+        allowing trenches and similar to only affect native classes and some TerrainSpeed classes can ignore them.
 5. For simplicity, Canals are same as rivers regarding movement. i.,e., if canals are so great that battleships can use them, 
-   why do we assume land types can't get on boats like they can for rivers? i.e., Canals are PassiveMovement, 6 moves.
+   why do we assume land types can't get on boats like they can for rivers? i.e., Canals are PassiveMovement, 1/6 mp, 
+   and have same hard-entry hard-exit rules as well. (A Canal is now effectively a river in every way except +1 trade.)
 6. Increased vision of castle
 7. New base watchtower, allows vision 
 8. Trains are actually active agents on passive road-type, so their +1 move bonus for electricity and combuston remains, as an active
    move bonus giving +5 and +5 tiles range, respectvely
 9. New road type Highway uses 2/9 move instead of 1/3; gives a range of 9 for foot, 18 for mounted, 27 for motorized
 10. Smaller boats (Boats and Triremes) get +1 move point for moving faster on rivers, if they start their turn on a river.
+      this now makes Boats move at 6, same speed as unit using river without boat.
 11. Like wagon and trawler, everyone can see a Boat's cargo.
 12. Patriarch can gain vet levels like other dipomat types.
 13. Most first techs reduced in price to 15. HBR 24. Warrior Code: 18. Easier Bronze Age, more risk rushing out because missing out on things,
@@ -87,8 +101,8 @@ and can now be built with veteran levels.
    or if 2 given saves moves for an attack!  Need to change docs for its SUA too.
 26. Space.2 tech doubled in cost to 2460.
 27. Howitzers go from 4mp to 3 1/3mp. On blank terrain they can travel the same number of tiles (just attack at 1/3 on the final move).
-    On roads and rivers they travel 10 tiles instead of 12.
-    On highways they travel tiles instead of 18 instead of 20 (which is higher than the 12 on roads of MP2D)
+    On roads they travel 10 tiles instead of 12. On rivers, 6 instead of 12.
+    On highways they travel 15 tiles (which is higher than the 12 on roads of MP2D) [27Nov2022 this statement is correct]
     On rails and maglev they travel 20 and 40 just like every other unit.
     REASONS: the 2x movement boost of Howitzer over Artillery was always problematic. These weapons are powerhouses which should
     require, as in real life, some tactical premeditations and preparatory movements to set up, rather than rushing down roads and 

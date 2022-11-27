@@ -2233,7 +2233,16 @@ reqs           =
 build_time = 2
 removal_time = 0
 flags          = "NativeTile", "Quayable", "IrrigationSource", "WaterwaySource"
-native_to      = "Land", "LandNoKill", "LandAirSea", "Trireme", "RiverShip" ;NOTE: "Big Land" doesn't use rivers like a road 
+native_to      = "Land", "LandNoKill", "LandAirSea", "Trireme", "RiverShip",
+                 "Big Land" ; see below:
+; NOTE: PassiveMovement cost of 1/6 effectively makes a move along a river 1mp, same as when
+; Big Land was non-native in mp2d. So why the change? Several differences:
+; Gets the 1.5x defense bonus on rivers, without which Big Land is over-nerfed compared to Foot.
+; Ends up being 1 move point when going on a forest/hill.
+; Does allow movement onto mountain river.
+; Incurs the restrictinfra hard entry/exit penalty for crossing rivers
+; Allows coding the server so only units native-to-road-type get hard entry/exit, thus
+; Allowing trenches and similar to only affect native classes and some TerrainSpeed classes can ignore them.
 helptext       = _("\
 A River adds +1 trade to the output of a tile, and +0.50 to\
  the terrain defense bonus. Non-motorized units with full move points\
@@ -2351,8 +2360,17 @@ reqs           =
     }
 build_time     = 10
 removal_time   = 0
-native_to      = "Trireme", "Sea", "RiverShip", "Land", "LandAirSea", "LandNoKill", "Helicopter", "Submarine" ; not native to "Big Land", like River
 flags          = "NativeTile", "Quayable", "IrrigationSource", "WaterwaySource"
+native_to      = "Trireme", "Sea", "RiverShip", "Land", "LandAirSea", "LandNoKill", "Helicopter", "Submarine",
+                 "Big Land"; see below
+; NOTE: PassiveMovement cost of 1/6 effectively makes a move along a canal 1mp, same as when
+; Big Land was non-native in mp2d. So why the change? Several differences:
+; Gets the 1.5x defense bonus on rivers, without which Big Land is over-nerfed compared to Foot.
+; Ends up being 1 move point when going on a forest/hill.
+; Does allow movement onto mountain river.
+; Incurs the restrictinfra hard entry/exit penalty for crossing rivers
+; Allows coding the server so only units native-to-road-type get hard entry/exit, thus
+; Allowing trenches and similar to only affect native classes and some TerrainSpeed classes can ignore them.
 helptext          = _("\
 Canals are a canal-type allowing all ships to travel over land tiles. They provide \
 the same move bonus to land units as a River does. Canals can be \
@@ -2384,8 +2402,17 @@ reqs           =
     }
 build_time     = 10
 removal_time   = 0
-native_to      = "Trireme", "Sea", "RiverShip", "Land", "LandAirSea", "LandNoKill", "Helicopter", "Submarine" ; not native to "Big Land", like River
 flags          = "NativeTile", "Quayable", "IrrigationSource"
+native_to      = "Trireme", "Sea", "RiverShip", "Land", "LandAirSea", "LandNoKill", "Helicopter", "Submarine", 
+                 "Big Land"; see below:
+; NOTE: PassiveMovement cost of 1/6 effectively makes a move along a canal 1mp, same as when
+; Big Land was non-native in mp2d. So why the change? Several differences:
+; Gets the 1.5x defense bonus on rivers, without which Big Land is over-nerfed compared to Foot.
+; Ends up being 1 move point when going on a forest/hill.
+; Does allow movement onto mountain river.
+; Incurs the restrictinfra hard entry/exit penalty for crossing rivers
+; Allows coding the server so only units native-to-road-type get hard entry/exit, thus
+; Allowing trenches and similar to only affect native classes and some TerrainSpeed classes can ignore them.
 helptext          = _("\
 Waterways are an inland canal-type. They’re the same as a Canal, but can use \
 Rivers and ocean-sourced Canals as their water source. Unlike a Canal, however, \
@@ -3188,6 +3215,18 @@ flags          = "NoAggressive"
 ;                           reflects the max moves any unit can make while "passively"
 ;                           using it. This solves age-old problem of the trains and boats
 ;                           that horsemen used, being twice as fast as for warriors.
+;   - "HardExitRInfra"    = When exiting this road-type to a tile which has no integrating
+;                           road-type, a hard restrictinfra penalty is assessed which spends
+;                           all remaining move points. Penalty not assessed if other road
+;                           types provide transport at a lower cost. This helps, for example,
+;                           in simulating the move cost of crossing a foreign river without
+;                           any friendly-river-infra present to assist that operation.
+;   - "HardEntryRInfra"   = When entering this road-type from a tile which has no integrating
+;                           road-type, a hard restrictinfra penalty is assessed which spends
+;                           all remaining move points. Penalty not assessed if other road
+;                           types provide transport at a lower cost. This helps, for example,
+;                           in simulating the move cost of crossing a foreign river without
+;                           any friendly-river-infra present to assist that operation.
 
 ; */ <— avoid gettext warnings
 
@@ -3272,7 +3311,7 @@ move_mode      = "Cardinal"
 trade_incr_const = 1
 compat_special = "River"
 integrates     = "Canal", "Waterway"
-flags          = "River", "UnrestrictedInfra", "PassiveMovement"
+flags          = "River", "UnrestrictedInfra", "PassiveMovement", "HardExitRInfra", "HardEntryRInfra"
 
 [road_sea_bridge]
 extra          = "Sea Bridge"
@@ -3301,7 +3340,7 @@ move_cost         = 6                   ; "PassiveMovement"
 move_mode         = "Cardinal"
 integrates        = "River", "Waterway"
 compat_special    = "None"
-flags             = "PassiveMovement"
+flags             = "PassiveMovement", "UnrestrictedInfra", "HardExitRInfra", "HardEntryRInfra"
 
 [road_waterway]
 extra             = "Waterway"
@@ -3309,4 +3348,4 @@ move_cost         = 6                   ; "PassiveMovement"
 move_mode         = "Cardinal"
 integrates        = "River", "Canal"
 compat_special    = "None"
-flags             = "PassiveMovement"
+flags             = "PassiveMovement", "UnrestrictedInfra", "HardExitRInfra", "HardEntryRInfra"
