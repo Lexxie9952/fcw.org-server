@@ -17,18 +17,9 @@ echo "echo \"/tmp/core/core.%e.%p.%t\" > /proc/sys/kernel/core_pattern"
 printf "ulimit -c unlimited\n"
 printf "exit\n"
 printf "\n\n"
-printf "***********************************************************************\n"
-echo "This script gives you useful alises. View it to see what they are.\n"
 printf "***********************************************************************\n\n"
 echo "==== Setting up coredump debug configuration ===="
 ulimit -c unlimited
-alias fcw="cd /vagrant/freeciv-web"
-alias bjs="cd /vagrant/freeciv-web; ./build-js.sh"
-alias b="cd /vagrant/freeciv-web; ./build.sh"
-alias rules="cd /vagrant/freeciv-web; ./vbuild-rules.sh; ./vclean-rules.sh"
-alias ball="cd /vagrant/freeciv-web; ./build-images.sh; ./vbuild-all*; ./vclean*; ./build.sh"
-alias bim="cd /vagrant/freeciv-web; ./build-images.sh"
-alias vr="cd /vagrant/freeciv-web; ./vremake.sh"
 echo "==== Installng gdb ===="
 sudo apt install gdb
 exit
