@@ -3081,6 +3081,8 @@ void handle_player_phase_done(struct player *pplayer,
     return;
   }
   pplayer->phase_done = TRUE;
+  /* Players who make no moves but hit turn done don't accrue idleness */
+  pplayer->nturns_idle = 0;
 
   check_for_full_turn_done();
 
