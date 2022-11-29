@@ -36,10 +36,8 @@ Focus goals for MP2-Elephant
 ========================================================================================================================
 
 0. Attack and Defense strength are all 10x higher across the board. This makes a basic unit like the Warriors as 
-   A10 D10 HP10. While this may be awkward for a week or so, it's really not so hard that it's 10,10,10 (all same and consistent),
-   and more importantly we can avoid lots of decimals and awkward attack strengths, and fine-tune unit combat strength with a finer 
-   shade. (Previouosly, the minimum higher strength you could give over A1 was A2, literally double strength and disallowing things 
-   like +25%, +50%, etc!) 
+   A10 D10 HP10. However, the strengths are represented at 1/10 so A10 stll shows as A1. This allows fine-tuning
+    unit combat strength with a finer shade.
 1. Spy Planes are harder to shoot down because of mass, size, speed, and altitude. Correspondingly, they gain higher defense, 
 and can now be built with veteran levels.
 1a. Spy Planes get 75% chance to Stack Escape, since they are in a different "layer" of the tile, like subs.
