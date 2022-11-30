@@ -3143,7 +3143,7 @@ actor_reqs    =
       "DiplRel",       "Never met",     "Local", FALSE
       "UnitType",      "Magnum Turret", "Local", FALSE  ;don't show illegal orders buttons 
       "MinMoveFrags",  "1",             "Local", TRUE   ;limits double-move and "attack-and-haul".
-      "UnitState",     "Transporting", "Local", FALSE  ;prevent russian doll exceptions               <<< *******
+      "UnitState",     "Transporting",  "Local", FALSE  ;prevent russian doll exceptions               <<< *******
     }
 [actionenabler_AAA_and_foot_units_boarding_mech_inf]
 action        = "Transport Board"
@@ -3429,17 +3429,43 @@ actor_reqs    =
       "MinMoveFrags", "1",           "Local"
     }
 
+; Most universal actionenabler for all non-restricted Embarkations.
+; This covers everything except Bombs/Missiles/Landroad embarkers and LandRoad/LandRail/Mech Inf transporters
 [actionenabler_embark]
 action        = "Transport Embark"
 actor_reqs    =
     { "type",         "name",       "range", "present"
-      "MinMoveFrags", "1",          "Local", TRUE
-      "UnitClass",    "Missile",    "Local", FALSE
+      "MinMoveFrags", "1",          "Local", TRUE       ; Classes which never embark:
+      "UnitClass",    "Missile",    "Local", FALSE      ; No missiles
+      "UnitClass",    "Bomb",       "Local", FALSE      ; No nuclear bombs
+      "UnitClass",    "Bomb2",      "Local", FALSE      ; No conventional bombs
+      "UnitClass",    "LandRoad",   "Local", FALSE      ;!LandRoad: prevent russian doll exceptions 
       "DiplRel",      "Armistice",  "Local", FALSE
       "DiplRel",      "War",        "Local", FALSE
       "DiplRel",      "Cease-fire", "Local", FALSE
       "DiplRel",      "Peace",      "Local", FALSE
       "DiplRel",      "Never met",  "Local", FALSE
+    }
+target_reqs   =
+    { "type",         "name",       "range", "present"
+      "UnitClass",    "LandRoad",   "Local", FALSE     ; These classes have cargo restrictions
+      "UnitClass",    "LandRail",   "Local", FALSE     ; ...and for simplicity require Transport_Board
+      "UnitType",     "Mech. Inf.", "Local", FALSE     ; ...action.
+    }
+
+;Wagons and trucks can't embark if carrying cargo.
+[actionenabler_wagons_and_trucks_embark_as_cargo]
+action        = "Transport Embark"
+actor_reqs    =
+    { "type",         "name",         "range", "present"
+      "MinMoveFrags", "1",            "Local", TRUE
+      "UnitClass",    "LandRoad",     "Local", TRUE    ; LandRoad only
+      "UnitState",    "Transporting", "Local", FALSE   ; prevent russian doll exceptions               <<< *******
+      "DiplRel",      "Armistice",    "Local", FALSE
+      "DiplRel",      "War",          "Local", FALSE
+      "DiplRel",      "Cease-fire",   "Local", FALSE
+      "DiplRel",      "Peace",        "Local", FALSE
+      "DiplRel",      "Never met",    "Local", FALSE
     }
 ;*******************************************************************************************************************
 
