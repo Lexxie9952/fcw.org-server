@@ -151,7 +151,8 @@ Missiles boarding and transport swapping must be done in friendly city or base. 
    the overhaul of the movement system, we keep things consistent with old rules and not add a complexity to worry about.
 47. GSF max attacks per turn: 3 (was 4)
 48. Spy Plane as defender limits to 5 combat rounds.
-49. LandRoad and LandRail can't be embarked, only boarded 
+49. LandRoad and LandRail can't be embarked upon, only boarded 
     (forces Transport Board enablers which restrict illegal units from boarding) (also MP2D)
 ** Missiles and Bombs lose all ability to embark (also MP2D)
 ** LandRoad can't embark if transporting (also MP2D)
+50. 
