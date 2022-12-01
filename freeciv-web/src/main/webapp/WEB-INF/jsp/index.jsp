@@ -276,7 +276,7 @@ Random randomValue=new Random();
 						</c:if>
 						<a id="single-button" href="/webclient/?action=new&type=singleplayer" class="btn"><i class="fa fa-flag"></i> <fmt:message key="index-game-launcher-2d"/></a>
                         <br><br>
-
+<!--
                         <c:if test="${default_lang}">
                             <div class="features">
                                 3D pre-release (development testing only)
@@ -284,8 +284,8 @@ Random randomValue=new Random();
                         </c:if>
                         <a id="single-button" href="/webclient/?action=new&renderer=webgl&type=singleplayer" class="btn" id="webgl_button"><i class="fa fa-cube"></i><fmt:message key="index-game-launcher-3d"/></a>
                         <br><br>
-
                         <br>
+-->
 						<%--<a href="/webclient/?action=load&amp;scenario=true&type=singleplayer" class="btn"><i class="fa fa-map-o"></i> <fmt:message key="index-game-launcher-scenario"/></a>
 						<c:if test="${default_lang}">
 							<div class="features">

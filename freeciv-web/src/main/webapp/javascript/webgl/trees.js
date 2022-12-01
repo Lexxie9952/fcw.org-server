@@ -32,6 +32,7 @@ function add_trees_to_landgeometry(landGeometry, xquality) {
   /* Trees using Three.Points
     TODO: Trees should be implemented using InstancedBufferGeometry with RawShaderMaterial and a billboard shader.
   */
+ /* The following code is disputed by @louis94, see comment in heightmap for details.
   forest_geometry = new THREE.Geometry();
   var treecolors = [];
   for (var i = 0, l = landGeometry.vertices.length; i < l; i++) {
@@ -43,11 +44,11 @@ function add_trees_to_landgeometry(landGeometry, xquality) {
       var terrain_name = tile_terrain(ptile).name;
       var add_tree = false;
       if (terrain_name == "Forest") {
-        /* Dense forests. */
+        // Dense forests. 
         add_tree = true;
       }
 
-      /* No trees on beaches */
+      // No trees on beaches
       add_tree &= (landGeometry.vertices[i].y > 57);
 
       if (add_tree) {
@@ -74,7 +75,7 @@ function add_trees_to_landgeometry(landGeometry, xquality) {
   scene.add(tree_points);
 
 
- /* Jungle */
+ // Jungle
   jungle_geometry = new THREE.Geometry();
   for (var i = 0, l = landGeometry.vertices.length; i < l; i++) {
     var x = i % xquality, y = Math.floor(i / xquality);
@@ -104,5 +105,5 @@ function add_trees_to_landgeometry(landGeometry, xquality) {
   var jungle_material = new THREE.PointsMaterial( { size: 42, sizeAttenuation: true, map: webgl_textures["jungle_1"], alphaTest: 0.5, transparent: true } );
   jungle_points = new THREE.Points( jungle_geometry, jungle_material );
   scene.add(jungle_points);
-
+*/
 }

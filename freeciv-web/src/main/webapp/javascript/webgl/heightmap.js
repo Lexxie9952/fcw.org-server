@@ -25,6 +25,44 @@ var heightmap = null;
 ****************************************************************************/
 function create_heightmap()
 {
+  /* reversion to undisputed code */
+  var heightmap_resolution_x = map['xsize'] * 4 + 1;
+  var heightmap_resolution_y = map['ysize'] * 4 + 1;
+  var row, col;
+  var heightmap_init = new Array(heightmap_resolution_x);
+  for (var i = 0; i <= heightmap_resolution_x; i++) {
+    heightmap_init[i] = new Array(heightmap_resolution_y);
+  }
+
+  for (var x = 0; x < heightmap_resolution_x ; x++) {
+    for (var y = 0; y < heightmap_resolution_y; y++) {
+      var gx = Math.floor(x * map['xsize'] / heightmap_resolution_x);
+      var gy = Math.floor((map['xsize'] / map['ysize']) * y * map['ysize'] / heightmap_resolution_y) - 1;
+      var ptile = map_pos_to_tile(gx, gy);
+      if (ptile != null) {
+        heightmap_init[gx][gy] = map_tile_height(ptile);
+      }
+    }
+  }
+
+  heightmap = new Array(heightmap_resolution_x);
+  for (var i = 0; i < heightmap_resolution_x; i++) {
+    heightmap[i] = new Array(heightmap_resolution_y);
+  }
+  /* smooth */
+  for (var x = 0; x < heightmap_resolution_x; x++) {
+    for (var y = 0; y < heightmap_resolution_y; y++) {
+      if (x == 0 || y == 0 || x >= heightmap_resolution_x || y >= heightmap_resolution_y) {
+        heightmap[x][y] = heightmap_init[x][y];
+      } else {
+        heightmap[x][y] = (heightmap_init[x][y] * 0.5 + heightmap_init[x+1][y] * 0.125 + heightmap_init[x-1][y] * 0.125 + heightmap_init[x][y+1] * 0.125 + heightmap_init[x][y-1] * 0.125);
+      }
+    }
+  }
+
+  /* The code below was disputed by @louis94 as
+     "a derivative work (essentially rearranging some expressions here and there)."
+     A formal offer stands regarding attribution of such as his own, then it may be used:
   var start_heightmap = new Date().getTime();
   var heightmap_resolution_x = map.xsize * 4 + 1;  // FIXME: in some special-cases, map.xsize is null (not set yet).
   var heightmap_resolution_y = map.ysize * 4 + 1;
@@ -36,8 +74,8 @@ function create_heightmap()
     distance_from_coast_map[x] = new Array(map.ysize);
   }
 
-  /* Here we look at every tile and determine its distance from the sea or river. */
-  /* First of all we set non-sea tiles' distance to be very big. */
+  // Here we look at every tile and determine its distance from the sea or river.
+  // First of all we set non-sea tiles' distance to be very big.
   for (var x = 0; x < map.xsize ; x++) {
     for (var y = 0; y < map.ysize; y++) {
       var ptile = map_pos_to_tile(x, y);
@@ -48,8 +86,7 @@ function create_heightmap()
       }
     }
   }
-  /* Then, for each sea or river tile, we propagate the distance information to the inner
-   * land. */
+  // Then, for each sea or river tile, we propagate the distance information to the inner land.
   for (var x = 0; x < map.xsize; x++) {
     for (var y = 0; y < map.ysize; y++) {
       var ptile = map_pos_to_tile(x, y);
@@ -76,19 +113,19 @@ function create_heightmap()
     heightmap[hx] = new Array(heightmap_resolution_y);
   }
 
-  /* smooth */
+  // smooth
   for (var x = 0; x < heightmap_resolution_x; x++) {
     for (var y = 0; y < heightmap_resolution_y; y++) {
       var gx = x / 4 - 0.5;
       var gy = y / 4 - 0.5;
 
       if (Math.round(gx) == gx && Math.round(gy) == gy) {
-        /* On tile center */
+        // On tile center
         heightmap[x][y] = heightmap_tiles[gx][gy];
       } else {
-        /* Interpolate between neighbouring tiles, with each tile having weight:
-         * 1 / (distance to the tile)^2.
-         */
+        // Interpolate between neighbouring tiles, with each tile having weight:
+        // 1 / (distance to the tile)^2.
+        //
         var neighbours = [
           { "x": Math.floor(gx), "y": Math.floor(gy) },
           { "x": Math.floor(gx), "y": Math.ceil(gy) },
@@ -101,7 +138,7 @@ function create_heightmap()
           var coords = neighbours[i];
           if (coords.x < 0 || coords.x >= map.xsize ||
               coords.y < 0 || coords.y >= map.ysize) {
-            /* Outside of map, don't use in the sum */
+            // Outside of map, don't use in the sum
             continue;
           }
           var dx = gx - coords.x;
@@ -125,7 +162,7 @@ function create_heightmap()
   }
 
   console.log("create_heightmap took: " + (new Date().getTime() - start_heightmap) + " ms.");
-
+*/
 }
 
 /****************************************************************************
