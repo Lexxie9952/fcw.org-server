@@ -133,7 +133,7 @@ function tile_set_worked(ptile, pwork)
 /**************************************************************************
  Returns whether the tile has a base.  true or false
 **************************************************************************/
-function does_tile_have_base(ptile)
+function tile_has_base(ptile)
 {
   if (typeof EXTRA_FORTRESS !== "undefined" && tile_has_extra(ptile, EXTRA_FORTRESS))
     return true;  
@@ -143,17 +143,18 @@ function does_tile_have_base(ptile)
     return true;
   if (typeof EXTRA_NAVALBASE !== "undefined" && tile_has_extra(ptile, EXTRA_NAVALBASE))
     return true;
-  if (typeof EXTRA_AIRSTRIP !== "undefined" && tile_has_extra(ptile, EXTRA_AIRSTRIP))
-    return true;
   if (typeof EXTRA_CASTLE !== "undefined" && tile_has_extra(ptile, EXTRA_CASTLE))
     return true;
   if (typeof EXTRA_BUNKER !== "undefined" && tile_has_extra(ptile, EXTRA_BUNKER))
     return true;
+  /* not a real base but included in order to exclude allowing building hideout */
   if (typeof EXTRA_TILE_CLAIM !== "undefined" && tile_has_extra(ptile, EXTRA_TILE_CLAIM))
     return true;
   if (typeof EXTRA_WATCHTOWER !== "undefined" && tile_has_extra(ptile, EXTRA_WATCHTOWER))
     return true;
   if (typeof EXTRA_ !== "undefined" && tile_has_extra(ptile, EXTRA_))  // hideout
+    return true;
+  if (typeof EXTRA_AIRSTRIP !== "undefined" && tile_has_extra(ptile, EXTRA_AIRSTRIP))
     return true;
     
   return false;

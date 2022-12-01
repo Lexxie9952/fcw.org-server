@@ -1683,7 +1683,7 @@ function update_unit_order_commands()
     const TILE_HAS_OVERFORT  = TILE_HAS_FORTRESS || TILE_HAS_NAVALBASE || TILE_HAS_CASTLE || TILE_HAS_BUNKER; 
     // TODO: civ2civ3 also needs flag for Airbase conflicts with other bases.
     /* Tile requirements for base to possibly exist there */
-    const CAN_TILE_HIDEOUT   = !pcity && !oceanic && HIDEOUTS   && !TILE_HAS_HIDEOUT && !does_tile_have_base(ptile) && (!QUAYS || !tile_has_extra(ptile,EXTRA_QUAY))
+    const CAN_TILE_HIDEOUT   = !pcity && !oceanic && HIDEOUTS   && !TILE_HAS_HIDEOUT && !tile_has_base(ptile) && (!QUAYS || !tile_has_extra(ptile,EXTRA_QUAY))
                                   && (ptile['owner']==UNCLAIMED_LAND || ptile['owner'] == client.conn.playing.playerno)
                                   && (terrain_name=='Mountains' || terrain_name=='Forest' || terrain_name == 'Jungle' || terrain_name == 'Swamp')
                                   && !(TILE_HAS_RIVER && NO_RIVER_BASE);
@@ -6306,7 +6306,7 @@ function unit_can_vigil(punit)
       case "Magnum Turret":
       case "Howitzer":
         if (client_rules_flag[CRF_MP2_D]) {
-          if (moves_used <= 0 && (tile_city(ptile) || does_tile_have_base(ptile))) {
+          if (moves_used <= 0 && (tile_city(ptile) || tile_has_base(ptile))) {
             return true;
           }
         }
