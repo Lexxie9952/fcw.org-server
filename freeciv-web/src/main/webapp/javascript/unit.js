@@ -435,6 +435,7 @@ function unit_could_possibly_load(punit, ptype, ttype, tclass)
 
   var pclass = get_unit_class_name(punit);
   var ptile = tiles[punit['tile']];
+  var pcity = tile_city(ptile);
   var can_load = false;
 
   //console.log("   pclass=="+pclass);
@@ -467,7 +468,7 @@ function unit_could_possibly_load(punit, ptype, ttype, tclass)
   // TO DO: when actionenabler_load is in server, we can put all this in game.ruleset actionenablers.
   if (punit['transported']) {
     if (pclass.includes("Bomb")) {
-      if (!tile_city(ptile) && !tile_has_extra(ptile, EXTRA_AIRBASE))
+      if (!pcity && !tile_has_extra(ptile, EXTRA_AIRBASE))
       return false; // No bomb-swapping in mid-air or beaming-up to Bomber from a truck or train!
     }
 
@@ -481,7 +482,7 @@ function unit_could_possibly_load(punit, ptype, ttype, tclass)
       var from_type = unit_type(from_unit);
 
       // Can "transport swap" where 1) unloading then loading again is legal anyway (cities, naval bases, quays) ...
-      if (tile_city(ptile)) can_load = true;
+      if (pcity) can_load = true;
       else if (unit_can_deboard(punit)) can_load = true; // When deboarding is legal, don't force micro-managing an extra step to unload.
       //commented out: e.g., Riflemen can't necessarily get off a Heli on a Quay.
       //else if (typeof EXTRA_NAVALBASE !== undefined && tile_has_extra(EXTRA_NAVALBASE)) can_load = true;
@@ -602,7 +603,7 @@ function unit_could_possibly_load(punit, ptype, ttype, tclass)
         ttype.name.includes("Carrier")) {
           //starting in MP2D missiles must load in a city or be a transport swap
           if (client_rules_flag[CRF_MP2_D]) { 
-            if (tile_city(ptile)) return true;
+            if (pcity) return true;
             else if (can_load) return true;
             else return false;
           }
@@ -617,7 +618,7 @@ function unit_could_possibly_load(punit, ptype, ttype, tclass)
   if (pclass == "Missile") {
     // MP2E Missiles are nice and simple:
     if (client_rules_flag[CRF_MP2_E]) {
-      if (tile_city(ptile)) return true;
+      if (pcity) return true;
       // Any 'base' type as defined by no stack death:
       if (tile_has_extra(ptile,EXTRA_) //hideout
          || tile_has_extra(ptile,EXTRA_FORT)
@@ -634,7 +635,7 @@ function unit_could_possibly_load(punit, ptype, ttype, tclass)
     }
     // MP2D Missiles can only board in a city or a transport swap at sea.
     else if (client_rules_flag[CRF_MP2_D]) {
-      if (tile_city(ptile)) return true;
+      if (pcity) return true;
       else if (can_load) return true;
       //else if (tile_has_extra(EXTRA_AIRBASE)) return true;   
         /* TODO: Airbase is a native place for missile where it should be able to board but then you could shoot a nuke out to
@@ -660,6 +661,11 @@ function unit_could_possibly_load(punit, ptype, ttype, tclass)
     // Special actionenabler rules in MP2, only slow units can use Trucks and Trains:
     if (tclass.rule_name == "LandRail" || tclass.rule_name == "LandRoad") {  
       if (utype_real_base_move_rate(ptype) >= 3 * SINGLE_MOVE) return false; // Equality: units with <3 moves can use wagon/train/truck
+      if (tclass.rule_name == "LandRail") {
+        if (pcity) return true;
+        if (utype_has_flag(ptype, UTYF_FOOTSOLDIER)) return true;
+        return false;
+      }
     }
     // Special rules in MP2: diplomat types on Airplanes are only legal Land class allowed on it.
     if (tclass.rule_name == "Air") {
