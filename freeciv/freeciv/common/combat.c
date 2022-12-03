@@ -406,6 +406,8 @@ winning. The calculation takes all factors into account.
 double unit_win_chance(const struct unit *attacker,
 		       const struct unit *defender)
 {
+  if (!attacker || !defender) return 0; // 3Dec22: fix segfault; caller aiunit.c::dai_hunter_manage().L523
+
   int def_power = get_total_defense_power(attacker, defender);
   int att_power = get_total_attack_power(attacker, defender);
 
