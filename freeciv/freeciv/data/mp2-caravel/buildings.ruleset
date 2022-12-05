@@ -1371,8 +1371,6 @@ Sets your religious capital and second center of government. Loss of this\
  Under Theocracy, Zealots produced in the city with this building\
  are inspired by fervorous faith to +1 higher veteran level.\
 "), _("\
- Allows instantly switching to Theocracy government if Theocracy tech is\
- known.\
  With Conscription, allows producing one extra qualifying unit per turn.\
 ")
 
