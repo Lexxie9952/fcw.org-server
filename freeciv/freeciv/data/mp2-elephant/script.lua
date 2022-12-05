@@ -89,7 +89,6 @@ end
 -- 1. Grant a blueprint tech when the tech Philosophy is researched.
 -- 2. Announce Horseback ridng before T15
 -- 3. Democracy upgrades to Workers II
--- 4. Theocracy blueprintst when getting Theology.
 function tech_researched_handler(tech, player, how)
   local id
   local gained
@@ -130,11 +129,11 @@ function tech_researched_handler(tech, player, how)
   end
 --------------------------------
   -- Inform of Theocracy blueprints upon discovering Theology
-  if id == find.tech_type("Theology").id then
-    gained = player:give_tech(find.tech_type("Theocracy"), 35, false, "researched")
-    notify.event(player, NIL, E.TECH_GAIN,
-    _("[`events/theology`]<br><font color=#ffff90><b>Theology shows the way to divine laws and new forms of rule. <br>Priests give you blueprints for Theocracy.</b></font>"))
-  end
+  -- if id == find.tech_type("Theology").id then
+  --   gained = player:give_tech(find.tech_type("Theocracy"), 35, false, "researched")
+  --   notify.event(player, NIL, E.TECH_GAIN,
+  --   _("[`events/theology`]<br><font color=#ffff90><b>Theology shows the way to divine laws and new forms of rule. <br>Priests give you blueprints for Theocracy.</b></font>"))
+  -- end
 -------------------------
   if id == find.tech_type("Philosophy").id and how == "researched" then
 

@@ -209,15 +209,14 @@ ruler_female_title = _("High Priestess %s")
 helptext = _("\
 Theocracy is formed on religious beliefs which are the law of the land. \
 "), _("\
-The people are devoted and often willing to die for their faith. Each city\
- has +1 happy citizen. Cities very\
+The people are devoted and often willing to die for their faith. Cities very\
  near a capital have very low corruption. Cost for enemies to incite cities or\
  bribe units is 2x, but Zealots and Fanatics cannot be bribed. Cost to incite foreign cities\
  is reduced by a third. Enemies cannot establish embassies without first making\
  Ceasefire or Peace. \
 "), _("\
-Improvements that appease unhappy citizens add +1 base gold in tithes for each\
- citizen appeased. Tithes also boost gold income by +20%, but science output\
+Improvements that appease unhappy citizens add +1 gold in tithes for each\
+ citizen appeased. Science output\
  suffers -20%. Palace gives +50% to gold income in its city. In cities, two\
  military units may impose martial law, affecting one citizen each. Pilgrims\
  can be made to migrate and grow cities. \n\
@@ -226,7 +225,6 @@ Celebrating cities rapture 2 out of 5 turns (with a Cathedral. 1 out of 2).\
 No citizens are made unhappy by each aggressive unit. \n\
 0% Base corruption in cities\n\
 1% Extra corruption per each tile in distance from capital \n\n\
-Having an Ecclesiastical Palace allows instant and orderly transition to this government.\
 ")
 
 ;------------------------------------------------------------------------

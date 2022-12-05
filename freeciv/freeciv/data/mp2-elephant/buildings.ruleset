@@ -1376,8 +1376,6 @@ Sets your religious capital and second center of government. Loss of this\
  Under Theocracy, Zealots and Fanatics produced in the city with this building\
  are inspired by fervorous faith to +1 higher veteran level.\
 "), _("\
- Allows instantly switching to Theocracy government if Theocracy tech is\
- known.\
  With Conscription, allows producing one extra multislot unit per turn.\
 ")
 
@@ -1460,6 +1458,7 @@ reqs	=
       "Gov", "Democracy",                "Player", FALSE,   TRUE,   FALSE
       "Gov", "Communism",                "Player", FALSE,   TRUE,   FALSE
       "Gov", "Nationalism",              "Player", FALSE,   TRUE,   FALSE
+      "Gov", "Theocracy",                "Player", FALSE,   TRUE,   FALSE
 ;requires 23Sept2021 changes to requirements.c, so obsolete wonders don't re-enable others
       "Building", "Hanging Gardens",     "Player", FALSE,   FALSE,  TRUE
       "Building","Mausoleum of Mausolos","Player", FALSE,   FALSE,  TRUE
@@ -1484,7 +1483,7 @@ Angkor Wat is a glorious ancient city of culture.\
  Elephants is reduced by 5 shields. \n\
 "), _("
 This Wonder is never obsolete, but has no effect in Democracy,\
- Communism, or Nationalism.\
+ Theocracy, Communism, or Nationalism.\
 "), _("
 Angkor Wat is a Civil Wonder. You can build only one Civil Wonder.\
 ")
