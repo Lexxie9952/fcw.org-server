@@ -536,17 +536,19 @@ void handle_player_change_government(struct player *pplayer,
 
 /* PLACEHOLDER, ruleset flexibility for ruleset-defined transition periods. */
 bool block_rf = false; // blocks multiple changing of govs in the same turn after revo finished
+/* this was too OP
 #ifdef FREECIV_WEB
   struct impr_type *ecc_pal = improvement_by_rule_name("Ecclesiastical Palace");
   int theo = government_index(government_by_rule_name("Theocracy"));
 
   if (!immediacy && theo != -1 && ecc_pal != NULL
       && theo == government && wonder_is_built(pplayer, ecc_pal)) {
-    turns = 0;
+    turns = 1;
     block_rf = true;
-    pplayer->revolution_finishes = -1;
+    pplayer->revolution_finishes = game.info.turn + 1;
   }
 #endif
+*/
 
   pplayer->government = plr_revo_gov;
   pplayer->target_government = gov;
