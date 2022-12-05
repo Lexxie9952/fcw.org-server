@@ -2462,14 +2462,13 @@ int get_city_tithes_bonus(const struct city *pcity)
 
   tithes_bonus += get_city_bonus(pcity, EFT_MAKE_CONTENT, V_COUNT);
   tithes_bonus += get_city_bonus(pcity, EFT_FORCE_CONTENT, V_COUNT);
-  /* Was wrongly excluded: MAKE_HAPPY causes content also: */
-  tithes_bonus += get_city_bonus(pcity, EFT_MAKE_HAPPY, V_COUNT);
-  /* NO_UNHAPPY causes content also: */
-  if (get_city_bonus(pcity, EFT_NO_UNHAPPY, V_COUNT)) {
-    /* This strength of this effect scales with city size */
-    tithes_bonus += pcity->size;
-  }
   
+  tithes_bonus = (tithes_bonus <= pcity->feel[CITIZEN_UNHAPPY][FEELING_BASE])
+               ? tithes_bonus
+               : pcity->feel[CITIZEN_UNHAPPY][FEELING_BASE];
+
+  tithes_bonus -= city_waste(pcity, O_TRADE, tithes_bonus, NULL);
+
   return tithes_bonus;
 }
 
@@ -3169,7 +3168,7 @@ inline void set_city_production(struct city *pcity)
   pcity->prod[O_TRADE] += get_city_add_bonus(pcity, O_TRADE);
   pcity->prod[O_FOOD] += get_city_add_bonus(pcity, O_FOOD);
   pcity->prod[O_SHIELD] += get_city_add_bonus(pcity, O_SHIELD);
-  pcity->prod[O_GOLD] += get_city_tithes_bonus(pcity) + get_city_add_bonus(pcity, O_GOLD);
+  pcity->prod[O_GOLD] += get_city_add_bonus(pcity, O_GOLD);
   pcity->prod[O_SCIENCE] += get_city_add_bonus(pcity, O_SCIENCE);
   pcity->prod[O_LUXURY] += get_city_add_bonus(pcity, O_LUXURY);
 
@@ -3196,6 +3195,8 @@ inline void set_city_production(struct city *pcity)
     pcity->prod[o] = pcity->prod[o] * pcity->bonus[o] / 100;
     pcity->prod[o] -= pcity->waste[o];
   } output_type_iterate_end;
+
+  pcity->prod[O_GOLD] += get_city_tithes_bonus(pcity);
 }
 
 /**********************************************************************//**

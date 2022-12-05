@@ -4644,7 +4644,7 @@ void helptext_government(char *buf, size_t bufsz, struct player *pplayer,
       case EFT_HAPPINESS_TO_GOLD:
         if (playerwide && net_value > 0) {
           CATLSTR(buf, bufsz,
-                  _("%s Buildings and Wonders that make citizens content or happy give 1 base gold"
+                  _("%s Buildings and Wonders that make citizens content give 1 gold"
                     " per citizen affected.\n"), BULLET);
         }
         break;
