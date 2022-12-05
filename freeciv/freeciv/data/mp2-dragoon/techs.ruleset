@@ -944,7 +944,7 @@ flags    = ""
 graphic     = "a.theocracy"
 graphic_alt = "-"
 helptext = _("Obsoletes Pax Dei. Allows government Theocracy.")
-cost = 500
+cost = 550
 
 [advance_theology]
 name     = _("Theology")
@@ -953,8 +953,8 @@ req2     = "Monotheism"
 flags    = ""
 graphic     = "a.theology"
 graphic_alt = "-"
-helptext = _("Obsoletes Oracle. +1 Effect for Cathedral/Michelangelo. Gives Theocracy blueprints.")
-cost = 400
+helptext = _("Obsoletes Oracle. +1 Effect for Cathedral/Michelangelo.")
+cost = 450
 
 [advance_theory_of_gravity]
 name     = _("Theory of Gravity")

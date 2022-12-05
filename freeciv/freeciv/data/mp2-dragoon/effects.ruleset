@@ -1586,7 +1586,7 @@ reqs    =
     }
 [effect_upkeep_free_units_theocracy]
 type    = "Unit_Upkeep_Free_Per_City"
-value   = 10
+value   = 2
 reqs    =
     { "type", "name", "range"
       "Gov", "Theocracy", "Player"
@@ -1594,7 +1594,7 @@ reqs    =
     }
 [effect_gold_upkeep_free_units_theocracy]
 type    = "Unit_Upkeep_Free_Per_City"
-value   = 1
+value   = 2
 reqs    =
     { "type", "name", "range"
       "Gov", "Theocracy", "Player"
@@ -2017,7 +2017,7 @@ reqs	=
     }
 [effect_martial_law_max_theocracy]
 type    = "Martial_Law_Max"
-value   = 2
+value   = 1
 reqs	=
     { "type",       "name",      "range"
       "Gov", "Theocracy", "Player"
@@ -2349,7 +2349,6 @@ value   = 1
 reqs  =
     { "type",       "name",        "range", "present"
       "Gov",        "Theocracy",   "Player", TRUE
-      "Building",   "Angkor Wat",  "Player", FALSE ;handled separately by the wonder
       "OutputType", "Trade",       "Local",  TRUE
     }
 
@@ -2479,7 +2478,7 @@ reqs	=
 ;******************************************************** Other Economic Adjustments for Governments
 [effect_bad_sci_theocracy]
 type    = "Output_Bonus_2"
-value   = -20
+value   = -30
 reqs    =
     { "type", "name", "range"
       "Gov", "Theocracy", "Player"
@@ -2492,17 +2491,17 @@ reqs    =
     { "type", "name", "range" 
       "Gov", "Theocracy", "Player" 
     }
-[effect_tithes_theocracy_2]
-type    = "Output_Bonus_2"
-value   = 20
-reqs    =
-    { "type", "name", "range"
-      "Gov", "Theocracy", "Player"
-      "OutputType", "Gold", "local"
-    }
+;[effect_tithes_theocracy_2]
+;type    = "Output_Bonus_2"
+;value   = 20
+;reqs    =
+;    { "type", "name", "range"
+;      "Gov", "Theocracy", "Player"
+;      "OutputType", "Gold", "local"
+;    }
 [effect_happy_believers_theocracy]
 type = "Make_Happy"
-value = 1
+value = 0
 reqs    =
     { "type", "name", "range"
       "Gov", "Theocracy", "Player"
@@ -4978,10 +4977,11 @@ reqs	=
       "Gov",      "Democracy",      "Player", FALSE
       "Gov",      "Communism",      "Player", FALSE
       "Gov",      "Nationalism",    "Player", FALSE
+      "Gov",      "Theocracy",      "Player", FALSE
     }
 
 [effect_angkor_wat_free_tile_celeb_bonus]  ;free celebration tile output
-type    = "Output_Inc_Tile"  ; monarchy and theocracy
+type    = "Output_Inc_Tile"  ; monarchy
 value   = 1
 reqs	=
     { "type",       "name",       "range",  "present"
@@ -4992,6 +4992,7 @@ reqs	=
       "Gov",        "Democracy",  "Player", FALSE
       "Gov",        "Communism",  "Player", FALSE
       "Gov",        "Nationalism","Player", FALSE
+      "Gov",        "Theocracy",  "Player", FALSE
       "OutputType", "Trade",      "Local",  TRUE
       "MinSize",    "2",          "City",   TRUE
     }
@@ -4999,9 +5000,13 @@ reqs	=
 type    = "Output_Penalty_Tile" 
 value   = 100
 reqs	=
-    { "type",       "name",       "range"
-      "Building",   "Angkor Wat", "Player"
-      "MinSize",    "2",          "City"
+    { "type",     "name",       "range",  "present"
+      "Building", "Angkor Wat", "Player", TRUE
+      "MinSize",  "2",          "City",   TRUE
+      "Gov",      "Democracy",  "Player", FALSE
+      "Gov",      "Communism",  "Player", FALSE
+      "Gov",      "Nationalism","Player", FALSE
+      "Gov",      "Theocracy",  "Player", FALSE
     }
 [effect_angkor_wat_happy]
 type    = "Make_Happy"
@@ -5012,46 +5017,53 @@ reqs	=
       "Gov",      "Democracy",  "Player", FALSE
       "Gov",      "Communism",  "Player", FALSE
       "Gov",      "Nationalism","Player", FALSE
+      "Gov",      "Theocracy",  "Player", FALSE
     }
 [effect_angkor_wat_jungleswamp_all_work_bonus]
 type    = "Unit_Work_Pct"
 value   = 100  ; 100% faster is half the time (or more, since rounded up)
 reqs =
-    { "type",     "name",          "range","present"
-      "Building", "Angkor Wat",    "Player",TRUE
+    { "type",     "name",          "range", "present"
+      "Building", "Angkor Wat",    "Player", TRUE
       "Gov",      "Democracy",     "Player", FALSE 
       "Gov",      "Communism",     "Player", FALSE 
-      "Gov",      "Nationalism",   "Player", FALSE 
-      "UnitFlag", "Infra",         "Local", TRUE
-      "Terrain",  "Grassland",     "Local", FALSE ; exclude everything but Swamp/Jungle.
-      "Terrain",  "Plains",        "Local", FALSE
-      "Terrain",  "Desert",        "Local", FALSE
-      "Terrain",  "Tundra",        "Local", FALSE
-      "Terrain",  "Glacier",       "Local", FALSE
-      "Terrain",  "Forest",        "Local", FALSE
-      "Terrain",  "Hills",         "Local", FALSE
-      "Terrain",  "Mountains",     "Local", FALSE
-      "Terrain",  "Ocean",         "Local", FALSE
-      "Terrain",  "Deep Ocean",    "Local", FALSE
+      "Gov",      "Nationalism",   "Player", FALSE
+      "Gov",      "Theocracy",     "Player", FALSE
+      "UnitFlag", "Infra",         "Local",  TRUE
+      "Terrain",  "Grassland",     "Local",  FALSE ; exclude everything but Swamp/Jungle.
+      "Terrain",  "Plains",        "Local",  FALSE
+      "Terrain",  "Desert",        "Local",  FALSE
+      "Terrain",  "Tundra",        "Local",  FALSE
+      "Terrain",  "Glacier",       "Local",  FALSE
+      "Terrain",  "Forest",        "Local",  FALSE
+      "Terrain",  "Hills",         "Local",  FALSE
+      "Terrain",  "Mountains",     "Local",  FALSE
+      "Terrain",  "Ocean",         "Local",  FALSE
+      "Terrain",  "Deep Ocean",    "Local",  FALSE
     }
 [effect_angkor_wat_elephant_discount]
 type    = "Unit_Build_Cost_Pct"
 value	  = -13 ; 36 - 5 = - 13%
 reqs    =
     {
-      "type",     "name",          "range",  "present"
-      "Building", "Angkor Wat",    "Player", TRUE
-      "UnitType", "Elephants",     "Local",  TRUE
-      "Gov",      "Democracy",     "Player", FALSE 
-      "Gov",      "Communism",     "Player", FALSE 
-      "Gov",      "Nationalism",   "Player", FALSE 
+      "type",     "name",        "range",  "present"
+      "Building", "Angkor Wat",  "Player", TRUE
+      "UnitType", "Elephants",   "Local",  TRUE
+      "Gov",      "Democracy",   "Player", FALSE 
+      "Gov",      "Communism",   "Player", FALSE 
+      "Gov",      "Nationalism", "Player", FALSE 
+      "Gov",      "Theocracy",   "Player", FALSE
     }
 [effect_angkor_wat_culture]
 type    = "History"
 value	= 2
 reqs	=
-    { "type", "name", "range", "present"
-      "Building", "Angkor Wat", "City", TRUE
+    { "type",     "name",        "range", "present"
+      "Building", "Angkor Wat",  "City",   TRUE
+      "Gov",      "Democracy",   "Player", FALSE
+      "Gov",      "Communism",   "Player", FALSE 
+      "Gov",      "Nationalism", "Player", FALSE 
+      "Gov",      "Theocracy",   "Player", FALSE
     }
 [effect_angkor_wat_celebrate_size]
 type = "Celebrate_Size_Add"
@@ -5062,6 +5074,7 @@ reqs	=
       "Gov",      "Democracy",  "Player", FALSE
       "Gov",      "Communism",  "Player", FALSE
       "Gov",      "Nationalism","Player", FALSE
+      "Gov",      "Theocracy",  "Player", FALSE
     }
 ;************************************************************************ Apollo Program
 [effect_apollo_program]
