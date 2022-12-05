@@ -1071,7 +1071,14 @@ next_check:
 bool can_player_see_unit(const struct player *pplayer,
 			 const struct unit *punit)
 {
-  /* was segfaulting from this call below, attempted fix in that func */
+  /* Catch null ptr segfault */
+  if (!pplayer || !punit) {
+    log_verbose("can_player_see_unit() called with a nullptr:");
+    if (!pplayer) log_verbose("pplayer is null!");
+    if (!punit) log_verbose("punit is null!");
+    return FALSE;
+  }
+
   return can_player_see_unit_at(pplayer, punit, unit_tile(punit),
                                 unit_transported(punit));
 }
