@@ -500,8 +500,10 @@ CallInfo *luaD_precall (lua_State *L, StkId func, int nresults) {
         luaD_hook(L, LUA_HOOKCALL, -1, 1, narg);
       }
       lua_unlock(L);
-      n = (*f)(L);  /* do the actual call */
-      lua_lock(L);
+      if (f && *f)    /* ... 3Dec22 Hack-patch for segfault, null f believed */
+        n = (*f)(L);  /* do the actual call */
+      else n = 0;     /* ... 3Dec22 Hack-patch for segfault */
+      lua_lock(L);    
       api_checknelems(L, n);
       luaD_poscall(L, ci, n);
       return NULL;
