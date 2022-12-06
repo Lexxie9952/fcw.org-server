@@ -2380,6 +2380,7 @@ reqs	=
     { "type",       "name",        "range", "present"
       "Gov",        "Communism",   "Player", TRUE
       "CityTile",   "Center",      "Local",  TRUE
+      "Terrain",    "Mountains",   "Local",  FALSE   ; doesn't add +1 even without this; so this is more as a comment reminder
       "Building",   "Granary",     "City",   TRUE 
       "OutputType", "Food",        "Local",  TRUE
     }
