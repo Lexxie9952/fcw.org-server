@@ -153,4 +153,32 @@ tiles = { "row", "column", "tag"
   9, 5,  "unit.stack7"
   9, 6,  "unit.stack8"
   9, 7,  "unit.stack9"  ; NB: 9 or more
+
+; Server sends back a single numeral/char for tile output, previously limiting us to 0-9, 
+ 10, 0, "city.t_food_A"  ; 10
+ 10, 1, "city.t_food_B"  ; 11
+ 10, 2, "city.t_food_C"  ; 12
+ 10, 3, "city.t_food_D"  ; 13
+ 10, 4, "city.t_food_E"  ; 14
+ 10, 5, "city.t_food_F"  ; 15
+ 10, 6, "city.t_food_G"  ; 16
+ 10, 7, "city.t_food_H"  ; 17
+ 10, 8, "city.t_food_I"  ; 18
+ 10, 9, "city.t_food_J"  ; 19
+; 10, 10, "city.t_food_K"  ; 20
+; 10, 11, "city.t_food_L"  ; 21+
+
+; Server sends back a single numeral/char for tile output, previously limiting us to 0-9, 
+ 11, 0, "city.t_shields_A"  ; 10
+ 11, 1, "city.t_shields_B"  ; 11
+ 11, 2, "city.t_shields_C"  ; 12
+ 11, 3, "city.t_shields_D"  ; 13
+ 11, 4, "city.t_shields_E"  ; 14
+ 11, 5, "city.t_shields_F"  ; 15
+ 11, 6, "city.t_shields_G"  ; 16
+ 11, 7, "city.t_shields_H"  ; 17
+ 11, 8, "city.t_shields_I"  ; 18
+ 11, 9, "city.t_shields_J"  ; 19
+; 11, 10, "city.t_shields_K"  ; 20
+; 11, 11, "city.t_shields_L"  ; 21+
 }

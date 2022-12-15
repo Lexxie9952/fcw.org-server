@@ -918,7 +918,7 @@ struct city *find_closest_city(const struct tile *ptile,
           && (!only_ocean || is_terrain_class_near_tile(city_tile(pcity), TC_OCEAN))
           && (!only_known
               || (map_is_known(city_tile(pcity), pplayer)
-                  && map_get_player_site(city_tile(pcity), pplayer)->identity
+                  && map_get_player_site(city_tile(pcity), pplayer)->identity   // segfault
                      > IDENTITY_NUMBER_ZERO))
           && (pclass == NULL
               || is_native_near_tile(&(wld.map), pclass, city_tile(pcity)))) {
@@ -2541,7 +2541,7 @@ void package_city(struct city *pcity, struct packet_city_info *packet,
   char trade_output_buf[MAX_NUM_ITEMS + 1];
   struct tile *pcenter = city_tile(pcity);
   int c = 0;
-  int trade_val;
+  int food_val, shield_val, trade_val;
 
   packet->id = pcity->id;
   packet->owner = player_number(city_owner(pcity));
@@ -2752,15 +2752,21 @@ void package_city(struct city *pcity, struct packet_city_info *packet,
     char s[2];
     char t[2];
 
-    fc_snprintf(f, sizeof(f), "%d", city_tile_output_now(pcity, ptile, O_FOOD));
-    fc_snprintf(s, sizeof(s), "%d", city_tile_output_now(pcity, ptile, O_SHIELD));
+    food_val = city_tile_output_now(pcity, ptile, O_FOOD);
+    fc_snprintf(f, sizeof(f), "%d", food_val);
+    shield_val = city_tile_output_now(pcity, ptile, O_SHIELD);
+    fc_snprintf(s, sizeof(s), "%d", shield_val);
     trade_val = city_tile_output_now(pcity, ptile, O_TRADE);
     fc_snprintf(t, sizeof(t), "%d", trade_val);
 
-    food_output_buf[c] = f[0];
-    shield_output_buf[c] = s[0];
-    /* Trade values can exceed one digit: 
+    /* Values can exceed one digit: 
      * convert values 10+ to letters A,B,C, etc... */
+    if (food_val>9) {
+      food_output_buf[c] = (char)(65+(food_val-10));
+    } else food_output_buf[c] = f[0];
+    if (shield_val>9) {
+      shield_output_buf[c] = (char)(65+(shield_val-10));
+    } else shield_output_buf[c] = s[0];
     if (trade_val>9) {
       trade_output_buf[c] = (char)(65+(trade_val-10));
     } else trade_output_buf[c] = t[0];
