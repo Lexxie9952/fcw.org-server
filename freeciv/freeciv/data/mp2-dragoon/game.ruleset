@@ -3915,6 +3915,7 @@ set =
       "partisan_turns", 2, FALSE           ; each city can spawn again 2 turns after last spawn
       "polarstrip", "DISABLED", FALSE      ; blocks making horizontal polar strips on most generators
       "razechance", 14, FALSE              ; each building has 1/7 chance to be lost/razed during a conquest (server default is 1/5)
+      "repulsion", 0, FALSE                ; Repulsion away from bias to startpos's on primary continent. -1=NONE, 0=(num_players+num_continents)*10, 1-100000 custom value.
       "revolen", 1, FALSE
       "restrictinfra", "ENABLED", FALSE    ; required for mp2 mechanics.
       "separatepoles", FALSE, FALSE
@@ -3922,7 +3923,7 @@ set =
       "slot_control_style", 1, FALSE      ; 1 = Shield2Gold units only
       "spaceship_travel_time", 225, FALSE
       "specials", 350, FALSE
-      "startpos", "DEFAULT", FALSE
+      "startpos", "VARIABLE", FALSE
       "startunits", "DDDwwwtuccU", "FALSE"  ;3 Tribesmen, 3 Workers, 1 Caravan, 1 Founders, 2 Settlers, 1 Well-Digger
       "steepness", 20, FALSE
       "techleak", 50, FALSE
@@ -3930,7 +3931,7 @@ set =
       "techlossrestore", 100, FALSE
       "techpenalty", 0, FALSE
       "temperature", 50, FALSE
-      "tilesperplayer", 290, FALSE
+      "tilesperplayer", 250, FALSE
       "tinyisles", "DISABLED", FALSE
       "steepness", 15, FALSE
       "tinyisles", FALSE, FALSE
@@ -3950,4 +3951,7 @@ set =
 ; TESTING ONLY, REMOVE FOR SURE: *(***************************************)
 ;      "fogofwar", FALSE, FALSE
 ;      "revealmap", "start", FALSE
+;      "generator", "FRACTURE", FALSE
+;      "landmass", 37, FALSE
+;      "aifill", 30, FALSE
     }

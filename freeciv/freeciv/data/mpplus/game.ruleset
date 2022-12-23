@@ -1544,6 +1544,7 @@ set =
       "nuclearwinter_percent", 20, FALSE
       "partisan_max_spawns", 3, FALSE      ; each city can spawn max. of 3 times
       "partisan_turns", 1, FALSE           ; each city can spawn again 1 turns after last spawn
+      "repulsion", 0, FALSE                ; Repulsion away from bias to startpos's on primary continent. -1=NONE, 0=(num_players+num_continents)*10, 1-100000 custom value.
       "revolen", 1, FALSE
       "separatepoles", FALSE, FALSE
       "specials", 350, FALSE

@@ -2269,6 +2269,7 @@ set =
       "nuclearwinter_percent", 20, FALSE
       "nukes_minor", "ENABLED", FALSE      ; set to DISABLED to completely disallow nuclear detonations
       "nukes_major", "DISABLED", FALSE     ; set to ENABLED to allow nuclear fusion weapons
+      "repulsion", 0, FALSE                ; Repulsion away from bias to startpos's on primary continent. -1=NONE, 0=(num_players+num_continents)*10, 1-100000 custom value.
       "revolen", 1, FALSE
       "separatepoles", FALSE, FALSE
       "slot_control", TRUE, FALSE         ; multiple units per turn

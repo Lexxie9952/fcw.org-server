@@ -1782,6 +1782,7 @@ set =
       "partisan_turns", 1, FALSE           ; each city can spawn again 1 turns after last spawn
       "polarstrip", "DISABLED", FALSE      ; blocks making horizontal polar strips on most generators
       "razechance", 14, FALSE              ; each building has 1/7 chance to be lost/razed during a conquest (server default is 1/5)
+      "repulsion", 0, FALSE                ; Repulsion away from bias to startpos's on primary continent. -1=NONE, 0=(num_players+num_continents)*10, 1-100000 custom value.
       "revolen", 2, FALSE
       "restrictinfra", "ENABLED", FALSE    ; required for mp2 mechanics.
       "separatepoles", FALSE, FALSE
