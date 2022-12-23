@@ -1708,6 +1708,33 @@ static struct setting settings[] = {
              "that will be made into land."), NULL, NULL, NULL,
           MAP_MIN_LANDMASS, MAP_MAX_LANDMASS, MAP_DEFAULT_LANDMASS)
 
+  GEN_INT("repulsion", game.server.repulsion,
+          SSET_MAP_GEN, SSET_GEOLOGY, SSET_SITUATIONAL,
+          ALLOW_NONE, ALLOW_BASIC,
+          N_("Repulsion of start-positions away from primary continent."),
+          N_("This setting represents the number of initial iterations to reject "
+             "for random startpos allocations to the primary/largest continent. Rejected "
+             "iterations are forced to first try to fill lesser continents and islands. "
+             "Afterward, random allocations are also allowed to be assigned to the primary "
+             "continent (which has an in-built selection bias favoring it.)\n\n"
+             "-1 - DEFAULT: No repulsion. This tends to crowd start "
+             "positions on the primary continent, with large islands and lesser "
+             "continents sometimes under- or un-populated. Such islands or lesser continents "
+             "then become prized colonization targets.\n\n"
+             "0 - STANDARD: The server assigns a value of (num_players+num_continents)*10.\n"
+             "On many map settings, this populates each separate landmass with a number "
+             "of players approximately proportionate to the size of each landmass. If "
+             "it does not work well on particular map settings, then you can first test on "
+             "a revealed unfogged map, lowering or raising the value to find the balanced "
+             "value for your particular map.\n\n"
+             "0 < value < 100000 - CUSTOM: A custom value for number of primary continent "
+             "allocations to reject before allowing server to start randomly selecting "
+             "start positions with its natural bias toward the primary continent. Lower values "
+             "will be closer to DEFAULT behavior. Higher values will tend toward a primary "
+             "continent with few or no start positions, such that the largest continent may "
+             "even become an uninhabited colonization target."), NULL, NULL, NULL,
+          GAME_MIN_REPULSION, GAME_MAX_REPULSION, GAME_DEFAULT_REPULSION)
+
   GEN_INT("steepness", wld.map.server.steepness,
           SSET_MAP_GEN, SSET_GEOLOGY, SSET_SITUATIONAL,
           ALLOW_NONE, ALLOW_BASIC,

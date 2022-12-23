@@ -429,6 +429,7 @@ static void game_defaults(bool keep_ruleset_value)
     game.server.pingtimeout       = GAME_DEFAULT_PINGTIMEOUT;
     game.server.razechance        = GAME_DEFAULT_RAZECHANCE;
     game.server.revealmap         = GAME_DEFAULT_REVEALMAP;
+    game.server.repulsion         = GAME_DEFAULT_REPULSION;
     game.server.revolution_length = GAME_DEFAULT_REVOLUTION_LENGTH;
     if (!keep_ruleset_value) {
       sz_strlcpy(game.server.rulesetdir, GAME_DEFAULT_RULESETDIR);

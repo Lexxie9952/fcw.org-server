@@ -35,6 +35,10 @@
 #include "startpos.h"
 #include "temperature_map.h"
 
+/* DEBUG */ 
+#include "notify.h"
+#include "featured_text.h"
+
 struct islands_data_type {
   Continent_id id;
   int size;
@@ -412,8 +416,37 @@ bool create_start_positions(enum map_startpos mode,
       / (1 + efactor)  / player_count();
   }
 
+  notify_conn(NULL, NULL, E_LOG_ERROR, ftc_server,
+                _("%d is map_mode enum, min_goodies_per_player == %d"),
+                mode, min_goodies_per_player);
+
   { 
     int nr, to_place = player_count(), first = 1;
+    /* Placements on smaller islands often give roughly double the workable tiles
+       of interior-land placements because of surrounding ocean. When considering
+       if the goodie score of a continent is high enough to be populated by anyone,
+       we therefore add a small_island_goodie_cutoff_bonus to the threshold for deciding
+       if the island is "allowed" to be populated. The bonus is less than +100% because:
+
+       1. Large-continent placements usually get some smaller amount water tiles too, 
+       2. Some of a small island's ocean tiles may be workable by other islands,
+       3. A median ocean-tile usually has less value than a median land tile. 
+       4. Small islands may have a lower ceiling for expansion/conquest/alliance. */
+    float watermass = 1.0 - (float)wld.map.server.landpercent / 100.0;
+    float small_island_goodie_cutoff_bonus = (watermass <= 0.70) 
+                                           ? 1.0 + (watermass/2)
+                                           : 1.0; 
+    /* The greater the landmass, the less likely it is that the continent's goodie score
+       is appreciably neglecting a large number of ocean tiles exclusively workable by
+       the island's owner. The formula above gives us:
+       10% landmass = 1.000 cutoff  Landmass < 30% is considered as a "well-separated islands"
+       29% landmass = 1.000 cutoff  ...game where no one wants to start on a smaller island 
+       ----------------------------
+       30% landmass = 1.350x cutoff
+       35% landmass = 1.325x cutoff
+       50% landmass = 1.250x cutoff
+       65% landmass = 1.175x cutoff
+       90% landmass = 1.050x cutoff */
 
     /* inizialize islands_index */
     for (nr = 1; nr <= wld.map.num_continents; nr++) {
@@ -430,17 +463,17 @@ bool create_start_positions(enum map_startpos mode,
                          ? player_count() : player_count() / 2);
 
       for (nr = 1; nr <= 1 + wld.map.num_continents - num_islands; nr++) {
-	if (islands[nr + num_islands - 1].goodies < min_goodies_per_player) {
-	  break;
-	}
-	var_goodies
-	    = (islands[nr].goodies - islands[nr + num_islands - 1].goodies)
-	    / (islands[nr + num_islands - 1].goodies);
+        if (islands[nr + num_islands - 1].goodies < min_goodies_per_player) {
+          break;
+        }
+        var_goodies
+            = (islands[nr].goodies - islands[nr + num_islands - 1].goodies)
+            / (islands[nr + num_islands - 1].goodies);
 
-	if (var_goodies < best * 0.9) {
-	  best = var_goodies;
-	  first = nr;
-	}
+        if (var_goodies < best * 0.9) {
+          best = var_goodies;
+          first = nr;
+        }
       }
     }
 
@@ -461,11 +494,36 @@ bool create_start_positions(enum map_startpos mode,
         to_place -= islands[nr].total = islands[nr].starters;
       }
 
-      if (MAPSTARTPOS_VARIABLE == mode && 0 < to_place) {
-        islands[nr].starters = MAX(1, islands[nr].goodies
-                                   / MAX(1, min_goodies_per_player));
-        to_place -= islands[nr].total = islands[nr].starters;
-      }
+      if (MAPSTARTPOS_VARIABLE == mode) {
+      /* The commented "if" below prevents "overcreation" of starter positions at the
+         sacrifice of also leaving large unpopulated islands/continents which have more than
+         enough goodies for a starter-pos. The result is empty islands up to 5x the size of 
+         tilesperplayer becoming huge game-winning land-grabs for whoever settles there first.
+         This problem arises from an in-built bias caused by not using total_goodies/player_count()
+         to set min_goodies_per_player. Not doing so is necessary in order to prevent some
+         horrible startpositions, but also tends to make us allocate all stating positions to
+         the most "goodie-wealthy" islands first, rather than distribute startpositions evenly
+         to each continent according their goodie count. 20Dec2022: Experimentally correct this
+         problem by "over-creating" more starter postions than we need, which now allows smaller
+         continents where (goodies > min_goodies_per_player)==TRUE to _possibly_ get populated
+         (instead of never.)
+
+        if (0 < to_place) { */ if (small_island_goodie_cutoff_bonus *
+                                   islands[nr].goodies >= min_goodies_per_player) {
+          islands[nr].starters = MAX(1, islands[nr].goodies
+                                    / MAX(1, min_goodies_per_player));               
+          to_place -= islands[nr].total = islands[nr].starters;
+        }
+                notify_conn(NULL, NULL, E_LOG_ERROR, ftc_server,
+                _("#%d. conti[%d]: %d size, %d goodies, %d starters"
+                  //"(%d to place)"
+                ),
+                nr,
+                islands[nr].id,
+                islands[nr].size,
+                islands[nr].goodies,
+                islands[nr].starters/*,to_place*/);
+       }
     }
   }
 
@@ -475,31 +533,89 @@ bool create_start_positions(enum map_startpos mode,
   sum = 0;
   for (k = 1; k <= wld.map.num_continents; k++) {
     sum += islands[islands_index[k]].starters;
+    /* DEBUG ONLY 
     if (islands[islands_index[k]].starters != 0) {
-      log_verbose("starters on isle %i", k);
-    }
+      notify_conn(NULL, NULL, E_NATION_SELECTED, ftc_server,
+                  "#%d. starters on conti[%d]: %d", islands_index[k], 
+                  islands[islands_index[k]].id, islands[islands_index[k]].starters);
+    } */
   }
-  fc_assert_ret_val(player_count() <= sum, FALSE);
+  /* We now allow overcreation of starter positions in order to prevent
+     perfectly good islands from never being considered for start
+     positions:
+  fc_assert_ret_val(player_count() <= sum, FALSE); */
 
+  /* Bring in the REPULSION game setting, which works against the strong legacy bias 
+     toward crowding start positions on the largest/best continent while leaving
+     smaller-but-acceptable continents under- or un-populated. "/show repulsion" for more
+     details. */
+  int iteration_escape = 0;
+  switch (game.server.repulsion) {
+    case -1:
+      iteration_escape = 0; /* none, legacy */
+      break;
+    case 0:
+      iteration_escape = (player_count() + wld.map.num_continents) * 10;
+      break;
+    default:
+      iteration_escape = game.server.repulsion;
+  }
+  
   /* now search for the best place and set start_positions */
   while (map_startpos_count() < player_count()) {
     if ((ptile = rand_map_pos_filtered(&(wld.map), &data,
                                        is_valid_start_pos))) {
+      /* Put no starters on the best continent until lesser continents get more chances
+         to fill up. This reduces likelihood of a lesser continent with 2+ starters to slip
+         through with only 1 starter (i.e. a player with 2x tilesperplayer). A higher
+         iteration_escape can all but eliminate this but since min_goodies_per_player
+         is so artificially low, the elevated number of startpositions on each continent
+         will make it so the best continent is UNDER-filled if iteration_escape is too
+         high. */
+      int lesser_conti_starters = 0; // number of startpos left on the !best continents
+      if (--iteration_escape > 0) {
+        for (k = 1; k <= wld.map.num_continents; k++) {
+          if (islands_index[k] != 1)
+            lesser_conti_starters += islands[islands_index[k]].starters;
+        }
+      }
+      if (lesser_conti_starters && islands_index[(int) tile_continent(ptile)] == 1) {
+        continue;
+      }
+
       islands[islands_index[(int) tile_continent(ptile)]].starters--;
-      log_debug("Adding (%d, %d) as starting position %d, %d goodies on "
-                "islands.", TILE_XY(ptile), map_startpos_count(),
+
+            notify_conn(NULL, NULL, E_LOG_ERROR, ftc_server,
+                "PLR%d added to conti#%d . rank#<b>%d</b> . %d goodies",
+                map_startpos_count()+1,
+                tile_continent(ptile),
+                islands_index[(int) tile_continent(ptile)],
                 islands[islands_index[(int) tile_continent(ptile)]].goodies);
+
       (void) map_startpos_new(ptile);
     } else {
       data.min_value *= 0.95;
       if (data.min_value <= 10) {
-        log_normal(_("The server appears to have gotten into an infinite "
+        notify_conn(NULL, NULL, E_NATION_SELECTED, ftc_server,
+                     _("The server appears to have gotten into an infinite "
                      "loop in the allocation of starting positions.\nMaybe "
                      "the number of players is too high for this map."));
         failure = TRUE;
         break;
       }
     }
+  }
+
+  /* DEBUG ONLY */
+  for (k = 1; k <= wld.map.num_continents; k++) {
+    int filled = islands[k].total - islands[k].starters;
+
+    if (islands[k].total > 0)
+      notify_conn(NULL, NULL, E_LOG_ERROR, ftc_server,
+                  "#%d. conti[%d]: total:%d filled:%d (%d%%)",  
+                  k, islands[k].id, islands[k].total,
+                  filled,
+                  (100*filled) / islands[k].total);
   }
 
   free(islands);

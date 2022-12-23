@@ -199,6 +199,7 @@ struct civ_game {
       int ransom_gold;
       int razechance;
       unsigned revealmap;
+      int repulsion;
       int revolution_length;
       int spaceship_travel_time;
       bool threaded_save;
@@ -640,6 +641,10 @@ extern struct world wld;
 #define GAME_DEFAULT_RAZECHANCE      20
 #define GAME_MIN_RAZECHANCE          0
 #define GAME_MAX_RAZECHANCE          100
+
+#define GAME_DEFAULT_REPULSION       -1
+#define GAME_MIN_REPULSION           -1
+#define GAME_MAX_REPULSION           100000
 
 #define GAME_DEFAULT_REVEALMAP       REVEAL_MAP_NONE
 
