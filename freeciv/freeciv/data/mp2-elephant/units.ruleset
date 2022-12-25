@@ -914,7 +914,7 @@ bonuses       =
      "SuperSpy", "DefenseDivider", 2     ; Barbarian Leader (which is 0D anyway), and Leader, which is hardly used.
    }
 flags         = "NoBuild", "Settlers", "Infra", "CanRoad",  "Capturable", "Expellable",
-                "HasNoZOC", "IgTer", "IgZOC", "NonMil", "NonProvoking", "NonMilAttack"
+                "HasNoZOC", "IgTer", "IgZOC", "NonMil", "NonProvoking", "NonMilAttack", "Cant_Pillage"
 roles         = "DefendGoodStartUnit"  ; re-purposed from Phalanx
 veteran_names =
   _("?vet_rank:green"),
