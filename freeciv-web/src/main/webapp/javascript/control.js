@@ -1587,6 +1587,12 @@ function update_unit_order_commands()
           || ((governments[client.conn.playing['government']]['name']=="Communism"
                && (ptype['name'].startsWith("Workers") || ptype['name']=="Riflemen"))
                && tech_known('Communism'))
+          || (client_rules_flag[CRF_MP2_C] 
+              && (ptype.name == "Warriors" || ptype.name == "Archers" || ptype.name == "Phalanx" || ptype.name == "Pikemen" || ptype.name == "Legion")  
+              && tech_known("Conscription"))
+          || (client_rules_flag[CRF_MP2_D]
+              && ptype.name == "Musketeers"
+              && tech_known("Mechanization"))
           // AAA can convert to Mobile SAM under qualifying conditions:
           || ( ptype['name']=="Anti-Aircraft Artillery"
                && pcity != null
