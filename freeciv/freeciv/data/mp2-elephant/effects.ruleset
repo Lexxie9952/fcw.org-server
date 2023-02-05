@@ -2622,14 +2622,14 @@ reqs    =
     { "type", "name", "range" 
       "Gov", "Theocracy", "Player" 
     }
-[effect_tithes_theocracy_2]
-type    = "Output_Bonus_2"
-value   = 20
-reqs    =
-    { "type", "name", "range"
-      "Gov", "Theocracy", "Player"
-      "OutputType", "Gold", "local"
-    }
+;[effect_tithes_theocracy_2]
+;type    = "Output_Bonus_2"
+;value   = 20
+;reqs    =
+;    { "type", "name", "range"
+;      "Gov", "Theocracy", "Player"
+;      "OutputType", "Gold", "local"
+;    }
 [effect_happy_believers_theocracy]
 type = "Make_Happy"
 value = 0
