@@ -2142,7 +2142,7 @@ The Lighthouse gives all your sea units +2 movement points\
  to Ocean before the discovery of Electricity.\n\n\
 The Lighthouse movement bonus reduces to +1 when combined with\
  any bonus from Magellan or Nuclear Power technology.\n\ 
-Damaged sea units which stay in town for one full turn without moving\
+Damaged sea units which stay in its town for one full turn without moving\
  are completely restored. The Lighthouse is never obsolete.\
 ")
 
