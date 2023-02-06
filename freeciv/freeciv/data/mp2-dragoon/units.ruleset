@@ -1846,7 +1846,7 @@ disembarks    = "Helicopter", "Land", "Sea", "LandRoad", "LandRail", "Big Land"
 targets       = "Sea", "Balloon", "Helicopter", "LandRail", "Zeppelin"
 flags         = "MultiSlot", "NonNativeAttack", "FootSoldier", "BeachLander",
                 "Capturer", "NeverBlocked", "Settlers", "CanHide", "WillNever",
-                "Airbase", "Bombarder", "CanFortress"; can Fort only, actually.
+                "CantReachAir", "Airbase", "Bombarder", "CanFortress"; can Fort only, actually.
 veteran_names =
   _("?vet_rank:green"),
   _("?vet_rank:veteran"),
@@ -4689,7 +4689,7 @@ bonuses       =
    { "flag", "type", "value"
      "NonNativeAttack", "DefenseMultiplier", 1    
    }
-flags         = "BadCityDefender", "CanEscape"
+flags         = "BadCityDefender", "CanEscape", "CantReachAir" ; flags Dive Bomber for 4.5x
 veteran_names =
   _("?vet_rank:green"),
   _("?vet_rank:veteran"),
