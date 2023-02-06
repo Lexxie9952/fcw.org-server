@@ -1276,7 +1276,7 @@ embarks       = "Helicopter", "Land", "Sea"
 disembarks    = "Helicopter", "Land", "Sea"
 targets       = "Sea", "Balloon", "Helicopter"
 flags         = "MultiSlot", "Marines", "FootSoldier", "BeachLander", "Capturer",
-                "NeverBlocked", "Shield2Gold", "Settlers", "CanHide", "WillNever"
+                "NeverBlocked", "Shield2Gold", "Settlers", "CanHide", "WillNever", "CantReachAir"
 veteran_names =
   _("?vet_rank:green"),
   _("?vet_rank:veteran"),
@@ -3513,7 +3513,7 @@ bonuses       =
    { "flag", "type", "value"
      "Marines", "DefenseMultiplier", 1    
    }
-flags         = "BadCityDefender", "CanEscape"
+flags         = "BadCityDefender", "CanEscape", "CantReachAir"
 roles         = "Ferryboat", "FerryStartUnit"
 helptext      = _("\
 The Transport cannot attack but can defend itself when under attack.\
