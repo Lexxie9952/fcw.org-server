@@ -127,7 +127,7 @@ function tech_researched_handler(tech, player, how)
     notify.event(player, NIL, E.TECH_GAIN,
     _("[`events/democracy`]<br><font color=#ffff90><b>Discovery of Democracy sparks educational socioeconomic trends.<br>All Workers everywhere can upgrade to Workers II for free.</b></font>"))
   end
---------------------------------
+-------------------------------- Removed in order to nerf Theocracy
   -- Inform of Theocracy blueprints upon discovering Theology
   -- if id == find.tech_type("Theology").id then
   --   gained = player:give_tech(find.tech_type("Theocracy"), 35, false, "researched")
@@ -488,9 +488,13 @@ function action_started_unit_city_callback(action, actor, city)
         partisans = partisans - 1
       end
 
-      if city:inspire_partisans(city_owner) > 0 then
-        do_partisan_message = 1
-        city.tile:place_partisans(city_owner, partisans + (partisan_utype*256), city:map_sq_radius())
+      if dplayer == city_owner then
+        partisans = 0      
+      else
+        if city:inspire_partisans(city_owner) > 0 then
+          do_partisan_message = 1
+          city.tile:place_partisans(city_owner, partisans + (partisan_utype*256), city:map_sq_radius())
+        end
       end
 
       if do_partisan_message == 1 then

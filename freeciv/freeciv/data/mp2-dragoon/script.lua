@@ -196,7 +196,7 @@ function tech_researched_handler(tech, player, how)
       forbidden_tech = find.tech_type("Monotheism")
       if researcher:knows_tech(forbidden_tech) then
         notify.event(player, NIL, E.TECH_GAIN,
-          _("<font color=#ffdf90><b>The knowledge of Monotheism prevents a free bonus from Philosophy.</b></font>"))
+          _("<font color=#ffdf90><b>The knowledge of Monotheism prevents a bonus from Philosophy.</b></font>"))
         return
       end
   
@@ -420,7 +420,7 @@ end
 
 signal.connect("building_built", "building_built_callback")
 
--- Mobile SAMs get free ABMs if Space.2 is known
+-- Mobile SAMs, AEGIS, M.Destroyer, Missile Sub, and Carrier get free ABMs if Space.2 is known
 function unit_built_callback(u, city)
   local owner = u.owner
   local utype = find.unit_type('Anti-Ballistic Missile')
@@ -479,9 +479,13 @@ function action_started_unit_city_callback(action, actor, city)
         partisans = partisans - 1
       end
 
-      if city:inspire_partisans(city_owner) > 0 then
-        do_partisan_message = 1
-        city.tile:place_partisans(city_owner, partisans + (partisan_utype*256), city:map_sq_radius())
+      if dplayer == city_owner then
+        partisans = 0      
+      else
+        if city:inspire_partisans(city_owner) > 0 then
+          do_partisan_message = 1
+          city.tile:place_partisans(city_owner, partisans + (partisan_utype*256), city:map_sq_radius())
+        end
       end
 
       if do_partisan_message == 1 then
