@@ -248,6 +248,9 @@ function merge_goto_path_segments(old_packet, new_packet, punit)
   // Deep copy the old packet, don't clone a reference to it.
   var result_packet = JSON.parse(JSON.stringify(old_packet));
   // Put the ending information into it:
+  if (result_packet['turn'] === undefined) {
+    result_packet['turn'] = [];   // Catches: sometimes old_packet contains no turn[] array
+  }
   result_packet['dest'] = new_packet['dest'];
   result_packet['turns'] = new_packet['turns']; // movesleft propagates into next segment request and server sends us updated turns in next packet
   result_packet['arrival_turns'] = new_packet['arrival_turns'];
@@ -440,7 +443,7 @@ function update_goto_path(goto_packet)
   goto_turns_request_map[goto_packet['unit_id'] + "," + goaltile['x'] + "," + goaltile['y']]
 	  = current_goto_turns; */
 
-  if (current_goto_turns !== "undefined" && punit) {
+  if (current_goto_turns !== undefined && punit) {
     let path_length = goto_path_packet['length'];
     // Fuel units inject extra non-path 'refuel data' in the goto_packet: +++
     if (refuel) path_length -= refuel;  // remove "refuel path steps" from path_length
