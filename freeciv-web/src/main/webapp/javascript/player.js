@@ -336,9 +336,20 @@ function get_invalid_username_reason(username)
   else if (username.includes("'")     || username.includes('&')
            || username.includes('@')  || username.includes('!')
            || username.includes('(')  || username.includes(')')
+           || username.includes('[')  || username.includes(']')
            || username.includes('+')  || username.includes('*')
            || username.includes('/')  || username.includes(',')
-           || username.includes('#')  || username.includes(';') ) {
+           || username.includes('#')  || username.includes(';') 
+           || username.includes('.')  || username.includes(':')
+           || username.includes('$')  || username.includes('%')
+           || username.includes('^')  || username.includes('=')
+           || username.includes('|')  || username.includes('~')
+           || username.includes('`')  || username.includes('\\')
+           || username.includes('<')  || username.includes('>')
+           || username.includes('|')  || username.includes('?')
+           || username.includes('£')  || username.includes('€')
+           || username.includes(' ')  || username.includes('\"')
+           || username.includes("'")) {
     return "disallowed. Illegal symbols: \" ' \\ & ^ % : $ ! ~ + / * = ? , etc."
   }
   else if (username != alphanumeric_cleaner(username)) {
