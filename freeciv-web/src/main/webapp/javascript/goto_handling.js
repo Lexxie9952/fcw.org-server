@@ -249,7 +249,7 @@ function merge_goto_path_segments(old_packet, new_packet, punit)
   var result_packet = JSON.parse(JSON.stringify(old_packet));
   // Put the ending information into it:
   if (result_packet['turn'] === undefined) {
-    result_packet['turn'] = [];   // Catches: sometimes old_packet contains no turn[] array
+    result_packet['turn'] = [];   // Was meant to catch an undefined error but didn't. See (*) below
   }
   result_packet['dest'] = new_packet['dest'];
   result_packet['turns'] = new_packet['turns']; // movesleft propagates into next segment request and server sends us updated turns in next packet
@@ -263,14 +263,18 @@ function merge_goto_path_segments(old_packet, new_packet, punit)
       && new_packet['dir'] && new_packet['dir'].length) {
     result_packet['dir'] = result_packet['dir'].concat(new_packet['dir']); // makes a new copy
   }
-  if (new_packet['turn'] && new_packet['turn'].length) {
+  if (new_packet['turn'] && new_packet['turn'].length > 0) {
     for (var i=0; i<new_packet['turn'].length; i++) {
-      result_packet['turn'].push(new_packet['turn'][i]/* + old_packet['turns']*/) 
+      if (new_packet['turn'][i] !== undefined) {// (*) Shouldn't happen but apparently does
+        result_packet['turn'].push(new_packet['turn'][i]/* + old_packet['turns']*/)
+      } 
     }
   }
-  if (new_packet['arrival_turn'] && new_packet['arrival_turn'].length) {
+  if (new_packet['arrival_turn'] && new_packet['arrival_turn'].length > 0) {
     for (var i=0; i<new_packet['arrival_turn'].length; i++) {
-      result_packet['arrival_turn'].push(new_packet['arrival_turn'][i]) 
+      if (new_packet['arrival_turn'][i] !== undefined) {// (*) Shouldn't happen but ...
+        result_packet['arrival_turn'].push(new_packet['arrival_turn'][i]) 
+      }
     }
   }
   /* Log every tile in the path */
