@@ -45,12 +45,12 @@ var fcwDebug=<%= fcwDebug %>;
 
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <script>
-  window.onGoogleLibraryLoad = () => {
+  $(document).ready(function() {
     google.accounts.id.initialize({
       client_id: '<%= googleSigninClientKey %>',
       callback: handleCredentialResponse
     });
-  }
+  })
 </script>
 
 <script type="text/javascript" src="/javascript/webclient.min.js?ts=${initParam.buildTimeStamp}"></script>
