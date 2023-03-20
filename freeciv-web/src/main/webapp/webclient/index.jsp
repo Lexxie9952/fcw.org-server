@@ -43,9 +43,18 @@ var fcwDebug=<%= fcwDebug %>;
 
 <script type="text/javascript" src="/javascript/webgl/libs/three.min.js??ts=${initParam.buildTimeStamp}"></script>
 
-<script src="https://apis.google.com/js/platform.js"></script>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 
 <script type="text/javascript" src="/javascript/webclient.min.js?ts=${initParam.buildTimeStamp}"></script>
+
+<script>
+  window.onGoogleLibraryLoad = () => {
+    google.accounts.id.initialize({
+      client_id: '<%= googleSigninClientKey %>',
+      callback: handleCredentialResponse
+    });
+  }
+</script>
 
 <script type="text/javascript" src="/music/audio.min.js"></script>
 
