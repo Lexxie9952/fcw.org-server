@@ -1427,7 +1427,8 @@ function show_longturn_intro_dialog() {
  * Loads starts the google login process when clicking the google button.
  ***********************************************/
 function google_login_button_handler() {
-  google.accounts.id.prompt();
+  console.log("Login button pressed")
+  //google.accounts.id.prompt();
 }
 
 /**************************************************************************

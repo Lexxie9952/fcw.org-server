@@ -48,7 +48,11 @@ var fcwDebug=<%= fcwDebug %>;
   $(document).ready(function() {
     google.accounts.id.initialize({
       client_id: '<%= googleSigninClientKey %>',
-      callback: handleCredentialResponse
+      callback: handleCredentialResponse,
+      autoselect: true,
+      prompt_parent_id: 'fc-signin2',
+      allowed_parent_origin: 'https://www.tacticsandtriumph.com/',
+      itp_support: true
     });
   })
 </script>
