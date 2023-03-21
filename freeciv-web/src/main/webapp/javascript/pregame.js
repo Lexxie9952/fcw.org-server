@@ -1415,7 +1415,7 @@ function show_longturn_intro_dialog() {
   google_user_token = null;
 
   //Renders the login button.
-  google.accounts.id.renderButton(document.getElementById('fc-signin2'), {
+  google.accounts.id.renderButton($("#fc-signin2")[0], {
     theme: 'outline',
     size: 'large',
     width: 240,
