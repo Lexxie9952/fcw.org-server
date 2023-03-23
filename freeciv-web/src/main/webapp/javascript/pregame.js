@@ -1414,14 +1414,27 @@ function show_longturn_intro_dialog() {
 
   google_user_token = null;
   resolveClientKey()
-  //Renders the login button.
+
+  // initialize singin api
+  google.accounts.id.initialize({
+    client_id: simpleStorage.get('clientKey'),
+    callback: handleCredentialResponse,
+    autoselect: true,
+    prompt_parent_id: 'fc-signin2',
+    allowed_parent_origin: 'https://www.tacticsandtriumph.com/',
+    state_cookie_domain: 'tacticsandtriumph.com'
+  });
+  google.accounts.id.prompt();
+
+
+   //Renders the login button.
   google.accounts.id.renderButton($("#fc-signin2")[0], {
     theme: 'outline',
     size: 'large',
     width: 240,
     click_listener: google_login_button_handler
   });
-  google.accounts.id.prompt();
+
 }
 
 /***********************************************
@@ -1430,7 +1443,7 @@ function show_longturn_intro_dialog() {
 function google_login_button_handler() {
   console.log("Login button pressed")
   //google.accounts.id.prompt();
-  console.log(simpleStorage.get('clientKey'))
+
 }
 
 /**************************************************************************
