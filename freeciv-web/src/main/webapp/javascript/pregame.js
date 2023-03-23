@@ -1413,7 +1413,7 @@ function show_longturn_intro_dialog() {
   blur_input_on_touchdevice();
 
   google_user_token = null;
-
+  resolveClientKey()
   //Renders the login button.
   google.accounts.id.renderButton($("#fc-signin2")[0], {
     theme: 'outline',
@@ -1430,7 +1430,7 @@ function show_longturn_intro_dialog() {
 function google_login_button_handler() {
   console.log("Login button pressed")
   //google.accounts.id.prompt();
-  console.log(resolveClientKey())
+  console.log(simpleStorage.get('clientKey'))
 }
 
 /**************************************************************************
@@ -1919,7 +1919,7 @@ function resolveClientKey() {
   xhr.open('POST', '/client_key');
   xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
   xhr.onload = function() {
-    return xhr.responseText
+    simpleStorage.set('clientKey', xhr.responseText)
   };
   xhr.send()
 }

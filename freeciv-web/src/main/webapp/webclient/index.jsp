@@ -43,7 +43,7 @@ var fcwDebug=<%= fcwDebug %>;
 
 <script type="text/javascript" src="/javascript/webgl/libs/three.min.js??ts=${initParam.buildTimeStamp}"></script>
 
-<script src="https://accounts.google.com/gsi/client" async defer></script>
+<script src="https://accounts.google.com/gsi/client"></script>
 <script>
   $(document).ready(function() {
     google.accounts.id.initialize({
@@ -74,7 +74,7 @@ var fcwDebug=<%= fcwDebug %>;
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 
-<meta name="google-signin-client_id" content="<%= googleSigninClientKey %>">
+<!--<meta name="google-signin-client_id" content="<%= googleSigninClientKey %>">-->
 <link rel="manifest" href="/static/manifest.json">
 
 <script>var captcha_site_key = '<%= captchaKey %>';</script>
