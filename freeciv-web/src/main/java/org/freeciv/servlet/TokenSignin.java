@@ -53,9 +53,7 @@ public class TokenSignin extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     private static final JacksonFactory jacksonFactory = new JacksonFactory();
-    private String google_signin_key;
-
-    public void init(ServletConfig config) throws ServletException {
+    private String google_signin_key;public void init(ServletConfig config) throws ServletException {
         super.init(config);
 
         try {
@@ -66,6 +64,8 @@ public class TokenSignin extends HttpServlet {
             e.printStackTrace();
         }
     }
+
+
 
     public void doPost(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {

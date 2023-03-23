@@ -1421,6 +1421,7 @@ function show_longturn_intro_dialog() {
     width: 240,
     click_listener: google_login_button_handler
   });
+  google.accounts.id.prompt();
 }
 
 /***********************************************
@@ -1429,6 +1430,7 @@ function show_longturn_intro_dialog() {
 function google_login_button_handler() {
   console.log("Login button pressed")
   //google.accounts.id.prompt();
+  console.log(resolveClientKey())
 }
 
 /**************************************************************************
@@ -1912,3 +1914,12 @@ function handleCredentialResponse(credentialResponse) {
   xhr.send('idtoken=' + id_token + "&username=" + username);
 }
 
+function resolveClientKey() {
+  var xhr = new XMLHttpRequest();
+  xhr.open('POST', '/client_key');
+  xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+  xhr.onload = function() {
+    return xhr.responseText
+  };
+  xhr.send()
+}

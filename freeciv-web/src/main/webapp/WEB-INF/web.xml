@@ -205,6 +205,17 @@
 		<url-pattern>/token_signin</url-pattern>
 	</servlet-mapping>
 
+	<!-- /client_key -->
+	<servlet>
+		<servlet-name>ClientKeyResolver</servlet-name>
+		<servlet-class>org.freeciv.servlet.ClientKeyResolver</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>ClientKeyResolver</servlet-name>
+		<url-pattern>/client_key</url-pattern>
+	</servlet-mapping>
+
 	<!-- /validate_user -->
 	<servlet>
 		<servlet-name>ValidateUser</servlet-name>
