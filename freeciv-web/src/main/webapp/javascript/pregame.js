@@ -1424,8 +1424,6 @@ function show_longturn_intro_dialog() {
     allowed_parent_origin: 'https://www.tacticsandtriumph.com/',
     state_cookie_domain: 'tacticsandtriumph.com'
   });
-  google.accounts.id.prompt();
-
 
    //Renders the login button.
   google.accounts.id.renderButton($("#fc-signin2")[0], {
@@ -1442,8 +1440,6 @@ function show_longturn_intro_dialog() {
  ***********************************************/
 function google_login_button_handler() {
   console.log("Login button pressed")
-  //google.accounts.id.prompt();
-
 }
 
 /**************************************************************************

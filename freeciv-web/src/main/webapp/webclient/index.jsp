@@ -44,15 +44,8 @@ var fcwDebug=<%= fcwDebug %>;
 <script type="text/javascript" src="/javascript/webgl/libs/three.min.js??ts=${initParam.buildTimeStamp}"></script>
 
 <script src="https://accounts.google.com/gsi/client"></script>
-<script>
-  $(document).ready(function() {
-    console.log("initialization")
-  })
-</script>
 
 <script type="text/javascript" src="/javascript/webclient.min.js?ts=${initParam.buildTimeStamp}"></script>
-
-
 
 <script type="text/javascript" src="/music/audio.min.js"></script>
 
