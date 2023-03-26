@@ -1440,15 +1440,78 @@ function show_longturn_intro_dialog() {
   blur_input_on_touchdevice();
 
   google_user_token = null;
- gapi.signin2.render('fc-signin2', {
-        'scope': 'profile email',
-        'width': 240,
-        'height': 50,
-        'onsuccess': google_signin_on_success,
-        'onfailure': google_signin_on_failure
-      });
+  resolveClientKey()
+
+  // initialize singin api
+  google.accounts.id.initialize({
+    client_id: simpleStorage.get('clientKey'),
+    callback: handleCredentialResponse,
+    autoselect: true,
+    prompt_parent_id: 'fc-signin2',
+    allowed_parent_origin: 'https://www.freecivweb.org/',
+    state_cookie_domain: 'freecivweb.org'
+  });
+
+  //Renders the login button.
+  google.accounts.id.renderButton($("#fc-signin2")[0], {
+    theme: 'outline',
+    size: 'large',
+    width: 240,
+    click_listener: google_login_button_handler
+  });
 
 }
+
+/***********************************************
+ * Loads starts the google login process when clicking the google button.
+ ***********************************************/
+function google_login_button_handler() {
+  console.log("Login button pressed")
+}
+
+/****************************************************************
+ * Handler to process sign in and call the backend tokenSignin Servlet.
+ *
+ * @param credentialResponse The credential response object Ref: https://developers.google.com/identity/gsi/web/reference/js-reference#CredentialResponse
+ *
+ ******************************************************************/
+function handleCredentialResponse(credentialResponse) {
+  var id_token = credentialResponse.credential;
+
+  username = $("#username_req").val().trim().toLowerCase();
+  if (!validate_username()) {
+    return;
+  }
+  //validate user token.
+  var xhr = new XMLHttpRequest();
+  xhr.open('POST', '/token_signin');
+  xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+  xhr.onload = function() {
+    if (xhr.responseText == "OK") {
+      google_user_token = id_token;
+      simpleStorage.set("username", username);
+      $("#dialog").dialog('close');
+    } else if (xhr.responseText == "Email not verified") {
+      swal("Login failed. E-mail not verified.");
+      setSwalTheme();
+    } else {
+      swal("Login failed.");
+      setSwalTheme();
+    }
+  };
+  xhr.send('idtoken=' + id_token + "&username=" + username);
+}
+
+function resolveClientKey() {
+  var xhr = new XMLHttpRequest();
+  xhr.open('POST', '/client_key');
+  xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+  xhr.onload = function() {
+    simpleStorage.set('clientKey', xhr.responseText)
+  };
+  xhr.send()
+}
+
 
 /**************************************************************************
   Validate username callback
@@ -1895,49 +1958,5 @@ function forgot_pbem_password()
       setSwalTheme();
     }
   }
-
-}
-
-/**************************************************************************
- User signed in with Google account.
-**************************************************************************/
-function google_signin_on_success(googleUser)
-{
-  var id_token = googleUser.getAuthResponse().id_token;
-  username = $("#username_req").val().trim().toLowerCase();
-  if (!validate_username()) {
-    return;
-  }
-  //validate user token.
-  var xhr = new XMLHttpRequest();
-  xhr.open('POST', '/token_signin');
-  xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-  xhr.onload = function() {
-    if (xhr.responseText == "OK") {
-      google_user_token = id_token;
-      simpleStorage.set("username", username);
-      $("#dialog").dialog('close');
-    } else if (xhr.responseText == "Email not verified") {
-      swal("Login failed. E-mail not verified.");
-      setSwalTheme();
-    } else {
-      swal("Login failed.");
-      setSwalTheme();
-    }
-  };
-  xhr.send('idtoken=' + id_token + "&username=" + username);
-
-}
-
-
-/**************************************************************************
- Handle Google signin problems.
-**************************************************************************/
-function google_signin_on_failure(error)
-{
-  if (error['error'] == "popup_closed_by_user") return;
-  swal("Unable to sign in with Google: " + JSON.stringify(error));
-  setSwalTheme();
-  console.error("Unable to sign in with Google: " + JSON.stringify(error));
 
 }
