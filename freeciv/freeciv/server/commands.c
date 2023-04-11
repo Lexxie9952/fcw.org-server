@@ -687,28 +687,24 @@ static struct command commands[] = {
   },
   {"delegate", ALLOW_BASIC,
    /* TRANS: translate only text between [] and <> */
-   N_("delegate to <username> [player-name]\n"
-      "delegate cancel [player-name]\n"
-      "delegate take <player-name>\n"
-      "delegate restore\n"
-      "delegate show <player-name>"),
-   N_("Delegate control to another user."),
-   N_("Delegation allows a user to nominate another user who can temporarily "
-      "take over control of their player while they are away.\n"
-      "'delegate to <username>': allow <username> to 'delegate take' your "
-      "player.\n"
-      "'delegate cancel': nominated user can no longer take your player.\n"
-      "'delegate take <player-name>': take control of a player who has been "
-      "delegated to you. (Behaves like 'take', except that the 'allowtake' "
-      "restrictions are not enforced.)\n"
-      "'delegate restore': relinquish control of a delegated player (opposite "
-      "of 'delegate take') and restore your previous view, if any. (This also "
-      "happens automatically if the player's owner reconnects.)\n"
-      "'delegate show': show who control of your player is currently "
-      "delegated to, if anyone.\n"
-      "The [player-name] argument can only be used by connections with "
-      "cmdlevel 'admin' or above to force the corresponding change of the "
-      "delegation status."), NULL,
+   N_(" <u><b>COMMAND OPTIONS</b></u>:\n"
+      "<i>/delegate to</i> {player_name}\n"
+      "<i>/delegate cancel</i>\n"
+      "<i>/delegate take</i> {player-name}\n"
+      "<i>/delegate restore</i>\n"
+      "<i>/delegate show</i> {player-name}"),
+   N_("Gives a player temporary control of your nation while you are away."),
+   N_("Manages temporary control by another player.\n"
+      "<u><b>Usage Examples</b></u>:\n"
+      "<b class='h'><i>/delegate to Fred</i></b> - Allow Fred to use \"/delegate take\" to control your nation.\n"
+      "<b class='h'><i>/delegate cancel</i></b> - Revoke Fred's permission to take control of your nation.\n"
+      "<b class='h'><i>/delegate take Kevin</i></b> - Take temporary control of Kevin, if delegated to you.\n"
+      "<b class='h'><i>/delegate restore</i></b> - Cancel \"/delegate take\". Relinquish control of Kevin; revert "
+      "to your own nation. (Also happens whenever the nation's owner reconnects.)\n"
+      "<b class='h'><i>/delegate show</i></b> - Show to which player you have given delegation rights.\n"
+      "<u>Admin Level</u>:\n"
+      "<i class='ha'>/delegate to Fred Kevin</i> - Give Fred delegate control of Kevin's nation.\n"
+      "<i class='ha'>/delegate cancel Fred</i> - Cancel Fred's delegation. "), NULL,
    CMD_ECHO_NONE, VCF_NONE, 0
   },
   {"aicmd", ALLOW_ADMIN,
