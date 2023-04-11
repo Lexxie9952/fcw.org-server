@@ -343,24 +343,26 @@ static void cmd_reply_line(enum command_id cmd, struct connection *caller,
 			   enum rfc_status rfc_status, const char *prefix,
 			   const char *line)
 {
+  /* 
   const char *cmdname = cmd < CMD_NUM
                         ? command_name_by_number(cmd)
                         : cmd == CMD_AMBIGUOUS
-                          /* TRANS: ambiguous command */
+                          // TRANS: ambiguous command  
                           ? _("(ambiguous)")
                           : cmd == CMD_UNRECOGNIZED
-                            /* TRANS: unrecognized command */
+                            // TRANS: unrecognized command  
                             ? _("(unknown)")
-                            : "(?!?)";  /* this case is a bug! */
+                            : "(?!?)";  // this case is a bug!
+  */
 
   if (caller) {
     notify_conn(caller->self, NULL, E_SETTING, ftc_command,
-                "/%s: %s%s", cmdname, prefix, line);
+                "• %s %s%s", ""/* was: cmdname, i.e. "/help:", "/show:" */, " ", line);
     /* cc: to the console - testing has proved it's too verbose - rp
     con_write(rfc_status, "%s/%s: %s%s", caller->name, cmdname, prefix, line);
     */
   } else {
-    con_write(rfc_status, "%s%s", prefix, line);
+    con_write(rfc_status, "%s%s", " ", line);
   }
 
   if ((rfc_status == C_OK && !caller)
@@ -399,11 +401,11 @@ static void vcmd_reply_prefix(enum command_id cmd, struct connection *caller,
   c0 = buf;
   while ((c1 = strstr(c0, "\n"))) {
     *c1 = '\0';
-    cmd_reply_line(cmd, caller, rfc_status, (c0 == buf ? "" : prefix), c0);
+    cmd_reply_line(cmd, caller, rfc_status, (c0 == buf ? "" : "• "), c0);
     c0 = c1 + 1;
   }
 
-  cmd_reply_line(cmd, caller, rfc_status, (c0 == buf ? "" : prefix), c0);
+  cmd_reply_line(cmd, caller, rfc_status, (c0 == buf ? "" : "• "), c0);
 }
 
 /**********************************************************************//**
@@ -420,7 +422,7 @@ static void cmd_reply_prefix(enum command_id cmd, struct connection *caller,
 {
   va_list ap;
   va_start(ap, format);
-  vcmd_reply_prefix(cmd, caller, rfc_status, prefix, format, ap);
+  vcmd_reply_prefix(cmd, caller, rfc_status, "• ", format, ap);
   va_end(ap);
 }
 
@@ -6803,23 +6805,23 @@ static void show_help_command(struct connection *caller,
   if (command_short_help(cmd)) {
     cmd_reply(help_cmd, caller, C_COMMENT,
               /* TRANS: <untranslated name> - translated short help */
-              _("Command: %s  -  %s"),
+              _("<b>/%s</b>  -  %s"),
               command_name(cmd),
               command_short_help(cmd));
   } else {
     cmd_reply(help_cmd, caller, C_COMMENT,
 	      /* TRANS: <untranslated name> */
-	      _("Command: %s"),
+	      _("<b>/%s</b>"),
 	      command_name(cmd));
   }
   if (command_synopsis(cmd)) {
     /* line up the synopsis lines: */
     const char *syn = _("Synopsis: ");
-    size_t synlen = strlen(syn);
-    char prefix[40];
+    //size_t synlen = strlen(syn);
+    //char prefix[40]; FCW doesn't use prefixes
 
-    fc_snprintf(prefix, sizeof(prefix), "%*s", (int) synlen, " ");
-    cmd_reply_prefix(help_cmd, caller, C_COMMENT, prefix,
+    //fc_snprintf(prefix, sizeof(prefix), "%*s", (int) synlen, " ");
+    cmd_reply_prefix(help_cmd, caller, C_COMMENT, "• ",
                      "%s%s", syn, command_synopsis(cmd));
   }
   cmd_reply(help_cmd, caller, C_COMMENT,
@@ -6828,8 +6830,8 @@ static void show_help_command(struct connection *caller,
     char *help = command_extra_help(cmd);
 
     if (help) {
-      fc_break_lines(help, LINE_BREAK);
-      cmd_reply(help_cmd, caller, C_COMMENT, _("Description:"));
+      // fc_break_lines(help, LINE_BREAK);  FCW breaks its own lines in a resizable window.
+      cmd_reply(help_cmd, caller, C_COMMENT, _("Description: "));
       cmd_reply_prefix(help_cmd, caller, C_COMMENT, "  ", "  %s", help);
       FC_FREE(help);
     }
