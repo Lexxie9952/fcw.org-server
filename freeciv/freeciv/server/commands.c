@@ -696,15 +696,15 @@ static struct command commands[] = {
    N_("Gives a player temporary control of your nation while you are away."),
    N_("Manages temporary control by another player.\n"
       "<u><b>Usage Examples</b></u>:\n"
-      "<b class='h'><i>/delegate to Fred</i></b> - Allow Fred to use \"/delegate take\" to control your nation.\n"
-      "<b class='h'><i>/delegate cancel</i></b> - Revoke Fred's permission to take control of your nation.\n"
-      "<b class='h'><i>/delegate take Kevin</i></b> - Take temporary control of Kevin, if delegated to you.\n"
-      "<b class='h'><i>/delegate restore</i></b> - Cancel \"/delegate take\". Relinquish control of Kevin; revert "
+      "<b class='h'><i>/delegate to Bob</i></b> - Allow Bob to use \"/delegate take\" to control your nation.\n"
+      "<b class='h'><i>/delegate cancel</i></b> - Revoke Bob's permission to take control of your nation.\n"
+      "<b class='h'><i>/delegate take Sue</i></b> - Take temporary control of Sue, if delegated to you.\n"
+      "<b class='h'><i>/delegate restore</i></b> - Cancel \"/delegate take\". Relinquish control of Sue; revert "
       "to your own nation. (Also happens whenever the nation's owner reconnects.)\n"
       "<b class='h'><i>/delegate show</i></b> - Show to which player you have given delegation rights.\n"
       "<u>Admin Level</u>:\n"
-      "<i class='ha'>/delegate to Fred Kevin</i> - Give Fred delegate control of Kevin's nation.\n"
-      "<i class='ha'>/delegate cancel Fred</i> - Cancel Fred's delegation. "), NULL,
+      "<i class='ha'>/delegate to Bob Sue</i> - Give Bob delegate control of Sue's nation.\n"
+      "<i class='ha'>/delegate cancel Bob</i> - Cancel Bob's delegation. "), NULL,
    CMD_ECHO_NONE, VCF_NONE, 0
   },
   {"aicmd", ALLOW_ADMIN,
