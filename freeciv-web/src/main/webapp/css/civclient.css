@@ -1277,6 +1277,17 @@ body:not(.mobile) .ui-dialog.unit_dialog {
   margin: -6px 7px -5px -1px;
 }
 
+/* Used to provide highlighting in certain instances of help text */
+.h
+{
+  color: #3aa;
+}
+/* Dimmer highlighting for admin or infrequently used commands */
+.ha
+{
+  color: #177;
+}
+
 .sb 
 {
   vertical-align: sub;
@@ -2104,7 +2115,7 @@ input[type="email" i], #email {
 }
 
 .e_setting {
- color: #777c79;
+ color: #878c89;
 }
 .e_setting a {
   target: new;
