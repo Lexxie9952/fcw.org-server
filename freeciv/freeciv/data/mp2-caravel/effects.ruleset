@@ -4098,7 +4098,7 @@ type    = "Unit_Upkeep_Free_Per_City"
 value	= 2
  reqs	=
     { "type",       "name",        "range"
-      "Building",   "Solar Plant", "City"
+      "Building",   "Wind Plant", "City"
       "OutputType", "Shield",      "Local"
     }
 ;********************************************************************** RECYCLING CENTER
