@@ -2829,8 +2829,8 @@ helptext      = _("\
 The Mobile SAM is the strongest Anti-Air unit on the ground. It can\
  attack nearby aircraft and missiles. It has a 2× bonus against Air and 3× against\
  Missiles. The Mobile SAM can also carry 3 Missiles of any type.\
- The discovery of Laser gives all units on its tile a 33% chance to\
- survive nuclear attack. \
+ The discovery of Laser gives each Mobile SAM a 33% chance to defend all units on
+ its tile from nuclear attack. \
 \nBig Land units can’t enter Mountains without a road or native base, and do not\
  receive a move bonus from Rivers. \n\
 "), _("
@@ -4981,8 +4981,8 @@ helptext      = _("\
 The AEGIS Cruiser has an Anti-Air missile system. Radar and sonar\
  give superior vision and 2× defense bonus against Submarines.\
  The AEGIS can carry five Missiles, and is the only ship that can attack\
- Air and Missile units.  The discovery of Laser gives all units on its tile\
- a 50% chance to survive nuclear attack. \n\
+ Air and Missile units. The discovery of Laser gives each AEGIS Cruiser\
+ a 50% chance to defend all units on its tile from nuclear attack. \n\
 "), _("\
 Excellent vision and 3× Anti-Air bonus are ideal for scouting and escorting. \
 "), _("
