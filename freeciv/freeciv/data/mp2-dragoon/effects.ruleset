@@ -6956,6 +6956,14 @@ reqs	=
       "UnitFlag",     "NonMil",       "Local", FALSE
       "UnitFlag",     "NoVeteran",    "Local", FALSE
     }
+[effect_ziggurat_barracks_2]
+type    = "Veteran_Build"
+value	= 1
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Ziggurat", "City", TRUE
+      "UnitType", "Scout",   "Local", TRUE
+    }
 [effect_ziggurat_barracks_a]
 type    = "HP_Regen"
 value	= 100
