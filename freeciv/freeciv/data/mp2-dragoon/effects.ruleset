@@ -4955,10 +4955,21 @@ reqs	=
     { "type",      "name",            "range", "present"
       "Building",  "Agōgē of Sparta", "City",   TRUE
       "Building",  "Barracks",        "City",   FALSE
+      "Building",  "Ziggurat",        "City",   FALSE
       "UnitClassFlag","TerrainSpeed", "Local",  TRUE
       "UnitType",  "Phalanx",         "Local",  FALSE
       "UnitFlag",  "NonMil",          "Local",  FALSE
       "UnitFlag",  "NoVeteran",       "Local",  FALSE
+    }
+[effect_agoge_veteran_build_scout]
+type    = "Veteran_Build"
+value	= 1
+reqs	=
+    { "type",      "name",            "range", "present"
+      "Building",  "Agōgē of Sparta", "City",   TRUE
+      "Building",  "Barracks",        "City",   FALSE
+      "Building",  "Ziggurat",        "City",   FALSE
+      "UnitType",  "Scout",           "Local",  TRUE
     }
 [effect_agoge_veteran_build_phalanx]
 type    = "Veteran_Build"
