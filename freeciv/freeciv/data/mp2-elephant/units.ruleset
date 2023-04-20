@@ -6267,7 +6267,7 @@ Commerce units can help build Wonders in any city with whom\
  increasing net trade in both cities relative to their combined trade. Routes are inactive\
  during war and (re)activate during peace. \n\
 Commerce units can build any Wonders for which you have the tech requirement. To use them\
- for a Trade Route, they need to have given a Home City. \n\
+ for a Trade Route, they need to be given a Home City. \n\
 All Commerce units can carry Goods as cargo.\
 ")
 
