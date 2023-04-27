@@ -345,7 +345,7 @@
 							<tr>
 								<th class="hidden-xs"></th>
 								<th class="hidden-xs">Players</th>
-								<th>Game Info<br><span style="font-size:90%; font-weight:600; color: #b6a6ff; text-shadow: 1px 1px #216;"><i>Late-join bonus gold and bulbs ensure FAIR-START&#8482; in the first 10 turns.</i></span></th>
+								<th>Game Info<br>* <span style="font-size:90%; font-weight:600; color: #b6a6ff; text-shadow: 1px 1px #216;"><i>Purple games: Late-join bonus gold and bulbs ensure FAIR-START&#8482; in the first 10 turns.</i></span><br><br><u>Player skill-level definitions:</u><br><span style="font-size:90%; font-weight:600; color: #f1dbba; text-shadow: 1px 1px rgb(39, 16, 3);"><b><u>EXPERT</u></b></span> - Winning player with highest score in a past RATED game.<br><span style="font-size:90%; font-weight:600; color: #f1dbba; text-shadow: 1px 1px rgb(39, 16, 3);"><b><u>EXPERIENCED</u></b></span> - Winning player with highest score in a past UNRATED game.<br><span style="font-size:90%; font-weight:600; color: #f1dbba; text-shadow: 1px 1px rgb(39, 16, 3);"><b><u>BEGINNER</u></b></span> - Any player who is neither <b>EXPERT</b> nor <b>EXPERIENCED</b>.</th>
 								<th style="text-align:center" class="hidden-xs">State</th>
 								<th style="text-align:right">Turn</th>
 								<th style="text-align:center">Action</th>
