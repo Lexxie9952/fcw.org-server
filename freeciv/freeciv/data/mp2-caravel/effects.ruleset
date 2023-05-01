@@ -4304,31 +4304,30 @@ reqs	=
       "Building", "Space Structural", "City"
     }
 
-;Timeline is already way behind and too slow, REMOVE:
-;[effect_plastics_slowdown]
-;type    = "Slow_Down_Timeline"
-;value   = 1
-;reqs    =
-;    { "type", "name", "range", "survives"
-;      "Tech", "Plastics", "World", TRUE
-;    }
-
-;[effect_superconductor_slowdown]
-;type    = "Slow_Down_Timeline"
-;value   = 1
-;reqs    =
-;    { "type", "name", "range", "survives"
-;      "Tech", "Superconductors", "World", TRUE
-;    }
 ;1 year per turn ensures spaceship travel time calibrated.
-;this can be removed after game.info.spacerace bug of not changing
-;timeline gets fixed in server. 
-[effect_spaceflight_slowdown]
-type    = "Turn_Years"
+;a Slow_Down_Timeline of 3 ensures maximum years per turn is 1
+;to build a spaceship requires all 3 of these techs, hence, 
+;a spaceship launch will always have 1 year = 1 turn.
+[effect_plastics_slowdown]
+type    = "Slow_Down_Timeline"
 value   = 1
 reqs    =
     { "type", "name", "range", "survives"
-      "Tech", "Space Flight", "World", TRUE
+      "Tech", "Plastics", "World", TRUE
+    }
+[effect_superconductor_slowdown]
+type    = "Slow_Down_Timeline"
+value   = 1
+reqs    =
+    { "type", "name", "range", "survives"
+      "Tech", "Superconductors", "World", TRUE
+   }
+[effect_spaceflight_slowdown]
+type    = "Slow_Down_Timeline"
+value   = 1
+reqs    =
+    { "type", "name", "range", "survives"
+      "Tech", "Space Flight", "World", TRUE 
     }
 
 [effect_stock_exchange_gold]

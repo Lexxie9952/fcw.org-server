@@ -2906,6 +2906,23 @@ target_reqs    =
       "Terrain", "Glacier",  "Local"
     }
 
+[actionenabler_forest_river_mill]
+action        = "Build Mine"
+actor_reqs    =
+    { "type",          "name",         "range",   "present"
+      "UnitFlag",      "Settlers",     "Local",   TRUE
+      "UnitFlag",      "CanHide",      "Local",   FALSE
+      "UnitFlag",      "CanClaim",     "Local",   FALSE
+      "UnitFlag",      "Well-Digger",  "Local",   FALSE
+      "UnitType",      "Tribesmen",    "Local",   FALSE
+      "Tech",          "Iron Working", "Player",  TRUE
+    }
+target_reqs    =
+    { "type",    "name",     "range"
+      "Terrain", "Forest",   "Local"
+      "Extra",   "River",    "Local"
+    }
+
 [actionenabler_build_fishtrap_trawler]
 action        = "Build Base"
 actor_reqs    = 
