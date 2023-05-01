@@ -4006,7 +4006,7 @@ set =
       "separatepoles", FALSE, FALSE
       "slot_control", TRUE, FALSE         ; multiple units per turn
       "slot_control_style", 1, FALSE      ; 1 = Shield2Gold units only
-      "spaceship_travel_time", 225, FALSE
+      "spaceship_travel_time", 250, FALSE
       "specials", 350, FALSE
       "startpos", "VARIABLE", FALSE
       "startunits", "DDDwwwtuccU", "FALSE"  ;3 Tribesmen, 3 Workers, 1 Caravan, 1 Founders, 2 Settlers, 1 Well-Digger
