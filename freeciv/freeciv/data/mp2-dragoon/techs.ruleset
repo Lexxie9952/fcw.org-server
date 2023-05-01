@@ -704,7 +704,7 @@ req2     = "Literacy"
 flags    = ""
 graphic     = "a.philosophy"
 graphic_alt = "-"
-helptext = _("Obsoletes Sphinx. Bonus blueprint before 1600AD if no next tier techs are possessed.")
+helptext = _("Obsoletes Sphinx. Before 1600AD, gives bonus tech toward Future Goal.")
 cost = 325
 
 [advance_physics]
