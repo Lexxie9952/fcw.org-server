@@ -138,6 +138,7 @@ tiles = { "row", "column", "tag"
  5,  6, "tx.village"
  6,  6, "tx.fallout"
  7,  6, "tx.oil_rig"
+; 9,  7, "tx.mill"
 
  15,  0, "t.dither_tile"
  15,  0, "tx.darkness"
