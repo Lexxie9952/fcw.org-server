@@ -157,3 +157,5 @@ Missiles boarding and transport swapping must be done in friendly city or base. 
 ** LandRoad can't embark if transporting (also MP2D)
 50. Spaceship items cost 3 gold per shield. Penalizes gold pooling efforts while still leaving gold a semi-feasible resource for spacerace.
 51. In foreign cities, Freight cannot recycle into spaceships or coinage (exploit prevention / game balance.)
+52. After building Apollo Program, you can't relocate capital by building Palace. This prevents exploit where capital moves to new city 
+    every turn, preventing any collaborated effort to sabotage a space program.

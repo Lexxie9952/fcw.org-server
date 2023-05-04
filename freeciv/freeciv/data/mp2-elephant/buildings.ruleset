@@ -1298,7 +1298,8 @@ name		= _("Palace")
 genus		= "SmallWonder"
 flags		= "SaveSmallWonder"
 reqs	=
-    { "type", "name", "range"
+    { "type",      "name",           "range", "present"
+       "Building", "Apollo Program", "Player", FALSE
     }
 graphic	= "b.palace"
 graphic_alt	= "-"
@@ -1510,7 +1511,9 @@ helptext	= _("\
 Allows you to start building spaceship parts in cities\
  with factories (assuming you have researched the necessary\
  technologies). With Laser tech, the city with the Apollo\
- Program can build a Satellite.\
+ Program can build a Satellite.\n\
+Be careful：once you build the Apollo Program, you cannot\
+ relocate your capital by building a new Palace.\ 
 ")
 
 [building_appian_way]
