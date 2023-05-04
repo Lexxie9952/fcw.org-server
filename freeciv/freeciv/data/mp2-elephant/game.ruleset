@@ -1107,17 +1107,46 @@ target_reqs    =
       "BuildingGenus", "SmallWonder", "Local", TRUE
     }
 
-[actionenabler_recycle_unit]
+[actionenabler_recycle_unit]              ; Basic recycle for everything except Tribesmen or Freight
 action = "Recycle Unit"
 actor_reqs    =
     { "type",     "name",         "range", "present", "quiet"
       "UnitFlag", "EvacuateFirst","Local", FALSE,     TRUE
       "UnitType", "Tribesmen",    "Local", FALSE,     TRUE
+      "UnitType", "Freight",      "Local", FALSE,     TRUE
       "DiplRel",  "War",          "Local", FALSE,     TRUE
       "DiplRel",  "Cease-fire",   "Local", FALSE,     TRUE
       "DiplRel",  "Armistice",    "Local", FALSE,     TRUE
       "DiplRel",  "Peace",        "Local", FALSE,     TRUE
     }
+
+[actionenabler_recycle_unit_freight_1]       ; Can recycle Freight into !(Spaceship || Coinage) if self or ally
+action = "Recycle Unit"
+actor_reqs    =
+    { "type",     "name",         "range", "present", "quiet"
+      "UnitType", "Freight",      "Local", TRUE,      TRUE
+      "DiplRel",  "War",          "Local", FALSE,     TRUE
+      "DiplRel",  "Cease-fire",   "Local", FALSE,     TRUE
+      "DiplRel",  "Armistice",    "Local", FALSE,     TRUE
+      "DiplRel",  "Peace",        "Local", FALSE,     TRUE
+    }
+target_reqs    =
+    { "type",   "name", "range", "present"
+      "BuildingGenus", "Special", "Local", FALSE     ; !(Spaceship || Coinage)
+    }
+
+[actionenabler_recycle_unit_freight_2]       ; Can recycle Freight into Spaceship/Coinage only when domestic
+action = "Recycle Unit"
+actor_reqs    =
+    { "type",     "name",         "range", "present", "quiet"
+      "UnitType", "Freight",      "Local", TRUE,      TRUE
+      "DiplRel",  "Foreign",      "Local", FALSE,     TRUE
+    }
+target_reqs    =
+    { "type",          "name",    "range", "present"
+      "BuildingGenus", "Special", "Local", TRUE
+    }
+
 ;TRIBESMEN RECYCLE: Building, Wonder, or Coinage (special)
 [actionenabler_recycle_unit_tribesmen_1]
 action = "Recycle Unit"

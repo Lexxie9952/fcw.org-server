@@ -8103,6 +8103,15 @@ reqs    =
       "Building", "Ecclesiastical Palace", "Local", FALSE
     }
 
+; 1.5x (+50%) buy cost for Space Parts (3 gold/shield)
+[effect_spaceship_buy_cost]
+type    = "Building_Buy_Cost_Pct"
+value   = 50
+reqs    =
+    { "type", "name", "range"
+      "BuildingGenus", "Special", "Local"
+    }
+
 ;************************************************************************************ MOVE COSTS
 ;By having control over embark/board and disembark/deboard, we can gracefully upgrade mechanics
 ;to tamp down double-move and transport-swap dynamics while still leaving a little flex in

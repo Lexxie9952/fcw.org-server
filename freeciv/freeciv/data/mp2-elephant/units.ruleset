@@ -6430,14 +6430,14 @@ helptext      = _("\
 Freight brings benefits of organized efficiency. Like all Commerce units, it can\
  Help Build Wonders, and Establish Trade Route. Unlike other Commerce units, it\
  can Disband to Recycle Production with no net loss in shields. This gives\
- Freight a variety of industrial uses. Similar to Infantry, Freight can use extra\
- build slots a city may have.\
+ Freight a variety of industrial uses. In allied cities, it can be used to\
+ help produce buildings, wonders, or units. Similar to Infantry, Freight\
+ can use extra build slots a city may have.\
   \n\
 "), _("\
 By itself, Freight is only able to move to tiles with loading infrastructure:\
  Cities, Quays, Fortresses, Airbases, and Naval Bases. To be transported, it must be carried\
- as cargo. If adjacent to a foreign city, use the D key to\
- do Commerce functions.\
+ as cargo. If adjacent to a foreign city, use the D key to do Commerce functions.\
 ")
 
 [unit_leader]
