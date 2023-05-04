@@ -37,7 +37,7 @@ Focus goals for MP2-Elephant
 
 0. Attack and Defense strength are all 10x higher across the board. This makes a basic unit like the Warriors as 
    A10 D10 HP10. However, the strengths are represented at 1/10 so A10 stll shows as A1. This allows fine-tuning
-    unit combat strength with a finer shade.
+    unit combat strength with a finer shade. This is a developer note that does not affect gamer-level concerns.
 1. Spy Planes are harder to shoot down because of mass, size, speed, and altitude. Correspondingly, they gain higher defense, 
 and can now be built with veteran levels.
 1a. Spy Planes get 75% chance to Stack Escape, since they are in a different "layer" of the tile, like subs.
@@ -68,7 +68,7 @@ and can now be built with veteran levels.
 10. Smaller boats (Boats and Triremes) get +1 move point for moving faster on rivers, if they start their turn on a river.
       this now makes Boats move at 6, same speed as unit using river without boat.
 11. Like wagon and trawler, everyone can see a Boat's cargo.
-12. Patriarch can gain vet levels like other dipomat types.
+12. Patriarch can gain vet levels like other diplomat types.
 13. Most first techs reduced in price to 15. HBR 24. Warrior Code: 18. Easier Bronze Age, more risk rushing out because missing out on things,
     more availability for early wonder choices and/or less penalty for pursuing them instead of new-gov-rush.
 14. Mausoleum 170 - cheaper is another civil wonder bonus of it.
@@ -159,3 +159,8 @@ Missiles boarding and transport swapping must be done in friendly city or base. 
 51. In foreign cities, Freight cannot recycle into spaceships or coinage (exploit prevention / game balance.)
 52. After building Apollo Program, you can't relocate capital by building Palace. This prevents exploit where capital moves to new city 
     every turn, preventing any collaborated effort to sabotage a space program.
+53. Boats are capturable units. Land units can capture them only when they are on terrain that land units can themselves travel to, i.e.,
+      rivers or canals.
+54. War Galleys gain ability to capture but native terrain rules are in effect:  They may capture boats at sea. They may capture any capturable units
+    on land but only on terrain War Galley can go on (i.e. rivers, canals). The usual restrictions apply for cities, bases, mountains, and multiple
+    units on the tile.

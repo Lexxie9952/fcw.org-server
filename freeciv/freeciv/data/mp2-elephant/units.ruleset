@@ -4328,7 +4328,7 @@ uk_food       = 0
 uk_gold       = 0
 cargo         = "Land", "LandNoKill", "LandAirSea", "Big Land", "Cargo"
 flags         = "BadCityDefender", "HelpWonder", "TradeRoute", "CoastStrict", "NonMil", 
-                "NonProvoking", "HasNoZOC", "IgZOC", "ProvokingClass2"
+                "Capturable", "NonProvoking", "HasNoZOC", "IgZOC", "ProvokingClass2"
 veteran_names =
   _("?vet_rank:green"),
   _("?vet_rank:veteran"),
@@ -4539,7 +4539,7 @@ uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
 cargo         = "Land", "LandNoKill", "LandAirSea", "Big Land", "LandRoad"
-flags         = "BadCityDefender", "CantReachAir", "WillNever", "ProvokingClass2"
+flags         = "BadCityDefender", "CantReachAir", "WillNever", "Capturer", "ProvokingClass2"
 veteran_names =
   _("?vet_rank:green"),
   _("?vet_rank:veteran"),

@@ -1198,30 +1198,82 @@ actor_reqs    =
       "UnitFlag", "EvacuateFirst",  "Local", FALSE,     TRUE
     }
 
-;CAPTURING LAND UNITS a "Capturer" must get a "Capturable" but not on a mountain.
-[actionenabler_capture]
+;LAND UNITS CAPTURING LAND UNITS: a "Capturer" must get a "Capturable" but not on oceanic, mountains, bases, or cities.
+[actionenabler_capture_land]
 action = "Capture Units"
 actor_reqs    =
-    { "type",   "name", "range", "present"
-      "UnitFlag", "Capturer", "Local", TRUE
-      "UnitState", "Transported", "Local", FALSE
-;     "DiplRel", "War", "Local", TRUE             ;NAH 
-      "MinMoveFrags", "1", "Local", TRUE
-      "DiplRel", "Foreign", "Local", TRUE
-      "DiplRel", "Alliance", "Local", FALSE
+    { "type",          "name",        "range", "present"
+      "UnitFlag",      "Capturer",    "Local", TRUE
+      "UnitClassFlag", "WaterVessel", "Local", FALSE                ;Water antics need different enabler conditions
+      "UnitState",     "Transported", "Local", FALSE
+;     "DiplRel",       "War",         "Local", TRUE                 ;NAH 
+      "MinMoveFrags",  "1",           "Local", TRUE
+      "DiplRel",       "Foreign",     "Local", TRUE
+      "DiplRel",       "Alliance",    "Local", FALSE
     }
 target_reqs    =
-    { "type",   "name", "range", "present"
-      "UnitFlag", "Capturable", "Local", TRUE
-      "CityTile", "Center", "Local", FALSE
-      "Terrain", "Mountains", "Local", FALSE
-      "MaxUnitsOnTile", "1", "Local", TRUE
-      "Extra", "Fort", "Local", FALSE
-      "Extra", "Fortress", "Local", FALSE
-      "Extra", "Naval Base", "Local", FALSE
-      "Extra", "Castle", "Local", FALSE
-      "Extra", "Bunker", "Local", FALSE
+    { "type",           "name",       "range", "present"
+      "UnitFlag",       "Capturable", "Local", TRUE
+      "CityTile",       "Center",     "Local", FALSE
+      "Terrain",        "Mountains",  "Local", FALSE
+      "TerrainClass",   "Oceanic",    "Local", FALSE
+      "MaxUnitsOnTile", "1",          "Local", TRUE
+      "Extra",          "Fort",       "Local", FALSE
+      "Extra",          "Fortress",   "Local", FALSE
+      "Extra",          "Naval Base", "Local", FALSE
+      "Extra",          "Castle",     "Local", FALSE
+      "Extra",          "Bunker",     "Local", FALSE
     }
+;SEA UNITS CAPTURING SEA UNITS @ SEA: a WaterVessel "Capturer" must get a WaterVessel "Capturable" on oceanic terrain.
+[actionenabler_capture_sea_units_at_sea]
+action = "Capture Units"
+actor_reqs    =
+    { "type",          "name",        "range", "present"
+      "UnitFlag",      "Capturer",    "Local", TRUE
+      "UnitClassFlag", "WaterVessel", "Local", TRUE               ;Enabler is for ships only
+      "UnitState",     "Transported", "Local", FALSE
+;     "DiplRel",       "War",         "Local", TRUE               ;NAH 
+      "MinMoveFrags",  "1",           "Local", TRUE
+      "DiplRel",       "Foreign",     "Local", TRUE
+      "DiplRel",       "Alliance",    "Local", FALSE
+    }
+target_reqs    =
+    { "type",         "name",       "range", "present"
+      "UnitFlag",     "Capturable", "Local", TRUE
+      "UnitClassFlag","WaterVessel","Local", TRUE
+      "CityTile",     "Center",     "Local", FALSE
+      "TerrainClass", "Oceanic",    "Local", TRUE
+      "MaxUnitsOnTile", "1",        "Local", TRUE
+    }
+;RIVERSHIPS CAPTURING UNITS ON RIVERS:  A RiverShip "Capturer" must get a "Capturable" on River/Canal/Waterway (ExtraFlag: "quayable".)
+[actionenabler_capture_by_rivership_on_river_or_canal]
+action = "Capture Units"
+actor_reqs    =
+    { "type",         "name",        "range", "present"
+      "UnitFlag",     "Capturer",    "Local", TRUE
+      "UnitClass",    "RiverShip",   "Local", TRUE               ;Enabler is for UC:RiverShip only
+      "UnitState",    "Transported", "Local", FALSE
+;     "DiplRel",      "War",         "Local", TRUE               ;NAH 
+      "MinMoveFrags", "1",           "Local", TRUE
+      "DiplRel",      "Foreign",     "Local", TRUE
+      "DiplRel",      "Alliance",    "Local", FALSE
+    }
+target_reqs    =
+    { "type",         "name",       "range", "present"
+      "UnitFlag",     "Capturable", "Local", TRUE
+      "CityTile",     "Center",     "Local", FALSE
+      "TerrainClass", "Oceanic",    "Local", FALSE
+      "ExtraFlag",    "Quayable",   "Local", TRUE
+      "Terrain",      "Mountains",  "Local", FALSE
+      "MaxUnitsOnTile", "1",        "Local", TRUE
+      "Extra",        "Fort",       "Local", FALSE
+      "Extra",        "Fortress",   "Local", FALSE
+      "Extra",        "Naval Base", "Local", FALSE
+      "Extra",        "Castle",     "Local", FALSE
+      "Extra",        "Bunker",     "Local", FALSE
+    }
+
+
 ;CAPTURING LAND COMMERCE UNIT CARRYING CARGO:
 ;Transported commercial cargo does not prevent capture!
 [actionenabler_capture_commerce]
