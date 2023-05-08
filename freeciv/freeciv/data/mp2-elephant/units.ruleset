@@ -2402,7 +2402,7 @@ build_cost    = 38
 pop_cost      = 0
 attack        = 40
 defense       = 20
-hitpoints     = 10
+hitpoints     = 11
 firepower     = 1
 move_rate     = 4
 vision_radius_sq = 4
@@ -2420,9 +2420,10 @@ flags         = "Horse", "Capturer", "CantReachAir", "WillNever"
 roles         = "AttackFastStartUnit", "BarbarianTech",
                 "BarbarianBuildTech", "BarbarianSeaTech", "Hunter"
 helptext      = _("\
-Knights are heavily armored mounted warriors. They defend at D3 against mounted units.\
- Their noble status allows them to attack cities without population reduction, and\
- conquer a size 1 city without destroying it.\
+Knights are heavily armored mounted warriors. Selected for their strength,\
+ they have an extra hitpoint over contemporary military units. They defend at\
+ D3 against mounted units. Their noble status allows them to attack cities without\
+ population reduction, and conquer a size 1 city without destroying it.\
 ")
 
 [unit_crusaders]
