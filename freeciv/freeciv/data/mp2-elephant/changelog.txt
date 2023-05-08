@@ -84,7 +84,7 @@ and can now be built with veteran levels.
    making a CM a field unit causing unhappiness in every Aegis Cruiser carrying it, it's like Cannons getting extra unhappiness for each
    cannonball they carry.
 19. Phalanxes and Pikemen get 1.5x attack bonus if they haven't moved. This is not cumulative to Agoge, but rather, Agoge expands the bonus to be 
-    active always for a pure 15 in attack strength.
+    active always for a pure 1.5 in attack strength.
 20. Bombs have no move cost to board but double move cost to deboard, which evens out on average; so why do it? Because this way it allows
    a newly made bomb to get on an aircraft on the same turn. In addition, bombs can't board while transported, as this would allow double
    moves of taking an Atom Bomb across the world in 14 trucks to blow up a target.
