@@ -1316,7 +1316,7 @@ Sets the main capital of your nation. Loss of your main capital：\
  (1) creates a new Palace and capital in a random city,\
  (2) destroys any Spaceship you are building, (3) may cause civil war.\
 "), _("\
- Capital cities gain +1 happy citizen.\
+ Capital cities gain +1 happy citizen and +1 content citizen.\
 "), _("\
  Capitals can’t be incited to revolt. The closer a city is to a capital,\
  the higher the cost to bribe or incite revolt. In a capital, the chance of\
@@ -1361,7 +1361,7 @@ helptext	= _("\
 Sets your religious capital and second center of government. Loss of this\
  city will create a new Ecclesiastical Palace in a random city.\
 "), _("\
- Capital cities gain +1 happy citizen.\
+ Capital cities gain +1 happy citizen and +1 content citizen.\
 "), _("\
  Capitals can’t be incited to revolt. The closer a city is to a capital,\
  the higher the cost to bribe or incite revolt. In a capital, the chance of\

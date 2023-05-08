@@ -1985,6 +1985,14 @@ reqs	=
     { "type", "name",     "range"
       "Gov",  "Monarchy", "Player"
     }
+[effect_max_rates_constitutional_monarchy]   ; Adds +5 to above.
+type    = "Max_Rates"
+value   = 5
+reqs	=
+    { "type", "name",     "range"
+      "Gov",  "Monarchy", "Player"
+      "Building", "Magna Carta", "Player"
+    }
 [effect_max_rates_republic]
 type    = "Max_Rates"
 value   = 80
@@ -3680,6 +3688,13 @@ reqs	=
     { "type", "name", "range"
       "Building", "Palace", "City"
     }
+[effect_palace_content]   ; Keeps Palace as a quasi-courthouse (i.e. no/less need to build one), similar to past rulesets
+type    = "Make_Content"
+value	= 1
+reqs	=
+    { "type", "name", "range"
+      "Building", "Palace", "City"
+    }
 [effect_palace_corruption_reduction]
 type    = "Output_Waste_Pct"
 value	= 60
@@ -3813,6 +3828,14 @@ reqs	=
       "Building", "Ecclesiastical Palace", "City", TRUE
       "Building", "Palace", "City", FALSE
     }
+[effect_ecclesiastical_palace_content]   ; Keeps Ecc.Palace as mirror same functions/bonuses as a palace.
+type    = "Make_Content"
+value	= 1
+reqs	=
+    { "type", "name", "range"
+      "Building", "Ecclesiastical Palace", "City"
+    }
+
 [effect_ecclesiastical_palace_despotism]
 type    = "Output_Bonus"
 value   = 75

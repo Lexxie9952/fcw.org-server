@@ -212,9 +212,14 @@ function update_rates_dialog()
                       client.conn.playing['luxury'],
                       client.conn.playing['science'], maxrate);
 
-  var govt = governments[client.conn.playing['government']];
+  var govt = governments[client.conn.playing['government']]['name'];
+  if (govt == "Monarchy") {
+    if (player_has_wonder(client.conn.playing.playerno, improvement_id_by_name(B_MAGNA_CARTA))) {
+      govt = "Constitutional Monarchy"
+    }  
+  }
 
-  $("#max_tax_rate").html("<i style='color:#a88'>" + govt['name'] + " max rate: &nbsp;</i>" + maxrate + "%");
+  $("#max_tax_rate").html("<i style='color:#a88'>" + govt + " max rate: &nbsp;</i>" + maxrate + "%");
   update_net_income();
   update_net_bulbs();
 }

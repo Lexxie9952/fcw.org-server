@@ -266,7 +266,11 @@ function government_max_rate(govt_id)
   } else if (govt == "Despotism") {
     return 60;
   } else if (govt == "Monarchy") {
-    return 70;
+    if (client_rules_flag[CRF_MP2_E] 
+        && player_has_wonder(client.conn.playing.playerno, improvement_id_by_name(B_MAGNA_CARTA))) {
+      return 75;  // MP2E onward gets 75% max rate for Magna Carta
+    }
+    else return 70;
   } else if (govt == "Communism") {
     return 80;
   } else if (govt == "Republic") {
