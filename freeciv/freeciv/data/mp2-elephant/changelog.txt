@@ -169,4 +169,7 @@ Missiles boarding and transport swapping must be done in friendly city or base. 
       more prominence and interest in early game which can also enhance both pace and interest in the early game.)
 57. Constitutional Monarchy max tax rates increased to 75% ... uses new 5% gradation feature and makes this gov. more competitive/long lasting as
      an option going past the mid-game perhaps.
-58. 
+58. Roman Colosseum (350): Entertainers only use 1 food. An entertainer that's 3 trade + 1 food (basically like an ocean tile without a harbor that 
+    selectively fine-tunes its trade output into luxury), makes the Roman Colosseum a much more interesting value proposition vis-a-vis Michelangelo. 
+    Especially for future communists, those who avoid Theology, and those in a situation of using entertainers over national luxury 
+    because needing more micro-control for some cities to rapture and not others.

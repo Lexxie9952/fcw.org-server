@@ -230,7 +230,7 @@ reqs    =
     }
 
 ; Specialist output bonuses
-[effect_elvis]
+[effect_entertainer]
 type    = "Specialist_Output"
 value   = 2
 reqs    =
@@ -239,13 +239,22 @@ reqs    =
       "OutputType", "Luxury",          "Local",  TRUE
       "Building",   "Roman Colosseum", "Player", FALSE
     }
-[effect_elvis_roman_colosseum]
+[effect_entertainer_roman_colosseum]
 type    = "Specialist_Output"
 value   = 3
 reqs    =
     { "type", "name", "range"
       "Specialist", "elvis", "Local"
-      "OutputType", "luxury", "Local"
+      "OutputType", "Luxury", "Local"
+      "Building", "Roman Colosseum", "Player"
+    }
+[effect_entertainer_roman_colosseum_2]
+type    = "Specialist_Output"
+value   = 1
+reqs    =
+    { "type", "name", "range"
+      "Specialist", "elvis", "Local"
+      "OutputType", "Food", "Local"
       "Building", "Roman Colosseum", "Player"
     }
 

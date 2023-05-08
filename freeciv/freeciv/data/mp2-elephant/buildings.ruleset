@@ -2542,7 +2542,7 @@ graphic_alt	= "-"
 obsolete_by	=
     { "type", "name", "range"
     }
-build_cost	= 360
+build_cost	= 350
 upkeep		= 0
 sabotage	= 0
 sound		= "w_roman_colosseum"
@@ -2550,9 +2550,11 @@ sound_alt	= "w_generic"
 helptext	= _("\
 The Roman Colosseum centralizes and gives prestige to the entertainment\
  events of your empire. Every city with an Amphitheater gains +1 happy\
- citizen and +1 luxury. In all your cities, Entertainers add 3 luxury\
- instead of 2. This means your Entertainers equal the net trade value of\
- Taxmen, Scientists, and Merchants. \n\
+ citizen and +1 luxury. \n\
+In ALL your cities, Entertainers add 3 luxury instead of 2, the same\
+ trade output as Taxmen, Scientists, and Merchants. The Roman Colosseum\
+ also starts the tradition of propīnō — gifting entertainers with food and drink:\
+ citizens who become entertainers cost the city only 1 food instead of 2. \n\
 This Wonder is never obsolete.\
 ")
 
