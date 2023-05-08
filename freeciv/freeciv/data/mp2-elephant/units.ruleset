@@ -4340,7 +4340,7 @@ veteran_names =
 veteran_base_raise_chance = 50, 33, 20, 15, 15, 15, 0
 veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
 veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
-veteran_move_bonus = 0, 0, 0, 0, 10080, 10080, 10080
+veteran_move_bonus = 0, 10080, 10080, 10080, 10080, 10080, 10080
 roles         = "Ferryboat", "FerryStartUnit"
 helptext      = _("\
 Boats were used pre-historically for exploration,\
@@ -4393,7 +4393,7 @@ veteran_names =
 veteran_base_raise_chance = 50, 33, 20, 15, 15, 15, 0
 veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
 veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
-veteran_move_bonus = 0, 0, 0, 0, 10080, 10080, 10080
+veteran_move_bonus = 0, 10080, 10080, 10080, 10080, 10080, 10080
 roles         = "Ferryboat", "FerryStartUnit"
 helptext      = _("\
 Triremes are used for exploration, transport, and Commerce.\
@@ -4401,7 +4401,7 @@ Triremes are used for exploration, transport, and Commerce.\
 "), _("
 Triremes can enter Deep Ocean, but there is risk：they must end every second\
  turn on river, coastline, or a city—or else be lost at sea. They can attack\
- and travel on rivers, but can’t attack the shore.\
+ and travel on rivers, but can’t attack the shore. Veteran wooden ships gain 1 extra move point.\
 "), _("
 Like most ancient sea units, when it initiates combat there will be 15 rounds\
  of combat and 15 total hp lost between both units. This may or may not\
@@ -4450,11 +4450,12 @@ veteran_names =
 veteran_base_raise_chance = 50, 33, 20, 15, 15, 15, 0
 veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
 veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
-veteran_move_bonus = 0, 0, 0, 0, 10080, 10080, 10080
+veteran_move_bonus = 0, 10080, 10080, 10080, 10080, 10080, 10080
 roles         = "Ferryboat", "Hunter"
 helptext      = _("\
 The Longboat is a warship. It can attack at sea, attack the shore, and carry one land\
  unit. It is useful for ancient sea campaigns. Longboats can travel on rivers.\
+ Veteran wooden ships gain 1 extra move point.\
 "), _("
 Like most early sea units, when it initiates combat there will be 15 rounds\
  of combat and 15 total hp lost between both units. This may or may not\
@@ -4500,13 +4501,14 @@ veteran_names =
 veteran_base_raise_chance = 50, 33, 20, 15, 15, 15, 0
 veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
 veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
-veteran_move_bonus = 0, 0, 0, 0, 10080, 10080, 10080
+veteran_move_bonus = 0, 10080, 10080, 10080, 10080, 10080, 10080
 roles         = "Ferryboat", "FerryStartUnit", "BarbarianBoat"
 helptext      = _("\
 The Galley is an all-purpose sea unit and upgrades the Trireme. It has decent\
  combat strength, can transport, and is a Commerce unit. The entry on Caravan\
  explains what Commerce units may do. Galleys can attack and travel on rivers,\
  but can’t attack the shore. Galleys do not cause unhappiness.\
+ Veteran wooden ships gain 1 extra move point.\
 "), _("
 Like most early sea units, when it initiates an attack, there will be 15 rounds\
  of combat and 15 total hp lost between both units. This may or may not\
@@ -4551,11 +4553,12 @@ veteran_names =
 veteran_base_raise_chance = 50, 33, 20, 15, 15, 15, 0
 veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
 veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
-veteran_move_bonus = 0, 0, 0, 0, 10080, 10080, 10080
+veteran_move_bonus = 0, 10080, 10080, 10080, 10080, 10080, 10080
 roles         = "Ferryboat", "FerryStartUnit", "BarbarianBoat", "Hunter"
 helptext      = _("\
 The War Galley has improved offense, defense, and cargo capacity, but lacks commerce\
  ability. War Galleys can attack and travel on rivers, and do shore attacks from the sea.\
+ Veteran wooden ships gain 1 extra move point.\
 "), _("
 Like most ancient sea units, when it initiates combat there will be 15 rounds\
  of combat and 15 total hitpoints lost between both units. This may or may not\
@@ -4599,13 +4602,14 @@ veteran_names =
 veteran_base_raise_chance = 50, 33, 20, 15, 15, 15, 0
 veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
 veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
-veteran_move_bonus = 0, 0, 0, 0, 10080, 10080, 10080
+veteran_move_bonus = 0, 10080, 10080, 10080, 10080, 10080, 10080
 roles         = "Hunter"
 helptext      = _("\
 The Ram Ship has one purpose：to destroy other ships. It has poor vision, and no transport or\
  commerce ability. Unlike other early ships, there will always be\
  a winner and a loser when Ram Ships attack. They are good for first-strike, and are good\
  counter units for nations not invested into sea tech. Ram Ships can’t do shore attacks.\
+ Veteran wooden ships gain 1 extra move point.\
 ")
 
 [unit_caravel]
@@ -4647,13 +4651,14 @@ veteran_names =
 veteran_base_raise_chance = 50, 33, 20, 15, 15, 15, 0
 veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
 veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
-veteran_move_bonus = 0, 0, 0, 0, 10080, 10080, 10080
+veteran_move_bonus = 0, 10080, 10080, 10080, 10080, 10080, 10080
 roles         = "Ferryboat", "FerryStartUnit", "BarbarianBoat", "Hunter"
 helptext      = _("\
 Caravels upgrade older sea units, and are a big advance in combat, speed,\
  range, and transport capacity. They have the commerce ability of the Galley,\
  but cannot build Wonders. Caravels can attack and travel on rivers and do\
  shore attacks. As a Commerce unit, the Caravel does not cause unhappiness.\
+ Veteran wooden ships gain 1 extra move point.\
 "), _("
 Like most early sea units, when it initiates an attack, there will be 15 rounds\
  of combat and 15 total hitpoints lost between both units. This may or may not\
@@ -4701,7 +4706,7 @@ veteran_names =
 veteran_base_raise_chance = 50, 33, 20, 15, 15, 15, 0
 veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
 veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
-veteran_move_bonus = 0, 0, 0, 0, 10080, 10080, 10080
+veteran_move_bonus = 0, 10080, 10080, 10080, 10080, 10080, 10080
 roles         = "Ferryboat", "FerryStartUnit", "BarbarianBoat"
 helptext      = _("\
 The Galleon is a heavily armed transport ship that can carry up to 4 units. Galleons can attack and travel on rivers,\
@@ -4712,7 +4717,7 @@ Like most early sea units, when it initiates combat there will be 15 rounds\
  result in the loss of one of the units. Although the Galleon is not a Commerce\
  unit, it retains one vestige of the commercial abilities for the ships it upgrades.\
  It can enter Peace waters to deliver commercial cargo, and does not cause\
- unhappiness. \
+ unhappiness. Veteran wooden ships gain 1 extra move point.\
 "), _("
 Stack-Escape：60% odds to evade stack-death if attacker doesn’t have more moves than it does.\
 ")
@@ -4759,13 +4764,13 @@ veteran_names =
 veteran_base_raise_chance = 50, 33, 20, 15, 15, 15, 0
 veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
 veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
-veteran_move_bonus = 0, 0, 0, 0, 10080, 10080, 10080
+veteran_move_bonus = 0, 10080, 10080, 10080, 10080, 10080, 10080
 flags         = "BadCityDefender", "CanEscape", "CantReachAir", "WillNever", "ProvokingClass2"
 roles         = "Hunter"
 helptext      = _("\
 The Frigate is versatile — it is a superior offensive unit and also a decent transport ship. Frigates\
  can attack and travel on rivers, or make shore attacks from sea. Frigate crews repair their ship an\
- extra +2hp per turn, regardless of whether it has moved.\
+ extra +2hp per turn, regardless of whether it has moved. Veteran wooden ships gain 1 extra move point.\
 "), _("
 From Frigates onward, all sea attacks end with a single victor.\
  Stack-Escape：60% odds to evade stack-death if attacker doesn’t have more moves than it does.\

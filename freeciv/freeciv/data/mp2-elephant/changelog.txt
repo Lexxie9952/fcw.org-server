@@ -164,3 +164,4 @@ Missiles boarding and transport swapping must be done in friendly city or base. 
 54. War Galleys gain ability to capture but native terrain rules are in effect:  They may capture boats at sea. They may capture any capturable units
     on land but only on terrain War Galley can go on (i.e. rivers, canals). The usual restrictions apply for cities, bases, mountains, and multiple
     units on the tile.
+55. Wooden ships get +1 move at V1 instead of V4. (Spices up the game tactically while giving a micro-boost to units known to be a bit slow.)
