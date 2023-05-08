@@ -246,6 +246,10 @@ char *get_web_unit_icon(const struct unit *punit, char *emoji_str)
 **************************************************************************/
 static char unit_scrambled_id(int n)
 {
+  
+  n += game.info.turn; /* Sentries can differentiate unit (quasi)-identity
+     within a single turn, but not like a "permanent SSN" */
+
   char identifer = (char)(90-(n % 26));
   return identifer;
 }
