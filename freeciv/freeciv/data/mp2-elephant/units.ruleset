@@ -1001,6 +1001,7 @@ Peasants are the common people of Monarchies. You can encourage them\
 If managed correctly, Peasants can increase your national population\
  growth. They give a tremendous advantage for growing new colonies\
  and settlements faster. \n\
+"), _("\
 Peasants can only be made in one city, but you can make more than one per\ 
  turn under the right conditions. When a city completes a unit, it will try\
  to make more of them if it doesn’t have a worklist. So be careful!\
