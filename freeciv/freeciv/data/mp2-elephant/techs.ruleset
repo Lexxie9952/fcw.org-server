@@ -550,7 +550,7 @@ req2     = "None"
 flags    = ""
 graphic     = "a.masonry"
 graphic_alt = "-"
-helptext = _("Allows Forts, Outposts")
+helptext = _("Allows Fort, Watchtower.")
 cost = 15
 
 [advance_mass_production]
