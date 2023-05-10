@@ -4953,29 +4953,54 @@ bool unit_move_real(struct unit *punit, struct tile *pdesttile, long move_cost,
   unit_cargo_iterate(punit, pcargo) {
     pdata = unit_move_data(pcargo, psrctile, pdesttile);
     unit_move_data_list_append(plist, pdata);
-    /* Each cargo unit loses moves proportionate to the moves lost by
-     * the transport. If the transport took a year to get somewhere,
-     * the cargo also waited all year to get there. Finally, a solution to
-     * double-haul move problems. EFT_PASSENGER_MOVE_COST_BP as 0 leaves it 
-     * legacy, 100 for full real proportonality, or somewhere in between
-     * if you want to leave lenience for disembark or starting an activity.
-     * Notice utype_move_rate() is used for the pcargo because it might be
-     * on an illegal tile while transported, or going over a penalty
-     * tile like mountains, and these shouldn't apply to it while it's
-     * passive cargo in a different transporter. Not recommended for
-     * rulesets with low movefrags; recommended to use a large highly
-     * composite number for movefrags. */
+    /* EFT_PASSENGER_MOVE_COST_BP: 
+     * Each cargo unit loses moves proportionate to the moves lost by the transport.
+     * If the transport took a year to get somewhere, the cargo also waited all year to
+     * get there. Finally, a solution to double-haul move problems! Leaving the effect
+     * EFT_PASSENGER_MOVE_COST_BP as 0 leaves legacy behaviour (no moves charged to
+     * units on long voyages). A value of 100 gives full real proportonality: an 8mp
+     * transport moving 50% of its range (4 tiles) will charge a 4mp cargo 2mp (50%).
+     * Somewhere between 0-100 can be used if you want to leniently leave some moves
+     * left to disembark or start an activity.
+     *
+     * Notice utype_move_rate() is used for the pcargo because it might be on a non-native
+     * tile while transported, or is getting flown over a move-penalty tile like mountains,
+     * and such terrain penalties shouldn't apply to it while it's passive cargo in a
+     * different transporter. EFT_PASSENGER_MOVE_COST_BP is not recommended for rulesets
+     * with low movefrags. Recommended: use an HCN (wikipedia: high composite number) for
+     * the number of movefrags in the ruleset.
+     *
+     * An ease-of-life / quality-of-life exception to the "laws of physics" is made for
+     * proportioned move-cost charged to cargo units, such that they are never charged more
+     * than 1.0 move-point per tile traveled while transported. Why? The exception only
+     * affects high-move units on slower transports (i.e., planes and missiles on carriers).
+     * Without this little "white lie" fiction, one would be forced by realism, to deboard
+     * all planes and missiles before their transport moved, in order to preserve more
+     * move-points and be charged only 1.0mp per tile traveled...then re-land on carrier to
+     * preserve more move-points for the possibility of an attack at longer range. This
+     * degree of ultra-realism is unwanted, as it creates unnecessary UI/UX micromanagement.
+     * NB: If we ever face a ruleset where this heuristic isn't wanted, we either create
+     * a new effect that does it "pure" or perhaps flag the value with as negative sign to
+     * indicate the unit gets the "ease-of-life" exception.
+     *
+     */
     pcargo->moved = TRUE;
     double cargo_move_rate = utype_move_rate(unit_type_get(pcargo),
                                            NULL, unit_owner(pcargo),
                                            pcargo->veteran, pcargo->hp,
                                            NULL);
+    double cargo_move_cost = MIN(SINGLE_MOVE, 
+                                 (double)move_cost/(double)unit_move_rate(punit)
+                                 * cargo_move_rate
+                                 * get_unit_bonus(pcargo, EFT_PASSENGER_MOVE_COST_BP) / SINGLE_MOVE
+                                );
 
-/* BREAK GLASS IN CASE OF DEBUG
+/* BREAK GLASS IN CASE OF DEBUG 
     notify_player(pplayer, unit_tile(punit), E_UNIT_ORDERS, ftc_server,
-                  _("%s passive cargo moves_left = %.0lf - (%.0lf/%.0lf) * %.0lf * %.1lf = %.0lf "),
+                  _("%s passive cargo move_cost = %.0lfmp - %.01f {{(%.0lf/%.0lf) * %.0lf * %.1lf}} = %.0lf "),
                   unit_link(pcargo),
                   (double)(pcargo->moves_left + 0.5),
+                  cargo_move_cost,
                   (double)(move_cost),
                   (double)(unit_move_rate(punit)),
                   cargo_move_rate,
@@ -4987,10 +5012,8 @@ bool unit_move_real(struct unit *punit, struct tile *pdesttile, long move_cost,
                        * get_unit_bonus(pcargo, EFT_PASSENGER_MOVE_COST_BP) / SINGLE_MOVE)
                   ); */
 
-    pcargo->moves_left = (double)pcargo->moves_left + 0.5   // move_frag round 
-                       - ((double)move_cost/(double)unit_move_rate(punit))
-                       * cargo_move_rate
-                       * get_unit_bonus(pcargo, EFT_PASSENGER_MOVE_COST_BP) / SINGLE_MOVE;
+    pcargo->moves_left = (double)pcargo->moves_left + 0.5 // frags will get rounded to nearest int, not trunc'd
+                       - cargo_move_cost; // never > SINGLE_MOVE;
     pcargo->moves_left = MAX(0, pcargo->moves_left);
                                                       
   } unit_cargo_iterate_end;
