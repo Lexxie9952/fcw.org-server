@@ -1410,7 +1410,7 @@ reqs	=
 ;BASE RATE of 50% while transported:
 ;Military land units who aren't LandAirSea.
 ;
-;FULL MOVES while transported = Civilian, Marines, AAA 
+;FULL MOVES while transported = Civilian, Marines, AAA, Bombs
 ;NON-LAND,
 ;Marines, AAA,
 ;Worker-types, Tribesmen, Migrant-types, Scouts, Balloons, Airplanes, Emissary, Diplomat, Spy, Patriarch
@@ -1437,9 +1437,17 @@ reqs	=
 
 ;Bombs don't incur cost because due to their nature; we have the other system working for them.
 
-;Aircraft + Missiles are a bit more complex, as it diminishes naval power to some extent and could
-;even disallow vigil if you didn't set it before moving! Perhaps auto-sentry on ships should be
-;scripted to auto-vigil. Losing half for a unit that never lost anything seems plenty for now. 
+;Aircraft + Missiles are a bit more complex, as it diminishes naval power to some extent and causes
+;micromanaged optimization of deboarding carriers before movement so that one tile moved on the carrier
+;doesn't cost 1.6 to 2.8 in range to the Fighter/Bomber/Missile which could reach farther by launching before 
+;the carrier even moved. The opposite problem of it getting Carrier move rate + its own natural range!
+;In a perfect world this becomes another effect where you don't lose MORE than your own move cost, 
+;leaving absolute zero advantage from micromanaged deboarding and absolutely zero disadvantage from 
+;not doing it, and absolutely zero advantage in range from staying on the carrier as well. 0=0=0=0.
+;---------------------
+;An issue is if this disallows vigil if you didn't set it before moving! Perhaps auto-sentry on ships should be
+;scripted to auto-vigil. Losing half for a unit that never lost anything seems plenty for now.
+;
 [effect_aircraft_and_missile_transported_passenger_move_cost]
 type    = "Passenger_Move_Cost_Bp"
 value	= 5040   ; 5040 / 10080 = 50%

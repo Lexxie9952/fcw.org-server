@@ -125,16 +125,41 @@ and can now be built with veteran levels.
 34. Foot Soldiers gain bigger move bonuses with vet levels. Standard is v0-1 = 0; v2-3 + 1/3; v4-6 +2/3
 35. FootSoldiers get improved promotion odds: 50 33 20 goes 85 50 33.
 36. FootSoldiers who didn't receive discounts in MP2C get ~10% discount. Musket:27, Riflemen:35, Partisan: 40, Alpine:45,
-    Marines:50, Ground Troops:35, Paratroopers:50.36. Destroy City requires 3 units (2 support units) to do. 
+    Marines:50, Ground Troops:35, Paratroopers:50.
+36A. Destroy City requires 3 units (2 support units) to do. 
 37. Modern FootSoldiers (Paratrooper, Ground Troops, get A8)
 38. Mech.Inf get A7 attack, can carry one Foot Soldier or AAA.
 39. AWACS cost adjust: 130, was 140. Attrition rate and other flight reconnaissance options disincentivized the cost.
 40. Each new aviation tech upgrades Airplane range by +1 move (was +2). 6 techs started making it almost a cheap AWACS.
 41. Marines, Ground Troops, and Paratroopers are simplified with same A8 D5.5; Marines however have stronger vet levels.
-42. Passenger Transport costs: 
-      0% land civilian and AAA/Marines; 
-      50% Foot Soldiers, Aircraft, Missiles
+42. Passenger Transport costs:
+    The general rule is that if a transport takes a whole turn to cross an ocean, the units on it shouldn't have full moves
+    as if the voyage took no time for the passengers. The physics/mechanics that allowed this in the past may have made the
+    game simple, but unfortunately created outlier cases with tragic loss of realism and shockingly counterintuitive exploits.
+    Therefore, in general, the percent of moves a transport uses in going somewhere, is and should be the percent of moves lost
+    by its cargo. For casual and intuitive play this will generally seem to be the case. However, some adjustments to this rule
+    do exist just to smooth over all the game mechanics, game balance, and behaviors. Please not then:
+
+      0% Goods/Freight, Civilian: Punishing ability to cash in on traderoutes/wonders/recycle is not relevant. Workers, etc., 
+                                  were intended to enjoy logistical bonuses in efficiency from using transport/river/canal/quay
+                                  infrastructural investment. Therefore, rule doesn't apply to these units. 
+      0% Bombs. (The move-point of Bomb-types is simply to allow it an attack something adjacent, which presumably it can always do.)
+      0% AAA/Marines. (Keeps original movement abilities intact; AAA needs full moves to vigil.)
+      50% Foot Soldiers - 50% accounts for balance with board/deboard costs and therefore ability to gain any slight edge in mobility
+                           from using faster transportation. 
+      50% Aircraft, Missiles - The high speed and "internal fuel" of these units is not meant to be 100% depleted and hampered by the
+                                "slower speed" steps taken by the carriers. e.g., one Fighter (20mp) offloads from a 
+                                a carrier (10mp) before it moves 5 tiles, and another stays on and then takes off. The Fighter who offloaded
+                                first could strike at a range of 20 while the other at a range of 5 + 10 = 15. Introducing an extra
+                                level of "micromanagement" to offload aircraft and missiles you might intend to use, before moving
+                                a Carrier, and then if deciding not to use them, landing them back again on the carrier. The 50%
+                                passenger move cost penalty here just keeps the ratios clean to reduce this extra level of micromanagement.
+                                move points 
       75% land military non-foot; 50% + won't subtract if <= 3 moves left (aircraft, preserves vigil)
+
+      *** In no case does a faster unit on a slower transport expend more than 1mp on the cargo, just to avoid the needlessness of 
+      micromanaging deboard/board to avoid losing more than 1 move per tile by staying on the transporter.
+
 43. Spy Plane and Bombers (except Dive Bomber) are BadCityDefender. This adjusts the fact some have strong 
     defensive capabilities in the air but are poor defenders to scramble for city defense.
 44. Transport swapping rules greatly simplifed because of Passenger_Move_Cost.
@@ -147,7 +172,7 @@ and can now be built with veteran levels.
  (3) Land in a friendly city (free short-range airlift rule).
  (4) Run out of fuel if not enough moves left to do (2) or (3) at TC.
 Missiles boarding and transport swapping must be done in friendly city or base. No bases are native to missiles.
-46. TiredAttack only applies to land units. Air and Sea weren't meant originally to have fractional moves_left but as it's now possible with
+46. TiredAttack only applies to land units. Air and Sea weren't originally meant to have fractional moves_left but as it's now possible with
    the overhaul of the movement system, we keep things consistent with old rules and not add a complexity to worry about.
 47. GSF max attacks per turn: 3 (was 4)
 48. Spy Plane as defender limits to 5 combat rounds.
