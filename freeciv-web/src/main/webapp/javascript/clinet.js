@@ -137,8 +137,11 @@ function websocket_init()
       +"min inactivity. Please reload the page to reconnect.", "error");
       setSwalTheme();
     } else {
-      swal("Network Error", "Connection to server is closed. Please reload the page to restart. Sorry!", "error");
-      setSwalTheme();
+      /* If client.conn.id == -1 the user already has a SWAL saying they're already logged in: */ 
+      if (client.conn.id != -1) {
+        swal("Server Disconnected", "Connection to server is closed. Please reload the page to restart.", "error");
+        setSwalTheme();
+      }
       message_log.update({
         event: E_LOG_ERROR,
         message: "Error: connection to server is closed. Please reload the page to restart. Sorry!"
