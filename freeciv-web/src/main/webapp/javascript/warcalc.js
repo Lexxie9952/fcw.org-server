@@ -526,11 +526,11 @@ function warcalc_set_tooltips()
           $("#wc150").prop("title", bl+"Veteran-1 ('Veteran')"+nbl+"Jungle"+nbl+"Flatland terrain in city with Fortifications"+nbl+"Land unit Fortified OR inside city"+nbl+"In city with City Walls dvs Cannon"
           +nbl+"Helicopter dvs Foot or Mounted units"+nbl+"Armor II dvs Missile" );
           $("#wc167").prop("title", bl+"Swamp in city with Fortifications"+nbl+"Forest in city with Fortifications"+nbl+"Land/Heli in Fortress dvs Armor/Aircraft"+nbl+"Land/Heli/Sea in Naval Base dvs Armor/Aircraft");
-          $("#wc175").prop("title", bl+"Veteran-2 ('Hardened')"+nbl+"In city with City Walls dvs Catapult");
-          $("#wc300").prop("title", bl+"Mountains"+nbl+"Knight dvs Horse (not Cavalry)"+nbl+"AEGIS dvs Air/Missile");
+          $("#wc175").prop("title", bl+"Veteran-2 ('Hardened')"+nbl+"In city with City Walls dvs Catapult")+nbl+"Knight dvs Mounted (not Cavalry)";
+          $("#wc300").prop("title", bl+"Mountains"+nbl+"AEGIS dvs Air/Missile");
           $("#wc200").prop("title", bl+"Veteran-3 ('Elite')"+nbl+"Hills"+nbl+"In city with City Walls dvs Land (not Ballistic class)"+nbl+"In city with Coastal Defense dvs Sea"
           +nbl+"In city with SAM Battery dvs Air/Heli (not Stealth)"+nbl+"In city with SDI dvs Missile"+nbl+"Land/Heli in Fortress dvs Land/Sea/Missile"+nbl+"Land/Heli/Sea in Naval Base dvs Land/Sea/Missile"
-          +nbl+"Pikemen dvs Horse (not Cavalry)"+nbl+"Knight dvs Foot soldier"
+          +nbl+"Pikemen dvs Horse (not Cavalry)"
           +nbl+"Cruiser,Battleship,M.Destroyer,AEGIS dvs Submarine"+nbl+"Sea unit dvs Marines"+nbl+"AAA/Mobile SAM dvs Aircraft"+nbl+"Mobile SAM dvs Missile"+nbl+"Missile Destroyer dvs Air/Missile");
         }
         return;
