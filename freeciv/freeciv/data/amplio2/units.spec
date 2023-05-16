@@ -149,4 +149,5 @@ tiles = { "row", "column", "tag"
   4, 19, "u.lightarmor"       ; [Lexxie]
   5, 0,  "u.abm"              ; [Lexxie]
   5, 1,  "u.light_carrier"    ; [Lexxie]
+  5, 2,  "u.scout2"           ; [Lexxie]
 }
