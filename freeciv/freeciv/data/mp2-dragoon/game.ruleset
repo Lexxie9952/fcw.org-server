@@ -3079,7 +3079,7 @@ actor_reqs    =
       "DiplRel",       "Never met",     "Local", FALSE
     }
 
-[actionenabler_board_all_land_units_except_LandRoad]
+[actionenabler_board_all_land_units_except_LandRoad_onto_all_transports_except_LandRoad]
 action        = "Transport Board"
 actor_reqs    =
     { "type",          "name",          "range", "present"
@@ -3093,7 +3093,30 @@ actor_reqs    =
       "UnitType",      "Magnum Turret", "Local", FALSE ;Makes utype_can_do_action() render false so we don't show illegal orders buttons 
       "MinMoveFrags",  "1",             "Local", TRUE  ;limits double-move and "attack-and-haul".
     }
-; This is a fall-thru identical to enabler above except Truck/Wagon/Siege Ram are allowed IFF !transporting
+target_reqs    =
+    { "type",      "name",       "range", "present"
+      "UnitClass", "LandRoad",   "Local", FALSE        ;Boarding a Wagon/Truck requires (the W/T can't be transported), so handled further below:
+    }
+[actionenabler_board_all_land_units_onto_LandRoad]  ;Same as above for the case of boarding a LandRoad class unit.
+action        = "Transport Board"
+actor_reqs    =
+    { "type",          "name",          "range", "present"
+      "UnitClassFlag", "TerrainSpeed",  "Local", TRUE   ;all Land
+      "DiplRel",       "Armistice",     "Local", FALSE
+      "DiplRel",       "War",           "Local", FALSE
+      "DiplRel",       "Cease-fire",    "Local", FALSE
+      "DiplRel",       "Peace",         "Local", FALSE
+      "DiplRel",       "Never met",     "Local", FALSE
+      "UnitType",      "Magnum Turret", "Local", FALSE ;Makes utype_can_do_action() render false so we don't show illegal orders buttons 
+      "MinMoveFrags",  "1",             "Local", TRUE  ;limits double-move and "attack-and-haul".
+    }
+target_reqs    =
+    { "type",      "name",       "range", "present"
+      "UnitClass", "LandRoad",   "Local", TRUE
+      "UnitState", "Transported","Local", FALSE   ;Loading up a wagon-on-a-ship, so the ship can carry extra armies? NOPE, nice try!
+    }
+
+; This is a fall-thru identical to enabler 2 above except Truck/Wagon/Siege Ram are allowed IFF !transporting
 [actionenabler_board_wagons_and_trucks_as_cargo]
 action        = "Transport Board"
 actor_reqs    =
@@ -3105,9 +3128,9 @@ actor_reqs    =
       "DiplRel",       "Cease-fire",    "Local", FALSE
       "DiplRel",       "Peace",         "Local", FALSE
       "DiplRel",       "Never met",     "Local", FALSE
-      "UnitType",      "Magnum Turret", "Local", FALSE ;don't show illegal orders buttons 
-      "MinMoveFrags",  "1",             "Local", TRUE  ;limits double-move and "attack-and-haul".
-      "UnitState",      "Transporting", "Local", FALSE ;prevent russian doll exceptions               <<< *******
+      "UnitType",      "Magnum Turret", "Local", FALSE  ;don't show illegal orders buttons 
+      "MinMoveFrags",  "1",             "Local", TRUE   ;limits double-move and "attack-and-haul".
+      "UnitState",     "Transporting",  "Local", FALSE  ;prevent russian doll exceptions               <<< *******
     }
 
 [actionenabler_board_sea_trawler]       
@@ -3125,32 +3148,14 @@ actor_reqs    =
 [actionenabler_board_marines]
 action        = "Transport Board"
 actor_reqs    =
-    { "type",    "name",          "range", "present"
-      "UnitType","Marines",       "Local", TRUE 
-      "DiplRel", "Armistice",     "Local", FALSE
-      "DiplRel", "War",           "Local", FALSE
-      "DiplRel", "Cease-fire",    "Local", FALSE
-      "DiplRel", "Peace",         "Local", FALSE
-      "DiplRel", "Never met",     "Local", FALSE
+    { "type",      "name",          "range", "present"
+      "UnitType",  "Marines",       "Local", TRUE
+      "DiplRel",   "Armistice",     "Local", FALSE
+      "DiplRel",   "War",           "Local", FALSE
+      "DiplRel",   "Cease-fire",    "Local", FALSE
+      "DiplRel",   "Peace",         "Local", FALSE
+      "DiplRel",   "Never met",     "Local", FALSE
     }
-
-;This enabler can replace the one above if/when needed if "russian doll" exploits are discovered which should be stopped.
-;Note: this is currently not illegal. In most cases it makes sense (e.g., Bomber with a Bomb on a Carrier, Trawler towing a
-;ship with Goods, Mobile SAM with loaded missiles can board a Transport, etc.)
-;[actionenabler_board_no_russian_doll_tricks]
-;action        = "Transport Board"
-;actor_reqs    =
-;    { "type",    "name",         "range", "present"
-;      "DiplRel", "Armistice",    "Local", FALSE
-;      "DiplRel", "War",          "Local", FALSE
-;      "DiplRel", "Cease-fire",   "Local", FALSE
-;      "DiplRel", "Peace",        "Local", FALSE
-;      "DiplRel", "Never met",    "Local", FALSE
-;      "MinMoveFrags", "1",       "Local", TRUE
-;      "UnitType","Magnum Turret", "Local", FALSE ;only needed for utype_can_do_action to render false so we aren't show illegal order options 
-;      "UnitType","Trawler",      "Local", FALSE   ; put unit_types here who can't be cargo if they also have cargo
-;      "UnitState","Transporting","Local", FALSE   ; note it should be legal for some cases like towing a ship with cargo
-;    }
 
 ;==================================================================================================================================== UNLOAD TRANSPORT vv
 ;TO DO: a reciprocal version for "Transport Deboard" with actor/target reqs reversed
