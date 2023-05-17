@@ -4342,8 +4342,50 @@ static bool unit_survive_autoattack(struct unit *punit)
       continue;
     }
 
-    /* Assume the worst. */
+    /* Assume the worst. (i.e., hidden cargo may be ultra-strong defender)*/
     penemywin = action_prob_to_0_to_1_pessimist(peprob->prob);
+    /* For AA_ADVANCED games, handle two special cases:
+       I. The Transporter is KNOWN to carry defenseless cargo:
+
+       For example, we wouldn't want a Jet Fighter on vigil to be afraid of a Jet Bomber just because 
+       it carries bombs. Rather than make a special hard-coded uclass_flag for these cases, just let
+       the ruleset-coder make their own custom uclass-flag named "HarmlessCargo", for such cases.
+       (This also lets rulesets define whether invisible cargo is never considered a barrier to
+       autoattack: simply give all unit-classes the HarmlessCargo flag.)
+
+       II. auto-BOMBARDERS aren't afraid of invisible cargo as long as they're not afraid of 
+       its transport:
+
+       In AA_ADVANCED rulesets, Bombard is the first (preferred) form of autoattack, due to
+       reduced risk of exploitation from autoattack-baiting. In such games, an autoattacker
+       who (1) is a bombarder, and (2) experiences a penemywin of 0.0, is very likely facing a case
+       of INVISIBLE CARGO which pessimistically is considered as a "superdefender" with 0 chance
+       to win. 
+
+       HOWEVER, a Bombard-autoattack (a) usually faces no retaliation (b) in cases where it does,
+       the cargo by being transported will rarely qualify to retaliate, (c) in cases where it could,
+       will rarely have enough bombard-retaliate combat rounds to result in killing the
+       auto-bombarder. 
+       
+       THUS, for cases where penemywin came back as 0.0, we _probably_ got a 0.0 because of having
+       an _undefined_ win % due to invisible cargo. But we DO know (a,b,c) above to be true. And we DO
+       know that a,b,c together represent a higher % chance to win/survive such a bombard-autoattack
+       than even the case of normal qualifying autoattacks whose thresholds are usually set between
+       80% and 90%. AND we know as devs we want to prevent an exploit where a transporter carrying
+       dummy worthless units, can first occupy a tile in order to allow subsequent movers-to-the-tile
+       to bypass all autoattacks with 100% success. In addition, for the rare case where 
+       penemywin came back as 0.0 not because of invisible cargo, but because the adjacent defender
+       itself is Godzilla, we happen to know unit_win_chance(penemy, punit). So if that is a 0.0,
+       then we know the penemywin of 0.0 was created by that and not by invisible enemy cargo.
+       
+       In other words, we know everything we need, in order to set a more accurate penemywin for just
+       such a case. */
+    if (penemywin == 0 && game.server.autoattack_style == AA_ADVANCED) {
+      if (uclass_has_user_unit_class_flag_named(unit_class_get(punit), "HarmlessCargo")
+          || can_unit_bombard(penemy)) {
+        penemywin = unit_win_chance(penemy, punit);
+      }
+    }
 
     /* Do the attack if the conditions for autoattack are fulfilled: */
     if ( (penemywin > 1.0 - punitwin || (will_attack == AA_ALWAYS) || penemywin > attack_anyway_threshold)
