@@ -109,10 +109,26 @@ struct ai_type;
  * (Rulesets can simply add a user-UCF with the "reserved user-UCF" name
  * in order for a ruleset uclass to OPT IN to concrete game mechanics.)
  *
- * "Missile" - is spent after pillage and is destroyed when its transporter
- *             is destroyed (unless it can be saved by being in a city,
- *             native base/extra, or co-habiting a tile with another
- *             transporter with extra capacity to take it.)
+ * "Missile"          Is spent after pillage and is destroyed when its transporter
+ *                    is destroyed (unless it can be saved by being in a city,
+ *                    native base/extra, or co-habiting a tile with another
+ *                    transporter with extra capacity to take it.)
+ *
+ * "NoCarrierRefuel"  Flags to the server those units who do not have actionenablers allowing them
+ *                    to board/embark on transports outside city or native base; this is a hack-patch
+ *                    needed for pftools.c to quickly know which units can't use legal transporters
+ *                    as a refuel tile. This is given to classes which have no legal Board/Embark enabler,
+ *                    such as Missiles flying out to sea. This flag is needed because checking for
+ *                    actionenablers during intensely recursive pathfinding is very very bad.
+ *
+ * "HarmlessCargo"    {{Background info: by default, autoattacks don't happen to any
+ *                    tile that has a cargo-carrying unit on it. Because the server takes a 
+ *                    pessimist view of unknown cargo in order to avoid baiting exploits. It assumes 
+ *                    the worst (that the cargo can defend and that it's a super strong defender.)}}
+ *                    The "HarmlessCargo" flag is for cases like Bombers carrying Bombs, which should
+ *                    in no case deter a Fighter from autoattacking it. If a unit class has the 
+ *                    HarmlessCargo flag, the autoattacker will not automatically refrain from
+ *                    autoattacks because of pessimistic fear about invisible cargo.
 */
 #define SPECENUM_VALUE12 UCF_USER_FLAG_1
 #define SPECENUM_VALUE13 UCF_USER_FLAG_2
@@ -126,6 +142,14 @@ struct ai_type;
 #define SPECENUM_VALUE21 UCF_USER_FLAG_10
 #define SPECENUM_VALUE22 UCF_USER_FLAG_11
 #define SPECENUM_VALUE23 UCF_USER_FLAG_12
+#define SPECENUM_VALUE24 UCF_USER_FLAG_13
+#define SPECENUM_VALUE25 UCF_USER_FLAG_14
+#define SPECENUM_VALUE26 UCF_USER_FLAG_15
+#define SPECENUM_VALUE27 UCF_USER_FLAG_16
+#define SPECENUM_VALUE28 UCF_USER_FLAG_17
+#define SPECENUM_VALUE29 UCF_USER_FLAG_18
+#define SPECENUM_VALUE30 UCF_USER_FLAG_19
+#define SPECENUM_VALUE31 UCF_USER_FLAG_20
 
 /* keep this last */
 #define SPECENUM_COUNT UCF_COUNT
