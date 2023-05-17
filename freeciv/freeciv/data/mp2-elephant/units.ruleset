@@ -102,6 +102,15 @@ flags =
 ; "NoCarrierRefuel"  =  SERVER CODED: May not embark on transports outside city or native base; 
 ;                       This is a hack-patch needed for pftools.c to not assume transports
 ;                       with no legal Board/Embark enabler count as refuel tile.
+; "HarmlessCargo"    =  SERVER CODED: {{Background info: by default, autoattacks don't happen to any
+;                       tile that has a cargo-carrying unit on it. Because the server takes a 
+;                       pessimist view of unknown cargo in order to avoid baiting exploits. It assumes 
+;                       the worst (that the cargo can defend and that it's a super strong defender.)}}
+;                       The "HarmlessCargo" flag is for cases like Bombers carrying Bombs, which should
+;                       in no case deter a Fighter from autoattacking it. If a unit class has the 
+;                       HarmlessCargo flag, the autoattacker will not automatically refrain from
+;                       autoattacks because of pessimistic fear about invisible cargo.
+;                        
 class_flags =
   { "name", "helptxt"
 ;RESERVED:
@@ -118,6 +127,7 @@ class_flags =
     _("NeverTired"), _("Always atttacks at full strength; never tired attack")
 ;RESERVED:
     _("NoCarrierRefuel")
+    _("HarmlessCargo"), _("Carrying cargo does not deter autoattacks against this unit.")
   }
 
 [veteran_system]
@@ -215,6 +225,9 @@ veteran_move_bonus = 0, 0, 0, 0, 1008, 1008, 1008
 ; Helicopter, Air, AirProtect, Air_High_Altitude, Balloon, Zeppelin
 ; Missile, Bomb, Bomb2, Space
 ;
+;
+; This chart helps devise special logic filters for actionenablers that want to include/exclude certain groups from legal/illegal actions,
+; or to design effects that target a plurality of included or excluded unit classes:
 ;                   Land bgLand LNK LAS Landim lRail lRoad Cargo   tREME rShip Sea Sub    Hel     Air aPRTCT AHH Bal Zep  Misl  Bomb Bomb2 Space     grouper
 ;ZOC                 ✅   ✅   ✅  ✅   ✅    ✅    ✅   ✅  ➗ ⛔   ✅   ✅ ⛔➗  ⛔ ➗  ⛔   ⛔   ⛔ ⛔  ⛔➗ ⛔   ⛔   ⛔    ⛔      
 ;TerrainSpeed        ✅   ✅   ✅  ✅   ✅    ✅    ✅   ✅  ➗ ⛔   ⛔   ⛔ ⛔➗  ⛔ ➗  ⛔   ⛔   ⛔ ⛔  ⛔➗ ⛔   ⛔   ⛔    ⛔       < Land
@@ -237,6 +250,8 @@ veteran_move_bonus = 0, 0, 0, 0, 1008, 1008, 1008
 ;CollectRansom       ✅   ✅   ✅  ✅   ⛔    ⛔    ⛔   ⛔  ➗ ⛔   ⛔   ⛔ ⛔➗  ✅ ➗  ⛔   ⛔   ⛔ ⛔  ⛔➗ ⛔   ⛔   ⛔    ⛔
 ;DelayLoad           ✅   ✅   ✅  ✅*  ✅    ✅    ✅   ✅  ➗ ⛔   ⛔   ⛔ ⛔➗  ⛔ ➗  ⛔   ⛔   ⛔ ⛔  ⛔➗ ⛔   ✅   ✅    ⛔       < Bombs (+Land)
 ;NoCarrierRefuel     ⛔   ⛔   ⛔  ⛔   ⛔    ⛔    ⛔   ⛔  ➗ ⛔   ⛔   ⛔ ⛔➗  ⛔ ➗  ⛔   ⛔   ⛔ ⛔  ⛔➗ ✅   ⛔   ⛔    ⛔
+;HarmlessCargo       ⛔   ✅   ⛔  ⛔   ⛔    ⛔    ⛔   ⛔  ➗ ⛔   ✅   ✅ ✅➗  ⛔ ➗  ✅   ⛔   ✅ ⛔  ⛔➗ ⛔   ⛔   ⛔    ⛔
+
 ;* = utypes have known exceptions
 ;-------------------------------------------------------------------------------------------------Land classes:
 [unitclass_land]
@@ -258,7 +273,9 @@ hp_loss_pct   = 0
 flags         = "TerrainSpeed", "DamageSlows", "CanOccupyCity", "BuildAnywhere",
                 "CollectRansom", "ZOC", "CanFortify", "CanPillage",
                 "TerrainDefense", "KillCitizen", "Airliftable", "BorderPolice",
-                "CargoRestrained", "DelayLoad"
+                "CargoRestrained", "DelayLoad",
+                "HarmlessCargo"   ; currently, Mech.Inf always carry a weaker cargo (foot soldiers),
+                                  ; currently, Mobile SAM always carries a harmless cargo (missiles).
 helptext      = _("\
   • Can be airlifted from a suitable city.\
 ")
@@ -328,6 +345,7 @@ min_speed     = 3
 hp_loss_pct   = 0
 flags         = "DamageSlows", "AttFromNonNative", "WaterVessel",
                 "NeverTired", "CargoRestrained" ;can't attack while being towed by Trawler
+                ;not a Harmless cargo flag because defender is PROBABLY stronger than it and/or probably civilian stuff.
 helptext      = _("\
   • <b style=\'color:#9aa\'>Crew Repair</b>：each turn, regardless of movement, recovers 10% of its hit points.\
 ")
@@ -338,7 +356,10 @@ name          = _("?unitclass:RiverShip")
 min_speed     = 3
 hp_loss_pct   = 0
 flags         = "DamageSlows", "AttackNonNative", "AttFromNonNative", "WaterVessel",
-                "NeverTired", "ZOC", "CargoRestrained" ;can't attack while being towed by Trawler
+                "NeverTired", "ZOC", "CargoRestrained", ;can't attack while being towed by Trawler
+                "HarmlessCargo"   ; while Riverships are D2 and up (so conceivably could carry something stronger as cargo)...
+                                  ; ...we don't want vigil at sea to be impossible just from invisible cargo, especially given 
+                                  ; that the cargo can't attack at Sea anyway.
 helptext      = _("\
   • <b style=\'color:#9aa\'>Crew Repair</b>：each turn, regardless of movement, recovers 10% of its hit points.\
 ")
@@ -348,7 +369,10 @@ name          = _("?unitclass:Sea")
 min_speed     = 4
 hp_loss_pct   = 0
 flags         = "DamageSlows", "AttackNonNative", "AttFromNonNative", "CanPillage", "WaterVessel",
-                "NeverTired", "ZOC", "CargoRestrained" ;can't attack while being towed by Trawler
+                "NeverTired", "ZOC", "CargoRestrained", ;can't attack while being towed by Trawler
+                "HarmlessCargo"   ; Sea class is always at sea. It's cargo can't defend in such cases.
+                                  ; This trumps rare case of being on a canal, or rare case of Aircraft Carrier
+                                  ; ...whose cargo units generally have a lower chance to win than the transporter
 helptext      = _("\
   • <b style=\'color:#9aa\'>Crew Repair</b>：each turn, regardless of movement, recovers 10% of its hit points.\
 ")
@@ -358,7 +382,8 @@ name          = _("?unitclass:Submarine")
 min_speed     = 5
 hp_loss_pct   = 0
 flags         = "DamageSlows", "AttackNonNative", "AttFromNonNative", "CanPillage", "Unreachable", "WaterVessel",
-                "NeverTired", "CargoRestrained" ;can't attack while being towed by Trawler
+                "NeverTired", "CargoRestrained", ;can't attack while being towed by Trawler
+                "HarmlessCargo"   ; Missile cargo does not inhibit autoattacks against submarines.
 helptext      = _("\
   • Visibility bonus：not visible to other players unless they have a unit or city adjacent to it.\n\
   • <b style=\'color:#9aa\'>Crew Repair</b>：each turn, regardless of movement, recovers 3 hit points.\
@@ -377,7 +402,8 @@ name          = _("?unitclass:Air")
 min_speed     = 1
 hp_loss_pct   = 0
 hut_behavior  = "Frighten"
-flags         = "NeverTired", "Unreachable", "DoesntOccupyTile", "Airliftable"
+flags         = "NeverTired", "Unreachable", "DoesntOccupyTile", "Airliftable",
+                "HarmlessCargo"   ; Bombs, Diplomats, and Freight as air cargo will not inhibit autoattacks.
 
 [unitclass_air_protect]   ; This class is for air units that can also protect a stack.
 name          = _("?unitclass:AirProtect")
@@ -395,7 +421,8 @@ name          = _("?unitclass:Air_High_Altitude")
 min_speed     = 1
 hp_loss_pct   = 0
 hut_behavior  = "Frighten"
-flags         = "NeverTired", "Unreachable", "DoesntOccupyTile", "Airliftable"
+flags         = "NeverTired", "Unreachable", "DoesntOccupyTile", "Airliftable",
+                "HarmlessCargo"   ; Bombs will not inhibit autoattacks.
 
 [unitclass_balloon]
 name          = _("?unitclass:Balloon")
@@ -2242,7 +2269,7 @@ Mechanized Infantry have the strongest general defense strength of any land unit
 name          = _("Scout")
 class         = "Land"
 tech_req      = "Horseback Riding"
-obsolete_by   = "Partisan"
+obsolete_by   = "Scout II"
 graphic       = "u.scout"
 graphic_alt   = "-"
 sound_move    = "m_explorer"
@@ -2286,10 +2313,60 @@ Scouts are explorers of unknown territory. They live off the land with no upkeep
  For each veteran level, they gain an additional +1⁄4 move point. Scouts can Investigate City\
  to gather intel, and their terrain scouting can give tactical advantage. Scouts can make\
  contact with far-off lands to arrange Cease-fire or Peace. In later times, Scouts upgrade\
- to Partisans. \n\
+ to Scout II. \n\
 "), _("
 Scouts provide sentry intel even if not sentried. Scouts gain the same veteran levels\
  from buildings and wonders as other land units.\
+")
+
+[unit_scout2]
+name          = _("Scout II")
+class         = "Land"
+tech_req      = "Leadership"
+obsolete_by   = "Partisan"
+graphic       = "u.scout2"
+graphic_alt   = "-"
+sound_move    = "m_explorer"
+sound_move_alt = "m_generic"
+sound_fight   = "f_horsemen"
+sound_fight_alt = "f_generic"
+build_cost    = 24
+pop_cost      = 0
+attack        = 10
+defense       = 10
+hitpoints     = 20
+firepower     = 1
+move_rate     = 2
+vision_radius_sq = 5
+transport_cap = 0
+fuel          = 0
+uk_happy      = 0
+uk_shield     = 0
+uk_food       = 0
+uk_gold       = 0
+embarks       = "LandRoad", "Helicopter"    ; transport helicopter only
+disembarks    = "LandRoad", "Helicopter"
+flags         = "IgTer", "IgZOC", "NonMil", "NonMilAttack", "NonProvoking", "HasNoZOC", "Capturable", "Expellable",
+                "NoHome", "Horse", "SentryAlways"
+roles         = "Explorer", "ExplorerStartUnit"
+veteran_names =
+  _("?vet_rank:green"),
+  _("?vet_rank:veteran"),
+  _("?vet_rank:hardened"),
+  _("?vet_rank:elite"),
+  _("?vet_rank:crack"),
+  _("?vet_rank:master"),
+  _("?vet_rank:wind walker")
+veteran_base_raise_chance = 50, 33, 20, 15, 15, 15, 0
+veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
+veteran_power_fact = 100, 150, 175, 250, 300, 350, 400
+veteran_move_bonus = 3360, 5880, 7560, 10080, 12600, 15120, 17640
+helptext      = _("\
+Scout II upgrades the Scout, and gets every bonus and ability its\
+ predecessor does. It gains 2 new abilities. It may pillage and engage\
+ in light combat. Whether attacking or defending, there are 15 combat\
+ rounds. This may result in no fatalities. They cannot conquer cities.\
+ In later times, Scout II upgrades to Partisans. \n\
 ")
 
 [unit_horsemen]
@@ -2301,7 +2378,7 @@ graphic       = "u.horsemen"
 graphic_alt   = "-"
 sound_move    = "m_horsemen"
 sound_move_alt = "m_generic"
-sound_fight   = "f_horsemen"
+sound_fight   = "f_dragoons"
 sound_fight_alt = "f_generic"
 build_cost    = 18
 pop_cost      = 0
