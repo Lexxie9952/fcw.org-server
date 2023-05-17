@@ -102,6 +102,14 @@ flags =
 ; "NoCarrierRefuel"  =  SERVER CODED: May not embark on transports outside city or native base; 
 ;                       This is a hack-patch needed for pftools.c to not assume transports
 ;                       with no legal Board/Embark enabler count as refuel tile.
+; "HarmlessCargo"    =  SERVER CODED: {{Background info: by default, autoattacks don't happen to any
+;                       tile that has a cargo-carrying unit on it. Because the server takes a 
+;                       pessimist view of unknown cargo in order to avoid baiting exploits. It assumes 
+;                       the worst (that the cargo can defend and that it's a super strong defender.)}}
+;                       The "HarmlessCargo" flag is for cases like Bombers carrying Bombs, which should
+;                       in no case deter a Fighter from autoattacking it. If a unit class has the 
+;                       HarmlessCargo flag, the autoattacker will not automatically refrain from
+;                       autoattacks because of pessimistic fear about invisible cargo.
 class_flags =
   { "name", "helptxt"
 ;RESERVED:
@@ -118,6 +126,7 @@ class_flags =
     _("NeverTired"), _("Always atttacks at full strength; never tired attack")
 ;RESERVED:
     _("NoCarrierRefuel")
+    _("HarmlessCargo"), _("Carrying cargo does not deter autoattacks against this unit.")
   }
 
 [veteran_system]
@@ -228,7 +237,7 @@ hp_loss_pct   = 0
 flags         = "TerrainSpeed", "DamageSlows", "CanOccupyCity", "BuildAnywhere",
                 "CollectRansom", "ZOC", "CanFortify", "CanPillage",
                 "TerrainDefense", "KillCitizen", "Airliftable", "BorderPolice",
-                "CargoRestrained", "DelayLoad"
+                "CargoRestrained", "DelayLoad", "HarmlessCargo"
 helptext      = _("\
   • Can be airlifted from a suitable city.\
 ")
@@ -308,7 +317,7 @@ name          = _("?unitclass:RiverShip")
 min_speed     = 3
 hp_loss_pct   = 0
 flags         = "DamageSlows", "AttackNonNative", "AttFromNonNative", "WaterVessel",
-                "CargoRestrained" ;can't attack while being towed by Trawler
+                "CargoRestrained", "HarmlessCargo" ;can't attack while being towed by Trawler
 helptext      = _("\
   • <b style=\'color:#9aa\'>Crew Repair</b>：each turn, regardless of movement, recovers 10% of its hit points.\
 ")
@@ -318,7 +327,7 @@ name          = _("?unitclass:Sea")
 min_speed     = 4
 hp_loss_pct   = 0
 flags         = "DamageSlows", "AttackNonNative", "AttFromNonNative", "CanPillage", "WaterVessel",
-                "CargoRestrained" ;can't attack while being towed by Trawler
+                "CargoRestrained", "HarmlessCargo" ;can't attack while being towed by Trawler
 helptext      = _("\
   • <b style=\'color:#9aa\'>Crew Repair</b>：each turn, regardless of movement, recovers 10% of its hit points.\
 ")
@@ -328,7 +337,7 @@ name          = _("?unitclass:Submarine")
 min_speed     = 5
 hp_loss_pct   = 0
 flags         = "DamageSlows", "AttackNonNative", "AttFromNonNative", "CanPillage", "Unreachable", "WaterVessel",
-                "CargoRestrained" ;can't attack while being towed by Trawler
+                "CargoRestrained", "HarmlessCargo" ;can't attack while being towed by Trawler
 helptext      = _("\
   • Visibility bonus：not visible to other players unless they have a unit or city adjacent to it.\n\
   • <b style=\'color:#9aa\'>Crew Repair</b>：each turn, regardless of movement, recovers 3 hit points.\
@@ -347,7 +356,7 @@ name          = _("?unitclass:Air")
 min_speed     = 1
 hp_loss_pct   = 0
 hut_behavior  = "Frighten"
-flags         = "Unreachable", "DoesntOccupyTile", "Airliftable"
+flags         = "Unreachable", "DoesntOccupyTile", "Airliftable", "HarmlessCargo"
 
 [unitclass_air_protect]   ; This class is for air units that can also protect a stack.
 name          = _("?unitclass:AirProtect")
@@ -365,7 +374,7 @@ name          = _("?unitclass:Air_High_Altitude")
 min_speed     = 1
 hp_loss_pct   = 0
 hut_behavior  = "Frighten"
-flags         = "Unreachable", "DoesntOccupyTile", "Airliftable"
+flags         = "Unreachable", "DoesntOccupyTile", "Airliftable", "HarmlessCargo"
 
 [unitclass_balloon]
 name          = _("?unitclass:Balloon")
