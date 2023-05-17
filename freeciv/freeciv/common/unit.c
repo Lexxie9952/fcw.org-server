@@ -784,6 +784,22 @@ bool could_unit_load(const struct unit *pcargo, const struct unit *ptrans)
 }
 
 /**********************************************************************//**
+  Return TRUE iff the given unit is capable of bombarding or
+  "special attacks."
+**************************************************************************/
+bool can_unit_bombard(const struct unit *punit)
+{
+  if (unit_can_do_action(punit, ACTION_BOMBARD))
+    return TRUE;
+  if (unit_can_do_action(punit, ACTION_BOMBARD2))
+    return TRUE;
+  if (unit_can_do_action(punit, ACTION_BOMBARD3))
+    return TRUE;
+
+  return FALSE;
+}
+
+/**********************************************************************//**
   Return TRUE iff the given unit can be loaded into the transporter.
 **************************************************************************/
 bool can_unit_load(const struct unit *pcargo, const struct unit *ptrans)
