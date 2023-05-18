@@ -199,3 +199,5 @@ Missiles boarding and transport swapping must be done in friendly city or base. 
     Especially for future communists, those who avoid Theology, and those in a situation of using entertainers over national luxury 
     because needing more micro-control for some cities to rapture and not others.
 59. Knights get an extra hitpoint, giving this late A4 D2 unit a little more distinction over much earlier units who have A4 or D2.
+60. Scout II upgrades scout, gains light attacks, pillage, evasion/escape.
+61. Boarding rules fixed to disallow boarding onto a LandRoad that's already cargo of another transporter.
