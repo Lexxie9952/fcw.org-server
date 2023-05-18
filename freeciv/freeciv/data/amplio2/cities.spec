@@ -177,4 +177,17 @@ tiles = { "row", "column", "tag"
  10, 8, "city.chichen_overlay"  ; replaces whole city graphic
  10, 9, "city.angkor_overlay"   ; replaces whole city graphic 
  10, 10,"city.hgarden_overlay"  ; replaces whole city graphic 
+
+;[Lexxie]
+12,  0, "city.steppes_city_0"
+12,  1, "city.steppes_city_1"
+12,  2, "city.steppes_city_2"
+12,  3, "city.steppes_city_3"
+12,  4, "city.steppes_city_4"
+;[Lexxie][HH]
+12,  5, "city.steppes_wall_0"
+12,  6, "city.steppes_wall_1"
+12,  7, "city.steppes_wall_2"
+12,  8, "city.steppes_wall_3"
+12,  9, "city.steppes_wall_4"
 }

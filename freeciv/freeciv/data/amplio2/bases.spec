@@ -67,6 +67,7 @@ tiles = { "row", "column", "tag"
       "city.electricage_occupied_0",
       "city.modern_occupied_0",
       "city.postmodern_occupied_0"
+      "city.steppes_occupied_0"
 ;[HH+Lexxie]
  0,  5, "city.disorder"    ; threatens disorder and/or disorder where you can still buy stuff
  0,  7, "city.revolt"      ; REAL disorder; you can't buy stuff; 2 turns of it causes anarchy in some govs, etc.

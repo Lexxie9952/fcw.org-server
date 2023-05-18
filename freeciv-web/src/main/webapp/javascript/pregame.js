@@ -566,16 +566,16 @@ function render_city_style_list()
   /* prepare a list of city styles. */
   var city_style_html = "<b>City Styles:</b><br>";
   for (var style_id in city_rules) {
-    if (style_id > 5) continue;
     var pstyle = city_rules[style_id];
+    if (style_id > 6 || pstyle['rule_name'] == "Industrial") continue;
     city_style_html += "<canvas id='city_style_" + style_id 
           + "' data-style-id='" + style_id + "' width='96' height='72' style='cursor: pointer;'></canvas><br>"
           + pstyle['rule_name'] + "<br>";
   }
   $("#nation_style_choices").html(city_style_html);
   for (var style_id in city_rules) {
-    if (style_id > 5) continue;
     var pstyle = city_rules[style_id];
+    if (style_id > 6 || pstyle['rule_name'] == "Industrial") continue;
     var pcitystyle_canvas = document.getElementById('city_style_' + style_id);
     if (pcitystyle_canvas == null) continue;
     var ctx = pcitystyle_canvas.getContext("2d");

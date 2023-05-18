@@ -43,6 +43,9 @@ name = _("?style:Babylonian")
 [style_celtic]
 name = _("?style:Celtic")
 
+[style_steppes]
+name = _("?style:Steppes")
+
 ; /* <-- avoid gettext warnings
 ;
 ; City styles define the way cities are drawn
@@ -120,6 +123,16 @@ citizens_graphic     = "ancient"
 citizens_graphic_alt = "generic"
 reqs = { "type", "name", "range"
          "Style", "Celtic", "Player"
+       }
+
+[citystyle_steppes]
+name        = _("?citystyle:Steppes")
+graphic     = "city.steppes"
+graphic_alt = "city.celtic"
+citizens_graphic     = "ancient"
+citizens_graphic_alt = "generic"
+reqs = { "type", "name", "range"
+         "Style", "Steppes", "Player"
        }
 
 [citystyle_industrial]
@@ -222,6 +235,14 @@ music_combat       = "music_celtic_combat"
 reqs	=
     { "type", "name", "range"
       "Style", "Celtic", "Player"
+    }
+
+[musicstyle_steppes]
+music_peaceful     = "music_steppes_peace"
+music_combat       = "music_steppes_combat"
+reqs	=
+    { "type", "name", "range"
+      "Style", "Steppes", "Player"
     }
 
 [musicstyle_renaissance]
