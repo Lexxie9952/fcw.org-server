@@ -138,7 +138,7 @@ tiles = { "row", "column", "tag"
  5,  6, "tx.village"
  6,  6, "tx.fallout"
  7,  6, "tx.oil_rig"
-; 9,  7, "tx.mill"
+ 9,  7, "tx.mill"
 
  15,  0, "t.dither_tile"
  15,  0, "tx.darkness"
@@ -151,8 +151,8 @@ tiles = { "row", "column", "tag"
  15,  5, "tx.fog"
 
 ;goto path sprites
- 14,  7, "path.step"            ; turn boundary within path
- 14,  8, "path.exhausted_mp"    ; tip of path, no MP left
- 15,  7, "path.normal"          ; tip of path with MP remaining
- 15,  8, "path.waypoint"
+; 14,  7, "path.step"            ; turn boundary within path
+; 14,  8, "path.exhausted_mp"    ; tip of path, no MP left
+; 15,  7, "path.normal"          ; tip of path with MP remaining
+; 15,  8, "path.waypoint"
 }

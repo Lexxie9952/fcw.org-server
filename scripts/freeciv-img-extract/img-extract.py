@@ -138,9 +138,9 @@ max_row_height = 0;
 curr_x = 0;
 curr_y = 14;
 # Set size of tileset image manually depending on number of tiles.
-# Note!  Safari on iPhone doesn't support more than 3000000 pixels in a single image.
-tileset_height = 1400; #was 1126
-tileset_width = 2020; #was 1919;
+# Note!  Safari on iPhone doesn't support more than 16,777,216 pixels in a single image. (May 2023)
+tileset_height = 1548; #was 1400, added 74x2 for more cities
+tileset_width = 2053; #was 1919;
 
 dither_types = ["t.l0.arctic1",  "t.l0.desert1", "t.l0.plains1", "t.l0.grassland1", "t.l0.forest1", "t.l0.jungle1", "t.l0.hills1", "t.l0.mountains1", "t.l0.tundra1", "t.l0.swamp1"];
 print("Freeciv-img-extract running with PIL ");
