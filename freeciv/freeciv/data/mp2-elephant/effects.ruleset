@@ -60,6 +60,14 @@ reqs	=
     { "type", "name", "range", "present"
       "UnitType", "Tribesmen", "Local", TRUE
     }
+[effect_combat_rounds_scout2]
+type    = "Combat_Rounds"
+value   = 15
+reqs	=
+    { "type", "name", "range", "present"
+      "UnitType", "Scout II", "Local", TRUE
+    }
+
 ;[effect_parthian_shot]
 ;type = "Defender_Combat_Rounds"    ;tested and works !
 ;value = 5
@@ -157,6 +165,13 @@ value = 5
 reqs =
     { "type",     "name",               "range", "present"
       "UnitType", "Penetration Bomber", "Local", TRUE 
+    }
+[effect_scout_ii_defending_combat_rounds]
+type = "Defender_Combat_Rounds"
+value = 15
+reqs =
+    { "type",     "name",               "range", "present"
+      "UnitType", "Scout II",           "Local", TRUE 
     }
 ;*********************************************************************************************************************** UNIT_MIN_SPEEDS
 [effect_foot_soldier_min_speed_one_and_a_half_mp]
@@ -2866,14 +2881,24 @@ reqs	=
       "UnitFlag",      "NonMil",       "Local", FALSE
       "UnitFlag",      "NoVeteran",    "Local", FALSE
     }
-[effect_barracks_3]
+[effect_barracks_scouts]
 type    = "Veteran_Build"
 value	= 1
 reqs	=
-    { "type", "name", "range", "present"
-      "Building", "Barracks", "City", TRUE
-      "UnitType", "Scout",   "Local", TRUE
-    }    
+    { "type",     "name",         "range", "present"
+      "Building", "Barracks",     "City",  TRUE
+      "UnitFlag", "NonMilAttack", "Local", TRUE
+      "UnitFlag", "Horse",        "Local", TRUE
+    }
+;[effect_barracks_3]
+;type    = "Veteran_Build"
+;value	= 1
+;reqs	=
+;    { "type", "name", "range", "present"
+;      "Building", "Barracks", "City", TRUE
+;      "UnitType", "Scout",   "Local", TRUE
+;    }    
+
 [effect_barracks_a]
 type    = "HP_Regen"
 value	= 100
@@ -2897,9 +2922,10 @@ reqs	=
 type    = "Veteran_Build"
 value	= 1
 reqs	=
-    { "type",     "name",        "range", "present"
-      "Building", "Barracks II", "City",  TRUE
-      "UnitType", "Scout",       "Local", TRUE
+    { "type",     "name",         "range", "present"
+      "Building", "Barracks II",  "City",  TRUE
+      "UnitFlag", "NonMilAttack", "Local", TRUE
+      "UnitFlag", "Horse",        "Local", TRUE
     }
 [effect_barracks_ii_a]
 type    = "HP_Regen"
@@ -2924,9 +2950,10 @@ reqs	=
 type    = "Veteran_Build"
 value	= 1
 reqs	=
-    { "type",     "name",        "range", "present"
+    { "type",     "name",         "range", "present"
       "Building", "Barracks III", "City",  TRUE
-      "UnitType", "Scout",       "Local", TRUE
+      "UnitFlag", "NonMilAttack", "Local", TRUE
+      "UnitFlag", "Horse",        "Local", TRUE
     }
 [effect_barracks_iii_a]
 type    = "HP_Regen"
@@ -5205,7 +5232,8 @@ reqs	=
       "Building",  "Agōgē of Sparta", "City",   TRUE
       "Building",  "Barracks",        "City",   FALSE
       "Building",  "Ziggurat",        "City",   FALSE
-      "UnitType",  "Scout",           "Local",  TRUE
+      "UnitFlag",  "NonMilAttack",    "Local",  TRUE
+      "UnitFlag",  "Horse",           "Local",  TRUE
     }
 [effect_agoge_veteran_build_phalanx]
 type    = "Veteran_Build"
@@ -6789,7 +6817,8 @@ value	= 1
 reqs	=
     { "type",     "name",                  "range",  "present"
       "Building", "Sun Tzu's War Academy", "Player", TRUE
-      "UnitType", "Scout",                 "Local",  TRUE
+      "UnitFlag", "NonMilAttack",          "Local",  TRUE
+      "UnitFlag", "Horse",                 "Local",  TRUE
     }
 ;************************************************************************ Supreme Court
 [effect_supreme_court_corruption1]
@@ -7207,9 +7236,10 @@ reqs	=
 type    = "Veteran_Build"
 value	= 1
 reqs	=
-    { "type", "name", "range", "present"
-      "Building", "Ziggurat", "City", TRUE
-      "UnitType", "Scout",   "Local", TRUE
+    { "type", "name", "range",    "present"
+      "Building", "Ziggurat",     "City", TRUE
+      "UnitFlag", "NonMilAttack", "Local", TRUE
+      "UnitFlag", "Horse",        "Local", TRUE
     }
 [effect_ziggurat_barracks_a]
 type    = "HP_Regen"
