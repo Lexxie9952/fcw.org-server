@@ -58,9 +58,9 @@ aggressive_max = 90
 aggressive_default = 50
 
 ; Value of trait "builder" defines how much AI wants to build buildings
-builder_min = 30
+builder_min = 45
 builder_max = 90
-builder_default = 60
+builder_default = 65
 
 ; Please keep [ruledit] section in sync with these includes
 *include "default/nationlist.ruleset"
