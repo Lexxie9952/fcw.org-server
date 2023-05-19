@@ -1494,7 +1494,7 @@ actor_reqs    =
     { "type",          "name",         "range", "present"
       "UnitFlag",      "Settlers",     "Local", TRUE
       "UnitFlag",      "NonMil",       "Local", TRUE
-      ;NonMil = don't let ability to do Hideouts 'cause' ability to clean pollution
+      "UnitFlag",      "Diplomat",     "Local", FALSE
     }
 [actionenabler_clean_fallout]
 action        = "Clean Fallout"
@@ -1502,7 +1502,7 @@ actor_reqs    =
     { "type",          "name",         "range", "present"
       "UnitFlag",      "Settlers",     "Local", TRUE
       "UnitFlag",      "NonMil",       "Local", TRUE
-      ;NonMil = don't let ability to do Hideouts 'cause' ability to clean fallout
+      "UnitFlag",      "Diplomat",     "Local", FALSE
     }
 
 [actionenabler_fortify]

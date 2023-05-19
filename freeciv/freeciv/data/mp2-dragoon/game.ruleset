@@ -2670,6 +2670,7 @@ actor_reqs    =
     { "type",          "name",         "range", "present"
       "UnitFlag",      "Settlers",     "Local", TRUE
       "UnitFlag",      "NonMil",       "Local", TRUE
+      "UnitFlag",      "Diplomat",     "Local", FALSE
     }
 [actionenabler_clean_fallout]
 action        = "Clean Fallout"
@@ -2677,6 +2678,7 @@ actor_reqs    =
     { "type",          "name",         "range", "present"
       "UnitFlag",      "Settlers",     "Local", TRUE
       "UnitFlag",      "NonMil",       "Local", TRUE
+      "UnitFlag",      "Diplomat",     "Local", FALSE
     }
 
 [actionenabler_fortify]
