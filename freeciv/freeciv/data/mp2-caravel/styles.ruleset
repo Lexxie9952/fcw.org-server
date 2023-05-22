@@ -46,6 +46,9 @@ name = _("?style:Celtic")
 [style_steppes]
 name = _("?style:Steppes")
 
+[style_northern]
+name = _("?style:Northern")
+
 ; /* <-- avoid gettext warnings
 ;
 ; City styles define the way cities are drawn
@@ -133,6 +136,16 @@ citizens_graphic     = "ancient"
 citizens_graphic_alt = "generic"
 reqs = { "type", "name", "range"
          "Style", "Steppes", "Player"
+       }
+
+[citystyle_northern]
+name        = _("?citystyle:Northern")
+graphic     = "city.northern"
+graphic_alt = "city.celtic"
+citizens_graphic     = "ancient"
+citizens_graphic_alt = "generic"
+reqs = { "type", "name", "range"
+         "Style", "Northern", "Player"
        }
 
 [citystyle_industrial]
@@ -243,6 +256,14 @@ music_combat       = "music_steppes_combat"
 reqs	=
     { "type", "name", "range"
       "Style", "Steppes", "Player"
+    }
+
+[musicstyle_northern]
+music_peaceful     = "music_northern_peace"
+music_combat       = "music_northern_combat"
+reqs	=
+    { "type", "name", "range"
+      "Style", "Northern", "Player"
     }
 
 [musicstyle_renaissance]

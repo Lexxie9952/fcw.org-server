@@ -109,7 +109,7 @@ allowed_terrains =
   "Mountains", "Plains", "Swamp", "Tundra", "Glacier", "Deep Ocean",
   "River"
 allowed_styles =
-  "European", "Classical", "Tropical", "Asian", "Babylonian", "Celtic", "Steppes"
+  "European", "Classical", "Tropical", "Asian", "Babylonian", "Celtic", "Steppes", "Northern"
 
 ; Every nation is a member of the "extended" set (no need to specify in
 ; individual nation specs).

@@ -176,8 +176,22 @@ tiles = { "row", "column", "tag"
  10, 7, "city.ziggurat_overlay" ; replaces whole city graphic
  10, 8, "city.chichen_overlay"  ; replaces whole city graphic
  10, 9, "city.angkor_overlay"   ; replaces whole city graphic 
- 10, 10,"city.hgarden_overlay"  ; replaces whole city graphic 
+ 10, 10,"city.hgarden_overlay"  ; replaces whole city graphic
 
+; replaces "celtic" for the generic city style. name is nicer than "generic" and has high frequency of northern tribes. 
+;[Lexxie]                               
+11,  0, "city.northern_city_0"
+11,  1, "city.northern_city_1"
+11,  2, "city.northern_city_2"
+11,  3, "city.northern_city_3"
+11,  4, "city.northern_city_4"
+;[Lexxie][HH]
+11,  5, "city.northern_wall_0"
+11,  6, "city.northern_wall_1"
+11,  7, "city.northern_wall_2"
+11,  8, "city.northern_wall_3"
+11,  9, "city.northern_wall_4"
+;Eastern Eurasian mongol,turkic,etc.
 ;[Lexxie]
 12,  0, "city.steppes_city_0"
 12,  1, "city.steppes_city_1"
