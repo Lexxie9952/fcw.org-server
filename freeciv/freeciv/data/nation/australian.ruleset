@@ -28,7 +28,7 @@ ruler_titles = {
 
 flag="australia"
 flag_alt = "-"
-style = "European"
+style = "Northern"
 
 init_techs=""
 init_buildings=""

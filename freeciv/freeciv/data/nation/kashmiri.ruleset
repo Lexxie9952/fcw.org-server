@@ -26,7 +26,7 @@ ruler_titles = {
 
 flag="kashmir"
 flag_alt="-"
-style = "Asian"
+style = "Babylonian"
 
 init_techs=""
 init_buildings=""

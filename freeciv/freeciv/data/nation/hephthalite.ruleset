@@ -23,7 +23,7 @@ leaders = {
 
 flag="hephthalite"
 flag_alt = "-"
-style = "Asian"
+style = "Steppes"
 
 ruler_titles = {
  "government",      "male_title",   "female_title"

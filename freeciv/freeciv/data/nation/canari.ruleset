@@ -31,7 +31,7 @@ ruler_titles = {
 
 flag="canar"
 flag_alt = "-"
-style = "Babylonian"
+style = "Tropical"
 
 init_techs=""
 init_buildings=""

@@ -34,7 +34,7 @@ ruler_titles = {
 
 flag="castile"
 flag_alt = "spain"
-style = "European"
+style = "Classical"
 
 init_techs=""
 init_buildings=""

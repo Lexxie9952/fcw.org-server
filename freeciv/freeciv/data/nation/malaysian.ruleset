@@ -24,7 +24,7 @@ ruler_titles = {
 
 flag = "malaysia"
 flag_alt = "-"
-style = "Tropical"
+style = "Asian"
 
 init_techs = ""
 init_buildings = ""

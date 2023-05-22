@@ -28,7 +28,7 @@ leaders = {
 }
 flag="marathi"
 flag_alt = "-"
-style = "Asian"
+style = "Babylonian"
 
 ruler_titles = {
  "government",      "male_title",         "female_title"

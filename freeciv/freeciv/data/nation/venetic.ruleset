@@ -24,7 +24,7 @@ leaders = {
 }
 flag="venetic"
 flag_alt = "-"
-style = "Celtic"
+style = "Classical"
 
 init_techs=""
 init_buildings=""

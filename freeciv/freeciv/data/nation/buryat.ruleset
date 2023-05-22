@@ -30,7 +30,7 @@ ruler_titles = {
 
 flag="buryatia"
 flag_alt=""
-style = "Asian"
+style = "Steppes"
 
 init_techs=""
 init_buildings=""

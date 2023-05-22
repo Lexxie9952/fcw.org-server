@@ -29,7 +29,7 @@ ruler_titles = {
 
 flag="bengal"
 flag_alt = "-"
-style = "Asian"
+style = "Babylonian"
 
 init_techs=""
 init_buildings=""

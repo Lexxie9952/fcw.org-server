@@ -23,7 +23,7 @@ ruler_titles = {
 
 flag="samogitia"
 flag_alt = "-"
-style = "European"
+style = "Celtic"
 
 init_techs=""
 init_buildings=""

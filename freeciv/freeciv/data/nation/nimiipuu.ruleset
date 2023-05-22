@@ -66,7 +66,7 @@ ruler_titles = {
 
 flag="nez_perce"
 flag_alt = "-"
-style = "Celtic"
+style = "Northern"
 
 init_techs=""
 init_buildings=""

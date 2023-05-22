@@ -24,7 +24,7 @@ ruler_titles = {
 
 flag="evenkia"
 flag_alt="-"
-style = "European"
+style = "Steppes"
 
 init_techs=""
 init_buildings=""

@@ -34,7 +34,7 @@ ruler_titles = {
 
 flag="maldives"
 flag_alt = "-"
-style = "Babylonian"
+style = "Tropical"
 
 init_techs=""
 init_buildings=""

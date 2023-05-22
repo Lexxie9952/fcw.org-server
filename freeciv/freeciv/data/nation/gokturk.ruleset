@@ -44,7 +44,7 @@ ruler_titles = {
 
 flag = "gokturk"
 flag_alt = "-"
-style = "asian"
+style = "Steppes"
 
 init_techs=""
 init_buildings=""

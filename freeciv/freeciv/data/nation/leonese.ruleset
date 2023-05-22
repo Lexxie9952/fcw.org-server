@@ -24,7 +24,7 @@ ruler_titles = {
 
 flag="leon"
 flag_alt = "-"
-style = "European"
+style = "Classical"
 
 init_techs=""
 init_buildings=""

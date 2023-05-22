@@ -31,7 +31,7 @@ ruler_titles = {
 
 flag="viking"
 flag_alt="norway"	; Used previously
-style = "European"
+style = "Northern"
 
 init_techs=""
 init_buildings=""

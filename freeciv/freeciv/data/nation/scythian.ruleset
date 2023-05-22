@@ -35,7 +35,7 @@ leaders = {
 
 flag= "scythia" 
 flag_alt = "-" 
-style = "Celtic" 
+style = "Steppes" 
 
 init_techs="" 
 init_buildings="" 

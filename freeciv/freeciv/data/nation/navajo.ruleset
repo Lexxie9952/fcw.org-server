@@ -30,7 +30,7 @@ ruler_titles = {
 
 flag="navajo"
 flag_alt = "-"
-style = "Celtic"
+style = "Babylonian"
 
 init_techs=""
 init_buildings=""

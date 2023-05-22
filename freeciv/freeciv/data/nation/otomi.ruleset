@@ -31,7 +31,7 @@ ruler_titles = {
 
 flag = "otomi"
 flag_alt = "-"
-style = "Celtic"
+style = "Babylonian"
 
 init_techs=""
 init_buildings=""

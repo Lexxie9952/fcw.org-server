@@ -31,7 +31,7 @@ ruler_titles = {
 }
 flag="sakha"
 flag_alt = "-"
-style = "European"
+style = "Steppes"
 
 init_techs=""
 init_buildings=""

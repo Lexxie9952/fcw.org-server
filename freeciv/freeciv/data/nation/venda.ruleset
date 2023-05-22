@@ -25,7 +25,7 @@ ruler_titles = {
 
 flag = "venda"
 flag_alt = "-"
-style = "babylonian"
+style = "Tropical"
 
 init_techs=""
 init_buildings=""

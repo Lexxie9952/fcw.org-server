@@ -24,7 +24,7 @@ ruler_titles = {
 }
 flag="iceland"
 flag_alt = "norway"
-style = "European"
+style = "Northern"
 
 init_techs=""
 init_buildings=""

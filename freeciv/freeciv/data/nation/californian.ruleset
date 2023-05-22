@@ -39,7 +39,7 @@ ruler_titles = {
 
 flag="california"
 flag_alt = "usa"
-style = "European"
+style = "Northern"
 
 init_techs=""
 init_buildings=""

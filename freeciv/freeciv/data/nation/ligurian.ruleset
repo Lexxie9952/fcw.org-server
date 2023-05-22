@@ -15,7 +15,7 @@ leaders = {
 }
 flag="ligurian"
 flag_alt = "-"
-style = "Celtic"
+style = "Classical"
 
 ruler_titles = {
  "government",      "male_title",              "female_title"

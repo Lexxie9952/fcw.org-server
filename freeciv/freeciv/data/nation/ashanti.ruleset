@@ -38,7 +38,7 @@ ruler_titles = {
 
 flag= "ashanti" 
 flag_alt = "-" 
-style = "Celtic" 
+style = "Tropical" 
 
 init_techs="" 
 init_buildings="" 

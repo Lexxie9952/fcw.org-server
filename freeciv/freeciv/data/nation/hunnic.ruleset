@@ -32,7 +32,7 @@ leaders = {
 }
 flag="hunnic"
 flag_alt = "-"
-style = "Celtic"
+style = "Steppes"
 
 ruler_titles = {
  "government",      "male_title",      "female_title"

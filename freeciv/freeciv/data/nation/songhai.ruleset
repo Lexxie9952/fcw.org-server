@@ -29,7 +29,7 @@ ruler_titles = {
 
 flag="songhai"
 flag_alt="-"
-style = "Tropical"
+style = "Babylonian"
 
 init_techs=""
 init_buildings=""

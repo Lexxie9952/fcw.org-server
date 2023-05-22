@@ -31,7 +31,7 @@ ruler_titles = {
 }
 flag="aland"
 flag_alt = ""
-style = "celtic"
+style = "Northern"
 
 init_techs=""
 init_buildings=""

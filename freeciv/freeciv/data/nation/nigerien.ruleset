@@ -25,7 +25,7 @@ ruler_titles = {
 }
 flag = "niger"
 flag_alt = "-"
-style = "Celtic"
+style = "Tropical"
 
 init_techs=""
 init_buildings=""

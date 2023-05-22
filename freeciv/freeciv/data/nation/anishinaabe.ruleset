@@ -32,7 +32,7 @@ ruler_titles = {
 
 flag="anishinaabe"
 flag_alt = "-"
-style = "Celtic"
+style = "Northern"
 
 init_techs=""
 init_buildings=""

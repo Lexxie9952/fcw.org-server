@@ -20,7 +20,7 @@ leaders = {
 }
 flag="chickasaw"
 flag_alt="-"
-style = "Celtic"
+style = "Northern"
 
 ruler_titles = {
  "government",      "male_title",            "female_title"

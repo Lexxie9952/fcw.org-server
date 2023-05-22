@@ -24,7 +24,7 @@ leaders = {
 
 flag="ghaznavid"
 flag_alt = "-"
-style = "Babylonian"
+style = "Steppes"
 
 ruler_titles = {
  "government",     "male_title",        "female_title"

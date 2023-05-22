@@ -31,7 +31,7 @@ ruler_titles = {
 
 flag="uyghur"
 flag_alt = "-"
-style = "Classical"
+style = "Steppes"
 
 init_techs=""
 init_buildings=""

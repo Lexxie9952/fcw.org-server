@@ -31,7 +31,7 @@ ruler_titles = {
 
 flag = "milan"
 flag_alt = "-"
-style = "European"
+style = "Classical"
 
 init_techs=""
 init_buildings=""

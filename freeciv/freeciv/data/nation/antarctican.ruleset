@@ -19,7 +19,7 @@ ruler_titles = {
 
 flag="antarctica"
 flag_alt = "-"
-style = "Classical"
+style = "Northern"
 
 init_techs=""
 init_buildings=""

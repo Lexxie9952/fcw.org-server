@@ -26,7 +26,7 @@ leaders = {
 
 flag="latvia"
 flag_alt = "-"
-style = "European"
+style = "Celtic"
 
 init_techs=""
 init_buildings=""

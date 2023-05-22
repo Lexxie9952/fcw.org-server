@@ -32,7 +32,7 @@ leaders={
 
 flag= "seljuk" 
 flag_alt = "-" 
-style = "Classical" 
+style = "Steppes" 
 
 ruler_titles = { "government",    "male_title", "female_title"
                 "Despotism",      _("%s Bey"),     _("?female:%s Bey")

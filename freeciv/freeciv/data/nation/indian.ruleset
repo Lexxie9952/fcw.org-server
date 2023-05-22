@@ -31,7 +31,7 @@ ruler_titles = {
 
 flag="india"
 flag_alt = "-"
-style = "Asian"
+style = "Babylonian"
 
 init_techs=""
 init_buildings=""

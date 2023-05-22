@@ -32,7 +32,7 @@ ruler_titles = {
 
 flag="occitania"
 flag_alt = "-"
-style = "European"
+style = "Classical"
 
 init_techs=""
 init_buildings=""
