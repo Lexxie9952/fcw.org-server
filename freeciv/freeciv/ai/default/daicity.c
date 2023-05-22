@@ -1715,7 +1715,8 @@ static void adjust_improvement_wants_by_effects(struct ai_type *ait,
 
     /* Is it possible to do the action to the city right now?
      *
-     * (DiplRel requirements are ignored since actor_player is NULL) */
+     * (DiplRel requirements are ignored since actor_player is NULL)
+     * See TODO below about keeping this in sync with 'will_be_possible' */
     is_possible = is_action_possible_on_city(act_id, NULL, pcity);
 
     /* Will it be possible to do the action to the city if the building is
@@ -1736,12 +1737,21 @@ static void adjust_improvement_wants_by_effects(struct ai_type *ait,
             active = FALSE;
             break;
           }
-        }
+        } else if (!is_req_active(pplayer, NULL, pcity, NULL,
+                                  city_tile(pcity), NULL, NULL, NULL, NULL,
+                                  NULL,
+                                  preq, RPT_POSSIBLE, V_COUNT)) {
+          /* TODO: Make this more robust! Now we must be really careful
+           *       that 'is_possible' is checked by exatly similar context
+           *       to this 'will_be_possible' or either one may trip on
+           *       a requirement that the other one does not, causing
+           *       them to differ when they should not. */
 
+/* OLD CODE replaced by "else if" above, see OSDN42169, AI making countless unusued caravans.
         if (!is_req_active(pplayer, NULL, pcity, pimprove,
                            city_tile(pcity), NULL, NULL, NULL, NULL,
                            NULL,
-                           preq, RPT_POSSIBLE, V_COUNT)) {
+                           preq, RPT_POSSIBLE, V_COUNT)) {*/
           active = FALSE;
           break;
         }
