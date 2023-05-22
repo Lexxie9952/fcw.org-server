@@ -2171,7 +2171,7 @@ All your new sea units built in cities in your nation start with an\
  additional veteran level (this is cumulative with any Port Facility.)\
  Must be built in a coastal city. Gives +1 move bonus to sea vessels\
  (but does not add to Lighthouse.) Damaged sea units\
- which stay in town for one full turn without moving are completely\
+ which stay in its town for one full turn without moving are completely\
  restored. This wonder is never obsolete.\
 ")
 
