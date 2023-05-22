@@ -564,7 +564,7 @@ function update_nation_selection()
 function render_city_style_list()
 {
   /* prepare a list of city styles. */
-  var city_style_html = "<b><u>City Styles</u>:</b><br>";
+  var city_style_html = "<b><u>City Styles</u></b><br>";
   for (var style_id in city_rules) {
     var pstyle = city_rules[style_id];
     if (pstyle['rule_name'] == "Industrial") break;  // Beginning of generic styles for all civs
