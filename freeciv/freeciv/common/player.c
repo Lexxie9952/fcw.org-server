@@ -1005,6 +1005,7 @@ bool can_player_see_unit_at(const struct player *pplayer,
   }
 
   struct city *pcity;
+  bool allied;
 
   /* If the player can't even see the tile... */
   if (TILE_KNOWN_SEEN != tile_get_known(ptile, pplayer)) {
@@ -1013,9 +1014,14 @@ bool can_player_see_unit_at(const struct player *pplayer,
 
   /* Don't show non-allied units that are in transports.  This is logical
    * because allied transports can also contain our units.  Shared vision
-   * isn't taken into account. */
+   * isn't taken into account. 
+   OLD CODE:
   if (is_transported && unit_owner(punit) != pplayer
-      && !pplayers_allied(pplayer, unit_owner(punit))) {
+      && !pplayers_allied(pplayer, unit_owner(punit))) { 
+
+  CAZFI UPDATED CODE: */
+  allied = pplayers_allied(pplayer, unit_owner(punit));
+  if (is_transported && !allied) {
 #ifdef FREECIV_WEB
     /* TODO: is_cargo_visible based on EFT or just a new var in unit_type */
     // currently, ugly placeholder hack waiting for the above:
@@ -1040,7 +1046,8 @@ next_check:
   }
 
   /* Units within some extras may be hidden. */
-  if (!pplayers_allied(pplayer, ptile->extras_owner)) {
+  //if (!pplayers_allied(pplayer, ptile->extras_owner)) {
+  if (!allied) { /* change by cazfi OSDN #47655 - allies see the unit, not extra owner */
     const struct unit_type *ptype = unit_type_get(punit);
 
     extra_type_list_iterate(extra_type_list_of_unit_hiders(), pextra) {
