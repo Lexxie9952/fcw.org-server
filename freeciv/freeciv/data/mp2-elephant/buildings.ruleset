@@ -2259,9 +2259,11 @@ sabotage	= 0
 sound		= "w_marco_polos_embassy"
 sound_alt	= "w_generic"
 helptext	= _("\
-This Wonder increases Trade, the very lifeblood of your tax income, science output,\
- and luxury for happiness. With this Wonder, Trade in each city increases by 40%.\
- This Wonder does not become obsolete, and cannot be lost.\
+Economies need much Trade to grow out of the dark ages.\
+ This Wonder increases Trade, the very lifeblood of your tax income, science output,\
+ and luxury for happiness. Marco Polo’s Embassy increases Trade in every city by 40%.\
+ This makes it the most important and powerful wonder a nation can build.\
+ This Wonder is never obsolete, and cannot be lost.\
 ")
 
 [building_mausoleum_of_mausolos]     
