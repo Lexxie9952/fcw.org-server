@@ -4997,7 +4997,7 @@ veteran_move_bonus = 0, 0, 0, 0, 10080, 10080, 10080
 roles         = "Ferryboat", "FerryStartUnit"
 helptext      = _("\
 The Transport can’t attack but can defend itself when under attack.\
- Marines and Anti-Aircraft Artillery can directly attack from a Transport. Its\
+ Marines can directly attack from a Transport. Its\
  large cargo capacity makes it a significant logistical upgrade for sea\
  transportation. The Transport is considered a military vessel：unwelcome in\
  the waters of nations with whom you are at Peace. Transports do not cause\
