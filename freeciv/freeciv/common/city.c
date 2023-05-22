@@ -1807,13 +1807,10 @@ bool is_rapture_turn(const struct city *pcity, int idx)
 
 /**********************************************************************//**
 Returns bitcode helping us notify the user about rapture timing.
-  code & 1 = Qualifies to rapture and WILL rapture NOW.
-  code & 2 = Qualifies to rapture BUT is DELAYED, CAN rapture NEXT TURN.
-i.e.:
-0 = Doesn't qualify, OR is delayed this turn AND next turn.  
-1 = Raptured now but can't next turn, due to rate delay or rapturedelay.
-2 = Delayed now but can rapture next turn.
-3 = Raptured now and can rapture next turn.
+  code & 1 = Has just raptured.
+  code & 2 = Qualifies to rapture NOW.
+  code & 4 = Qualifies to rapture NEXT TURN.
+  code & 8 = Qualifies to rapture TURN AFTER NEXT.
 **************************************************************************/
 int city_would_rapture(const struct city *pcity)
 {

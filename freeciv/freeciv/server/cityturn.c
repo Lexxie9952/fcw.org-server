@@ -3683,9 +3683,9 @@ static void update_city_activity(struct city *pcity)
 
     /* Reason/timing bit codes for any contexts where rapture gets delayed. 
       1 = raptured this turn
-      2 = can rapture next turn.  (pauses this turn)
-      4 = can rapture in 2 turns. (pauses next turn)  
-      8 = can rapture in 3 turns. (pauses 2 turns) */
+      2 = can rapture next turn.
+      4 = can rapture in 2 turns.  
+      8 = can rapture in 3 turns. */
 
     /* !1 = Rapture qualifying city who paused rapture this turn. */
     if (pcity->rapture_status && (!pcity->rapture_status & 1)) {

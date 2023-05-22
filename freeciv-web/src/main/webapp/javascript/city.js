@@ -949,9 +949,11 @@ function show_city_dialog(pcity)
         RNOW = 2,
         R2 = 4,
         R3 = 8;
+  // Use 0-3 braille dots to show next 3 turns of rapture status:    
+  var braille_code = city_rapture_dots(pcity.rapture_status);
   switch (pcity.rapture_status) {
     case RLAST:
-      rapture_status_icon = "<img id='rstatus_icon' class='v' src='/images/e/3.png'><img id='rstatus_icon' class='v' src='/images/e/comet.png' title='rapture paused'>"
+      rapture_status_icon = "<img id='rstatus_icon' class='v' src='/images/e/3.png'><img id='rstatus_icon' class='v' src='/images/e/comet.png' title='rapture paused '>"
       break;
     /* all possibilities of bit 2 being on, i.e., can rapture this turn*/  
     case RNOW:   
@@ -962,19 +964,19 @@ function show_city_dialog(pcity)
     case RNOW+R3+RLAST:
     case RNOW+R2+R3:
     case RNOW+RLAST+R2+R3:
-      rapture_status_icon = "<img id='rstatus_icon' class='v' src='/images/e/star2.png' title='can continue rapture'>"
+      rapture_status_icon = "<img id='rstatus_icon' class='v' src='/images/e/star2.png' title='can continue rapture'>"+braille_code;
       break;
     /* bit 4, can rapture next turn BUT NOT this turn */
     case R2:
     case R2+RLAST:
     case R2+R3:
     case R2+R3+RLAST:
-      rapture_status_icon = "<img id='rstatus_icon' class='v' src='/images/e/comet.png' title='rapture paused, can rapture next turn'>"
+      rapture_status_icon = "<img id='rstatus_icon' class='v' src='/images/e/comet.png' title='rapture paused, can rapture next turn'>"+braille_code
       break;
     /* bit 8 can rapture in 2 turns BUT NOT this turn or next turn */
     case R3:
     case R3+RLAST:
-      rapture_status_icon = "<img id='rstatus_icon' class='v' src='/images/e/2.png'><img id='rstatus_icon' class='v' src='/images/e/comet.png' title='rapture paused, can rapture in 2 turns'>"
+      rapture_status_icon = "<img id='rstatus_icon' class='v' src='/images/e/2.png'><img id='rstatus_icon' class='v' src='/images/e/comet.png' title='rapture paused, can rapture in 2 turns'>"+braille_code
       break;
   }
   $('#rapture_status').html("<div>"+ rapture_status_icon + "<span class='"+rapture_status_class+"' style='font-weight:bold;padding-bottom:9px;'>"
@@ -1068,6 +1070,16 @@ function show_city_dialog(pcity)
     }
   }
 }
+
+/**************************************************************************
+ Returns the braille symbol representing the next three turns of rapture
+ qualification for rulesets with variable rapture rates. (Braille numbers
+ directly map over to the pcity.rapture_status bitfield. ;~) 
+**************************************************************************/
+function city_rapture_dots(rapture_status) {
+  return String.fromCharCode((rapture_status>>1) + 0x2800);
+}
+
 /**************************************************************************
  Each city tab from city.hbs is set to call this when it's clicked.
 **************************************************************************/
@@ -3927,7 +3939,20 @@ function update_city_screen()
           else next_state = "Lawless";
         } 
         city_state = "<span title='"+html_safe(get_city_state_description(current_state,next_state))+"' "+city_state_span;
-        
+        // Put braille code for next 3 turns of rapture after the celebrating state
+        if (!tiny_screen) {
+          city_state += "<span";
+
+          if (!(pcity.rapture_status & 2))          // won't rapture next turn, red color warns of it
+            city_state += " class='negative_text'>";
+          else if (pcity.rapture_status & 14)       // raptures 3 turns in a row, cool blue, don't worry
+            city_state += " class='hint_of_blue'>";
+          else 
+            city_state += ">";
+
+          city_state += city_rapture_dots(pcity.rapture_status) + "</span>";  
+        }
+
         happy_people   = "<span class='hint_of_green'>"+happy_people+"</span>";
         content_people = "<span class='hint_of_blue'>" +content_people+"</span>";
         unhappy_angry_people = "<span class='hint_of_orange'>"+unhappy_angry_people+"</span>";  
