@@ -2226,8 +2226,10 @@ static void cm_find_best_solution(struct cm_state *state,
     loop_count++;
 
     if (loop_count == max_count + 1) {
+#ifdef FREECIV_TESTMATIC
       log_warn("Did not find a cm solution in %d iterations for %s.",
                max_count, city_name_get(state->pcity));
+#endif /* FREECIV_TESTMATIC */
 #ifndef CM_LOOP_NO_LIMIT
       result->aborted = TRUE;
       break;
@@ -2237,12 +2239,12 @@ static void cm_find_best_solution(struct cm_state *state,
 
 /* DEBUG 
 notify_conn(game.est_connections, NULL, E_WONDER_WILL_BE_BUILT, ftc_server, 
-            _("%s took %d iterations to finish."),
+            _("%s took %d iterations to find a cm solution."),
             city_link(state->pcity), loop_count); */
     
 #ifdef CM_LOOP_NO_LIMIT
   if (loop_count > max_count) {
-    log_warn("It took %d iterations to finish.", loop_count);
+    log_warn("It took %d iterations to a find cm solution.", loop_count);
   }
 #endif /* CM_LOOP_NO_LIMIT */
 
