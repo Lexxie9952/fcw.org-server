@@ -336,20 +336,20 @@ int unittype_def_rating_squared(const struct unit_type *att_type,
   shouldn't treat cities as a stack (despite the code using this function) - the
   scaling is probably different. (extremely dodgy usage of it -- GB)
 **************************************************************************/
-int kill_desire(int benefit, int attack, int loss, int vuln, int victim_count)
+adv_want kill_desire(adv_want benefit, int attack, int loss, int vuln, int victim_count)
 {
-  int desire;
+  adv_want desire;
 
   /*         attractiveness     danger */ 
-  desire = ((benefit * attack - loss * vuln) * victim_count * SHIELD_WEIGHTING
-            / (attack + vuln * victim_count));
+  desire = (benefit * attack - loss * vuln) * victim_count
+           * SHIELD_WEIGHTING / (attack + vuln * victim_count);
 
   return desire;
 }
 
 /**********************************************************************//**
   Compute how much we want to kill certain victim we've chosen, counted in
-  SHIELDs.  See comment to kill_desire.
+  SHIELDs.  See comment to kill_desire().
 
   chance -- the probability the action will succeed,
   benefit -- the benefit (in shields) that we are getting in the case of
@@ -1118,7 +1118,7 @@ int find_something_to_kill(struct ai_type *ait, struct player *pplayer,
   bool harbor = FALSE;  /* Do we have access to sea? */
   bool go_by_boat;      /* Whether we need a boat or not. */
   int vulnerability;    /* Enemy defence rating. */
-  int benefit;          /* Benefit from killing the target. */
+  adv_want benefit;     /* Benefit from killing the target. */
   struct unit *pdefender;       /* Enemy city defender. */
   int move_time;        /* Turns needed to target. */
   int reserves;

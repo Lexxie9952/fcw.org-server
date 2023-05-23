@@ -859,7 +859,8 @@ bool dai_process_defender_want(struct ai_type *ait, struct player *pplayer,
       /* Yes, there's some similarity with kill_desire(). */
       /* TODO: Explain what shield cost has to do with tech want. */
       tech_desire[utype_index(punittype)] =
-        (desire * danger / (utype_build_shield_cost(pcity, punittype) + tech_cost));
+        (desire * danger 
+         / (utype_build_shield_cost(pcity, punittype) + tech_cost));
     }
   } simple_ai_unit_type_iterate_end;
 
@@ -926,7 +927,7 @@ bool dai_process_defender_want(struct ai_type *ait, struct player *pplayer,
 **************************************************************************/
 static void process_attacker_want(struct ai_type *ait,
                                   struct city *pcity,
-                                  int value,
+                                  adv_want value,
                                   const struct unit_type *victim_unit_type,
                                   struct player *victim_player,
                                   int veteran, struct tile *ptile,
@@ -1132,7 +1133,8 @@ static void process_attacker_want(struct ai_type *ait,
 
             CITY_LOG(LOG_DEBUG, pcity, "overriding %s(" ADV_WANT_PRINTF
                      ") with %s(" ADV_WANT_PRINTF ")"
-                     " [attack=%d,value=%d,move_time=%d,vuln=%d,bcost=%d]",
+                     " [attack=%d,value=" ADV_WANT_PRINTF
+                     ",move_time=%d,vuln=%d,bcost=%d]",
                      utype_rule_name(best_choice->value.utype),
 		     best_choice->want,
                      utype_rule_name(punittype),
@@ -1178,14 +1180,16 @@ static void process_attacker_want(struct ai_type *ait,
   If the target is overseas, the function might suggest building a ferry
   to carry a land attack unit, instead of the land attack unit itself.
 **************************************************************************/
-static struct adv_choice *kill_something_with(struct ai_type *ait, struct player *pplayer,
-                                              struct city *pcity, struct unit *myunit,
+static struct adv_choice *kill_something_with(struct ai_type *ait,
+                                              struct player *pplayer,
+                                              struct city *pcity,
+                                              struct unit *myunit,
                                               struct adv_choice *choice)
 {
   /* Our attack rating (with reinforcements) */
   int attack;
   /* Benefit from fighting the target */
-  int benefit;
+  adv_want benefit;
   /* Defender of the target city/tile */
   struct unit *pdef; 
   const struct unit_type *def_type;
