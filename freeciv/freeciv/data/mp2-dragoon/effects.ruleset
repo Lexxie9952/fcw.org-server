@@ -1203,6 +1203,37 @@ reqs    =
       "Tech",          "Laser",          "Player", TRUE
     }
 
+;City Radius
+[effect_bigger_size_21_cities]
+type    = "City_Radius_Sq"       ;size 21 cities get 5x5+corners
+value = 3
+reqs	=
+    { "type",    "name", "range", "present"
+      "MinSize", "21",   "City",   TRUE
+    }
+[effect_bigger_size_30_cities]    
+type    = "City_Radius_Sq"       ;size 30 cities get 7x7-corners
+value = 5
+reqs	=
+    { "type",    "name", "range", "present"
+      "MinSize", "30",    "City",   TRUE
+    }
+[effect_city_vision_size_21]
+type    = "City_Vision_Radius_Sq"
+value   = 3
+reqs    =
+    { "type", "name", "range"
+      "MinSize", "21",   "City",   TRUE
+      "VisionLayer", "Main", "Local"
+    }
+[effect_city_vision_size_30]
+type    = "City_Vision_Radius_Sq"
+value   = 5
+reqs    =
+    { "type", "name", "range"
+      "MinSize", "30",    "City",   TRUE
+      "VisionLayer", "Main", "Local"
+    }
 ; Base vision range - radius of vision is sqrt(5) = 2.24
 [effect_city_vision]
 type    = "City_Vision_Radius_Sq"
@@ -3429,22 +3460,6 @@ value = -50
 reqs  =
     { "type", "name", "range"
       "Building", "Marketplace", "Local"
-    }
-
-;City Radius
-[effect_bigger_size_21_cities]
-type    = "City_Radius_Sq"       ;size 21 cities get 5x5+corners
-value = 3
-reqs	=
-    { "type",    "name", "range", "present"
-      "MinSize", "21",   "City",   TRUE
-    }
-[effect_bigger_size_30_cities]    
-type    = "City_Radius_Sq"       ;size 30 cities get 7x7-corners
-value = 2
-reqs	=
-    { "type",    "name", "range", "present"
-      "MinSize", "30",    "City",   TRUE
     }
 
 ; No population pollution until certain techs researched
