@@ -18,6 +18,9 @@
 
 #define MORT 24
 
+#define FC_EPSILON (0.001)
+#define ADV_WANTS_EQ(_w1, _w2) (fabs((_w1) - (_w2)) < FC_EPSILON * (fabs((float) (_w1)) + fabs((float) (_w2))))
+
 adv_want amortize(adv_want benefit, int delay);
 
 /*
@@ -25,6 +28,6 @@ adv_want amortize(adv_want benefit, int delay);
  * is divided by POWER_DIVIDER.
  *
  */
-#define POWER_DIVIDER 	(POWER_FACTOR * 3)
+#define POWER_DIVIDER (POWER_FACTOR * 3)
 
 #endif   /* FC__ADVTOOLS_H */
