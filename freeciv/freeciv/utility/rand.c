@@ -57,69 +57,60 @@ static RANDOM_STATE rand_state;
   This means that if size <= 1 the function will always return 0.
 
   Once we calculate new_rand below uniform (we hope) between 0 and
-  MAX_UINT32 inclusive, need to reduce to required range.  Using
+  MAX_UINT32 inclusive, need to reduce to required range. Using
   modulus is bad because generators like this are generally less
   random for their low-significance bits, so this can give poor
-  results when 'size' is small.  Instead want to divide the range
+  results when 'size' is small. Instead want to divide the range
   0..MAX_UINT32 into (size) blocks, each with (divisor) values, and
   for any remainder, repeat the calculation of new_rand.
   Then:
-	 return_val = new_rand / divisor;
+         return_val = new_rand / divisor;
   Will repeat for new_rand > max, where:
          max = size * divisor - 1
   Then max <= MAX_UINT32 implies
-	 size * divisor <= (MAX_UINT32+1)
-  thus   divisor <= (MAX_UINT32+1)/size
+         size * divisor <= (MAX_UINT32 + 1)
+  thus   divisor <= (MAX_UINT32 + 1) / size
 
-  Need to calculate this divisor.  Want divisor as large as possible
+  Need to calculate this divisor. Want divisor as large as possible
   given above contraint, but it doesn't hurt us too much if it is a
-  bit smaller (just have to repeat more often).  Calculation exactly
-  as above is complicated by fact that (MAX_UINT32+1) may not be
+  bit smaller (just have to repeat more often). Calculation exactly
+  as above is complicated by fact that (MAX_UINT32 + 1) may not be
   directly representable in type RANDOM_TYPE, so we do instead:
-         divisor = MAX_UINT32/size
+         divisor = MAX_UINT32 / size
 *************************************************************************/
 RANDOM_TYPE fc_rand_debug(RANDOM_TYPE size, const char *called_as,
-                          int line, const char *file) 
+                          int line, const char *file)
 {
-  RANDOM_TYPE new_rand, divisor, max;
-  int bailout = 0;
+  RANDOM_TYPE new_rand;
 
   fc_assert_ret_val(rand_state.is_init, 0);
 
   if (size > 1) {
+    RANDOM_TYPE divisor, max;
+    int bailout = 0;
+
     divisor = MAX_UINT32 / size;
     max = size * divisor - 1;
-  } else {
-    /* size == 0 || size == 1 */
 
-    /*
-     * These assignments are only here to make the compiler
-     * happy. Since each usage is guarded with a if (size > 1).
-     */
-    max = MAX_UINT32;
-    divisor = 1;
-  }
+    do {
+      new_rand = (rand_state.v[rand_state.j]
+                  + rand_state.v[rand_state.k]) & MAX_UINT32;
 
-  do {
-    new_rand = (rand_state.v[rand_state.j]
-                + rand_state.v[rand_state.k]) & MAX_UINT32;
+      rand_state.x = (rand_state.x +1) % 56;
+      rand_state.j = (rand_state.j +1) % 56;
+      rand_state.k = (rand_state.k +1) % 56;
+      rand_state.v[rand_state.x] = new_rand;
 
-    rand_state.x = (rand_state.x +1) % 56;
-    rand_state.j = (rand_state.j +1) % 56;
-    rand_state.k = (rand_state.k +1) % 56;
-    rand_state.v[rand_state.x] = new_rand;
+      if (++bailout > 10000) {
+        log_error("%s(%lu) = %lu bailout at %s:%d",
+                  called_as, (unsigned long) size,
+                  (unsigned long) new_rand, file, line);
+        new_rand = 0;
+        break;
+      }
 
-    if (++bailout > 10000) {
-      log_error("%s(%lu) = %lu bailout at %s:%d", 
-                called_as, (unsigned long) size,
-                (unsigned long) new_rand, file, line);
-      new_rand = 0;
-      break;
-    }
+    } while (new_rand > max);
 
-  } while (size > 1 && new_rand > max);
-
-  if (size > 1) {
     new_rand /= divisor;
   } else {
     new_rand = 0;
