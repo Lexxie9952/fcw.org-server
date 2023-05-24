@@ -2780,18 +2780,21 @@ static void *cargo_iter_get(const struct iterator *it)
 static void cargo_iter_next(struct iterator *it)
 {
   struct cargo_iter *iter = CARGO_ITER(it);
-  const struct unit_list_link *piter = iter->links[iter->depth - 1];
+  const struct unit_list_link *piter;
   const struct unit_list_link *pnext;
 
   /* Variant 1: unit has cargo. */
-  pnext = unit_list_head(unit_transport_cargo(unit_list_link_data(piter)));
+  pnext = unit_list_head(unit_transport_cargo(cargo_iter_get(it)));
   if (NULL != pnext) {
     fc_assert(iter->depth < ARRAY_SIZE(iter->links));
     iter->links[iter->depth++] = pnext;
     return;
   }
+  fc_assert(iter->depth > 0);
 
-  do {
+  while (iter->depth > 0) {
+    piter = iter->links[iter->depth - 1];
+
     /* Variant 2: there are other cargo units at same level. */
     pnext = unit_list_link_next(piter);
     if (NULL != pnext) {
@@ -2800,8 +2803,8 @@ static void cargo_iter_next(struct iterator *it)
     }
 
     /* Variant 3: return to previous level, and do same tests. */
-    piter = iter->links[iter->depth-- - 2];
-  } while (0 < iter->depth);
+    iter->depth--;
+  }
 }
 
 /**********************************************************************//**
