@@ -4777,6 +4777,10 @@ static struct unit_move_data *unit_move_data(struct unit *punit,
 {
   struct unit_move_data *pdata;
   struct player *powner = unit_owner(punit);
+  /* TODO: This is hard-code assuming 3 layers when we might have more
+     later. In addition, each call to get_unit_vision(..) is doing the
+     same work multiple times. See OSDN #45627 for functions there which
+     improved performance. */
   const v_radius_t radius_sq =
         V_RADIUS(get_unit_vision_at(punit, pdesttile, V_MAIN),
                  get_unit_vision_at(punit, pdesttile, V_INVIS),
