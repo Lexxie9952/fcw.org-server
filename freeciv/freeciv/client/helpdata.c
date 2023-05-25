@@ -1774,7 +1774,7 @@ char *helptext_unit(char *buf, size_t bufsz, struct player *pplayer,
 #endif
 
   cat_snprintf(buf, bufsz,
-               _("%s Belongs to <b style=\'color:#9aa\'>%s</b> unit class."), BULLET_BIG,
+               _("%s Belongs to <b style=\'color:#ffc\'>%s</b> unit class."), BULLET_BIG,
                uclass_name_translation(pclass));
   if (NULL != pclass->helptext) {
     strvec_iterate(pclass->helptext, text) {
