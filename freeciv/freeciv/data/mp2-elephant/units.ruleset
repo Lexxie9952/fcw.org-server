@@ -78,7 +78,7 @@ flags =
     _("Workers")
   }
 
-; RESERVED User-UCF's: these can be included by creators to immediately access special 
+; RESERVED User-UCF's：these can be included by creators to immediately access special 
 ; deluxe game mechanics for any of their ruleset unit_classes. If a class has a user
 ; unit class flag with a ";RESERVED:" indicator, specially coded mechanics inside the
 ; server will apply to it. To access these mechanics, simply add a user class-flag with
@@ -91,18 +91,18 @@ flags =
 ; helptxt       = displayed in the help for unit types belonging to a class
 ;                 with this flag (optional)
 ;______________________________________________________________________________________________
-; "Missile"           = SERVER CODED: Unit is spent after Pillage, and destroyed if its
+; "Missile"           = SERVER CODED：Unit is spent after Pillage, and destroyed if its
 ;                       transport is lost (unless inside a city, or native base, or co-existing
 ;                       on a tile with another transport who has remaining capacity to 'save'
-;                       the cargo unit.). RULESET CODED: spent after attack.
-; "AttFromNonNative"  = RULESET CODED: Unit Class can launch attack from non-native tile (against
+;                       the cargo unit.). RULESET CODED：spent after attack.
+; "AttFromNonNative"  = RULESET CODED：Unit Class can launch attack from non-native tile (against
 ;                       native one). This applies for both attacking from transport or
 ;                       cities. If only some unit types of the class should
 ;                       get this property, use type flag "NonNativeAttack"
-; "NoCarrierRefuel"  =  SERVER CODED: May not embark on transports outside city or native base; 
+; "NoCarrierRefuel"  =  SERVER CODED：May not embark on transports outside city or native base; 
 ;                       This is a hack-patch needed for pftools.c to not assume transports
 ;                       with no legal Board/Embark enabler count as refuel tile.
-; "HarmlessCargo"    =  SERVER CODED: {{Background info: by default, autoattacks don't happen to any
+; "HarmlessCargo"    =  SERVER CODED：{{Background info：by default, autoattacks don't happen to any
 ;                       tile that has a cargo-carrying unit on it. Because the server takes a 
 ;                       pessimist view of unknown cargo in order to avoid baiting exploits. It assumes 
 ;                       the worst (that the cargo can defend and that it's a super strong defender.)}}
@@ -377,7 +377,7 @@ helptext      = _("\
   • <b style=\'color:#9aa\'>Crew Repair</b>：each turn, regardless of movement, recovers 10% of its hit points.\
 ")
 
-[unitclass_submarine]    ; Separating the Submarine class allows it to be unreachable by Air. NOTE: not subject to ZOC.
+[unitclass_submarine]    ; Separating the Submarine class allows it to be unreachable by Air. NOTE：not subject to ZOC.
 name          = _("?unitclass:Submarine")
 min_speed     = 5
 hp_loss_pct   = 0
@@ -853,11 +853,13 @@ veteran_power_fact = 100
 veteran_move_bonus = 0
 roles         = "UserType1Startunit"
 helptext      = _("\
-At game start, Founders are a more populous portion of your nomadic tribe. \n\
+At game start, Founders represent your pre-civilized nomadic tribe. \n\
 "), _("\
-Founders are Settlers who found a city of size 2—usually the first city and\
- capital of a tribe. They are a start unit that cannot be built. In all other\
- respects they are exactly like Settlers, except they cannot be bribed.\
+Founders are Settlers who found size 2 cities. You start the game with\
+ Founders. They cannot be built. A Founder can build roads and irrigation\
+ in one turn, but be careful not to dally：a delayed founding is still a\
+ delayed growth of the city! Founders see a little farther than other units,\
+ and cannot be bribed.\
 ")
 
 [unit_settlers]
@@ -894,7 +896,7 @@ veteran_power_fact = 100
 veteran_move_bonus = 0
 roles         = "CitiesStartUnit"
 helptext      = _("\
-Population Cost: 1. Adds Population: 1.\n\n\
+Population Cost：1. Adds Population：1.\n\n\
 Settlers are your only means of founding new cities. \
 "), _("\
 Settlers can perform most of the terrain alterations as\
@@ -957,7 +959,7 @@ veteran_power_fact = 100, 150, 175, 250, 300, 350, 400
 veteran_move_bonus = 3360, 4200, 5040, 5880, 6720, 7560, 8400
 helptext      = _("\
 Tribesmen came before cities and specialized division of labor. During\
- ancient times, they get primitive versatility bonuses: \n\
+ ancient times, they get primitive versatility bonuses：\n\
 Tribesmen can explore, moving over terrain with no penalty. They don’t obey\
  or exert ZOC. They can build roads, quays, irrigate, or mine at half the\
  rate of Workers. \n\
@@ -1019,7 +1021,7 @@ veteran_power_fact = 100
 veteran_move_bonus = 0
 roles         = "UserType2Startunit"
 helptext      = _("\
-Population Cost: 1. Adds Population: 1.\n\n\
+Population Cost：1. Adds Population：1.\n\n\
 Peasants are the common people of Monarchies. You can encourage them\
  by royal edict to migrate to other cities and help colonize new\
  areas. But to have such access, you must be a Constitutional Monarchy\
@@ -1071,7 +1073,7 @@ veteran_work_raise_chance = 0
 veteran_power_fact = 100
 veteran_move_bonus = 0
 helptext      = _("\
-Population Cost: 0. Adds Population: 1.\n\n\
+Population Cost：0. Adds Population：1.\n\n\
 Pilgrims are wayfaring migrants from Theocratic nations. Like Zealots,\
  they have no upkeep if under a Theocratic government. Heeding the call\
  of ecclesiastic authority, Pilgrims can be guided from one city to another in\
@@ -1122,7 +1124,7 @@ veteran_power_fact = 100
 veteran_move_bonus = 1008
 roles         = "Settlers"
 helptext      = _("\
-Population Cost: 1. Adds Population: 2.\n\n\
+Population Cost：1. Adds Population：2.\n\n\
 Proletarians can only be controlled by Communist governments. \
 "), _("\
 Communist States can assign Proletarians from one city to another, which transfers population\
@@ -1172,7 +1174,7 @@ veteran_work_raise_chance = 0
 veteran_power_fact = 100
 veteran_move_bonus = 0
 helptext      = _("\
-Population Cost: 1. Adds Population: 1.\n\n\
+Population Cost：1. Adds Population：1.\n\n\
 Migrants are citizens under Nationalist governments who are encouraged to\
  settle in new cities, usually in conquered or colonized areas.\
  They can be guided to transfer population from city to city. This may\
@@ -2012,7 +2014,7 @@ uk_happy      = 1
 uk_shield     = 0
 uk_food       = 0
 uk_gold       = 1
-embarks       = "Helicopter", "Land", "Sea", "LandRoad", "LandRail", "Big Land" ;NB: currently no Big Land units are transports
+embarks       = "Helicopter", "Land", "Sea", "LandRoad", "LandRail", "Big Land" ;NB：currently no Big Land units are transports
 disembarks    = "Helicopter", "Land", "Sea", "LandRoad", "LandRail", "Big Land"
 targets       = "Sea", "Balloon", "Helicopter", "LandRail", "Zeppelin"
 flags         = "MultiSlot", "NonNativeAttack", "FootSoldier", "BeachLander",
@@ -3442,13 +3444,13 @@ Dive Bombers are fitted with armor and armaments for ground attack and sea comba
  range and Air-to-Air ability. They do not block attacks on their same tile, but exert\
  ZoC on adjacent land tiles and can iPillage. The Dive Bomber is not an interceptor,\
  and can only attack once per turn.\
- Role specialization yields the following gains and losses over a Fighter: \n\n\
- GAINS: \n\
+ Role specialization yields the following gains and losses over a Fighter：\n\n\
+ GAINS：\n\
  • A:4½  vs Surface units (Land or Sea) \n\
  • D:4     vs Anti-Air \n\
  • iPillage \n\
  • ZoC \n\
-LOSSES: \n\
+LOSSES：\n\
  • A3/D3 in Air-to-Air \n\
  • Can’t block its tile \n\
  • One attack per turn \n\
@@ -3511,7 +3513,7 @@ The Medium Bomber is well suited for hitting a moderately strong target.\
  It may not attack other Air units, and can only attack once per turn. It can only\
  carry conventional Bombs, not nuclear bomb units. This makes it a Soft Field Unit,\
  causing less discontent than other types of Bombers. \n\
-➤ Unhappy effect for Soft Field units: \n\
+➤ Unhappy effect for Soft Field units：\n\
 Republic:0   Democracy:1    (non-aggressive) \n\
 Republic:1   Democracy:2    (aggressive) \n\
 "), _("
@@ -3570,7 +3572,7 @@ Heavy Bombers are large and sturdy Bombers with larger payload and numerous gunn
  They are excellent for hitting strong well-defended ground targets, and can attack once per turn.\
  They can’t attack Air units. They can carry one Bomb. Like most Bombers, the Heavy Bomber is a Field Unit.\
  Field Units cause the same unhappiness no matter if aggressively or peacefully deployed. \n\
-➤ Unhappy effect for Field units: \n\
+➤ Unhappy effect for Field units：\n\
 Republic:1   Democracy:2 \n\
 "), _("
 Stack-Escape：60% odds to evade stack-death if attacker doesn’t have more moves than it does.\n \
@@ -4188,7 +4190,7 @@ roles         = ""
 helptext      = _("\
 Before Stealth Bombers were engineered, high tech air forces devised a different way\
  to strike and escape：extreme speed. Penetration Bombers are bombers with a special\
- role: ultrasonic strike missions on deep interior targets. With only 1 turn of fuel,\
+ role：ultrasonic strike missions on deep interior targets. With only 1 turn of fuel,\
  total range is inferior to other bombers. But a top speed of Mach 2 gives a single-turn\
  range of 29 tiles. Top speed is so fast that interceptors only get 5 combat rounds against\
  this unit. Penetration Bombers can Bomb Strike, a targeted instant-Pillage which\
@@ -5631,7 +5633,7 @@ ABMs aren't very effective\
  against non-missiles. As a defensive unit, they cause no unhappiness; and\
  their upkeep is 1 gold. After required tech is known, 1 ABM is delivered free\
  to each newly built unit capable of carrying missilies. \n\
-Multislot: Under certain conditions, cities can make one (or more) multislot units per turn, plus one of any other type. \n\n\
+Multislot：Under certain conditions, cities can make one (or more) multislot units per turn, plus one of any other type. \n\n\
 *** Logistical Rules for ALL Missiles：\n\
  A Missile must be transported by ending its turn in a city, or by Airlift, or as cargo on a\
  Missile Destroyer, AEGIS Cruiser, Missile Submarine, Carrier, or Mobile SAM. Loading\
@@ -5877,7 +5879,7 @@ Bombs can only be moved by bombers or the airlift order. They can’t attack\
  kill, and even victory has a cost. Hidden expenses lie in logistics, delivery\
  risk, and non-reusability. \n\
 "), _("\
-Multislot: Under certain conditions, cities can make one (or more) multislot units per turn, plus one of any other type.\
+Multislot：Under certain conditions, cities can make one (or more) multislot units per turn, plus one of any other type.\
 ")
 
 [unit_atom_bomb]
@@ -6394,7 +6396,7 @@ Trains are Commerce that allow you to carry Goods and Freight on your railways.\
  They can carry any land unit that has less than three move points.\
  Logistics for Trains are more restricted than Wagons and Trucks. Except for Foot\
  soldiers, all units need to be in a city to get on or off a Train. \n\
-Foot Soldiers use Trains the same as Wagons and Trucks, and can: \n\
+Foot Soldiers use Trains the same as Wagons and Trucks, and can：\n\
  1. Board anywhere; \n 2. Deboard in a Base or Quay; \n\
  3. Disembark outside a City (loses all moves.) \n\n\
 On non-allied foreign rails, Trains incur full terrain movement cost.\
@@ -6437,7 +6439,7 @@ The Truck replaces the Caravan as the basic Commerce unit on Land. It moves at\
  Each Truck used to build a Wonder will add 50 shields. See the entry on Caravan to read\
  what Commerce units may do. \n\
 "), _("\
-Trucks allow units with less than 3 move points to travel your roads faster: Like\
+Trucks allow units with less than 3 move points to travel your roads faster：Like\
  the Wagon, any cargo can board a Truck anywhere, but a city, quay, or base is\
  needed to deboard. Disembarking is legal for all cargo types, but uses up all\
  moves (except Marines.)\
