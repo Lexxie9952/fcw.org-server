@@ -1469,7 +1469,7 @@ graphic_alt	= "-"
 obsolete_by	=
     { "type", "name", "range", "survives"
     }
-build_cost	= 200
+build_cost	= 190
 upkeep		= 0
 sabotage	= 0
 sound		= "w_angkor"
@@ -1633,7 +1633,7 @@ obsolete_by	=
     { "type", "name", "range"
       "Tech", "Democracy", "Player"
     }
-build_cost	= 130
+build_cost	= 120
 upkeep		= 0
 sabotage	= 0
 sound		= "w_hammurabi"
@@ -1909,7 +1909,7 @@ obsolete_by	=
     { "type", "name", "range"
       "Tech", "Steam Engine", "Player"
     }
-build_cost	= 210
+build_cost	= 200
 upkeep		= 0
 sabotage	= 0
 sound		= "w_hanging_gardens"
@@ -2253,7 +2253,7 @@ graphic_alt	= "-"
 obsolete_by	=
     { "type", "name", "range"
     }
-build_cost	= 400
+build_cost	= 350
 upkeep		= 0
 sabotage	= 0
 sound		= "w_marco_polos_embassy"
