@@ -8671,7 +8671,7 @@ reqs    =
 
 [effect_despotism_city_founding_nomad_food_bonus]
 type    = "Growth_Food"
-value	= 15 ; 15% of 15 = +2
+value	= 34 ; 34% of 15 = +5
 reqs	=
     { "type",     "name",      "range", "present"
       "Gov",      "Despotism", "Player", TRUE
@@ -8680,7 +8680,7 @@ reqs	=
     }
 [effect_despotism_capital_founding_nomad_food_bonus]
 type    = "Growth_Food"
-value	= 15  ; 15+15=30% of 15 = +4
+value	= 33  ; 33+34=67% of 15 = +10
 reqs	=
     { "type",     "name",      "range", "present"
       "Gov",      "Despotism", "Player", TRUE
