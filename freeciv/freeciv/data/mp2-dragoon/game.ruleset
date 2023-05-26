@@ -1243,7 +1243,7 @@ actor_reqs    =
       "UnitType",     "Siege Ram",     "Local", FALSE 
       "UnitType",     "Zealots",       "Local", FALSE 
       "UnitType",     "Fanatics",      "Local", FALSE 
-      "UnitType",     "Zeppelin",      "Local", FALSE 
+      "UnitType",     "Zeppelin",      "Local", FALSE
       "UnitType",     "Marines",       "Local", FALSE 
       "UnitType",     "Battleship",    "Local", FALSE 
       "UnitState",    "Transported",   "Local", FALSE
