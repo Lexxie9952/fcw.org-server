@@ -433,8 +433,9 @@ struct city {
 
       int illness;
 
-      //int steal; /* diplomats steal once; for spies, gets harder */
-
+      /* Cache the real pollution incurred from before Factories finish. Use
+         it when placing pollution and calculating demographic civ scores. */
+      int cached_pollution;
       /* If > 0, workers will not be rearranged until they are unfrozen. */
       int workers_frozen;
 

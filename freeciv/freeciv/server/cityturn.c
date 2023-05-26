@@ -725,6 +725,9 @@ void update_city_activities(struct player *pplayer)
       
       /* Accumulate score elements which must be done prior to tile re-arrange */
       pplayer->score.mfg += cities[r]->surplus[O_SHIELD];
+      /* New factories are built before check_pollution() is called, but we
+         mustn't incur pollution from prod. bonuses not yet received: */
+      cities[r]->server.cached_pollution = city_pollution(cities[r], cities[r]->surplus[O_SHIELD]);
       /* Specialists are calculated before re-arrange IFF (game.server.city_output_style == WYSIWYG) */
       if (game.server.city_output_style) {
         specialist_type_iterate(sp) {
@@ -3438,11 +3441,14 @@ static bool place_pollution(struct city *pcity, enum extra_cause cause)
 }
 
 /**********************************************************************//**
- Add some Pollution if we have waste
+ Add some Pollution if we have waste. 25May2023: Use server cached 
+ pollution from last real-generated shield output, not the pollution
+ calculated right after a Factory completed.
 **************************************************************************/
 static void check_pollution(struct city *pcity)
 {
-  if (fc_rand(100) < pcity->pollution) {
+  if (fc_rand(100) < pcity->server.cached_pollution) {
+//if (fc_rand(100) < pcity->pollution) { /* 👈🏻 Gave cities extra pollution before a completed Factory gives bonus shields. */
     if (place_pollution(pcity, EC_POLLUTION)) {
       notify_player(city_owner(pcity), city_tile(pcity), E_POLLUTION, ftc_server,
                     _("[`pollution`] Pollution near %s."), city_link(pcity));

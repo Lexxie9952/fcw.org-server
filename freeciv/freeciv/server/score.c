@@ -295,7 +295,9 @@ void calc_civ_score(struct player *pplayer)
     pplayer->score.angry += pcity->feel[CITIZEN_ANGRY][FEELING_FINAL];
     pplayer->score.population += city_population(pcity);
     pplayer->score.cities++;
-    pplayer->score.pollution += pcity->pollution;
+    /* 25May2023: Don't add pcity->pollution for next turn, to this turn's pollution score. Used 
+       cached version of pollution shields as it stood before Factories etc. were built: */
+    pplayer->score.pollution += pcity->server.cached_pollution;
     /* These are calculated here if (game.server.city_output_style !=WYSIWYG) */
     if (!game.server.city_output_style) {
       specialist_type_iterate(sp) {
