@@ -4062,7 +4062,7 @@ set =
       "freecost", 0, FALSE                ; 0 would get overridden by the 'blueprints' setting: 1 gives 99% of the bulbs of the tech awarded by Philosophy.
       "fulldisorder", "ENABLED", FALSE    ; disorder fully halts one turn of production or buying in a city: closes lots of complex time-consuming micromanaged exploits one would feel obligated to do to be competitive
       "generator", "RANDOM", FALSE
-      "gold", 70, FALSE
+      "gold", 90, FALSE
       "globalwarming", 50, FALSE
       "globalwarming_percent", 50, FALSE
       "hideouts", TRUE, FALSE
@@ -4094,7 +4094,7 @@ set =
       "spaceship_travel_time", 250, FALSE
       "specials", 350, FALSE
       "startpos", "VARIABLE", FALSE
-      "startunits", "DDDwwwtuccU", "FALSE"  ;3 Tribesmen, 3 Workers, 1 Caravan, 1 Founders, 2 Settlers, 1 Well-Digger
+      "startunits", "DDDwwwtuuuU", "FALSE"  ;3 Tribesmen, 3 Workers, 1 Caravan, 1 Founders, 2 Settlers, 1 Well-Digger
       "steepness", 20, FALSE
       "techleak", 50, FALSE
       "techlossforgiveness", 200, FALSE
