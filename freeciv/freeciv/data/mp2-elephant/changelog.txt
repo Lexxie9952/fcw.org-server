@@ -4,6 +4,8 @@ Brief Explanations of goals and challenges.
    What motivates Ruleset additions
       
 Focus goals for MP2-Elephant
+   Compress phenomenon where first 25% of era history happens in first 50% of game length.
+      (e.g., first quarter of game happening in first half of game length.) Goal: MP2D's T60 should be roughly T50 in MP2E
    Simplify unnecessary complexities.
    Evolve movement system
       passive movement vs active movement: boats with horses shouldn't move on rivers faster, nor should trains
@@ -201,3 +203,10 @@ Missiles boarding and transport swapping must be done in friendly city or base. 
 59. Knights get an extra hitpoint, giving this late A4 D2 unit a little more distinction over much earlier units who have A4 or D2.
 60. Scout II upgrades scout, gains light attacks, pillage, evasion/escape.
 61. Boarding rules fixed to disallow boarding onto a LandRoad that's already cargo of another transporter.
+62. Hut revealing map area goes from 7 tile radius to 8 tile radius.
+GAME SPEED/PACE:
+63. All nations start with 3 Founders.
+64. Despotism starting city food bonus adjusted from +2 (+4 capital) to +5 (+10 capital).
+65. Start gold changed to 90 (was 75).
+66. Marco Polo 350 shields (basically speeds the game by 50 shields for this early obligatory wonder).
+67. Civil Wonders all reduced in price by 10 shields. (See, however, change to Mausoleum).
