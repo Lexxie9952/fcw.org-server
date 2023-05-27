@@ -1504,6 +1504,7 @@ function update_unit_order_commands()
   $("#order_fort").hide();
   $("#order_fortress").hide();
   $("#order_castle").hide();
+  $("#order_tileclaim").hide();
   $("#order_bunker").hide();
   $("#order_buoy").hide();
   $("#order_fishtrap").hide();
@@ -1677,7 +1678,7 @@ function update_unit_order_commands()
     const TILE_HAS_NAVALBASE = NAVALBASES && tile_has_extra(ptile,EXTRA_NAVALBASE);
     const TILE_HAS_CASTLE    = CASTLES    && tile_has_extra(ptile,EXTRA_CASTLE);
     const TILE_HAS_BUNKER    = BUNKERS    && tile_has_extra(ptile,EXTRA_BUNKER);
-    const TILE_HAS_CLAIM     = TILECLAIMS && tile_has_extra(ptile,EXTRA_TILE_CLAIM);
+    //const TILE_HAS_CLAIM     = TILECLAIMS && tile_has_extra(ptile,EXTRA_TILE_CLAIM);
     const TILE_HAS_AIRBASE   = AIRBASES   && tile_has_extra(ptile,EXTRA_AIRBASE);
     const TILE_HAS_BUOY      = BUOYS      && tile_has_extra(ptile,EXTRA_BUOY);
     const TILE_HAS_FISHTRAP  = FISHTRAPS  && tile_has_extra(ptile,EXTRA_FISHTRAP);
@@ -1698,7 +1699,7 @@ function update_unit_order_commands()
     const CAN_TILE_NAVALBASE = !pcity && !oceanic && NAVALBASES && TILE_HAS_FORT && !TILE_HAS_OVERFORT && !(TILE_HAS_RIVER && NO_RIVER_BASE); // further tile reqs in: can_build_naval_base(punit,ptile)
     const CAN_TILE_CASTLE    = !pcity && !oceanic && CASTLES    && !TILE_HAS_CASTLE && !TILE_HAS_BUNKER && TILE_HAS_FORTRESS && !(TILE_HAS_RIVER && NO_RIVER_BASE);
     const CAN_TILE_BUNKER    = !pcity && !oceanic && BUNKERS    && !TILE_HAS_BUNKER && !TILE_HAS_CASTLE && TILE_HAS_FORTRESS && !(TILE_HAS_RIVER && NO_RIVER_BASE);
-    //const CAN_TILE_CLAIM     = !pcity && !oceanic && TILECLAIMS && !TILE_HAS_CLAIM && (client.conn.playing.playerno==tile_owner(ptile) || 
+    const CAN_TILE_CLAIM     = TILECLAIMS && can_build_tileclaim(punit,ptile); 
     const CAN_TILE_AIRBASE   = !pcity && !oceanic && AIRBASES   && !TILE_HAS_AIRBASE && !(TILE_HAS_RIVER && NO_RIVER_BASE);
     const CAN_TILE_BUOY      = !pcity &&  oceanic && BUOYS      && !TILE_HAS_BUOY && !(TILE_HAS_RIVER && NO_RIVER_BASE);
     const CAN_TILE_FISHTRAP  = !pcity &&  oceanic && FISHTRAPS  && !TILE_HAS_FISHTRAP // this is only a 'half true' qualifier for tile can do fishtrap: further checks done later below
@@ -1770,6 +1771,10 @@ function update_unit_order_commands()
     } else if (UNIT_CAN_WATCHTOWER) {
       unit_actions["watchtower"] = {name: "Build Watchtower (shift-E)"};
       $("#order_watchtower").show();
+    }
+    if (CAN_TILE_CLAIM) {
+      unit_actions["tileclaim"] = {name: "Claim Tile"};
+      $("#order_tileclaim").show();
     }
     // ********************************************************************** </END Base Building> ***
 
@@ -4445,6 +4450,10 @@ function handle_context_menu_callback(key)
       key_unit_fortress();
       break;
 
+    case "tileclaim":
+      key_unit_tileclaim();
+      break;
+
     case "hideout":
       key_unit_hideout();
       break;
@@ -5739,6 +5748,23 @@ function key_unit_fortress()
 }
 
 /**************************************************************************
+ Tell the units in focus to build Tileclaim.
+**************************************************************************/
+function key_unit_tileclaim()
+{
+  var funits = get_units_in_focus();
+  for (var i = 0; i < funits.length; i++) {
+    var punit = funits[i];
+    var activity = EXTRA_TILE_CLAIM;
+    request_new_unit_activity(punit, ACTIVITY_BASE, activity);
+    // Focused unit got orders, make sure not on waiting_list now:
+    remove_unit_id_from_waiting_list(punit['id']);
+  }
+  deactivate_goto(false);
+  setTimeout(update_unit_focus, update_focus_delay);
+}
+
+/**************************************************************************
  Tell the units in focus to build a hideout
 **************************************************************************/
 function key_unit_hideout()
@@ -5753,7 +5779,7 @@ function key_unit_hideout()
   var funits = get_units_in_focus();
   for (var i = 0; i < funits.length; i++) {
     var punit = funits[i];
-    var ptile = tiles[punit['tile']];
+    //var ptile = tiles[punit['tile']];
     var activity = EXTRA_NONE;     /* EXTRA_NONE -> server decides */
     if (hideout_rules) activity=EXTRA_;
     request_new_unit_activity(punit, ACTIVITY_BASE, activity);
@@ -6530,6 +6556,46 @@ function can_build_quay(punit, ptile)
       &&  unit_can_do_action(punit, ACTION_ROAD)
       &&  tech_known('Pottery')
          );
+}
+
+/**************************************************************************
+ Check whether a unit can build a tileclaim on a tile.
+**************************************************************************/
+function can_build_tileclaim(punit, ptile)
+{
+  const domestic = (ptile['owner'] == client.conn.playing.playerno)
+
+  // Requires minimum of MP2C rules
+  if (!client_rules_flag[CRF_MP2_C]) return false;
+  if (!unit_has_type_flag(punit, UTYF_CAN_CLAIM)) return false;
+  if (is_ocean_tile(ptile)) return false;
+  if (tile_city(ptile)) return false;
+
+  // Domestic tile can do it unless it's already there:
+  if (domestic) {
+    if (tile_has_extra(ptile, EXTRA_TILE_CLAIM)) return false; //already got one
+    return true;
+  } else {  // foreign or unclaimed: need adjacent tile claim and 2 units on tile
+    if (tile_units(ptile).length < 2) return false;
+
+    // Save expensive check for last:
+    var adjacent_claim = false;
+    for (var dir = 0; dir <= 7; dir++) {
+      /* if (!diagonal_legal && (dir==2 || dir==5))
+        continue; if we ever outlaw cardinal adjacency */
+
+      var adj_tile = mapstep(ptile, dir);
+      if (adj_tile != null) {
+        if (tile_has_extra(adj_tile, EXTRA_TILE_CLAIM)) {
+          adjacent_claim = true;
+          break; 
+        }
+      }
+    }
+    if (adjacent_claim) return true;
+  } 
+  
+  return false;
 }
 
 /**************************************************************************

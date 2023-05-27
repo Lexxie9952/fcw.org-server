@@ -131,6 +131,10 @@
     <span style="cursor:pointer" onclick="key_unit_fortress();"><img src="/images/orders/bunker.png" name="bunker_button" alt="" border="0" width="30" height="30"></span>
   </div>
 
+  <div id="order_tileclaim" class="order_button not_mobile" title="Claim Tile">
+    <span style="cursor:pointer" onclick="key_unit_tileclaim();"><img src="/images/orders/tileclaim.png" name="tileclaim_button" alt="" border="0" width="30" height="30"></span>
+  </div>
+
   <div id="order_buoy" class="order_button not_mobile" title="Lay Buoy (shift-F)">
     <span style="cursor:pointer" onclick="key_unit_fortress();"><img src="/images/orders/buoy.png" name="buoy_button" alt="" border="0" width="30" height="30"></span>
   </div>
