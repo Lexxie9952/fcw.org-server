@@ -1516,7 +1516,8 @@ function get_unit_activity_sprite(punit)
             "offset_x" : unit_activity_offset_x,
             "offset_y" : - unit_activity_offset_y};
         }
-      } else if (client_rules_flag[CRF_MP2_D]) {
+      } 
+      if (client_rules_flag[CRF_MP2_D]) {
         if (tile_has_extra(tiles[punit['tile']], EXTRA_DEEPDIVE) && get_unit_class_name(punit) == "Submarine") {
           return {"key" : "unit.sentry_hidden",
             "offset_x" : unit_activity_offset_x,
