@@ -2885,11 +2885,11 @@ actor_reqs    =
 ; Hard contradiction between Tile Claim and Hideout is necessary so that
 ; the actionenabler for one never allows the other to be made. TODO: 
 ; req is just a CanHide unit, when actionenabler req can check base type:
-;       "UnitType",      "Missile Submarine","Local",    TRUE
-;       "Extra",         "Buoy",             "Local",    FALSE
-;       "Extra",         "Fishtrap",         "Local",    FALSE
-;       "Terrain",       "Deep Ocean",       "Local",    TRUE
-;       "Extra",         "Fish",             "Adjacent", FALSE  ;prevent making Fishtrap 
+        "UnitType",      "Missile Submarine","Local",    TRUE
+        "Extra",         "Buoy",             "Local",    FALSE
+        "Extra",         "Fishtrap",         "Local",    FALSE
+        "Terrain",       "Deep Ocean",       "Local",    TRUE
+        "Extra",         "Fish",             "Adjacent", FALSE  ;prevent making Fishtrap 
     }
 target_reqs    =
     { "type",     "name",       "range", "present"
