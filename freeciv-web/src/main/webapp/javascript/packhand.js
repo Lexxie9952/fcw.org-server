@@ -2452,20 +2452,23 @@ function handle_server_setting_control(packet)
 
 function handle_player_diplstate(packet)
 {
-  if (client == null || client.conn.playing == null) return;
+  // This code applies to real players only:
+  if (!is_supercow()) {
+    if (client == null || client.conn.playing == null) return;
+ 
+    if (packet['type'] == DS_WAR && packet['plr2'] == client.conn.playing['playerno']
+        && diplstates[packet['plr1']] != DS_WAR && diplstates[packet['plr1']] != DS_NO_CONTACT) {
+      alert_war(packet['plr1']);
+    } else if (packet['type'] == DS_WAR && packet['plr1'] == client.conn.playing['playerno']
+        && diplstates[packet['plr2']] != DS_WAR && diplstates[packet['plr2']] != DS_NO_CONTACT)  {
+      alert_war(packet['plr2']);
+    }
 
-  if (packet['type'] == DS_WAR && packet['plr2'] == client.conn.playing['playerno']
-      && diplstates[packet['plr1']] != DS_WAR && diplstates[packet['plr1']] != DS_NO_CONTACT) {
-     alert_war(packet['plr1']);
-  } else if (packet['type'] == DS_WAR && packet['plr1'] == client.conn.playing['playerno']
-      && diplstates[packet['plr2']] != DS_WAR && diplstates[packet['plr2']] != DS_NO_CONTACT)  {
-     alert_war(packet['plr2']);
-  }
-
-  if (packet['plr1'] == client.conn.playing['playerno']) {
-    diplstates[packet['plr2']] = packet['type'];
-  } else if (packet['plr2'] == client.conn.playing['playerno']) {
-    diplstates[packet['plr1']] = packet['type'];
+    if (packet['plr1'] == client.conn.playing['playerno']) {
+      diplstates[packet['plr2']] = packet['type'];
+    } else if (packet['plr2'] == client.conn.playing['playerno']) {
+      diplstates[packet['plr1']] = packet['type'];
+    }
   }
 
   // TODO: remove current diplstates (after moving all users to the new one),
