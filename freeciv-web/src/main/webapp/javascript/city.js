@@ -765,7 +765,7 @@ function show_city_dialog(pcity)
     else shield_txt += "<b>";
     shield_txt += pcity['surplus'][O_SHIELD] + "</b>";
     var shield_txt2 = pcity['surplus'][O_SHIELD]==pcity['prod'][O_SHIELD] ? "" : "(" + pcity['prod'][O_SHIELD] + ")";
-    if (pcity.build_slots && pcity.build_slots >1) shield_txt2 += " (<b style='cursor:pointer; color:red' title='Unit Build Slots'>"+pcity.build_slots+"</b>)"
+    if (pcity.build_slots && pcity.build_slots > 1) shield_txt2 += " (<b style='cursor:help; color:red' title='"+pcity.build_slots+" Unit Build Slots'>"+pcity.build_slots+"</b>)"
 
     var trade_txt = "";
     if (pcity['surplus'][O_TRADE] > 0) trade_txt += "+<b class='trade_text'>";
@@ -957,7 +957,7 @@ function show_city_dialog(pcity)
   var braille_code = city_rapture_dots(pcity.rapture_status);
   switch (pcity.rapture_status) {
     case RLAST:
-      rapture_status_icon = "<img id='rstatus_icon' class='v' src='/images/e/3.png'><img id='rstatus_icon' class='v' src='/images/e/comet.png' title='rapture paused '>"
+      rapture_status_icon = "<img id='rstatus_icon' class='v' src='/images/e/3.png' title='rapture paused 3 turns '><img id='rstatus_icon' class='v' src='/images/e/comet.png' title='rapture paused 3 turns '>"
       break;
     /* all possibilities of bit 2 being on, i.e., can rapture this turn*/  
     case RNOW:   
@@ -980,7 +980,7 @@ function show_city_dialog(pcity)
     /* bit 8 can rapture in 2 turns BUT NOT this turn or next turn */
     case R3:
     case R3+RLAST:
-      rapture_status_icon = "<img id='rstatus_icon' class='v' src='/images/e/2.png'><img id='rstatus_icon' class='v' src='/images/e/comet.png' title='rapture paused, can rapture in 2 turns'>"+braille_code
+      rapture_status_icon = "<img id='rstatus_icon' class='v' src='/images/e/2.png' title='rapture paused 2 turns'><img id='rstatus_icon' class='v' src='/images/e/comet.png' title='rapture paused, can rapture in 2 turns'>"+braille_code
       break;
   }
   $('#rapture_status').html("<div>"+ rapture_status_icon + "<span class='"+rapture_status_class+"' style='font-weight:bold;padding-bottom:9px;'>"
@@ -1081,7 +1081,56 @@ function show_city_dialog(pcity)
  directly map over to the pcity.rapture_status bitfield. ;~) 
 **************************************************************************/
 function city_rapture_dots(rapture_status) {
-  return String.fromCharCode((rapture_status>>1) + 0x2800);
+  return "<span style='cursor:help' title='"+city_rapture_text(rapture_status)+"'>" 
+         + String.fromCharCode((rapture_status>>1) + 0x2800)
+         + "</span>";
+}
+
+/**************************************************************************
+ Returns the natural language text explaining the braille dot pattern
+ from above.  
+**************************************************************************/
+function city_rapture_text(rapture_status) {
+  if (!rapture_status) return "";
+
+  const THIS_TURN = 2;
+  const NEXT_TURN = 4;
+  const TURN_AFTER_NEXT = 8;
+
+  var text = "";
+
+  rapture_status = rapture_status & (THIS_TURN+NEXT_TURN+TURN_AFTER_NEXT)
+
+  switch (rapture_status) {
+    case 0:
+      text = "Pauses rapture next three turns."
+      break;
+    case THIS_TURN:
+      text = "Can rapture this turn.\nPauses rapture next turn and turn after-next."
+      break;
+    case NEXT_TURN:
+      text = "Pauses rapture this turn and turn after-next.\nCan rapture next turn."
+      break;
+    case (THIS_TURN + NEXT_TURN):
+      text = "Can rapture next two turns.\nPauses rapture turn after-next."
+      break;
+    case (TURN_AFTER_NEXT):
+      text = "Pauses rapture next two turns.\nCan rapture turn after-next."
+      break;
+    case (THIS_TURN + TURN_AFTER_NEXT):
+      text = "Can rapture this turn and turn after-next.\nPauses rapture next turn."
+      break;
+    case (NEXT_TURN + TURN_AFTER_NEXT):
+      text = "Pauses rapture this turn.\nCan rapture next turn and turn after-next."
+      break;
+    case (THIS_TURN + NEXT_TURN + TURN_AFTER_NEXT):
+      text = "Can rapture next three turns."
+      break;
+    default:
+      text = "";
+  }
+
+  return (text);
 }
 
 /**************************************************************************
@@ -2706,7 +2755,11 @@ function city_worklist_dialog(pcity)
 
   if (turns_to_complete != FC_INFINITY && !is_small_screen() ) {
     headline += ", turns: " + turns_to_complete;
-    if (pcity.build_slots && pcity.build_slots > 1) headline += "<span style='float:right; font-size: 80%'><b style='color:red' title='Unit Build Slots'>"+pcity.build_slots+"</b> slots</span>"
+    if (pcity.build_slots && pcity.build_slots > 1) {
+      headline += "<span onclick='javascript:event.stopPropagation();' title='" 
+               + pcity.build_slots + " Unit Build Slots' style='float:right; cursor:help; font-size: 80%'><b style='color:red'>"
+               + pcity.build_slots + "</b> slots</span>";
+    }
   }
 
   if (is_small_screen() ) headline = "<span style='font-size:70%;'>"+headline+"</span>";
