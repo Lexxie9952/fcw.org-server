@@ -2745,6 +2745,8 @@ void package_city(struct city *pcity, struct packet_city_info *packet,
 
   web_packet->granary_size = city_granary_size(city_size_get(pcity));
   web_packet->granary_turns = city_turns_to_grow(pcity);
+
+  packet->build_slots = get_city_bonus(pcity, EFT_CITY_BUILD_SLOTS, V_COUNT);
 #endif /* FREECIV_WEB */
 
   city_tile_iterate(city_map_radius_sq_get(pcity), pcenter, ptile) {

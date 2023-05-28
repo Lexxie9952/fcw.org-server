@@ -57,7 +57,8 @@ const CURV_TRADE_REVENUE  = 3;
 const CURV_GOLD_PER_SHIELD= 4;
 const CURV_FOREIGNERS     = 5;
 const CURV_TURN_FOUNDED   = 6;
-const CURV_LAST           = 7;
+const CURV_BUILD_SLOTS    = 7
+const CURV_LAST           = 8;
 const clkmsg = "\n\nClick top to sort.\nClick column BELOW to set info type";
 const CURV_icons = ["/images/city_user_row.png",
                     "/images/corrupt.png",
@@ -65,14 +66,16 @@ const CURV_icons = ["/images/city_user_row.png",
                     "/images/camel.png",
                     "/images/goldpershield.png",
                     "/images/foreigner.png",
-                    "/images/stone_henge.png"];
+                    "/images/stone_henge.png",
+                    "/images/e/factory.png"];
 const CURV_title = ["User Info Column:\nClick top to sort\nClick column BELOW to choose",
                     "Corruption"+clkmsg,
                     "Pollution Probability"+clkmsg,
                     "Trade from Trade Routes"+clkmsg,
                     "Gold cost per Shield"+clkmsg,
                     "Foreign Citizens"+clkmsg,
-                    "Turn Founded"+clkmsg];
+                    "Turn Founded"+clkmsg,
+                    "Unit Build Slots"+clkmsg];
 
 // *****************************************************************
 
@@ -762,6 +765,7 @@ function show_city_dialog(pcity)
     else shield_txt += "<b>";
     shield_txt += pcity['surplus'][O_SHIELD] + "</b>";
     var shield_txt2 = pcity['surplus'][O_SHIELD]==pcity['prod'][O_SHIELD] ? "" : "(" + pcity['prod'][O_SHIELD] + ")";
+    if (pcity.build_slots && pcity.build_slots >1) shield_txt2 += " (<b style='cursor:pointer; color:red' title='Unit Build Slots'>"+pcity.build_slots+"</b>)"
 
     var trade_txt = "";
     if (pcity['surplus'][O_TRADE] > 0) trade_txt += "+<b class='trade_text'>";
@@ -2702,6 +2706,7 @@ function city_worklist_dialog(pcity)
 
   if (turns_to_complete != FC_INFINITY && !is_small_screen() ) {
     headline += ", turns: " + turns_to_complete;
+    if (pcity.build_slots && pcity.build_slots > 1) headline += "<span style='float:right; font-size: 80%'><b style='color:red' title='Unit Build Slots'>"+pcity.build_slots+"</b> slots</span>"
   }
 
   if (is_small_screen() ) headline = "<span style='font-size:70%;'>"+headline+"</span>";
@@ -4005,6 +4010,10 @@ function update_city_screen()
           case CURV_TURN_FOUNDED:
             city_user = "<td class='non_priority' style='text-align:right; padding-right:32px' onclick='javascript:change_city_user_row(" + pcity['id'] + ");'>"
               + "<span style='color:#999'>" + pcity['turn_founded'] +"</span>" +  "</td>";
+            break;
+          case CURV_BUILD_SLOTS:
+            city_user = "<td class='non_priority' style='text-align:right; padding-right:32px' onclick='javascript:change_city_user_row(" + pcity['id'] + ");'>"
+              + "<span style='color:#f44'>" + ((pcity['build_slots'] && pcity['build_slots'] > 1) ? pcity['build_slots'] : "") +"</span>" +  "</td>";
             break;
           case CURV_FOREIGNERS:
             /* Determine which position in the national populations array is the current owner */
