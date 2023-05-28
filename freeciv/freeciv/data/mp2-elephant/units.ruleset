@@ -5603,7 +5603,7 @@ fuel          = 1
 uk_happy      = 0
 uk_shield     = 0
 uk_food       = 0
-uk_gold       = 1
+uk_gold       = 0
 ;embarks       = "Submarine", "Sea", "Land", "Big Land"  ;since disallowing embark disallows "Transport Board" also, we must use actionenabler to disallow disembark
 disembarks    = "Submarine", "Sea", "Land", "Big Land"
 targets       = "Missile"
@@ -5621,7 +5621,7 @@ bonuses       =
      "Missile",      "DefenseMultiplierPct", 999, TRUE
    }
 flags         = "NeverProtects", "HasNoZOC", "Unbribable", "CantReachAir", "BadCityDefender",
-                "Missile", "NeverBlocked", "AlwaysAttackClass1", "MultiSlot"
+                "NoHome", "Missile", "NeverBlocked", "AlwaysAttackClass1", "MultiSlot"
 roles         = ""
 helptext      = _("\
 ABMs intercept enemy missiles. Because there is seldom enough time to\
@@ -5858,9 +5858,9 @@ fuel          = 1
 uk_happy      = 0
 uk_shield     = 0
 uk_food       = 0
-uk_gold       = 1
+uk_gold       = 0
 targets       = "LandRail", "LandRoad"
-flags         = "NeverProtects", "HasNoZOC", "Unbribable", "WillNever",
+flags         = "NeverProtects", "HasNoZOC", "Unbribable", "WillNever", "NoHome",
                 "NoVeteran", "MultiSlot", "CantReachAir", "Missile"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
