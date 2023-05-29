@@ -214,17 +214,29 @@ function update_game_status_panel() {
 
   if ($(window).width() - sum_width() > 880) {   // was 800 but 740 is the space available on standard screen and it's adequate
     if ($("#game_status_panel_top").length) {
-      $("#game_status_panel_top").show();
       $("#game_status_panel_bottom").hide();
-      $("#game_status_panel_top").html(status_html);
+
+      // Reduce flicker on slower/inefficient browsers: Don't redraw/reset status bar if it hasn't changed.
+      if ( !($("#game_status_panel_top").is(":visible")) ) { 
+        $("#game_status_panel_top").show();
+      }
+      if (status_html != $("#game_status_panel_top").html()) {
+        $("#game_status_panel_top").html(status_html); //update only if changed
+      } 
     }
   } else {
     if ($("#game_status_panel_bottom").length) {
       $("#game_status_panel_top").hide();
+
+      // If show_order_buttons==3, then all lower panels are OFF to maximize map space
       if (show_order_buttons != 3) {
-         $("#game_status_panel_bottom").show();  //if show_order_buttons==3 all lower panels are OFF to maximize map space
-         $("#game_status_panel_bottom").css({"width": $(window).width(),"pointer-events":"none" }); ////
-         $("#game_status_panel_bottom").html(status_html);
+        if ( !($("#game_status_panel_bottom").is(":visible")) ) { 
+          $("#game_status_panel_bottom").show();  
+        }
+        $("#game_status_panel_bottom").css({"width": $(window).width(),"pointer-events":"none" }); ////
+        if (status_html != $("#game_status_panel_bottom").html()) {
+          $("#game_status_panel_bottom").html(status_html); // update only if changed
+        }
       }
     }
   }
