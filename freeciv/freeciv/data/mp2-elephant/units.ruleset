@@ -1997,7 +1997,7 @@ sound_move    = "m_marines"
 sound_move_alt = "m_generic"
 sound_fight   = "f_marines"
 sound_fight_alt = "f_generic"
-build_cost    = 50
+build_cost    = 53
 pop_cost      = 0
 attack        = 80
 defense       = 55
@@ -4907,8 +4907,8 @@ Trawlers can tow ships who haven’t moved, via a Load, Board,\
 When towing, encumbrance slows the Trawler to 6 move points. Remaining moves\
  reduce proportional to this slower speed. If a Trawler\
  stops towing a ship via Unload or Deboard, it regains pro-rated moves\
- proportional to its natural speed. \n\n\
-Towed ships lose all moves after release.\
+ proportional to its natural speed. Towed ships lose all moves after release.\n\n\
+Everyone can see a Trawler’s cargo.\
 ")
 
 [unit_cargo_ship]
