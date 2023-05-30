@@ -274,11 +274,18 @@ void establish_new_connection(struct connection *pconn)
       fc_assert(pdelegate);
       /* This really shouldn't happen. */
       log_error("Failed to revoke delegate %s's control of %s, so owner %s "
-                "can't regain control.", pdelegate->username,
+                "can't regain control.", (pdelegate ? pdelegate->username : "[pdelegate==NULL]"),
                 player_name(pplayer), pconn->username);
       notify_conn(dest, NULL, E_CONNECTION, ftc_server,
-                  _("Couldn't get back control of '%s' from delegation."),
-                  player_name(pplayer));
+                  _("ERROR: server/connecthand.c::establish_new_connection()\n"
+                  "Please report details to Admin:\n"
+                  "Couldn't get back control of player_name(pplayer)=='%s' from delegation.\n"
+                  "pdelegate->username==%s pconn->username==%s"),
+                  player_name(pplayer),
+                  (pdelegate 
+                   ? pdelegate->username 
+                   : "[conn_by_user(player_delegation_get(pplayer)) gave NULL pointer error!]"),
+                  pconn->username);
       delegation_error = TRUE;
       pplayer = NULL;
     }
