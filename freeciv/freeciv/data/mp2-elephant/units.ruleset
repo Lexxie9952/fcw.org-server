@@ -5630,8 +5630,8 @@ ABMs intercept enemy missiles. Because there is seldom enough time to\
 ABMs are useful for anti-missile defense outside of cities. They must be\
  cargo on a Mobile SAM or similar missile-capable unit, and set to Vigil. \n\\
 ABMs aren't very effective\
- against non-missiles. As a defensive unit, they cause no unhappiness; and\
- their upkeep is 1 gold. After required tech is known, 1 ABM is delivered free\
+ against non-missiles. As a defensive unit, they cause no unhappiness.\
+ After required tech is known, 1 ABM is delivered free\
  to each newly built unit capable of carrying missilies. \n\
 Multislot：Under certain conditions, cities can make one (or more) multislot units per turn, plus one of any other type. \n\n\
 *** Logistical Rules for ALL Missiles：\n\
