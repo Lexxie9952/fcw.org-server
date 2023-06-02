@@ -4816,8 +4816,13 @@ static bool sg_load_player_city(struct loaddata *loading, struct player *plr,
   sg_warn_ret_val(secfile_lookup_int(loading->file, &pcity->anarchy,
                                     "%s.anarchy", citystr),
                   FALSE, "%s", secfile_error());
+  pcity->hangry =
+    secfile_lookup_int_default(loading->file, 0, "%s.hangry", citystr);
   pcity->rapture =
     secfile_lookup_int_default(loading->file, 0, "%s.rapture", citystr);
+  pcity->rapture_status =
+    secfile_lookup_int_default(loading->file, 0, "%s.rapture_status", citystr);
+
   pcity->steal =
     secfile_lookup_int_default(loading->file, 0, "%s.steal", citystr);
 
@@ -4997,10 +5002,15 @@ static bool sg_load_player_city(struct loaddata *loading, struct player *plr,
           loading->file, FALSE, "%s.require_happy", citystr);
       param->allow_disorder = secfile_lookup_bool_default(
           loading->file, FALSE, "%s.allow_disorder", citystr);
+      param->no_farmer = secfile_lookup_bool_default(
+          loading->file, FALSE, "%s.no_farmer", citystr);
       param->allow_specialists = secfile_lookup_bool_default(
           loading->file, FALSE, "%s.allow_specialists", citystr);
       param->happy_factor = secfile_lookup_int_default(
           loading->file, 0, "%s.happy_factor", citystr);
+      param->max_food_needed = secfile_lookup_int_default(
+          loading->file, 0, "%s.max_food_needed", citystr);
+
       pcity->cm_parameter = param;
     } else {
       pcity->cm_parameter = NULL;
@@ -5017,9 +5027,13 @@ static bool sg_load_player_city(struct loaddata *loading, struct player *plr,
                                   citystr);
       (void) secfile_entry_lookup(loading->file, "%s.allow_disorder",
                                   citystr);
+      (void) secfile_entry_lookup(loading->file, "%s.no_farmer",
+                                  citystr);
       (void) secfile_entry_lookup(loading->file, "%s.allow_specialists",
                                   citystr);
       (void) secfile_entry_lookup(loading->file, "%s.happy_factor",
+                                  citystr);
+      (void) secfile_entry_lookup(loading->file, "%s.max_food_needed",
                                   citystr);
     }
   }  
@@ -5277,7 +5291,9 @@ static void sg_save_player_cities(struct savedata *saving,
                        buf);
 
     secfile_insert_int(saving->file, pcity->anarchy, "%s.anarchy", buf);
+    secfile_insert_int(saving->file, pcity->hangry, "%s.hangry", buf);
     secfile_insert_int(saving->file, pcity->rapture, "%s.rapture", buf);
+    secfile_insert_int(saving->file, pcity->rapture_status, "%s.rapture_status", buf);
     secfile_insert_int(saving->file, pcity->steal, "%s.steal", buf);
     secfile_insert_int(saving->file, pcity->turn_founded, "%s.turn_founded",
                        buf);
@@ -5368,11 +5384,15 @@ static void sg_save_player_cities(struct savedata *saving,
                           "%s.require_happy", buf);
       secfile_insert_bool(saving->file, pcity->cm_parameter->allow_disorder,
                           "%s.allow_disorder", buf);
+      secfile_insert_bool(saving->file, pcity->cm_parameter->no_farmer,
+                          "%s.no_farmer", buf);
       secfile_insert_bool(saving->file,
                           pcity->cm_parameter->allow_specialists,
                          "%s.allow_specialists", buf);
       secfile_insert_int(saving->file, pcity->cm_parameter->happy_factor,
                         "%s.happy_factor", buf);
+      secfile_insert_int(saving->file, pcity->cm_parameter->max_food_needed,
+                        "%s.max_food_needed", buf);
     } else {
       int zeros[O_LAST];
 
@@ -5384,8 +5404,10 @@ static void sg_save_player_cities(struct savedata *saving,
       secfile_insert_bool(saving->file, FALSE, "%s.max_growth", buf);
       secfile_insert_bool(saving->file, FALSE, "%s.require_happy", buf);
       secfile_insert_bool(saving->file, FALSE, "%s.allow_disorder", buf);
+      secfile_insert_bool(saving->file, FALSE, "%s.no_farmer", buf);
       secfile_insert_bool(saving->file, FALSE, "%s.allow_specialists", buf);
       secfile_insert_int(saving->file, 0, "%s.happy_factor", buf);
+      secfile_insert_int(saving->file, 0, "%s.max_food_needed", buf);
     }
 
     secfile_insert_int(saving->file, pcity->rally_point.length,
