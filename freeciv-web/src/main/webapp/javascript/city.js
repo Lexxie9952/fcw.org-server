@@ -4883,7 +4883,7 @@ function set_citydlg_dimensions(pcity)
       citydlg_map_width += tileset_width;
     break;
     default:
-      if (pcity.city_radius_sq > 17) {
+      if (pcity.city_radius_sq > 12) {
         citydlg_map_width += tileset_width;
         citydlg_map_height += tileset_height;
       }
