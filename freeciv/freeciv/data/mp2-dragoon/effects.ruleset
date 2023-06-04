@@ -2048,7 +2048,7 @@ reqs	=
     }
 [effect_martial_law_max_theocracy]
 type    = "Martial_Law_Max"
-value   = 1
+value   = 2
 reqs	=
     { "type",       "name",      "range"
       "Gov", "Theocracy", "Player"
