@@ -1272,7 +1272,7 @@ veteran_names =
   _("?vet_rank:master workmen")
 veteran_base_raise_chance = 0, 0, 0, 0
 veteran_work_raise_chance = 7, 5, 3, 0
-veteran_power_fact = 100, 120, 125, 134
+veteran_power_fact = 100, 125, 134, 150
 veteran_move_bonus = 0, 1008, 1008, 1008
 roles         = "Settlers", "WorkerStartUnit"
 helptext      = _("\

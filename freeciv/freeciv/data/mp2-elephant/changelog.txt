@@ -210,3 +210,11 @@ GAME SPEED/PACE:
 65. Start gold changed to 90 (was 75).
 66. Marco Polo 350 shields (basically speeds the game by 50 shields for this early obligatory wonder).
 67. Civil Wonders all reduced in price by 10 shields. (See, however, change to Mausoleum).
+68. Workers II promotion bonuses bump the numerator/divisor progression by 1, which makes them go from 
+   barely usable if you use a spreadsheet, to definitive, measurable and simpler:
+veteran_power_fact = 100, 120, 125, 134 goes to:
+veteran_power_fact = 100, 125, 134, 150
+i.e., 6 in 5 (swamp), 5 in 4 (mine), 4 in 3 (angkor wat swamp drain) goes to:
+      5 in 4 (mine), 4 in 3 (mine or nationalists/angkor wat time), 3 in 2 (irrigate).
+
+
