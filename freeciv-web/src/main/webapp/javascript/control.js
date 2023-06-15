@@ -7678,7 +7678,8 @@ function openFullscreen() {
 
 /****************************************************************************
  This progressive enhancement changes full screen mode to require a long
- press of the [Esc] key, so that the player doesn't accidentally leave it.
+ press of the [Esc] key to exit, so that the player doesn't accidentally leave full
+ screen mode, but can instead cancel in-game dialogs by pressing [Esc].
 ****************************************************************************/
 const supportsKeyboardLock = ('keyboard' in navigator) && ('lock' in navigator.keyboard);
 if (supportsKeyboardLock) {
