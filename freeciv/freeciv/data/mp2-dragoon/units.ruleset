@@ -5519,7 +5519,7 @@ While bombers carry standard weaponry included, the Bombs unit\
  includes a payload of large numbers of smaller weaponry. This lets bombers\
  disrupt target defenses before coming in for a riskier fatal\
  strike. Only bombers with high capacity can carry this unit. \n\
-Bombs can only be moved by bombers or the airlift order. They can’t attack\
+Bombs can only be moved by bombers, trains, or the airlift order. They can’t attack\
  from inside a domestic city. Bombs are cheap, but they damage more often than\
  kill, and even victory has a cost. Hidden expenses lie in logistics, delivery\
  risk, and non-reusability. \n\
@@ -6021,7 +6021,7 @@ uk_happy      = 0
 uk_shield     = 0
 uk_food       = 0
 uk_gold       = 0
-cargo         = "Land", "LandAirSea", "Balloon", "Bomb", "Cargo", "Zeppelin"
+cargo         = "Land", "LandAirSea", "Balloon", "Bomb", "Bomb2", "Cargo", "Zeppelin"
 flags         =  "HelpWonder", "TradeRoute", "NonMil", "NonProvoking", "HasNoZOC", "Cant_Fortify", "NoVeteran", "Capturable"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
