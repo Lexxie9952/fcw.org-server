@@ -407,7 +407,9 @@ static void hard_code_oblig_hard_reqs(void)
   /* Why this is a hard requirement: Assumed in the code. Corner case
    * where diplomacy prevents a transported unit to go to the target
    * tile. The paradrop code doesn't check if transported units can
-   * coexist with the target tile city and units. */
+   * coexist with the target tile city and units. 
+
+   OLD hard req: no airlift, no paradrop:
   oblig_hard_req_register(req_from_values(VUT_UNITSTATE, REQ_RANGE_LOCAL,
                                           FALSE, TRUE, TRUE,
                                           USP_TRANSPORTING),
@@ -415,6 +417,17 @@ static void hard_code_oblig_hard_reqs(void)
                           "All action enablers for %s must require that "
                           "the actor isn't transporting another unit.",
                           ACTION_PARADROP, ACTION_AIRLIFT, ACTION_NONE);
+ 
+ 
+  NEW hard req: no paradrop. Airlift allowed if ruleset allows:*/
+
+  oblig_hard_req_register(req_from_values(VUT_UNITSTATE, REQ_RANGE_LOCAL,
+                                          FALSE, TRUE, TRUE,
+                                          USP_TRANSPORTING),
+                          FALSE,
+                          "All action enablers for %s must require that "
+                          "the actor isn't transporting another unit.",
+                          ACTION_PARADROP, ACTION_NONE);
  
   /* IMPORTANT: FCW can't have this as hard req. FCW allows capturing
      units with cargo. Cargo if capturable is returned as booty via

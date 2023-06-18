@@ -105,10 +105,12 @@ enum unit_airlift_result
     return AR_WRONG_UNITTYPE;
   }
 
+/* 
   if (0 < get_transporter_occupancy(punit)) {
-    /* Units with occupants can't be airlifted currently. */
+    // Units with occupants can't be airlifted currently.
     return AR_OCCUPIED;
   }
+*/
 
   if (NULL == psrc_city) {
     /* No city there. */
