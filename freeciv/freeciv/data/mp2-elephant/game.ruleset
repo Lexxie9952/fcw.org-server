@@ -2643,6 +2643,19 @@ actor_reqs    =
       "MinMoveFrags",  "1",            "Local", TRUE
     }
 
+;Some units with cargo can airlift. if (Airliftable && HarmlessCargo) == TRUE
+;The only units with this condition are: Bombers and Mobile SAM. Basically,
+;BYOB "bring your own bombs" is allowed to the party:
+[actionenabler_airlift_unit_carrying_bombs_1]
+action = "Airlift Unit"
+actor_reqs    =
+    { "type",          "name",          "range", "present"
+      "UnitClassFlag", "Airliftable",   "Local", TRUE
+      "UnitState",     "Transporting",  "Local", TRUE
+      "UnitClassFlag", "HarmlessCargo", "Local", TRUE
+      "MinMoveFrags",  "1",             "Local", TRUE
+    }
+
 [actionenabler_transform_terrain_outside_city]
 action        = "Transform Terrain"
 actor_reqs    =
