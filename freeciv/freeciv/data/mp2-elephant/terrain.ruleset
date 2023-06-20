@@ -3054,8 +3054,8 @@ vision_subs_sq = 0
 extra          = "Depth"
 gui_type       = "Other"
 border_sq      = -1
-vision_subs_sq = 0
-vision_main_sq = 0
+vision_subs_sq = -1
+vision_main_sq = -1
 
 [base_tileclaim]
 extra          = "Tile Claim"
@@ -3067,7 +3067,7 @@ vision_subs_sq = 0
 extra          = "Fishtrap"
 gui_type       = "Other"
 border_sq      = -1
-vision_subs_sq = 0
+vision_subs_sq = -1
 
 [base_watchtower]
 extra          = "Watchtower"
