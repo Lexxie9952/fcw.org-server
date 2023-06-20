@@ -379,7 +379,7 @@ function console_filter_dialog()
   var buttons = { 'Set All': function() {console_filters_set(true);},
                   'Clear': function() {console_filters_set(false);},
                   'Flip':function() {console_filters_set('flip');},
-                  'Do it!':    function() {console_filter_radio_clicked(); remove_active_dialog(id);}
+                  'Done':    function() {console_filter_radio_clicked(); remove_active_dialog(id);}
                 };
 
   $(id).dialog({
