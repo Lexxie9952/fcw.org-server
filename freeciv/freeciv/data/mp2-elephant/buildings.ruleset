@@ -890,7 +890,7 @@ A Nuclear Plant boosts the base production of a city by +60%,\
  while reducing pollution from production by -50%. (i.e., only\
  1/6 of the extra output contributes to pollution.) \n\
 "), _("\
-➤ With a Factory and Mass Production technology, this makes a\
+➤ With a Factory, this makes a\
  combined +110% production bonus. \n\
 "), _("\
 ➤ Only one Coal Plant, Hydro Plant, Nuclear Plant, or\
