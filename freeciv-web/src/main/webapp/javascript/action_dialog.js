@@ -648,9 +648,9 @@ function popup_action_selection(actor_unit, action_probabilities,
           && action_prob_possible(
               action_probabilities[action_id])) {
         //---------------------------------------------------------------------------------        
-        // This code disallows capture IFF:        
-        // Longturn && idle nation && human && unit isn't trespassing on player's territory
-        // TO DO: move this to C-server
+        // Capture is illegal on FCW server IFF:        
+        // Longturn && idle nation && human && unit isn't trespassing on player's territory.
+        // Therefore, don't show button and give a courtesy message about the rule.
         if (action_id == ACTION_CAPTURE_UNITS && is_longturn() ) {
           var sunits = tile_units(tiles[tgt_id]);
           if (sunits && sunits.length==1) {
@@ -659,8 +659,8 @@ function popup_action_selection(actor_unit, action_probabilities,
             if (players[player_id]['nturns_idle'] > 1 && !(players[player_id]['flags'].isSet(PLRF_AI))) {
               // Disallow if idler is NOT trespassing on player's own territory: 
               if (tiles[tgt_id].owner != client.conn.playing.playerno) {
-                add_client_message("Info: capture order unavailable on idle human player.");
-                continue; // disallow capture
+                add_client_message("Info: Capture is unavailable on idlers except in your homeland.");
+                continue; // don't add button for illegal action
               }
             }
           }

@@ -349,6 +349,8 @@ static bool do_capture_units(struct player *pplayer,
   char capturer_link[MAX_LEN_LINK];
   const char *capturer_nation = nation_plural_for_player(pplayer);
   bv_unit_types unique_on_tile;
+  bool longturn = is_longturn();
+  bool domestic = (pplayer == tile_owner(pdesttile));
   const struct unit_type *act_utype;
 
   /* Sanity check: The actor still exists. */
@@ -357,11 +359,30 @@ static bool do_capture_units(struct player *pplayer,
 
   act_utype = unit_type_get(punit);
 
-  /* Sanity check: make sure that the capture won't result in the actor
-   * ending up with more than one unit of each unique unit type. */
+  /* 1. Sanity check: make sure that the capture won't result in the actor
+   *    ending up with more than one unit of each unique unit type. 
+   * 2. In longturn we don't allow capture on tiles containing an idle player's
+   *    unit unless that tile is inside the capturer's domestic territory: */
   BV_CLR_ALL(unique_on_tile);
   unit_list_iterate(pdesttile->units, to_capture) {
     bool unique_conflict = FALSE;
+
+    /* In longturn games, Capture is illegal on tiles occupied by idle
+       humans, unless executed inside the capturer's domestic territory: */
+    if (longturn) {
+      struct player *pvictim = unit_owner(to_capture);
+
+      if (is_human(pvictim) && pvictim->nturns_idle > 1) {
+        if (!domestic) {
+          notify_player(pplayer, pdesttile, E_UNIT_ILLEGAL_ACTION, ftc_server,
+                        _("💢 %s %s idle. You can only capture "
+                          "idlers in your homeland."), 
+                          unit_link(to_capture),
+                          (is_unit_plural(to_capture) ? "are" : "is"));
+          return FALSE;
+        }
+      }
+    }
 
     /* Check what the player already has. */
     if (utype_player_already_has_this_unique(pplayer,
