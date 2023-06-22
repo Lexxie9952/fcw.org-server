@@ -6356,6 +6356,7 @@ function unit_can_vigil(punit)
           return true;
         break;
       case "Stealth Multi-Fighter":
+        return true;
       case "Multi-Fighter":
         if (fuel > 1)
           return true;
