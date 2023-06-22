@@ -5935,7 +5935,7 @@ bool execute_orders(struct unit *punit, const bool fresh)
         cancel_orders(punit, "  failed action");
         notify_player(pplayer, unit_tile(punit), E_UNIT_ORDERS, ftc_server,
                       _("Orders for %s aborted because "
-                        "doing %s to %s failed."),
+                        "doing %s %sfailed."),
                       unit_link(punit),
                       action_id_name_translation(order.action),
                       tile_link(dst_tile));
