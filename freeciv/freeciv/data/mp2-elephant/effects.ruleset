@@ -4763,7 +4763,7 @@ reqs	=
     { "type", "name", "range"
       "Building", "Super Highways", "City"
       "Building", "Airport", "City"
-      "Building", "Sewer System", "City"
+      "MinSize",  "12", "City"
     }
 
 [effect_mine]

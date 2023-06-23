@@ -1093,7 +1093,7 @@ sound		= "b_super_highways"
 sound_alt	= "b_generic"
 helptext	= _("\
 Increases trade by +50% on all tiles with roads, railroads, or MagLev (rounded down.) Improves transportation\
- logistics to an Airport, giving +1 airlift capacity to cities over size 12.\ 
+ logistics to an Airport, giving +1 airlift capacity to cities size 12 or more.\ 
 ")
 
 [building_supermarket]
