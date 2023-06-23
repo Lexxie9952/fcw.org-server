@@ -581,7 +581,7 @@ function show_city_dialog(pcity)
      }
      else
      {
-        airlift_send_text = Math.max(0,pcity["airlift"])+"/"+effects[1][0]["effect_value"]
+        airlift_send_text = Math.max(0,pcity["airlift"]);
      }
      var city_airlift_capacity_html = '<div id="airlift_send_capacity" title="Airlift send capacity"><div style="float:left"><img src="/images/orders/airlift.png" height="26" width="26"></div><div style="font-size:'+airlift_font_size+'float:left;height:26px;line-height:26px;margin-left:1px">'+airlift_send_text+'</div></div>';
      if (game_info['airlift_dest_divisor'] > 0) {
