@@ -597,7 +597,7 @@ actor_reqs    =
 ;**Mobile SAM is an upgrade to AAA but does not obsolete it,
 ;  since AAA retains special uses. Instead, AAA can convert
 ;  to Mobile SAM under special conditions.
-[actionenabler_convert_AAA_in_capital]
+[actionenabler_convert_AAA]
 action = "Convert Unit"
 actor_reqs    =
     { "type",     "name",             "range"
