@@ -2132,9 +2132,9 @@ helptext       = _("\
 Highways allow your land units to move more quickly. On Flatland terrain,\
  they also provide a trade bonus to the tile if it is used by a city. \n\
 "), _("\
-Highways are 1.5× faster than roads, using 2/9 move-point instead of 1/3. Motorized\
- units actually move faster and farther on highways than railroads (27 tiles).\
- Foot units gain +3 range to 9 tiles. Mounted units go from 12 to 18 tiles in range.\
+Highways are 67% faster than roads, using 1/5 move-point instead of 1/3. Motorized\
+ units actually move faster and farther on highways than railroads (30 tiles).\
+ Basic Foot units gain +4 range (10 tiles). Mounted units go from 12 to 20 tiles in range.\
  City centers automatically get Highways after you research Automobile tech.\
 ")
 
@@ -2163,9 +2163,9 @@ native_to      = "Land", "LandNoKill", "LandAirSea", "LandRail", "Big Land" ;NB:
 flags          = "AutoOnCityCenter", "NativeTile"
 bridged_over   = "River"
 helptext       = _("\
-Railroad tech lets you upgrade Roads to Railroads. Units use 1/20th of their\
+Railroad tech lets you upgrade Roads to Railroads. Units use 1/24th of their\
  full move_rate when using rails. This effectively gives all land units a range of\
- 20 tiles when using rails.\
+ 24 tiles when using rails.\
 "), _("\
 Railroads increase tile shield output by 50% (rounded down).\
  A tile whose road is upgraded to rails retains the trade bonus\
@@ -2199,8 +2199,8 @@ native_to      = "Land", "LandNoKill", "LandAirSea", "Big Land"
 flags          = "NativeTile", "AutoOnCityCenter"
 helptext       = _("\
 With Superconductors, you may build MAGnetic LEVitation tracks.\
- Land units expend 1/40th of their full move_rate when riding\
- MagLevs; giving a maximum range of 40 tiles. \n\
+ Land units expend 1/48th of their full move_rate when riding\
+ MagLevs; giving a maximum range of 48 tiles. \n\
 "), _("\
 City center tiles are automatically upgraded to MagLev\
  when you acquire Superconductor tech.\
@@ -2245,9 +2245,9 @@ native_to      = "Land", "LandNoKill", "LandAirSea", "Trireme", "RiverShip",
 ; Allowing trenches and similar to only affect native classes and some TerrainSpeed classes can ignore them.
 helptext       = _("\
 A River adds +1 trade to the output of a tile, and +0.50 to\
- the terrain defense bonus. Non-motorized units with full move points\
- can move 6 tiles along a River, regardless of their move rate.\
- That is, units use 1/6th of their full move rate on each river\
+ the terrain defense bonus. Units with full move points\
+ can move 7 tiles along a River, regardless of their move rate.\
+ That is, units use 1/7th of their full move rate on each river\
  tile.\
 "), _("\
 Roads can be built on rivers after you acquire Bridge Building technology.\
@@ -3245,7 +3245,7 @@ flags          = "UnrestrictedInfra"
 
 [road_highway]
 extra          = "Highway"
-move_cost      = 2240
+move_cost      = 2016
 food_incr      = 0
 shield_incr    = 0
 trade_incr     = 1
@@ -3281,7 +3281,7 @@ integrates     = "Road", "Highway", "Quay", "Quay​"  ; "Quay"+0-width space = 
 
 [road_railroad]
 extra          = "Railroad"
-move_cost      = 20           ; "PassiveMovement" i.e., everyone gets 20 moves on it
+move_cost      = 24           ; "PassiveMovement" i.e., everyone gets 24 moves on it
 food_incr      = 0
 shield_incr    = 0
 trade_incr     = 0
@@ -3294,7 +3294,7 @@ flags          = "PassiveMovement"
 
 [road_maglev]
 extra          = "Maglev"
-move_cost      = 40             ; "PassiveMovement" i.e., everyone gets 40 moves on it
+move_cost      = 48             ; "PassiveMovement" i.e., everyone gets 48 moves on it
 food_incr      = 0
 shield_incr    = 0
 trade_incr     = 0
@@ -3306,7 +3306,7 @@ flags          = "PassiveMovement"
 
 [road_river]
 extra          = "River"
-move_cost      = 6             ; "PassiveMovement" i.e., everyone gets 6 moves on it.
+move_cost      = 7             ; "PassiveMovement" i.e., everyone gets 7 moves on it.
 move_mode      = "Cardinal"
 trade_incr_const = 1
 compat_special = "River"

@@ -46,7 +46,7 @@ and can now be built with veteran levels.
 2. Scout 10hp (was 8)
 3. AWACS 30hp (was 20), moved to Rocketry (post WW2 tech: give Escort Fighters a purpose in WW2)
 4. Rivers and Rails are now PASSIVE MOVEMENT: unit is assumed to be a passenger. Therefore Warriors, Horsemen, and Armor all move the same
-   speed down a river. This is 1/6 of mp. This only effects Land-type units, Sea units aren't TerrainSpeed and are always 1mp wherever
+   speed down a river. This is 1/7 of mp. This only effects Land-type units, Sea units aren't TerrainSpeed and are always 1mp wherever
    they go.
    A. Rivers gain hard-entry and hard-exit flags, using all move points to go from non-river tile to river tile and vice versa, 
    simulating to difficulty of crossing an unbridged/unquayed river.
@@ -101,9 +101,9 @@ and can now be built with veteran levels.
    or if 2 given saves moves for an attack!  Need to change docs for its SUA too.
 26. Space.2 tech doubled in cost to 2460.
 27. Howitzers go from 4mp to 3 1/3mp. On blank terrain they can travel the same number of tiles (just attack at 1/3 on the final move).
-    On roads they travel 10 tiles instead of 12. On rivers, 6 instead of 12.
+    On roads they travel 10 tiles instead of 12. On rivers, 7 instead of 12.
     On highways they travel 15 tiles (which is higher than the 12 on roads of MP2D) [27Nov2022 this statement is correct]
-    On rails and maglev they travel 20 and 40 just like every other unit.
+    On rails and maglev they travel 24 and 48 just like every other unit.
     REASONS: the 2x movement boost of Howitzer over Artillery was always problematic. These weapons are powerhouses which should
     require, as in real life, some tactical premeditations and preparatory movements to set up, rather than rushing down roads and 
     rails and slamming into whatever city or stack is there. Nevertheless, on MP2E highways they move farther than MP2D roads,
