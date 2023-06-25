@@ -1599,7 +1599,6 @@ function update_unit_order_commands()
                && pcity != null
                && city_owner_player_id(pcity) == client.conn.playing.playerno
                && tech_known('Space Flight')
-               && ( city_has_building(pcity, improvement_id_by_name(B_PALACE_NAME)) || city_has_building(pcity, improvement_id_by_name(B_ECC_PALACE_NAME)) )
              )
           ) {
               $("#order_convert").show();
