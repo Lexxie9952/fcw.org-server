@@ -4963,6 +4963,7 @@ bool unit_move_real(struct unit *punit, struct tile *pdesttile, long move_cost,
   }
 
   /* Move magic. */
+  //if (!unit_transported(punit)) punit->moved = TRUE;
   punit->moved = TRUE;
   punit->moves_left = MAX(0, punit->moves_left - move_cost);
   if (punit->moves_left == 0 && !unit_has_orders(punit)) {
@@ -5030,7 +5031,13 @@ bool unit_move_real(struct unit *punit, struct tile *pdesttile, long move_cost,
      * indicate the unit gets the "ease-of-life" exception.
      *
      */
-    pcargo->moved = TRUE;
+
+    /* pcargo has moved or not, as far as MovedThisTurn reqs go, we're making it so pcargo has
+       not moved. This makes it so ability for units on Carriers to vigil is preserved,
+       treating carriers like a city is preserved, and does have side effect that
+       other MovedThisTurn stipulations aren't activated such as SUA or other things:
+
+    pcargo->moved = TRUE;   */
     double cargo_move_rate = utype_move_rate(unit_type_get(pcargo),
                                            NULL, unit_owner(pcargo),
                                            pcargo->veteran, pcargo->hp,
