@@ -979,8 +979,6 @@ Tribesmen lose many versatility bonuses as you become more civilized. For\
  wild animals.)\
 ")
 
-;A unique patch unit to provide fair starts regardless of lack of nearby water.
-;to make as a start unit, use the letter "a"：for example, cccwwwxxa
 [unit_peasants]
 name          = _("Peasants")
 class         = "Land"
@@ -1065,7 +1063,7 @@ uk_food       = 2
 uk_gold       = 0
 embarks       = "LandRoad", "LandRail", "Helicopter"    ; transport helicopter only
 disembarks    = "LandRoad", "LandRail", "Helicopter"
-flags         = "Fanatic", "Cant_Fortify", "NonMil", "NonProvoking", "HasNoZOC", "AddToCity", "Capturable", "Expellable", "Cant_Pillage"
+flags         = "MultiSlot", "Fanatic", "Cant_Fortify", "NonMil", "NonProvoking", "HasNoZOC", "AddToCity", "Capturable", "Expellable", "Cant_Pillage"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
 veteran_base_raise_chance = 0
@@ -1079,10 +1077,12 @@ Pilgrims are wayfaring migrants from Theocratic nations. Like Zealots,\
  of ecclesiastic authority, Pilgrims can be guided from one city to another in\
  order to transfer population from city to city. Pilgrims have no population\
  cost, so can be thought of as geographically controled rapture for the price\
- of 10 shields. \n\
+ of 10 shields.\
 "), _("\
 Pilgrims can Estabish Home City in any allied city that is Theocracy,\
- allowing control to pass between nations who share the same faith.\
+ allowing control to pass between nations who share the same faith.\n\
+"), _("\
+Multislot：Under certain conditions, cities can make one (or more) multislot units per turn, plus one of any other type.\
 ")
 
 [unit_proletarians]
@@ -1262,8 +1262,8 @@ uk_food       = 0
 uk_gold       = 0
 embarks       = "LandRoad", "LandRail", "Helicopter"    ; transport helicopter only
 disembarks    = "LandRoad", "LandRail", "Helicopter"
-flags         = "Settlers", "Infra", "CanRoad", "CanFortress", "NonMil", "NonProvoking", "HasNoZOC", "Airbase", "Cant_Fortify", "Capturable",
-                "Expellable", "Workers"
+flags         = "MultiSlot", "Settlers", "Infra", "CanRoad", "CanFortress", "NonMil", "NonProvoking", "HasNoZOC", "Airbase", "Cant_Fortify",
+                "Capturable", "Expellable", "Workers"
 ; No veteran levels (level name is never displayed)
 veteran_names =
   _("?vet_rank:apprentice"),
@@ -1296,7 +1296,9 @@ Until the discovery of Explosives, Workers will immediately upgrade for free\
  is not interrupted. \n\
 "), _("\
 Communism tech allows Communist governments to conscript Workers II into Riflemen via the\
- Convert order. And vice versa.\
+ Convert order. And vice versa. \n\
+"), _("\
+Multislot：Under certain conditions, cities can make one (or more) multislot units per turn, plus one of any other type.\
 ")
 
 [unit_engineers]
@@ -1326,7 +1328,7 @@ uk_food       = 0
 uk_gold       = 0
 embarks       = "Helicopter"    ; transport helicopter only
 disembarks    = "Helicopter"
-flags         = "Settlers", "Infra", "CanRoad", "CanFortress", "NonMil", "NonProvoking", "HasNoZOC", "Transform", "Airbase", "Cant_Fortify", "Expellable"
+flags         = "MultiSlot", "Settlers", "Infra", "CanRoad", "CanFortress", "NonMil", "NonProvoking", "HasNoZOC", "Transform", "Airbase", "Cant_Fortify", "Expellable"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
 veteran_base_raise_chance = 0
@@ -1339,7 +1341,9 @@ Engineers can do everything Workers can do, at twice the speed.\
  Unlike Workers, Engineers can Transform, such as converting\
  Desert to Plains. Converting Ocean to Swamp requires being on a ship\
  on a tile bordering 2 land tiles. Constructing a Sea Bridge requires\
- being on a ship on a tile cardinally adjacent to land.\
+ being on a ship on a tile cardinally adjacent to land. \n\
+"), _("\
+Multislot：Under certain conditions, cities can make one (or more) multislot units per turn, plus one of any other type.\
 ")
 
 [unit_warriors]
@@ -1813,7 +1817,9 @@ Proportional to city size, up to 8 Partisans appear when an enemy conquers your 
  ➣ The city hasn’t spawned twice and it has been 2 turns since last spawning. \n\
  ➣ The conquest is not a “false flag attack” made by a cooperating player. \n\
  ➣ You must be Democracy or Communist, AND know Communism AND Gunpowder, OR \n\
- ➣ You must be Theocracy, in which case the partisan spawn will yield Zealots or Fanatics.\
+ ➣ You must be Theocracy, in which case the partisan spawn will yield Zealots or Fanatics. \n\n\
+"), _("\
+Multislot：Under certain conditions, cities can make one (or more) multislot units per turn, plus one of any other type.\
 ")
 
 [unit_riflemen]
@@ -1868,7 +1874,9 @@ Riflemen are World War-era infantry. They are good at defending cities and\
  strategic Fortresses. They also have good attack capability. \ 
 "), _("\
 Under Communism this unit costs 5 less. Also, Communism tech allows Communist\
- governments to de-commission Riflemen into Workers II via the Convert order. And vice versa. \
+ governments to de-commission Riflemen into Workers II via the Convert order. And vice versa. \n\
+"), _("\
+Multislot：Under certain conditions, cities can make one (or more) multislot units per turn, plus one of any other type.\
 ")
 
 [unit_zealots]
@@ -1933,7 +1941,9 @@ Zealots fervently defend their homeland, and can do surprise skirmish\
  a remaining Foreign National population. \n\
 "), _("\
 Zealots can Estabish Home City in any allied city that is Theocracy,\
- allowing control to pass between nations who share the same faith.\
+ allowing control to pass between nations who share the same faith. \n\
+"), _("\
+Multislot：Under certain conditions, cities can make one (or more) multislot units per turn, plus one of any other type.\
 ")
 bombard_rate = 3
 
@@ -1983,7 +1993,9 @@ veteran_move_bonus = 0, 0, 3360, 3360, 6720, 6720, 6720
 helptext      = _("\
 Alpine Troops are highly mobile units and\
  excellent defenders.  Similar to a Scout, they\
- treat every land tile like a road were on it. \
+ treat every land tile like a road were on it. \n\
+"), _("\
+Multislot：Under certain conditions, cities can make one (or more) multislot units per turn, plus one of any other type.\
 ")
 
 [unit_marines]
@@ -2050,7 +2062,9 @@ Marines are experts at all-terrain warfare. Armed with diverse\
 "), _("
 Marines gain greater strength bonuses with veterancy, and more\
  moves for each veteran level. Marines built in a city with an\
- Airport, Port Facility, and Barracks III get an extra veteran level.\
+ Airport, Port Facility, and Barracks III get an extra veteran level. \n\
+"), _("\
+Multislot：Under certain conditions, cities can make one (or more) multislot units per turn, plus one of any other type.\
 ")
 bombard_rate = 3
 
@@ -2104,7 +2118,9 @@ Ground Troops upgrade earlier infantry with better weaponry. The\
  upgrade cost for Riflemen and Alpine Troops is 4 gold.\
  Ground Troops can stay fortified while attacking, and veterans\
  enjoy a +⅓ move bonus. \n\
-Under Communism this unit costs 5 less.\
+Under Communism this unit costs 5 less. \n\
+"), _("\
+Multislot：Under certain conditions, cities can make one (or more) multislot units per turn, plus one of any other type.\
 ")
 
 [unit_fanatics]
@@ -2168,7 +2184,9 @@ Fanatics fervently defend their homeland, and can do surprise skirmish\
  a remaining Foreign National population. \n\
 "), _("\
 Fanatics can Establish Home City in any allied city that is Theocracy,\
- allowing control to pass between nations who share the same faith.\
+ allowing control to pass between nations who share the same faith. \n\n\
+"), _("\
+Multislot：Under certain conditions, cities can make one (or more) multislot units per turn, plus one of any other type.\
 ")
 bombard_rate = 3
 
@@ -2222,7 +2240,9 @@ Paratroopers are experts at airborne attacks.\
  to any tile in range, and be immediately ready to act there. Beware dropping into unseen territory,\
  as Paratroopers landing on a tile occupied by enemy units will be lost.\
  Also note：Paradropping is assumed to be done from aircraft. Therefore,\
- Fighters on Vigil may auto-attack the tile you land on, if adjacent. \
+ Fighters on Vigil may auto-attack the tile you land on, if adjacent. \n\n\
+"), _("\
+Multislot：Under certain conditions, cities can make one (or more) multislot units per turn, plus one of any other type.\
 ")
 paratroopers_range = 14
 paratroopers_mr_req = 1
@@ -2264,7 +2284,9 @@ helptext      = _("\
 Mechanized Infantry have the strongest general defense strength of any land unit.\
  They have decent attack strength in open field engagements, and excellent mobility.\
  Can carry 1 foot soldier or AAA. \
-\nBig Land units can’t enter Mountains without a road, river, or native base.\ 
+\nBig Land units can’t enter Mountains without a road, river, or native base. \n\n\ 
+"), _("\
+Multislot：Under certain conditions, cities can make one (or more) multislot units per turn, plus one of any other type.\
 ")
 
 [unit_scout]
