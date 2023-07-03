@@ -5593,7 +5593,7 @@ veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
 veteran_move_bonus = 0, 0, 0, 0, 10080, 10080, 10080
 roles         = ""
 helptext      = _("\
-The Carrier is a mobile airport that can carry Air units, Helicopters, AAA, Marines, and Missiles.\
+The Carrier transports Air units, Helicopters, AAA, Marines, and Missiles.\
  ABMs and Fighter-types can Vigil on a Carrier if they have enough moves left. Carriers are expensive\
  and have no ASW bonus against Submarines. Thus, they are usually protected by a fleet of scouts and\
  escorts. \n\
