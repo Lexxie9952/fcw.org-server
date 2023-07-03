@@ -4039,8 +4039,7 @@ roles         = ""
 helptext      = _("\
 Stealth Multi-Fighters can’t be seen unless adjacent to an enemy. Stealth evasion gives a\
  25% bonus against all Anti-Air units, and reduces SAM Batteries down to a smaller 25% bonus.\
- A Stealth Multi-Fighter can do 2 attacks per turn, and can\
- Vigil any tile it occupies. \n\
+ A Stealth Multi-Fighter can do 2 attacks per turn, and can Vigil any tile it occupies. \n\
 "), _("
 INTERCEPTOR：the Vigil order lets Stealth Fighters auto-attack adjacent Air units if they\
  have better attack odds. \n\
