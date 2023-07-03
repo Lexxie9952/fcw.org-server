@@ -217,5 +217,12 @@ veteran_power_fact = 100, 125, 134, 150
 i.e., 6 in 5 (swamp), 5 in 4 (mine), 4 in 3 (angkor wat swamp drain) goes to:
       5 in 4 (mine), 4 in 3 (mine or nationalists/angkor wat time), 3 in 2 (irrigate).
 69. More Multislot units: Pilgrims, Workers II, Engineers.
-
-
+70. Fighter types may always vigil in a city or airbase.
+71. Vigil range extended for fighter types:
+   Fighter:          5 (was 2)
+   Escort Fighter:   8 (was 3)
+   Jet Fighter:      8 (was 3)
+   Multi-Fighter     first turn fuel: no limit, second turn: less than 8 moves used. (was first turn of fuel only)
+   Stealth-Multifighter: no change (can always vigil) 
+   Stealth Fighter:  12 (was 4)
+72. 

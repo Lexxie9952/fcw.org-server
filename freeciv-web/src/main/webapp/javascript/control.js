@@ -6342,28 +6342,63 @@ function unit_can_vigil(punit)
           }
         }
         break;
+
+      /* TODO: Once MP2E is released, propagate vigil rules backwards to all
+         MP2D for simplicity and change all in-game and fandom docs. */ 
       case "Fighter":
+        if (client_rules_flag[CRF_MP2_E]) {
+          if (moves_used <= 5) return true;
+          else if (tile_city(ptile) || tile_has_extra(ptile, EXTRA_AIRBASE)) return true;
+          else return false;
+        }
+        // pre MP2E:
         if (moves_used <= 2)
           return true;
         break;
       case "Escort Fighter":
+        if (client_rules_flag[CRF_MP2_E]) {
+          if (moves_used <= 8) return true;
+          else if (tile_city(ptile) || tile_has_extra(ptile, EXTRA_AIRBASE)) return true;
+          else return false;
+        }
+        // pre MP2E:
         if (moves_used <= 3)
           return true;
         break;
       case "Jet Fighter":
+        if (client_rules_flag[CRF_MP2_E]) {
+          if (moves_used <= 8) return true;
+          else if (tile_city(ptile) || tile_has_extra(ptile, EXTRA_AIRBASE)) return true;
+          else return false;
+        }
+        // pre MP2E:
         if (moves_used <= 3)
           return true;
         break;
       case "Stealth Multi-Fighter":
+        // All MP2:
         return true;
       case "Multi-Fighter":
+        if (client_rules_flag[CRF_MP2_E]) {
+          if (fuel>1) return true;
+          if (moves_used <= 8) return true;
+          else if (tile_city(ptile) || tile_has_extra(ptile, EXTRA_AIRBASE)) return true;
+          else return false;
+        }
+        // pre MP2E:
         if (fuel > 1)
           return true;
         break;
       case "Stealth Fighter":
+        if (client_rules_flag[CRF_MP2_E]) {
+          if (moves_used <= 12) return true;
+          else if (tile_city(ptile) || tile_has_extra(ptile, EXTRA_AIRBASE)) return true;
+          else return false;
+        }
+        // pre MP2E:
         if (moves_used <= 4)
-          return true;
-      break;
+            return true;
+        break;
       case "Anti-Ballistic Missile":
         if (tile_city(ptile) || punit['transported'] || tile_has_extra(ptile, EXTRA_AIRBASE))
           return true;
