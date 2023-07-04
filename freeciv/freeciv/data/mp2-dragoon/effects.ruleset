@@ -890,22 +890,67 @@ reqs    =
       "CityTile",      "Center",       "Local", TRUE
       "UnitState",     "MovedThisTurn","Local", TRUE
     }
-[effect_city_helicopter_first_arrival_in_city]
+;This handles two effects simultaneously. First turn arrival is: 1hp (above) +9 = 10hp,
+;Second turn resting is min. 10hp healing but in every case will be full healing since first arrival yields min. of 11hp.
+[effect_city_helicopter_in_city]
 type    = "Unit_Recover"
 value   = 9 ; 9 + 1(min.heal) = 10
 reqs    =
     { "type",          "name",         "range", "present"
       "UnitClass",     "Helicopter",   "Local", TRUE
       "CityTile",      "Center",       "Local", TRUE
+    }
+; **************************************************** CARRIERS act just like cities, for aircraft healing:
+[effect_carrier_1hp_heal_minimum]     ; normal aircraft get +1hp just like in a city
+type    = "Unit_Recover"
+value   = 1
+reqs    =
+    { "type",          "name",         "range", "present"
+      "UnitFlag",      "AirAttacker",  "Local", TRUE
+      "UnitState",     "Transported",  "Local", TRUE
+      "CityTile",      "Center",       "Local", FALSE   ; doesn't stack with city healing
+      "Extra",         "Airbase",      "Local", FALSE   ; doesn't stack with carrier in naval base with airbase
       "UnitState",     "MovedThisTurn","Local", TRUE
     }
-[effect_city_helicopter_resting_in_city_min10hp]
+[effect_carrier_helicopter_first_arrival_on_carrier]
+type    = "Unit_Recover"
+value   = 9 ; 9 + 1(min.heal) = 10    ; helicopters get 10hp, just like in a city
+reqs    =
+    { "type",          "name",         "range", "present"
+      "UnitClass",     "Helicopter",   "Local", TRUE
+      "UnitState",     "Transported",  "Local", TRUE
+      "CityTile",      "Center",       "Local", FALSE   ; doesn't stack with city healing
+      "Extra",         "Airbase",      "Local", FALSE   ; doesn't stack with carrier in naval base with airbase
+    }
+[effect_carrier_aircraft_resting]
+type    = "Unit_Recover"
+value   = 6 ; 6hp recovery + 2hp for resting = 8hp, same as resting in city
+reqs    =
+    { "type",          "name",         "range", "present"
+      "UnitFlag",      "AirAttacker",  "Local", TRUE
+      "UnitState",     "Transported",  "Local", TRUE
+      "CityTile",      "Center",       "Local", FALSE   ; doesn't stack with city healing
+      "Extra",         "Airbase",      "Local", FALSE   ; doesn't stack with carrier in naval base with airbase
+      "UnitState",     "MovedThisTurn","Local", FALSE
+    }
+[effect_carrier_helicopter_resting_in_city_min10hp]
 type    = "Unit_Recover"
 value   = 2 ; 2 + (33% of 20 [rest in city])=6 + (10% of 20 [resting])=2 = 10hp
 reqs    =
     { "type",          "name",         "range", "present"
       "UnitClass",     "Helicopter",   "Local", TRUE
       "CityTile",      "Center",       "Local", TRUE
+      "UnitState",     "MovedThisTurn","Local", FALSE
+    }
+[effect_carrier_helicopter_on_carrier_resting_min10hp]
+type    = "Unit_Recover"
+value   = 2 ;  2 + (33% of 20 [rest in city])=6 + (10% of 20 [resting])=2 = 10hp
+reqs    =
+    { "type",          "name",         "range", "present"
+      "UnitClass",     "Helicopter",  "Local", TRUE
+      "UnitState",     "Transported",  "Local", TRUE
+      "CityTile",      "Center",       "Local", FALSE   ; doesn't stack with city healing
+      "Extra",         "Airbase",      "Local", FALSE   ; doesn't stack with carrier in naval base with airbase
       "UnitState",     "MovedThisTurn","Local", FALSE
     }
 

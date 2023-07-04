@@ -225,4 +225,6 @@ i.e., 6 in 5 (swamp), 5 in 4 (mine), 4 in 3 (angkor wat swamp drain) goes to:
    Multi-Fighter     first turn fuel: no limit, second turn: less than 8 moves used. (was first turn of fuel only)
    Stealth-Multifighter: no change (can always vigil) 
    Stealth Fighter:  12 (was 4)
-72. 
+72. For aircraft, Airbase healing increased to 20% for simplicity: same as a Fortress for Land units. (NEEDS A NOTE IN BASES.MP2E)
+    (helicopters, 25%, same as MP2D, no change.)
+73.  

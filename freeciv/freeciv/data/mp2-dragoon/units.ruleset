@@ -5228,7 +5228,7 @@ helptext      = _("\
 The Carrier transports Air units, Helicopters, AAA, Marines, and Missiles.\
  ABMs and Fighter-types can Vigil on a Carrier if they have enough moves left. Carriers are expensive\
  and have no ASW bonus against Submarines. Thus, they are usually protected by a fleet of scouts and\
- escorts. \n\
+ escorts. Aircraft landing and resting on a Carrier get the same repairs as in a city. \n\
 "), _("\
 Stack-Chief：(1) Will not die if other units in its stack die. (2) Other units escaping Stack Death aren’t forced to other tiles.\
 ")
