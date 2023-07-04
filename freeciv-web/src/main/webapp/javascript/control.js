@@ -6348,7 +6348,7 @@ function unit_can_vigil(punit)
       case "Fighter":
         if (client_rules_flag[CRF_MP2_E]) {
           if (moves_used <= 5) return true;
-          else if (tile_city(ptile) || tile_has_extra(ptile, EXTRA_AIRBASE)) return true;
+          else if (tile_city(ptile) || punit['transported'] || tile_has_extra(ptile, EXTRA_AIRBASE)) return true;
           else return false;
         }
         // pre MP2E:
@@ -6358,7 +6358,7 @@ function unit_can_vigil(punit)
       case "Escort Fighter":
         if (client_rules_flag[CRF_MP2_E]) {
           if (moves_used <= 8) return true;
-          else if (tile_city(ptile) || tile_has_extra(ptile, EXTRA_AIRBASE)) return true;
+          else if (tile_city(ptile) || punit['transported'] || tile_has_extra(ptile, EXTRA_AIRBASE)) return true;
           else return false;
         }
         // pre MP2E:
@@ -6368,7 +6368,7 @@ function unit_can_vigil(punit)
       case "Jet Fighter":
         if (client_rules_flag[CRF_MP2_E]) {
           if (moves_used <= 8) return true;
-          else if (tile_city(ptile) || tile_has_extra(ptile, EXTRA_AIRBASE)) return true;
+          else if (tile_city(ptile) || punit['transported'] || tile_has_extra(ptile, EXTRA_AIRBASE)) return true;
           else return false;
         }
         // pre MP2E:
@@ -6382,7 +6382,7 @@ function unit_can_vigil(punit)
         if (client_rules_flag[CRF_MP2_E]) {
           if (fuel>1) return true;
           if (moves_used <= 8) return true;
-          else if (tile_city(ptile) || tile_has_extra(ptile, EXTRA_AIRBASE)) return true;
+          else if (tile_city(ptile) || punit['transported'] || tile_has_extra(ptile, EXTRA_AIRBASE)) return true;
           else return false;
         }
         // pre MP2E:
@@ -6392,7 +6392,7 @@ function unit_can_vigil(punit)
       case "Stealth Fighter":
         if (client_rules_flag[CRF_MP2_E]) {
           if (moves_used <= 12) return true;
-          else if (tile_city(ptile) || tile_has_extra(ptile, EXTRA_AIRBASE)) return true;
+          else if (tile_city(ptile) || punit['transported'] || tile_has_extra(ptile, EXTRA_AIRBASE)) return true;
           else return false;
         }
         // pre MP2E:
