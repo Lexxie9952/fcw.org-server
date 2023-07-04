@@ -1176,7 +1176,7 @@ reqs    =
     }
 [effect_airbase_hp_regen1]
 type    = "HP_Regen"
-value   = 15
+value   = 20
 reqs    =
     { "type", "name", "range"
       "Extra", "Airbase", "Tile"
@@ -1184,7 +1184,7 @@ reqs    =
     }
 [effect_airbase_hp_regen2]
 type    = "HP_Regen"
-value   = 15
+value   = 20
 reqs    =
     { "type", "name", "range"
       "Extra", "Airbase", "Tile"
@@ -1192,7 +1192,7 @@ reqs    =
     }
 [effect_airbase_hp_regen3]
 type    = "HP_Regen"
-value   = 15
+value   = 20
 reqs    =
     { "type", "name", "range"
       "Extra", "Airbase", "Tile"

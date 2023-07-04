@@ -227,4 +227,4 @@ i.e., 6 in 5 (swamp), 5 in 4 (mine), 4 in 3 (angkor wat swamp drain) goes to:
    Stealth Fighter:  12 (was 4)
 72. For aircraft, Airbase healing increased to 20% for simplicity: same as a Fortress for Land units. (NEEDS A NOTE IN BASES.MP2E)
     (helicopters, 25%, same as MP2D, no change.)
-73.  
+73. MP2E also gets (forgottenly undocumented) changed to MP2D that airbases heal air units at the same rate as fortresses heal land units.
