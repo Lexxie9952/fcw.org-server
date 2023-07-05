@@ -53,7 +53,7 @@ The current and complete list of Freeciv-web controls can be found here:<br>
 
 <tr><td><img src="/images/orders/forest_remove_default.png"></td><td><span class="vctr">Cultivate (Chop Forest)</td><td><span class="hotkey">i</span></span></td></tr>
 
-<tr><td><img src="/images/orders/vigil.png"></td><td><span class="vctr"> Vigil</td><td><span class="hotkey">shift-I</span></span></td></tr>
+<tr><td><img src="/images/orders/vigil.png"></td><td><span class="vctr"> Vigil</td><td><span class="hotkey">shift-I or ctrl-V</span></span></td></tr>
 
 <tr><td><img src="/images/orders/no_orders.png"></td><td><span class="vctr"> No orders</td><td><span class="hotkey">j</span></span></td></tr>
 
@@ -140,7 +140,7 @@ The current and complete list of Freeciv-web controls can be found here:<br>
 <tr><td><span class="hotkey">shift-H</span></td><td> make Hideout</td></tr>
 <tr><td><span class="hotkey">  i</span></td><td> build (i)rrigation or convert terrain  (settler/worker units)</td></tr>
 <tr><td><span class="hotkey">  i</span></td><td> (on ocean tile) lay f(i)shtrap</td></tr>
-<tr><td><span class="hotkey">shift-I</span></td><td> v(I)gil: (I)ntercept and auto-attack adjacent air units</td></tr>
+<tr><td><span class="hotkey">shift-I</span></td><td> v(I)gil: (I)ntercept and auto-attack adjacent units (also, ctrl-v)</td></tr>
 <tr><td><span class="hotkey">alt-shift-I</span></td><td> connect irrigation along goto path</td></tr>
 <tr><td><span class="hotkey">  j</span></td><td> no orders - skip orders for this unit this turn </td></tr>
 <tr><td><span class="hotkey">shift-J</span></td><td> cancel orders - clear current orders for this unit</td></tr>
@@ -171,6 +171,7 @@ The current and complete list of Freeciv-web controls can be found here:<br>
 <tr><td><span class="hotkey">  v</span></td><td> select all units on same tile </td></tr>
 <tr><td><span class="hotkey">shift-V</span></td><td> select all units of same TYPE on tile </td></tr>
 <tr><td><span class="hotkey">alt-v</span></td><td> select all units NOT of this type on tile</td></tr>
+<tr><td><span class="hotkey">ctrl-v</span></td><td> (v)igil: intercept and auto-attack adjacent units (also, shift-I) </td></tr>
 <tr><td><span class="hotkey">  x</span></td><td> unit auto e(x)plore</td></tr>
 <tr><td><span class="hotkey">shift-X</span></td><td> select all units of same TYPE globally</td></tr>
 <tr><td><span class="hotkey">  w</span></td><td> (w)ait: focus on next unit</td></tr>

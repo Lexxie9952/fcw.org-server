@@ -4016,8 +4016,10 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
       } else if (alt && !shift && !ctrl) {
         the_event.preventDefault(); // override possible browser shortcut
         key_select_different_units_on_tile();
-      } else {
+      } else if (!shift && !alt && !ctrl) {
         key_select_all_units_on_tile();
+      } else if (ctrl && !shift && !alt) {
+        key_unit_vigil();
       }
     break;
 
