@@ -2201,7 +2201,7 @@ flags          = "NativeTile", "AutoOnCityCenter"
 helptext       = _("\
 With Superconductors, you may build MAGnetic LEVitation tracks.\
  Land units expend 1/48th of their full move_rate when riding\
- MagLevs; giving a maximum range of 48 tiles. \n\
+ MagLevs; giving a maximum range of 60 tiles. \n\
 "), _("\
 City center tiles are automatically upgraded to MagLev\
  when you acquire Superconductor tech.\
