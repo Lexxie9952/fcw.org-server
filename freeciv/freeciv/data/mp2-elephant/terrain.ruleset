@@ -3295,7 +3295,7 @@ flags          = "PassiveMovement"
 
 [road_maglev]
 extra          = "Maglev"
-move_cost      = 48             ; "PassiveMovement" i.e., everyone gets 48 moves on it
+move_cost      = 60             ; "PassiveMovement" i.e., everyone gets 60 moves on it
 food_incr      = 0
 shield_incr    = 0
 trade_incr     = 0

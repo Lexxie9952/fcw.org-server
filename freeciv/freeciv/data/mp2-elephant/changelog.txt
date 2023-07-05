@@ -103,7 +103,7 @@ and can now be built with veteran levels.
 27. Howitzers go from 4mp to 3 1/3mp. On blank terrain they can travel the same number of tiles (just attack at 1/3 on the final move).
     On roads they travel 10 tiles instead of 12. On rivers, 7 instead of 12.
     On highways they travel 15 tiles (which is higher than the 12 on roads of MP2D) [27Nov2022 this statement is correct]
-    On rails and maglev they travel 24 and 48 just like every other unit.
+    On rails and maglev they travel 24 and 60 just like every other unit.
     REASONS: the 2x movement boost of Howitzer over Artillery was always problematic. These weapons are powerhouses which should
     require, as in real life, some tactical premeditations and preparatory movements to set up, rather than rushing down roads and 
     rails and slamming into whatever city or stack is there. Nevertheless, on MP2E highways they move farther than MP2D roads,
