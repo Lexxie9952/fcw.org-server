@@ -3345,7 +3345,7 @@ Fighters are the first offensive Air units. Their superior mobility and firepowe
  Fighters can attack twice per turn. \n\
 "), _("
 INTERCEPTOR：the Vigil order lets Fighters auto-attack adjacent Air units if they\
- have better attack odds. A Fighter can Vigil in a city, on a Carrier, or on any\
+ have better attack odds. A Fighter can Vigil in a city, on a Carrier type, or on any\
  tile where it has used 5 move points or less. \n\
 "), _("
 Stack-Escape：60% odds to evade stack-death if attacker doesn’t have more moves than it does.\n \
@@ -3401,7 +3401,7 @@ Escort Fighters are large fighters with high fuel capacity. Higher mass and\
  Escort Fighters can attack twice per turn. \n\
 "), _("
 INTERCEPTOR：the Vigil order lets Escort Fighters auto-attack adjacent Air units if they\
- have better attack odds. This unit can Vigil in a city, on a Carrier, or on any tile where\
+ have better attack odds. This unit can Vigil in a city, on a Carrier type, or on any tile where\
  it has used 8 move points or less. \n\
 "), _("
 Stack-Escape：60% odds to evade stack-death if attacker doesn’t have more moves than it does.\n \
@@ -3988,7 +3988,7 @@ Jet Fighters upgrade the Fighter with improved attack, defense, and range. A Jet
  can do a maximum of three attacks per turn. \n\
 "), _("
 INTERCEPTOR：the Vigil order lets Jet Fighters auto-attack adjacent Air units if they\
- have better attack odds. This unit can Vigil in a city, on a Carrier, or on any tile\
+ have better attack odds. This unit can Vigil in a city, on a Carrier type, or on any tile\
  where it has used 8 move points or less. \n\
 "), _("
 Stack-Escape：60% odds to evade stack-death if attacker doesn’t have more moves than it does.\n \
@@ -4048,7 +4048,7 @@ Multi-Fighters are fitted for mission versatility.\
  at any range, and can do a maximum of 2 attacks per turn. \n\
 "), _("
 INTERCEPTOR：the Vigil order lets Multi-Fighters auto-attack adjacent Air units if they\
- have better attack odds. This unit can Vigil in a city, on a Carrier, on its first turn of fuel, or if it has used\
+ have better attack odds. This unit can Vigil in a city, on a Carrier type, on its first turn of fuel, or if it has used\
  8 moves or less. \n\
 "), _("
 Stack-Escape：60% odds to evade stack-death if attacker doesn’t have more moves than it does.\n \
@@ -4280,7 +4280,7 @@ The most advanced Fighter, with improved attack and longer range. Stealth Fighte
  attacks per turn. \n\
 "), _("
 INTERCEPTOR：the Vigil order lets Stealth Fighters auto-attack adjacent Air units if they\
- have better attack odds. This unit can Vigil in a city, on a Carrier, or on any tile where\
+ have better attack odds. This unit can Vigil in a city, on a Carrier type, or on any tile where\
  it has used 12 move points or less. \n\
 "), _("
 Stack-Escape：67% odds to evade stack-death if attacker doesn’t have more moves than it does.\n \
@@ -5545,7 +5545,7 @@ roles         = ""
 helptext      = _("\
 The Light Carrier can carry 5 cargo units of aircraft, missiles, Marines, or AAA.\
  A Light Carrier’s small runway isn’t suited for Zeppelins, Jet Bombers, Penetration Bombers, or Spy Planes.\
- ABMs and Fighter-types can Vigil on Light Carriers if they have enough moves left.\
+ ABMs and Fighter-types can Vigil on Light Carriers.\
  Aircraft landing and resting on a Light Carrier get the same repairs as in a city. Light\
  Carriers have no ASW bonus against Submarines and require protection from other\
  warships.\
@@ -5599,7 +5599,7 @@ veteran_move_bonus = 0, 0, 0, 0, 10080, 10080, 10080
 roles         = ""
 helptext      = _("\
 The Carrier transports Air units, Helicopters, AAA, Marines, and Missiles.\
- ABMs and Fighter-types can Vigil on a Carrier if they have enough moves left. Carriers are expensive\
+ ABMs and Fighter-types can Vigil on a Carrier. Carriers are expensive\
  and have no ASW bonus against Submarines. Thus, they are usually protected by a fleet of scouts and\
  escorts. Aircraft landing and resting on a Carrier get the same repairs as in a city. \n\
 "), _("\
@@ -5663,7 +5663,7 @@ ABMs aren't very effective\
 Multislot：Under certain conditions, cities can make one (or more) multislot units per turn, plus one of any other type. \n\n\
 *** Logistical Rules for ALL Missiles：\n\
  A Missile must be transported by ending its turn in a city, or by Airlift, or as cargo on a\
- Missile Destroyer, AEGIS Cruiser, Missile Submarine, Carrier, or Mobile SAM. Loading\
+ Missile Destroyer, AEGIS Cruiser, Missile Submarine, Carrier type, or Mobile SAM. Loading\
  Missile cargo requires being in a city or any base-type where StackDeath does not occur.\
 ")
 
@@ -5731,7 +5731,7 @@ A Cruise Missile can strike distant targets. It can’t attack Air units, but Ai
  improvement. You may select the target with the Do command, then select Tile Target. \n\n\
 *** Logistical Rules for ALL Missiles：\n\
  A Missile must be transported by ending its turn in a city, or by Airlift, or as cargo on a\
- Missile Destroyer, AEGIS Cruiser, Missile Submarine, Carrier, or Mobile SAM. Loading\
+ Missile Destroyer, AEGIS Cruiser, Missile Submarine, Carrier type, or Mobile SAM. Loading\
  Missile cargo requires being in a city or any base-type where StackDeath does not occur.\
 ")
 
@@ -5794,7 +5794,7 @@ If you have Space Flight and the Manhattan Project has been built by any player,
 If Fallout is cleaned on the turn it appears, the chance of nuclear winter is reduced. \n\n\
 *** Logistical Rules for ALL Missiles：\n\
  A Missile must be transported by ending its turn in a city, or by Airlift, or as cargo on a\
- Missile Destroyer, AEGIS Cruiser, Missile Submarine, Carrier, or Mobile SAM. Loading\
+ Missile Destroyer, AEGIS Cruiser, Missile Submarine, Carrier type, or Mobile SAM. Loading\
  Missile cargo requires being in a city or any base-type where StackDeath does not occur.\
 ")
 bombard_rate = 0       ; default sq_radius of 2：every adjacent tile.

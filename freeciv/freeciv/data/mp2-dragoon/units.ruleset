@@ -5230,7 +5230,7 @@ veteran_move_bonus = 0, 0, 0, 0, 9, 9, 9
 roles         = ""
 helptext      = _("\
 The Carrier transports Air units, Helicopters, AAA, Marines, and Missiles.\
- ABMs and Fighter-types can Vigil on a Carrier if they have enough moves left. Carriers are expensive\
+ ABMs and Fighter-types can Vigil on a Carrier. Carriers are expensive\
  and have no ASW bonus against Submarines. Thus, they are usually protected by a fleet of scouts and\
  escorts. Aircraft landing and resting on a Carrier get the same repairs as in a city. \n\
 "), _("\
