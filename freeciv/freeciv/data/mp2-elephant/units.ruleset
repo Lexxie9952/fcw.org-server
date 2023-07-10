@@ -5515,7 +5515,7 @@ hitpoints     = 35
 firepower     = 2
 move_rate     = 11
 vision_radius_sq = 12
-transport_cap = 5
+transport_cap = 6
 fuel          = 0
 uk_happy      = 1
 uk_shield     = 1
@@ -5543,7 +5543,7 @@ veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
 veteran_move_bonus = 0, 0, 0, 0, 10080, 10080, 10080
 roles         = ""
 helptext      = _("\
-The Light Carrier can carry 5 cargo units of aircraft, missiles, Marines, or AAA.\
+The Light Carrier can carry 6 cargo units of aircraft, missiles, Marines, or AAA.\
  A Light Carrier’s small runway isn’t suited for Zeppelins, Jet Bombers, Penetration Bombers, or Spy Planes.\
  ABMs and Fighter-types can Vigil on Light Carriers.\
  Aircraft landing and resting on a Light Carrier get the same repairs as in a city. Light\
