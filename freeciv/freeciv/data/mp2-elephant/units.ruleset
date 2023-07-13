@@ -704,10 +704,11 @@ flags         = "NeverTired", "Unreachable", "DoesntOccupyTile", "Airliftable"
 ; "NoStackDeath" = When in a stack whose defender is killed, this unit survives and 
 ;                  remains occupying the same tile.
 ; "Provoking" =   Under autoattack_style=1 standard Vigil units will ONLY autoattack
-;                 units marked with the Provoking flag. Under autoattack_style=0, a
-;                 unit considering to autoattack this unit will choose to do so even
-;                 if has better odds when defending against it than when attacking it.
-;                 Autoattacks only apply when the autoattack server setting is enabled.
+;                 units marked with the Provoking flag, unless their other flags
+;                 dictate otherwise and override this default behaviour. Under 
+;                 autoattack_style=0, a unit considering to autoattack this unit will choose to
+;                 do so even if has better odds when defending against it than when attacking
+;                 it. Autoattacks only apply when the autoattack server setting is enabled.
 ; "NonProvoking" = This unit never gets autoattacked, under all possible settings.
 ; "AvidAttacker" = Units under activity Vigil with this flag auto-attack everything  
 ;                  except "NonProvoking" units, (rather than only attacking
@@ -3045,7 +3046,9 @@ helptext      = _("\
 Anti-Aircraft Artillery (AAA) get a 2× bonus against Air units. They can attack any tile.\
  They can be transported by any unit that can carry Marines.\
  Transported AAA can always defend their tile, even at sea. AAA can’t attack while transported,\
- and cannot attack Submarines, Missiles, and High Altitude aircraft.\
+ and cannot attack Submarines, Missiles, and High Altitude aircraft.\n\n\
+ Like Siege class units, AAA can vigil if in a city or base and they have their full move-points\
+ left.\n\n\
 "), _("
 After Space Flight and 9 turns of service, AAA can be converted to\
  Mobile SAM. The order must be done in a domestic city, and takes 2 turns.\
