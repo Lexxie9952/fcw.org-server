@@ -6344,7 +6344,12 @@ function unit_can_vigil(punit)
           }
         }
         break;
-
+      case "Anti-Aircraft Artillery":
+        if (client_rules_flag[CRF_MP2_E]) {
+          if (moves_used <= 0 && (tile_city(ptile) || tile_has_base(ptile))) {
+            return true;
+          }
+          break;
       /* TODO: Once MP2E is released, propagate vigil rules backwards to all
          MP2D for simplicity and change all in-game and fandom docs. */ 
       case "Fighter":
