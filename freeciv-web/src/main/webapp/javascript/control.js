@@ -6325,6 +6325,7 @@ function unit_can_vigil(punit)
   var name = ptype['name'];
   var moves_used = (parseFloat(ptype['move_rate']) / parseFloat(SINGLE_MOVE))
                  - (parseFloat(punit['movesleft']) / parseFloat(SINGLE_MOVE));
+  var half_moves_left = moves_used / (parseFloat(ptype['move_rate']) / parseFloat(SINGLE_MOVE))  <= 0.5;
   var fuel = punit['fuel'];
 
   // For now Vigil is only for these server settings:
@@ -6349,13 +6350,14 @@ function unit_can_vigil(punit)
           if (moves_used <= 0 && (tile_city(ptile) || tile_has_base(ptile))) {
             return true;
           }
-          break;
+        }
+        break;
       /* TODO: Once MP2E is released, propagate vigil rules backwards to all
          MP2D for simplicity and change all in-game and fandom docs. */ 
       case "Fighter":
         if (client_rules_flag[CRF_MP2_E]) {
           if (moves_used <= 5) return true;
-          else if (tile_city(ptile) || punit['transported'] || tile_has_extra(ptile, EXTRA_AIRBASE)) return true;
+          else if (half_moves_left && (tile_city(ptile) || punit['transported'] || tile_has_extra(ptile, EXTRA_AIRBASE))) return true;
           else return false;
         }
         // pre MP2E:
@@ -6365,7 +6367,7 @@ function unit_can_vigil(punit)
       case "Escort Fighter":
         if (client_rules_flag[CRF_MP2_E]) {
           if (moves_used <= 8) return true;
-          else if (tile_city(ptile) || punit['transported'] || tile_has_extra(ptile, EXTRA_AIRBASE)) return true;
+          else if (half_moves_left && (tile_city(ptile) || punit['transported'] || tile_has_extra(ptile, EXTRA_AIRBASE))) return true;
           else return false;
         }
         // pre MP2E:
@@ -6375,7 +6377,7 @@ function unit_can_vigil(punit)
       case "Jet Fighter":
         if (client_rules_flag[CRF_MP2_E]) {
           if (moves_used <= 8) return true;
-          else if (tile_city(ptile) || punit['transported'] || tile_has_extra(ptile, EXTRA_AIRBASE)) return true;
+          else if (half_moves_left && (tile_city(ptile) || punit['transported'] || tile_has_extra(ptile, EXTRA_AIRBASE))) return true;
           else return false;
         }
         // pre MP2E:
@@ -6389,7 +6391,7 @@ function unit_can_vigil(punit)
         if (client_rules_flag[CRF_MP2_E]) {
           if (fuel>1) return true;
           if (moves_used <= 8) return true;
-          else if (tile_city(ptile) || punit['transported'] || tile_has_extra(ptile, EXTRA_AIRBASE)) return true;
+          else if (half_moves_left && (tile_city(ptile) || punit['transported'] || tile_has_extra(ptile, EXTRA_AIRBASE))) return true;
           else return false;
         }
         // pre MP2E:
@@ -6399,7 +6401,7 @@ function unit_can_vigil(punit)
       case "Stealth Fighter":
         if (client_rules_flag[CRF_MP2_E]) {
           if (moves_used <= 12) return true;
-          else if (tile_city(ptile) || punit['transported'] || tile_has_extra(ptile, EXTRA_AIRBASE)) return true;
+          else if (half_moves_left && (tile_city(ptile) || punit['transported'] || tile_has_extra(ptile, EXTRA_AIRBASE))) return true;
           else return false;
         }
         // pre MP2E:

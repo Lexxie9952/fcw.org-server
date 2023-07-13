@@ -217,7 +217,7 @@ veteran_power_fact = 100, 125, 134, 150
 i.e., 6 in 5 (swamp), 5 in 4 (mine), 4 in 3 (angkor wat swamp drain) goes to:
       5 in 4 (mine), 4 in 3 (mine or nationalists/angkor wat time), 3 in 2 (irrigate).
 69. More Multislot units: Pilgrims, Workers II, Engineers.
-70. Fighter types may always vigil in a city or airbase.
+70. Fighter types may always vigil in a city or airbase, if they have half their moves or more.
 71. Vigil range extended for fighter types:
    Fighter:          5 (was 2)
    Escort Fighter:   8 (was 3)
@@ -228,3 +228,4 @@ i.e., 6 in 5 (swamp), 5 in 4 (mine), 4 in 3 (angkor wat swamp drain) goes to:
 72. For aircraft, Airbase healing increased to 20% for simplicity: same as a Fortress for Land units. (NEEDS A NOTE IN BASES.MP2E)
     (helicopters, 25%, same as MP2D, no change.)
 73. MP2E also gets (forgottenly undocumented) changed to MP2D that airbases heal air units at the same rate as fortresses heal land units.
+74. AAA can vigil in a city or base if they have their full move points left.

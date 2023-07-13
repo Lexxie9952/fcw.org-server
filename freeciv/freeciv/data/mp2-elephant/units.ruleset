@@ -3348,7 +3348,7 @@ Fighters are the first offensive Air units. Their superior mobility and firepowe
  Fighters can attack twice per turn. \n\
 "), _("
 INTERCEPTOR：the Vigil order lets Fighters auto-attack adjacent Air units if they\
- have better attack odds. A Fighter can Vigil in a city, on a Carrier type, or on any\
+ have better attack odds. A Fighter with half or more of its moves can Vigil in an airbase, in a city, on a Carrier type, or on any\
  tile where it has used 5 move points or less. \n\
 "), _("
 Stack-Escape：60% odds to evade stack-death if attacker doesn’t have more moves than it does.\n \
@@ -3404,7 +3404,7 @@ Escort Fighters are large fighters with high fuel capacity. Higher mass and\
  Escort Fighters can attack twice per turn. \n\
 "), _("
 INTERCEPTOR：the Vigil order lets Escort Fighters auto-attack adjacent Air units if they\
- have better attack odds. This unit can Vigil in a city, on a Carrier type, or on any tile where\
+ have better attack odds. This unit with half or more of its moves can Vigil in an airbase, in a city, on a Carrier type, or on any tile where\
  it has used 8 move points or less. \n\
 "), _("
 Stack-Escape：60% odds to evade stack-death if attacker doesn’t have more moves than it does.\n \
@@ -3991,7 +3991,7 @@ Jet Fighters upgrade the Fighter with improved attack, defense, and range. A Jet
  can do a maximum of three attacks per turn. \n\
 "), _("
 INTERCEPTOR：the Vigil order lets Jet Fighters auto-attack adjacent Air units if they\
- have better attack odds. This unit can Vigil in a city, on a Carrier type, or on any tile\
+ have better attack odds. This unit with half or more of its moves can Vigil in an airbase, in a city, on a Carrier type, or on any tile\
  where it has used 8 move points or less. \n\
 "), _("
 Stack-Escape：60% odds to evade stack-death if attacker doesn’t have more moves than it does.\n \
@@ -4051,7 +4051,7 @@ Multi-Fighters are fitted for mission versatility.\
  at any range, and can do a maximum of 2 attacks per turn. \n\
 "), _("
 INTERCEPTOR：the Vigil order lets Multi-Fighters auto-attack adjacent Air units if they\
- have better attack odds. This unit can Vigil in a city, on a Carrier type, on its first turn of fuel, or if it has used\
+ have better attack odds. This unit with half or more of its moves can Vigil in an airbase, in a city, on a Carrier type, on its first turn of fuel, or if it has used\
  8 moves or less. \n\
 "), _("
 Stack-Escape：60% odds to evade stack-death if attacker doesn’t have more moves than it does.\n \
@@ -4283,7 +4283,7 @@ The most advanced Fighter, with improved attack and longer range. Stealth Fighte
  attacks per turn. \n\
 "), _("
 INTERCEPTOR：the Vigil order lets Stealth Fighters auto-attack adjacent Air units if they\
- have better attack odds. This unit can Vigil in a city, on a Carrier type, or on any tile where\
+ have better attack odds. This unit with half or more of its moves can Vigil in an airbase, in a city, on a Carrier type, or on any tile where\
  it has used 12 move points or less. \n\
 "), _("
 Stack-Escape：67% odds to evade stack-death if attacker doesn’t have more moves than it does.\n \
