@@ -3099,8 +3099,8 @@ Fighters are the first offensive Air units. Their superior mobility and firepowe
  Fighters can attack twice per turn. \n\
 "), _("
 INTERCEPTOR：the Vigil order lets Fighters auto-attack adjacent Air units if they\
- have better attack odds. A Fighter can Vigil in a city, on a Carrier, or on any\
- tile where it has used 2 move points or less. \n\
+ have better attack odds. A Fighter can Vigil on any\
+ tile if it has used 2 move points or less. \n\
 "), _("
 Stack-Escape：60% odds to evade stack-death if attacker doesn’t have more moves than it does.\
  NOTE：GOTO disallows unit loss from lack of fuel. You\
@@ -3165,7 +3165,7 @@ Escort Fighters are large fighters with high fuel capacity. Higher mass and\
  Escort Fighters can attack twice per turn. \n\
 "), _("
 INTERCEPTOR：the Vigil order lets Escort Fighters auto-attack adjacent Air units if they\
- have better attack odds. This unit can Vigil in a city, on a Carrier, or on any tile where\
+ have better attack odds. This unit can Vigil on any tile where\
  it has used 3 move points or less. \n\
 "), _("
 Stack-Escape：60% odds to evade stack-death if attacker doesn’t have more moves than it does.\
@@ -3749,7 +3749,7 @@ Jet Fighters upgrade the Fighter with improved attack, defense, and range. A Jet
  can do a maximum of three attacks per turn. \n\
 "), _("
 INTERCEPTOR：the Vigil order lets Jet Fighters auto-attack adjacent Air units if they\
- have better attack odds. This unit can Vigil in a city, on a Carrier, or on any tile\
+ have better attack odds. This unit can Vigil on any tile\
  where it has used 3 move points or less. \n\
 "), _("
 Stack-Escape：60% odds to evade stack-death if attacker doesn’t have more moves than it does.\
@@ -3809,7 +3809,7 @@ Multi-Fighters are fitted for mission versatility.\
  at any range, and can do a maximum of 2 attacks per turn. \n\
 "), _("
 INTERCEPTOR：the Vigil order lets Multi-Fighters auto-attack adjacent Air units if they\
- have better attack odds. This unit can Vigil in a city, on a Carrier, or if it has 1 turn of fuel or more. \n\
+ have better attack odds. This unit can Vigil if it has 1 turn of fuel or more. \n\
 "), _("
 Stack-Escape：60% odds to evade stack-death if attacker doesn’t have more moves than it does.\
  NOTE：GOTO disallows unit loss from lack of fuel. You can override this by moving to adjacent tiles.\
@@ -3984,7 +3984,7 @@ The most advanced Fighter, with improved attack and longer range. Stealth Fighte
  attacks per turn. \n\
 "), _("
 INTERCEPTOR：the Vigil order lets Stealth Fighters auto-attack adjacent Air units if they\
- have better attack odds. This unit can Vigil in a city, on a Carrier, or on any tile where\
+ have better attack odds. This unit can on any tile where\
  it has used 4 move points or less. \n\
 "), _("
 Stack-Escape：67% odds to evade stack-death if attacker doesn’t have more moves than it does.\
