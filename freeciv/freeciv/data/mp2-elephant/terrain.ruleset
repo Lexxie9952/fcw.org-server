@@ -3337,7 +3337,7 @@ flags          = "IntegrateCostUp", "ReverseRestrictInfra" ;(allied units ignore
 
 [road_canal]
 extra             = "Canal"
-move_cost         = 6                   ; "PassiveMovement"
+move_cost         = 7                   ; "PassiveMovement"
 move_mode         = "Cardinal"
 integrates        = "River", "Waterway"
 compat_special    = "None"
@@ -3345,7 +3345,7 @@ flags             = "PassiveMovement", "UnrestrictedInfra", "HardExitRInfra", "H
 
 [road_waterway]
 extra             = "Waterway"
-move_cost         = 6                   ; "PassiveMovement"
+move_cost         = 7                   ; "PassiveMovement"
 move_mode         = "Cardinal"
 integrates        = "River", "Canal"
 compat_special    = "None"
