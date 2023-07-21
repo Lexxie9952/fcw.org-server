@@ -5345,7 +5345,7 @@ bonuses       =
      "Submarine", "DefenseMultiplier", 1
      "NonNativeAttack", "DefenseMultiplier", 1    
    }
-flags         = "BadCityDefender", "NoStackDeath", "CantReachAir", "WillNever", "Bombarder", "ProvokingClass2"
+flags         = "BadCityDefender", "NoStackDeath", "NeverBlocked", "CantReachAir", "WillNever", "Bombarder", "ProvokingClass2"
 veteran_names =
   _("?vet_rank:green"),
   _("?vet_rank:veteran"),
@@ -5361,7 +5361,7 @@ veteran_move_bonus = 0, 0, 0, 0, 10080, 10080, 10080
 roles         = ""
 helptext      = _("\
 The Battleship is the supreme naval unit, with excellent offensive and defensive strength.\
- It has a 2× defense bonus vs Submarines. \n\
+ It has a 2× defense bonus vs Submarines. No unit can stop this unit from attacking surface units on a tile. \n\
 Battleships may expend 5 move points to do a 3 round bombardment which hits up to 4 units within a stack, of which a maximum of one\
  can be killed. This can be done on any units within 2 tiles distance. Defending Battleships get a free bombardment against\
  Special Unit Attacks. \
