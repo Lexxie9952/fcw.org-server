@@ -156,22 +156,25 @@
   <h2>General Rules for Site, Server, and Discord</h2>
   <b>FCW is a private gaming community. By playing in it, you accept membership in the commmunity and represent that you will abide by the following rules:</b><br>
   <div style="font-size:110%">
-  1. Be polite.<br> 
+  1. Be polite. (Be nice.)<br> 
   2. Don't cheat.<br>
   3. Keep in-game conflicts in-the-game. <br>
-  4. No abuse, spam, harrassment, doxxing, personal threats. <br>
+  4. No ASSHATS: <b>a</b>buse, <b>s</b>pam, <b>s</b>lander, <b>h</b>arrassment, <b>a</b>ntagonism, <b>t</b>hreats, <b>s</b>edition; and similar ilk. <br>
   5. Don't promote, spam, recruit, or link to other servers and sites.<br>
   6. Compare or politick against servers or sites somewhere else.<br>
   7. Constructive ideas are welcome. Directly or indirectly disparaging the site or its members is not.<br>
   8. Do religious or political discussions somewhere else.<br>
-  9. Private DMs require FCW Discord or FCW Game Server to bridge them and thus fall under these rules.<br>
-  10. FCW is a private gathering and not a public square. Keep speech and conduct appropriate. <br>
-  11. Information, communications, and content that take place within the FCW private gathering may not be shared or distributed offsite without permission.
+  9. Grievances, suspicions, accusations, or appeals that impugn a player/admin/GM must be procedurally handled in private. FCW protects the presumed innocence of the parties involved.
+  10. Private DMs require FCW Discord or FCW Game Server to bridge them and thus fall under these rules.<br>
+  11. FCW is a private gathering and not a public square. Speech is regulated. Keep speech and conduct appropriate. <br>
+  12. Information, communications, and content that take place within the FCW private gathering may not be shared or distributed offsite without permission.
   <br><br>
   <b>Clarification:</b>
 </div>
 <div style="font-size:95%">
-  1. Be nice. Almost every other rule is derived from this. Remember this one and there's a lot less to memorize!<br>
+  <b>1. Be nice.</b>
+  &bull; This is FCW's golden Meta-rule. Every other rule is subordinate to this one, a mere detail and explanation of this one.
+   Almost every other rule is derived from this. Remember this one and there's a lot less to memorize!<br>
   2. Don't cheat:<br>
   &bull; No multi-accounts: Do not play multiple accounts within the same game.<br>
   &bull; Hacking is cheating: Browser hacking, dev-console hacking, packet hacking, server hacking, and any other form of hacking.<br>
@@ -186,9 +189,14 @@
   &nbsp;&nbsp;&bull;&bull; Address other players as their country's fictional leader. **Third person pronouns are advisable.** <br>
   &nbsp;&nbsp;&bull;&bull; INCORRECT: "You're a lying warmonger, asshole, and I'm going to crush you, pathetic loser!"<br>
   &nbsp;&nbsp;&bull;&bull; CORRECT: "The Mongol nation and its leader are lying warmongers, pathetic losers who deserve to be crushed by the Swiss!"<br>
-  4. No abuse, spam, harrassment.<br> 
-  &bull; This includes but is not limited to, directing another person or "bot" as the agent for violating any site rules.<br>
+  4. No ASSHATS.<br> 
+  &bull; NO abuse, spam, slander, harrassment, antagonism, threats, sedition; no rabble-rowsing, psychoaggression; no abrasive, disrespectful or hateful interactions.
+  &bull; NO using, directing, incorporating from another person or "bot" as the agent for violating any site rules.<br>
   &bull; Preserve the game entertainment ambience by keeping in-game chat relative to the in-game play of your player-nation.<br>
+  &bull; ASSHATing that affects game outcome or integrity may be punished or corrected by the GM.
+  &bull; Keep in-game psycho-aggression/manipulation, psy-ops, gaslighting, mindwarps, dishonesty: a) fictional/role-played: NOT between humans, b) short in time,duration,length, c) NOT excessive/extreme/exorbitant in scope
+  &bull; Non-sporting or "meta-game dishonesty" is considered ASSHAT: e.g., informing someone you won't RTS then doing so, misinforming human players of external out-of-game facts/conditions for an in-game advantage, etc.
+  &bull; NO: Sharing/screenshotting private conversations without permission, doxxing, violating Privacy Policy of FCW ecosystem. <br>
   &bull; Off-site links except to a rules question, are forbidden from in-game chat.<br>
   &bull; Drowning community discussion in Discord by posting many more messages than anyone is bad form: let others give their views. <br>
   5. FCW is not the appropriate forum for publicly or privately promoting, recruiting, or poaching to other servers or sites. Ask admin permission.<br>
@@ -196,13 +204,24 @@
   7. All constructive ideas and contributions are welcome.<br> 
   &bull; Politicking against the site or its members can be freely done in locations other than FCW.<br>
   8. Religious and political discussions are encouraged in locations other than FCW. Such discussions may be deleted from FCW.<br>
-  9. Private DMs must abide by community rules when those DMs were bridged by mutual belonging to FCW Discord or the FCW Game Server which make those communications possible. Private complaints about DMs to other members will be treated the same as if they had been made in public, if those DMs were bridged or conveyed by a FCW server. <br>
-  10. FCW is not a public square with guaranteed free speech. It is more like a friend's house party where you are expected to be nice and enjoy the offerings. You are not welcome if you break the party's rules.<br>
-  11. What happens at FCW stays at FCW:  FCW is a private party gathering, our strict Privacy Policy represents to our users that what they do at FCW takes place in a private gathering on a Preferred Privacy Protection site. Users need not react to, nor concern themselves about distribution of their information or communications outside of the FCW services. Do not screenshot, copy-paste, relay, report, journalize, log, transliterate, translate, or otherwise convey information, communications, or any form of Private Identity Data, within the FCW services to anywhere outside the FCW privacy sphere, without first obtaining permission. Violation of this policy means you are no longer deemed to be an authorized user of our site. Private Identity Data includes but is not limited to real name, address, location, nationality, telephone or digital contact information, and so on.<br>
-  11a. General sharing permission is already granted by default, for game experiences available from the perspective of the nation you play in any game, and any message you make that does not interact with or imply or help infer, another user's private content.<br>
+  9. Grievances, accusations, or appeals in private.
+  &bull; Humans have suspicions, sometimes false accusations, some even have slander or reputational injury as their motive. To protect against a 
+  player, admin, or GM ever falsely suffering a reputation degradation in public: you MUST do accusations, complaints, infraction reports, and similar actions in PRIVATE. Report to an appropriate GM/moderator/admin. You have a right 
+  to a private hearing and to appeal intial decisions to other admins/moderators/GMs, but the process from start to finish must be handled in private if 
+  any content in the complaint either directly, indirectly, or implicitly, impugns, accuses, or maligns FCW, its players, admins, GMs, or moderators.
+  10. Private DMs must abide by community rules when those DMs were bridged by mutual belonging to FCW Discord or the FCW Game Server which make those communications possible. Private complaints about DMs to other members will be treated the same as if they had been made in public, if those DMs were bridged or conveyed by a FCW server. <br>
+  11. FCW is not a public square with guaranteed free speech. It is more like a friend's house party. You are not welcome if you break the party's rules.<br>
+  12. What happens at FCW stays at FCW:  FCW is a private party gathering, our strict Privacy Policy represents to our users that what they do at FCW takes place in a private gathering on a Preferred Privacy Protection site. Users need not react to, nor concern themselves about distribution of their information or communications outside of the FCW services. Do not screenshot, copy-paste, relay, report, journalize, log, transliterate, translate, or otherwise convey information, communications, or any form of Private Identity Data, within the FCW services to anywhere outside the FCW privacy sphere, without first obtaining permission. Violation of this policy means you are no longer deemed to be an authorized user of our site. Private Identity Data includes but is not limited to real name, address, location, nationality, telephone or digital contact information, and so on.<br>
+  &bull; General sharing permission is already granted by default, for game experiences available from the perspective of the nation you play in any game, and any message you make that does not interact with or imply or help infer, another user's private content.<br>
 </div>
-  
-  
+<div>
+<b>NOTES on Disputes, Issues, and Moderation:</b>  
+<i>Be polite, Be nice</i> is the meta-rule of the site. It is a catch-all against all incivility and inappropriate conduct not listed here.<br> 
+<i>"Who is the injured party and how injured are they?"</i> is the Prime Decider above all other considerations when adjudicating infractions.<br>
+<i>GRIEVANCES may be briefly raised in public</i> <u>but MAY NOT impugn in public</u>, and will be procedurally moderated out of public.</i>
+&bull; Publicly dramatizing or impugning the site, an admin, or admin decision, or creating any drama that's not part of the fun entertainment ambience of gaming, is forbidden. Ask for appeals, reviews, and moderation in private. <br>
+
+</div>  
 
   <br>
   <b>FCW may alter these rules over time. This takes place after admin consultations and such changes will be posted on our Discord #rules channel.</b>
