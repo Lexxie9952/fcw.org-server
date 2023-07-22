@@ -197,8 +197,8 @@
   &bull; Non-sporting or "meta-game dishonesty" is considered ASSHAT: e.g., informing someone you won't RTS then doing so, misinforming human players of external out-of-game facts/conditions for an in-game advantage, etc.<br>
   &bull; NO: Sharing/screenshotting private conversations without permission, doxxing, violating Privacy Policy of FCW ecosystem. <br>
   &bull; Off-site links except to a rules question, are forbidden from in-game chat.<br>
-  &bull; Drowning community discussion in Discord by posting many more messages than anyone is bad form: let others give their views. <br><br>
-  &bull; NO using, directing, incorporating from another person or "bot" as the agent for violating any site rules.<br>
+  &bull; Drowning community discussion in Discord by posting many more messages than anyone is bad form: let others give their views. <br>
+  &bull; NO using, directing, incorporating from another person or "bot" as the agent for violating any site rules.<br><br>
   5. FCW is not the appropriate forum for publicly or privately promoting, recruiting, or poaching to other servers or sites. Ask admin permission.<br><br>
   6. FCW is not the appropriate forum for comparison or politicking for or against servers or sites.<br><br>
   7. All constructive ideas and contributions are welcome.<br>
