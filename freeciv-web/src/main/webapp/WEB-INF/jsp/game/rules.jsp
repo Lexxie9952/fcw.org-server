@@ -99,8 +99,8 @@
   <h2><span style="color:#fff">Clarifications to In-game Rules:</span></h2>
   <div style="font-size:95%">
     <b>1. Idle players may lose their nation</b> after 2 idle turns on <b>Turns 1-5</b>, &nbsp; <b>Turn 6:</b> idle 3 turns &nbsp; 
-    <b>T20:</b> idle 4,  &nbsp; <b>T25:</b> idle 5, &nbsp; <b>T30:</b> idle 6, &nbsp; <b>T35:</b> idle 7<br>
-    <b>2.</b> GM may change the victory conditions documented in the ruleset and the <u>game settings</u> at the game start.<br>
+    <b>T20:</b> idle 4,  &nbsp; <b>T25:</b> idle 5, &nbsp; <b>T30:</b> idle 6, &nbsp; <b>T35:</b> idle 7<br><br>
+    <b>2.</b> GM may change the victory conditions documented in the ruleset and the <u>game settings</u> at the game start.<br><br>
     <b>3. Delegation's purpose is to maximize game integrity.</b><br>
     &bull; <b>Delegation is good when...</b><br>
     &nbsp;&nbsp;&bull;&bull; (a) it lets a nation make self-interested rational moves at the right times, when it could not otherwise.<br>
@@ -112,7 +112,7 @@
     &bull; Delegations can't be done before turn 3<br>
     &bull; One delegation per player is allowed.<br>
     &bull; Long-term delegations can be approved by the Gamemaster (GM).<br>
-    &bull; Complaints may be made to the GM. GM judgments may be contextual, flexible. GM judgments are final.<br>
+    &bull; Complaints may be made to the GM. GM judgments may be contextual, flexible. GM judgments are final.<br><br>
     <b>4. No RTS, if requested.</b> <i><small>Real-time strategy ("RTS") is simultaneous military moves taken by both players in the same theatre of battle.</small></i><br>
     &bull; In general (with exceptions*) players should be allowed to take their turns in peace without RTS.<br> 
     &bull; It is encouraged to be sensitive to this even when a player does NOT make a No-RTS-request.<br> 
@@ -124,9 +124,9 @@
     <b>There are key times when <u>RTS is expected, allowed, and necessary.</u></b><br> Players may deny No-RTS-requests:</i><br>
     
     &nbsp;&nbsp;&bull;&bull; <b>One hour BEFORE to one hour AFTER a Turn Change.</b><br>
-    &nbsp;&nbsp;&bull;&bull; <b>For one hour, AFTER the final UWT expires from last TC: <b>10h to 11h into the turn</b>.<br>
+    &nbsp;&nbsp;&bull;&bull; <b>For one hour, AFTER the final UWT expires from last TC: 10 to 11 hours into the turn</b>.<br>
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; * UWT = unitwaittime. For more info, type: /help unitwaittime<br>
-    &nbsp;&nbsp;&bull;&bull; <b>Starting one hour BEFORE movements will start to incur UWT next turn: (11h on the turn timer.)</b><br>
+    &nbsp;&nbsp;&bull;&bull; Starting <b>one hour BEFORE movements start to incur UWT next turn:</b> (11h on the turn timer.)<br>
     &nbsp;&nbsp;&bull;&bull; <b>During "Mexican Standoff"</b> -- both players request "No RTS" and whoever asked first would gain such an advantage over the other player, that it would decide the game's outcome:<br>
     &nbsp;&nbsp;&nbsp;&nbsp;&bull;&bull;&bull; Each player should use the Mexican Standoff rule: (1) infrequently or never, and (2) not for situations more minor than similar requests made by others.<br>
     &nbsp;&nbsp;&nbsp;&nbsp;&bull;&bull;&bull; If there is conflict over this, players should negotiate either (a) come to their own agreement, (b) confirm an agreement to RTS it,  (c) agree to alternate 1 (or 2) moves at a time between the players, OR (d) freeze the action and wait GM decision.<br>
@@ -134,21 +134,21 @@
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&bull;&bull;&bull;&bull; A player's unilateral violation of the above without agreement or moderation allows the other player to seek compensatory justice though moderation.<br> 
     &bull; After T100 or the discovery of Flight, rules are slightly relaxed in favor of the one who wishes to RTS, if:<br>
     &nbsp;&nbsp;&bull;&bull; ...Air unit actions would result in major swaying of outcome due to aircrafts' &bull;mobility, &bull;ZOC, &bull;iPillage, &bull;strong military power in influencing outcomes.<br>
-    &nbsp;&nbsp;&bull;&bull; The above helps clarify understanding for those inexperienced in how No-RTS-requests may cause game imbalance under these conditions.<br> 
+    &nbsp;&nbsp;&bull;&bull; The above helps clarify understanding for those inexperienced in how No-RTS-requests may cause game imbalance under these conditions.<br><br>
     <b>5. No camping.</b><br>
-    &bull; A player should not be online for most the day. Remaining online all day is unfair to everyone else.<br>
+    &bull; A player should not be online for most the day. Remaining online all day is unfair to everyone else.<br><br>
     <b>6. NEVER declare victory for anyone but yourself.</b><br>
-    &bull; Players are unaware of all game events. Your alliance may be defeated and feel your surrender means victory for your enemies, but perhaps the opposing alliance is about to splinter or a small nation secretly built a large nuclear arsenal. You may declare victory for yourself or your own alliance only. Surrender does not equate to a victory declaration for others. Do NOT declare someone else's victory. <br>
+    &bull; Players are unaware of all game events. Your alliance may be defeated and feel your surrender means victory for your enemies, but perhaps the opposing alliance is about to splinter or a small nation secretly built a large nuclear arsenal. You may declare victory for yourself or your own alliance only. Surrender does not equate to a victory declaration for others. Do NOT declare someone else's victory. <br><br>
     <b>7. Turn timer is typically extended in the late game</b> of longturn games. (25 hours, 35h, 37h, or 47h).<br>
     &bull;  This meets the needs of players who have successfully grown large nations. <br>
     &bull;  Turn length extension will be decided by the GM after the first active player makes a public request. Generally,<br>
     &bull; &bull; After Turn 60, a 25h extension would be acceptable.<br>
     &bull; &bull; After turn 100, an extension to 35h or 37h turns is common practice.<br>
     &bull; &bull; 47h turns could judiciously be decided for very late game, very large nation(s), or any other conditions that help game integrity.<br>
-    &bull; A minority of players may need longer turns and be given them, in order that ALL players have time to play correctly.<br>
-    <b>8.</b> For obvious settings errors, a Gamemaster (GM) can fix any such settings before T10 provided they do not affect any player and provided the GM fully announces such changes, giving at least 1 turn notice before making the change. Exception: announcing creates an exploit, in which case the GM may elect not to give notice (but must inform those members of the admin council who are non-players in the game.)<br>
-    <b>9.</b> Regarding multiple players in the same household OR sharing the same device:  The GM can approve such cases if asked privately in advance of you joining the game; otherwise it is forbidden. Gamemaster decision will be final. GM may make special rules for allowing the case, like: making all players aware of it, or forbidding alliance between the two players. <br>
-    <b>10.</b> Most of the game's events are an unknown mystery. Players deserve to know what other players thought and did. Please share your contribution to world history when the game finishes! Hint: use your private discord channels to collect these stories as the game progresses.<br>  
+    &bull; A minority of players may need longer turns and be given them, in order that ALL players have time to play correctly.<br><br>
+    <b>8.</b> For obvious settings errors, a Gamemaster (GM) can fix any such settings before T10 provided they do not affect any player and provided the GM fully announces such changes, giving at least 1 turn notice before making the change. Exception: announcing creates an exploit, in which case the GM may elect not to give notice (but must inform those members of the admin council who are non-players in the game.)<br><br>
+    <b>9.</b> Regarding multiple players in the same household OR sharing the same device:  The GM can approve such cases if asked privately in advance of you joining the game; otherwise it is forbidden. Gamemaster decision will be final. GM may make special rules for allowing the case, like: making all players aware of it, or forbidding alliance between the two players. <br><br>
+    <b>10.</b> Most of the game's events are an unknown mystery. Players deserve to know what other players thought and did. Please share your contribution to world history when the game finishes! Hint: use your private discord channels to collect these stories as the game progresses.<br> <br>
   </div>
 </div>
 <div class="container">
@@ -164,7 +164,7 @@
   6. Compare or politick against servers or sites somewhere else.<br>
   7. Constructive ideas are welcome. Directly or indirectly disparaging the site or its members is not.<br>
   8. Do religious or political discussions somewhere else.<br>
-  9. Grievances, suspicions, accusations, or appeals that impugn a player/admin/GM must be procedurally handled in private. FCW protects the presumed innocence of the parties involved.
+  9. Grievances, suspicions, accusations, or appeals that impugn a player/admin/GM must be procedurally handled in private. FCW protects the presumed innocence of the parties involved.<br>
   10. Private DMs require FCW Discord or FCW Game Server to bridge them and thus fall under these rules.<br>
   11. FCW is a private gathering and not a public square. Speech is regulated. Keep speech and conduct appropriate. <br>
   12. Information, communications, and content that take place within the FCW private gathering may not be shared or distributed offsite without permission.
@@ -172,13 +172,13 @@
   <b>Clarification:</b>
 </div>
 <div style="font-size:95%">
-  <b>1. Be nice.</b>
+  <b>1. Be nice.</b><br>
   &bull; This is FCW's golden Meta-rule. Every other rule is subordinate to this one, a mere detail and explanation of this one.
-   Almost every other rule is derived from this. Remember this one and there's a lot less to memorize!<br>
+   Almost every other rule is derived from this. Remember this one and there's a lot less to memorize!<br><br>
   2. Don't cheat:<br>
   &bull; No multi-accounts: Do not play multiple accounts within the same game.<br>
   &bull; Hacking is cheating: Browser hacking, dev-console hacking, packet hacking, server hacking, and any other form of hacking.<br>
-  &bull; Information, actions, or access not commonly available through normal use of the game's interface is competitive inequality, which means it's cheating.<br>
+  &bull; Information, actions, or access not commonly available through normal use of the game's interface is competitive inequality, which means it's cheating.<br><br>
   3. Keep in-game conflicts in-the-game. <br>
   &bull; Remember, your enemy may be your ally in a future game.<br>
   &nbsp;&nbsp;&bull;&bull; Creating a lasting grudge may disadvantage your nation in future games.<br>
@@ -188,7 +188,7 @@
   &nbsp;&nbsp;&bull;&bull; Represent yourself as your country's fictional leader.<br>
   &nbsp;&nbsp;&bull;&bull; Address other players as their country's fictional leader. **Third person pronouns are advisable.** <br>
   &nbsp;&nbsp;&bull;&bull; INCORRECT: "You're a lying warmonger, asshole, and I'm going to crush you, pathetic loser!"<br>
-  &nbsp;&nbsp;&bull;&bull; CORRECT: "The Mongol nation and its leader are lying warmongers, pathetic losers who deserve to be crushed by the Swiss!"<br>
+  &nbsp;&nbsp;&bull;&bull; CORRECT: "The Mongol nation and its leader are lying warmongers, pathetic losers who deserve to be crushed by the Swiss!"<br><br>
   4. No ASSHATS.<br> 
   &bull; NO abuse, spam, slander, harrassment, antagonism, threats, sedition; no rabble-rowsing, psychoaggression; no abrasive, disrespectful or hateful interactions.
   &bull; NO using, directing, incorporating from another person or "bot" as the agent for violating any site rules.<br>
@@ -198,28 +198,28 @@
   &bull; Non-sporting or "meta-game dishonesty" is considered ASSHAT: e.g., informing someone you won't RTS then doing so, misinforming human players of external out-of-game facts/conditions for an in-game advantage, etc.
   &bull; NO: Sharing/screenshotting private conversations without permission, doxxing, violating Privacy Policy of FCW ecosystem. <br>
   &bull; Off-site links except to a rules question, are forbidden from in-game chat.<br>
-  &bull; Drowning community discussion in Discord by posting many more messages than anyone is bad form: let others give their views. <br>
-  5. FCW is not the appropriate forum for publicly or privately promoting, recruiting, or poaching to other servers or sites. Ask admin permission.<br>
-  6. FCW is not the appropriate forum for comparison or politicking for or against servers or sites.<br>
-  7. All constructive ideas and contributions are welcome.<br> 
-  &bull; Politicking against the site or its members can be freely done in locations other than FCW.<br>
-  8. Religious and political discussions are encouraged in locations other than FCW. Such discussions may be deleted from FCW.<br>
-  9. Grievances, accusations, or appeals in private.
+  &bull; Drowning community discussion in Discord by posting many more messages than anyone is bad form: let others give their views. <br><br>
+  5. FCW is not the appropriate forum for publicly or privately promoting, recruiting, or poaching to other servers or sites. Ask admin permission.<br><br>
+  6. FCW is not the appropriate forum for comparison or politicking for or against servers or sites.<br><br>
+  7. All constructive ideas and contributions are welcome.<br>
+  &bull; Politicking against the site or its members can be freely done in locations other than FCW.<br><br>
+  8. Religious and political discussions are encouraged in locations other than FCW. Such discussions may be deleted from FCW.<br><br>
+  9. Grievances, accusations, or appeals in private.<br>
   &bull; Humans have suspicions, sometimes false accusations, some even have slander or reputational injury as their motive. To protect against a 
   player, admin, or GM ever falsely suffering a reputation degradation in public: you MUST do accusations, complaints, infraction reports, and similar actions in PRIVATE. Report to an appropriate GM/moderator/admin. You have a right 
-  to a private hearing and to appeal intial decisions to other admins/moderators/GMs, but the process from start to finish must be handled in private if 
-  any content in the complaint either directly, indirectly, or implicitly, impugns, accuses, or maligns FCW, its players, admins, GMs, or moderators.
-  10. Private DMs must abide by community rules when those DMs were bridged by mutual belonging to FCW Discord or the FCW Game Server which make those communications possible. Private complaints about DMs to other members will be treated the same as if they had been made in public, if those DMs were bridged or conveyed by a FCW server. <br>
-  11. FCW is not a public square with guaranteed free speech. It is more like a friend's house party. You are not welcome if you break the party's rules.<br>
+  to a private hearing and to appeal decisions to other admins/moderators/GMs, but the process from start to finish must be handled in private if 
+  any content in the complaint either directly, indirectly, or implicitly, impugns, accuses, or maligns FCW, its players, admins, GMs, or moderators.<br><br>
+  10. Private DMs must abide by community rules when those DMs were bridged by mutual belonging to FCW Discord or the FCW Game Server which make those communications possible. Private complaints about DMs to other members will be treated the same as if they had been made in public, if those DMs were bridged or conveyed by a FCW server. <br><br>
+  11. FCW is not a public square with guaranteed free speech. It is more like a friend's house party. You are not welcome if you break the party's rules.<br><br>
   12. What happens at FCW stays at FCW:  FCW is a private party gathering, our strict Privacy Policy represents to our users that what they do at FCW takes place in a private gathering on a Preferred Privacy Protection site. Users need not react to, nor concern themselves about distribution of their information or communications outside of the FCW services. Do not screenshot, copy-paste, relay, report, journalize, log, transliterate, translate, or otherwise convey information, communications, or any form of Private Identity Data, within the FCW services to anywhere outside the FCW privacy sphere, without first obtaining permission. Violation of this policy means you are no longer deemed to be an authorized user of our site. Private Identity Data includes but is not limited to real name, address, location, nationality, telephone or digital contact information, and so on.<br>
-  &bull; General sharing permission is already granted by default, for game experiences available from the perspective of the nation you play in any game, and any message you make that does not interact with or imply or help infer, another user's private content.<br>
+  &bull; General sharing permission is already granted by default, for game experiences available from the perspective of the nation you play in any game, and any message you make that does not interact with or imply or help infer, another user's private content.<br><br>
 </div>
 <div>
-<b>NOTES on Disputes, Issues, and Moderation:</b>  
+<h2>Disputes, Issues, and Moderation:</h2>  
 <i>Be polite, Be nice</i> is the meta-rule of the site. It is a catch-all against all incivility and inappropriate conduct not listed here.<br> 
-<i>"Who is the injured party and how injured are they?"</i> is the Prime Decider above all other considerations when adjudicating infractions.<br>
-<i>GRIEVANCES may be briefly raised in public</i> <u>but MAY NOT impugn in public</u>, and will be procedurally moderated out of public.</i>
-&bull; Publicly dramatizing or impugning the site, an admin, or admin decision, or creating any drama that's not part of the fun entertainment ambience of gaming, is forbidden. Ask for appeals, reviews, and moderation in private. <br>
+<i>"Who is the injured party and how injured are they?"</i> is the Prime Measure for deciding all adjudication.<br>
+<i>GRIEVANCES may be briefly raised in public</i> <u>IF THEY DO NOT <b>IMPUGN</b> in public</u>, and will be procedurally moderated out of public.</i><br>
+&bull; Publicly dramatizing or impugning the site, a player, an admin, admin decision, or creating any drama that's not part of the fun entertainment ambience of gaming, is forbidden. Ask for appeals, reviews, and moderation in private. <br>
 
 </div>  
 
