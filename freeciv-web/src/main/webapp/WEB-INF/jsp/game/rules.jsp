@@ -97,7 +97,7 @@
     <br>
   </div>
   <h2><span style="color:#fff">Clarifications to In-game Rules:</span></h2>
-  <div style="font-size:95%">
+  <div style="font-size:100%">
     <b>1. Idle players may lose their nation</b> after 2 idle turns on <b>Turns 1-5</b>, &nbsp; <b>Turn 6:</b> idle 3 turns &nbsp; 
     <b>T20:</b> idle 4,  &nbsp; <b>T25:</b> idle 5, &nbsp; <b>T30:</b> idle 6, &nbsp; <b>T35:</b> idle 7<br><br>
     <b>2.</b> GM may change the victory conditions documented in the ruleset and the <u>game settings</u> at the game start.<br><br>
@@ -171,7 +171,7 @@
   <br><br>
   <b>Clarification:</b>
 </div>
-<div style="font-size:95%">
+<div style="font-size:100%">
   <b>1. Be nice.</b><br>
   &bull; This is FCW's golden Meta-rule. Every other rule is subordinate to this one, a mere detail and explanation of this one.
    Almost every other rule is derived from this. Remember this one and there's a lot less to memorize!<br><br>
