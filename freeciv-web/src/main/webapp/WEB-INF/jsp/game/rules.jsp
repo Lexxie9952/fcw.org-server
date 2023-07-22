@@ -189,13 +189,13 @@
   &nbsp;&nbsp;&bull;&bull; Address other players as their country's fictional leader. **Third person pronouns are advisable.** <br>
   &nbsp;&nbsp;&bull;&bull; INCORRECT: "You're a lying warmonger, asshole, and I'm going to crush you, pathetic loser!"<br>
   &nbsp;&nbsp;&bull;&bull; CORRECT: "The Mongol nation and its leader are lying warmongers, pathetic losers who deserve to be crushed by the Swiss!"<br><br>
-  4. No ASSHATS.<br> 
-  &bull; NO abuse, spam, slander, harrassment, antagonism, threats, sedition; no rabble-rowsing, psychoaggression; no abrasive, disrespectful or hateful interactions.
+  4. No <b>ASSHATS</b>.<br> 
+  &bull; NO <u>A</u>buse, <u>S</u>pam, <u>S</u>lander, <u>H</u>arrassment, <u>A</u>ntagonism, <u>T</u>hreats, <u>S</u>edition; no rabble-rowsing, psychoaggression; no abrasive, disrespectful or hateful interactions.<br>
   &bull; NO using, directing, incorporating from another person or "bot" as the agent for violating any site rules.<br>
   &bull; Preserve the game entertainment ambience by keeping in-game chat relative to the in-game play of your player-nation.<br>
   &bull; ASSHATing that affects game outcome or integrity may be punished or corrected by the GM.
-  &bull; Keep in-game psycho-aggression/manipulation, psy-ops, gaslighting, mindwarps, dishonesty: a) fictional/role-played: NOT between humans, b) short in time,duration,length, c) NOT excessive/extreme/exorbitant in scope
-  &bull; Non-sporting or "meta-game dishonesty" is considered ASSHAT: e.g., informing someone you won't RTS then doing so, misinforming human players of external out-of-game facts/conditions for an in-game advantage, etc.
+  &bull; Keep in-game psycho-aggression/manipulation, psy-ops, gaslighting, mindwarps, dishonesty: a) fictional/role-played: NOT between humans, b) short in time,duration,length, c) NOT excessive/extreme/exorbitant in scope<br>
+  &bull; Non-sporting or "meta-game dishonesty" is considered ASSHAT: e.g., informing someone you won't RTS then doing so, misinforming human players of external out-of-game facts/conditions for an in-game advantage, etc.<br>
   &bull; NO: Sharing/screenshotting private conversations without permission, doxxing, violating Privacy Policy of FCW ecosystem. <br>
   &bull; Off-site links except to a rules question, are forbidden from in-game chat.<br>
   &bull; Drowning community discussion in Discord by posting many more messages than anyone is bad form: let others give their views. <br><br>
@@ -206,7 +206,7 @@
   8. Religious and political discussions are encouraged in locations other than FCW. Such discussions may be deleted from FCW.<br><br>
   9. Grievances, accusations, or appeals in private.<br>
   &bull; Humans have suspicions, sometimes false accusations, some even have slander or reputational injury as their motive. To protect against a 
-  player, admin, or GM ever falsely suffering a reputation degradation in public: you MUST do accusations, complaints, infraction reports, and similar actions in PRIVATE. Report to an appropriate GM/moderator/admin. You have a right 
+  player, admin, or GM publicly and wrongly suffering degraded reputation: you MUST do accusations, complaints, infraction reports, and similar actions in PRIVATE. Report to an appropriate GM/moderator/admin. You have a right 
   to a private hearing and to appeal decisions to other admins/moderators/GMs, but the process from start to finish must be handled in private if 
   any content in the complaint either directly, indirectly, or implicitly, impugns, accuses, or maligns FCW, its players, admins, GMs, or moderators.<br><br>
   10. Private DMs must abide by community rules when those DMs were bridged by mutual belonging to FCW Discord or the FCW Game Server which make those communications possible. Private complaints about DMs to other members will be treated the same as if they had been made in public, if those DMs were bridged or conveyed by a FCW server. <br><br>
