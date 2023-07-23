@@ -190,7 +190,9 @@
   &nbsp;&nbsp;&bull;&bull; INCORRECT: "You're a lying warmonger, asshole, and I'm going to crush you, pathetic loser!"<br>
   &nbsp;&nbsp;&bull;&bull; CORRECT: "The Mongol nation and its leader are lying warmongers, pathetic losers who deserve to be crushed by the Swiss!"<br><br>
   4. No <b>ASSHATS</b>.<br> 
-  &bull; NO <u>A</u>buse, <u>S</u>pam, <u>S</u>lander, <u>H</u>arrassment, <u>A</u>ntagonism, <u>T</u>hreats, <u>S</u>edition; no rabble-rowsing, psychoaggression; no abrasive, disrespectful or hateful interactions.<br>
+  &bull; NO <u>A</u>buse, <u>S</u>pam, <u>S</u>lander, <u>H</u>arrassment, <u>A</u>ntagonism, <u>T</u>hreats, <u>S</u>edition; no rabble-rowsing, psychoaggression.<br>
+  &bull; Abrasive or disrespectful actions should be limited. Hateful interactions shouldn't happen.<br> 
+  &bull; Interactions deemed unusually dishonorable or lacking sportsmanship; especially if leveraging this to impact outcome in an unnatural or irregular way.<br> 
   &bull; Preserve the game entertainment ambience by keeping in-game chat relative to the in-game play of your player-nation.<br>
   &bull; ASSHATing that affects game outcome or integrity may be punished or corrected by the GM. <br>
   &bull; Keep in-game psycho-aggression/manipulation, psy-ops, gaslighting, mindwarps, dishonesty: a) fictional/role-played: NOT between humans, b) short in duration and frequency, c) lightly done <br>
