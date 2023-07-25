@@ -3806,6 +3806,11 @@ static bool city_build(struct player *pplayer, struct unit *punit,
   start_tile are used to create a path segment starting at start_tile;
   otherwise unit_tile(punit) is assumed for a fresh goto path. 
 **************************************************************************/
+
+// TODO: all int moves_left_initially should be converted to uint32 to match
+// incoming data or whatever is originally feeding this at beginning of chain
+// as it's throwing a "ERROR: unable to get uint32 from moves_left_initially"
+// somewhere in the chain
 static void do_path_req(struct player *pplayer, struct unit *punit, 
                         int goal, int start_tile, int moves_left_initially,
                         int fuel_left_initially)

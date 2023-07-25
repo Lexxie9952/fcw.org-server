@@ -174,7 +174,7 @@
 <div style="font-size:100%">
   <b>1. Be nice.</b><br>
   &bull; This is FCW's golden Meta-rule. Every other rule is subordinate to this one, a mere detail and explanation of this one.
-   Almost every other rule is derived from this. Remember this one and there's a lot less to memorize!<br><br>
+   Remember this one and there's a lot less to memorize!<br><br>
   2. <b>Don't cheat:</b><br>
   &bull; No multi-accounts: Do not play multiple accounts within the same game.<br>
   &bull; Hacking is cheating: Browser hacking, dev-console hacking, packet hacking, server hacking, and any other form of hacking.<br>
