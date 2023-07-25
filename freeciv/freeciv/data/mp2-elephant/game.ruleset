@@ -1142,10 +1142,6 @@ actor_reqs    =
       "UnitType", "Freight",      "Local", TRUE,      TRUE
       "DiplRel",  "Foreign",      "Local", FALSE,     TRUE
     }
-target_reqs    =
-    { "type",          "name",    "range", "present"
-      "BuildingGenus", "Special", "Local", TRUE
-    }
 
 ;TRIBESMEN RECYCLE: Building, Wonder, or Coinage (special)
 [actionenabler_recycle_unit_tribesmen_1]
