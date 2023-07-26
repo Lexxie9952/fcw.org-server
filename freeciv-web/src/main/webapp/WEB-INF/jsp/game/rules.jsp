@@ -134,7 +134,6 @@
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&bull;&bull;&bull;&bull; A player's unilateral violation of the above without agreement or moderation allows the other player to seek compensatory justice though moderation.<br> 
     &bull; After T100 or the discovery of Flight, rules are slightly relaxed in favor of the one who wishes to RTS, especially if:<br>
     &nbsp;&nbsp;&bull;&bull; ...Air unit actions would result in major swaying of outcome due to aircrafts' &bull;mobility, &bull;ZOC, &bull;iPillage, &bull;strong military power in influencing outcomes.<br>
-    &nbsp;&nbsp;&bull;&bull; The above helps clarify understanding for those inexperienced in how No-RTS-requests may cause game imbalance under these conditions.<br><br>
     <b>5. No camping.</b><br>
     &bull; A player should not be online for most the day. Remaining online all day is unfair to everyone else.<br><br>
     <b>6. NEVER declare victory for anyone but yourself.</b><br>
