@@ -122,7 +122,7 @@
     &bull; Players who are online longer are EXPECTED to be MORE tolerant of No-RTS-requests, and the GM should consider this in their decisions.<br>
     &bull; Be considerate of players who cannot log in multiple times per day, especially if you are online longer than them.<br>
     <b>There are key times when <u>RTS is expected, allowed, and necessary.</u></b><br> Players may deny No-RTS-requests:</i><br>
-    
+    <a href="https://static.wikia.nocookie.net/freecivweb/images/e/ee/RTS_chart.png/revision/latest?cb=20230726172842" target="_blank">RTS time chart</a><br>
     &nbsp;&nbsp;&bull;&bull; <b>One hour BEFORE to one hour AFTER a Turn Change.</b><br>
     &nbsp;&nbsp;&bull;&bull; <b>For one hour, AFTER the final UWT expires from last TC: 10 to 11 hours into the turn</b>.<br>
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; * UWT = unitwaittime. For more info, type: /help unitwaittime<br>
