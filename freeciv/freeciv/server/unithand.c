@@ -4263,6 +4263,8 @@ static bool unit_bombard(struct unit *punit, struct tile *ptile,
   /* Sanity check: The actor still exists. */
   fc_assert_ret_val(pplayer, FALSE);
   fc_assert_ret_val(punit, FALSE);
+  int bomber_sanity = punit->id; 
+  fc_assert_ret_val(game_unit_by_number(bomber_sanity), FALSE);
 
   act_utype = unit_type_get(punit);
   
@@ -4507,6 +4509,20 @@ static bool unit_bombard(struct unit *punit, struct tile *ptile,
   if (!is_retaliation) {
     // function calls itself once for every retaliator to fight back 
     unit_list_iterate_safe(ptile->units, pdefender) {
+
+      /* Sanity checks: multiple units possibly killing each other! */
+        /* ...make sure defender still exists...*/ 
+      if (!pdefender) continue;
+      else {
+        if (!game_unit_by_number(pdefender->id)) {
+          continue;
+        } 
+      }
+        /* ...make sure bombarder didn't get killed by a previous retaliation...*/ 
+      if (!game_unit_by_number(bomber_sanity)) {
+        break;
+      }
+      
       struct extra_unit_stats rstats;
       unit_get_extra_stats(&rstats, pdefender);
       
@@ -4540,8 +4556,11 @@ static bool unit_bombard(struct unit *punit, struct tile *ptile,
     } unit_list_iterate_safe_end;
   }
 
-  send_unit_info(NULL, punit);
-
+  /* send_unit_info unless bomber died in retaliation, in which case it was already wiped and its
+     info sent in that earlier recursive step */
+  if (game_unit_by_number(bomber_sanity)) {
+    send_unit_info(NULL, punit);
+  }
   return TRUE;
 }
 
