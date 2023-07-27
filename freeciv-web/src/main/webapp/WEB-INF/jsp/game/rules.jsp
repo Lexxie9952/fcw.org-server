@@ -100,15 +100,15 @@
   <div style="font-size:100%">
     <b>1. Idle players may lose their nation</b> after 2 idle turns on <b>Turns 1-5</b>, &nbsp; <b>Turn 6:</b> idle 3 turns &nbsp; 
     <b>T20:</b> idle 4,  &nbsp; <b>T25:</b> idle 5, &nbsp; <b>T30:</b> idle 6, &nbsp; <b>T35:</b> idle 7<br><br>
-    <b>2.</b> GM may change the victory conditions documented in the ruleset and the <u>game settings</u> at the game start.<br><br>
+    <b>2.</b> At game start, GM may customize the victory conditions documented in the ruleset and the <u>game settings</u>.<br><br>
     <b>3. Delegation's purpose is to maximize game integrity.</b><br>
     &bull; <b>Delegation is good when...</b><br>
     &nbsp;&nbsp;&bull;&bull; (a) it lets a nation make self-interested rational moves at the right times, when it could not otherwise.<br>
-    &nbsp;&nbsp;&bull;&bull; (b) idle nation would unfairly affect game outcome.<br>
+    &nbsp;&nbsp;&bull;&bull; (b) an idle nation would unfairly affect game outcome.<br>
     &bull; <b>Delegation is bad when...</b><br>
-    &nbsp;&nbsp;&bull;&bull; Any delegation longer than a week, with no attempt made for a replacement.<br>
+    &nbsp;&nbsp;&bull;&bull; it lasts longer than a week with no attempt made for a replacement.<br>
     &nbsp;&nbsp;&bull;&bull; A more experienced player micro-manages moves for a less experienced player (instead of advising them).<br>
-    &nbsp;&nbsp;&bull;&bull; Any situation where it's common sense that it is unfair or degrades game integrity.<br>
+    &nbsp;&nbsp;&bull;&bull; It's any situation where common sense shows it is unfair or degrades game integrity.<br>
     &bull; Delegations can't be done before turn 3<br>
     &bull; One delegation per player is allowed.<br>
     &bull; Long-term delegations can be approved by the Gamemaster (GM).<br>
@@ -120,18 +120,19 @@
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; * &nbsp;Units on an automated GOTO action that are delayed by UWT, are not RTS.<br>
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; ** Units on vigil are not considered RTS.<br>
     &bull; Players who are online longer are EXPECTED to be MORE tolerant of No-RTS-requests, and the GM should consider this in their decisions.<br>
-    &bull; Be considerate of players who cannot log in multiple times per day, especially if you are online longer than them.<br>
-    <b>There are key times when <u>RTS is expected, allowed, and necessary.</u></b><br> Players may deny No-RTS-requests:</i><br>
-    <a href="https://static.wikia.nocookie.net/freecivweb/images/e/ee/RTS_chart.png/revision/latest?cb=20230726172842" target="_blank">RTS time chart</a><br>
-    &nbsp;&nbsp;&bull;&bull; <b>One hour BEFORE to one hour AFTER a Turn Change.</b><br>
-    &nbsp;&nbsp;&bull;&bull; <b>For one hour, AFTER the final UWT expires from last TC: 10 to 11 hours into the turn</b>.<br>
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; * UWT = unitwaittime. For more info, type: /help unitwaittime<br>
-    &nbsp;&nbsp;&bull;&bull; Starting <b>one hour BEFORE movements start to incur UWT next turn:</b> (11h on the turn timer.)<br>
-    &nbsp;&nbsp;&bull;&bull; <b>During "Mexican Standoff"</b> -- both players request "No RTS" and whoever asked first would gain such an advantage over the other player, that it would decide the game's outcome:<br>
-    &nbsp;&nbsp;&nbsp;&nbsp;&bull;&bull;&bull; Each player should use the Mexican Standoff rule: (1) infrequently or never, and (2) not for situations more minor than similar requests made by others.<br>
-    &nbsp;&nbsp;&nbsp;&nbsp;&bull;&bull;&bull; If there is conflict over this, players should negotiate either (a) come to their own agreement, (b) confirm an agreement to RTS it,  (c) agree to alternate 1 (or 2) moves at a time between the players, OR (d) freeze the action and wait GM decision.<br>
-    &nbsp;&nbsp;&nbsp;&nbsp;&bull;&bull;&bull; NO PLAYER may take unilateral advantage during a Mexican Standoff, if an agreement (a),(b),(c), or (d) is not reached. CONFIRM and COMMUNICATE.<br>
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&bull;&bull;&bull;&bull; A player's unilateral violation of the above without agreement or moderation allows the other player to seek compensatory justice though moderation.<br> 
+    &bull; Yield to players who cannot log in multiple times per day, especially if you are online longer than them.<br>
+    <b>There are key times when <u>RTS is expected, allowed, and necessary.</u></b><br>
+    <a href="https://static.wikia.nocookie.net/freecivweb/images/e/ee/RTS_chart.png/revision/latest?cb=20230726172842" target="_blank">Click here for RTS timing chart</a><br>
+    Players may deny No-RTS-requests:</i><br>
+    &nbsp;&nbsp;&bull;&bull; <b>One hour BEFORE and AFTER a Turn Change.</b><br>
+    &nbsp;&nbsp;&bull;&bull; <b>Ten hours after Turn Change, for one hour (after all UWT expires)</b>.<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; * <small>UWT = unitwaittime. For more info, type: /help unitwaittime</small><br>
+    &nbsp;&nbsp;&bull;&bull; <b>When there is 11h on the turn timer, for one hour.</b> (One hour BEFORE movements incur UWT next turn.)<br>
+    &nbsp;&nbsp;&bull;&bull; <b>During "Mexican Standoff"</b> -- whoever would request "No RTS" first would gain major advantage over the other:<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&bull;&bull;&bull; The Mexican Standoff rule should be used: (1) as little as possible, (2) not for minor situations.<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&bull;&bull;&bull; In Mexican Standoff, players should negotiate to (a) come to their own agreement, OR (b) confirm an agreement to do RTS, OR (c) agree to alternate 1 (or 2) moves at a time, OR (d) stop moving and await GM moderation.<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&bull;&bull;&bull; NO PLAYER may take unilateral advantage during a Mexican Standoff, without (a),(b),(c), or (d) in place. CONFIRM and COMMUNICATE.<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&bull;&bull;&bull;&bull; Violation of the above allows the other player to seek compensatory justice though moderation.<br> 
     &bull; After T100 or the discovery of Flight, rules are slightly relaxed in favor of the one who wishes to RTS, especially if:<br>
     &nbsp;&nbsp;&bull;&bull; ...Air unit actions would result in major swaying of outcome due to aircrafts' &bull;mobility, &bull;ZOC, &bull;iPillage, &bull;strong military power in influencing outcomes.<br>
     <b>5. No camping.</b><br>
@@ -200,7 +201,7 @@
   &bull; Off-site links except to a rules question, are forbidden from in-game chat.<br>
   &bull; Drowning community discussion in Discord by posting many more messages than anyone is bad form: let others give their views. <br>
   &bull; NO using, directing, incorporating from another person or "bot" as the agent for violating any site rules.<br><br>
-  5. FCW is not the appropriate forum for publicly or privately promoting, recruiting, or poaching to other servers or sites. Ask admin permission.<br><br>
+  5. FCW is a safe space, free from public or private promoting, recruiting, or poaching to other sites. Ask admin permission.<br><br>
   6. FCW is not the appropriate forum for comparison or politicking for or against servers or sites.<br><br>
   7. All constructive ideas and contributions are welcome.<br>
   &bull; Politicking against the site or its members can be freely done in locations other than FCW.<br><br>
@@ -212,15 +213,15 @@
   any content in the complaint either directly, indirectly, or implicitly, impugns, accuses, or maligns FCW, its players, admins, GMs, or moderators.<br><br>
   10. Private DMs must abide by community rules when those DMs were bridged by mutual belonging to FCW Discord or the FCW Game Server which make those communications possible. Private complaints about DMs to other members will be treated the same as if they had been made in public, if those DMs were bridged or conveyed by a FCW server. <br><br>
   11. FCW is not a public square with guaranteed free speech. It is more like a friend's house party. You are not welcome if you break the party's rules.<br><br>
-  12. <b>What happens at FCW stays at FCW</b>:  FCW is a private party gathering, our strict Privacy Policy represents to our users that what they do at FCW takes place in a private gathering on a Preferred Privacy Protection site. Users need not react to, nor concern themselves about distribution of their information or communications outside of the FCW services. Do not screenshot, copy-paste, relay, report, journalize, log, transliterate, translate, or otherwise convey information, communications, or any form of Private Identity Data, within the FCW services to anywhere outside the FCW privacy sphere, without first obtaining permission. Violation of this policy means you are no longer deemed to be an authorized user of our site. Private Identity Data includes but is not limited to real name, address, location, nationality, telephone or digital contact information, and so on.<br>
-  &bull; General sharing permission is already granted by default, for game experiences available from the perspective of the nation you play in any game, and any message you make that does not interact with or imply or help infer, another user's private content.<br><br>
+  12. <b>What happens at FCW stays at FCW</b>:  FCW is a Preferred Privacy Protection site. What users do at FCW is privacy protected. <b>Users may not distribute other users' content, information, or communications outside of the FCW services.</b> Do not screenshot, copy-paste, relay, report, journalize, log, transliterate, translate, or otherwise convey information, communications, or Private Identity Data, within the FCW services to anywhere outside the FCW privacy sphere, without first obtaining permission. Violation of this policy means you are no longer deemed to be an authorized user of our site.<br>
+  &bull; <b>General sharing permission is granted by default:</b> for in-game experiences available from the perspective of the nation you play in-game (so long as it does not violate another user's private content.)<br><br>
 </div>
 <div>
 <h2>Disputes, Issues, and Moderation:</h2>  
-<i>Be polite, Be nice</i> is the meta-rule of the site. It is a catch-all against all incivility and inappropriate conduct not listed here.<br> 
-<i>"Who is the injured party and how injured are they?"</i> is the Prime Measure for deciding all adjudication.<br>
-<i>GRIEVANCES may be briefly raised in public</i> <u>IF THEY DO NOT <b>IMPUGN</b> in public</u>, and will be procedurally moderated out of public.</i><br>
-&bull; Publicly dramatizing or impugning the site, a player, an admin, admin decision, or creating any drama that's not part of the fun entertainment ambience of gaming, is forbidden. Ask for appeals, reviews, and moderation in private. <br>
+<i>Be polite, Be nice</i> is the meta-rule of the site. It is a catch-all against all incivility and inappropriate conduct not listed here.<br><br>
+<i>"Who is the injured party and how injured are they?"</i> is the Prime Measure for deciding all adjudication.<br><br>
+<i>GRIEVANCES may be briefly raised in public</i> <u>IF THEY DO NOT <b>IMPUGN</b> in public</u>, and will be procedurally moderated out of public.</i><br><br>
+&bull; Impugning a player, admin, admin decision, the site, or creating public drama that's not in a fun entertainment ambience of gaming, is forbidden. Ask for moderation and appeals in private. <br>
 
 </div>  
 
