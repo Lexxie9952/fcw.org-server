@@ -2133,9 +2133,9 @@ helptext       = _("\
 Highways allow your land units to move more quickly. On Flatland terrain,\
  they also provide a trade bonus to the tile if it is used by a city. \n\
 "), _("\
-Highways are 67% faster than roads, using 1/5 move-point instead of 1/3. Motorized\
- units actually move faster and farther on highways than railroads (30 tiles).\
- Basic Foot units gain +4 range (10 tiles). Mounted units go from 12 to 20 tiles in range.\
+Highways are twice as fast as roads, using 1/6 move-point instead of 1/3. Motorized\
+ units actually move faster and farther on highways than railroads (36 vs 28 tiles).\
+ Other units double their range compared to a basic road.\
  City centers automatically get Highways after you research Automobile tech.\
 ")
 
@@ -2164,9 +2164,9 @@ native_to      = "Land", "LandNoKill", "LandAirSea", "LandRail", "Big Land" ;NB:
 flags          = "AutoOnCityCenter", "NativeTile"
 bridged_over   = "River"
 helptext       = _("\
-Railroad tech lets you upgrade Roads to Railroads. Units use 1/24th of their\
+Railroad tech lets you upgrade Roads to Railroads. Units use 1/28th of their\
  full move_rate when using rails. This effectively gives all land units a range of\
- 24 tiles when using rails.\
+ 28 tiles when using rails.\
 "), _("\
 Railroads increase tile shield output by 50% (rounded down).\
  A tile whose road is upgraded to rails retains the trade bonus\
@@ -2200,8 +2200,8 @@ native_to      = "Land", "LandNoKill", "LandAirSea", "Big Land"
 flags          = "NativeTile", "AutoOnCityCenter"
 helptext       = _("\
 With Superconductors, you may build MAGnetic LEVitation tracks.\
- Land units expend 1/48th of their full move_rate when riding\
- MagLevs; giving a maximum range of 60 tiles. \n\
+ Land units expend 1/70th of their full move_rate when riding\
+ MagLevs; giving a maximum range of 70 tiles. \n\
 "), _("\
 City center tiles are automatically upgraded to MagLev\
  when you acquire Superconductor tech.\
@@ -2236,10 +2236,10 @@ removal_time = 0
 flags          = "NativeTile", "Quayable", "IrrigationSource", "WaterwaySource"
 native_to      = "Land", "LandNoKill", "LandAirSea", "Trireme", "RiverShip",
                  "Big Land" ; see below:
-; NOTE: PassiveMovement cost of 1/6 effectively makes a move along a river 1mp, same as when
-; Big Land was non-native in mp2d. So why the change? Several differences:
-; Gets the 1.5x defense bonus on rivers, without which Big Land is over-nerfed compared to Foot.
-; Ends up being 1 move point when going on a forest/hill.
+; NOTE: PassiveMovement cost of 1/8 effectively makes a moves along a river .75mp
+; this reduces Big Land's non-native penalty in mp2d. So why the change?
+; Gets the 1.5x defense bonus on rivers, preventing over-nerfing.
+; Ends up not losing major mobility following river into forest/hill.
 ; Does allow movement onto mountain river.
 ; Incurs the restrictinfra hard entry/exit penalty for crossing rivers
 ; Allows coding the server so only units native-to-road-type get hard entry/exit, thus
@@ -2247,8 +2247,8 @@ native_to      = "Land", "LandNoKill", "LandAirSea", "Trireme", "RiverShip",
 helptext       = _("\
 A River adds +1 trade to the output of a tile, and +0.50 to\
  the terrain defense bonus. Units with full move points\
- can move 7 tiles along a River, regardless of their move rate.\
- That is, units use 1/7th of their full move rate on each river\
+ can move 8 tiles along a River, regardless of their move rate.\
+ That is, units use 1/8th of their full move rate on each river\
  tile.\
 "), _("\
 Roads can be built on rivers after you acquire Bridge Building technology.\
@@ -3246,7 +3246,7 @@ flags          = "UnrestrictedInfra"
 
 [road_highway]
 extra          = "Highway"
-move_cost      = 2016
+move_cost      = 1680           ; twice as fast as road, 1/6th move
 food_incr      = 0
 shield_incr    = 0
 trade_incr     = 1
@@ -3282,7 +3282,7 @@ integrates     = "Road", "Highway", "Quay", "Quay​"  ; "Quay"+0-width space = 
 
 [road_railroad]
 extra          = "Railroad"
-move_cost      = 24           ; "PassiveMovement" i.e., everyone gets 24 moves on it
+move_cost      = 28           ; "PassiveMovement" i.e., everyone gets 28 moves on it
 food_incr      = 0
 shield_incr    = 0
 trade_incr     = 0
@@ -3295,7 +3295,7 @@ flags          = "PassiveMovement"
 
 [road_maglev]
 extra          = "Maglev"
-move_cost      = 60             ; "PassiveMovement" i.e., everyone gets 60 moves on it
+move_cost      = 70             ; "PassiveMovement" i.e., everyone gets 70 moves on it
 food_incr      = 0
 shield_incr    = 0
 trade_incr     = 0
@@ -3307,7 +3307,7 @@ flags          = "PassiveMovement"
 
 [road_river]
 extra          = "River"
-move_cost      = 7             ; "PassiveMovement" i.e., everyone gets 7 moves on it.
+move_cost      = 8             ; "PassiveMovement" i.e., everyone gets 8 moves on it.
 move_mode      = "Cardinal"
 trade_incr_const = 1
 compat_special = "River"
@@ -3337,7 +3337,7 @@ flags          = "IntegrateCostUp", "ReverseRestrictInfra" ;(allied units ignore
 
 [road_canal]
 extra             = "Canal"
-move_cost         = 7                   ; "PassiveMovement"
+move_cost         = 8                   ; "PassiveMovement"
 move_mode         = "Cardinal"
 integrates        = "River", "Waterway"
 compat_special    = "None"
@@ -3345,7 +3345,7 @@ flags             = "PassiveMovement", "UnrestrictedInfra", "HardExitRInfra", "H
 
 [road_waterway]
 extra             = "Waterway"
-move_cost         = 7                   ; "PassiveMovement"
+move_cost         = 8                   ; "PassiveMovement"
 move_mode         = "Cardinal"
 integrates        = "River", "Canal"
 compat_special    = "None"

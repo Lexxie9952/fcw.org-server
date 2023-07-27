@@ -4428,7 +4428,7 @@ attack        = 0
 defense       = 10
 hitpoints     = 8
 firepower     = 1
-move_rate     = 5
+move_rate     = 6
 vision_radius_sq = 4
 transport_cap = 1
 fuel          = 0
@@ -4460,7 +4460,7 @@ Boats were used pre-historically for exploration,\
  commerce：building Wonders or setting up Trade Routes.\
  Early bartering may help you advance faster or create\
  relations with ancient neighbors. Boats are better suited\
- for river travel and gain +1 move when starting their turn\
+ for river travel and gain +2 moves when starting their turn\
  on a river. Everyone can see a Boat’s cargo.\
 ")
 
@@ -4481,7 +4481,7 @@ attack        = 10
 defense       = 10
 hitpoints     = 10
 firepower     = 1
-move_rate     = 6
+move_rate     = 7
 vision_radius_sq = 4
 transport_cap = 2
 fuel          = 2
@@ -4517,7 +4517,7 @@ Like most ancient sea units, when it initiates combat there will be 15 rounds\
  of combat and 15 total hp lost between both units. This may or may not\
  result in a victor. Triremes do not cause unhappiness. \n\
 "), _("
-Triremes are well-suited for river travel and gain +1 move when starting\
+Triremes are well-suited for river travel and gain +2 moves when starting\
  their turn on a river.\n \
 GOTO forces layovers on coastal tiles. To override, shift-click goal-tile or move one tile off the refuel spot.\
 ")
@@ -6432,7 +6432,7 @@ Foot Soldiers use Trains the same as Wagons and Trucks, and can：\n\
 On non-allied foreign rails, Trains incur full terrain movement cost.\
  Pre-gunpowder units can’t attack Trains. \n\n\
 Electricity and Combustion each give Trains the ability to travel +5 more tiles,\
- resulting in a range of 25 and then 30 tiles.\
+ resulting in a range of 33 and then 38 tiles.\
 ")
 
 [unit_truck]

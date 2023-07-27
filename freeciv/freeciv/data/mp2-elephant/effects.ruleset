@@ -1425,7 +1425,7 @@ reqs    =
 ;------------------------------------------------------
 [effect_small_boats_faster_on_rivers_1]
 type    = "Move_Bonus"
-value	  = 10080
+value	  = 20160
 reqs    =
     {
       "type",         "name",    "range",    "present"
@@ -1435,7 +1435,7 @@ reqs    =
     }
 [effect_small_boats_faster_on_rivers_2]
 type    = "Move_Bonus"
-value	  = 10080
+value	  = 20160
 reqs    =
     {
       "type",         "name",    "range",    "present"
@@ -5165,22 +5165,22 @@ reqs	=
     }
 [effect_rail_electricity_no_combustion]
 type    = "Move_Bonus"
-value	= 10584                                          ;in 60 frag system this was 63, needs testing.
+value	= 7200    ; 5 * 4/28th of a move
 reqs	=
     { "type",      "name",          "range", "present"
       "Tech",      "Electricity",   "Player",TRUE
       "Tech",      "Combustion",    "Player", FALSE
       "UnitClass", "LandRail",      "Local", TRUE
-      "UnitState", "MovedThisTurn", "Local", FALSE ;a trick to make it uses 4/20 (12/60) move frags after its first move which costs 18/20
+      "UnitState", "MovedThisTurn", "Local", FALSE ;a trick to make it passive move calculator charge 4/28 move frags after its first move
     }
 [effect_rail_combustion]
 type    = "Move_Bonus"
-value	= 21168                                           ;in 60 frag system this was 126, needs testing
+value	= 14400
 reqs	=
     { "type",      "name",          "range", "present"
       "Tech",      "Combustion",    "Player",TRUE
       "UnitClass", "LandRail",      "Local", TRUE
-      "UnitState", "MovedThisTurn", "Local", FALSE ;a trick to make it uses 4/20 (12/60) move frags after its first move which costs 18/20
+      "UnitState", "MovedThisTurn", "Local", FALSE ;a trick to make it passive move calculator charge 4/28 move frags after its first move
     }
 [effect_automobile_light_armor]
 type    = "Move_Bonus"
