@@ -2048,8 +2048,12 @@ void free_unit_orders(struct unit *punit)
 {
   if (punit->has_orders) {
     punit->goto_tile = NULL;
-    free(punit->orders.list);
-    punit->orders.list = NULL;
+    if (punit->orders.list) { // never free() a NULL orders.list
+      free(punit->orders.list);
+      punit->orders.list = NULL;
+    } else {                  // shouldn't happen
+        log_debug("segfault prevented: free_unit_orders() disallowed free()ing a NULL punit->orders.list !");
+    }
   }
   punit->has_orders = FALSE;
 }

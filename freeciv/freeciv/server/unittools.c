@@ -4412,15 +4412,35 @@ static bool unit_survive_autoattack(struct unit *punit)
                TILE_XY(unit_tile(punit)), penemywin,
                1.0 - punitwin, abort_threshold);
 #endif
-      // Note: this puts the unit off vigil:
-      unit_activity_handling(penemy, ACTIVITY_IDLE);
+      // Dumb autoattacks clear orders and set the unit to idle:
+      if (game.server.autoattack_style == AA_DEFAULT) {
+        unit_activity_handling(penemy, ACTIVITY_IDLE);
+      }
       action_auto_perf_unit_do(AAPC_UNIT_MOVED_ADJ,
                                penemy, unit_owner(punit), NULL,
                                tgt_tile, tile_city(tgt_tile), punit, NULL);
+      /* This block of code would have to come back if units are losing their
+         vigil state after their first autoattack. Otherwise, ...
+      
+         This used to set vigil unit back on vigil after it was put to idle, 
+         but currently appears unnecessary, since only AA_DEFAULT now sets 
+         vigiling units back to idle (3 lines up.) This should now avoid 
+         segfault from unit_activity_handling() on a possibly dead unit. 
+         If we ever change/add features such that we use this code again, 
+         it's now more secure because it was edited to:
+         (1) Check the unit is still alive
+         (2) Not use unit_activity_handling() which does a free_unit_orders:
+            a. units can be in a perma-vigil state while having orders
+               e.g., an ABM
+            b. not open possibility of freeing orders on a dead unit
+               even though we did already fix that in (1) .....
+
       if (game.server.autoattack_style == AA_ADVANCED) {
-        // Back on vigil
-        unit_activity_handling(penemy, ACTIVITY_VIGIL);
-      }
+        // Set unit back on vigil
+        if (game_unit_by_number(sanity2)) {
+          set_unit_activity(penemy, ACTIVITY_IDLE);
+        } 
+      } */
 
     } else {
         notify_player(unit_owner(penemy), unit_tile(punit), E_UNIT_ORDERS, ftc_server,
