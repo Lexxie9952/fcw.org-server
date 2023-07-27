@@ -3415,6 +3415,7 @@ function do_map_click(ptile, qtype, first_time_called)
       if (player_can_see_inside_city(pcity) && !mouse_click_mod_key['shiftKey']) { // if allowed to look inside and not shift-clicking
         if (sunits != null && sunits.length > 0 //if units inside
             && sunits[0]['activity'] == ACTIVITY_IDLE //if unit idle/selectable
+            && !sunits[0]['transported'] // transported units are sometimes idle but in this case similar to sentry
             && sunits[0]['owner'] == client.conn.playing.playerno  // if foreign-allied occupant we don't want to select the unit
             && sunits[0]['movesleft'] > 0) { // if no moves left we'd rather go inside city
 
@@ -3473,7 +3474,8 @@ function do_map_click(ptile, qtype, first_time_called)
             player_has_own_unit_present = true;
             if (!mouse_click_mod_key['shiftKey'] && focuslock) center_tile_mapcanvas(unit_tile(sunits[u]));
           }
-          if (player_has_own_unit_present) break; // gets first visible unit in stack, not last
+          if (sunits[u]['transported']) continue;  // ideally, look for first unit who isn't transported
+          if (player_has_own_unit_present) break;  // gets first [non-transported] visible unit in stack, not last
       }
 
       //if (sunits[0]['owner'] == client.conn.playing.playerno) {   // if player had a unit index >0, we couldn't click the stack
