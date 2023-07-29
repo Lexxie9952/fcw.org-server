@@ -134,7 +134,7 @@
     &nbsp;&nbsp;&nbsp;&nbsp;&bull;&bull;&bull; NO PLAYER may take unilateral advantage during a Mexican Standoff, without (a),(b),(c), or (d) in place. CONFIRM and COMMUNICATE.<br>
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&bull;&bull;&bull;&bull; Violation of the above allows the other player to seek compensatory justice though moderation.<br> 
     &bull; After T100 or the discovery of Flight, rules are slightly relaxed in favor of the one who wishes to RTS, especially if:<br>
-    &nbsp;&nbsp;&bull;&bull; ...Air unit actions would result in major swaying of outcome due to aircrafts' &bull;mobility, &bull;ZOC, &bull;iPillage, &bull;strong military power in influencing outcomes.<br>
+    &nbsp;&nbsp;&bull;&bull; ...Air unit actions would result in major swaying of outcome due to aircrafts' &bull;mobility, &bull;ZOC, &bull;iPillage, &bull;strong military power in influencing outcomes.<br><br>
     <b>5. No camping.</b><br>
     &bull; A player should not be online for most the day. Remaining online all day is unfair to everyone else.<br><br>
     <b>6. NEVER declare victory for anyone but yourself.</b><br>
@@ -197,7 +197,7 @@
   &bull; ASSHATing that affects game outcome or integrity may be punished or corrected by the GM. <br>
   &bull; Keep in-game psycho-aggression/manipulation, psy-ops, gaslighting, mindwarps, dishonesty: a) fictional/role-played: NOT between humans, b) short in duration and frequency, c) lightly done <br>
   &bull; Non-sporting or "meta-game dishonesty" is considered ASSHAT: e.g., informing someone you won't RTS then doing so, misinforming human players of external out-of-game facts/conditions for an in-game advantage, etc.<br>
-  &bull; NO: Sharing/screenshotting private conversations without permission, doxxing, violating Privacy Policy of FCW ecosystem. <br>
+  &bull; NO: Sharing/screenshotting private conversations without permission. NO doxxing. NO violating Privacy Policy of FCW ecosystem. <br>
   &bull; Off-site links except to a rules question, are forbidden from in-game chat.<br>
   &bull; Drowning community discussion in Discord by posting many more messages than anyone is bad form: let others give their views. <br>
   &bull; NO using, directing, incorporating from another person or "bot" as the agent for violating any site rules.<br><br>
