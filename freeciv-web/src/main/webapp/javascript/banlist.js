@@ -21,7 +21,7 @@
 /* This is a list of banned users of Freeciv-web.
    Note that user accounts can also be disabled by setting activated=0 in the auth DB table.
 */
-var banned_users = ["Blank", "KickedPlayer", "Hapy"];
+var banned_users = ["Blank", "KickedPlayer"];
 
 /**************************************************************************
  Returns false if the text contains a banned user.
