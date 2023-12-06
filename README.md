@@ -51,7 +51,7 @@ Whatever the method you choose, you'll have to check out Freeciv-web to a
 directory on your computer, by installing [Git](http://git-scm.com/) and
 running this command:
  ```bash
-  git clone https://github.com/Lexxie9952/fcw.org-server.git --depth=10
+  git clone https://github.com/Lexxie9952/fcw.org-server.git
  ```
 
 You may also want to change some parameters before installing, although
