@@ -13,6 +13,10 @@ create() {
   multipass exec fcw --working-directory /home/ubuntu/freeciv-web -- chmod +x scripts/install/install-multipass.sh
   multipass exec fcw --working-directory /home/ubuntu/freeciv-web -- scripts/install/install-multipass.sh
   echo "======= Installation complete ================"
+  echo "To complete the booting of FCW, please now do:"
+  echo "multipass shell fcw"
+  echo "./multipass-entrypoint.sh start"
+  echo ""
 }
 
 rebuild() {
