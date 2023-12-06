@@ -2,8 +2,8 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-# Freeciv-web Vagrant Vagrantfile - play.freeciv.org
-# 2014-02-17 - Andreas Røsdal
+# Freeciv-web Vagrant Vagrantfile
+# 2014-02-17 - Andreas RÃ¸sdal
 #
 # Run 'vagrant up' in this directory, which will create a VirtualBox image
 # and install Freeciv-web for you.

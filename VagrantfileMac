@@ -1,0 +1,397 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# Freeciv-web Vagrant Vagrantfile 
+
+###################################################################################################
+# NOTE: THIS FILE HAS SNIPPETS OF CONFIGURATION CODE THAT YOU CAN LOOK AT IF YOU WISH TO EDIT
+# THE INCLUDED "Vagrantfile" TO RUN VAGRANT ON:
+### A MAC WITH Apple Silicon chips (M-chips/arm64).
+### A Linux Machine using an arm64 CPU 
+# 
+# As of 30Nov2023:
+### Oracle VirtualBox is not supported for Apple Silicon / arm64 chips
+### VMWare supports Vagrant under arm64 via a vagrant bridge plugin extension.
+### Parallels, which is not free, would in theory work but has not been tested.
+#
+# If you succeed at getting Vagrant working under one of these VM platforms for arm64 chips,
+# Please commit an alternative version of the Vagrantfile to the repository with some comments
+# in the header for additional installation notes and required steps. Thanks!
+#
+# For now, You can install FCW on Apple silicon using Multipass. Multipass is also a good solution
+# for Linux machines regardless of chip architecture--just make sure the iso image for the distro
+# matches the x86 or arm64 architecture for your individual hardware.
+#
+### See README.md and multipass.md for more information.
+#
+# The rest of this file is a scrapyard of failed attempts to get Vagrant working under VMWare
+# for Mac. By seeing what [almost] succeeded, it may assist you in first steps to configure your
+# own Vagrant file in order to work.
+#
+# A known bug (documented installation hangup in VMWare forums) was encountered where endless
+# looping at the ubuntu login occurred while waiting to be assigned a port. Others have reportedly
+# got around this problem, and later versions of VMWare may have fixed it. It is advised to do an
+# internet search for a step-by-step video or written guide for getting VMWare working with Vagrant
+# on Apple Silicon and just get a "plain vanilla" installation working without FCW, prior to coming
+# into this file and cannibalizing or learning from this file's failed attempts to configure Vagrant 
+# for FCW under an ubuntu distro.
+###################################################################################################
+
+# Run 'vagrant up' in this directory, which will create a VirtualBox image
+# and install Freeciv-web for you.
+# Then point your browser to http://localhost/ on your host OS.
+#
+
+# Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
+VAGRANTFILE_API_VERSION = "2"
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  # The most common configuration options are documented and commented below.
+  # For a complete reference, please see the online documentation at
+  # https://docs.vagrantup.com.
+
+  # Every Vagrant development environment requires a box. You can search for
+  # boxes at https://vagrantcloud.com/search.
+  config.vm.box = "bytesguy/ubuntu-server-20.04-arm64"  #NB: should be 18.04 bionic
+  config.vm.box_version = "1.0.0"
+#  config.vm.provider "vmware_fusion" #doesn't seem needed and we don't know if vmware_desktop is the correct one.
+
+# this line may or may not be needed and hasn't actually been tested but appears to be the url from
+# vagrant's own json-structured install service records at https://vagrantcloud.com/api/v2/vagrant/bytesguy/ubuntu-server-20.04-arm64
+# and at very least it is hoped to help it more quickly find the url source for the box;
+config.vm.box_url = "https://vagrantcloud.com/bytesguy/boxes/ubuntu-server-20.04-arm64/versions/1.0.0/providers/vmware_fusion/unknown/vagrant.box"
+#  config.vm.box_url = "https://app.vagrantup.com/bytesguy/boxes/ubuntu-server-20.04-arm64/versions/1.0.0/providers/vmware_fusion/unknown/vagrant.box"
+
+#WARNING: The VMX file for this box contains a setting that is automatically overwritten by Vagrant when
+#started. Vagrant will stop overwriting this setting in an upcoming release which may prevent proper networking
+#setup. Below is the detected VMK: setting:
+#        ethernet0.pcislotnumber = "33"
+#If networking fails to properly configure, it may require this VMX setting. It can be manually applied in
+#the Vagrant file by uncommenting these lines:
+#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!###
+#vmware.gui = true is based on an historic known issue in getting past a hangup when launching Vagrant-VMWare
+#on Apple Silicon. See https://github.com/hashicorp/vagrant/issues/12695
+config.vm.provider :vmware_desktop do |vmware|
+  vmware.gui = true
+#  vmware.vmx["ethernet0.pcislotnumber"] = "33"
+end
+#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!###
+
+  config.vm.network :private_network, ip: "10.11.12.13"
+  config.vm.network :forwarded_port, guest: 80, host: 8080, host_ip: "127.0.0.1"
+  config.vm.network :forwarded_port, guest: 443, host: 8443, host_ip: "127.0.0.1"
+
+  config.vm.provider :vmware_fusion do |v|
+    v.cpus = "1"
+    host = RbConfig::CONFIG['host_os']
+
+    #Set your system RAM here as a fall-through if the below isn't able to capture mem setting:
+    #16GB / 1024 gives our system memory in megabytes:
+    mem = 17179869184 / 1024
+    # Give VM 50% of system memory 
+    if host =~ /darwin/
+      # sysctl returns Bytes and we need to convert to MB
+      mem = `sysctl -n hw.memsize`.to_i / 1024
+    elsif host =~ /linux/
+      # meminfo shows KB and we need to convert to MB
+      mem = `grep 'MemTotal' /proc/meminfo | sed -e 's/MemTotal://' -e 's/ kB//'`.to_i 
+    elsif host =~ /mswin|mingw|cygwin/
+      # Windows code via https://github.com/rdsubhas/vagrant-faster
+      mem = `wmic computersystem Get TotalPhysicalMemory`.split[1].to_i / 1024
+    end
+
+    mem = mem / 1024 / 2
+    v.customize ["modifyvm", :id, "--memory", mem.floor]
+
+    # Disable serial port. It is unnecessary, and may cause error on Win10
+    #   https://github.com/joelhandwell/ubuntu_vagrant_boxes/issues/1#issuecomment-292370353
+    v.customize ["modifyvm", :id, "--uartmode1", "disconnected"]
+  end
+
+  config.vm.synced_folder "./", "/vagrant", type: "nfs",
+  mount_options: ['rw', 'vers=3', 'tcp', 'nolock'],
+  linux__nfs_options: ['rw','no_subtree_check','all_squash','async']
+  
+  config.vm.boot_timeout = 100000
+
+  # There are problems with the default configuration of a DNS stub in some
+  # versions of systemd-resolved
+  config.vm.provision "systemd-resolved workaround", type: "shell", inline: "ln -sf /run/systemd/resolve/resolv.conf /etc/resolv.conf"
+  # run the Freeciv bootstrap script on machine creation
+  config.vm.provision "bootstrap", type: "shell", inline: "/vagrant/scripts/install/install.sh --mode=TEST", privileged: false
+  # run the Freeciv start script on startup
+  config.vm.provision "startup", type: "shell", inline: "/vagrant/scripts/start-freeciv-web.sh", run: "always", privileged: false
+
+end
+
+############################################################################################################################################################
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# All Vagrant configuration is done below. The "2" in Vagrant.configure
+# configures the configuration version (we support older styles for
+# backwards compatibility). Please don't change it unless you know what
+# you're doing.
+Vagrant.configure("2") do |config|
+  # The most common configuration options are documented and commented below.
+  # For a complete reference, please see the online documentation at
+  # https://docs.vagrantup.com.
+
+  # Every Vagrant development environment requires a box. You can search for
+  # boxes at https://vagrantcloud.com/search.
+  config.vm.box = "bytesguy/ubuntu-server-20.04-arm64"
+  config.vm.box_version = "1.0.0"
+
+  # Disable automatic box update checking. If you disable this, then
+  # boxes will only be checked for updates when the user runs
+  # `vagrant box outdated`. This is not recommended.
+  # config.vm.box_check_update = false
+
+  # Create a forwarded port mapping which allows access to a specific port
+  # within the machine from a port on the host machine. In the example below,
+  # accessing "localhost:8080" will access port 80 on the guest machine.
+  # NOTE: This will enable public access to the opened port
+  # config.vm.network "forwarded_port", guest: 80, host: 8080
+
+  # Create a forwarded port mapping which allows access to a specific port
+  # within the machine from a port on the host machine and only allow access
+  # via 127.0.0.1 to disable public access
+  config.vm.provider :vmware_desktop do |vmware|
+    vmware.gui = true
+    #vmware.allowlist_verified = true
+    #vmware.vmx["ethernet0.pcislotnumber"] = "33"
+  end
+  # config.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: "127.0.0.1"
+
+  # Create a private network, which allows host-only access to the machine
+  # using a specific IP.
+  # config.vm.network "private_network", ip: "192.168.33.10"
+
+  # Create a public network, which generally matched to bridged network.
+  # Bridged networks make the machine appear as another physical device on
+  # your network.
+  # config.vm.network "public_network"
+
+  # Share an additional folder to the guest VM. The first argument is
+  # the path on the host to the actual folder. The second argument is
+  # the path on the guest to mount the folder. And the optional third
+  # argument is a set of non-required options.
+  # config.vm.synced_folder "../data", "/vagrant_data"
+
+  # Disable the default share of the current code directory. Doing this
+  # provides improved isolation between the vagrant box and your host
+  # by making sure your Vagrantfile isn't accessable to the vagrant box.
+  # If you use this you may want to enable additional shared subfolders as
+  # shown above.
+  # config.vm.synced_folder ".", "/vagrant", disabled: true
+
+  # Provider-specific configuration so you can fine-tune various
+  # backing providers for Vagrant. These expose provider-specific options.
+  # Example for VirtualBox:
+  #
+  # config.vm.provider "virtualbox" do |vb|
+  #   # Display the VirtualBox GUI when booting the machine
+  #   vb.gui = true
+  #
+  #   # Customize the amount of memory on the VM:
+  #   vb.memory = "1024"
+  # end
+  #
+  # View the documentation for the provider you are using for more
+  # information on available options.
+
+  # Enable provisioning with a shell script. Additional provisioners such as
+  # Ansible, Chef, Docker, Puppet and Salt are also available. Please see the
+  # documentation for more information about their specific syntax and use.
+  # config.vm.provision "shell", inline: <<-SHELL
+  #   apt-get update
+  #   apt-get install -y apache2
+  # SHELL
+
+  # run the Freeciv bootstrap script on machine creation
+  config.vm.provision "bootstrap", type: "shell", inline: "/vagrant/scripts/install/install.sh --mode=TEST", privileged: false
+  # run the Freeciv start script on startup
+  config.vm.provision "startup", type: "shell", inline: "/vagrant/scripts/start-freeciv-web.sh", run: "always", privileged: false
+  
+end
+
+############################################################################################################################################################
+# coding: iso-8859-1
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# Freeciv-web Vagrant Vagrantfile - play.freeciv.org
+# 2014-02-17 - Andreas R�sdal
+#
+# Run 'vagrant up' in this directory, which will create a VirtualBox image
+# and install Freeciv-web for you.
+# Then point your browser to http://localhost/ on your host OS.
+#
+
+# Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
+VAGRANTFILE_API_VERSION = "2"
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  # All Vagrant configuration is done here. The most common configuration
+  # options are documented and commented below. For a complete reference,
+  # please see the online documentation at vagrantup.com.
+
+  # Every Vagrant virtual environment requires a box to build off of.
+  config.vm.box = "ubuntu-bionic-64"
+
+  config.vm.provider "virtualbox"
+
+  config.vm.box_url = "https://cloud-images.ubuntu.com/bionic/current/bionic-server-cloudimg-amd64-vagrant.box"
+
+  if Vagrant::Util::Platform.windows?
+	  config.vm.network :forwarded_port, guest: 80, host: 80, host_ip: "127.0.0.1"
+	  config.vm.network :forwarded_port, guest: 443, host: 443, host_ip: "127.0.0.1"
+  else 
+      config.vm.network :private_network, ip: "10.11.12.13"
+	  config.vm.network :forwarded_port, guest: 80, host: 8080, host_ip: "127.0.0.1"
+	  config.vm.network :forwarded_port, guest: 443, host: 8443, host_ip: "127.0.0.1"
+  end
+
+  config.vm.provider "virtualbox" do |v|
+    v.cpus = "1"
+    host = RbConfig::CONFIG['host_os']
+
+    # Give VM 50% of system memory 
+    if host =~ /darwin/
+      # sysctl returns Bytes and we need to convert to MB
+      mem = `sysctl -n hw.memsize`.to_i / 1024
+    elsif host =~ /linux/
+      # meminfo shows KB and we need to convert to MB
+      mem = `grep 'MemTotal' /proc/meminfo | sed -e 's/MemTotal://' -e 's/ kB//'`.to_i 
+    elsif host =~ /mswin|mingw|cygwin/
+      # Windows code via https://github.com/rdsubhas/vagrant-faster
+      mem = `wmic computersystem Get TotalPhysicalMemory`.split[1].to_i / 1024
+    end
+
+    mem = mem / 1024 / 2
+    v.customize ["modifyvm", :id, "--memory", mem.floor]
+
+    # Disable serial port. It is unnecessary, and may cause error on Win10
+    #   https://github.com/joelhandwell/ubuntu_vagrant_boxes/issues/1#issuecomment-292370353
+    v.customize ["modifyvm", :id, "--uartmode1", "disconnected"]
+  end
+
+  if Vagrant::Util::Platform.windows?      
+      config.vm.synced_folder "./", "/vagrant"
+  else 
+      config.vm.synced_folder "./", "/vagrant", type: "nfs",
+      mount_options: ['rw', 'vers=3', 'tcp', 'nolock'],
+      linux__nfs_options: ['rw','no_subtree_check','all_squash','async']
+  end
+  
+  config.vm.boot_timeout = 100000
+
+  # There are problems with the default configuration of a DNS stub in some
+  # versions of systemd-resolved
+  config.vm.provision "systemd-resolved workaround", type: "shell", inline: "ln -sf /run/systemd/resolve/resolv.conf /etc/resolv.conf"
+  # run the Freeciv bootstrap script on machine creation
+  config.vm.provision "bootstrap", type: "shell", inline: "/vagrant/scripts/install/install.sh --mode=TEST", privileged: false
+  # run the Freeciv start script on startup
+  config.vm.provision "startup", type: "shell", inline: "/vagrant/scripts/start-freeciv-web.sh", run: "always", privileged: false
+
+
+
+end
+
+############################################################################################################################################################
+# coding: iso-8859-1
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# Freeciv-web Vagrant Vagrantfile - play.freeciv.org
+# 2014-02-17 - Andreas R�sdal
+#
+# Run 'vagrant up' in this directory, which will create a VirtualBox image
+# and install Freeciv-web for you.
+# Then point your browser to http://localhost/ on your host OS.
+#
+
+# Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
+VAGRANTFILE_API_VERSION = "2"
+
+
+Vagrant.configure("2") do |config|
+end
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  # All Vagrant configuration is done here. The most common configuration
+  # options are documented and commented below. For a complete reference,
+  # please see the online documentation at vagrantup.com.
+
+  # Every Vagrant virtual environment requires a box to build off of.
+  #original:
+  #config.vm.box = "ubuntu-bionic-64"
+config.vm.box = "gyptazy/ubuntu22.04-arm64"
+
+  #original:
+  #config.vm.provider "virtualbox"
+config.vm.provider "vmware_fusion"
+
+#config.vm.box_url = "https://cloud-images.ubuntu.com/bionic/current/bionic-server-cloudimg-amd64-vagrant.box"
+#upstream is using this, probably upgraded their ubuntu: #config.vm.box_url = "https://cloud-images.ubuntu.com/jammy/current/jammy-server-cloudimg-amd64-vagrant.box"
+  if Vagrant::Util::Platform.windows?
+	  config.vm.network :forwarded_port, guest: 80, host: 80, host_ip: "127.0.0.1"
+	  config.vm.network :forwarded_port, guest: 443, host: 443, host_ip: "127.0.0.1"
+  else 
+      config.vm.network :private_network, ip: "10.11.12.13"
+	  config.vm.network :forwarded_port, guest: 80, host: 8080, host_ip: "127.0.0.1"
+	  config.vm.network :forwarded_port, guest: 443, host: 8443, host_ip: "127.0.0.1"
+  end
+  #original:
+  #config.vm.provider "virtualbox" do |v|
+config.vm.provider "vmware_fusion" do |v|
+      v.cpus = "1"
+    host = RbConfig::CONFIG['host_os']
+
+    #VMWare boxes only: comment out for VirtualBox or others:  
+    #v.gui = true
+
+    # Give VM 50% of system memory 
+    if host =~ /darwin/
+      # sysctl returns Bytes and we need to convert to MB
+      mem = `sysctl -n hw.memsize`.to_i / 1024
+    elsif host =~ /linux/
+      # meminfo shows KB and we need to convert to MB
+      mem = `grep 'MemTotal' /proc/meminfo | sed -e 's/MemTotal://' -e 's/ kB//'`.to_i 
+    elsif host =~ /mswin|mingw|cygwin/
+      # Windows code via https://github.com/rdsubhas/vagrant-faster
+      mem = `wmic computersystem Get TotalPhysicalMemory`.split[1].to_i / 1024
+    end
+
+    mem = mem / 1024 / 2
+    v.customize ["modifyvm", :id, "--memory", mem.floor]
+
+    # Disable serial port. It is unnecessary, and may cause error on Win10
+    #   https://github.com/joelhandwell/ubuntu_vagrant_boxes/issues/1#issuecomment-292370353
+    v.customize ["modifyvm", :id, "--uartmode1", "disconnected"]
+  end
+
+  if Vagrant::Util::Platform.windows?      
+      config.vm.synced_folder "./", "/vagrant"
+  else 
+      config.vm.synced_folder "./", "/vagrant", type: "nfs",
+      mount_options: ['rw', 'vers=3', 'tcp', 'nolock'],
+      linux__nfs_options: ['rw','no_subtree_check','all_squash','async']
+  end
+  
+  config.vm.boot_timeout = 100000
+
+  # There are problems with the default configuration of a DNS stub in some
+  # versions of systemd-resolved
+  config.vm.provision "systemd-resolved workaround", type: "shell", inline: "ln -sf /run/systemd/resolve/resolv.conf /etc/resolv.conf"
+  # run the Freeciv bootstrap script on machine creation
+  config.vm.provision "bootstrap", type: "shell", inline: "/vagrant/scripts/install/install.sh --mode=TEST", privileged: false
+  # run the Freeciv start script on startup
+  config.vm.provision "startup", type: "shell", inline: "/vagrant/scripts/start-freeciv-web.sh", run: "always", privileged: false
+
+
+
+end
+
+
+############################################################################################################################################################
