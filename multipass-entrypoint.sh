@@ -22,6 +22,7 @@ stop)
   ;;
 *)
   echo ""
+  echo "Run this script inside a multipass vm shell, to start or stop FCW."
   echo "Invalid action ${action}"
   echo "Usage $0 start|stop"
   echo ""

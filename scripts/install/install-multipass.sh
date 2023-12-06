@@ -228,8 +228,8 @@ bionic_install() {
   build_freeciv_web || handle_error 9 "Failed to build freeciv web"
   setup_nginx || handle_error 9 "Failed to setup nginx"
   create_start_stop_scripts || handle_error 10 "Failed to create Start/Stop scripts"
-  cp "${HOME}/freeciv-web/multipass-entrypoint.sh" "${HOME}/multipass-entrtrypoint.sh"
-  chmod +x "${HOME}/multipass-entrtrypoint.sh"
+  cp "${HOME}/freeciv-web/multipass-entrypoint.sh" "${HOME}/multipass-entrypoint.sh"
+  chmod +x "${HOME}/multipass-entrypoint.sh"
   echo "========= [ubuntu-bionic installation complete] =========="
 }
 

@@ -1,6 +1,5 @@
 THE FREECIV-WEB PROJECT
 -----------------------
-
 [![Build Status](https://github.com/Lexxie9952/fcw.org-server/workflows/continuous%20integration/badge.svg)](https://github.com/Lexxie9952/fcw.org-server/actions?query=workflow%3A%22continuous+integration%22)
 [![Code Quality: Javascript](https://img.shields.io/lgtm/grade/javascript/g/freeciv/freeciv-web.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/freeciv/freeciv-web/context:javascript)
 [![Total Alerts](https://img.shields.io/lgtm/alerts/g/freeciv/freeciv-web.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/freeciv/freeciv-web/alerts) [![License: AGPL v3](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
@@ -19,7 +18,6 @@ Currently known servers based on Freeciv-web:
 
 Overview
 --------
-
 Freeciv-Web consists of these components:
 
 * [Freeciv-web](freeciv-web) - a Java web application for the Freeciv-web client.
@@ -44,7 +42,8 @@ Freeciv-Web consists of these components:
 
 Running Freeciv-web on your computer
 ------------------------------------
-The recommended and probably easiest way is to use Vagrant on VirtualBox.  
+For computers with x86 architecture, the recommended and probably easiest way is
+to use Vagrant on VirtualBox.  
 [FCW Install Docs on Wiki](https://freecivweb.fandom.com/wiki/Freeciv-web_FCW_Install)  
 
 Whatever the method you choose, you'll have to check out Freeciv-web to a
@@ -53,28 +52,48 @@ running this command:
  ```bash
   git clone https://github.com/Lexxie9952/fcw.org-server.git
  ```
+_NOTE: In Dec.2023, the ``dev`` branch is the active one, not the ``master``
+branch. Your ``git clone`` statement should be changed to reflect that._ This
+is subject to change later.
 
 You may also want to change some parameters before installing, although
 it's not needed in most cases. If you have special requirements, have a look
 at [config.dist](config/config.dist),
 copy it without the `.dist` extension and edit to your liking.
 
+#### :warning: Notice for Mac users with arm64/Apple Silicon/M-chips:
+
+1. As of November 2023, VirtualBox does not officially support Apple Silicon
+M chips (arm64). This may change later. If you find such support available,
+or if you want to use alternatives such as VMWare or Parallels, you will need
+to reconfigure your ~/Vagrantfile to link to an iso that's an arm64 version
+of the linux distro that will be used. There are some more notes in
+ ~/VagrantfileMac for those looking into this.
+2. For Mac arm64 M-chips, successful installations have been achieved using
+Multipass for the virtual machine. The [Multipass.md](Multipass.md) document contains
+info on setup steps for this. Instead of using ``localhost`` for the url
+to such a VM, you will use the IP address of that VM as found by doing a ```multipass list```
+command from Terminal.
+
 #### :warning: Notice for Windows users
 
-Please keep in mind that the files are to be used in a Unix-like system
+1. Please keep in mind that the files are to be used in a Unix-like system
 (some Ubuntu version with the provided Vagrant file).
 Line endings for text files are different in Windows, and some editors
-"correct" them, making the files unusable in the VM.
-There's some provision to recode the main configuration files when installing,
-but not afterwards. If you touch shared files after installation, please use
-an editor that respect Unix line endings or transform them with a utility
-like dos2unix after saving them.
+"correct" them, making the files unusable in the VM. If using VS Code
+for your editor (recommended), you can click in the lower right to change
+your end-of-line terminations; and also be sure to look up system-wide
+configuration of this throughout VS Code.
+2. There's some provision to recode the main configuration files when
+installing, but not afterwards. If you touch shared files after installation,
+please use an editor that respects Unix line-endings or transforms them with a
+utility like dos2unix after saving them (e.g., VS Code configured to LF).
 
 ### Running Freeciv-web with Vagrant on VirtualBox
 
 Freeciv-web can be setup using Vagrant on VirtualBox to quickly create a 
 local developer image running Freeciv-web on latest Ubuntu on your host
-operating system such as Windows, OSX or Linux. 
+operating system such as Windows, macOS (* see above), or Linux. 
 This is the recommended way to build Freeciv-web on your computer.
 
 1. Install VirtualBox: https://www.virtualbox.org/ - Install manually on Windows, and with the following command on Linux:
@@ -115,7 +134,7 @@ The Vagrant guest machine will mount the Freeciv-web source repository in the /v
 Note that running Freeciv-web using Vagrant requires about 4Gb of memory
 and 3 Gb of harddisk space.
 
-### System Requirements for manual install
+### System Requirements for manual Linux install
 
 Install this software if you are not running Freeciv-web with Vagrant:
 
@@ -179,10 +198,20 @@ Freeciv-web can easily be built and run from Docker using `docker-compose`. Web 
     ```
 
  3. Connect to docker via host machine using standard browser
-
 http://localhost/
 
 Enjoy. The overall dockerfile and required changes to scripts needs some further improvements.
+If you're an advanced user, look at the working Vagrant and Multipass implementations and 
+adjust your dockerfile etc. accordingly.
+
+### Running Freeciv-web on Multipass
+
+On Mac, Windows, and Linux, another option is to try installing FCW using Multipass for the virtual machine.
+
+On Mac with Apple Silicon chips, Multipass is the currently the only confirmed working option.
+
+Multipass installation will use different install scripts (included). See [Multipass.md](Multipass.md) for instructions.
+
 
 Freeciv-Web continuous integration on Travis CI 
 -----------------------------------------------
@@ -190,14 +219,7 @@ Freeciv-Web is built on Travis CI on every commit. This is the current build sta
 
 Developers interested in Freeciv-web
 ------------------------------------
-
-If you want to contibute to Freeciv-web, see the [issues](https://github.com/freeciv/freeciv-web/issues) on GibHub and the [TODO file](TODO.md) for 
-some tasks you can work on. Pull requests on Github is welcome! 
-
-Freeciv WebGL
--------------
-Freeciv WebGL is the 3D version, which uses the Three.js 3D engine. More info about the WebGL 3D version can be found for [developers](https://github.com/freeciv/freeciv-web/tree/develop/freeciv-web/src/main/webapp/javascript/webgl) and [3D artists](https://github.com/freeciv/freeciv-web/wiki/Contributing-Blender-models-for-Freeciv-WebGL).
-  
+If you want to contibute to Freeciv-web, please visit our Discord at https://discord.gg/Zj8UQSN and introduce yourself as a developer.
 
 Contributors to Freeciv-web
 ---------------------------
@@ -206,11 +228,6 @@ Andreas Røsdal  [@andreasrosdal](https://github.com/andreasrosdal)
 Marko Lindqvist [@cazfi](https://github.com/cazfi)  
 Sveinung Kvilhaugsvik [@kvilhaugsvik](https://github.com/kvilhaugsvik) 
 Máximo Castañeda [@lonemadmax](https://github.com/lonemadmax)  
-Gerik Bonaert [@adaxi](https://github.com/adaxi)  
+Gerik Bonaert [@adaxi](https://github.com/adaxi)
+...others...
 and the [Freeciv.org project](http://freeciv.wikia.com/wiki/People)!
-
-About FCW and this repository
------------------------------
-HELP! We have a dispute against this repository!
-Licensing restrictions not contained in the (A)GPL have been legally threatened against this repository. They seek to restrict our repository- and user- policies from having content allowed by our licenses. Claiming additional restrictions not contained within a license, misrepresenting them as being within that license, and threatening legal enforcement of said restrictions, legally qualifies as a breach of the license by the parties making the claim. Please be patient. FCW has suspended its Repository Policy pending resolution of the licensing infractions against us.
-
