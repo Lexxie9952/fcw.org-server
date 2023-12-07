@@ -3540,26 +3540,54 @@ actor_reqs    =
       "MinMoveFrags", "1",           "Local"
     }
 
-;This currently catches a bug in complex rulesets with complex Boarding rules where
-;a unit doing order_move or order_perform_action "transport embark" to a non-native tile
-;with a transport there, is allowed to move to that tile because embark is legal, but
-;then seems to lose its mp first, and then because it has no moves left, can't embark.
+;The two enablers below catch a bug in complex rulesets that have complex Boarding rules.
+;The bug is that a unit doing order_move or order_perform_action "transport embark" to a 
+;transport on a non-native tile, are allowed to move to that tile because embark is legal.
+;But then the movepoints are subtracted first, and then because it has no moves left, it
+;no longer fulfills the legality for Embark action, leaving it stranded on the water.
 ;The logic then seems to fall thru to check if "Transport Board" would be legal and it
-;tries that next, but if the ruleset has complex rules for "Transport Board" and it's
+;tries that next, but if the ruleset has complex rules for "Transport Board" and that's also
 ;no longer legal, the unit can't board in order to pull off the verisimilitude of doing
 ;an embark. Apparently it assumed or was only tested with rulesets with legacy rules
-;of no moves_left being required. The superior high priority solution is to debug this
-;case on the server to see where it's slipping over itself and ALLOWING the move BECAUSE
-;embark is legal then NOT allowing the embarcation to actually happen. 
-[actionenabler_embark_fall_thru_bug_fix]
+;of zero moves_left being allowed for Boarding. Ideally we'd debug this logic on the 
+;server to see where it's slipping over itself and ALLOWING the move BECAUSE
+;embark is legal then NOT allowing the embarcation to actually happen because it does
+;the move, loses move points, then lost the legality to embark/board and becomes
+;stranded in the water. For now, we are making two ruleset enablers to allow faulty
+;server logic to work, where a unit that would obviously be stranded in the water
+;is allowed to perform the server's fallthru logic of doing a Boarding action.
+;This also allows any other bugged units floating in water to Board and get picked
+;up by ships coming by, should that ever happen for other reasons.
+[actionenabler_embark_fall_thru_bug_fix_1]             ; BUG FIX for land units who aren't LandRoad units      
 action        = "Transport Board"
 actor_reqs    =
     { "type",         "name",           "range", "present"
-      "MinMoveFrags", "1",              "Local", FALSE  ;only catched bug units stranded on unlivable tiles
-      "UnitState",    "Transported",    "Local", FALSE  ;only catched bug units stranded on unlivable tiles
-      "UnitState",    "OnLivableTile",  "Local", FALSE  ;only catched bug units stranded on unlivable tiles
+      "MinMoveFrags", "1",              "Local", FALSE  ;only catch bugged units stranded with ZERO MOVES as non-passengers on unlivable tiles
+      "UnitState",    "Transported",    "Local", FALSE  ;only catch bugged units stranded with zero moves as NON-PASSENGERS on unlivable tiles
+      "UnitState",    "OnLivableTile",  "Local", FALSE  ;only catch bugged units stranded with zero moves as non-passengers on UNLIVABLE tiles
       "UnitClassFlag","TerrainSpeed",   "Local", TRUE   ;Land only
-      "UnitClass",    "LandRoad",       "Local", FALSE  ;!LandRoad: prevent russian doll exceptions 
+      "UnitClass",    "LandRoad",       "Local", FALSE  ;!LandRoad: separate actionenabler for those to prevent russian dolls (see below)
+      "DiplRel",      "Armistice",      "Local", FALSE
+      "DiplRel",      "War",            "Local", FALSE
+      "DiplRel",      "Cease-fire",     "Local", FALSE
+      "DiplRel",      "Peace",          "Local", FALSE
+      "DiplRel",      "Never met",      "Local", FALSE
+    }
+target_reqs   =
+    { "type",         "name",       "range", "present"
+      "UnitClass",    "LandRoad",   "Local", FALSE     ; These classes have cargo restrictions and for...
+      "UnitClass",    "LandRail",   "Local", FALSE     ; ...for simplicity require Transport_Board action
+    }
+[actionenabler_embark_fall_thru_bug_fix_2]             ; BUG FIX for LandRoad units (prevent Russian dolls)      
+action        = "Transport Board"
+actor_reqs    =
+    { "type",         "name",           "range", "present"
+      "MinMoveFrags", "1",              "Local", FALSE  ;only catch bugged units stranded with ZERO MOVES as non-passengers on unlivable tiles
+      "UnitState",    "Transported",    "Local", FALSE  ;only catch bugged units stranded with zero moves as NON-PASSENGERS on unlivable tiles
+      "UnitState",    "OnLivableTile",  "Local", FALSE  ;only catch bugged units stranded with zero moves as non-passengers on UNLIVABLE tiles
+      "UnitClassFlag","TerrainSpeed",   "Local", TRUE   ;Land only
+      "UnitClass",    "LandRoad",       "Local", TRUE   ;Separate actionenabler for those to prevent russian dolls
+      "UnitState",    "Transporting",   "Local", FALSE  ; prevent russian doll exceptions               <<< *******
       "DiplRel",      "Armistice",      "Local", FALSE
       "DiplRel",      "War",            "Local", FALSE
       "DiplRel",      "Cease-fire",     "Local", FALSE
@@ -3609,6 +3637,23 @@ actor_reqs    =
       "DiplRel",      "Cease-fire",   "Local", FALSE
       "DiplRel",      "Peace",        "Local", FALSE
       "DiplRel",      "Never met",    "Local", FALSE
+    }
+
+; This additionally allows Missiles who are transported to offload as cargo onto adjacent transporters, thus 
+; extending other enabler and server logic that makes it so that Missiles can Board only in cities, or at TC 
+; through a "parachute catch" done by hard-coded server logic to rescue fuel units, which overrides all enablers.
+[actionenabler_embark_missiles]
+action        = "Transport Embark"
+actor_reqs    =
+    { "type",         "name",       "range", "present"
+      "MinMoveFrags", "1",          "Local", TRUE
+      "UnitClass",    "Missile",    "Local", TRUE
+      "UnitState",    "Transported","Local", TRUE
+      "DiplRel",      "Armistice",  "Local", FALSE
+      "DiplRel",      "War",        "Local", FALSE
+      "DiplRel",      "Cease-fire", "Local", FALSE
+      "DiplRel",      "Peace",      "Local", FALSE
+      "DiplRel",      "Never met",  "Local", FALSE
     }
 ;*******************************************************************************************************************
 
