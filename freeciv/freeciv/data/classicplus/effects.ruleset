@@ -1210,6 +1210,14 @@ reqs	=
       "Building", "Coastal Defense", "City"
       "UnitClass", "Trireme", "Local"
     }
+[effect_coastal_defense_rivership]
+type    = "Defend_Bonus"
+value	= 100
+reqs	=
+    { "type", "name", "range"
+      "Building", "Coastal Defense", "City"
+      "UnitClass", "RiverShip", "Local"
+    }
 
 [effect_colosseum]
 type    = "Make_Content"
@@ -1785,7 +1793,7 @@ reqs	=
       "Building", "Women's Suffrage", "Player", FALSE
     }
 
-[effect_port_facility]
+[effect_port_facility_seavet]
 type    = "Veteran_Build"
 value	= 1
 reqs	=
@@ -1795,17 +1803,17 @@ reqs	=
       "UnitFlag", "NonMil", "Local", FALSE
       "UnitFlag", "NoVeteran", "Local", FALSE
     }
-
-[effect_port_facility_1]
-type    = "HP_Regen"
-value	= 100
+[effect_port_facility_rivervet]
+type    = "Veteran_Build"
+value	= 1
 reqs	=
-    { "type", "name", "range"
-      "Building", "Port Facility", "City"
-      "UnitClass", "Sea", "Local"
+    { "type", "name", "range", "present"
+      "Building", "Port Facility", "City", TRUE
+      "UnitClass", "RiverShip", "Local", TRUE
+      "UnitFlag", "NonMil", "Local", FALSE
+      "UnitFlag", "NoVeteran", "Local", FALSE
     }
-
-[effect_port_facility_trireme]
+[effect_port_facility_triremevet]
 type    = "Veteran_Build"
 value	= 1
 reqs	=
@@ -1815,8 +1823,23 @@ reqs	=
       "UnitFlag", "NonMil", "Local", FALSE
       "UnitFlag", "NoVeteran", "Local", FALSE
     }
-
-[effect_port_facility_trireme_1]
+[effect_port_facility_seahp]
+type    = "HP_Regen"
+value	= 100
+reqs	=
+    { "type", "name", "range"
+      "Building", "Port Facility", "City"
+      "UnitClass", "Sea", "Local"
+    }
+[effect_port_facility_riverhp]
+type    = "HP_Regen"
+value	= 100
+reqs	=
+    { "type", "name", "range"
+      "Building", "Port Facility", "City"
+      "UnitClass", "RiverShip", "Local"
+    }
+[effect_port_facility_trireme_hp]
 type    = "HP_Regen"
 value	= 100
 reqs	=
