@@ -2477,7 +2477,7 @@ reqs	=
       "Building", "Leonardo's Workshop", "Player"
     }
 
-[effect_lighthouse]
+[effect_lighthouse_sea_move]
 type    = "Move_Bonus"
 value	= 2
 reqs	=
@@ -2485,8 +2485,7 @@ reqs	=
       "Building", "Lighthouse", "Player"
       "UnitClass", "Sea", "Local"
     }
-
-[effect_lighthouse_2]
+[effect_lighthouse_sea_vet]
 type    = "Veteran_Build"
 value	= 1
 reqs	=
@@ -2497,7 +2496,6 @@ reqs	=
       "UnitFlag", "NoVeteran", "Local", FALSE
       "Building", "Port Facility", "City", FALSE
     }
-
 [effect_lighthouse_trireme_move]
 type    = "Move_Bonus"
 value	= 2
@@ -2506,8 +2504,7 @@ reqs	=
       "Building", "Lighthouse", "Player"
       "UnitClass", "Trireme", "Local"
     }
-
-[effect_lighthouse_trireme_veteran]
+[effect_lighthouse_trireme_vet]
 type    = "Veteran_Build"
 value	= 1
 reqs	=
@@ -2518,8 +2515,27 @@ reqs	=
       "UnitFlag", "NoVeteran", "Local", FALSE
       "Building", "Port Facility", "City", FALSE
     }
+[effect_lighthouse_river_move]
+type    = "Move_Bonus"
+value	= 2
+reqs	=
+    { "type", "name", "range"
+      "Building", "Lighthouse", "Player"
+      "UnitClass", "RiverShip", "Local"
+    }
+[effect_lighthouse_river_vet]
+type    = "Veteran_Build"
+value	= 1
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Lighthouse", "Player", TRUE
+      "UnitClass", "RiverShip", "Local", TRUE
+      "UnitFlag", "NonMil", "Local", FALSE
+      "UnitFlag", "NoVeteran", "Local", FALSE
+      "Building", "Port Facility", "City", FALSE
+    }
 
-[effect_magellans_expedition]
+[effect_magellan_sea]
 type    = "Move_Bonus"
 value	= 2
 reqs	=
@@ -2527,7 +2543,6 @@ reqs	=
       "Building", "Magellan's Expedition", "Player"
       "UnitClass", "Sea", "Local"
     }
-
 [effect_magellan_trireme]
 type    = "Move_Bonus"
 value	= 2
@@ -2535,6 +2550,14 @@ reqs	=
     { "type", "name", "range"
       "Building", "Magellan's Expedition", "Player"
       "UnitClass", "Trireme", "Local"
+    }
+[effect_magellan_rivership]
+type    = "Move_Bonus"
+value	= 2
+reqs	=
+    { "type", "name", "range"
+      "Building", "Magellan's Expedition", "Player"
+      "UnitClass", "RiverShip", "Local"
     }
 
 [effect_manhattan_project]
