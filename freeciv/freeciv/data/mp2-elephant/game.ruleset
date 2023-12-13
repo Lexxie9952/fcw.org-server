@@ -1320,7 +1320,7 @@ actor_reqs    =
       "UnitType",     "Siege Ram",     "Local", FALSE 
       "UnitType",     "Zealots",       "Local", FALSE 
       "UnitType",     "Fanatics",      "Local", FALSE 
-      "UnitType",     "Zeppelin",      "Local", FALSE 
+      "UnitType",     "Zeppelin",      "Local", FALSE
       "UnitType",     "Marines",       "Local", FALSE 
       "UnitType",     "Battleship",    "Local", FALSE 
       "UnitState",    "Transported",   "Local", FALSE
@@ -1333,6 +1333,8 @@ target_reqs    =
       "CityTile",   "Center",    "Local", FALSE
       "Extra",      "Fortress",  "Local", FALSE
       "Extra",      "Naval Base","Local", FALSE
+      "Extra",      "Castle",    "Local", FALSE
+      "Extra",      "Bunker",    "Local", FALSE
 ;     "TerrainClass", "Oceanic",  "Local", FALSE      can bombard ocean tiles.
     }
 [actionenabler_ballistic_SUA_magnum_turret]
@@ -1366,6 +1368,8 @@ target_reqs    =
       "CityTile", "Center",       "Local", FALSE
       "Extra",    "Fortress",     "Local", FALSE
       "Extra",    "Naval Base",   "Local", FALSE
+      "Extra",    "Castle",       "Local", FALSE
+      "Extra",    "Bunker",       "Local", FALSE
       "TerrainClass", "Oceanic",  "Local", FALSE
     }
 ;Can hit Oceanic but not while transported.
@@ -1384,6 +1388,8 @@ target_reqs    =
       "CityTile", "Center",       "Local", FALSE
       "Extra",    "Fortress",     "Local", FALSE
       "Extra",    "Naval Base",   "Local", FALSE
+      "Extra",    "Castle",       "Local", FALSE
+      "Extra",    "Bunker",       "Local", FALSE
     }
 
 ;Fortified Phalanxes can "rumble"
@@ -1404,6 +1410,8 @@ target_reqs    =
       "Extra",      "Fort",      "Local", FALSE
       "Extra",      "Fortress",  "Local", FALSE
       "Extra",      "Naval Base","Local", FALSE
+      "Extra",      "Castle",    "Local", FALSE
+      "Extra",      "Bunker",    "Local", FALSE
       "TerrainClass","Oceanic",  "Local", FALSE
     }
 ;Phalanxes who haven't moved can "rumble"
@@ -1424,6 +1432,8 @@ target_reqs    =
       "Extra",      "Fort",      "Local", FALSE
       "Extra",      "Fortress",  "Local", FALSE
       "Extra",      "Naval Base","Local", FALSE
+      "Extra",      "Castle",    "Local", FALSE
+      "Extra",      "Bunker",    "Local", FALSE
       "TerrainClass","Oceanic",  "Local", FALSE
     }
 
@@ -1444,6 +1454,8 @@ target_reqs    =
       "Extra",    "Fortress",     "Local", FALSE
       "Extra",    "Fort",         "Local", FALSE
       "Extra",    "Naval Base",   "Local", FALSE
+      "Extra",    "Castle",       "Local", FALSE
+      "Extra",    "Bunker",       "Local", FALSE
       "TerrainClass", "Oceanic",  "Local", FALSE
     }
 
@@ -1462,6 +1474,8 @@ actor_reqs    =
 target_reqs    =
     { "type",  "name",     "range", "present"
       "Extra", "Fortress", "Local", TRUE
+      "Extra", "Castle",   "Local", FALSE
+      "Extra", "Bunker",   "Local", FALSE
     }
 ;Siege Rams can assault Fortress Perimeter
 [actionenabler_siege_ram_navbase_assault]
@@ -1499,6 +1513,8 @@ target_reqs    =
       "CityTile", "Center",       "Local", FALSE
       "Extra",    "Fortress",     "Local", FALSE
       "Extra",    "Naval Base",   "Local", FALSE
+      "Extra",    "Castle",       "Local", FALSE
+      "Extra",    "Bunker",       "Local", FALSE
       "TerrainClass",  "Oceanic", "Local", FALSE
     }
 ;Zealots and Fanatics can infiltrate/skirmish foreign occupied cities
@@ -1518,6 +1534,8 @@ target_reqs    =
       "CityTile",     "Center",      "Local", TRUE
       "Extra",        "Fortress",    "Local", FALSE
       "Extra",        "Naval Base",  "Local", FALSE
+      "Extra",        "Castle",      "Local", FALSE
+      "Extra",        "Bunker",      "Local", FALSE
       "TerrainClass", "Oceanic",     "Local", FALSE
       "CityStatus","OwnedByOriginal","City",  FALSE
       "MinForeignPct","1",           "City",  TRUE
@@ -1563,6 +1581,8 @@ target_reqs    =
       "CityTile", "Center",       "Local", FALSE
       "Extra",    "Fortress",     "Local", FALSE
       "Extra",    "Naval Base",   "Local", FALSE
+      "Extra",    "Castle",       "Local", FALSE
+      "Extra",    "Bunker",       "Local", FALSE
       "TerrainClass",  "Oceanic", "Local", FALSE
     }
 ;Can hit Oceanic but not while transported
@@ -1582,6 +1602,8 @@ target_reqs    =
       "CityTile", "Center",       "Local", FALSE
       "Extra",    "Fortress",     "Local", FALSE
       "Extra",    "Naval Base",   "Local", FALSE
+      "Extra",    "Castle",       "Local", FALSE
+      "Extra",    "Bunker",       "Local", FALSE
     }
 
 ;Battleships can do bombardment
