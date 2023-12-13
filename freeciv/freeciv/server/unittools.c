@@ -855,12 +855,15 @@ void update_unit_move_points(struct player *pplayer)
 
 /**********************************************************************//**
   Iterate through all units and update them.
+
+  Called only by srv_main.c::begin_phase(..) for TC processing
 **************************************************************************/
 void update_unit_activities(struct player *pplayer)
 {
   time_t now = time(NULL);
   unit_list_iterate_safe(pplayer->units, punit) {
     update_unit_activity(punit, now);
+    /* This is where we would reset punit->server.moves_left_at_start to some kinda -1 or #defined FLAG */
   } unit_list_iterate_safe_end;
 }
 
@@ -1279,16 +1282,18 @@ void unit_activity_complete(struct unit *punit)
 }
 
 /**************************************************************************
-  Progress settlers in their current tasks,
-  and units that is pillaging.
-  also move units that is on a goto.
-  Restore unit move points (information needed for settler tasks)
+  Progress settlers in their current tasks, and units that are pillaging.
+  also move units that are on a goto.
+
+  This function should only be called by update_unit_activities()
+  which itself is only called once during TC processing in begin_phase()
 **************************************************************************/
 static void update_unit_activity(struct unit *punit, time_t now)
 {
   //struct player *pplayer = unit_owner(punit);
   enum unit_activity activity = punit->activity;
-  int activity_rate = get_activity_rate_this_turn(punit);
+  // bool flag TRUE means TC processing:
+  int activity_rate = real_get_activity_rate_this_turn(punit, TRUE);
   struct unit_wait *wait;
   time_t wake_up;
   /* Value now has to be cached by update_unit_move_points() 

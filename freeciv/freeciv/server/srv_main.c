@@ -1356,14 +1356,18 @@ static void begin_phase(bool is_new_phase)
         }
       }
     } whole_map_iterate_end;
-    /* Due to passive transport move costs and other actors now 
-       able to do TC-processed actions which affect tgt_unit->moves_left,
-       move point restoration now has to happen for ALL players' units
-       before any single one is allowed to process activity/orders.
-       An ally's Carrier may move BEFORE we get move points restored
-       on a Fighter, yet the Fighter would need passenger move cost
-       deducted from its fully restored points and NOT get mp fully
-       restored AFTER moving! */
+    /* Foreign cargo units incur passive target move-costs when transported.
+       In legacy sequencing (which restored mp immediately upon processing unit
+       activity): a foreign Carrier moved during TC and deducted mp from the
+       allied Fighter, then Fighter's mp got restored when it was its turn to be
+       processed by update_unit_move_points, effectively giving it a "free ride".
+       ... 
+       In current sequencing, mp restoration happens for ALL players' units BEFORE
+       ANY units update activities. The actions of one unit can now affect the
+       moves_left on another unit without sequencing paradox. An ally's Carrier
+       moves AFTER mp is restored on its transported Fighter: the Fighter
+       gets passenger move-cost deducted from its fully restored points, rather than
+       a "free ride" mp restoration AFTER charged for passive transport move-costs! */
     phase_players_iterate(pplayer) {
       update_unit_move_points(pplayer);
     } phase_players_iterate_end;

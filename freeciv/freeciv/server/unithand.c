@@ -6205,7 +6205,7 @@ bool unit_activity_handling(struct unit *punit,
 /**********************************************************************//**
   Handle request for targeted activity.
     other_tile means activity is not on punit's current tile, currently
-      only operationational for iPillage
+      only operational for iPillage
 **************************************************************************/
 bool unit_activity_handling_targeted(struct unit *punit,
                                      enum unit_activity new_activity,

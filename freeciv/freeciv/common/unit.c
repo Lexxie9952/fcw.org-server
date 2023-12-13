@@ -528,19 +528,126 @@ int get_activity_rate(const struct unit *punit)
 }
 
 /**********************************************************************//**
-  Returns the amount of work a unit does (will do) on an activity this
-  turn.  Units that have no MP do no work.
+  WRAPPER function for real_get_activity_rate_this_turn(..)
+  -----------------------------------------------------------------
+  Returns the amount of work a unit would do on an activity this
+  turn. Units that have no move points do no work.
 
   The speed is multiplied by ACTIVITY_FACTOR.
+  -----------------------------------------------------------------
+  This is the mid-turn generic wrapper function for 
+  real_get_activity_rate_this_turn(..)
+  Only TC processing is allowed to call real_get_activity_rate_this_turn
+  directly (and skip this wrapper), as it's the only case where 
+  is_turn_change==TRUE is passed through. (This arrangement has lightest
+  impact on existing codebase and legacy calls to this function.)
 **************************************************************************/
 int get_activity_rate_this_turn(const struct unit *punit)
 {
-  /* This logic is also coded in client/goto.c. */
-  if (punit->moves_left > 0) {
-    return get_activity_rate(punit);
-  } else {
-    return 0;
+  const bool is_turn_change = false;
+  return real_get_activity_rate_this_turn(punit, is_turn_change);
+}
+
+/**********************************************************************//**
+  Returns the amount of work a unit does (will do) on an activity this
+  turn. Units that have no move points do no work.
+
+  The speed is multiplied by ACTIVITY_FACTOR.
+  -----------------------------------------------------------------
+  This function gets called:
+  1) DIRECTLY, when TC iterates units to credit their activity,
+  2) BY WRAPPER: in unittools.c::execute_orders() for a freshly given order
+     that has UWT, to calc the work-rate that will be actuated after UWT.
+  3) BY WRAPPER: Mid-clicking a tile to see activity completion time.
+  [+ Possible future cases for projected work-units assigned this turn] 
+**************************************************************************/
+int real_get_activity_rate_this_turn (const struct unit *punit,
+                                      bool is_turn_change)
+{
+/*  This logic is also coded in client/goto.c, but only for mid-turn
+    info requests, not for the TC logic processing exceptions here. */
+
+/*  Formerly, we knew a unit can begin activity if punit->moves_left > 0. 
+    
+    Passive target move-costs need refresh of move-points BEFORE updating
+    activities, so that passive move-costs won't be charged then reset by
+    refresh, during one-at-a-time unit-by-unit processing.
+
+    The legacy get_real_activity_rate_this_turn() function becomes a
+    wrapper to this function for non-TC contexts, passing TC==FALSE.
+
+    (1) If called at TC, we use punit->server.moves_left_at_start as a cached
+    copy of punit->moves_left, taken from before the move-points refresh.
+    (2) Else this function behaves like legacy, checking punit->moves_left
+  */
+
+  // TC Processing: use cached val, not prematurely refreshed moves_left:
+  if (is_turn_change) {
+    if (punit->server.moves_left_at_start > 0) {
+      return get_activity_rate(punit);
+    }
   }
+  // Mid-turn info checking: we know work begins if we have moves_left:
+  else {
+    if (punit->moves_left > 0) {
+      return get_activity_rate(punit);
+    }
+  }
+  // Not qualified to start activity this turn. Zero activity credit.
+  return 0;
+
+/*  FUTURE FEATURES:
+    Fairly small logic changes in this function can allow for 
+    1. New ruleset sophistication and flexibility,
+    2. More realistic physics,
+    3. Better work-rate granularity.
+
+    RULESET FLEXIBILITY
+      1a. BONUS TYPE ONE: Cases where a unit with no moves_left can still begin work. This
+      EFT_FAST_START_ACTIVITY can be activated however the ruleset wants based on activity
+      type, terrain, unittype, government, wonders, tech, etc:
+        else if {
+          if (get_target_bonus_effects(NULL, unit_owner(punit), NULL,
+                                        tile_city(unit_tile(punit)), NULL, unit_tile(punit), punit,
+                                        unit_type_get(punit), NULL, NULL, NULL,
+                                        EFT_FAST_START_ACTIVITY, V_COUNT)) {
+            return get_activity_rate(punit);
+          }
+        }
+      1b. BONUS TYPE TWO: a hybrid goldilocks half-measure mechanic, where a unit who did
+      not qualify to begin work because of 0 moves_left_at_start, now qualifies for some
+      kind of "half rate" work; e.g., in 2x rules will be certain effects
+      such that if you're on a forest you start work now. OR if you're out of moves you'll
+      get half the work rate. This can be tuned with ruleset EFFECTS.
+        else {  // If ruleset gives partial work credit for 0 moves, return that rate here:
+          int reduced_rate = get_target_bonus_effects(NULL, unit_owner(punit), NULL,
+                                        tile_city(unit_tile(punit)), NULL, unit_tile(punit), punit,
+                                        unit_type_get(punit), NULL, NULL, NULL,
+                                        EFT_TIRED_ACTIVITY_CREDIT, V_COUNT));
+          if (reduced_rate > 0) return reduced_rate;                       
+        }
+
+    REALISTIC PHYSICS
+      2a. Should a unit with 0.01 moves left really do an infinite amount more
+      work than one with 0.00 moves left? (All or nothing?)
+      2b. Should a unit put in its moves left for work rate on first turn arriving
+      and working a tile, then (when not moving) put in its full work rate?
+
+    WORK-RATE GRANULARITY
+      The above (and other) ideas may help us improve ratio flaws from discrete stair-stepping
+      phenomena in move mechanics: e.g., 
+      In 1x rules:
+        * 1 turn lost for moving + 2 turns for road on grass/plains
+        * 1 turn lost for moving + 4 turns for road on forest/hills
+      In 2x rules:
+        * 1 turn to move AND road on grass/plains (3x faster than 1x rules)
+        * 1 turn to move and 2 turns to road forest/hills (1.67x faster than 1x rules)
+      Ratio flaws:
+        * Roading plains is 3x faster in 2x rules than 1x rules (not 2x faster)
+        * Roading forest is 1.67x faster in 2x rules than 1x rules (not 2x faster)
+        * Ratio of forest/plains work time is 3x in 2x rules and 1.67x in 1x rules,
+          or in other words the penalty for roading a forest is almost double in 2x
+          rules, relatively and proportionately. */
 }
 
 /**********************************************************************//**
