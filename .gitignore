@@ -23,6 +23,7 @@
 .libs
 .svn
 .DS_Store
+.vscode/*.*
 Freeciv.h
 Makefile
 Makefile.in
@@ -381,11 +382,9 @@ tests/casperjs-1.1.4/tests/testdir/03_a.js
 tests/casperjs-1.1.4/tests/testdir/03_b.js
 tests/casperjs-1.1.4/tests/testdir/04/01_init.js
 tests/casperjs-1.1.4/tests/testdir/04/02_do.js
-publite2/supercows.txt
 freeciv-web/vagrant-rules-fix.sh
 freeciv-web/full-vagrant-rules-fix.sh
 freeciv-web/valhallabuild.sh
 freeciv-web/vdebug-remake.sh
-publite2/supercows.txt
 publite2/supercows.txt
 publite2/init-freeciv-web.sh
