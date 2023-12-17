@@ -2028,11 +2028,14 @@ flags          = "NativeTile"
 helptext       = _("\
 Quays improve logistics on rivers. River and Canal traffic can deboard\
  to a quay for 1⁄₃ move instead of disembarking for full moves onto adjacent\
- tiles. Quays let units ferry across\
+ tiles (domestic units only.) Quays let units ferry across\
  rivers——the ancient way to cross without a bridge!\
  Moving from road-to-quay or quay-to-road uses 2⁄₃ move point.\
  Quays can also be put on Canals. In cities they allow moving to\
- adjacent roads for only 1⁄₃ move. \
+ adjacent roads for only 1⁄₃ move. Quays are RestrictedInfra. Only\
+ allied units can use them to cross rivers, and only domestic units\
+ can use them to deboard at 1⁄₃ move. Non-domestic units may deboard\
+ but lose all moves (except Marines.)\ 
 "), _("Don’t make too many Quays. The ability to unload on rivers helps enemies do surprise attacks.\ 
 "), _("Moves needed to cross a river to a tile on the other side:\n\
 ⁶⁄₃ moves: No infrastructure.\n\

@@ -7999,6 +7999,30 @@ reqs    =
       "UnitClassFlag", "DelayLoad",        "Local", TRUE      ; Does not affect Aircraft
       "UnitType",      "Marines",          "Local", FALSE     ; Does not affect Marines
     }
+;############################################# The exception is Quays where we simulate a RestrictInfra on the deboard command to make them lose all moves:
+[effect_action_success_move_cost_deboard_nondomestic_quay]
+type    = "Action_Success_Actor_Move_Cost"
+value   = 90   ; 10 mp gets everyone out of moves
+reqs    =
+    { "type",          "name",              "range", "present"
+      "Action",        "Transport Deboard", "Local", TRUE
+      "UnitClassFlag", "DelayLoad",         "Local", TRUE      ; Aircraft always unload free
+      "UnitType",      "Marines",           "Local", FALSE     ; Does not affect Marines
+      "Extra",         "Quay",              "Local", TRUE
+      "UnitState",     "OnDomesticTile",    "Local", FALSE     ; DiplRel doesn't evaluate against tile
+    }
+[effect_action_success_move_cost_transport_unload_nondomestic_quay]
+type    = "Action_Success_Target_Move_Cost"   ; "Local" scope on unit pertains to target, not actor.
+value   = 90   ; 10 mp gets everyone out of moves
+reqs    =
+    { "type",          "name",             "range", "present"
+      "Action",        "Transport Unload", "Local", TRUE
+      "UnitClassFlag", "DelayLoad",        "Local", TRUE      ; Aircraft always unload free
+      "UnitType",      "Marines",          "Local", FALSE     ; Does not affect Marines
+      "Extra",         "Quay",             "Local", TRUE
+      "UnitState",     "OnDomesticTile",    "Local", FALSE    ; DiplRel doesn't evaluate against tile
+    }
+;###############################################
 ;Bombs can't be used after a double-move double-cargo run, so unloading has to ensure half of all moves are gone
 ;so the Bomb wouldn't be able to load up after two cargo hauls. Nukes have 1 1/3 moves (to allow disembark),
 ;and conventional have 1 move. 

@@ -232,3 +232,5 @@ i.e., 6 in 5 (swamp), 5 in 4 (mine), 4 in 3 (angkor wat swamp drain) goes to:
 76. Secondary tech costs increased. Combu.2 610>>1200, Flight.2 750>>900, Radio.2 820>>900
 77. Spies gain SentryAlways flag
 78. Magna Carta cost reduced 270
+79. Quay unloading/deboarding costs full moves except in Domestic Territory -- this completes the intended purpose of Quays being fully RestrictInfra (reminder, was also put in mp2d 17.Dec.2023)
+80. 
