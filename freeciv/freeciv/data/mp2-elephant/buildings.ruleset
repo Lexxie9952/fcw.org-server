@@ -2191,7 +2191,7 @@ graphic_alt	= "-"
 obsolete_by	=
     { "type", "name", "range"
     }
-build_cost	= 300
+build_cost	= 270
 upkeep		= 0
 sabotage	= 0
 sound		= "w_magna_carta"
