@@ -6201,7 +6201,8 @@ uk_food       = 0
 uk_gold       = 0
 embarks       = "LandRail", "Helicopter"    ; transport helicopter only
 disembarks    = "LandRail", "Helicopter"
-flags         = "Diplomat", "IgZOC", "NonMil", "NonProvoking", "HasNoZOC", "Spy", "Expellable", "CanClaim", "Settlers"
+flags         = "Diplomat", "IgZOC", "NonMil", "NonProvoking", "HasNoZOC", "Spy", "Expellable", "CanClaim",
+                "Settlers", "SentryAlways"
 veteran_names =
   _("?spy_level:informant"),
   _("?spy_level:handler"),
@@ -6219,6 +6220,7 @@ helptext      = _("\
 Except for establishing an embassy, Spies can do what a Diplomat can, and also：• Survive ops\
  • Sabotage lone units • Poison city water • Steal specific tech\
  • Steal tech from cities more than once • Sabotage specific targets in cities. \
+ • Provide sentry intel even if not sentried.\
 "), _("\
 Spies who survive ops escape to the nearest friendly city. Spies have\
  a 25% advantage over Diplomats in combat：a base 75% chance to win.\

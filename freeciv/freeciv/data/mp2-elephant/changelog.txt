@@ -228,4 +228,7 @@ i.e., 6 in 5 (swamp), 5 in 4 (mine), 4 in 3 (angkor wat swamp drain) goes to:
     (helicopters, 25%, same as MP2D, no change.)
 73. MP2E also gets (forgottenly undocumented) changed to MP2D that airbases heal air units at the same rate as fortresses heal land units.
 74. AAA can vigil in a city or base if they have their full move points left.
-75. Battleships gain "NeverBlocked" flag to join CM and Arm2 -- was needed something similar on the seas.
+75. Battleships gain "NeverBlocked" flag to join CM, Marines, and Arm2 -- was needed something similar on the seas.
+76. Secondary tech costs increased. Combu.2 610>>1200, Flight.2 750>>900, Radio.2 820>>900
+77. Spies gain SentryAlways flag
+78. Magna Carta cost reduced 270
