@@ -1033,7 +1033,7 @@ req2     = "None"
 flags    = "Specialization"
 graphic     = "a.flight" ;this pic won't be shown in the tech tree but will show in other places
 graphic_alt = "-"
-cost = 750
+cost = 900
 
 [advance_radio2]
 name     = _("Radio.2")
@@ -1042,7 +1042,7 @@ req2     = "None"
 flags    = "Specialization"
 graphic     = "a.radio" ;this pic won't be shown in the tech tree but will show in other places
 graphic_alt = "-"
-cost = 820
+cost = 900
 
 [advance_space2]
 name     = _("Space.2")
