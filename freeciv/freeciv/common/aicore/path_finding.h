@@ -282,12 +282,13 @@ extern "C" {
       f. more danger of auto-attacks by unseen units
       g. greater likelihood of being detected by sentry               */
 #define PF_DIAG_PENALTY 1
-/* How often to apply PF_DIAG_PENALTY. 0=NEVER. 100=ALWAYS. Use smaller
-   numbers to even out server's intrinsic bias for diagonal directions.
-   Use high but sub-100 numbers to tune out inferiority of diagonal pathing
-   and to simulate straight paths in all 360 degrees instead of
-   'polygonal edge' pathings. */
-#define PF_CARDINAL_BIAS_PCT 83
+/* How often to apply PF_DIAG_PENALTY. This number is a modulus which is used
+   to make the percentage of the time the cardinal bias will be force-applied.
+   if (seed % PF_CARDINAL_BIAS > 0), then cardinal bias is applied.
+   1=NEVER. 2=50%, 6=83%, 10=90%, etc. Use higher numbers to tune out inferiority
+   of diagonal pathing and to simulate straight paths in all 360 degrees instead
+   of 'polygonal edge' pathings. */
+#define PF_CARDINAL_BIAS 6
 
 /* =========================== Structures ================================ */
 

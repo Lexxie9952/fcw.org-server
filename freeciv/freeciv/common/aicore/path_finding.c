@@ -42,7 +42,7 @@
 #include "specpq.h"
 #define INITIAL_QUEUE_SIZE 100
 /* Generates a unique seed for any {X,Y} coordinates on a freeciv map: */
-#define CONST_SEED(X, Y)  srand((X*32769) + Y)
+#define CONST_SEED(X, Y) ((X*32769) + Y)
 
 #ifdef FREECIV_DEBUG
 /* Extra checks for debugging. */
@@ -832,8 +832,7 @@ static bool pf_normal_map_iterate(struct pf_map *pfm)
       /* Adjust for intrinsic diagonal bias. Any (x,y) always gets same
         seed for consistency with no interference to fc_rand state. */
       if (!is_cardinal_dir(dir)) {
-        CONST_SEED(tindex, tindex1);
-        if ((rand() % (100)) < PF_CARDINAL_BIAS_PCT)
+        if (CONST_SEED(tindex, tindex1) % PF_CARDINAL_BIAS)
           extra += PF_DIAG_PENALTY;
       }
 
@@ -1819,8 +1818,7 @@ static bool pf_danger_map_iterate(struct pf_map *pfm)
         /* Adjust for intrinsic diagonal bias. Any (x,y) always gets same
           seed for consistency with no interference to fc_rand state. */
         if (!is_cardinal_dir(dir)) {
-          CONST_SEED(tindex, tindex1);
-          if ((rand() % (100)) < PF_CARDINAL_BIAS_PCT)
+          if (CONST_SEED(tindex, tindex1) % PF_CARDINAL_BIAS)
             extra += PF_DIAG_PENALTY;
         }
 
@@ -3036,8 +3034,7 @@ static bool pf_fuel_map_iterate(struct pf_map *pfm)
         /* Adjust for intrinsic diagonal bias. Any (x,y) always gets same
           seed for consistency with no interference to fc_rand state. */
         if (!is_cardinal_dir(dir)) {
-          CONST_SEED(tindex, tindex1);
-          if ((rand() % (100)) < PF_CARDINAL_BIAS_PCT)
+          if (CONST_SEED(tindex, tindex1) % PF_CARDINAL_BIAS)
             extra += PF_DIAG_PENALTY;
         }
 
