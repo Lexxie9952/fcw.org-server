@@ -8253,7 +8253,7 @@ value   = 3360
 reqs    =
     { "type",          "name",            "range", "present"
       "Action",        "Transport Board", "Local", TRUE
-      "UnitClassFlag", "DelayLoad",       "Local", TRUE      ; Does not affect Aircraft
+      "UnitClassFlag", "DelayLoad",       "Local", TRUE      ; Does not affect Aircraft or ships
       "UnitType",      "Marines",         "Local", FALSE     ; Does not affect Marines
       "UnitClassFlag", "UnloadOnce",      "Local", FALSE     ; prevent 2/3 TiredAttack by loading up a Bomb; inability to uses nuke-bombs after loading them.
     }
@@ -8263,8 +8263,28 @@ value   = 3360
 reqs    =
     { "type",          "name",              "range", "present"
       "Action",        "Transport Deboard", "Local", TRUE
-      "UnitClassFlag", "DelayLoad",         "Local", TRUE      ; Does not affect Aircraft
+      "UnitClassFlag", "DelayLoad",         "Local", TRUE      ; Does not affect Aircraft or ships
       "UnitType",      "Marines",           "Local", FALSE     ; Does not affect Marines
+    }
+[effect_action_success_move_cost_deboard_to_unsupported_tile_is_a_disembark_1]    ; TO DO: If we move all deboard illegality rules to this section we can liberalize deboarding rules in client and here too.
+type    = "Action_Success_Actor_Move_Cost"
+value   = 999999  ; same as disembark: lose all moves
+reqs    =
+    { "type",          "name",              "range", "present"
+      "Action",        "Transport Deboard", "Local", TRUE
+      "UnitClassFlag", "TerrainSpeed",      "Local", TRUE      ; Only affects land units, ... 
+      "UnitType",      "Marines",           "Local", FALSE     ; except Marines
+      
+      ; For now since this is one effect for ALL land units, exclude ANY tile that ANY unit can legally deboard to:
+      "CityTile",      "Center",            "Local", FALSE
+      "Extra",         "Quay",              "Local", FALSE
+      "Extra",         "Hideout",           "Local", FALSE
+      "Extra",         "Fort",              "Local", FALSE
+      "Extra",         "Fortress",          "Local", FALSE
+      "Extra",         "Naval Base",        "Local", FALSE
+      "Extra",         "Castle",            "Local", FALSE
+      "Extra",         "Bunker",            "Local", FALSE
+      "Extra",         "Airbase",           "Local", FALSE
     }
 [effect_action_success_move_cost_transport_unload]
 type    = "Action_Success_Target_Move_Cost"   ; "Local" scope on unit pertains to target, not actor.
@@ -8272,8 +8292,28 @@ value   = 3360
 reqs    =
     { "type",          "name",             "range", "present"
       "Action",        "Transport Unload", "Local", TRUE
-      "UnitClassFlag", "DelayLoad",        "Local", TRUE      ; Does not affect Aircraft
+      "UnitClassFlag", "DelayLoad",        "Local", TRUE      ; Does not affect Aircraft or ships
       "UnitType",      "Marines",          "Local", FALSE     ; Does not affect Marines
+    }
+[effect_action_success_move_cost_transport_unload_to_unsupported_tile_is_a_disembark_1]    ; TO DO: If we move all unload illegality rules to this section we can liberalize unloading rules in client and here too.
+type    = "Action_Success_Target_Move_Cost"
+value   = 999999  ; same as disembark: lose all moves
+reqs    =
+    { "type",          "name",              "range", "present"
+      "Action",        "Transport Unload",  "Local", TRUE
+      "UnitClassFlag", "TerrainSpeed",      "Local", TRUE      ; Only affects land units, ... 
+      "UnitType",      "Marines",           "Local", FALSE     ; except Marines
+      
+      ; For now since this is one effect for ALL land units, exclude ANY tile that ANY unit can legally deboard to:
+      "CityTile",      "Center",            "Local", FALSE
+      "Extra",         "Quay",              "Local", FALSE
+      "Extra",         "Hideout",           "Local", FALSE
+      "Extra",         "Fort",              "Local", FALSE
+      "Extra",         "Fortress",          "Local", FALSE
+      "Extra",         "Naval Base",        "Local", FALSE
+      "Extra",         "Castle",            "Local", FALSE
+      "Extra",         "Bunker",            "Local", FALSE
+      "Extra",         "Airbase",           "Local", FALSE
     }
 ;############################################# The exception is Quays where we simulate a RestrictInfra on the deboard command to make them lose all moves:
 [effect_action_success_move_cost_deboard_nondomestic_quay]

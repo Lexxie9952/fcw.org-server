@@ -3553,7 +3553,7 @@ target_reqs    =
 
 ;TO DO: this now enables ruleset to control disembarkation stipulations, rather
 ;than hard-coded client. This actionenabler should be extended with all the 
-;rules logic for mp2c, and taken advantage of for upgraded/simplified mechanics.
+;rules logic for mp2e, and taken advantage of for upgraded/simplified mechanics.
 [actionenabler_disembark]
 action        = "Transport Disembark"
 actor_reqs    =
