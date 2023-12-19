@@ -2522,36 +2522,112 @@ static void wipe_unit_full(struct unit *punit, bool transported,
     unit_list_iterate_safe(unit_transport_cargo(punit), pcargo) {
       bool healthy = FALSE;
 
+      /* Handle and assemble three classes of cargo:
+         1. Units who cannot deboard:
+              * put in the helpless list
+         2. Units who can (theoretically) deboard but can't survive on tile:
+              * put in the imperiled list
+         3. Units who can (theoretically) deboard:
+              * mark as healthy for deboard or "disembark-to-same-tile" */
       if (!can_unit_unload(pcargo, punit)) {
+        /* !can_unit_unload = (a) has NO theoretic ability to
+         * deboard AND (b) is not in a city or native base */
         unit_list_prepend(helpless, pcargo);
-      } else {
+      } else {   /* can_unit_unload == true 
+                  * unit has theoretic ability to deboard OR
+                  * is in a city or native base: */
         if (unit_dies_when_transport_dies(pcargo)) {
+          /* unit can (theoretically) deboard
+           * but can't survive on the tile: imperiled */
           unit_list_prepend(imperiled, pcargo);
         } else {
-        /* These units do not need to be saved. */
+        /* These units can theoretically deboard 
+           (no actionenabler check!) but get arbitrarily 
+           declared as saved anyway(!), then dumped on the
+           survivable tile where they are. */
           healthy = TRUE;
         }
       }
 
-      /* Could use unit_transport_unload_send here, but that would
-       * call send_unit_info for the transporter unnecessarily.
-       * Note that this means that unit might to get seen briefly
-       * by clients other than owner's, for example as a result of
-       * update of homecity common to this cargo and some other
-       * destroyed unit. */
-      unit_transport_unload(pcargo);
+      if (healthy) {
+        /* "Healthy" units are units who can theoretically deboard
+           (no actionenabler check), and are on a survivable
+           tile. Hard-coded legacy rules just dumped them on their
+           current tile with no move_cost and left it at that.
+
+           >> This created an exploit where all units can deboard from
+           ships with full mp if ships do a "sacrificial disbanding".
+           Voilà, Howitzers transported down the river in a Trireme
+           then attacking with full moves, like Marines!
+
+           The fix, below, is that we must charge cargo units the
+           proper "exit fee" for offloading from the destroyed ship! */
+
+        /* DEBUG notify_player(unit_owner(pcargo), ptile, E_UNIT_RELOCATED, ftc_server,
+                    _("[`anger`] %s is considered a healthy unit."),
+                    unit_link(pcargo)); */
+
+        // Try deboard:
+        if (is_action_enabled_unit_on_unit(ACTION_TRANSPORT_DEBOARD,
+                                          pcargo, punit)) {
+          /* DEBUG notify_player(unit_owner(pcargo), ptile, E_UNIT_RELOCATED, ftc_server,
+                        _("[`anger`] %s can legally deboard and will try to."),
+                        unit_link(pcargo)); */
+
+          unit_do_action(unit_owner(pcargo), pcargo->id, punit->id,
+                          0, "", ACTION_TRANSPORT_DEBOARD);
+        }
+        // Try unload:
+        else if (is_action_enabled_unit_on_unit(ACTION_TRANSPORT_UNLOAD,
+                                            punit, pcargo)) {
+            /* DEBUG notify_player(unit_owner(pcargo), ptile, E_UNIT_RELOCATED, ftc_server,
+                          _("[`anger`] %s can legally be unloaded and will try to."),
+                          unit_link(pcargo)); */
+
+            unit_do_action(unit_owner(punit), punit->id, pcargo->id,
+                            0, "", ACTION_TRANSPORT_UNLOAD);
+        }
+        // Illegal deboard/unload is treated as "disembark-to-same-tile". It loses all mp:
+        else {
+          /* notify_player(unit_owner(pcargo), ptile, E_UNIT_RELOCATED, ftc_server,
+              _("[`anger`] %s couldn't legally deboard/disembark. Force moves=0 and unloading..."),
+              unit_link(pcargo)); */
+
+            pcargo->moves_left = 0;
+        }
+        
+        if (unit_transported(pcargo)) {
+          /* DEBUG notify_player(unit_owner(pcargo), ptile, E_UNIT_RELOCATED, ftc_server,
+              _("[`anger`] %s which should no longer be passenger, still is. Force moves=0 and unloading..."),
+              unit_link(pcargo)); */
+
+          pcargo->moves_left = 0;
+          unit_transport_unload(pcargo);
+        }
+        /* DEBUG else {
+          notify_player(unit_owner(pcargo), ptile, E_UNIT_RELOCATED, ftc_server,
+              _("[`anger`] %s succeeded at being offloaded by above action."),
+              unit_link(pcargo));
+        } */
+      }
+      // not healthy:
+      else { 
+        /* Could use unit_transport_unload_send here, but that would
+        * call send_unit_info for the transporter unnecessarily.
+        * Note that this means that unit might to get seen briefly
+        * by clients other than owners, for example as a result of
+        * update of homecity common to this cargo and some other
+        * destroyed unit. */
+        unit_transport_unload(pcargo);
+      }
       if (pcargo->activity == ACTIVITY_SENTRY) {
         /* Activate sentried units - like planes on a disbanded carrier.
          * Note this will activate ground units even if they just change
          * transporter. */
         set_unit_activity(pcargo, ACTIVITY_IDLE);
       }
+      send_unit_info(NULL, pcargo);
 
-      /* Unit info for unhealthy units will be sent when they are
-       * assigned new transport or removed. */
-      if (healthy) {
-        send_unit_info(NULL, pcargo);
-      }
     } unit_list_iterate_safe_end;
   }
 
