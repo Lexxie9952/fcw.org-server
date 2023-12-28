@@ -4762,8 +4762,10 @@ static bool handle_stdin_input_real(struct connection *caller, char *str,
 
   if (caller
       && !((check || (vote_would_pass_immediately(caller, cmd)
-                     && !is_longturn()) || (is_longturn()
-                     && command_vote_percent(command_by_number(cmd)) == 0))
+                     && !is_longturn()) 
+              // Voting not allowed in LT games except private password games:
+                     || (is_longturn() && srvarg.server_password_enabled
+                         && command_vote_percent(command_by_number(cmd)) == 0))
             && conn_get_access(caller) >= ALLOW_BASIC
             && level == ALLOW_CTRL)
       && conn_get_access(caller) < level) {
