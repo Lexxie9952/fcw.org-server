@@ -8603,6 +8603,80 @@ reqs    =
     }
 
 ;*********************************************************************
+;Gulag requirement increases by +2 at 20,30,40,50,60
+
+[effect_gulag_population_20]
+type    = "Gulag"
+value	  = 2 ; +2 martial law unit needed for size 20
+reqs    =
+    {
+      "type",   "name",       "range",  "present"
+      "MinSize","20",         "City",   TRUE
+      "Gov",    "Anarchy",    "Player", FALSE
+      "Gov",    "Monarchy",   "Player", FALSE
+      "Gov",    "Republic",   "Player", FALSE
+      "Gov",    "Democracy",  "Player", FALSE
+      "Gov",    "Theocracy",  "Player", FALSE
+      "Gov",    "Nationalism","Player", FALSE
+    }
+[effect_gulag_population_30]
+type    = "Gulag"
+value	  = 2 ; +2 martial law unit needed for size 30
+reqs    =
+    {
+      "type",   "name",       "range",  "present"
+      "MinSize","20",         "City",   TRUE
+      "Gov",    "Anarchy",    "Player", FALSE
+      "Gov",    "Monarchy",   "Player", FALSE
+      "Gov",    "Republic",   "Player", FALSE
+      "Gov",    "Democracy",  "Player", FALSE
+      "Gov",    "Theocracy",  "Player", FALSE
+      "Gov",    "Nationalism","Player", FALSE
+    }
+[effect_gulag_population_40]
+type    = "Gulag"
+value	  = 2 ; +2 martial law unit needed for size 40
+reqs    =
+    {
+      "type",   "name",       "range",  "present"
+      "MinSize","20",         "City",   TRUE
+      "Gov",    "Anarchy",    "Player", FALSE
+      "Gov",    "Monarchy",   "Player", FALSE
+      "Gov",    "Republic",   "Player", FALSE
+      "Gov",    "Democracy",  "Player", FALSE
+      "Gov",    "Theocracy",  "Player", FALSE
+      "Gov",    "Nationalism","Player", FALSE
+    }
+[effect_gulag_population_50]
+type    = "Gulag"
+value	  = 2 ; +2 martial law unit needed for size 50
+reqs    =
+    {
+      "type",   "name",       "range",  "present"
+      "MinSize","20",         "City",   TRUE
+      "Gov",    "Anarchy",    "Player", FALSE
+      "Gov",    "Monarchy",   "Player", FALSE
+      "Gov",    "Republic",   "Player", FALSE
+      "Gov",    "Democracy",  "Player", FALSE
+      "Gov",    "Theocracy",  "Player", FALSE
+      "Gov",    "Nationalism","Player", FALSE
+    }
+[effect_gulag_population_60]
+type    = "Gulag"
+value	  = 2 ; +2 martial law unit needed for size 60
+reqs    =
+    {
+      "type",   "name",       "range",  "present"
+      "MinSize","20",         "City",   TRUE
+      "Gov",    "Anarchy",    "Player", FALSE
+      "Gov",    "Monarchy",   "Player", FALSE
+      "Gov",    "Republic",   "Player", FALSE
+      "Gov",    "Democracy",  "Player", FALSE
+      "Gov",    "Theocracy",  "Player", FALSE
+      "Gov",    "Nationalism","Player", FALSE
+    }
+
+;*********************************************************************
 ;Banking changes upkeep of infantry to gold
 [effect_banking_upkeep]
 type    = "Shield2Gold_Factor"
