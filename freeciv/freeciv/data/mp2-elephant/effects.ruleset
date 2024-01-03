@@ -4003,7 +4003,7 @@ reqs	=
 
 [effect_police_station_base_level_all_govs]
 type    = "Make_Content_Mil"
-value	= 2  ; handles foreign nationals for every gov.
+value	= 2  ; handles foreign nationals for every gov. and unhappy about military for representative govs
 reqs	=
     { "type", "name", "range", "present"
       "Building", "Police Station", "City", TRUE
@@ -9017,8 +9017,32 @@ reqs    =
     }
 
 ;*********************************************************************
-;Gulag requirement increases by +2 at 20,30,40,50,60
+[effect_gulag_output_loss_shields]
+type    = "Gulag_Lost_Income_Pct"
+value	  = 11
+reqs    =
+    {
+      "type",       "name",   "range",  "present"
+      "OutputType", "Shield", "Local",  TRUE
+    }
+[effect_gulag_output_loss_gold]
+type    = "Gulag_Lost_Income_Pct"
+value	  = 33
+reqs    =
+    {
+      "type",       "name", "range",  "present"
+      "OutputType", "Gold", "Local",  TRUE
+    }
+[effect_gulag_output_loss_science]
+type    = "Gulag_Lost_Income_Pct"
+value	  = 100
+reqs    =
+    {
+      "type",       "name",     "range",  "present"
+      "OutputType", "Science",  "Local",  TRUE
+    }
 
+;Gulag requirement increases by +2 at 20,30,40,50,60
 [effect_gulag_population_20]
 type    = "Gulag"
 value	  = 2 ; +2 martial law unit needed for size 20
