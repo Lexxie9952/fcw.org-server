@@ -80,6 +80,7 @@
 
 /* Maximal iterations before the search loop is stopped, or until warning is
  * printed if CM_LOOP_NO_LIMIT is defined. */
+#define CM_MIN_LOOP 10000
 #define CM_MAX_LOOP 27500
 
 #define CPUHOG_CM_MAX_LOOP (CM_MAX_LOOP * 4)
@@ -2165,22 +2166,49 @@ static int get_heuristic_cm_max_loop_count(struct cm_state *state)
     return CPUHOG_CM_MAX_LOOP;
   }
 
-  // Usable specialist count of {0..3..6} >> {-0.15 .. 0 .. +0.15}
-  float spec_adj = -0.15;
+  // Usable specialist count of {0..3..6} >> {-0.24 .. 0 .. +0.24}
+  float spec_adj = -0.24;
+  int specs = 0;
   specialist_type_iterate(spec) {
-    if (city_can_use_specialist(pcity, spec)) spec_adj += 0.05;
+    if (city_can_use_specialist(pcity, spec)) {
+      specs ++;
+      spec_adj += 0.08;
+    }
   } specialist_type_iterate_end;
+  if (specs >= 6) spec_adj += 0.26; // Results in full +0.50 for Adam Smith
 
-  // Radius of {5,8,10} >> {0, +0.135, +0.225}
-  float rad_adj = (10 - pcity->city_radius_sq) * .045;
-  // Size of {1..30..70} >> {-0.44 .. +0.09 .. +0.29}
+  // Radius of {5,8,10,13} >> {0, +0.2, +0.8, +1.2}
+  float rad_adj = 0;
+  switch (pcity->city_radius_sq) {
+    case 5:
+      rad_adj = 0;
+      break;
+    case 8:    // 25 tiles / 21 = 1.1904
+      rad_adj = 0.2;
+      break;
+    case 10:   // 37 tiles / 21 = 1.7619
+      rad_adj = 0.8;
+      break;
+    case 13:   // 45 tiles / 21 = 2.1429
+      rad_adj = 1.2;
+      break;
+    default: 
+      rad_adj = (pcity->city_radius_sq - 5) * 0.143;
+      // e.g., (4-5)*0.143 = -0.143
+      // e.g., (9-5)*0.143 =  0.572
+      // e.g., (16-5)*0.143 = 1.287
+  }
+  // Size of {1..30..70} >> {-0.44 .. +0.18 .. +0.58}
   int csize = city_size_get(pcity);
-  float size_adj = (12.0 - csize) * -1; // s1 to s70 produces -11 to 59;
-  size_adj /= (size_adj < -1) ? 25 : 200;
+  float size_adj = (12.0 - csize) * -1; // s1 to s70 produces -11 to 58;
+  size_adj /= (size_adj < -1) ? 25 : 100;
   
-  /* Adjust CM_MAX_LOOP between low range of 59% to high range of 166.5%.
-    If 27500==CM_MAX_LOOP: 16225 to 45787. Size 21 city (+0.045),
-    radius 8 (+0.135), 6 specialists (+0.15) = 1.33x = 36575 iterations */
+// Low range: spec-0.24 size-0.44 = -0.66. If city_radius_sq < 5, could go negative.
+// High range: spec+0.50 size+0.58 = +1.08. If city_radius_sq == 13, 1.08+1.2 = +2.28 (328%) 
+
+  /* Adjust CM_MAX_LOOP between low range of 34% to high range of 328%.
+    If 27500==CM_MAX_LOOP: 10000 to 90200 (s70). Size 21 city (+0.09),
+    radius 8 (+0.2), 6 specialists (+0.50) = 1.79x = 49225 iterations */
   int max_count = CM_MAX_LOOP * (1.0 + rad_adj + size_adj + spec_adj);
 
   /* High iterations are wasted on the AI: */
@@ -2190,10 +2218,11 @@ static int get_heuristic_cm_max_loop_count(struct cm_state *state)
 
 /* DEBUG 
   notify_conn(game.est_connections, NULL, E_WONDER_WILL_BE_BUILT, ftc_server, 
-          _("%s, size %d, spec_adj %f, gets %d iterations to finish."),
-          city_link(state->pcity), csize, spec_adj, max_count);
+          _("%s, size %d, spec_adj %f, rad_adj %f, radius %d, size_adj %f. %d max_loop."),
+          city_link(pcity), csize, spec_adj, rad_adj, pcity->city_radius_sq, size_adj, max_count);
 */
-  return max_count;
+  // Don't return less than CM_MIN_LOOP, nor more than CPUHOG_CM_MAX_LOOP
+  return MIN(MAX(max_count, CM_MIN_LOOP), CPUHOG_CM_MAX_LOOP);
 }
 
 /************************************************************************//**
