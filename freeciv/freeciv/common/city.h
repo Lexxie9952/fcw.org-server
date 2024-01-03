@@ -447,6 +447,9 @@ struct city {
        * Set inside city_refresh() and city_refresh_queue_add(). */
       bool needs_refresh;
 
+      /* if not hangry, was non-hangry caused by gulag? */
+      bool gulag;
+
       /* the city map is synced with the client. */
       bool synced;
 

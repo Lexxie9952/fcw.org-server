@@ -3194,6 +3194,33 @@ inline void set_city_production(struct city *pcity)
   } output_type_iterate_end;
 
   pcity->prod[O_GOLD] += get_city_tithes_bonus(pcity);
+
+  /* Cities under forced gulag mechanics may lose a percentage of
+     their income if the ruleset specifies such: */
+  if (pcity->server.gulag) {
+    /* NOT a good idea to do an output_type_iterate(o) since some outputs are 
+      interdependent on others (e.g., gold upon trade.) Trade would have to be
+      applied higher above before anything with gold/sci/lux is done. Messing
+      with lux and food could create situations where loss of either locks you
+      into inescapable Gulag condition, so left out of here also. */
+    int penalty_shield =
+      get_target_bonus_effects(NULL, city_owner(pcity), NULL, pcity, NULL,
+                               NULL, NULL, NULL, get_output_type(O_SHIELD), NULL, NULL,
+                               EFT_GULAG_LOST_INCOME_PCT, V_COUNT);
+
+    int penalty_gold = 
+      get_target_bonus_effects(NULL, city_owner(pcity), NULL, pcity, NULL,
+                               NULL, NULL, NULL, get_output_type(O_GOLD), NULL, NULL,
+                               EFT_GULAG_LOST_INCOME_PCT, V_COUNT);
+    int penalty_sci =
+      get_target_bonus_effects(NULL, city_owner(pcity), NULL, pcity, NULL,
+                               NULL, NULL, NULL, get_output_type(O_SCIENCE), NULL, NULL,
+                               EFT_GULAG_LOST_INCOME_PCT, V_COUNT);
+
+    pcity->prod[O_SHIELD] -= (pcity->prod[O_SHIELD] * penalty_shield) / 100;
+    pcity->prod[O_GOLD] -= (pcity->prod[O_GOLD] * penalty_gold) / 100;
+    pcity->prod[O_SCIENCE] -= (pcity->prod[O_SCIENCE] * penalty_sci) / 100;
+  }
 }
 
 /**********************************************************************//**
@@ -3671,6 +3698,7 @@ struct city *create_city_virtual(struct player *pplayer,
   pcity->rally_point.dest_tile = - 1; /* no rally point */
 
   if (is_server()) {
+    pcity->server.gulag = false;
     pcity->server.mgr_score_calc_turn = -1; /* -1 = never */
 
     CALL_FUNC_EACH_AI(city_alloc, pcity);

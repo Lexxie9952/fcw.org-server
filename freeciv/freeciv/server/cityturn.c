@@ -1168,6 +1168,7 @@ static bool city_populate(struct city *pcity, struct player *nationality)
   int saved_id = pcity->id;
   int granary_size = city_granary_size(city_size_get(pcity));
 
+  pcity->server.gulag = false; /* clear val from last turn */
 
   /* With city_output_style = 0, shield upkeep isn't counted on the turn
    * a unit is produced, but, assymmetrically, food upkeep is. How
@@ -1224,6 +1225,8 @@ static bool city_populate(struct city *pcity, struct player *nationality)
 	      return false; // city famine avoided by a lost unit
       }
     } unit_list_iterate_safe_end;
+
+    /* We get here if famine is definitely occuring */
     if (city_size_get(pcity) > 1) {
       notify_player(city_owner(pcity), city_tile(pcity),
                     E_CITY_FAMINE, ftc_server,
@@ -1243,13 +1246,16 @@ static bool city_populate(struct city *pcity, struct player *nationality)
       int gulag = get_city_bonus(pcity, EFT_GULAG, V_COUNT);
       int gulag_force = pcity->martial_law 
                       + get_city_bonus(pcity, EFT_MAKE_CONTENT_MIL, V_COUNT);
+
+      /* Under server hangry rules, famine immediately disqualifies rapture */
+      pcity->rapture = 0;
+
       /* Disorder from Famine conditions:
          1. No gulag effect = don't suppress disorder
          2. gulag_force < gulag effect. don't suppress disorder.
          3. gulag_force >= gulag effect. suppress disorder.
          3. EFT_GULAG=100: always suppress disorder */
       if ((!gulag || gulag_force < gulag) && gulag != 100) {
-        pcity->rapture = 0;
         pcity->was_happy = false;
         pcity->hangry++;
         if (gulag) {
@@ -1260,6 +1266,9 @@ static bool city_populate(struct city *pcity, struct player *nationality)
         }
         return true; // indicates city is hangry from starvation
       } else {
+          /* Flag: gulag effect evaded lawlessness; triggers EFT_GULAG_LOST_INCOME_PCT */
+          pcity->server.gulag = true;
+
           notify_player(city_owner(pcity), city_tile(pcity),
                         E_CITY_NORMAL, ftc_server,
                         _("Gulag policy in %s prevents disorder."), city_link(pcity));

@@ -382,6 +382,9 @@ extern "C" {
  * itself. Measured in SA Basis Points (10080 instead of 10000). See README.effects */
 #define SPECENUM_VALUE146 EFT_PASSENGER_MOVE_COST_BP
 #define SPECENUM_VALUE146NAME "Passenger_Move_Cost_Bp"
+/* Output losses when Gulag effects circumvent disorder */
+#define SPECENUM_VALUE147 EFT_GULAG_LOST_INCOME_PCT
+#define SPECENUM_VALUE147NAME "Gulag_Lost_Income_Pct"
 /* 🖐🏻 ******* 👆🏻👇🏻 
  * FCW does not have /common and needs to hard code any changes or re-ordering of the above in effects.js */
 /********************************************************************************************************~*/

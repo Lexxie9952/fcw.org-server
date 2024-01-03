@@ -375,6 +375,20 @@ Gulag
      *   100   =  always suppress. 
     "Gulag" suppression of disorder. 100 = always suppress disorder.
 
+Gulag_Lost_Income_Pct
+    The percentage loss incurred by a city to an output type IFF 
+    it avoids disorder due to Gulag effects.
+    To specify an output product, e.g., gold, use it in the req field, such as:
+    "OutputType", "Gold", "Local",  TRUE
+    Effect's value specifies how much of gross output is lost:
+     *   0      = No loss of output
+     *   1-99   = Percent of gross output lost iff under Gulag
+     *   100    = No output accumulates when the city is under Gulag. 
+    NB: Careful ... only shields, gold, and sci are operative here.
+    Trade, Lux, Food are not because 1) Lux affects disorder/gulag and could
+    create negative feedback, 2) Trade affects lux, 3) Food could affect 
+    famine and therefore also be a negative feedback. 
+
 Happiness_To_Gold
     All Make_Content and Force_Content effects generate 1 gold per citizen
     (actually) affected. For example, a temple that makes 2 content will

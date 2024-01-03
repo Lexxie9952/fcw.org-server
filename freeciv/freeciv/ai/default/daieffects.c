@@ -174,6 +174,7 @@ adv_want dai_effect_value(struct player *pplayer, struct government *gov,
   case EFT_COINAGE_BONUS_PM:                   // not yet evaluated
   case EFT_IMPROVEMENT_SALE_PCT:               // not yet evaluated
   case EFT_GULAG:                              // not yet evaluated
+  case EFT_GULAG_LOST_INCOME_PCT:              // not yet evaluated
   case EFT_STACK_ESCAPE_PCT:                   // not yet evaluated
   case EFT_ACTION_RESIST_PCT:                  // not yet evaluated
   case EFT_TERRAIN_DEFEND_ADD_BONUS:           // not yet evaluated
