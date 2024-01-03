@@ -776,10 +776,11 @@ sabotage	= 100
 sound		= "b_police_station"
 sound_alt	= "b_generic"
 helptext	= _("\
-Police Stations neutralize the unhappiness caused by two military units or two\
- unhappy Foreign Nationals. That is, they extend your martial law count by +2\
- beyond its ordinary limit. Under authoritarian government, they also force\
- two additional citizens to be content (Despotism, Communism, and Nationalism.)\
+In representative governments, Police Stations neutralize the unhappiness caused\
+ by two aggressively stationed military units or two\
+ unhappy Foreign Nationals. In other governments, they extend your martial law count by +2\
+ beyond its ordinary limit. In dictatorial government (Despotism, Communism, and Nationalism),\
+ they also force two additional citizens to be content.\
  Police Stations prevent ALL units from Establishing Embassy without first agreeing\
  to Cease-Fire or Peace. They also half the odds to Investigate City under all\
  governments except Democracy.\
