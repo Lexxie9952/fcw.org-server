@@ -870,7 +870,8 @@ function mapview_put_goto_line(pcanvas, dir, canvas_x, canvas_y, tile_index)
   }
   pcanvas.beginPath();
   pcanvas.moveTo(x0, y0);
-  pcanvas.lineTo(x0, y0);
+  //Chrome 116 no longer allows drawing points with zero length line, so use .01 length:
+  pcanvas.lineTo(x0, y0+.01);
   pcanvas.stroke();
 
  // Dest waypoint circle
@@ -883,7 +884,8 @@ function mapview_put_goto_line(pcanvas, dir, canvas_x, canvas_y, tile_index)
   }
   pcanvas.beginPath();
   pcanvas.moveTo(x1, y1);
-  pcanvas.lineTo(x1, y1);
+  //Chrome 116 no longer allows drawing points with zero length line, so use .01 length:
+  pcanvas.lineTo(x1, y1+.01);
   pcanvas.stroke();
  
   // Waypoint inner dots
@@ -892,11 +894,13 @@ function mapview_put_goto_line(pcanvas, dir, canvas_x, canvas_y, tile_index)
   pcanvas.lineCap = "square";
   pcanvas.beginPath();
   pcanvas.moveTo(x0, y0);
-  pcanvas.lineTo(x0, y0);
+  //Chrome 116 no longer allows drawing points with zero length line, so use .01 length:
+  pcanvas.lineTo(x0, y0+.01);
   pcanvas.stroke();
   pcanvas.beginPath();
   pcanvas.moveTo(x1, y1);
-  pcanvas.lineTo(x1, y1);
+  //Chrome 116 no longer allows drawing points with zero length line, so use .01 length:
+  pcanvas.lineTo(x1, y1+.01);
   pcanvas.stroke();
 }
 
