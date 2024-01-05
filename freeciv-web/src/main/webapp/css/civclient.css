@@ -278,7 +278,8 @@ input[type='number'] {
   color: #9aa;
   line-height:115%;
   font-size:115%;
-  font-family:SegoeSB
+  font-family:SegoeSB;
+  font-weight:normal;
 }
 
 .blue_clickable {
