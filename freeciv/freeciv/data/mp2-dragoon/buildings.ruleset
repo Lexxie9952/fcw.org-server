@@ -414,13 +414,13 @@ sound		= "b_stock_exchange"
 sound_alt	= "b_generic"
 helptext	= _("\
 In cities with a Bank, a Stock Exchange boosts tax and luxury\
- production by an additional +50%. \
+ production by an additional +50%. \n\
 "), _("\
 * A Bank and Stock Exchange together boost\
- tax and luxury production by +100%.\
+ tax and luxury production by +100%. \n\
 "), _("\
 * A Marketplace, Bank, and Stock Exchange together boost\
- tax and luxury production by +150%. \
+ tax and luxury production by +150%. \n\
 "), _("\
 After discovery of The Corporation, non-Communist governments see the conversion rate of\
  Coinage increase by +25%. A Bank, Marketplace, and Stock Exchange each add +25%, yielding\
