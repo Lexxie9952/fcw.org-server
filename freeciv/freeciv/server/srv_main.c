@@ -3031,6 +3031,10 @@ static void srv_running(void)
         /* nothing */
       }
 
+      notify_conn(game.est_connections, NULL, E_NEXT_YEAR, ftc_any,
+                  _("END OF TURN %d (%s)"),
+                  game.info.turn, calendar_text());
+
       between_turns = timer_renew(between_turns, TIMER_USER, TIMER_ACTIVE);
       timer_start(between_turns);
 
