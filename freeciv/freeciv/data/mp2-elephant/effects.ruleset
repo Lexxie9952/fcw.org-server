@@ -4410,9 +4410,10 @@ reqs	=
       "Building",   "Factory",        "City",   TRUE
       "OutputType", "Shield",         "Local",  TRUE
     }
+;The below is for the city with Hoover Dam. 
 [effect_fusion_reactor_1a_hoover]
 type    = "Output_Bonus"
-value	= 20
+value	= 20  ; 60% + 20% = 180%
 reqs	=
     { "type",       "name",           "range", "present"
       "Building",   "Fusion Reactor", "Player", TRUE

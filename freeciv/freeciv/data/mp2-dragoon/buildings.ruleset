@@ -445,7 +445,7 @@ sabotage	= 100
 sound		= "b_factory"
 sound_alt	= "b_generic"
 helptext	= _("\
-Increases the shield production in a city by +50%. This increase may\
+Increases the base production in a city by +50%. This increase may\
  contribute to pollution. \n\
 "), _("\
 A Factory lets you build one extra multislot unit per turn.\
@@ -1782,16 +1782,17 @@ sabotage	= 0
 sound		= "w_fusion_reactor_wonder"
 sound_alt	= "w_generic"
 helptext	= _("\
-Obsoletes the effects of Power Plants in all your cities,\
- replacing them with Fusion Reactor power. This boosts base\
- production by +80%. The extra output generates no pollution. \n\
+In all your cities, the Fusion Reactor boosts base production by\
+ +80%. The extra output generates no pollution. \n\
+Only one Coal Plant, Hydro Plant, Nuclear Plant, or Fusion\
+ Reactor can take effect for a city. The Fusion Reactor\
+ obsoletes all effects of those Power Plants in all your cities.\
+ (You can sell old Power Plants for a one-time profit, and also\
+ eliminate their upkeep costs.) \n\
 "), _("\
 ➤ In a city with a Factory and Mfg. Plant, this makes a\
  combined +180% production bonus. \n\
-➤ Only one Coal Plant, Hydro Plant, Nuclear Plant, or Fusion\
- Reactor can take effect for a city. A nation that owns\
- the Fusion Reactor can sell off all Power Plants and gain a\
- large savings in ongoing upkeep costs. \n\
+➤  \n\
 "), _("\
 ➤ The Fusion Reactor's surplus power gives 1 free unit upkeep\
  to every city in your nation, and 1 extra unit build slot.\
