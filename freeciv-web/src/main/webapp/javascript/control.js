@@ -3594,6 +3594,9 @@ function find_active_dialog()
 **************************************************************************/
 function global_keyboard_listener(ev)
 {
+  // The metaKey (win/cmd) means an OS or browser hotkey. Abort:
+  if (ev['metaKey'] == true) return;
+
   // Check if focus is in chat field, where these keyboard events are ignored.
   if ($('input:focus').length > 0 || !keyboard_input) return;
 
