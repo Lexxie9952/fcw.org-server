@@ -68,7 +68,9 @@ var city_paste_target = {}; // ctrl-shift-right-click for pasting city prod targ
 var current_focus = [];   // unit(s) in current focus selection
 var urgent_focus_queue = [];  /* The priority unit(s) for unit_focus_advance(). */
 var last_focus = null;    // last unit in focus before focus change
-
+/* Used in advance_unit_focus to remember the tile a GOTO-ing unit came from.
+   NULL means there was no GOTO. CAREFUL: 0 is a real tile index. */
+var flag_tile = null;     
 /* User specified last actions appended to GOTO/RALLY */
 var user_last_action = null;
 var user_last_order = null;
@@ -1320,6 +1322,9 @@ function advance_unit_focus(same_type)
       message_log.update({ event: E_BEGINNER_HELP, message: txt});
     }
   }
+  /* This var is only used for finding next unit to focus on, by subroutines
+   * of this function. So we always reset to null before leaving this function */
+  flag_tile = null;
 }
 
 
@@ -2481,18 +2486,23 @@ function unit_distance_compare(unit_a, unit_b)
     return 0;
   } else {
 
-    // Use the first focused unit as center
     var i_focus = 0;
+    // if focus unit did a GOTO, use its origin for distance sorting:
     var ref_tile = null;
-    while (i_focus < current_focus.length
-           && (ref_tile = tiles[current_focus[i_focus].tile]) == null) {
+
+    if (flag_tile !== null) ref_tile = tiles[flag_tile]
+    // If no flag_tile, use the tile of the first focused unit as center point:
+    else while (i_focus < current_focus.length
+          && (ref_tile = tiles[current_focus[i_focus].tile]) == null) {
       i_focus++;
     }
 
     // Or the canvas center if no unit is focused
-    if (ref_tile == null) {
+    if (ref_tile === null) {
       ref_tile = canvas_pos_to_nearest_tile(mapview.width/2, mapview.height/2);
     }
+
+    //DEBUG: add_client_message("ref_tile: "+ref_tile.tile+"  flag_tile:"+flag_tile);
 
     var ref_a = map_distance_vector(ref_tile, ptile_a);
     var ref_b = map_distance_vector(ref_tile, ptile_b);
@@ -3074,6 +3084,8 @@ function do_map_click(ptile, qtype, first_time_called)
       // send goto order for all units in focus.
       for (var s = 0; s < current_focus.length; s++) {
         punit = current_focus[s];
+        // Flag the tile the unit originally came from, so advance_unit_focus() picks next unit closest to origin tile:
+        flag_tile = punit.tile;
         /* Get the path the server sent using PACKET_GOTO_PATH. */
         var goto_path = goto_request_map[punit['id'] + "," + ptile['x'] + "," + ptile['y']];
 
@@ -3595,7 +3607,7 @@ function global_keyboard_listener(ev)
       map_handle_key(keyboard_key, ev.keyCode, ev['ctrlKey'], ev['altKey'], ev['shiftKey'], ev);
     }
   }
-  civclient_handle_key(keyboard_key, ev.keyCode, ev['ctrlKey'],  ev['altKey'], ev['shiftKey'], ev);
+  civclient_handle_key(keyboard_key, ev.keyCode, ev['ctrlKey'], ev['altKey'], ev['shiftKey'], ev);
 
   if (renderer == RENDERER_2DCANVAS) $("#canvas").contextMenu('hide');
 }
@@ -3743,8 +3755,7 @@ function civclient_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_even
 /**************************************************************************
  Handles map keybindings.
 **************************************************************************/
-function
-map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
+function map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
 {
   switch (keyboard_key) {
     case 'A':
