@@ -3475,7 +3475,7 @@ target_reqs   =
     { "type",         "name",       "range", "present"
       "UnitClass",    "LandRoad",   "Local", FALSE     ; These classes have cargo restrictions
       "UnitClass",    "LandRail",   "Local", FALSE     ; ...and for simplicity require Transport_Board
-    }
+    }                                                  ; MP2E can fix these after the Great Board/Deboard Resimplification is done ******************************************************************** 
 
 ;Wagons and trucks can't embark if carrying cargo.
 [actionenabler_wagons_and_trucks_embark_as_cargo]
@@ -3485,6 +3485,22 @@ actor_reqs    =
       "MinMoveFrags", "1",            "Local", TRUE
       "UnitClass",    "LandRoad",     "Local", TRUE    ; LandRoad only
       "UnitState",    "Transporting", "Local", FALSE   ; prevent russian doll exceptions               <<< *******
+      "DiplRel",      "Armistice",    "Local", FALSE
+      "DiplRel",      "War",          "Local", FALSE
+      "DiplRel",      "Cease-fire",   "Local", FALSE
+      "DiplRel",      "Peace",        "Local", FALSE
+      "DiplRel",      "Never met",    "Local", FALSE
+    }
+
+;Cargo can always embark. 1) Just for less micromanagement, 2) To avoid all the kinds of cases where the game
+;thinks GOTO is legal to a tile because a transport is there: Even if embark is NOT legal, it does the goto
+;anyway, and gets stranded on an illegal tile.
+[actionenabler_cargo_can_embark]
+action        = "Transport Embark"
+actor_reqs    =
+    { "type",         "name",         "range", "present"
+      "MinMoveFrags", "1",            "Local", TRUE
+      "UnitClass",    "Cargo",        "Local", TRUE    ; Cargo only
       "DiplRel",      "Armistice",    "Local", FALSE
       "DiplRel",      "War",          "Local", FALSE
       "DiplRel",      "Cease-fire",   "Local", FALSE
