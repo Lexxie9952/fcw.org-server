@@ -6329,7 +6329,7 @@ Wagons are the first Commerce unit that can travel by land. Compared to a Carava
  transporting slower units. Wagons have 3⅓ move points, giving a range of 10 tiles on roads. \n\ 
 "), _("\
 Wagons allow units with less than 3 move points to travel your roads faster.\
- Any cargo can board a Wagon anywhere; but needs a city, quay, or base to deboard.\
+ Any cargo can board a Wagon anywhere; but only Goods and Freight can embark. Passengers need a city, quay, or base to deboard.\
  Cargo can disembark anywhere, but it uses up all move points. Everyone can see a Wagon’s cargo.\n\
 Read the help on Caravans to see what Commerce units can do.\
 ")
