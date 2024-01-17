@@ -1641,59 +1641,6 @@ Long sharp pikes give Pikemen a counter to the height and mobility of mounted\
 \nThe discovery of Banking changes upkeep from shields to gold.\
 ")
 
-[unit_musketeers]
-name          = _("Musketeers")
-class         = "Land"
-tech_req      = "Gunpowder"
-obsolete_by   = "Riflemen"
-graphic       = "u.musketeers"
-graphic_alt   = "-"
-sound_move    = "m_musketeers"
-sound_move_alt = "m_generic"
-sound_fight   = "f_musketeers"
-sound_fight_alt = "f_generic"
-build_cost    = 27
-pop_cost      = 0
-attack        = 30
-defense       = 30
-hitpoints     = 20
-firepower     = 1
-move_rate     = 2
-vision_radius_sq = 4
-convert_to    = "Riflemen"
-transport_cap = 0
-fuel          = 0
-uk_happy      = 1
-uk_shield     = 1
-uk_food       = 0
-uk_gold       = 0
-embarks       = "LandRoad", "LandRail", "Helicopter"    ; transport helicopter only
-disembarks    = "LandRoad", "LandRail", "Helicopter"
-targets       = "LandRail"
-flags         = "FootSoldier", "Capturer", "CantReachAir", "Settlers", "CanHide", "MultiSlot", "Shield2Gold", "WillNever"
-roles         = "DefendGood", "DefendGoodStartUnit", "FirstBuild",
-                "BarbarianTech", "BarbarianBuildTech", "BarbarianSeaTech"
-veteran_names =
-  _("?vet_rank:green"),
-  _("?vet_rank:veteran"),
-  _("?vet_rank:hardened"),
-  _("?vet_rank:elite"),
-  _("?vet_rank:crack"),
-  _("?vet_rank:master"),
-  _("?vet_rank:champion")
-veteran_base_raise_chance = 85, 50, 33, 25, 20, 20, 0
-veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
-veteran_power_fact = 100, 150, 175, 250, 300, 350, 400
-veteran_move_bonus = 0, 0, 3360, 3360, 6720, 6720, 6720
-helptext      = _("\
-Musketeers are infantry equipped with early firearms. They replace Pikemen as the preferred\
- city defender, and replace Archers and Legions for offensive foot soldiers.\
- The discovery of Mechanization allows converting Musketeers to Riflemen for free\
- in any domestic city. \
-"), _("\
-\nThe discovery of Banking changes upkeep from shields to gold.\
-")
-
 [unit_falconeers]
 name          = _("Falconeers")
 class         = "Land"
@@ -1759,6 +1706,59 @@ Falconets are huge and heavy. They have woeful accuracy but lethal\
 Righteous faith is needed to fight with slow heavy inaccurate weaponry:\
  only Theocracies can train Falconeers. Other governments will incur\
  high upkeep or see them retire.\
+")
+
+[unit_musketeers]
+name          = _("Musketeers")
+class         = "Land"
+tech_req      = "Gunpowder"
+obsolete_by   = "Riflemen"
+graphic       = "u.musketeers"
+graphic_alt   = "-"
+sound_move    = "m_musketeers"
+sound_move_alt = "m_generic"
+sound_fight   = "f_musketeers"
+sound_fight_alt = "f_generic"
+build_cost    = 27
+pop_cost      = 0
+attack        = 30
+defense       = 30
+hitpoints     = 20
+firepower     = 1
+move_rate     = 2
+vision_radius_sq = 4
+convert_to    = "Riflemen"
+transport_cap = 0
+fuel          = 0
+uk_happy      = 1
+uk_shield     = 1
+uk_food       = 0
+uk_gold       = 0
+embarks       = "LandRoad", "LandRail", "Helicopter"    ; transport helicopter only
+disembarks    = "LandRoad", "LandRail", "Helicopter"
+targets       = "LandRail"
+flags         = "FootSoldier", "Capturer", "CantReachAir", "Settlers", "CanHide", "MultiSlot", "Shield2Gold", "WillNever"
+roles         = "DefendGood", "DefendGoodStartUnit", "FirstBuild",
+                "BarbarianTech", "BarbarianBuildTech", "BarbarianSeaTech"
+veteran_names =
+  _("?vet_rank:green"),
+  _("?vet_rank:veteran"),
+  _("?vet_rank:hardened"),
+  _("?vet_rank:elite"),
+  _("?vet_rank:crack"),
+  _("?vet_rank:master"),
+  _("?vet_rank:champion")
+veteran_base_raise_chance = 85, 50, 33, 25, 20, 20, 0
+veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
+veteran_power_fact = 100, 150, 175, 250, 300, 350, 400
+veteran_move_bonus = 0, 0, 3360, 3360, 6720, 6720, 6720
+helptext      = _("\
+Musketeers are infantry equipped with early firearms. They replace Pikemen as the preferred\
+ city defender, and replace Archers and Legions for offensive foot soldiers.\
+ The discovery of Mechanization allows converting Musketeers to Riflemen for free\
+ in any domestic city. \
+"), _("\
+\nThe discovery of Banking changes upkeep from shields to gold.\
 ")
 
 [unit_partisan]
