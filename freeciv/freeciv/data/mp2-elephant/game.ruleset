@@ -3562,6 +3562,10 @@ actor_reqs    =
       "MinMoveFrags", "1",           "Local"
     }
 
+;NOTE the two enablers below SHOULD be fixed by 17Jan2023 commit "Fix units with (moves_left ≤ 1) can't EMBARK" ********************************************************************************** NOTE: DELETE THESE
+;Thus we can schedule them for deletion, but leaving them would allow units stranded for any other reason to  ************************************************************************************ NOTE: DELETE THESE 
+;always be able to board to save themselves from drowning.
+;
 ;The two enablers below catch a bug in complex rulesets that have complex Boarding rules.
 ;The bug is that a unit doing order_move or order_perform_action "transport embark" to a 
 ;transport on a non-native tile, are allowed to move to that tile because embark is legal.
