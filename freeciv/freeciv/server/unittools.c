@@ -5337,8 +5337,15 @@ bool unit_move_real(struct unit *punit, struct tile *pdesttile, long move_cost,
       } else {
         ptransporter = NULL;
       }
+      /* EMBARK UNIT ON TRANSPORT (second part of "dual action" of 1)move, 2)board */
       if (ptransporter) {
-        unit_transport_load_tp_status(punit, ptransporter, FALSE);
+        /* Being here is a promise to embark! We've passed legality for ACTION_TRANSPORT_EMBARK, and moved to the
+           transport's tile. The 3rd param was changed to TRUE to fix bug where units lost moves_left by moving, 
+           then can't board if moves_left is a req for boarding; leaving units drowning in the water! 
+           ~*~ NOTE: ~*~
+           Brief tests didn't show this breaks anything. Seems OK: being here is a 'promise' we could embark AND
+           the second of two steps in doing so. However, if illegal embarkations occur, this may be to blame. */
+        unit_transport_load_tp_status(punit, ptransporter, TRUE); // NB: 'force' was previously set FALSE;
 
         /* Set activity to sentry if boarding a ship. */
         if (is_human(pplayer)
