@@ -17,6 +17,7 @@
 
 ***********************************************************************/
 /* State machine vars: */
+var goto_exception_processing = false;    // "true" alerts other threads that we're failing out of a goto error. Disallow/abort goto clicks and client/server goto packets 
 var goto_active = false;                  // state for selecting goto target for a unit: i.e., mouse position changes ask server for new path
 var patrol_mode = false;                  // repeat goto_path forward then backward
 var rally_active = false;                 // modifies goto_active to be setting a rally point
@@ -199,10 +200,8 @@ function start_goto_path_segment()
   }
 
   if (!prior_goto_packet || prior_goto_packet.length == 0) {
-    console.log("Error, hit tab for a waypoint when there's no goto_request_map for punit to that tile.");
-     return;
-  } else {
-    //console.log("Retrieved an existing path before new segment.")
+    goto_exception_abort("New waypoint requested before goto_request_map was built.");
+    return false; // fail/abort code
   }
 
   current_goto_turns = prior_goto_packet['turns'];
@@ -210,6 +209,7 @@ function start_goto_path_segment()
   // Stash path to this point, pushing it to any existing segment from earlier:
   if (goto_segment.saved_path.length) { // Append to prior path
     goto_segment.saved_path = merged_goto_packet(prior_goto_packet, punit); 
+    if (goto_segment.saved_path===false) return false; // abort code
   } else { // Make a new path
     goto_segment.saved_path = JSON.parse(JSON.stringify(prior_goto_packet));
   }
@@ -245,78 +245,110 @@ function merged_goto_packet(new_packet, punit) {
 **************************************************************************/
 function merge_goto_path_segments(old_packet, new_packet, punit)
 {
-  // Deep copy the old packet, don't clone a reference to it.
-  var result_packet = JSON.parse(JSON.stringify(old_packet));
-  // Put the ending information into it:
-  if (result_packet['turn'] === undefined) {
-    result_packet['turn'] = [];   // Was meant to catch an undefined error but didn't. See (*) below
-  }
-  result_packet['dest'] = new_packet['dest'];
-  result_packet['turns'] = new_packet['turns']; // movesleft propagates into next segment request and server sends us updated turns in next packet
-  result_packet['arrival_turns'] = new_packet['arrival_turns'];
-  result_packet['total_mc'] += new_packet['total_mc'];
-  result_packet['movesleft'] = new_packet['movesleft'];
-  result_packet['length'] += new_packet['length'];
-  result_packet['fuelleft'] = new_packet['fuelleft'];
-  result_packet['moverate'] = new_packet['moverate'];
-  if (result_packet['dir'] && result_packet['dir'].length
-      && new_packet['dir'] && new_packet['dir'].length) {
-    result_packet['dir'] = result_packet['dir'].concat(new_packet['dir']); // makes a new copy
-  }
-  if (new_packet['turn'] && new_packet['turn'].length > 0) {
-    for (var i=0; i<new_packet['turn'].length; i++) {
-      if (new_packet['turn'][i] !== undefined) {// (*) Shouldn't happen but apparently does
-        result_packet['turn'].push(new_packet['turn'][i]/* + old_packet['turns']*/)
-      } 
+  try {
+    // Deep copy the old packet, don't clone a reference to it.
+    var result_packet = JSON.parse(JSON.stringify(old_packet));
+    // Put the ending information into it:
+    if (result_packet['turn'] === undefined) {
+      result_packet['turn'] = [];   // Was meant to catch an undefined error but didn't. See (*) below
     }
-  }
-  if (new_packet['arrival_turn'] && new_packet['arrival_turn'].length > 0) {
-    for (var i=0; i<new_packet['arrival_turn'].length; i++) {
-      if (new_packet['arrival_turn'][i] !== undefined) {// (*) Shouldn't happen but ...
-        result_packet['arrival_turn'].push(new_packet['arrival_turn'][i]) 
+    result_packet['dest'] = new_packet['dest'];
+    result_packet['turns'] = new_packet['turns']; // movesleft propagates into next segment request and server sends us updated turns in next packet
+    result_packet['arrival_turns'] = new_packet['arrival_turns'];
+    result_packet['total_mc'] += new_packet['total_mc'];
+    result_packet['movesleft'] = new_packet['movesleft'];
+    result_packet['length'] += new_packet['length'];
+    result_packet['fuelleft'] = new_packet['fuelleft'];
+    result_packet['moverate'] = new_packet['moverate'];
+    if (result_packet['dir'] && result_packet['dir'].length
+        && new_packet['dir'] && new_packet['dir'].length) {
+      result_packet['dir'] = result_packet['dir'].concat(new_packet['dir']); // makes a new copy
+    }
+    if (new_packet['turn'] && new_packet['turn'].length > 0) {
+      for (var i=0; i<new_packet['turn'].length; i++) {
+        if (new_packet['turn'][i] !== undefined) {// (*) Shouldn't happen but apparently does
+          result_packet['turn'].push(new_packet['turn'][i]/* + old_packet['turns']*/)
+        } 
+      }
+    }
+    if (new_packet['arrival_turn'] && new_packet['arrival_turn'].length > 0) {
+      for (var i=0; i<new_packet['arrival_turn'].length; i++) {
+        if (new_packet['arrival_turn'][i] !== undefined) {// (*) Shouldn't happen but ...
+          result_packet['arrival_turn'].push(new_packet['arrival_turn'][i]) 
+        }
+      }
+    }
+    /* Log every tile in the path */
+    if (!punit) punit = current_focus[0];
+    result_packet['tile'] = [];
+    result_packet['tile'].push(punit['tile']);
+
+    for (var i=1; i<result_packet['dir'].length; i++) {
+      const index = i-1;
+      var dir = result_packet['dir'][index];
+
+      /* Handle waypoint-refueling layovers */
+      let ptile = mapstep(index_to_tile(result_packet['tile'][index]), dir)/*['index'];*/
+      if (!ptile || dir < 0) {
+        if (index >= 0) { // refueling layover on same tile
+          result_packet['tile'].push(result_packet['tile'][index])
+        } else { // no path yet, earliest possible tile is start tile
+          result_packet['tile'].push(punit.tile)
+        }
+      }
+      /* Normal processing, no layover tile: */
+      else {
+        result_packet['tile'].push(mapstep(index_to_tile(result_packet['tile'][index]),
+                                    dir)['index']);
+      }
+    }
+
+    result_packet['tile'].push(new_packet['dest']);  
+
+    /* DEBUG */
+    if (DEBUG_SHORT_PACKETS) {
+      if (last_dest != new_packet.dest) { // suppress redundant debug messages
+        last_dest = new_packet.dest;
+        console.log("%cSEG1: %s",'color: #4AA',JSON.stringify(old_packet))
+        console.log("%cSEG2: %s",'color: #7CC',JSON.stringify(new_packet))
+        console.log("%cS1+2: %s",'color: #9FF',JSON.stringify(result_packet))
       }
     }
   }
-  /* Log every tile in the path */
-  if (!punit) punit = current_focus[0];
-  result_packet['tile'] = [];
-  result_packet['tile'].push(punit['tile']);
-
-  for (var i=1; i<result_packet['dir'].length; i++) {
-    const index = i-1;
-    var dir = result_packet['dir'][index];
-
-    /* Handle waypoint-refueling layovers */
-    let ptile = mapstep(index_to_tile(result_packet['tile'][index]), dir)/*['index'];*/
-    if (!ptile || dir < 0) {
-      if (index >= 0) { // refueling layover on same tile
-        result_packet['tile'].push(result_packet['tile'][index])
-      } else { // no path yet, earliest possible tile is start tile
-        result_packet['tile'].push(punit.tile)
-      }
-    }
-    /* Normal processing, no layover tile: */
-    else {
-      result_packet['tile'].push(mapstep(index_to_tile(result_packet['tile'][index]),
-                                  dir)['index']);
-    }
-  }
-
-  result_packet['tile'].push(new_packet['dest']);  
-
-  /* DEBUG */
-  if (DEBUG_SHORT_PACKETS) {
-    if (last_dest != new_packet.dest) { // suppress redundant debug messages
-      last_dest = new_packet.dest;
-      console.log("%cSEG1: %s",'color: #4AA',JSON.stringify(old_packet))
-      console.log("%cSEG2: %s",'color: #7CC',JSON.stringify(new_packet))
-      console.log("%cS1+2: %s",'color: #9FF',JSON.stringify(result_packet))
-    }
+  catch (error) {
+    /* A known way to fail is wildly moving the mouse over many tiles setting waypoints before internal goto data
+     * gets made from received server packets. Corrupt goto data can mess up client or server. Catch it here: */
+    goto_exception_abort("Caught error in merge_goto_path_segment():");
+    console.log(error);
+    return false; // fail/abort code
   }
 
   return result_packet;
 }
 
+/****************************************************************************
+ Waypoints made before client has time to reconstruct server pathing packets
+ results in bad goto data. This function gracefully fails in such cases.
+****************************************************************************/
+function goto_exception_abort(code)
+{
+  goto_exception_processing = true;
+  legal_goto_path = null;
+  console.log("GOTO EXCEPTION ABORT. "+code);
+  clear_all_modes();
+  deactivate_goto(false);  
+  // Give time to flush out incoming server packets for requested GOTO paths:
+  setTimeout(goto_exception_cleanup, 750);
+}
+function goto_exception_cleanup()
+{
+  // Insurance: sometimes it cleared goto_lines before server sent new ones?
+  // Shouldn't be needed because we block server while goto_exception_processing,
+  // but maybe goto_exception_processing was turning off too soon. TODO: just try
+  // the delay on goto_exception_processing being toggled, instead.
+  deactivate_goto(false);
+  goto_exception_processing = false;
+}
 /****************************************************************************
   Show the GOTO path in the unit_goto_path packet. Ultimately this means
   putting goto_dirs[tindex] = dir, after we figure out all our other logic.
@@ -331,10 +363,13 @@ function update_goto_path(goto_packet)
     goto_from_tile = {};
   } else goto_request_map = {}; // Insurance: stashing multiple grm's in join-mode could make circularity/overwrite issues.
 
-  var goto_path_packet = (join_to_existing_segment && punit) 
-                       ? merged_goto_packet(goto_packet, punit) 
-                       : goto_packet;
-
+  var goto_path_packet = null;
+  if (join_to_existing_segment && punit) {
+    goto_path_packet = merged_goto_packet(goto_packet, punit);
+    if (goto_path_packet===false) return false; // abort code
+  } else {
+    goto_path_packet = goto_packet;
+  }
   legal_goto_path = goto_packet.length !== undefined;
   /* No unit_id means rally_active or path has no length. This block is
      required to show the goto info when path_len is 0 on the start tile,

@@ -2967,7 +2967,7 @@ function do_map_click(ptile, qtype, first_time_called)
   // User can safely finish dragging map and releasing on ANY tile without incurring an action.
   if (real_mouse_move_mode == true) return;
 
-  if (ptile == null || client_is_observer()) return;
+  if (ptile == null || client_is_observer() || goto_exception_processing) return;
 
   // handle shift-ctrl click
   if (mouse_click_mod_key['shiftKey'] && mouse_click_mod_key['ctrlKey'] && !mouse_click_mod_key['altKey']) {
@@ -3091,6 +3091,11 @@ function do_map_click(ptile, qtype, first_time_called)
 
         // NOTE: this is untested for what it does about length reported too high for fuel units, will each segment neeed to be higher?
         if (is_goto_segment_active()) goto_path = merged_goto_packet(goto_path);
+
+        if (goto_path === false) {
+          console.log("do_map_click aborting goto order: merged_goto_packet failed.");
+          return false;
+        }
 
         if (goto_path) { // touch devices don't have a goto_path until they call this function twice. see: if (touch_device) below
           // Client circumvents FC Server has buggy GOTO for units which have UTYF_COAST + fuel:
@@ -3896,7 +3901,10 @@ function map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
           if (shift) delayed_goto_active = true;
           goto_path_skip_count = goto_path_trigger + 1;
         } else { // 'g' while pathing requests a goto-waypoint
-          request_goto_waypoint();
+          // Don't try to create waypoint unless our path processing has validated path legality:
+          if (legal_goto_path) {
+            request_goto_waypoint();
+          }
         }
       }
     break;
@@ -4168,7 +4176,10 @@ function map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
   switch (key_code) {
     case 9:   // Tab key = save goto path up to tile shown, start a new path segment after it.
       the_event.preventDefault();
-      request_goto_waypoint();
+      // Don't try to create waypoint unless our path processing has validated path legality:
+      if (legal_goto_path) {
+        request_goto_waypoint();
+      }
       break;
     
     case 46: // DEL key

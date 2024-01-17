@@ -2344,10 +2344,11 @@ function handle_edit_object_created(packet)
 function handle_goto_path(packet)
 {
   if (goto_active||rally_active) {
-    update_goto_path(packet);
+    // Abort all path processing if we're failing out of goto mode.
+    if (!goto_exception_processing) update_goto_path(packet);
   }
   else { // middle-click to show path for units on tile
-    show_goto_path(packet);
+    if (!goto_exception_processing) show_goto_path(packet);
   }
 }
 
