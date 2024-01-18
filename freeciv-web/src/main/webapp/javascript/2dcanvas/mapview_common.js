@@ -64,11 +64,28 @@ function mapdeco_init()
 function center_tile_mapcanvas_2d(ptile)
 {
   if (ptile == null) return;
-  var r = map_to_gui_pos(ptile['x'], ptile['y']);
+  /* We don't want to center the map on units near y=0 or y=ysize, because
+   * then half the displayed map is black void. Fix: center the map by
+   * [polar_buffer] number of tiles from the polar edges of the map. 
+   * TODO: There is also a bug where tiny ysize maps on UHD displays will
+   * further down the call-chain somehow flip or lose the gui_y calculated
+   * here, for units near the south pole. Centering farther from the poles
+   * eliminates the the large majority of that bug, but extreme 
+   * (resolution/ysize) vals still trigger it. e.g.,2160p/40.
+   * This could also be fixed by bumping zoom to ~125% if 2160p
+   * AND low ysize are detected. */
+  const polar_buffer = 9;  // Center map a minimum of 9 y-tiles from poles.
+  var adjusted_y = ptile.y;
+  if (adjusted_y > server_settings.ysize.val - 1 - polar_buffer) { // -1 is for 0-indexing
+    adjusted_y = server_settings.ysize.val - 1 - polar_buffer;     // South pole
+  }
+  else if (adjusted_y < polar_buffer) adjusted_y = polar_buffer;   // North pole
+
+  var r = map_to_gui_pos(ptile['x'], adjusted_y);
   var gui_x = r['gui_dx'];
   var gui_y = r['gui_dy'];
 
-  gui_x -= (mapview['width'] - tileset_tile_width) >> 1 ;
+  gui_x -= (mapview['width'] - tileset_tile_width) >> 1;
   gui_y -= (mapview['height'] - tileset_tile_height) >> 1;
 
   set_mapview_origin(gui_x, gui_y);
