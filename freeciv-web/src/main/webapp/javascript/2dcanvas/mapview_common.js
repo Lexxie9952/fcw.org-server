@@ -76,10 +76,12 @@ function center_tile_mapcanvas_2d(ptile)
    * AND low ysize are detected. */
   const polar_buffer = 9;  // Center map a minimum of 9 y-tiles from poles.
   var adjusted_y = ptile.y;
-  if (adjusted_y > server_settings.ysize.val - 1 - polar_buffer) { // -1 is for 0-indexing
-    adjusted_y = server_settings.ysize.val - 1 - polar_buffer;     // South pole
+  if (!active_city) { // City maps need exact centering, even at poles
+    if (adjusted_y > server_settings.ysize.val - 1 - polar_buffer) { // -1 is for 0-indexing
+      adjusted_y = server_settings.ysize.val - 1 - polar_buffer;     // South pole
+    }
+    else if (adjusted_y < polar_buffer) adjusted_y = polar_buffer;   // North pole
   }
-  else if (adjusted_y < polar_buffer) adjusted_y = polar_buffer;   // North pole
 
   var r = map_to_gui_pos(ptile['x'], adjusted_y);
   var gui_x = r['gui_dx'];
