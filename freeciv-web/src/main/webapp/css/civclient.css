@@ -559,14 +559,23 @@ input[type='number'] {
   color: var(--default_text_color);
 }
 
-/* Research dialog. */
-#technologies {
+/* Research tab */
+.technologies {
   clear: left;
   position: relative; 
   overflow: auto; 
   width: 100%;
   background-image: url('/images/bg-dark.jpg');
 } /* theme classes 3 */
+/* Other players' research tab */
+.others_technologies {
+  clear: left;
+  position: relative; 
+  overflow: auto; 
+  width: 100%;
+  background-image: url('/images/bg-light.jpg');
+} /* theme classes 3 */
+
 
 #tech_info_box {
   float: left; 

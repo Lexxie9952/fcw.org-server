@@ -275,3 +275,10 @@ function show_intelligence_report_embassy(pplayer)
   $("#game_text_input").blur();
 }
 
+function intel_show_player_tech_tree()
+{
+  remove_active_dialog("#intel_dialog");
+  $('#tech_tab_item').trigger("click"); // tech tab
+  show_player_tech_tree(selected_player);
+}
+

@@ -33,6 +33,7 @@ var tech_canvas_text_font_special_alt   = "13px Arial";
 
 var is_tech_tree_init = false;
 var tech_dialog_active = false;
+var tech_clicklock = false; // prevents clicking tech when looking at other player's tech
 
 var tech_xscale = 1.2;
 var wikipedia_url = "http://freeciv.fandom.com/wiki/";
@@ -137,6 +138,31 @@ function tech_known(tech_str) {
 }
 
 /**************************************************************************
+ Sets the reqtree for the ruleset
+**************************************************************************/
+function set_ruleset_reqtree()
+{
+// if classic is not selected, default to mpplus reqtree. Now we don't have to make code changes every time
+  // we want to add or test a new ruleset:
+  if (ruleset_control['name'] != "Classic+ ruleset"
+      && ruleset_control['name'] != "Classic ruleset") reqtree = reqtree_mpplus;
+
+  if (ruleset_control['name'] == "Civ2Civ3 ruleset") reqtree = reqtree_civ2civ3;
+  else if (ruleset_control['name'] == "Multiplayer ruleset") reqtree = reqtree_multiplayer;
+  else if (ruleset_control['name'] == "Longturn-Web-X ruleset") reqtree = reqtree_multiplayer;
+  else if (ruleset_control['name'] == "Multiplayer-Plus ruleset") reqtree = reqtree_mpplus;
+  else if (ruleset_control['name'] == "Multiplayer-Evolution ruleset") reqtree = reqtree_mpplus;
+  else if (ruleset_control['name'].startsWith("Avant-garde")) reqtree = reqtree_avantgarde;
+  else if (ruleset_control['name'].startsWith("MP2")) reqtree = reqtree_avantgarde;   // from MP2 Brava onward all MP2 rules start with "MP2"
+  else if (ruleset_control['name'] == "Civ I ruleset" 
+   || ruleset_control['name'] == "Civ1 ruleset") reqtree = reqtree_civ1;  // include legacy name just in case
+  
+  if (client_rules_flag[CRF_MP2_C]) reqtree = reqtree_mp2c;
+  if (client_rules_flag[CRF_MP2_D]) reqtree = reqtree_mp2d;
+}
+
+
+/**************************************************************************
  ...
 **************************************************************************/
 function init_tech_screen()
@@ -156,23 +182,7 @@ function init_tech_screen()
 
   if (is_tech_tree_init) return;
 
-  // if classic is not selected, default to mpplus reqtree. Now we don't have to make code changes every time
-  // we want to add or test a new ruleset:
-  if (ruleset_control['name'] != "Classic+ ruleset"
-      && ruleset_control['name'] != "Classic ruleset") reqtree = reqtree_mpplus;
-
-  if (ruleset_control['name'] == "Civ2Civ3 ruleset") reqtree = reqtree_civ2civ3;
-  else if (ruleset_control['name'] == "Multiplayer ruleset") reqtree = reqtree_multiplayer;
-  else if (ruleset_control['name'] == "Longturn-Web-X ruleset") reqtree = reqtree_multiplayer;
-  else if (ruleset_control['name'] == "Multiplayer-Plus ruleset") reqtree = reqtree_mpplus;
-  else if (ruleset_control['name'] == "Multiplayer-Evolution ruleset") reqtree = reqtree_mpplus;
-  else if (ruleset_control['name'].startsWith("Avant-garde")) reqtree = reqtree_avantgarde;
-  else if (ruleset_control['name'].startsWith("MP2")) reqtree = reqtree_avantgarde;   // from MP2 Brava onward all MP2 rules start with "MP2"
-  else if (ruleset_control['name'] == "Civ I ruleset" 
-   || ruleset_control['name'] == "Civ1 ruleset") reqtree = reqtree_civ1;  // include legacy name just in case
-  
-  if (client_rules_flag[CRF_MP2_C]) reqtree = reqtree_mp2c;
-  if (client_rules_flag[CRF_MP2_D]) reqtree = reqtree_mp2d;
+  set_ruleset_reqtree();
 
   tech_canvas = document.getElementById('tech_canvas');
   if (tech_canvas == null) {
@@ -576,6 +586,9 @@ function is_tech_req_for_tech(check_tech_id, next_tech_id)
 **************************************************************************/
 function update_tech_screen()
 {
+  // Updating screen resets var that prevents clicking tech when looking at other player's tech
+  tech_clicklock = false;
+  $("#technologies").attr("class","technologies");  // Default css class when viewing own tree
 
   if (client_is_observer() || client.conn.playing == null) {
     $("#technologies").width($(window).width() - 20);
@@ -740,6 +753,11 @@ function scroll_tech_tree()
 **************************************************************************/
 function send_player_research(tech_id)
 {
+  // Disallow clicking tech targets when looking at another player's tech
+  if (tech_clicklock) {
+    update_tech_screen();  // Return to own player screen
+    return; 
+  }
   var packet = {"pid" : packet_player_research, "tech" : tech_id};
   send_request(JSON.stringify(packet));
   remove_active_dialog("#tech_dialog");
@@ -750,6 +768,11 @@ function send_player_research(tech_id)
 **************************************************************************/
 function send_player_tech_goal(tech_id)
 {
+  // Disallow clicking future targets when looking at another player's tech
+  if (tech_clicklock) {
+    update_tech_screen();  // Return to own player screen
+    return; 
+  }
   var packet = {"pid" : packet_player_tech_goal, "tech" : tech_id};
   send_request(JSON.stringify(packet));
 }
@@ -1179,14 +1202,48 @@ function update_tech_dialog_cursor()
 
 
 /**************************************************************************
+ Shows a different player's tech tree
+**************************************************************************/
+function show_player_tech_tree(player_no)
+{
+  // Set temp vars to remember our state, before we temporarily become a different persona:
+  let obs = observing;
+  let playing = client.conn.playing;
+  // Supercow has to pretend to be a player to see tech tab
+  if (is_supercow() || was_supercow) {
+    if (observing) {
+      flip_supercow();
+      was_supercow = true;
+    }
+  }
+  // Become our new persona:
+  client.conn.playing = players[player_no];
+  // Update the tech screen with our new persona
+  try {
+    update_tech_screen();
+    tech_clicklock = true; // prevents clicking tech when looking at other player's tech
+    // Switch CSS styles when viewing others' tech, to avoid "identity dysphoria"
+    $("#technologies").attr("class","others_technologies");  
+  } catch(error) {
+    add_client_message("Tech information for this nation is unavailable without an embassy.");
+  }
+  // Other player's tech tree is now drawn. Revert to our real identity.
+  observing = obs;
+  client.conn.playing = playing;
+}
+
+/**************************************************************************
  ...
 **************************************************************************/
 function show_observer_tech_dialog()
 {
+  set_ruleset_reqtree();            // TODO: only needs to be called first time this func is called
   $("#tech_info_box").hide();
   $("#tech_canvas").hide();
   var msg = "<h2>Global Technology Report</h2>";
   msg += "<table class='tech_report'><tr><th>Name</th><th>Nation</th><th>Highest</th><th>Research</th><th>Bulb Sum</th></tr>"
+  
+  // Iterate all players and show current research and most advanced known tech
   for (var player_id in players) {
     let pplayer = players[player_id];
     if (!pplayer.is_alive) continue;
@@ -1198,15 +1255,21 @@ function show_observer_tech_dialog()
     // Nation
     msg += "<td style='text-align:left'><img src='/images/e/flag/"+nations[pplayer['nation']]['graphic_str']+".png'> &nbsp;"
         + nations[pplayer['nation']]['adjective']+"</td>";
-    
-    // Most advanced tech
+
+    // Find player's most advanced/best tech:
     let highest_tech_name = null;
     let highest_tech_cost = 0;
+    let highest_tech_tier = 0;    // We don't know exact tier but we do know its reqtree.x position in the tech tree!
     for (var tech_id in techs) {
       if (player_invention_state(pplayer, tech_id) == TECH_KNOWN) {
-        if (techs[tech_id].cost > highest_tech_cost) {
-          highest_tech_name = techs[tech_id].name;
-          highest_tech_cost = techs[tech_id].cost;
+         // If known tech is equal or higher tier than current "best" tech...
+        if (reqtree[tech_id].x >= highest_tech_tier) {
+          // ...then set as "best" tech if: 1) it's the current highest tier, OR 2) [is equal tier and] has a greater bulbcost.
+          if ((reqtree[tech_id].x > highest_tech_tier) || techs[tech_id].cost > highest_tech_cost) {
+            highest_tech_tier = reqtree[tech_id].x
+            highest_tech_cost = techs[tech_id].cost;
+            highest_tech_name = techs[tech_id].name;
+          }
         }
         if (techs[tech_id].cost > 0) bulb_sum += techs[tech_id].cost;
       }
