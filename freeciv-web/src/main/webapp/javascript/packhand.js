@@ -2454,7 +2454,7 @@ function handle_server_setting_control(packet)
 function handle_player_diplstate(packet)
 {
   // This code applies to real players only:
-  if (!is_supercow()) {
+  if (!is_supercow() || !observing) {
     if (client == null || client.conn.playing == null) return;
  
     if (packet['type'] == DS_WAR && packet['plr2'] == client.conn.playing['playerno']
