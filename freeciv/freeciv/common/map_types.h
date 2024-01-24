@@ -98,6 +98,7 @@ struct civ_map {
       bool polar_strip;
       bool alltemperate;
       int temperature;
+      int riverpct;
       int wetness;
       int steepness;
       bool ocean_resources;         /* Resources in the middle of the ocean */

@@ -152,7 +152,7 @@ struct iterator *map_startpos_iter_init(struct map_startpos_iter *iter);
   (*(pnat_x) = index_to_native_pos_x(mindex),                                \
    *(pnat_y) = index_to_native_pos_y(mindex))
 #define index_to_native_pos_x(mindex)                                        \
-  ((mindex) % wld.map.xsize) 
+  ((mindex) % wld.map.xsize)
 #define index_to_native_pos_y(mindex)                                        \
   ((mindex) / wld.map.xsize)
 
@@ -360,7 +360,7 @@ extern struct terrain_misc terrain_control;
 
 #define iterate_outward_end iterate_outward_dxy_end
 
-/* 
+/*
  * Iterate through all tiles in a square with given center and radius.
  * The position (x_itr, y_itr) that is returned will be normalized;
  * unreal positions will be automatically discarded. (dx_itr, dy_itr)
@@ -383,10 +383,10 @@ extern struct terrain_misc terrain_control;
 
 #define square_iterate_end  square_dxy_iterate_end
 
-/* 
+/*
  * Iterate through all tiles in a circle with given center and squared
  * radius.  Positions returned will have adjusted (x, y); unreal
- * positions will be automatically discarded. 
+ * positions will be automatically discarded.
  */
 #define circle_iterate(nmap, center_tile, sq_radius, tile_itr)           \
   circle_dxyr_iterate(nmap, center_tile, sq_radius, tile_itr, _dx, _dy, _dr)
@@ -574,7 +574,7 @@ extern const int DIR_DY[8];
 
 #define MAP_DEFAULT_MAPSIZE     MAPSIZE_FULLSIZE
 
-/* Size of the map in thousands of tiles. If MAP_MAX_SIZE is increased, 
+/* Size of the map in thousands of tiles. If MAP_MAX_SIZE is increased,
  * MAX_DBV_LENGTH in bitvector.c must be checked; see the static assertion
  * below. */
 #ifdef FREECIV_WEB
@@ -628,6 +628,10 @@ moves. Includes MAP_MAX_LINEAR_SIZE because a map can be non wrapping. */
 #define MAP_MIN_RICHES           0
 #define MAP_MAX_RICHES           1000
 
+#define MAP_DEFAULT_RIVERPCT     50
+#define MAP_MIN_RIVERPCT         0
+#define MAP_MAX_RIVERPCT         100
+
 #define MAP_DEFAULT_STEEPNESS    30
 #define MAP_MIN_STEEPNESS        0
 #define MAP_MAX_STEEPNESS        100
@@ -657,7 +661,7 @@ moves. Includes MAP_MAX_LINEAR_SIZE because a map can be non wrapping. */
 #define MAP_MAX_SINGLE_POLE        TRUE
 
 #define MAP_DEFAULT_POLAR_STRIP    TRUE
-#define MAP_MIN_POLAR_STRIP        FALSE 
+#define MAP_MIN_POLAR_STRIP        FALSE
 #define MAP_MAX_POLAR_STRIP        TRUE
 
 #define MAP_DEFAULT_ALLTEMPERATE   FALSE
@@ -719,7 +723,7 @@ static inline bool is_border_tile(const struct tile *ptile, int dist)
 
   index_to_native_pos(&nat_x, &nat_y, tile_index(ptile));
 
-  return (nat_x < xdist 
+  return (nat_x < xdist
           || nat_y < ydist
           || nat_x >= wld.map.xsize - xdist
           || nat_y >= wld.map.ysize - ydist);
