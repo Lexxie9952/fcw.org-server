@@ -140,6 +140,7 @@ int tile_extras_class_defense_bonus(const struct tile *ptile,
 
 bool tile_has_road(const struct tile *ptile, const struct road_type *proad);
 bool tile_has_road_flag(const struct tile *ptile, enum road_flag_id flag);
+bool tile_has_any_extra(const struct tile *ptile);
 int tile_roads_output_incr(const struct tile *ptile, enum output_type_id o);
 int tile_roads_output_bonus(const struct tile *ptile, enum output_type_id o);
 bool tile_has_river(const struct tile *tile);

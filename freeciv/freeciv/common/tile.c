@@ -165,7 +165,7 @@ const bv_extras *tile_extras_null(void)
     empty_cleared = TRUE;
   }
 
-  return &(empty_extras);  
+  return &(empty_extras);
 }
 
 /************************************************************************//**
@@ -704,7 +704,7 @@ bool tile_apply_activity(struct tile *ptile, Activity_type_id act,
     tile_mine(ptile, tgt);
     return TRUE;
 
-  case ACTIVITY_IRRIGATE: 
+  case ACTIVITY_IRRIGATE:
     tile_irrigate(ptile, tgt);
     return TRUE;
 
@@ -905,6 +905,21 @@ bool tile_has_road_flag(const struct tile *ptile, enum road_flag_id flag)
 }
 
 /************************************************************************//**
+  Returns TRUE if the given tile has any extra whatsoever:
+    resource, river, road, base, pollution, ruins, anything at all.
+****************************************************************************/
+bool tile_has_any_extra(const struct tile *ptile)
+{
+  extra_type_iterate(pextra) {
+    if (tile_has_extra(ptile, pextra)) {
+      return TRUE;
+    }
+  } extra_type_iterate_end;
+
+  return FALSE;
+}
+
+/************************************************************************//**
   Check if tile contains extra providing effect
 ****************************************************************************/
 bool tile_has_extra_flag(const struct tile *ptile, enum extra_flag_id flag)
@@ -953,7 +968,7 @@ bool tile_has_conflicting_extra(const struct tile *ptile,
 }
 
 /************************************************************************//**
-  Returns the first extra that conflcts with pextra (there may be >1) 
+  Returns the first extra that conflcts with pextra (there may be >1)
 ****************************************************************************/
 const struct extra_type *get_conflicting_extra(const struct tile *ptile,
                                 const struct extra_type *pextra)
@@ -1018,10 +1033,10 @@ void tile_add_extra(struct tile *ptile, const struct extra_type *pextra)
        tagged as a resource. Formerly, reloading a savegame did log it as a
        resource, but it was not in current server memory as such until after
        a re-load savegame. This made issues e.g., when terrain changed,
-       it would show a resource for the wrong terrain type, but only 
+       it would show a resource for the wrong terrain type, but only
        for resources which were caused by "Appear": */
-       
-    if (is_extra_caused_by(pextra, EC_RESOURCE)) 
+
+    if (is_extra_caused_by(pextra, EC_RESOURCE))
       ptile->resource = (struct extra_type *)pextra;
   }
 }
