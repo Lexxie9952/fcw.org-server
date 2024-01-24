@@ -85,7 +85,7 @@ food_cost        = 2
 ;   if city_size > num_inis;
 ;     city_granary_size = (granary_food_ini[num_inis] +
 ;        granary_food_inc * (city_size - num_inis)) * foodbox / 100
-;                   S2  S3  S4  S5  S6  S7  S8 
+;                   S2  S3  S4  S5  S6  S7  S8
 ;granary_food_ini = 20, 30, 40, 50, 60, 70, 70     ;MP2A-C
 ;granary_food_ini = 16, 23, 30, 40, 50, 60, 70     ;MP2D alpha, 3 turns shaved off s1-s2 growth.
 ;granary_food_ini = 16, 22, 27, 33, 40, 50, 60     ;MP2D EX1 - mild acceleration
@@ -208,13 +208,13 @@ illness_pollution_factor = 50
 total_factor = 100       ; TF   = 100 (effectively makes 100x cost at capital and 1x cost at DIST=32)
 ;city_size_adjusted      ; SZ  (happy*2 + content*1 + unhappy*0 - angry*2)
 ;nationality factor      ; NF   native=1.0, was_conquered=0.67, originally_belonged_to_inciter=0.5
-base_incite_cost = 1500   ; BIC  =1500 (base cost before modifiers) 
+base_incite_cost = 1500   ; BIC  =1500 (base cost before modifiers)
 ;                     content bonus.
-;city is content         ; CON 
-;city is celebrating     ; CEL 
+;city is content         ; CON
+;city is celebrating     ; CEL
 ;incite defence bonuses  ; BONUS  -50% empty + 300% occupied+courthouse OR + 100% empty+courthouse + supreme_court applies courthouse bonuses again
-;                        ;        +∞ = democracy/mausoleum/palace/ecclesiastical palace 
-;total unit shield cost  ; UC 
+;                        ;        +∞ = democracy/mausoleum/palace/ecclesiastical palace
+;total unit shield cost  ; UC
 ;total improvements cost ; IC
 ;distance to capital     ; DIST  (max distance penalty=32 tiles)
 improvement_factor = 20   ; IF   =   20 these need inflation because subject to huge divisors
@@ -626,7 +626,7 @@ actor_reqs    =
 action = "Convert Unit"
 actor_reqs    =
     { "type",     "name",             "range", "present"
-      "UnitType", "Musketeers",       "Local", TRUE 
+      "UnitType", "Musketeers",       "Local", TRUE
       "UnitState","OnDomesticTile",   "Local", TRUE
       "CityTile", "Center",           "Local", TRUE
       "Tech",     "Mechanization",    "Player",TRUE
@@ -690,7 +690,7 @@ actor_reqs    =
     }
 
 ; ************************ ESTABLISH EMBASSY ***********************
-; EMISSARY: normal establish embassy--if not at war 
+; EMISSARY: normal establish embassy--if not at war
 [actionenabler_emissary_establish_embassy]
 action       = "Establish Embassy Stay"
 actor_reqs    =
@@ -702,7 +702,7 @@ actor_reqs    =
       "MinMoveFrags", "1",             "Local", TRUE
       "DiplRel",      "Foreign",       "Local", TRUE
       "UnitFlag",     "Spy",           "Local", FALSE
-      "DiplRel",      "War",           "Local", FALSE 
+      "DiplRel",      "War",           "Local", FALSE
     }
 target_reqs  =
     { "type",        "name",      "range",  "present"
@@ -720,7 +720,7 @@ actor_reqs    =
       "MinMoveFrags", "1",             "Local", TRUE
       "DiplRel",      "Foreign",       "Local", TRUE
       "UnitFlag",     "Spy",           "Local", FALSE
-      "DiplRel",      "War",           "Local", TRUE 
+      "DiplRel",      "War",           "Local", TRUE
     }
 target_reqs  =
     { "type",        "name",              "range",   "present"
@@ -731,7 +731,7 @@ target_reqs  =
       "Gov",         "Theocracy",         "Player",  FALSE
     }
 
-; Diplomat & Patriarch: normal establish embassy--if not at war 
+; Diplomat & Patriarch: normal establish embassy--if not at war
 [actionenabler_establish_embassy_diplomat_patriarch]
 action       = "Establish Embassy"
 actor_reqs    =
@@ -744,7 +744,7 @@ actor_reqs    =
       "UnitState",    "Transported",   "Local", FALSE
       "MinMoveFrags", "1",             "Local", TRUE
       "DiplRel",      "Foreign",       "Local", TRUE
-      "DiplRel",      "War",           "Local", FALSE 
+      "DiplRel",      "War",           "Local", FALSE
     }
 target_reqs  =
     { "type",        "name",      "range",  "present"
@@ -763,7 +763,7 @@ actor_reqs    =
       "UnitState",    "Transported",   "Local", FALSE
       "MinMoveFrags", "1",             "Local", TRUE
       "DiplRel",      "Foreign",       "Local", TRUE
-      "DiplRel",      "War",           "Local", TRUE 
+      "DiplRel",      "War",           "Local", TRUE
     }
 target_reqs  =
     { "type",        "name",              "range", "present"
@@ -787,7 +787,7 @@ actor_reqs    =
       "MinMoveFrags", "1",             "Local", TRUE
       "DiplRel",      "Foreign",       "Local", TRUE
       "DiplRel",      "War",           "Local", TRUE
-      "Tech",         "Espionage",     "Player",TRUE  ;actor unit's owner needs espionage tech <<<<<< 
+      "Tech",         "Espionage",     "Player",TRUE  ;actor unit's owner needs espionage tech <<<<<<
     }
 target_reqs  =
     { "type",        "name",          "range",    "present"
@@ -841,7 +841,7 @@ actor_reqs    =
     { "type",         "name",          "range","present"
       "UnitType",     "Satellite",     "Local", TRUE
       "DiplRel",      "Foreign",       "Local", TRUE
-    }    
+    }
 
 ;Spy can investigate city even if transported...
 [actionenabler_investigate_city_spy]
@@ -1064,7 +1064,7 @@ actor_reqs    =
     }
 
 ;S12 cities with colossus giving 486 gold from a wagon; this has to be turned OFF until if/when
-;we balance it or make a whole new formula for that stuff, based on simple value of the 
+;we balance it or make a whole new formula for that stuff, based on simple value of the
 ;commerce unit times a simple multiplier.
 ;[actionenabler_marketplace]
 ;action = "Enter Marketplace"
@@ -1160,7 +1160,7 @@ actor_reqs    =
 target_reqs    =
     { "type",   "name", "range", "present"
       "BuildingGenus", "Special", "Local", TRUE
-    }  
+    }
 ;---------------------------
 [actionenabler_disband_unit]
 action = "Disband Unit"
@@ -1176,7 +1176,7 @@ actor_reqs    =
     { "type",   "name", "range", "present"
       "UnitFlag", "Capturer", "Local", TRUE
       "UnitState", "Transported", "Local", FALSE
-;     "DiplRel", "War", "Local", TRUE             ;NAH 
+;     "DiplRel", "War", "Local", TRUE             ;NAH
       "MinMoveFrags", "1", "Local", TRUE
       "DiplRel", "Foreign", "Local", TRUE
       "DiplRel", "Alliance", "Local", FALSE
@@ -1220,7 +1220,7 @@ target_reqs    =
       "UnitFlag",      "Settlers",   "Local", FALSE ; workers and foot units who make hideouts
       "UnitFlag",      "NonMil",     "Local", TRUE  ; all military excluded
       "UnitFlag",      "HasNoZOC",   "Local", TRUE  ; "    "        "
-      "UnitFlag",      "Diplomat",   "Local", FALSE ; no diplomat 
+      "UnitFlag",      "Diplomat",   "Local", FALSE ; no diplomat
       "UnitType",      "Scout",      "Local", FALSE ; no scout
       "TerrainClass",  "Oceanic",    "Local", FALSE ; not on a ship
       "UnitClass",     "RiverShip",  "Local", FALSE ; no ships
@@ -1229,7 +1229,7 @@ target_reqs    =
     }
 
 ; ***************** BOMBARDS *****************************
-; **************************************** !!!!!!!!!!!!!!!!!!!!!!!!! NOTE, for every new unit who can bombard, you have to 
+; **************************************** !!!!!!!!!!!!!!!!!!!!!!!!! NOTE, for every new unit who can bombard, you have to
 ; **************************************** !!!!!!!!!!!!!!!!!!!!!!!!! add it to the UnitType, FALSE list below for general Ballistic class
 ;Ballistic units who haven't moved can bombard: i.e., Catapult, Ballista, Canon, Artillery, Howitzer
 [actionenabler_ballistic_SUA_unmoved]
@@ -1237,15 +1237,15 @@ action = "Bombard"
 actor_reqs    =
     { "type",         "name",          "range", "present"
       "UnitFlag",     "Bombarder",     "Local", TRUE
-      "UnitType",     "Archers",       "Local", FALSE 
-      "UnitType",     "Phalanx",       "Local", FALSE 
-      "UnitType",     "Legion",        "Local", FALSE 
-      "UnitType",     "Siege Ram",     "Local", FALSE 
-      "UnitType",     "Zealots",       "Local", FALSE 
-      "UnitType",     "Fanatics",      "Local", FALSE 
+      "UnitType",     "Archers",       "Local", FALSE
+      "UnitType",     "Phalanx",       "Local", FALSE
+      "UnitType",     "Legion",        "Local", FALSE
+      "UnitType",     "Siege Ram",     "Local", FALSE
+      "UnitType",     "Zealots",       "Local", FALSE
+      "UnitType",     "Fanatics",      "Local", FALSE
       "UnitType",     "Zeppelin",      "Local", FALSE
-      "UnitType",     "Marines",       "Local", FALSE 
-      "UnitType",     "Battleship",    "Local", FALSE 
+      "UnitType",     "Marines",       "Local", FALSE
+      "UnitType",     "Battleship",    "Local", FALSE
       "UnitState",    "Transported",   "Local", FALSE
       "UnitState",    "MovedThisTurn", "Local", FALSE
       "MinMoveFrags", "1",             "Local", TRUE
@@ -1265,8 +1265,8 @@ action = "Bombard 2"
 actor_reqs    =
     { "type",         "name",          "range", "present"
       "UnitFlag",     "Bombarder",     "Local", TRUE
-      "UnitType",     "Magnum Turret", "Local", TRUE 
-      "MinMoveFrags", "1",             "Local", TRUE  ; can do multiple Bombards @ 1 move each. NB: tamps exploit of suicide sacrifice. 
+      "UnitType",     "Magnum Turret", "Local", TRUE
+      "MinMoveFrags", "1",             "Local", TRUE  ; can do multiple Bombards @ 1 move each. NB: tamps exploit of suicide sacrifice.
       "DiplRel",      "War",           "Local", TRUE
     }
 target_reqs    =
@@ -1482,7 +1482,7 @@ target_reqs    =
       "UnitClass", "Helicopter",  "Local", FALSE
       "UnitClass", "Space",       "Local", FALSE
       "UnitClass", "Balloon",     "Local", FALSE
-      "UnitClass", "Bomb",        "Local", FALSE 
+      "UnitClass", "Bomb",        "Local", FALSE
       "UnitClass", "Zeppelin",    "Local", FALSE
       "UnitClass", "Air_High_Altitude",  "Local", FALSE
     }
@@ -1612,7 +1612,7 @@ actor_reqs    =
 ;      "UnitFlag", "Production_Bomber", "Local", TRUE
 ;      "DiplRel",  "War",               "Local", TRUE
 ;      "UnitState", "Transported",      "Local", FALSE
-;    }    
+;    }
 
 ;Land expel: must be not on a mountain nor an air expeller/expellee
 [actionenabler_border_police]
@@ -1649,7 +1649,7 @@ actor_reqs    =
     { "type",          "name",           "range", "present"
       "UnitClassFlag", "BorderPolice",   "Local", TRUE
       "UnitFlag",      "AirAttacker",    "Local", TRUE      ;some air class might not be expellers (AWACS)
-      "UnitFlag",      "FieldUnit",      "Local", FALSE     ;bombers can't expel 
+      "UnitFlag",      "FieldUnit",      "Local", FALSE     ;bombers can't expel
       "UnitState",     "OnDomesticTile", "Local", TRUE
       "DiplRel",       "Foreign",        "Local", TRUE
       "DiplRel",       "Team",           "Local", FALSE
@@ -1660,7 +1660,7 @@ actor_reqs    =
 target_reqs    =
     { "type",          "name",           "range", "present"
       "UnitFlag",      "Expellable",     "Local", TRUE   ;Has to be 1-expellable and 2-an air unit, in order for an air-expeller...
-      "UnitClass",     "Air",            "Local", TRUE   ;...to be able to do border police action           
+      "UnitClass",     "Air",            "Local", TRUE   ;...to be able to do border police action
       "UnitState",     "OnDomesticTile", "Local", FALSE
       "MaxUnitsOnTile", "1", "Local", TRUE
     }
@@ -1711,7 +1711,7 @@ actor_reqs    =
       "MaxUnitsOnTile","1",            "Local",  FALSE ; At least 2 units needed for genocidal operation
       ;-------------------------------------------------
       "DiplRel",      "Foreign",       "Local",  TRUE  ; Must be at war and foreign city
-      "DiplRel",      "War",           "Local",  TRUE   
+      "DiplRel",      "War",           "Local",  TRUE
     }
 target_reqs =
     {  "type",         "name",         "range", "present"
@@ -1744,7 +1744,7 @@ target_reqs =
     }
 
 ;ATTACKS every enabler below has 2 more duplicates in sections below, to
-;handle Pax Dei logic. Always keep them identical except for Pax Dei 
+;handle Pax Dei logic. Always keep them identical except for Pax Dei
 ;reqs, which fall below the ;... marker.
 ;----------------------------------------------------------------------------ATTACK ENABLERS
 ;-----------------------------------------------------------TRIBESMEN ONLY
@@ -1786,7 +1786,7 @@ actor_reqs    =
       "DiplRel",       "War",     "Local", TRUE
       "UnitFlag",      "NonMil",  "Local", FALSE
     }
-target_reqs = 
+target_reqs =
     { "type",          "name",          "range", "present"
       "Extra",        "Bunker",         "Local", FALSE
     }
@@ -1803,7 +1803,7 @@ actor_reqs    =
       "DiplRel",       "War",     "Local", TRUE
       "UnitFlag",      "NonMil",  "Local", FALSE
     }
-target_reqs = 
+target_reqs =
     { "type",          "name",          "range", "present"
       "Extra",        "Bunker",         "Local", FALSE
     }
@@ -1827,7 +1827,7 @@ actor_reqs    =
       ;...
       "Building",     "Pax Dei",        "World", FALSE
     }
-;-----------------------------------------------------------LANDAIRSEA 
+;-----------------------------------------------------------LANDAIRSEA
 ;LandAirSea = (Land__) && (!Land && !LandNoKill)
 ;Native attack ALWAYS allowed for units who aren't CargoRestrained
 [actionenabler_land_attacker_native_unrestrained]
@@ -1836,7 +1836,7 @@ actor_reqs    =
     { "type",         "name",           "range", "present"
       "UnitClassFlag","TerrainSpeed",   "Local", TRUE    ;all Land___ types.
       "UnitClassFlag","CargoRestrained","Local", FALSE   ;!Land, !LandNoKill, !LandRoad
-      "UnitType", "Anti-Aircraft Artillery","Local",FALSE ;AAA has to fall through to use CargoRestrained enablers because it is indeed a restrained exception 
+      "UnitType", "Anti-Aircraft Artillery","Local",FALSE ;AAA has to fall through to use CargoRestrained enablers because it is indeed a restrained exception
       "MinMoveFrags", "1",              "Local", TRUE
       "UnitState",    "OnNativeTile",   "Local", TRUE    ; No "Transported" restriction
       ;...
@@ -1866,7 +1866,7 @@ actor_reqs    =
       ;...
       "Building",     "Pax Dei",        "World", FALSE
     }
-target_reqs = 
+target_reqs =
     { "type",          "name",          "range", "present"
       "Extra",        "Bunker",         "Local", FALSE
     }
@@ -1876,7 +1876,7 @@ action = "Attack"
 actor_reqs    =
     { "type",         "name",           "range", "present"
       "UnitClassFlag","TerrainSpeed",   "Local", FALSE
-      "UnitClassFlag","CargoRestrained","Local", TRUE  
+      "UnitClassFlag","CargoRestrained","Local", TRUE
       "MinMoveFrags", "1",              "Local", TRUE
       "UnitState",    "OnNativeTile",   "Local", TRUE
       "UnitState",    "Transported",    "Local", FALSE  ; Can't attack while towed on Trawler
@@ -1888,7 +1888,7 @@ actor_reqs    =
       ;...
       "Building",     "Pax Dei",        "World", FALSE
     }
-target_reqs = 
+target_reqs =
     { "type",          "name",          "range", "present"
       "Extra",        "Bunker",         "Local", FALSE
     }
@@ -1943,7 +1943,7 @@ actor_reqs    =
       ;...
       "Building",     "Pax Dei",           "World", FALSE
     }
-target_reqs = 
+target_reqs =
     { "type",          "name",             "range", "present"
       "Extra",        "Bunker",            "Local", FALSE
     }
@@ -1965,14 +1965,14 @@ actor_reqs    =
       ;...
       "Building",     "Pax Dei",           "World", FALSE
     }
-target_reqs = 
+target_reqs =
     { "type",          "name",             "range", "present"
       "Extra",        "Bunker",            "Local", FALSE
     }
 ;-----------------------------------------------------------------------NONMIL EXCEPTIONS
 ; ***** NON-MIL ATTACKER rules (commerce units)
 ;Commerce units have to be NonMil to enter peaceful waters
-;but they can also attack those with whom they are at war:   
+;but they can also attack those with whom they are at war:
 [actionenabler_attack_native_nonmil_attacker]
 action = "Attack"
 actor_reqs    =
@@ -1988,7 +1988,7 @@ actor_reqs    =
       ;...
       "Building",     "Pax Dei",        "World", FALSE
     }
-target_reqs = 
+target_reqs =
     { "type",         "name",           "range", "present"
       "Extra",        "Bunker",         "Local", FALSE
     }
@@ -2007,7 +2007,7 @@ actor_reqs    =
       ;...
       "Building",     "Pax Dei",           "World", FALSE
     }
-target_reqs = 
+target_reqs =
     { "type",         "name",              "range", "present"
       "Extra",        "Bunker",            "Local", FALSE
     }
@@ -2025,7 +2025,7 @@ target_reqs =
 action = "Attack"
 actor_reqs    =
     { "type",         "name",           "range", "present"
-      "UnitClassFlag","TerrainSpeed",   "Local", TRUE  ;all Land___ 
+      "UnitClassFlag","TerrainSpeed",   "Local", TRUE  ;all Land___
 ;      "UnitClassFlag","CargoRestrained","Local", TRUE  ;no need to prevent LandAirSea from using this because we have CargoRestrained sub-members of that class (i.e. AAA)
       "MinMoveFrags", "1",              "Local", TRUE
       "UnitState",    "OnNativeTile",   "Local", TRUE
@@ -2040,7 +2040,7 @@ actor_reqs    =
       "Tech",         "Monotheism",     "Player",FALSE
     }
 
-;-----------------------------------------------------------LANDAIRSEA 
+;-----------------------------------------------------------LANDAIRSEA
 ;LandAirSea = (Land__) && (!Land && !LandNoKill)
 ;Native attack ALWAYS allowed for units who aren't CargoRestrained
 [actionenabler_land_attacker_native_unrestrained_pd_no_m]
@@ -2083,13 +2083,13 @@ actor_reqs    =
       "Building",     "Pax Dei",       "World", TRUE
       "Tech",         "Monotheism",    "Player",FALSE
     }
-target_reqs = 
+target_reqs =
     { "type",          "name",         "range", "present"
       "Extra",        "Bunker",        "Local", FALSE
     }
 
 ;-----------------------------------------------------------all AIR__, SEA types
-;Non-Land units can't attack Bunkers 
+;Non-Land units can't attack Bunkers
 [actionenabler_non_land_attacker_native_restrained_pd_no_m]
 action = "Attack"
 actor_reqs    =
@@ -2108,7 +2108,7 @@ actor_reqs    =
       "Building",     "Pax Dei",        "World", TRUE
       "Tech",         "Monotheism",     "Player",FALSE
     }
-target_reqs = 
+target_reqs =
     { "type",          "name",          "range", "present"
       "Extra",        "Bunker",         "Local", FALSE
     }
@@ -2166,14 +2166,14 @@ actor_reqs    =
       "Building",     "Pax Dei",           "World", TRUE
       "Tech",         "Monotheism",        "Player",FALSE
     }
-target_reqs = 
+target_reqs =
     { "type",          "name",             "range", "present"
       "Extra",        "Bunker",            "Local", FALSE
     }
 ;-----------------------------------------------------------------------NONMIL EXCEPTIONS
 ; ***** NON-MIL ATTACKER rules (commerce units)
 ;Commerce units have to be NonMil to enter peaceful waters
-;but they can also attack those with whom they are at war:   
+;but they can also attack those with whom they are at war:
 [actionenabler_attack_native_nonmil_attacker_pd_no_m]
 action = "Attack"
 actor_reqs    =
@@ -2190,7 +2190,7 @@ actor_reqs    =
       "Building",     "Pax Dei",        "World", TRUE
       "Tech",         "Monotheism",     "Player",FALSE
     }
-target_reqs = 
+target_reqs =
     { "type",         "name",           "range", "present"
       "Extra",        "Bunker",         "Local", FALSE
     }
@@ -2210,7 +2210,7 @@ actor_reqs    =
       "Building",     "Pax Dei",           "World", TRUE
       "Tech",         "Monotheism",        "Player",FALSE
     }
-target_reqs = 
+target_reqs =
     { "type",         "name",           "range", "present"
       "Extra",        "Bunker",         "Local", FALSE
     }
@@ -2239,7 +2239,7 @@ actor_reqs    =
       "Building",     "Pax Dei",        "World", TRUE
       "UnitState",    "OnDomesticTile", "Local", TRUE
     }
-;-----------------------------------------------------------LANDAIRSEA 
+;-----------------------------------------------------------LANDAIRSEA
 ;LandAirSea = (Land__) && (!Land && !LandNoKill)
 ;Native attack ALWAYS allowed for units who aren't CargoRestrained
 [actionenabler_land_attacker_native_unrestrained_pd_m_domestic]
@@ -2280,12 +2280,12 @@ actor_reqs    =
       "Building",     "Pax Dei",        "World", TRUE
       "UnitState",    "OnDomesticTile", "Local", TRUE
     }
-target_reqs = 
+target_reqs =
     { "type",          "name",          "range", "present"
       "Extra",        "Bunker",         "Local", FALSE
     }
 ;-----------------------------------------------------------all SEA types
-;Non-Land units can't attack Bunkers 
+;Non-Land units can't attack Bunkers
 [actionenabler_non_land_attacker_native_restrained_pd_m_domestic]
 action = "Attack"
 actor_reqs    =
@@ -2304,7 +2304,7 @@ actor_reqs    =
       "Building",     "Pax Dei",        "World", TRUE
       "UnitState",    "OnDomesticTile", "Local", TRUE
     }
-target_reqs = 
+target_reqs =
     { "type",          "name",          "range", "present"
       "Extra",        "Bunker",         "Local", FALSE
     }
@@ -2362,14 +2362,14 @@ actor_reqs    =
       "Building",     "Pax Dei",           "World", TRUE
       "UnitState",    "OnDomesticTile",    "Local", TRUE
     }
-target_reqs = 
+target_reqs =
     { "type",          "name",             "range", "present"
       "Extra",        "Bunker",            "Local", FALSE
     }
 ;-----------------------------------------------------------------------NONMIL EXCEPTIONS
 ; ***** NON-MIL ATTACKER rules (commerce units)
 ;Commerce units have to be NonMil to enter peaceful waters
-;but they can also attack those with whom they are at war:   
+;but they can also attack those with whom they are at war:
 [actionenabler_attack_native_nonmil_attacker_pd_m_domestic]
 action = "Attack"
 actor_reqs    =
@@ -2386,7 +2386,7 @@ actor_reqs    =
       "Building",     "Pax Dei",        "World", TRUE
       "UnitState",    "OnDomesticTile", "Local", TRUE
     }
-target_reqs = 
+target_reqs =
     { "type",         "name",           "range", "present"
       "Extra",        "Bunker",         "Local", FALSE
     }
@@ -2406,7 +2406,7 @@ actor_reqs    =
       "Building",     "Pax Dei",           "World", TRUE
       "UnitState",    "OnDomesticTile",    "Local", TRUE
     }
-target_reqs = 
+target_reqs =
     { "type",         "name",              "range", "present"
       "Extra",        "Bunker",            "Local", FALSE
     }
@@ -2470,7 +2470,7 @@ actor_reqs    =
       "MinMoveFrags",   "1",                "Local", TRUE
       "UnitClassFlag",  "AttFromNonNative", "Local", TRUE
       "UnitState",      "Transported",      "Local", FALSE    ; only Marines can conquer while transported, and that's covered above.
-      "UnitType", "Anti-Aircraft Artillery","Local", FALSE    ; redundantly exclude AAA even though this could only happen while transported 
+      "UnitType", "Anti-Aircraft Artillery","Local", FALSE    ; redundantly exclude AAA even though this could only happen while transported
       "Nation",         "Animal Kingdom",   "Player",FALSE
     }
 target_reqs    =
@@ -2486,7 +2486,7 @@ target_reqs    =
 #    { "type",           "name",           "range", "present"
 #      "UnitClassFlag",  "CanOccupyCity",  "Local", TRUE
 #      "UnitClassFlag",  "CargoRestrained","Local", TRUE         ; This enabler is an exception only for the case of non-Marines type units
-#      "UnitState",      "Transported",    "Local", TRUE         ; This enabler is an exception only for non-Marines conquering 1x1 island cities 
+#      "UnitState",      "Transported",    "Local", TRUE         ; This enabler is an exception only for non-Marines conquering 1x1 island cities
 #      "UnitFlag",       "NonMil",         "Local", FALSE
 #      "DiplRel",        "War",            "Local", TRUE
 #      "UnitFlag",       "FootSoldier",    "Local", TRUE         ; FootSoldiers only
@@ -2499,7 +2499,7 @@ target_reqs    =
 #target_reqs    =
 #    { "type",           "name",          "range",    "present"
 #      "MaxUnitsOnTile", "0",             "Local",    TRUE
-#      "TerrainClass",   "Land",          "Adjacent", FALSE       ; This enabler is an exception only for the case of a 1x1 island city 
+#      "TerrainClass",   "Land",          "Adjacent", FALSE       ; This enabler is an exception only for the case of a 1x1 island city
 #    }
 ;---------------------------------------------------------------------------
 [actionenabler_change_home_city]
@@ -2562,7 +2562,7 @@ actor_reqs    =
     }
 
 ;Workers can upgrade to Workers II for free, anywhere on the map
-;but not if player knows Explosives because that would be free 
+;but not if player knows Explosives because that would be free
 ;Engineers. In such a case they can try the convert order to go
 ;to Workers II but the truth is, Workers II are obsolete if you
 ;have explosives, so, too bad. Should have done it earlier.
@@ -2677,7 +2677,7 @@ actor_reqs    =
     { "type",     "name",              "range", "present"
       "UnitType", "Strategic Bomber",  "Local", TRUE
       "MinMoveFrags", "1",             "Local", TRUE
-    }    
+    }
 [actionenabler_pillage3a]
 action        = "Pillage"
 actor_reqs    =
@@ -2783,7 +2783,7 @@ actor_reqs    =
       "UnitState",     "OnDomesticTile","Local",   FALSE
       "UnitState",     "Transported",  "Local",    FALSE    ; Prevent quay exploit
     }
-; Don't force legions to road BEFORE making a fortress 
+; Don't force legions to road BEFORE making a fortress
 ; from fortress being "domestic national territory"
 [actionenabler_legion_road2]
 action        = "Build Road"
@@ -2818,9 +2818,9 @@ action        = "Build Base"
 actor_reqs    =
     { "type",          "name",            "range", "present"
 ; Hard contradiction between Tile Claim and Hideout is necessary so that
-; the actionenabler for one never allows the other to be made. TODO: 
+; the actionenabler for one never allows the other to be made. TODO:
 ; req is just a CanHide unit, when actionenabler req can check base type:
-       "UnitFlag",      "CanHide",         "Local",  TRUE      
+       "UnitFlag",      "CanHide",         "Local",  TRUE
        "UnitFlag",      "CanClaim",        "Local",  FALSE
        "UnitState",     "OnLivableTile",   "Local",  TRUE
        "DiplRel",       "Foreign",         "Local",  FALSE
@@ -2830,13 +2830,13 @@ action        = "Build Base"
 actor_reqs    =
     { "type",          "name",            "range", "present"
 ; Hard contradiction between Tile Claim and Hideout is necessary so that
-; the actionenabler for one never allows the other to be made. TODO: 
+; the actionenabler for one never allows the other to be made. TODO:
 ; req is just a CanHide unit, when actionenabler req can check base type:
         "UnitType",      "Missile Submarine","Local",    TRUE
         "Extra",         "Buoy",             "Local",    FALSE
         "Extra",         "Fishtrap",         "Local",    FALSE
         "Terrain",       "Deep Ocean",       "Local",    TRUE
-        "Extra",         "Fish",             "Adjacent", FALSE  ;prevent making Fishtrap 
+        "Extra",         "Fish",             "Adjacent", FALSE  ;prevent making Fishtrap
     }
 target_reqs    =
     { "type",     "name",       "range", "present"
@@ -2851,7 +2851,7 @@ actor_reqs    =
     { "type",          "name",            "range", "present"
        "UnitState",     "OnLivableTile",   "Local",  TRUE
 ; Hard contradiction between Tile Claim and Hideout is necessary so that
-; the actionenabler for one never allows the other to be made. TODO: 
+; the actionenabler for one never allows the other to be made. TODO:
 ; req is just a CanHide unit, when actionenabler req can check base type:
       "UnitFlag",      "CanHide",         "Local",  TRUE
       "UnitFlag",      "CanClaim",        "Local",  FALSE
@@ -2866,12 +2866,12 @@ action        = "Build Base"
 actor_reqs    =
     { "type",          "name",            "range", "present"
 ; Hard contradiction between Tile Claim and Hideout is necessary so that
-; the actionenabler for one never allows the other to be made. TODO: 
+; the actionenabler for one never allows the other to be made. TODO:
 ; req is just a military unit, when actionenabler req can check base type:
        "UnitState",     "OnLivableTile",   "Local",  TRUE     ; disallow sea claims
 ;--------------------------------
        "UnitFlag",      "CanClaim",        "Local",  TRUE
-       "UnitFlag",      "CanHide",         "Local",  FALSE      
+       "UnitFlag",      "CanHide",         "Local",  FALSE
        "DiplRel",       "Foreign",         "Local",  FALSE
     }
 target_reqs    =
@@ -2894,13 +2894,13 @@ actor_reqs    =
 ;--------------------------------
        "UnitState",     "OnLivableTile",   "Local",    TRUE   ; disallow sea claims
        "UnitFlag",      "CanClaim",        "Local",    TRUE
-       "UnitFlag",      "CanHide",         "Local",    FALSE      
+       "UnitFlag",      "CanHide",         "Local",    FALSE
        "Extra",         "Tile Claim",      "Adjacent", TRUE
        "MaxUnitsOnTile", "1",              "Local",    FALSE  ; need a diplo + 1 other unit.
     }
 target_reqs    =
     { "type",     "name",    "range","present"
- ;     "CityTile", "Claimed", "Local", TRUE                   ; can claim unclaimed lands too 
+ ;     "CityTile", "Claimed", "Local", TRUE                   ; can claim unclaimed lands too
     }
 ;*******************************************************
 [actionenabler_mining]
@@ -2932,7 +2932,7 @@ target_reqs    =
     { "type",    "name",         "range"
       "Terrain", "Desert",       "Local"
     }
- 
+
 [actionenabler_arctic_oil]
 action        = "Build Mine"
 actor_reqs    =
@@ -2951,7 +2951,7 @@ target_reqs    =
 
 [actionenabler_build_fishtrap_trawler]
 action        = "Build Base"
-actor_reqs    = 
+actor_reqs    =
      { "type",     "name",        "range", "present"
        "UnitFlag", "Settlers",    "Local", TRUE
        "UnitType", "Trawler",     "Local", TRUE
@@ -2963,7 +2963,7 @@ target_reqs    =
      }
 [actionenabler_build_fishtrap_worker_types]
 action        = "Build Base"
-actor_reqs    = 
+actor_reqs    =
      { "type",     "name",        "range", "present"
        "UnitFlag", "Settlers",    "Local", TRUE
        "UnitState","Transported", "Local", TRUE
@@ -3076,7 +3076,7 @@ target_reqs    =
       "UnitState", "Transporting", "Local"
     }
 
-[actionenabler_board_air_and_missile]  ;no move frag req for boarding for planes and missiles 
+[actionenabler_board_air_and_missile]  ;no move frag req for boarding for planes and missiles
 action        = "Transport Board"
 actor_reqs    =
     { "type",          "name",          "range", "present"
@@ -3099,7 +3099,7 @@ actor_reqs    =
 ; a conventional bomb and use it this turn (with no tired attack because conv.Bombs don't have it), you can single-haul a
 ; nuclear bomb and use it this turn. You can load either, on the turn it's made, onto a Bomber and be ready for action
 ; at full moves.
-[actionenabler_board_bombs]  
+[actionenabler_board_bombs]
 action        = "Transport Board"
 actor_reqs    =
     { "type",          "name",          "range", "present"
@@ -3108,7 +3108,7 @@ actor_reqs    =
       "UnitFlag",      "AirAttacker",   "Local", FALSE  ;not Air
       "UnitClass",     "Missile",       "Local", FALSE  ;not Missile
       "UnitClassFlag", "UnloadOnce",    "Local", TRUE   ;only Bombs are left
-      "UnitState",     "Transported",   "Local", FALSE  
+      "UnitState",     "Transported",   "Local", FALSE
       "DiplRel",       "Armistice",     "Local", FALSE
       "DiplRel",       "War",           "Local", FALSE
       "DiplRel",       "Cease-fire",    "Local", FALSE
@@ -3127,7 +3127,7 @@ actor_reqs    =
       "DiplRel",       "Cease-fire",    "Local", FALSE
       "DiplRel",       "Peace",         "Local", FALSE
       "DiplRel",       "Never met",     "Local", FALSE
-      "UnitType",      "Magnum Turret", "Local", FALSE ;Makes utype_can_do_action() render false so we don't show illegal orders buttons 
+      "UnitType",      "Magnum Turret", "Local", FALSE ;Makes utype_can_do_action() render false so we don't show illegal orders buttons
       "MinMoveFrags",  "1",             "Local", TRUE  ;limits double-move and "attack-and-haul".
     }
 target_reqs    =
@@ -3144,7 +3144,7 @@ actor_reqs    =
       "DiplRel",       "Cease-fire",    "Local", FALSE
       "DiplRel",       "Peace",         "Local", FALSE
       "DiplRel",       "Never met",     "Local", FALSE
-      "UnitType",      "Magnum Turret", "Local", FALSE ;Makes utype_can_do_action() render false so we don't show illegal orders buttons 
+      "UnitType",      "Magnum Turret", "Local", FALSE ;Makes utype_can_do_action() render false so we don't show illegal orders buttons
       "MinMoveFrags",  "1",             "Local", TRUE  ;limits double-move and "attack-and-haul".
     }
 target_reqs    =
@@ -3165,12 +3165,12 @@ actor_reqs    =
       "DiplRel",       "Cease-fire",    "Local", FALSE
       "DiplRel",       "Peace",         "Local", FALSE
       "DiplRel",       "Never met",     "Local", FALSE
-      "UnitType",      "Magnum Turret", "Local", FALSE  ;don't show illegal orders buttons 
+      "UnitType",      "Magnum Turret", "Local", FALSE  ;don't show illegal orders buttons
       "MinMoveFrags",  "1",             "Local", TRUE   ;limits double-move and "attack-and-haul".
       "UnitState",     "Transporting",  "Local", FALSE  ;prevent russian doll exceptions               <<< *******
     }
 
-[actionenabler_board_sea_trawler]       
+[actionenabler_board_sea_trawler]
 action        = "Transport Board"
 actor_reqs    =
     { "type",          "name",          "range", "present"
@@ -3180,7 +3180,7 @@ actor_reqs    =
       "DiplRel",       "Cease-fire",    "Local", FALSE
       "DiplRel",       "Peace",         "Local", FALSE
       "DiplRel",       "Never met",     "Local", FALSE
-      "UnitState",     "MovedThisTurn", "Local", FALSE   ;Sea units may not have moved to get on trawler 
+      "UnitState",     "MovedThisTurn", "Local", FALSE   ;Sea units may not have moved to get on trawler
     }
 [actionenabler_board_marines]
 action        = "Transport Board"
@@ -3256,7 +3256,7 @@ actor_reqs    =
     { "type",      "name",         "range", "present"
       "UnitState",     "Transporting", "Local", TRUE
       "UnitClassFlag", "TerrainSpeed", "Local", FALSE   ; !Land
-      "UnitClassFlag", "WaterVessel",  "Local", FALSE   ; !Sea     (only transport-types left are aircraft)  
+      "UnitClassFlag", "WaterVessel",  "Local", FALSE   ; !Sea     (only transport-types left are aircraft)
     }
 target_reqs    =
     { "type",          "name",          "range", "present"
@@ -3380,7 +3380,7 @@ target_reqs    =
 ;==================================================================================================================================== UNLOAD TRANSPORT ^^
 
 ;TO DO: this now enables ruleset to control disembarkation stipulations, rather
-;than hard-coded client. This actionenabler should be extended with all the 
+;than hard-coded client. This actionenabler should be extended with all the
 ;rules logic for mp2c, and taken advantage of for upgraded/simplified mechanics.
 [actionenabler_disembark]
 action        = "Transport Disembark"
@@ -3391,11 +3391,11 @@ actor_reqs    =
     }
 
 ;NOTE the two enablers below SHOULD be fixed by 17Jan2023 commit "Fix units with (moves_left ≤ 1) can't EMBARK" ********************************************************************************** NOTE: DELETE THESE
-;Thus we can schedule them for deletion, but leaving them would allow units stranded for any other reason to  ************************************************************************************ NOTE: DELETE THESE 
+;Thus we can schedule them for deletion, but leaving them would allow units stranded for any other reason to  ************************************************************************************ NOTE: DELETE THESE
 ;always be able to board to save themselves from drowning.
 ;
 ;The two enablers below catch a bug in complex rulesets that have complex Boarding rules.
-;The bug is that a unit doing order_move or order_perform_action "transport embark" to a 
+;The bug is that a unit doing order_move or order_perform_action "transport embark" to a
 ;transport on a non-native tile, are allowed to move to that tile because embark is legal.
 ;But then the movepoints are subtracted first, and then because it has no moves left, it
 ;no longer fulfills the legality for Embark action, leaving it stranded on the water.
@@ -3403,7 +3403,7 @@ actor_reqs    =
 ;tries that next, but if the ruleset has complex rules for "Transport Board" and that's also
 ;no longer legal, the unit can't board in order to pull off the verisimilitude of doing
 ;an embark. Apparently it assumed or was only tested with rulesets with legacy rules
-;of zero moves_left being allowed for Boarding. Ideally we'd debug this logic on the 
+;of zero moves_left being allowed for Boarding. Ideally we'd debug this logic on the
 ;server to see where it's slipping over itself and ALLOWING the move BECAUSE
 ;embark is legal then NOT allowing the embarcation to actually happen because it does
 ;the move, loses move points, then lost the legality to embark/board and becomes
@@ -3412,7 +3412,7 @@ actor_reqs    =
 ;is allowed to perform the server's fallthru logic of doing a Boarding action.
 ;This also allows any other bugged units floating in water to Board and get picked
 ;up by ships coming by, should that ever happen for other reasons.
-[actionenabler_embark_fall_thru_bug_fix_1]             ; BUG FIX for land units who aren't LandRoad units      
+[actionenabler_embark_fall_thru_bug_fix_1]             ; BUG FIX for land units who aren't LandRoad units
 action        = "Transport Board"
 actor_reqs    =
     { "type",         "name",           "range", "present"
@@ -3432,7 +3432,7 @@ target_reqs   =
       "UnitClass",    "LandRoad",   "Local", FALSE     ; These classes have cargo restrictions and for...
       "UnitClass",    "LandRail",   "Local", FALSE     ; ...for simplicity require Transport_Board action
     }
-[actionenabler_embark_fall_thru_bug_fix_2]             ; BUG FIX for LandRoad units (prevent Russian dolls)      
+[actionenabler_embark_fall_thru_bug_fix_2]             ; BUG FIX for LandRoad units (prevent Russian dolls)
 action        = "Transport Board"
 actor_reqs    =
     { "type",         "name",           "range", "present"
@@ -3464,7 +3464,7 @@ actor_reqs    =
       "UnitClass",    "Missile",    "Local", FALSE      ; No missiles
       "UnitClass",    "Bomb",       "Local", FALSE      ; No nuclear bombs
       "UnitClass",    "Bomb2",      "Local", FALSE      ; No conventional bombs
-      "UnitClass",    "LandRoad",   "Local", FALSE      ;!LandRoad: prevent russian doll exceptions 
+      "UnitClass",    "LandRoad",   "Local", FALSE      ;!LandRoad: prevent russian doll exceptions
       "DiplRel",      "Armistice",  "Local", FALSE
       "DiplRel",      "War",        "Local", FALSE
       "DiplRel",      "Cease-fire", "Local", FALSE
@@ -3475,7 +3475,7 @@ target_reqs   =
     { "type",         "name",       "range", "present"
       "UnitClass",    "LandRoad",   "Local", FALSE     ; These classes have cargo restrictions
       "UnitClass",    "LandRail",   "Local", FALSE     ; ...and for simplicity require Transport_Board
-    }                                                  ; MP2E can fix these after the Great Board/Deboard Resimplification is done ******************************************************************** 
+    }                                                  ; MP2E can fix these after the Great Board/Deboard Resimplification is done ********************************************************************
 
 ;Wagons and trucks can't embark if carrying cargo.
 [actionenabler_wagons_and_trucks_embark_as_cargo]
@@ -3508,8 +3508,8 @@ actor_reqs    =
       "DiplRel",      "Never met",    "Local", FALSE
     }
 
-; This additionally allows Missiles who are transported to offload as cargo onto adjacent transporters, thus 
-; extending other enabler and server logic that makes it so that Missiles can Board only in cities, or at TC 
+; This additionally allows Missiles who are transported to offload as cargo onto adjacent transporters, thus
+; extending other enabler and server logic that makes it so that Missiles can Board only in cities, or at TC
 ; through a "parachute catch" done by hard-coded server logic to rescue fuel units, which overrides all enablers.
 [actionenabler_embark_missiles]
 action        = "Transport Embark"
@@ -3974,7 +3974,7 @@ set =
       "ceasefirelength", 15, FALSE
       "city_output_style", 1, FALSE      ; whether tiles and specialists have WYSIWYG output, or calculate output for gold/science AFTER city growth/shrink events.
       "contactturns", 10, FALSE
-      "conquercost", 0, FALSE            ; thefts/conquests at 0 means we use (100-blueprints%) tax on theft/conquest. if blueprints off then 0 means no tax (or override it to a val) 
+      "conquercost", 0, FALSE            ; thefts/conquests at 0 means we use (100-blueprints%) tax on theft/conquest. if blueprints off then 0 means no tax (or override it to a val)
       "diplomacy", "ALL", FALSE
       "diplgoldcost", 5, FALSE
       "diplbulbcost", 0, FALSE           ; tech trades are overridden by blueprint %; if blueprints are off, there is no tax on theft/conquest.
@@ -3989,7 +3989,7 @@ set =
       "globalwarming", 50, FALSE
       "globalwarming_percent", 50, FALSE
       "hideouts", TRUE, FALSE
-      "hangry", 1, FALSE                  ; Famine causes disorder. Closes a flaw where people are happier starving with lux than food and less lux. Helps re-balance rapture vs non-rapture govs (martial law/gulag effect/etc.) 
+      "hangry", 1, FALSE                  ; Famine causes disorder. Closes a flaw where people are happier starving with lux than food and less lux. Helps re-balance rapture vs non-rapture govs (martial law/gulag effect/etc.)
       "huts", 10, FALSE
       "killcitizen_pct", 50, FALSE        ; regulates % chance of pop kill by city pop-killer units
       "latejoin_gold", 14, FALSE          ; gold per turn of absence when late joining
@@ -3999,7 +3999,7 @@ set =
       "minplayers", 0, FALSE
       "move_bonus_in_frags", "ENABLED", TRUE   ;locked
       "multiresearch", "ENABLED", FALSE
-      "nationset", "all", FALSE 
+      "nationset", "all", FALSE
       "nuclearwinter_percent", 50, FALSE
       "nukes_minor", "ENABLED", FALSE      ; set to DISABLED to completely disallow nuclear detonations
       "nukes_major", "ENABLED", FALSE      ; set to DISABLED to disallow nuclear fusion weapons
@@ -4010,6 +4010,7 @@ set =
       "repulsion", 0, FALSE                ; Repulsion away from bias to startpos's on primary continent. -1=NONE, 0=(num_players+num_continents)*10, 1-100000 custom value.
       "revolen", 1, FALSE
       "restrictinfra", "ENABLED", FALSE    ; required for mp2 mechanics.
+      "riverpct", 50, FALSE                ; 0=fewest rivers, 100=most rivers
       "separatepoles", FALSE, FALSE
       "slot_control", TRUE, FALSE         ; multiple units per turn
       "slot_control_style", 1, FALSE      ; 1 = Shield2Gold units only
