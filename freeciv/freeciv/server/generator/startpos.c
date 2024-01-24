@@ -35,7 +35,7 @@
 #include "startpos.h"
 #include "temperature_map.h"
 
-/* DEBUG */ 
+/* DEBUG */
 #include "notify.h"
 #include "featured_text.h"
 
@@ -193,10 +193,10 @@ static bool is_valid_start_pos(const struct tile *ptile, const void *dataptr)
   struct islands_data_type *island;
   int cont_size, cont = tile_continent(ptile);
 
-  /* Only start on certain terrain types. */  
+  /* Only start on certain terrain types. */
   if (pdata->value[tile_index(ptile)] < pdata->min_value) {
       return FALSE;
-  } 
+  }
 
   fc_assert_ret_val(cont > 0, FALSE);
   if (islands[islands_index[cont]].starters == 0) {
@@ -295,7 +295,7 @@ static bool filter_starters(const struct tile *ptile, const void *data)
   MAPSTARTPOS_2or3: 2 players per isle (maybe one isle with 3).
   MAPSTARTPOS_ALL: all players in asingle isle.
   MAPSTARTPOS_VARIABLE: at least 2 player per isle.
-  
+
   Assumes assign_continent_numbers() has already been done!
   Returns true on success
 ****************************************************************************/
@@ -310,7 +310,7 @@ bool create_start_positions(enum map_startpos mode,
   int min_goodies_per_player = 1500;
   int total_goodies = 0;
   /* this is factor is used to maximize land used in extreme little maps */
-  float efactor =  player_count() / map_size_checked() / 4; 
+  float efactor =  player_count() / map_size_checked() / 4;
   bool failure = FALSE;
   bool is_tmap = temperature_is_initialized();
 
@@ -412,7 +412,7 @@ bool create_start_positions(enum map_startpos mode,
 
   /* the variable way is the last possibility */
   if (MAPSTARTPOS_VARIABLE == mode) {
-    min_goodies_per_player = total_goodies * (0.65 + 0.8 * efactor) 
+    min_goodies_per_player = total_goodies * (0.65 + 0.8 * efactor)
       / (1 + efactor)  / player_count();
   }
 
@@ -420,7 +420,7 @@ bool create_start_positions(enum map_startpos mode,
                 _("%d is map_mode enum, min_goodies_per_player == %d"),
                 mode, min_goodies_per_player);
 
-  { 
+  {
     int nr, to_place = player_count(), first = 1;
     /* Placements on smaller islands often give roughly double the workable tiles
        of interior-land placements because of surrounding ocean. When considering
@@ -428,19 +428,19 @@ bool create_start_positions(enum map_startpos mode,
        we therefore add a small_island_goodie_cutoff_bonus to the threshold for deciding
        if the island is "allowed" to be populated. The bonus is less than +100% because:
 
-       1. Large-continent placements usually get some smaller amount water tiles too, 
+       1. Large-continent placements usually get some smaller amount water tiles too,
        2. Some of a small island's ocean tiles may be workable by other islands,
-       3. A median ocean-tile usually has less value than a median land tile. 
+       3. A median ocean-tile usually has less value than a median land tile.
        4. Small islands may have a lower ceiling for expansion/conquest/alliance. */
     float watermass = 1.0 - (float)wld.map.server.landpercent / 100.0;
-    float small_island_goodie_cutoff_bonus = (watermass <= 0.70) 
+    float small_island_goodie_cutoff_bonus = (watermass <= 0.70)
                                            ? 1.0 + (watermass/2)
-                                           : 1.0; 
+                                           : 1.0;
     /* The greater the landmass, the less likely it is that the continent's goodie score
        is appreciably neglecting a large number of ocean tiles exclusively workable by
        the island's owner. The formula above gives us:
        10% landmass = 1.000 cutoff  Landmass < 30% is considered as a "well-separated islands"
-       29% landmass = 1.000 cutoff  ...game where no one wants to start on a smaller island 
+       29% landmass = 1.000 cutoff  ...game where no one wants to start on a smaller island
        ----------------------------
        30% landmass = 1.350x cutoff
        35% landmass = 1.325x cutoff
@@ -497,7 +497,7 @@ bool create_start_positions(enum map_startpos mode,
       if (MAPSTARTPOS_VARIABLE == mode) {
       /* The commented "if" below prevents "overcreation" of starter positions at the
          sacrifice of also leaving large unpopulated islands/continents which have more than
-         enough goodies for a starter-pos. The result is empty islands up to 5x the size of 
+         enough goodies for a starter-pos. The result is empty islands up to 5x the size of
          tilesperplayer becoming huge game-winning land-grabs for whoever settles there first.
          This problem arises from an in-built bias caused by not using total_goodies/player_count()
          to set min_goodies_per_player. Not doing so is necessary in order to prevent some
@@ -511,7 +511,7 @@ bool create_start_positions(enum map_startpos mode,
         if (0 < to_place) { */ if (small_island_goodie_cutoff_bonus *
                                    islands[nr].goodies >= min_goodies_per_player) {
           islands[nr].starters = MAX(1, islands[nr].goodies
-                                    / MAX(1, min_goodies_per_player));               
+                                    / MAX(1, min_goodies_per_player));
           to_place -= islands[nr].total = islands[nr].starters;
         }
                 notify_conn(NULL, NULL, E_LOG_ERROR, ftc_server,
@@ -533,10 +533,10 @@ bool create_start_positions(enum map_startpos mode,
   sum = 0;
   for (k = 1; k <= wld.map.num_continents; k++) {
     sum += islands[islands_index[k]].starters;
-    /* DEBUG ONLY 
+    /* DEBUG ONLY
     if (islands[islands_index[k]].starters != 0) {
       notify_conn(NULL, NULL, E_NATION_SELECTED, ftc_server,
-                  "#%d. starters on conti[%d]: %d", islands_index[k], 
+                  "#%d. starters on conti[%d]: %d", islands_index[k],
                   islands[islands_index[k]].id, islands[islands_index[k]].starters);
     } */
   }
@@ -545,7 +545,7 @@ bool create_start_positions(enum map_startpos mode,
      positions:
   fc_assert_ret_val(player_count() <= sum, FALSE); */
 
-  /* Bring in the REPULSION game setting, which works against the strong legacy bias 
+  /* Bring in the REPULSION game setting, which works against the strong legacy bias
      toward crowding start positions on the largest/best continent while leaving
      smaller-but-acceptable continents under- or un-populated. "/show repulsion" for more
      details. */
@@ -560,7 +560,7 @@ bool create_start_positions(enum map_startpos mode,
     default:
       iteration_escape = game.server.repulsion;
   }
-  
+
   /* now search for the best place and set start_positions */
   while (map_startpos_count() < player_count()) {
     if ((ptile = rand_map_pos_filtered(&(wld.map), &data,
@@ -612,7 +612,7 @@ bool create_start_positions(enum map_startpos mode,
 
     if (islands[k].total > 0)
       notify_conn(NULL, NULL, E_LOG_ERROR, ftc_server,
-                  "#%d. conti[%d]: total:%d filled:%d (%d%%)",  
+                  "#%d. conti[%d]: total:%d filled:%d (%d%%)",
                   k, islands[k].id, islands[k].total,
                   filled,
                   (100*filled) / islands[k].total);
