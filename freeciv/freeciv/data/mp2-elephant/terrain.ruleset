@@ -56,11 +56,11 @@ land_channel_requirement = 10
 
 ; Percentage of unfrozen tiles (no "Frozen" flag) required to be adjacent
 ; to a frozen tile before it can thaw (0-101; 0=anywhere, default 101=nowhere)
-thaw_requirement = 1   ;1 tile is 12.5% 
+thaw_requirement = 1   ;1 tile is 12.5%
 
 ; Percentage of frozen tiles ("Frozen" flag) required to be adjacent to an
 ; unfrozen tile before it can freeze (0-101; 0=anywhere, default 101=nowhere)
-freeze_requirement = 1     ;1 tile is 12.5% 
+freeze_requirement = 1     ;1 tile is 12.5%
 
 ; Bodies of water up to this size are considered freshwater lakes, if there is
 ; also terrain type(s) with flag "FreshWater" in the ruleset.
@@ -239,7 +239,7 @@ ocean_resources = FALSE
 ; Each parameter has a special logic.
 ; TARGET = all terrains with the passed PARAMTER property will be considered and one will be picked at random based on the % values for each terrain.
 ; PREFERRED =  only terrains with (some of) that property will be chosen.
-; AVOID = all terrains with any of that property will be blacklisted from appearing in this ZONE. 
+; AVOID = all terrains with any of that property will be blacklisted from appearing in this ZONE.
 ;
 ; ZONES are:
 ;  Plains:  MG_TEMPERATE, MG_GREEN, MG_MOUNTAINOUS.
@@ -283,8 +283,9 @@ warmer_drier_result  = "Ocean"
 cooler_wetter_result = "Swamp"
 cooler_drier_result  = "Swamp"
 native_to            = "Sea", "Air", "Balloon", "Zeppelin", "Missile", "Helicopter", "Trireme", "RiverShip", "Submarine", "AirProtect", "Air_High_Altitude", "Bomb", "Space"
-flags                = "NoCities", "NoBarbs", "NoPollution", "FreshWater", "NoFortify" ; has ZOC
+flags                = "CanHaveRiver", "NoCities", "NoBarbs", "NoPollution", "FreshWater", "NoFortify" ; has ZOC
 property_ocean_depth = 0
+property_wet         = 100
 color.r              = 80
 color.g              = 176
 color.b              = 247
@@ -413,7 +414,7 @@ native_to            = "Land", "LandNoKill", "LandAirSea", "Big Land", "Air", "B
 flags                = "Starter", "CanHaveRiver", "Low Land", "Flat Land"
 property_green       = 38
 property_temperate   = 38
-property_frozen      = 90
+property_frozen      = 1
 property_dry         = 23
 color.r              = 161
 color.g              = 198
@@ -460,7 +461,7 @@ property_green       = 69
 property_temperate   = 69
 property_cold        = 20
 property_dry         = 23
-property_wet         = 100
+property_wet         = 20
 property_tropical    = 40
 color.r              = 100
 color.g              = 178
@@ -505,8 +506,8 @@ native_to            = "Land", "LandNoKill", "LandAirSea", "Big Land", "Air", "B
                        "AirProtect", "Air_High_Altitude", "Bomb", "Space"
 flags                = "Starter", "CanHaveRiver", "Low Land"
 property_cold        = 21
-property_frozen      = 17
-property_mountainous = 9
+property_frozen      = 2
+property_mountainous = 1
 property_wet         = 34
 property_foliage     = 50
 property_temperate   = 50
@@ -598,12 +599,11 @@ cooler_wetter_result = "Plains"
 cooler_drier_result  = "Plains"
 native_to            = "Land", "LandNoKill", "LandAirSea", "Big Land", "Air", "Balloon", "Zeppelin", "Missile", "Helicopter", "AirProtect", "Air_High_Altitude", "Bomb", "Space"
 flags                = "CanHaveRiver", "Oil", "Low Land", "Flat Land"
-property_dry         = 69
+property_dry         = 68
 property_tropical    = 35
 property_temperate   = 3
 property_green       = 3
 property_cold        = 0
-property_mountainous = 2
 color.r              = 247
 color.g              = 222
 color.b              = 187
@@ -693,10 +693,10 @@ cooler_drier_result  = "no"
 native_to            = "Land", "LandNoKill", "LandAirSea", "Big Land", "Air", "Balloon", "Zeppelin", "Missile", "Helicopter",
                        "AirProtect", "Air_High_Altitude", "Bomb", "Space"
 flags                = "Starter", "CanHaveRiver"
-property_mountainous = 55
+property_mountainous = 48
 property_green       = 1
 property_temperate   = 1
-property_frozen      = 100
+property_frozen      = 1
 property_dry         = 9
 property_cold        = 11
 color.r              = 222
@@ -741,10 +741,10 @@ cooler_drier_result  = "no"
 native_to            = "Land", "LandNoKill", "LandAirSea", "Air", "Zeppelin", "Missile", "Helicopter",
                        "AirProtect", "Air_High_Altitude", "Bomb", "Space"
 flags                = "CanHaveRiver"
-property_mountainous = 30
+property_mountainous = 55
 property_green       = 15
 property_temperate   = 15
-property_frozen      = 20
+property_frozen      = 2
 color.r              = 160
 color.g              = 156
 color.b              = 170
@@ -807,7 +807,7 @@ defense_bonus        = 0
 food                 = 0
 shield               = 0
 trade                = 0
-resources            = "Furs", "Ivory", "Oil" 
+resources            = "Furs", "Ivory", "Oil"
 road_trade_incr_pct  = 0
 base_time            = 1
 road_time            = 4
@@ -1009,7 +1009,7 @@ identifier  = "i"
 ;food        = 1     ;added in effects because only generated resources tied to a terrain type can access this var
 ;shield      = 1
 ;trade       = 4
-# arctic 
+# arctic
 
 [resource_silk]
 extra       = "Silk"
@@ -1269,7 +1269,7 @@ reqs           =
      "Extra",       "Fish",          "Local",     FALSE
      "Extra",       "Whales",        "Local",     FALSE
 ;—————————-
-     "Extra",       "Fishtrap",      "CAdjacent", FALSE 
+     "Extra",       "Fishtrap",      "CAdjacent", FALSE
      "Extra",       "Fish",          "Adjacent",  TRUE
 ;—————————-
      "UnitFlag",    "Settlers",      "Local",     TRUE
@@ -1481,7 +1481,7 @@ reqs           =
     }
 removal_time   = 0
 disappearance_chance    = 1500
-disappearance_reqs = 
+disappearance_reqs =
     { "type",           "name", "range"
     }
 flags          = "NuclearWinter"
@@ -1535,7 +1535,7 @@ reqs           =
       "Extra",   "Quay",      "Local", FALSE,    FALSE ; "Quay"+0-width space = CityTile, already prevented
       "Extra",   "Watchtower","Local", FALSE,    FALSE
     }
-disappearance_reqs = 
+disappearance_reqs =
     { "type",           "name", "range",  "present"
       "MaxUnitsOnTile", "0",    "Local",  TRUE
       "Extra",          "Ruins","Local",  FALSE
@@ -1558,7 +1558,7 @@ Since the dawn of time, concealed terrain was\
  15% chance of disappearing, unless built on ruins. The only way to know if\
  a tile has a Hideout is to have a Land unit inside. \
 "), _("
-Be careful! An abandoned Hideout can be used against you!\ 
+Be careful! An abandoned Hideout can be used against you!\
 ")
 
 [extra_deep_dive_hideout]
@@ -1581,7 +1581,7 @@ reqs           =
       "Extra",       "Buoy",              "Local", FALSE,     FALSE
       "Extra",       "Fishtrap",          "Local", FALSE,     FALSE
     }
-disappearance_reqs = 
+disappearance_reqs =
     { "type",           "name",      "range",  "present"
       "MaxUnitsOnTile", "0",         "Local",  TRUE
       ;TODO, when disappear reqs can check for a unit on the tile:
@@ -1677,7 +1677,7 @@ flags          = "NativeTile"
 helptext       = _("\
 Watchtowers provide vision of the surrounding terrain.\
  An unmanned Watchtower can be claimed by a foreign unit,\
- but the loss of the Watchtower reveals a foreign presence!\ 
+ but the loss of the Watchtower reveals a foreign presence!\
 ")
 
 [extra_fort]
@@ -1707,17 +1707,17 @@ native_to      = "Land", "LandAirSea", "LandNoKill", "Big Land", "LandRoad", "He
 hidden_by      = "Fortress", "Naval Base", "Castle", "Bunker"
 flags          = "NativeTile", "NoStackDeath"  ;, "Refuel"
 ;NOTE: effect_fortress_regen should give 25% of 20HP to helicopter, +1hp for being stationary
-;thus a fortress should give +6hp -2hp for not being in refuel spot or +4hp/turn. Healing 67% 
-;as fast as an airbase. MEANWHILE, removing the refuel flag allows us to make Forts native 
-;to AirProtect so that they cannot prevent attacks on forts. This is debatable issue of 
-;Fort with no Killstack but not Airprotected vs no fort, Killstack and Airprotect, but 
-;many times fighters over forts have come up as a dynamic. 
+;thus a fortress should give +6hp -2hp for not being in refuel spot or +4hp/turn. Healing 67%
+;as fast as an airbase. MEANWHILE, removing the refuel flag allows us to make Forts native
+;to AirProtect so that they cannot prevent attacks on forts. This is debatable issue of
+;Fort with no Killstack but not Airprotected vs no fort, Killstack and Airprotect, but
+;many times fighters over forts have come up as a dynamic.
 helptext       = _("\
 Forts are rapidly built fortifications which give Land units +33% defense\
  against Land and Sea units. Defending units are lost one at a time instead\
  of the entire stack dying. A fort is necessary to start building a Fortress. \
 "), _("
-Be careful—an unmanned Fort can be claimed by a foreign unit.\ 
+Be careful—an unmanned Fort can be claimed by a foreign unit.\
 ")
 
 [extra_fortress]
@@ -2035,8 +2035,8 @@ Quays improve logistics on rivers. River and Canal traffic can deboard\
  adjacent roads for only 1⁄₃ move. Quays are RestrictedInfra. Only\
  allied units can use them to cross rivers, and only domestic units\
  can use them to deboard at 1⁄₃ move. Non-domestic units may deboard\
- but lose all moves (except Marines.)\ 
-"), _("Don’t make too many Quays. The ability to unload on rivers helps enemies do surprise attacks.\ 
+ but lose all moves (except Marines.)\
+"), _("Don’t make too many Quays. The ability to unload on rivers helps enemies do surprise attacks.\
 "), _("Moves needed to cross a river to a tile on the other side:\n\
 ⁶⁄₃ moves: No infrastructure.\n\
 ⁴⁄₃ moves: Quay connected to roads.\n\
@@ -2045,7 +2045,7 @@ Quays improve logistics on rivers. River and Canal traffic can deboard\
 
 [extra_city_quay] ; distinct quay extra goes on cities to enable conditional logic
 ;rule_name       = "Quay2"  ; otherwise the zero-width gets parsed out by some code handling in some places
-name           = _("Quay​") ; has a zero-width space in it in order to create conditional logic for the extra 
+name           = _("Quay​") ; has a zero-width space in it in order to create conditional logic for the extra
 category       = "Infra"
 causes         = "Road"
 rmcauses       = "Pillage"
@@ -2089,7 +2089,7 @@ rmact_gfx_alt  = "-"
 reqs           =
     { "type",         "name",       "range",  "present"
       "UnitFlag",     "CanRoad",    "Local",  TRUE
-      "TerrainClass", "Land",       "Local",  TRUE 
+      "TerrainClass", "Land",       "Local",  TRUE
       "Tech",         "Automobile", "Player", FALSE
     }
 build_time     = 0
@@ -2124,7 +2124,7 @@ rmact_gfx_alt  = "-"
 reqs           =
     { "type",         "name",       "range",  "present"
       "UnitFlag",     "CanRoad",    "Local",  TRUE
-      "TerrainClass", "Land",       "Local",  TRUE 
+      "TerrainClass", "Land",       "Local",  TRUE
       "Tech",         "Automobile", "Player", TRUE
     }
 build_time     = 0
@@ -2163,7 +2163,7 @@ reqs           =
     }
 build_time     = 3
 removal_time   = 0
-native_to      = "Land", "LandNoKill", "LandAirSea", "LandRail", "Big Land" ;NB:by making this non-native we could equalize movement without "Train" unit 
+native_to      = "Land", "LandNoKill", "LandAirSea", "LandRail", "Big Land" ;NB:by making this non-native we could equalize movement without "Train" unit
 flags          = "AutoOnCityCenter", "NativeTile"
 bridged_over   = "River"
 helptext       = _("\
@@ -2195,7 +2195,7 @@ reqs           =
     { "type",     "name",            "range"
       "Tech",     "Superconductors", "Player"
       "ExtraFlag","Railable",        "Local"
-      "UnitFlag", "CanRoad",         "Local"        
+      "UnitFlag", "CanRoad",         "Local"
     }
 build_time     = 3
 removal_time   = 0
@@ -2336,7 +2336,7 @@ helptext          = _("\
 If you own the Great Wall, Walls can be built on land not held by a foreign\
  nation. Walls can’t be built on Mountains, Swamp, Rivers, or Bases.\
  Domestic units on the Walls get a free defense bonus of 1.5×. When fortified,\
- 2.25×. \ 
+ 2.25×. \
 In foreign territory, non-allied land units lose all moves when entering or exiting\
  a tile occupied by Walls. Foreign units caught on Walls with no move points are\
  considered vulnerable from climbing and scaling, and suffer a -50% defense penalty. \
@@ -2407,7 +2407,7 @@ reqs           =
 build_time     = 10
 removal_time   = 0
 flags          = "NativeTile", "Quayable", "IrrigationSource"
-native_to      = "Trireme", "Sea", "RiverShip", "Land", "LandAirSea", "LandNoKill", "Helicopter", "Submarine", 
+native_to      = "Trireme", "Sea", "RiverShip", "Land", "LandAirSea", "LandNoKill", "Helicopter", "Submarine",
                  "Big Land"; see below:
 ; NOTE: PassiveMovement cost of 1/6 effectively makes a move along a canal 1mp, same as when
 ; Big Land was non-native in mp2d. So why the change? Several differences:
@@ -2458,7 +2458,7 @@ rmact_gfx_alt  = "-"
 ;Resource distribution scripting to add more resources in leaner
 ;regions. Adds about +40 to specials, so adjust settings accordingly
 appearance_chance = 1000   ; +10% if no adjacent resource
-appearance_reqs = 
+appearance_reqs =
     { "type",    "name",     "range",   "present"
       "Terrain", "Mountains","Local",    TRUE
 ;if server places resources on T1 then the one line below replaces the two lines below it:
@@ -2487,7 +2487,7 @@ rmact_gfx_alt  = "-"
 ;Resource distribution scripting to add more resources in leaner
 ;regions. Adds about +40 to specials, so adjust settings accordingly
 appearance_chance = 1100   ; +11% if no adjacent resource
-appearance_reqs = 
+appearance_reqs =
     { "type",    "name",     "range",   "present"
       "Terrain", "Tundra",   "Local",    TRUE
 ;if server places resources on T1 then the one line below replaces the two lines below it:
@@ -2517,17 +2517,17 @@ rmact_gfx_alt  = "-"
 ;Resource distribution scripting to add more resources in leaner
 ;regions. Adds about +40 to specials, so adjust settings accordingly
 appearance_chance = 900   ; +9% if no adjacent resource
-appearance_reqs = 
+appearance_reqs =
     { "type",    "name",     "range",   "present"
       ;"Terrain", "Tundra",   "Local",    TRUE
-      "Terrain", "Grassland","Local",    FALSE 
+      "Terrain", "Grassland","Local",    FALSE
       "Terrain", "Desert",   "Local",    FALSE
       "Terrain", "Mountains","Local",    FALSE
       "Terrain", "Hills",    "Local",    FALSE
       "Terrain", "Forest",   "Local",    FALSE
       "Terrain", "Jungle",   "Local",    FALSE
       "Terrain", "Swamp",    "Local",    FALSE
-      "Terrain", "Plains",   "Local",    FALSE 
+      "Terrain", "Plains",   "Local",    FALSE
       "TerrainClass","Oceanic","Local",  FALSE
 ;if server places resources on T1 then the one line below replaces the two lines below it:
 ;     "MinYear", "-4000",    "World",   FALSE
@@ -2597,7 +2597,7 @@ rmact_gfx_alt  = "-"
 ;Resource distribution scripting to add more resources in leaner
 ;regions. Adds about +40 to specials, so adjust settings accordingly
 appearance_chance = 200   ; +2% if no adjacent resource
-appearance_reqs = 
+appearance_reqs =
     { "type",    "name",     "range",   "present"
       "Terrain", "Jungle",   "Local",    TRUE
 ;if server places resources on T1 then the one line below replaces the two lines below it:
@@ -2627,7 +2627,7 @@ rmact_gfx_alt  = "-"
 ;Resource distribution scripting to add more resources in leaner
 ;regions. Adds about +40 to specials, so adjust settings accordingly
 appearance_chance = 300   ; +3% if no adjacent resource
-appearance_reqs = 
+appearance_reqs =
     { "type",    "name",     "range",   "present"
       "Terrain", "Jungle",   "Local",    TRUE
 ;if server places resources on T1 then the one line below replaces the two lines below it:
@@ -2685,7 +2685,7 @@ flags          = "IrrigationSource"
 ;Resource distribution scripting to add more resources in leaner
 ;regions. Adds about +40 to specials, so adjust settings accordingly
 appearance_chance = 400   ; +4% if no adjacent resource
-appearance_reqs = 
+appearance_reqs =
     { "type",    "name",     "range",   "present"
       "Terrain", "Desert",   "Local",    TRUE
 ;if server places resources on T1 then the one line below replaces the two lines below it:
@@ -2714,7 +2714,7 @@ rmact_gfx_alt  = "-"
 ;Resource distribution scripting to add more resources in leaner
 ;regions. Adds about +40 to specials, so adjust settings accordingly
 appearance_chance = 2280   ; +22.8% if no adjacent resource
-appearance_reqs = 
+appearance_reqs =
     { "type",    "name",     "range",   "present"
       "Terrain", "Swamp",    "Local",    TRUE
 ;if server places resources on T1 then the one line below replaces the two lines below it:
@@ -2770,7 +2770,7 @@ rmact_gfx_alt  = "-"
 ;Resource distribution scripting to add more resources in leaner
 ;regions. Adds about +40 to specials, so adjust settings accordingly
 appearance_chance       = 4500  ;+45%
-appearance_reqs = 
+appearance_reqs =
     { "type",    "name",     "range",   "present"
       "Terrain", "Glacier",   "Local",    TRUE
       "TerrainClass","Oceanic","Adjacent",TRUE
@@ -2810,8 +2810,8 @@ rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
 ;Resource distribution scripting to add more resources in leaner
 ;regions. Adds about +40 to specials, so adjust settings accordingly
-appearance_chance = 2420 ;+24.2% extra chance if non-adjacent extra 
-appearance_reqs = 
+appearance_chance = 2420 ;+24.2% extra chance if non-adjacent extra
+appearance_reqs =
     { "type",    "name",     "range",   "present"
       "Terrain", "Swamp",    "Local",    TRUE
 ;if server places resources on T1 then the one line below replaces the two lines below it:
@@ -2868,7 +2868,7 @@ rmact_gfx_alt  = "-"
 ;Resource distribution scripting to add more resources in leaner
 ;regions. Adds about +40 to specials, so adjust settings accordingly
 ;appearance_chance       = 0    ;55% no longer appears because too many permutations for layered bonuses not working.
-;appearance_reqs = 
+;appearance_reqs =
 ;    { "type",    "name",     "range",   "present"
 ;      "Terrain", "Glacier",   "Local",    TRUE
 ;      "TerrainClass","Oceanic","Adjacent",FALSE
@@ -2895,7 +2895,7 @@ rmact_gfx_alt  = "-"
 ;Resource distribution scripting to add more resources in leaner
 ;regions. Adds about +40 to specials, so adjust settings accordingly
 appearance_chance = 700   ; +7% iff no adjacent rivers or resources i.e., far less than 4%
-appearance_reqs = 
+appearance_reqs =
     { "type",    "name",     "range",   "present"
       "Terrain", "Forest",   "Local",    TRUE
 ;if server places resources on T1 then the one line below replaces the two lines below it:
@@ -2928,11 +2928,11 @@ act_gfx_alt2   = "-"
 rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
 disappearance_chance    = 10000
-disappearance_reqs = 
+disappearance_reqs =
     { "type",           "name", "range"
     }
 appearance_chance       = 360
-appearance_reqs = 
+appearance_reqs =
     { "type",    "name", "range",  "present"
       "Terrain", "Grassland","Local", TRUE
       "MinYear", "-2200", "World", FALSE
@@ -2953,11 +2953,11 @@ act_gfx_alt2   = "-"
 rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
 disappearance_chance    = 10000
-disappearance_reqs = 
+disappearance_reqs =
     { "type",           "name", "range"
     }
 appearance_chance       = 360
-appearance_reqs = 
+appearance_reqs =
     { "type",    "name", "range",  "present"
       "Terrain", "Forest","Local", TRUE
       "MinYear", "-2200", "World", FALSE
@@ -2978,11 +2978,11 @@ act_gfx_alt2   = "-"
 rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
 disappearance_chance    = 10000
-disappearance_reqs = 
+disappearance_reqs =
     { "type",           "name", "range"
     }
 appearance_chance       = 180
-appearance_reqs = 
+appearance_reqs =
     { "type",    "name", "range",  "present"
       "Terrain", "Tundra",    "Local", FALSE
       "Terrain", "Glacier",   "Local", FALSE
@@ -3014,11 +3014,11 @@ act_gfx_alt2   = "-"
 rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
 disappearance_chance    = 10000
-disappearance_reqs = 
+disappearance_reqs =
     { "type",           "name", "range"
     }
 appearance_chance       = 390
-appearance_reqs = 
+appearance_reqs =
     { "type",    "name", "range",  "present"
       "Terrain", "Desert",      "Local", TRUE
       "Extra",   "River",       "Local", TRUE
@@ -3187,27 +3187,27 @@ flags          = "NoAggressive"
 ;   - "JumpTo"            = Allow movement to this tile natively, provided the
 ;                           source tile has a road with "JumpFrom" and the road
 ;                           is considered native
-;   - "IntegrateCostUp"   = If this road (type A) integrates with type B, then  
-;                           the move cost when going from A to B will be the 
+;   - "IntegrateCostUp"   = If this road (type A) integrates with type B, then
+;                           the move cost when going from A to B will be the
 ;                           greater of move_cost(A) and move_cost(B).
 ;                           This gives the ruleset several possibilities:
 ;                           if this flag is given to higher move cost road (A):
-;                              the move cost from A to B will be the same as 
-;                              B to A: the higher of the two; i.e., symmetric 
+;                              the move cost from A to B will be the same as
+;                              B to A: the higher of the two; i.e., symmetric
 ;                              higher move cost. In other words, the same as
 ;                              how roads work with railroads.
 ;                           if this flag is given to lower move cost road (B):
-;                              the move cost from A to B and B to A will be the 
-;                              destination cost — that is, asymmetric; BUT 
+;                              the move cost from A to B and B to A will be the
+;                              destination cost — that is, asymmetric; BUT
 ;                              type B will have symmetric move costs integrating
 ;                              with roads of lower move cost than itself.
 ;                           if this flag is not used:
-;                              move_cost will be that of the destination road: 
+;                              move_cost will be that of the destination road:
 ;                              i.e., asymmetric move_cost for A-to-B and B-to-A
-;  - "ReverseRestrictInfra"= The move cost of this road is only triggered when 
+;  - "ReverseRestrictInfra"= The move cost of this road is only triggered when
 ;                            RestrictInfra is active for a unit. That is, the move cost
 ;                            for this road is only incurred by unfriendly invader units.
-;                            This flag allows you to create "terrain obstacle" extras that 
+;                            This flag allows you to create "terrain obstacle" extras that
 ;                            slow enemy movement (including IGTER units) when the extra
 ;                            is encountered by an unfriendly unit on non-allied foreign
 ;                            territory.
