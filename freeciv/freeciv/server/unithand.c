@@ -159,13 +159,13 @@ const char battle_survivor_adjectives[NUM_BATTLE_LOSS_ADJECTIVES+1][40] = {
   "brutal", "ruthless", "vicious", "bloodthirsty",                             //  0- 3
   "savage", "harsh", "barbarous", "atrocious",                                 //  4- 7
   "unsuccessful", "inadequate", "ineffective", "mediocre",                     //  8-11
-  "disrespectful", "deficient", "unimpressive", "scrappy",                     // 12-15 
-  "pointless", "cheap", "pathetic", "&#8203;useless", // prevent "an useless"  // 16-19   
+  "disrespectful", "deficient", "unimpressive", "scrappy",                     // 12-15
+  "pointless", "cheap", "pathetic", "&#8203;useless", // prevent "an useless"  // 16-19
   "insignficant", "futile", "inept", "shabby",                                 // 20-23
-  "sorry", "decrepit", "pathetic", "hopeless",                                 // 24-27 
+  "sorry", "decrepit", "pathetic", "hopeless",                                 // 24-27
   "effete", "weak", "pitiful", "feeble",                                       // 28-31
   "incompetent", "laughable", "puny", "worthless",                             // 32-35
-  "impotent", "lame",  "wimpy", "ridiculous",                                  // 36-39   
+  "impotent", "lame",  "wimpy", "ridiculous",                                  // 36-39
   "amusing", "trifling", "total joke of an ", "textbook example of how not to ",// 40-43
   "ERROR"
 };
@@ -219,7 +219,7 @@ const char *get_battle_winner_verb(int stack_size)
 
   return
     battle_winner_verbs[fc_rand(NUM_BATTLE_WINNER_VERBS/2)+
-                             (NUM_BATTLE_WINNER_VERBS/2)];   
+                             (NUM_BATTLE_WINNER_VERBS/2)];
 }
 
 
@@ -247,9 +247,9 @@ void handle_unit_type_upgrade(struct player *pplayer, Unit_type_id uti)
     return;
   }
 
-  /* 
+  /*
    * Try to upgrade units. The order we upgrade in is arbitrary (if
-   * the player really cared they should have done it manually). 
+   * the player really cared they should have done it manually).
    */
   conn_list_do_buffer(pplayer->connections);
   unit_list_iterate(pplayer->units, punit) {
@@ -360,7 +360,7 @@ static bool do_capture_units(struct player *pplayer,
   act_utype = unit_type_get(punit);
 
   /* 1. Sanity check: make sure that the capture won't result in the actor
-   *    ending up with more than one unit of each unique unit type. 
+   *    ending up with more than one unit of each unique unit type.
    * 2. In longturn we don't allow capture on tiles containing an idle player's
    *    unit unless that tile is inside the capturer's domestic territory: */
   BV_CLR_ALL(unique_on_tile);
@@ -376,7 +376,7 @@ static bool do_capture_units(struct player *pplayer,
         if (!domestic) {
           notify_player(pplayer, pdesttile, E_UNIT_ILLEGAL_ACTION, ftc_server,
                         _("💢 %s %s idle. You can only capture "
-                          "idlers in your homeland."), 
+                          "idlers in your homeland."),
                           unit_link(to_capture),
                           (is_unit_plural(to_capture) ? "are" : "is"));
           return FALSE;
@@ -439,26 +439,26 @@ static bool do_capture_units(struct player *pplayer,
                                 FALSE, FALSE, TRUE, FALSE, NULL);
         struct unit *new_unit = NULL;
         if (new_home_city != NULL) {
-          new_unit = create_unit(pplayer, new_home_city->tile, pcargo->utype, 
+          new_unit = create_unit(pplayer, new_home_city->tile, pcargo->utype,
                             0, (game.server.homecaughtunits ? punit->homecity : IDENTITY_NUMBER_ZERO), 0);
           if (new_unit) new_unit=NULL;
           else return FALSE; // failsafe
         }
-          
+
         notify_player(unit_owner(pcargo), pdesttile,
                     E_ENEMY_DIPLOMAT_BRIBE, ftc_server,
                     _("[`warning`] Your transported %s %s %s lost when the %s ambushed %s %s."),
-                    unit_name_translation(pcargo), UNIT_EMOJI(pcargo), 
+                    unit_name_translation(pcargo), UNIT_EMOJI(pcargo),
                     (is_unit_plural(pcargo) ? "were" : "was"),
                     nation_plural_for_player(pplayer),
                     (is_unit_plural(pcargo) ? "their" : "its"),
                     unit_name_translation(tunit));
 
-        // This is what we formerly did to avoid seg fault. We can revert to this for safety if needed. 
+        // This is what we formerly did to avoid seg fault. We can revert to this for safety if needed.
         // Don't make new unit. Award gold for booty below. Do a return FALSE; All the important data
-        // gets updated & fresh, and each separate capture takes one move. Not so bad. 
+        // gets updated & fresh, and each separate capture takes one move. Not so bad.
 
-        /* pplayer->economic.gold += unit_build_shield_cost_base(pcargo); 
+        /* pplayer->economic.gold += unit_build_shield_cost_base(pcargo);
 
         notify_player(pplayer, pdesttile,
                     E_ENEMY_DIPLOMAT_BRIBE, ftc_server,
@@ -487,8 +487,8 @@ static bool do_capture_units(struct player *pplayer,
     const char *victim_link;
 
     unit_owner(to_capture)->score.units_lost++;
-    
-   
+
+
     to_capture = unit_change_owner(to_capture, pplayer,
                                    (game.server.homecaughtunits
                                     ? punit->homecity
@@ -509,7 +509,7 @@ static bool do_capture_units(struct player *pplayer,
                   E_ENEMY_DIPLOMAT_BRIBE, ftc_server,
                   /* TRANS: <unit> ... <Poles> */
                   _("[`warning`] Your %s %s captured by the %s."),
-                  victim_link, (is_unit_plural(to_capture) ? "were" : "was"), 
+                  victim_link, (is_unit_plural(to_capture) ? "were" : "was"),
                   capturer_nation);
 
     /* May cause an incident */
@@ -604,7 +604,7 @@ static bool do_expel_unit(struct player *pplayer,
   notify_player(uplayer, target_tile, E_UNIT_WAS_EXPELLED, ftc_server,
                 /* TRANS: <unit> ... <Poles> */
                 _("[`boot`] Your %s %s expelled by the %s."),
-                target_link, 
+                target_link,
                 (is_unit_plural(target) ? "were" : "was"),
                 nation_plural_for_player(pplayer));
 
@@ -2500,7 +2500,7 @@ void illegal_action_msg(struct player *pplayer,
                   action_id_rule_name(explnat->blocker->id));
     break;
   case ANEK_UNKNOWN:
-    /* We can grow this into a switch-case if we get more illegal actions 
+    /* We can grow this into a switch-case if we get more illegal actions
        that need richer messaging: */
     if (stopped_action == ACTION_TRANSPORT_UNLOAD) {
           notify_player(pplayer, unit_tile(actor),
@@ -2515,7 +2515,7 @@ void illegal_action_msg(struct player *pplayer,
                    * "Your Spy was unable to do Bribe Enemy Unit." */
                   _("Your %s %s unable to do %s."),
                   unit_name_translation(actor),
-                  (is_unit_plural(actor) ? "were" : "was"),                    
+                  (is_unit_plural(actor) ? "were" : "was"),
                   action_id_name_translation(stopped_action));
     }
     break;
@@ -2681,7 +2681,7 @@ void handle_unit_action_query(struct connection *pc,
                                           NULL, city_tile(pcity), pactor, unit_type_get(pactor),
                                           NULL, NULL, action_by_number(action_type),
                                           EFT_ACTOR_INCITE_COST_PCT, V_COUNT)) / 100;
-      incite_cost = MAX(0, incite_cost);   
+      incite_cost = MAX(0, incite_cost);
       dsend_packet_unit_action_answer(pc,
                                       actor_id, target_id,
                                       incite_cost,
@@ -3009,7 +3009,7 @@ bool unit_perform_action(struct player *pplayer,
       } unit_cargo_iterate_end;
 
       notify_player(unit_owner(actor_unit), unit_tile(actor_unit), E_UNIT_BUILT,
-                ftc_server, _("%s #%d unloading %s"), 
+                ftc_server, _("%s #%d unloading %s"),
                 unit_tile_link(actor_unit), actor_id, unload_string);
 
       /* Attempt to unload each passenger: */
@@ -3030,7 +3030,7 @@ bool unit_perform_action(struct player *pplayer,
             continue; // Try the next cargo unit.
           }
           bool local_success = do_unit_unload(pplayer, actor_unit, pcargo, paction);
-          success = success || local_success; 
+          success = success || local_success;
           if (local_success) {
             action_success_actor_price(paction, actor_id, actor_unit);
             action_success_target_pay_mp(paction, pcargo->id, pcargo);
@@ -3261,7 +3261,7 @@ bool unit_perform_action(struct player *pplayer,
     ACTION_STARTED_UNIT_UNITS(action_type, actor_unit, target_tile,
                               spy_attack(pplayer, actor_unit, target_tile,
                                          paction));
-    break;  
+    break;
   case ACTION_FOUND_CITY:
     ACTION_STARTED_UNIT_TILE(action_type, actor_unit, target_tile,
                              city_build(pplayer, actor_unit,
@@ -3524,7 +3524,7 @@ static bool do_unit_change_homecity(struct unit *punit,
   The amount of shields used to build the unit added to the city's shield
   stock for the current production is determined by the
   Unit_Shield_Value_Pct effect.
-  
+
   Returns TRUE iff action could be done, FALSE if it couldn't. Even if
   this returns TRUE, unit may have died during the action.
 **************************************************************************/
@@ -3553,11 +3553,11 @@ static bool unit_do_help_build(struct player *pplayer,
           /* NULL == we don't want player price/bonus discounts in this calc.*/
                               NULL);
 
-  bool double_contributor = (shields >= unit_type_get(punit)->build_cost * 2) 
+  bool double_contributor = (shields >= unit_type_get(punit)->build_cost * 2)
                           ? true : false;
-  bool full_contributor = (shields >= unit_type_get(punit)->build_cost) 
+  bool full_contributor = (shields >= unit_type_get(punit)->build_cost)
                           ? true : false;
-  bool three_quarters = three_quarters = 
+  bool three_quarters = three_quarters =
                           (!full_contributor
                           && shields >= (float)unit_type_get(punit)->build_cost*70/100)
                           ? true : false;
@@ -3577,7 +3577,7 @@ static bool unit_do_help_build(struct player *pplayer,
      * production. */
     pcity_dest->shield_stock += shields;
 
-    // This had to change, otherwise there is no control at all over what 
+    // This had to change, otherwise there is no control at all over what
     // production types can get a Unit_Shield_Value_Pct penalty/bonus, since
     // you can just change production to allowed/bonus type, disband, then
     // change back again:
@@ -3605,7 +3605,7 @@ static bool unit_do_help_build(struct player *pplayer,
     // Reason someone made it say "current production": you might not have
     // intel on what your ally is making who is planning to backstab you.
     // Reason it's changed: if you help make something, you get direct
-    // intel on what's being made. Also, most names are shorter than 
+    // intel on what's being made. Also, most names are shorter than
     // 'current production', so it's a verbosity reduction for busy
     // leaders.
     if (full_contributor || three_quarters) {
@@ -3615,7 +3615,7 @@ static bool unit_do_help_build(struct player *pplayer,
     action_name = (is_unit_plural(punit) ? _("recycle to build")
                                          : _("recycles to build"));
     if (three_quarters) info_emoji = _("[`recycle`][`75`]");
-    else { 
+    else {
       if (double_contributor) info_emoji = _("[`recycle`][`200`]");
       else {
         info_emoji = full_contributor ? _("[`recycle`][`100`]") : _("[`recycle`][`50pct`]");
@@ -3644,12 +3644,12 @@ static bool unit_do_help_build(struct player *pplayer,
                 unit_link(punit),
                 action_name,
                 prod,
-                city_link(pcity_dest), 
+                city_link(pcity_dest),
                 abs(build_points_left(pcity_dest)),
                 work);
 
   /* May cause an incident */
-  action_consequence_success(paction, pplayer, act_utype, 
+  action_consequence_success(paction, pplayer, act_utype,
                              city_owner(pcity_dest),
                              city_tile(pcity_dest), city_link(pcity_dest));
 
@@ -3694,7 +3694,7 @@ static bool city_add_unit(struct player *pplayer, struct unit *punit,
   const struct unit_type *act_utype;
 
   // Handle 0 pop cost migrant type possibilities: "shields for rapture"
-  amount = (amount >= unit_type_get(punit)->city_size) 
+  amount = (amount >= unit_type_get(punit)->city_size)
            ? amount : unit_type_get(punit)->city_size;
 
   /* Sanity check: The actor is still alive. */
@@ -3804,14 +3804,14 @@ static bool city_build(struct player *pplayer, struct unit *punit,
   This function handles GOTO and RALLY path requests from the client.
   IFF start_tile > -1 then moves_left_initially, fuel_left_initially, and
   start_tile are used to create a path segment starting at start_tile;
-  otherwise unit_tile(punit) is assumed for a fresh goto path. 
+  otherwise unit_tile(punit) is assumed for a fresh goto path.
 **************************************************************************/
 
 // TODO: all int moves_left_initially should be converted to uint32 to match
 // incoming data or whatever is originally feeding this at beginning of chain
 // as it's throwing a "ERROR: unable to get uint32 from moves_left_initially"
 // somewhere in the chain
-static void do_path_req(struct player *pplayer, struct unit *punit, 
+static void do_path_req(struct player *pplayer, struct unit *punit,
                         int goal, int start_tile, int moves_left_initially,
                         int fuel_left_initially)
 {
@@ -3823,8 +3823,8 @@ static void do_path_req(struct player *pplayer, struct unit *punit,
   int unit_id = punit->id;
   struct tile *ptile = index_to_tile(&(wld.map), goal);
   long umr = unit_move_rate(punit);
-  
-  /* Catch bad calls from clients: */  
+
+  /* Catch bad calls from clients: */
   if (umr <= 0) {
     log_verbose("do_path_req()"
         " %s (id=%d) %s. moverate<=0 would cause error or div by zero",
@@ -3876,7 +3876,7 @@ static void do_path_req(struct player *pplayer, struct unit *punit,
     parameter.start_tile = index_to_tile(&(wld.map), start_tile);
     parameter.moves_left_initially = moves_at_start;
     if (fuel_unit) {
-      parameter.fuel_left_initially = fuel_at_start;  
+      parameter.fuel_left_initially = fuel_at_start;
     }
   }
   /* Pathing can't access info unavailable to player: */
@@ -3930,7 +3930,7 @@ static void do_path_req(struct player *pplayer, struct unit *punit,
       /* fuel units might refuel; we need to track legit "value at the tile" for path construction */
       p.movesleft = moves_left;
       /* path->positions[].fuel_left is a misnomer: pf_fuel_finalize_position_base() uses:
-         pos->fuel_left = (moves_left / move_rate). Thus, the "real" fuel_left will be 
+         pos->fuel_left = (moves_left / move_rate). Thus, the "real" fuel_left will be
          +1 higher from trunc rounding. Boundary tile (moves_left % move_rate == 0)
          is allowed to have 1 higher because technically you don't lose -1 fuel by
          having 0 moves_left, but by the start of a new turn (according to how path-
@@ -3941,7 +3941,7 @@ static void do_path_req(struct player *pplayer, struct unit *punit,
       p.movesleft = moves_at_start - total_mc;
       p.fuelleft = 0;
     }
-    /******************************************************************************************************************/ 
+    /******************************************************************************************************************/
 
     send_packet_goto_path(pplayer->current_conn, &p);
   }
@@ -3962,12 +3962,12 @@ void handle_goto_path_req(struct player *pplayer, int unit_id, int goal,
 /**********************************************************************//**
   This function handles RALLY path requests from the client.
 **************************************************************************/
-void handle_rally_path_req(struct player *pplayer, int city_id, 
+void handle_rally_path_req(struct player *pplayer, int city_id,
                           Unit_type_id utype_id, int goal)
 {
   if (!city_id) return;
 
-  const struct unit_type *utype; 
+  const struct unit_type *utype;
   struct unit *punit;
 
   /* Make unit of utype */
@@ -3979,7 +3979,7 @@ void handle_rally_path_req(struct player *pplayer, int city_id,
   /* Set to tile of city */
   struct city *pcity = game_city_by_number(city_id);
   fc_assert_ret(pcity);
-  struct tile *ptile = city_tile(pcity);  
+  struct tile *ptile = city_tile(pcity);
   fc_assert(ptile);
   unit_tile_set(punit, ptile);
   /* Other stuff: */
@@ -4074,7 +4074,7 @@ void handle_unit_change_activity(struct player *pplayer, int unit_id,
       // Client requests to override default iPillage with standard Pillage.
       target_id -= ACTIVITY_IPILLAGE_OVERRIDE_FLAG; // convert target_id to valid again.
       punit->server.iPillage_no = true;
-    } 
+    }
     else punit->server.iPillage_no = false;
   }
 
@@ -4146,9 +4146,9 @@ static void see_combat(struct unit *pattacker, struct unit *pdefender)
   struct packet_unit_short_info unit_att_short_packet, unit_def_short_packet;
   struct packet_unit_info unit_att_packet, unit_def_packet;
 
-  /* 
+  /*
    * Special case for attacking/defending:
-   * 
+   *
    * Normally the player doesn't get the information about the units inside a
    * city. However for attacking/defending the player has to know the unit of
    * the other side.  After the combat a remove_unit packet will be sent
@@ -4182,7 +4182,7 @@ static void see_combat(struct unit *pattacker, struct unit *pdefender)
         } else {
           send_packet_unit_short_info(pconn, &unit_att_short_packet, FALSE);
         }
-        
+
         if (pplayer == unit_owner(pdefender)) {
           send_packet_unit_info(pconn, &unit_def_packet);
         } else {
@@ -4200,7 +4200,7 @@ static void see_combat(struct unit *pattacker, struct unit *pdefender)
 /**********************************************************************//**
   Send combat info to players.
 **************************************************************************/
-static void send_combat(struct unit *pattacker, struct unit *pdefender, 
+static void send_combat(struct unit *pattacker, struct unit *pdefender,
                         int att_veteran, int def_veteran, int bombard)
 {
   struct packet_unit_combat_info combat;
@@ -4220,7 +4220,7 @@ static void send_combat(struct unit *pattacker, struct unit *pdefender,
                                  V_MAIN)) {
       lsend_packet_unit_combat_info(other_player->connections, &combat);
 
-      /* 
+      /*
        * Remove the client knowledge of the units.  This corresponds to the
        * send_packet_unit_short_info calls up above.
        */
@@ -4263,11 +4263,11 @@ static bool unit_bombard(struct unit *punit, struct tile *ptile,
   /* Sanity check: The actor still exists. */
   fc_assert_ret_val(pplayer, FALSE);
   fc_assert_ret_val(punit, FALSE);
-  int bomber_sanity = punit->id; 
+  int bomber_sanity = punit->id;
   fc_assert_ret_val(game_unit_by_number(bomber_sanity), FALSE);
 
   act_utype = unit_type_get(punit);
-  
+
   struct bombard_stats pstats;
   unit_get_bombard_stats(&pstats, punit);
   int bombard_rate = unit_type_get(punit)->bombard_rate;
@@ -4285,9 +4285,9 @@ static bool unit_bombard(struct unit *punit, struct tile *ptile,
     /* bombard_primary_targets = retaliator uses same val as its bombard_stats
      * bombard_primary_kills =   retaliator uses same val as its bombard_stats
      * bombard_atk_mod =         retaliator uses same val as its bombard_stats
-     * The above 3 stats need to be set in the ruleset for units who don't 
+     * The above 3 stats need to be set in the ruleset for units who don't
      * initiate bombard, to inform how they behave in retaliatory bombard. */
-  } 
+  }
   // Now the retaliator is all set up to look like the attacker, in this function
 
   log_debug("Start bombard: %s %s to %d, %d.",
@@ -4296,7 +4296,7 @@ static bool unit_bombard(struct unit *punit, struct tile *ptile,
 
 /* If bombard_primary_targets isn't unlimited (==0), then we:
    1. count targets on the tile
-   2. if tile targets are less than max_targets, treat as unlimited 
+   2. if tile targets are less than max_targets, treat as unlimited
    3. else randomly select max_targets # of targets to be bombed. */
   int max_targets = pstats.bombard_primary_targets;
   int num_reachable = 0;
@@ -4317,7 +4317,7 @@ static bool unit_bombard(struct unit *punit, struct tile *ptile,
     if (max_targets) { // Create target list only if needed
       // Randomly select the max_targets # of targets:
 #define ITERATION_LIMIT 1000 // Safety insurance
-      int c=0, iteration = 0; 
+      int c=0, iteration = 0;
       // Init dynamic target array:
       is_target = (bool *)calloc(num_reachable, sizeof(bool));
       // Pick a random target for each of the # of targets:
@@ -4347,7 +4347,7 @@ static bool unit_bombard(struct unit *punit, struct tile *ptile,
       fc_assert_ret_val_msg(!pplayers_allied(unit_owner(punit),
                             unit_owner(pdefender)), FALSE,
                             "Trying to attack a unit with which you have "
-                            "alliance at (%d, %d).", 
+                            "alliance at (%d, %d).",
                             TILE_XY(unit_tile(pdefender)));
     }
 
@@ -4396,7 +4396,7 @@ static bool unit_bombard(struct unit *punit, struct tile *ptile,
                         (is_retaliation ? "retaliated against": "assaulted"),
                         unit_name_translation(pdefender), unit_name_translation(pdefender),
                         def_hp);
-        } else {          // DIED 
+        } else {          // DIED
           notify_player(pplayer, ptile,
                         E_UNIT_ACTION_FAILED, ftc_server,
                         /* TRANS: * Your 🤺Swordsmen assault eliminated the English Horsemen🏇.
@@ -4421,7 +4421,7 @@ static bool unit_bombard(struct unit *punit, struct tile *ptile,
                         UNIT_EMOJI(punit), unit_name_translation(punit),
                         (is_retaliation ? "retaliated": "assaulted"),
                         get_battle_winner_verb(0),
-                        unit_name_translation(pdefender), unit_name_translation(pdefender));        
+                        unit_name_translation(pdefender), unit_name_translation(pdefender));
         }
 
         see_combat(punit, pdefender);
@@ -4462,10 +4462,10 @@ static bool unit_bombard(struct unit *punit, struct tile *ptile,
      a) lose moves, b) get a UWT timestamp, c) possibly lose fortified status
      d) could possibly do a killcitizen to target city
      BUT, Retaliation bombarders don't process any of this stuff. */
-  if (!is_retaliation)  { 
+  if (!is_retaliation)  {
   // bm_cost is bombard_move_cost if specified otherwise it's a OneAttack turn loss:
     long bm_cost = (pstats.bombard_move_cost>0) ? pstats.bombard_move_cost : FC_INFINITY;
-    punit->moves_left = (punit->moves_left - bm_cost > 0) 
+    punit->moves_left = (punit->moves_left - bm_cost > 0)
                       ? (punit->moves_left - bm_cost) : 0;
 
     // Retaliators don't get UWT stamped either
@@ -4481,7 +4481,7 @@ static bool unit_bombard(struct unit *punit, struct tile *ptile,
     } else {
         unit_forget_last_activity(punit); // Otherwise forget last activity as usual
     }
-  
+
     if (pcity
         && city_size_get(pcity) > 1
         && get_city_bonus(pcity, EFT_UNIT_NO_LOSE_POP, V_COUNT) <= 0
@@ -4494,8 +4494,8 @@ static bool unit_bombard(struct unit *punit, struct tile *ptile,
       // For non-obvious values of killcitizen_pct, report that city lost population.
       if (game.server.killcitizen_pct>0 && game.server.killcitizen_pct<100) {
         /* notify players of population loss can go here*/
-      }   
-    } 
+      }
+    }
     else {
       // For non-obvious values of killcitizen_pct, report city lost no population.
       if (game.server.killcitizen_pct>0 && game.server.killcitizen_pct<100) {
@@ -4504,34 +4504,34 @@ static bool unit_bombard(struct unit *punit, struct tile *ptile,
     }
   }
 
-  // This is where we recursively call this function for retaliators to fight back. 
+  // This is where we recursively call this function for retaliators to fight back.
   // Safe Recursion because is_retaliation==true won't continue recursion.
   if (!is_retaliation) {
-    // function calls itself once for every retaliator to fight back 
+    // function calls itself once for every retaliator to fight back
     unit_list_iterate_safe(ptile->units, pdefender) {
 
       /* Sanity checks: multiple units possibly killing each other! */
-        /* ...make sure defender still exists...*/ 
+        /* ...make sure defender still exists...*/
       if (!pdefender) continue;
       else {
         if (!game_unit_by_number(pdefender->id)) {
           continue;
-        } 
+        }
       }
-        /* ...make sure bombarder didn't get killed by a previous retaliation...*/ 
+        /* ...make sure bombarder didn't get killed by a previous retaliation...*/
       if (!game_unit_by_number(bomber_sanity)) {
         break;
       }
-      
+
       struct extra_unit_stats rstats;
       unit_get_extra_stats(&rstats, pdefender);
-      
+
       // Retaliators get a chance to 'recursively' fight back */
       // ... if defender has bombard retaliation capability:
-      if (rstats.bombard_retaliate_rounds 
+      if (rstats.bombard_retaliate_rounds
           && is_unit_reachable_at(punit, pdefender, unit_tile(punit))) {
         /* in order of precedence, attempt BOMBARD1 (shorter range but stronger),
-         * else BOMBARD2 (longer ranger but weaker), else BOMBARD3 (longest/weakest): 
+         * else BOMBARD2 (longer ranger but weaker), else BOMBARD3 (longest/weakest):
          * TODO: bombard_retaliate_rounds has grown kinda redundant since they are all
          * assumed to be symmetric SUA, thus this becomes more of a flag for can_retaliate;
          * however, what we really want is BOMBARD,BOMBARD2,BOMBARD3 to have separately
@@ -4551,8 +4551,8 @@ static bool unit_bombard(struct unit *punit, struct tile *ptile,
          else if (is_action_enabled_unit_on_units(ACTION_BOMBARD2, pdefender,unit_tile(punit)))
            unit_bombard(pdefender,unit_tile(punit),action_by_number(ACTION_BOMBARD2),true);
          else if (is_action_enabled_unit_on_units(ACTION_BOMBARD3, pdefender,unit_tile(punit)))
-           unit_bombard(pdefender,unit_tile(punit),action_by_number(ACTION_BOMBARD3),true); 
-      }                
+           unit_bombard(pdefender,unit_tile(punit),action_by_number(ACTION_BOMBARD3),true);
+      }
     } unit_list_iterate_safe_end;
   }
 
@@ -4657,7 +4657,7 @@ static bool unit_nuke(struct player *pplayer, struct unit *punit,
                     E_UNIT_ACTION_TARGET_HOSTILE, ftc_server,
                     _("[`nuclearexplosion`] Your %s vaporized the %s %s."),
                     unit_link(punit),
-                    (tile_owner(def_tile) ? nation_adjective_for_player(tile_owner(def_tile)) : " " ), 
+                    (tile_owner(def_tile) ? nation_adjective_for_player(tile_owner(def_tile)) : " " ),
                     extra_name_translation(target));
 
               if (tile_owner(def_tile) && tile_owner(def_tile) != unit_owner(punit)) {
@@ -4666,7 +4666,7 @@ static bool unit_nuke(struct player *pplayer, struct unit *punit,
                           _("[`warning`] Your %s %s destroyed from %s %s done by %s %s %s!"),
                           extra_name_translation(target),
                           (is_word_plural(extra_name_translation(target)) ? "were" : "was"),
-                          indefinite_article_for_word(unit_type_get(punit)->sound_fight_alt, false),                          
+                          indefinite_article_for_word(unit_type_get(punit)->sound_fight_alt, false),
                           unit_type_get(punit)->sound_fight_alt,
                           indefinite_article_for_word(nation_adjective_for_player(unit_owner(punit)), false),
                           nation_adjective_for_player(unit_owner(punit)),
@@ -4678,7 +4678,7 @@ static bool unit_nuke(struct player *pplayer, struct unit *punit,
     }
     // Pillage blast area ================================================
     // ===================================================================
-    int max_radius_sq = DEFAULT_DETONATION_RADIUS_SQ + extra_radius; 
+    int max_radius_sq = DEFAULT_DETONATION_RADIUS_SQ + extra_radius;
     circle_dxyr_iterate(&(wld.map), def_tile, max_radius_sq, ptile1, dx, dy, dr) {
       if (!tile_city(ptile1)) {
         // Nuke extras as many times as the nuke's stats say to:
@@ -4698,7 +4698,7 @@ static bool unit_nuke(struct player *pplayer, struct unit *punit,
                       E_UNIT_ACTION_TARGET_HOSTILE, ftc_server,
                       _("[`nuclearexplosion`] Your %s vaporized the %s %s."),
                       unit_link(punit),
-                      (tile_owner(ptile1) ? nation_adjective_for_player(tile_owner(ptile1)) : " " ), 
+                      (tile_owner(ptile1) ? nation_adjective_for_player(tile_owner(ptile1)) : " " ),
                       extra_name_translation(target));
 
                 if (tile_owner(ptile1) && tile_owner(ptile1) != unit_owner(punit)) {
@@ -4707,7 +4707,7 @@ static bool unit_nuke(struct player *pplayer, struct unit *punit,
                             _("[`warning`] Your %s %s destroyed from %s %s done by %s %s %s!"),
                             extra_name_translation(target),
                             (is_word_plural(extra_name_translation(target)) ? "were" : "was"),
-                            indefinite_article_for_word(unit_type_get(punit)->sound_fight_alt, false),                          
+                            indefinite_article_for_word(unit_type_get(punit)->sound_fight_alt, false),
                             unit_type_get(punit)->sound_fight_alt,
                             indefinite_article_for_word(nation_adjective_for_player(unit_owner(punit)), false),
                             nation_adjective_for_player(unit_owner(punit)),
@@ -4847,7 +4847,7 @@ static bool do_attack(struct unit *punit, struct tile *def_tile,
   char loser_link[MAX_LEN_LINK], winner_link[MAX_LEN_LINK];
   struct unit *ploser, *pwinner;
   struct city *pcity = NULL;
-  long moves_used, def_moves_used; 
+  long moves_used, def_moves_used;
   int old_unit_vet, old_defender_vet, vet;
   int winner_id;
   struct player *pplayer = unit_owner(punit);
@@ -4861,10 +4861,10 @@ static bool do_attack(struct unit *punit, struct tile *def_tile,
     /* Can't fight air... */
     return FALSE;
   }
-  
+
   log_debug("Start attack: %s %s against %s %s.",
             nation_rule_name(nation_of_player(pplayer)),
-            unit_rule_name(punit), 
+            unit_rule_name(punit),
             nation_rule_name(nation_of_unit(pdefender)),
             unit_rule_name(pdefender));
 
@@ -4880,7 +4880,7 @@ static bool do_attack(struct unit *punit, struct tile *def_tile,
                         "alliance at (%d, %d).", TILE_XY(def_tile));
 
   struct extra_unit_stats pstats;
-  unit_get_extra_stats(&pstats, punit);                      
+  unit_get_extra_stats(&pstats, punit);
 
   moves_used = unit_move_rate(punit) - punit->moves_left;
   def_moves_used = unit_move_rate(pdefender) - pdefender->moves_left;
@@ -4914,9 +4914,9 @@ static bool do_attack(struct unit *punit, struct tile *def_tile,
   /* Adjust attackers moves_left _after_ unit_versus_unit() so that
    * the movement attack modifier is correct! --dwp
    *
-   * For greater Civ2 compatibility (and game balance issues), we recompute 
-   * the new total MP based on the HP the unit has left after being damaged, 
-   * and subtract the MPs that had been used before the combat (plus the 
+   * For greater Civ2 compatibility (and game balance issues), we recompute
+   * the new total MP based on the HP the unit has left after being damaged,
+   * and subtract the MPs that had been used before the combat (plus the
    * points used in the attack itself, for the attacker). -GJW, Glip
    */
   punit->moves_left = unit_move_rate(punit) - moves_used;
@@ -4937,7 +4937,7 @@ static bool do_attack(struct unit *punit, struct tile *def_tile,
   } else {
       unit_forget_last_activity(punit); // Otherwise forget last activity as usual
   }
-    
+
   /* This may cause a diplomatic incident. */
   action_consequence_success(paction, pplayer, act_utype,
                              unit_owner(pdefender),
@@ -4959,15 +4959,15 @@ static bool do_attack(struct unit *punit, struct tile *def_tile,
                 E_CITY_FAMINE, ftc_server, //E_CITY_FAMINE is only shared event for pop loss in city.
                 _("[`minus`] The %s attack caused population loss in %s:"),
                 nation_adjective_for_player(pplayer),
-                city_link(pcity));      
-          }   
+                city_link(pcity));
+          }
           city_reduce_size(pcity, 1, pplayer, "attack");
           city_refresh(pcity);
           send_city_info(NULL, pcity);
-        } 
+        }
         else  {
           // For non-obvious values of killcitizen_pct, report whether city lost population.
-          if (game.server.killcitizen_pct>0 && game.server.killcitizen_pct<100) {    
+          if (game.server.killcitizen_pct>0 && game.server.killcitizen_pct<100) {
             notify_player(pplayer, NULL,
                   E_CITY_NORMAL, ftc_server,
                   _("[`equal`] %s lost no population after your attack:"),
@@ -5100,7 +5100,7 @@ static bool do_attack(struct unit *punit, struct tile *def_tile,
 
   /* If attacker wins, and occupychance > 0, it might move in.  Don't move in
    * if there are enemy units in the tile (a fortress, city or air base with
-   * multiple defenders and unstacked combat). Note that this could mean 
+   * multiple defenders and unstacked combat). Note that this could mean
    * capturing (or destroying) a city. */
 
   if (pwinner == punit && fc_rand(100) < game.server.occupychance
@@ -5400,13 +5400,13 @@ static bool can_unit_move_to_tile_with_notify(struct unit *punit,
 
 /**********************************************************************//**
  Wrapper function for unit_move_handling_real. This handles all
- unit_move_handling cases that aren't on a GOTO looping through a 
+ unit_move_handling cases that aren't on a GOTO looping through a
  multi-tile voyage. See unit_move_handling_real for further explanation.
 **************************************************************************/
 bool unit_move_handling(struct unit *punit, struct tile *pdesttile,
                         bool igzoc, bool move_do_not_act)
 {
-  return unit_move_handling_real(punit, pdesttile, 
+  return unit_move_handling_real(punit, pdesttile,
                                  igzoc, move_do_not_act, TRUE);
 }
 
@@ -5428,12 +5428,12 @@ bool unit_move_handling(struct unit *punit, struct tile *pdesttile,
   controlled action) to pdesttile the game will try to explain why.
 
   'first_move' - indicates whether the unit is on a GOTO departing from
-  its first tile. This serves two purposes (1) A big increase to 
+  its first tile. This serves two purposes (1) A big increase to
   performance: wakeup_neighbor_sentries() can now get called n+1 times
   on a path of n tiles instead of 2*(n-1)+1 times. (2) For servers which
   use sentry waking as a useful intel function to report movemments to
   the console, this reduces doubling of sentry intel messages which were
-  appearing when a unit arrived on a tile AND when the unit left the tile.   
+  appearing when a unit arrived on a tile AND when the unit left the tile.
 
   FIXME: This function needs a good cleaning.
 **************************************************************************/
@@ -5555,7 +5555,7 @@ bool unit_move_handling_real(struct unit *punit, struct tile *pdesttile,
   }
 
 /* FIXME: replace this with osdn #42581 once the stuff it depends on
-   * arrives. 
+   * arrives.
    a53773bf84bd86ce181ba6f231900026ec1f5d9b upstream replacement
    4633405cd8613b61ce65a0e4fcb0975516b76970 this commit (revert)
    1626d3db607 we think is what allows swapping this with upstream
@@ -5760,11 +5760,10 @@ static bool do_unit_establish_trade(struct player *pplayer,
                                                can_establish);
 
   bonus_type = trade_route_settings_by_type(cities_trade_route_type(pcity_homecity, pcity_dest))->bonus_type;
-
   conn_list_do_buffer(pplayer->connections);
 
   goods_str = goods_name_translation(goods);
-  // in the case where, e.g., the unit name is "Goods" and the goods name is "Goods", 
+  // in the case where, e.g., the unit name is "Goods" and the goods name is "Goods",
   // avoid saying "Goods Goods" in the messages generated farther below.
   char empty[1] = "";
   if (strcmp(goods_str, utype_name_translation(unit_type_get(punit))) ==0 ) {
@@ -5873,6 +5872,17 @@ static bool do_unit_establish_trade(struct player *pplayer,
                     nation_plural_for_player(pplayer),
                     homecity_link,
                     destcity_link);
+
+      if (is_ai(city_owner(pcity_dest))) {
+        int *love = &(city_owner(pcity_dest)->ai_common.love[player_index(pplayer)]);
+        *love = (MAX_AI_LOVE + *love * 9) / 10;
+        if (*love > MAX_AI_LOVE) *love = MAX_AI_LOVE;
+
+        notify_player(pplayer, city_tile(pcity_dest),
+                      E_DIPLOMACY, ftc_server,
+                      _("[`bright`] Trade route improves relations with %s."),
+                      player_name(city_owner(pcity_dest)));
+      }
     }
 
     cities_out_of_home = city_list_new();
@@ -6138,7 +6148,7 @@ static void unit_activity_dependencies(struct unit *punit,
   switch (punit->activity) {
   case ACTIVITY_IDLE:
     switch (old_activity) {
-    case ACTIVITY_PILLAGE: 
+    case ACTIVITY_PILLAGE:
       {
         if (old_target != NULL) {
           unit_list_iterate_safe(unit_tile(punit)->units, punit2) {
@@ -6159,7 +6169,7 @@ static void unit_activity_dependencies(struct unit *punit,
       /* Restore unit's control status */
       punit->ai_controlled = FALSE;
       break;
-    default: 
+    default:
       ; /* do nothing */
     }
     break;
@@ -6237,11 +6247,11 @@ bool unit_activity_handling_targeted(struct unit *punit,
       /* unit_assign_specific_activity_target() changed our target activity
        * (to ACTIVITY_IDLE in practice) */
       unit_activity_handling(punit, new_activity);
-    } 
-    else 
+    }
+    else
     {
         set_unit_activity_targeted(punit, new_activity, *new_target);
-        send_unit_info(NULL, punit);    
+        send_unit_info(NULL, punit);
         unit_activity_dependencies(punit, old_activity, old_target);
 /*** BEGIN all Pillage actions *****/
         if (new_activity == ACTIVITY_PILLAGE) {
@@ -6259,7 +6269,7 @@ bool unit_activity_handling_targeted(struct unit *punit,
                           /* changing this string below requires changing substring extraction in packhand:handle_iPillage_event() */
                           _("[`boom`] Your %s destroyed the %s %s with a %s."),
                           unit_link(punit),
-                          (tile_owner(pillage_tile) ? nation_adjective_for_player(tile_owner(pillage_tile)) : " " ), 
+                          (tile_owner(pillage_tile) ? nation_adjective_for_player(tile_owner(pillage_tile)) : " " ),
                           extra_name_translation(punit->activity_target),
                           unit_type_get(punit)->sound_fight_alt);
                 //notify other player:
@@ -6269,7 +6279,7 @@ bool unit_activity_handling_targeted(struct unit *punit,
                           _("[`warning`] Your %s %s destroyed from %s %s done by %s %s %s!"),
                           extra_name_translation(punit->activity_target),
                           (is_word_plural(extra_name_translation(punit->activity_target)) ? "were" : "was"),
-                          indefinite_article_for_word(unit_type_get(punit)->sound_fight_alt, false),                          
+                          indefinite_article_for_word(unit_type_get(punit)->sound_fight_alt, false),
                           unit_type_get(punit)->sound_fight_alt,
                           indefinite_article_for_word(nation_adjective_for_player(unit_owner(punit)), false),
                           nation_adjective_for_player(unit_owner(punit)),
@@ -6299,7 +6309,7 @@ bool unit_activity_handling_targeted(struct unit *punit,
                     spend_unit = true;
                   }
                   unit_did_action(punit); // iPillage, just like unit_move, needs an immediate real-time uwt timestamp.
-              } 
+              }
 /*** END SUCCESSFUL iPILLAGE BLOCK ***/
 /*** BEGIN FAILED iPILLAGE BLOCK ***/
               else {
@@ -6335,7 +6345,7 @@ bool unit_activity_handling_targeted(struct unit *punit,
                 } else {
                   if (punit->moves_left<0) punit->moves_left = 0;
                   // unit_activity_complete(..) was not called due to FAILED MISSION, so do house-keeping here:
-                  
+
                     unit_did_action(punit); // iPillage, just like unit_move, needs an immediate real-time uwt timestamp.
                     unit_list_refresh_vision(pillage_tile->units);
                     set_unit_activity(punit, ACTIVITY_IDLE);
@@ -6346,7 +6356,7 @@ bool unit_activity_handling_targeted(struct unit *punit,
 /*** END FAILED iPILLAGE BLOCK ***/
             }
 /**** </end iPillage block>: TODO: move to its own function *****/
-            punit->server.iPillage_no = false; 
+            punit->server.iPillage_no = false;
             // both iPillage and regular Pillage reset special request flag to false after any pillage attempt type completed.
 
             /* DEBUG only:
@@ -6367,15 +6377,15 @@ bool unit_activity_handling_targeted(struct unit *punit,
 
             if (spend_unit) wipe_unit(punit, ULR_MISSILE, NULL);
         }
-/**** </end all PILLAGE ACTIONS> *****/        
+/**** </end all PILLAGE ACTIONS> *****/
         else if (new_activity == ACTIVITY_GEN_ROAD) {
           // Successful action consequence has to come early to make casus belli,
-          // so that victim can preventatively react to the offensive behaviour:          
+          // so that victim can preventatively react to the offensive behaviour:
           action_consequence_success(action_by_number(ACTION_ROAD),
                                     unit_owner(punit), unit_type_get(punit),
                                     tile_owner(unit_tile(punit)),
                                     unit_tile(punit),
-                                    tile_link(unit_tile(punit)));                                   
+                                    tile_link(unit_tile(punit)));
         }
         else if (new_activity == ACTIVITY_BASE) {
           // Successful action consequence has to come early to make casus belli,
@@ -6384,7 +6394,7 @@ bool unit_activity_handling_targeted(struct unit *punit,
                                     unit_owner(punit), unit_type_get(punit),
                                     tile_owner(unit_tile(punit)),
                                     unit_tile(punit),
-                                    tile_link(unit_tile(punit)));                                   
+                                    tile_link(unit_tile(punit)));
         }
     }
   }
