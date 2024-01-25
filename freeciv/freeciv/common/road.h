@@ -107,7 +107,7 @@ enum road_compat road_compat_special(const struct road_type *proad);
 struct road_type *road_by_compat_special(enum road_compat compat);
 
 int count_road_near_tile(const struct tile *ptile, const struct road_type *proad);
-int count_river_near_tile(const struct tile *ptile,
+int count_river_near_tile(const struct tile *ptile, bool cardinal,
                           const struct extra_type *priver);
 int count_river_type_tile_card(const struct tile *ptile,
                                const struct extra_type *priver,
