@@ -45,6 +45,9 @@
 
 #include "mapgen.h"
 
+/* Replace island river generators with global improved version */
+#define BETTER_RIVERS true
+
 static void make_huts(int number);
 static void add_resources(int prob);
 static void mapgenerator2(void);
@@ -1052,7 +1055,7 @@ static bool make_river(struct river_map *privermap, struct tile *ptile,
           fc_assert_action(rd_comparison_val[dir] >= 0, continue);
 
           /* Inject special sub-algorithm to prefer downhill directions */
-          // Going uphill? Not as optimal. Add +3. (Lower is better)
+          // Think you're going uphill? Oh no you don't! Kill it dead!
           struct terrain *pterrain = tile_terrain(ptile);
           struct terrain *pterrain1 = tile_terrain(ptile1);
           if (pterrain->property[MG_MOUNTAINOUS] < pterrain1->property[MG_MOUNTAINOUS]) {
@@ -1849,22 +1852,22 @@ bool map_fractal_generate(bool autosize, struct unit_type *initial_unit)
       char mode_name[72];
       switch (mode) {
         case MAPSTARTPOS_SINGLE:
-          strncpy(mode_name, "one player per island or continent.", sizeof(mode_name));
+          strncpy(mode_name, "one per island or continent.", sizeof(mode_name));
           break;
         case MAPSTARTPOS_2or3:
-          strncpy(mode_name, "two or three players per continent.", sizeof(mode_name));
+          strncpy(mode_name, "two or three per continent.", sizeof(mode_name));
           break;
         case MAPSTARTPOS_ALL:
-          strncpy(mode_name, "all players on one continent.", sizeof(mode_name));
+          strncpy(mode_name, "all on one continent.", sizeof(mode_name));
           break;
         case MAPSTARTPOS_VARIABLE:
-          strncpy(mode_name, "players on multiple continents according to sizes.", sizeof(mode_name));
+          strncpy(mode_name, "on multiple continents according to sizes.", sizeof(mode_name));
           break;
         default:
-          strncpy(mode_name, "error. Unknown 'startpos' setting.", sizeof(mode_name));
+          strncpy(mode_name, "error. 'startpos' unknown.", sizeof(mode_name));
       }
       notify_conn(NULL, NULL, E_SETTING, ftc_server,
-        _("<b style='color:#8f7'>Placing on map </b>%s"), mode_name);
+        _("<b style='color:#8f7'>Placing players </b>%s"), mode_name);
 
       success = create_start_positions(mode, initial_unit);
       if (success) {
@@ -1896,7 +1899,7 @@ bool map_fractal_generate(bool autosize, struct unit_type *initial_unit)
           break;
         default:
           notify_conn(NULL, NULL, E_SETTING, ftc_server,
-            _("<b style='color:#f77'>The server couldn't allocate starting positions.</b>.\n"
+            _("<b style='color:#f77'>The server couldn't allocate starting positions.</b>\n"
               "Please adjust geography and generator settings, and try again."));
           log_error(_("The server couldn't allocate starting positions."));
           destroy_tmap();
@@ -2589,7 +2592,7 @@ static bool make_island(int islemass, int starters,
      * If we get too small, return an error. */
     while (!create_island(i, pstate)) {
       if (i < islemass * min_specific_island_size / 100) {
-	return FALSE;
+	      return FALSE;
       }
       i--;
     }
@@ -2606,8 +2609,10 @@ static bool make_island(int islemass, int starters,
 
     i *= tilefactor;
 
+    /* rivers */
     riverbuck += river_pct * i;
-    fill_island_rivers(1, &riverbuck, pstate);
+    if (false) fill_island_rivers(1, &riverbuck, pstate);
+    if (!BETTER_RIVERS) fill_island(1, &riverbuck, island_terrain.forest, pstate);
 
     /* forest */
     forestbuck += forest_pct * i;
@@ -2755,6 +2760,7 @@ static void mapgenerator2(void)
 
   make_plains();
   destroy_placed_map();
+  if (BETTER_RIVERS) make_rivers();
   free(height_map);
   height_map = NULL;
 
@@ -2851,6 +2857,7 @@ static void mapgenerator3(void)
 
   make_plains();
   destroy_placed_map();
+  if (BETTER_RIVERS) make_rivers();
   free(height_map);
   height_map = NULL;
 
@@ -2919,6 +2926,7 @@ static void mapgenerator4(void)
   }
   make_plains();
   destroy_placed_map();
+  if (BETTER_RIVERS) make_rivers();
   free(height_map);
   height_map = NULL;
 
