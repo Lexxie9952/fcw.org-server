@@ -3422,6 +3422,20 @@ target_reqs    =
       "UnitState",     "Transported",   "Local", TRUE
       "UnitClassFlag", "TerrainSpeed",  "Local", TRUE   ; ✅Land (just being safe)
     }
+[actionenabler_unload_goods_and_freight_always_allowed_quay]  ; Caravan/Tribesmen unloading on quay wasn't covered, so added. 26Jan2024
+action        = "Transport Unload"
+actor_reqs    =
+    { "type",           "name",         "range", "present"
+      "UnitState",      "Transporting", "Local", TRUE
+      "UnitClass",      "Land",         "Local", TRUE      ; !Big_Land !WatterVessel !Air !LandRoad = Caravan, Tribesmen
+      "Extra",          "Quay",         "Local", TRUE
+    }
+target_reqs    =
+    { "type",          "name",          "range", "present"
+      "UnitClass",     "Cargo",         "Local", TRUE
+      "UnitState",     "OnLivableTile", "Local", TRUE
+      "UnitState",     "Transported",   "Local", TRUE
+    }
 
 [actionenabler_unload_marines_cargo_anywhere]           ; Marines can be unloaded anywhere
 action        = "Transport Unload"
