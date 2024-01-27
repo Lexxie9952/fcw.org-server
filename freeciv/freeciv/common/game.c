@@ -155,7 +155,7 @@ void game_remove_unit(struct world *gworld, struct unit *punit)
     log_debug("game_remove_unit()"
               " at (%d,%d) unit %d, %s %s home (%d,%d) city %d, %s %s",
               TILE_XY(unit_tile(punit)),
-              punit->id, 
+              punit->id,
               nation_rule_name(nation_of_unit(punit)),
               unit_rule_name(punit),
               TILE_XY(pcity->tile),
@@ -165,14 +165,14 @@ void game_remove_unit(struct world *gworld, struct unit *punit)
   } else if (IDENTITY_NUMBER_ZERO == punit->homecity) {
     log_debug("game_remove_unit() at (%d,%d) unit %d, %s %s home %d",
               TILE_XY(unit_tile(punit)),
-              punit->id, 
+              punit->id,
               nation_rule_name(nation_of_unit(punit)),
               unit_rule_name(punit),
               punit->homecity);
   } else {
     log_error("game_remove_unit() at (%d,%d) unit %d, %s %s home %d invalid",
               TILE_XY(unit_tile(punit)),
-              punit->id, 
+              punit->id,
               nation_rule_name(nation_of_unit(punit)),
               unit_rule_name(punit),
               punit->homecity);
@@ -317,7 +317,7 @@ static void game_defaults(bool keep_ruleset_value)
   game.info.trading_tech     = GAME_DEFAULT_TRADING_TECH;
   game.info.turn             = 0;
   // unloading from transport has same behaviour whether native or non-native tile:
-  game.info.universal_unload = GAME_DEFAULT_UNIVERSAL_UNLOAD; 
+  game.info.universal_unload = GAME_DEFAULT_UNIVERSAL_UNLOAD;
   game.info.unload_override  = GAME_DEFAULT_UNLOAD_OVERRIDE;
   game.info.warminglevel     = 0; /* set later */
   game.info.year_0_hack      = FALSE;
@@ -444,7 +444,7 @@ static void game_defaults(bool keep_ruleset_value)
     game.server.savepalace        = GAME_DEFAULT_SAVEPALACE;
     game.server.scorelog          = GAME_DEFAULT_SCORELOG;
     game.server.scoreloglevel     = GAME_DEFAULT_SCORELOGLEVEL;
-    game.server.scoreturn         = GAME_DEFAULT_SCORETURN - 1;
+    game.server.scoreturn         = GAME_DEFAULT_SCORETURN + 5;
     game.server.seed              = GAME_DEFAULT_SEED;
     sz_strlcpy(game.server.start_units, GAME_DEFAULT_START_UNITS);
     game.server.slot_control      = GAME_DEFAULT_SLOT_CONTROL;

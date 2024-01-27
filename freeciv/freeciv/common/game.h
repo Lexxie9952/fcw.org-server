@@ -81,7 +81,7 @@ struct user_flag
   char *helptxt;
 };
 
-/* The number of turns that the first user needs to be attached to a 
+/* The number of turns that the first user needs to be attached to a
  * player for that user to be ranked as that player */
 #define TURNS_NEEDED_TO_RANK 10
 
@@ -260,7 +260,7 @@ struct civ_game {
       int global_warming;           // changed from bool to int so that it can regulate strength
       int global_warming_percent;
       int nuclear_winter;           // changed from bool to int so that it can regulate strength
-      bool nukes_minor; /* if (dis)abled, rulesets with req "ServerSetting","nukes_minor","World",TRUE 
+      bool nukes_minor; /* if (dis)abled, rulesets with req "ServerSetting","nukes_minor","World",TRUE
                            can have games (dis)allowing nuclear detonations */
       bool nukes_major; /* if (dis)abled, rulesets with req "ServerSetting","nukes_major","World",TRUE
                            can have games (dis)allowing advanced (more deadly) nuclear unit types */
@@ -469,10 +469,10 @@ extern struct world wld;
 #define GAME_MAX_NUCLEAR_WINTER  10000
 
 #define GAME_DEFAULT_NUKES_MINOR     TRUE
-#define GAME_DEFAULT_NUKES_MAJOR     TRUE   // USE game.ruleset to change default to FALSE 
+#define GAME_DEFAULT_NUKES_MAJOR     TRUE   // USE game.ruleset to change default to FALSE
 
 #define GAME_DEFAULT_NUCLEAR_WINTER_PERCENT 100 // controls threshold/likelihood for it to happen
-#define GAME_MIN_NUCLEAR_WINTER_PERCENT 1   
+#define GAME_MIN_NUCLEAR_WINTER_PERCENT 1
 #define GAME_MAX_NUCLEAR_WINTER_PERCENT 10000
 
 #define GAME_DEFAULT_PARTISAN_MAX_SPAWNS 50000   // Maximum num. of times each city can spawn partisans
@@ -496,7 +496,7 @@ extern struct world wld;
 #define GAME_DEFAULT_DIPLOMACY       DIPLO_FOR_ALL
 
 #define GAME_DEFAULT_AIRLIFT_DEST_DIVISOR 0
-#define GAME_MIN_AIRLIFT_DEST_DIVISOR     0        
+#define GAME_MIN_AIRLIFT_DEST_DIVISOR     0
 #define GAME_MAX_AIRLIFT_DEST_DIVISOR     20
 
 #define GAME_DEFAULT_DIPLCHANCE      80
@@ -543,9 +543,9 @@ extern struct world wld;
 #define GAME_DEFAULT_UNRPROTECTS     TRUE
 #define GAME_DEFAULT_UNIVERSAL_UNLOAD FALSE
 /* if non-zero, override unloading move-cost when universal_unload=true: */
-#define GAME_DEFAULT_UNLOAD_OVERRIDE 0 /* value=move fragments. 0=no override */  
-#define GAME_MIN_UNLOAD_OVERRIDE 0  
-#define GAME_MAX_UNLOAD_OVERRIDE 1000 /* 1000 effectively uses all moves_left */  
+#define GAME_DEFAULT_UNLOAD_OVERRIDE 0 /* value=move fragments. 0=no override */
+#define GAME_MIN_UNLOAD_OVERRIDE 0
+#define GAME_MAX_UNLOAD_OVERRIDE 1000 /* 1000 effectively uses all moves_left */
 
 #define GAME_DEFAULT_CONTACTTURNS    20
 #define GAME_MIN_CONTACTTURNS        0
@@ -653,9 +653,10 @@ extern struct world wld;
 #define GAME_DEFAULT_SCOREFILE       "freeciv-score.log"
 
 /* Turns between reports is random between SCORETURN and (2 x SCORETURN).
- * First report is shown at SCORETURN. As report is generated in the end of the turn,
- * first report is already generated at (SCORETURN - 1) */
-#define GAME_DEFAULT_SCORETURN       20
+ * First report is GAME_DEFAULT_SCORETURN + 5
+ * Since reports are generated at the end of the turn,
+ * first report gets generated at (SCORETURN - 1) */
+#define GAME_DEFAULT_SCORETURN       10
 
 #define GAME_DEFAULT_VICTORY_CONDITIONS (1 << VC_SPACERACE | 1 << VC_ALLIED)
 #define GAME_DEFAULT_END_SPACESHIP   TRUE
@@ -775,7 +776,7 @@ extern struct world wld;
 #define GAME_DEFAULT_AUTOATTACK      FALSE
 #define GAME_DEFAULT_AUTOATTACK_STYLE 0
 /* autoattack_style server setting:
- * AA_DEFAULT  - Every unit autoattacks based on an "AI" decision to autoattack 
+ * AA_DEFAULT  - Every unit autoattacks based on an "AI" decision to autoattack
                  if it thinks its odds of winning an attack are better than defending,
                  or always if the enemy unit has the "Provoking" flag.
  * AA_ADVANCED - Rulesets provide more intelligence and human control over autoattack.
