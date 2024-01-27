@@ -1,4 +1,4 @@
-/********************************************************************** 
+/**********************************************************************
  Freeciv - Copyright (C) 1996 - A Kjeldberg, L Gregersen, P Unold
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -35,7 +35,7 @@ void log_civ_score_init(void);
 void log_civ_score_free(void);
 void log_civ_score_now(void);
 
-void make_history_report(void);
+void make_history_report(int trigger_pollution_event);
 void send_current_history_report(struct conn_list *dest);
 void report_wonders_of_the_world(struct conn_list *dest);
 void report_top_five_cities(struct conn_list *dest);

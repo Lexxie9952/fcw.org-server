@@ -77,26 +77,33 @@ static void page_conn_etype(struct conn_list *dest, const char *caption,
 			    const char *headline, const char *lines,
 			    enum event_type event);
 enum historian_type {
-        HISTORIAN_RICHEST=0, 
+        HISTORIAN_RICHEST=0,
         HISTORIAN_ADVANCED=1,
         HISTORIAN_MILITARY=2,
         HISTORIAN_HAPPIEST=3,
-        HISTORIAN_LARGEST=4};
+        HISTORIAN_POPULOUS=4,
+        HISTORIAN_LARGEST=5,
+        HISTORIAN_POLLUTED=6
+};
 
 #define HISTORIAN_FIRST		HISTORIAN_RICHEST
-#define HISTORIAN_LAST 		HISTORIAN_LARGEST
+#define HISTORIAN_LAST 		HISTORIAN_POLLUTED
 
 static const char *historian_message[]={
     /* TRANS: year <name> reports ... */
-    N_("%s %s reports on the RICHEST Civilizations in the World."),
+    N_("%s %s reports on the RICHEST nations in the world."),
     /* TRANS: year <name> reports ... */
-    N_("%s %s reports on the most ADVANCED Civilizations in the World."),
+    N_("%s %s reports on the most ADVANCED nations in the world."),
     /* TRANS: year <name> reports ... */
-    N_("%s %s reports on the most MILITARIZED Civilizations in the World."),
+    N_("%s %s reports on the most MILITARIZED nations in the world."),
     /* TRANS: year <name> reports ... */
-    N_("%s %s reports on the HAPPIEST Civilizations in the World."),
+    N_("%s %s reports on the HAPPIEST nations in the world."),
     /* TRANS: year <name> reports ... */
-    N_("%s %s reports on the LARGEST Civilizations in the World.")
+    N_("%s %s reports on the most POPULOUS nations in the world."),
+    /* TRANS: year <name> reports ... */
+    N_("%s %s reports on the nations with greatest LAND AREA, in the world."),
+    /* TRANS: year <name> reports ... */
+    N_("%s %s reports on the most POLLUTING nations in the world.")
 };
 
 static const char *historian_name[]={
@@ -253,25 +260,30 @@ static void historian_generic(struct history_report *report,
   players_iterate(pplayer) {
     if (GOOD_PLAYER(pplayer)) {
       switch (which_news) {
-      case HISTORIAN_RICHEST:
-	size[j].value = pplayer->economic.gold;
-	break;
-      case HISTORIAN_ADVANCED:
-	size[j].value
-	  = pplayer->score.techs + research_get(pplayer)->future_tech;
-	break;
-      case HISTORIAN_MILITARY:
-	size[j].value = pplayer->score.units;
-	break;
-      case HISTORIAN_HAPPIEST: 
-	size[j].value =
-            (((pplayer->score.happy - pplayer->score.unhappy
-               - 2 * pplayer->score.angry) * 1000) /
-             (1 + total_player_citizens(pplayer)));
-	break;
-      case HISTORIAN_LARGEST:
-	size[j].value = total_player_citizens(pplayer);
-	break;
+        case HISTORIAN_RICHEST:
+          size[j].value = pplayer->economic.gold;
+          break;
+        case HISTORIAN_ADVANCED:
+	        size[j].value = pplayer->score.techs + research_get(pplayer)->future_tech;
+	        break;
+        case HISTORIAN_MILITARY:
+          size[j].value = pplayer->score.units;
+          break;
+        case HISTORIAN_HAPPIEST:
+          size[j].value =
+              (((pplayer->score.happy - pplayer->score.unhappy
+                - 2 * pplayer->score.angry) * 1000) /
+              (1 + total_player_citizens(pplayer)));
+          break;
+        case HISTORIAN_POPULOUS:
+          size[j].value = total_player_citizens(pplayer);
+          break;
+        case HISTORIAN_LARGEST:
+          size[j].value = get_landarea(pplayer);
+          break;
+        case HISTORIAN_POLLUTED:
+          size[j].value = get_pollution(pplayer);
+          break;
       }
       size[j].player = pplayer;
       j++;
@@ -357,14 +369,14 @@ void report_top_five_cities(struct conn_list *dest)
   const int NUM_BEST_CITIES = 5;
   /* How we score a city is 1 per citizen plus factor-points worth 1/100th
      of a citizen each. i.e., 100=1 citizen */
-  const float WONDER_FACTOR = 100,   // 1 wonder = 1 citizen 
+  const float WONDER_FACTOR = 100,   // 1 wonder = 1 citizen
               BUILDING_FACTOR = 20,  // 5 buildings = 1 citizen
-              SHIELD_FACTOR = 2.22,  // 45 PROD = 1 citizen   
+              SHIELD_FACTOR = 2.22,  // 45 PROD = 1 citizen
               GOLD_FACTOR = 1,       // 100 GOLD = 1 citizen
               SCIENCE_FACTOR = 0.66, // 150 BULBS = 1 citizen
               HAPPY_FACTOR = 10,     // Happy citizen is worth 1.1 citizen
               UNHAPPY_FACTOR = -10;  // Unhappy: 0.9 citizen, Angry: 0.8 citizen
-                        
+
   struct city_score_entry size[NUM_BEST_CITIES];
   int i;
   char buffer[4096];
@@ -400,7 +412,7 @@ void report_top_five_cities(struct conn_list *dest)
     int wonders;
 
     if (!size[i].city) {
-	/* 
+	/*
 	 * pcity may be NULL if there are less then NUM_BEST_CITIES in
 	 * the whole game.
 	 */
@@ -955,7 +967,7 @@ static const char *culture_to_text(int value)
 static const char *units_to_text(int value)
 {
   /* TRANS: Unit(s) quantity for built/killed/lost */
-  return value_units(value, PL_(" unit", " units", value));  
+  return value_units(value, PL_(" unit", " units", value));
 }
 
 /**********************************************************************//**
@@ -965,7 +977,7 @@ static const char *units_to_text(int value)
 static const char *citizens_to_text(int value)
 {
   /* TRANS: Unit(s) quantity for built/killed/lost */
-  return value_units(value, PL_(" citizen", " citizens", value));  
+  return value_units(value, PL_(" citizen", " citizens", value));
 }
 
 /**********************************************************************//**
@@ -999,7 +1011,7 @@ static void dem_line_item(char *outptr, size_t out_size,
 
     cat_snprintf(outptr, out_size, _("<td>#%d</td>"), place);
   }
-   
+
   if (NULL == pplayer || BV_ISSET(selcols, DEM_COL_BEST)) {
     struct player *best_player = pplayer;
     int best_value = NULL != pplayer ? prow->get_value(pplayer) : 0;
@@ -1080,7 +1092,7 @@ bool is_valid_demography(const char *demography, int *error)
 
 /**********************************************************************//**
   Send demographics report; what gets reported depends on value of
-  demographics server option.  
+  demographics server option.
 **************************************************************************/
 void report_demographics(struct connection *pconn)
 {
@@ -1369,7 +1381,7 @@ void log_civ_score_init(void)
     return;
   }
 
-  fc_snprintf(game.server.scorefile, 100, 
+  fc_snprintf(game.server.scorefile, 100,
               "/var/lib/tomcat8/webapps/data/scorelogs/score-%d.log",
               srvarg.port);
 
@@ -1605,21 +1617,37 @@ log_civ_score_disable:
 /**********************************************************************//**
   Produce random history report if it's time for one.
 **************************************************************************/
-void make_history_report(void)
+void make_history_report(int trigger_pollution_report)
 {
+
   if (player_count() == 1) {
     return;
   }
 
-  if (game.server.scoreturn > game.info.turn) {
-    return;
+enum historian_type report_code;
+
+  // Never skip a pollution report when levels demand international action:
+  if (trigger_pollution_report == 2) {
+    report_code = HISTORIAN_POLLUTED;
+  }
+  // Every third turn, if there's high pollution, report that:
+  else if (trigger_pollution_report == 1
+           && game.info.turn % 3 == 0) {
+    report_code = HISTORIAN_POLLUTED;
+  }
+  // No pollution crisis and not a normal "Historian Report Turn":
+  else if (game.server.scoreturn  > game.info.turn) {
+    return;  // abort, do nothing.
+  }
+  // If we get here, it's a normal History Report with no pollution crisis:
+  else {
+    report_code = game.server.scoreturn % (HISTORIAN_LAST + 1);
   }
 
   game.server.scoreturn = (game.info.turn + GAME_DEFAULT_SCORETURN
                            + fc_rand(GAME_DEFAULT_SCORETURN));
 
-  historian_generic(&latest_history_report, game.server.scoreturn
-                    % (HISTORIAN_LAST + 1));
+  historian_generic(&latest_history_report, report_code);
   send_current_history_report(game.est_connections);
 }
 
@@ -1706,7 +1734,7 @@ void report_final_scores(struct conn_list *dest)
 /**********************************************************************//**
   This function pops up a non-modal message dialog on the player's desktop
 **************************************************************************/
-void page_conn(struct conn_list *dest, const char *caption, 
+void page_conn(struct conn_list *dest, const char *caption,
 	       const char *headline, const char *lines) {
   page_conn_etype(dest, caption, headline, lines, E_REPORT);
 }

@@ -175,7 +175,7 @@ struct civserver server;
 /* server state information */
 static enum server_states civserver_state = S_S_INITIAL;
 
-/* this global is checked deep down the netcode. 
+/* this global is checked deep down the netcode.
    packets handling functions can set it to none-zero, to
    force end-of-tick asap
 */
@@ -194,7 +194,7 @@ static struct timer *eot_timer = NULL;
 static struct timer *between_turns = NULL;
 
 /* Flag to clean uwt list on first call of the turn to finish_unit_waits() */
-bool uwt_list_cleaned = FALSE; 
+bool uwt_list_cleaned = FALSE;
 
 /**********************************************************************//**
   Initialize the game seed.  This may safely be called multiple times.
@@ -764,17 +764,17 @@ static void do_border_vision_effect(void)
 /**********************************************************************//**
   Handle environmental upsets, meaning currently pollution or fallout.
 **************************************************************************/
-static void update_environmental_upset(enum environment_upset_type type,   // EUT_NUCLEAR_WINTER, etc.
+static int update_environmental_upset(enum environment_upset_type type,   // EUT_NUCLEAR_WINTER, etc.
                                        int *current,          // &game.info.cooling        #fallout_tiles * nuclear_winter_percent
                                                               // only used for weighing autosettler importance of cleaning fallout/pollution !
-                                       int *accum,            // &game.info.nuclearwinter  accumulates += #fallout_tiles each turn 
+                                       int *accum,            // &game.info.nuclearwinter  accumulates += #fallout_tiles each turn
                                        int *level,            // &game.info.coolinglevel   accum threshold to trigger climate change, also the per turn
                                                               // "healing"/reduction of accum (game.info.nuclearwinter).
                                        int percent,           // game.server.nuclear_winter_percent: inverse adjuster for the threshold/tolerance var above.
                                        void (*upset_action_fn)(int))
 
 /* NOTES:  1. accum accumulates AND reduces. problem tiles add, while coolinglevel reduces by x each turn, as a kind of tolerance threshold.
-           2. coolinglevel/warminglevel (*level): the threshold where triggering becomes possible, is the same as the tolerance (amount reduced from 
+           2. coolinglevel/warminglevel (*level): the threshold where triggering becomes possible, is the same as the tolerance (amount reduced from
               accumulation each turn), thus, "exceeding tolerance" leads past threshold because you are adding more than subtracting each turn.
            3. game.info.cooling (*current) is set here and nuclear_winter_percent modifies it, but is never used except to weigh autosettler decisions,
                which the zoltan patch will break if values other than 100 are used.
@@ -782,9 +782,10 @@ static void update_environmental_upset(enum environment_upset_type type,   // EU
                 game.info.coolinglevel = (map_num_tiles() + 499) / 500; In this function below, it seems as if it grows every turn? did not find
                 somewhere else that changes it.
 
-   TO DO: 
+   TO DO:
            1. Number of affected tiles proportionate to map size, not proportionate to (perimeter / 20) ?- see affected_tiles below. */
 {
+  int trigger_pollution_report = 0;
   int count;     // number of problem tiles which affect climate change
 
   count = 0;
@@ -804,9 +805,9 @@ static void update_environmental_upset(enum environment_upset_type type,   // EU
   /* The higher the percent, the lower the threshold to trigger, and the lower the 'healing' reduction
      effect on accumulation. The lower the percent, it's vice versa. */
   int new_level = ((*level) * 100)/percent;  // min percent is 1 (server settings)
-  if (new_level<1) new_level = 1;  // prevent divide by zero, for huge values like percent==10000.                
-  
-  if (type == EUT_NUCLEAR_WINTER) {     // multiply in strength modifiers for climate change effects: 
+  if (new_level<1) new_level = 1;  // prevent divide by zero, for huge values like percent==10000.
+
+  if (type == EUT_NUCLEAR_WINTER) {     // multiply in strength modifiers for climate change effects:
     count = (count * game.info.nuclear_winter) / 100;  // this would affect STRENGTH
   } else { // global warming
     count = (count * game.info.global_warming) / 100;  // this would affect STRENGTH
@@ -835,16 +836,18 @@ static void update_environmental_upset(enum environment_upset_type type,   // EU
                     "—————————————————————————————<br>"),
                     *accum,
                     new_level,
-                    (*accum >= new_level ? "[`warning`] <font color='#f44'>International action recommended to halt habitat destruction!</font>"
+                    (*accum >= new_level ? "[`warning`] <font color='#f44'>The world demands action to halt habitat destruction!</font>"
                                          : "[`anger`] <font color='#ddd'>Scientists recommend keeping impact below Climate Tolerance.</font>")
     );
+
+    trigger_pollution_report = (*accum >= new_level) ? 2 : 1;
   }
 
   if (*accum < new_level) {
     *accum = 0;
-  } 
+  }
   else {
-    *accum -= new_level; 
+    *accum -= new_level;
     // Basically, (polluted_tile_pct_of_map * 20) = chance of climate change,
     // except in the the case it's within the Climate Tolerance:
     if (fc_rand((map_num_tiles() + 19) / 20) < *accum) {
@@ -860,7 +863,7 @@ static void update_environmental_upset(enum environment_upset_type type,   // EU
 
       // Seems to be artificial increase each turn, does this make any sense?
       // ... and should it also be adjusted by one of the modifiers ?
-      *level += (map_num_tiles() + 999) / 1000;  
+      *level += (map_num_tiles() + 999) / 1000;
       if (IPCC_report) {
       notify_player(NULL, NULL, E_GLOBAL_ECO, ftc_server,
                   _("IPCC estimate: %d%% of the planet was affected.<br>"
@@ -869,9 +872,10 @@ static void update_environmental_upset(enum environment_upset_type type,   // EU
       }
     }
   }
-
   log_debug("environmental_upset: type=%-4d current=%-2d "
             "level=%-2d accum=%-2d", type, *current, *level, *accum);
+
+  return trigger_pollution_report;
 }
 
 /**********************************************************************//**
@@ -1203,7 +1207,7 @@ static void begin_turn(bool is_new_turn)
     }
     2021.December.20 - This is tested and works. One time game-start resource
     appearance can be handled by putting appearance req as:
-    "MinYear", "-4000",    "World",   FALSE 
+    "MinYear", "-4000",    "World",   FALSE
     */
 
     script_server_signal_emit("turn_begin", game.info.turn, game.info.year);
@@ -1361,7 +1365,7 @@ static void begin_phase(bool is_new_phase)
        activity): a foreign Carrier moved during TC and deducted mp from the
        allied Fighter, then Fighter's mp got restored when it was its turn to be
        processed by update_unit_move_points, effectively giving it a "free ride".
-       ... 
+       ...
        In current sequencing, mp restoration happens for ALL players' units BEFORE
        ANY units update activities. The actions of one unit can now affect the
        moves_left on another unit without sequencing paradox. An ally's Carrier
@@ -1461,7 +1465,7 @@ static void end_phase(void)
 {
   log_debug("Endphase");
 
-  /* 
+  /*
    * This empties the client Messages window; put this before
    * everything else below, since otherwise any messages from the
    * following parts get wiped out before the user gets a chance to
@@ -1709,12 +1713,14 @@ static void end_turn(void)
     player_list_destroy(achievers);
   } achievements_iterate_end;
 
+  int trigger_pollution_report = 0;
   if (game.info.global_warming) {
-    update_environmental_upset(EUT_GLOBAL_WARMING, &game.info.heating,
-                               &game.info.globalwarming,
-                               &game.info.warminglevel,
-                               game.server.global_warming_percent,
-                               global_warming);
+    trigger_pollution_report =
+      update_environmental_upset(EUT_GLOBAL_WARMING, &game.info.heating,
+                                &game.info.globalwarming,
+                                &game.info.warminglevel,
+                                game.server.global_warming_percent,
+                                global_warming);
   }
 
   if (game.info.nuclear_winter) {
@@ -1790,7 +1796,7 @@ static void end_turn(void)
   } extra_type_by_cause_iterate_end;
 
   update_diplomatics();
-  make_history_report();
+  make_history_report(trigger_pollution_report);
   settings_turn();
   stdinhand_turn();
   voting_turn();
@@ -1972,7 +1978,7 @@ void server_quit(void)
 void handle_report_req(struct connection *pconn, enum report_type type)
 {
   struct conn_list *dest = pconn->self;
-  
+
   if (S_S_RUNNING != server_state() && S_S_OVER != server_state()) {
     log_error("Got a report request %d before game start", type);
     return;
@@ -2079,7 +2085,7 @@ bool server_packet_input(struct connection *pconn, void *packet, int type)
     return TRUE;
   }
 
-  /* 
+  /*
    * Old pre-delta clients (before 2003-11-28) send a
    * PACKET_LOGIN_REQUEST (type 0) to the server. We catch this and
    * reply with an old reject packet. Since there is no struct for
@@ -2110,7 +2116,7 @@ bool server_packet_input(struct connection *pconn, void *packet, int type)
       dio_output_rewind(&dout);
       dio_put_uint16_raw(&dout, size);
 
-      /* 
+      /*
        * Use send_connection_data instead of send_packet_data to avoid
        * compression.
        */
@@ -2207,7 +2213,7 @@ bool server_packet_input(struct connection *pconn, void *packet, int type)
               packet_name(type), type);
     return TRUE;
   }
-  
+
   /* Make sure to set this back to NULL before leaving this function: */
   pplayer->current_conn = pconn;
 
@@ -2421,7 +2427,7 @@ void handle_ongoing_longturn_nation_select_req(struct connection *pc,
   struct conn_list *dest = pc->self;
   struct nation_type *new_nation;
   struct player *pplayer;
-  new_nation = nation_by_number(nation_no);    
+  new_nation = nation_by_number(nation_no);
 
   pplayer = find_uncontrolled_player(pc);
   if (pplayer) {
@@ -2434,7 +2440,7 @@ void handle_ongoing_longturn_nation_select_req(struct connection *pc,
     }
     else{
       notify_conn(dest, NULL, E_CONNECTION, ftc_server,
-        _("Unable to join the LongTurn game. There was a problem with picking your country."));        
+        _("Unable to join the LongTurn game. There was a problem with picking your country."));
     }
   }
   else {
@@ -2504,7 +2510,7 @@ void handle_player_ready(struct player *requestor,
     } players_iterate_end;
 
     /* Prevent longturn restarts being locked by pre-game campers: */
-    if (is_longturn() && game.info.turn > 1) num_unready = 0; 
+    if (is_longturn() && game.info.turn > 1) num_unready = 0;
 
     if (num_unready > 0) {
       notify_conn(NULL, NULL, E_SETTING, ftc_server,
@@ -2527,7 +2533,7 @@ const char *aifill(int amount)
 {
   char *limitreason = NULL;
   int limit;
- 
+
   if (game_was_started()) {
     return NULL;
   }
@@ -2687,7 +2693,7 @@ void player_nation_defaults(struct player *pplayer, struct nation_type *pnation,
   depending on what nations players have already picked; in this case,
   it's OK to pick nations without start positions, as init_new_game() will
   fall back to mismatched start positions.)
- 
+
   Otherwise, pick available nations using pick_a_nation(), which tries to
   pick nations that look good with nations already in the game.
 
@@ -2933,11 +2939,11 @@ static void srv_running(void)
     timer_start(game.server.save_timer);
   }
 
-  /* 
+  /*
    * This will freeze the reports and agents at the client.
-   * 
+   *
    * Do this before the body so that the PACKET_THAW_CLIENT packet is
-   * balanced. 
+   * balanced.
    */
   lsend_packet_freeze_client(game.est_connections);
 
@@ -2976,7 +2982,7 @@ static void srv_running(void)
 
       force_end_of_sniff = FALSE;
 
-      /* 
+      /*
        * This will thaw the reports and agents at the client.
        */
       lsend_packet_thaw_client(game.est_connections);
@@ -3046,7 +3052,7 @@ static void srv_running(void)
 
       sanity_check();
 
-      /* 
+      /*
        * This will freeze the reports and agents at the client.
        */
       lsend_packet_freeze_client(game.est_connections);
@@ -3069,7 +3075,7 @@ static void srv_running(void)
       if (game.info.turn > game.server.end_turn) {
 	/* endturn was reached - rank users based on team scores */
 	rank_users(TRUE);
-      } else { 
+      } else {
 	/* game ended for victory conditions - rank users based on survival */
 	rank_users(FALSE);
       }
@@ -3126,7 +3132,7 @@ static void srv_prepare(void)
   con_puts(C_COMMENT, beta_message());
   con_puts(C_COMMENT, "");
 #endif
-  
+
   con_flush();
 
   settings_init(TRUE);
@@ -3221,7 +3227,7 @@ static void srv_scores(void)
       char imgfilename[128];
       fc_snprintf(imgfilename, sizeof(imgfilename), "map-%d", srvarg.port);
 
-      mapimg_create(pmapdef, TRUE, imgfilename, 
+      mapimg_create(pmapdef, TRUE, imgfilename,
                     srvarg.saves_pathname);
     } else {
       log_error("%s", mapimg_error());
@@ -3508,7 +3514,7 @@ static void srv_ready(void)
           server_player_set_name(pplayer, "NewAvailablePlayer ");
           pplayer->unassigned_user = TRUE;
    }
-      } players_iterate_end;       
+      } players_iterate_end;
     }
   }
 
@@ -3891,7 +3897,7 @@ static struct rgbcolor *mapimg_server_plrcolor_get(int i)
 }
 
 /**************************************************************************
- Is this a LongTurn game? 
+ Is this a LongTurn game?
 **************************************************************************/
 bool is_longturn(void)
 {
@@ -3931,17 +3937,17 @@ bool is_supercow(struct connection * caller)
       if (strcmp(caller_name, game.server.supercows[i]) == 0) {
         return true;
       }
-    }     
+    }
 
     /* Our conn wasn't in the server supercow list. Now, look in the legacy
        file for an override supercow. Reason: if a supercow was not assigned
-       or mis-assigned, we need a way to manually patch one, to avoid the 
+       or mis-assigned, we need a way to manually patch one, to avoid the
        catch-22 that the /supercows command requires you to be a supercow: */
     supercow_list = fopen("supercows.txt", "r");
     if (!supercow_list) {
       return FALSE;
     }
-    
+
     while (fgets(line, 1000, supercow_list)) {
       if ((pos=strchr(line, '#')) != NULL) {
         continue;
