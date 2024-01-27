@@ -67,7 +67,7 @@ var anim_swords_instead = {};  // bools for whether to show swords instead of ex
 var show_tile_marker_instead = {}; // bools for whether to show a tile marker indicator instead of combat animation.
 
 const USER_MARK_1     = 1
-const USER_MARK_2     = 2; 
+const USER_MARK_2     = 2;
 const USER_MARK_3     = 3;
 const USER_MARK_4     = 4;
 const USER_MARKS = ["","grid.usermark","grid.userarea","user.attention","grid.userspot"];
@@ -292,7 +292,7 @@ function fill_sprite_array(layer, ptile, pedge, pcorner, punit, pcity, citymode)
       if (ptile != null) {
         var tterrain_near = tile_terrain_near(ptile);
         var pterrain = tile_terrain(ptile);
-        
+
         sprite_array = sprite_array.concat(fill_terrain_sprite_layer(2, ptile, pterrain, tterrain_near));
         if (draw_map_grid) sprite_array = sprite_array.concat({"key":"grid.map"});
         sprite_array = sprite_array.concat(fill_irrigation_sprite_array(ptile, pcity));
@@ -344,7 +344,7 @@ function fill_sprite_array(layer, ptile, pedge, pcorner, punit, pcity, citymode)
                               tileset_extra_id_graphic_tag(EXTRA_FALLOUT)});
         }
         // (Optional) frontier-facing flags on borders
-        if (draw_border_flags) 
+        if (draw_border_flags)
           sprite_array = sprite_array.concat(get_frontier_flag_sprites(ptile));
       }
     break;
@@ -367,7 +367,7 @@ function fill_sprite_array(layer, ptile, pedge, pcorner, punit, pcity, citymode)
         if (layer_sprite) sprite_array.push(layer_sprite);
 
         sprite_array.push(get_city_sprite(pcity));                      //city
-        
+
         layer_sprite = get_city_fortifications_overlay_sprite(pcity);  // overlays (coastal defence, fortifications)
         if (layer_sprite) sprite_array.push(layer_sprite);
         layer_sprite = get_city_coastal_overlay_sprite(pcity);
@@ -378,17 +378,24 @@ function fill_sprite_array(layer, ptile, pedge, pcorner, punit, pcity, citymode)
         if (layer_sprite) sprite_array.push(layer_sprite);
 
         if (polluted) sprite_array.push({"key" : "grid.pollute_icon"}); //pollution icon clearly over top
-        
-        // starving: show empty plate
-        if (pcity.granary_turns == -1) {
-          sprite_array.push({"key" : "city.starve"});
-        }
-        // anarchy fists or disorder fist can go on top of plate ;)
+
+        // Lawless, Disorder, and Famine feared: ----------------------------//
+        // lawless-fists go under plate, disorder-fist goes on top of plate
         if (pcity.anarchy) {
           sprite_array.push({"key" : "city.revolt"});
-        } else if (pcity['unhappy']) {
+          // if starving, empty plate goes over double fists (to be visible)
+          if (pcity.granary_turns == -1) {
+            sprite_array.push({"key" : "city.starve"});
+          }
+        }
+        if (pcity['unhappy']) {
+          // if starving, single fist goes over empty plate (to be visible)
+          if (pcity.granary_turns == -1) {
+            sprite_array.push({"key" : "city.starve"});
+          }
           sprite_array.push({"key" : "city.disorder"});
         }
+        //-------------------------------------------------------------------//
       }
       // Otherwise show highlighted pollution only if user pref is on:
       else if (draw_highlighted_pollution && polluted) {
@@ -407,7 +414,7 @@ function fill_sprite_array(layer, ptile, pedge, pcorner, punit, pcity, citymode)
       var do_draw_unit = (punit != null && (draw_units || ptile == null || (draw_focus_unit
 				     && unit_is_in_focus(punit))));
       var is_stacked = false;    // stacked units get a "+" icon drawn over them
-      
+
       if (do_draw_unit && active_city == null) {
         is_stacked = (ptile['units'] != null && ptile['units'].length > 1) ? ptile['units'].length : false;
         if (is_stacked>9) is_stacked =9;  // 9 or more will just show a "9+" stack icon
@@ -422,15 +429,15 @@ function fill_sprite_array(layer, ptile, pedge, pcorner, punit, pcity, citymode)
         sprite_array = sprite_array.concat(fill_unit_sprite_array(punit, is_stacked));
       }
         // Front walls of Forts and Fortresses are drawn immediately over a unit on a tile in the same layer.
-        // This puts the front wall over the unit on that tile, but prevents front walls on other tiles from 
+        // This puts the front wall over the unit on that tile, but prevents front walls on other tiles from
         // improperly occluding units on other tiles.
-        if (!pcity && ptile != null) 
-          sprite_array = sprite_array.concat(fill_layer3_sprite_array(ptile, is_stacked, punit)); 
+        if (!pcity && ptile != null)
+          sprite_array = sprite_array.concat(fill_layer3_sprite_array(ptile, is_stacked, punit));
 
     /* show explosion animation on current tile.*/
      if (ptile != null && explosion_anim_map[ptile['index']] != null) {
        var explode_step = explosion_anim_map[ptile['index']];
-     
+
        var swords = anim_swords_instead[ptile['index']];
        if (!swords) swords = 0;
        var marker = show_tile_marker_instead[ptile['index']];
@@ -442,7 +449,7 @@ function fill_sprite_array(layer, ptile, pedge, pcorner, punit, pcity, citymode)
        if (marker) {
          key_prefix = (explode_step>16 && explode_step<34) ? "" : USER_MARKS[USER_MARK_1];
          frame ="";
-       }       
+       }
        if (explode_step <= 1) {
          delete explosion_anim_map[ptile['index']];
          delete anim_swords_instead[ptile['index']];
@@ -451,7 +458,7 @@ function fill_sprite_array(layer, ptile, pedge, pcorner, punit, pcity, citymode)
        else {
          const xo = marker ? 0 : (unit_offset_x+swords*8);
          const yo = marker ? 0 : (unit_offset_y+swords*-15);
-         sprite_array.push({"key": key_prefix+frame, 
+         sprite_array.push({"key": key_prefix+frame,
            "offset_x" : xo,
            "offset_y" : yo});
        } /* the above 8 lines replace the below for supporting 2 explosion types.
@@ -475,7 +482,7 @@ function fill_sprite_array(layer, ptile, pedge, pcorner, punit, pcity, citymode)
          sprite_array.push({"key" : "explode.unit_4",
            "offset_x" : unit_offset_x,
            "offset_y" : unit_offset_y});
-       } 
+       }
        else {
          delete explosion_anim_map[ptile['index']];
        } */
@@ -490,7 +497,7 @@ function fill_sprite_array(layer, ptile, pedge, pcorner, punit, pcity, citymode)
       break;
 
     ////1
-    /* don't draw front walls of Forts and Fortresses as separate layer, it improperly occludes units on other tiles  
+    /* don't draw front walls of Forts and Fortresses as separate layer, it improperly occludes units on other tiles
     case LAYER_SPECIAL3:
       if (ptile != null) {
         sprite_array = sprite_array.concat(fill_layer3_sprite_array(ptile, pcity));
@@ -510,7 +517,7 @@ function fill_sprite_array(layer, ptile, pedge, pcorner, punit, pcity, citymode)
       break;
 
     // This layer puts down worked tile info on main map THEN city label on top of that
-    case LAYER_CITYBAR: 
+    case LAYER_CITYBAR:
       if (draw_city_output && active_city == null && ptile != null && ptile['worked']>0 ) {
         var acity = cities[ptile['worked']];
         if (acity) {                         //might be undefined
@@ -519,11 +526,11 @@ function fill_sprite_array(layer, ptile, pedge, pcorner, punit, pcity, citymode)
             var ctile = city_tile(acity);
             var d = map_distance_vector(ctile, ptile);
             var idx = get_city_dxy_to_index(d[0], d[1], acity);
-    
+
             var food_output = acity['food_output'].substring(idx, idx + 1);
             var shield_output = acity['shield_output'].substring(idx, idx + 1);
             var trade_output = acity['trade_output'].substring(idx, idx + 1);
-    
+
             sprite_array.push(get_city_food_output_sprite(food_output));
             sprite_array.push(get_city_shields_output_sprite(shield_output));
             sprite_array.push(get_city_trade_output_sprite(trade_output));
@@ -566,7 +573,7 @@ function fill_sprite_array(layer, ptile, pedge, pcorner, punit, pcity, citymode)
                "offset_x" : -45,
                "offset_y" : -45});
       }
- 
+
       break;
   }
 
@@ -614,7 +621,7 @@ function fill_terrain_sprite_array(l, ptile, pterrain, tterrain_near)
              for (var i = 0; i < num_cardinal_tileset_dirs; i++) {
                if (ts_tiles[tterrain_near[DIR4_TO_DIR8[i]]['graphic_str']] == null) continue;
                var near_dlp = tile_types_setup["l" + l + "." + tterrain_near[DIR4_TO_DIR8[i]]['graphic_str']];
-             
+
              var terrain_near = (pterrain['graphic_str']=='arctic' && !(near_dlp['dither'] == true))
                ? "swamp" // hard-coded for now, but dithers so much nicer into shore graphics
 	             : (near_dlp['dither'] == true) ?  tterrain_near[DIR4_TO_DIR8[i]]['graphic_str'] : pterrain['graphic_str'];
@@ -650,7 +657,7 @@ function fill_terrain_sprite_array(l, ptile, pterrain, tterrain_near)
             gfx_key = "t.l" + l + "." + pterrain['graphic_str'] + mulberry_random(ptile.tile,16);
             var y = tileset_tile_height - tileset[gfx_key][3];
             return [ {"key" : gfx_key, "offset_x" : 0, "offset_y" : y} ];
-        }  
+        }
       }
     }
 
@@ -778,10 +785,10 @@ function fill_unit_sprite_array(punit, num_stacked)
   inside get_unit_nation_flag_sprite effectively halved our animation frames for a GOTO,
   which was good because browser animations can't achieve the FPS of native client.
   HOWEVER, the result was jiggly because the shield was always one frame ahead of the
-  unit. Now we call it twice at the start and both the unit and send the offset to the 
-  get_unit_nation_flag_sprite function. Result: the shield are now always on the same 
+  unit. Now we call it twice at the start and both the unit and send the offset to the
+  get_unit_nation_flag_sprite function. Result: the shield are now always on the same
   animation frame, skipping every other frame together (instead of skipping every other
-  but the shields always +1 frame ahead of the unit.) TODO: performance could be 
+  but the shields always +1 frame ahead of the unit.) TODO: performance could be
   increased by finding a way to call the above function only once and having it increment
   TWO frames in one call. Then we'd avoid doing a double call here.
   */
@@ -797,7 +804,7 @@ function fill_unit_sprite_array(punit, num_stacked)
   result.push(
     {"key" : tileset_unit_type_graphic_tag(unit_type(punit)),
       "offset_x": unit_offset['x'] + UO_dx[id],
-      "offset_y": unit_offset['y'] - UO_dy[id]} );        
+      "offset_y": unit_offset['y'] - UO_dy[id]} );
   var activities = get_unit_activity_sprite(punit);
   if (activities != null) {
     activities['offset_x'] = activities['offset_x'] + unit_offset['x'];
@@ -831,7 +838,7 @@ function fill_unit_sprite_array(punit, num_stacked)
           result.push({"key" : "unit.stk_shld_r",
                 "offset_x" : unit_offset['x'],
                 "offset_y" : -31-unit_offset['y']});
-          push_right = 2; // small "+" needs +2 pixels for right-aligned shield 
+          push_right = 2; // small "+" needs +2 pixels for right-aligned shield
         }
         else           // left-aligned shield:
           result.push({"key" : "unit.stk_shld_l",
@@ -874,7 +881,7 @@ function fill_stacked_in_base_sprite_array(punit, num_stacked)
     const mx = UO_mx[id];   const my = UO_my[id];
     stacked['offset_x'] += mx;
     stacked['offset_y'] -= my;
-  }  
+  }
   return stacked;
 }
 
@@ -977,7 +984,7 @@ function get_city_occupied_sprite(pcity) {
   } else {
     return "citybar.occupancy_0";
   }
-  
+
   /*
   else if (punits.length == 1) {
     return "citybar.occupancy_1";
@@ -1047,7 +1054,7 @@ function fill_goto_line_sprite_array(ptile)
 /**********************************************************************
   Thus function puts flags on the frontier-facing edge of border tiles.
 ***********************************************************************/
-function get_frontier_flag_sprites(ptile) 
+function get_frontier_flag_sprites(ptile)
 {
   var result = [];
 
@@ -1063,16 +1070,16 @@ function get_frontier_flag_sprites(ptile)
         && ptile['owner'] != checktile['owner']
         && ptile['owner'] != 255 /* 255 indicates the tile is not owned by anyone. */
         && players[ptile['owner']] != null) {
-    
+
           var pnation = nations[players[ptile['owner']]['nation']];
           /* Former filling of all land with semi-transparent nation color
               var bcolor = pnation['color'].replace(")", ",0.15)").replace("rgb", "rgba");
               result.push({"key" : "territory", "offset_x" : 0, "offset_y" : 0, "color": bcolor}); */
 
-          border_dirs[dir] = true;   
+          border_dirs[dir] = true;
     }
   }
-  // Welcome to the LOGIC TREE! Which flags to draw on which BORDERS. 
+  // Welcome to the LOGIC TREE! Which flags to draw on which BORDERS.
   // Step One. Orthogonal cardinal borders collapse their two flags into one in their shared corner:
   if (border_dirs[DIR8_NORTH]) {
     // North and East borders
@@ -1117,7 +1124,7 @@ function get_frontier_flag_sprites(ptile)
   if (drawn_dirs[DIR8_NORTHEAST] && drawn_dirs[DIR8_NORTHWEST]) {
     drawn_dirs[DIR8_NORTHEAST] = false;
     drawn_dirs[DIR8_NORTHWEST] = false;
-    drawn_dirs[DIR8_NORTH] = true;      
+    drawn_dirs[DIR8_NORTH] = true;
   }
   else if (drawn_dirs[DIR8_NORTHEAST] && drawn_dirs[DIR8_SOUTHEAST]) {
     drawn_dirs[DIR8_NORTHEAST] = false;
@@ -1180,7 +1187,7 @@ function get_unit_nation_flag_sprite(punit, unit_offset)
   var nation_id = owner['nation'];
   var nation = nations[nation_id];
   //var unit_offset = get_unit_anim_offset(punit);
-  // line above removed because, now we pass this value since the 
+  // line above removed because, now we pass this value since the
   // function calling this already got this info; this also fixed
   // jiggly movement since making the two get_unit_anim_offset calls
   // returned different values for the same frame!
@@ -1285,16 +1292,16 @@ function get_full_hp_sprite(punit)
   var max_hp = unit_type['hp'];
   var healthpercent = (10 * Math.floor((20 * hp) / max_hp))/2; //0-100 by 5's
   var tag = "unit.hp_" + healthpercent;
-  
+
   return get_sprite_from_tag(tag);
 }
 /**************************************************************************
-  Returns a <div> string that can be appended to an html string containing 
+  Returns a <div> string that can be appended to an html string containing
     a unit sprite, that will place the hp meter over it in the right
     place and keep the image underneath clickable.
 **************************************************************************/
 function get_html_hp_sprite(punit, unit_panel_pos)
-{  
+{
   var htype_sprite = {"type":null,"sprite":get_full_hp_sprite(punit)};
   var hp_sprite = htype_sprite['sprite'];
 
@@ -1326,11 +1333,11 @@ function get_full_mp_sprite(punit)
   var movepercent = (10 * Math.floor((20 * mp) / max_mp))/2; //0-100 by 5's
   if (movepercent>100) movepercent=100; // move bonuses can give numbers >100
   var tag = "unit.hp_" + movepercent;   // hp tag serves for mp too
-  
+
   return get_sprite_from_tag(tag);
 }
 /**************************************************************************
-  Returns a <div> string that can be appended to an html string containing 
+  Returns a <div> string that can be appended to an html string containing
     a unit sprite, that will place the movesleft meter over it in the right
     place and keep the image underneath clickable.
 **************************************************************************/
@@ -1366,7 +1373,7 @@ function get_full_vet_sprite(punit)
   } else return null;
 }
 /**************************************************************************
-  Returns a <div> string that can be appended to an html string containing 
+  Returns a <div> string that can be appended to an html string containing
     a unit sprite, that will place the vet level over it in the right place
     and keep the image underneath clickable.
 **************************************************************************/
@@ -1387,7 +1394,7 @@ function get_html_vet_sprite(punit)
       + "</div>";
 }
 /**************************************************************************
-  Returns a <div> string that can be appended to an html string containing 
+  Returns a <div> string that can be appended to an html string containing
     a unit sprite, that will place the activity sprite over it in the
     right place and keep the image underneath clickable.
 **************************************************************************/
@@ -1421,7 +1428,7 @@ function get_html_activity_sprite(punit)
 function get_sprite_from_tag(tag)
 {
   if (!tag) return null;
-  
+
   var tileset_x = tileset[tag][0];
   var tileset_y = tileset[tag][1];
   var width = tileset[tag][2];
@@ -1434,7 +1441,7 @@ function get_sprite_from_tag(tag)
           "tileset-y" : tileset_y,
           "width" : width,
           "height" : height
-          };        
+          };
 }
 
 
@@ -1471,7 +1478,7 @@ function get_unit_activity_sprite(punit)
                   "offset_x" : unit_activity_offset_x,
                   "offset_y" : - unit_activity_offset_y,
                   /*flag to also push a connect sprite on top */
-                  "connect" : ((punit['orders_length']>0) ? true : false) 
+                  "connect" : ((punit['orders_length']>0) ? true : false)
                 };
 
     case ACTIVITY_IRRIGATE:
@@ -1481,7 +1488,7 @@ function get_unit_activity_sprite(punit)
                 "offset_x" : unit_activity_offset_x,
                 "offset_y" : - unit_activity_offset_y,
                 /*flag to also push a connect sprite on top */
-                "connect" : ((punit['orders_length']>0) ? true : false) 
+                "connect" : ((punit['orders_length']>0) ? true : false)
                };
 
     case ACTIVITY_CULTIVATE:
@@ -1489,14 +1496,14 @@ function get_unit_activity_sprite(punit)
                "offset_x" : unit_activity_offset_x,
                "offset_y" : - unit_activity_offset_y,
                /*flag to also push a connect sprite on top */
-               "connect" : ((punit['orders_length']>0) ? true : false) 
+               "connect" : ((punit['orders_length']>0) ? true : false)
               };
 
     case ACTIVITY_GOTO:
         return {"key" : "unit.goto",
             "offset_x" : unit_activity_offset_x,
             "offset_y" : - unit_activity_offset_y};
-            
+
     case ACTIVITY_FORTIFYING:
       if (client_rules_flag[CRF_EXTRA_HIDEOUT]) {
         if (tile_has_extra(tiles[punit['tile']], EXTRA_)) {
@@ -1516,7 +1523,7 @@ function get_unit_activity_sprite(punit)
             "offset_x" : unit_activity_offset_x,
             "offset_y" : - unit_activity_offset_y};
         }
-      } 
+      }
       if (client_rules_flag[CRF_MP2_D]) {
         if (tile_has_extra(tiles[punit['tile']], EXTRA_DEEPDIVE) && get_unit_class_name(punit) == "Submarine") {
           return {"key" : "unit.sentry_hidden",
@@ -1527,7 +1534,7 @@ function get_unit_activity_sprite(punit)
       return {"key" : "unit.sentry",
           "offset_x" : unit_activity_offset_x,
           "offset_y" : - unit_activity_offset_y};
-          
+
     case ACTIVITY_FORTIFIED:
       if (client_rules_flag[CRF_EXTRA_HIDEOUT]) {
         if (tile_has_extra(tiles[punit['tile']], EXTRA_)) {
@@ -1546,7 +1553,7 @@ function get_unit_activity_sprite(punit)
                              tileset_extra_id_activity_graphic_tag(act_tgt),
               "offset_x" : unit_activity_offset_x,
               "offset_y" : - unit_activity_offset_y,
-              /*flag to also push a connect sprite on top */ 
+              /*flag to also push a connect sprite on top */
               "connect" : ((punit['orders_length']>0) ? true : false)
               };
 
@@ -1554,7 +1561,7 @@ function get_unit_activity_sprite(punit)
        return {"key"      : "unit.plant",
                "offset_x" : unit_activity_offset_x,
                "offset_y" : - unit_activity_offset_y,
-               /*flag to also push a connect sprite on top */ 
+               /*flag to also push a connect sprite on top */
                "connect" : ((punit['orders_length']>0) ? true : false)
                };
 
@@ -1562,7 +1569,7 @@ function get_unit_activity_sprite(punit)
       return {"key" : tileset_extra_id_activity_graphic_tag(act_tgt),
               "offset_x" : unit_activity_offset_x,
               "offset_y" : - unit_activity_offset_y,
-              /*flag to also push a connect sprite on top */ 
+              /*flag to also push a connect sprite on top */
               "connect" : ((punit['orders_length']>0) ? true : false)
               };
 
@@ -1570,12 +1577,12 @@ function get_unit_activity_sprite(punit)
       return {"key" : "unit.pillage",
           "offset_x" : unit_activity_offset_x,
           "offset_y" : - unit_activity_offset_y,
-          /*flag to also push a connect sprite on top */ 
+          /*flag to also push a connect sprite on top */
           "connect" : ((punit['orders_length']>0) ? true : false)
           };
 
     case ACTIVITY_VIGIL:
-        if (observing 
+        if (observing
            || (client.conn.playing != null
                && (client.conn.playing.playerno == punit.owner
                    || players[punit.owner]['gives_shared_vision'].isSet(client.conn.playing.playerno)))
@@ -1595,7 +1602,7 @@ function get_unit_activity_sprite(punit)
       return {"key" : "unit.transform",
           "offset_x" : unit_activity_offset_x,
           "offset_y" : - unit_activity_offset_y,
-          /*flag to also push a connect sprite on top */ 
+          /*flag to also push a connect sprite on top */
           "connect" : ((punit['orders_length']>0) ? true : false)
           };
 
@@ -1603,15 +1610,15 @@ function get_unit_activity_sprite(punit)
         return {"key" : "unit.pollution",
             "offset_x" : unit_activity_offset_x,
             "offset_y" : - unit_activity_offset_y,
-            /*flag to also push a connect sprite on top */ 
+            /*flag to also push a connect sprite on top */
             "connect" : ((punit['orders_length']>0) ? true : false)
             };
-  
+
     case ACTIVITY_FALLOUT:
       return {"key" : "unit.fallout",
           "offset_x" : unit_activity_offset_x,
           "offset_y" : - unit_activity_offset_y,
-          /*flag to also push a connect sprite on top */ 
+          /*flag to also push a connect sprite on top */
           "connect" : ((punit['orders_length']>0) ? true : false)
           };
 
@@ -1629,8 +1636,8 @@ function get_unit_activity_sprite(punit)
     // now trying: **if movesleft>0** and then using a simpler way to distinguish an issue with using >0--the problem with
     // using moves>0 is that units given a DelayGoto/shift-G command would also show an hourglass unless there is a way to
     // distinguish them; which indeed, is that they have moved, so should have a done_moving flag; whereas the UWT delayed
-    // units didn't get to move yet. This worked in tests, but should be watched to confirm it works in all cases: 
-    && punit['done_moving'] == false   // distinguisher between shift-G delayGoto and a UWT_DELAY_GOTO forced wait. 
+    // units didn't get to move yet. This worked in tests, but should be watched to confirm it works in all cases:
+    && punit['done_moving'] == false   // distinguisher between shift-G delayGoto and a UWT_DELAY_GOTO forced wait.
     && punit['changed_from'] == activity
     && !(typeof server_settings['unitwaittime_style'] === 'undefined')
     && (server_settings['unitwaittime_style']['val'] & 4)  // UWT_DELAY_GOTO is on
@@ -1641,7 +1648,7 @@ function get_unit_activity_sprite(punit)
     } // Show patrol or patrol_back icon if unit is on patrol
     if (punit['orders_vigilant'] && punit['orders_repeat']) {
       if (punit['orders_index']/(punit['orders_length']-1) <= 0.50)
-        return {"key" : "unit.patrol", 
+        return {"key" : "unit.patrol",
         "offset_x" : unit_activity_offset_x,
         "offset_y" : - unit_activity_offset_y};
       else // indicates unit is on the return journey of its patrol
@@ -1694,7 +1701,7 @@ function get_city_fortifications_overlay_sprite(pcity) {
   if ((pcity['walls'] & CITY_FORTIFICATIONS) && !(pcity['walls'] & CITY_WALLS) && !(pcity['walls'] & CITY_CITADEL)) {
     // !(&1) means, don't show if there are also City Walls
     return {"key": "city.fortifications_overlay", "offset_x" : -4, "offset_y" : -24};
-  } 
+  }
   return null; // no overlay.
 }
 function get_city_fortifications_underlay_sprite(pcity) {
@@ -1881,17 +1888,17 @@ function get_tile_river_like_sprite(ptile, extra, prefix, abort_outlets)
     return null;
   }
   var extra2 = extra;   // 'synonymous' connective extra: extras can be connective to a twin type
-  
+
   var integrate_extras = [];
 
   // Due to how canals and rivers integrate into naval bases (for graphical pleasure only),
-  // we have to make a fake naval base that will never be used, for rulesets which don't 
+  // we have to make a fake naval base that will never be used, for rulesets which don't
   // have it.
   if (typeof EXTRA_NAVALBASE === 'undefined') var EXTRA_NAVALBASE = EXTRA_NONE;
 
   // TO DO: if these are predefined it might be less processing time. Rulesets could have any
   // combination of Canal, Waterway, or Navalbase, and this just assumes what we've done with
-  // MP2 and AG. 
+  // MP2 and AG.
   // Handle "integrates" feature of roads. Has to be hard-coded until server gives this info.
 
   // Ruleset with Naval base but no Waterway (old MP2):
@@ -1908,7 +1915,7 @@ function get_tile_river_like_sprite(ptile, extra, prefix, abort_outlets)
     else if (extra == EXTRA_NAVALBASE) {
       extra2 = EXTRA_RIVER;
       integrate_extras = [EXTRA_RIVER, EXTRA_CANAL];
-    } 
+    }
   }
   else if (client_rules_flag[CRF_CANALS]) // Ruleset with Canal and Waterway
   {  // process in order of frequency
@@ -1936,7 +1943,7 @@ function get_tile_river_like_sprite(ptile, extra, prefix, abort_outlets)
       for (var i = 0; i < num_cardinal_tileset_dirs; i++) {
         var dir = cardinal_tileset_dirs[i];
         var checktile = mapstep(ptile, dir);
-        if (checktile 
+        if (checktile
             && (tile_has_extra(checktile, extra)
             || !is_ocean_tile(checktile)
             || tile_has_extra(checktile, EXTRA_ROAD)  )  ) {
@@ -1965,7 +1972,7 @@ function get_tile_river_like_sprite(ptile, extra, prefix, abort_outlets)
       for (var i = 0; i < num_cardinal_tileset_dirs; i++) {
         var dir = cardinal_tileset_dirs[i];
         var checktile = mapstep(ptile, dir);
-        if (checktile 
+        if (checktile
             && (tile_has_extra(checktile, extra)
             || (is_ocean_tile(checktile) && abort_outlets !==true)
             || tile_has_extra(checktile, integrate_extras[0])
@@ -2193,7 +2200,7 @@ function fill_road_rail_sprite_array(ptile, pcity)
   const SEABRIDGE_active = (typeof EXTRA_SEABRIDGE !== "undefined");
   const WALLS_active = (typeof EXTRA_WALLS !== "undefined");
   const HWY_active = (typeof EXTRA_HIGHWAY !== "undefined");
-  
+
   if (MAGLEV_active) {
     var maglev = tile_has_extra(ptile, EXTRA_MAGLEV);
   }
@@ -2248,14 +2255,14 @@ function fill_road_rail_sprite_array(ptile, pcity)
         if (cardinal_tileset_dirs.includes(dir)) {  // only cardinal tiles are valid road-connectors
           road_near[dir] |= tile_has_extra(tile1, EXTRA_SEABRIDGE);
         }
-        // For non-cardinal adjacent sea-bridges, we also want rails to not show, but 
+        // For non-cardinal adjacent sea-bridges, we also want rails to not show, but
         // rails go on top so we catch it contrarily here:
         else {  // non-cardinal (diagonally adjacent) tiles don't connect rails if EITHER has a sea bridge
           if (seabridge || tile_has_extra(tile1, EXTRA_SEABRIDGE)) rail_near[dir] = false; // absolute override
         }
       }
       if (MAGLEV_active) maglev_near[dir] = tile_has_extra(tile1, EXTRA_MAGLEV);
-   
+
       /* Draw rail/road/maglev if this tile connects to the adjacent tile. But don't
        * draw road/rail if there is also a rail/maglev connection. */
       if (MAGLEV_active) {
@@ -2287,7 +2294,7 @@ function fill_road_rail_sprite_array(ptile, pcity)
         if (draw_road[i]) {
           let rtype = hwy ? "hwy" : "road";
           /* if we make a different graphic for bridges just uncommennt this et voilà!
-          if (tile_has_extra(ptile, EXTRA_RIVER) 
+          if (tile_has_extra(ptile, EXTRA_RIVER)
               || (CANAL_active  && tile_has_extra(ptile, EXTRA_CANAL))
               || (WATERWAY_active && tile_has_extra(ptile, EXTRA_WATERWAY))) {
                 rtype = "bridge";
@@ -2398,24 +2405,24 @@ function fill_layer1_sprite_array(ptile, pcity)
 
   /* We don't draw the bases if there's a city */
   if (pcity == null) {
-    if (typeof EXTRA_NAVALBASE !== 'undefined')  { 
+    if (typeof EXTRA_NAVALBASE !== 'undefined')  {
       if (tile_has_extra(ptile, EXTRA_NAVALBASE)) {
         // draw river outlets to make connective channel exits to other nearby water
         var river_sprite = get_tile_river_like_sprite(ptile, EXTRA_NAVALBASE, "road.river");
         if (river_sprite != null) result_sprites.push(river_sprite);
-        
+
         result_sprites.push({"key" : "base.navalbase_bg",
                               "offset_y" : -normal_tile_height / 2});
         return result_sprites;
       }
     }
     // bunker hides everything under it, but is drawn in other layer since it's _mg
-    if (typeof EXTRA_BUNKER !== 'undefined')  { 
-      if (tile_has_extra(ptile, EXTRA_BUNKER)) {   
+    if (typeof EXTRA_BUNKER !== 'undefined')  {
+      if (tile_has_extra(ptile, EXTRA_BUNKER)) {
         return result_sprites;
       }
     }
-    // show in top-down order and return early, to not show hidden foundational 
+    // show in top-down order and return early, to not show hidden foundational
     // based underneath:
     if (typeof EXTRA_CASTLE !== 'undefined') {
       if (tile_has_extra(ptile, EXTRA_CASTLE)) {
@@ -2423,19 +2430,19 @@ function fill_layer1_sprite_array(ptile, pcity)
                            "offset_y" : -normal_tile_height / 2});
         return result_sprites;
       }
-    } 
+    }
     if (tile_has_extra(ptile, EXTRA_FORTRESS)) {
       result_sprites.push({"key" : "base.fortress_bg",
                            "offset_y" : -normal_tile_height / 2});
     }
     // We can only draw the Fort if there's not a Naval Base or Fortress (which hide it):
     // But we also have to check if it's defined because some rulesets don't define it
-    else if (typeof EXTRA_FORT !== 'undefined')  { 
-      if (tile_has_extra(ptile, EXTRA_FORT)) {   
+    else if (typeof EXTRA_FORT !== 'undefined')  {
+      if (tile_has_extra(ptile, EXTRA_FORT)) {
         result_sprites.push({"key" : "base.outpost_bg",
                              "offset_y" : -normal_tile_height / 2});
       }
-    } 
+    }
   }
   return result_sprites;
 }
@@ -2473,8 +2480,8 @@ function fill_layer2_sprite_array(ptile, pcity)
       result_sprites.push(get_base_flag_sprite(ptile));
     }
     if (tile_has_extra(ptile, EXTRA_FORTRESS)
-             || (typeof EXTRA_NAVALBASE !== 'undefined' 
-             && tile_has_extra(ptile, EXTRA_NAVALBASE))) 
+             || (typeof EXTRA_NAVALBASE !== 'undefined'
+             && tile_has_extra(ptile, EXTRA_NAVALBASE)))
     {
       result_sprites.push(get_base_flag_sprite(ptile));
     }
@@ -2507,24 +2514,24 @@ function fill_layer2_sprite_array(ptile, pcity)
   Foreground layer of walled bases
 ...st_unit is unit shown on top of stack (if any)
 ****************************************************************************/
-function fill_layer3_sprite_array(ptile, stacked, st_unit) 
+function fill_layer3_sprite_array(ptile, stacked, st_unit)
 {
   var result_sprites = [];
-  
+
   // bunker hides everything under it, but is drawn in other layer since it's _mg
-  if (typeof EXTRA_BUNKER !== 'undefined')  { 
-    if (tile_has_extra(ptile, EXTRA_BUNKER)) {   
+  if (typeof EXTRA_BUNKER !== 'undefined')  {
+    if (tile_has_extra(ptile, EXTRA_BUNKER)) {
       return result_sprites;
     }
   }
   // castle on top of fortress, have to check for it first then return
-  if (typeof EXTRA_CASTLE !== 'undefined')  { 
-    if (tile_has_extra(ptile, EXTRA_CASTLE)) {   
+  if (typeof EXTRA_CASTLE !== 'undefined')  {
+    if (tile_has_extra(ptile, EXTRA_CASTLE)) {
     result_sprites.push({"key" : "base.castle_fg",
                           "offset_y" : -normal_tile_height / 2});
     if (stacked)
       result_sprites.push(fill_stacked_in_base_sprite_array(st_unit, stacked));
-    return result_sprites;                  
+    return result_sprites;
     }
   }
   // fortress on top of fort, have to check for it first then return
@@ -2533,10 +2540,10 @@ function fill_layer3_sprite_array(ptile, stacked, st_unit)
                           "offset_y" : -normal_tile_height / 2});
     if (stacked)
       result_sprites.push(fill_stacked_in_base_sprite_array(st_unit, stacked));
-    return result_sprites;                  
+    return result_sprites;
   }
   // navalbase on top of fort, have to check for it first then return
-  if (typeof EXTRA_NAVALBASE !== 'undefined')  { 
+  if (typeof EXTRA_NAVALBASE !== 'undefined')  {
     if (tile_has_extra(ptile, EXTRA_NAVALBASE)) {
       result_sprites.push({"key" : "base.navalbase_fg",
                             "offset_y" : -normal_tile_height / 2});
@@ -2546,22 +2553,22 @@ function fill_layer3_sprite_array(ptile, stacked, st_unit)
     }
   }
   // We can only draw the Fort if there's no Fortress or Naval Base
-  if (typeof EXTRA_FORT !== 'undefined')  { 
-    if (tile_has_extra(ptile, EXTRA_FORT)) {   
+  if (typeof EXTRA_FORT !== 'undefined')  {
+    if (tile_has_extra(ptile, EXTRA_FORT)) {
       result_sprites.push({"key" : "base.outpost_fg",
                           "offset_y" : -normal_tile_height / 2});
       if (stacked)
         result_sprites.push(fill_stacked_in_base_sprite_array(st_unit, stacked));
-      return result_sprites;  
+      return result_sprites;
     }
-  }  
+  }
 
   return result_sprites; // returns empty array
 }
 
 /**************************************************************************
  One step closer to all unit graphics having all their offsets defined in
- a file. This currently hard-codes it but the function could be easily 
+ a file. This currently hard-codes it but the function could be easily
  changed to load from a file once there is some standard for that.
 **************************************************************************/
 function create_unit_offset_arrays()
@@ -2572,27 +2579,27 @@ function create_unit_offset_arrays()
 
     // **WARNING for all y values: positive moves up, negative moves down
     var dx = unit_offset_adj_x;  // this is a base value to allow adjusting all unit offsets
-    var dy = unit_offset_adj_y; 
+    var dy = unit_offset_adj_y;
     var sx = 0, sy = 0;       // custom shield placement
     var vx = 0,  vy = 0;      // custom vet badge placement
-    var mx = -10, my = -19;   // a "starting base value" for position of multi-unit 
+    var mx = -10, my = -19;   // a "starting base value" for position of multi-unit
                               // (stacked "+") sprite. Some units will change this.
 
     // This section allows custom offset adjustments for any particular unit. This helps with the
     // fact a 64x48 sprite can occupy parts of an area larger than the 96x48 tile area, and the fact
-    // that sprites have distinct shapes and sizes. 
+    // that sprites have distinct shapes and sizes.
 
     switch(ptype['name']) {
       case "AEGIS Cruiser":
           dx -= 2;  dy -= 7;
           vx -= 11; vy += 8;
-          mx -= 6; my += 7; 
+          mx -= 6; my += 7;
           break;
-      case "Alpine Troops":                     
+      case "Alpine Troops":
           dx -= 3; dy -= 1;
           vx -= 4; vy -= 4;
           break;
-      case "Archer":                     
+      case "Archer":
           dx += 1;
           vx -= 8; vy -= 8;
           break;
@@ -2604,18 +2611,18 @@ function create_unit_offset_arrays()
           vx += 11; vy += 4;
           break;
       case "Artillery":
-          dx -= 12;               
+          dx -= 12;
           vx += 8; vy -= 8;
           break;
-      case "AWACS":                     
+      case "AWACS":
           dx -= 17; dy += 3;
           mx -= 7; my += 6;
           sx = 8;
-          break;    
+          break;
       case "Battleship":
           dx -= 5; dy -= 7;
           vx += 4; vy -= 11;
-          //mx -= 6; my += 7; 
+          //mx -= 6; my += 7;
           break;
       case "Cannon":
           vx += 1; vy -= 4;
@@ -2628,13 +2635,13 @@ function create_unit_offset_arrays()
           vx += 3; vy -= 3;
           break;
       case "Carrier":
-          dx -= 3; dy -= 4; 
+          dx -= 3; dy -= 4;
           vx -= 12; vy +=12;
           mx -= 10; my +=7;
           break;
       case "Cargo Ship":
           dx -= 1; dy -= 2;
-          mx -= 6; my += 7; 
+          mx -= 6; my += 7;
           break;
       case "Catapult":
           vx -= 14; vy += 15;
@@ -2645,7 +2652,7 @@ function create_unit_offset_arrays()
           dx += 4; dy -= 3;
           break;
       case "Chariot":
-          sx = 8; 
+          sx = 8;
           dx -= 2; dy -= 3;
           vx -= 11; vy += 4;
           mx -= 6;  my += 7;
@@ -2659,9 +2666,9 @@ function create_unit_offset_arrays()
           break;
       case "Crusaders":
           vx -= 3; vy -= 12;
-          break;    
+          break;
       case "Destroyer":
-          dx -= 3; dy -= 3; 
+          dx -= 3; dy -= 3;
           vx -= 13; vy += 12;
           break;
       case "Diplomat":
@@ -2677,10 +2684,10 @@ function create_unit_offset_arrays()
           dx -= 3; dy -= 4;
           vx -= 48; vy -= 16;
           break;
-      case "Engineers":                     
+      case "Engineers":
           dx -= 3; dy -= 4;
           break;
-      case "Elephants":                     
+      case "Elephants":
           vx += 8; vy -= 9;
           dx -= 6; dy -= 7;
           break;
@@ -2690,8 +2697,8 @@ function create_unit_offset_arrays()
           vx += 2; vy += 2;
           mx -= 6; my += 4;
           break;
-      case "Explorer":                     
-          dx -= 3; dy -= 5; 
+      case "Explorer":
+          dx -= 3; dy -= 5;
           break;
       case "Falconeers":
           dx += 2; dy += 2;
@@ -2720,7 +2727,7 @@ function create_unit_offset_arrays()
       case "Ground Troops":
           dy += 2;
           vx -= 3; vy -= 7;
-        break;              
+        break;
       case "Heavy Bomber":
             case "Bomber":
           sx = 8;
@@ -2778,9 +2785,9 @@ function create_unit_offset_arrays()
           sx = 8;
           dx += 5; dy += 2;
           vx += 7; vy += 18;
-          break;  
+          break;
       case "Missile Destroyer":
-          dx -= 3; dy -= 3; 
+          dx -= 3; dy -= 3;
           vx -= 12; vy += 11;
           break;
       case "Missile Submarine":
@@ -2795,7 +2802,7 @@ function create_unit_offset_arrays()
           dx += 1; dy -= 4;
           vx += 1; vy -= 19;
           break;
-      case "Phalanx":                     
+      case "Phalanx":
           dx += 0; dy -= 3;
           vx +=2; vy -= 8;
           break;
@@ -2809,7 +2816,7 @@ function create_unit_offset_arrays()
       case "Riflemen":
           dx -= 4; dy -= 2;
           vx -= 9; vy -= 4;
-          break; 
+          break;
       case "Ram Ship":
           vx -= 1; vy -= 1;
           break;
@@ -2827,9 +2834,9 @@ function create_unit_offset_arrays()
           sx = 8;
           dx -= 27; dy += 0;
           mx -= 4;  my -= 6;
-          break;       
+          break;
       case "Stealth Bomber":
-          dx -= 31; dy -= 4;  
+          dx -= 31; dy -= 4;
           vx -= 45; vy += 4;
           mx -= 2;  my -= 1;
           break;
@@ -2849,7 +2856,7 @@ function create_unit_offset_arrays()
           break;
       case "Train":
           dx += 5; dy -= 8;
-          break;  
+          break;
       case "Transport":
           dx -= 3; dy -= 1;
           vx -= 23; vy += 12;
@@ -2859,7 +2866,7 @@ function create_unit_offset_arrays()
           break;
       case "Trawler":
           dx -= 13; dy += 6;
-          mx -= 6; my += 7; 
+          mx -= 6; my += 7;
           break;
       case "Trireme":
           vx += 2; vy += 1;
@@ -2870,7 +2877,7 @@ function create_unit_offset_arrays()
       case "Wagon":
           dx -= 9; dy -= 5;
           mx -= 7; my -= 3;
-          break;  
+          break;
       case "War Galley":
           vx -= 4; vy += 3;
           break;
@@ -2891,7 +2898,7 @@ function create_unit_offset_arrays()
     }
 
     // Put above information into the UO unit offset arrays for units and their icon components:
-    UO_dx[i] = dx + unit_offset_x; 
+    UO_dx[i] = dx + unit_offset_x;
     UO_dy[i] = dy + unit_offset_y;
     UO_sx[i] = sx; UO_sy[i] = sy;
     UO_vx[i] = vx; UO_vy[i] = vy;
