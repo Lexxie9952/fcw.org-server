@@ -1583,7 +1583,7 @@ function get_unit_activity_sprite(punit)
 
     case ACTIVITY_VIGIL:
         if (observing
-           || (client.conn.playing != null
+           || ((client.conn.playing != null || is_supercow())
                && (client.conn.playing.playerno == punit.owner
                    || players[punit.owner]['gives_shared_vision'].isSet(client.conn.playing.playerno)))
             ) {
