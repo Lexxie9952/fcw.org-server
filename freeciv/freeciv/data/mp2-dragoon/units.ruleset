@@ -1237,9 +1237,9 @@ Masonry lets Workers build Forts. Construction lets them build Fortresses and\
  Bridges. Radio lets them build Airbases and Buoys, which Settlers cannot. Workers\
  must be on a ship to build Buoys. \n\
 "), _("\
-Until the discovery of Explosives, Workers will immediately upgrade for free\
- to Workers II. No moves are spent, no city is needed, and the current job\
- is not interrupted. \n\
+Workers are immediately upgraded to Workers II when you learn Democracy.\
+ Until the discovery of Explosives, you can upgrade bribed and captured Workers for free.\
+ This can be done on any tile and the current job is not interrupted. \n\
 "), _("\
 Communism tech allows Communist governments to conscript Workers II into Riflemen via the\
  Convert order. And vice versa.\
