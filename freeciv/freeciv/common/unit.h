@@ -49,7 +49,7 @@ enum unit_orders {
 };
 
 enum unit_focus_status {
-  FOCUS_AVAIL, FOCUS_WAIT, FOCUS_DONE  
+  FOCUS_AVAIL, FOCUS_WAIT, FOCUS_DONE
 };
 
 enum goto_route_type {
@@ -355,14 +355,14 @@ void set_unit_activity_road(struct unit *punit,
                             Road_type_id road);
 int get_activity_rate(const struct unit *punit);
 int real_get_activity_rate_this_turn(const struct unit *punit,
-                                     bool is_turn_change); 
+                                     bool is_turn_change);
 int get_activity_rate_this_turn(const struct unit *punit);
 int get_turns_for_activity_at(const struct unit *punit,
                               enum unit_activity activity,
                               const struct tile *ptile,
                               struct extra_type *tgt);
 bool activity_requires_target(enum unit_activity activity);
-bool can_unit_do_autosettlers(const struct unit *punit); 
+bool can_unit_do_autosettlers(const struct unit *punit);
 bool is_unit_activity_on_tile(enum unit_activity activity,
                               const struct tile *ptile);
 bv_extras get_unit_tile_pillage_set(const struct tile *ptile);
@@ -436,6 +436,10 @@ int get_transporter_occupancy(const struct unit *ptrans);
 struct unit *transporter_for_unit(const struct unit *pcargo);
 struct unit *transporter_for_unit_at(const struct unit *pcargo,
                                      const struct tile *ptile);
+
+enum unit_upgrade_result unit_transform_result(const struct civ_map *nmap,
+                                               const struct unit *punit,
+                                               const struct unit_type *to_unittype);
 
 enum unit_upgrade_result unit_upgrade_test(const struct unit *punit,
                                            bool is_free);

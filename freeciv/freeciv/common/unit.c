@@ -40,7 +40,7 @@
 #include "traderoutes.h"
 #include "unitlist.h"
 
-/* DEBUG 
+/* DEBUG
 #include "../server/notify.h" */
 
 #include "unit.h"
@@ -105,7 +105,7 @@ enum unit_airlift_result
     return AR_WRONG_UNITTYPE;
   }
 
-/* 
+/*
   if (0 < get_transporter_occupancy(punit)) {
     // Units with occupants can't be airlifted currently.
     return AR_OCCUPIED;
@@ -177,7 +177,7 @@ enum unit_airlift_result
       / game.info.airlift_dest_divisor)+0.5) : 0;
       if (city_airlift_max(pdest_city) <= 0 || (!(game.info.airlifting_style
           & AIRLIFTING_UNLIMITED_DEST) && pdest_city->airlift
-          <= airlift_dest_condition)) {  
+          <= airlift_dest_condition)) {
         /* The destination cannot support airlifted units for this turn
          * (maybe already airlifed or no airport).
          * See also do_airline() in server/unittools.h. */
@@ -339,7 +339,7 @@ bool is_military_unit(const struct unit *punit)
   Determines if a unit with a limited number of attacks per turn is
   still able to attack (or has used up all its attacks.)
 **************************************************************************/
-static bool unit_has_attacks_left(const struct unit *punit) { 
+static bool unit_has_attacks_left(const struct unit *punit) {
   struct extra_unit_stats pstats;
   unit_get_extra_stats(&pstats, punit);
 
@@ -403,7 +403,7 @@ bool is_field_unit(const struct unit *punit)
 /**********************************************************************//**
   Is the unit one that is invisible on the map? A unit is invisible if
   its vision_layer is set to one of the hard-coded layers deemed to be
-  so by fiat (currently V_INVIS ("Stealth") and V_SUBSURFACE ("Subsurface") 
+  so by fiat (currently V_INVIS ("Stealth") and V_SUBSURFACE ("Subsurface")
   ... OR if the unit is transported by a unit whose vision_layer is one
   of those.
 
@@ -502,10 +502,10 @@ int get_activity_rate(const struct unit *punit)
    * This means sea formers won't have their activity rate increased by
    * Magellan's, and it means injured units work just as fast as
    * uninjured ones.  Note the value is never less than SINGLE_MOVE. */
-  /* That's great and smart to keep adjusted move rate out of work 
+  /* That's great and smart to keep adjusted move rate out of work
      activity rate because it should be a separate effect, which it
      now is. Setting a new standard for good Freeciv maths practices,
-     we're keeping it float all the way through to set a new example in 
+     we're keeping it float all the way through to set a new example in
      accurate mathematical rounding */
   float work_bonus_rate = (float)get_target_bonus_effects(NULL, unit_owner(punit), NULL,
                                   tile_city(ptile), NULL, ptile, punit,
@@ -518,8 +518,8 @@ int get_activity_rate(const struct unit *punit)
 
    float move_rate = (float)unit_type_get(punit)->move_rate; /* sans Move_Bonus */
    // Add work_bonus_rate and/or multiple by work_bonus_pct:
-   move_rate = (move_rate + work_bonus_rate) * (1.0 + work_bonus_pct) + .1; //round up 
-                                                             
+   move_rate = (move_rate + work_bonus_rate) * (1.0 + work_bonus_pct) + .1; //round up
+
 
   /* All settler actions are multiplied by ACTIVITY_FACTOR. */
   return (int)(ACTIVITY_FACTOR
@@ -535,10 +535,10 @@ int get_activity_rate(const struct unit *punit)
 
   The speed is multiplied by ACTIVITY_FACTOR.
   -----------------------------------------------------------------
-  This is the mid-turn generic wrapper function for 
+  This is the mid-turn generic wrapper function for
   real_get_activity_rate_this_turn(..)
   Only TC processing is allowed to call real_get_activity_rate_this_turn
-  directly (and skip this wrapper), as it's the only case where 
+  directly (and skip this wrapper), as it's the only case where
   is_turn_change==TRUE is passed through. (This arrangement has lightest
   impact on existing codebase and legacy calls to this function.)
 **************************************************************************/
@@ -559,7 +559,7 @@ int get_activity_rate_this_turn(const struct unit *punit)
   2) BY WRAPPER: in unittools.c::execute_orders() for a freshly given order
      that has UWT, to calc the work-rate that will be actuated after UWT.
   3) BY WRAPPER: Mid-clicking a tile to see activity completion time.
-  [+ Possible future cases for projected work-units assigned this turn] 
+  [+ Possible future cases for projected work-units assigned this turn]
 **************************************************************************/
 int real_get_activity_rate_this_turn (const struct unit *punit,
                                       bool is_turn_change)
@@ -567,8 +567,8 @@ int real_get_activity_rate_this_turn (const struct unit *punit,
 /*  This logic is also coded in client/goto.c, but only for mid-turn
     info requests, not for the TC logic processing exceptions here. */
 
-/*  Formerly, we knew a unit can begin activity if punit->moves_left > 0. 
-    
+/*  Formerly, we knew a unit can begin activity if punit->moves_left > 0.
+
     Passive target move-costs need refresh of move-points BEFORE updating
     activities, so that passive move-costs won't be charged then reset by
     refresh, during one-at-a-time unit-by-unit processing.
@@ -597,7 +597,7 @@ int real_get_activity_rate_this_turn (const struct unit *punit,
   return 0;
 
 /*  FUTURE FEATURES:
-    Fairly small logic changes in this function can allow for 
+    Fairly small logic changes in this function can allow for
     1. New ruleset sophistication and flexibility,
     2. More realistic physics,
     3. Better work-rate granularity.
@@ -624,7 +624,7 @@ int real_get_activity_rate_this_turn (const struct unit *punit,
                                         tile_city(unit_tile(punit)), NULL, unit_tile(punit), punit,
                                         unit_type_get(punit), NULL, NULL, NULL,
                                         EFT_TIRED_ACTIVITY_CREDIT, V_COUNT));
-          if (reduced_rate > 0) return reduced_rate;                       
+          if (reduced_rate > 0) return reduced_rate;
         }
 
     REALISTIC PHYSICS
@@ -635,7 +635,7 @@ int real_get_activity_rate_this_turn (const struct unit *punit,
 
     WORK-RATE GRANULARITY
       The above (and other) ideas may help us improve ratio flaws from discrete stair-stepping
-      phenomena in move mechanics: e.g., 
+      phenomena in move mechanics: e.g.,
       In 1x rules:
         * 1 turn lost for moving + 2 turns for road on grass/plains
         * 1 turn lost for moving + 4 turns for road on forest/hills
@@ -719,7 +719,7 @@ bool activity_requires_target(enum unit_activity activity)
   auto-settlers.  If any new auto modes are introduced they should be
   handled separately.
 **************************************************************************/
-bool can_unit_do_autosettlers(const struct unit *punit) 
+bool can_unit_do_autosettlers(const struct unit *punit)
 {
   return unit_type_get(punit)->adv.worker;
 }
@@ -870,7 +870,7 @@ bool could_unit_load(const struct unit *pcargo, const struct unit *ptrans)
   bool found_enabler = FALSE;
   action_enabler_list_iterate(action_enablers_for_action(ACTION_TRANSPORT_BOARD),
                               enabler) {
-    if (is_enabler_active(enabler, unit_owner(pcargo), 
+    if (is_enabler_active(enabler, unit_owner(pcargo),
                           tile_city(unit_tile(ptrans)), /* boarding happens @ target */
                           NULL, unit_tile(ptrans),      /* boarding happens @ target */
                           pcargo, unit_type_get(pcargo),
@@ -1004,7 +1004,7 @@ bool can_unit_continue_current_activity(struct unit *punit)
 {
   enum unit_activity current = punit->activity;
   struct extra_type *target = punit->activity_target;
-  enum unit_activity current2 = 
+  enum unit_activity current2 =
               (current == ACTIVITY_FORTIFIED) ? ACTIVITY_FORTIFYING : current;
   bool result;
 
@@ -1133,7 +1133,7 @@ bool can_unit_do_activity_targeted_at(const struct unit *punit,
                                     unit_owner(punit),
                                     punit);
         if (pextra == NULL) {
-          // No available pollution extras 
+          // No available pollution extras
           return FALSE;
         }
       }
@@ -1178,7 +1178,7 @@ bool can_unit_do_activity_targeted_at(const struct unit *punit,
                                     unit_owner(punit),
                                     punit);
         if (pextra == NULL) {
-          // No available pollution extras 
+          // No available pollution extras
           return FALSE;
         }
       }
@@ -1583,7 +1583,7 @@ void unit_tile_set(struct unit *punit, struct tile *ptile)
 }
 
 /**********************************************************************//**
-Pass-through function for is_allied_unit_tile(), which is supposed to be 
+Pass-through function for is_allied_unit_tile(), which is supposed to be
 used to see if it's an allied unit tile. But sometimes it was hard-coded
 to determine the legality of ZoC movement under the assumption ZoC rules
 were invariable and not changeable by effects or settings. This function
@@ -1598,7 +1598,7 @@ struct unit *is_allied_unit_tile_allowing_movement(const struct tile *ptile,
     return is_allied_unit_tile_zoc_pure(ptile, pplayer);
   }
   else {
-    return is_allied_unit_tile(ptile, pplayer); 
+    return is_allied_unit_tile(ptile, pplayer);
   }
 }
 
@@ -1625,7 +1625,7 @@ struct unit *is_allied_unit_tile(const struct tile *ptile,
 }
 
 /**********************************************************************//**
-Returns true if the tile contains an allied unit that is NOT igZOC. 
+Returns true if the tile contains an allied unit that is NOT igZOC.
 This is alternate version of above func for game.server.zoc_purity==true,
 (igzoc units don't lift zoc for non-igzoc units.)
 (if your nation A is allied with B, and B is allied with C, a tile
@@ -1773,7 +1773,7 @@ bool is_my_zoc(const struct player *pplayer, const struct tile *ptile0,
   if (srv || tile_get_known(ptile0, pplayer) == TILE_KNOWN_SEEN) {
     if (is_non_allied_unit_tile(ptile0, pplayer)) {
       return FALSE;
-    } 
+    }
   }
 
   square_iterate(zmap, ptile0, 1, ptile) {
@@ -1792,7 +1792,7 @@ bool is_my_zoc(const struct player *pplayer, const struct tile *ptile0,
     if (pcity != NULL) {
       /* Putting the next if() as an && in the line above triggers the
          else{} in such a way that breaks with the rule that the ZOC a
-         city exerts will not reveal what kind of unit(s) inside. 
+         city exerts will not reveal what kind of unit(s) inside.
          This also works with some other important nuances: 1. Cities
          are 'native' to land not sea, 2. The rule that cities don't do
          ZOC over ocean stays consistent and ultra-simple, 3. BadCityDefenders
@@ -1835,13 +1835,13 @@ bool is_my_zoc_client_goto(const struct player *pplayer,
   if (tile_get_known(ptile0, pplayer) == TILE_KNOWN_SEEN) {
     if (is_non_allied_unit_tile(ptile0, pplayer)) {
       return FALSE;
-    } 
+    }
   }
 
   square_iterate(zmap, ptile0, 1, ptile) {
     bool non_allied_city = is_non_allied_city_tile(ptile, pplayer) != NULL;
     enum known_type tile_vision = tile_get_known(ptile, pplayer);
-    
+
     if (terrain_has_flag(tile_terrain(ptile), TER_NO_ZOC)
         || (tile_vision == TILE_UNKNOWN) /* unknown == no ZOC */
         /* Fogged == no ZOC, unless a non-allied city is shown: */
@@ -1883,7 +1883,7 @@ bool is_my_zoc_client_goto_igzoc(const struct player *pplayer,
   if (tile_get_known(ptile0, pplayer) == TILE_KNOWN_SEEN) {
     if (is_non_allied_unit_tile(ptile0, pplayer)) {
       return FALSE;
-    } 
+    }
   }
 
   return TRUE;
@@ -2176,7 +2176,7 @@ int get_transporter_occupancy(const struct unit *ptrans)
 }
 
 /**********************************************************************//**
-  Helper for transporter_for_unit() and transporter_for_unit_at() 
+  Helper for transporter_for_unit() and transporter_for_unit_at()
 **************************************************************************/
 static struct unit *base_transporter_for_unit(const struct unit *pcargo,
                                               const struct tile *ptile,
@@ -2334,33 +2334,68 @@ static bool can_type_transport_units_cargo(const struct unit_type *utype,
 }
 
 /**********************************************************************//**
+  Tests if something prevents punit from being transformed to to_unittype
+  where it is now, presuming its current position is valid.
+
+  FIXME: 1. the nmap pointer is wasteful and was removed by upstream;
+            simply find all callers and remove it and change nmap
+            to &(wld.map) inside this function. Test with LUA free
+            upgrades in a ruleset which does it.
+         2. The transport stack may still fail unit_transport_check()
+            in result.
+**************************************************************************/
+enum unit_upgrade_result
+unit_transform_result(const struct civ_map *nmap,
+                      const struct unit *punit,
+                      const struct unit_type *to_unittype)
+{
+  fc_assert_ret_val(NULL != to_unittype, UU_NO_UNITTYPE);
+
+  if (!can_type_transport_units_cargo(to_unittype, punit)) {
+    return UU_NOT_ENOUGH_ROOM;
+  }
+
+  if (punit->transporter != NULL) {
+    if (!can_unit_type_transport(unit_type_get(punit->transporter),
+                                 utype_class(to_unittype))) {
+      return UU_UNSUITABLE_TRANSPORT;
+    }
+  } else if (!can_exist_at_tile(nmap, to_unittype, unit_tile(punit))) {
+    /* The new unit type can't survive on this terrain. */
+    return UU_NOT_TERRAIN;
+  }
+
+  return UU_OK;
+}
+
+/**********************************************************************//**
   Tests if the unit could be updated. Returns UU_OK if is this is
   possible.
 
   is_free should be set if the unit upgrade is "free" (e.g., Leonardo's).
   Otherwise money is needed and the unit must be in an owned city.
 
-  Note that this function is strongly tied to unittools.c:upgrade_unit().
+  Note that this function is strongly tied to unittools.c:transform_unit().
 **************************************************************************/
 enum unit_upgrade_result unit_upgrade_test(const struct unit *punit,
                                            bool is_free)
 {
   struct player *pplayer = unit_owner(punit);
   const struct unit_type *to_unittype = can_upgrade_unittype(pplayer,
-                                                       unit_type_get(punit));
+                                                             unit_type_get(punit));
   int cost;
-
-  if (punit->activity == ACTIVITY_CONVERT) {
-    /*  TODO: There may be other activities that the upgraded unit is not
-       allowed to do, which we could also test.
-       -
-       If convert were legal for new unit_type we could allow, but then it 
-       has a 'head start' getting activity time from the old conversion. */
-    return UU_NOT_ACTIVITY;
-  }
 
   if (!to_unittype) {
     return UU_NO_UNITTYPE;
+  }
+
+  if (punit->activity == ACTIVITY_CONVERT) {
+    /*  TODO: There may be other activities that the upgraded unit is not
+        allowed to do, which we could also test.
+        -
+        If convert were legal for new unit_type we could allow, but then it
+        has a 'head start' getting activity time from the old conversion. */
+    return UU_NOT_ACTIVITY;
   }
 
   if (!is_free) {
@@ -2369,36 +2404,20 @@ enum unit_upgrade_result unit_upgrade_test(const struct unit *punit,
       return UU_NO_MONEY;
     }
 
-    /*THESE REQS ARE NOW SOFT-CODED IN RULESET ACTIONENABLER, not HARD-CODED HERE
+    /*THESE REQS are for RULESET ACTIONENABLER to decide, not server:
     struct city *pcity = tile_city(unit_tile(punit));
     if (!pcity) {
       return UU_NOT_IN_CITY;
     }
     if (city_owner(pcity) != pplayer) {
-      // TODO: should upgrades in allied cities be possible?
-      // ANSWER: LET THE ACTIONENABLER DECIDE !
       return UU_NOT_CITY_OWNER;
     }
     */
   }
 
-  if (!can_type_transport_units_cargo(to_unittype, punit)) {
-    /* TODO: allow transported units to be reassigned.  Check here
-     * and make changes to upgrade_unit. */
-    return UU_NOT_ENOUGH_ROOM;
-  }
-
-  if (punit->transporter != NULL) {
-    if (!can_unit_type_transport(unit_type_get(punit->transporter),
-                                 unit_class_get(punit))) {
-      return UU_UNSUITABLE_TRANSPORT;
-    }
-  } else if (!can_exist_at_tile(&(wld.map), to_unittype, unit_tile(punit))) {
-    /* The new unit type can't survive on this terrain. */
-    return UU_NOT_TERRAIN;
-  }
-
-  return UU_OK;
+  /* TODO: Allow transported units to be reassigned. Check here
+   * and make changes to upgrade_unit. */
+  return unit_transform_result(&(wld.map), punit, to_unittype);
 }
 
 /**********************************************************************//**
@@ -2623,7 +2642,7 @@ int unit_bribe_cost(struct unit *punit, struct player *briber)
   cost = unit_owner(punit)->economic.gold + game.info.base_bribe_cost;
   ///capital = player_capital(unit_owner(punit));
 
-  /* /// Consider the distance to the capital. 
+  /* /// Consider the distance to the capital.
   if (capital != NULL) {
     dist = MIN(GAME_UNIT_BRIBE_DIST_MAX,
                map_distance(capital->tile, unit_tile(punit)));

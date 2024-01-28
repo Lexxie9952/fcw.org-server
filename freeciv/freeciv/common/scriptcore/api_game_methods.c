@@ -540,7 +540,7 @@ int api_methods_player_culture_get(lua_State *L, Player *pplayer)
 bool api_methods_player_has_flag(lua_State *L, Player *pplayer, const char *flag)
 {
   enum plr_flag_id flag_val;
-  
+
   LUASCRIPT_CHECK_STATE(L, 0);
   LUASCRIPT_CHECK_SELF(L, pplayer, 0);
 
@@ -551,6 +551,54 @@ bool api_methods_player_has_flag(lua_State *L, Player *pplayer, const char *flag
   }
 
   return FALSE;
+}
+
+/**********************************************************************//**
+  Return if a unit can upgrade considering where it is now.
+  If is_free is FALSE, considers local city and the owner's treasury.
+**************************************************************************/
+bool api_methods_unit_can_upgrade(lua_State *L, Unit *punit, bool is_free)
+{
+
+  return UU_OK == unit_upgrade_test(punit, is_free);
+}
+
+/**********************************************************************//**
+  Return a name of the problem unit may have being transformed to ptype
+  where it is now, or nil if no problem seems to exist.
+**************************************************************************/
+const char *api_methods_unit_transform_problem(lua_State *L, Unit *punit,
+                                               Unit_Type *ptype)
+{
+  enum unit_upgrade_result uu;
+
+  LUASCRIPT_CHECK_STATE(L, NULL);
+  LUASCRIPT_CHECK_SELF(L, punit, NULL);
+  LUASCRIPT_CHECK_ARG_NIL(L, ptype, 3, Unit_Type, NULL);
+
+  uu = unit_transform_result(&(wld.map), punit, ptype);
+  switch (uu) {
+  case UU_OK:
+    return NULL;
+  case UU_NOT_ENOUGH_ROOM:
+    return "cargo";
+  case UU_UNSUITABLE_TRANSPORT:
+    return "transport";
+  case UU_NOT_TERRAIN:
+    return "terrain";
+  case UU_NOT_ACTIVITY:
+    return "activity";
+  case UU_NO_UNITTYPE:
+  case UU_NO_MONEY:
+  case UU_NOT_IN_CITY:
+  case UU_NOT_CITY_OWNER:
+    /* should not get here */
+    break;
+  }
+
+  fc_assert_msg(FALSE, "Unexpected unit transform result %i", uu);
+
+  return "\?";
 }
 
 /*************************************************************************//**
@@ -880,7 +928,7 @@ bool api_methods_tile_has_road(lua_State *L, Tile *ptile, const char *name)
     return FALSE;
   } else {
     struct extra_type *pextra;
- 
+
     pextra = extra_type_by_rule_name(name);
 
     return (NULL != pextra && is_extra_caused_by(pextra, EC_ROAD)
@@ -894,7 +942,7 @@ bool api_methods_tile_has_road(lua_State *L, Tile *ptile, const char *name)
 bool api_methods_enemy_tile(lua_State *L, Tile *ptile, Player *against)
 {
   struct city *pcity;
-  
+
   LUASCRIPT_CHECK_STATE(L, FALSE);
   LUASCRIPT_CHECK_SELF(L, ptile, FALSE);
 

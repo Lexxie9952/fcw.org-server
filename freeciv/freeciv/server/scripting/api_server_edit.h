@@ -19,7 +19,7 @@
 
 struct lua_State;
 
-/* type of clima change */
+/* type of climate change */
 enum climate_change_type {
   CLIMATE_CHANGE_GLOBAL_WARMING,
   CLIMATE_CHANGE_NUCLEAR_WINTER
@@ -38,6 +38,10 @@ Unit *api_edit_create_unit_full(lua_State *L, Player *pplayer, Tile *ptile,
 bool api_edit_unit_teleport(lua_State *L, Unit *punit, Tile *dest);
 
 void api_edit_unit_turn(lua_State *L, Unit *punit, Direction dir);
+
+bool api_edit_unit_upgrade(lua_State *L, Unit *punit, int vet_loss);
+bool api_edit_unit_transform(lua_State *L, Unit *punit, Unit_Type *ptype,
+                             int vet_loss);
 
 void api_edit_unit_kill(lua_State *L, Unit *punit, const char *reason,
                         Player *killer);

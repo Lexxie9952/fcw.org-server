@@ -39,8 +39,8 @@
 #include "srv_main.h" /* game_was_started() */
 #include "stdinhand.h"
 #include "techtools.h"
-#include "unittools.h"
 #include "unithand.h"
+#include "unittools.h"
 
 /* server/scripting */
 #include "script_server.h"
@@ -51,7 +51,34 @@
 #include "api_server_edit.h"
 
 
-/*************************************************************************//**
+/**********************************************************************//**
+  A wrapper around transform_unit() that correctly processes
+  some unsafe requests. punit and to_unit must not be NULL.
+**************************************************************************/
+static bool
+ur_transform_unit(struct unit *punit, const struct unit_type *to_unit,
+                  int vet_loss)
+{
+  if (UU_OK == unit_transform_result(&(wld.map), punit, to_unit)) {
+    /* Avoid getting overt veteranship if a user requests increasing it */
+    if (vet_loss < 0) {
+      int vl = utype_veteran_levels(to_unit);
+
+      vl = punit->veteran - vl + 1;
+      if (vl >= 0) {
+        vet_loss = 0;
+      } else {
+        vet_loss = MAX(vet_loss, vl);
+      }
+    }
+    transform_unit(punit, to_unit, vet_loss);
+    return TRUE;
+  } else {
+    return FALSE;
+  }
+}
+
+/**********************************************************************//**
   Unleash barbarians on a tile, for example from a hut
 *****************************************************************************/
 bool api_edit_unleash_barbarians(lua_State *L, Tile *ptile)
@@ -218,7 +245,7 @@ void api_edit_unit_turn(lua_State *L, Unit *punit, Direction dir)
 
   LUASCRIPT_CHECK_STATE(L);
   LUASCRIPT_CHECK_ARG_NIL(L, punit, 2, Unit);
- 
+
   if (direction8_is_valid(dir)) {
     punit->facing = dir;
 
@@ -228,7 +255,39 @@ void api_edit_unit_turn(lua_State *L, Unit *punit, Direction dir)
   }
 }
 
-/*************************************************************************//**
+/**********************************************************************//**
+  Upgrade punit for free in the default manner, lose vet_loss vet levels.
+  Returns if the upgrade was possible.
+**************************************************************************/
+bool api_edit_unit_upgrade(lua_State *L, Unit *punit, int vet_loss)
+{
+  const struct unit_type *ptype;
+
+  LUASCRIPT_CHECK_STATE(L, FALSE);
+  LUASCRIPT_CHECK_SELF(L, punit, FALSE);
+
+  ptype = can_upgrade_unittype(unit_owner(punit), unit_type_get(punit));
+  if (!ptype) {
+    return FALSE;
+  }
+  return ur_transform_unit(punit, ptype, vet_loss);
+}
+
+/**********************************************************************//**
+  Transform punit to ptype, decreasing vet_loss veteranship levels.
+  Returns if the transformation was possible.
+**************************************************************************/
+bool api_edit_unit_transform(lua_State *L, Unit *punit, Unit_Type *ptype,
+                             int vet_loss)
+{
+  LUASCRIPT_CHECK_STATE(L, FALSE);
+  LUASCRIPT_CHECK_SELF(L, punit, FALSE);
+  LUASCRIPT_CHECK_ARG_NIL(L, ptype, 3, Unit_Type, FALSE);
+
+  return ur_transform_unit(punit, ptype, vet_loss);
+}
+
+/**********************************************************************//**
   Kill the unit.
 *****************************************************************************/
 void api_edit_unit_kill(lua_State *L, Unit *punit, const char *reason,
@@ -265,7 +324,7 @@ bool api_edit_change_terrain(lua_State *L, Tile *ptile, Terrain *pterr)
       || (terrain_has_flag(pterr, TER_NO_CITIES) && tile_city(ptile) != NULL)) {
     return FALSE;
   }
-  
+
   tile_change_terrain(ptile, pterr);
   fix_tile_on_terrain_change(ptile, old_terrain, FALSE);
   if (need_to_reassign_continents(old_terrain, pterr)) {
@@ -378,14 +437,14 @@ Tech_Type *api_edit_give_technology(lua_State *L, Player *pplayer,
       } else if (cost == -3) {
         cost = game.server.diplbulbcost;
       } else {
-        
+
         cost = 0;
       }
     }
     result = advance_by_number(id);
-    
+
     /* give blueprints instead of tech */
-    if (game.server.blueprints) { 
+    if (game.server.blueprints) {
       int blueprint_discount = cost ?
                                100-cost : game.server.blueprints;
       found_new_blueprint(presearch, id, blueprint_discount);
