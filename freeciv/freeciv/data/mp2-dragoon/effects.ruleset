@@ -30,7 +30,7 @@ format_version=20
 ; */ <-- avoid gettext warnings
 
 
-; ***************************************************************************************************************** SOFT FIELD UNIT 
+; ***************************************************************************************************************** SOFT FIELD UNIT
 ; Med. Bomber is a "Soft Field Unit." If non-aggressively deployed, 0 unhappy in Republic,
 ; 1 unhappy in Democracy:
 [effect_medium_bomber_field_unit_minus_one]
@@ -40,7 +40,7 @@ reqs	=
     { "type", "name", "range", "present"
       "UnitType", "Medium Bomber", "Local", TRUE
     }
-; EXAMPLE OF HOW TO USE NEW Unit_Unhappy_Cost EFFECT, almost same 
+; EXAMPLE OF HOW TO USE NEW Unit_Unhappy_Cost EFFECT, almost same
 ; as the above effect (don't use both!)
 ;[effect_medium_bomber_field_unit_minus_one]
 ;type    = "Unit_Unhappy_Cost"
@@ -48,7 +48,7 @@ reqs	=
 ;reqs	=
 ;    { "type", "name", "range", "present"
 ;      "UnitType", "Medium Bomber", "Local", TRUE
-;      "UnitState","OnDomesticTile","Local", TRUE 
+;      "UnitState","OnDomesticTile","Local", TRUE
 ;    }
 
 ; Combat_rounds, modern sea units attacking land
@@ -57,18 +57,18 @@ type    = "Combat_Rounds"
 value   = 20
 reqs	=
     { "type",         "name", "range", "present"
-      "UnitClass",    "Sea",  "Local", TRUE  
-      ; scope resolves to tile being attacked so effect can be influnced by things like terrain, tile nativity 
-      "TerrainClass", "Land", "Local", TRUE  
+      "UnitClass",    "Sea",  "Local", TRUE
+      ; scope resolves to tile being attacked so effect can be influnced by things like terrain, tile nativity
+      "TerrainClass", "Land", "Local", TRUE
     }
-target_reqs = 
+target_reqs =
     { "type",      "name", "range", "present"
     }
-; Non-native battles limited by combat_rounds don't usually 
-; result in a victor, and often the attacker uses multiple 
-; attack moves on a single defender, which artificially 
+; Non-native battles limited by combat_rounds don't usually
+; result in a victor, and often the attacker uses multiple
+; attack moves on a single defender, which artificially
 ; raises the chance of promotion. Therefore, we adjust promotion
-; odds downward such that chance of promotion after 2 attacks 
+; odds downward such that chance of promotion after 2 attacks
 ; is identical to standard chance of promotion after 1 attack.
 [effect_shore_bombardment_vet_reduce]
 type    = "Veteran_Combat"
@@ -77,13 +77,13 @@ reqs	=
     { "type",      "name", "range", "present"
       "UnitClass", "Sea",  "Local", TRUE
     }
-target_reqs = 
+target_reqs =
     { "type",         "name", "range", "present"
       "TerrainClass", "Land", "Local", TRUE
     }
 ;FP2 to FP1 in non-native attacks is a legitimately needed balance penalty,
 ;but it's overcorrective. Reducing firepower by half but then increasing
-;attack by 1/3 results in overall -33% penalty instead of -50%. That is, 
+;attack by 1/3 results in overall -33% penalty instead of -50%. That is,
 ;Attack becomes 67% strength instead of 50% strength.
 [effect_shore_bombardment_fp_reduction_compensation]
 type    = "Attack_Bonus"
@@ -244,7 +244,7 @@ reqs    =
       "Specialist", "merchant", "Local"
       "OutputType", "Gold", "Local"
       "Building", "A.Smith's Trading Co.", "Player"
-    }    
+    }
 [effect_laborer]
 type    = "Specialist_Output"
 value   = 1
@@ -447,7 +447,7 @@ reqs	=
       "Extra", "Furs", "Local"
       "OutputType", "Trade", "Local"
       "Terrain", "Glacier", "Local"
-    }    
+    }
 [effect_elk]
 type    = "Output_Add_Tile"
 value	= 2
@@ -475,7 +475,7 @@ reqs	=
       "OutputType", "Shield", "Local"
       "Terrain", "Tundra", "Local"
       "Extra", "Railroad", "Local"
-    }  
+    }
 [effect_iron]
 type    = "Output_Add_Tile"
 value	= 3
@@ -506,7 +506,7 @@ reqs	=
       "Extra", "Railroad", "Local"
       "Extra", "Mine", "Local"
     }
-; *** WANDERING RESOURCES ** 
+; *** WANDERING RESOURCES **
 [effect_deer]
 type    = "Output_Add_Tile"
 value	= 3
@@ -559,8 +559,8 @@ reqs	=
       "OutputType", "Food", "Local"
     }
 
-; *** "BLOOD FOR OIL" ** 
-[effect_blood_for_oil]  
+; *** "BLOOD FOR OIL" **
+[effect_blood_for_oil]
 type    = "Output_Add_Tile" ; Refining gives +1 shield to Oil Wells IFF on Oil.
 value	= 1
 reqs	=
@@ -606,7 +606,7 @@ reqs	=
 ; Vision benefit from mountains (for every land unit)
 [effect_mountains_vision]
 type    = "Unit_Vision_Radius_Sq"
-value   = 5    
+value   = 5
 reqs    =
     { "type",          "name",         "range"
       "Terrain",       "Mountains",    "Local"
@@ -632,7 +632,7 @@ value   = 3
 type    = "Max_Trade_Routes"
 value   = 1
 
-;pow(2, value/1000) = Base % 
+;pow(2, value/1000) = Base %
 ; ------------ ESTABLISH TRADE ROUTE, ONE TIME BONUS -----------------
 ;pow(2, value/1000)   USE STANDARD BONUS.
 ;[effect_base_trade_revenue_reduce]
@@ -672,7 +672,7 @@ reqs	=
       "Building", "Palace", "City",       TRUE
       "Building", "Palace", "Traderoute", TRUE
       "Tech",     "Banking", "World",     FALSE
-    }    
+    }
 ;------------------------------------------------------------------------
 
 ; Minimum trade from a traderoute is 1; change down-round to up-round by
@@ -684,7 +684,7 @@ reqs    =
     { "type", "name", "range"
       ; This was the ONLY req we could find for detecting a TradeRoute,
       ; everything else was false + or -
-      "CityStatus", "OwnedByOriginal", "TradeRoute"     
+      "CityStatus", "OwnedByOriginal", "TradeRoute"
       "CityTile", "Center", "Local"
       "OutputType", "Trade", "Local"
     }
@@ -701,14 +701,14 @@ reqs    =
 
 [effect_trireme_hp_regen] ;all riverships get + 1
 type    = "Unit_Recover"
-value   = 1   
+value   = 1
 reqs    =
     { "type",     "name",       "range", "present"
       "UnitClass", "Trireme",   "Local", TRUE
-    }    
+    }
 [effect_rivership_hp_regen] ;all riverships get + 1
 type    = "Unit_Recover"
-value   = 1   
+value   = 1
 reqs    =
     { "type",     "name",       "range", "present"
       "UnitClass", "RiverShip", "Local", TRUE
@@ -729,14 +729,14 @@ reqs    =
     }
 [effect_sea_hp_regen]
 type    = "Unit_Recover" ;30hp units get + 3
-value   = 3   
+value   = 3
 reqs    =
     { "type", "name", "range"
       "UnitClass", "Sea", "Local"
     }
 [effect_sub_hp_regen] ;28hp gets + 3
 type    = "Unit_Recover"
-value   = 3   
+value   = 3
 reqs    =
     { "type", "name", "range"
       "UnitClass", "Submarine", "Local"
@@ -831,7 +831,7 @@ reqs    =
       "UnitType", "Spy Plane", "Local"
     }
 
-; ******** ruleset bonus ********** FORTIFY and RIVER ********************* 
+; ******** ruleset bonus ********** FORTIFY and RIVER *********************
 [effect_fortified]
 type    = "Fortify_Defense_Bonus"
 value   = 50
@@ -962,7 +962,7 @@ reqs    =
 ;    { "type",          "name",         "range", "present"
 ;      "UnitType",      "Tribesmen",    "Local", TRUE
 ;      "MinYear",       "100",          "World", TRUE
-;      "Building",      "Chand Baori",  "Player",FALSE  
+;      "Building",      "Chand Baori",  "Player",FALSE
 ;    }
 
 
@@ -978,7 +978,7 @@ reqs    =
       ; Everything except Cargo class has classic 50% recycle penalty:
     }
 [effect_unit_shield_value_recycle_cargo_unit]
-;The Goods unit_Type has 25% recycle penalty. Freight 
+;The Goods unit_Type has 25% recycle penalty. Freight
 ;is caught by no effects so remains 100%
 type    = "Unit_Shield_Value_Pct"
 value   = -15
@@ -1049,7 +1049,7 @@ type    = "Defend_Bonus"
 value   = 33
 reqs    =
     { "type",      "name",             "range", "present"
-      "Extra",     "Fort",             "Local", TRUE  
+      "Extra",     "Fort",             "Local", TRUE
       "Extra",     "Fortress",         "Local", FALSE ; Fortress calculated separately even if a fort is under it.
       "Extra",     "Naval Base",       "Local", FALSE ; Naval base calculated separately even if a fort is under it.
       "UnitClass", "Helicopter",       "Local", FALSE ; ... these attackers do not activate Fort defense bonus
@@ -1072,11 +1072,11 @@ reqs    =
 
 ; **** FORTRESS/NAVAL BASE ***************************************************
 
-; Adjust the 1.67xdefense_bonus in terrain.ruleset for some attackers: 
+; Adjust the 1.67xdefense_bonus in terrain.ruleset for some attackers:
 ; ****************************************************************************
 [effect_nonfortbuster_vs_fortress]
 type    = "Defend_Bonus"
-value   = 20 ;increase 1.67x to 2x except when defending against FortBuster types. 
+value   = 20 ;increase 1.67x to 2x except when defending against FortBuster types.
 ;note: 1.20*1.67=2.0 (this bonus is multiplied after terrain defense_bonus was multiplied)
 reqs    =
     { "type",     "name",           "range", "present"
@@ -1084,10 +1084,10 @@ reqs    =
       "UnitFlag", "FortBuster",     "Local", FALSE
       "UnitFlag", "FortressBuster", "Local", FALSE
       "UnitFlag", "AirAttacker",    "Local", FALSE
-    }    
+    }
 [effect_nonfortbuster_vs_navalbase] ;same as above but for naval base
 type    = "Defend_Bonus"
-value   = 20 ;increase 1.67x to 2x except when defending against FortBuster types. 
+value   = 20 ;increase 1.67x to 2x except when defending against FortBuster types.
 ;note: 1.20*1.67=2.0 (this bonus is multiplied after terrain defense_bonus was multiplied)
 reqs    =
     { "type",     "name",           "range", "present"
@@ -1098,26 +1098,26 @@ reqs    =
     }
 [effect_fortressbuster_fortress]
 type    = "Attack_Bonus"
-value   = 67 ;Cancel defender's 1.67x with attacker getting 1.67x 
+value   = 67 ;Cancel defender's 1.67x with attacker getting 1.67x
 reqs    =
     { "type",     "name",           "range", "present"
       "Extra",    "Fortress",       "Local", TRUE
-      "UnitFlag", "FortressBuster", "Local", TRUE 
+      "UnitFlag", "FortressBuster", "Local", TRUE
     }
 [effect_fortressbuster_navalbase]
 type    = "Attack_Bonus"
-value   = 67 ;Cancel defender's 1.67x with attacker getting 1.67x 
+value   = 67 ;Cancel defender's 1.67x with attacker getting 1.67x
 reqs    =
     { "type",     "name",           "range", "present"
       "Extra",    "Naval Base",     "Local", TRUE
-      "UnitFlag", "FortressBuster", "Local", TRUE 
+      "UnitFlag", "FortressBuster", "Local", TRUE
     }
 ; ****** ^^ defense_bonus_correctives ^^ *************************************
 
 ; Vision benefit from fortress
 [effect_fortress_vision]
 type    = "Unit_Vision_Radius_Sq"
-value   = 8   
+value   = 8
 reqs    =
     { "type",          "name",         "range"
       "Extra",         "Fortress",     "tile"
@@ -1127,7 +1127,7 @@ reqs    =
     }
 [effect_castle_vision]
 type    = "Unit_Vision_Radius_Sq"
-value   = 8   
+value   = 8
 reqs    =
     { "type",          "name",         "range"
       "Extra",         "Castle",       "tile"
@@ -1137,7 +1137,7 @@ reqs    =
     }
 [effect_navalbase_vision]
 type    = "Unit_Vision_Radius_Sq"
-value   = 8   
+value   = 8
 reqs    =
     { "type",          "name",         "range"
       "Extra",         "Naval Base",   "tile"
@@ -1202,7 +1202,7 @@ reqs    =
 ; ****************** NAVAL BASE ******************************
 [effect_navbase_vision]
 type    = "Unit_Vision_Radius_Sq"   ;NB:land units handled in fortress section
-value   = 8   
+value   = 8
 reqs    =
     { "type",          "name",        "range"
       "Extra",         "Naval Base",  "tile"
@@ -1256,7 +1256,7 @@ reqs	=
     { "type",    "name", "range", "present"
       "MinSize", "21",   "City",   TRUE
     }
-[effect_bigger_size_30_cities]    
+[effect_bigger_size_30_cities]
 type    = "City_Radius_Sq"       ;size 30 cities get 7x7-corners
 value = 5
 reqs	=
@@ -1297,7 +1297,7 @@ reqs    =
     }
 
 ;PERCENTAGE CHANCE OF STEALING A TECH WHEN CONQUERING A CITY.
-[effect_conquest_tech]                       
+[effect_conquest_tech]
 type    = "Conquest_Tech_Pct"
 value   = 100
 
@@ -1646,7 +1646,7 @@ reqs    =
       "OutputType", "Gold",        "Local", TRUE
     }
 [effect_building_upkeep_communism]
-type    = "Upkeep_Free"          ; 
+type    = "Upkeep_Free"          ;
 value   = 1
 reqs    =
     { "type", "name", "range", "quiet"
@@ -1713,7 +1713,7 @@ value   = 70
 reqs	=
     { "type",       "name",      "range",  "present"
       "Gov",        "Monarchy",  "Player", TRUE
-      "Building", "Magna Carta", "Player", FALSE 
+      "Building", "Magna Carta", "Player", FALSE
     }
 [effect_civil_war_constitutional_monarchy]
 type    = "Civil_War_Chance"
@@ -1721,7 +1721,7 @@ value   = 50
 reqs	=
     { "type",       "name",      "range",  "present"
       "Gov",        "Monarchy",  "Player", TRUE
-      "Building", "Magna Carta", "Player", TRUE 
+      "Building", "Magna Carta", "Player", TRUE
     }
 [effect_civil_war_republic]
 type    = "Civil_War_Chance"
@@ -1761,7 +1761,7 @@ reqs	=
 ;******************************************* RAZED BUILDINGS IN LIBERATED CITIES
 [effect_razings_mean_govs]  ;anarchy, despotism, communism
 type    = "Raze_Building_Pct"
-value   = 50                       
+value   = 50
 reqs	=
     { "type","name",       "range", "present"
       "Gov", "Monarchy",   "Player", FALSE
@@ -1774,7 +1774,7 @@ reqs	=
 
 [effect_razings_nice_govs]  ;theocracy, democracy
 type    = "Raze_Building_Pct"
-value   = -50                       
+value   = -50
 reqs	=
     { "type","name",       "range", "present"
       "Gov", "Anarchy",    "Player", FALSE
@@ -2082,8 +2082,8 @@ value   = 1
 reqs	=
     { "type",     "name",        "range", "present"
       "Gov",      "Monarchy",    "Player", TRUE
-      "Building", "Magna Carta", "Player", TRUE 
-    }    
+      "Building", "Magna Carta", "Player", TRUE
+    }
 [effect_martial_law_each_theocracy]
 type    = "Martial_Law_Each"
 value   = 1
@@ -2325,7 +2325,7 @@ reqs	=
 ;veteran_raise_chance = 40, 25, 16, 10, 10, 10, 0
 [effect_nationalism_fighters_vet_promotion]
 type    = "Veteran_Combat"
-value   = 50 ;60 37.5 24 15 15 15 
+value   = 50 ;60 37.5 24 15 15 15
 reqs	=
     { "type",       "name",      "range"
       "Gov", "Nationalism", "Player"
@@ -2361,7 +2361,7 @@ value   = 1
 reqs	=
     { "type",       "name",        "range", "present"
       "Gov",        "Monarchy",    "Player", TRUE
-      "Building",   "Magna Carta", "Player", FALSE ;handled separately by the wonder 
+      "Building",   "Magna Carta", "Player", FALSE ;handled separately by the wonder
       "Building",   "Angkor Wat",  "Player", FALSE ;handled separately by the wonder
       "OutputType", "Trade",       "Local",  TRUE
     }
@@ -2457,12 +2457,12 @@ reqs	=
       "Gov",        "Communism",   "Player", TRUE
       "CityTile",   "Center",      "Local",  TRUE
       "Terrain",    "Mountains",   "Local",  FALSE   ; doesn't add +1 even without this; so this is more as a comment reminder
-      "Building",   "Granary",     "City",   TRUE 
+      "Building",   "Granary",     "City",   TRUE
       "OutputType", "Food",        "Local",  TRUE
     }
 
 ; Nationalism gets trade bonus only on Land tiles unless celebrating.
-[effect_gov_tile_bonus_7] 
+[effect_gov_tile_bonus_7]
 type    = "Output_Inc_Tile"
 value   = 1
 reqs	=
@@ -2508,7 +2508,7 @@ value   = 1
 reqs	=
     { "type",     "name",        "range", "present"
       "Gov",      "Monarchy",    "Player", TRUE
-      "Building", "Magna Carta", "Player", TRUE      
+      "Building", "Magna Carta", "Player", TRUE
     }
 [effect_popular_parliament_magna_carta]
 type    = "Has_Senate"
@@ -2562,11 +2562,11 @@ reqs    =
       "OutputType", "Science", "local"
     }
 [effect_tithes_theocracy_1]
-type    = "Happiness_To_Gold" 
+type    = "Happiness_To_Gold"
 value   = 1
-reqs    = 
-    { "type", "name", "range" 
-      "Gov", "Theocracy", "Player" 
+reqs    =
+    { "type", "name", "range"
+      "Gov", "Theocracy", "Player"
     }
 ;[effect_tithes_theocracy_2]
 ;type    = "Output_Bonus_2"
@@ -2609,7 +2609,7 @@ reqs	=
     { "type", "name", "range"
       "Building", "Airport", "City"
     }
-    
+
 [effect_airport_v0]
 type    = "Veteran_Build"
 value	= 1
@@ -2783,7 +2783,7 @@ value	= 1
 reqs	=
     { "type",          "name",         "range", "present"
       "Building",      "Barracks",     "City",  TRUE
-      "UnitClassFlag", "TerrainSpeed", "Local", TRUE ;all land classes 
+      "UnitClassFlag", "TerrainSpeed", "Local", TRUE ;all land classes
       "UnitFlag",      "NonMil",       "Local", FALSE
       "UnitFlag",      "NoVeteran",    "Local", FALSE
     }
@@ -2794,14 +2794,14 @@ reqs	=
     { "type", "name", "range", "present"
       "Building", "Barracks", "City", TRUE
       "UnitType", "Scout",   "Local", TRUE
-    }    
+    }
 [effect_barracks_a]
 type    = "HP_Regen"
 value	= 100
 reqs	=
     { "type",          "name",         "range"
       "Building",      "Barracks",     "City"
-      "UnitClassFlag", "TerrainSpeed", "Local" ;all land classes 
+      "UnitClassFlag", "TerrainSpeed", "Local" ;all land classes
     }
 
 [effect_barracks_ii]
@@ -3222,14 +3222,14 @@ reqs	=
       "Building", "Gibraltar Fortress", "Player", TRUE
       "Building", "Coastal Defense",    "Local",  TRUE
     }
-;Waiting on an Effect which can compare or inject range value.    
+;Waiting on an Effect which can compare or inject range value.
 ;[effect_building_upkeep_gibratalar_fortress]
-;type    = "Upkeep_Reduce"         
+;type    = "Upkeep_Reduce"
 ;value   = 1
 ;reqs    =
 ;    { "type", "name", "range"
 ;      "Building", "Gibraltar Fortress", "Player"
-;      "Building", "Coastal Defense",    "Local" 
+;      "Building", "Coastal Defense",    "Local"
 ;    }
 ;------------------------------------------------------------
 
@@ -3283,7 +3283,7 @@ reqs	=
       "MaxUnitsOnTile", "0", "Local", TRUE
       "Building", "Courthouse", "City", TRUE
     }
-; Law and order provides +1 upkeep    
+; Law and order provides +1 upkeep
 [effect_courthouse_upkeep]
 type    = "Unit_Upkeep_Free_Per_City"
 value	= 1
@@ -3291,7 +3291,7 @@ reqs	=
     { "type",       "name",      "range"
       "Building", "Courthouse", "City"
       "OutputType", "Shield", "Local"
-    }    
+    }
 [effect_courthouse_spy_resistance]
 type	= "Spy_Resistant"
 value	= 25 ;25% reduction of 50% base chance is 12.5% bonus. 50%-12.5%=37.5% success rate
@@ -3554,7 +3554,7 @@ reqs	=
     { "type", "name", "range"
       "Building", "Mass Transit", "City"
     }
-; Increased citizen mobility and ticket revenues increase city base trade by +2 
+; Increased citizen mobility and ticket revenues increase city base trade by +2
 [effect_mass_transit_1]
 type    = "Output_Add_Tile"
 value   = 2
@@ -3585,7 +3585,7 @@ reqs	=
       "OutputType", "Shield", "Local"
     }
 
-;Having a Palace means having a city, the beginning of 
+;Having a Palace means having a city, the beginning of
 ;sedentary culture and loss of game-start move bonus.
 [effect_sedentary_people_are_slow]
 type = "Move_Bonus"
@@ -3842,21 +3842,21 @@ reqs	=
     { "type", "name", "range", "present"
       "Building", "Police Station", "City", TRUE
       "UnitFlag", "NoVeteran", "Local", FALSE
-      "UnitFlag", "Diplomat", "Local", TRUE      
+      "UnitFlag", "Diplomat", "Local", TRUE
     }
 [effect_police_station_spy_resistant]
 type	= "Spy_Resistant"
 value	= 25 ; 25% of 50% = -12.5% 4/8-1/8 = 3/8
 reqs	=
     { "type", "name", "range", "present"
-      "Building", "Police Station", "City", TRUE 
+      "Building", "Police Station", "City", TRUE
     }
 [effect_police_station_hostile_diplomat_0]
 type	= "Action_Odds_Pct"
 value	= -25 ;// -25*.8 = -20
 reqs	=
     { "type", "name", "range", "present"
-      "Building", "Police Station", "City", TRUE 
+      "Building", "Police Station", "City", TRUE
       "Action", "Steal Tech", "Local", TRUE
     }
 [effect_police_station_hostile_diplomat_1]
@@ -3964,7 +3964,7 @@ reqs	=
       "Action",   "Investigate City", "Local", TRUE
       "UnitType", "Satellite",        "Local", FALSE
     }
-;Cancel out the above bonus for democracies:    
+;Cancel out the above bonus for democracies:
 [effect_police_station_investigate_democracy]
 type	= "Action_Resist_Pct"
 value	= -54 ; +7% - 54% = -47% ... -0.47 * 80 = 37.6% ... 80%-37.6% = 42.4% ... (85%/2 = 42.5%) ✓
@@ -4021,7 +4021,7 @@ reqs	=
       "Building",   "Hoover Dam",     "City",   FALSE
       "Building",   "Fusion Reactor", "Player", FALSE
     }
-[effect_coal_plant_upgrade_1] 
+[effect_coal_plant_upgrade_1]
 type    = "Improvement_Sale_Pct"
 value = 70 ; 'recycle value' after Hydro goes in
 reqs  =
@@ -4029,7 +4029,7 @@ reqs  =
       "Building", "Coal Plant", "Local"
       "Building", "Hoover Dam", "City"
     }
-[effect_coal_plant_upgrade_2] 
+[effect_coal_plant_upgrade_2]
 type    = "Improvement_Sale_Pct"
 value = 70 ; 'recycle value' after Hydro goes in
 reqs  =
@@ -4037,7 +4037,7 @@ reqs  =
       "Building", "Coal Plant", "Local"
       "Building", "Hydro Plant", "City"
     }
-[effect_coal_plant_upgrade_3] 
+[effect_coal_plant_upgrade_3]
 type    = "Improvement_Sale_Pct"
 value = 70 ; 'recycle value' after Hydro goes in
 reqs  =
@@ -4045,7 +4045,7 @@ reqs  =
       "Building", "Coal Plant",    "Local", TRUE
       "Building", "Nuclear Plant", "City",  TRUE
       "Building", "Hydro Plant",   "City",  FALSE
-      ;^ closes super rare loophole  
+      ;^ closes super rare loophole
     }
 ;---------------------------------------------------------
 [effect_hydro_plant]
@@ -4157,7 +4157,7 @@ reqs	=
       "Building",  "Nuclear Plant", "City",   FALSE
       "Building",  "Fusion Reactor","Player", FALSE
     }
-;Hydro Plants cost less 
+;Hydro Plants cost less
 [effect_hoover_dam_cheaper_hydro_plants]
 type    = "Building_Build_Cost_Pm"
 value   = -28; -0.028 * 175 = -4.9 shields (c rounds negative numbers to lower (more magnitude) value)
@@ -4213,7 +4213,7 @@ reqs	=
       "Building",   "Factory",        "City",   TRUE
       "OutputType", "Shield",         "Local",  TRUE
     }
-;The below is for the city with Hoover Dam. 
+;The below is for the city with Hoover Dam.
 [effect_fusion_reactor_1a_hoover]
 type    = "Output_Bonus"
 value	= 20  ; 60% + 20% = 180%
@@ -4317,9 +4317,9 @@ value	= 2
     }
 ;********************************************************************** RECYCLING CENTER
 ; All pollution bonus effects are layered in Power Plants with nice
-; clean logic: each lower ones turn its effect off for better ones 
-; to take effect, all the way to the top. Finally we arrive at 
-; Recycling Center which has to do the heavy lifting on special 
+; clean logic: each lower ones turn its effect off for better ones
+; to take effect, all the way to the top. Finally we arrive at
+; Recycling Center which has to do the heavy lifting on special
 ; combination rules of the ruleset:
 ; ....
 ; A Solar Plant combines with Recycling Center to eliminate 90%
@@ -4329,7 +4329,7 @@ value	= 2
 ; has to "unsupersede" in the case of Recycling and Solar both present:
 ; ....
 ; Case 1:  neither SP or FR is present. Highest in food chain, full 66%:
-[effect_recycling_center_1] 
+[effect_recycling_center_1]
 type    = "Pollu_Prod_Pct"
 value	= -66
 reqs	=
@@ -4340,9 +4340,9 @@ reqs	=
     }
 ; Case 2: SP is present, FR is absent. Second highest in food chain,
 ; and obligation to deliver on the 90% reduction effect:
-[effect_recycling_center_2] 
+[effect_recycling_center_2]
 type    = "Pollu_Prod_Pct"
-value	= -15 ; Solar is higher and ACTIVE at -75%. -15 = -90%. 
+value	= -15 ; Solar is higher and ACTIVE at -75%. -15 = -90%.
 reqs	=
     { "type", "name", "range", "present"
       "Building", "Recycling Center", "City", TRUE
@@ -4352,7 +4352,7 @@ reqs	=
 ; Case 3: SP and Fusion Reactor both present and higher on food chain.
 ; Solar Plant "wakes up" from being superseded by Fusion Reactor to
 ; deliver its promised 90% combinatorial bonus with Recycling Center:
-[effect_recycling_center_3] 
+[effect_recycling_center_3]
 type    = "Pollu_Prod_Pct"
 value	= -10 ; Fusion reactor superseded to -80%. -10 = -90%
 reqs	=
@@ -4361,7 +4361,7 @@ reqs	=
       "Building", "Fusion Reactor", "Player", TRUE
       "Building", "Solar Plant", "City",      TRUE
     }
-; Case 4: SP absent and Fusion Reactor present  
+; Case 4: SP absent and Fusion Reactor present
 ; Fusion reactor is superceding Recycling Center:
 ; DO NOTHING
 ; ....
@@ -4381,7 +4381,7 @@ value   = -20
 reqs    =
     { "type", "name", "range"
       "Tech", "Recycling", "Player"
-    } 
+    }
 
 [effect_research_lab]
 type    = "Output_Bonus"
@@ -4441,7 +4441,7 @@ reqs	=
     { "type", "name", "range"
       "Building", "SAM Battery", "City"
       "UnitClass", "Helicopter", "Local"
-    }    
+    }
 [effect_sam_battery_stealth_bomber]
 type    = "Defend_Bonus"
 value	= 25
@@ -4449,7 +4449,7 @@ reqs	=
     { "type", "name", "range", "present"
       "Building", "SAM Battery", "City", TRUE
       "UnitType", "Stealth Bomber", "Local", TRUE
-    }    
+    }
 [effect_sam_battery_stealth_fighter]
 type    = "Defend_Bonus"
 value	= 25
@@ -4527,7 +4527,7 @@ reqs	=
 
 ;1 year per turn ensures spaceship travel time calibrated.
 ;a Slow_Down_Timeline of 3 ensures maximum years per turn is 1
-;to build a spaceship requires all 3 of these techs, hence, 
+;to build a spaceship requires all 3 of these techs, hence,
 ;a spaceship launch will always have 1 year = 1 turn.
 [effect_plastics_slowdown]
 type    = "Slow_Down_Timeline"
@@ -4548,7 +4548,7 @@ type    = "Slow_Down_Timeline"
 value   = 1
 reqs    =
     { "type", "name", "range", "survives"
-      "Tech", "Space Flight", "World", TRUE 
+      "Tech", "Space Flight", "World", TRUE
     }
 
 [effect_stock_exchange_gold]
@@ -4964,7 +4964,7 @@ value	= 3
 reqs	=
     { "type", "name", "range", "present"
       "Building", "Agōgē of Sparta", "Player", TRUE
-      "UnitFlag", "FootSoldier", "Local", TRUE 
+      "UnitFlag", "FootSoldier", "Local", TRUE
     }
 [effect_agoge_move_bonus_2]
 type    = "Move_Bonus"
@@ -4973,23 +4973,23 @@ reqs	=
     { "type", "name", "range", "present"
       "Building", "Agōgē of Sparta", "Player", TRUE
       "CityTile", "Center", "Local", TRUE
-      "UnitFlag", "FootSoldier", "Local", TRUE 
+      "UnitFlag", "FootSoldier", "Local", TRUE
     }
 [effect_agoge_phalanx]
 type    = "Attack_Bonus"
-value   = 50  
+value   = 50
 reqs    =
     { "type", "name", "range", "present"
       "Building", "Agōgē of Sparta", "Player", TRUE
-      "UnitType", "Phalanx", "Local", TRUE 
+      "UnitType", "Phalanx", "Local", TRUE
     }
 [effect_agoge_pikemen]
 type    = "Attack_Bonus"
-value   = 50  
+value   = 50
 reqs    =
     { "type", "name", "range", "present"
       "Building", "Agōgē of Sparta", "Player", TRUE
-      "UnitType", "Pikemen", "Local", TRUE 
+      "UnitType", "Pikemen", "Local", TRUE
     }
 [effect_agoge_phalanx_discount]
 type    = "Unit_Build_Cost_Pct"
@@ -5040,7 +5040,7 @@ reqs	=
       "UnitType",  "Phalanx",         "Local",  TRUE
       "UnitFlag",  "NonMil",          "Local",  FALSE
       "UnitFlag",  "NoVeteran",       "Local",  FALSE
-    }    
+    }
 [effect_agoge_barracks_a]
 type    = "HP_Regen"
 value	= 100
@@ -5080,7 +5080,7 @@ reqs	=
       "MinSize",    "2",          "City",   TRUE
     }
 [effect_angkor_wat_free_tile_bonus] ;simulates celebration for anarchy/despotism
-type    = "Output_Penalty_Tile" 
+type    = "Output_Penalty_Tile"
 value   = 100
 reqs	=
     { "type",     "name",       "range",  "present"
@@ -5108,8 +5108,8 @@ value   = 100  ; 100% faster is half the time (or more, since rounded up)
 reqs =
     { "type",     "name",          "range", "present"
       "Building", "Angkor Wat",    "Player", TRUE
-      "Gov",      "Democracy",     "Player", FALSE 
-      "Gov",      "Communism",     "Player", FALSE 
+      "Gov",      "Democracy",     "Player", FALSE
+      "Gov",      "Communism",     "Player", FALSE
       "Gov",      "Nationalism",   "Player", FALSE
       "Gov",      "Theocracy",     "Player", FALSE
       "UnitFlag", "Infra",         "Local",  TRUE
@@ -5132,9 +5132,9 @@ reqs    =
       "type",     "name",        "range",  "present"
       "Building", "Angkor Wat",  "Player", TRUE
       "UnitType", "Elephants",   "Local",  TRUE
-      "Gov",      "Democracy",   "Player", FALSE 
-      "Gov",      "Communism",   "Player", FALSE 
-      "Gov",      "Nationalism", "Player", FALSE 
+      "Gov",      "Democracy",   "Player", FALSE
+      "Gov",      "Communism",   "Player", FALSE
+      "Gov",      "Nationalism", "Player", FALSE
       "Gov",      "Theocracy",   "Player", FALSE
     }
 [effect_angkor_wat_culture]
@@ -5144,8 +5144,8 @@ reqs	=
     { "type",     "name",        "range", "present"
       "Building", "Angkor Wat",  "City",   TRUE
       "Gov",      "Democracy",   "Player", FALSE
-      "Gov",      "Communism",   "Player", FALSE 
-      "Gov",      "Nationalism", "Player", FALSE 
+      "Gov",      "Communism",   "Player", FALSE
+      "Gov",      "Nationalism", "Player", FALSE
       "Gov",      "Theocracy",   "Player", FALSE
     }
 [effect_angkor_wat_celebrate_size]
@@ -5306,8 +5306,8 @@ reqs	=
 type    = "Unit_Work_Pct"
 value   = 63 ;  33% bonus
 ; believe it or not, because of trunc-rounding, 63 is the number that gives closest to true 33.3% bonus!
-; 1. It yields the SAME as value=34 when irrigating grass/plains for a true +33.3% work rate. 
-; 2. But yields "8 -> 5" (+37.5%) rather than "8 -> 6" (which lost 32% of the 33% bonus to trunc-rounding!) 
+; 1. It yields the SAME as value=34 when irrigating grass/plains for a true +33.3% work rate.
+; 2. But yields "8 -> 5" (+37.5%) rather than "8 -> 6" (which lost 32% of the 33% bonus to trunc-rounding!)
 reqs =
     { "type",     "name",          "range","present"
       "Building", "Chand Baori",   "Player",TRUE
@@ -5326,8 +5326,8 @@ reqs =
 type    = "Unit_Work_Pct"
 value   = 63 ;  33% bonus
 ; believe it or not, because of trunc-rounding, 63 is the number that gives closest to true 33.3% bonus!
-; 1. It yields the SAME as value=34 when irrigating grass/plains for a true +33.3% work rate. 
-; 2. But yields "8 -> 5" (+37.5%) rather than "8 -> 6" (which lost 32% of the 33% bonus to trunc-rounding!) 
+; 1. It yields the SAME as value=34 when irrigating grass/plains for a true +33.3% work rate.
+; 2. But yields "8 -> 5" (+37.5%) rather than "8 -> 6" (which lost 32% of the 33% bonus to trunc-rounding!)
 reqs =
     { "type",     "name",          "range","present"
       "Building", "Chand Baori",   "Player",TRUE
@@ -5346,8 +5346,8 @@ reqs =
 type    = "Unit_Work_Pct"
 value   = 63 ;  33% bonus
 ; believe it or not, because of trunc-rounding, 63 is the number that gives closest to true 33.3% bonus!
-; 1. It yields the SAME as value=34 when irrigating grass/plains for a true +33.3% work rate. 
-; 2. But yields "8 -> 5" (+37.5%) rather than "8 -> 6" (which lost 32% of the 33% bonus to trunc-rounding!) 
+; 1. It yields the SAME as value=34 when irrigating grass/plains for a true +33.3% work rate.
+; 2. But yields "8 -> 5" (+37.5%) rather than "8 -> 6" (which lost 32% of the 33% bonus to trunc-rounding!)
 reqs =
     { "type",     "name",          "range","present"
       "Building", "Chand Baori",   "Player",TRUE
@@ -5366,8 +5366,8 @@ reqs =
 type    = "Unit_Work_Pct"
 value   = 63 ;  33% bonus
 ; believe it or not, because of trunc-rounding, 63 is the number that gives closest to true 33.3% bonus!
-; 1. It yields the SAME as value=34 when irrigating grass/plains for a true +33.3% work rate. 
-; 2. But yields "8 -> 5" (+37.5%) rather than "8 -> 6" (which lost 32% of the 33% bonus to trunc-rounding!) 
+; 1. It yields the SAME as value=34 when irrigating grass/plains for a true +33.3% work rate.
+; 2. But yields "8 -> 5" (+37.5%) rather than "8 -> 6" (which lost 32% of the 33% bonus to trunc-rounding!)
 reqs =
     { "type",     "name",          "range","present"
       "Building", "Chand Baori",   "Player",TRUE
@@ -5518,7 +5518,7 @@ reqs    =
       "Building", "Colossus", "City", TRUE
       "UnitType", "Trireme", "Local", TRUE
       "Tech", "Steam Engine", "Player", FALSE
-    }  
+    }
 [effect_colossus_boat_discount]
 type    = "Unit_Build_Cost_Pct"
 value	  = -18     ;10-3 = -30%
@@ -5552,7 +5552,7 @@ reqs    =
 ;************************************************************************ Commissariat of Agriculture
 [effect_commissariat_1]
 type    = "Growth_Food"
-value	= 34 ; 34% = 5/15 = 33.3% 
+value	= 34 ; 34% = 5/15 = 33.3%
 reqs	=
     { "type",     "name",                       "range",  "present"
       "Building", "Commissariat of Agriculture", "Player", TRUE
@@ -5579,14 +5579,15 @@ type    = "Unit_Work_Pct"  ;Unit_Work_Frag_Bonus
 value	  = 50
 reqs    =
     {
-      "type",     "name",      "range", "present"
-      "UnitFlag", "Infra",     "Local",  TRUE
-      "Gov",      "Communism", "Player", TRUE
-      "Extra",    "Irrigation","Local",  TRUE
-      "Activity", "Irrigate",  "Local",  TRUE
+      "type",     "name",                        "range", "present"
+      "Building", "Commissariat of Agriculture", "Player", TRUE
+      "UnitFlag", "Infra",                       "Local",  TRUE
+      "Gov",      "Communism",                   "Player", TRUE
+      "Extra",    "Irrigation",                  "Local",  TRUE
+      "Activity", "Irrigate",                    "Local",  TRUE
     }
 
-;************************************************************************ Copernicus 
+;************************************************************************ Copernicus
 [effect_copernicus_observatory]
 type    = "Output_Bonus"
 value	= 100
@@ -5741,7 +5742,7 @@ value	= 9
 reqs	=
     { "type", "name", "range", "present"
       "Building", "Genghis Khan's Equestrian School", "Player", TRUE
-      "UnitFlag", "Horse", "Local", TRUE 
+      "UnitFlag", "Horse", "Local", TRUE
     }
 ;************************************************************************ Lighthouse
 [effect_lighthouse]
@@ -5825,7 +5826,7 @@ reqs	=
 
 ; ╭╯╭╯╭╯╭╯╭╯╭╯ Devs: THIS IS WHY REQS NEED TO BE ABLE TO DO "OR" LOGIC!
 ; .....................................
-; EFFECT CHART:   CH SC CW GW   result 
+; EFFECT CHART:   CH SC CW GW   result
 ;                  0  0  0  0           ✓
 ;                  0  0  0  1   1c      ✓
 ;                  0  0  1  0   1c      ✓
@@ -5915,7 +5916,7 @@ reqs    =
       "Building", "Great Wall",           "Player", TRUE
       ; - - - - - - - - - - - - - - - - - - - - - - - - - -
       "Building", "Mausoleum of Mausolos","Player", TRUE
-    } 
+    }
 [effect_mausoleum_of_mausolos_0110_c] ; 0110 = -------------------HAPPY+CONTENT
 type    = "Make_Content"
 value   = 1
@@ -5939,7 +5940,7 @@ reqs    =
       "Building", "Great Wall",           "Player", FALSE
       ; - - - - - - - - - - - - - - - - - - - - - - - - - -
       "Building", "Mausoleum of Mausolos","Player", TRUE
-    } 
+    }
 [effect_mausoleum_of_mausolos_0111_c] ; 0111 = -------------------HAPPY+CONTENT
 type    = "Make_Content"
 value   = 1
@@ -6303,7 +6304,7 @@ type    = "Output_Bonus_2"
 ; 7% with trunc rounding: x̄ = +5.96% gold. (median is lower)
 ; (NB: bonus suffers somewhat more under lower gold tax rates)
 ; If changing from 7% to another value, use "Medici Rounding.ods" to calibrate
-value	= 8  
+value	= 8
 reqs    =
     { "type",       "name",        "range", "present"
       "Building",   "Medici Bank", "Player", TRUE
@@ -6429,7 +6430,7 @@ reqs	=
     }
 [effect_pyramids_1]
 type    = "Growth_Food"
-value	= 9 ; 9+25 = 34% = 5/15 = 33.3% 
+value	= 9 ; 9+25 = 34% = 5/15 = 33.3%
 reqs	=
     { "type",     "name",     "range",  "present"
       "Building", "Pyramids", "Player", TRUE
@@ -6486,23 +6487,23 @@ reqs	=
     { "type",       "name",        "range"
       "Building",   "The Sphinx",  "City"
       "CityTile",   "Center",      "Local"
-      "OutputType", "Luxury",      "Local" 
+      "OutputType", "Luxury",      "Local"
     }
 [effect_sphinx_corruption]
 type    = "Output_Waste_Pct"
 value	= 60
 reqs	=
-    { "type",       "name",       "range" 
-      "Building",   "The Sphinx", "City" 
-      "OutputType", "Trade",      "Local" 
+    { "type",       "name",       "range"
+      "Building",   "The Sphinx", "City"
+      "OutputType", "Trade",      "Local"
     }
 [effect_sphinx_corruption1]
 type    = "Output_Waste_Min_Reduce"
 value	= 1    ; if there is corruption, then at least 1 corruption will be removed
 reqs	=
-    { "type",       "name",       "range" 
-      "Building",   "The Sphinx", "City" 
-      "OutputType", "Trade",      "Local" 
+    { "type",       "name",       "range"
+      "Building",   "The Sphinx", "City"
+      "OutputType", "Trade",      "Local"
     }
 ;************************************************************************ Shakespeare
 [effect_shakespeares_theatre]
@@ -6632,7 +6633,7 @@ value	= 1 ; reduce at least 1 corruption, if there is any
       "Building", "Supreme Court", "Player"
       "OutputType", "Trade", "Local"
     }
-[effect_supreme_court_all_govs]   
+[effect_supreme_court_all_govs]
 type    = "Make_Content" ; keeping in equal with courthouse
 value	= 1
 reqs	=
@@ -6654,7 +6655,7 @@ reqs	=
     { "type", "name", "range", "present"
       "MaxUnitsOnTile", "0", "Local", TRUE
       "Building", "Supreme Court", "Player", TRUE
-    }   
+    }
 [effect_supreme_court_upkeep]
 type    = "Unit_Upkeep_Free_Per_City"
 value	= 1
@@ -6664,7 +6665,7 @@ reqs	=
       "OutputType", "Shield", "Local"
     }
 ; Removes penalties (Despotism/Anarchy) for tiles >3 output
-[effect_supreme_court_tile_corruption]         
+[effect_supreme_court_tile_corruption]
 type    = "Output_Penalty_Tile"
 value   = 100
 reqs	=
@@ -6679,7 +6680,7 @@ value	= 25 ;25% reduction of 50% base chance is 12.5% bonus. 50%-12.5%=37.5% suc
            ; No protection= 1/2, HL = 3/8, CH+HL = 1/4, CH+HL+PS = 1/8
 reqs	=
     { "type", "name", "range", "present"
-      "Building", "Homeland Security", "City", TRUE 
+      "Building", "Homeland Security", "City", TRUE
     }
 [effect_homeland_security_hostile_diplomat0]
 type	= "Action_Odds_Pct"
@@ -6798,7 +6799,7 @@ reqs    =
       "OutputType", "Luxury", "Local"
     }
 ;Note: the city applies +1 to 0-shield city tiles on grass,swamp,hills,tundra
-;Thus this bonus negates the condition of getting that +1 and needs a 
+;Thus this bonus negates the condition of getting that +1 and needs a
 ;compensating +1 further below
 [effect_temple_of_artemis_1]
 type    = "Output_Add_Tile"
@@ -6810,9 +6811,9 @@ reqs    =
       "CityTile", "Center", "Local"
       "OutputType", "Shield", "Local"
     }
-;--------    
-;Give the city its extra shield if it was built on a 0-shield (grass/hills/swamp/tundra) 
-;tile or +1-shield resource (grass-shield,fur) 
+;--------
+;Give the city its extra shield if it was built on a 0-shield (grass/hills/swamp/tundra)
+;tile or +1-shield resource (grass-shield,fur)
 [effect_temple_of_artemis_1a]
 type    = "Output_Add_Tile"
 value	= 1
@@ -6929,7 +6930,7 @@ reqs	=
 
 ;************************************************************************ Voyage of Darwin
 ; There are nasty hard-coded things to the original Wonder, so it had
-; to be given a name change (Voyage of Darwin) to avoid messy problems. 
+; to be given a name change (Voyage of Darwin) to avoid messy problems.
 [effect_voyage_of_darwin]
 type    = "Output_Inc_Tile"
 value	= 1
@@ -6952,7 +6953,7 @@ reqs	=
 ; causes +1 unhappy for all cities, usually over s2 or s3 (depending on empire size)
 [effect_no_womens_suffrage_unhappy_republic]
 type    = "Empire_Size_Base"
-value	= -13 
+value	= -13
 reqs	=
     { "type", "name", "range", "present"
       "Gov",      "Republic",         "Player", TRUE
@@ -6961,7 +6962,7 @@ reqs	=
       ; great. zero-width space for the great wonder
       "Building", "Women's Suffrage​", "Player", FALSE
       ; great. zero-width space for the great wonder
-      "Building", "Women's Suffrage​", "World",  TRUE  
+      "Building", "Women's Suffrage​", "World",  TRUE
     }
 [effect_womens_suffrage_democracy]
 type    = "Make_Happy"
@@ -6974,10 +6975,10 @@ reqs	=
       ; has zero-width space for the great wonder. can't get double women's suffrage bonus.
       "Building", "Women's Suffrage​", "Player", FALSE
     }
-; causes +1 unhappy for all cities, usually over s2 or s3 (depending on empire size)    
+; causes +1 unhappy for all cities, usually over s2 or s3 (depending on empire size)
 [effect_no_womens_suffrage_unhappy_democracy]
 type    = "Empire_Size_Base"
-value	= -14 
+value	= -14
 reqs	=
     { "type", "name", "range", "present"
       "Gov",      "Democracy",        "Player", TRUE
@@ -6986,7 +6987,7 @@ reqs	=
       ; great wonder. zero-width space for the great wonder:
       "Building", "Women's Suffrage​", "Player", FALSE
       ; great wonder. has zero-width space for the great wonder:
-      "Building", "Women's Suffrage​", "World",  TRUE  
+      "Building", "Women's Suffrage​", "World",  TRUE
     }
 ;************************************************************************ Women's Suffrage great wonder version
 [effect_womens_suffrage_gw_republic]
@@ -7074,7 +7075,7 @@ reqs	=
 [effect_ziggurat_settler_upkeep]
 type    = "Upkeep_Factor"
 value   = -1
-reqs = 
+reqs =
     { "type",     "name",     "range","present"
       "Building", "Ziggurat", "Player", TRUE
       "Gov",      "Despotism","Player", TRUE
@@ -7159,7 +7160,7 @@ reqs    =
       "OutputType", "Food", "Local"
     }
 ; in all cases where food output is exactly 2, tile corruption prevents bonus above
-[effect_ziggurat_extra_food_1]  
+[effect_ziggurat_extra_food_1]
 type    = "Output_Penalty_Tile"
 value = 100
 reqs	=
@@ -7168,10 +7169,10 @@ reqs	=
       "OutputType","Food",     "Local",   TRUE
       "CityTile",  "Center",   "Local",   TRUE
       ; Plains, Tundra need tile penalty lifted to receive +1 food
-      "Terrain", "Desert",      "Local",  FALSE 
+      "Terrain", "Desert",      "Local",  FALSE
       "Terrain", "Forest",      "Local",  FALSE
-      "Terrain", "Grassland",   "Local",  FALSE 
-      "Terrain", "Jungle",      "Local",  FALSE 
+      "Terrain", "Grassland",   "Local",  FALSE
+      "Terrain", "Jungle",      "Local",  FALSE
       "Terrain", "Mountains",   "Local",  FALSE
       "Terrain", "Swamp",       "Local",  FALSE
       ; Excluse extras who got the bonus because they already 'absorbed' their penalty:
@@ -7180,7 +7181,7 @@ reqs	=
       "Extra",   "Furs",        "Local",  FALSE
       "Extra",   "Elk",         "Local",  FALSE
     }
-[effect_ziggurat_extra_food_2]  
+[effect_ziggurat_extra_food_2]
 type    = "Output_Penalty_Tile"
 value = 100
 reqs	=
@@ -7189,11 +7190,11 @@ reqs	=
       "OutputType","Food",     "Local",   TRUE
       "CityTile",  "Center",   "Local",   TRUE
       ; Desert River needs tile penalty lifted IFF it has no irrigation on it
-      "Terrain", "Desert",      "Local",  TRUE 
+      "Terrain", "Desert",      "Local",  TRUE
       "Extra",   "River",       "Local",  TRUE
       "Extra",   "Irrigation",  "Local",  FALSE
     }
-[effect_ziggurat_extra_food_3]  
+[effect_ziggurat_extra_food_3]
 type    = "Output_Penalty_Tile"
 value = 100
 reqs	=
@@ -7204,7 +7205,7 @@ reqs	=
       ; Extras whose bonus results in exactly +2F got their bonus taken away from tile corruption:
       "Extra",   "Berries",    "Local"
     }
-[effect_ziggurat_extra_food_4]  
+[effect_ziggurat_extra_food_4]
 type    = "Output_Add_Tile"
 value = 1
 reqs	=
@@ -7330,7 +7331,7 @@ reqs    =
     { "type", "name",            "range", "present"
       "Gov", "Monarchy",         "Player", TRUE
       "Building", "Magna Carta", "City", TRUE
-    }    
+    }
 [effect_city_build_slots_factory]
 type    = "City_Build_Slots"
 value   = 1
@@ -7411,8 +7412,8 @@ reqs	=
 
 ; **** Action Odds for Hostile Diplomatic Actions *******
 ;********************************************************
-;Jan 2021 this effect should be non-zero so that it triggers 
-;not showing 100% in pop-up odds, since certain improvement 
+;Jan 2021 this effect should be non-zero so that it triggers
+;not showing 100% in pop-up odds, since certain improvement
 ;effects may now disallow this action.
 [effect_no_free_investigation]
 type	= "Action_Odds_Pct"
@@ -7610,7 +7611,7 @@ reqs	=
     { "type", "name", "range", "present"
       "Action", "Spy Attack", "Local", TRUE
       "DiplRel", "War", "Local", FALSE
-    }    
+    }
 [effect_incident_caught_spy_attack]
 type	= "Casus_Belli_Caught"
 value	= 1
@@ -7997,9 +7998,9 @@ value   = 65535  ; same as disembark: lose all moves
 reqs    =
     { "type",          "name",              "range", "present"
       "Action",        "Transport Deboard", "Local", TRUE
-      "UnitClassFlag", "TerrainSpeed",      "Local", TRUE      ; Only affects land units, ... 
+      "UnitClassFlag", "TerrainSpeed",      "Local", TRUE      ; Only affects land units, ...
       "UnitType",      "Marines",           "Local", FALSE     ; except Marines
-      
+
       ; For now since this is one effect for ALL land units, exclude ANY tile that ANY unit can legally deboard to:
       "CityTile",      "Center",            "Local", FALSE
       "Extra",         "Quay",              "Local", FALSE
@@ -8026,9 +8027,9 @@ value   = 65535  ; same as disembark: lose all moves
 reqs    =
     { "type",          "name",              "range", "present"
       "Action",        "Transport Unload",  "Local", TRUE
-      "UnitClassFlag", "TerrainSpeed",      "Local", TRUE      ; Only affects land units, ... 
+      "UnitClassFlag", "TerrainSpeed",      "Local", TRUE      ; Only affects land units, ...
       "UnitType",      "Marines",           "Local", FALSE     ; except Marines
-      
+
       ; For now since this is one effect for ALL land units, exclude ANY tile that ANY unit can legally deboard to:
       "CityTile",      "Center",            "Local", FALSE
       "Extra",         "Quay",              "Local", FALSE
@@ -8066,10 +8067,10 @@ reqs    =
 ;###############################################
 ;Bombs can't be used after a double-move double-cargo run, so unloading has to ensure half of all moves are gone
 ;so the Bomb wouldn't be able to load up after two cargo hauls. Nukes have 1 1/3 moves (to allow disembark),
-;and conventional have 1 move. 
+;and conventional have 1 move.
 [effect_action_success_move_cost_unload_bombs]
 type    = "Action_Success_Target_Move_Cost"   ; "Local" scope on unit pertains to target, not actor.
-value   = 3360                                ; 20+20 = 2/3, which is double cost for unload since it has no cost for load, and keeps 
+value   = 3360                                ; 20+20 = 2/3, which is double cost for unload since it has no cost for load, and keeps
 reqs    =                                     ; both Bomb and Bomb2 classes only able to do one cargo haul.
     { "type",          "name",             "range", "present"
       "Action",        "Transport Unload", "Local", TRUE
@@ -8077,7 +8078,7 @@ reqs    =                                     ; both Bomb and Bomb2 classes only
     }
 [effect_action_success_move_cost_deboard_bombs]
 type    = "Action_Success_Actor_Move_Cost"    ; "Local" scope on unit pertains to target, not actor.
-value   = 3360                                  ; 20+20 = 2/3, which is double cost for unload since it has no cost for load, and keeps 
+value   = 3360                                  ; 20+20 = 2/3, which is double cost for unload since it has no cost for load, and keeps
 reqs    =                                     ; both Bomb and Bomb2 classes only able to do one cargo haul.
     { "type",          "name",              "range", "present"
       "Action",        "Transport Deboard", "Local", TRUE
@@ -8090,7 +8091,7 @@ reqs    =                                     ; both Bomb and Bomb2 classes only
 ;which would be stupid.
 [effect_bombs_dont_have_tired_attack]
 type    = "Attack_Bonus"
-value   = 200                                 ; 33% + 200%*33% = 100% 
+value   = 200                                 ; 33% + 200%*33% = 100%
 reqs    =
     { "type",          "name",             "range", "present"
       "UnitType",      "Bombs",            "Local", TRUE       ; conventional bomb
@@ -8142,7 +8143,7 @@ reqs    =
 ;TODO: We no longer need bitfields for move cost of SUA and could code the move cost in here
 [effect_action_success_move_cost_bombard]
 type    = "Action_Success_Actor_Move_Cost"
-value   = 0       ; currently, keep using bitfield for move cost 
+value   = 0       ; currently, keep using bitfield for move cost
 reqs    =
     { "type", "name", "range", "present"
       "Action", "Bombard", "Local", TRUE
@@ -8329,7 +8330,7 @@ reqs    =
       "UnitClassFlag", "WaterVessel",       "Local"
       "Action",        "Transport Unload",  "Local"
     }
-;OPTIONAL PROBLEM KILLER if the above 3 don't cover all cases: "Transport Board" loses all moves on WaterVessels    
+;OPTIONAL PROBLEM KILLER if the above 3 don't cover all cases: "Transport Board" loses all moves on WaterVessels
 ;/\ /\ ---------------------- TRAWLERS ---------------------- /\ /\
 
 ;******************************************************************** </end MOVE COSTS>
@@ -8483,7 +8484,7 @@ reqs    =
       "UnitType", "Armor II",    "Local"
       "Gov",      "Nationalism", "Player"
     }
-; Police Stations Cost less 
+; Police Stations Cost less
 [effect_nationalism_cheaper_police_stations]
 type    = "Building_Build_Cost_Pct"
 value   = -20; 50-10 = 40
@@ -8501,7 +8502,7 @@ reqs    =
       "type",     "name",        "range", "present"
       "Gov",      "Nationalism", "Player", TRUE
   ;    "UnitFlag", "NonMil",      "Local",  FALSE  ;can't seem to access this.
-    } 
+    }
 ;******** COMMUNISM EFFECTS ****************************************
 ;*** useless Proletarians if (!commmunist) *****
 ;Proletarians useless unless communist.
@@ -8721,9 +8722,9 @@ reqs	=
     }
 
 ;This is supposed to be outrage for violating a treaty but looks to me more like
-;it causes outrage for any invasion of foreign territory. That's not necessarily 
-;bad, but: (1) This needs testing. (2) A separate effect for treaty violation 
-;outrage where DiplRel != {War} and all the benevolent actions are left with 
+;it causes outrage for any invasion of foreign territory. That's not necessarily
+;bad, but: (1) This needs testing. (2) A separate effect for treaty violation
+;outrage where DiplRel != {War} and all the benevolent actions are left with
 ;,FALSE clauses and all the malevolent actions are commented out so they'd cause it.
 [effect_united_nations_international_outrage_invasion]
 type    = "Casus_Belli_Success"
@@ -8737,7 +8738,7 @@ reqs    =
       "DiplRel", "Foreign",                        "Local", TRUE
       "UnitFlag", "NonMil",                        "Local", FALSE
       "Building", "United Nations",                "World", TRUE
-; TO DO: shouldn't the actions below which would vioalte treaty be commented out so that they also 
+; TO DO: shouldn't the actions below which would vioalte treaty be commented out so that they also
 ; cause the outrage for a treaty violation?
       "Action", "Establish Embassy",               "Local", FALSE
       "Action", "Establish Embassy Stay",          "Local", FALSE
@@ -8879,6 +8880,6 @@ reqs    =
       "Action", "Clean Pollution",                 "Local", FALSE
       "Action", "Clean Fallout",                   "Local", FALSE
       "Action", "Spy Attack",                      "Local", FALSE
-    }    
+    }
 
 ;This line intentionally left blank:
