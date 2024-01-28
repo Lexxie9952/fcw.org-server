@@ -2163,7 +2163,7 @@ reqs           =
     }
 build_time     = 3
 removal_time   = 0
-native_to      = "Land", "LandNoKill", "LandAirSea", "LandRail", "Big Land" ;NB:by making this non-native we could equalize movement without "Train" unit
+native_to      = "Land", "LandNoKill", "LandAirSea", "LandRail", "Cargo", "Big Land" ;NB:if Big Land is non-native we could make interesting movement rebalances (perhaps requiring Train unit for Big Land transport?)
 flags          = "AutoOnCityCenter", "NativeTile"
 bridged_over   = "River"
 helptext       = _("\
