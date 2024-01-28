@@ -1292,9 +1292,9 @@ Masonry lets Workers build Forts. Construction lets them build Fortresses and\
  Bridges. Radio lets them build Airbases and Buoys, which Settlers cannot. Workers\
  must be on a ship to build Buoys. \n\
 "), _("\
-Until the discovery of Explosives, Workers will immediately upgrade for free\
- to Workers II. No moves are spent, no city is needed, and the current job\
- is not interrupted. \n\
+Workers are immediately upgraded to Workers II when you learn Democracy.\
+ Until the discovery of Explosives, you can upgrade bribed and captured Workers for free.\
+ This can be done on any tile and the current job is not interrupted. \n\
 "), _("\
 Communism tech allows Communist governments to conscript Workers II into Riflemen via the\
  Convert order. And vice versa. \n\
@@ -1952,7 +1952,7 @@ bombard_rate = 3
 name          = _("Alpine Troops")
 class         = "Land"
 tech_req      = "Tactics"
-obsolete_by   = "Ground Troops"
+obsolete_by   = "Alpine Troops Upgrade"
 graphic       = "u.alpine_troops"
 graphic_alt   = "-"
 sound_move    = "m_alpine_troops"
@@ -1993,8 +1993,9 @@ veteran_power_fact = 100, 150, 175, 250, 300, 350, 400
 veteran_move_bonus = 0, 0, 3360, 3360, 6720, 6720, 6720
 helptext      = _("\
 Alpine Troops are highly mobile units and\
- excellent defenders.  Similar to a Scout, they\
- treat every land tile like a road were on it. \n\
+ excellent defenders. Similar to a Scout, they\
+ treat every land tile like a road were on it. \n\n\
+With Combined Arms, Alpine Troops get +2 to combat strength. \n\n\
 "), _("\
 Multislot：Under certain conditions, cities can make one (or more) multislot units per turn, plus one of any other type.\
 ")
@@ -2115,10 +2116,10 @@ veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
 veteran_power_fact = 100, 150, 175, 250, 300, 350, 400
 veteran_move_bonus = 0, 3360, 3360, 3360, 6720, 6720, 6720
 helptext      = _("\
-Ground Troops upgrade earlier infantry with better weaponry. The\
- upgrade cost for Riflemen and Alpine Troops is 4 gold.\
- Ground Troops can stay fortified while attacking, and veterans\
- enjoy a +⅓ move bonus. \n\
+Ground Troops upgrade Riflemen with better weaponry. This upgrade\
+ is received free with the required tech. (Bribed Riflemen can be\
+ upgraded for only 4 gold.) Ground Troops can stay fortified while\
+ attacking, and veterans enjoy a +⅓ move bonus. \n\
 Under Communism this unit costs 5 less. \n\
 "), _("\
 Multislot：Under certain conditions, cities can make one (or more) multislot units per turn, plus one of any other type.\
@@ -2186,10 +2187,63 @@ Fanatics fervently defend their homeland, and can do surprise skirmish\
 "), _("\
 Fanatics can Establish Home City in any allied city that is Theocracy,\
  allowing control to pass between nations who share the same faith. \n\n\
+Zealots upgrade to Fanatics for free with the required tech. \n\n\
 "), _("\
 Multislot：Under certain conditions, cities can make one (or more) multislot units per turn, plus one of any other type.\
 ")
 bombard_rate = 3
+
+[unit_alpine_troops_2]
+name          = _("Alpine Troops​")     ; contains zero width space
+rule_name     = _("Alpine Troops Upgrade")
+class         = "Land"
+tech_req      = "Combined Arms"
+obsolete_by   = "None"
+graphic       = "u.alpines2"
+graphic_alt   = "u.alpine_troops"
+sound_move    = "m_alpine_troops"
+sound_move_alt = "m_generic"
+sound_fight   = "f_alpine_troops"
+sound_fight_alt = "f_generic"
+build_cost    = 45
+pop_cost      = 0
+attack        = 70
+defense       = 70
+hitpoints     = 20
+firepower     = 1
+move_rate     = 2
+vision_radius_sq = 4
+transport_cap = 0
+fuel          = 0
+uk_happy      = 1
+uk_shield     = 0
+uk_food       = 0
+uk_gold       = 1
+embarks       = "LandRoad", "LandRail", "Helicopter"    ; transport helicopter only
+disembarks    = "LandRoad", "LandRail", "Helicopter"
+targets       = "Balloon", "Helicopter", "LandRail"
+flags         = "MultiSlot",  "IgTer", "FootSoldier", "Capturer",
+                "CantReachAir", "Settlers", "CanHide", "WillNever"
+roles         = "DefendGood", "DefendGoodStartUnit"
+veteran_names =
+  _("?vet_rank:green"),
+  _("?vet_rank:veteran"),
+  _("?vet_rank:hardened"),
+  _("?vet_rank:elite"),
+  _("?vet_rank:crack"),
+  _("?vet_rank:master"),
+  _("?vet_rank:champion")
+veteran_base_raise_chance = 85, 50, 33, 25, 20, 20, 0
+veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
+veteran_power_fact = 100, 150, 175, 250, 300, 350, 400
+veteran_move_bonus = 0, 0, 3360, 3360, 6720, 6720, 6720
+helptext      = _("\
+Alpine Troops are highly mobile units and excellent defenders. Similar to a Scout, they\
+ treat every land tile like a road were on it. \n\n\
+Alpine Troops are A7 D7 from Combined Arms technology. \n\n\
+"), _("\
+Multislot：Under certain conditions, cities can make one (or more) multislot units per turn, plus one of any other type.\
+")
 
 [unit_paratroopers]
 name          = _("Paratroopers")
@@ -6518,7 +6572,7 @@ Goods are used to establish Trade Routes, Help Build Wonders, and contribute to\
  city production. Recycle Production has a penalty of only 3 shields,\
  yielding 17 shields into a city’s production target. \n\
 "), _("\
-Goods can only move to tiles with a City, Quay, Fortress, Airbase, or Naval Base. Otherwise\
+Goods can only move to tiles with a City, Railroad, Quay, Fortress, Airbase, or Naval Base. Otherwise\
  they must be transported. If adjacent to a foreign city, use the Do\
  command (D) for Commerce functions.\
 ")
@@ -6562,7 +6616,7 @@ Freight brings benefits of organized efficiency. Like all Commerce units, it can
   \n\
 "), _("\
 By itself, Freight is only able to move to tiles with loading infrastructure:\
- Cities, Quays, Fortresses, Airbases, and Naval Bases. To be transported, it must be carried\
+ Cities, Railroads, Quays, Fortresses, Airbases, and Naval Bases. To be transported, it must be carried\
  as cargo. If adjacent to a foreign city, use the D key to do Commerce functions.\
 ")
 

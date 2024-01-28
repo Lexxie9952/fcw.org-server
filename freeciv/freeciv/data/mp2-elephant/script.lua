@@ -29,10 +29,10 @@ function history_turn_notifications(turn, year)
   if turn >= 2 and turn <= 6 then
     for p in players_iterate() do
       local has_city = 0
-      
+
       -- Each Settler type gets 1 bulb in first 5 turns
       for u in p:units_iterate() do
-        local uname = u.utype:rule_name() 
+        local uname = u.utype:rule_name()
         if uname == "Settlers" or uname == "Founders" then
           p:give_bulbs(1)
         end
@@ -52,9 +52,9 @@ function history_turn_notifications(turn, year)
     notify.event(nil, nil, E.BEGINNER_HELP,
 _("[`events/giordano`]<br>[`fire`] Philosophers hide their books after Giordano Bruno is burned.<br>Philosophy no longer gives a bonus advance."))
   end
-  
+
   return false
-end 
+end
 signal.connect("turn_begin", "history_turn_notifications")          --  *************** turn_started deprecated in 3.1, renamed turn_begin
 
 -- Place Ruins at the location of the destroyed city.
@@ -89,6 +89,7 @@ end
 -- 1. Grant a blueprint tech when the tech Philosophy is researched.
 -- 2. Announce Horseback ridng before T15
 -- 3. Democracy upgrades to Workers II
+-- 4. Combined Arms upgrades Zealots, Riflemen, and Alpines.
 function tech_researched_handler(tech, player, how)
   local id
   local gained
@@ -102,7 +103,7 @@ function tech_researched_handler(tech, player, how)
 -- Report early Horseback riding.
   if id == find.tech_type("Horseback Riding").id and how == "researched" then
     if game_turn < 15 then
-      for c in player:cities_iterate() do 
+      for c in player:cities_iterate() do
         if c:has_building(find.building_type("Palace")) and first_horse_warning > 0 then
           notify.event(NIL, c.tile, E.TECH_GAIN,
           _("<font color=#ffff60>[`scout`] Travellers say the %s now ride horses, near %s. (%i,%i)</font>"),
@@ -118,14 +119,43 @@ function tech_researched_handler(tech, player, how)
           notify.all( _("<img src='/images/e/scout.png'> A tribe has learned to ride wild beasts near %s (%i,%i)"),
            c.name, c.tile.x, c.tile.y)
         end
-      end  
+      end
+    end
+  end
+--------------------------------
+  -- Inform of free upgrades to Riflemen and Alpines, upon discovering Combined Arms
+  if id == find.tech_type("Combined Arms").id then
+    notify.event(player, NIL, E.TECH_GAIN, ("[`events/combinedarms`]<br><font color=#ffff90><b> Combined Arms tech upgrades weaponry for your foot soldiers.</b></font><br>"))
+    for u in player:units_iterate() do
+      local uname = u.utype:rule_name()
+      if uname == "Riflemen" or uname == "Alpine Troops" or uname == "Zealots" then
+        -- This works fine for direct upgrade:  local success = u:upgrade(0)
+        -- The below is used only because more versatile (can upgrade only one tier instead of 2, if desired.)
+        local success = u:transform(u.utype.obsoleted_by, 0)
+        if success then
+            notify.event(player, u.tile, E.UNIT_UPGRADED, ("[`gift`] %s <font color=#9090ff>upgraded for free.</font>"),uname)
+        end
+      end
     end
   end
 --------------------------------
   -- Inform of free Workers II upgrade upon discovering Democracy
   if id == find.tech_type("Democracy").id then
     notify.event(player, NIL, E.TECH_GAIN,
-    _("[`events/democracy`]<br><font color=#ffff90><b>Discovery of Democracy sparks educational socioeconomic trends.<br>All Workers everywhere can upgrade to Workers II for free.</b></font>"))
+    _("[`events/democracy`]<br><font color=#ffff90><b>Discovery of Democracy sparks educational socioeconomic trends.<br>Workers everywhere upgrade to Workers II for free.</b></font>"))
+
+    for u in player:units_iterate() do
+      local uname = u.utype:rule_name()
+      if uname == "Workers" then
+        -- This works fine for direct upgrade:  local success = u:upgrade(0)
+        -- local success = u:transform(u:can_upgrade(), 0);   << this is supposed to work but maybe doesn't, but we don't need it.
+        -- The below is used because we don't want a free upgrade to Engineers, only to first obsoleted_by type which is Workers II:
+        local success = u:transform(u.utype.obsoleted_by, 0)
+        if success then
+            notify.event(player, u.tile, E.UNIT_UPGRADED, ("[`gift`] Workers <font color=#9090ff>upgraded for free.</font>"))
+        end
+      end
+    end
   end
 -------------------------------- Removed in order to nerf Theocracy
   -- Inform of Theocracy blueprints upon discovering Theology
@@ -149,60 +179,60 @@ function tech_researched_handler(tech, player, how)
 
     record_philo(player)
 
-    
+
     -- Philosophy does not give a bonus tech under certain conditions. Check for those conditions -------------------
     if philosophy_possible == 0 then
       -- No Philosophy advance after turn 85 (1600 CE)
         return
       end
-  
+
       -- Philosophy can only give advances if you know NO techs from the next tier --------------
       -- Even knowing any of these techs makes an advance impossible !
-      
+
       local researcher = player
-  
+
       local forbidden_tech = find.tech_type("Banking")
       if researcher:knows_tech(forbidden_tech) then
         notify.event(player, NIL, E.TECH_GAIN,
           _("<font color=#ffdf90><b>The knowledge of Banking prevents a bonus from Philosophy.</b></font>"))
         return
       end
-  
+
       forbidden_tech = find.tech_type("Medicine")
       if researcher:knows_tech(forbidden_tech) then
         notify.event(player, NIL, E.TECH_GAIN,
           _("<font color=#ffdf90><b>The knowledge of Medicine prevents a bonus from Philosophy.</b></font>"))
         return
       end
-  
+
       forbidden_tech = find.tech_type("University")
       if researcher:knows_tech(forbidden_tech) then
         notify.event(player, NIL, E.TECH_GAIN,
           _("<font color=#ffdf90><b>The knowledge of University prevents a bonus from Philosophy.</b></font>"))
         return
       end
-  
+
       forbidden_tech = find.tech_type("Invention")
       if researcher:knows_tech(forbidden_tech) then
         notify.event(player, NIL, E.TECH_GAIN,
           _("<font color=#ffdf90><b>The knowledge of Invention prevents a bonus from Philosophy.</b></font>"))
         return
       end
-  
+
       forbidden_tech = find.tech_type("Physics")
       if researcher:knows_tech(forbidden_tech) then
         notify.event(player, NIL, E.TECH_GAIN,
           _("<font color=#ffdf90><b>The knowledge of Physics prevents a bonus from Philosophy.</b></font>"))
         return
       end
-  
+
       forbidden_tech = find.tech_type("Monotheism")
       if researcher:knows_tech(forbidden_tech) then
         notify.event(player, NIL, E.TECH_GAIN,
           _("<font color=#ffdf90><b>The knowledge of Monotheism prevents a bonus from Philosophy.</b></font>"))
         return
       end
-  
+
     -- Give the player free blueprints
     gained = player:give_tech(nil, 35, false, "researched")
 
@@ -233,7 +263,7 @@ function tech_researched_handler(tech, player, how)
     end
 
   end
-end 
+end
 
 signal.connect("tech_researched", "tech_researched_handler")
 
@@ -300,8 +330,8 @@ function unit_lost_callback(unit, loser, reason)
 
     -- We know for certain an animal was killed and who killed it:
     if num_owners == 1 then
-      -- remove [] from name of animal 
-      killed_utype_name = killed_utype_name:sub(2, #killed_utype_name - 1) 
+      -- remove [] from name of animal
+      killed_utype_name = killed_utype_name:sub(2, #killed_utype_name - 1)
 
       -- Hunt reward values:
       if killed_utype_name == "Wolf" then
@@ -360,7 +390,7 @@ function unit_lost_callback(unit, loser, reason)
 
       if gold > 0 or food > 0 then
         edit.change_gold(owner, gold)
-        
+
         if nearest_city then
           nearest_city:give_food(food)
         else
@@ -368,9 +398,9 @@ function unit_lost_callback(unit, loser, reason)
         end
 
         if owner:is_human() then
-          if food > 0 then 
+          if food > 0 then
             notify.event(owner, unit.tile, E.UNIT_WIN_ATT,
-            _("%s gets %d meat from the %s hunt, and %d gold from %s!"), 
+            _("%s gets %d meat from the %s hunt, and %d gold from %s!"),
                nearest_city.name, food, killed_utype_name, gold, fur_name)
           else
             notify.event(owner, unit.tile, E.UNIT_WIN_ATT,
@@ -414,7 +444,7 @@ function building_built_callback(building, city)
     local player = city.owner
     local city_name = city.name
     local gained = nil;
-    
+
     if player:give_tech(find.tech_type("Code of Laws"), -1, false, "researched") then
       notify.player(player, "The Code of Hammurabi provides blueprints for Code of Laws.")
     elseif player:give_tech(find.tech_type("Writing"), -1, false, "researched") then
@@ -436,9 +466,9 @@ function unit_built_callback(u, city)
   --local vigil = find.action('Vigil')
   local req_tech = find.tech_type("Space.2")
   local created_ABM
-  if owner:knows_tech(req_tech) then  
+  if owner:knows_tech(req_tech) then
     if u.utype:rule_name() == "Mobile SAM" or u.utype:rule_name() == "AEGIS Cruiser" or u.utype:rule_name() == "Missile Destroyer" or u.utype:rule_name() == "Missile Submarine" or u.utype:rule_name() == "Carrier" or u.utype:rule_name() == "Light Carrier" then
-      created_ABM = edit.create_unit_full(owner, u.tile, utype, 0, city, 1, 1, u) 
+      created_ABM = edit.create_unit_full(owner, u.tile, utype, 0, city, 1, 1, u)
       if created_ABM then
         --edit.unit_kill(created_ABM, "killed", owner)
         edit.unit_turn(created_ABM, created_ABM:facing())
@@ -446,12 +476,12 @@ function unit_built_callback(u, city)
         -- edit.perform_action(created_ABM, vigil)  ## TODO: when lua core is caught up and ACTION_VIGIL put in, this is the right way to do it.
         --when that day happens, remove the commit from 9 Sept 2022
         return true
-      end  
+      end
     end
     if u.utype:rule_name() == "Anti-Ballistic Missile" then
         edit.unit_turn(u, u:facing())
         return true
-    end  
+    end
  end
 
   -- continue processing
@@ -462,19 +492,30 @@ signal.connect("unit_built", "unit_built_callback")
 
 function action_started_unit_city_callback(action, actor, city)
 
-  -- Destroy City script (action.id==39)  
+  -- Destroy City script (action.id==39)
     if action.id == 39 then
       local dplayer = actor.owner
       local city_owner = city.owner
       local do_partisan_message = 0
       local partisan_utype = 17
+      local partisan_name = "Partisans"
       local migrant_utype = 6
+
+      if city_owner.government:rule_name() == "Theocracy" then
+        partisan_name = "Zealots"
+        partisan_utype = 19
+        local better_tech = find.tech_type("Combined Arms")
+        if city_owner:knows_tech(better_tech) then
+          partisan_name = "Fanatics"
+          partisan_utype = 23
+        end
+      end
 
       notify.event(NIL, city.tile, E.CITY_NUKED,
       _("[`events/citydestroy`]<br>[`redexclamation`]<font color=#ffef50> The %s massacred %s—slaying all who didn't escape!</font>"),
       dplayer.nation:plural_translation(), city.name )
 
-      -- City annihilation spawns Partisans and refugee Migrants  
+      -- City annihilation spawns Partisans and refugee Migrants
       local partisans = random(0, 0 + (city.size + 1) / 2) + 1
       local migrants = random(1, 0 + (city.size + 1) / 2) + 1
       if partisans > 5 then
@@ -489,7 +530,7 @@ function action_started_unit_city_callback(action, actor, city)
       end
 
       if dplayer == city_owner then
-        partisans = 0      
+        partisans = 0
       else
         if city:inspire_partisans(city_owner) > 0 then
           do_partisan_message = 1
@@ -499,14 +540,14 @@ function action_started_unit_city_callback(action, actor, city)
 
       if do_partisan_message == 1 then
         notify.event(city_owner, city.tile, E.CITY_LOST,
-        _("[`partisan`][`migrants`] The sack of %s releases %d Partisans and %d refugee Migrants!"), city.name, partisans, migrants)
+        _("[`partisan`][`migrants`] The sack of %s releases %d %s and %d refugee Migrants!"), city.name, partisans, partisan_name, migrants)
         notify.event(dplayer, city.tile, E.UNIT_WIN_ATT,
-        _("[`partisan`][`migrants`] The sack of %s releases %d Partisans and %d refugee Migrants!"), city.name, partisans, migrants)
+        _("[`partisan`][`migrants`] The sack of %s releases %d %s and %d refugee Migrants!"), city.name, partisans, partisan_name, migrants)
       else
         notify.event(city_owner, city.tile, E.CITY_LOST,
         _("[`migrants`] The sack of %s releases %d refugee Migrants!"), city.name, migrants)
         notify.event(dplayer, city.tile, E.UNIT_WIN_ATT,
-        _("[`migrants`] The sack of %s releases %d refugee Migrants!"), city.name, migrants)  
+        _("[`migrants`] The sack of %s releases %d refugee Migrants!"), city.name, migrants)
       end
 
       -- map_sq_radius: 5 + 10 = 15 (everything < 4 tiles away)

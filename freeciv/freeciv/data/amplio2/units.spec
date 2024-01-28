@@ -1,7 +1,7 @@
 
 [spec]
 
-; Format and options of this spec file: 
+; Format and options of this spec file:
 options = "+Freeciv-spec-Devel-2019-Jul-03"
 
 [info]
@@ -11,10 +11,10 @@ options = "+Freeciv-spec-Devel-2019-Jul-03"
 
 ; Special thanks go to:
 ; Alex Mor and Captain Nemo for their excellent graphics work
-; in the scenarios 2194 days war, Red Front, 2nd front and other misc graphics. 
+; in the scenarios 2194 days war, Red Front, 2nd front and other misc graphics.
 ; Fairline for his huge collection of original Civ2 unit spanning centuries
 ; Bebro for his collection of mediveal units and ships
-; Last but not least:  Lexxie 
+; Last but not least:  Lexxie
 
 artists = "
     Alex Mor            [Alex]
@@ -22,7 +22,7 @@ artists = "
     Bebro               [BB]
     CapTVK              [CT] <thomas@worldonline.nl>
     Curt Sibling        [CS]
-    Eleazar             [Eleazar] <www.jwbjerk.com> / J. W. Bjerk 
+    Eleazar             [Eleazar] <www.jwbjerk.com> / J. W. Bjerk
     Erwan               [EW]
     FiftyNine           [FiftyNine]
     Fairline            [GB]
@@ -151,4 +151,5 @@ tiles = { "row", "column", "tag"
   5, 0,  "u.abm"              ; [Lexxie]
   5, 1,  "u.light_carrier"    ; [Lexxie]
   5, 2,  "u.scout2"           ; [Lexxie]
+  5, 4,  "u.alpines2"         ; [Nemo] && [Lexxie]
 }

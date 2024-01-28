@@ -16,17 +16,17 @@ function _deflua_hut_get_gold(unit, gold)
                                                   "[`gold`] You found beads worth %d gold.", gold),
                 gold)
     owner:change_gold(gold)
-  elseif gold == 2 then  
+  elseif gold == 2 then
     notify.event(owner, unit.tile, E.HUT_GOLD, PL_("[`gold`] You found medicinal herbs worth %d gold.",
                                                   "[`gold`] You found medicinal herbs worth %d gold.", gold),
                 gold)
     owner:change_gold(gold)
-  elseif gold == 5 then  
+  elseif gold == 5 then
     notify.event(owner, unit.tile, E.HUT_GOLD, PL_("[`gold`] You found bronze tools worth %d gold.",
                                                   "[`gold`] You found bronze tools worth %d gold.", gold),
                 gold)
     owner:change_gold(gold)
-  elseif gold == 10 then  
+  elseif gold == 10 then
     notify.event(owner, unit.tile, E.HUT_GOLD, PL_("[`gold`] You found furs worth %d gold.",
                                                   "[`gold`] You found furs worth %d gold.", gold),
                 gold)
@@ -108,10 +108,10 @@ function _deflua_hut_get_boat(unit)
   local board = find.action('Transport Board')
   local capital = nil
 
-  for c in owner:cities_iterate() do 
+  for c in owner:cities_iterate() do
     if c:has_building(find.building_type("Palace")) then
       capital = c
-      break         
+      break
     end
   end
 
@@ -131,10 +131,10 @@ function _deflua_hut_get_goods(unit)
   local board = find.action('Transport Board')
   local capital = nil
 
-  for c in owner:cities_iterate() do 
+  for c in owner:cities_iterate() do
     if c:has_building(find.building_type("Palace")) then
       capital = c
-      break         
+      break
     end
   end
 
@@ -190,7 +190,7 @@ function _deflua_hut_get_barbarians(unit)
                    _("An abandoned village is here."))
     return true
   end
-  
+
   local alive = tile:unleash_barbarians()
   if alive then
     notify.event(owner, tile, E.HUT_BARB,
@@ -305,7 +305,7 @@ function _deflua_make_partisans_callback(city, loser, winner, reason)
     partisan_utype = 19
     local better_tech = find.tech_type("Combined Arms")
     if loser:knows_tech(better_tech) then
-      partisan_name = "Fanatics"
+      partisan_name = "Fanatic"
       partisan_utype = 23
     end
   end
@@ -315,7 +315,7 @@ function _deflua_make_partisans_callback(city, loser, winner, reason)
   partisan_spawns = partisan_spawns + 1
   if partisan_spawns < 5 then
     notify.event(loser, city.tile, E.CITY_LOST,
-      PL_("[`events/partisans`]<br>[`partisan`] The loss of %s inspires %d %s!", 
+      PL_("[`events/partisans`]<br>[`partisan`] The loss of %s inspires %d %s!",
       "[`events/partisans`]<br>[`partisan`] The loss of %s inspires %d %ss!", partisans),
       city.name, partisans, partisan_name)
     notify.event(winner, city.tile, E.UNIT_WIN_ATT,

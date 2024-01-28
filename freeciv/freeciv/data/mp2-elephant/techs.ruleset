@@ -252,7 +252,7 @@ req2     = "Advanced Flight"
 flags    = ""
 graphic     = "a.combined_arms"
 graphic_alt = "-"
-helptext = _("Obsoletes Riflemen, Zealots, Alpine Troops.")
+helptext = _("Auto-upgrades Riflemen, Zealots, Alpine Troops.")
 cost = 5650
 
 [advance_combustion]
@@ -321,7 +321,7 @@ req2     = "Invention"
 flags    = ""
 graphic     = "a.democracy"
 graphic_alt = "-"
-helptext = _("Obsoletes Workers, Code of Hammurabi. Allows government Democracy.")
+helptext = _("Obsoletes Code of Hammurabi. Auto-upgrades Workers. Allows government Democracy.")
 cost = 950
 
 [advance_economics]
@@ -1012,7 +1012,7 @@ cost = 50
 
 ;==========================================CHILD TECHS===================================================
 ;This is the exemplar for how to do a specialty add-on tech, it's basically just a dead-end tech
-;usually for cheaper than its parent req, that allows "specializing into" the parent tech more, 
+;usually for cheaper than its parent req, that allows "specializing into" the parent tech more,
 ;and so, the "Specialization" flag is used by FCW help it display it as a minor add-on attached
 ;to the parent, whereas other clients would just show it separately.
 [advance_combu2]

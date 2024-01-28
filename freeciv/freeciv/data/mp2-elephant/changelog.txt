@@ -1,29 +1,29 @@
 Brief Explanations of goals and challenges.
    Simplicity vs. Complexity.
- 
+
    What motivates Ruleset additions
-      
+
 Focus goals for MP2-Elephant
    Compress phenomenon where first 25% of era history happens in first 50% of game length.
       (e.g., first quarter of game happening in first half of game length.) Goal: MP2D's T60 should be roughly T50 in MP2E
    Simplify unnecessary complexities.
    Evolve movement system
       passive movement vs active movement: boats with horses shouldn't move on rivers faster, nor should trains
-      movement costs for actions, movement dynamics over terrain, terrain improvements having finer control over 
+      movement costs for actions, movement dynamics over terrain, terrain improvements having finer control over
          speeding/slowing movement, etc.
       min frags to move to next tile: allows a differentiation in being able to travel x tiles, from being able
          to travel there and fortfy, begin work, etc.
    Re-evaluate terrain: move costs, defense bonuses, special penalties and other dynamics.
 
-   Granularity - while small integers like 1 and 2 are simpler, the power factor is 2/1 = 200%. Everything should 
+   Granularity - while small integers like 1 and 2 are simpler, the power factor is 2/1 = 200%. Everything should
       be elevated by a factor like 10 so that balance adjustments can properly come from small tweaks rather than
-      always making new rules and exceptions to the rules. For MP2E, however, this is such a large jump that no 
+      always making new rules and exceptions to the rules. For MP2E, however, this is such a large jump that no
       few fine adjustments will be made, so people may adjust to everything costing 10x more, attacking 10x more,
       moving 10x more, etc.
-      * movement and move costs 
+      * movement and move costs
 
-   Early Game - Blossom the early game even more, giving it the attention the late game got in earlier releases 
-      (late game balance and tactics and number of units were far behind early game balance) 
+   Early Game - Blossom the early game even more, giving it the attention the late game got in earlier releases
+      (late game balance and tactics and number of units were far behind early game balance)
 
    Fine-tune the more radical and experimental adjustments of MP2D.
 
@@ -31,16 +31,16 @@ Focus goals for MP2-Elephant
       bonuses for ships to be improved:
          Movement, Vigil, Attack II (combat rounds).
 
-   Project Infantry - time to really enrich it 
+   Project Infantry - time to really enrich it
       Early game types
       Differentiate Napoleonic / WW1 / WW2 foot units better, partly through new units but partly through
          bonuses achieved from techs / vet levels / movement / etc. e.g., sub-techs for musket/rifle techs.
 ========================================================================================================================
 
-0. Attack and Defense strength are all 10x higher across the board. This makes a basic unit like the Warriors as 
+0. Attack and Defense strength are all 10x higher across the board. This makes a basic unit like the Warriors as
    A10 D10 HP10. However, the strengths are represented at 1/10 so A10 stll shows as A1. This allows fine-tuning
     unit combat strength with a finer shade. This is a developer note that does not affect gamer-level concerns.
-1. Spy Planes are harder to shoot down because of mass, size, speed, and altitude. Correspondingly, they gain higher defense, 
+1. Spy Planes are harder to shoot down because of mass, size, speed, and altitude. Correspondingly, they gain higher defense,
 and can now be built with veteran levels.
 1a. Spy Planes get 75% chance to Stack Escape, since they are in a different "layer" of the tile, like subs.
 2. Scout 10hp (was 8)
@@ -48,25 +48,25 @@ and can now be built with veteran levels.
 4. Rivers and Rails are now PASSIVE MOVEMENT: unit is assumed to be a passenger. Therefore Warriors, Horsemen, and Armor all move the same
    speed down a river. This is 1/8 of mp. This only effects Land-type units, Sea units aren't TerrainSpeed and are always 1mp wherever
    they go.
-   A. Rivers gain hard-entry and hard-exit flags, using all move points to go from non-river tile to river tile and vice versa, 
+   A. Rivers gain hard-entry and hard-exit flags, using all move points to go from non-river tile to river tile and vice versa,
    simulating to difficulty of crossing an unbridged/unquayed river.
    B. Big Land units are native to rivers again. This implies certain differences and has certain reasons:
    ** New PassiveMovement cost of 1/8 effectively makes all units, including motor, get the same
-         "virtual boat speed" now. 
+         "virtual boat speed" now.
    ** this means motor units could now enter a mountain with a river.
    ** Allows Big Land to incur the restrictinfra hard entry/exit penalty for crossing rivers
    ** Allows coding the server so only units native-to-road-type get hard entry/exit, thus
         allowing trenches and similar to only affect native classes and some TerrainSpeed classes can ignore them.
-5. For simplicity, Canals are same as rivers regarding movement. i.,e., if canals are so great that battleships can use them, 
-   why do we assume land types can't get on boats like they can for rivers? i.e., Canals are PassiveMovement, 1/8 mp, 
+5. For simplicity, Canals are same as rivers regarding movement. i.,e., if canals are so great that battleships can use them,
+   why do we assume land types can't get on boats like they can for rivers? i.e., Canals are PassiveMovement, 1/8 mp,
    and have same hard-entry hard-exit rules as well. (A Canal is now effectively a river in every way except +1 trade.)
 6. Increased vision of castle
-7. New base watchtower, allows vision 
+7. New base watchtower, allows vision
 8. Trains are actually active agents on passive road-type, so their +1 move bonus for electricity and combuston remains, as an active
    move bonus giving +5 and +5 tiles range, respectvely
 9. New road type Highway uses 1/6 move instead of 1/3; gives a range of 12 for foot, 24 for mounted, 36 for motorized
 10. Smaller boats (Boats and Triremes) get more moves and also get +2 move points for moving faster on rivers, if they start their turn on a river.
-      this now makes Boats move at 8, same speed as unit using river without boat. This should enhance rivers as a key logistical aspect of 
+      this now makes Boats move at 8, same speed as unit using river without boat. This should enhance rivers as a key logistical aspect of
       early civilization, like they should be.
 11. Like wagon and trawler, everyone can see a Boat's cargo.
 12. Patriarch can gain vet levels like other diplomat types.
@@ -84,7 +84,7 @@ and can now be built with veteran levels.
 18. Cruise Missiles aren't field units. This penalty goes back to an earlier simpler less realistic game. At this point in MP2 evolution,
    making a CM a field unit causing unhappiness in every Aegis Cruiser carrying it, it's like Cannons getting extra unhappiness for each
    cannonball they carry.
-19. Phalanxes and Pikemen get 1.5x attack bonus if they haven't moved. This is not cumulative to Agoge, but rather, Agoge expands the bonus to be 
+19. Phalanxes and Pikemen get 1.5x attack bonus if they haven't moved. This is not cumulative to Agoge, but rather, Agoge expands the bonus to be
     active always for a pure 1.5 in attack strength.
 20. Bombs have no move cost to board but double move cost to deboard, which evens out on average; so why do it? Because this way it allows
    a newly made bomb to get on an aircraft on the same turn. In addition, bombs can't board while transported, as this would allow double
@@ -104,30 +104,30 @@ and can now be built with veteran levels.
     On highways they travel 20 tiles (which is higher than the 12 on roads of MP2D)
     On rails and maglev they travel 28 and 70 just like every other unit.
     REASONS: the 2x movement boost of Howitzer over Artillery was always problematic. These weapons are powerhouses which should
-    require, as in real life, some tactical premeditations and preparatory movements to set up, rather than rushing down roads and 
+    require, as in real life, some tactical premeditations and preparatory movements to set up, rather than rushing down roads and
     rails and slamming into whatever city or stack is there. Nevertheless, on MP2E highways they move farther than MP2D roads,
     and can move the same # of tiles over blank terrain, albeit not attack at full strength on the last move.
-28. Coastal D costs 75, same as city walls. The 2x defense improvement that got the most complaints for being too common/too easy 
+28. Coastal D costs 75, same as city walls. The 2x defense improvement that got the most complaints for being too common/too easy
    to build and make navy irrelevant, was also the cheapest. This fixes that somewhat. Note: it costs 80 in Civ2.
 29. The ability for Helicopters to see Submarines better (from Civ2) is finally live and operational in Freeciv! Helicopters can see
-   submarines at 2 tiles distance instead of 1, which is to say, in a 5x5 box at which they are the centre. This effect counts for 
+   submarines at 2 tiles distance instead of 1, which is to say, in a 5x5 box at which they are the centre. This effect counts for
    Transport Helicopters also
 30. Land units, early sea units cannot see adjacent submarines. All air units, and all military ships from Destroyer onward, can see adjacent subs.
 31. Space.2 cost is now 6300 bulbs
-32. New unit Penetration Bomber - has bonus of only 5 combat rounds when defending (4 attacks to kill), not a huge deal for manual 
+32. New unit Penetration Bomber - has bonus of only 5 combat rounds when defending (4 attacks to kill), not a huge deal for manual
       interception (which usually doesn't happen on a 1 fuel unit), but can be a godsend for vigil interceptions, requiring 4 to knock it out
-      this feature wasn't documented in the unit yet and the whole thing needs careful rethinking as it's bit OP in some ways and UnP in 
-      other ways and needs to seek its special role and cost a little better, the goal is EQUALITY in usefulness to JBomber but just in a 
+      this feature wasn't documented in the unit yet and the whole thing needs careful rethinking as it's bit OP in some ways and UnP in
+      other ways and needs to seek its special role and cost a little better, the goal is EQUALITY in usefulness to JBomber but just in a
       different way allowing more tactical tools. Should maybe have max_attacks 1 or def. -1 less than JBomber.
-33. Foot Soldiers min.speed is 1.5 moves. This doesn't increase max range at all but GREATLY increases mobility inside their natural range. 
-     e.g., a foot unit with 2 moves can attack and still have a move fraction left to fortify or retreat a tile. Note the max_range to 
+33. Foot Soldiers min.speed is 1.5 moves. This doesn't increase max range at all but GREATLY increases mobility inside their natural range.
+     e.g., a foot unit with 2 moves can attack and still have a move fraction left to fortify or retreat a tile. Note the max_range to
      min_speed ratio in original 1x is 1/1=100% actually more than 1.5/2 = 75% in 2x !! So this makes a lot of sense to improve for units
      plagued by mobility issues ever since 2x modification occurred. (see white paper)
 34. Foot Soldiers gain bigger move bonuses with vet levels. Standard is v0-1 = 0; v2-3 + 1/3; v4-6 +2/3
 35. FootSoldiers get improved promotion odds: 50 33 20 goes 85 50 33, basically bumping all odds up one level.
 36. FootSoldiers who didn't receive discounts in MP2C get ~10% discount. Musket:27, Riflemen:35, Partisan: 40, Alpine:45,
     Marines:50, Ground Troops:35, Paratroopers:50. Zealots which were 25 in MP2D receive discount also and are back to 20.
-36A. Destroy City requires 3 units (2 support units) to do. 
+36A. Destroy City requires 3 units (2 support units) to do.
 37. Modern FootSoldiers (Paratrooper, Ground Troops, get A8)
 38. Mech.Inf get A7 attack, can carry one Foot Soldier or AAA.
 39. AWACS cost adjust: 130, was 140. Attrition rate and other flight reconnaissance options disincentivized the cost.
@@ -141,33 +141,33 @@ and can now be built with veteran levels.
     by its cargo. For casual and intuitive play this will generally seem to be the case. However, some adjustments to this rule
     do exist just to smooth over all the game mechanics, game balance, and behaviors. Please not then:
 
-      0% Goods/Freight, Civilian: Punishing ability to cash in on traderoutes/wonders/recycle is not relevant. Workers, etc., 
+      0% Goods/Freight, Civilian: Punishing ability to cash in on traderoutes/wonders/recycle is not relevant. Workers, etc.,
                                   were intended to enjoy logistical bonuses in efficiency from using transport/river/canal/quay
-                                  infrastructural investment. Therefore, rule doesn't apply to these units. 
+                                  infrastructural investment. Therefore, rule doesn't apply to these units.
       0% Bombs. (The move-point of Bomb-types is simply to allow it an attack something adjacent, which presumably it can always do.)
       0% AAA/Marines. (Keeps original movement abilities intact; AAA needs full moves to vigil.)
       50% Foot Soldiers - 50% accounts for balance with board/deboard costs and therefore ability to gain any slight edge in mobility
-                           from using faster transportation. 
+                           from using faster transportation.
       50% Aircraft, Missiles - The high speed and "internal fuel" of these units is not meant to be 100% depleted and hampered by the
-                                "slower speed" steps taken by the carriers. e.g., one Fighter (20mp) offloads from a 
+                                "slower speed" steps taken by the carriers. e.g., one Fighter (20mp) offloads from a
                                 a carrier (10mp) before it moves 5 tiles, and another stays on and then takes off. The Fighter who offloaded
                                 first could strike at a range of 20 while the other at a range of 5 + 10 = 15. Introducing an extra
                                 level of "micromanagement" to offload aircraft and missiles you might intend to use, before moving
                                 a Carrier, and then if deciding not to use them, landing them back again on the carrier. The 50%
                                 passenger move cost penalty here just keeps the ratios clean to reduce this extra level of micromanagement.
-                                move points 
+                                move points
       75% land military non-foot; 50% + won't subtract if <= 3 moves left (aircraft, preserves vigil)
 
-      *** In no case does a faster unit on a slower transport expend more than 1mp on the cargo, just to avoid the needlessness of 
+      *** In no case does a faster unit on a slower transport expend more than 1mp on the cargo, just to avoid the needlessness of
       micromanaging deboard/board to avoid losing more than 1 move per tile by staying on the transporter.
 
-43. Spy Plane and Bombers (except Dive Bomber) are BadCityDefender. This adjusts the fact some have strong 
+43. Spy Plane and Bombers (except Dive Bomber) are BadCityDefender. This adjusts the fact some have strong
     defensive capabilities in the air but are poor defenders to scramble for city defense.
 44. Transport swapping rules greatly simplifed because of Passenger_Move_Cost.
     a. Bombs can swap transports in cities and airbases.
     b. Missiles can swap transports in cities and any no-stack-death base.
     b. Every other unit, IF transported, can swap.
-45. Missiles have special rules. A missile launched this turn has strict options. It may: 
+45. Missiles have special rules. A missile launched this turn has strict options. It may:
  (1) Strike a target, or
  (2) Board transport in any city or no-stack-death "base"
  (3) Land in a friendly city (free short-range airlift rule).
@@ -177,13 +177,13 @@ Missiles boarding and transport swapping must be done in friendly city or base. 
    the overhaul of the movement system, we keep things consistent with old rules and not add a complexity to worry about.
 47. GSF max attacks per turn: 3 (was 4)
 48. Spy Plane as defender limits to 5 combat rounds.
-49. LandRoad and LandRail can't be embarked upon, only boarded 
+49. LandRoad and LandRail can't be embarked upon, only boarded
     (forces Transport Board enablers which restrict illegal units from boarding) (also MP2D)
 ** Missiles and Bombs lose all ability to embark (also MP2D)
 ** LandRoad can't embark if transporting (also MP2D)
 50. Spaceship items cost 3 gold per shield. Penalizes gold pooling efforts while still leaving gold a semi-feasible resource for spacerace.
 51. In foreign cities, Freight cannot recycle into spaceships or coinage (exploit prevention / game balance.)
-52. After building Apollo Program, you can't relocate capital by building Palace. This prevents exploit where capital moves to new city 
+52. After building Apollo Program, you can't relocate capital by building Palace. This prevents exploit where capital moves to new city
     every turn, preventing any collaborated effort to sabotage a space program.
 53. Boats are capturable units. Land units can capture them only when they are on terrain that land units can themselves travel to, i.e.,
       rivers or canals.
@@ -191,13 +191,13 @@ Missiles boarding and transport swapping must be done in friendly city or base. 
     on land but only on terrain War Galley can go on (i.e. rivers, canals). The usual restrictions apply for cities, bases, mountains, and multiple
     units on the tile.
 55. Wooden ships get +1 move at V1 instead of V4. (Spices up the game tactically while giving a micro-boost to units known to be a bit slow.)
-56. Palace-types (capital cities) gain +1 content citizen (matches original "pseudo-courthouse" behavior of Palace in historic rulesets, allows capital to have 
+56. Palace-types (capital cities) gain +1 content citizen (matches original "pseudo-courthouse" behavior of Palace in historic rulesets, allows capital to have
       more prominence and interest in early game which can also enhance both pace and interest in the early game.)
 57. Constitutional Monarchy max tax rates increased to 75% ... uses new 5% gradation feature and makes this gov. more competitive/long lasting as
      an option going past the mid-game perhaps.
-58. Roman Colosseum (350): Entertainers only use 1 food. An entertainer that's 3 trade + 1 food (basically like an ocean tile without a harbor that 
-    selectively fine-tunes its trade output into luxury), makes the Roman Colosseum a much more interesting value proposition vis-a-vis Michelangelo. 
-    Especially for future communists, those who avoid Theology, and those in a situation of using entertainers over national luxury 
+58. Roman Colosseum (350): Entertainers only use 1 food. An entertainer that's 3 trade + 1 food (basically like an ocean tile without a harbor that
+    selectively fine-tunes its trade output into luxury), makes the Roman Colosseum a much more interesting value proposition vis-a-vis Michelangelo.
+    Especially for future communists, those who avoid Theology, and those in a situation of using entertainers over national luxury
     because needing more micro-control for some cities to rapture and not others.
 59. Knights get an extra hitpoint, giving this late A4 D2 unit a little more distinction over much earlier units who have A4 or D2.
 60. Scout II upgrades scout, gains light attacks, pillage, evasion/escape.
@@ -209,7 +209,7 @@ GAME SPEED/PACE:
 65. Start gold changed to 90 (was 75).
 66. Marco Polo 350 shields (basically speeds the game by 50 shields for this early obligatory wonder).
 67. Civil Wonders all reduced in price by 10 shields. (See, however, change to Mausoleum).
-68. Workers II promotion bonuses bump the numerator/divisor progression by 1, which makes them go from 
+68. Workers II promotion bonuses bump the numerator/divisor progression by 1, which makes them go from
    barely usable if you use a spreadsheet, to definitive, measurable and simpler:
 veteran_power_fact = 100, 120, 125, 134 goes to:
 veteran_power_fact = 100, 125, 134, 150
@@ -222,7 +222,7 @@ i.e., 6 in 5 (swamp), 5 in 4 (mine), 4 in 3 (angkor wat swamp drain) goes to:
    Escort Fighter:   8 (was 3)
    Jet Fighter:      8 (was 3)
    Multi-Fighter     first turn fuel: no limit, second turn: less than 8 moves used. (was first turn of fuel only)
-   Stealth-Multifighter: no change (can always vigil) 
+   Stealth-Multifighter: no change (can always vigil)
    Stealth Fighter:  12 (was 4)
 72. For aircraft, Airbase healing increased to 20% for simplicity: same as a Fortress for Land units. (NEEDS A NOTE IN BASES.MP2E)
     (helicopters, 25%, same as MP2D, no change.)
@@ -233,4 +233,8 @@ i.e., 6 in 5 (swamp), 5 in 4 (mine), 4 in 3 (angkor wat swamp drain) goes to:
 77. Spies gain SentryAlways flag
 78. Magna Carta cost reduced 270
 79. Quay unloading/deboarding costs full moves except in Domestic Territory -- this completes the intended purpose of Quays being fully RestrictInfra (reminder, was also put in mp2d 17.Dec.2023)
-80. 
+80. Alpine Troops automatically become A7 D7 (a virtual sub-type of Alpines with slightly different appearance), when Combined Arms is discovered. (doc it in Techs.mp2e online page also)
+81. Combined Arms now automatically upgrades all Alpines, Riflemen, and Zealots when it is discovered:  no micro-management of moving units around for 4 gold upgrade prices.
+82. Goods and Freight can use railroads because they are passive movement. They can't use Maglev because of their large cargo space requirements.
+    This lessens some micromanagement pains and makes good sense too.
+83.
