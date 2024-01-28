@@ -1761,6 +1761,7 @@ Musketeers are infantry equipped with early firearms. They replace Pikemen as th
 \nThe discovery of Banking changes upkeep from shields to gold.\
 ")
 
+;utype 17 - If this changes it needs to be re-hard-coded in default.lua and script.lua where partisans get spawned
 [unit_partisan]
 name          = _("Partisan")
 class         = "Land"
@@ -1880,6 +1881,7 @@ Under Communism this unit costs 5 less. Also, Communism tech allows Communist\
 Multislot：Under certain conditions, cities can make one (or more) multislot units per turn, plus one of any other type.\
 ")
 
+;utype 19 - If this changes it needs to be re-hard-coded in default.lua and script.lua where partisans get spawned
 [unit_zealots]
 name          = _("Zealots")
 class         = "Land"
@@ -2125,6 +2127,7 @@ Under Communism this unit costs 5 less. \n\
 Multislot：Under certain conditions, cities can make one (or more) multislot units per turn, plus one of any other type.\
 ")
 
+;utype 23 - If this changes it needs to be re-hard-coded in default.lua and script.lua where partisans get spawned
 [unit_fanatics]
 name          = _("Fanatics")
 class         = "Land"
