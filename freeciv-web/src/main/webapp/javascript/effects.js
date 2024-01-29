@@ -19,7 +19,7 @@
 
 var effects = {};
 
-// This file is commented out in a form that will assist in its eventual 
+// This file is commented out in a form that will assist in its eventual
 // incorporation into FCW client features.
 
 
@@ -179,18 +179,19 @@ const EFT_OUTPUT_WASTE_REDUCE = 139
 const EFT_ACTOR_BRIBE_COST_PCT = 140
 const EFT_ACTOR_INCITE_COST_PCT = 141
 const EFT_TILE_NUKE_PROOF = 142
-const EFT_RAZE_BUILDING_PCT = 143;
-const EFT_DEFENDER_COMBAT_ROUNDS = 144;
-const EFT_UNIT_MIN_SPEED = 145;
-const EFT_PASSENGER_MOVE_COST_BP = 146;
-const EFT_GULAG_LOST_INCOME_PCT = 147;
-const EFT_LAST = 148;
+const EFT_NUKE_INTERCEPT_RADIUS_ODDS_PM = 143
+const EFT_RAZE_BUILDING_PCT = 144;
+const EFT_DEFENDER_COMBAT_ROUNDS = 145;
+const EFT_UNIT_MIN_SPEED = 146;
+const EFT_PASSENGER_MOVE_COST_BP = 147;
+const EFT_GULAG_LOST_INCOME_PCT = 148;
+const EFT_LAST = 149;
 
 /**********************************************************************//**
   Looks for Action_Success_Actor_Move_Cost effects for the
   Bombard action, then adds it to the ptype data for bombard move cost.
   This is because we can no longer support bitfields for suchc costs
-  after going to highly composite move costs. 
+  after going to highly composite move costs.
 **************************************************************************/
 function effects_set_bombard_move_costs()
 {
@@ -212,7 +213,7 @@ function effects_set_bombard_move_costs()
     let ptype_id = null;
     let move_cost = null;
 
-    // Find all A_S_A_M_C associated to ACTION_BOMBARD, and get the UnitType: 
+    // Find all A_S_A_M_C associated to ACTION_BOMBARD, and get the UnitType:
     for (let req=0; req < actor_costs[eft].reqs.length; req++) {
       let kind = actor_costs[eft].reqs[req].kind;
       let val  = actor_costs[eft].reqs[req].value;
@@ -221,11 +222,11 @@ function effects_set_bombard_move_costs()
           ptype_id = val;
           break;
         case VUT_ACTION:
-          if (val == ACTION_BOMBARD 
+          if (val == ACTION_BOMBARD
               || val == ACTION_BOMBARD2
               || val == ACTION_BOMBARD3) {
             move_cost = actor_costs[eft].effect_value;
-          } 
+          }
           break;
       }
     }
@@ -249,10 +250,10 @@ function effects_set_bombard_move_costs()
 
   We will consider STATIC EFFECTS to be those which have only one req which
   targets a UnitType, UnitClass, or UnitFlag. Rulesets should keep that in
-  mind when making base min_speeds, or update this function accordingly. 
-  
+  mind when making base min_speeds, or update this function accordingly.
+
   The purpose of this function is only to better document base min_speed
-  for exceptional unit_types.  
+  for exceptional unit_types.
 **************************************************************************/
 function effects_set_min_speeds()
 {
@@ -260,7 +261,7 @@ function effects_set_min_speeds()
   for (let ptype_id in unit_types) {
     let ptype = unit_types[ptype_id];
     let pclass = unit_classes[ptype.unit_class_id];
-    
+
     if (utype_has_class_flag(ptype, UCF_DAMAGE_SLOWS)) {
       unit_types[ptype_id].min_speed = pclass.min_speed;
 
@@ -310,7 +311,7 @@ function effects_set_min_speeds()
             if (utype_has_flag(unit_types[ptype_id], utype_flag)) {
               unit_types[ptype_id].min_speed += min_speed_effects[eft].effect_value;
             }
-          }          
+          }
           break;
       }
     }
@@ -335,7 +336,7 @@ function effects_set_min_speeds()
   data structures.  This allows the above queries to be fast:
     - Look up the possible sources for the effect
     - For each source, find out if it is present
-  The first is commonly called the "ruleset cache" The second is the 
+  The first is commonly called the "ruleset cache" The second is the
   "sources cache" and is stored all over.
 
   Any type of effect range and "survives" is possible if we have a sources
@@ -410,7 +411,7 @@ struct effect *effect_new(enum effect_type type, int value,
 {
   struct effect *peffect;
 
-  // Create the effect. 
+  // Create the effect.
   peffect = fc_malloc(sizeof(*peffect));
   peffect->type = type;
   peffect->value = value;
@@ -418,7 +419,7 @@ struct effect *effect_new(enum effect_type type, int value,
 
   requirement_vector_init(&peffect->reqs);
 
-  // Now add the effect to the ruleset cache. 
+  // Now add the effect to the ruleset cache.
   effect_list_append(ruleset_cache.tracker, peffect);
   effect_list_append(get_effects(type), peffect);
 
@@ -621,7 +622,7 @@ int effect_value_from_universals(enum effect_type type,
 
     if (peffect->multiplier) {
       // Discount any effects with multipliers; we are looking for constant
-      // effects 
+      // effects
       continue;
     }
 
@@ -633,24 +634,24 @@ int effect_value_from_universals(enum effect_type type,
         switch (universal_fulfills_requirement(preq, &(unis[i]))) {
         case ITF_NOT_APPLICABLE:
           // This req not applicable to this source (but might be relevant
-          // to another source in our template). Keep looking. 
+          // to another source in our template). Keep looking.
           break;
         case ITF_NO:
-          req_mentioned_a_source = TRUE; // this req matched this source 
+          req_mentioned_a_source = TRUE; // this req matched this source
           if (preq->present) {
-            // Requirement contradicts template. Effect doesn't apply. 
+            // Requirement contradicts template. Effect doesn't apply.
             effect_applies = FALSE;
-          } // but negative req doesn't count for first_source_mentioned 
+          } // but negative req doesn't count for first_source_mentioned
           break;
         case ITF_YES:
-          req_mentioned_a_source = TRUE; /* this req matched this source 
+          req_mentioned_a_source = TRUE; /* this req matched this source
           if (preq->present) {
             if (i == 0) {
               first_source_mentioned = TRUE;
             }
-            // keep looking 
+            // keep looking
           } else // !present  {
-            // Requirement contradicts template. Effect doesn't apply. 
+            // Requirement contradicts template. Effect doesn't apply.
             effect_applies = FALSE;
           }
           break;
@@ -658,18 +659,18 @@ int effect_value_from_universals(enum effect_type type,
       }
       if (!req_mentioned_a_source) {
         // This requirement isn't relevant to any source in our template,
-        // so it's an extra condition and the effect should be ignored. 
+        // so it's an extra condition and the effect should be ignored.
         effect_applies = FALSE;
       }
       if (!effect_applies) {
-        // Already known to be irrelevant, bail out early 
+        // Already known to be irrelevant, bail out early
         break;
       }
     } requirement_vector_iterate_end;
 
     if (!first_source_mentioned) {
       // First source not positively mentioned anywhere in requirements,
-         so ignore this effect 
+         so ignore this effect
       continue;
     }
     if (effect_applies) {
@@ -718,7 +719,7 @@ void send_ruleset_cache(struct conn_list *dest)
       effect_packet.multiplier = multiplier_number(peffect->multiplier);
     } else {
       effect_packet.has_multiplier = FALSE;
-      effect_packet.multiplier = 0; // arbitrary 
+      effect_packet.multiplier = 0; // arbitrary
     }
 
     counter = 0;
@@ -745,7 +746,7 @@ bool building_has_effect(const struct impr_type *pimprove,
 {
   struct universal source = {
     .kind = VUT_IMPROVEMENT,
-    // just to bamboozle the annoying compiler warning 
+    // just to bamboozle the annoying compiler warning
     .value = {.building = improvement_by_number(improvement_number(pimprove))}
   };
   struct effect_list *plist = get_req_source_effects(&source);
@@ -783,7 +784,7 @@ static bool is_effect_prevented(const struct player *target_player,
 {
   requirement_vector_iterate(&peffect->reqs, preq) {
     // Only check present=FALSE requirements; these will return _FALSE_
-     // from is_req_active() if met, and need reversed prob_type 
+     // from is_req_active() if met, and need reversed prob_type
     if (!preq->present
         && !is_req_active(target_player, other_player, target_city,
                           target_building, target_tile,
@@ -814,7 +815,7 @@ bool is_building_replaced(const struct city *pcity,
 
   plist = get_req_source_effects(&source);
 
-  // A building with no effects and no flags is always redundant! 
+  // A building with no effects and no flags is always redundant!
   if (!plist) {
     return TRUE;
   }
@@ -822,9 +823,9 @@ bool is_building_replaced(const struct city *pcity,
   effect_list_iterate(plist, peffect) {
     // We use TARGET_BUILDING as the lowest common denominator.  Note that
     // the building is its own target - but whether this is actually
-    // checked depends on the range of the effect. 
+    // checked depends on the range of the effect.
     // Prob_type is not reversed here. disabled is equal to replaced, not
-    // reverse 
+    // reverse
     if (!is_effect_prevented(city_owner(pcity), NULL, pcity,
                              pimprove,
                              NULL, NULL, NULL, NULL, NULL,
@@ -863,17 +864,17 @@ int get_target_bonus_effects(struct effect_list *plist,
 {
   int bonus = 0;
 
-  // Loop over all effects of this type. 
+  // Loop over all effects of this type.
   effect_list_iterate(get_effects(effect_type), peffect) {
-    // For each effect, see if it is active. 
+    // For each effect, see if it is active.
     if (are_reqs_active(target_player, other_player, target_city,
                         target_building, target_tile,
                         target_unit, target_unittype,
                         target_output, target_specialist, target_action,
 			&peffect->reqs, RPT_CERTAIN)) {
-      // This code will add value of effect. If there's multiplier for 
+      // This code will add value of effect. If there's multiplier for
       // effect and target_player aren't null, then value is multiplied
-      // by player's multiplier factor. 
+      // by player's multiplier factor.
       if (peffect->multiplier) {
         if (target_player) {
           bonus += (peffect->value
@@ -1267,7 +1268,7 @@ int get_potential_improvement_bonus(struct impr_type *pimprove,
                            preq, prob_type)) {
           useful = FALSE;
           break;
-        } 
+        }
       } requirement_vector_iterate_end;
 
       if (useful) {
@@ -1299,7 +1300,7 @@ void get_effect_req_text(const struct effect *peffect,
   }
 
   // FIXME: should we do something for present == FALSE reqs?
-  // Currently we just ignore them. 
+  // Currently we just ignore them.
   requirement_vector_iterate(&peffect->reqs, preq) {
     if (!preq->present) {
       continue;

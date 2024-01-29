@@ -1,5 +1,5 @@
-The effects.ruleset file contains all effects in play in a Freeciv scenario. 
-They have the following form (this is perhaps the most complicated example I 
+The effects.ruleset file contains all effects in play in a Freeciv scenario.
+They have the following form (this is perhaps the most complicated example I
 could find):
 
 [effect_hydro_plant]
@@ -14,21 +14,21 @@ reqs  =
       "Building", "Nuclear Plant", "City", FALSE, FALSE
     }
 
-The text in the brackets is the entry name, which just has to be unique, but 
+The text in the brackets is the entry name, which just has to be unique, but
 is otherwise not used. The type field tells Freeciv which effect you are
-defining.  The value is the effect's value, which depends on which effect it 
-is. The reqs table contain a list of requirements for this effect being in 
-effect. You need to satisfy all requirements listed here for this effect to 
+defining.  The value is the effect's value, which depends on which effect it
+is. The reqs table contain a list of requirements for this effect being in
+effect. You need to satisfy all requirements listed here for this effect to
 take effect in the game. Requirements with present = TRUE must be present,
 those with present = FALSE must not be present.
 
-Value is integral amount parameter for many effects (must be in the range 
+Value is integral amount parameter for many effects (must be in the range
 -32767 to 32767).
 
 Requirement range may be one of: "None", "Local",
-"CAdjacent" (Cardinally Adjacent), "Adjacent", "City", 
-"Continent", "Player", "Allied, "World". Some requirement types may only work at 
-certain ranges; this is not yet documented. In particular, at present, 
+"CAdjacent" (Cardinally Adjacent), "Adjacent", "City",
+"Continent", "Player", "Allied, "World". Some requirement types may only work at
+certain ranges; this is not yet documented. In particular, at present,
 "Continent" effects can affect only cities and units in cities.
 
 A requirement may have a 'survives' field, and if this 'TRUE', the effect
@@ -152,9 +152,9 @@ Action_Odds_Pct
 Action_Resist_Pct
     Provides a % resistance for the TARGET player of an Action in such cases
     where the "Action_Odds_Pct" effect can only access req/ranges of the ACTOR
-    player. Example: the "Gov" of the target changes the odds, or the target 
+    player. Example: the "Gov" of the target changes the odds, or the target
     owning a certain wonder changes the odds. Positive values decrease the
-    Action_Odds_Pct; negative values increase it. In other words, it acts 
+    Action_Odds_Pct; negative values increase it. In other words, it acts
     in reverse of Action_Odds_Pct: "Player" range refers to the target
     instead of the actor, and the value is subtracted rather than added.
     NOTE: unit ranges still pertain to actor, not target.
@@ -170,9 +170,9 @@ Actor_Bribe_Cost_Pct
 Actor_Incite_Cost_Pct
     Increases the actor player's cost of inciting cities by this amount percent.
     Use negative numbers to decrease the incite cost. Note: "Incite_Cost_Pct"
-    is the cost modifier based on the player and city who are the victim of 
+    is the cost modifier based on the player and city who are the victim of
     the incite action. With "Actor_Incite_Cost_Pct", the Player and Unit reqs
-    refer to the actor player and unit. The city req refers to the home city 
+    refer to the actor player and unit. The city req refers to the home city
     of the actor unit.
 
 Airlift
@@ -199,17 +199,17 @@ Building_Build_Cost_Pct                 (EFT_IMPR_BUILD_COST_PCT)
     the cost of a building. NOT 1.5 * 1.5 = 2.25 (i.e., not multiplicative).
 
 Building_Build_Cost_Pm                  (EFT_IMPR_BUILD_COST_PM)
-    ▷ If no Building_Build_Cost_Pct is active, then this effect by itself is 
+    ▷ If no Building_Build_Cost_Pct is active, then this effect by itself is
     an additive layer at the higher resolution of permille rather than percent,
     letting you achieve specific discounts without "rounding holes". For example,
-    two layers of Building_Build_Cost_Pm at a value of 500 becomes a net effect of 
+    two layers of Building_Build_Cost_Pm at a value of 500 becomes a net effect of
     +1000‰ (i.e. +100%) -- or in other words, will double the cost of a building.
     ▷ If Building_Build_Cost_Pct is active, this effect is a Permille multiplied
     to the building build cost AFTER Building_Build_Cost_Pct has adjusted it. This
     allows multiple additive layers through the former effect, then layering specific
     multiplier effects over those. For example, Building_Build_Cost_Pct=50 and
-    Building_Build_Cost_Pm=500 will together result in a 1.5 * 1.5 = 2.25x building cost. 
-    
+    Building_Build_Cost_Pm=500 will together result in a 1.5 * 1.5 = 2.25x building cost.
+
 Building_Buy_Cost_Pct
     Percentage added to building buy cost.
 
@@ -227,7 +227,7 @@ on top of any movement fragments the action itself subtracts.
 
 Action_Success_Target_Move_Cost
     The number of move fragments subtracted from a unit when someone
-successfully performs an action on it. Req scope is evaluated upon 
+successfully performs an action on it. Req scope is evaluated upon
 the target (not the actor). Evaluated and done after the action
 is successfully completed. Added on top of any movement fragments the
 action itself subtracts. Only supported for actions that target
@@ -250,8 +250,8 @@ Casus_Belli_Success
 Celebrate_Size_Add
     Add this value to the base size at which cities may celebrate. For example,
     if cities.ruleset has celebrate_size_limit = 3, then a negative value will
-    lower the limit and a positive value will raise the limit, when this effect's 
-    requirements are triggered. 
+    lower the limit and a positive value will raise the limit, when this effect's
+    requirements are triggered.
 
 City_Image
     The index for the city image of the given city style.
@@ -295,13 +295,13 @@ Civil_War_Chance
 Coinage_Bonus_Pm
     Adds a Permille to the default 1:1 conversion of shields to gold, when
     coinage is produced (or any other Improvement with the "Gold" flag,
-    when the req vector is actively true). 
+    when the req vector is actively true).
 
 Combat_Rounds
     Maximum number of rounds combat lasts. Unit is the attacker. Zero and
     negative values mean that combat continues until either side dies.
     Local tile reqs resolve to the tile the battle is fought on; that is,
-    the defender's tile. Thus a ruleset can reduce combat_rounds for 
+    the defender's tile. Thus a ruleset can reduce combat_rounds for
     contexts like non-native attacks, attacking vs. mountains, etc.
     If this and Defender_Combat_Rounds are both in effect, the stronger
     effect takes precedence (i.e. the one with the least rounds.)
@@ -331,8 +331,8 @@ Empire_Size_Base
     Empire_Size_Step is zero, there is no such penalty.
 
 Empire_Size_Step
-    After your civilization reaches Empire_Size_Base size, it gets one more 
-    unhappy citizen for each amount of cities it gets above that. Set to zero to 
+    After your civilization reaches Empire_Size_Base size, it gets one more
+    unhappy citizen for each amount of cities it gets above that. Set to zero to
     disable. You can use Empire_Size_Step even if Empire_Size_Base is zero.
 
 Enable_Nuke
@@ -349,7 +349,7 @@ Fanatics
     Units with "Fanatics" flag incur no upkeep.
 
 Force_Content
-    Make amount' unhappy citizens content. Applied after martial law and unit 
+    Make amount' unhappy citizens content. Applied after martial law and unit
     penalties.
 
 Gain_AI_Love
@@ -364,7 +364,7 @@ Give_Imm_Tech
     Give amount techs immediately.
 
 Growth_Food
-    Food left after cities grow or shrink is amount percent of the capacity of 
+    Food left after cities grow or shrink is amount percent of the capacity of
     the city's foodbox. This also affects the 'aqueductloss' penalty.
 
 Gulag
@@ -372,22 +372,22 @@ Gulag
     is active. Values:
      *   0     =  No suppression.
      *   1-99  =  Total martial law impact needed to achieve suppression.
-     *   100   =  always suppress. 
+     *   100   =  always suppress.
     "Gulag" suppression of disorder. 100 = always suppress disorder.
 
 Gulag_Lost_Income_Pct
-    The percentage loss incurred by a city to an output type IFF 
+    The percentage loss incurred by a city to an output type IFF
     it avoids disorder due to Gulag effects.
     To specify an output product, e.g., gold, use it in the req field, such as:
     "OutputType", "Gold", "Local",  TRUE
     Effect's value specifies how much of gross output is lost:
      *   0      = No loss of output
      *   1-99   = Percent of gross output lost iff under Gulag
-     *   100    = No output accumulates when the city is under Gulag. 
+     *   100    = No output accumulates when the city is under Gulag.
     NB: Careful ... only shields, gold, and sci are operative here.
     Trade, Lux, Food are not because 1) Lux affects disorder/gulag and could
-    create negative feedback, 2) Trade affects lux, 3) Food could affect 
-    famine and therefore also be a negative feedback. 
+    create negative feedback, 2) Trade affects lux, 3) Food could affect
+    famine and therefore also be a negative feedback.
 
 Happiness_To_Gold
     All Make_Content and Force_Content effects generate 1 gold per citizen
@@ -411,7 +411,7 @@ History
     Value is how much history type (cumulative) culture city produces.
 
 HP_Regen
-    Units that do not move recover amount percentage of their full hitpoints 
+    Units that do not move recover amount percentage of their full hitpoints
     per turn.
 
 Illegal_Action_Move_Cost
@@ -419,15 +419,15 @@ Illegal_Action_Move_Cost
     that turns out to be illegal.
 
 Improvement_Sale_Pct
-    Multiplier Pct to the 1/1 rate at which a building's shield value converts 
+    Multiplier Pct to the 1/1 rate at which a building's shield value converts
     to gold when the building is sold.
 
 Incite_Cost_Pct
-    Increases revolt cost by amount percent. Reqs refer to the scope of the 
+    Increases revolt cost by amount percent. Reqs refer to the scope of the
     victim player and city. See also, "Actor_Incite_Cost_Pct".
 
 Inspire_Partisans
-    Partisan units (defined in units.ruleset) may spring up when this player's 
+    Partisan units (defined in units.ruleset) may spring up when this player's
     cities are taken.
 
 Irrigation_Pct
@@ -439,14 +439,14 @@ Mining_Pct
     (This is how mine-like extras have an effect.)
 
 Make_Content
-    Make amount unhappy citizens content. Applied before martial law and unit 
+    Make amount unhappy citizens content. Applied before martial law and unit
     penalties.
 
 Make_Content_Mil
     Make amount unhappy citizens caused by units outside of a city content.
 
 Make_Content_Mil_Per
-    Make amount per unit of unhappy citizens caused by units outside of a city 
+    Make amount per unit of unhappy citizens caused by units outside of a city
     content.
 
 Make_Happy
@@ -478,8 +478,8 @@ Migration_Pct
     percent.
 
 Move_Bonus
-    Add amount movement to units. Use UnitClass' requirement with range of 
-    'Local' to give it a specific class of units only. If ruleset forces 
+    Add amount movement to units. Use UnitClass' requirement with range of
+    'Local' to give it a specific class of units only. If ruleset forces
     server setting "move_bonus_in_frags" to ENABLED, gives bonus in fragments,
     otherwise whole move points.
     NOTES: has a bug, always returns FALSE for DiplRel req;
@@ -509,21 +509,30 @@ No_Unhappy
 Not_Tech_Source
     Tech cannot be received from this player by any means.
 
+Nuke_Intercept_Radius_Odds_Pm
+    The sq_radius at which a unit has SDI-like effects to intercept a nuke, and
+    its permille odds of doing so. This is two separate values which are encoded
+    as a single value by doing:
+        val = (1000 * sq_radius) + (permille odds)
+    e.g., sq_radius=5 and odds of 33.3% gives:         val = 5333
+    (see also: Nuke_Proof, Tile_Nuke_Proof)
+    PERMILLE component cannot exceed 999.
+
 Nuke_Proof
     The percentage chance the city will absolutely prevent nuclear explosions
     from taking place on all tiles whose distance from the city center are 2
     or less: that is, within the 5x5 square whose center is the city tile.
-    (see also: Tile_Nuke_Proof)
+    (see also: Nuke_Intercept_Radius_Odds_Pm, Tile_Nuke_Proof)
 
 Output_Add_Bonus
-    City production is increased by adding raw amount. This happens prior 
+    City production is increased by adding raw amount. This happens prior
     to any Output_Bonus effects, which multiply on top of this.
 
 Output_Bonus
     City production is multiplied by amount percent.
 
 Output_Bonus_2
-    City production is multiplied by amount percent after Output_Bonus, so is 
+    City production is multiplied by amount percent after Output_Bonus, so is
     multiplicative with it.
 
 Output_Add_Tile
@@ -547,7 +556,7 @@ Output_Tile_Punish_Pct
     minimal output.
 
 Output_Waste
-    Base amount in percentage that each city has in waste. Waste can be used 
+    Base amount in percentage that each city has in waste. Waste can be used
     with any output type, use an OutputType requirement to specify which.
 
 Output_Waste_Pct
@@ -621,7 +630,7 @@ Rapture_Rate_Pm
     1000: Every turn
     667:  Two out of three turns.
     500:  Half the turns, etc.
-    NOTE: for backward compat, a rate of 0 is treated as the formerly 
+    NOTE: for backward compat, a rate of 0 is treated as the formerly
     hard-coded assumption that the rate is 1000pm.
 
 Raze_Building_Pct
@@ -635,10 +644,10 @@ Raze_Building_Pct
     presence of "Building", "City" and that indicated building is razed, all
     buildings iterated afterward aren't affected by whatever bonus it had.
      _Illegal scopes_:
-        Units and Victim Players.   
+        Units and Victim Players.
 
 Rehome_Pct
-    Units who would disband after their homecity is conquered, have this 
+    Units who would disband after their homecity is conquered, have this
     value's percent chance to rehome to the nearest legal domestic city,
     instead of disbanding. Use 0 for never, 100 for always, and 1-99 to set
     random odds.
@@ -680,13 +689,13 @@ Size_Unlimit
     Make the size of a city unlimited.
 
 Slow_Down_Timeline
-    Slow down the timeline based on the AMOUNT. If AMOUNT >= 3 the timeline 
+    Slow down the timeline based on the AMOUNT. If AMOUNT >= 3 the timeline
     will be max 1 year/turn; with AMOUNT == 2 it is max 2 years/turn;
     with AMOUNT == 1 it is max 5 years/turn; with AMOUNT <= 0 the timeline is
     unaffected. The effect will be ignored if game.spacerace isn't set.
 
 Specialist_Output
-    Specify what outputs a specialist is producing. Should be used with an 
+    Specify what outputs a specialist is producing. Should be used with an
     OutputType requirement.
 
 Spy_Resistant
@@ -694,17 +703,17 @@ Spy_Resistant
     percent bonus. All Spy_Resistant's are summed before being applied.
 
 SS_Structural, SS_Component and SS_Module
-    A part of a spaceship; this is a "Local" ranged effect. It (for now) 
-    applies to improvements which cannot be built unless "Enable_Space" is felt. 
-    Buildings which have this effect should probably not be given any other 
+    A part of a spaceship; this is a "Local" ranged effect. It (for now)
+    applies to improvements which cannot be built unless "Enable_Space" is felt.
+    Buildings which have this effect should probably not be given any other
     effects.
 
 Stack_Escape_Pct
-    ADDS this percent to the default 50% chance to escape a stack if the stack 
-    is killed and the unit_type has the "CanEscape" flag. For example, 
+    ADDS this percent to the default 50% chance to escape a stack if the stack
+    is killed and the unit_type has the "CanEscape" flag. For example,
     a value of 50 would result in 50 + 50 = 100% chance to escape.
-    (NOT: 50 + (50% * 50) = 75%). "UnitType", "Local" is drawn from the 
-    defender/escaper, not the attacker. 
+    (NOT: 50 + (50% * 50) = 75%). "UnitType", "Local" is drawn from the
+    defender/escaper, not the attacker.
 
 Stealings_Ignore
     When determining how difficult it is to steal a tech from enemy, AMOUNT
@@ -734,15 +743,15 @@ Terrain_Defend_Add_Bonus
     with defending unit. Applied value is 1/100 in order to allow fractions.
     For example, to give a +0.5 bonus like Civ2 has for rivers:
         value = 50
-        reqs = "Extra", "River", "Local";         ...results in...     
+        reqs = "Extra", "River", "Local";         ...results in...
             Grassland 1.0   Grassland + River 1.5
             Mountains 3.0   Mountains + River 3.5
     NOTE: (For unit classes with "TerrainDefense" flag, this effect can be
            used to add other defense effects.)
 
 Tile_Nuke_Proof
-    The percent chance that a tile and all its unit occupants will survive 
-    a nuclear blast. (see also Nuke_Proof)
+    The percent chance that a tile and all its unit occupants will survive
+    a nuclear blast. (see also Nuke_Proof, Nuke_Intercept_Radius_Odds_Pm)
 
 Tile_Workable
     If value > 0, city can work target tile.
@@ -810,12 +819,12 @@ Unit_Slots
     separately for each unit type.
 
 Unit_Unhappy_Cost
-    This amount is subtracted from unit_type's final happy_cost, if reqs are 
+    This amount is subtracted from unit_type's final happy_cost, if reqs are
     true. Note: this also applies to Field Units. Use negative values to
     decrease happy cost.
 
 Unit_Upkeep_Free_Per_City
-    In each city unit upkeep is deducted by this amount. As usual, you can use 
+    In each city unit upkeep is deducted by this amount. As usual, you can use
     with OutputType requirement to specify which kind of upkeep this should be.
 
 Unit_Vision_Radius_Sq
@@ -845,7 +854,7 @@ Unit_Work_Frag_Bonus
     its base move rate for movement.
 
 Unit_Work_Pct
-    Adds a percent to the unit's work that accumulates into the work 
+    Adds a percent to the unit's work that accumulates into the work
     target, per turn. For example: -100 (unit can't work here),
      -50 (works at half speed), 0 (no change), 100 (works at double speed.)
 
@@ -861,10 +870,10 @@ Upkeep_Factor
     Multiply unit upkeep by amount.
 
 Upkeep_Free
-    Improvements with amount or less upkeep cost become free to upkeep (others 
+    Improvements with amount or less upkeep cost become free to upkeep (others
     are unaffected).
 
-Upkeep_Reduce 
+Upkeep_Reduce
     Reduces upkeep of specified building by value. (Use negative value to increase)
 
 Veteran_Build
@@ -873,7 +882,7 @@ Veteran_Build
     unit).
 
 Veteran_Combat
-    Increases the chance of units of this type becoming veteran after combat 
+    Increases the chance of units of this type becoming veteran after combat
     by amount percent.
 
 Visible_Walls

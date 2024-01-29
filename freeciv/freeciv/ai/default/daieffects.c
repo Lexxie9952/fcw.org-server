@@ -48,8 +48,8 @@
   specialists who provide at least HAPPY_COST luxury, being the number of
   luxuries needed to make one citizen content or happy.
 
-  The AI assumes that for any specialist that provides HAPPY_COST luxury, 
-  if we can get that luxury from some other source it allows the specialist 
+  The AI assumes that for any specialist that provides HAPPY_COST luxury,
+  if we can get that luxury from some other source it allows the specialist
   to become a worker.  The benefits from an extra worker are weighed against
   the losses from acquiring the two extra luxury.
 
@@ -98,10 +98,10 @@ adv_want dai_content_effect_value(const struct player *pplayer,
     int factor = 2;
 
     /* Try to build wonders to offset empire size unhappiness */
-    if (city_list_size(pplayer->cities) 
+    if (city_list_size(pplayer->cities)
         > get_player_bonus(pplayer, EFT_EMPIRE_SIZE_BASE)) {
       if (get_player_bonus(pplayer, EFT_EMPIRE_SIZE_BASE) > 0) {
-        factor += city_list_size(pplayer->cities) 
+        factor += city_list_size(pplayer->cities)
           / MAX(get_player_bonus(pplayer, EFT_EMPIRE_SIZE_STEP), 1);
       }
       factor += 2;
@@ -260,7 +260,7 @@ adv_want dai_effect_value(struct player *pplayer, struct government *gov,
     {
       int bulbs;
       int value;
-	  
+
       if (nplayers <= amount) {
 	break;
       }
@@ -275,16 +275,16 @@ adv_want dai_effect_value(struct player *pplayer, struct government *gov,
 	}
 	bulbs += potential;
       } players_iterate_end;
-  
+
       /* For some number of turns we will be receiving bulbs for free
        * Bulbs should be amortized properly for each turn.
        * We use formula for the sum of geometric series:
        */
       value = bulbs * (1.0 - pow(1.0 - (1.0 / MORT), turns)) * MORT;
-	  
-      value = value  * (100 - game.server.freecost)	  
+
+      value = value  * (100 - game.server.freecost)
 	* (nplayers - amount) / (nplayers * amount * 100);
-	  
+
       /* WAG */
       value /= 3;
 
@@ -306,7 +306,7 @@ adv_want dai_effect_value(struct player *pplayer, struct government *gov,
     }
     break;
   case EFT_AIRLIFT:
-    /* FIXME: We need some smart algorithm here. The below is 
+    /* FIXME: We need some smart algorithm here. The below is
      * totally braindead. */
     v += c + MIN(ai->stats.units.airliftable, 13);
     break;
@@ -340,7 +340,7 @@ adv_want dai_effect_value(struct player *pplayer, struct government *gov,
   case EFT_HAVE_CONTACTS:
     {
       int new_contacts = 0;
-      
+
       players_iterate_alive(theother) {
         if (player_diplstate_get(pplayer, theother)->contact_turns_left <= 0) {
           new_contacts++;
@@ -364,7 +364,7 @@ adv_want dai_effect_value(struct player *pplayer, struct government *gov,
     break;
   case EFT_TILE_NUKE_PROOF:
     if (ai->threats.nuclear) {
-      v += city_size_get(pcity) * unit_list_size(pcity->tile->units) 
+      v += city_size_get(pcity) * unit_list_size(pcity->tile->units)
            * (capital + 1) * amount / 100;
     }
     break;
@@ -398,7 +398,7 @@ adv_want dai_effect_value(struct player *pplayer, struct government *gov,
         /* The idea being that if we have a full granary, we have an
          * automatic surplus of our granary excess in addition to anything
          * collected by city workers. */
-        extra_food += pcity->food_stock - 
+        extra_food += pcity->food_stock -
                       city_granary_size(city_size_get(pcity) - 1);
       }
 
@@ -468,11 +468,11 @@ adv_want dai_effect_value(struct player *pplayer, struct government *gov,
     break;
   case EFT_ACTOR_BRIBE_COST_PCT:
     /* Negative amounts are desirable */
-    v -= amount / 5; 
+    v -= amount / 5;
     break;
   case EFT_ACTOR_INCITE_COST_PCT:
     /* Negative amounts are desirable */
-    v -= amount / 5; 
+    v -= amount / 5;
     break;
   case EFT_UNIT_BRIBE_COST_PCT:
     num = num_affected_units(peffect, ai);
@@ -481,6 +481,13 @@ adv_want dai_effect_value(struct player *pplayer, struct government *gov,
   case EFT_ATTACK_BONUS:
     num = num_affected_units(peffect, ai);
     v += (num + 4) * amount / 200;
+    break;
+  case EFT_NUKE_INTERCEPT_RADIUS_ODDS_PM:
+    if (ai->threats.nuclear) {
+      // TODO: this could be calculated a lot better but for now it gives something.
+      num = (amount % 1000);  // gives the permille odds; loses the sq_radius*1000
+      v += ((amount - num)/1000) * num / 1000;  // i.e., sq_radius * val/1000
+    }
     break;
   case EFT_DEFEND_BONUS:
     if (has_handicap(pplayer, H_DEFENSIVE)) {
@@ -543,7 +550,7 @@ adv_want dai_effect_value(struct player *pplayer, struct government *gov,
                                   * EFT_ATTACK_BONUS that is always active.
                                   * Fortify bonus applies only in special case that
                                   * unit is fortified. */
-    break;  
+    break;
   case EFT_GAIN_AI_LOVE:
     players_iterate(aplayer) {
       if (is_ai(aplayer)) {
@@ -777,7 +784,7 @@ bool dai_can_requirement_be_met_in_city(const struct requirement *preq,
   case VUT_NATIONALITY:
     /* Crude, but the right answer needs to consider civil wars. */
     return nation_is_in_current_set(preq->source.value.nation);
-    
+
   case VUT_CITYSTATUS:
     if (pcity == NULL) {
       return preq->present;

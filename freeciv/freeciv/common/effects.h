@@ -303,7 +303,7 @@ extern "C" {
 /* hp_regen regardless of movement: a pct-based Unit_Recover */
 #define SPECENUM_VALUE120 EFT_UNIT_RECOVER_PCT
 #define SPECENUM_VALUE120NAME "Unit_Recover_Pct"
-/* Yay, finally programmatic ruleset conditions for happy upkeep! 
+/* Yay, finally programmatic ruleset conditions for happy upkeep!
    (use negative value to decrease unhappiness.) */
 #define SPECENUM_VALUE121 EFT_UNIT_UNHAPPY_COST
 #define SPECENUM_VALUE121NAME "Unit_Unhappy_Cost"
@@ -369,23 +369,27 @@ extern "C" {
 /* The percent chance a tile will be immune to nuclear blast */
 #define SPECENUM_VALUE142 EFT_TILE_NUKE_PROOF
 #define SPECENUM_VALUE142NAME "Tile_Nuke_Proof"
+/* Units' ability to intercept nukes, like SDI. val = (intercept_sqradius * 1000) + permille odds to intercept
+ e.g. sq_radius 2 with 33.3% odds: val = 5333. */
+#define SPECENUM_VALUE143 EFT_NUKE_INTERCEPT_RADIUS_ODDS_PM
+#define SPECENUM_VALUE143NAME "Nuke_Intercept_Radius_Odds_Pm"
 /* Modifies the chance the actor will raze buildings when conquering cities */
-#define SPECENUM_VALUE143 EFT_RAZE_BUILDING_PCT
-#define SPECENUM_VALUE143NAME "Raze_Building_Pct"
-/* Modifies COMBAT_ROUNDS from defending unit's req-scope perspective. See README.effects */ 
-#define SPECENUM_VALUE144 EFT_DEFENDER_COMBAT_ROUNDS
-#define SPECENUM_VALUE144NAME "Defender_Combat_Rounds"
+#define SPECENUM_VALUE144 EFT_RAZE_BUILDING_PCT
+#define SPECENUM_VALUE144NAME "Raze_Building_Pct"
+/* Modifies COMBAT_ROUNDS from defending unit's req-scope perspective. See README.effects */
+#define SPECENUM_VALUE145 EFT_DEFENDER_COMBAT_ROUNDS
+#define SPECENUM_VALUE145NAME "Defender_Combat_Rounds"
 /* Adjusts the unit's base min_speed from its unit_class, by amount */
-#define SPECENUM_VALUE145 EFT_UNIT_MIN_SPEED
-#define SPECENUM_VALUE145NAME "Unit_Min_Speed"
-/* Marines using a Transport all day can lose a % of their move_rate like the Transport 
+#define SPECENUM_VALUE146 EFT_UNIT_MIN_SPEED
+#define SPECENUM_VALUE146NAME "Unit_Min_Speed"
+/* Marines using a Transport all day can lose a % of their move_rate like the Transport
  * itself. Measured in SA Basis Points (10080 instead of 10000). See README.effects */
-#define SPECENUM_VALUE146 EFT_PASSENGER_MOVE_COST_BP
-#define SPECENUM_VALUE146NAME "Passenger_Move_Cost_Bp"
+#define SPECENUM_VALUE147 EFT_PASSENGER_MOVE_COST_BP
+#define SPECENUM_VALUE147NAME "Passenger_Move_Cost_Bp"
 /* Output losses when Gulag effects circumvent disorder */
-#define SPECENUM_VALUE147 EFT_GULAG_LOST_INCOME_PCT
-#define SPECENUM_VALUE147NAME "Gulag_Lost_Income_Pct"
-/* 🖐🏻 ******* 👆🏻👇🏻 
+#define SPECENUM_VALUE148 EFT_GULAG_LOST_INCOME_PCT
+#define SPECENUM_VALUE148NAME "Gulag_Lost_Income_Pct"
+/* 🖐🏻 ******* 👆🏻👇🏻
  * FCW does not have /common and needs to hard code any changes or re-ordering of the above in effects.js */
 /********************************************************************************************************~*/
 /* keep this last */
@@ -451,7 +455,7 @@ bool is_building_replaced(const struct city *pcity,
 /* functions to know the bonuses a certain effect is granting */
 int get_world_bonus(enum effect_type effect_type);
 int get_player_bonus(const struct player *plr, enum effect_type effect_type);
-int get_city_bonus(const struct city *pcity, 
+int get_city_bonus(const struct city *pcity,
                    enum effect_type effect_type,
 /* SEND V_COUNT for vision_layer if not relevant to scope */
                     enum vision_layer vision_layer);
