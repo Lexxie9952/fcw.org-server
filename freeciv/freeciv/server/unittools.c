@@ -159,7 +159,7 @@ static void wipe_unit_full(struct unit *punit, bool transported,
 static char unit_scrambled_id(int id);
 
 /* Cycling index used by uwt scrambler.*/
-int unit_wait_cycle = -1;        
+int unit_wait_cycle = -1;
 
 
 /**********************************************************************//**
@@ -223,16 +223,16 @@ struct unit_type *find_a_unit_type(enum unit_role_id role,
   ...
   Returns empty string if not FCW or if invalid unit.
 **************************************************************************/
-char *get_web_unit_icon(const struct unit *punit, char *emoji_str) 
+char *get_web_unit_icon(const struct unit *punit, char *emoji_str)
 {
   emoji_str[0] = 0; // default/reset result to "" empty string
   if (!punit) return emoji_str;
   const struct unit_type *ptype = unit_type_get((const struct unit *)punit);
   if (!ptype) return emoji_str;
-  
+
 #ifdef FREECIV_WEB
   sprintf(emoji_str, "[`%s`]", utype_name_translation(ptype));
-#endif 
+#endif
 
   return emoji_str; // returning the parameter assists macro syntax.
 }
@@ -246,7 +246,7 @@ char *get_web_unit_icon(const struct unit *punit, char *emoji_str)
 **************************************************************************/
 static char unit_scrambled_id(int n)
 {
-  
+
   n += game.info.turn; /* Sentries can differentiate unit (quasi)-identity
      within a single turn, but not like a "permanent SSN" */
 
@@ -349,26 +349,26 @@ void unit_versus_unit(struct unit *attacker, struct unit *defender,
 
   log_verbose("attack:%d, defense:%d, attack firepower:%d, "
             "defense firepower:%d", attackpower, defensepower,
-            attack_firepower, defense_firepower);   
+            attack_firepower, defense_firepower);
 */
 
 /* debug
   notify_player(plr1, NULL, E_UNIT_ACTION_FAILED, ftc_server,
             _("attack: %d, defense:%d, att_fp: %d, "
             "def_fp: %d"), attackpower, defensepower,
-            attack_firepower, defense_firepower);  
+            attack_firepower, defense_firepower);
             */
-         
+
   player_update_last_war_action(plr1);
   player_update_last_war_action(plr2);
 
   if (attackpower == 0) {
-    *att_hp = 0; 
+    *att_hp = 0;
   } else if (defensepower == 0) {
     *def_hp = 0;
   }
 
-  
+
   /* Combat_Rounds tests the defended tile rather than attacker tile,
    * because that's where the combat is really happening. */
   max_rounds = get_target_bonus_effects(NULL,
@@ -385,8 +385,8 @@ void unit_versus_unit(struct unit *attacker, struct unit *defender,
                                         EFT_COMBAT_ROUNDS,
                                         V_COUNT);
   /* There may be the case of an elusive defender unit_type or such,
-   * which limits the combat_rounds from defender's perspective: */                                      
-  defender_max_rounds 
+   * which limits the combat_rounds from defender's perspective: */
+  defender_max_rounds
              = get_target_bonus_effects(NULL,
                                         unit_owner(defender),
                                         unit_owner(attacker),
@@ -404,10 +404,10 @@ void unit_versus_unit(struct unit *attacker, struct unit *defender,
    combat_rounds the most. So let the stronger effect be the winner,
    and discard the weaker. The tricky part is to treat zero and negative
    numbers as "higher" since <=0 really means infinite rounds: */
-max_rounds = MIN(defender_max_rounds, max_rounds) <= 0  
-           ? MAX(defender_max_rounds, max_rounds) 
+max_rounds = MIN(defender_max_rounds, max_rounds) <= 0
+           ? MAX(defender_max_rounds, max_rounds)
            : MIN(defender_max_rounds, max_rounds);
-  
+
   for (rounds = 0;
        *att_hp > 0 && *def_hp > 0
          && (max_rounds <= 0 || max_rounds > rounds);
@@ -448,14 +448,14 @@ void unit_bombs_unit(struct unit *attacker, struct unit *defender,
 {
   int i;
   // int rate = unit_type_get(attacker)->bombard_rate;
-  int rate = bombard_rate; 
+  int rate = bombard_rate;
 
   int attackpower = get_total_attack_power(attacker, defender);
   int defensepower = get_total_defense_power(attacker, defender);
   int attack_firepower, defense_firepower;
   struct player *plr1 = unit_owner(attacker);
   struct player *plr2 = unit_owner(defender);
-  
+
   struct bombard_stats pstats;
   unit_get_bombard_stats(&pstats, attacker);
 
@@ -744,7 +744,7 @@ void player_restore_units(struct player *pplayer)
                       (is_unit_plural(punit) ? "they" : "it"));
       }
       wipe_unit(punit, ULR_FUEL, NULL);
-    } 
+    }
   } unit_list_iterate_safe_end;
 
   /* Send all updates. */
@@ -779,7 +779,7 @@ static void unit_restore_hitpoints(struct unit *punit)
 
   /* Bonus recovery HP (traditionally from the United Nations) */
   punit->hp += get_unit_bonus(punit, EFT_UNIT_RECOVER);
-  punit->hp += (unit_type_get(punit)->hp 
+  punit->hp += (unit_type_get(punit)->hp
                 * get_unit_bonus(punit, EFT_UNIT_RECOVER_PCT) / 100);
 
   if (!punit->homecity && 0 < game.server.killunhomed
@@ -802,7 +802,7 @@ static void unit_restore_hitpoints(struct unit *punit)
     if (was_lower && punit->activity == ACTIVITY_SENTRY) {
       set_unit_activity(punit, ACTIVITY_IDLE);
     }
-    /* Wake up injured FORTIFIED units after healing, if in a city. 
+    /* Wake up injured FORTIFIED units after healing, if in a city.
        (Fortified gives no bonus in a city EXCEPT healing faster.) Why:
        Better UX for the usual case of fortifying to heal faster: remove
        the penalty of needing to heal slower just to get wake-up UX
@@ -810,7 +810,7 @@ static void unit_restore_hitpoints(struct unit *punit)
        condition for receiving 1.5x D-bonus is ever moved out of hard-coded
        server, this feature needs a server setting or other conditional
        logic to not wake the unit iff it will get a lower defense bonus as
-       a result of waking */ 
+       a result of waking */
     if (was_lower && punit->activity == ACTIVITY_FORTIFIED
         && tile_city(unit_tile(punit))) {
       set_unit_activity(punit, ACTIVITY_IDLE);
@@ -824,7 +824,7 @@ static void unit_restore_hitpoints(struct unit *punit)
   punit->moved = FALSE;
   punit->paradropped = FALSE;
 }
-  
+
 /**********************************************************************//**
   Move points are trivial, only modifiers to the base value is if it's
   sea units and the player has certain wonders/techs. Then add veteran
@@ -957,7 +957,7 @@ static int total_activity(struct tile *ptile, enum unit_activity act,
   unit_list_iterate(ptile->units, punit) {
     if (unit_is_alive(punit->id) && punit->activity == act
 /* 28Jan2022 added unit_is_alive() && ... to hunt segfault. REMOVE
-   if it ends up being some other problem: 
+   if it ends up being some other problem:
 signal SIGSEGV, Segmentation fault:
 #0  total_activity (ptile=0x55dc95922d10, tgt=0x0, act=ACTIVITY_MINE)
     at ../../freeciv/server/unittools.c:861
@@ -1004,9 +1004,9 @@ void notify_unit_experience(struct unit *punit)
 
   notify_player(unit_owner(punit), unit_tile(punit),
             E_UNIT_BECAME_VET, ftc_server,
-            //  TRANS: Your <unit> became ... rank of <veteran level>. 
+            //  TRANS: Your <unit> became ... rank of <veteran level>.
             _("[`medal`] <font color='#fff'>v%d</font>. Your %s gained experience and %s now %s. <span class='nowrap'>%s[`v%d`]</span>"),
-            punit->veteran, unit_link(punit), 
+            punit->veteran, unit_link(punit),
             (is_unit_plural(punit) ? "are" : "is"),
             name_translation_get(&vlevel->name), UNIT_EMOJI(punit), punit->veteran);
 }
@@ -1068,12 +1068,12 @@ void unit_activity_complete(struct unit *punit)
   bool unit_activity_done = FALSE;
   enum unit_activity activity = punit->activity;
   struct tile *ptile = unit_tile(punit);
- 
+
   switch (activity) {
 
   /* DELAYED GOTO HANDLING: */
   case ACTIVITY_IDLE: /* (ACTIVITY_IDLE && has_orders) means GOTO */
-  case ACTIVITY_GOTO: 
+  case ACTIVITY_GOTO:
     /* Only do handling if settings delay GOTO, and unit is doing a GOTO: */
     if ((game.server.unitwaittime_style & UWT_DELAY_GOTO) && punit->has_orders) {
       /* Don't execute GOTO if it is UWT restricted: */
@@ -1098,12 +1098,12 @@ void unit_activity_complete(struct unit *punit)
 
   /* DELAYED FORTIFY HANDLING: */
   case ACTIVITY_FORTIFYING:
-    /* Criterion for delayed Fortify is UWT_FORTIFY=enabled */ 
+    /* Criterion for delayed Fortify is UWT_FORTIFY=enabled */
     if ((game.server.unitwaittime_style & UWT_FORTIFY)) {
       /* Check unit has accumulated enough activity_count to finish:*/
       if (punit->activity_count >= action_id_get_act_time(ACTION_FORTIFY,
                                   punit, ptile, punit->activity_target)) {
-        /* Check if 'fortifywaittime' has expired: */                           
+        /* Check if 'fortifywaittime' has expired: */
         time_t dt = time(NULL) - punit->server.action_timestamp;
         if (dt < game.server.fortifywaittime) {
           /* FWT not expired. This task is in the unit_wait_list to handle later.*/
@@ -1113,7 +1113,7 @@ void unit_activity_complete(struct unit *punit)
           punit->activity = ACTIVITY_FORTIFIED; /* Force a prompt mid-turn state change */
           send_unit_info(NULL, punit);
           /* "Fortify complete" messages might be verbose. They would go here:
-             notify_player(punit->owner, NULL, E_UNIT_ORDERS, ftc_server, 
+             notify_player(punit->owner, NULL, E_UNIT_ORDERS, ftc_server,
                       _("%s finished fortifying."), unit_link(punit));*/
           return;
         }
@@ -1134,7 +1134,7 @@ void unit_activity_complete(struct unit *punit)
     return;
 
   case ACTIVITY_PILLAGE:
-    if (total_activity_done(ptile, ACTIVITY_PILLAGE, 
+    if (total_activity_done(ptile, ACTIVITY_PILLAGE,
                             punit->activity_target)) {
       struct player *victim = tile_owner(ptile); /* Owner before fortress gets destroyed */
 
@@ -1296,10 +1296,10 @@ static void update_unit_activity(struct unit *punit, time_t now)
   int activity_rate = real_get_activity_rate_this_turn(punit, TRUE);
   struct unit_wait *wait;
   time_t wake_up;
-  /* Value now has to be cached by update_unit_move_points() 
+  /* Value now has to be cached by update_unit_move_points()
   long moves_left_at_start = punit->moves_left; */
   long moves_left_at_start = punit->server.moves_left_at_start;
-  
+
   /* Fortify order has separate wait time setting (or lack thereof) */
   if (activity==ACTIVITY_FORTIFYING && (game.server.unitwaittime_style & UWT_FORTIFY) ) {
     wake_up = punit->server.action_timestamp + (time_t)game.server.fortifywaittime;
@@ -1308,7 +1308,7 @@ static void update_unit_activity(struct unit *punit, time_t now)
   }
 
   /* Now that Freeciv has actions from some units that affect the mp of others,
-     mp restoration must happen for all players' units prior to any other 
+     mp restoration must happen for all players' units prior to any other
      activity/order processing. See update_unit_move_points() called by
      srv_main() prior to any other player/unit iterating.
 
@@ -1329,7 +1329,7 @@ static void update_unit_activity(struct unit *punit, time_t now)
   case ACTIVITY_IDLE: /* units with GOTO orders really show up with this activity code */
     if (!(punit->has_orders)) break; /* for a real idle unit, has_orders==false */
     if (game.server.unitwaittime
-        && punit->has_orders 
+        && punit->has_orders
         && (game.server.unitwaittime_style & UWT_DELAY_GOTO)
         && wake_up > now) {
       wait = fc_malloc(sizeof(*wait));
@@ -1477,25 +1477,25 @@ void finish_unit_wait(struct unit *punit, int activity_count)
   unit_activity_complete(punit);
 
   /* Unit may have joined a city, established embassy, got auto-attacked, etc. */
-  bool is_dead = !unit_is_alive(saved_id); 
+  bool is_dead = !unit_is_alive(saved_id);
 
   /* Send a message if legitimate activity completed */
   if (!is_dead) {
     /* If unit had orders but not anymore, then unit is no longer doing activity */
     orders_finished = had_orders && !punit->has_orders;
-    
+
     /* Catch false movement cases, bogus orders, etc.: don't print message for these */
     if (possibly_moved==true && (original_tile == punit->tile))
-      orders_finished = false; 
-                        
+      orders_finished = false;
+
     /* Report activity is finished: */
-    if (orders_finished && punit->activity==ACTIVITY_IDLE)  
+    if (orders_finished && punit->activity==ACTIVITY_IDLE)
         notify_player(unit_owner(punit), unit_tile(punit), E_UNIT_ORDERS, ftc_server,
                       _(" [`clock`] %s %s finished %s."), unit_link(punit), UNIT_EMOJI(punit), buf);
   } else {
     /* Unit no longer exists after unit_activity_complete() */
     notify_player(saved_player, saved_tile, E_UNIT_ORDERS, ftc_server,
-                      _(" [`clock`] %s %s finished."), 
+                      _(" [`clock`] %s %s finished."),
                       utype_name_translation(saved_type),
                       (is_word_plural(utype_name_translation(saved_type)) ? "are" : "is"));
   }
@@ -1511,14 +1511,14 @@ time_t scramble_uwt_stamp(time_t stamptime)
 #define SCRAMBLE_OFFSET_SECONDS 2
   time_t scramble_time;
 
-  if (++unit_wait_cycle >= NUM_UWT_CYCLES) 
+  if (++unit_wait_cycle >= NUM_UWT_CYCLES)
     unit_wait_cycle = 0;
 
   /* Add 0-9 seconds to the time a delayed action will be executed
    * (UWT_ACTIVITIES / UWT_DELAY_GOTO). Do it in such a that mass-orders
    * given to 10 units will evenly distribute over that time range, yet
    * each is "unpredictably uneven" by 1 second. */
-  scramble_time = stamptime + (time_t)(unit_wait_cycle * SCRAMBLE_OFFSET_SECONDS 
+  scramble_time = stamptime + (time_t)(unit_wait_cycle * SCRAMBLE_OFFSET_SECONDS
                             + fc_rand(SCRAMBLE_OFFSET_SECONDS));
 
   /* Catch 32-bit unsigned time_t making negative numbers into false huge vals */
@@ -1667,7 +1667,7 @@ void place_partisans(struct tile *pcenter, struct player *powner,
   vet_level  = get_target_bonus_effects(NULL,
                                         powner,
                                         NULL,
-                                        tile_city(pcenter), 
+                                        tile_city(pcenter),
                                         NULL,
                                         pcenter,
                                         NULL,
@@ -1769,7 +1769,7 @@ void bounce_unit(struct unit *punit, bool verbose)
       tiles[count++] = ptile;
     }
   } square_iterate_end;
-  /* Second preference, bounce to a tile where unit can exist 
+  /* Second preference, bounce to a tile where unit can exist
    * i.e., might lose fuel or helicopter hp */
   if (count == 0) {
     square_iterate(&(wld.map), punit_tile, DIST, ptile) {
@@ -1905,10 +1905,10 @@ static void resolve_stack_conflicts(struct player *pplayer,
           bounce_unit(aunit, verbose);
         }
       } unit_list_iterate_safe_end;
-    }    
+    }
   } unit_list_iterate_safe_end;
 }
-				
+
 /**********************************************************************//**
   When in civil war or an alliance breaks there will potentially be units
   from both sides coexisting on the same squares.  This routine resolves
@@ -1925,7 +1925,7 @@ void resolve_unit_stacks(struct player *pplayer, struct player *aplayer,
 {
   throw_units_from_illegal_cities(pplayer, verbose);
   throw_units_from_illegal_cities(aplayer, verbose);
-  
+
   resolve_stack_conflicts(pplayer, aplayer, verbose);
   resolve_stack_conflicts(aplayer, pplayer, verbose);
 }
@@ -2041,7 +2041,7 @@ bool is_airunit_refuel_point(const struct tile *ptile,
   }
 
   /* Coastal-fueled units refuel on safe ocean tiles */
-  if (utype_has_flag(unit_type_get(punit), UTYF_COAST) 
+  if (utype_has_flag(unit_type_get(punit), UTYF_COAST)
       && is_safe_ocean(&(wld.map), ptile)) {
     return TRUE;
   }
@@ -2115,10 +2115,10 @@ void transform_unit(struct unit *punit, const struct unit_type *to_unit,
   } else {
     punit->moves_left = punit->moves_left * unit_move_rate(punit) / old_mr;
   }
-  /* Scale Fuel. Avoid "unfair" death by covering every case in the logic tree:    
+  /* Scale Fuel. Avoid "unfair" death by covering every case in the logic tree:
    * CASE 1. Old type has no fuel? Fill up with 100% fuel.  ==(Don't start with no fuel)
    * CASE 2. New type has more fuel? Add the difference.    ==(Same amount of burnt fuel)
-   * CASE 3: New type has less fuel? Keep max.legal amount. ==(Avoid unfair death) */ 
+   * CASE 3: New type has less fuel? Keep max.legal amount. ==(Avoid unfair death) */
   punit->fuel
     = (!old_fu) ? new_fu : MAX(cur_fu + (new_fu - old_fu), MIN(cur_fu, new_fu));
 
@@ -2136,10 +2136,10 @@ void transform_unit(struct unit *punit, const struct unit_type *to_unit,
   \*/
   players_iterate(vplayer) {
     const bool is_seen  = can_player_see_unit(vplayer, punit);
-    const bool was_seen = BV_ISSET(unit_was_visible, player_index(vplayer)); 
+    const bool was_seen = BV_ISSET(unit_was_visible, player_index(vplayer));
     if (is_seen && !was_seen)
        BV_SET(punit->server.moving->can_see_unit, player_index(vplayer));
-    else if (was_seen && !is_seen) 
+    else if (was_seen && !is_seen)
        unit_goes_out_of_sight(vplayer, punit);
   } players_iterate_end;
 
@@ -2153,11 +2153,11 @@ void transform_unit(struct unit *punit, const struct unit_type *to_unit,
 /**********************************************************************//**
   Wrapper of the below
 **************************************************************************/
-struct unit *create_unit(struct player *pplayer, struct tile *ptile, 
-			                   const struct unit_type *type, int veteran_level, 
+struct unit *create_unit(struct player *pplayer, struct tile *ptile,
+			                   const struct unit_type *type, int veteran_level,
                          int homecity_id, int moves_left)
 {
-  return create_unit_full(pplayer, ptile, type, veteran_level, homecity_id, 
+  return create_unit_full(pplayer, ptile, type, veteran_level, homecity_id,
                           moves_left, -1, NULL);
 }
 
@@ -2181,7 +2181,7 @@ void unit_get_goods(struct unit *punit)
   If moves_left is less than zero, unit will get max moves.
 **************************************************************************/
 struct unit *create_unit_full(struct player *pplayer, struct tile *ptile,
-                              const struct unit_type *type, int veteran_level, 
+                              const struct unit_type *type, int veteran_level,
                               int homecity_id, int moves_left, int hp_left,
                               struct unit *ptrans)
 {
@@ -2226,7 +2226,7 @@ struct unit *create_unit_full(struct player *pplayer, struct tile *ptile,
    * (Otherwise could pass moved arg too...)  --dwp */
   /* TODO: this is resulting in newly made units with all their
      moves left to be registerd as moved. If we fix this later,
-     then remove the hack-patch in city_create_unit(). */ 
+     then remove the hack-patch in city_create_unit(). */
   punit->moved = (moves_left >= 0);
 
   unit_list_prepend(pplayer->units, punit);
@@ -2422,7 +2422,7 @@ static void unit_lost_with_transport(const struct player *pplayer,
   notify_player(pplayer, unit_tile(pcargo), E_UNIT_LOST_MISC, ftc_server,
                 _("[`warning`] %s %s lost when %s [`%s`] was lost."),
                 unit_tile_link(pcargo), UNIT_EMOJI(pcargo),
-                utype_name_translation(ptransport), 
+                utype_name_translation(ptransport),
                 utype_name_translation(ptransport) );
   /* Unit is not transported any more at this point, but it has jumped
    * off the transport and drowns outside. So it must be removed from
@@ -2463,7 +2463,7 @@ static bool unit_dies_when_transport_dies(struct unit *pcargo)
     /* Missiles in native bases don't die. */
     const struct unit_type *ptype = unit_type_get(pcargo);
     extra_type_by_cause_iterate(EC_BASE, pextra) {
-      if (tile_has_extra(ptile, pextra) 
+      if (tile_has_extra(ptile, pextra)
           && is_native_extra_to_utype(pextra, ptype)) {
         return false; /*saved*/
       }
@@ -2533,7 +2533,7 @@ static void wipe_unit_full(struct unit *punit, bool transported,
         /* !can_unit_unload = (a) has NO theoretic ability to
          * deboard AND (b) is not in a city or native base */
         unit_list_prepend(helpless, pcargo);
-      } else {   /* can_unit_unload == true 
+      } else {   /* can_unit_unload == true
                   * unit has theoretic ability to deboard OR
                   * is in a city or native base: */
         if (unit_dies_when_transport_dies(pcargo)) {
@@ -2541,8 +2541,8 @@ static void wipe_unit_full(struct unit *punit, bool transported,
            * but can't survive on the tile: imperiled */
           unit_list_prepend(imperiled, pcargo);
         } else {
-        /* These units can theoretically deboard 
-           (no actionenabler check!) but get arbitrarily 
+        /* These units can theoretically deboard
+           (no actionenabler check!) but get arbitrarily
            declared as saved anyway(!), then dumped on the
            survivable tile where they are. */
           healthy = TRUE;
@@ -2595,7 +2595,7 @@ static void wipe_unit_full(struct unit *punit, bool transported,
 
             pcargo->moves_left = 0;
         }
-        
+
         if (unit_transported(pcargo)) {
           /* DEBUG notify_player(unit_owner(pcargo), ptile, E_UNIT_RELOCATED, ftc_server,
               _("[`anger`] %s which should no longer be passenger, still is. Force moves=0 and unloading..."),
@@ -2611,7 +2611,7 @@ static void wipe_unit_full(struct unit *punit, bool transported,
         } */
       }
       // not healthy:
-      else { 
+      else {
         /* Could use unit_transport_unload_send here, but that would
         * call send_unit_info for the transporter unnecessarily.
         * Note that this means that unit might to get seen briefly
@@ -2849,7 +2849,7 @@ struct unit *unit_change_owner(struct unit *punit, struct player *pplayer,
 **************************************************************************/
 void kill_unit(struct unit *pkiller, struct unit *punit, bool vet)
 {
-  char pkiller_link[MAX_LEN_LINK], 
+  char pkiller_link[MAX_LEN_LINK],
        punit_link[MAX_LEN_LINK],                 // stack defender
        casualty_type_name[MAX_LEN_LINK];         // unit type name for secondary casualties
   struct player *pvictim = unit_owner(punit);
@@ -2868,7 +2868,7 @@ void kill_unit(struct unit *pkiller, struct unit *punit, bool vet)
 
   sz_strlcpy(pkiller_link, unit_link(pkiller));
   sz_strlcpy(punit_link, unit_tile_link(punit));
-  
+
   // Make a reference copy for use.
   char punit_emoji[MAX_LEN_LINK], pkiller_emoji[MAX_LEN_LINK];
   sprintf(punit_emoji, "%s", UNIT_EMOJI(punit));
@@ -2878,7 +2878,7 @@ void kill_unit(struct unit *pkiller, struct unit *punit, bool vet)
   punit->server.dying = TRUE;
 
   // CASE HANDLING: Game Loss Loot unit (e.g., Barbarian Leader)
-  if ((game.info.gameloss_style & GAMELOSS_STYLE_LOOT) 
+  if ((game.info.gameloss_style & GAMELOSS_STYLE_LOOT)
       && unit_has_type_flag(punit, UTYF_GAMELOSS)) {
     ransom = fc_rand(1 + pvictim->economic.gold);
     int n;
@@ -2887,7 +2887,7 @@ void kill_unit(struct unit *pkiller, struct unit *punit, bool vet)
     give_distorted_map(pvictim, pvictor, 1, 1, TRUE);
 
     log_debug("victim has money: %d", pvictim->economic.gold);
-    pvictor->economic.gold += ransom; 
+    pvictor->economic.gold += ransom;
     pvictim->economic.gold -= ransom;
 
     n = 1 + fc_rand(3);
@@ -2896,7 +2896,7 @@ void kill_unit(struct unit *pkiller, struct unit *punit, bool vet)
       Tech_type_id ttid = steal_a_tech(pvictor, pvictim, A_UNSET);
 
       if (ttid == A_NONE) {
-        log_debug("Worthless enemy doesn't have more techs to steal."); 
+        log_debug("Worthless enemy doesn't have more techs to steal.");
         break;
       } else {
         log_debug("Pressed tech %s from captured enemy",
@@ -2907,22 +2907,22 @@ void kill_unit(struct unit *pkiller, struct unit *punit, bool vet)
         n--;
       }
     }
-    
+
     { /* try to submit some cities */
       int vcsize = city_list_size(pvictim->cities);
       int evcsize = vcsize;
       int conqsize = evcsize;
 
       if (evcsize < 3) {
-        evcsize = 0; 
+        evcsize = 0;
       } else {
         evcsize -=3;
       }
       /* about a quarter on average with high numbers less probable */
-      conqsize = fc_rand(fc_rand(evcsize)); 
+      conqsize = fc_rand(fc_rand(evcsize));
 
       log_debug("conqsize=%d", conqsize);
-      
+
       if (conqsize > 0) {
         bool palace = game.server.savepalace;
         bool submit = FALSE;
@@ -2938,7 +2938,7 @@ void kill_unit(struct unit *pkiller, struct unit *punit, bool vet)
           if (submit) {
             conqsize--;
             /* Transfer city to the victorious player
-             * kill all its units outside of a radius of 7, 
+             * kill all its units outside of a radius of 7,
              * give verbose messages of every unit transferred,
              * and raze buildings according to raze chance
              * (also removes palace) */
@@ -2960,7 +2960,7 @@ void kill_unit(struct unit *pkiller, struct unit *punit, bool vet)
       && (unit_list_size(unit_tile(punit)->units) == 1)
       && uclass_has_flag(unit_class_get(pkiller), UCF_COLLECT_RANSOM)) {
     /* Occupying units can collect ransom if leader is alone in the tile */
-    ransom = (pvictim->economic.gold >= game.server.ransom_gold) 
+    ransom = (pvictim->economic.gold >= game.server.ransom_gold)
              ? game.server.ransom_gold : pvictim->economic.gold;
     notify_player(pvictor, unit_tile(pkiller), E_UNIT_WIN_ATT, ftc_server,
                   PL_("[`gold`] Barbarian leader%s captured; %d gold ransom paid.",
@@ -3022,7 +3022,7 @@ void kill_unit(struct unit *pkiller, struct unit *punit, bool vet)
       num_escaped[i] = 0;
     }
 
-    /* When a surviving "NoStackDeath" unit occupies the tile, "escapees" don't 
+    /* When a surviving "NoStackDeath" unit occupies the tile, "escapees" don't
      * flee to adjacent tiles, since the stack isn't gone yet. */
     unit_list_iterate(ptile->units, vunit) {
       if (unit_has_type_flag(vunit, UTYF_NOSTACKDEATH) && !vunit->server.dying) {
@@ -3066,9 +3066,9 @@ void kill_unit(struct unit *pkiller, struct unit *punit, bool vet)
                                           action_by_number(ACTION_ATTACK),
                                           EFT_STACK_ESCAPE_PCT,
                                           V_COUNT);
-            // Escape Charm. +1% odds for each move point more the defender has over attacker:                                 
+            // Escape Charm. +1% odds for each move point more the defender has over attacker:
             escape_chance += ((vunit->moves_left - pkiller->moves_left) / SINGLE_MOVE);
-          
+
             // Roll the dice:
             if (fc_rand(100)<escape_chance) {
               // Successful roll: vunit will escape iff there is legal tile to escape.
@@ -3086,7 +3086,7 @@ void kill_unit(struct unit *pkiller, struct unit *punit, bool vet)
                 escaped = TRUE;
                 unitcount--;
               }
-              else { 
+              else {
                 /* or, flee to an adjacent tile ... */
                 adjc_iterate(&(wld.map), ptile, ptile2) {
                   if (can_exist_at_tile(&(wld.map), vunit->utype, ptile2)
@@ -3158,7 +3158,7 @@ void kill_unit(struct unit *pkiller, struct unit *punit, bool vet)
                     punit_link, /*punit_emoji,*/
                     unitcount - 1);
     }
-    // List up to {MAX_SECONDARY_CASUALTIES_TO_REPORT} other units killed on the tile: 
+    // List up to {MAX_SECONDARY_CASUALTIES_TO_REPORT} other units killed on the tile:
     else if (unitcount-1 <= MAX_SECONDARY_CASUALTIES_TO_REPORT
              && kill_counter <= MAX_KILLED_UNITS_TO_REPORT_TO_ALL_PLAYERS) {
         char dead_units_str[1024];
@@ -3168,7 +3168,7 @@ void kill_unit(struct unit *pkiller, struct unit *punit, bool vet)
         // Make a string out of all the secondary casualty unit types and nationalities.
         for (int k = 0; k < kill_counter; k++) {
           // Don't show primary stack defender as secondary casualty
-          if (killed_units[k].id != punit->id) { 
+          if (killed_units[k].id != punit->id) {
             // Concatenate the result string for secondary casualties
             sz_strlcpy(casualty_type_name, unit_name_translation(&killed_units[k]));
             sprintf(killed_unit_str, " [`boom`]%s %s %s", nation_adjective_for_player(unit_owner(&killed_units[k])),
@@ -3214,7 +3214,7 @@ void kill_unit(struct unit *pkiller, struct unit *punit, bool vet)
      * not units from other players. Also, if there are more than MAX_SECONDARY_CASUALTIES_TO_REPORT
      * secondary casualties, players only get a number, not what they all were. */
      // ...
-    // Iterate every player in the game to see if they lost one or more units... 
+    // Iterate every player in the game to see if they lost one or more units...
     for (i = 0; i < player_slot_count(); i++) {
 
       // Case handling for each player who lost exactly one unit in the stack:
@@ -3227,7 +3227,7 @@ void kill_unit(struct unit *pkiller, struct unit *punit, bool vet)
                         /* TRANS: "Horsemen🏇 lost to an attack by [a] Polish 🏇Horsemen." */
                         _("[`warning`]%s %s %s lost to an attack by %s %s %s %s"),
                         (pcity ? city_link(pcity) : ""),
-                        punit_link, punit_emoji,                 
+                        punit_link, punit_emoji,
                         is_unit_plural(pkiller) ? "" : indefinite_article_for_word(nation_adjective_for_player(pvictor), false),
                         nation_adjective_for_player(pvictor),
                         pkiller_emoji, pkiller_link);
@@ -3248,7 +3248,7 @@ void kill_unit(struct unit *pkiller, struct unit *punit, bool vet)
                         nation_adjective_for_player(pvictim),
                         punit_link/*, punit_emoji*/);
         }
-      } 
+      }
       // CASE HANDLING FOR EACH PLAYER WHO LOST MORE THAN ONE UNIT:
       else if (num_killed[i] > 1) {
         // REPORT for SAME PLAYER as the primary stack defender
@@ -3256,11 +3256,11 @@ void kill_unit(struct unit *pkiller, struct unit *punit, bool vet)
           others = num_killed[i] - 1;
           /* Used to have two separate blocks for whether you had one or more than one secondary casualty:
              This block is no longer necessary but kept around for reference history
-          if (others == 1) {  // 2 units lost, meaning one secondary casualty to list 
+          if (others == 1) {  // 2 units lost, meaning one secondary casualty to list
             notify_player(player_by_number(i), ptile,
                           E_UNIT_LOST_DEF, ftc_server,
                           // TRANS: "Musketeers (and Cannon) lost to an
-                          // attack from the Polish Destroyer." 
+                          // attack from the Polish Destroyer."
                           _("[`warning`]%s (and %s) were lost to %s %s %s."),
                           punit_link,
                           unit_link(other_killed[i]),
@@ -3357,7 +3357,7 @@ void kill_unit(struct unit *pkiller, struct unit *punit, bool vet)
           /* In the case of not being the stack defender, we ALWAYS get a report of #n unit(s) lost
              when the Attacker killed the [allied] stack defender. If the number of casualties is
              too long to list, we stop there; otherwise we insert a colon at the end of that string
-             to prompt the later notification which lists the casualties: */                 
+             to prompt the later notification which lists the casualties: */
           notify_player(player_by_number(i), ptile,
                   E_UNIT_LOST_DEF, ftc_server,
                   /* TRANS: "2 units lost when [an] Italian 🏇Horsemen attacked [a] German Horsemen🏇:" */
@@ -3378,11 +3378,11 @@ void kill_unit(struct unit *pkiller, struct unit *punit, bool vet)
             if (!too_many_casualties) {
               char dead_units_str[1024];
               char killed_unit_str[512];
-              
+
               memset(dead_units_str, '\0', sizeof(dead_units_str));
               for (int k = 0; k < kill_counter; k++) {
                 /* Only show casualties belonging to this player */
-                if (unit_owner(&killed_units[k])==player_by_number(i)) { 
+                if (unit_owner(&killed_units[k])==player_by_number(i)) {
                   // Concatenate the result string for secondary casualties
                   sz_strlcpy(casualty_type_name, unit_name_translation(&killed_units[k]));
                   sprintf(killed_unit_str, " ◽%s %s", casualty_type_name, UNIT_EMOJI(&killed_units[k]));
@@ -3397,13 +3397,13 @@ void kill_unit(struct unit *pkiller, struct unit *punit, bool vet)
                     dead_units_str);
             }
         } // </end> case handling for player with secondary casualties who did not own the stack defender.
-      } // </end> case handling for each player who lost more than one unit 
+      } // </end> case handling for each player who lost more than one unit
     } // </end> report to every player who lost a unit
 
     /* Inform the owners of their units who escaped. */
     for (i = 0; i < player_slot_count(); ++i) {
       if (num_escaped[i] > 0) {
-        // TODO: could list the units who escaped if less than 
+        // TODO: could list the units who escaped if less than
         // MAX_SECONDARY_CASUALTIES_TO_REPORT (same logic as above)
         notify_player(player_by_number(i), unit_tile(punit),
                       E_UNIT_ESCAPED, ftc_server,
@@ -3585,13 +3585,13 @@ void send_unit_info(struct conn_list *dest, struct unit *punit)
 
   //CHECK_UNIT(punit);
   // Segfault hunting
-  if (!punit 
+  if (!punit
      || !unit_type_get(punit)
-     || !unit_owner(punit)            
+     || !unit_owner(punit)
      || player_by_number(player_index(unit_owner(punit)))
-            != unit_owner(punit)                 
+            != unit_owner(punit)
      || !game_unit_by_number(punit->id)) {
-       
+
     log_error("send_unit_info attempted on non-existent unit or player");
     return;
   }
@@ -3675,8 +3675,8 @@ static void do_nuke_tile(struct player *pplayer, struct tile *ptile,
                     ? _("self-induced")
                     : nation_adjective_for_player(pplayer));
       break; /* only one unit per tile triggers this message */
-    } unit_list_iterate_safe_end;  
-    return;  /* protected tile: avoid all further nuke action below */  
+    } unit_list_iterate_safe_end;
+    return;  /* protected tile: avoid all further nuke action below */
   }
 
   pcity = tile_city(ptile);
@@ -3713,7 +3713,7 @@ static void do_nuke_tile(struct player *pplayer, struct tile *ptile,
                     pplayer == city_owner(pcity)
                     ? _("yourself")
                     : nation_plural_for_player(pplayer));
-    
+
       if (city_owner(pcity) != pplayer) {
         notify_player(pplayer, ptile, E_CITY_NUKED, ftc_server,
                       _("[`nuclearexplosion`] You nuked %s."),
@@ -3769,10 +3769,10 @@ static void do_nuke_tile(struct player *pplayer, struct tile *ptile,
   of the explosion. High radius is considered fusion explosion with worse
   effects. pplayer is the player that caused the explosion.
 **************************************************************************/
-void do_nuclear_explosion(struct player *pplayer, struct tile *ptile, 
+void do_nuclear_explosion(struct player *pplayer, struct tile *ptile,
                           int extra_radius_sq, const char *unit_name)
 {
-  int max_radius_sq = DEFAULT_DETONATION_RADIUS_SQ + extra_radius_sq; 
+  int max_radius_sq = DEFAULT_DETONATION_RADIUS_SQ + extra_radius_sq;
   bool is_fusion = (max_radius_sq >= FUSION_DETONATION_RADIUS_SQ);
   struct city *pcity = NULL;
 
@@ -3837,6 +3837,17 @@ bool do_airline(struct unit *punit, struct city *pdest_city)
                 UNIT_EMOJI(punit), unit_link(punit),
                 city_link(pdest_city));
 
+  /* Set cargo to 1 move left BEFORE doing airlift. This way, send_unit_info()
+   * will send updated moves_left. In rulesets with no passive movement, this
+   * leaves such units a chance to disembark. In rulesets with passive movement,
+   * it leaves 1/60th of a move left, allowing bombs, missiles, allies, etc.,
+   * to deboard. */
+  unit_cargo_iterate(punit, pcargo) {
+    if (pcargo->moves_left > 1) {
+      pcargo->moves_left = 1;
+    }
+  } unit_cargo_iterate_end;
+
   unit_move(punit, pdest_city->tile, punit->moves_left, NULL,
             /* Can only airlift to allied and domestic cities */
             FALSE, FALSE);
@@ -3849,7 +3860,7 @@ bool do_airline(struct unit *punit, struct city *pdest_city)
   if (!(game.info.airlifting_style & AIRLIFTING_UNLIMITED_DEST)) {
     pdest_city->airlift--;
     send_city_info(city_owner(pdest_city), pdest_city);
-  }  
+  }
 
   return TRUE;
 }
@@ -4015,7 +4026,7 @@ bool do_paradrop(struct unit *punit, struct tile *ptile,
   }
 
   /* May cause an incident */
-  action_consequence_success(paction, pplayer, unit_type_get(punit), 
+  action_consequence_success(paction, pplayer, unit_type_get(punit),
                              tgt_player, ptile, tile_link(ptile));
 
   return TRUE;
@@ -4238,18 +4249,18 @@ static int compare_units(const struct autoattack_prob *const *p1,
   if 'punit' provokes auto-attack from the unit 'penemy'.
   Called when autoattack_style == AA_ADVANCED
 **************************************************************************/
-static int will_unit_autoattack_unit (struct unit *penemy, 
+static int will_unit_autoattack_unit (struct unit *penemy,
                                        struct unit *punit)
 {
 
 /* Autoattack may happen based on which flags attacker and defender have:
-                       attacker ⏩      
+                       attacker ⏩
 ——————————————————————————————————————————————————————————————————————————————————
 defender         ""    AvidAttacker  O1   O2   O3    A1   A2   A3    !if_attacker*
 ——————————————————————————————————————————————————————————————————————————————————
-NonProvoking     N-    N-            N-   N-   N-    N-   N-   N-    N-  
-""               --    ODDS          --   --   --    --   --   --    N-  
-Provoking        ODDS  ODDS          ODDS ODDS ODDS  ODDS ODDS ODDS  N-  
+NonProvoking     N-    N-            N-   N-   N-    N-   N-   N-    N-
+""               --    ODDS          --   --   --    --   --   --    N-
+Provoking        ODDS  ODDS          ODDS ODDS ODDS  ODDS ODDS ODDS  N-
 ProvokingClass1  --    ODDS          ODDS --   --    YES  --   --    N-
 ProvokingClass2  --    ODDS          --   ODDS --    --   YES  --    N-
 ProvokingClass3  --    ODDS          --   --   ODDS  --   --   YES   N-
@@ -4269,7 +4280,7 @@ ODDS = AA_ODDS   = auto-attack if odds are better (unless overridden by N- or YE
 
   /* N-, Priority 1: Immediately kick out overriding cases that can never attack: */
   if (penemy->activity != ACTIVITY_VIGIL) {
-    return AA_NO;  
+    return AA_NO;
   }
   /* for performance this is checked only once @ start of unit_survive_autoattack()
   if (unit_has_type_flag(punit, UTYF_NONPROVOKING)) return AA_NO; */
@@ -4318,12 +4329,12 @@ ODDS = AA_ODDS   = auto-attack if odds are better (unless overridden by N- or YE
   unit that is adjacent to us can see us.
 **************************************************************************/
 static bool unit_survive_autoattack(struct unit *punit)
-{ 
+{
   struct autoattack_prob_list *autoattack;
   int moves = punit->moves_left;
   int sanity1 = punit->id;
 
-  if (!game.server.autoattack 
+  if (!game.server.autoattack
       || unit_has_type_flag(punit, UTYF_NONPROVOKING)) {
     return TRUE;
   }
@@ -4335,7 +4346,7 @@ static bool unit_survive_autoattack(struct unit *punit)
   adjc_iterate(&(wld.map), unit_tile(punit), ptile) {
     /* First add all eligible units to a autoattack list */
     unit_list_iterate(ptile->units, penemy) {
-      /* AA_ADVANCED has ruleset filters for whether to auto-attack */                                
+      /* AA_ADVANCED has ruleset filters for whether to auto-attack */
       if (game.server.autoattack_style == AA_ADVANCED) {
         if (!will_unit_autoattack_unit(penemy,punit)) {
           continue;
@@ -4353,7 +4364,7 @@ static bool unit_survive_autoattack(struct unit *punit)
                                      tgt_tile, tile_city(tgt_tile),
                                      punit, NULL);
 
-      if (action_prob_possible(probability->prob) 
+      if (action_prob_possible(probability->prob)
           && is_unit_reachable_at(punit, penemy, unit_tile(punit))) {
           probability->unit_id = penemy->id;
           autoattack_prob_list_prepend(autoattack, probability);
@@ -4371,7 +4382,7 @@ static bool unit_survive_autoattack(struct unit *punit)
 
   autoattack_prob_list_iterate_safe(autoattack, peprob, penemy) {
     int will_attack = AA_ODDS;
-    /* AA_ADVANCED has ruleset filters for whether to auto-attack */                                
+    /* AA_ADVANCED has ruleset filters for whether to auto-attack */
     if (game.server.autoattack_style == AA_ADVANCED) {
       will_attack = will_unit_autoattack_unit(penemy, punit);
       if (will_attack == AA_NO) {
@@ -4428,37 +4439,37 @@ static bool unit_survive_autoattack(struct unit *punit)
     /* For AA_ADVANCED games, handle two special cases:
        I. The Transporter is KNOWN to carry defenseless cargo:
 
-       For example, we wouldn't want a Jet Fighter on vigil to be afraid of a Jet Bomber just because 
+       For example, we wouldn't want a Jet Fighter on vigil to be afraid of a Jet Bomber just because
        it carries bombs. Rather than make a special hard-coded uclass_flag for these cases, just let
        the ruleset-coder make their own custom uclass-flag named "HarmlessCargo", for such cases.
        (This also lets rulesets define whether invisible cargo is never considered a barrier to
        autoattack: simply give all unit-classes the HarmlessCargo flag.)
 
-       II. auto-BOMBARDERS aren't afraid of invisible cargo as long as they're not afraid of 
+       II. auto-BOMBARDERS aren't afraid of invisible cargo as long as they're not afraid of
        its transport:
 
        In AA_ADVANCED rulesets, Bombard is the first (preferred) form of autoattack, due to
        reduced risk of exploitation from autoattack-baiting. In such games, an autoattacker
        who (1) is a bombarder, and (2) experiences a penemywin of 0.0, is very likely facing a case
        of INVISIBLE CARGO which pessimistically is considered as a "superdefender" with 0 chance
-       to win. 
+       to win.
 
        HOWEVER, a Bombard-autoattack (a) usually faces no retaliation (b) in cases where it does,
        the cargo by being transported will rarely qualify to retaliate, (c) in cases where it could,
        will rarely have enough bombard-retaliate combat rounds to result in killing the
-       auto-bombarder. 
-       
+       auto-bombarder.
+
        THUS, for cases where penemywin came back as 0.0, we _probably_ got a 0.0 because of having
        an _undefined_ win % due to invisible cargo. But we DO know (a,b,c) above to be true. And we DO
        know that a,b,c together represent a higher % chance to win/survive such a bombard-autoattack
        than even the case of normal qualifying autoattacks whose thresholds are usually set between
        80% and 90%. AND we know as devs we want to prevent an exploit where a transporter carrying
        dummy worthless units, can first occupy a tile in order to allow subsequent movers-to-the-tile
-       to bypass all autoattacks with 100% success. In addition, for the rare case where 
+       to bypass all autoattacks with 100% success. In addition, for the rare case where
        penemywin came back as 0.0 not because of invisible cargo, but because the adjacent defender
        itself is Godzilla, we happen to know unit_win_chance(penemy, punit). So if that is a 0.0,
        then we know the penemywin of 0.0 was created by that and not by invisible enemy cargo.
-       
+
        In other words, we know everything we need, in order to set a more accurate penemywin for just
        such a case. */
     if (penemywin == 0 && game.server.autoattack_style == AA_ADVANCED) {
@@ -4502,12 +4513,12 @@ static bool unit_survive_autoattack(struct unit *punit)
                                tgt_tile, tile_city(tgt_tile), punit, NULL);
       /* This block of code would have to come back if units are losing their
          vigil state after their first autoattack. Otherwise, ...
-      
-         This used to set vigil unit back on vigil after it was put to idle, 
-         but currently appears unnecessary, since only AA_DEFAULT now sets 
-         vigiling units back to idle (3 lines up.) This should now avoid 
-         segfault from unit_activity_handling() on a possibly dead unit. 
-         If we ever change/add features such that we use this code again, 
+
+         This used to set vigil unit back on vigil after it was put to idle,
+         but currently appears unnecessary, since only AA_DEFAULT now sets
+         vigiling units back to idle (3 lines up.) This should now avoid
+         segfault from unit_activity_handling() on a possibly dead unit.
+         If we ever change/add features such that we use this code again,
          it's now more secure because it was edited to:
          (1) Check the unit is still alive
          (2) Not use unit_activity_handling() which does a free_unit_orders:
@@ -4520,7 +4531,7 @@ static bool unit_survive_autoattack(struct unit *punit)
         // Set unit back on vigil
         if (game_unit_by_number(sanity2)) {
           set_unit_activity(penemy, ACTIVITY_IDLE);
-        } 
+        }
       } */
 
     } else {
@@ -4565,7 +4576,7 @@ static bool unit_survive_autoattack(struct unit *punit)
   Cancel orders for the unit.
 **************************************************************************/
 static void cancel_orders(struct unit *punit, char *dbg_msg)
-{  
+{
   free_unit_orders(punit);
   send_unit_info(NULL, punit);
   log_debug("%s", dbg_msg);
@@ -4573,7 +4584,7 @@ static void cancel_orders(struct unit *punit, char *dbg_msg)
 
 /**********************************************************************//**
   Will wake up any neighboring enemy sentry units or patrolling
-  units. 'departure' indicates a departure from the tile rather 
+  units. 'departure' indicates a departure from the tile rather
   than arrival at it (used to suppress double-messaging in some cases)
 **************************************************************************/
 static void wakeup_neighbor_sentries(struct unit *punit, bool departure)
@@ -4612,11 +4623,11 @@ static void wakeup_neighbor_sentries(struct unit *punit, bool departure)
     /* if the tile has an extra who reports movement; e.g., Buoy, do that first: */
     const struct extra_type *reporting_extra = tile_get_extra_by_flag(ptile, EF_REPORTS);
     if (!departure && reporting_extra) {
-      int radius_sq = 0; /* "dumb" extras can see someone on their own tile only */ 
+      int radius_sq = 0; /* "dumb" extras can see someone on their own tile only */
       if (extra_base_get(reporting_extra)) { /* base extras have a vision radius */
         radius_sq = extra_base_get(reporting_extra)->vision_main_sq;
       }
-      if (extra_owner(ptile)           
+      if (extra_owner(ptile)
          && radius_sq >= distance_sq
          && can_player_see_unit(extra_owner(ptile), punit)
          && !pplayers_allied(unit_owner(punit), extra_owner(ptile))) {
@@ -4629,15 +4640,15 @@ static void wakeup_neighbor_sentries(struct unit *punit, bool departure)
                 E_UNIT_SENTRY_WAKE, ftc_server,
                 _("[`eye`] %s (%d,%d) saw %s %s %s<span class='sc'>%c</span> moving at (%d,%d)"),
                 extra_name_translation(reporting_extra),
-                stile_x, stile_y, 
-                nation_rule_name(nation_of_unit(punit)), 
+                stile_x, stile_y,
+                nation_rule_name(nation_of_unit(punit)),
                 unit_name_translation(punit), punit_emoji,
                 unit_scrambled_id(punit->id),
                 mtile_x, mtile_y );
         }
       }
     }
-    
+
     unit_list_iterate(ptile->units, penemy) {
       // don't notify the same player twice for movement to this tile
       int enemy_playerno = player_number(unit_owner(penemy));
@@ -4676,8 +4687,8 @@ static void wakeup_neighbor_sentries(struct unit *punit, bool departure)
                 E_UNIT_SENTRY_WAKE, ftc_server,
                 _("[`eye`] %s (%d,%d) saw %s %s %s<span class='sc'>%c</span> moving at (%d,%d)"),
                 unit_link(penemy),
-                stile_x, stile_y, 
-                nation_rule_name(nation_of_unit(punit)), 
+                stile_x, stile_y,
+                nation_rule_name(nation_of_unit(punit)),
                 unit_name_translation(punit), punit_emoji,
                 unit_scrambled_id(punit->id),
                 mtile_x, mtile_y );
@@ -4968,14 +4979,14 @@ static void unit_move_data_unref(struct unit_move_data *pdata)
 
 /**********************************************************************//**
  Wrapper function for unit_move_real. This handles all unit_move cases
- that aren't on a GOTO looping through a multi-tile voyage. See 
+ that aren't on a GOTO looping through a multi-tile voyage. See
  unit_move_real for further explanation.
 **************************************************************************/
 bool unit_move(struct unit *punit, struct tile *pdesttile, long move_cost,
                struct unit *embark_to, bool find_embark_target,
                bool conquer_city_allowed)
 {
-  return unit_move_real(punit, pdesttile, move_cost, embark_to, 
+  return unit_move_real(punit, pdesttile, move_cost, embark_to,
                 find_embark_target, conquer_city_allowed, TRUE);
 }
 
@@ -4990,7 +5001,7 @@ bool unit_move(struct unit *punit, struct tile *pdesttile, long move_cost,
   pdesttile need not be adjacent.
 
   'first_move' - indicates whether the unit is on a GOTO departing from
-  its first tile. This serves two purposes: (1) A big increase to 
+  its first tile. This serves two purposes: (1) A big increase to
   performance: wakeup_neighbor_sentries() can now get called n+1 times
   on a path of n tiles instead of 2*(n-1)+1 times; (2) For servers which
   use sentry waking as a useful intel function to report movemments to
@@ -5101,7 +5112,7 @@ bool unit_move_real(struct unit *punit, struct tile *pdesttile, long move_cost,
   unit_cargo_iterate(punit, pcargo) {
     pdata = unit_move_data(pcargo, psrctile, pdesttile);
     unit_move_data_list_append(plist, pdata);
-    /* EFT_PASSENGER_MOVE_COST_BP: 
+    /* EFT_PASSENGER_MOVE_COST_BP:
      * Each cargo unit loses moves proportionate to the moves lost by the transport.
      * If the transport took a year to get somewhere, the cargo also waited all year to
      * get there. Finally, a solution to double-haul move problems! Leaving the effect
@@ -5143,13 +5154,13 @@ bool unit_move_real(struct unit *punit, struct tile *pdesttile, long move_cost,
                                            NULL, unit_owner(pcargo),
                                            pcargo->veteran, pcargo->hp,
                                            NULL);
-    double cargo_move_cost = MIN(SINGLE_MOVE, 
+    double cargo_move_cost = MIN(SINGLE_MOVE,
                                  (double)move_cost/(double)unit_move_rate(punit)
                                  * cargo_move_rate
                                  * get_unit_bonus(pcargo, EFT_PASSENGER_MOVE_COST_BP) / SINGLE_MOVE
                                 );
 
-/* BREAK GLASS IN CASE OF DEBUG 
+/* BREAK GLASS IN CASE OF DEBUG
     notify_player(pplayer, unit_tile(punit), E_UNIT_ORDERS, ftc_server,
                   _("%s passive cargo move_cost = %.0lfmp - %.01f {{(%.0lf/%.0lf) * %.0lf * %.1lf}} = %.0lf "),
                   unit_link(pcargo),
@@ -5169,7 +5180,7 @@ bool unit_move_real(struct unit *punit, struct tile *pdesttile, long move_cost,
     pcargo->moves_left = (double)pcargo->moves_left + 0.5 // frags will get rounded to nearest int, not trunc'd
                        - cargo_move_cost; // never > SINGLE_MOVE;
     pcargo->moves_left = MAX(0, pcargo->moves_left);
-                                                      
+
   } unit_cargo_iterate_end;
 
   /* Get data for 'punit'. */
@@ -5340,8 +5351,8 @@ bool unit_move_real(struct unit *punit, struct tile *pdesttile, long move_cost,
       /* EMBARK UNIT ON TRANSPORT (second part of "dual action" of 1)move, 2)board */
       if (ptransporter) {
         /* Being here is a promise to embark! We've passed legality for ACTION_TRANSPORT_EMBARK, and moved to the
-           transport's tile. The 3rd param was changed to TRUE to fix bug where units lost moves_left by moving, 
-           then can't board if moves_left is a req for boarding; leaving units drowning in the water! 
+           transport's tile. The 3rd param was changed to TRUE to fix bug where units lost moves_left by moving,
+           then can't board if moves_left is a req for boarding; leaving units drowning in the water!
            ~*~ NOTE: ~*~
            Brief tests didn't show this breaks anything. Seems OK: being here is a 'promise' we could embark AND
            the second of two steps in doing so. However, if illegal embarkations occur, this may be to blame. */
@@ -5490,10 +5501,10 @@ bool unit_move_real(struct unit *punit, struct tile *pdesttile, long move_cost,
 /**********************************************************************//**
   Maybe cancel the goto if there is an enemy in the way
 **************************************************************************/
-static bool maybe_cancel_goto_due_to_enemy(struct unit *punit, 
+static bool maybe_cancel_goto_due_to_enemy(struct unit *punit,
                                            struct tile *ptile)
 {
-  return (is_non_allied_unit_tile(ptile, unit_owner(punit)) 
+  return (is_non_allied_unit_tile(ptile, unit_owner(punit))
 	  || is_non_allied_city_tile(ptile, unit_owner(punit)));
 }
 
@@ -5577,7 +5588,7 @@ bool execute_orders(struct unit *punit, const bool fresh)
   struct extra_type *pextra;
 
   fc_assert_ret_val(unit_has_orders(punit), TRUE);
- 
+
   if (punit->activity != ACTIVITY_IDLE) {
     /* Unit's in the middle of an activity; wait for it to finish. */
     punit->done_moving = TRUE;
@@ -5744,7 +5755,7 @@ bool execute_orders(struct unit *punit, const bool fresh)
           punit->done_moving = TRUE;
           set_unit_activity_targeted(punit, activity, pextra);
           send_unit_info(NULL, punit);
-          
+
           // Doing these 4 in foreign territory may trigger casus belli:
           if (activity == ACTIVITY_PILLAGE) {
             action_consequence_success(action_by_number(ACTION_PILLAGE),
@@ -5847,19 +5858,19 @@ bool execute_orders(struct unit *punit, const bool fresh)
               /* DON'T CANCEL ORDERS: they need to be kept to delay GOTO later */
               // ....
               /* This message was coming up redundant to the message in unit_can_do_action_now,
-                 for all unit move orders, thus unneeded in that case. It was suspected of 
+                 for all unit move orders, thus unneeded in that case. It was suspected of
                  making the spurious messages about 9 hours 59 minutes on units that could move,
                  likely because it was forgetting to check if (punit->server.action_turn == game.info.turn - 1),
                  AND it was suspected of giving FALSE positives about UWT preventing an action
                  when the action was simply reported illegal for some other reason. For all
                  these reasons it's commented out now, but might have had some reason before,
-                 which could be made to work again, if we filter out ANYTHING that's NOT 
-                 the unit in a state of a LEGAL delayed GOTO, remove the redundant message 
-                 about UWT from unit_can_do_action_now(..) under those conditions there, and 
+                 which could be made to work again, if we filter out ANYTHING that's NOT
+                 the unit in a state of a LEGAL delayed GOTO, remove the redundant message
+                 about UWT from unit_can_do_action_now(..) under those conditions there, and
                  check the server.action_turn like we weren't doing before. For now, it's just
-                 commented out and we'll see how it goes.  
+                 commented out and we'll see how it goes.
               char buf[64];
-              if (dt>0.99) { 
+              if (dt>0.99) {
                 format_time_duration(game.server.unitwaittime - dt, buf, sizeof(buf));
                 notify_player(pplayer, unit_tile(punit),
                           E_UNIT_ORDERS, ftc_server,
@@ -5868,7 +5879,7 @@ bool execute_orders(struct unit *punit, const bool fresh)
               } */
               // ....
               /* We must undo the earlier 'premature' increment of order_index++ which assumed success */
-              punit->orders.index--;  
+              punit->orders.index--;
               /* Courtesy feature: put fresh user-given orders in unit_wait_list to execute later */
               if (fresh) {
                 time_t wake_up = punit->server.action_timestamp + (time_t)game.server.unitwaittime;
@@ -5880,7 +5891,7 @@ bool execute_orders(struct unit *punit, const bool fresh)
                 wait->wake_up = scramble_uwt_stamp(wake_up);/* DEBUG LEFTOER
                 notify_player(punit->owner, NULL, E_UNIT_RELOCATED, ftc_server,
                               _("xo.%s #%d appending to waitlist."),unit_link(punit),punit->id);*/
-                unit_forget_last_activity(punit); // prevent last activity getting a wait on this turn 
+                unit_forget_last_activity(punit); // prevent last activity getting a wait on this turn
                 unit_wait_list_append(server.unit_waits, wait);
               }
               return true;
@@ -6180,7 +6191,7 @@ bool unit_can_do_action_now(const struct unit *punit, char *caller_string)
 
     /* Exceptions to fail message---------------------- */
     /* Every possible activity will be done after UWT, so don't do fail message.*/
-    if ( (game.server.unitwaittime_style & UWT_ACTIVITIES & UWT_DELAY_GOTO) 
+    if ( (game.server.unitwaittime_style & UWT_ACTIVITIES & UWT_DELAY_GOTO)
          && !is_perform_action) /*action not activity*/
     {
       give_uwt_message = false;
@@ -6188,13 +6199,13 @@ bool unit_can_do_action_now(const struct unit *punit, char *caller_string)
     /* UWT_ACTIVITIES is on and it's not a movement or GOTO. Will do activity later. No message.*/
     if ((game.server.unitwaittime_style & UWT_ACTIVITIES)
         && punit->activity != ACTIVITY_IDLE
-        && !is_movement_action 
+        && !is_movement_action
         && !is_perform_action /*action not activity*/) {
           give_uwt_message = false;
     }
     /* Exceptions to exceptions------------------------- */
-    /* Delay_Goto is OFF and unit was given a GOTO command */ 
-    if ((game.server.unitwaittime_style & !UWT_DELAY_GOTO) 
+    /* Delay_Goto is OFF and unit was given a GOTO command */
+    if ((game.server.unitwaittime_style & !UWT_DELAY_GOTO)
         && (punit->activity == ACTIVITY_IDLE || is_movement_action)
         && punit->has_orders) {
         give_uwt_message = true;
@@ -6212,10 +6223,10 @@ bool unit_can_do_action_now(const struct unit *punit, char *caller_string)
     char buf[64];
     format_time_duration(game.server.unitwaittime - dt, buf, sizeof(buf));
     // TODO: This is where, if we can somehow know it's a GOTO and not a cursor key
-    // to adjacent tile, we can give a specially nice message about unit 
+    // to adjacent tile, we can give a specially nice message about unit
     // "orders will be executed in 2 hours, 32 minutes." For now it's && false to
-    // block it out: 
-    if (false && is_movement_action && (game.server.unitwaittime_style & UWT_DELAY_GOTO)) { 
+    // block it out:
+    if (false && is_movement_action && (game.server.unitwaittime_style & UWT_DELAY_GOTO)) {
       /* UWT_DELAY_GOTO means some actions WILL perform with a delay, others not
         (e.g. investigate city, attack unit) */
       notify_player(unit_owner(punit), unit_tile(punit), E_UNIT_ORDERS,
@@ -6226,14 +6237,14 @@ bool unit_can_do_action_now(const struct unit *punit, char *caller_string)
     }
     else {
       if (!is_perform_action) {
-        // An activity is being delayed 
+        // An activity is being delayed
         notify_player(unit_owner(punit), unit_tile(punit), E_UNIT_ORDERS,
                       ftc_server, _("[`hourglass`] %s %s delayed for %s."
                                   "<span class='e_beginner_help'> See /help unitwaittime.</span>"),
                                   UNIT_EMOJI(punit), unit_link(punit),
                                   buf);
       } else {
-        // Simply can't give an action order because we have no delayed fulfillent. You have 
+        // Simply can't give an action order because we have no delayed fulfillent. You have
         // to wait to give the order.
         notify_player(unit_owner(punit), unit_tile(punit), E_UNIT_ORDERS,
                         ftc_server, _("[`hourglass`] %s %s can't perform actions for %s."
