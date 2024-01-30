@@ -510,18 +510,25 @@ Not_Tech_Source
     Tech cannot be received from this player by any means.
 
 Nuke_Intercept_Radius_Odds_Pm
-    The sq_radius at which a unit has SDI-like effects to intercept a nuke, and
-    its permille odds of doing so. This is two separate values which are encoded
-    as a single value by doing:
+    The sq_radius at which a city or unit has SDI-like effects to intercept
+    a nuke, and its permille odds of doing so. These are two separate values
+    encoded as a single value by doing:
         val = (1000 * sq_radius) + (permille odds)
     e.g., sq_radius=5 and odds of 33.3% gives:         val = 5333
+    >>> PERMILLE component cannot exceed 999. (99.9%)
+    >>> RADIUS cannot exceed MAX_ALLOWED_SDI_RADIUS_SQ <combat.h>
+    ~*~
+    This effect behaves differently on units and cities:
+    * For units, it only allows missile-types to defeat nuclear missiles,
+      and, it only allows non-missiles to defeat non-missile nukes;
+      it may not access the "City" req range.
+    * For cities, it prevents all unit classes from nuclear detonation.
+      It may not access any Unit-based req ranges.
     (see also: Nuke_Proof, Tile_Nuke_Proof)
-    PERMILLE component cannot exceed 999.
 
 Nuke_Proof
-    The percentage chance the city will absolutely prevent nuclear explosions
-    from taking place on all tiles whose distance from the city center are 2
-    or less: that is, within the 5x5 square whose center is the city tile.
+    The percentage chance the city will prevent nuclear explosions
+    from happening on all tiles 8-adjacent to the city.
     (see also: Nuke_Intercept_Radius_Odds_Pm, Tile_Nuke_Proof)
 
 Output_Add_Bonus
