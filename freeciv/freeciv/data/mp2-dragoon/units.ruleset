@@ -2838,8 +2838,8 @@ helptext      = _("\
 The Mobile SAM is the strongest Anti-Air unit on the ground. It can\
  attack nearby aircraft and missiles. It has a 2× bonus against Air and 3× against\
  Missiles. The Mobile SAM can also carry 3 Missiles of any type.\
- The discovery of Laser gives each Mobile SAM a 33% chance to defend all units on
- its tile from nuclear attack. \
+ With upgraded Laser tech, each Mobile SAM has a 33% chance to thwart adjacent nuclear\
+ bombs dropped by bombers. \
 \nBig Land units can’t enter Mountains without a road or native base, and do not\
  receive a move bonus from Rivers. \n\
 "), _("
@@ -4993,8 +4993,8 @@ helptext      = _("\
 The AEGIS Cruiser has an Anti-Air missile system. Radar and sonar\
  give superior vision and 2× defense bonus against Submarines.\
  The AEGIS can carry five Missiles, and is the only ship that can attack\
- Air and Missile units. The discovery of Laser gives each AEGIS Cruiser\
- a 50% chance to defend all units on its tile from nuclear attack. \n\
+ Air and Missile units. With upgraded Laser tech, each AEGIS Cruiser has\
+ a 50% chance to thwart adjacent nuclear bombs dropped by bombers. \n\
 "), _("\
 Excellent vision and 3× Anti-Air bonus are ideal for scouting and escorting. \
 "), _("
@@ -5284,7 +5284,9 @@ roles         = ""
 helptext      = _("\
 ABMs intercept enemy missiles. Because there is seldom enough time to\
  order a launch against incoming missiles, ABMs are usually set to Vigil,\
- which makes them automatically intercept adjacent missiles. \n\
+ which makes them automatically intercept adjacent missiles. In the case\
+ of a missile trying non-adjacent nuclear detonation, each ABM on vigil has a 29% chance to\
+ intercept it within a 5x5 area of effect (minus the corners). \n\
 ABMs are useful for anti-missile defense outside of cities. They must be\
  cargo on a Mobile SAM or similar missile-capable unit, and set to Vigil. \n\\
 ABMs aren't very effective\
