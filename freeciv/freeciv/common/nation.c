@@ -144,7 +144,7 @@ const char *nation_rule_name(const struct nation_type *pnation)
 }
 
 /************************************************************************//**
-  Return the (translated) adjective for the given nation. 
+  Return the (translated) adjective for the given nation.
   You don't have to free the return pointer.
 ****************************************************************************/
 const char *nation_adjective_translation(const struct nation_type *pnation)
@@ -154,7 +154,7 @@ const char *nation_adjective_translation(const struct nation_type *pnation)
 }
 
 /************************************************************************//**
-  Return the (translated) plural noun of the given nation. 
+  Return the (translated) plural noun of the given nation.
   You don't have to free the return pointer.
 ****************************************************************************/
 const char *nation_plural_translation(const struct nation_type *pnation)
@@ -164,7 +164,7 @@ const char *nation_plural_translation(const struct nation_type *pnation)
 }
 
 /************************************************************************//**
-  Return the (translated) adjective for the given nation of a player. 
+  Return the (translated) adjective for the given nation of a player.
   You don't have to free the return pointer.
 ****************************************************************************/
 const char *nation_adjective_for_player(const struct player *pplayer)
@@ -172,7 +172,7 @@ const char *nation_adjective_for_player(const struct player *pplayer)
   return nation_adjective_translation(nation_of_player(pplayer));
 }
 /************************************************************************//**
-  Return "a" or "an", optionally capitalized, based on the word passed. 
+  Return "a" or "an", optionally capitalized, based on the word passed.
 ****************************************************************************/
 const char *indefinite_article_for_word(const char *word, bool capitalize)
 {
@@ -205,8 +205,9 @@ bool is_word_plural(const char *word)
   if (strcmp(&word[len-4], "s II") == 0)  return true;  // Workers II, Barracks II
   if (strcmp(&word[len-3], "men") == 0) return true;  // Pikemen, Riflemen, etc.
   if (strcmp(&word[len-7], "nfantry") == 0) return true;  // mechanized infantry
+  if (strcmp(&word[len-7], "oops​") == 0)  return true;  // Alpine Troops with zero-width space (Alpines II)
   if (strcmp(&word[len-8], "rtillery") == 0) return true;  // artillery
-  
+
   return false;
   /* Exceptions I, currently commented because they don't come up:
   if (strcmp(word, "AWACS") == 0) return false; // names end in small 's'
@@ -221,7 +222,7 @@ bool is_word_plural(const char *word)
 }
 
 /************************************************************************//**
-  Return the (translated) plural noun of the given nation of a player. 
+  Return the (translated) plural noun of the given nation of a player.
   You don't have to free the return pointer.
 ****************************************************************************/
 const char *nation_plural_for_player(const struct player *pplayer)
