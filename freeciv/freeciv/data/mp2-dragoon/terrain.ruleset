@@ -2137,8 +2137,8 @@ generated      = TRUE
 ;defense_bonus  = 33   now a +0.50 flat bonus.
 reqs           =
     { "type",        "name",          "range", "present"
-;      "TerrainClass","Land",          "Local",  TRUE
-      "TerrainFlag", "CanHaveRiver",  "Local", TRUE
+;      "TerrainClass","Land",          "Local",  TRUE   ;; allow rivers on mountain lakes
+      "TerrainFlag", "CanHaveRiver",  "Local",  TRUE
       "Tech",        "Pottery",       "Player", FALSE
       "Tech",        "Alphabet",      "Player", FALSE
       "Tech",        "Writing",       "World",  FALSE

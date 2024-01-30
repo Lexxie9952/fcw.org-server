@@ -2226,13 +2226,14 @@ buildable      = TRUE
 generated      = TRUE
 ;defense_bonus  = 33   now a +0.50 flat bonus.
 reqs           =
-    { "type", "name", "range", "present"
-      "TerrainClass", "Land", "Local", TRUE
-      "Tech", "Pottery", "Player", FALSE
-      "Tech", "Alphabet","Player", FALSE
-      "Tech", "Writing", "World",  FALSE
-      "UnitFlag", "Well-Digger", "Local", TRUE
-      "Age",      "10",          "Local", FALSE
+    { "type",        "name",          "range", "present"
+;      "TerrainClass","Land",          "Local",  TRUE   ;; allow rivers on mountain lakes
+      "TerrainFlag", "CanHaveRiver",  "Local",  TRUE
+      "Tech",        "Pottery",       "Player", FALSE
+      "Tech",        "Alphabet",      "Player", FALSE
+      "Tech",        "Writing",       "World",  FALSE
+      "UnitFlag",    "Well-Digger",   "Local",  TRUE
+      "Age",         "10",            "Local",  FALSE
     }
 build_time = 2
 removal_time = 0
