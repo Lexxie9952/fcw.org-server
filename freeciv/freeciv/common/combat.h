@@ -28,7 +28,13 @@ extern "C" {
  * Yeah I changed it. 10 meant it was rounding to only one decimal place.
  * Absolutely horrible, an Attack strength of 1.99 became 1.9!
  */
-#define POWER_FACTOR	100
+#define POWER_FACTOR                        100
+
+/* Determines the number of tiles to be searched for SDI-effects, if
+ * nuking. Should not be greater than highest value of a supported ruleset.
+ * TODO: make this a game_info setting. */
+#define MAX_ALLOWED_SDI_RADIUS_SQ           5
+
 
 enum unit_attack_result {
   ATT_OK,
@@ -58,7 +64,11 @@ double unit_win_chance(const struct unit *attacker,
 		       const struct unit *defender);
 
 bool unit_really_ignores_citywalls(const struct unit *punit);
-struct city *sdi_try_defend(const struct player *owner,
+int prevent_nuclear_detonation(const struct player *nuke_owner,
+                               const struct tile *ptile,
+                               const struct unit_class *nuke_uclass,
+                               int nuke_radius);
+struct city *sdi_try_defend(const struct player *nuke_owner,
 			       const struct tile *ptile);
 
 bool is_tile_nuke_proof(const struct tile *ptile);

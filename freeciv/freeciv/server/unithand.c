@@ -4567,7 +4567,8 @@ static bool unit_bombard(struct unit *punit, struct tile *ptile,
 /**********************************************************************//**
   Do a "regular" nuclear attack.
 
-  Can be stopped by an EFT_NUKE_PROOF (SDI defended) city.
+  Can be stopped by effects and mechanics coded in
+    combat.c::prevent_nuclear_detonation(..)
 
   This function assumes the attack is legal. The calling function should
   have already made all necessary checks.
@@ -4577,24 +4578,24 @@ static bool unit_bombard(struct unit *punit, struct tile *ptile,
 **************************************************************************/
 static bool unit_nuke(struct player *pplayer, struct unit *punit,
                       struct tile *def_tile, const struct action *paction)
-{
-
-/*
-  unit_type_iterate(ptype) {
-        notify_player(pplayer, unit_tile(punit), E_UNIT_LOST_ATT, ftc_server,
-                  _("[`/units/%s`] id:%d name: %s"),
-                     utype_name_translation(ptype),
-                     ptype->item_number,
-                     utype_name_translation(ptype));
-  } unit_type_iterate_end;
-*/
-
-  struct city *pcity;
+{ /* DEBUG:
+      unit_type_iterate(ptype) {
+            notify_player(pplayer, unit_tile(punit), E_UNIT_LOST_ATT, ftc_server,
+                      _("[`/units/%s`] id:%d name: %s"),
+                        utype_name_translation(ptype),
+                        ptype->item_number,
+                        utype_name_translation(ptype));
+      } unit_type_iterate_end;
+  */
+  int success_code = 0;     // Identifier for successful defender vs nuke
+  struct unit *intercept_unit = NULL; // Assigned if successful intercept
+  struct city *pcity = NULL;
+  struct player *defending_player = NULL;
   const struct unit_type *act_utype;
   /* bombard_rate is never used on nukes, but for nukes it has a double purpose:
      the amount of sq_radius to add to the default sq_radius of 2: */
   int extra_radius = unit_type_get(punit)->bombard_rate;
-  char nuclear_unit_name[64];
+  char nuclear_unit_name[80];
 
   sprintf(nuclear_unit_name,"%s",unit_rule_name(punit));
 
@@ -4609,22 +4610,46 @@ static bool unit_nuke(struct player *pplayer, struct unit *punit,
             unit_rule_name(punit),
             TILE_XY(def_tile));
 
-  if ((pcity = sdi_try_defend(pplayer, def_tile))) {
-    /* FIXME: Remove the hard coded reference to SDI defense. */
+  //if ((pcity = sdi_try_defend(pplayer, def_tile))) { // NB: Formerly we used to only check if city has SDI
+
+  // Success code is 0 if no luck, positive if city, -(unit.id) if unit.
+  if ((success_code = prevent_nuclear_detonation(pplayer, def_tile,
+                                                utype_class(act_utype),
+                                                DEFAULT_DETONATION_RADIUS_SQ + extra_radius))) {
+    // Determine which player shot the nuke down:
+    if (success_code < 0) { // unit shot it down:
+      intercept_unit = game_unit_by_number(abs(success_code));
+      defending_player = unit_owner(intercept_unit);
+    } else {                // city shot it down:
+      pcity = game_city_by_number(success_code);
+      defending_player = city_owner(pcity);
+    }
+
     notify_player(pplayer, unit_tile(punit), E_UNIT_LOST_ATT, ftc_server,
-                  _("[`warning`]Your %s was shot down by "
-                    "SDI defenses, what a waste."), unit_tile_link(punit));
-    notify_player(city_owner(pcity), def_tile, E_UNIT_WIN_DEF, ftc_server,
-                  _("[`boom`]The nuclear attack on %s was thwarted by"
-                    " your SDI defense."), city_link(pcity));
+                  _("[`warning`]Your %s was shot down by %s. What a waste!"),
+                    unit_tile_link(punit),
+                    ((success_code > 0) ? "city defenses" : "nearby units"));
+    notify_player(defending_player, def_tile, E_UNIT_WIN_DEF, ftc_server,
+                  _("[`boom`]A %s nuclear attack was thwarted by %s."),
+                    nation_adjective_for_player(pplayer),
+                    ((success_code > 0) ? "city defenses" : "nearby units"));
+
+    if (success_code < 0 /* A unit did the interception */) {
+        // Missiles always spend themselves. "Missile" user-UCF is a RUUCF. See unittype.h
+      if (uclass_has_user_unit_class_flag_named(unit_class_get(intercept_unit), "Missile")) {
+        wipe_unit(intercept_unit, ULR_MISSILE, NULL);
+      } else {    // A unit stopping a nuke deserves a promotion!
+        maybe_make_veteran(intercept_unit);
+      }
+    }
 
     /* Trying to nuke something this close can be... unpopular. */
     action_consequence_caught(paction, pplayer, act_utype,
-                              city_owner(pcity),
+                              defending_player,
                               def_tile, unit_tile_link(punit));
 
     /* Remove the destroyed nuke. */
-    wipe_unit(punit, ULR_SDI, city_owner(pcity));
+    wipe_unit(punit, ULR_SDI, defending_player);
 
     return FALSE;
   }

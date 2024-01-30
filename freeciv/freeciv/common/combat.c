@@ -34,8 +34,8 @@
 
 #include "combat.h"
 
-/* debug 
-#include "../server/notify.h" */
+/* debug */
+#include "../server/notify.h"
 
 /*******************************************************************//**
   Checks if player is restricted diplomatically from attacking the tile.
@@ -48,7 +48,7 @@ static bool can_player_attack_tile(const struct player *pplayer,
 			    const struct tile *ptile)
 {
   struct city *pcity = tile_city(ptile);
-  
+
   /* 1. Is there anyone there at all? */
   if (!pcity && unit_list_size((ptile->units)) == 0) {
     return FALSE;
@@ -183,7 +183,7 @@ static enum unit_attack_result unit_attack_all_at_tile_result(const struct unit 
       enum unit_attack_result result;
 
       result = unit_attack_unit_at_tile_result(punit, aunit, ptile);
-      /* Check for NeverProtects and NeverBlocked exceptions for an 
+      /* Check for NeverProtects and NeverBlocked exceptions for an
           unreachable unit. Continue iteration IFF it's an exception */
 
       if (result == ATT_UNREACHABLE
@@ -191,19 +191,19 @@ static enum unit_attack_result unit_attack_all_at_tile_result(const struct unit 
                 || unit_has_type_flag(punit, UTYF_NEVER_BLOCKED) ) ) {
         /* Unreachable but NOT prevented from attacking other units */
         continue;
-      /* If defender was not an "unreachable exception", then we 
-          report cases of an illegal attack and quit */   
+      /* If defender was not an "unreachable exception", then we
+          report cases of an illegal attack and quit */
       } else if (result != ATT_OK) {
         return result;
       }
-      /* We only arrive here if ATT_OK, meaning that at least 
-          one of the units was reachable */  
+      /* We only arrive here if ATT_OK, meaning that at least
+          one of the units was reachable */
       any_reachable_unit = TRUE;
     }
   } unit_list_iterate_end;
 
-  /* If there are only unreachable units, we have to return 
-     ATT_UNREACHABLE, regardless of a UTYF_NEVER_BLOCKED attacker or 
+  /* If there are only unreachable units, we have to return
+     ATT_UNREACHABLE, regardless of a UTYF_NEVER_BLOCKED attacker or
      a UTYF_NEVER_PROTECTS defenders. */
   return any_reachable_unit ? ATT_OK : ATT_UNREACHABLE;
 }
@@ -280,7 +280,7 @@ double win_chance(int as, int ahp, int afp, int ds, int dhp, int dfp)
   double def_P_lose1 = 1 - att_P_lose1;
 
   /*
-    This calculates 
+    This calculates
 
     binomial_coeff(def_N_lose-1 + lr, lr)
       * def_P_lose1^(def_N_lose-1)
@@ -372,15 +372,15 @@ void get_modified_firepower(const struct unit *attacker,
     *att_fp = 1;
   }
 
-  /* pearl harbour - defender's firepower is reduced to one, 
+  /* pearl harbour - defender's firepower is reduced to one,
    *                 attacker's is multiplied by two         */
   if (unit_has_type_flag(defender, UTYF_BADCITYDEFENDER)
       && tile_city(unit_tile(defender))) {
     *att_fp *= 2;
     *def_fp = 1;
   }
-  
-  /* 
+
+  /*
    * When attacked by fighters, helicopters have their firepower
    * reduced to 1.
    */
@@ -422,20 +422,185 @@ double unit_win_chance(const struct unit *attacker,
   return chance;
 }
 
+
 /*******************************************************************//**
-  Try defending against nuclear attack; if successful, return a city which 
-  had enough luck and EFT_NUKE_PROOF.
-  If the attack was successful return NULL.
+  Units trying to intercept a nuclear unit have some hard reqs checked
+  here. Basically, missiles can defend against missiles and non-missiles
+  can defend against non-missiles.
+
+                          Nuke is a missile | Nuke is a bomb/other
+  Defender is a missile         YES                 NO
+  Defender is non-missile       NO                  YES
 ***********************************************************************/
-struct city *sdi_try_defend(const struct player *owner,
+static bool can_defender_sdi_nuker(const struct unit_class *defender_uclass,
+                                   const struct unit_class *nuke_uclass)
+{
+  /* This hard-coded logic is very arbitrary but works for MP2.
+   * We COULD let the ruleset define reachability and use:
+   * BV_ISSET(defender_uclass->targets, uclass_index(nuke_uclass))
+   *
+   * However, this forces reachability for combat to be the same as
+   * for SDI, which is troublesome when fine-tuning the ruleset.
+   *
+   * TODO: ruleset specifies uclass targets via some mechanic like:
+   * 1) an effect that specifies a bitfield for uclasses, or
+   * 2) uclass_has_user_unit_class_flag_named("SDI_Missile"), or
+   * 3) utype_has_user_unittype_flag_named,("SDI_Bombs"), or
+   * 4) a reserved utype_flag.
+   * */
+
+  if (uclass_has_user_unit_class_flag_named(nuke_uclass, "Missile") ==
+      uclass_has_user_unit_class_flag_named(defender_uclass, "Missile")) {
+
+    return true;
+  }
+  return false;
+}
+/*******************************************************************//**
+  Units near a tile try to defend against nuclear attack;
+  if successful, return punit->id of the successful defender.
+  If the defense was unsuccessful return zero.
+***********************************************************************/
+static int antinuke_unit_try_defend(const struct player *nuke_owner,
+                                    const struct tile *ptile,
+                                    const struct unit_class *nuke_uclass)
+{
+  //--See if a unit on a surrounding tile defends---------------------//
+  circle_dxyr_iterate(&(wld.map), ptile, MAX_ALLOWED_SDI_RADIUS_SQ, ptile1, dx, dy, dr) {
+
+    /* DEBUG: notify_player(nuke_owner, ptile, E_CHAT_MSG_ALLY, ftc_server,
+                          _("Check tile with dx:%d dy:%d rad:%.2f dr:%d"),
+                          dx, dy, sqrt(dx*dx + dy*dy), dr); */
+
+    // Check units on each tile
+    unit_list_iterate_safe(ptile1->units, punit) {
+      // Units belonging to nuke's owner don't prevent attack:
+      if (unit_owner(punit) == nuke_owner) continue; // commenting this line allows debugging by nuking your own units
+      // Get odds for each unit to stop the detonation
+      int eft = get_target_bonus_effects(NULL,
+                                        unit_owner(punit),
+                                        NULL,
+                                        NULL,  // NULL to prevent aggregating city SDI into unit SDI
+                                        NULL,
+                                        ptile1,// tile effects don't trigger city effects (ruleset may give aggregate tile bonuses!)
+                                        punit,
+                                        unit_type_get(punit),
+                                        NULL,
+                                        NULL,
+                                        NULL,
+                                        EFT_NUKE_INTERCEPT_RADIUS_ODDS_PM,
+                                        V_COUNT);
+
+      int odds_pm = (eft % 1000); // odds permille of 0-999 extracted from the remainder of eft/1000.
+      // Subtracting the odds component from the eft will yield 1000*sq_radius.
+      float defense_radius = sqrt((eft - odds_pm) / 1000.0) + 0.001; // avoid rounding error
+      float radius_from_ground0 = sqrt(dx*dx + dy*dy);
+
+      const struct unit_class *defender_uclass = utype_class(unit_type_get(punit));
+
+      bool reachable = can_defender_sdi_nuker(defender_uclass, nuke_uclass);
+
+      /* DEBUG
+      if (odds_pm)
+          notify_player(nuke_owner, unit_tile(punit), E_UNIT_LOST_ATT, ftc_server,
+              _("Radius check on %s. defense_radius:%.2f, dgz: %.2f, dr:%d"),
+              unit_tile_link(punit), defense_radius, radius_from_ground0, dr); */
+
+      if (defense_radius >= radius_from_ground0
+          && odds_pm > 0
+          && reachable) {
+        // Roll odds, return the unit.id if success:
+        if (fc_rand(1000) < odds_pm) {
+          /* TODO: leaving notify_player() in a /common/.c file is messy and these messages
+           * while useful, contribute to clutter. Take them out after a year or so of
+           * playtesting. They're useful for now in snapshotting any potential bugs. */
+          notify_player(nuke_owner, unit_tile(punit), E_UNIT_LOST_ATT, ftc_server,
+              _("<i style='color:#999'>[`dice`]%s has %d.%d%% odds to intercept nuke.</i> SUCCESS!"),
+              unit_tile_link(punit), (odds_pm)/10, (odds_pm % 10));
+
+          return punit->id;
+        } else {
+            notify_player(nuke_owner, unit_tile(punit), E_UNIT_WIN_ATT, ftc_server,
+              _("<i style='color:#999'>[`dice`]%s has %d.%d%% odds to intercept nuke. FAILED!</i>"),
+              unit_tile_link(punit), (odds_pm)/10, (odds_pm % 10));
+        }
+      }
+    } unit_list_iterate_safe_end;
+  } circle_dxyr_iterate_end;
+
+  // No unit succeded to prevent the nuke detonation:
+  return 0;
+}
+
+/*******************************************************************//**
+  See if nearby cities can defend against nuclear attack.
+  If successful, return the city which thwarted the attack.
+  If failed, return NULL.
+***********************************************************************/
+struct city *sdi_try_defend(const struct player *nuke_owner,
                             const struct tile *ptile)
 {
+  /* SDI Check Version 2: Use circle iterate MAX_ALLOWED_SDI_RADIUS_SQ to
+     make sure we're finding all cities inside the max SDI effect radius,
+     and check each for EFT_NUKE_INTERCEPT_RADIUS_ODDS_PM. This allows
+     rulesets to set a radius AND odds for the SDI improvements */
+  //--See if a city on a surrounding tile defends---------------------//
+  circle_dxyr_iterate(&(wld.map), ptile, MAX_ALLOWED_SDI_RADIUS_SQ, ptile1, dx, dy, dr) {
+    struct city *pcity = tile_city(ptile1);
+    // Check for a foreign city on the tile. (You can nuke your own cities.)
+    if (pcity) { // reqs in [effect_sdi_defense] can allow self-nuking without owner-checking here
+      int eft = get_target_bonus_effects(NULL,
+                                  city_owner(pcity),
+                                  NULL,
+                                  tile_city(ptile1),
+                                  NULL,
+                                  ptile1, // NULL would prevent adding tile specified bonuses for this effect
+                                  NULL,   // punit: don't aggregate units into this value
+                                  NULL,   // unit_type
+                                  NULL,
+                                  NULL,
+                                  NULL,
+                                  EFT_NUKE_INTERCEPT_RADIUS_ODDS_PM,
+                                  V_COUNT);
+
+      int odds_pm = (eft % 1000); // odds permille of 0-999 extracted from the remainder of eft/1000.
+      // Subtracting the odds component from the eft will yield 1000*sq_radius.
+      float defense_radius = sqrt((eft - odds_pm) / 1000.0) + 0.001; // avoid rounding error
+      float radius_from_ground0 = sqrt(dx*dx + dy*dy);
+
+      /* For future implementation of city SDI effects specifying missiles and/or non-missiles: */
+      /* bool reachable = SDI_MISSILES && uclass_has_user_unit_class_flag_named(nuke_uclass, "Missile")
+                       || (SDI_NON_MISSILES && !uclass_has_user_unit_class_flag_named(nuke_uclass, "Missile"));
+      */
+      if (defense_radius >= radius_from_ground0 && odds_pm > 0 /*&& reachable*/) {
+        // Roll odds, return the SDI-enabled pcity if success:
+        if (fc_rand(1000) < odds_pm) {
+          /* TODO: leaving notify_player() in a /common/.c file is messy and these messages
+           * while useful, contribute to clutter. Take them out after a year or so of
+           * playtesting. They're useful for now in snapshotting any potential bugs. */
+          notify_player(nuke_owner, city_tile(pcity), E_UNIT_LOST_ATT, ftc_server,
+              _("<i style='color:#999'>[`dice`]%s has %d.%d%% odds to intercept nuke.</i> SUCCESS!"),
+              city_name_get(pcity), (odds_pm)/10, (odds_pm % 10));
+
+          return pcity;
+        } else {
+            notify_player(nuke_owner, city_tile(pcity), E_UNIT_WIN_ATT, ftc_server,
+              _("<i style='color:#999'>[`dice`]%s has %d.%d%% odds to intercept nuke. FAILED!</i>"),
+              city_name_get(pcity), (odds_pm)/10, (odds_pm % 10));
+        }
+      }
+    }
+  } circle_dxyr_iterate_end;
+
+  /* SDI Check Legacy Version:
+     Only checks adjacent tiles. Keeps compatibility with legacy rulesets */
+  //--See if a city on an 8-adjacent tile defends-------------------------//
   square_iterate(&(wld.map), ptile, 2, ptile1) {
     struct city *pcity = tile_city(ptile1);
 
     if (pcity
         && fc_rand(100) < get_target_bonus_effects(NULL,
-                                                   city_owner(pcity), owner,
+                                                   city_owner(pcity), nuke_owner,
                                                    pcity, NULL, ptile,
                                                    NULL, NULL,
                                                    NULL, NULL, NULL,
@@ -449,12 +614,49 @@ struct city *sdi_try_defend(const struct player *owner,
 }
 
 /*******************************************************************//**
-  Besides SDI protecting a city, individual tiles may be nuke resistant
-  for their own reasons; e.g., bunker, fallout shelter, etc.
-  This gives finer control of protecting specific tiles without 
-  shooting down the nuke and preventing its explosion. In addition,
-  it allows setting a probability for tile protection. (Use 0 or 100
-  for boolean behaviour).
+  Try defending against nuclear attack; if successful, return an
+  integer code identifying if a city or unit had enough luck to stop
+  the attack. If the attack was successful, returns zero.
+***********************************************************************/
+int prevent_nuclear_detonation(const struct player *nuke_owner,
+                               const struct tile *ptile,
+                               const struct unit_class *nuke_uclass,
+                               int nuke_radius) {
+
+  //--See if SDI defends----------------------------------------------//
+  struct city *pcity = NULL;
+  // TODO: only works on missile class if ruleset specifies
+  pcity = sdi_try_defend(nuke_owner, ptile);
+  // A positive number indicates the city.id that successfully defended:
+  if (pcity) return pcity->id;
+
+  //--See if anti-nuclear unit defends---------------------------------//
+  int successful_defender = antinuke_unit_try_defend(nuke_owner, ptile,
+                                                     nuke_uclass);
+  // A negative number indicates the unit.id that successfully defended:
+  if (successful_defender) return (-1 * successful_defender);
+
+  //--TODO: See if SAM Battery knocks out bomb-------------------------//
+  // ... ///
+
+  return 0;
+}
+
+/*******************************************************************//**
+  Individual tiles may be nuke resistant for their own reasons;
+  e.g., bunker.
+  In conventional use, this effect covers a tile (or city):
+  • A nuked tile has EFT_TILE_NUKE_PROOF odds of immediately returning
+  TRUE, and then it will suffer no nuclear blast.
+  This may be used non-conventionally, where units have the EFT:
+  • A ruleset may implement "magic units" which somehow cause a
+  successful detonation to not affect their tile (not recommended).
+  In this case, each unit on the tile gets a chance to roll the dice
+  separately for its "magic protection."
+
+  This protects specific tiles WITHOUT shooting down the nuke and
+  preventing its explosion. In addition, it allows setting a probability
+  for tile protection. (Set effect to 0 or 100 for boolean behaviour).
 ***********************************************************************/
 bool is_tile_nuke_proof(const struct tile *ptile)
 {
@@ -482,9 +684,9 @@ bool is_tile_nuke_proof(const struct tile *ptile)
                                        NULL,
                                        EFT_TILE_NUKE_PROOF,
                                        V_COUNT);
-    
+
     success |= (fc_rand(100) < tmp);
-  } unit_list_iterate_safe_end; 
+  } unit_list_iterate_safe_end;
 
   return success;
 }
@@ -584,10 +786,10 @@ int get_total_attack_power(const struct unit *attacker,
   evaluate all kinds of details in the req scope FOR NO GOOD REASON, such as
   unit-specific details such as MinMoveFrags, UnitState, etc. EXAMPLES of
   why get_tile_bonus() is needed: an attack bonus for a unit IFF it's
-  already fortified, or a bonus/penalty if the unit is transported or 
+  already fortified, or a bonus/penalty if the unit is transported or
   !transported, or has < or > a certain number of MinMoveFrags (e.g.,
-  a stronger 'tired attack' penalty or a 'charge' or 'ambush' bonus), 
-  or is OnDomesticTile and fights stronger for the Homeland, etc.                              
+  a stronger 'tired attack' penalty or a 'charge' or 'ambush' bonus),
+  or is OnDomesticTile and fights stronger for the Homeland, etc.
 */
 
   return attackpower * mod / 100;
@@ -792,9 +994,9 @@ struct unit *get_defender(const struct unit *attacker,
    * also be nice if the function was a bit more fuzzy about prioritizing,
    * making it able to fx choose a 1a/9d unit over a 10a/10d unit. It should
    * also be able to spare units without full hp's to some extent, as these
-   * could be more valuable later. ** Of particular importance is whether 
+   * could be more valuable later. ** Of particular importance is whether
    * stack death takes place, in which case the absolute best defender is a
-   * lot more important than if it's 44 units in a Fortress, where a much 
+   * lot more important than if it's 44 units in a Fortress, where a much
    * cheaper unit with 6% worse odds is a lot better volunteer to die first. */
 
    /* 18April2022. build_cost now includes transported units who might drown!
@@ -828,7 +1030,7 @@ struct unit *get_defender(const struct unit *attacker,
 
       int defense_rating = get_defense_rating(attacker, defender);
       /* This will make units roughly evenly good defenders look alike. */
-      int unit_def 
+      int unit_def
         = (int) (100000 * (1 - unit_win_chance(attacker, defender)));
 
       fc_assert_action(0 <= unit_def, continue);
@@ -851,9 +1053,9 @@ struct unit *get_defender(const struct unit *attacker,
 	          change = TRUE;
 	      }
         else if (build_cost == best_cost) {
-          /* super tiebreaker: cost and defense are 
+          /* super tiebreaker: cost and defense are
              same, so find any good reason: */
-	        if (rating_of_best < defense_rating) {	
+	        if (rating_of_best < defense_rating) {
 	          change = TRUE;
           } /*
           else if (best_healer < heal_value) {
