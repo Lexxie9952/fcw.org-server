@@ -1302,21 +1302,33 @@ reqs    =
     }
 ; ***********************************************************
 
-[effect_aegis_nuke_proof]
-type    = "Tile_Nuke_Proof"
-value   = 50  ; 50% probability of survival
+;ABMs have 29.3% chance to intercept nuclear missiles (but not bombs)
+;(Obviously, 40-50% if adjacent on vigil, as it uses regular combat odds)
+[effect_abm_sdi_effect]
+type    = "Nuke_Intercept_Radius_Odds_Pm"
+value   = 5293  ; 29.3% = (1 - sqrt(0.5)) probability. i.e., each 2 ABM halves the chance of nuke success.
 reqs    =
-    { "type",          "name",           "range", "present"
-      "UnitType",      "AEGIS Cruiser",  "Local",  TRUE
-      "Tech",          "Laser",          "Player", TRUE
-    }
-[effect_mobile_sam_nuke_proof]
-type    = "Tile_Nuke_Proof"
-value   = 33  ; 33% probability of survival
+   { "type",      "name",                   "range", "present"
+      "UnitType", "Anti-Ballistic Missile", "Local", TRUE
+      "Activity", "Vigil",                  "Local", TRUE
+   }
+;AEGIS have a 50% chance to intercept 8-adjacent bombs (but not missiles)
+[effect_aegis_sdi_effect]
+type    = "Nuke_Intercept_Radius_Odds_Pm"
+value   = 2500  ; radius < 2 == adjacent. 500/100 = 50% probability of survival
 reqs    =
-    { "type",          "name",           "range", "present"
-      "UnitType",      "Mobile SAM",     "Local",  TRUE
-      "Tech",          "Laser",          "Player", TRUE
+   {  "type",     "name",           "range", "present"
+      "UnitType", "AEGIS Cruiser",  "Local",  TRUE
+      "Tech",     "Laser",          "Player", TRUE
+   }
+;MSAMs have a 33% chance to intercept 8-adjacent bombs (but not missiles)
+[effect_mobile_sam_sdi_effect]
+type    = "Nuke_Intercept_Radius_Odds_Pm"
+value   = 2333  ; radius < 2 == adjacent. 333/1000 = 33.3% probability of survival
+reqs    =
+    { "type",     "name",           "range", "present"
+      "UnitType", "Mobile SAM",     "Local",  TRUE
+      "Tech",     "Laser",          "Player", TRUE
     }
 
 ;City Radius
@@ -4656,15 +4668,26 @@ reqs	=
       "UnitType", "Stealth Fighter", "Local", TRUE
     }
 
-[effect_sdi_defense]
-type    = "Nuke_Proof"
-value   = 100
+;NEW VERSION: 99.9% odds of success, adjacent tiles
+[effect_sdi_radius_defense_odds]
+type    = "Nuke_Intercept_Radius_Odds_Pm"
+value   = 2999 ; adjacent tiles, 500/1000 = 50% odds of success
 reqs    =
-    { "type", "name", "range", "present"
-      "Building", "SDI Defense", "City", TRUE
-      "DiplRel", "Foreign", "Local", TRUE
-      "DiplRel", "Team", "Local", FALSE
+    { "type",     "name",        "range", "present"
+      "Building", "SDI Defense", "City",  TRUE
+      "DiplRel",  "Foreign",     "Local", TRUE
+      "DiplRel",  "Team",        "Local", FALSE
     }
+;LEGACY VERSION: 100% chance on adjacent tiles
+;[effect_sdi_defense]
+;type    = "Nuke_Proof"
+;value   = 100
+;reqs    =
+;    { "type", "name", "range", "present"
+;      "Building", "SDI Defense", "City", TRUE
+;      "DiplRel", "Foreign", "Local", TRUE
+;      "DiplRel", "Team", "Local", FALSE
+;    }
 [effect_sdi_defense_1]
 type    = "Defend_Bonus"
 value	= 100

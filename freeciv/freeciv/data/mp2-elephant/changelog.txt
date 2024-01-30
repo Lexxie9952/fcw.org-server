@@ -237,4 +237,8 @@ i.e., 6 in 5 (swamp), 5 in 4 (mine), 4 in 3 (angkor wat swamp drain) goes to:
 81. Combined Arms now automatically upgrades all Alpines, Riflemen, and Zealots when it is discovered:  no micro-management of moving units around for 4 gold upgrade prices.
 82. Goods and Freight can use railroads because they are passive movement. They can't use Maglev because of their large cargo space requirements.
     This lessens some micromanagement pains and makes good sense too.
-83.
+83. (also recent change to MP2D) - AEGIS and MSAM lose ability to defend their single tile from a successful nuclear detonation. Tile protection in a successful detonation is reserved for the Bunker base type.
+84. (also recent change to MP2D) - AEGIS and MSAM instead get a 50% and 33% chance respectively to use their anti-aircraft capabilites to prevent aircraft-delivered nuclear bombs on adjacent tiles from detonating.
+85. (also recent change to MP2D) - Anti-Ballistic Missiles can intercept all nuclear-type missiles in a 5x5-minus corners area of effect, preventing their detonation. They have a 29% chance of doing so, or in other words, each two ABMs in
+    radius, reduces the chance by 50%. (1 missile: 29%), 2 missiles: 50%, 4 missiles: 25%, 6 missiles: 12.5%, etc.
+86.

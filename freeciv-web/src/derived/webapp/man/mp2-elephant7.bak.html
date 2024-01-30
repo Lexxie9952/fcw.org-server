@@ -2899,7 +2899,7 @@ Veteran Levels for AAA are the default for all other military units:
 <pre class='firepower'>Firepower: 2</pre>
 <pre class='hitpoints'>Hitpoints: 30</pre>
 <pre class='obsolete'>Obsolete by: None</pre>
-<pre class='helptext'><b class='unit_desc'>The Mobile SAM is the strongest Anti-Air unit on the ground. It can attack nearby aircraft and missiles. It has a 2× bonus against Air and 3× against Missiles. The Mobile SAM can also carry 3 Missiles of any type. The discovery of Laser gives all units on its tile a 33% chance to survive nuclear attack.
+<pre class='helptext'><b class='unit_desc'>The Mobile SAM is the strongest Anti-Air unit on the ground. It can attack nearby aircraft and missiles. It has a 2× bonus against Air and 3× against Missiles. The Mobile SAM can also carry 3 Missiles of any type. With upgraded Laser tech, each Mobile SAM has a 33% chance to thwart adjacent nuclear bombs dropped by bombers.
 
 Big Land units can’t enter Mountains without a road, river, or native base.</b>
 <b class='unit_desc'>
@@ -2926,8 +2926,9 @@ AAA can convert to Mobile SAM for free after 9 turns of service. The order must 
   • Helicopter types.
   • Sea units (with 50% penalty).
   • Air, AirProtect, and AirHighAltitude units.
-➤ <b style="color:#9aa">Can defend units on its tile from Nuclear Attack:</b>
-  • 33% chance of success, all units on tile will survive.
+➤ Can <b style="color:#9aa">prevent Nuclear Attack</b> from aircraft-delivered Bombs:
+  • Detonation must be on adjacent tile.
+  • 33% chance of success.
 ➤ Can <b style="color:#9aa">Expel</b>
   • target unit must be alone and not on Mountains.
   • uses ⅔ movement point
@@ -5100,7 +5101,7 @@ Veteran Levels for Missile Destroyers:
 <pre class='firepower'>Firepower: 2</pre>
 <pre class='hitpoints'>Hitpoints: 30</pre>
 <pre class='obsolete'>Obsolete by: None</pre>
-<pre class='helptext'><b class='unit_desc'>The AEGIS Cruiser has an Anti-Air missile system. Radar and sonar give superior vision and 2× defense bonus against Submarines. The AEGIS can carry five Missiles, and is the only ship that can attack Air and Missile units. The discovery of Laser gives all units on the tile a 50% chance to resist nuclear attack.</b>
+<pre class='helptext'><b class='unit_desc'>The AEGIS Cruiser has an Anti-Air missile system. Radar and sonar give superior vision and 2× defense bonus against Submarines. The AEGIS can carry five Missiles, and is the only ship that can attack Air and Missile units. With upgraded Laser tech, each AEGIS Cruiser has a 50% chance to thwart adjacent nuclear bombs dropped by bombers.</b>
 <b class='unit_desc'>Excellent vision and 3× Anti-Air bonus are ideal for scouting and escorting.</b>
 <hr style='border-top: 1px solid #000'>➤ Belongs to <b style='color:#ffc'>Sea</b> unit class.
   • <b style="color:#9aa">Crew Repair</b>: Automatically repairs 10% of its hitpoints each turn, regardless of movement (+3hp)
@@ -5123,8 +5124,9 @@ Veteran Levels for Missile Destroyers:
   • Firepower is reduced to 1. Attack strength is increased +33%
     * Overall effect is -33% reduction in attack strength.
 ➤ <b style="color:#9aa">PORT PENALTY</b>: If attacked in a city, firepower is set to 1 and firepower of attacker is doubled.
-➤ <b style="color:#9aa">Can defend units on its tile from Nuclear Attack:</b>
-  • 50% chance of success, all units on tile will survive.
+➤ Can <b style="color:#9aa">prevent Nuclear Attack</b> from aircraft-delivered Bombs:
+  • Detonation must be on adjacent tile.
+  • 50% chance of success.
 ➤ <b style="color:#9aa">Can attack against Aircraft, Helicopter, or Missile units, which are usually not reachable.</b>
 ➤ Can attack against Submarine units, which are usually not reachable.
 ➤ Attacking with fractional move points gives fractional attack power.
@@ -5449,6 +5451,7 @@ Veteran Levels for Carriers:
 <pre class='hitpoints'>Hitpoints: 1</pre>
 <pre class='obsolete'>Obsolete by: None</pre>
 <pre class='helptext'><b class='unit_desc'>ABMs intercept enemy missiles. Because there is seldom enough time to order a launch against incoming missiles, ABMs are usually set to Vigil, which makes them automatically intercept adjacent missiles.
+In the case of a missile trying non-adjacent nuclear detonation, each ABM on vigil has a 29% chance to intercept it within a 5x5 area of effect (minus the corners).
 ABMs are useful for anti-missile defense outside of cities. They must be cargo on a Mobile SAM or similar missile-capable unit, and set to Vigil. ABMs aren't very effective against non-missiles. As a defensive unit, they cause no unhappiness. After required tech is known, 1 ABM is delivered free to each newly built unit capable of carrying missilies.
 Multi-slot: Under certain conditions, cities can make one (or more) multi-slot units per turn, plus one of any other type.
 
@@ -5466,6 +5469,10 @@ The only way to transport a Missile is by: 1) ending its turn in a city, or 2) A
   • <b style="color:#9aa">AIRLIFT</b>: Can be airlifted if it has remaining moves.
 ➤ <b style="color:#9aa">Unblockable</b>: unreachable units can't block its attacks on reachable units.
 ➤ <b style="color:#9aa">VIGIL</b>: can be given the Vigil order to intercept adjacent enemy missiles.
+  • <b style="color:#9aa">Prevents Nuclear Attack from missiles.</b>
+    • Detonation must be within 21-tile area of effect (5x5 minus 4 corners).
+    • 29.3% chance of success for <u>each</u> ABM within distance.
+    • ABM must be set to Vigil.
 ➤ Largely ineffective against non-Missile units.
 ➤ <b style="color:#9aa">Multislot</b>: Under certain conditions, <b>cities can make one (or more) multislot unit(s) per turn, plus one of any other unit type.</b>
 ➤ <b>Unable to attack air units.</b>
