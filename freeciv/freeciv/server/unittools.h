@@ -29,7 +29,7 @@
 // unit will auto-attack no matter what
 #define AA_ALWAYS 2
 // unit will auto-attack if it has better odds than defending (with some other exceptions)
-#define AA_ODDS   1   
+#define AA_ODDS   1
 // unit will not auto-attack
 #define AA_NO     0
 
