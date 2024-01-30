@@ -1874,8 +1874,8 @@ flags          = "NativeTile", "Refuel", "NoStackDeath", "FortressHeal"
 helptext       = _("\
 Bunkers are underground Fortresses made of concrete and steel, \
 immune to air and missile attacks. In some respects they are the \
-modern equivalent of a Castle. Units inside can’t be seen and are \
-90% resistant to nuclear blasts.\
+modern equivalent of a Castle. Odds of surviving a nuclear blast \
+are 90%. Units inside can’t be seen.\
 ")
 
 [extra_airbase]
