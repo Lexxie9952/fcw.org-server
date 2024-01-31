@@ -165,7 +165,7 @@ int utype_upkeep_cost(const struct unit_type *ut, struct player *pplayer,
     }
   }
 
-  val *= get_player_output_bonus(pplayer, get_output_type(otype), 
+  val *= get_player_output_bonus(pplayer, get_output_type(otype),
                                  EFT_UPKEEP_FACTOR);
   return val;
 }
@@ -174,7 +174,7 @@ int utype_upkeep_cost(const struct unit_type *ut, struct player *pplayer,
   Return the "happy cost" (the number of citizens who are discontented)
   for this unit.
 **************************************************************************/
-int utype_happy_cost(const struct unit_type *ut, 
+int utype_happy_cost(const struct unit_type *ut,
                      const struct player *pplayer)
 {
   return ut->happy_cost * get_player_bonus(pplayer, EFT_UNHAPPY_FACTOR);
@@ -186,6 +186,45 @@ int utype_happy_cost(const struct unit_type *ut,
 bool unit_has_type_flag(const struct unit *punit, enum unit_type_flag_id flag)
 {
   return utype_has_flag(unit_type_get(punit), flag);
+}
+
+/**********************************************************************//**
+  Return whether the unit has the given ruleset-defined (user) flag.
+  This only checks custom ruleset flags. Use the much more efficient
+  unit_has_type_flag(UTYF_xyz), for all hard-coded/reserved UTYF's.
+  ~*~
+  This function allows user_type_flags of a given name to be invoked by
+  ruleset designers, for certain optional effects/mechanics, without that
+  flag being hard-coded into an overly long list of reserved UTYF defs.
+**************************************************************************/
+bool unit_has_user_flag_named(const struct unit *punit,
+                              const char *name)
+{
+  return utype_has_user_flag_named(unit_type_get(punit), name);
+}
+/**********************************************************************//**
+  Return whether the unit_type has the given ruleset-defined (user) flag.
+  If checking for a reserved UTYF, utype_has_flag(*utype, UTYF_xyz)
+  must be used.
+  ~*~
+  This function allows user_type_flags of a given name to be invoked by
+  ruleset designers, for certain optional effects/mechanics, without that
+  flag being hard-coded into an overly long list of reserved UTYF defs.
+**************************************************************************/
+bool utype_has_user_flag_named(const struct unit_type *punittype,
+                          const char *name)
+{
+  // Loop and find every user type flag the utype has:
+  for (int id = UTYF_USER_FLAG_1; id <= UTYF_LAST_USER_FLAG; id++) {
+    // Check only the flags the unit really has:
+    if (utype_has_flag(punittype, id)) {
+      // If it has the flag with this name, then return TRUE:
+      if (0 == strcmp(name, unit_type_flag_id_name_cb(id))) {
+        return TRUE;
+      }
+    }
+  }
+  return FALSE;
 }
 
 /**********************************************************************//**
@@ -1340,13 +1379,13 @@ const struct unit_type *can_upgrade_unittype(const struct player *pplayer,
 
 /**********************************************************************//**
   Return the cost (gold) of upgrading a single unit of the specified type
-  to the new type.  
+  to the new type.
   FORMERLY:
   "This price could (but currently does not) depend on other attributes
   (like nation or government type) of the player the unit belongs to."
   2022.Jan.19:
   This price may depend on other attributes like nation or government
-  type of the player the unit belongs to THEREFORE needs to send 
+  type of the player the unit belongs to THEREFORE needs to send
   *pplayer to unit_shield_value
 **************************************************************************/
 int unit_upgrade_price(const struct player *pplayer,
@@ -2520,10 +2559,10 @@ bool utype_is_cityfounder(const struct unit_type *utype)
 /**********************************************************************//**
   ************* NOTE: THIS FUNCTION HAS TO BE MAINTAINED TO BE IDENTICAL
   to the function of the same name in unit.js
-  -------------------------------------------------------------------------  
+  -------------------------------------------------------------------------
   Return the extra_unit_stats for this unit by filling in *pstats
 **************************************************************************/
-void unit_get_extra_stats(struct extra_unit_stats *pstats, 
+void unit_get_extra_stats(struct extra_unit_stats *pstats,
                           const struct unit *punit)
 {
   fc_assert(NULL != punit);
@@ -2535,10 +2574,10 @@ void unit_get_extra_stats(struct extra_unit_stats *pstats,
 /**********************************************************************//**
   ************* NOTE: THIS FUNCTION HAS TO BE MAINTAINED TO BE IDENTICAL
   to the function of the same name in unit.js
-  -------------------------------------------------------------------------  
+  -------------------------------------------------------------------------
   Return the extra_unit_stats for this unit_type by filling in *pstats
 **************************************************************************/
-void utype_get_extra_stats(struct extra_unit_stats *pstats, 
+void utype_get_extra_stats(struct extra_unit_stats *pstats,
                            const struct unit_type *ptype)
 {
   fc_assert(NULL != ptype);
@@ -2548,7 +2587,7 @@ void utype_get_extra_stats(struct extra_unit_stats *pstats,
    * this a non-ideal var for storing bitfield since:
     we lose bit resolution (in 60 frags: 32 down to 26: BIT25 is our max) */
 
-  int BB = ptype->paratroopers_mr_sub / SINGLE_MOVE;        
+  int BB = ptype->paratroopers_mr_sub / SINGLE_MOVE;
 
   /* extra_unit_stats are currently embedded in paratroopers_mr_sub,
      which means if it that var is being used by a real paratrooper,
@@ -2576,9 +2615,9 @@ void utype_get_extra_stats(struct extra_unit_stats *pstats,
   // Bit 11-15: # of rounds of Bombard retaliation
   pstats->bombard_retaliate_rounds =
                                 (BB & 0b1111100000000000) >> 11;
-  // Bit 16-18: # of max attacks per turn                              
+  // Bit 16-18: # of max attacks per turn
   pstats->max_attacks =      (BB & 0b1110000000000000000) >> 16;
-                            
+
 
   /* Adjustments of the raw encoded values to match their purpose: */
 
@@ -2624,7 +2663,7 @@ bool utype_can_iPillage(const struct unit_type *ptype)
 /**********************************************************************//**
   Return the bombard_stats for this unit by filling in *pstats
 **************************************************************************/
-void unit_get_bombard_stats(struct bombard_stats *pstats, 
+void unit_get_bombard_stats(struct bombard_stats *pstats,
                             const struct unit *punit)
 {
   fc_assert(NULL != punit);
@@ -2636,7 +2675,7 @@ void unit_get_bombard_stats(struct bombard_stats *pstats,
 /**********************************************************************//**
   Return the bombard_stats for this unit_type by filling in *pstats
 **************************************************************************/
-void utype_get_bombard_stats(struct bombard_stats *pstats, 
+void utype_get_bombard_stats(struct bombard_stats *pstats,
                              const struct unit_type *ptype)
 {
   fc_assert(NULL != ptype);
@@ -2644,7 +2683,7 @@ void utype_get_bombard_stats(struct bombard_stats *pstats,
   // extract bits from unused city_size field (for savegame compat)
   // FIXME: on next upgrade that breaks savegame, get this data from
   // a new and normal set of data fields
-  int BB = ptype->city_size;         
+  int BB = ptype->city_size;
 
   // Preserve a copy of the bombard flags/stats:
   pstats->bit_field = BB;
@@ -2659,14 +2698,14 @@ void utype_get_bombard_stats(struct bombard_stats *pstats,
   // Bits 11-13: Max # of kills possible on primary targets (0==none)
   pstats->bombard_primary_kills =(BB & 0b11100000000000) >> 11;
   // Bits 14-19: bombard_atk_mod
-  /* How to get the most out of 6 bits? 
+  /* How to get the most out of 6 bits?
      For positive values, each unit is worth +25%, taking us up to 31*25 = +775% or 8.75x
      For negative values, each unit is worth -3%, taking us down to 31*-3 = -93%
    */
   pstats->bombard_atk_mod= (BB & 0b01111100000000000000) >> 14;
   if /* signed bit for - */(BB & 0b10000000000000000000) {
     pstats->bombard_atk_mod *= -3;
-  } 
+  }
   else {
     pstats->bombard_atk_mod *= 25;
   }

@@ -90,9 +90,9 @@ struct ai_type;
  * that has _a specific name_ which will trigger various special and
  * detailed game mechanics for any unit_class that has a user-UCF
  * with that specially reserved name.
- * 
+ *
  * The necessity of having reserved RUUCF's is caused by deprecation
- * of various legacy hard-coded UCF's such as UCF_MISSILE. This is 
+ * of various legacy hard-coded UCF's such as UCF_MISSILE. This is
  * not a bad thing. It's BRILLIANT to gain the ability to opt in to
  * special game mechanics via user-UCF's that access those mechanics
  * simply by a custom user UCF that bears the reserved name. Q:How is it
@@ -101,7 +101,7 @@ struct ai_type;
  * quick creation of nearly infinite special mechanics on thy fly
  * without the creation of a single #define'd and hard-coded UCF. Of
  * course, just as with hard-coded #define'd UCF's, it's important to
- * inventory the list of RUUCF's in this file, here, below:  
+ * inventory the list of RUUCF's in this file, here, below:
  * -------------------------------------------------------------------*/
 
 /* List of RESERVED user-UCF names and their special mechanics:
@@ -122,11 +122,11 @@ struct ai_type;
  *                    actionenablers during intensely recursive pathfinding is very very bad.
  *
  * "HarmlessCargo"    {{Background info: by default, autoattacks don't happen to any
- *                    tile that has a cargo-carrying unit on it. Because the server takes a 
- *                    pessimist view of unknown cargo in order to avoid baiting exploits. It assumes 
+ *                    tile that has a cargo-carrying unit on it. Because the server takes a
+ *                    pessimist view of unknown cargo in order to avoid baiting exploits. It assumes
  *                    the worst (that the cargo can defend and that it's a super strong defender.)}}
  *                    The "HarmlessCargo" flag is for cases like Bombers carrying Bombs, which should
- *                    in no case deter a Fighter from autoattacking it. If a unit class has the 
+ *                    in no case deter a Fighter from autoattacking it. If a unit class has the
  *                    HarmlessCargo flag, the autoattacker will not automatically refrain from
  *                    autoattacks because of pessimistic fear about invisible cargo.
 */
@@ -238,8 +238,8 @@ struct unit_class {
 #define SPECENUM_VALUE6 UTYF_FIELDUNIT
 #define SPECENUM_VALUE6NAME N_("?unitflag:FieldUnit")
 /* a unit will choose to autoattack a unit flagged PROVOKING even if
- * defending against it has better odds. 
- * if autoattack_style==1 (AA_ADVANCED), then more advanced ruleset 
+ * defending against it has better odds.
+ * if autoattack_style==1 (AA_ADVANCED), then more advanced ruleset
  * conditions apply. */
 #define SPECENUM_VALUE7 UTYF_PROVOKING
 #define SPECENUM_VALUE7NAME N_("?unitflag:Provoking")
@@ -328,17 +328,17 @@ struct unit_class {
 /* Unit can always defend while transported, even on non-native terrain  */
 #define SPECENUM_VALUE34 UTYF_TRANSPORTDEFENDER
 #define SPECENUM_VALUE34NAME N_("?unitflag:TransportDefender")
-/* These units always behave as sentry (e.g. fortified snipers, air 
+/* These units always behave as sentry (e.g. fortified snipers, air
    reconnaissance units who can't sentry because !refuel tile, etc.) */
 #define SPECENUM_VALUE35 UTYF_SENTRYALWAYS
 #define SPECENUM_VALUE35NAME N_("?unitflag:SentryAlways")
-/* Under autoattack_style=1, does not limit itself to autoattack only 
+/* Under autoattack_style=1, does not limit itself to autoattack only
    units with the flag UTYF_PROVOKING, but will autoattack anything except
-   UTYF_NONPROVOKING. */  
+   UTYF_NONPROVOKING. */
 #define SPECENUM_VALUE36 UTYF_AVIDATTACKER
 #define SPECENUM_VALUE36NAME N_("?unitflag:AvidAttacker")
 /* The following flag currently is a combination of StackSafe and StackAnchor,
-   and will be split into those 2 separate flags since they have 2 separate 
+   and will be split into those 2 separate flags since they have 2 separate
    dynamics. Currently, it does both.
    StackSafe = does not die when its stack dies
    StackAnchor = CanEscape units do not flee to other tiles this unit is present */
@@ -711,7 +711,7 @@ struct unit_type {
 };
 
 /************************************************************************
- * BOMBARD MECHANICS ADDITION 
+ * BOMBARD MECHANICS ADDITION
  * **********************************************************************/
 struct bombard_stats {
   int bit_field;                  // raw bit field currently taken from unit_type.city_size
@@ -733,14 +733,14 @@ struct bombard_stats {
   // RESERVED for later use
   struct name_translation name;       // unique name for this type of ranged attack
   char sound_fight[MAX_LEN_NAME];     // different sound for bombardment
-  char sound_fight_alt[MAX_LEN_NAME]; 
+  char sound_fight_alt[MAX_LEN_NAME];
 };
 
 void unit_get_bombard_stats(struct bombard_stats *pstats, const struct unit *punit);
 void utype_get_bombard_stats(struct bombard_stats *pstats, const struct unit_type *ptype);
 /************************************************************************
- * EXTRA STATS ADDITION: paradrop vars are bit fields, dirty way to 
- * maintain savegame compat. TO DO: next major upgrade, create more 
+ * EXTRA STATS ADDITION: paradrop vars are bit fields, dirty way to
+ * maintain savegame compat. TO DO: next major upgrade, create more
  * blank fields.
  * **********************************************************************/
 struct extra_unit_stats {
@@ -748,15 +748,15 @@ struct extra_unit_stats {
 
   bool attack_stay_fortified;     // Bit 0
   bool iPillage;                  // Bit 1    - Whether pillage can be done instantly
-  int  iPillage_moves;            // Bits 2-4 - Moves expended from an iPillage 
-  
+  int  iPillage_moves;            // Bits 2-4 - Moves expended from an iPillage
+
   int iPillage_odds;              // Bits 5-8 - odds of success expressed as 100-(6*)
   int iPillage_random_targets;    // Bit 9-10:  non-zero==randomly pick x targets. 0==user select target.
   int bombard_retaliate_rounds;   // Bits 11-15:number of rounds of bombard retaliation when bombarded
   int max_attacks;                // Bits 16-18:max number of attacks per turn, e.g., 001 = 'OneAttack'
     /****** NOTE ****** A retaliator should be aware to also set the following bombard_stats,
        which are used in its retaliation but do NOT enable initiated bombardment, per se:
-                                           bombard_primary_targets 
+                                           bombard_primary_targets
                                            bombard_primary_kills
                                            bombard_atk_mod */
 
@@ -768,7 +768,7 @@ struct extra_unit_stats {
   int attack_primary_kills;       // can't kill more than this in a stack kill event
   int attack_collateral_targets;  // number of non-kills in a stack death that can be damaged
   int attack_collateral_damage_pct;// % hitpoints lost to collateral units
- 
+
   int stealth_terrain_type[3];     // index to terrain types this unit becomes "stealth" in
   int stealth_terrain_class;       // terrain class this unit comes stealth in OR'd with above
 
@@ -805,7 +805,12 @@ const char *utype_values_string(const struct unit_type *punittype);
 const char *utype_values_translation(const struct unit_type *punittype);
 
 /* General unit type flag and role routines */
-bool unit_has_type_flag(const struct unit *punit, enum unit_type_flag_id flag);
+bool unit_has_type_flag(const struct unit *punit,
+                        enum unit_type_flag_id flag);
+bool unit_has_user_flag_named(const struct unit *punit,
+                              const char *name);
+bool utype_has_user_flag_named(const struct unit_type *punittype,
+                          const char *name);
 
 /**************************************************************************
   Return whether the given unit type has the flag.
