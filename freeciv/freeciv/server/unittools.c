@@ -3685,6 +3685,7 @@ static void do_nuke_tile(struct player *pplayer, struct tile *ptile,
                          bool is_fusion)
 {
   struct city *pcity = NULL;
+  int nuke_flag_id = get_user_flag_id_by_name("Nuclear");
   int survival_chance = 0;  // adjusted ver. of base_survival_chance
   int pop_loss;
 
@@ -3703,28 +3704,41 @@ static void do_nuke_tile(struct player *pplayer, struct tile *ptile,
 
   pcity = tile_city(ptile);
 
-//---NUKE UNITS nuked on the tile. Result is killed, damaged, or unharmed. ---------//
+//---NUKE UNITS on the tile. Result is killed, damaged, or unharmed. ---------//
   unit_list_iterate_safe(ptile->units, punit) {
+    bool defender_is_nuke = (nuke_flag_id < 0)
+                          ? FALSE
+                          : unit_has_type_flag(punit, nuke_flag_id);
 
-    /* ruleset specified chance to survive the nuke: */
-    int counter_eft = get_target_bonus_effects(
-                        NULL,                       // effect_list *plist
-                        unit_owner(punit),          // target player
-                        pplayer,                    // other player
-                        pcity,                      // target city
-                        NULL,                       // target building
-                        ptile,                      // target tile
-                        punit,                      // target unit
-                        unit_type_get(punit),       // target unittype
-                        NULL,                       // target output
-                        NULL,                       // target specialist
-                        NULL,                       // target action
-                        EFT_NUKE_SURVIVAL_PCT,
-                        V_COUNT);
+    /* ruleset specified modifier to defender, to survive the nuke: */
+    int counter_eft = 0;
+    /* For simplicity, EFT_NUKE_SURVIVAL_PCT aggregates both defenders and
+     * attackers with a single effect. For defending nuke units, don't count
+     * their EFT meant as an offensive bonus, as a penalty when they are a
+     * defender. Just the opposite, Nuke units are sheltered carefully
+     * underground to provide Mutually Assured Destruction deterrence */
+    if (!defender_is_nuke) {
+      counter_eft = get_target_bonus_effects(
+                          NULL,                       // effect_list *plist
+                          unit_owner(punit),          // target player
+                          pplayer,                    // other player
+                          pcity,                      // target city
+                          NULL,                       // target building
+                          ptile,                      // target tile
+                          punit,                      // target unit
+                          unit_type_get(punit),       // target unittype
+                          NULL,                       // target output
+                          NULL,                       // target specialist
+                          NULL,                       // target action
+                          EFT_NUKE_SURVIVAL_PCT,
+                          V_COUNT);
+    } else {
+      counter_eft = 10;  // Give a M.A.D. boost of +10
+    }
 
     /* final chance = EFT_ATTACKER (base_survival_chance)
                       + nuke_defender_survival_chance_pct (from ruleset)
-                      + EFT_DEFENDER                                  */
+                      + EFT_DEFENDER (counter_eft)                   */
     survival_chance = base_survival_chance
                     + (pcity ? game.info.nuke_defender_survival_chance_pct : 0)
                     + counter_eft;
@@ -3734,14 +3748,14 @@ static void do_nuke_tile(struct player *pplayer, struct tile *ptile,
     }
     survival_chance = CLIP(0, survival_chance, 100);
 
-    /* DEBUG
+    /* DEBUG */
     notify_player(unit_owner(punit), ptile, E_BEGINNER_HELP, ftc_server,
                   _("Chance for %s to survive is %d+%d+%d == %d"),
                   unit_link(punit),
                   base_survival_chance,
                   (pcity ? game.info.nuke_defender_survival_chance_pct : 0),
                   counter_eft,
-                  survival_chance); */
+                  survival_chance);
 
     /* KILL UNITS */
     if (survival_chance <= fc_rand(100)) {
