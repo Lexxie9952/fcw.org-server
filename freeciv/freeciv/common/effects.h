@@ -373,22 +373,26 @@ extern "C" {
  e.g. sq_radius 2 with 33.3% odds: val = 5333. */
 #define SPECENUM_VALUE143 EFT_NUKE_INTERCEPT_RADIUS_ODDS_PM
 #define SPECENUM_VALUE143NAME "Nuke_Intercept_Radius_Odds_Pm"
+/* Chance for units or citizens to survive a nuclear blast. Server settings and mechanics affect behaviour!
+   See README.effects for more info. */
+#define SPECENUM_VALUE144 EFT_NUKE_SURVIVAL_PCT
+#define SPECENUM_VALUE144NAME "Nuke_Survival_Pct"
 /* Modifies the chance the actor will raze buildings when conquering cities */
-#define SPECENUM_VALUE144 EFT_RAZE_BUILDING_PCT
-#define SPECENUM_VALUE144NAME "Raze_Building_Pct"
+#define SPECENUM_VALUE145 EFT_RAZE_BUILDING_PCT
+#define SPECENUM_VALUE145NAME "Raze_Building_Pct"
 /* Modifies COMBAT_ROUNDS from defending unit's req-scope perspective. See README.effects */
-#define SPECENUM_VALUE145 EFT_DEFENDER_COMBAT_ROUNDS
-#define SPECENUM_VALUE145NAME "Defender_Combat_Rounds"
+#define SPECENUM_VALUE146 EFT_DEFENDER_COMBAT_ROUNDS
+#define SPECENUM_VALUE146NAME "Defender_Combat_Rounds"
 /* Adjusts the unit's base min_speed from its unit_class, by amount */
-#define SPECENUM_VALUE146 EFT_UNIT_MIN_SPEED
-#define SPECENUM_VALUE146NAME "Unit_Min_Speed"
+#define SPECENUM_VALUE147 EFT_UNIT_MIN_SPEED
+#define SPECENUM_VALUE147NAME "Unit_Min_Speed"
 /* Marines using a Transport all day can lose a % of their move_rate like the Transport
  * itself. Measured in SA Basis Points (10080 instead of 10000). See README.effects */
-#define SPECENUM_VALUE147 EFT_PASSENGER_MOVE_COST_BP
-#define SPECENUM_VALUE147NAME "Passenger_Move_Cost_Bp"
+#define SPECENUM_VALUE148 EFT_PASSENGER_MOVE_COST_BP
+#define SPECENUM_VALUE148NAME "Passenger_Move_Cost_Bp"
 /* Output losses when Gulag effects circumvent disorder */
-#define SPECENUM_VALUE148 EFT_GULAG_LOST_INCOME_PCT
-#define SPECENUM_VALUE148NAME "Gulag_Lost_Income_Pct"
+#define SPECENUM_VALUE149 EFT_GULAG_LOST_INCOME_PCT
+#define SPECENUM_VALUE149NAME "Gulag_Lost_Income_Pct"
 /* 🖐🏻 ******* 👆🏻👇🏻
  * FCW does not have /common and needs to hard code any changes or re-ordering of the above in effects.js */
 /********************************************************************************************************~*/

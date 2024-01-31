@@ -174,7 +174,9 @@ void send_all_known_units(struct conn_list *dest);
 void unit_goes_out_of_sight(struct player *pplayer, struct unit *punit);
 
 /* doing a unit activity */
-void do_nuclear_explosion(struct player *pplayer, struct tile *ptile, int extra_radius_sq, const char *unit_name);
+void do_nuclear_explosion(struct player *pplayer, struct tile *ptile,
+                          int extra_radius_sq, const char *unit_name,
+                          int survival_chance);
 bool do_airline(struct unit *punit, struct city *city2);
 void do_explore(struct unit *punit);
 bool do_paradrop(struct unit *punit, struct tile *ptile, const struct action *paction);

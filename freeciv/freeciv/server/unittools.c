@@ -117,8 +117,6 @@ struct autoattack_prob {
   struct act_prob prob;
 };
 
-int nuke_count = 0;  // globally keep track of number of nuke detonations.
-
 #define SPECLIST_TAG autoattack_prob
 #define SPECLIST_TYPE struct autoattack_prob
 #include "speclist.h"
@@ -3649,21 +3647,45 @@ void send_all_known_units(struct conn_list *dest)
 }
 
 /**********************************************************************//**
-  Nuke a square: 1) remove all units on the square, and 2) halve the
-  size of the city on the square.
+  Possibly put fallout on a nuked tile.
+**************************************************************************/
+static void maybe_do_fallout(struct tile *ptile, int pct_chance) {
+  /* In legacy freeciv, a standard nuke has a 50% chance of doing fallout
+     on 9 tiles. Now we call the ground_zero twice, which is 10 calls total.
+     Balance the odds for the amount of generated fallout to be roughly same.
+     50% * 9 = x * 10. x = 45%. (Although we could make this an EFT, it's
+     probably not worth the "cost" of inflating the effects list.)
+  */
+  if (fc_rand(100) < pct_chance) {
+    struct extra_type *pextra = rand_extra_for_tile(ptile, EC_FALLOUT, FALSE);
 
-  If it isn't a city square or an ocean square then with 50% chance add
-  some fallout, then notify the client about the changes.
+    if (pextra != NULL && !tile_has_extra(ptile, pextra)) {
+      tile_add_extra(ptile, pextra);
+      update_tile_knowledge(ptile);
+    }
+  }
+}
+/**********************************************************************//**
+  Nuke a tile: 1) remove or damage a percentage of units on the tile,
+  2) reduce the size of the city on the tile, 3) send odds to
+  maybe_do_fallout() for adding some fallout, then notify the client
+  about the changes.
 
-  'suppress' means do_nuke_tile will be called a second time for this
-    tile, or it's ground zero of a fusion explosion. This lets us know
-    to suppress double-redundant messaging and double-redundant
-    remove_city() calls.
+  'base_survival_chance' - a modifier for the percent of citizens
+  and units to kill, that was determined from the effects assigned to
+  the (now wiped) nuclear unit. Base value gets adjusted herein.
+
+  'ground_zero' - whether the tile nuked is ground zero of the explosion.
+
+  'is_fusion' - lets us know if calling function will totally annihilate
+                the city so that we don't need to reduce population here.
 **************************************************************************/
 static void do_nuke_tile(struct player *pplayer, struct tile *ptile,
-                         bool suppress)
+                         int base_survival_chance, bool ground_zero,
+                         bool is_fusion)
 {
   struct city *pcity = NULL;
+  int survival_chance = 0;  // adjusted ver. of base_survival_chance
   int pop_loss;
 
   bool protected = is_tile_nuke_proof(ptile);
@@ -3681,50 +3703,124 @@ static void do_nuke_tile(struct player *pplayer, struct tile *ptile,
 
   pcity = tile_city(ptile);
 
+//---NUKE UNITS nuked on the tile. Result is killed, damaged, or unharmed. ---------//
   unit_list_iterate_safe(ptile->units, punit) {
 
-    /* unit in a city may survive */
-    if (pcity && fc_rand(100) < game.info.nuke_defender_survival_chance_pct) {
-      continue;
+    /* ruleset specified chance to survive the nuke: */
+    int counter_eft = get_target_bonus_effects(
+                        NULL,                       // effect_list *plist
+                        unit_owner(punit),          // target player
+                        pplayer,                    // other player
+                        pcity,                      // target city
+                        NULL,                       // target building
+                        ptile,                      // target tile
+                        punit,                      // target unit
+                        unit_type_get(punit),       // target unittype
+                        NULL,                       // target output
+                        NULL,                       // target specialist
+                        NULL,                       // target action
+                        EFT_NUKE_SURVIVAL_PCT,
+                        V_COUNT);
+
+    /* final chance = EFT_ATTACKER (base_survival_chance)
+                      + nuke_defender_survival_chance_pct (from ruleset)
+                      + EFT_DEFENDER                                  */
+    survival_chance = base_survival_chance
+                    + (pcity ? game.info.nuke_defender_survival_chance_pct : 0)
+                    + counter_eft;
+    // Opt-in for user unit type flag "Nuclear" to receive the M.A.D. bonus.
+    if (unit_has_user_flag_named(punit, "Nuclear")) {
+      survival_chance *= 2;
     }
-    notify_player(unit_owner(punit), ptile, E_UNIT_LOST_MISC, ftc_server,
-                  _("[`nuclearexplosion`] Your %s %s %s nuked by %s."),
-                  unit_tile_link(punit), UNIT_EMOJI(punit),
-                  (is_unit_plural(punit) ? "were" : "was"),
-                  pplayer == unit_owner(punit)
-                  ? _("yourself")
-                  : nation_plural_for_player(pplayer));
-    if (unit_owner(punit) != pplayer) {
-      notify_player(pplayer, ptile, E_NUKE, ftc_server,
-                    _("[`nuclearexplosion`] The %s %s %s %s nuked."),
-                    nation_adjective_for_player(unit_owner(punit)),
+    survival_chance = CLIP(0, survival_chance, 100);
+
+    /* DEBUG
+    notify_player(unit_owner(punit), ptile, E_BEGINNER_HELP, ftc_server,
+                  _("Chance for %s to survive is %d+%d+%d == %d"),
+                  unit_link(punit),
+                  base_survival_chance,
+                  (pcity ? game.info.nuke_defender_survival_chance_pct : 0),
+                  counter_eft,
+                  survival_chance); */
+
+    /* KILL UNITS */
+    if (survival_chance <= fc_rand(100)) {
+      notify_player(unit_owner(punit), ptile, E_UNIT_LOST_MISC, ftc_server,
+                    _("[`reddiamond`] Your %s %s %s nuked by %s."),
                     unit_tile_link(punit), UNIT_EMOJI(punit),
-                    (is_unit_plural(punit) ? "were" : "was"));
-    }
-    wipe_unit(punit, ULR_NUKE, pplayer);
-  } unit_list_iterate_safe_end;
-
-
-  if (pcity) {
-    if (!suppress) {
-      notify_player(city_owner(pcity), ptile, E_CITY_NUKED, ftc_server,
-                    _("[`nuclearexplosion`] %s was nuked by %s."),
-                    city_link(pcity),
-                    pplayer == city_owner(pcity)
+                    (is_unit_plural(punit) ? "were" : "was"),
+                    pplayer == unit_owner(punit)
                     ? _("yourself")
                     : nation_plural_for_player(pplayer));
+      if (unit_owner(punit) != pplayer && !pcity) {      // Can't see what happened inside a city.
+        notify_player(pplayer, ptile, E_NUKE, ftc_server,
+                      _("[`headstone`] The %s %s %s %s nuked."),
+                      nation_adjective_for_player(unit_owner(punit)),
+                      unit_tile_link(punit), UNIT_EMOJI(punit),
+                      (is_unit_plural(punit) ? "were" : "was"));
+      }
+      wipe_unit(punit, ULR_NUKE, pplayer);
+    }
+    /* INJURE UNITS */
+    else {
+      int max_hp_loss = punit->hp;
 
-      if (city_owner(pcity) != pplayer) {
-        notify_player(pplayer, ptile, E_CITY_NUKED, ftc_server,
-                      _("[`nuclearexplosion`] You nuked %s."),
-                      city_link(pcity));
+      /* Chance that a unit in a city survives totally unscathed! */
+      if (pcity && fc_rand(100) < game.info.nuke_defender_survival_chance_pct) {
+        max_hp_loss = 0; // e.g., if n_d_s_c_p is 25%, then 25% survivors are unscathed.
+        //continue; Commented out so that we get a survival message.
+      }
+
+      int hp_lost = fc_rand(max_hp_loss);
+      punit->hp -= hp_lost;
+
+      if (punit->hp < 1) {
+        hp_lost -= (1 - punit->hp);
+        punit->hp = 1; // Insurance: avoid rounding error
+      }
+
+      if (hp_lost) {
+        notify_player(unit_owner(punit), ptile, E_UNIT_WIN_DEF, ftc_server,
+                      _("[`yellowdiamond`] Your %s %s survived the nuke by %s, losing %d hp."),
+                      unit_tile_link(punit), UNIT_EMOJI(punit),
+                      (pplayer == unit_owner(punit)
+                      ? _("yourself")
+                      : nation_plural_for_player(pplayer)),
+                      hp_lost);
+        // Injured units need to refresh clients' hp info:
+        send_unit_info(NULL, punit);
+      } else {
+          notify_player(unit_owner(punit), ptile, E_UNIT_ESCAPED, ftc_server,
+                        _("[`greendiamond`] Your %s %s survived the nuke by %s."),
+                        unit_tile_link(punit), UNIT_EMOJI(punit),
+                        (pplayer == unit_owner(punit)
+                        ? _("yourself")
+                        : nation_plural_for_player(pplayer)));
       }
     }
+  } unit_list_iterate_safe_end;
 
-    // Reduce city size by half.
+//---NUKE CITIZENS in a city: reduce city population----------------------------------------//
+//---Thermonuclear fusion annihilation at Ground Zero is handled by caller, not here--------//
+  if (pcity && !(is_fusion && ground_zero)) {
 
-    // Half of one is zero: DESTROY IT (but not on first pass)
-    if (pcity && city_size_get(pcity) == 1 && !suppress) {
+    notify_player(city_owner(pcity), ptile, E_CITY_NUKED, ftc_server,
+                  _("[`nuclearexplosion`] %s was nuked by %s."),
+                  city_link(pcity),
+                  pplayer == city_owner(pcity)
+                  ? _("yourself")
+                  : nation_plural_for_player(pplayer));
+
+    if (city_owner(pcity) != pplayer) {
+      notify_player(pplayer, ptile, E_CITY_NUKED, ftc_server,
+                    _("[`nuclearexplosion`] You nuked %s."),
+                    city_link(pcity));
+    }
+
+    // Reduce city population.
+
+    // Destroy size one cities:
+    if (city_size_get(pcity) == 1) {
       int saved_id = pcity->id;
 
       notify_player(city_owner(pcity), ptile, E_CITY_NUKED, ftc_server,
@@ -3733,7 +3829,7 @@ static void do_nuke_tile(struct player *pplayer, struct tile *ptile,
 
       if (city_owner(pcity) != pplayer) {
         notify_player(pplayer, ptile, E_CITY_NUKED, ftc_server,
-        _("[`nuclearexplosion`] %s was annihilated by a nuclear detonation."),
+        _("[`skull`] %s was annihilated by a nuclear detonation."),
           city_link(pcity));
       }
       script_server_signal_emit("city_destroyed", pcity, city_owner(pcity), pplayer);
@@ -3742,62 +3838,56 @@ static void do_nuke_tile(struct player *pplayer, struct tile *ptile,
         remove_city(pcity);
       }
     }
-    // Reduce size by nuke_pop_loss_pct
+    // Reduce size by (nuke_pop_loss_pct - base_survival_chance) %
     else {
-      pop_loss = (game.info.nuke_pop_loss_pct * city_size_get(pcity)) / 100;
+      int death_pct = CLIP(0, game.info.nuke_pop_loss_pct - base_survival_chance, 100);
+      pop_loss = MAX(1, death_pct * city_size_get(pcity) / 100);
+
+      notify_player(pplayer, ptile, E_CITY_NUKED, ftc_server,
+                    _("%s loses %d%% of its population. (%d deaths)"),
+                    city_link(pcity),
+                    death_pct,
+                    pop_loss);
+
       if (city_reduce_size(pcity, pop_loss, pplayer, "nuke")) {
         send_city_info(NULL, pcity);
       }
       update_tile_knowledge(ptile);
     }
   }
-
-  // 50% chance of Fallout.
-  if (fc_rand(2) == 1) {
-    struct extra_type *pextra;
-
-    pextra = rand_extra_for_tile(ptile, EC_FALLOUT, FALSE);
-    if (pextra != NULL && !tile_has_extra(ptile, pextra)) {
-      tile_add_extra(ptile, pextra);
-      update_tile_knowledge(ptile);
-    }
-  }
+  /* Fallout. Increase odds at ground_zero or if fusion explosion */
+  maybe_do_fallout(ptile, 45);                    // 45.00% odds
+  if (ground_zero) maybe_do_fallout(ptile,45);    // 69.75% odds
+  else if (is_fusion) maybe_do_fallout(ptile,32); // 62.50% odds
 }
 
 /**********************************************************************//**
   Nuke all the squares in a sqrt(2+extra_radius_sq) area around the center
   of the explosion. High radius is considered fusion explosion with worse
-  effects. pplayer is the player that caused the explosion.
+  fallout. 'pplayer' is the player that caused the explosion.
+  The nuke has already been spent when we get here, so 'survival_chance'
+  was pre-calculated from the effects that do so, and passed in.
 **************************************************************************/
 void do_nuclear_explosion(struct player *pplayer, struct tile *ptile,
-                          int extra_radius_sq, const char *unit_name)
+                          int extra_radius_sq, const char *unit_name,
+                          int survival_chance)
 {
   int max_radius_sq = DEFAULT_DETONATION_RADIUS_SQ + extra_radius_sq;
   bool is_fusion = (max_radius_sq >= FUSION_DETONATION_RADIUS_SQ);
   struct city *pcity = NULL;
 
-// old code: not that special
-//   square_iterate(&(wld.map), ptile, 1, ptile1) {
-//    do_nuke_tile(pplayer, ptile1);
-//  } square_iterate_end;
+  /* DEBUG
+  notify_player(pplayer, ptile, E_BEGINNER_HELP, ftc_server,
+      _("[`nuclearexplosion`] Began a nuclear explosion with survival chance of %d"),
+        survival_chance); */
 
   circle_dxyr_iterate(&(wld.map), ptile, max_radius_sq, ptile1, dx, dy, dr) {
-    do_nuke_tile(pplayer, ptile1, is_fusion); //is_fusion==true means suppress redundant remove_city() and notify_player() messages
-    // Fusion detonation is double nasty, reduces to 1/4 pop:
-    if (is_fusion && tile_city(ptile1)) {
-      bool suppress = (ptile==ptile1); // fusion @ ground zero! suppress remove_city and messages again: it's going to be annihilated further below
-      do_nuke_tile(pplayer, ptile1, suppress); // false==not first pass, go ahead and message/annihilate tiles.
-    }
+    bool ground_zero = (ptile==ptile1);
+    do_nuke_tile(pplayer, ptile1, survival_chance, ground_zero, is_fusion);
   } circle_dxyr_iterate_end;
 
   script_server_signal_emit("nuke_exploded", 2, API_TYPE_TILE, ptile,
                             API_TYPE_PLAYER, pplayer);
-  notify_conn(NULL, ptile, E_NUKE, ftc_server,
-              _("%s[`nuclearexplosion`] The %s detonated %s %s!"),
-              ((nuke_count++==0) ? "[`events/nuke`]<br>" : ""),  // First nuke to ever go off is major event.
-              nation_plural_for_player(pplayer),
-              indefinite_article_for_word(unit_name, false),
-              unit_name);
 
   // Direct ground-zero hit by Hydrogen-Bomb / Fusion warhead, etc.
   if (is_fusion) {  // H-bomb, etc.
@@ -3806,12 +3896,12 @@ void do_nuclear_explosion(struct player *pplayer, struct tile *ptile,
       int saved_id = pcity->id;
 
       notify_player(city_owner(pcity), ptile, E_CITY_NUKED, ftc_server,
-         _("[`nuclearexplosion`] %s was annihilated at Ground Zero of a thermonuclear fusion explosion."),
+         _("[`skull`] %s was annihilated at Ground Zero of a thermonuclear fusion explosion."),
            city_link(pcity));
 
       if (city_owner(pcity) != pplayer) {
         notify_player(pplayer, ptile, E_CITY_NUKED, ftc_server,
-         _("[`nuclearexplosion`] %s was annihilated at Ground Zero of a thermonuclear fusion explosion."),
+         _("[`skull`] %s was annihilated at Ground Zero of a thermonuclear fusion explosion."),
            city_link(pcity));
       }
       script_server_signal_emit("city_destroyed", pcity, city_owner(pcity), pplayer);

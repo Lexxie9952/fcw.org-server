@@ -531,6 +531,23 @@ Nuke_Proof
     from happening on all tiles 8-adjacent to the city.
     (see also: Nuke_Intercept_Radius_Odds_Pm, Tile_Nuke_Proof)
 
+Nuke_Survival_Pct
+    Adjustment value to the ruleset's base odds to survive nuclear blasts.
+    ...
+    For units outside a city, the value the attacker has for this effect is added to
+        the value the defender has for this effect, to come up with the final value.
+    For units inside a city, the value above is added to
+        game.info.nuke_defender_survival_chance_pct, to achieve the final value.
+    For city population, whatever value the attacker has for this effect is subtracted
+        from game.info.nuke_pop_loss_pct to get the final pop_loss_pct. (Use negative
+        values to add to it.)
+    ...
+    How best to use: In general, use the game.info settings in game.ruleset to set
+    base values covering your most common/median cases. For weaker nukes, give the
+    attacker a positive effect value. For stronger nukes, give it a negative value.
+    Do the opposite for defenders. Positive values for both attackers and defenders,
+    increase odds of survival, whereas negative values decrease survival chances.
+
 Output_Add_Bonus
     City production is increased by adding raw amount. This happens prior
     to any Output_Bonus effects, which multiply on top of this.

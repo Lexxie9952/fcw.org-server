@@ -185,6 +185,7 @@ const char battle_winner_verbs[NUM_BATTLE_WINNER_VERBS+1][40] = {
   "ERROR"
 };
 
+int nuke_count = 0;  // globally keep track of number of nuke detonations.
 
 /**********************************************************************//**
   For variety, returns a battle adjective after defeating an enemy
@@ -4578,44 +4579,32 @@ static bool unit_bombard(struct unit *punit, struct tile *ptile,
 **************************************************************************/
 static bool unit_nuke(struct player *pplayer, struct unit *punit,
                       struct tile *def_tile, const struct action *paction)
-{ /* DEBUG:
-      unit_type_iterate(ptype) {
-            notify_player(pplayer, unit_tile(punit), E_UNIT_LOST_ATT, ftc_server,
-                      _("[`/units/%s`] id:%d name: %s"),
-                        utype_name_translation(ptype),
-                        ptype->item_number,
-                        utype_name_translation(ptype));
-      } unit_type_iterate_end;
-  */
-  int success_code = 0;     // Identifier for successful defender vs nuke
-  struct unit *intercept_unit = NULL; // Assigned if successful intercept
-  struct city *pcity = NULL;
+{
   struct player *defending_player = NULL;
-  const struct unit_type *act_utype;
-  /* bombard_rate is never used on nukes, but for nukes it has a double purpose:
-     the amount of sq_radius to add to the default sq_radius of 2: */
-  int extra_radius = unit_type_get(punit)->bombard_rate;
+  struct city *pcity = NULL;
+  const struct unit_type *act_utype = unit_type_get(punit);;
+  struct unit *intercept_unit = NULL; // Assigned if successful intercept
+  int success_code = 0;     // Identifier for successful defender vs nuke
   char nuclear_unit_name[80];
-
   sprintf(nuclear_unit_name,"%s",unit_rule_name(punit));
+  /* nukes never bombard, but their "bombard_rate" encodes extra
+     sq_radius to add to the default blast sq_radius of 2: */
+  int extra_radius = unit_type_get(punit)->bombard_rate;
 
   /* Sanity check: The actor still exists. */
   fc_assert_ret_val(pplayer, FALSE);
   fc_assert_ret_val(punit, FALSE);
 
-  act_utype = unit_type_get(punit);
-
   log_debug("Start nuclear attack: %s %s against (%d, %d).",
             nation_rule_name(nation_of_player(pplayer)),
-            unit_rule_name(punit),
-            TILE_XY(def_tile));
+            unit_rule_name(punit), TILE_XY(def_tile));
 
-  //if ((pcity = sdi_try_defend(pplayer, def_tile))) { // NB: Formerly we used to only check if city has SDI
-
-  // Success code is 0 if no luck, positive if city, -(unit.id) if unit.
+  //-----See if SDI or anti-nuclear interceptor units can stop the detonation-----------------//
+  /* Success code is positive if city SDI, -(unit.id) if unit shot down, and 0 if unprevented.*/
+  //------------------------------------------------------------------------------------------//
   if ((success_code = prevent_nuclear_detonation(pplayer, def_tile,
-                                                utype_class(act_utype),
-                                                DEFAULT_DETONATION_RADIUS_SQ + extra_radius))) {
+                                                 utype_class(act_utype),
+                                                 DEFAULT_DETONATION_RADIUS_SQ+extra_radius))) {
     // Determine which player shot the nuke down:
     if (success_code < 0) { // unit shot it down:
       intercept_unit = game_unit_by_number(abs(success_code));
@@ -4654,8 +4643,17 @@ static bool unit_nuke(struct player *pplayer, struct unit *punit,
     return FALSE;
   }
 
-  /* Nukes with iPillage can destroy infrastucture in their blast radius,
-     which we have to do before the unit is wiped. */
+  /*--------------Notify the world of a nuclear explosion-----------------------------------------*/
+  notify_conn(NULL, def_tile, E_NUKE, ftc_server,
+              _("[`events/%s`]<br>[`nuclearexplosion`] The %s detonated %s %s!"),
+              ((nuke_count++==0) ? "nuke" : "smallnuke"),  // The first nuke is big news!
+              nation_plural_for_player(pplayer),
+              indefinite_article_for_word(nuclear_unit_name, false),
+              nuclear_unit_name);
+
+  /*--------------Pillage extras from tiles -------------------------------------------------------*/
+  /* Nukes with iPillage destroy tile extras in the blast radius. Do this before wiping the unit.  */
+  //-----------------------------------------------------------------------------------------------//
   if (unit_can_iPillage(punit)) {
     struct extra_unit_stats pstats;
     unit_get_extra_stats(&pstats, punit);
@@ -4688,7 +4686,7 @@ static bool unit_nuke(struct player *pplayer, struct unit *punit,
               if (tile_owner(def_tile) && tile_owner(def_tile) != unit_owner(punit)) {
                   notify_player(tile_owner(def_tile), def_tile,
                           E_UNIT_ACTION_TARGET_HOSTILE, ftc_server,
-                          _("[`warning`] Your %s %s destroyed from %s %s done by %s %s %s!"),
+                          _("[`warning`] Your %s %s vaporized from %s %s done by %s %s %s!"),
                           extra_name_translation(target),
                           (is_word_plural(extra_name_translation(target)) ? "were" : "was"),
                           indefinite_article_for_word(unit_type_get(punit)->sound_fight_alt, false),
@@ -4750,11 +4748,29 @@ static bool unit_nuke(struct player *pplayer, struct unit *punit,
   /* A nuke is always consumed when it detonates. See below. */
   fc_assert(paction->actor_consuming_always);
 
-  /* The nuke must be wiped here so it won't be seen as a victim of its own
-   * detonation. */
+  // We have to calculate the basic destruction/survival level BEFORE we wipe the unit:
+  int survival_chance = get_target_bonus_effects(
+                        NULL,                       // effect_list *plist
+                        NULL, /*unit_owner(punit),*/// target player: NULL to not include self's defense bonuses from wonders?
+                        NULL,                       // other player
+                        NULL,                       // NULL tgt_city - don't include defender bonuses!
+                        NULL,                       // target building
+                        NULL, /*ptile,*/            // NULL tgt tile - don't include defender bonuses!
+                        punit,                      // target unit
+                        unit_type_get(punit),       // target unittype
+                        NULL,                       // target output
+                        NULL,                       // target specialist
+                        NULL,                       // target action
+                        EFT_NUKE_SURVIVAL_PCT,
+                        V_COUNT);
+
+  /* The nuke must be wiped here so it won't be seen as a victim of its own detonation. */
   wipe_unit(punit, ULR_DETONATED, NULL);
 
-  do_nuclear_explosion(pplayer, def_tile, extra_radius, nuclear_unit_name);
+  /*--------------Complete the rest of the nuking--------------------------------------------------*/
+  /* Kill, reduce, and damage cities, units, population, tiles, and do fallout.                    */
+  //-----------------------------------------------------------------------------------------------//
+  do_nuclear_explosion(pplayer, def_tile, extra_radius, nuclear_unit_name, survival_chance);
 
   /* May cause an incident even if the target tile is unclaimed. A ruleset
    * could give everyone a casus belli against the tile nuker. A rule
