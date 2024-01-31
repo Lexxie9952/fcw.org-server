@@ -226,7 +226,22 @@ bool utype_has_user_flag_named(const struct unit_type *punittype,
   }
   return FALSE;
 }
-
+/**********************************************************************//**
+  Gets the flag_id of a user unit type flag, by name. This can increase
+  efficiency if doing numerous checks on many units to see if they
+  have the flag. Returns -1 if none found.
+**************************************************************************/
+int get_user_flag_id_by_name(const char *name)
+{
+  // Loop through user flags
+  for (int id = UTYF_USER_FLAG_1; id <= UTYF_LAST_USER_FLAG; id++) {
+    // If the flag has the same name, then return its id
+    if (0 == strcmp(name, unit_type_flag_id_name_cb(id))) {
+      return id;
+    }
+  }
+  return -1;
+}
 /**********************************************************************//**
   Return whether the given unit type has the role.  Roles are like
   flags but have no meaning except to the AI.

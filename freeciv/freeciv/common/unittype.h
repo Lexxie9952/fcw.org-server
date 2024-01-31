@@ -810,8 +810,8 @@ bool unit_has_type_flag(const struct unit *punit,
 bool unit_has_user_flag_named(const struct unit *punit,
                               const char *name);
 bool utype_has_user_flag_named(const struct unit_type *punittype,
-                          const char *name);
-
+                               const char *name);
+int get_user_flag_id_by_name(const char *name);
 /**************************************************************************
   Return whether the given unit type has the flag.
 **************************************************************************/
