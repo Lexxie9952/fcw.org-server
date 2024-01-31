@@ -32,8 +32,16 @@ format_version=20
 ; ************** THERE IS UNIFORMITY IN FCW CLIENT which checks these flags based on index #. Not keeping
 ; ************** uniformity results in loss of features as ability to check these flags would be lost.
 ; *** if you remove one, make it "unused" and add to it later, so the index of the others does not mess up
+; --------------------------------------------------------------------------------------------------------
+; "RESERVED" User-UTYF's: these can be included by creators to immediately access special
+; deluxe game mechanics for any of their ruleset unit_types. If a unit has a user
+; unit type flag with a ";RESERVED:" indicator, specially coded mechanics inside the
+; server will apply to it. To access these mechanics, simply add a user flag with
+; the reserved name to the flags={} list below, then add it to any unit type.
+;---------------------------------------------------------------------------------------------------------
 flags =
   { "name", "helptxt"
+;CUSTOM:
     _("Airbase")
     _("Transform"), _("Can do advanced Terrain transformations.")
     _("CanRoad"), _("Able to build Roads.")
@@ -53,7 +61,10 @@ flags =
     _("Capturable")
     _("Cities")
     _("AddToCity"), _("Can add itself to the population of a city.")
+;RESERVED:
+    ;using this flag name invokes the M.A.D. effect: rnuclear units are less likely to be destroyed from a nuke, so they can retaliate.
     _("Nuclear"), _("Can perform a Nuclear Detonation obliterating all adjacent tiles.")
+;CUSTOM:
     _("Missile"), _("AEGIS and Armor II have a defense bonus against this unit.")
     _("Well-Digger"), _("Can dig a well.")
     _("Infra"), _("Belongs to worker-type sub-class of units.")
@@ -5856,7 +5867,7 @@ veteran_move_bonus = 0
 roles         = ""
 helptext      = _("\
 If you have Space Flight and the Manhattan Project has been built by any player, you can make Nuclear Missiles.\
- Nuclear blasts destroy ALL units in a 3×3 area, and up to 2 tile improvements on each tile (×2 at ground zero). City population is reduced by half. Land tiles may get nuclear fallout.\
+ Nuclear blasts affect all units in a 3×3 area, and up to 2 tile improvements on each tile (×2 at ground zero). City population is reduced by 45%. Land tiles may get nuclear fallout.\
  Fallout reduces tile output and increases risk of nuclear winter. \
 "), _("\
 If Fallout is cleaned on the turn it appears, the chance of nuclear winter is reduced. \n\n\
@@ -5922,8 +5933,8 @@ veteran_power_fact = 100
 veteran_move_bonus = 0
 roles         = ""
 helptext      = _("\
-Tactical Nukes are very small warheads attached to missiles. A Tactical Nuke destroys all units on\
- a single tile, and up to 4 tile improvements. City population is reduced by half. The target tile may get Fallout. In theory,\
+Tactical Nukes are very small warheads attached to missiles. A Tactical Nuke affects all units on\
+ a single tile, and up to 4 tile improvements. City population is reduced by 45%. The target tile may get Fallout. In theory,\
  Tactical Nukes are small enough to get the advantages of nuclear armaments without the severity of\
  consequences. In reality, they might be a gateway that escalates toward mutual assured destruction. \n\
 If you have Fusion Power and the Manhattan Project was built, a Tactical Nuke\
@@ -6021,8 +6032,8 @@ roles         = ""
 helptext      = _("\
 If you have Nuclear Fission and the Manhattan Project has been built by any player, you can make Atom Bombs.\
  A Bomber can drop it within two tiles of its location. Disembark the bomb and fly the Bomber out of range, then\
- attack the target (or detonate by pressing D twice.) The blast destroys ALL cardinally adjacent tiles, and might destroy a tile improvement on each tile (×2 at ground zero). City population\
- is reduced by half. Land tiles may get nuclear fallout. \
+ attack the target (or detonate by pressing D twice.) The blast affects ALL cardinally adjacent tiles, and may destroy a tile improvement on each tile (×2 at ground zero). City population\
+ is reduced by 35%. Land tiles may get nuclear fallout. \
 "), _("\
 Fallout reduces tile output and increases risk of nuclear winter.\
 ")
@@ -6068,8 +6079,8 @@ veteran_move_bonus = 3360
 roles         = ""
 helptext      = _("\
 Hydrogen Bombs make Atom Bombs seem tame. Any unprotected city at Ground Zero will be absolutely annihilated.\
- In other cities in the blast radius, population is reduced by about 75%. Blast area is 21 tiles:\
- the same area as an entire city (5×5 minus the corners.) All units within the blast are destroyed, and up to 3 tile improvements on each tile (×2 at ground zero). \n\
+ In other cities in the blast radius, population is reduced by 60%. Blast area is 21 tiles:\
+ the same area as an entire city (5×5 minus the corners.) All units within the blast are affected, and up to 3 tile improvements on each tile (×2 at ground zero). \n\
 A Bomber can drop a Hydrogen Bomb within two tiles of its location. Unload the bomb, fly the Bomber out of\
  range, then detonate by pressing D twice. \n\
 If you have Fusion Power and the Manhattan Project was built, a Hydrogen Bomb\
@@ -6120,8 +6131,8 @@ roles         = ""
 helptext      = _("\
 The Doomsday Bomb is the mother of all bombs. Blast area is about 100 tiles.\
  Only one can be made at a time. A city at Ground Zero will be\
- annihilated. Other cities in the blast area lose about 75% of their population.\
- All units within the blast are completely destroyed, and up to 3 tile improvements on each tile (×2 at ground zero). \n\
+ annihilated. Other cities in the blast area lose about 70% of their population!\
+ All units within the blast are affected, and up to 3 tile improvements on each tile (×2 at ground zero). \n\
 A Bomber can drop the Bomb within two tiles of its location. Unload the Bomb and\
  pray that you can fly the Bomber out of range. Detonate by pressing D twice. \n\
 If you have Fusion Power and the Manhattan Project was built, a Doomsday Bomb\

@@ -245,12 +245,13 @@ only_killing_makes_veteran = FALSE
 ; 100 city is destroyed along with all the units. If set to 0 city does not
 ; loose population. Any value below 100 means the city can never be
 ; destroyed completely using nuclear. NOTE THIS SETTING MAY BE HARD-CODED DIFFERENTLY IN FCW SERVER
-nuke_pop_loss_pct = 50
+;nuke_pop_survival_pct = 45    ; put here to avoid screw-ups in ruleset calcs because this val means "death" while the one below is "not death"
+nuke_pop_loss_pct = 55         ; (100-nuke_pop_survival_pct)
 
 ; Percentage chance of a city defender surviving nuclear attack. When set
 ; to 50 roughly half of defenders will survive nuclear attack. When set to
 ; 0 no defenders will survive. When set to 100 all defenders will survive.
-nuke_defender_survival_chance_pct = 0
+nuke_defender_survival_chance_pct = 25
 
 [auto_attack]
 ; An auto attack may be triggered when another unit moves to an adjacent

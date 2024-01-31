@@ -241,4 +241,7 @@ i.e., 6 in 5 (swamp), 5 in 4 (mine), 4 in 3 (angkor wat swamp drain) goes to:
 84. (also recent change to MP2D) - AEGIS and MSAM instead get a 50% and 33% chance respectively to use their anti-aircraft capabilites to prevent aircraft-delivered nuclear bombs on adjacent tiles from detonating.
 85. (also recent change to MP2D) - Anti-Ballistic Missiles can intercept all nuclear-type missiles in a 5x5-minus corners area of effect, preventing their detonation. They have a 29% chance of doing so, or in other words, each two ABMs in
     radius, reduces the chance by 50%. (1 missile: 29%), 2 missiles: 50%, 4 missiles: 25%, 6 missiles: 12.5%, etc.
-86.
+86. Added NukeSurvivalPct effects, regulating suvival odds for city pop, units in city, units on map, nukes in city, and nukes on map. See HELP>UNITS>Atom Bomb for more info
+    75% of surviving units will be injured, and 25% unscathed. Different nukes have different strengths affecting survival percentages across the various categories.
+    Note the M.A.D. corrective affect where nukes have less chance of being nuked, presumably because preciously stored underground for retaliation purposes.
+87.
