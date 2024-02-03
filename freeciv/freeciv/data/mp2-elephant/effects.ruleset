@@ -1359,6 +1359,7 @@ reqs    =
    {  "type",     "name",           "range", "present"
       "UnitType", "AEGIS Cruiser",  "Local",  TRUE
       "Tech",     "Laser",          "Player", TRUE
+      "CityTile", "Center",         "Local",  FALSE   ; PORT PENALTY
    }
 ;MSAMs have a 33% chance to intercept 8-adjacent bombs (but not missiles)
 [effect_mobile_sam_sdi_effect]

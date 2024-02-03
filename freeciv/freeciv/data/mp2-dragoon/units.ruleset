@@ -4993,7 +4993,8 @@ helptext      = _("\
 The AEGIS Cruiser has an Anti-Air missile system. Radar and sonar\
  give superior vision and 2× defense bonus against Submarines.\
  The AEGIS can carry five Missiles, and is the only ship that can attack\
- Air and Missile units. With upgraded Laser tech, each AEGIS Cruiser has\
+ Air and Missile units. With upgraded Laser tech, each AEGIS Cruiser not\
+ under PORT PENALTY has\
  a 50% chance to thwart adjacent nuclear bombs dropped by bombers. \n\
 "), _("\
 Excellent vision and 3× Anti-Air bonus are ideal for scouting and escorting. \
