@@ -1821,7 +1821,7 @@ static void explain_why_no_action_enabled(struct unit *punit,
   case ANEK_DISEMBARK_ACT:
     notify_player(pplayer, unit_tile(punit), E_BAD_COMMAND, ftc_server,
                   _("%s cannot disembark outside of a city or a native base "
-                    "for %s."),
+                    "from a %s."),
                   unit_link(punit),
                   utype_name_translation(
                       unit_type_get(unit_transport_get(punit))));
