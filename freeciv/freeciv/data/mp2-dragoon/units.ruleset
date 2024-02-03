@@ -714,7 +714,9 @@ flags         = "NeverTired", "Unreachable", "DoesntOccupyTile", "Airliftable"
 ;   pop_cost = the number of population added to the target city
 ;  "Paradrop Unit"
 ;   paratroopers_range  = the maximal range the unit can be paradropped to.
-;                         Max range is 65534.
+;                         Max range is 65534. DO NOT USE AS A SUBSTITUTE FLAG
+;                         FOR OTHER FEATURES UNTIL unit_move_real() stops using
+;                         non-zero value of this as a hack for Paratroopers on Cargo Plane.
 ;   paratroopers_mr_req = the move rate which is required at least for
 ;                         paradropping (whole movement points)
 ;   paratroopers_mr_sub = <the move rate which is subtracted after paradropping>
