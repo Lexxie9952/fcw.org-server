@@ -19,6 +19,9 @@
 var client = {};
 client.conn = {};
 
+var turn_done_button_RTS_state = 999;  // an invalid state so that it gets set to right state at launch
+var remaining;                         // global storage for last time turn-timer was calculated
+const RTS_NO = 0, RTS_YES = 1, RTS_SOON = 2;   // rts state codes
 var client_frozen = false;
 var phase_start_time = 0;
 var fullscreen = false;
@@ -160,56 +163,56 @@ function civclient_init()
       sounds_enabled = true;
     }
   }
- 
+
   draw_map_grid = simpleStorage.get('mapgrid');
-  if (draw_map_grid == null) 
+  if (draw_map_grid == null)
     draw_map_grid = false;  // Default case
 
   map_drag_enabled = simpleStorage.get('mapdrag');
-  if (map_drag_enabled == null) 
+  if (map_drag_enabled == null)
     map_drag_enabled = true;  // Default case
 
   enable_goto_drag = simpleStorage.get('gotodrag');
-  if (enable_goto_drag == null) 
-    enable_goto_drag = true;  // Default case 
-    
+  if (enable_goto_drag == null)
+    enable_goto_drag = true;  // Default case
+
   enable_autoexplore = simpleStorage.get('explorekey');
-  if (enable_autoexplore == null) 
-    enable_autoexplore = true;  // Default case     
+  if (enable_autoexplore == null)
+    enable_autoexplore = true;  // Default case
 
   unit_click_menu = simpleStorage.get('unitclickmenu');
-  if (unit_click_menu == null) 
+  if (unit_click_menu == null)
     if (is_small_screen() || is_touch_device())
       unit_click_menu = true;  // Default for mobile
-    else 
+    else
       unit_click_menu = false;  // Default for PC
 
   draw_city_airlift_counter = simpleStorage.get('airlift');
-  if (draw_city_airlift_counter == null) 
+  if (draw_city_airlift_counter == null)
     draw_city_airlift_counter = false;  // Default case
 
   draw_city_mood = simpleStorage.get('drawMood');
-  if (draw_city_mood == null) 
+  if (draw_city_mood == null)
     draw_city_mood = false;  // Default case
 
   draw_stacked_unit_mode = simpleStorage.get('stackmode');
-  if (draw_stacked_unit_mode == null) 
+  if (draw_stacked_unit_mode == null)
     draw_stacked_unit_mode = 3;  // Default case
-  
+
   draw_city_output = simpleStorage.get('drawTiles');
-  if (draw_city_output == null) 
+  if (draw_city_output == null)
     draw_city_output = false;  // Default case
 
   scroll_narrow_x = simpleStorage.get('xScroll');
-  if (scroll_narrow_x == null) 
+  if (scroll_narrow_x == null)
     scroll_narrow_x = false;  // Default case
 
   show_empire_tab = simpleStorage.get('showEmpire');
-  if (show_empire_tab == null) 
+  if (show_empire_tab == null)
     show_empire_tab = false;  // Default case
-  
+
 /*show_warcalc = simpleStorage.get('showCalc');
-  if (show_warcalc == null) 
+  if (show_warcalc == null)
     show_warcalc = false;  // Default case */
 
   show_compass = simpleStorage.get('showCompass');
@@ -267,25 +270,25 @@ function civclient_init()
   } else hp_bar_offset = 0;
 
   draw_border_flags = simpleStorage.get('borderFlags');
-  if (draw_border_flags == null) 
+  if (draw_border_flags == null)
     draw_border_flags = false;  // Default case
 
   draw_tertiary_colors = simpleStorage.get('tricolore');
-  if (draw_tertiary_colors == null) 
+  if (draw_tertiary_colors == null)
     draw_tertiary_colors = false;  // Default case
   draw_border_mode |= draw_tertiary_colors;
 
   draw_thick_borders = simpleStorage.get('thickBorders');
-  if (draw_thick_borders == null) 
+  if (draw_thick_borders == null)
     draw_thick_borders = false;  // Default case
 
   draw_dashed_borders = simpleStorage.get('dashedBorders');
-  if (draw_dashed_borders == null) 
+  if (draw_dashed_borders == null)
     draw_dashed_borders = false;  // Default case
 
   draw_moving_borders = simpleStorage.get('movingBorders');
-  if (draw_moving_borders == null) 
-    draw_moving_borders = false;  // Default case  
+  if (draw_moving_borders == null)
+    draw_moving_borders = false;  // Default case
 
   play_music = simpleStorage.get('play_music');
   if (play_music == null) {
@@ -325,15 +328,15 @@ function civclient_init()
                 $.ajax({
                     type: 'POST',
                     url: "/validate_twit?username="+stored_username+"&type=type%3D"+link_game_type+"&port="+game_port,
-                });    
+                });
             }
             init_common_intro_dialog();
         },
-        error: function (request, textStatus, errorThrown) {  
+        error: function (request, textStatus, errorThrown) {
             swal("Error, can't get the game type!");
-            setSwalTheme();      
+            setSwalTheme();
         }
-    });    
+    });
   }
   setup_window_size();
   update_turn_change_timer(); // styles it for mobile or large screen.
@@ -347,7 +350,7 @@ function civclient_init()
   $(".ui-dialog-titlebar-close").css({"background":"none","background-image":"none","margin-top":"1px", "margin-left": "0px",
     "margin-right":"2px", "border":"none", "height":"16px"}); // solo el diablo sabe por que!
 
-  // Allows civclient.css to specify different styling for mobile vs. not mobile  
+  // Allows civclient.css to specify different styling for mobile vs. not mobile
   if (is_small_screen()) document.body.classList.add('mobile');
 }
 
@@ -419,24 +422,24 @@ function init_common_intro_dialog() {
         "Falling back to regular mode.");
       return;
     }
-    
+
     $.ajax({
         type: 'POST',
         url: "/validate_twit?username="+hack_username+"&type=action_hack&port="+hack_port,
-    });    
-    
+    });
+
   } else {
     show_intro_dialog("Singleplayer vs. Freeciv AI",
-      "<br>Creating an account is optional. Saved games need an account."); 
+      "<br>Creating an account is optional. Saved games need an account.");
       //+" (<a class='pwd_reset' href='#' style='color: #404A6F;'>Forgot password?</a>) Have fun! <br>");
-      //$(".pwd_reset").click(forgot_pbem_password); 
+      //$(".pwd_reset").click(forgot_pbem_password);
   }
   $("#pregame_message_area").html("<b>Game</b>: Select rules and game settings.<br>"+
   "<b>Load</b>: Load saved game.<br>"+
   "<b>Nation</b>: Pick nation.<br>"+
   "<b>Start</b>: Do <u>after</u> you set rules and settings.<br><br>"+
-  ($.getUrlVar('action') != "multi" 
-     ? 
+  ($.getUrlVar('action') != "multi"
+     ?
      "<u>Starting a game confirms consent with our <a href='https://www.freecivweb.org/rules'>Terms of Service</a>.</u><br><br>"+
      "<b>WARNING:</b> Default rules for Singleplayer are now <b><u>Classic+.</u></b><br><br>"+
      "<u>All rulesets are suitable for Singleplayer.</u><br><br>"+
@@ -444,7 +447,7 @@ function init_common_intro_dialog() {
      "You can play Singleplayer with a Multiplayer ruleset if you wish to improve for multiplayer games with other humans.<br>"+
      "&nbsp;&bull; If you do this, try: &nbsp; <b>/set sciencebox 80</b> &nbsp; (or similar) to set a singleplayer research pace. <b>/help sciencebox</b> for more info.<br>"
      : "Default rules for multiplayer games are: <b>Multiplayer II Evolution Avant-garde.</b> (mp2-ag)<br><br>"   ) +
-  
+
   "Click <b>Game</b> button to select Game Version (ruleset).<br><br>"+
   "Advanced: You can tune more settings with the command line.<br>"+
   "&nbsp;&nbsp;&nbsp;To see all options: <b>/show all</b><br>"+
@@ -498,8 +501,8 @@ function show_dialog_message(title, message)
                      "minimize" : "ui-icon-circle-minus",
                      "restore" : "ui-icon-bullet"
                    }});
-        
-  // W is universal key to get out of anything and back to map                 
+
+  // W is universal key to get out of anything and back to map
   $(this).keypress(function(e){
     //alert("(this).keypress(e) event that was tied to dialog, keycode: "+e.keyCode);
     if (e.which == 119 || e.keyCode == 119 /* IE8: || (window.event != null && window.event.keyCode == 119)*/) {
@@ -517,9 +520,9 @@ function show_dialog_message(title, message)
       $("#calc_tip").tooltip({
         show: { delay:150, effect:"none", duration: 0 }, hide: {delay:120, effect:"none", duration: 0}
       });
-  
+
   // Automatically close dialog after 38 seconds, because sometimes the dialog can't be closed manually.
-  // When can't it be closed manually? This made problems if two dialogs opened in <30 and first one 
+  // When can't it be closed manually? This made problems if two dialogs opened in <30 and first one
   // closes second one. Turning off and will fix some other way if needed:
   // dialog_message_close_task = setTimeout(close_dialog_message, 38000);
 
@@ -568,24 +571,35 @@ function is_server()
 **************************************************************************/
 function update_timeout()
 {
-  var now = new Date().getTime();
-
-  var is_small = is_small_screen();
+  const is_small = is_small_screen();
+  const longturn = is_longturn();
+  const rts_text = {
+    0: " ",
+    1: " RTS",
+    2: " RTS Soon"
+  };
 
   if (game_info != null
       && current_turn_timeout() != null && current_turn_timeout() > 0) {
-    var remaining = Math.floor(seconds_to_phasedone - ((now - seconds_to_phasedone_sync) / 1000));
+    let now = new Date().getTime();
+    remaining = Math.floor(seconds_to_phasedone - ((now - seconds_to_phasedone_sync) / 1000));
 
     if (remaining >= 0 && turn_change_elapsed == 0) {
-      if (is_small && !is_longturn()) {
+      if (is_small && !longturn) {                                                   // Small screen and NOT longturn
         $("#turn_done_button").button("option", "label", "T " + remaining);
         $("#turn_done_button .ui-button-text").css("padding", "3px");
-      } else if (is_small) {  // small screen && longturn:
+      } else if (is_small) {                                                          // small screen && longturn:
         $("#turn_done_button").button("option", "label", "" + seconds_to_human_time(remaining) + ""); //timer only, don't cover tabs
-      } else {                          // big screen && longturn:   
-        $("#turn_done_button").button("option", "label", "Turn Done (" + seconds_to_human_time(remaining) + ")");
+      } else {                                                                        // Big screen && (longturn || !longturn):
+        if (longturn) {
+          let rts_code = style_longturn_turn_done_button(current_turn_timeout(), remaining);
+          $("#turn_done_button").button("option", "label", seconds_to_human_time(remaining) + rts_text[rts_code]);
+          $("")
+        } else {
+          $("#turn_done_button").button("option", "label", "Turn Done (" + seconds_to_human_time(remaining) + ")");
+        }
       }
-      if (!is_touch_device()) $("#turn_done_button").tooltip({ 
+      if (!is_touch_device()) $("#turn_done_button").tooltip({
         disabled: false,
         show: { delay:200, effect:"none", duration: 0 },
         hide: {delay:0, effect:"none", duration: 0}
@@ -594,6 +608,89 @@ function update_timeout()
   }
 }
 
+/**************************************************************************
+  For courtesy, style longturn button to indicate RTS legality.
+
+  Under current RTS rules, RTS is always allowed:
+    0 -1 hours after TC
+    10-11 hours after TC (UWT just expired)
+    0 -1 hours before TC
+    10-11 hours before TC (before units will get UWT next turn)
+
+  Also returns an RTS state code of RTS_NO, RTS_YES, or RTS_SOON.
+**************************************************************************/
+function style_longturn_turn_done_button(timeout, time_left)
+{
+  remaining = time_left;
+  const time_after = timeout - remaining;
+  const hour = 3600; // seconds
+
+  /* NO-RTS periods are most frequent, process a quick getaway.
+     NB: leave 15 minute warning periods for RTS about to begin: */
+  if ( (inside(1.00*hour, time_after, 9.75*hour))
+   ||  (inside(1.25*hour, remaining,  10*hour))
+   ||  (time_after > 11*hour && remaining > 11.25*hour) ) {
+    if (turn_done_button_RTS_state != RTS_NO) {
+      set_turn_done_button_state(RTS_NO);
+    }
+    return RTS_NO;
+  }
+
+  let rts = RTS_NO;
+
+  if ((remaining  <= 1*hour)                         //  0- 1 hours before TC
+   || (between(10*hour, remaining, 11*hour))         // 10-11 hours before TC
+   || (time_after <= 1*hour)                         // up to 1 hour after TC
+   || (between(10*hour, time_after, 11*hour))) {     // from 10 to 11 hrs after TC
+
+     rts = RTS_YES;
+   } else rts = RTS_SOON;
+
+  /* This check isn't needed: as the only possibility is that: RTS is SOON!
+  if (rts != RTS_YES) {
+    if      (remaining  <= 1.250*hour)                             rts = RTS_SOON;  // 15min before 0- 1 hours before TC
+    else if (remaining  >  11.00*hour && remaining <= 11.25*hour)  rts = RTS_SOON;  // 15min before 10-11 hours before TC
+    else if (time_after >= 9.750*hour && time_after < 10*hour)     rts = RTS_SOON;   // from 10 to 11 hrs after TC
+  }*/
+
+  switch (rts) {
+    case RTS_YES:
+      if (turn_done_button_RTS_state != RTS_YES) {
+        set_turn_done_button_state(RTS_YES);
+      }
+      break;
+    case RTS_SOON:
+      if (turn_done_button_RTS_state != RTS_SOON) {
+        set_turn_done_button_state(RTS_SOON);
+      }
+      break;
+  }
+
+  return rts;
+}
+/**************************************************************************
+  Sets a flag in turn_done_button_RTS_state so that we only restyle it once
+  each time its state actually changes.
+**************************************************************************/
+function set_turn_done_button_state(state) {
+  switch (state) {
+    case RTS_NO:
+      turn_done_button_RTS_state = RTS_NO;
+      $("#turn_done_button").attr('title', '"NO RTS" can be declared.');
+      $("#turn_done_button").css("color", "green");
+      break;
+    case RTS_YES:
+      turn_done_button_RTS_state = RTS_YES;
+      $("#turn_done_button").attr("title", "RTS allowed!");
+      $("#turn_done_button").css("color", "#f66");
+      break;
+    case RTS_SOON:
+      turn_done_button_RTS_state = RTS_SOON;
+      $("#turn_done_button").attr("title", "RTS in less than 15m");
+      $("#turn_done_button").css("color", "#fc7");
+      break;
+    }
+}
 
 /**************************************************************************
  shows the remaining time of the turn change on the turn done button.
@@ -603,7 +700,7 @@ function update_turn_change_timer()
   turn_change_elapsed += 1;
   if (turn_change_elapsed < last_turn_change_time) {
     setTimeout(update_turn_change_timer, 1000);
-    $("#turn_done_button").button("option", "label", "Please wait (" 
+    $("#turn_done_button").button("option", "label", "Please wait ("
         + (last_turn_change_time - turn_change_elapsed) + ")");
   } else {
     turn_change_elapsed = 0;
@@ -612,7 +709,7 @@ function update_turn_change_timer()
     }
     else {
       set_large_turn_done_button();
-    } 
+    }
   }
 }
 function set_small_turn_done_button() {
@@ -682,7 +779,7 @@ function show_fullscreen_window()
   }
 }
 /* Because opera has a bug in it */
-function fix_opera_full_screen() 
+function fix_opera_full_screen()
 {
   if (browser.opera && !is_longturn()) {
     var mtop = fullscreen ? 37 : 0;
@@ -804,7 +901,7 @@ function flip_supercow()
   if (observing) {
     client.conn.playing = null;
   } else {
-    client.conn.playing = {playerno: -1};   
+    client.conn.playing = {playerno: -1};
   }
   add_client_message("Supercow Lock turned "+(observing?"ON":"OFF"));
 }
