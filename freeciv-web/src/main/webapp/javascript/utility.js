@@ -26,11 +26,11 @@ stripChar[0] = new RegExp(String.fromCharCode(3), "g");
 const STRIPCHAR_LAST = 1;
 
 // if old browser lacks String.repeat, add it here:
-String.prototype.repeat = String.prototype.repeat || 
+String.prototype.repeat = String.prototype.repeat ||
 function(n) {
   if (n < 0) throw new RangeError("invalid count value");
   if (n == 0) return "";
-  return new Array(n + 1).join(this.toString()) 
+  return new Array(n + 1).join(this.toString())
 };
 
 /****************************************************************************
@@ -74,6 +74,19 @@ function XOR(a,b) {
   return ( a || b ) && !( a && b );
 }
 
+/**************************************************************************
+ Check if x is between min and max
+**************************************************************************/
+const between = (min, x, max) => {
+  return x >= min && x <= max;
+}
+/**************************************************************************
+ Check if x is inside (but not equal to) min and max
+**************************************************************************/
+const inside = (min, x, max) => {
+  return x > min && x < max;
+}
+
 /****************************************************************************
  Reduce a fraction by finding the Greatest Common Divisor and dividing by it.
 ****************************************************************************/
@@ -93,7 +106,7 @@ function fraction_reduce(numerator,denominator) {
   //avoid fifths -- they're more complex than tenths in the base-10 system:
   if (denominator/gcd == 5) gcd /=2;
   //in base-60 time- or move-systems, we avoid 12th,15ths,20ths, and 30ths:
-  //i.e., people like halves, thirds, and quarters, but not more complex: 
+  //i.e., people like halves, thirds, and quarters, but not more complex:
   else if (denominator/gcd == 12) gcd /=5;
   else if (denominator/gcd == 15) gcd /=4;
   else if (denominator/gcd == 20) gcd /=3;
@@ -219,8 +232,6 @@ function seconds_to_human_time(input_seconds) {
     else if (hours == 0 && minutes > 9) return minutes+'m';                //10m 32s shows as 10m
     else return minutes+':'+seconds;                                       //9m 59s shows as 9:59
   }
-  
-
 }
 
 /**************************************************************************
@@ -258,7 +269,7 @@ function copy_string_to_clipboard (str) {
 }
 
 /**************************************************************************
- Allows changing the properties of a css class itself, instead of just 
+ Allows changing the properties of a css class itself, instead of just
  changing properties of existing elements with that class. This is useful
  when you want the class itself to have the new property, so that it will
  universally affect all instances of that class which appear in the future,
@@ -334,7 +345,7 @@ function is_alphabetic(text)
 }
 
 /**************************************************************************
- Returns original string iff it is composed of legal alphanumeric characters  
+ Returns original string iff it is composed of legal alphanumeric characters
   and/or basic ASCII spaces and punctuation. Otherwise returns null.
   Accepts most accented characters, such as: é,ç,ä etc.
 **************************************************************************/
@@ -363,8 +374,8 @@ function alphanumeric_cleaner_city_names(text)
     return result;
 }
 /**************************************************************************
-  Minimized jquery #dialog-extend-fixed-container has undesirable 
-    behaviour of being z-index:9999 and screen-wide, blocking clicks on 
+  Minimized jquery #dialog-extend-fixed-container has undesirable
+    behaviour of being z-index:9999 and screen-wide, blocking clicks on
     more important objects. A call to this function below can be put in the
     inline declared minimize function where the dialog init_ is done, to
     fix this issue.
@@ -397,7 +408,7 @@ function html_safe(text)
 function html_emoji_from_universal(universal_name)
 {
   // Force lower case and remove white space and escape sequences
-  var freemoji_name = freemoji_name_from_universal(universal_name);        
+  var freemoji_name = freemoji_name_from_universal(universal_name);
   var path = "/images/e/"+freemoji_name+".png";
   var element = "<img class='v' src='"+path+"'>";
   return element;
@@ -432,7 +443,7 @@ function getHash(input){
   for (var i = 0; i < len; i++) {
     hash  = ((hash << 5) - hash) + input.charCodeAt(i);
     hash |= 0; // to 32bit integer
-  } 
+  }
   return Math.abs(hash).toString();
 }
 
@@ -446,7 +457,7 @@ function getKeyByValue(object, value) {
 /**************************************************************************
    Force execution to delay by x milliseconds.
 **************************************************************************/
-function wait(ms) 
+function wait(ms)
 {
   var start = new Date().getTime();
   var end = start;
@@ -546,7 +557,7 @@ function is_word_plural(word)
   if (word.endsWith("s II")) return true; // Workers II, Barracks II
   if (word.endsWith("men")) return true; // Pikemen, Riflemen, etc.
   if (word.endsWith("nfantry")) return true; // Mechanized Infantry
-  if (word.endsWith("rtillery")) return true; 
+  if (word.endsWith("rtillery")) return true;
 
   /* Exceptions I */
   if (word.endsWith("AWACS")) return false; // names end in small 's'
