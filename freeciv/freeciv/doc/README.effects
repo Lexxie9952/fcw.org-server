@@ -111,6 +111,23 @@ UnitState:     Local                                                   "Transpor
                                                                        "OnNativeTile", New in 3.1: "InNativeExtra", "MovedThisTurn"; FCW: "Fortified" (deprecated, use "Activity")
 UnitType:      Local
 VisionLayer:   Local                                                    "Main", "Stealth", "Subsurface"
+--------------------------------------------
+TO DO:
+MinCities           Player
+Counter             City
+                    "Tile"
+BuildingFlag        Local, Tile, City
+PlayerFlag          Player
+OriginalOwner       City
+DiplRelTileOther    Local
+DiplRelUnitAny      Alliance, Team, Player, Local
+DiplRelUnitAnyOther Local
+Wrap                World
+FormAge             Local
+MinLatitude         Tile, Adjacent, CAdjacent, Traderoute, City
+MaxLatitude         Tile, Adjacent, CAdjacent, World
+
+
 
 MinSize is the minimum size of a city required.
 AI is ai player difficulty level.
