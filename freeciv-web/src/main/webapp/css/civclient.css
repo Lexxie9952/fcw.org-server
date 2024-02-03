@@ -41,12 +41,12 @@ body, html, div {
 }
 /************************************************/
 
-button { 
-  margin: .2em .2em .2em 0; 
-  cursor: pointer; 
-  padding: .2em .6em .3em .6em; 
-  line-height: 1.4em; 
-  width:auto; 
+button {
+  margin: .2em .2em .2em 0;
+  cursor: pointer;
+  padding: .2em .6em .3em .6em;
+  line-height: 1.4em;
+  width:auto;
   overflow:visible;
 }
 
@@ -60,10 +60,10 @@ button {
 }
 
 #freeciv_logo {
-  float:left; 
+  float:left;
   background-image: url(/images/freeciv-web-logo2.png);
-  width: 118px; 
-  height: 30px; 
+  width: 118px;
+  height: 30px;
   margin-right: 10px;
 }
 
@@ -192,7 +192,7 @@ table.terrain_chart td {
 {
   outline: none !important;
 }
- 
+
 
 #turn_done_button_div {
   position: absolute;
@@ -213,10 +213,10 @@ table.terrain_chart td {
   margin: 0px;
 }
 
-#freeciv_manual {  
+#freeciv_manual {
   color: #ffffff;
   padding: 10px;
-  
+
 }
 
 .manual-tab {
@@ -227,7 +227,7 @@ table.terrain_chart td {
 
 /* scrollable but without scrollbars */
 .noscrollbars {
-  overflow-y: scroll; 
+  overflow-y: scroll;
   overflow-x: scroll;
   scrollbar-width: none !important; /* Firefox */
 }
@@ -237,12 +237,12 @@ table.terrain_chart td {
 }
 
 /* no up-down arrows on number inputs */
-input[type=number]::-webkit-inner-spin-button, 
-input[type=number]::-webkit-outer-spin-button { 
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
-    margin: 0; 
+    margin: 0;
 }
 input[type='number'] {
   -moz-appearance:textfield;
@@ -283,7 +283,7 @@ input[type='number'] {
 }
 
 .blue_clickable {
-  color: #3498DB; 
+  color: #3498DB;
   text-decoration:underline;
 }
 
@@ -389,8 +389,8 @@ input[type='number'] {
   border-style: solid solid solid solid;
 }
 /*********** KILL ME! After next prod server recompilation of C server
- * that happens after 14April2021: C server put these classes in the 
- * Tile Info pop-up, but they are now replaced by the above, whose 
+ * that happens after 14April2021: C server put these classes in the
+ * Tile Info pop-up, but they are now replaced by the above, whose
  * shorterness avoids forced newline in the middle of tile output text
  * ********************************************************************/
  .fbt,.sbt,.tbt {
@@ -447,7 +447,7 @@ input[type='number'] {
   text-shadow: 2px 1px #000;
 }
 .gold_text {
-  color: #ffd52c; 
+  color: #ffd52c;
   padding-top: 0 px;
   padding-right: 0 px;
   max-width: 2em;
@@ -482,7 +482,7 @@ input[type='number'] {
 #city_luxury,
 #city_luxury2,
 #city_science,
-#city_science2, 
+#city_science2,
 #city_corruption,
 #city_pollution,
 #city_waste,
@@ -562,30 +562,30 @@ input[type='number'] {
 /* Research tab */
 .technologies {
   clear: left;
-  position: relative; 
-  overflow: auto; 
+  position: relative;
+  overflow: auto;
   width: 100%;
   background-image: url('/images/bg-dark.jpg');
 } /* theme classes 3 */
 /* Other players' research tab */
 .others_technologies {
   clear: left;
-  position: relative; 
-  overflow: auto; 
+  position: relative;
+  overflow: auto;
   width: 100%;
   background-image: url('/images/bg-light.jpg');
 } /* theme classes 3 */
 
 
 #tech_info_box {
-  float: left; 
-  border: 1px solid rgb(153, 153, 153); 
+  float: left;
+  border: 1px solid rgb(153, 153, 153);
   width: 100%;
-  min-height: 40px; 
-  padding: 4px; 
-  margin: 2px; 
-  margin-left: 0px; 
-  background: url("/images/bg-dark.jpg") repeat scroll 0 0 ; 
+  min-height: 40px;
+  padding: 4px;
+  margin: 2px;
+  margin-left: 0px;
+  background: url("/images/bg-dark.jpg") repeat scroll 0 0 ;
   color: rgb(226, 226, 226);
   font-family: Segoe;
 }
@@ -596,22 +596,22 @@ input[type='number'] {
 }
 
 #tech_progress_box {
-  float: left; 
-  padding-left: 80px; 
+  float: left;
+  padding-left: 80px;
   width: 280px;
 }
 
 #progress_bg {
   float: left;
-  background-color: #bbbbbb40; 
+  background-color: #bbbbbb40;
   width: 100%;
   border: 1px solid #ffffff;
   position: relative;
 }
 
 #progress_fg {
-  float: left; 
-  width: 60%; 
+  float: left;
+  width: 60%;
   background-color: #5582c2;
 }
 
@@ -621,7 +621,7 @@ input[type='number'] {
 }
 
 #tech_results {
-  float: left; 
+  float: left;
   padding-left: 20px;
 }
 
@@ -641,7 +641,7 @@ input[type='number'] {
   text-align: center;
 }
 
-/* Overrides to jquery-ui-1.8.9.custom.css */ 
+/* Overrides to jquery-ui-1.8.9.custom.css */
 
 .ui-widget-overlay {
   background: none repeat scroll 0 0 #000000;
@@ -682,7 +682,7 @@ input[type='number'] {
 #city_present_units, #city_supported_units, #city_improvements {
   float: left;
   height: 105px;
-  overflow: auto; 
+  overflow: auto;
   background:  url("/images/bg-med-light.jpg") repeat scroll 0 0 ;
   color: var(--contrast_text_color) !important;
   border: 1px solid #444444;
@@ -720,7 +720,7 @@ input[type='number'] {
 
 .production_list_item {
   float: left;
-  text-align: center; 
+  text-align: center;
   width: 80px;
   height: 90px;
   font-size: 70%;
@@ -728,17 +728,17 @@ input[type='number'] {
 
 .production_list_item_sub {
   cursor:pointer;
-  float:left; 
+  float:left;
 }
 
 #unit_info_div {
-  float:left; 
+  float:left;
 }
 
 #unit_info_image {
-  cursor:pointer; 
-  float: left; 
-  margin-right: 2px;  
+  cursor:pointer;
+  float: left;
+  margin-right: 2px;
 }
 
 #city_production_overview {
@@ -800,7 +800,7 @@ input[type='number'] {
 
 .tablesorter-dark {
   font: 115% sans-serif;
-  background: url("/images/bg-dark.jpg") repeat scroll 0 0 ; 
+  background: url("/images/bg-dark.jpg") repeat scroll 0 0 ;
   color: rgb(223, 223, 223);
 } /* theme classes 2 */
 
@@ -823,7 +823,7 @@ input[type='number'] {
 }
 
 .setting_button {
-/*  width: 140px; 
+/*  width: 140px;
     left blank, let the layout auto-fit: working better
 */
 }
@@ -973,8 +973,8 @@ input[type='number'] {
 }
 
 #wiki_image {
-  max-width: 600px; 
-  max-height: 500px; 
+  max-width: 600px;
+  max-height: 500px;
   margin: 5px;
   float: right;
 }
@@ -1042,13 +1042,13 @@ table.vet_level th {
 table.vet_level tr:nth-child(3) td {
   color: #bcdabc;
 }
-table.vet_level tr:nth-child(4) td, 
-table.vet_level tr:nth-child(5) td, 
+table.vet_level tr:nth-child(4) td,
+table.vet_level tr:nth-child(5) td,
 table.vet_level tr:nth-child(6) td {
   color: #dddd9f;
 }
-table.vet_level tr:nth-child(7) td, 
-table.vet_level tr:nth-child(8) td, 
+table.vet_level tr:nth-child(7) td,
+table.vet_level tr:nth-child(8) td,
 table.vet_level tr:nth-child(9) td {
   color: #dbc2a1;
 }
@@ -1101,7 +1101,7 @@ table.vet_level tr:nth-child(9) td {
 }
 
 .prod_choice_list_item {
-  text-align: left; 
+  text-align: left;
   font-size: 100%;
   cursor:pointer;
 }
@@ -1162,10 +1162,10 @@ table.vet_level tr:nth-child(9) td {
   margin-bottom: -5px;
   overflow: hidden;
 }
-/* Fixes unit panel for >100 units but requires 
-   hard-coding to add 
+/* Fixes unit panel for >100 units but requires
+   hard-coding to add
    if (is_small_screen()) document.body.classList.add('mobile');
-*/  
+*/
 body:not(.mobile) .ui-dialog.unit_dialog {
   overflow: auto !important;
   height: auto !important;
@@ -1189,7 +1189,7 @@ body:not(.mobile) .ui-dialog.unit_dialog {
 }
 
 /* Government Docs table showing content/unhappy citizens per empire size */
-.gov_city_happy_table, 
+.gov_city_happy_table,
 .gov_city_rapture_table {
   width: 100%;
   border-collapse: collapse;
@@ -1234,44 +1234,44 @@ body:not(.mobile) .ui-dialog.unit_dialog {
 }
 
 .Democracy {
-  background-image: url(/images/gov.democracy.png) !important; 
+  background-image: url(/images/gov.democracy.png) !important;
 }
 
 .Anarchy {
-  background-image: url(/images/gov.anarchy.png) !important; 
+  background-image: url(/images/gov.anarchy.png) !important;
 }
 
 .Republic {
-  background-image: url(/images/gov.republic.png) !important; 
+  background-image: url(/images/gov.republic.png) !important;
 }
 
 .Despotism {
-  background-image: url(/images/gov.despotism.png) !important; 
+  background-image: url(/images/gov.despotism.png) !important;
 }
 
 .Communism {
-  background-image: url(/images/gov.communism.png) !important; 
+  background-image: url(/images/gov.communism.png) !important;
 }
 
 .Monarchy {
-  background-image: url(/images/gov.monarchy.png) !important; 
+  background-image: url(/images/gov.monarchy.png) !important;
 }
 
 .Fundamentalism {
-  background-image: url(/images/gov.fundamentalism.png) !important; 
+  background-image: url(/images/gov.fundamentalism.png) !important;
 }
 
 .Tribalism,
 .Tribal {
-  background-image: url(/images/gov.tribalism.png) !important; 
+  background-image: url(/images/gov.tribalism.png) !important;
 }
 
 .Tribalism {
-  background-image: url(/images/gov.tribalism.png) !important; 
+  background-image: url(/images/gov.tribalism.png) !important;
 }
 
 .Federation {
-  background-image: url(/images/gov.federation.png) !important; 
+  background-image: url(/images/gov.federation.png) !important;
 }
 
 /* vertically aligned images */
@@ -1298,7 +1298,7 @@ body:not(.mobile) .ui-dialog.unit_dialog {
   color: #177;
 }
 
-.sb 
+.sb
 {
   vertical-align: sub;
 }
@@ -1346,23 +1346,23 @@ body:not(.mobile) .ui-dialog.unit_dialog {
 }
 
 /* city tabs will be on the bottom of the dialog. */
-#city_tabs .ui-tabs-nav { 
-    position: absolute; 
-    left: 0.25em; 
-    right: 0.25em; 
-    bottom: 0.25em; 
-    padding: 0em 0.2em 0.2em; 
-} 
-#city_tabs .ui-tabs-nav li { 
-    border-top: none; 
-    border-bottom: 1px solid rgb(51, 51, 51); 
-    -moz-border-radius: 0px 0px 4px 4px; 
-    -webkit-border-radius: 0px 0px 4px 4px; 
-    border-radius: 0px 0px 4px 4px; 
-} 
-#city_tabs .ui-tabs-nav li.ui-tabs-selected, 
-#city_tabs .ui-tabs-nav li.ui-state-active { 
-    top: -1px; 
+#city_tabs .ui-tabs-nav {
+    position: absolute;
+    left: 0.25em;
+    right: 0.25em;
+    bottom: 0.25em;
+    padding: 0em 0.2em 0.2em;
+}
+#city_tabs .ui-tabs-nav li {
+    border-top: none;
+    border-bottom: 1px solid rgb(51, 51, 51);
+    -moz-border-radius: 0px 0px 4px 4px;
+    -webkit-border-radius: 0px 0px 4px 4px;
+    border-radius: 0px 0px 4px 4px;
+}
+#city_tabs .ui-tabs-nav li.ui-tabs-selected,
+#city_tabs .ui-tabs-nav li.ui-state-active {
+    top: -1px;
 }
 
 
@@ -1376,7 +1376,7 @@ body:not(.mobile) .ui-dialog.unit_dialog {
 }
 
 .no-close .ui-dialog-titlebar-close {
-  display: none 
+  display: none
 }
 
 .nation_flags {
@@ -1444,13 +1444,13 @@ body:not(.mobile) .ui-dialog.unit_dialog {
 }
 
 .cities_row {
-  cursor:pointer; 
+  cursor:pointer;
   cursor:hand;
 }
 
 .cities_row td {
     padding-left: 20px;
-    padding-left: 0px;        /* added by Lexxie to experiment */ 
+    padding-left: 0px;        /* added by Lexxie to experiment */
 }
 
 /* Empire -> all tabs -> cities_row of images:
@@ -1560,8 +1560,8 @@ li.tech-both::before {
   position: absolute;
   left: 1em;
 }
-/* the following classes express a matrix of possibilities, some of which are 
-   not possible. the first code is who definitely possesses the tech:  
+/* the following classes express a matrix of possibilities, some of which are
+   not possible. the first code is who definitely possesses the tech:
    them, me_only, both, neither
    the second is two bits for who possess blueprints: [me_bit][them_bit] */
 li.tech-them00 { /* no one has blueprints, they have the tech. we don't. */
@@ -1845,7 +1845,7 @@ li.tech-both00::before { /*  we both have the tech and neither has blueprints */
 }
 
 /* this probably is doing nothing */
-.ui-dialog-content 
+.ui-dialog-content
 .ui-widget-content {
   color: var(--default_text_color);
 }
@@ -1856,7 +1856,7 @@ li.tech-both00::before { /*  we both have the tech and neither has blueprints */
   white-space: pre-line;
   background-image: url('/images/bg-light.jpg') !important;
   color: var(--contrast_text_color) !important;
-  /* box-shadow: none !important; 
+  /* box-shadow: none !important;
   box-shadow: 5px 5px 15px #000a, -.01em 0 .27em #ccc5 !important; */
   box-shadow: 6px 6px 23px #000b !important;
   text-shadow: 1px 1px #33222241 !important;
@@ -1983,7 +1983,7 @@ body div.ui-tooltip {
 }
 a:focus { outline: thin dotted; border:none;}
 .ui-tabs-active .ui-tabs-anchor {
-  top: -1px; 
+  top: -1px;
   background: url('/images/bg-med-light.jpg') #000 !important;
   color:#000 !important;
   border: none !important;
@@ -2020,7 +2020,7 @@ a:focus { outline: thin dotted; border:none;}
 }
 
 input[type="text"], textarea {
-  background-color : #111; 
+  background-color : #111;
   color: var(--default_text_color);
   border-color: #aaa;
 }
@@ -2115,7 +2115,7 @@ input[type="email" i], #email {
   background: #0000003b;
 }
 
-/*  These get put in chatbox classes, meaning we can define colours, fonts, indent, collapsing, all kinds of stuff 
+/*  These get put in chatbox classes, meaning we can define colours, fonts, indent, collapsing, all kinds of stuff
     In addition, these could be intercepted and their names used as playsounds, where, if playsound not found, it just does nothing.
 */
 
@@ -2195,7 +2195,7 @@ input[type="email" i], #email {
 .e_enemy_diplomat_failed,
 .e_my_diplomat_poison,
 .e_my_spy_steal_map,
-.e_my_diplomat_escape, 
+.e_my_diplomat_escape,
 .e_my_diplomat_bribe,
 .e_my_spy_steal_gold,
 .e_my_diplomat_incite,
@@ -2225,12 +2225,12 @@ input[type="email" i], #email {
   color: #7cb4ff;
   font-size: 82%;
 }
-.e_unit_orders { 
+.e_unit_orders {
   color: #7cb4ff;
  }
 .e_imp_build,
 .e_unit_built {
-  color: #acb8d3 
+  color: #acb8d3
 }
 .e_unit_became_vet {
   color: #b0b0b0;
@@ -2323,7 +2323,7 @@ input[type="email" i], #email {
 .e_city_build,
 .e_city_production_changed,
 
-.e_worklist, 
+.e_worklist,
 
 .e_imp_auctioned,
 .e_imp_auto,
@@ -2397,7 +2397,7 @@ input[type="email" i], #email {
   font-size: 70%;
 }
 
-/* Font Control over various game elements 
+/* Font Control over various game elements
 *******************************************************************/
 #pregame_message_area {
   font-family: SegoeSB;
@@ -2448,8 +2448,8 @@ input[type="email" i], #email {
 }
 
 #city_canvas_div {
-  width: 384px; 
-  height: 192px; 
+  width: 384px;
+  height: 192px;
   float: left;
   margin: 5px;
   border: 1px solid #888888;
@@ -2473,7 +2473,7 @@ input[type="email" i], #email {
   color: var(--default_text_color);
 }
 #city_right_panel {
-  float: right; 
+  float: right;
   width: 55%;
   background: url("/images/bg.jpg") repeat scroll 0 0 #222222;
   height: 533px;
@@ -2627,19 +2627,19 @@ label {
 }
 
 input[type=checkbox].css-checkbox {
-    position: absolute; 
-    overflow: hidden; 
-    clip: rect(0 0 0 0); 
-    height:1px; 
-    width:1px; 
-    margin:-1px; 
+    position: absolute;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    height:1px;
+    width:1px;
+    margin:-1px;
     padding:0;
     border:0;
 }
 
 input[type=checkbox].css-checkbox + label.css-label {
   padding-left:20px;
-  height:15px; 
+  height:15px;
   display:inline-block;
   line-height:15px;
   background-repeat:no-repeat;
@@ -2669,7 +2669,7 @@ background-image:url(/images/dark-check-green.png);
 
 input[type=checkbox].css-checkbox.med + label.css-label.med {
   padding-left:22px;
-    height:17px; 
+    height:17px;
   display:inline-block;
   line-height:17px;
   background-repeat:no-repeat;
@@ -2679,12 +2679,12 @@ input[type=checkbox].css-checkbox.med + label.css-label.med {
     cursor:pointer;
 }
 
-input[type=checkbox].css-checkbox.med:checked + label.css-label.med {  
+input[type=checkbox].css-checkbox.med:checked + label.css-label.med {
     background-position: 0 -17px;
 }
 input[type=checkbox].css-checkbox.sme + label.css-label.sme {
   padding-left:22px;
-    height:16px; 
+    height:16px;
   display:inline-block;
   line-height:16px;
   background-repeat:no-repeat;
@@ -2693,13 +2693,13 @@ input[type=checkbox].css-checkbox.sme + label.css-label.sme {
   vertical-align:middle;
     cursor:pointer;
 }
-  
-input[type=checkbox].css-checkbox.sme:checked + label.css-label.sme{  
+
+input[type=checkbox].css-checkbox.sme:checked + label.css-label.sme{
       background-position: 0 -16px;
   }
 input[type=checkbox].css-checkbox.lrg + label.css-label.lrg {
     padding-left:22px;
-      height:20px; 
+      height:20px;
     display:inline-block;
     line-height:20px;
     background-repeat:no-repeat;
@@ -2708,7 +2708,7 @@ input[type=checkbox].css-checkbox.lrg + label.css-label.lrg {
     vertical-align:middle;
       cursor:pointer;
   }
-  
+
 input[type=checkbox].css-checkbox.lrg:checked + label.css-label.lrg{
       background-position: 0 -20px;
   }
