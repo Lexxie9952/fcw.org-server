@@ -1,7 +1,7 @@
 
 [spec]
 
-; Format and options of this spec file: 
+; Format and options of this spec file:
 options = "+Freeciv-spec-Devel-2015-Mar-25"
 
 [info]
@@ -50,4 +50,5 @@ tiles = { "row", "column", "tag"
   1,  9, "u.armor_ii_o"               ; Lexxie, GB
   1, 10, "u.armor_o"                  ; Nemo, Lexxie
   2,  0, "u.pbomber_o"                ; Lexxie
+  2,  1, "u.cargo_plane"
 }
