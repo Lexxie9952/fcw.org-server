@@ -5212,6 +5212,13 @@ bool unit_move_real(struct unit *punit, struct tile *pdesttile, long move_cost,
     tile_claim_bases(pdesttile, pplayer);
   }
 
+
+  /* FIXME: Reqs seem to have no way of checking transported_by so that we don't
+     charge EFT_PASSENGER_MOVE_COST_BP to Paratroopers on Airborne Transport.
+     Nor even to see if Cargo Plane is on the same tile? Or is there a better way,
+     surely there must be. Doing it ugly for now! */
+  bool is_paratrooper_transport = (0 == (strcmp(unit_rule_name(punit), "Cargo Plane")));
+
   /* Move all contained units. */
   unit_cargo_iterate(punit, pcargo) {
     pdata = unit_move_data(pcargo, psrctile, pdesttile);
@@ -5263,6 +5270,11 @@ bool unit_move_real(struct unit *punit, struct tile *pdesttile, long move_cost,
                                  * cargo_move_rate
                                  * get_unit_bonus(pcargo, EFT_PASSENGER_MOVE_COST_BP) / SINGLE_MOVE
                                 );
+
+    /* FIXME: ugly hack, see above */
+    if (is_paratrooper_transport && unit_type_get(pcargo)->paratroopers_range > 0) {
+      cargo_move_cost = 0;
+    }
 
 /* BREAK GLASS IN CASE OF DEBUG
     notify_player(pplayer, unit_tile(punit), E_UNIT_ORDERS, ftc_server,
