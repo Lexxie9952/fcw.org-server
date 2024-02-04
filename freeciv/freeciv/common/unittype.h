@@ -375,9 +375,15 @@ struct unit_class {
 #define SPECENUM_VALUE48NAME N_("?unitflag:AlwaysAttackClass2")
 #define SPECENUM_VALUE49 UTYF_ALWAYSATTACKCLASS3
 #define SPECENUM_VALUE49NAME N_("?unitflag:AlwaysAttackClass3")
+/* Gives 'free ride' (zero PASSENGER_MOVE_COST). Assign to Transport unit.
+   Qualifying 'free riders' are any unit with paratroopers_range > 0. (This
+   serves as a "FREE_RIDER flag" by units with or without a Paradrop
+   actionenabler. Real Paratroopers will always ride free on such
+   transports :(. The 'proper way' to do this is a free_ride = <list>
+   in the cargo unit_type, if we ever use this more widely. */
+#define SPECENUM_VALUE50 UTYF_FREE_RIDE
+#define SPECENUM_VALUE50NAME N_("?unitflag:FreeRide")
 /* Reserved for future use */
-#define SPECENUM_VALUE50 UTYF_RESERVED
-#define SPECENUM_VALUE50NAME N_("?unitflag:RESERVED")
 #define SPECENUM_VALUE51 UTYF_RESERVED1
 #define SPECENUM_VALUE51NAME N_("?unitflag:RESERVED1")
 #define SPECENUM_VALUE52 UTYF_RESERVED2

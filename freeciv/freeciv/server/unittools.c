@@ -5213,11 +5213,11 @@ bool unit_move_real(struct unit *punit, struct tile *pdesttile, long move_cost,
   }
 
 
-  /* FIXME: Reqs seem to have no way of checking transported_by so that we don't
-     charge EFT_PASSENGER_MOVE_COST_BP to Paratroopers on Airborne Transport.
-     Nor even to see if Cargo Plane is on the same tile? Or is there a better way,
-     surely there must be. Doing it ugly for now! */
-  bool is_paratrooper_transport = (0 == (strcmp(unit_rule_name(punit), "Cargo Plane")));
+  /* FIXME: Reqs seem to have no way of checking transported_by so that we can avoid
+     charging EFT_PASSENGER_MOVE_COST_BP to Paratroopers on an Airborne Transport.
+     So the UTYF_FREE_RIDE flag works for now, until rulesets want more complicated
+     rules for what gets you a free ride. Doing it ugly for now! */
+  bool is_free_ride = utype_has_flag(unit_type_get(punit), UTYF_FREE_RIDE);
 
   /* Move all contained units. */
   unit_cargo_iterate(punit, pcargo) {
@@ -5271,8 +5271,9 @@ bool unit_move_real(struct unit *punit, struct tile *pdesttile, long move_cost,
                                  * get_unit_bonus(pcargo, EFT_PASSENGER_MOVE_COST_BP) / SINGLE_MOVE
                                 );
 
-    /* FIXME: ugly hack, see above */
-    if (is_paratrooper_transport && unit_type_get(pcargo)->paratroopers_range > 0) {
+    /* FIXME: See above. paratroopers_range is a "free rider" flag, usable by any utype
+       Problem is that all Paratroopers will always be free riders. */
+    if (is_free_ride && unit_type_get(pcargo)->paratroopers_range > 0) {
       cargo_move_cost = 0;
     }
 
