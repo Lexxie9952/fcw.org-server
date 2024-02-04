@@ -247,13 +247,13 @@ cost = 50
 
 [advance_combined_arms]
 name     = _("Combined Arms")
-req1     = "Computers"
+req1     = "Mobile Warfare"
 req2     = "Advanced Flight"
 flags    = ""
 graphic     = "a.combined_arms"
 graphic_alt = "-"
-helptext = _("Auto-upgrades Riflemen, Zealots, Alpine Troops.")
-cost = 5650
+helptext = _("Auto-upgrades Riflemen, Zealots, Alpine Troops. Free Cargo Plane")
+cost = 2300
 
 [advance_combustion]
 name     = _("Combustion")
@@ -1025,7 +1025,6 @@ graphic_alt = "-"
 cost = 1200
 helptext = _("Obsoletes Cavalry.")
 
-
 [advance_flight2]
 name     = _("Flight.2")
 req1     = "Flight"
@@ -1053,3 +1052,13 @@ graphic     = "a.space_flight"  ;this pic won't be shown in the tech tree but wi
 graphic_alt = "-"
 cost = 3600
 helptext = _("Missile transporters are created with 1 free ABM.")
+
+[advance_carms.2]
+name     = _("C.Arms.2")
+req1     = "Combined Arms"
+req2     = "None"
+flags    = "Specialization"
+graphic     = "a.combined_arms" ;this pic won't be shown in the tech tree but will show in other places
+graphic_alt = "-"
+cost = 2900
+

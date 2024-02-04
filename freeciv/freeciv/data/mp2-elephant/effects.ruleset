@@ -1540,7 +1540,23 @@ reqs	=
 
 ;*********************************************************************** TRANSPORTED UNIT MOVE COSTS
 ;As other things liberalize we may observe setting this at 0 is OP exploitive and go for like, idk,
-;1/3, 1/2, or 2/3 mp. Then again not necessary if the 1/3 is built into a board/load cost.
+;1/3, 1/2, or 2/3 mp. Then again not necessary if the 1/3 is built into a board/load cost. BUT
+;since we're getting rid of that, I think we need to keep a Board cost at very least, or Deboard
+;(decide which is better).
+;
+; Currently Paratroopers are hard-coded in unit_move_real() to ignore this iff they are transported by a Cargo Plane
+; obviously that's ugly but if we ever change that we need to re-introduce other ways to not charge them move points
+; when on a Cargo Plane.
+;
+;BASE RATE of 50% while transported:
+;Military land units who aren't LandAirSea.
+;
+;FULL MOVES while transported = Civilian, Marines, AAA, Bombs
+;NON-LAND,
+;Marines, AAA,
+;Worker-types, Tribesmen, Migrant-types, Scouts, Balloons, Airplanes, Emissary, Diplomat, Spy, Patriarch
+;Wagon, Caravan, Train, Truck, Goods, Freight, Leader.
+;
 [effect_military_land_base_passenger_cost_50] ;except Marines/AAA
 type    = "Passenger_Move_Cost_Bp"
 value	= 5040
@@ -1550,14 +1566,7 @@ reqs	=
       "UnitFlag",      "Infra",         "Local", FALSE     ; except worker types
       "UnitFlag",      "NonMil",        "Local", FALSE     ; except NonMil types
       "UnitClass",     "LandAirSea",    "Local", FALSE     ; except Marines, AAA. (AAA slated to vigil on ships)
-;BASE RATE of 50% while transported:
-;Military land units who aren't LandAirSea.
-;
-;FULL MOVES while transported = Civilian, Marines, AAA, Bombs
-;NON-LAND,
-;Marines, AAA,
-;Worker-types, Tribesmen, Migrant-types, Scouts, Balloons, Airplanes, Emissary, Diplomat, Spy, Patriarch
-;Wagon, Caravan, Train, Truck, Goods, Freight, Leader.
+;      "UnitType",      "Paratroopers",  "Local", FALSE     ; See notes around here.
     }
 
 ; Siege: 0.5mp, Mounted: 1 mp. Motor: 1.5 mp. Absolutely great. Could get rewrite after deboard liberalization?
@@ -5589,7 +5598,8 @@ value   = 3360
 reqs =
     { "type",     "name",          "range","present"
       "Building", "Appian Way",    "Player",TRUE
-      "UnitFlag", "Workers",       "Local", TRUE
+      "UnitFlag", "Workers",       "Local", TRUE  ;; Workers, Workers II, Engineers
+      "UnitType", "Engineers",     "Local", FALSE   ;; ...minus Engineers
       "UnitType", "Legion",        "Local", FALSE ;Legions already got a bonus above.
       "CityTile", "Claimed",       "Local", FALSE
     }
@@ -5599,7 +5609,8 @@ value   = 3360
 reqs =
     { "type",     "name",          "range","present"
       "Building", "Appian Way",    "Player",TRUE
-      "UnitFlag", "Workers",       "Local", TRUE
+      "UnitFlag", "Workers",       "Local", TRUE    ;; Workers, Workers II, Engineers
+      "UnitType", "Engineers",     "Local", FALSE   ;; ...minus Engineers
       "Extra",    "Fallout",       "Local", FALSE ; UnitState tile check will segfault without a tile target in the reqs list.
       "UnitState", "OnDomesticTile","Local",TRUE
     }
@@ -8307,11 +8318,12 @@ reqs    =
       "BuildingGenus", "Special", "Local"
     }
 
-;************************************************************************************ MOVE COSTS
+;***************************************************************************************************************************************************************** MOVE COSTS
 ;By having control over embark/board and disembark/deboard, we can gracefully upgrade mechanics
 ;to tamp down double-move and transport-swap dynamics while still leaving a little flex in
 ;smoothing logistics and transportation issues via transportation bonnses instead of OP 3x
 ;movement:
+;This now makes Paratroopers like Marines but see note in actionenabler below
 [effect_action_success_move_cost_board]
 type    = "Action_Success_Actor_Move_Cost"
 value   = 3360
@@ -8320,8 +8332,15 @@ reqs    =
       "Action",        "Transport Board", "Local", TRUE
       "UnitClassFlag", "DelayLoad",       "Local", TRUE      ; Does not affect Aircraft or ships
       "UnitType",      "Marines",         "Local", FALSE     ; Does not affect Marines
+      "UnitType",      "Paratroopers",    "Local", FALSE     ; Does not affect Paratroopers
       "UnitClassFlag", "UnloadOnce",      "Local", FALSE     ; prevent 2/3 TiredAttack by loading up a Bomb; inability to uses nuke-bombs after loading them.
     }
+
+;note this allows Paratroopers to deboard for 0 like Marines but since we're getting
+;rid of deboarding costs because of passive movement anyway, not a big deal. we're only
+;stalled on doing this because not yet figured out how it affects Bombs but perhaps
+;they're not DelayLoad or perhaps we just make this only apply to Bombs but better yet
+;is to just rethink Bombs under the new system.
 [effect_action_success_move_cost_deboard]
 type    = "Action_Success_Actor_Move_Cost"
 value   = 3360
@@ -8330,6 +8349,7 @@ reqs    =
       "Action",        "Transport Deboard", "Local", TRUE
       "UnitClassFlag", "DelayLoad",         "Local", TRUE      ; Does not affect Aircraft or ships
       "UnitType",      "Marines",           "Local", FALSE     ; Does not affect Marines
+      "UnitType",      "Paratroopers",      "Local", FALSE     ; Doesn't affect Paratroopers
     }
 [effect_action_success_move_cost_deboard_to_unsupported_tile_is_a_disembark_1]    ; TO DO: If we move all deboard illegality rules to this section we can liberalize deboarding rules in client and here too.
 type    = "Action_Success_Actor_Move_Cost"
@@ -8339,6 +8359,7 @@ reqs    =
       "Action",        "Transport Deboard", "Local", TRUE
       "UnitClassFlag", "TerrainSpeed",      "Local", TRUE      ; Only affects land units, ...
       "UnitType",      "Marines",           "Local", FALSE     ; except Marines
+      "UnitType",      "Paratroopers",      "Local", FALSE     ; except Paratroopers from Cargo Plane
 
       ; For now since this is one effect for ALL land units, exclude ANY tile that ANY unit can legally deboard to:
       "CityTile",      "Center",            "Local", FALSE
@@ -8351,6 +8372,7 @@ reqs    =
       "Extra",         "Bunker",            "Local", FALSE
       "Extra",         "Airbase",           "Local", FALSE
     }
+; See notes 2 above for how this affects Paratroopers and makes them like Marines
 [effect_action_success_move_cost_transport_unload]
 type    = "Action_Success_Target_Move_Cost"   ; "Local" scope on unit pertains to target, not actor.
 value   = 3360
@@ -8359,6 +8381,7 @@ reqs    =
       "Action",        "Transport Unload", "Local", TRUE
       "UnitClassFlag", "DelayLoad",        "Local", TRUE      ; Does not affect Aircraft or ships
       "UnitType",      "Marines",          "Local", FALSE     ; Does not affect Marines
+      "UnitType",      "Paratroopers",     "Local", FALSE     ; Does not affect Paratroopers
     }
 [effect_action_success_move_cost_transport_unload_to_unsupported_tile_is_a_disembark_1]    ; TO DO: If we move all unload illegality rules to this section we can liberalize unloading rules in client and here too.
 type    = "Action_Success_Target_Move_Cost"

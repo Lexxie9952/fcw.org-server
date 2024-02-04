@@ -588,12 +588,13 @@ actor_reqs    =
 [actionenabler_communist_plows_to_rifles]
 action = "Convert Unit"
 actor_reqs    =
-    { "type",     "name",         "range"
-      "UnitFlag", "Workers",      "Local"
-      "Gov",      "Communism",    "Player"
-      "Tech",     "Communism",    "Player"
-      "Tech",     "Conscription", "Player"
-      "UnitState","OnDomesticTile","Local"
+    { "type",     "name",         "range",  "present"
+      "UnitFlag", "Workers",      "Local",  TRUE
+      "UnitType", "Engineers",    "Local",  FALSE
+      "Gov",      "Communism",    "Player", TRUE
+      "Tech",     "Communism",    "Player", TRUE
+      "Tech",     "Conscription", "Player", TRUE
+      "UnitState","OnDomesticTile","Local", TRUE
     }
 ;**Mobile SAM is an upgrade to AAA but does not obsolete it,
 ;  since AAA retains special uses. Instead, AAA can convert
@@ -3450,6 +3451,20 @@ target_reqs    =
       "UnitState", "Transported",   "Local", TRUE
       "UnitType",  "Marines",       "Local", TRUE
     }
+;This actionenabler didn't seem to be necessary
+;[actionenabler_paradrop_unload]
+;action        = "Transport Unload"
+;actor_reqs    =
+;    { "type",      "name",          "range", "present"
+;      "UnitType",  "Cargo Plane",   "Local", TRUE
+;      "UnitState", "Transporting",  "Local", TRUE
+;    }
+;target_reqs    =
+;    { "type",          "name",      "range", "present"
+;      "UnitState", "OnLivableTile", "Local", TRUE
+;      "UnitState", "Transported",   "Local", TRUE
+;      "UnitType",  "Paratroopers",  "Local", TRUE
+;    }
 
 [actionenabler_landroad_unload_footsiege_in_bases]      ; Wagon and Truck unloading Foot, Siege, Civilian, in base
 action        = "Transport Unload"

@@ -129,8 +129,8 @@ and can now be built with veteran levels.
     Marines:50, Ground Troops:35, Paratroopers:50. Zealots which were 25 in MP2D receive discount also and are back to 20.
 36A. Destroy City requires 3 units (2 support units) to do.
 37. Modern FootSoldiers (Paratrooper, Ground Troops, get A8)
-38. Mech.Inf get A7 attack, can carry one Foot Soldier or AAA.
-39. AWACS cost adjust: 130, was 140. Attrition rate and other flight reconnaissance options disincentivized the cost.
+38. Mech.Inf can carry one Foot Soldier or AAA.
+39. AWACS cost adjust: 125, was 140. Vision radius moderate increase. Attrition rate and other flight reconnaissance options disincentivized the cost.
 40. Each new aviation tech upgrades Airplane range by +1 move (was +2). 6 techs started making it almost a cheap AWACS.
 41. Marines, Ground Troops, and Paratroopers are simplified with same A8 D5.5; Marines however have stronger vet levels.
 42. Passenger Transport costs:
@@ -176,7 +176,7 @@ Missiles boarding and transport swapping must be done in friendly city or base. 
 46. TiredAttack only applies to land units. Air and Sea weren't originally meant to have fractional moves_left but as it's now possible with
    the overhaul of the movement system, we keep things consistent with old rules and not add a complexity to worry about.
 47. GSF max attacks per turn: 3 (was 4)
-48. Spy Plane as defender limits to 5 combat rounds.
+48. Spy Plane as defender limits to 5 combat rounds. Gets vision increase to be more than AWACS instead of same.
 49. LandRoad and LandRail can't be embarked upon, only boarded
     (forces Transport Board enablers which restrict illegal units from boarding) (also MP2D)
 ** Missiles and Bombs lose all ability to embark (also MP2D)
@@ -244,4 +244,12 @@ i.e., 6 in 5 (swamp), 5 in 4 (mine), 4 in 3 (angkor wat swamp drain) goes to:
 86. Added NukeSurvivalPct effects, regulating suvival odds for city pop, units in city, units on map, nukes in city, and nukes on map. See HELP>UNITS>Atom Bomb for more info
     75% of surviving units will be injured, and 25% unscathed. Different nukes have different strengths affecting survival percentages across the various categories.
     Note the M.A.D. corrective affect where nukes have less chance of being nuked, presumably because preciously stored underground for retaliation purposes.
-87.
+87. New unit Cargo Plane.
+88. Paratroopers totally reworked. Paradrop range reduced to 5. Can board/deboard at no move cost. Have no PASSENGER_MOVE_COST when transported by Cargo Plane.
+   Paratroopers long had a special OP-exploitableness that no one used just because they were too weak. Adding more micromanagement for paradropping is not desirable but there was no other choice if the game was to be balanced and the unit
+      finally become viable. Air defenses now have proper ability to prevent transport planes from easily paradropping in their interior, if deployed properly.
+   As a courtesy for playability and lack of micromanagement, Paratroopers CAN paradrop within a 5 tile range, considered a quick and easy paradrop on more readily available planes than a dedicated military class Cargo Plane.
+89. Discovery of Combined Arms gives a free Cargo Transport in the capital.
+90. Combined Arms no longer requires computers but is demoted one tier. Reason: allow more advanced troops and capabilities. Before, by the time this tech was available, it was not as appealing as other available techs, and thus became
+      much less relevant. In addition, this helps buff Project Infantry another step and makes "necessity" of Mechanization for Mech.Inf slightly less.
+91.

@@ -86,6 +86,7 @@ flags =
     _("Cant_Pillage"), _("Unable to pillage tiles.")
     _("CanClaim"), _("Is able to claim sovereignty of foreign tiles bordering domestic territory.")
     _("CantAttack"), _("Cannot do conventional combat attacks.")
+;;; Courtesy UTYPE flag allows effects/enablers to select all worker-types then rule out some with ,"false", instead of needing 3 effects/enablers
     _("Workers")
   }
 
@@ -779,7 +780,9 @@ flags         = "NeverTired", "Unreachable", "DoesntOccupyTile", "Airliftable"
 ;   pop_cost = the number of population added to the target city
 ;  "Paradrop Unit"
 ;   paratroopers_range  = the maximal range the unit can be paradropped to.
-;                         Max range is 65534.
+;                         Max range is 65534. DO NOT USE AS A SUBSTITUTE FLAG
+;                         FOR OTHER FEATURES UNTIL unit_move_real() stops using
+;                         non-zero value of this as a hack for Paratroopers on Cargo Plane.
 ;   paratroopers_mr_req = the move rate which is required at least for
 ;                         paradropping (whole movement points)
 ;   paratroopers_mr_sub = <the move rate which is subtracted after paradropping>
@@ -1342,7 +1345,8 @@ uk_food       = 0
 uk_gold       = 0
 embarks       = "Helicopter"    ; transport helicopter only
 disembarks    = "Helicopter"
-flags         = "MultiSlot", "Settlers", "Infra", "CanRoad", "CanFortress", "NonMil", "NonProvoking", "HasNoZOC", "Transform", "Airbase", "Cant_Fortify", "Expellable"
+flags         = "MultiSlot", "Settlers", "Infra", "CanRoad", "CanFortress", "NonMil", "NonProvoking", "HasNoZOC",
+                "Transform", "Airbase", "Cant_Fortify", "Expellable", "Workers"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
 veteran_base_raise_chance = 0
@@ -2287,10 +2291,11 @@ uk_shield     = 0
 uk_food       = 0
 uk_gold       = 1
 embarks       = "LandRoad", "LandRail", "Helicopter"    ; transport helicopter only
-disembarks    = "LandRoad", "LandRail", "Helicopter"
+disembarks    = "LandRoad", "LandRail", "Helicopter", "Air"
 targets       = "Balloon", "Helicopter", "LandRail", "Zeppelin"
 flags         = "MultiSlot", "Paratroopers", "FootSoldier", "Capturer",
-                "CantReachAir", "Provoking", "Settlers", "CanHide", "WillNever"
+                "CantReachAir", "Provoking", "Settlers", "CanHide", "WillNever",
+                "TransportDefender"
 roles         = "DefendOk", "DefendOkStartUnit"
 veteran_names =
   _("?vet_rank:green"),
@@ -2305,17 +2310,18 @@ veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
 veteran_power_fact = 100, 150, 175, 250, 300, 350, 400
 veteran_move_bonus = 0, 0, 3360, 3360, 6720, 6720, 6720
 helptext      = _("\
-Paratroopers are experts at airborne attacks.\
- From a friendly city or airbase, Paratroopers who have moves left and\
- have not already paradropped in the current turn, can paradrop directly\
- to any tile in range, and be immediately ready to act there. Beware dropping into unseen territory,\
- as Paratroopers landing on a tile occupied by enemy units will be lost.\
- Also note：Paradropping is assumed to be done from aircraft. Therefore,\
- Fighters on Vigil may auto-attack the tile you land on, if adjacent. \n\n\
+Paratroopers are expert at airborne deployment and attacks. Paratroopers have multiple ways\
+  to parachute to distant tiles：\n\
+  • Move a Cargo Plane over the the desired tile, then Deboard Transport (shift-T), or Unload Transport (T). ‡\n
+  • Without a Cargo Plane, Paratroopers can Paradrop (P) within 5 tiles range, if in a friendly city or airbase.\
+Fighters on Vigil may auto-attack the adjacent tile you land on. \n\n\
+Paratroopers can Board and Deboard any transport for free. If on a Cargo Plane, they are similar to Marines and AAA,\
+ incurring no passenger move costs. They can defend their transport from attackers. \n\n\
+‡ Paratroopers may also disembark from a Cargo Plane to an adjacent tile (uses all moves.) \n\n\
 "), _("\
 Multislot：Under certain conditions, cities can make one (or more) multislot units per turn, plus one of any other type.\
 ")
-paratroopers_range = 14
+paratroopers_range = 5
 paratroopers_mr_req = 1
 paratroopers_mr_sub = 0
 
@@ -2333,7 +2339,7 @@ sound_fight   = "f_mech_inf"
 sound_fight_alt = "f_generic"
 build_cost    = 50
 pop_cost      = 0
-attack        = 70
+attack        = 60
 defense       = 60
 hitpoints     = 30
 firepower     = 1
@@ -3732,6 +3738,54 @@ Stack-Escape：60% odds to evade stack-death if attacker doesn’t have more mov
 GOTO forces layovers on refuel-tiles. To override, shift-click goal-tile or move one tile off the refuel spot.\
 ")
 
+[unit_cargo_plane]
+name          = _("Cargo Plane")
+class         = "Air"
+tech_req      = "Advanced Flight"
+obsolete_by   = "None"
+graphic       = "u.cargo_plane"
+graphic_alt   = "-"
+sound_move    = "m_strategic_bomber"
+sound_move_alt = "m_generic"
+sound_fight   = "f_fighter"
+sound_fight_alt = "f_generic"
+build_cost    = 65
+pop_cost      = 0
+attack        = 0
+defense       = 10
+hitpoints     = 20
+firepower     = 1
+move_rate     = 26
+vision_radius_sq = 12
+transport_cap = 5
+fuel          = 1
+uk_happy      = 0
+uk_shield     = 1
+uk_food       = 0
+uk_gold       = 0
+flags         = "HasNoZOC", "NoVeteran", "Unbribable", "NeverProtects", "CanEscape", "Provoking"
+; No veteran levels (level name is never displayed)
+veteran_names = _("green")
+veteran_base_raise_chance = 0
+veteran_work_raise_chance = 0
+veteran_power_fact = 100
+veteran_move_bonus = 0
+roles         = ""
+cargo         = "Land", "LandAirSea", "Cargo"
+helptext      = _("\
+Cargo Planes can carry 5 foot soldiers, diplomatic units, worker-types, or commerce cargo. \n\
+Cargo Planes have a variety of uses: \n\
+ ‣ They can airlift cargo to a friendly airport for only 1 airlift point. \n\
+ ‣ They can quickly bring needed troops to a distant city or airbase. \n\
+ ‣ Paratroopers can jump below (T) the Cargo Plane with no move cost. \n\
+ ‣ They can bring Freight to distant cities for commercial or industrial purposes. \n\
+ ‣ Diplomatic missions (a legal landing spot is needed). \n\n\
+A Cargo Plane is delivered free to the capital with discovery of Combined Arms.\n\n\
+"), _("
+Stack-Escape：60% odds to evade stack-death if attacker doesn’t have more moves than it does.\n \
+GOTO forces layovers on refuel-tiles. To override, shift-click goal-tile or move one tile off the refuel spot.\
+")
+
 [unit_awacs]
 name          = _("AWACS")
 class         = "Air"
@@ -3750,7 +3804,7 @@ defense       = 10
 hitpoints     = 30
 firepower     = 1
 move_rate     = 32
-vision_radius_sq = 46
+vision_radius_sq = 53
 transport_cap = 0
 fuel          = 2
 uk_happy      = 1
@@ -3791,7 +3845,7 @@ defense       = 55
 hitpoints     = 30
 firepower     = 1
 move_rate     = 34
-vision_radius_sq = 46
+vision_radius_sq = 65
 transport_cap = 0
 fuel          = 2
 uk_happy      = 1
@@ -3877,7 +3931,7 @@ NOTE： Due to game mechanics, a Satellite blocks terrestrial movement\
 ; /* TRANS：unit type */
 name          = _("Transport Helicopter")
 class         = "Helicopter"
-tech_req      = "Combined Arms"
+tech_req      = "C.Arms.2"
 obsolete_by   = "None"
 graphic       = "u.t_helicopter"
 graphic_alt   = "-"
@@ -3943,7 +3997,7 @@ Transport Helicopters can carry three land units, which they can pick up from an
 ; /* TRANS：unit type */
 name          = _("Helicopter")
 class         = "Helicopter"
-tech_req      = "Combined Arms"
+tech_req      = "C.Arms.2"
 obsolete_by   = "None"
 graphic       = "u.helicopter"
 graphic_alt   = "-"
@@ -5374,8 +5428,8 @@ helptext      = _("\
 The AEGIS Cruiser has an Anti-Air missile system. Radar and sonar\
  give superior vision and 2× defense bonus against Submarines.\
  The AEGIS can carry five Missiles, and is the only ship that can attack\
- Air and Missile units. With upgraded Laser tech, each AEGIS Cruiser has\
- a 50% chance to thwart adjacent nuclear bombs dropped by bombers. \n\
+ Air and Missile units. With upgraded Laser tech, each AEGIS Cruiser not\
+ under PORT PENALTY has a 50% chance to thwart adjacent nuclear bombs dropped by bombers. \n\
 "), _("\
 Excellent vision and 3× Anti-Air bonus are ideal for scouting and escorting. \
 "), _("

@@ -121,6 +121,8 @@ function tech_researched_handler(tech, player, how)
         end
       end
     end
+
+    return
   end
 --------------------------------
   -- Inform of free upgrades to Riflemen and Alpines, upon discovering Combined Arms
@@ -137,6 +139,29 @@ function tech_researched_handler(tech, player, how)
         end
       end
     end
+    -- Inform of getting a free Cargo Plane
+    -- First find capital to put it in
+    local capital = nil
+    local palace = find.building_type("Palace")
+    for c in player:cities_iterate() do
+      if c:has_building(palace) then
+        capital = c
+        break
+      end
+    end
+    -- No capital, no cigar!
+    if capital == nil then
+      return
+    end
+    -- Create the Cargo Plane in the capital
+    local utype = find.unit_type('Cargo Plane')
+    local created_plane = edit.create_unit(player, capital.tile, utype, 0, capital_city, -1)
+    if created_plane then
+      -- why needed? edit.unit_turn(created_plane, created_plane:facing())
+      notify.event(player, capital.tile, E.UNIT_BUILT, _("[`hammer`][`cargoplane`] Free Cargo Plane delivered to %s"), capital.name)
+    end
+
+    return
   end
 --------------------------------
   -- Inform of free Workers II upgrade upon discovering Democracy
@@ -156,7 +181,10 @@ function tech_researched_handler(tech, player, how)
         end
       end
     end
+
+    return
   end
+
 -------------------------------- Removed in order to nerf Theocracy
   -- Inform of Theocracy blueprints upon discovering Theology
   -- if id == find.tech_type("Theology").id then
