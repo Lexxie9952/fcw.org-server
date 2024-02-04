@@ -635,107 +635,112 @@ flags         = "NeverTired", "Unreachable", "DoesntOccupyTile", "Airliftable"
 ;                       ever this has non-zero value.
 ;                       Bonus is defined in attackers entry.
 ;
-; ** Flags **
-;
-; "IgZOC"       = ignore Zones of Control (ZOC) even if unit class has
-;                 "ZOC" flag
-; "HasNoZOC"	  = unit has no Zone of Control (ZOC), thus any unit can move
-;		              around it freely
-; "NonMil"	    = a non-military unit：no martial law; can enter
-;                 peaceful borders; DoesntOccupyTile
-; "IgTer"       = use constant move cost defined in igter_cost (terrain.ruleset)
-;                 rather than terrain/road etc cost, unless terrain cost is
-;                 less
-; "OneAttack"	  = can only make a single attack, regardless of movement points. SLATED FOR DEPRECATION IN 3.1
-; "FieldUnit"	  = cause unhappiness even when not being aggressive
-; "BeachLander" = won’t lose all its movement when moving from non-native
-;                 terrain to native terrain even if slow_invasions is on.
-; "Settlers"	  = "can irrigate and build roads" but really seems to be a required flag for
-;                 any tile improvement at all.
-; "Diplomat"	  = can defend against diplomat actions (see diplchance
-;                 server option)
-; "Spy"         = strong in diplomatic battles. _Must_ be "Diplomat" also
-; "CoastStrict" = (sea only) cannot leave coast
-; "Coast"       = (sea only) can refuel on coast. Set fuel to force unit
-;                 to regularly end turn on coast
-; "Only_Native_Attack" = cannot attack targets on non-native tiles even if
-;                 unit class can
-; "Cant_Fortify"= cannot fortify even if unit class has "CanFortify" flag
-; "Fanatic"	    = can only be built by governments that allow them
-;		              (see civ2/governments.ruleset, Fvndamentalist government)
-; "Unique"	    = a player can only have one of these units in the game at
-;		              the same time; barbarians cannot use this at present
-; "GameLoss"	  = losing one of these units means you lose the game, but it
-;		              is produced without homecity and upkeep
-; "EvacuateFirst"=the game will try to rescue units with this flag before
-;                 it tries to rescue units without it when their transport
-;                 is destroyed. Think of the Birkenhead drill ("women and
-;                 children first"). Replace "women and children" with
-;                 "units with the EvacuateFirst unit type flag".
-; "SuperSpy"	  = this unit always wins diplomatic contests, that is, unless
-;		              it encounters another SuperSpy, in which case defender wins;
-;		              can also be used on non-diplomat units, in which case it can
-;		              protect cities from diplomats; also 100% spy survival chance
-; "NoHome"	    = this unit has no homecity and will be free of all upkeep, and
-;		              therefore will not revolt along with its city of origin should
-;		              it be incited
-; "NoVeteran"   = this unit cannot gain veteran levels through experience
-;                 (as if both raise_chance and work_raise_chance were zero);
-;                 it can still gain veterancy through Veteran_Build, etc
-; "CityBuster"  = this unit has double firepower against cities
-; "NoBuild"     = this unit cannot be built
-; "BadWallAttacker"=the firepower of this unit is set to 1 if attacking a city
-;		              defended by a city wall (or other city building defense)
-; "BadCityDefender"=if attacked while in a city, firepower is set to 1
-;		              and firepower of attacker is doubled (the Pearl Harbour rule)
-; "BarbarianOnly" = only barbarians can build this unit
-; "Shield2Gold" = Switch from shield upkeep to gold upkeep possible.
-; "NewCityGamesOnly" = unit can’t be built on scenarios where founding new cities
-;                 is not allowed. Give this flag to units that would make no sense
-;                 to have in a game with such a scenario
-; "CanEscape"   = this unit has, given that certain conditions are
-;                 fulfilled, a 50% chance to escape rather than being
-;                 killed when killstack is enabled and the defender of its
-;                 tile is defeated. The conditions are that it has more move
-;                 points than required to move to an adjacent tile plus the
-;                 attackers move points and that the attacker doesn’t have
-;                 the "CanKillEscaping" unit type flag.
-; "CanKillEscaping" = an attack from this unit ignores the "CanEscape" unit
-;                 type flag.
-; "NeverProtects" = doesn’t protect reachable units on its tile from enemy
-;                 attackers, even if the unreachableprotects server setting
-;                 is enabled and the unit class is unreachable
-; "NeverBlocked" = isn’t blocked by unreachable units on targeted tile,
-;                  even if the unreachableprotects server setting
-;                  is enabled and the unit class is unreachable
-; "MultiSlot"    = if server setting slot_control is ON, only unit types with this
-;                  flag can use extra city_build_slots
-; "TransportDefender" = Unit can always defend while transported, even on non-native
-;                  terrain.
-; "SentryAlways" = This unit always reports sentry-type information; give this flag to
-;                  reconnaissance/scouting type units who can’t sentry because they are
-;                  fuel-type units (which can only sentry on refueling tiles.)
-; "NoStackDeath" = When in a stack whose defender is killed, this unit survives and
-;                  remains occupying the same tile.
-; "Provoking" =   Under autoattack_style=1 standard Vigil units will ONLY autoattack
-;                 units marked with the Provoking flag, unless their other flags
-;                 dictate otherwise and override this default behaviour. Under
-;                 autoattack_style=0, a unit considering to autoattack this unit will choose to
-;                 do so even if has better odds when defending against it than when attacking
-;                 it. Autoattacks only apply when the autoattack server setting is enabled.
-; "NonProvoking" = This unit never gets autoattacked, under all possible settings.
-; "AvidAttacker" = Units under activity Vigil with this flag auto-attack everything
-;                  except "NonProvoking" units, (rather than only attacking
-;                  units with the "Provoking" flag) (requires autoattackstyle=1)
-; "ProvokingClass1"   = This flag will trigger attackers with the flags below
-; "ProvokingClass2"   = This flag will trigger attackers with the flags below
-; "ProvokingClass3"   = This flag will trigger attackers with the flags below
-; "OddsAttackClass1"  = Unit will attack ProvokingClass1 if odds are better than defending
-; "OddsAttackClass2"  = Unit will attack ProvokingClass2 if odds are better than defending
-; "OddsAttackClass3"  = Unit will attack ProvokingClass3 if odds are better than defending
-; "AlwaysAttackClass1"= Unit always attacks ProvokingClass1 unless < 25% or alone in a city with <90% odds to win. see:unittools.c::unit_survive_autoattack()
-; "AlwaysAttackClass2"= Unit always attacks ProvokingClass2 unless alone in a city with <90% odds to win.
-; "AlwaysAttackClass3"= Unit always attacks ProvokingClass3 unless alone in a city with <90% odds to win.
+; ** FLAGS ** -- reserved unit_type flags -- (last updated 4.Feb.2024)                               NOTES:
+;-----------------------------------------------------------------------------------------------------------------------------------------------
+; "Cant_Fortify"        = cannot fortify even if unit class has "CanFortify" flag
+; "HasNoZOC"	          = unit has no Zone of Control (ZOC), thus any unit can move
+;		                      around it freely
+; "IgZOC"               = ignore Zones of Control (ZOC) even if unit class has
+;                         "ZOC" flag
+; "NonMil"	            = a non-military unit：no martial law; can enter
+;                         peaceful borders; DoesntOccupyTile
+; "IgTer"               = use constant move cost defined in igter_cost (terrain.ruleset)
+;                         rather than terrain/road etc cost, unless terrain cost is less
+; "OneAttack"	          = can only make a single attack, regardless of movement points.              DEPRECATED IN 3.1
+; "FieldUnit"	          = cause unhappiness even when not being aggressive
+; "Settlers"	          = "can irrigate and build roads" but really seems to be a required flag for
+;                         any tile improvement at all.
+; "Diplomat"	          = can defend against diplomat actions (see diplchance
+;                         server option)
+; "Spy"                 = strong in diplomatic battles. _Must_ be "Diplomat" also
+; "CoastStrict"         = (sea only) cannot leave coast
+; "Coast"               = (sea only) can refuel on coast. Set fuel to force unit
+;                         to regularly end turn on coast
+; "Only_Native_Attack"  = cannot attack targets on non-native tiles even if
+;                         unit class can
+; "Fanatic"	            = can only be built by governments that allow them
+;		                      (see civ2/governments.ruleset, Fundamentalist government)
+; "Unique"	            = a player can only have one of these units in the game at
+;		                      the same time; barbarians cannot use this at present
+; "GameLoss"	          = losing one of these units means you lose the game, but it
+;		                      is produced without homecity and upkeep
+; "EvacuateFirst"       = the game will try to rescue units with this flag before
+;                         it tries to rescue units without it when their transport
+;                         is destroyed. Think of the Birkenhead drill ("women and
+;                         children first"). Replace "women and children" with
+;                         "units with the EvacuateFirst unit type flag".
+; "SuperSpy"	          = this unit always wins diplomatic contests, that is, unless
+;		                      it encounters another SuperSpy, in which case defender wins;
+;		                      can also be used on non-diplomat units, in which case it can
+;		                      protect cities from diplomats; also 100% spy survival chance
+; "NoHome"	            = this unit has no homecity and will be free of all upkeep, and
+;		                      therefore will not revolt along with its city of origin should
+;		                      it be incited
+; "NoVeteran"           = this unit cannot gain veteran levels through experience                    UPSTREAM DEPRECATED?
+;                        (as if both raise_chance and work_raise_chance were zero);
+;                         it can still gain veterancy through Veteran_Build, etc
+; "CityBuster"          = this unit has double firepower against cities
+; "NoBuild"             = this unit cannot be built
+; "BadWallAttacker"     = the firepower of this unit is set to 1 if attacking a city
+;		                      defended by a city wall (or other city building defense)
+; "BadCityDefender"     = if attacked while in a city, firepower is set to 1
+;		                      and firepower of attacker is doubled (the Pearl Harbour rule)
+; "BeachLander"         = won’t lose all its movement when moving from non-native                    UPSTREAM DEPRECATED? still HARDCODED IN FCW'S
+;                         terrain to native terrain even if slow_invasions is on.                    universal_unload AND unload_override MECHANICS
+; "BarbarianOnly"       = only barbarians can build this unit
+; "Shield2Gold"         = Switch from shield upkeep to gold upkeep possible.
+; "NewCityGamesOnly"    = unit can’t be built on scenarios where founding new cities
+;                         is not allowed. Give this flag to units that would make no sense
+;                         to have in a game with such a scenario
+; "CanEscape"           = this unit has, given that certain conditions are
+;                         fulfilled, a 50% chance to escape rather than being
+;                         killed when killstack is enabled and the defender of its
+;                         tile is defeated. The conditions are that it has more move
+;                         points than required to move to an adjacent tile plus the
+;                         attackers move points and that the attacker doesn’t have
+;                         the "CanKillEscaping" unit type flag.
+; "CanKillEscaping"     = an attack from this unit ignores the "CanEscape" unit
+;                         type flag.
+; "NeverProtects"       = doesn’t protect reachable units on its tile from enemy
+;                         attackers, even if the unreachableprotects server setting
+;                         is enabled and the unit class is unreachable
+; "NeverBlocked"        = isn’t blocked by unreachable units on targeted tile,
+;                         even if the unreachableprotects server setting
+;                         is enabled and the unit class is unreachable
+; "MultiSlot"           = if server setting slot_control is ON, only unit types with this
+;                         flag can use extra city_build_slots
+; "TransportDefender"   = Unit can always defend while transported, even on non-native
+;                         terrain.
+; "SentryAlways"        = This unit always reports sentry-type information; give this flag to
+;                         reconnaissance/scouting type units who can’t sentry because they are
+;                         fuel-type units (which can only sentry on refueling tiles.)
+; "NoStackDeath"        = When in a stack whose defender is killed, this unit survives and
+;                         remains occupying the same tile. Currently, units with this flag
+;                         also enact the "StackAnchor" effect: CanEscape units do not flee to another tile
+; "StackAnchor"         = RESERVED FOR FUTURE EFFECT: CanEscape units do not flee to another tile
+; "StackAlone"          = RESERVED FOR FUTURE EFFECT: Death of THIS unit doesn't result in others in its stack dying.
+; "Provoking"           = Under autoattack_style=1 standard Vigil units will ONLY autoattack
+;                         units marked with the Provoking flag, unless their other flags
+;                         dictate otherwise and override this default behaviour. Under
+;                         autoattack_style=0, a unit considering to autoattack this unit will choose to
+;                         do so even if has better odds when defending against it than when attacking
+;                         it. Autoattacks only apply when the autoattack server setting is enabled.
+; "NonProvoking"        = This unit never gets autoattacked, under all possible settings.
+; "AvidAttacker"        = Units under activity Vigil with this flag auto-attack everything
+;                         except "NonProvoking" units, (rather than only attacking
+;                         units with the "Provoking" flag) (requires autoattackstyle=1)
+; "ProvokingClass1"     = This flag will trigger attackers with the flags below
+; "ProvokingClass2"     = This flag will trigger attackers with the flags below
+; "ProvokingClass3"     = This flag will trigger attackers with the flags below
+; "OddsAttackClass1"    = Unit will attack ProvokingClass1 if odds are better than defending
+; "OddsAttackClass2"    = Unit will attack ProvokingClass2 if odds are better than defending
+; "OddsAttackClass3"    = Unit will attack ProvokingClass3 if odds are better than defending
+; "AlwaysAttackClass1"  = Unit always attacks ProvokingClass1 unless < 25% or alone in a city with <90% odds to win.
+;                         see:unittools.c::unit_survive_autoattack()
+; "AlwaysAttackClass2"  = Unit always attacks ProvokingClass2 unless alone in a city with <90% odds to win.
+; "AlwaysAttackClass3"  = Unit always attacks ProvokingClass3 unless alone in a city with <90% odds to win.
+; "FreeRide"            = Units w/ (paratroopers_range > 0) have no PASSENGER_MOVE_COST if cargo on this unit. Units who
+;                         can't paradrop may freely use this, but paratroopers will always ride for free in this unit type.
 ;—————————————————————————————————————————————————————————————————————————————————————
 ;| Autoattack may happen based on which flags attacker and defender have:
 ;|
