@@ -137,13 +137,13 @@ function tile_units(ptile)
 function unit_tile(punit) {
   if (punit && punit['tile'])
     return index_to_tile(punit['tile']);
-  
+
   return null;
 }  /* TODO: occurrences of ptile=index_to_tile(punit['tile']) in the code,
       could be:  ptile = unit_tile(punit)
       for conformity to c server code and native clients
    */
-      
+
 
 /**************************************************************************
  Returns a list of units supported by this city.
@@ -288,8 +288,8 @@ function unit_has_cargo(punit) {
 
 /**************************************************************************
  * Return true if this unit can DEBOARD.
- * 
- * This function is currently hard-coded as a placeholder for proper 
+ *
+ * This function is currently hard-coded as a placeholder for proper
  * ruleset actionenablers, but has dual use as logic of when to show
  * an order as legal; so can't be removed until 1) 3.1/3.2 actionenablers
  * are in all rulesets AND 2) client can somehow test the actionenabler
@@ -298,7 +298,7 @@ function unit_has_cargo(punit) {
 function unit_can_deboard(punit)
 {
   if (!punit) return false;
-  if (!client_rules_flag[CRF_DEBOARD_RESTRICT]) 
+  if (!client_rules_flag[CRF_DEBOARD_RESTRICT])
     return true; // no actionenabler restrictions on other rulesets
   //****************************************************************** */
   var tunit=null,ttype=null,tclass=null;
@@ -320,16 +320,16 @@ function unit_can_deboard(punit)
   //var terrain_name = tile_terrain(ptile)['name'];
   //****************************************************************** */
   // COMMON
-  /* UTYF_MARINES flag is a mishmash intersection of old capabilities of Marines programmed first as a hard-coded server flag, 
+  /* UTYF_MARINES flag is a mishmash intersection of old capabilities of Marines programmed first as a hard-coded server flag,
    * next migrated over to a custom ruleset flag, and now is a confused holdover for backward compatibility to older rulesets.
    * The whole thing is getting deprecated so it can be split into several flags handling distinctly DIFFERENT behaviours instead
-   * of all together. Therefore the line below is commented out and we'll have to see what breaks or needs changing as we 
+   * of all together. Therefore the line below is commented out and we'll have to see what breaks or needs changing as we
    * extricate ourselves from that legacy mess. The line below that is the new handling. May change behaviour specifically for AAA
    * in MP2A-C, though not necessarily in a bad way (since AAA acting like full Marines when it comes to transports is a bad thing.)
   //if (utype_has_flag(ptype, UTYF_MARINES) && !is_ocean_tile(ptile)) return true;
    */
   if (ptype.rule_name == "Marines" && !is_ocean_tile(ptile)) return true;
-  
+
   if ((typeof EXTRA_NAVALBASE !== "undefined") && tile_has_extra(ptile, EXTRA_NAVALBASE)) return true;
   if (pclass == "Air") return true;
   if (pclass == "AirProtect") return true;
@@ -343,7 +343,7 @@ function unit_can_deboard(punit)
     if (is_ocean_tile(ptile)) return false;
   }
 
-  // currently decided it can unload in airbase also, below. 
+  // currently decided it can unload in airbase also, below.
   //if (pclass == "Bomb") return false; // only allowed in city, handled above.
 
   if (!quay_rules) {
@@ -354,6 +354,7 @@ function unit_can_deboard(punit)
   if ( (tclass.rule_name == "Helicopter" || tclass.rule_name.startsWith("Air"))
         && (pclass.includes("Land") || pclass == "Bomb") ) {
     // NB:Land could only be on a Transport Helicopter or Airplane utype.
+    if (ttype.name == "Cargo Plane" && ptype.name == "Paratroopers") return true;
     if (!tile_has_extra(ptile, EXTRA_AIRBASE)) return false;
     return true;
     /* could also unload in city and naval base -- already checked above */
@@ -379,10 +380,10 @@ function unit_can_deboard(punit)
   This function returns TRUE if the unit_class of utype is on the list
   of "legal" cargo classes for ttype. (Each unit_type has an array of 4
   bytes which are a bitfield for (up to) 32 unit_classes which ttype is
-  technically allowed to have as cargo. What we don't know is if the 
+  technically allowed to have as cargo. What we don't know is if the
   ruleset actonenablers or other mechanics prevent a given utype
   from actually boarding/embarking. Nevertheless, knowing if it's in the
-  list of legal cargo classes is good info. 
+  list of legal cargo classes is good info.
 **************************************************************************/
 function utype_is_a_cargo_class_for_ttype(ptype, ttype)
 {
@@ -406,14 +407,14 @@ function utype_is_a_cargo_class_for_ttype(ptype, ttype)
       else return false;
     }
   }
-  
+
   return (ttype.cargo[cargo_array_index] & cargo_bit_val);
 }
 /**************************************************************************
   Returns FALSE iff we definitely know the unit can't load on this type
   of transporter. Returning true only means we don't know if it can't:
   The server won't tell us for sure because of actionenablers which may
-  limit legal cargo from boarding. But knowing the unit CAN'T load is a 
+  limit legal cargo from boarding. But knowing the unit CAN'T load is a
   pragmatic way to prevent long GUI lists of invalid transport candidates
   to load onto.
 **************************************************************************/
@@ -421,7 +422,7 @@ function unit_could_possibly_load(punit, ptype, ttype, tclass)
 {
   if (!punit || !ptype || !ttype || !tclass) return false;
 
-  const ptype_is_valid_cargo_class = 
+  const ptype_is_valid_cargo_class =
       utype_is_a_cargo_class_for_ttype(ptype, ttype);
 
   // Immedately reject cargo not on the list of legal cargo classes for ttype:
@@ -444,7 +445,7 @@ function unit_could_possibly_load(punit, ptype, ttype, tclass)
   if (client_rules_flag[CRF_MP2_D]) {
     if (punit.movesleft <= 0) {
       if (  ptype.rule_name == "Marines"
-         || pclass == "Air" 
+         || pclass == "Air"
          || pclass == "AirProtect"
          || pclass == "Air_High_Altitude"
          || pclass == "Missile"
@@ -461,7 +462,7 @@ function unit_could_possibly_load(punit, ptype, ttype, tclass)
     // Can't get on a Trawler if you moved this turn:
     if (pclass == "Sea" || pclass == "Submarine") {
       if (unit_has_moved(punit)) return false;
-    } 
+    }
   }
 
   // Transported units can't swap transports except under some conditions:
@@ -486,9 +487,9 @@ function unit_could_possibly_load(punit, ptype, ttype, tclass)
       else if (unit_can_deboard(punit)) can_load = true; // When deboarding is legal, don't force micro-managing an extra step to unload.
       //commented out: e.g., Riflemen can't necessarily get off a Heli on a Quay.
       //else if (typeof EXTRA_NAVALBASE !== undefined && tile_has_extra(EXTRA_NAVALBASE)) can_load = true;
-      //else if (client_rules_flag[CRF_EXTRA_QUAY] && tile_has_extra(EXTRA_QUAY)) can_load=true;    
+      //else if (client_rules_flag[CRF_EXTRA_QUAY] && tile_has_extra(EXTRA_QUAY)) can_load=true;
       // ... 2) in ships who have neither moved more than 4 moves NOR moved more than half their moves;
-      else if (from_class.rule_name == "Trireme" 
+      else if (from_class.rule_name == "Trireme"
             || from_class.rule_name == "RiverShip"
             || from_class.rule_name == "Sea"
             || from_class.rule_name == "Boat")
@@ -521,7 +522,7 @@ function unit_could_possibly_load(punit, ptype, ttype, tclass)
 
 /**************************************************************************************************************************
  * LARGE CHUNKS OF THE CODE BELOW IS RENDERED REDUNDANT BY THE ADDITION OF utype_is_a_cargo_class_for_ttype(ptype, ttype),
- * which is infinitely better than immense logic cascades trying to handle every case with hard-coding. So it's 
+ * which is infinitely better than immense logic cascades trying to handle every case with hard-coding. So it's
  * commented as of now (1.Oct.2022) and slated for deletion in 6 months after we discover we're bug free and everything
  * works great.
  * ********************************************************************************************************************** */
@@ -541,7 +542,7 @@ function unit_could_possibly_load(punit, ptype, ttype, tclass)
         if (pclass != "LandRail" && pclass != "Space" && pclass !="LandImmobile") {
           return true;
         }
-      }  
+      }
       return false;
   }
 */
@@ -580,7 +581,7 @@ function unit_could_possibly_load(punit, ptype, ttype, tclass)
 
 /* Should be handled by utype is legal cargo check at top.
   else if (pclass == "Bomb") {
-    if (!ttype.name.includes("Bomber") 
+    if (!ttype.name.includes("Bomber")
         && tclass.rule_name != "LandRail"
         && tclass.rule_name != "LandRoad" ) return false;
     if (ttype.cargo[0]==0) return false; // any "Bomber" who can't carry bombs.
@@ -602,7 +603,7 @@ function unit_could_possibly_load(punit, ptype, ttype, tclass)
         ttype.name=="Mobile SAM" ||
         ttype.name.includes("Carrier")) {
           //starting in MP2D missiles must load in a city or be a transport swap
-          if (client_rules_flag[CRF_MP2_D]) { 
+          if (client_rules_flag[CRF_MP2_D]) {
             if (pcity) return true;
             else if (can_load) return true;
             else return false;
@@ -637,10 +638,10 @@ function unit_could_possibly_load(punit, ptype, ttype, tclass)
     else if (client_rules_flag[CRF_MP2_D]) {
       if (pcity) return true;
       else if (can_load) return true;
-      //else if (tile_has_extra(EXTRA_AIRBASE)) return true;   
+      //else if (tile_has_extra(EXTRA_AIRBASE)) return true;
         /* TODO: Airbase is a native place for missile where it should be able to board but then you could shoot a nuke out to
-         * an airbase and then board an AEGIS on a canal there who takes it to another one etc. So this waits for the 
-         * !unit_has_moved(missile_unit) req to be implemented here and in ruleset */ 
+         * an airbase and then board an AEGIS on a canal there who takes it to another one etc. So this waits for the
+         * !unit_has_moved(missile_unit) req to be implemented here and in ruleset */
       else return false;
     }
   }
@@ -659,7 +660,7 @@ function unit_could_possibly_load(punit, ptype, ttype, tclass)
     }
 */
     // Special actionenabler rules in MP2, only slow units can use Trucks and Trains:
-    if (tclass.rule_name == "LandRail" || tclass.rule_name == "LandRoad") {  
+    if (tclass.rule_name == "LandRail" || tclass.rule_name == "LandRoad") {
       if (utype_real_base_move_rate(ptype) >= 3 * SINGLE_MOVE) return false; // Equality: units with <3 moves can use wagon/train/truck
       if (tclass.rule_name == "LandRail") {
         if (pcity) return true;
@@ -667,9 +668,16 @@ function unit_could_possibly_load(punit, ptype, ttype, tclass)
         return false;
       }
     }
-    // Special rules in MP2: diplomat types on Airplanes are only legal Land class allowed on it.
+    // Special rules in MP2: Airplanes can only carry diplos; Cargo Planes can only carry Foot/Diplo
     if (tclass.rule_name == "Air") {
-      if (ttype.name != "Airplane" || !unit_has_type_flag(punit, UTYF_DIPLOMAT))
+      if (ttype.name == "Cargo Plane") {
+        if (!unit_has_type_flag(punit, UTYF_FOOTSOLDIER)
+            &&!unit_has_type_flag(punit, UTYF_WORKERS)
+            &&!unit_has_type_flag(punit, UTYF_DIPLOMAT)) {
+              return false;
+        }
+      }
+      else if (ttype.name != "Airplane" || !unit_has_type_flag(punit, UTYF_DIPLOMAT))
         return false;
       // We got here if a diplomat type is trying to board an Airplane. That's
       // currently the only legal way for "Land" to load on "Air". (MP2-AG rev2)
@@ -698,7 +706,7 @@ function unit_could_possibly_load(punit, ptype, ttype, tclass)
   else if (pclass == "Balloon") {
     if (tclass.rule_name == "LandRail") return true;
     if (tclass.rule_name == "RiverShip" && !(ttype.name == "Cargo Ship" || ttype.name == "Galleon")) return false;
-    if (tclass.rule_name == "Sea" && !(ttype.name == "Transport" || ttype.name.includes("Carrier"))) 
+    if (tclass.rule_name == "Sea" && !(ttype.name == "Transport" || ttype.name.includes("Carrier")))
       return false;
   }
 */
@@ -720,6 +728,8 @@ function unit_could_possibly_load(punit, ptype, ttype, tclass)
   //console.log("  ..."+ptype.name+" on "+ttype.name+" is LEGAL !");
 
   return true;
+  /* TODO: should be:
+  return ptype_is_valid_cargo_class */
 }
 /**************************************************************************
   Returns a string saying how many moves a unit has left.
@@ -774,7 +784,7 @@ function move_points_text(moves, make_fraction, small)
     }
 
     if (Math.floor(moves / SINGLE_MOVE) > 0 && numerator>0) {
-      result = "" + Math.floor(moves / SINGLE_MOVE) 
+      result = "" + Math.floor(moves / SINGLE_MOVE)
                + spacer + (small?"<small>":"") + numerator
                + div_symbol + denominator+ (small?"</small>":"");
     } else if (numerator>0) {
@@ -891,7 +901,7 @@ function get_unit_anim_offset(punit)
     if (focuslock && unit_is_only_unit_in_focus(punit)) {
       center_tile_mapcanvas(tiles[punit['anim_list'][0]['tile']]);
       // if unit is center-locked, it never has non-centered-on-tile
-      //   placement on the way to the next tile: 
+      //   placement on the way to the next tile:
       dst_tile = src_tile;
       u_tile = src_tile;
       i = 0;
@@ -930,7 +940,7 @@ function get_unit_anim_offset(punit)
 
     offset['x'] = - gui_dx;
     offset['y'] = - gui_dy;
-  } 
+  }
   else {
     offset['x'] = 0;
     offset['y'] = 0;
@@ -1023,7 +1033,7 @@ function get_unit_city_info(punit, plaintext)
 
   // No need to show 3 upkeep types if ruleset doesn't use 3
   if (client_rules_flag[CRF_NO_UNIT_GOLD_UPKEEP]) {
-      upkeep_mode=1; // Shields and Food only 
+      upkeep_mode=1; // Shields and Food only
   }
   else upkeep_mode=3; // F/P/G
 
@@ -1037,7 +1047,7 @@ function get_unit_city_info(punit, plaintext)
   // HOME CITY, IF ANY OR KNOWN:
   if (get_unit_homecity_name(punit)) {
     result += ": "+get_unit_homecity_name(punit);
-  
+
     // UPKEEP only happens for home city units
     if (upkeep_mode == 3) {
       result += "\nFood/Gold/Shield: ";
@@ -1046,14 +1056,14 @@ function get_unit_city_info(punit, plaintext)
               + punit['upkeep'][O_GOLD] + "/"
               + punit['upkeep'][O_SHIELD];
       }
-    } 
+    }
     else if (upkeep_mode==1) {
       result += "\nUpkeep: ";
       if (punit['upkeep'] != null) {
-        var food_string = punit['upkeep'][O_FOOD] ? punit['upkeep'][O_FOOD]+"f " : "";  
+        var food_string = punit['upkeep'][O_FOOD] ? punit['upkeep'][O_FOOD]+"f " : "";
         result += food_string + punit['upkeep'][O_SHIELD];
         if (food_string) result+="s";
-      } 
+      }
     }
   } else if (client.conn.playing != null && punit['owner'] != client.conn.playing.playerno) {
     // Foreign unit, we don't know home city but we do know nationality and player:
@@ -1065,7 +1075,7 @@ function get_unit_city_info(punit, plaintext)
     }
   }
 
-  // LOCATION 
+  // LOCATION
   result += "\nLocation: ";
   var tile_id = punit['tile'];
   var pcity = tile_city(tiles[punit['tile']]);
@@ -1077,7 +1087,7 @@ function get_unit_city_info(punit, plaintext)
   {
     if (cities[tiles[punit['tile']]['worked']]['name'])
       result += coordinates + " near "+ cities[tiles[punit['tile']]['worked']]['name'];
-    else 
+    else
       result += coordinates + " near unknown foreign city.";
   } else {
       result += coordinates;
@@ -1087,8 +1097,8 @@ function get_unit_city_info(punit, plaintext)
     if (tiles[punit['tile']]['owner'] == UNCLAIMED_LAND) {
       result += "\nTerritory: Unclaimed"
     } // if not in a city, it's informative to tell you it's in your nation:
-    else if (!pcity && tiles[punit['tile']]['owner'] == client.conn.playing.playerno) { 
-      result += "\nTerritory: Homeland" 
+    else if (!pcity && tiles[punit['tile']]['owner'] == client.conn.playing.playerno) {
+      result += "\nTerritory: Homeland"
     }
     else if (tiles[punit['tile']]['owner'] != client.conn.playing.playerno) {
       var player_id = tiles[punit['tile']]['owner'];
@@ -1137,7 +1147,7 @@ function get_unit_city_info(punit, plaintext)
         result += "\nActivity: AUTO-EXPLORE";
         break;
       case ACTIVITY_TRANSFORM:
-        var ptile = tiles[punit['tile']]; 
+        var ptile = tiles[punit['tile']];
         result += "\nTRANSFORMING "+terrains[ptile['terrain']]['name'];
         break;
       case ACTIVITY_FALLOUT:
@@ -1175,21 +1185,21 @@ function get_unit_city_info(punit, plaintext)
   result += "\n";  // Space for separating key stats
 
   //VETERAN LEVEL
-  if (punit['veteran']) {    
+  if (punit['veteran']) {
     if (ptype['veteran_levels'] > 0 ) // custom vet names
     {
       var special_name = ptype['veteran_name'][punit['veteran']];
       var n = special_name.lastIndexOf(':'); // remove junk like ?vet_rank:name
       var vet_name = special_name.substring(n + 1);
     }
-    else { // standard vet names 
+    else { // standard vet names
       var vet_name = game_rules['veteran_name'][punit['veteran']];
     }
     vet_star = plaintext ? "*" : "&starf;";
     vet_name = vet_name.charAt(0).toUpperCase() + vet_name.substring(1);
     result += "\n" + vet_name + " " + vet_star.repeat(punit['veteran']);
   }
-    
+
   // HEALTH
   result += "\nHealth: " + punit['hp'] + "/" + ptype['hp'];
 
@@ -1197,9 +1207,9 @@ function get_unit_city_info(punit, plaintext)
   if (client.conn.playing != null && punit['owner'] == client.conn.playing.playerno)
   { // ^ We don't know move points of non-domestic units (NaN), so only do domestic:
     result += "\nMoves: " + move_points_text(punit['movesleft'],false);
-    // FUEL 
+    // FUEL
     if (punit['fuel']) result += "\nFuel: "+punit['fuel'];
-  }  
+  }
   return result;
 }
 
@@ -1229,7 +1239,7 @@ function get_what_can_unit_pillage_from(punit, ptile)
       var ptype = unit_type(punit);
       if (ptype['name'] != "Ground Strike Fighter"
          && ptype['name'] != "Dive Bomber"
-         && ptype['name'] != "Jet Bomber" 
+         && ptype['name'] != "Jet Bomber"
          && ptype['name'] != "Strategic Bomber"
          && ptype['name'] != "Stealth Bomber"
          ) {
@@ -1251,8 +1261,8 @@ function get_what_can_unit_pillage_from(punit, ptile)
     // might double-check from uncertainty, or the unit might want
     // to change Pillage to iPillage. Or, it might want to iPillage
     // because the other unit's pillage isn't immediate.
-    if (unit==punit || unit_can_iPillage(punit)) continue; 
-    
+    if (unit==punit || unit_can_iPillage(punit)) continue;
+
     if (unit.activity === ACTIVITY_PILLAGE) {
       cannot_pillage.set(unit.activity_tgt);
     }
@@ -1265,10 +1275,10 @@ function get_what_can_unit_pillage_from(punit, ptile)
   const NAVALBASE = (typeof EXTRA_NAVALBASE !== "undefined") ? tile_has_extra(ptile,EXTRA_NAVALBASE) : false;
   const CASTLE = (typeof EXTRA_CASTLE !== "undefined") ? tile_has_extra(ptile,EXTRA_CASTLE) : false;
   const BUNKER = (typeof EXTRA_BUNKER !== "undefined") ? tile_has_extra(ptile,EXTRA_BUNKER) : false;
-  
+
   // TODO: more things to check?
   // Sure!
-  // MP2-Brava+ UI convenience. Railroad reqs changed to EXTRAFLAG "Railable" instead of EXTRAS "Road", 
+  // MP2-Brava+ UI convenience. Railroad reqs changed to EXTRAFLAG "Railable" instead of EXTRAS "Road",
   // in order to allow EITHER road OR seabridge as reqs. This little hack is for pure UI convenience:
   if (client_rules_flag[CRF_SEABRIDGE]) {
     extras['17'].reqs.push({'kind': 23, 'value': 16, 'range': 0, 'survives': false, 'present': true, 'quiet': false}) //road
@@ -1277,10 +1287,10 @@ function get_what_can_unit_pillage_from(punit, ptile)
 
   /* Get what extras that are dependencies of other */
   for (i = 0; i < available.length; i++) {
-    extra = extras[available[i]];    
+    extra = extras[available[i]];
     for (j = 0; j < extra.reqs.length; j++) {
       var req = extra.reqs[j];
-      if (req.kind == VUT_EXTRA && req.present == true) cannot_pillage.set(req.value);   
+      if (req.kind == VUT_EXTRA && req.present == true) cannot_pillage.set(req.value);
     }
   }
 
@@ -1289,7 +1299,7 @@ function get_what_can_unit_pillage_from(punit, ptile)
     if (is_extra_removed_by(extras[extra], ERM_PILLAGE)
         && !cannot_pillage.isSet(extra)) {
       if (game_info.pillage_select) {
-        //TODO: PART 2 of 2: remove when we get it working. 
+        //TODO: PART 2 of 2: remove when we get it working.
         /* Hack to force these from not showing */
         if (extra==EXTRA_ROAD && (RAIL)) { /*no road selectable if rail is present*/}
         else if (FORT      && extra==EXTRA_FORT      && (FORTRESS || NAVALBASE || CASTLE || BUNKER)) {}
@@ -1313,15 +1323,15 @@ function get_what_can_unit_pillage_from(punit, ptile)
 }
 
 /**************************************************************************
- Forces a unit to go along its goto path. 
+ Forces a unit to go along its goto path.
  current_focus[f_index]==which focused unit is getting the order
-function unit_forced_goto(goto_path, f_index) 
+function unit_forced_goto(goto_path, f_index)
 {
   var step_delay = 350; // milliseconds delay per step
   var sounds_on = sounds_enabled; // store original state of sounds_enabled
 
   for (step = 1; step < goto_path.length; step++) {
-    setTimeout(function(step) 
+    setTimeout(function(step)
               { sounds_enabled = (step==1) ? sounds_on : false;
                 key_unit_move_focus_index(goto_path['dir'][step], f_index);
               }.bind(this, step), ((step-1)*step_delay));
@@ -1385,7 +1395,7 @@ function unit_has_moved(punit)
     //console.log("Code 1");
     return true;
   }
-  // If unit is not slowed by damage, it's a simple check for if it has 
+  // If unit is not slowed by damage, it's a simple check for if it has
   // less than full move points:
   if (!unit_has_class_flag(punit, UCF_DAMAGE_SLOWS))
   { // min_speed is 100% so any less moves than full means it moved
@@ -1404,14 +1414,14 @@ function unit_has_moved(punit)
     return false; // potential false negative if unit has external move bonus
   }
   // DAMAGE_SLOWS unit with less than full moves left:
-  
-  // Full hp, but not full moves: this means unit has moved. 
+
+  // Full hp, but not full moves: this means unit has moved.
   if (punit['hp']>=ptype['hp']) {
     //console.log("Code 5");
     return true;
   }
 
-  // Less than full moves, less than full hp. Have to look at hp*move_rate  
+  // Less than full moves, less than full hp. Have to look at hp*move_rate
   var health_pct = parseFloat(punit['hp']) / parseFloat(ptype['hp']);
   // Calculate "injured full moves" for this health level
   var injured_full_moves = Math.floor(parseFloat(ptype['move_rate']) * health_pct);
@@ -1430,7 +1440,7 @@ function unit_has_moved(punit)
   return false; // potential false negative if external move bonus in effect
 }
 
-/************************************************************************ 
+/************************************************************************
  * Returns the special name that a unit has for its special unit attack/
  * ranged attack/bombard attack.
 *************************************************************************/
@@ -1445,8 +1455,8 @@ function utype_get_bombard_name(ptype) {
   else return name;
 }
 
-/************************************************************************ 
- * Returns the special name that a unit has for its special iPillage 
+/************************************************************************
+ * Returns the special name that a unit has for its special iPillage
  * characteristics, if any
 *************************************************************************/
 function unit_get_pillage_name(punit)
@@ -1463,9 +1473,9 @@ function utype_get_pillage_name(ptype)
   else return name;
 }
 
-/************************************************************************ 
+/************************************************************************
  * Returns true if unit can pillage AND iPillage. Helps UI decide if user
- * needs prompting for decisions where usually game decides automatically. 
+ * needs prompting for decisions where usually game decides automatically.
 *************************************************************************/
 function unit_has_dual_pillage_options(punit)
 {
@@ -1475,8 +1485,8 @@ function unit_has_dual_pillage_options(punit)
 }
 
 
-/************************************************************************ 
- * Returns true if unit / unit_type can iPillage.  
+/************************************************************************
+ * Returns true if unit / unit_type can iPillage.
 *************************************************************************/
 function unit_can_iPillage(punit)
 {
@@ -1490,7 +1500,7 @@ function utype_can_iPillage(ptype)
 /**************************************************************************
   ************* NOTE: THIS FUNCTION HAS TO BE MAINTAINED TO BE IDENTICAL
   to the function of the same name in unittype.c
-  -------------------------------------------------------------------------  
+  -------------------------------------------------------------------------
  Extracts the extra_unit_stats bit_field data from the unused field
  'paratrooper_mr_sub' then packs it into nice key-object pair list.
  *************************************************************************/
@@ -1502,7 +1512,7 @@ function unit_get_extra_stats(punit) {
 /**************************************************************************
   ************* NOTE: THIS FUNCTION HAS TO BE MAINTAINED TO BE IDENTICAL
   to the function of the same name in unittype.c
-  -------------------------------------------------------------------------  
+  -------------------------------------------------------------------------
   Extracts the extra_unit_stats bit_field data from the unused field
  'paratrooper_mr_sub' then packs it into nice key-object pair list.
  *************************************************************************/
@@ -1513,8 +1523,8 @@ function utype_get_extra_stats(ptype) {
 
   // Take out the bitfield and divide since server artificially
   // bumps it by SINGLE_MOVE:
-  var BB = ptype['paratroopers_mr_sub'] / SINGLE_MOVE  
-  
+  var BB = ptype['paratroopers_mr_sub'] / SINGLE_MOVE
+
   /* extra_unit_stats are currently embedded bits in paratroopers_mr_sub:
       if that var is being used by a real paratrooper, we must abort. */
   if (ptype['paratroopers_range'] > 0) { // a real paratrooper
@@ -1540,15 +1550,15 @@ function utype_get_extra_stats(ptype) {
   // Bit 11-15: # of rounds of Bombard retaliation
   pstats.bombard_retaliate_rounds =
                                (BB & 0b1111100000000000) >> 11;
-  // Bit 16-18: # of max attacks per turn                              
+  // Bit 16-18: # of max attacks per turn
   pstats.max_attacks =      (BB & 0b1110000000000000000) >> 16;
-  
+
   /* Adjustments of the raw encoded values to match their purpose: */
 
   // The iPillage_odds came as bits from 0 to 15. Each value represents reduction
   // by 5%. 15x5=75 so this gives us a range from 100% down to 25%, by fives.
   pstats.iPillage_odds = 100 - 5 * pstats.iPillage_odds;
-  
+
   /* bombard_retaliate_rounds came as 5 bits with 32 possible values.
    * 0==no retaliate. bit 16=2^4=0b10000 can be reserved as a mega
    * multiplier to get values higher than 31 by sacrificing resolution
@@ -1563,7 +1573,7 @@ function utype_get_extra_stats(ptype) {
 }
 
 /**********************************************************************//**
-  Return the bombard_stats for this unit 
+  Return the bombard_stats for this unit
     ************* NOTE: THIS FUNCTION HAS TO BE MAINTAINED TO BE IDENTICAL
   to the function of the same name in unittype.c
 **************************************************************************/
@@ -1600,7 +1610,7 @@ function utype_get_bombard_stats(ptype)
   // Bits 11-13: Max # of kills possible on primary targets (0==none)
   pstats.bombard_primary_kills =(BB & 0b11100000000000) >> 11;
   // Bits 14-19: bombard_atk_mod
-  /* How to get the most out of 6 bits? 
+  /* How to get the most out of 6 bits?
   For positive values, each unit is worth +25%, taking us up to 31*25 = +775% or 8.75x
   For negative values, each unit is worth -3%, taking us down to 31*-3 = -93%
   */
@@ -1628,13 +1638,13 @@ function utype_get_bombard_stats(ptype)
 **************************************************************************/
 function unit_get_flag_image(punit, height)
 {
-  var tag = nations[players[punit['owner']]['nation']]['graphic_str'] 
+  var tag = nations[players[punit['owner']]['nation']]['graphic_str']
   var civ_flag_url = "";
   var image_element = "";
-  
+
   if (!nations[players[punit['owner']]['nation']]['customized'] ) {
     civ_flag_url += "/images/flags/" + tag + "-web" + get_tileset_file_extention();
-    
+
     image_element = "<img "
                   + "class='v' "  // vertical align center
                   + "src='" + civ_flag_url + "' "

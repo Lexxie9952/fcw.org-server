@@ -72,12 +72,12 @@ const UTYF_CIVILIAN = 3;                  /* Is a non-military unit */
 const UTYF_IGTER = 4;                     /* Ignores terrain movement speed, treating all terrain as roaded */
 const UTYF_ONEATTACK = 5;                 /* HEINOUS MISNOMER: Loses all movement points after making an attack */
 const UTYF_FIELDUNIT = 6;                 /* Causes unhappiness in some governments merely by existing. */
-const UTYF_PROVOKING = 7;                 /* SERVER autoattack: A unit will choose to attack this unit even if defending against it has better odds. */ 
-const UTYF_NEVER_PROTECTS = 8;            /* Overrides unreachable_protects server setting for defender */        
+const UTYF_PROVOKING = 7;                 /* SERVER autoattack: A unit will choose to attack this unit even if defending against it has better odds. */
+const UTYF_NEVER_PROTECTS = 8;            /* Overrides unreachable_protects server setting for defender */
 const UTYF_SETTLERS = 9;                  /* Does not include ability to found cities */
 const UTYF_DIPLOMAT = 10;                 /* The most undocumented hard-coded mystery flag in Freeciv history */
 const UTYF_COAST_STRICT = 11;             /* Can't leave the coast */
-const UTYF_COAST = 12;                    /* Can 'refuel' at coast - meaningless if fuel value not set */ 
+const UTYF_COAST = 12;                    /* Can 'refuel' at coast - meaningless if fuel value not set */
 const UTYF_SHIELD2GOLD = 13;              /* Upkeep can switch from shield to gold */
 const UTYF_SPY = 14;                      /* Strong in diplomatic battles */
 const UTYF_ONLY_NATIVE_ATTACK = 15;       /* Cannot attack vs non-native tiles even if class can */
@@ -102,7 +102,7 @@ const UTYF_NEVER_BLOCKED = 32;            /* Overrides unreachable_protects serv
 const UTYF_MULTISLOT = 33;                /* if server setting slot_control is ON, unit types with this flag can use extra city_build_slots*/
 const UTYF_TRANSPORTDEFENDER = 34;        /* Unit can always defend while transported, even on non-native terrain  */
 const UTYF_SENTRYALWAYS = 35;             /* These units always behave as sentry (e.g. fortified snipers, air reconnaissance units who
-                                             can't sentry because !refuel tile, etc.) */     
+                                             can't sentry because !refuel tile, etc.) */
 const UTYF_NONPROVOKEVIGIL = 36;          /* with AA_ADVANCED autoattack rulesets, these units attack non-provoking units when on vigil (except civilians) */
 const UTYF_NOSTACKDEATH = 37;             /* Unit does not die in stack kill events. This means stack is not gone, so CanEscape units remain anchored to the stack. */
 const UTYF_STACKANCHOR = 38;              /* StackAnchor == CanEscape units escaping stack death do not flee to other tiles.*/
@@ -129,18 +129,18 @@ const UTYF_RESERVED6 = 56;
 const UTYF_RESERVED7 = 57;
 const UTYF_RESERVED8 = 58;
 
-const UTYF_USER_FLAG_1 = 59;              // Airbase: can build airbases  
+const UTYF_USER_FLAG_1 = 59;              // Airbase: can build airbases
 const UTYF_USER_FLAG_2 = 60;              // Transform: can transform terrain
 const UTYF_USER_FLAG_3 = 61;              // CanRoad: Able to build roads
 const UTYF_USER_FLAG_4 = 62;              // CanFortress: can build forts/fortresses
-const UTYF_USER_FLAG_5 = 63;              // Bombarder (SUA) 
+const UTYF_USER_FLAG_5 = 63;              // Bombarder (SUA)
 const UTYF_USER_FLAG_6 = 64;              // AirAttacker
 const UTYF_USER_FLAG_7 = 65;              // Horse
 const UTYF_USER_FLAG_8 = 66;              // FootSoldier
 const UTYF_USER_FLAG_9 = 67;              // Helicopter
 const UTYF_USER_FLAG_10 = 68;             // Submarine
 const UTYF_USER_FLAG_11 = 69;             // Unbribable
-const UTYF_USER_FLAG_12 = 70;             // Traderoute 
+const UTYF_USER_FLAG_12 = 70;             // Traderoute
 const UTYF_USER_FLAG_13 = 71;             // HelpWonder
 const UTYF_USER_FLAG_14 = 72;             // Capturer
 const UTYF_USER_FLAG_15 = 73;             // Capturable
@@ -160,12 +160,12 @@ const UTYF_USER_FLAG_28 = 86;             // FortBuster - defending forts get no
 const UTYF_USER_FLAG_29 = 87;             // FortressBuster - defending fortresses get no bonus
 const UTYF_USER_FLAG_30 = 88;             // AntiAir - Anti-Air bonus vs air, less effective vs Stealth
 const UTYF_USER_FLAG_31 = 89;             // CanHide - can make Hideouts
-const UTYF_USER_FLAG_32 = 90;             // WillNever 
+const UTYF_USER_FLAG_32 = 90;             // WillNever
 const UTYF_USER_FLAG_33 = 91;             // NonMilAttack - has military capacity but can enter territories with whom you're at peace
-const UTYF_USER_FLAG_34 = 92;             // Cant_Pillage 
+const UTYF_USER_FLAG_34 = 92;             // Cant_Pillage
 const UTYF_USER_FLAG_35 = 93;             // CanClaim - can make a Tile Claim
 const UTYF_USER_FLAG_36 = 94;             // CantAttack - can't do conventional attacks (usually means bombard only)
-const UTYF_USER_FLAG_37 = 95;             // Workers - lets ruleset target Workers and Workers II with a single effect or actionenabler 
+const UTYF_USER_FLAG_37 = 95;             // Workers - lets ruleset target Workers and Workers II with a single effect or actionenabler
 const UTYF_USER_FLAG_38 = 96;
 const UTYF_USER_FLAG_39 = 97;
 const UTYF_USER_FLAG_40 = 98;             // unused , reserved for future use .....
@@ -190,13 +190,13 @@ const UTYF_HELICOPTER = UTYF_USER_FLAG_9      // Defends very badly against Figh
 const UTYF_SUBMARINE = UTYF_USER_FLAG_10      // Attack value reduced against some ships
 const UTYF_UNBRIBABLE = UTYF_USER_FLAG_11     // Can't be bribed
 const UTYF_TRADEROUTE = UTYF_USER_FLAG_12     // Can establish trade routes
-const UTYF_HELPWONDER = UTYF_USER_FLAG_13     // Can help build a Wonder 
+const UTYF_HELPWONDER = UTYF_USER_FLAG_13     // Can help build a Wonder
 const UTYF_CAPTURER = UTYF_USER_FLAG_14       // Can capture some enemy units
 const UTYF_CAPTURABLE = UTYF_USER_FLAG_15     // Can be captured by some enemy units
 const UTYF_CITIES = UTYF_USER_FLAG_16         // can build city?
 const UTYF_ADDTOCITY = UTYF_USER_FLAG_17      // Can add itself to the population of a city
 const UTYF_NUCLEAR = UTYF_USER_FLAG_18        // Can perform nuclear detonations
-const UTYF_MISSILE = UTYF_USER_FLAG_19        // Unit is a Missile     
+const UTYF_MISSILE = UTYF_USER_FLAG_19        // Unit is a Missile
 const UTYF_WELLDIGGER = UTYF_USER_FLAG_20     // Can dig a well and irrigate tiles with no water.
 const UTYF_INFRA = UTYF_USER_FLAG_21          // Can build infrastructure
 const UTYF_PROLETARIAN = UTYF_USER_FLAG_22    // Controllable only by communist governments
@@ -215,7 +215,7 @@ const UTYF_NONMILATTACK = UTYF_USER_FLAG_33;  // NonMilAttack - can attack and e
 const UTYF_CANT_PILLAGE = UTYF_USER_FLAG_34;  // CantPillage - unable to pillage tiles
 const UTYF_CAN_CLAIM = UTYF_USER_FLAG_35;     // CanClaim - able to make Tile Claims
 const UTYF_CANT_ATTACK = UTYF_USER_FLAG_36;   // CantAttack - unable to do conventional attacks (usually bombard only)
-const UTYF_WORKERS = UTYF_USER_FLAG_37;       // Workers - allows manipulating Workers and Workers II with single effect or actionenabler
+const UTYF_WORKERS = UTYF_USER_FLAG_37;       // Workers - allows manipulating just the class of Workers,Workers II,Engineers with single effect or actionenabler
 /**********************************************************************//**
   Return true iff units of the given type can do the specified generalized
   (ruleset defined) action enabler controlled action.
@@ -284,7 +284,7 @@ player has a coastal city.
 **************************************************************************/
 function can_player_build_unit_direct(p, punittype)
 {
-  /* might be called on a null punittype, such as 
+  /* might be called on a null punittype, such as
      the non-existing type to which a unit upgrades: */
   if (!punittype) return false;
 
@@ -356,9 +356,9 @@ function utype_attack_power(ptype) {
  punit.defense_strength directly.
  *************************************************************************/
  function utype_defense_power(ptype) {
-   return ptype['defense_strength'] / client_rules_flag[CRF_GRANULAR_COMBAT_STRENGTH]; 
+   return ptype['defense_strength'] / client_rules_flag[CRF_GRANULAR_COMBAT_STRENGTH];
  }
-/************************************************************************ 
+/************************************************************************
  * Returns the base attack strength of a unit based on its v0 vet
  * power level.
 *************************************************************************/
@@ -374,7 +374,7 @@ function utype_real_base_attack_strength(ptype) {
   adjusted = Math.round(adjusted) / 1000;
   return adjusted;
 }
-/************************************************************************ 
+/************************************************************************
  * Same as above, for base defense strength.
 *************************************************************************/
 function utype_real_base_defense_strength(ptype) {
@@ -390,15 +390,15 @@ function utype_real_base_defense_strength(ptype) {
   return adjusted;
 }
 
-/************************************************************************ 
+/************************************************************************
  * Returns the "real" base move rate of a unit, since v0 veteran level
  * can be used to achieve non-integer values for base movement.
  * Return value is in move_frags.
 *************************************************************************/
 function utype_real_base_move_rate(punit_type)
 {
-  var move_bonus = parseInt(punit_type['move_bonus'][0]) 
-                 ? parseInt(punit_type['move_bonus'][0]) 
+  var move_bonus = parseInt(punit_type['move_bonus'][0])
+                 ? parseInt(punit_type['move_bonus'][0])
                  : 0;
   var move_rate  = parseInt(punit_type['move_rate']);
 
