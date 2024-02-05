@@ -2684,6 +2684,12 @@ function city_worklist_dialog(pcity)
       continue;
     }
 
+    let multislot = "";
+    if (universal['kind'] == VUT_UTYPE
+        && utype_has_flag(unit_types[universal['value']], UTYF_MULTISLOT)) {
+      multislot = "<span title='Multislot'>🔹</span>";
+    }
+
     worklist_html += "<tr class='prod_choice_list_item"
      + (can_city_build_now(pcity, universal['kind'], universal['value']) ?
         "" : " cannot_build_item")
@@ -2696,7 +2702,7 @@ function city_worklist_dialog(pcity)
            + "px;  width: " + sprite['width'] + "px;height: " + sprite['height'] + "px;'"
            +"></div></td>"
      + "<td class='prod_choice_name'>" + universal['name'] + "</td>"
-     + "<td class='prod_choice_cost'>" + universal['build_cost']+"</td></tr>";
+     + "<td class='prod_choice_cost'>" + universal['build_cost']+multislot+"</td></tr>";
   }
   worklist_html += "</table>";
   $("#city_current_worklist").html(worklist_html);
@@ -2748,8 +2754,14 @@ function city_worklist_dialog(pcity)
     + (prod_type != null ? prod_type['type']['name'] : "None")
     + (is_small_screen() ? "" : "</b>");
 
+  let multislot = "";
+  if (pcity['production_kind'] == VUT_UTYPE
+      && utype_has_flag(unit_types[pcity['production_value']], UTYF_MULTISLOT)) {
+    multislot = "🔹";
+  }
+
   if (!is_small_screen() )
-    headline += " &nbsp; (" + get_production_progress(pcity) + ")";
+    headline += multislot + " &nbsp; (" + get_production_progress(pcity) + ")";
   else
     headline += " " + get_production_progress(pcity);
 
@@ -2880,10 +2892,12 @@ function populate_worklist_production_choices(pcity)
        + "<td class='prod_choice_name'>" + production_list[a]['text'] + "</td>";
 
        if (kind == VUT_UTYPE /*&& !small*/) {
+          let multislot = utype_has_flag(unit_types[value], UTYF_MULTISLOT) ? "<span title='Multislot'>🔹</span>" : "";
           production_html += "<td title='Attack/Defense/Firepower, HP, Moves' class='prod_choice_info' "
           + "style='padding-right:30px; text-align:right'>"
           + production_list[a]['unit_details'] + "</td>"
-          + "<td class='prod_choice_cost'>" + get_universal_discount_price(unit_types[value],pcity) + "</td></tr>";
+          + "<td class='prod_choice_cost'>" + get_universal_discount_price(unit_types[value],pcity) +
+          multislot + "</td></tr>";
        }
        else if (kind == VUT_IMPROVEMENT /*&& !small*/) {
           production_html += "<td title='Upkeep' class='prod_choice_info' "
