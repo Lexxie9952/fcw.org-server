@@ -63,6 +63,7 @@ flags =
     _("AddToCity"), _("Can add itself to the population of a city.")
 ;RESERVED:
     ;using this flag name invokes the M.A.D. effect: rnuclear units are less likely to be destroyed from a nuke, so they can retaliate.
+    ;RENAME flag to something else if you don't want the M.A.D. effect invoked (e.g., "CanNuke")
     _("Nuclear"), _("Can perform a Nuclear Detonation obliterating all adjacent tiles.")
 ;CUSTOM:
     _("Missile"), _("AEGIS and Armor II have a defense bonus against this unit.")
@@ -77,18 +78,20 @@ flags =
     _("FortBuster"), _("Defending Forts get no bonus. +33% attack bonus vs. the 2× defense of a Fortress.")
     _("FortressBuster"), _("Defending Fortresses get no bonus.")
     _("AntiAir"), _("Anti-Air bonus of this unit is less effective against Stealth, which has a 25% bonus against this unit.")
-;;;   _("NeverBlocked"), _("Bypasses unreachable units when attacking a tile.")   ; UNCOMMENT THIS IF NOT USING LEXXIE’s PATCH FOR THIS FLAG
-;;;    _("MultiSlot"), _("Cities with proper requirements can produce more than one of these per turn.") ;uncomment if you don’t have slot_control patch
     _("CanHide"), _("In appropriate terrain, this unit can make a Hideout, which conceals all land and helicopter units on the tile.")
     _("WillNever"), _("Can't vigil or auto-attack.")
-;;;    _("TransportDefender"), _("Can defend while transported on non-native tiles.") ;uncomment if you don’t have TransportDefender patch
     _("NonMilAttack"), _("Has military capacity but for peaceful purposes, can enter territories with whom you are at Peace")
     _("Cant_Pillage"), _("Unable to pillage tiles.")
     _("CanClaim"), _("Is able to claim sovereignty of foreign tiles bordering domestic territory.")
     _("CantAttack"), _("Cannot do conventional combat attacks.")
 ;;; Courtesy UTYPE flag allows effects/enablers to select all worker-types then rule out some with ,"false", instead of needing 3 effects/enablers
-    _("Workers")
+    _("Workers")        ;; NB: THIS WAS ADDED AS A RESERVED SERVER FLAG IN UPSTREAM 3.1 OR 3.2
   }
+;;; If not using FCW server you will need to put these in as custom type flags and find other mechanics to code their behaviour:
+;;;   _("NeverBlocked"), _("Bypasses unreachable units when attacking a tile.")   ; UNCOMMENT THIS IF NOT USING LEXXIE’s PATCH FOR THIS FLAG
+;;;    _("MultiSlot"), _("Cities with proper requirements can produce more than one of these per turn.") ;uncomment if you don’t have slot_control patch
+;;;    _("TransportDefender"), _("Can defend while transported on non-native tiles.") ;uncomment if you don’t have TransportDefender patch
+
 
 ; RESERVED User-UCF's：these can be included by creators to immediately access special
 ; deluxe game mechanics for any of their ruleset unit_classes. If a class has a user
@@ -6554,7 +6557,8 @@ uk_shield     = 0
 uk_food       = 0
 uk_gold       = 0
 cargo         = "Land", "LandAirSea", "Balloon", "Bomb", "Bomb2", "Cargo", "Zeppelin"
-flags         =  "HelpWonder", "TradeRoute", "NonMil", "NonProvoking", "HasNoZOC", "Cant_Fortify", "NoVeteran", "Capturable"
+flags         =  "HelpWonder", "TradeRoute", "NonMil", "NonProvoking", "HasNoZOC", "Cant_Fortify",
+                 "Multislot", "NoVeteran", "Capturable"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
 veteran_base_raise_chance = 0
