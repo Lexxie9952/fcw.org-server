@@ -1106,8 +1106,6 @@ Pilgrims are wayfaring migrants from Theocratic nations. Like Zealots,\
 "), _("\
 Pilgrims can Estabish Home City in any allied city that is Theocracy,\
  allowing control to pass between nations who share the same faith.\n\
-"), _("\
-Multislot：Under certain conditions, cities can make one (or more) multislot units per turn, plus one of any other type.\
 ")
 
 [unit_proletarians]
@@ -1191,7 +1189,8 @@ uk_food       = 2
 uk_gold       = 0
 embarks       = "LandRoad", "LandRail", "Helicopter"    ; transport helicopter only
 disembarks    = "LandRoad", "LandRail", "Helicopter"
-flags         = "Cant_Fortify", "NonMil", "NonProvoking", "HasNoZOC", "AddToCity", "Capturable", "Expellable", "Cant_Pillage"
+flags         = "Cant_Fortify", "NonMil", "NonProvoking", "HasNoZOC", "AddToCity", "Capturable", "Expellable", "Cant_Pillage",
+                "MultiSlot"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
 veteran_base_raise_chance = 0
@@ -1322,8 +1321,6 @@ Workers are immediately upgraded to Workers II when you learn Democracy.\
 "), _("\
 Communism tech allows Communist governments to conscript Workers II into Riflemen via the\
  Convert order. And vice versa. \n\
-"), _("\
-Multislot：Under certain conditions, cities can make one (or more) multislot units per turn, plus one of any other type.\
 ")
 
 [unit_engineers]
@@ -1368,8 +1365,6 @@ Engineers can do everything Workers can do, at twice the speed.\
  Desert to Plains. Converting Ocean to Swamp requires being on a ship\
  on a tile bordering 2 land tiles. Constructing a Sea Bridge requires\
  being on a ship on a tile cardinally adjacent to land. \n\
-"), _("\
-Multislot：Under certain conditions, cities can make one (or more) multislot units per turn, plus one of any other type.\
 ")
 
 [unit_warriors]
@@ -1845,8 +1840,6 @@ Proportional to city size, up to 8 Partisans appear when an enemy conquers your 
  ➣ The conquest is not a “false flag attack” made by a cooperating player. \n\
  ➣ You must be Democracy or Communist, AND know Communism AND Gunpowder, OR \n\
  ➣ You must be Theocracy, in which case the partisan spawn will yield Zealots or Fanatics. \n\n\
-"), _("\
-Multislot：Under certain conditions, cities can make one (or more) multislot units per turn, plus one of any other type.\
 ")
 
 [unit_riflemen]
@@ -1902,8 +1895,6 @@ Riflemen are World War-era infantry. They are good at defending cities and\
 "), _("\
 Under Communism this unit costs 5 less. Also, Communism tech allows Communist\
  governments to de-commission Riflemen into Workers II via the Convert order. And vice versa. \n\
-"), _("\
-Multislot：Under certain conditions, cities can make one (or more) multislot units per turn, plus one of any other type.\
 ")
 
 ;utype 19 - If this changes it needs to be re-hard-coded in default.lua and script.lua where partisans get spawned
@@ -1970,8 +1961,6 @@ Zealots fervently defend their homeland, and can do surprise skirmish\
 "), _("\
 Zealots can Estabish Home City in any allied city that is Theocracy,\
  allowing control to pass between nations who share the same faith. \n\
-"), _("\
-Multislot：Under certain conditions, cities can make one (or more) multislot units per turn, plus one of any other type.\
 ")
 bombard_rate = 3
 
@@ -2023,8 +2012,6 @@ Alpine Troops are highly mobile units and\
  excellent defenders. Similar to a Scout, they\
  treat every land tile like a road were on it. \n\n\
 With Combined Arms, Alpine Troops get +2 to combat strength. \n\n\
-"), _("\
-Multislot：Under certain conditions, cities can make one (or more) multislot units per turn, plus one of any other type.\
 ")
 
 [unit_marines]
@@ -2092,8 +2079,6 @@ Marines are experts at all-terrain warfare. Armed with diverse\
 Marines gain greater strength bonuses with veterancy, and more\
  moves for each veteran level. Marines built in a city with an\
  Airport, Port Facility, and Barracks III get an extra veteran level. \n\
-"), _("\
-Multislot：Under certain conditions, cities can make one (or more) multislot units per turn, plus one of any other type.\
 ")
 bombard_rate = 3
 
@@ -2148,8 +2133,6 @@ Ground Troops upgrade Riflemen with better weaponry. This upgrade\
  upgraded for only 4 gold.) Ground Troops can stay fortified while\
  attacking, and veterans enjoy a +⅓ move bonus. \n\
 Under Communism this unit costs 5 less. \n\
-"), _("\
-Multislot：Under certain conditions, cities can make one (or more) multislot units per turn, plus one of any other type.\
 ")
 
 ;utype 23 - If this changes it needs to be re-hard-coded in default.lua and script.lua where partisans get spawned
@@ -2216,8 +2199,6 @@ Fanatics fervently defend their homeland, and can do surprise skirmish\
 Fanatics can Establish Home City in any allied city that is Theocracy,\
  allowing control to pass between nations who share the same faith. \n\n\
 Zealots upgrade to Fanatics for free with the required tech. \n\n\
-"), _("\
-Multislot：Under certain conditions, cities can make one (or more) multislot units per turn, plus one of any other type.\
 ")
 bombard_rate = 3
 
@@ -2269,8 +2250,6 @@ helptext      = _("\
 Alpine Troops are highly mobile units and excellent defenders. Similar to a Scout, they\
  treat every land tile like a road were on it. \n\n\
 Alpine Troops are A7 D7 from Combined Arms technology. \n\n\
-"), _("\
-Multislot：Under certain conditions, cities can make one (or more) multislot units per turn, plus one of any other type.\
 ")
 
 [unit_paratroopers]
@@ -2326,8 +2305,6 @@ Fighters on Vigil may auto-attack the adjacent tile you land on. \n\n\
 Paratroopers can Board and Deboard any transport for free. If on a Cargo Plane, they are similar to Marines and AAA,\
  incurring no passenger move costs. They can defend their transport from attackers. \n\n\
 ‡ Paratroopers may also disembark from a Cargo Plane to an adjacent tile (uses all moves.) \n\n\
-"), _("\
-Multislot：Under certain conditions, cities can make one (or more) multislot units per turn, plus one of any other type.\
 ")
 paratroopers_range = 5
 paratroopers_mr_req = 1
@@ -2370,8 +2347,6 @@ Mechanized Infantry have the strongest general defense strength of any land unit
  They have decent attack strength in open field engagements, and excellent mobility.\
  Can carry 1 foot soldier or AAA. \
 \nBig Land units can’t enter Mountains without a road, river, or native base. \n\n\
-"), _("\
-Multislot：Under certain conditions, cities can make one (or more) multislot units per turn, plus one of any other type.\
 ")
 
 [unit_scout]
@@ -3263,7 +3238,8 @@ uk_happy      = 0
 uk_shield     = 0
 uk_food       = 0
 uk_gold       = 0
-flags         = "Unbribable", "HasNoZOC", "NeverProtects", "NonMil", "NonProvoking", "NoVeteran", "SentryAlways"
+flags         = "Unbribable", "HasNoZOC", "NeverProtects", "NonMil", "NonProvoking", "NoVeteran",
+                "Multislot", "SentryAlways"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
 veteran_base_raise_chance = 0
@@ -3364,7 +3340,8 @@ uk_happy      = 0
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-flags         = "HasNoZOC", "NoVeteran", "Unbribable", "Expellable", "NeverProtects", "CanEscape", "Provoking", "NonMil"
+flags         = "HasNoZOC", "NoVeteran", "Unbribable", "Expellable", "NeverProtects", "CanEscape",
+                "Multislot", "Provoking", "NonMil"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
 veteran_base_raise_chance = 0
@@ -3771,7 +3748,8 @@ uk_happy      = 0
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-flags         = "HasNoZOC", "NoVeteran", "Unbribable", "FreeRide", "NeverProtects", "CanEscape", "Provoking"
+flags         = "HasNoZOC", "NoVeteran", "Unbribable", "FreeRide", "NeverProtects", "CanEscape", "Provoking",
+                "Multislot"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
 veteran_base_raise_chance = 0
@@ -3861,7 +3839,8 @@ uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
 vision_layer  = "Stealth"
-flags         = "HasNoZOC", "NoVeteran", "Unbribable", "NeverProtects", "CanEscape", "Provoking", "WillNever", "SentryAlways", "BadCityDefender"
+flags         = "HasNoZOC", "NoVeteran", "Unbribable", "NeverProtects", "CanEscape", "Provoking", "WillNever",
+                "SentryAlways", "BadCityDefender"
 veteran_names =
   _("?vet_rank:green"),
   _("?vet_rank:veteran"),
@@ -5046,7 +5025,7 @@ uk_gold       = 1
 cargo         = "Land", "LandNoKill", "LandAirSea", "Big Land", "LandRoad", "Cargo",
                 "RiverShip", "Sea", "Submarine", "Trireme"
 flags         = "Settlers", "Infra", "CanRoad", "CanFortress", "Cant_Pillage", "NonMil", "NonProvoking",
-                "HasNoZOC", "NoVeteran", "Capturable", "Expellable", "BadCityDefender",
+                "HasNoZOC", "NoVeteran", "Capturable", "Expellable", "BadCityDefender", "Multislot",
                 "Airbase", "HasNoZOC" ;Airbase for buoys
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
@@ -5098,7 +5077,7 @@ uk_shield     = 0
 uk_food       = 0
 uk_gold       = 0
 cargo         = "Land", "LandNoKill", "LandAirSea", "Big Land", "Balloon", "LandRoad", "Cargo"
-flags         = "BadCityDefender", "HelpWonder", "Traderoute", "NonMil",
+flags         = "BadCityDefender", "HelpWonder", "Traderoute", "NonMil", "Multislot",
                 "NonProvoking", "HasNoZOC", "NoVeteran", "ProvokingClass2"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
@@ -5788,7 +5767,7 @@ roles         = ""
 helptext      = _("\
 ABMs intercept enemy missiles. Because there is seldom enough time to\
  order a launch against incoming missiles, ABMs are usually set to Vigil,\
- which makes them automatically intercept adjacent missiles. In the case\
+ which makes them automatically intercept adjacent offensive missiles (not other ABMs). In the case\
  of a missile trying non-adjacent nuclear detonation, each ABM on vigil has a 29% chance to\
  intercept it within a 5x5 area of effect (minus the corners). \n\
 ABMs are useful for anti-missile defense outside of cities. They must be\
@@ -5796,8 +5775,7 @@ ABMs are useful for anti-missile defense outside of cities. They must be\
 ABMs aren't very effective\
  against non-missiles. As a defensive unit, they cause no unhappiness.\
  After required tech is known, 1 ABM is delivered free\
- to each newly built unit capable of carrying missilies. \n\
-Multislot：Under certain conditions, cities can make one (or more) multislot units per turn, plus one of any other type. \n\n\
+ to each newly built unit capable of carrying missilies. \n\n\
 *** Logistical Rules for ALL Missiles：\n\
  A Missile must be transported by ending its turn in a city, or by Airlift, or as cargo on a\
  Missile Destroyer, AEGIS Cruiser, Missile Submarine, Carrier type, or Mobile SAM. Loading\
@@ -6050,8 +6028,6 @@ Bombs can only be moved by bombers, trains, or the airlift order. They can’t a
  from inside a domestic city. Bombs are cheap, but they damage more often than\
  kill, and even victory has a cost. Hidden expenses lie in logistics, delivery\
  risk, and non-reusability. \n\
-"), _("\
-Multislot：Under certain conditions, cities can make one (or more) multislot units per turn, plus one of any other type.\
 ")
 
 [unit_atom_bomb]
@@ -6286,7 +6262,8 @@ uk_food       = 0
 uk_gold       = 0
 embarks       = "LandRail", "Helicopter"    ; transport helicopter only
 disembarks    = "LandRail", "Helicopter"
-flags         = "Diplomat", "IgZOC", "NonMil", "NonProvoking", "HasNoZOC", "Expellable", "Cant_Pillage", "CanClaim", "Settlers"
+flags         = "Diplomat", "IgZOC", "NonMil", "NonProvoking", "HasNoZOC", "Expellable", "Cant_Pillage", "CanClaim",
+                "Multislot", "Settlers"
 veteran_names =
   _("?diplomatic_rank:attaché"),
   _("?diplomatic_rank:secretary"),
@@ -6344,7 +6321,7 @@ uk_gold       = 0
 embarks       = "LandRail", "Helicopter"    ; transport helicopter only
 disembarks    = "LandRail", "Helicopter"
 flags         = "Diplomat", "IgZOC", "NonMil", "NonProvoking", "HasNoZOC", "Spy", "Expellable", "CanClaim",
-                "Settlers", "SentryAlways"
+                "Multislot", "Settlers", "SentryAlways"
 veteran_names =
   _("?spy_level:informant"),
   _("?spy_level:handler"),
@@ -6606,7 +6583,8 @@ uk_shield     = 0
 uk_food       = 0
 uk_gold       = 0
 cargo         = "Land", "LandAirSea", "Cargo"
-flags         = "HelpWonder", "TradeRoute", "NonMil", "NonProvoking", "HasNoZOC", "Capturable", "Expellable", "NoVeteran", "Cant_Pillage"
+flags         = "HelpWonder", "TradeRoute", "NonMil", "NonProvoking", "HasNoZOC", "Capturable", "Expellable",
+                "Multislot", "NoVeteran", "Cant_Pillage"
 roles         = "TradeStartUnit"
 helptext      = _("\
 The Truck replaces the Caravan as the basic Commerce unit on Land. It moves at\

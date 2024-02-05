@@ -1339,7 +1339,7 @@ Sets the main capital of your nation. Loss of your main capital：\
  the move bonus for nations who have no cities, due to sedentary\
  culture.\
 "), _("\
- With Conscription, a Palace allows producing one extra multislot unit per turn.\
+ A Palace allows producing one extra multislot unit per turn.\
 ")
 
 [building_ecclesiastical_palace]

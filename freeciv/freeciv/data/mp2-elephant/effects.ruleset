@@ -7654,7 +7654,7 @@ type    = "City_Build_Slots"
 value   = 1
 reqs    =
     { "type", "name", "range", "present"
-      "Tech", "Conscription", "Player", TRUE
+;      "Tech", "Conscription", "Player", TRUE
       "Building", "Palace", "City", TRUE
     }
 [effect_city_build_slots_capital2]

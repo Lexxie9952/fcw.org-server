@@ -215,7 +215,10 @@ veteran_power_fact = 100, 120, 125, 134 goes to:
 veteran_power_fact = 100, 125, 134, 150
 i.e., 6 in 5 (swamp), 5 in 4 (mine), 4 in 3 (angkor wat swamp drain) goes to:
       5 in 4 (mine), 4 in 3 (mine or nationalists/angkor wat time), 3 in 2 (irrigate).
-69. More Multislot units: Pilgrims, Workers II, Engineers.
+69. More Multislot units:
+   Pilgrims, Migrant, Workers II, Engineers, Trawler
+   Train, Truck, Airplane, Cargo Plane, Cargo Ship, Balloon
+   Diplomat, Spy
 70. Fighter types may always vigil in a city or airbase, if they have half their moves or more.
 71. Vigil range extended for fighter types:
    Fighter:          5 (was 2)
@@ -238,7 +241,7 @@ i.e., 6 in 5 (swamp), 5 in 4 (mine), 4 in 3 (angkor wat swamp drain) goes to:
 82. Goods and Freight can use railroads because they are passive movement. They can't use Maglev because of their large cargo space requirements.
     This lessens some micromanagement pains and makes good sense too.
 83. (also recent change to MP2D) - AEGIS and MSAM lose ability to defend their single tile from a successful nuclear detonation. Tile protection in a successful detonation is reserved for the Bunker base type.
-84. (also recent change to MP2D) - AEGIS and MSAM instead get a 50% and 33% chance respectively to use their anti-aircraft capabilites to prevent aircraft-delivered nuclear bombs on adjacent tiles from detonating.
+84. (also recent change to MP2D) - AEGIS and MSAM instead get a 50% and 33% chance respectively to use their anti-aircraft capabilites to prevent aircraft-delivered nuclear bombs on adjacent tiles from detonating. AEGIS bad city defender applies to this.
 85. (also recent change to MP2D) - Anti-Ballistic Missiles can intercept all nuclear-type missiles in a 5x5-minus corners area of effect, preventing their detonation. They have a 29% chance of doing so, or in other words, each two ABMs in
     radius, reduces the chance by 50%. (1 missile: 29%), 2 missiles: 50%, 4 missiles: 25%, 6 missiles: 12.5%, etc.
 86. Added NukeSurvivalPct effects, regulating suvival odds for city pop, units in city, units on map, nukes in city, and nukes on map. See HELP>UNITS>Atom Bomb for more info
@@ -252,4 +255,5 @@ i.e., 6 in 5 (swamp), 5 in 4 (mine), 4 in 3 (angkor wat swamp drain) goes to:
 89. Discovery of Combined Arms gives a free Cargo Transport in the capital.
 90. Combined Arms no longer requires computers but is demoted one tier. Reason: allow more advanced troops and capabilities. Before, by the time this tech was available, it was not as appealing as other available techs, and thus became
       much less relevant. In addition, this helps buff Project Infantry another step and makes "necessity" of Mechanization for Mech.Inf slightly less.
-91.
+91. palace gives a multislot in early times
+
