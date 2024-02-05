@@ -3137,7 +3137,7 @@ static void sg_save_map_owner(struct savedata *saving)
         fc_snprintf(token, sizeof(token), "%d",
                     ptile->infra_turns);
       } else {
-        fc_snprintf(token, sizeof(token), "0"); 
+        fc_snprintf(token, sizeof(token), "0");
       }
       strcat(line, token);
       if (x + 1 < wld.map.xsize) {
@@ -3316,7 +3316,7 @@ static void sg_save_map_known(struct savedata *saving)
             p = player_index(pplayer);
             l = p / 32;
             known[l * MAP_INDEX_SIZE + tile_index(ptile)]
-              |= (1u << (p % 32)); /* "p % 32" = "p - l * 32" */ 
+              |= (1u << (p % 32)); /* "p % 32" = "p - l * 32" */
           }
         } players_iterate_end;
       } whole_map_iterate_end;
@@ -4537,7 +4537,7 @@ static void sg_save_player_main(struct savedata *saving,
   secfile_insert_int(saving->file, plr->score.culture,
                      "score%d.culture", plrno);
   secfile_insert_int(saving->file, plr->score.traderoutes,
-                     "score%d.traderoutes", plrno);     
+                     "score%d.traderoutes", plrno);
   secfile_insert_int(saving->file, plr->score.game,
                      "score%d.total", plrno);
 
@@ -4986,7 +4986,7 @@ static bool sg_load_player_city(struct loaddata *loading, struct player *plr,
     bool enabled = secfile_lookup_bool_default(loading->file, FALSE,
                                                "%s.cma_enabled", citystr);
     if (enabled) {
-      
+
       struct cm_parameter *param = fc_calloc(1, sizeof(struct cm_parameter));
 
       for (i = 0; i < O_LAST; i++) {
@@ -5036,7 +5036,7 @@ static bool sg_load_player_city(struct loaddata *loading, struct player *plr,
       (void) secfile_entry_lookup(loading->file, "%s.max_food_needed",
                                   citystr);
     }
-  }  
+  }
 
   /* Load the city rally point. */
   {
@@ -5678,7 +5678,7 @@ static bool sg_load_player_unit(struct loaddata *loading,
   sg_warn_ret_val(secfile_lookup_int(loading->file, &punit->homecity,
                                      "%s.homecity", unitstr), FALSE,
                   "%s", secfile_error());
-  
+
   /* DANGER, loads a long from an int; but at this point likely not a huge_val
    * after all factors and calculations stripped it down to simple move_frags:
      TODO: savegame compat for long ints */
@@ -7160,7 +7160,7 @@ static void sg_load_researches(struct loaddata *loading)
     }
 
     /* multiresearch and blueprints store separate bulb accounts for each
-       individual tech, for cases where bulbs are not and can not be 
+       individual tech, for cases where bulbs are not and can not be
        transferred by selecting different techs to research */
     if (game.server.multiresearch || game.server.blueprints) {
       size_t count_res;
@@ -7213,7 +7213,7 @@ static void sg_save_researches(struct savedata *saving)
       secfile_insert_int(saving->file, presearch->bulbs_researching_saved,
                          "research.r%d.bulbs_before", i);
       /* multiresearch and blueprints store separate bulb accounts for each
-         individual tech, for cases where bulbs are not and can not be 
+         individual tech, for cases where bulbs are not and can not be
          transferred by selecting different techs to research */
       if (game.server.multiresearch || game.server.blueprints) {
         vlist_research = fc_calloc(game.control.num_tech_types, sizeof(int));
@@ -7319,7 +7319,7 @@ static void sg_load_treaties(struct loaddata *loading)
 
       init_treaty(ptreaty, p0, p1);
       treaty_list_prepend(treaties, ptreaty);
-      
+
       for (cidx = 0; (ct = secfile_lookup_str_default(loading->file, NULL,
                                                       "treaty%d.clause%d.type",
                                                       tidx, cidx)) != NULL ;

@@ -218,7 +218,7 @@ static bool is_req_knowable(const struct player *pow_player,
     case USP_HAS_HOME_CITY:
     case USP_MOVED_THIS_TURN:
       /* Known to the unit's owner. */
-      return target_unit && unit_owner(target_unit) == pow_player;  
+      return target_unit && unit_owner(target_unit) == pow_player;
     case USP_COUNT:
       fc_assert_msg(req->source.value.unit_state != USP_COUNT,
                     "Invalid unit state property.");

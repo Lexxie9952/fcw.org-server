@@ -73,7 +73,7 @@ static void form_chat_name(struct connection *pconn, char *buffer, size_t len)
   str[0] = str[0] & 0b11011111;
 
   if (pconn->supercow) {
-    fc_snprintf(buffer, len, 
+    fc_snprintf(buffer, len,
       "<font face='Freeciv'><font color='#dc9'>%s</font> (<font color='#da5'>Gamemaster</font>)",
       str);
   } else if (!pplayer || pconn->observer
@@ -127,7 +127,7 @@ static void send_chat_msg(struct connection *pconn,
   va_end(args);
 
 // Instead, Freeciv-Web uses css class styling:
-#ifdef FREECIV_WEB 
+#ifdef FREECIV_WEB
   packet.event = msgclass;
 #endif /* FREECIV_WEB */
 
@@ -243,7 +243,7 @@ static void chat_msg_to_player(struct connection *sender,
   }//color="#caa3b3"
 
   /* Send the message to player observers. */
-  package_chat_msg(&packet, sender, ftc_any, E_CHAT_MSG_PRIVATE_RCVD, 
+  package_chat_msg(&packet, sender, ftc_any, E_CHAT_MSG_PRIVATE_RCVD,
                    "%s %s<span class='arwr'></span>%s %s:<br>%s", sender_flag, sender_name,
                     player_name(pdest), dest_flag, msg);
   conn_list_iterate(pdest->connections, pconn) {
@@ -307,7 +307,7 @@ void ai_chat_msg_to_player(struct player *psource, struct player *pdest,
   }//color="#caa3b3"
 
   /* Send the message to player observers. */
-  package_chat_msg(&packet, NULL, ftc_any, E_CHAT_MSG_PRIVATE_RCVD, 
+  package_chat_msg(&packet, NULL, ftc_any, E_CHAT_MSG_PRIVATE_RCVD,
                    "%s %s (A.I.)<span class='arwr'></span>%s %s:<br>%s", sender_flag, sender_name,
                     player_name(pdest), dest_flag, text);
   conn_list_iterate(pdest->connections, pconn) {
@@ -388,14 +388,14 @@ static void chat_msg_to_global_observers(struct connection *sender,
 **************************************************************************/
 static void chat_msg_to_all(struct connection *sender, char *msg)
 {
-  struct packet_chat_msg packet;  
+  struct packet_chat_msg packet;
   char sender_name[MAX_LEN_CHAT_NAME];
   char sender_flag[MAX_LEN_CHAT_NAME];
 
   msg = skip_leading_spaces(msg);
   form_chat_name(sender, sender_name, sizeof(sender_name));
   form_chat_flag(sender, sender_flag, sizeof(sender_flag));
-  
+
   package_chat_msg(&packet, sender, ftc_any, E_CHAT_MSG_PUBLIC,
                  "%s %s:<br>%s", sender_flag, sender_name, msg);
   con_write(C_COMMENT, "%s", packet.message);
@@ -432,7 +432,7 @@ void handle_chat_msg_req(struct connection *pconn, const char *message)
 {
   char real_message[MAX_LEN_MSG], *cp;
   bool double_colon;
-  
+
   sz_strlcpy(real_message, message);
 
   /* This loop to prevent players from sending multiple lines which can
@@ -480,7 +480,7 @@ void handle_chat_msg_req(struct connection *pconn, const char *message)
      notice intended private messages with (eg) mis-spelt name.
 
      Approach:
-     
+
      If there is no ':', or ':' is first on line,
           message is global (send to all players)
      else if the ':' is double, try matching part before "::" against
@@ -496,10 +496,10 @@ void handle_chat_msg_req(struct connection *pconn, const char *message)
      else complain (might be a typo-ed intended private message)
   */
 
-  /* FCW differentiates conn name and player name for a reason. One 
+  /* FCW differentiates conn name and player name for a reason. One
    * is the account and the other is your public persona. Do NOT
    * expose private connection/account and only go by player name */
-  
+
   cp = strchr(real_message, CHAT_DIRECT_PREFIX);
 
   if (cp && (cp != &real_message[0])) {

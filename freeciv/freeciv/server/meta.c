@@ -188,7 +188,7 @@ void set_user_meta_message_string(const char *string)
   } else {
     /* Remove user meta message. We will use automatic messages instead */
     game.server.meta_info.user_message[0] = '\0';
-    set_meta_message_string(default_meta_message_string());    
+    set_meta_message_string(default_meta_message_string());
   }
 }
 
@@ -345,18 +345,18 @@ static bool send_to_metaserver(enum meta_flag flag)
         netfile_add_form_str(post, "plt[]", type);
         netfile_add_form_str(post, "pll[]", player_name(plr));
         netfile_add_form_str(post, "pln[]",
-                             plr->nation != NO_NATION_SELECTED 
+                             plr->nation != NO_NATION_SELECTED
                              ? nation_plural_for_player(plr)
                              : "none");
         netfile_add_form_str(post, "plf[]",
-                             plr->nation != NO_NATION_SELECTED 
+                             plr->nation != NO_NATION_SELECTED
                              ? nation_of_player(plr)->flag_graphic_str
                              : "none");
         netfile_add_form_str(post, "plh[]",
                              pconn ? pconn->addr : "");
 
         /* is this player available to take?
-         * TODO: there's some duplication here with 
+         * TODO: there's some duplication here with
          * stdinhand.c:is_allowed_to_take() */
         if (is_barbarian(plr) && !strchr(game.server.allow_take, 'b')) {
           is_player_available = FALSE;
@@ -504,7 +504,7 @@ bool send_server_info_to_metaserver(enum meta_flag flag)
   }
 
   /* if we're bidding farewell, ignore all timers */
-  if (flag == META_GOODBYE) { 
+  if (flag == META_GOODBYE) {
     if (last_send_timer) {
       timer_destroy(last_send_timer);
       last_send_timer = NULL;
@@ -528,9 +528,9 @@ bool send_server_info_to_metaserver(enum meta_flag flag)
     return FALSE;
   }
 
-  /* if we're asking for a refresh, only do so if 
+  /* if we're asking for a refresh, only do so if
    * we've exceeded the refresh interval */
-  if ((flag == META_REFRESH) && !want_update && last_send_timer 
+  if ((flag == META_REFRESH) && !want_update && last_send_timer
       && (timer_read_seconds(last_send_timer) < METASERVER_REFRESH_INTERVAL)) {
     return FALSE;
   }

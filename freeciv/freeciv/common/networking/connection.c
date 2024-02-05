@@ -199,7 +199,7 @@ static int write_socket_data(struct connection *pc,
     if (FD_ISSET(pc->sock, &writefs)) {
       nblock=MIN(buf->ndata-start, MAX_LEN_PACKET);
       log_debug("trying to write %d limit=%d", nblock, limit);
-      if ((nput = fc_writesocket(pc->sock, 
+      if ((nput = fc_writesocket(pc->sock,
                                  (const char *)buf->data+start, nblock)) == -1) {
 #ifdef NONBLOCKING_SOCKETS
         if (errno == EWOULDBLOCK || errno == EAGAIN) {
@@ -403,7 +403,7 @@ struct connection *conn_by_user_prefix(const char *user_name,
                          conn_list_size(game.all_connections),
                          MAX_LEN_NAME-1, fc_strncasequotecmp,
                          effectivestrlenquote, user_name, &ind);
-  
+
   if (*result < M_PRE_AMBIGUOUS) {
     return conn_list_get(game.all_connections, ind);
   } else {

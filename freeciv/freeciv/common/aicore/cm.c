@@ -775,7 +775,7 @@ static void apply_solution(struct cm_state *state,
 
 /************************************************************************//**
   Convert the city's surplus numbers into an array. Get the happy/disorder
-  values, too. This fills in the surplus array and disorder and happy 
+  values, too. This fills in the surplus array and disorder and happy
   values based on the city's data.
 ****************************************************************************/
 static void get_city_surplus(const struct city *pcity,
@@ -826,7 +826,7 @@ static struct cm_fitness evaluate_solution(struct cm_state *state,
     int specialists_amount = city_specialists(pcity);
     int max_content = player_content_citizens(city_owner(pcity));
 
-    state->min_luxury = surplus[O_LUXURY] 
+    state->min_luxury = surplus[O_LUXURY]
       + game.info.happy_cost * MAX(specialists_amount - max_content, 0)
        + 1;
   }
@@ -957,16 +957,16 @@ static int compare_tile_type_by_stat(const void *va, const void *vb)
 
   /* consider the influence of trade on science, luxury, gold
      for compute_max_stats_heuristics, which uses these sorted arrays,
-     it is essential, that the sorting is correct, else promising 
+     it is essential, that the sorting is correct, else promising
      branches get pruned */
-  double valuea = (*a)->production[compare_key] + 
+  double valuea = (*a)->production[compare_key] +
                     compare_key_trade_bonus * (*a)->production[O_TRADE];
   double valueb = (*b)->production[compare_key] +
                     compare_key_trade_bonus * (*b)->production[O_TRADE];
 
   /* most production of what we care about goes first */
   /* double compare is ok, both values are calculated in the same way
-     and should only be considered equal, if equal in compare_key 
+     and should only be considered equal, if equal in compare_key
      and O_TRADE */
   if (valuea != valueb) {
     /* b-a so we sort big numbers first */
@@ -1189,7 +1189,7 @@ static void clean_lattice(struct tile_type_vector *lattice,
   struct tile_type_vector tofree;
   bool forced_loop = FALSE;
 
-  /* We collect the types we want to remove and free them in one fell 
+  /* We collect the types we want to remove and free them in one fell
      swoop at the end, in order to avoid memory errors.  */
   tile_type_vector_init(&tofree);
 
@@ -1608,7 +1608,7 @@ static bool invalid_specialists_in_solution(const struct cm_state *state,
   int i;
 
   /* If we don't forbid specialists, then we're not invalid. */
-  if (state->parameter.allow_specialists 
+  if (state->parameter.allow_specialists
       && !state->parameter.max_growth) /* temp. used as substitute for no_farmer because wasn't latter wasn't building into our return packets! */
     return false;
 
@@ -1682,10 +1682,10 @@ static void compute_max_stats_heuristic(const struct cm_state *state,
 
   }
 
-  /* we found the basic production, however, bonus, taxes, 
+  /* we found the basic production, however, bonus, taxes,
      free production, tithes, traderoutes are missing
      we add free production, and have the city.c code do the rest */
-  
+
   struct city *pcity = state->pcity;
   struct tile *pcenter = city_tile(pcity);
   bool is_celebrating = base_city_celebrating(pcity);
@@ -1737,8 +1737,8 @@ static bool choice_is_promising(struct cm_state *state, int newchoice,
        * don't short-circuit */
     }
   } output_type_iterate_end;
- 
-  /* If we don't get the city content, we assume using every idle worker 
+
+  /* If we don't get the city content, we assume using every idle worker
      as specialist and the maximum producible luxury already computed.
      If this is less than the amount of luxury we calculated in
      evaluate_solution() (where min_luxury is set), when we observed the
@@ -1747,9 +1747,9 @@ static bool choice_is_promising(struct cm_state *state, int newchoice,
      don't need to take effects, angry citizens etc into account here
      either.)
      FIXME: this heuristic will break in rulesets where specialists can
-     influence happiness other than by direct production of luxury. Also 
-     this heuristic now assumes ENTERTAINER or spec[0] is the only one 
-     allowed to produce luxury if allow_specialists is off, which the 
+     influence happiness other than by direct production of luxury. Also
+     this heuristic now assumes ENTERTAINER or spec[0] is the only one
+     allowed to produce luxury if allow_specialists is off, which the
      FIXME solution should figure out some other way, such as looking at
      how Merchant specialist produces Trade.*/
   {
@@ -1762,7 +1762,7 @@ static bool choice_is_promising(struct cm_state *state, int newchoice,
 
     if (max_luxury < state->min_luxury ) {
       log_base(LOG_PRUNE_BRANCH, "--- pruning: disorder (%d + %d*%d < %d)",
-               production[O_LUXURY], 
+               production[O_LUXURY],
                game.info.happy_cost,
                specialists_suppress_unhappy,
                state->min_luxury);
@@ -1863,7 +1863,7 @@ static double estimate_fitness(const struct cm_state *state,
   output_type_iterate(stat_index) {
     estimates[stat_index] *= pcity->bonus[stat_index] / 100.0;
     if (estimates[stat_index] < state->parameter.minimal_surplus[stat_index])
-      F_this = true; 
+      F_this = true;
       // Fire the governor and let the user decide, if mins can't be met.
       // reason: preserve the semantic meaning of "minimum surplus"
   } output_type_iterate_end;
@@ -2192,7 +2192,7 @@ static int get_heuristic_cm_max_loop_count(struct cm_state *state)
     case 13:   // 45 tiles / 21 = 2.1429
       rad_adj = 1.2;
       break;
-    default: 
+    default:
       rad_adj = (pcity->city_radius_sq - 5) * 0.143;
       // e.g., (4-5)*0.143 = -0.143
       // e.g., (9-5)*0.143 =  0.572
@@ -2202,9 +2202,9 @@ static int get_heuristic_cm_max_loop_count(struct cm_state *state)
   int csize = city_size_get(pcity);
   float size_adj = (12.0 - csize) * -1; // s1 to s70 produces -11 to 58;
   size_adj /= (size_adj < -1) ? 25 : 100;
-  
+
 // Low range: spec-0.24 size-0.44 = -0.66. If city_radius_sq < 5, could go negative.
-// High range: spec+0.50 size+0.58 = +1.08. If city_radius_sq == 13, 1.08+1.2 = +2.28 (328%) 
+// High range: spec+0.50 size+0.58 = +1.08. If city_radius_sq == 13, 1.08+1.2 = +2.28 (328%)
 
   /* Adjust CM_MAX_LOOP between low range of 34% to high range of 328%.
     If 27500==CM_MAX_LOOP: 10000 to 90200 (s70). Size 21 city (+0.09),
@@ -2216,8 +2216,8 @@ static int get_heuristic_cm_max_loop_count(struct cm_state *state)
     return MIN(CM_MAX_LOOP * .727, max_count); // .727 * 27500 == 20000
   }
 
-/* DEBUG 
-  notify_conn(game.est_connections, NULL, E_WONDER_WILL_BE_BUILT, ftc_server, 
+/* DEBUG
+  notify_conn(game.est_connections, NULL, E_WONDER_WILL_BE_BUILT, ftc_server,
           _("%s, size %d, spec_adj %f, rad_adj %f, radius %d, size_adj %f. %d max_loop."),
           city_link(pcity), csize, spec_adj, rad_adj, pcity->city_radius_sq, size_adj, max_count);
 */
@@ -2241,7 +2241,7 @@ static void cm_find_best_solution(struct cm_state *state,
 #endif
 
   begin_search(state, parameter, negative_ok);
-  
+
   /* make a backup of the city to restore at the very end */
   memcpy(&backup, state->pcity, sizeof(backup));
 
@@ -2266,11 +2266,11 @@ static void cm_find_best_solution(struct cm_state *state,
     }
   }
 
-/* DEBUG 
-notify_conn(game.est_connections, NULL, E_WONDER_WILL_BE_BUILT, ftc_server, 
+/* DEBUG
+notify_conn(game.est_connections, NULL, E_WONDER_WILL_BE_BUILT, ftc_server,
             _("%s took %d iterations to find a cm solution."),
             city_link(state->pcity), loop_count); */
-    
+
 #ifdef CM_LOOP_NO_LIMIT
   if (loop_count > max_count) {
     log_warn("It took %d iterations to a find cm solution.", loop_count);

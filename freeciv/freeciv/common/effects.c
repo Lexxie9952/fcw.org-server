@@ -623,7 +623,7 @@ int get_target_bonus_effects(struct effect_list *plist,
                         target_output, target_specialist, target_action,
 			                  &peffect->reqs, RPT_CERTAIN,
                         vision_layer)) {
-      /* This code will add value of effect. If there's multiplier for 
+      /* This code will add value of effect. If there's multiplier for
        * effect and target_player aren't null, then value is multiplied
        * by player's multiplier factor. */
       if (peffect->multiplier) {
@@ -1007,7 +1007,7 @@ int get_potential_improvement_bonus(const struct impr_type *pimprove,
                            preq, prob_type, V_COUNT)) {
           useful = FALSE;
           break;
-        } 
+        }
       } requirement_vector_iterate_end;
 
       if (useful) {

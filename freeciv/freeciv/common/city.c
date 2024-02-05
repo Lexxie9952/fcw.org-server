@@ -659,7 +659,7 @@ const char *city_improvement_name_translation(const struct city *pcity,
     return improvement_name_translation(pimprove);
 
 /* This is redundant in FCW and causes string mismatches over improvement
-   names. TODO: make #ifndef FREECIV_WEB to do all this: 
+   names. TODO: make #ifndef FREECIV_WEB to do all this:
 
   static char buffer[256];
   const char *state = NULL;
@@ -685,9 +685,9 @@ const char *city_improvement_name_translation(const struct city *pcity,
 
   if (state) {
     fc_snprintf(buffer, sizeof(buffer), "%s",
-                improvement_name_translation(pimprove), state); 
+                improvement_name_translation(pimprove), state);
     return buffer;
-  } 
+  }
 
   return improvement_name_translation(pimprove);
   */
@@ -750,16 +750,16 @@ bool city_production_build_units(const struct city *pcity,
    *    by MSU's. e.g., If you have 3 slots, you can make up to 3 units, only one of
    *    which can (optionally) be a non-MSU. "SC_MIXED" is the default setting.
    * 2. "SC_SEGREGATED": Multiple slots can be used so long as they only units ever made
-   *    are MSU's. Production halts the moment it would result in a non-MSU unit being 
+   *    are MSU's. Production halts the moment it would result in a non-MSU unit being
    *    bundled in a batch of multiple units. In other words, you can't use extra slots
    *    whenever a non-MSU is in the batch.
-   * 3. "SC_SAME_TYPE": Only the same type of unit can be made multiple times. This was 
+   * 3. "SC_SAME_TYPE": Only the same type of unit can be made multiple times. This was
    *    the old, unpopular, and unrealistic legacy behaviour.
-   * 
-   * If game.server.slot_control is OFF, things are much simpler. Option 1 and 2 are 
+   *
+   * If game.server.slot_control is OFF, things are much simpler. Option 1 and 2 are
    * identical and allow units of different types to mix. Option 3 disallows it and
    * keeps the old legacy behaviour.
-   */ 
+   */
   bool utype_is_slotblocker = false;
   int slotblockers = 0; // slotblockers is a count of units from the group of which more
                         // than one from that group can't be made: i.e., a non-multi-slot unit
@@ -768,7 +768,7 @@ bool city_production_build_units(const struct city *pcity,
   (*num_units) = 0;
 
   if (pcity->production.kind != VUT_UTYPE) {
-    return FALSE; 
+    return FALSE;
   }
 
   utype = pcity->production.value.utype;
@@ -783,17 +783,17 @@ bool city_production_build_units(const struct city *pcity,
     return FALSE;
   }
 
-  if ( game.server.slot_control 
-       && !(utype_has_flag(utype, UTYF_MULTISLOT)) 
-      && game.server.slot_control_style == SC_MIXED )   { 
+  if ( game.server.slot_control
+       && !(utype_has_flag(utype, UTYF_MULTISLOT))
+      && game.server.slot_control_style == SC_MIXED )   {
 
         utype_is_slotblocker = true;
 
   }  else if ( game.server.slot_control
               && game.server.slot_control_style == SC_SEGREGATED
               && !(utype_has_flag(utype, UTYF_MULTISLOT))) {
-  
-        (*num_units)++; 
+
+        (*num_units)++;
         return FALSE;
   }
 
@@ -804,10 +804,10 @@ bool city_production_build_units(const struct city *pcity,
 
   switch (game.server.slot_control_style) {
     case SC_MIXED:  // multi-slot units can mix with up to one non-multi-slot unit */
-    ///// CODE FOR OPTION #1 
+    ///// CODE FOR OPTION #1
         for (i = 0; i < build_slots; i++) {
           if (shields_left < unit_shield_cost) {
-            // not enough shields 
+            // not enough shields
             break;
           }
           // Maximum of one unit of a type not allowed to make multiple in one turn.
@@ -823,11 +823,11 @@ bool city_production_build_units(const struct city *pcity,
           /* If there is another item in the worklist, then:
             ➤ check if it's forbidden and exit if so,
             ➤ else, adjust the shield cost to the new item so that
-            ➤ the loop will begin again with the right info to check. */ 
+            ➤ the loop will begin again with the right info to check. */
           if (worklist_length(&pcity->worklist) > i) {
             // Get next utype in the list
             (void) worklist_peek_ith(&pcity->worklist, &target, i);
-            
+
             // Stop if an item in the worklist is not a unit
             if (target.kind != VUT_UTYPE) {
               break;
@@ -837,7 +837,7 @@ bool city_production_build_units(const struct city *pcity,
             if (utype_index(target.value.utype) != utype_index(utype)) {
               utype = target.value.utype; // remember for next comparison
               // STEP 1. Check if it it's legal at all to make this with other units
-              if (/*utype_pop_value(target.value.utype) != 0 
+              if (/*utype_pop_value(target.value.utype) != 0
                     ||*/ utype_has_flag(target.value.utype, UTYF_UNIQUE) ) {
                   return FALSE; // ILLEGAL, go home
               }
@@ -849,9 +849,9 @@ bool city_production_build_units(const struct city *pcity,
 
             // LEGAL! Simply change shield cost and keep looping...
             unit_shield_cost = utype_build_shield_cost(pcity, target.value.utype);
-          }   
+          }
         }
-        
+
       return TRUE;
       break;
 
@@ -859,7 +859,7 @@ bool city_production_build_units(const struct city *pcity,
     ///// CODE FOR OPTION #2:
         for (i = 0; i < build_slots; i++) {
           if (shields_left < unit_shield_cost) {
-            // not enough shields 
+            // not enough shields
             break;
           }
 
@@ -869,12 +869,12 @@ bool city_production_build_units(const struct city *pcity,
           /* If there is another item in the worklist, then:
             ➤ check if it's legal for MultiSlot production and exit if not,
             ➤ otherwise if it's legal, adjust the shield cost to the new item
-            ➤ so the loop will begin again with the right info to check. */ 
+            ➤ so the loop will begin again with the right info to check. */
           if (worklist_length(&pcity->worklist) > i) {
             // Get next utype in the list
 
             (void) worklist_peek_ith(&pcity->worklist, &target, i);
-            
+
             // Stop if an item in the worklist is not a unit
             if (target.kind != VUT_UTYPE) {
               break;
@@ -885,7 +885,7 @@ bool city_production_build_units(const struct city *pcity,
               utype = target.value.utype; // remember for next comparison
 
               // STEP ONE. Check again if it it's legal to make >1 of this
-              if (/*utype_pop_value(target.value.utype) != 0 
+              if (/*utype_pop_value(target.value.utype) != 0
                     || */ utype_has_flag(target.value.utype, UTYF_UNIQUE)
                     || (game.server.slot_control && !(utype_has_flag(target.value.utype, UTYF_MULTISLOT))) ) {
                   return FALSE; // not legal, go home
@@ -893,7 +893,7 @@ bool city_production_build_units(const struct city *pcity,
 
               // LEGAL! Simply change shield cost and keep looping...
               unit_shield_cost = utype_build_shield_cost(pcity, target.value.utype);
-            }   
+            }
           }
         }
 
@@ -901,17 +901,17 @@ bool city_production_build_units(const struct city *pcity,
       break;
 
   case SC_SAME_TYPE: // only the same type of unit can ever be made twice or more in one turn:
-  ///// CODE FOR OPTION 3: 
+  ///// CODE FOR OPTION 3:
 /* This was legacy code that exits if worklist changed utype.
    The raison d'etre for competitive use of this feature is getting two units
    per turn by allowing co-creation of cheaper cannon-fodder types bundled
    with expensive types, in order to fix FC's crippling oppressive distortion
    toward quality-over-quantity, in order to enable one of the fundamental
-   metaphysics of all war (and war-games): optimal strategic balance of the 
+   metaphysics of all war (and war-games): optimal strategic balance of the
    quality-quantity spectrum. This version ignores that raison d'etre. */
       for (i = 0; i < build_slots; i++) {
         if (shields_left < unit_shield_cost) {
-          // not enough shields 
+          // not enough shields
           break;
         }
 
@@ -923,7 +923,7 @@ bool city_production_build_units(const struct city *pcity,
           if (target.kind != VUT_UTYPE
               || utype_index(target.value.utype) != utype_index(utype)) {
             // stop if there is a build target in the worklist not equal to the
-            // unit we build . WHY? u should make it also! 
+            // unit we build . WHY? u should make it also!
             break;
           }
         }
@@ -985,7 +985,7 @@ bool can_city_build_improvement_direct(const struct city *pcity,
 **************************************************************************/
 bool can_city_build_improvement_now(const struct city *pcity,
                                     const struct impr_type *pimprove)
-{  
+{
   if (!can_city_build_improvement_direct(pcity, pimprove)) {
     return FALSE;
   }
@@ -1023,7 +1023,7 @@ bool can_city_build_improvement_later(const struct city *pcity,
 }
 
 /**********************************************************************//**
-  Return whether given city can build given unit, ignoring whether unit 
+  Return whether given city can build given unit, ignoring whether unit
   is obsolete.
 **************************************************************************/
 bool can_city_build_unit_direct(const struct city *pcity,
@@ -1057,12 +1057,12 @@ bool can_city_build_unit_direct(const struct city *pcity,
 }
 
 /**********************************************************************//**
-  Return whether given city can build given unit; returns FALSE if unit is 
+  Return whether given city can build given unit; returns FALSE if unit is
   obsolete.
 **************************************************************************/
 bool can_city_build_unit_now(const struct city *pcity,
 			     const struct unit_type *punittype)
-{  
+{
   if (!can_city_build_unit_direct(pcity, punittype)) {
     return FALSE;
   }
@@ -1134,7 +1134,7 @@ bool can_city_build_now(const struct city *pcity,
 }
 
 /**********************************************************************//**
-  Returns whether city can ever build given target, unit or improvement. 
+  Returns whether city can ever build given target, unit or improvement.
 **************************************************************************/
 bool can_city_build_later(const struct city *pcity,
                           const struct universal *target)
@@ -1191,7 +1191,7 @@ bool city_can_change_build(const struct city *pcity)
 void city_choose_build_default(struct city *pcity)
 {
   if (NULL == city_tile(pcity)) {
-    /* When a "dummy" city is created with no tile, then choosing a build 
+    /* When a "dummy" city is created with no tile, then choosing a build
      * target could fail.  This currently might happen during map editing.
      * FIXME: assumes the first unit is always "valid", so check for
      * obsolete units elsewhere. */
@@ -1358,7 +1358,7 @@ bool city_has_building(const struct city *pcity,
                        const struct impr_type *pimprove)
 {
   if (NULL == pimprove) {
-    /* Callers should ensure that any external data is tested with 
+    /* Callers should ensure that any external data is tested with
      * valid_improvement_by_number() */
     return FALSE;
   }
@@ -1379,7 +1379,7 @@ int city_improvement_upkeep(const struct city *pcity,
   }
   /* Q: Is there a need to hard-code wonder upkeep as 0 when rulesets
      set it as 0 anyway, but MIGHT want to create wonders with upkeep?
-     A: No.  Removed 07.Oct.2022 
+     A: No.  Removed 07.Oct.2022
      see: https://osdn.net/projects/freeciv/ticket/42993
 
   if (is_wonder(b)) {
@@ -1473,9 +1473,9 @@ int city_tile_output(const struct city *pcity, const struct tile *ptile,
     }
     prod += get_tile_output_bonus(pcity, ptile, output,
                                   EFT_OUTPUT_INC_TILE);
-    prod += (prod 
+    prod += (prod
              * get_tile_output_bonus(pcity, ptile, output,
-                                     EFT_OUTPUT_PER_TILE)) 
+                                     EFT_OUTPUT_PER_TILE))
             / 100;
     if (!is_celebrating && penalty_limit > 0 && prod > penalty_limit) {
       prod--;
@@ -1823,7 +1823,7 @@ int city_would_rapture(const struct city *pcity)
     bool next  = is_rapture_turn(pcity, pcity->rapture+1);
     bool next2 = is_rapture_turn(pcity, pcity->rapture+2);
     bool next3 = is_rapture_turn(pcity, pcity->rapture+3);
-    
+
     if (now)  code |= 1;
     if (next) code |= 2;
     if (next2) code |= 4;
@@ -1831,7 +1831,7 @@ int city_would_rapture(const struct city *pcity)
   }
 
   return code;
-} 
+}
 
 
 /**********************************************************************//**
@@ -1947,7 +1947,7 @@ int city_style_by_rule_name(const char *s)
 }
 
 /**********************************************************************//**
-  Return the (translated) name of the given city style. 
+  Return the (translated) name of the given city style.
   You don't have to free the return pointer.
 **************************************************************************/
 const char *city_style_name_translation(const int style)
@@ -2318,7 +2318,7 @@ bool is_friendly_city_near(const struct player *owner,
 }
 
 /**********************************************************************//**
-  Return TRUE iff a city exists within a city radius of the given 
+  Return TRUE iff a city exists within a city radius of the given
   location. may_be_on_center determines if a city at x,y counts.
 **************************************************************************/
 bool city_exists_within_max_city_map(const struct tile *ptile,
@@ -2439,7 +2439,7 @@ int get_city_add_bonus(const struct city *pcity, Output_type_id otype)
 {
   struct output_type *output = &output_types[otype];
 
-  int add_bonus = get_city_tile_output_bonus(pcity, NULL, output, 
+  int add_bonus = get_city_tile_output_bonus(pcity, NULL, output,
              EFT_OUTPUT_ADD_BONUS);
 
   return add_bonus;
@@ -2459,7 +2459,7 @@ int get_city_tithes_bonus(const struct city *pcity)
 
   tithes_bonus += get_city_bonus(pcity, EFT_MAKE_CONTENT, V_COUNT);
   tithes_bonus += get_city_bonus(pcity, EFT_FORCE_CONTENT, V_COUNT);
-  
+
   tithes_bonus = (tithes_bonus <= pcity->feel[CITIZEN_UNHAPPY][FEELING_BASE])
                ? tithes_bonus
                : pcity->feel[CITIZEN_UNHAPPY][FEELING_BASE];
@@ -2470,7 +2470,7 @@ int get_city_tithes_bonus(const struct city *pcity)
 }
 
 /**********************************************************************//**
-  Add the incomes of a city according to the taxrates (ignore # of 
+  Add the incomes of a city according to the taxrates (ignore # of
   specialists). trade should be in output[O_TRADE].
 **************************************************************************/
 void add_tax_income(const struct player *pplayer, int trade, int *output)
@@ -2690,7 +2690,7 @@ static void citizen_base_mood(struct city *pcity)
   *angry = MIN(base_angry, size - spes);
 
   /* Create unhappy citizens. In the beginning, all who are not content,
-   * specialists or angry are unhappy. This is changed by luxuries and 
+   * specialists or angry are unhappy. This is changed by luxuries and
    * buildings later. */
   *unhappy = (size - spes - *content - *angry);
 
@@ -2699,7 +2699,7 @@ static void citizen_base_mood(struct city *pcity)
 }
 
 /**********************************************************************//**
-  Make people happy: 
+  Make people happy:
    * angry citizen are eliminated first
    * then content are made happy, then unhappy content, etc.
    * each conversions costs 2 or 4 luxuries.
@@ -2987,7 +2987,7 @@ int city_pollution(const struct city *pcity, int shield_total)
 }
 
 /**********************************************************************//**
-  Gets whether cities that pcity trades with had the plague. If so, it 
+  Gets whether cities that pcity trades with had the plague. If so, it
   returns the health penalty in tenth of percent which depends on the size
   of both cities. The health penalty is given as the product of the ruleset
   option 'game.info.illness_trade_infection' (in percent) and the square
@@ -3120,7 +3120,7 @@ inline void set_city_production(struct city *pcity)
    * This is a rather complicated process if we allow rules to become
    * more generalized.  We can assume that there are no recursive dependency
    * loops, but there are some dependencies that do not follow strict
-   * ordering.  For instance corruption must be calculated before 
+   * ordering.  For instance corruption must be calculated before
    * trade taxes can be counted up, which must occur before the science bonus
    * is added on.  But the calculation of corruption must include the
    * trade bonus.  To do this without excessive special casing means that in
@@ -3148,7 +3148,7 @@ inline void set_city_production(struct city *pcity)
       if (settings->cancelling == TRI_ACTIVE) {
         can_trade = TRUE;
       }
-    } 
+    }
 
     if (can_trade) {
       int value;
@@ -3198,7 +3198,7 @@ inline void set_city_production(struct city *pcity)
   /* Cities under forced gulag mechanics may lose a percentage of
      their income if the ruleset specifies such: */
   if (pcity->server.gulag) {
-    /* NOT a good idea to do an output_type_iterate(o) since some outputs are 
+    /* NOT a good idea to do an output_type_iterate(o) since some outputs are
       interdependent on others (e.g., gold upon trade.) Trade would have to be
       applied higher above before anything with gold/sci/lux is done. Messing
       with lux and food could create situations where loss of either locks you
@@ -3208,7 +3208,7 @@ inline void set_city_production(struct city *pcity)
                                NULL, NULL, NULL, get_output_type(O_SHIELD), NULL, NULL,
                                EFT_GULAG_LOST_INCOME_PCT, V_COUNT);
 
-    int penalty_gold = 
+    int penalty_gold =
       get_target_bonus_effects(NULL, city_owner(pcity), NULL, pcity, NULL,
                                NULL, NULL, NULL, get_output_type(O_GOLD), NULL, NULL,
                                EFT_GULAG_LOST_INCOME_PCT, V_COUNT);
@@ -3253,17 +3253,17 @@ int city_unit_unhappiness(struct unit *punit, int *free_unhappy)
   fc_assert_ret_val(0 <= *free_unhappy, 0);
 
   if (!unit_being_aggressive(punit)) {
-    if (!is_field_unit(punit)) { 
+    if (!is_field_unit(punit)) {
       /* Non-aggressive non-field unit: 0 unhappy */
       return 0;
     }
     /* Non-aggressive Field unit: let ruleset differentiate happy_cost for aggressive
        vs. non-aggressive field units */
-    happy_cost -= get_unittype_bonus(plr, unit_tile(punit), ut, EFT_PEACEFUL_FIELDUNIT_BONUS, V_COUNT); 
+    happy_cost -= get_unittype_bonus(plr, unit_tile(punit), ut, EFT_PEACEFUL_FIELDUNIT_BONUS, V_COUNT);
   }
 
   /* Ruleset conditions for increased/decreased unhappy cost */
-  happy_cost += get_unit_bonus(punit, EFT_UNIT_UNHAPPY_COST); 
+  happy_cost += get_unit_bonus(punit, EFT_UNIT_UNHAPPY_COST);
   /* Last step, reduce by MAKE_CONTENT_MIL_PER */
   happy_cost -= get_city_bonus(pcity, EFT_MAKE_CONTENT_MIL_PER, V_COUNT);
 
@@ -3592,7 +3592,7 @@ void city_remove_improvement(struct city *pcity,
 {
   log_debug("Improvement %s removed from city %s",
             improvement_rule_name(pimprove), pcity->name);
-  
+
   pcity->built[improvement_index(pimprove)].turn = I_DESTROYED;
 
   if (is_server() && is_wonder(pimprove)) {

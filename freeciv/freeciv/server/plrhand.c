@@ -190,7 +190,7 @@ void kill_player(struct player *pplayer)
     if (city_list_size(pplayer->cities) >= 2 + MIN(GAME_MIN_CIVILWARSIZE, 2)) {
       log_verbose("Civil war strikes the remaining empire of %s",
                   pplayer->name);
-      /* out of sheer cruelty we reanimate the player 
+      /* out of sheer cruelty we reanimate the player
        * so he can behold what happens to his empire */
       pplayer->is_alive = TRUE;
       (void) civil_war(pplayer);
@@ -227,7 +227,7 @@ void kill_player(struct player *pplayer)
     } city_list_iterate_safe_end;
 
     game.server.savepalace = palace;
-      
+
     resolve_unit_stacks(pplayer, barbarians, FALSE);
 
     /* Barbarians don't get free buildings like Palaces, so we don't
@@ -332,24 +332,24 @@ void handle_player_rates(struct player *pplayer,
 }
 
 /**********************************************************************//**
-  Returns whether a play can immediately transition to new governments.   
+  Returns whether a play can immediately transition to new governments.
 **************************************************************************/
 static bool immediate_revolution(struct player *pplayer)
 {
-  /* whether transition to new gov is instant or (may) require turn delays: 
+  /* whether transition to new gov is instant or (may) require turn delays:
    * EFT_NO_ANARCHY (1..9): instant.  EFT_NO_ANARCHY (10+): not instant:
                                       but transitional gov = current gov */
   /* TODO: logic/mechanics for when immediacy happens can be expanded
-           out of this semi-hard-coded logic to more ruleset fluid logic */                                    
+           out of this semi-hard-coded logic to more ruleset fluid logic */
   return get_player_bonus(pplayer, EFT_NO_ANARCHY) >= 1
              && get_player_bonus(pplayer, EFT_NO_ANARCHY) < 10;
 }
 /**********************************************************************//**
   Returns the transition government a player must have during their
-  revolution period of switching governments.   
+  revolution period of switching governments.
 **************************************************************************/
 static struct government *revolution_government(struct player *pplayer) {
-  /* Start with the default revolution gov: */ 
+  /* Start with the default revolution gov: */
   struct government *plr_revo_gov = game.government_during_revolution;
 
   /* whether Anarchy gov is needed to transition */
@@ -422,7 +422,7 @@ void government_change(struct player *pplayer, struct government *gov,
       notify_player(pplayer, NULL, E_REVOLT_DONE, ftc_server,
                     _("The tax rates for the %s are changed from "
                       "%3d%%/%3d%%/%3d%% (tax/luxury/science) to "
-                      "%3d%%/%3d%%/%3d%%."), 
+                      "%3d%%/%3d%%/%3d%%."),
                     nation_plural_for_player(pplayer),
                     save_tax, save_luxury, save_science,
                     pplayer->economic.tax, pplayer->economic.luxury,
@@ -490,7 +490,7 @@ void handle_player_change_government(struct player *pplayer,
   struct government *plr_revo_gov = revolution_government(pplayer);
   struct government *gov = government_by_number(government);
   bool anarchy;   /* whether transitions need an "anarchy/revolution gov" */
-  bool immediacy; /* whether the transition to new gov is immediate */ 
+  bool immediacy; /* whether the transition to new gov is immediate */
   if (!gov || !can_change_to_government(pplayer, gov)) {
     return;
   }
@@ -514,7 +514,7 @@ void handle_player_change_government(struct player *pplayer,
     turns = pplayer->revolution_finishes - game.info.turn;
   } else if ((is_ai(pplayer) && !has_handicap(pplayer, H_REVOLUTION))
 	     || (!anarchy && immediacy)) {
-    /* AI players without the H_REVOLUTION handicap, and Human players with 
+    /* AI players without the H_REVOLUTION handicap, and Human players with
           immediacy of transition (&& no anarchy) can skip anarchy */
     turns = 0;
   } else {
@@ -623,7 +623,7 @@ void update_revolution(struct player *pplayer)
    *       and the player can leave the revolution at any time.  The value
    *       is reset at the end of any turn when a non-anarchy government is
    *       chosen.
-   *     * If the player has non-immediate revolution without transitional 
+   *     * If the player has non-immediate revolution without transitional
    *       anarchy/revolutionary gov, then we're forced to end the revolution
    *       immediately after achieving the new gov (avoids legacy logic mess).
    */
@@ -645,7 +645,7 @@ void update_revolution(struct player *pplayer)
       log_debug("Update: finishing revolution for %s.", player_name(pplayer));
       government_change(pplayer, pplayer->target_government, TRUE);
       /* (!anarchy && !immediate) == no infinite twiddling of govs after revo */
-      if (plr_revo_gov != game.government_during_revolution 
+      if (plr_revo_gov != game.government_during_revolution
           && pplayer->revolution_finishes <= game.info.turn) {
         pplayer->revolution_finishes = -1;
       }
@@ -656,10 +656,10 @@ void update_revolution(struct player *pplayer)
                     _("You should choose a new government from the "
                       "government menu."));
     }
-  } else if ( (government_of_player(pplayer) != plr_revo_gov 
+  } else if ( (government_of_player(pplayer) != plr_revo_gov
                && pplayer->revolution_finishes < game.info.turn)
               || /* !immediate && !anarchy == can't change constantly */
-              (plr_revo_gov != game.government_during_revolution 
+              (plr_revo_gov != game.government_during_revolution
                && pplayer->revolution_finishes < game.info.turn) )
   { /* Reset the revolution counter.  If the player has another revolution
      * they'll have to re-enter anarchy. */
@@ -902,7 +902,7 @@ void handle_diplomacy_cancel_pact(struct player *pplayer,
                           "constant provocations of the %s."),
                           nation_plural_for_player(pplayer2));
       }
-    } 
+    }
     else if (new_type == DS_WAR) {
       if (game.server.pax_dei_set && game.server.pax_dei_counter > 0) {
           notify_player(NULL, NULL, E_TREATY_BROKEN, ftc_server,
@@ -928,9 +928,9 @@ void handle_diplomacy_cancel_pact(struct player *pplayer,
   send_player_all_c(pplayer, NULL);
   send_player_all_c(pplayer2, NULL);
 
-  /* 
+  /*
    * Refresh all cities which have a unit of the other side within
-   * city range. 
+   * city range.
    */
   city_map_update_all_cities_for_player(pplayer);
   city_map_update_all_cities_for_player(pplayer2);
@@ -971,7 +971,7 @@ void handle_diplomacy_cancel_pact(struct player *pplayer,
         handle_diplomacy_cancel_pact(other, player_number(pplayer),
                                      CLAUSE_ALLIANCE);
       } else {
-        /* We are in the same team as the agressor; we cannot break 
+        /* We are in the same team as the agressor; we cannot break
          * alliance with him. We trust our team mate and break alliance
          * with the attacked player */
         notify_player(other, NULL, E_TREATY_BROKEN, ftc_server,
@@ -1310,7 +1310,7 @@ static void package_player_info(struct player *plr,
     pgov = game.government_during_revolution;
   }
   packet->government = pgov ? government_number(pgov) : government_count();
-   
+
   /* Send diplomatic status of the player to everyone they are in
    * contact with. */
   if (info_level >= INFO_EMBASSY
@@ -1339,7 +1339,7 @@ static void package_player_info(struct player *plr,
   }
 
   /* Make absolutely sure - in case you lose your embassy! */
-  if (info_level >= INFO_EMBASSY 
+  if (info_level >= INFO_EMBASSY
       || (receiver
 	  && player_diplstate_get(plr, receiver)->type == DS_TEAM)) {
     packet->tech_upkeep = player_tech_upkeep(plr);
@@ -1391,18 +1391,18 @@ static void package_player_info(struct player *plr,
   web_packet->advance_count = game.control.num_tech_types;
   struct research *research = research_get(plr);
 
-  /* <NOTE> This block could easily be added to PACKET_PLAYER_INFO instead of 
+  /* <NOTE> This block could easily be added to PACKET_PLAYER_INFO instead of
      PACKET_WEB_PLAYER_INFO_ADDITION, and would solve https://osdn.net/projects/freeciv/ticket/42713
      from the server side. Still, the client tech tree will need some logic
      to properly use this info for accurate display to the user */
 
   /* 1. Send multiresearch status to client so it can properly portray saved bulbs
-     without forcing the player to change research targets: 
+     without forcing the player to change research targets:
      2. Send tech costs so client can portray true costs without forcing the player
      to change research. Q: Why in player_info? A: One day, tech costs will be
      non-global: altered by player- and civ-specific effects */
-  memset(&web_packet->advance_saved_bulbs, 0, sizeof(web_packet->advance_saved_bulbs)); // clear arrays  
-  memset(&web_packet->advance_costs, 0, sizeof(web_packet->advance_costs));    
+  memset(&web_packet->advance_saved_bulbs, 0, sizeof(web_packet->advance_saved_bulbs)); // clear arrays
+  memset(&web_packet->advance_costs, 0, sizeof(web_packet->advance_costs));
   if (info_level >= INFO_FULL || (receiver && pplayers_allied(plr, receiver))) {
     advance_index_iterate(A_NONE, i) {
       if (research) {
@@ -1410,7 +1410,7 @@ static void package_player_info(struct player *plr,
            the client needs both to know whether the player's bulbs qualify as a blueprint: */
         web_packet->advance_saved_bulbs[i] = research->inventions[i].bulbs_researched_saved;
         web_packet->advance_costs[i] = research_total_bulbs_required(research, i, FALSE);
-      } 
+      }
     } advance_index_iterate_end;
   }
   /* </end NOTE> */
@@ -1538,7 +1538,7 @@ void server_player_init(struct player *pplayer, bool initmap,
   }
 
   /* This must be done after team information is initialised
-   * as it might be needed to determine max rate effects. 
+   * as it might be needed to determine max rate effects.
    * Sometimes this server_player_init() gets called twice
    * with only latter one having needs_team set. We don't
    * want to call player_limit_to_max_rates() at first time
@@ -2221,7 +2221,7 @@ void make_contact(struct player *pplayer1, struct player *pplayer2,
     ds_plr1plr2->type = new_state;
     ds_plr2plr1->type = new_state;
     if (new_state == DS_WAR) {
-      // DS_WAR has nothing to cancel, this assures integrity for 
+      // DS_WAR has nothing to cancel, this assures integrity for
       // expanding legacy diplomatic system to cover more cases:
       ds_plr1plr2->has_reason_to_cancel = 0;
       ds_plr2plr1->has_reason_to_cancel = 0;
@@ -2655,7 +2655,7 @@ void reset_all_start_commands(bool plrchange)
   This function creates a new player and copies all of it's science
   research etc.  Players are both thrown into anarchy and gold is
   split between both players.
-                               - Kris Bubendorfer 
+                               - Kris Bubendorfer
 **************************************************************************/
 static struct player *split_player(struct player *pplayer)
 {

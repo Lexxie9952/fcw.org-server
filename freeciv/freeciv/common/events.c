@@ -236,9 +236,9 @@ static struct {
 };
 
 
-/* 
+/*
  * Maps from enum event_type to indexes of events[]. Set by
- * events_init. 
+ * events_init.
  */
 static int event_to_index[E_COUNT];
 
@@ -269,7 +269,7 @@ static int compar_event_message_texts(const void *i1, const void *i2)
 {
   const enum event_type *j1 = i1;
   const enum event_type *j2 = i2;
-  
+
   return fc_strcasecmp(get_event_message_text(*j1),
                        get_event_message_text(*j2));
 }
@@ -329,7 +329,7 @@ bool is_city_event(enum event_type event)
 }
 
 /**********************************************************************//**
-  Initialize events. 
+  Initialize events.
   Now also initialise sorted_events[].
 **************************************************************************/
 void events_init(void)
@@ -376,7 +376,7 @@ void events_init(void)
 }
 
 /**********************************************************************//**
-  Free events. 
+  Free events.
 **************************************************************************/
 void events_free(void)
 {

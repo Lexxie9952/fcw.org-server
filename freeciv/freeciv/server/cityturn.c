@@ -244,12 +244,12 @@ void remove_obsolete_buildings_city(struct city *pcity, bool refresh)
                       improvement_name_translation(pimprove), sgold);
         sold = TRUE;
       }
-      // Handle Pax Dei is obsolete from tech but not from counter 
+      // Handle Pax Dei is obsolete from tech but not from counter
       // (avoids wiping the building twice in the block further below):
-      else if (game.server.pax_dei_counter != 0 
+      else if (game.server.pax_dei_counter != 0
                && strcmp(improvement_rule_name(pimprove), "Pax Dei")==0) {
       // pax_dei_set should always be true if you have the wonder, but if not,
-      // wipe it anyway 
+      // wipe it anyway
           building_lost(pcity, pimprove, "obsolete", NULL);
           notify_player(NULL, city_tile(pcity), E_WONDER_OBSOLETE, ftc_server,
               _("[`warning`] [`paxdei`] Pax Dei is now obsolete."));
@@ -411,13 +411,13 @@ void auto_arrange_workers(struct city *pcity)
   // We used to look at pplayer->ai.xxx_priority to determine the values
    * to be used here.  However that doesn't work at all because those values
    * are on a different scale.  Later the ai may wish to adjust its
-   * priorities - this should be done via a separate set of variables. 
+   * priorities - this should be done via a separate set of variables.
   if (city_size_get(pcity) > 1) {
     if (city_size_get(pcity) <= game.info.notradesize) {
       cmp.factor[O_FOOD] = 15;
     } else {
       if (city_granary_size(city_size_get(pcity)) == pcity->food_stock) {
-        // We don't need more food if the granary is full. 
+        // We don't need more food if the granary is full.
         cmp.factor[O_FOOD] = 0;
       } else {
         cmp.factor[O_FOOD] = 10;
@@ -428,7 +428,7 @@ void auto_arrange_workers(struct city *pcity)
     cm_copy_parameter(&cmp, pcity->cm_parameter);
   } else {
   /* BELOW removed Jan2021 for server-side CMA patch
-    // Growing to size 2 is the highest priority. 
+    // Growing to size 2 is the highest priority.
     cmp.factor[O_FOOD] = 20;
 ABOVE removed Jan2021 for server-side CMA patch */
       set_default_city_manager(&cmp, pcity); // new func for setting default
@@ -450,7 +450,7 @@ ABOVE removed Jan2021 for server-side CMA patch */
                     E_CITY_CMA_RELEASE, ftc_server,
                     _("[`redx`] Governor of %s failed to meet goals and resigned."),
                     city_link(pcity));
-      
+
       /* Switch to default parameters, and try with them */
       set_default_city_manager(&cmp, pcity);
       cm_query_result(pcity, &cmp, cmr, FALSE);
@@ -500,7 +500,7 @@ ABOVE removed Jan2021 for server-side CMA patch */
       free(pcity->cm_parameter);
       pcity->cm_parameter = NULL;
     }
-  }  
+  }
   apply_cmresult_to_city(pcity, cmr);
 
   if (pcity->server.debug) {
@@ -541,7 +541,7 @@ static void city_global_turn_notify(struct conn_list *dest)
                   E_WONDER_WILL_BE_BUILT, ftc_server,
                   _("[`%s`] Notice: %s in %s will finish next turn!"),
                   improvement_name_translation(pimprove),
-                  improvement_name_translation(pimprove), 
+                  improvement_name_translation(pimprove),
                   city_link(pcity));
     }
   } cities_iterate_end;
@@ -722,7 +722,7 @@ void update_city_activities(struct player *pplayer)
       r = fc_rand(i);
       /* update unit upkeep */
       city_units_upkeep(cities[r]);
-      
+
       /* Accumulate score elements which must be done prior to tile re-arrange */
       pplayer->score.mfg += cities[r]->surplus[O_SHIELD];
       /* New factories are built before check_pollution() is called, but we
@@ -732,20 +732,20 @@ void update_city_activities(struct player *pplayer)
       if (game.server.city_output_style) {
         specialist_type_iterate(sp) {
           pplayer->score.specialists[sp] += cities[r]->specialists[sp];
-        } specialist_type_iterate_end;      
+        } specialist_type_iterate_end;
       }
 
       // 27August2021:
-      /* TRS_SIMPLE route revenue now uses "one-turn delayed WYSIWYG" to avoid numerous 
+      /* TRS_SIMPLE route revenue now uses "one-turn delayed WYSIWYG" to avoid numerous
        * R/T issues and exploits: The base trade you see right before TC is the base
        * trade that will be used in NEXT TURN's traderoute revenue calculations.
        * i.e., NOT the base trade after you exploited the governor to temporarily allocate
        * 15 Merchants, and NOT the catch-22 of two foreign players in a real-time feedback
-       * interference pattern of mutually altering each other's adjustments for luxury, 
+       * interference pattern of mutually altering each other's adjustments for luxury,
        * bulbs, etc. */
       int base_trade = cities[r]->citizen_base[O_TRADE];
       update_city_activity(cities[r]);
-      /* Now immediately record this turn's base trade for TRS_SIMPLE revenue next turn: */ 
+      /* Now immediately record this turn's base trade for TRS_SIMPLE revenue next turn: */
       cities[r]->base_trade_recorded = base_trade;
 
       cities[r] = cities[--i];
@@ -913,7 +913,7 @@ bool city_reduce_size(struct city *pcity, citizens pop_loss,
 
   /* Update citizens. */
   citizens_update(pcity, NULL);
-  
+
   /* Update number of people in each feelings category.
    * This also updates the city radius if needed. */
   if (game.server.city_output_style) {
@@ -1099,7 +1099,7 @@ static bool city_increase_size(struct city *pcity, struct player *nationality)
 
   notify_player(powner, city_tile(pcity), E_CITY_GROWTH, ftc_server,
                 _("[`plus`] %s %s to size %d."),
-                city_link(pcity), 
+                city_link(pcity),
                 (rapture_grow ? "rapture grows" : "grows"),
                 city_size_get(pcity));
 
@@ -1244,7 +1244,7 @@ static bool city_populate(struct city *pcity, struct player *nationality)
     if (game.server.hangry) {
       // but they're quiet about it in the gulag:
       int gulag = get_city_bonus(pcity, EFT_GULAG, V_COUNT);
-      int gulag_force = pcity->martial_law 
+      int gulag_force = pcity->martial_law
                       + get_city_bonus(pcity, EFT_MAKE_CONTENT_MIL, V_COUNT);
 
       /* Under server hangry rules, famine immediately disqualifies rapture */
@@ -1262,7 +1262,7 @@ static bool city_populate(struct city *pcity, struct player *nationality)
           notify_player(city_owner(pcity), city_tile(pcity),
                         E_CITY_FAMINE, ftc_server,
                         _("Martial force of %d not enough to suppress famine disorder in %s."),
-                         gulag_force, city_link(pcity));          
+                         gulag_force, city_link(pcity));
         }
         return true; // indicates city is hangry from starvation
       } else {
@@ -1273,7 +1273,7 @@ static bool city_populate(struct city *pcity, struct player *nationality)
                         E_CITY_NORMAL, ftc_server,
                         _("Gulag policy in %s prevents disorder."), city_link(pcity));
       }
-    } 
+    }
   }
   // No starvation occurred:
   pcity->hangry = 0;  // reset turns of starving counter
@@ -1283,11 +1283,11 @@ static bool city_populate(struct city *pcity, struct player *nationality)
 /**********************************************************************//**
   Examine an unbuildable build target from a city's worklist to see if it
   can be postponed. Returns:
-  
+
   FALSE - it never can be built and should be cancelled (or city is gone.)
-  
+
   TRUE - Items can be postponed (and this function handled postponing.)
-  
+
   NB:This function has DIFFERENCES from UPSTREAM: HACK-PATCHES to
   avoid exploits. Newer upstream code is desired; but it's request to notify
   FCW so FCW can run anti-exploit tests after. Hack-patches are commented
@@ -1382,7 +1382,7 @@ static bool worklist_item_postpone_req_vec(struct universal *target,
              instead of postponing, then exploited by players to
              speed production with gold purchase on cheaper illegal
              units, shuffling those shields into next queued legal
-             unit on the turn after */                          
+             unit on the turn after */
           success = FALSE;
         } else {
           notify_player(pplayer, city_tile(pcity),
@@ -2051,7 +2051,7 @@ static bool worklist_item_postpone_req_vec(struct universal *target,
 
   if (!known) {
     /* This shouldn't happen... but,
-       IT DOES happen from the same item queued multiple times, and that 
+       IT DOES happen from the same item queued multiple times, and that
        means purge it, don't postpone it. */
     notify_player(pplayer, city_tile(pcity),
                   E_CITY_CANTBUILD, ftc_server,
@@ -2163,7 +2163,7 @@ static bool worklist_change_build_target(struct player *pplayer,
 	/* Yep, we can go after pupdate instead.  Joy! */
         notify_player(pplayer, city_tile(pcity), E_WORKLIST, ftc_server,
                       _("[`reddiamond`] Production of %s is upgraded to %s [`%s`] in %s."),
-                      utype_name_translation(ptarget), 
+                      utype_name_translation(ptarget),
                       utype_name_translation(pupdate),
                       utype_name_translation(pupdate),
                       city_link(pcity));
@@ -2203,7 +2203,7 @@ static bool worklist_change_build_target(struct player *pplayer,
 	/* Hey, we can upgrade the improvement! */
         notify_player(pplayer, city_tile(pcity), E_WORKLIST, ftc_server,
                       _("Production of %s is upgraded to %s in %s."),
-                      city_improvement_name_translation(pcity, ptarget), 
+                      city_improvement_name_translation(pcity, ptarget),
                       city_improvement_name_translation(pcity, pupdate),
                       city_link(pcity));
 	target.value.building = pupdate;
@@ -2385,8 +2385,8 @@ static void upgrade_unit_prod(struct city *pcity)
                   E_UNIT_UPGRADED, ftc_server,
 		  _("[`reddiamond`] Production of %s is upgraded to %s [`%s`] in %s."),
 		  utype_name_translation(producing),
-		  utype_name_translation(upgrading), 
-		  utype_name_translation(upgrading), 
+		  utype_name_translation(upgrading),
+		  utype_name_translation(upgrading),
 		  city_link(pcity));
     pcity->production.value.utype = upgrading;
   }
@@ -2448,7 +2448,7 @@ static bool city_distribute_surplus_shields(struct player *pplayer,
   }
 
   /* Now we confirm changes made last turn. */
-  if (!pcity->hangry && 
+  if (!pcity->hangry &&
       !(game.server.fulldisorder && (pcity->anarchy || pcity->hangry))) {
     pcity->shield_stock += pcity->surplus[O_SHIELD];
   } else pcity->surplus[O_SHIELD] = 0;
@@ -2469,7 +2469,7 @@ static bool city_build_building(struct player *pplayer, struct city *pcity)
   int saved_id = pcity->id;
 
   /* Convert Coinage (or other "Gold" flagged improvement) from shields
-     into gold in player's treasury. Rate is 1/1 * EFT_COINAGE_BONUS_PCT */ 
+     into gold in player's treasury. Rate is 1/1 * EFT_COINAGE_BONUS_PCT */
   if (city_production_has_flag(pcity, IF_GOLD)) {
     fc_assert(pcity->surplus[O_SHIELD] >= 0);
     /* pcity->before_change_shields already contains the surplus from
@@ -2480,11 +2480,11 @@ static bool city_build_building(struct player *pplayer, struct city *pcity)
                           EFT_COINAGE_BONUS_PM, V_COUNT);
     double coinage = pcity->before_change_shields*(1000+bonus_permille);
     // Round to nearest int with 0.5 randomly decided up or down:
-    coinage = (coinage / 1000) + (double)(499.000000001+fc_rand(2))/1000; 
+    coinage = (coinage / 1000) + (double)(499.000000001+fc_rand(2))/1000;
     notify_player(pplayer, city_tile(pcity), E_IMP_BUILD, ftc_server,
               _("[`shield`][`a_rght`][`gold`] %s %s renders %d shields to %d gold."),
               city_link(pcity), city_improvement_name_translation(pcity, pimprove),
-              pcity->before_change_shields, (int)coinage);  
+              pcity->before_change_shields, (int)coinage);
     pplayer->economic.gold += (int)coinage;
     pcity->before_change_shields = 0;
     pcity->shield_stock = 0;
@@ -2504,7 +2504,7 @@ static bool city_build_building(struct player *pplayer, struct city *pcity)
     /* NEVER allow city to keep unavailable target! */
     worklist_change_build_target(pplayer, pcity);
     /* w_c_b_t() works in nice normal conditions, but... */
-    if (pcity->production.kind == VUT_IMPROVEMENT 
+    if (pcity->production.kind == VUT_IMPROVEMENT
         && pcity->production.value.building == pimprove) {
           /* Fallback for nasty mean cases e.g., queued 100x times! */
           advisor_choose_build(pplayer, pcity);
@@ -2653,14 +2653,14 @@ static struct unit *city_create_unit(struct city *pcity,
                       city_production_unit_veteran_level(pcity, utype),
                       pcity->id, 0);
   /* Set newly built units to non-moved status. UGLY HACK PATCH for bug in
-     unittools.c::create_unit_full(): punit->moved = (moves_left >= 0); */                    
+     unittools.c::create_unit_full(): punit->moved = (moves_left >= 0); */
   punit->moved = false;
   pplayer->score.units_built++;
   if (!punit) {
           notify_conn(game.est_connections, city_tile(pcity),
                   E_WONDER_WILL_BE_BUILT, ftc_server,
                   _("Notice: %s in %s creating illegal segfault. Report to admin immediately!"),
-                  utype_name_translation(utype), 
+                  utype_name_translation(utype),
                   city_link(pcity));
     return NULL;              // 17Oct2022 line below was segfault:
   }
@@ -2678,14 +2678,14 @@ static struct unit *city_create_unit(struct city *pcity,
 
     /* FIXME: Heuristic Patch: units on rally-goto did not have a goto_tile,
        making clients fail to show their GOTO activity. A fake tile (home_city
-       tile) gets associated to the unit. This is NOT the correct tile but 
+       tile) gets associated to the unit. This is NOT the correct tile but
        it doesn't matter--it's not used in orders execution, and
        is only used by the client to show if the unit is on GOTO, and gets
-       cleared after orders are fulfilled. 
-       3July2021: 
+       cleared after orders are fulfilled.
+       3July2021:
        FIXED: put dest_tile into 1) rally packets and 2) city's rally struct,
        then use that tile here. Commented line can be substituted back
-       for servers lacking the dest_tile field, and it still works! 
+       for servers lacking the dest_tile field, and it still works!
     punit->goto_tile = unit_tile(punit); */
     punit->goto_tile = index_to_tile(&(wld.map), pcity->rally_point.dest_tile);
   }
@@ -2706,7 +2706,7 @@ static struct unit *city_create_unit(struct city *pcity,
   to legal type (BUT it's not an obsolete unit that's still allowed to
   finish), then and only then... postponing or purging won't work because
   no substitute target replacement.
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
   Supplies the most similar buildable utype so caller can switch target
   to it. (Formerly, player was informed it's an unavailable target but was
   allowed to engage in exploits like buying unavailable target (at cheaper
@@ -2746,7 +2746,7 @@ static const struct unit_type *city_find_similar_legal_utype(
         }
       }
     } else return role_utype;
-    
+
     /* Not our fault: ruleset has NO legal utype roles! */
     if (!role_utype) {
       return NULL;
@@ -2796,15 +2796,15 @@ static bool city_build_unit(struct player *pplayer, struct city *pcity)
     log_verbose("%s %s tried to build %s, which is not available.",
                 nation_rule_name(nation_of_city(pcity)),
                 city_name_get(pcity), utype_rule_name(utype));
-    
+
      script_server_signal_emit("unit_cant_be_built", utype, pcity,
-                              "unavailable"); 
+                              "unavailable");
 
     /* NEVER allow city to build an unavailable target */
     if (worklist_change_build_target(pplayer, pcity)) {
       // Message for postponement was done in w_c_b_t() call
     } else {
-      const struct unit_type *newtype = 
+      const struct unit_type *newtype =
                      city_find_similar_legal_utype(pcity, utype);
 
       if (newtype) {
@@ -2815,7 +2815,7 @@ static bool city_build_unit(struct player *pplayer, struct city *pcity)
         pcity->production.value.utype = newtype;
       } /* else { Shouldn't happen. } */
     }
-    
+
     return city_exist(saved_city_id);
   }
 
@@ -2859,13 +2859,13 @@ static bool city_build_unit(struct player *pplayer, struct city *pcity)
     for (i = 0; i < num_units; i++) {
       // The following code was changed to support the upgraded city_production_build_units
       // which formerly only allowed the same type of unit to get made twice, more out of
-      // laziness to avoid complex coding, than any valid game reason.  
-      // The changes below were needed to correctly use our city_build_slots and the now-accurate 
+      // laziness to avoid complex coding, than any valid game reason.
+      // The changes below were needed to correctly use our city_build_slots and the now-accurate
       // num_units info returned to us.  Go through the worklist and properly produce each
       // unit that can be made in it, given the number of city_build_slots.
 
       // CASE 1: producing current prod item
-      if (i == 0) { 
+      if (i == 0) {
                 // DEBUG notify_player(pplayer, city_tile(pcity), E_UNIT_BUILT_POP_COST,
                 //      ftc_server, _("  i=0 %s making %s."),
                 //      city_link(pcity), utype_name_translation(utype));
@@ -2888,7 +2888,7 @@ static bool city_build_unit(struct player *pplayer, struct city *pcity)
         notify_player(pplayer, city_tile(pcity), E_UNIT_BUILT_POP_COST,
         ftc_server, _("  i=%d worklist peek target(0) is %s."),
         i, utype_name_translation(target.value.utype)); */
- 
+
         utype = target.value.utype;
         pop_cost = utype_pop_value(utype);
 
@@ -2896,7 +2896,7 @@ static bool city_build_unit(struct player *pplayer, struct city *pcity)
         // correct shield cost that will be deducted below
         unit_shield_cost = utype_build_shield_cost(pcity, utype);
       }
-      // CASE 3: making an nth item and we ran out of stuff in the 
+      // CASE 3: making an nth item and we ran out of stuff in the
       // worklist, so just repeat making the last item
       else {
         // DEBUG notify_player(pplayer, city_tile(pcity), E_UNIT_BUILT_POP_COST,
@@ -2920,7 +2920,7 @@ static bool city_build_unit(struct player *pplayer, struct city *pcity)
       if (punit) {
         if (punit->goto_tile) {
           notify_player(pplayer, city_tile(pcity), E_UNIT_BUILT, ftc_server,
-                _("[`bullseye`]%s %s built %s, which left for a %s rally point."),                              
+                _("[`bullseye`]%s %s built %s, which left for a %s rally point."),
                   UNIT_EMOJI(punit), city_link(pcity),
                   utype_name_translation(utype),
                   pcity->rally_point.persistent ? "<b>constant</b>" : ""
@@ -2996,7 +2996,7 @@ static bool city_build_stuff(struct player *pplayer, struct city *pcity)
   /* WYSIWYG collects food surplus BEFORE new unit decreases its surplus.
    * This fixes an assymmetry in city_output_style = 0, where shield
    * upkeep wasn't counted on the turn a unit is produced, but food
-   * upkeep was. With WYSIWYG, what you see is what you get!™ 
+   * upkeep was. With WYSIWYG, what you see is what you get!™
    * Notably, this eliminates complaints where a newly made Settler
    * counterintuitively starves right when it's produced, even though
    * the city showed a break-even food_surplus of +0. */
@@ -3009,7 +3009,7 @@ static bool city_build_stuff(struct player *pplayer, struct city *pcity)
 
   switch (pcity->production.kind) {
   case VUT_IMPROVEMENT:
-    if (!pcity->hangry && !(game.server.fulldisorder && pcity->anarchy)) { 
+    if (!pcity->hangry && !(game.server.fulldisorder && pcity->anarchy)) {
       return city_build_building(pplayer, pcity);
     }
     else {
@@ -3450,7 +3450,7 @@ static bool place_pollution(struct city *pcity, enum extra_cause cause)
 }
 
 /**********************************************************************//**
- Add some Pollution if we have waste. 25May2023: Use server cached 
+ Add some Pollution if we have waste. 25May2023: Use server cached
  pollution from last real-generated shield output, not the pollution
  calculated right after a Factory completed.
 **************************************************************************/
@@ -3470,9 +3470,9 @@ static void check_pollution(struct city *pcity)
   the number of happy, unhappy and angry citizens, whether it is
   celebrating, how close it is to the capital, how many units it has and
   upkeeps, presence of courthouse, its buildings and wonders, and who
-  originally built it. NOTE: this is the "actorless" incite cost in a 
-  vacuum, before we know who is the actor player, actor unit, and any 
-  bonus effects tied to those. 
+  originally built it. NOTE: this is the "actorless" incite cost in a
+  vacuum, before we know who is the actor player, actor unit, and any
+  bonus effects tied to those.
 **************************************************************************/
 int city_incite_cost(struct player *pplayer, struct city *pcity)
 {
@@ -3550,7 +3550,7 @@ int city_incite_cost(struct player *pplayer, struct city *pcity)
     int tgt_cit = citizens_nation_get(pcity, pplayer->slot);
     int third_party = pcity->size - natives - tgt_cit;
 
-    cost = cost_per_citizen * (natives + 0.7 * third_party + 0.5 * tgt_cit); 
+    cost = cost_per_citizen * (natives + 0.7 * third_party + 0.5 * tgt_cit);
   }
 
   cost += (cost * get_city_bonus(pcity, EFT_INCITE_COST_PCT, V_COUNT)) / 100;
@@ -3696,10 +3696,10 @@ static void update_city_activity(struct city *pcity)
       return;
     }
 
-    /* Reason/timing bit codes for any contexts where rapture gets delayed. 
+    /* Reason/timing bit codes for any contexts where rapture gets delayed.
       1 = raptured this turn
       2 = can rapture next turn.
-      4 = can rapture in 2 turns.  
+      4 = can rapture in 2 turns.
       8 = can rapture in 3 turns. */
 
     /* !1 = Rapture qualifying city who paused rapture this turn. */
@@ -3711,7 +3711,7 @@ static void update_city_activity(struct city *pcity)
     /* 3 = Raptured now and can rapture next turn. */
     if (pcity->rapture_status & 2) { /* status of 2||3 may notify */
       /* If/when rapture is never delayed, this message is redundant. */
-      int rrate = get_city_bonus(pcity, EFT_RAPTURE_RATE_PM, V_COUNT);   
+      int rrate = get_city_bonus(pcity, EFT_RAPTURE_RATE_PM, V_COUNT);
       bool redundant = game.info.rapturedelay == 1 && (rrate == 0 || rrate == 1000);
       if (!redundant) {
         notify_player(pplayer, city_tile(pcity), E_CITY_NORMAL, ftc_server,
@@ -3737,11 +3737,11 @@ static void update_city_activity(struct city *pcity)
     update_bulbs(pplayer, pcity->prod[O_SCIENCE], FALSE);
 
     /* For WYSIWYG output, tally demographics for Science and Net Trade
-       when they are counted in each city. This ensures that trade- 
+       when they are counted in each city. This ensures that trade-
        and science-boosting improvements are tallied right when city
        output is accumulated: i.e., between the code blocks where bulbs
        and gold are literally given to the player. */
-    if (game.server.city_output_style) {     
+    if (game.server.city_output_style) {
       pplayer->score.bnp += pcity->surplus[O_TRADE];
       pplayer->score.techout += pcity->prod[O_SCIENCE];
     }
@@ -3765,22 +3765,22 @@ static void update_city_activity(struct city *pcity)
       * also creates heinous playability annoyances. */
       pplayer->economic.gold -= wysiwyg_impr_gold_upkeep;
     }
-    /* Under non-WYSIWYG city_output_style=0, newly made units 
+    /* Under non-WYSIWYG city_output_style=0, newly made units
      * assymetrically pay food and gold upkeep but NOT shield upkeep,
-     * because someone originally made it counterintuitively 
+     * because someone originally made it counterintuitively
      * assymetrical that way (to avoid recursion on shield upkeep
-     * preventing a unit from being made which then if it's not 
-     * made has no upkeep which would allow it to be made but then 
+     * preventing a unit from being made which then if it's not
+     * made has no upkeep which would allow it to be made but then
      * if it's made it has upkeep which then ...) */
     if (!game.server.city_output_style) {
       pplayer->economic.gold -= city_total_unit_gold_upkeep(pcity);
     }
-    /* Under WYSIWYG city_output_style = 1|2, newly made units have 
-     * "upkeep symmetry" - since you don't pay upkeep for shields on 
+    /* Under WYSIWYG city_output_style = 1|2, newly made units have
+     * "upkeep symmetry" - since you don't pay upkeep for shields on
      * the first turn a unit is made, you also don't pay it for food
      * or gold; instead, what you see before you hit TURN DONE is what
      * you get. */
-    else { 
+    else {
       pplayer->economic.gold -= wysiwyg_unit_gold_upkeep;
     }
 
@@ -3924,13 +3924,13 @@ static bool disband_city(struct city *pcity)
      * to rcity.  transfer_city_units does not make sure no units are
      * left floating without a transport, but since all units are
      * transferred this is not a problem. */
-    transfer_city_units(pplayer, pplayer, pcity->units_supported, rcity, 
+    transfer_city_units(pplayer, pplayer, pcity->units_supported, rcity,
                         pcity, -1, TRUE);
 
     if (punit) {
       notify_player(pplayer, ptile, E_UNIT_BUILT, ftc_server,
                     /* TRANS: "<city> is disbanded into Settler." */
-                    _("%s is disbanded into %s."), 
+                    _("%s is disbanded into %s."),
                     city_tile_link(pcity), utype_name_translation(utype));
     }
 

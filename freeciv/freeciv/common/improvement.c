@@ -226,7 +226,7 @@ const struct impr_type *valid_improvement_by_number(const Impr_type_id id)
 }
 
 /**********************************************************************//**
-  Return the (translated) name of the given improvement. 
+  Return the (translated) name of the given improvement.
   You don't have to free the return pointer.
 **************************************************************************/
 const char *improvement_name_translation(const struct impr_type *pimprove)
@@ -253,11 +253,11 @@ int impr_build_shield_cost(const struct city *pcity,
       * (100 + get_building_bonus(pcity, pimprove, EFT_IMPR_BUILD_COST_PCT)) / 100; */
 
   double bonus; /* note: EFT_IMPR_BUILD_COST_PM doesn't add, but multiplies over
-                  over whatever is first fetched from EFT_IMPR_BUILD_COST_PCT. This 
+                  over whatever is first fetched from EFT_IMPR_BUILD_COST_PCT. This
                   allows layering specific multipliers over more general rate levels. */
 
   bonus = (100 + (double)get_building_bonus(pcity, pimprove, EFT_IMPR_BUILD_COST_PCT)) / 100;
-  bonus *= ((1000 + (double)get_building_bonus(pcity, pimprove, EFT_IMPR_BUILD_COST_PM)) / 1000);  
+  bonus *= ((1000 + (double)get_building_bonus(pcity, pimprove, EFT_IMPR_BUILD_COST_PM)) / 1000);
 
   int base = pimprove->build_cost * bonus;
 
@@ -981,7 +981,7 @@ enum test_result test_player_sell_building_now(struct player *pplayer,
   }
 
   /* Check if particular building can be solt */
-  if (pimprove != NULL 
+  if (pimprove != NULL
       && !can_city_sell_building(pcity, pimprove)) {
     return TR_OTHER_FAILURE;
   }

@@ -199,7 +199,7 @@ static void hard_code_oblig_hard_reqs(void)
   /* Why this used to be a hard requirement: Keep the old rules. Need to work
    * out corner cases...
    * Why this is NO LONGER a hard requirement... this totally handicaps the
-     upgrade command with something the ruleset actionenabler should be 
+     upgrade command with something the ruleset actionenabler should be
      responsible for doing by itself. For "old rules" compatibility just
      make sure UNIT_UPGRADE actionenablers in all rulesets add the req:
      "CityTile", "Center",    "Local", TRUE
@@ -318,16 +318,16 @@ static void hard_code_oblig_hard_reqs(void)
   /* Why someone previously made this a hard requirement:
    * "Preserve semantics of NonMil flag. Need to replace other uses in game
    * engine before this can be demoted to a regular unit flag.""
-   * 
+   *
    * NO! Rulesets RELY on "NonMil" to code for allowed entry into Peace
    * territory. Don't FORCE ruleset to wed this with the inability to
    * attack. Actionenablers can CHOOSE to do that or not already. This
    * has to be removed for the following to even be possible in Freeciv:
-   *  
-   * Units which are able to serve peaceful functions during peace and 
+   *
+   * Units which are able to serve peaceful functions during peace and
    * military functions during war:  e.g., half of all ships from 3000BC
-   * to 1400AD, and maybe beyond. 
-   * 
+   * to 1400AD, and maybe beyond.
+   *
    * COMMENTED OUT:
   oblig_hard_req_register(req_from_values(VUT_UTFLAG, REQ_RANGE_LOCAL,
                                           FALSE, TRUE, TRUE, UTYF_CIVILIAN),
@@ -407,7 +407,7 @@ static void hard_code_oblig_hard_reqs(void)
   /* Why this is a hard requirement: Assumed in the code. Corner case
    * where diplomacy prevents a transported unit to go to the target
    * tile. The paradrop code doesn't check if transported units can
-   * coexist with the target tile city and units. 
+   * coexist with the target tile city and units.
 
    OLD hard req: no airlift, no paradrop:
   oblig_hard_req_register(req_from_values(VUT_UNITSTATE, REQ_RANGE_LOCAL,
@@ -417,8 +417,8 @@ static void hard_code_oblig_hard_reqs(void)
                           "All action enablers for %s must require that "
                           "the actor isn't transporting another unit.",
                           ACTION_PARADROP, ACTION_AIRLIFT, ACTION_NONE);
- 
- 
+
+
   NEW hard req: no paradrop. Airlift allowed if ruleset allows:*/
 
   oblig_hard_req_register(req_from_values(VUT_UNITSTATE, REQ_RANGE_LOCAL,
@@ -428,7 +428,7 @@ static void hard_code_oblig_hard_reqs(void)
                           "All action enablers for %s must require that "
                           "the actor isn't transporting another unit.",
                           ACTION_PARADROP, ACTION_NONE);
- 
+
   /* IMPORTANT: FCW can't have this as hard req. FCW allows capturing
      units with cargo. Cargo if capturable is returned as booty via
      TP to nearest capturer city.
@@ -830,7 +830,7 @@ static void hard_code_actions(void)
   actions[ACTION_CLEAN_FALLOUT] =
       action_new(ACTION_CLEAN_FALLOUT, ATK_TILE, ASTK_EXTRA,
                  FALSE, ACT_TGT_COMPL_FLEXIBLE, TRUE, FALSE,
-                 0, 0, FALSE);               
+                 0, 0, FALSE);
   actions[ACTION_FORTIFY] =
       action_new(ACTION_FORTIFY, ATK_SELF, ASTK_NONE,
                  FALSE, ACT_TGT_COMPL_SIMPLE, TRUE, FALSE,
@@ -1567,7 +1567,7 @@ enum unit_activity action_get_activity(const struct action *paction)
   } else if (action_has_result(paction, ACTION_CLEAN_POLLUTION)) {
     return ACTIVITY_POLLUTION;
   } else if (action_has_result(paction, ACTION_CLEAN_FALLOUT)) {
-    return ACTIVITY_FALLOUT;    
+    return ACTIVITY_FALLOUT;
   } else if (action_has_result(paction, ACTION_TRANSFORM_TERRAIN)) {
     return ACTIVITY_TRANSFORM;
   } else if (action_has_result(paction, ACTION_CONVERT)) {
@@ -2217,7 +2217,7 @@ action_actor_utype_hard_reqs_ok(const action_id wanted_action,
   case ACTION_HEAL_UNIT:
   case ACTION_PILLAGE:
   case ACTION_CLEAN_POLLUTION:
-  case ACTION_CLEAN_FALLOUT:  
+  case ACTION_CLEAN_FALLOUT:
   case ACTION_FORTIFY:
   case ACTION_TRANSPORT_BOARD:
   case ACTION_TRANSPORT_EMBARK:
@@ -3216,7 +3216,7 @@ case ACTION_CLEAN_POLLUTION:
       }
     }
     break;
-  
+
 
   case ACTION_TRANSPORT_DEBOARD:
     if (!can_unit_unload(actor_unit, target_unit)) {
@@ -4171,7 +4171,7 @@ action_prob(const action_id wanted_action,
   case ACTION_SPY_ATTACK:
     /* All uncertainty comes from potential diplomatic battles. */
     chance = ap_diplomat_battle(actor_unit, NULL, target_tile);
-    break;  
+    break;
   case ACTION_SPY_SABOTAGE_CITY:
     /* TODO */
     break;

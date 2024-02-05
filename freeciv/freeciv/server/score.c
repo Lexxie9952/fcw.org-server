@@ -83,12 +83,12 @@ static char when_char(int when)
   return (when >= 0 && when < sizeof(list)) ? list[when] : '?';
 }
 
-/* 
+/*
  * Writes the map_char_expr expression for each position on the map.
  * map_char_expr is provided with the variables x,y to evaluate the
  * position. The 'type' argument is used for formatting by printf; for
  * instance it should be "%c" for characters.  The data is printed in a
- * native orientation to make it easier to read.  
+ * native orientation to make it easier to read.
  */
 #define WRITE_MAP_DATA(type, map_char_expr)        \
 {                                                  \
@@ -276,7 +276,7 @@ void calc_civ_score(struct player *pplayer)
     pplayer->score.techout = 0;
   }
   /* This is never calculated after city growth so was commented out here */
-  //pplayer->score.mfg = 0; 
+  //pplayer->score.mfg = 0;
   pplayer->score.literacy = 0;
   pplayer->score.spaceship = 0;
   pplayer->score.culture = player_culture(pplayer);
@@ -295,22 +295,22 @@ void calc_civ_score(struct player *pplayer)
     pplayer->score.angry += pcity->feel[CITIZEN_ANGRY][FEELING_FINAL];
     pplayer->score.population += city_population(pcity);
     pplayer->score.cities++;
-    /* 25May2023: Don't add pcity->pollution for next turn, to this turn's pollution score. Used 
+    /* 25May2023: Don't add pcity->pollution for next turn, to this turn's pollution score. Used
        cached version of pollution shields as it stood before Factories etc. were built: */
     pplayer->score.pollution += pcity->server.cached_pollution;
     /* These are calculated here if (game.server.city_output_style !=WYSIWYG) */
     if (!game.server.city_output_style) {
       specialist_type_iterate(sp) {
         pplayer->score.specialists[sp] += pcity->specialists[sp];
-      } specialist_type_iterate_end;      
+      } specialist_type_iterate_end;
       pplayer->score.bnp += pcity->surplus[O_TRADE];
       pplayer->score.techout += pcity->prod[O_SCIENCE];
     }
-    
+
     trade_routes_iterate(pcity, proute) {
       pplayer->score.traderoutes += proute->value;
     } trade_routes_iterate_end;
-    
+
     // This has to be calculated prior to update_city_activity or else gives wildly incorrect results
     //pplayer->score.mfg += pcity->surplus[O_SHIELD];
 
@@ -339,7 +339,7 @@ void calc_civ_score(struct player *pplayer)
     }
   } advance_index_iterate_end;
   pplayer->score.techs += research_get(pplayer)->future_tech * 5 / 2;
-  
+
   unit_list_iterate(pplayer->units, punit) {
     if (is_military_unit(punit)) {
       pplayer->score.units++;
@@ -415,9 +415,9 @@ int total_player_citizens(const struct player *pplayer)
   output to a suitable place.
 
   The definition of winners and losers: a winner is one who is alive at the
-  end of the game and has not surrendered, or in the case of a team game, 
+  end of the game and has not surrendered, or in the case of a team game,
   is alive or a teammate is alive and has not surrendered. A loser is
-  surrendered or dead. Exception: the winner of the spacerace and his 
+  surrendered or dead. Exception: the winner of the spacerace and his
   teammates will win of course.
 
   In games ended by /endgame, endturn, or any other interruption not caused
@@ -521,7 +521,7 @@ void rank_users(bool interrupt)
 	t_winner_score = t_score;
       }
     } teams_iterate_end;
-  
+
     /* ii) set all the members of the team as winners, the others as losers */
     players_iterate(pplayer) {
       if (pplayer->team == t_winner) {

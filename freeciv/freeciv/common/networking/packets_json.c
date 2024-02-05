@@ -49,7 +49,7 @@
 
 #include "packets_json.h"
 
-/* 
+/*
  * Valid values are 0, 1 and 2. For 2 you have to set generate_stats
  * to 1 in generate_packets.py.
  */
@@ -86,7 +86,7 @@ void *get_packet_from_connection_json(struct connection *pc,
   if (!pc->used) {
     return NULL;		/* connection was closed, stop reading */
   }
-  
+
   if (pc->buffer->ndata < data_type_size(pc->packet_header.length)) {
     /* Not got enough for a length field yet */
     return NULL;
@@ -180,7 +180,7 @@ void *get_packet_from_connection_json(struct connection *pc,
     pc->incoming_packet_notify(pc, utype.type, whole_packet_len);
   }
 
-#if PACKET_SIZE_STATISTICS 
+#if PACKET_SIZE_STATISTICS
   {
     static struct {
       int counter;

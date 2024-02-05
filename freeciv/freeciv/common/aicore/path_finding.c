@@ -243,7 +243,7 @@ struct pf_normal_map {
 /* Up-cast macro. */
 #ifdef PF_DEBUG
 static inline struct pf_normal_map *
-pf_normal_map_check(struct pf_map *pfm, const char *file, 
+pf_normal_map_check(struct pf_map *pfm, const char *file,
                     const char *function, int line)
 {
   fc_assert_full(file, function, line,
@@ -291,7 +291,7 @@ static inline bool pf_normal_node_init(struct pf_normal_map *pfnm,
 
   /* For non-omniscient goto_path_req, server only blocks access to
      illegal tiles if player knows they're illegal: */
-  bool blind_to_illegality = !params->omniscience 
+  bool blind_to_illegality = !params->omniscience
                              && node_known_type < TILE_KNOWN_SEEN;
 
   /* Establish the tile behavior. */
@@ -353,15 +353,15 @@ static inline bool pf_normal_node_init(struct pf_normal_map *pfnm,
           node->behavior = TB_IGNORE;
         }
         action = PF_ACTION_NONE;
-      } 
+      }
       else {
         if (PF_ACTION_NONE != action /* an attack/conquer/diplo/caravan action is wanted on this tile */
                   && TB_DONT_LEAVE != node->behavior) {
           /* On unseen tiles, we don't omnisciently KNOW we can't leave, unless we believe there's a city there */
           if (!blind_to_illegality || (tile_city(ptile) && node_known_type >= TILE_KNOWN_UNSEEN)) {
             /* If in an allied city you can do help wonder/traderoute, behavior != TB_DONT_LEAVE.
-               Currently it seems other code is fixing this case. If we need this, it's here. 
-               Don't forget the other 2 pf_node__init functions! 
+               Currently it seems other code is fixing this case. If we need this, it's here.
+               Don't forget the other 2 pf_node__init functions!
             if (!is_allied_city_tile(ptile, params->owner) */
               node->behavior = TB_DONT_LEAVE; /* Can enter to do the action, but not path through */
           }
@@ -439,7 +439,7 @@ static inline bool pf_normal_node_init(struct pf_normal_map *pfnm,
               node->zoc_number = ZOC_ALLIED;
             }
           }
-          
+
           // No units on a non-city tile that's not our ZOC:
           else {
             node->zoc_number = ZOC_NO;
@@ -460,7 +460,7 @@ static inline bool pf_normal_node_init(struct pf_normal_map *pfnm,
               // final tile:
               else {
                 // final tile with a doable action:
-                if (node->action) { 
+                if (node->action) {
                   node->behavior = TB_DONT_LEAVE;
                 }
                 // final tile with no doable action:
@@ -474,7 +474,7 @@ static inline bool pf_normal_node_init(struct pf_normal_map *pfnm,
             else {
               node->zoc_number = ZOC_ALLIED;
             }
-          } 
+          }
           // no units on a tile that's not our ZOC
           else {
             node->zoc_number = ZOC_NO;
@@ -527,7 +527,7 @@ static inline bool pf_normal_node_init(struct pf_normal_map *pfnm,
 #endif
   }
 
-/* DEBUG 
+/* DEBUG
 if (ptile->index == 1110) {
 notify_conn(NULL, NULL, E_SETTING, ftc_any,_("Tile%d returns TRUE: zoc==%d,TB==%d,EC==%ld,ms%d,act:%d"),
     ptile->index,node->zoc_number, node->behavior, node->extra_tile, node->move_scope, node->action);
@@ -735,14 +735,14 @@ static bool pf_jumbo_map_iterate(struct pf_map *pfm)
   return TRUE;
 }
 /************************************************************************//**
-  Called by the pf_____map_iterate functions when zoc_purity is enabled, 
+  Called by the pf_____map_iterate functions when zoc_purity is enabled,
     in order to check for the more restrictive conditions which would
     enforce ZoC under that server setting.
 ****************************************************************************/
-static bool zoc_purity_disallowed(int zoc_num_src, 
+static bool zoc_purity_disallowed(int zoc_num_src,
                                   int zoc_num_dest,
-                                  struct tile *tile, 
-                                  struct tile *tile1, 
+                                  struct tile *tile,
+                                  struct tile *tile1,
                                   const struct player *pplayer)
 {
 /* (zoc_num_src != ZOC_MINE && zoc_num_dest == ZOC_ALLIED) is synonymous
@@ -1243,7 +1243,7 @@ static inline bool pf_danger_node_init(struct pf_danger_map *pfdm,
 
   /* For non-omniscient goto_path_req, server only blocks access to
      illegal tiles if player knows they're illegal: */
-  bool blind_to_illegality = !params->omniscience 
+  bool blind_to_illegality = !params->omniscience
                               && node_known_type < TILE_KNOWN_SEEN;
 
   /* Establish the tile behavior. */
@@ -1305,15 +1305,15 @@ static inline bool pf_danger_node_init(struct pf_danger_map *pfdm,
           node->behavior = TB_IGNORE;
         }
         action = PF_ACTION_NONE;
-      } 
+      }
       else {
         if (PF_ACTION_NONE != action /* an attack/conquer/diplo/caravan action is wanted on this tile */
                   && TB_DONT_LEAVE != node->behavior) {
           /* On unseen tiles, we don't omnisciently KNOW we can't leave, unless we believe there's a city there */
           if (!blind_to_illegality || (tile_city(ptile) && node_known_type >= TILE_KNOWN_UNSEEN)) {
             /* If in an allied city you can do help wonder/traderoute, behavior != TB_DONT_LEAVE.
-               Currently it seems other code is fixing this case. If we need this, it's here. 
-               Don't forget the other 2 pf_node__init functions! 
+               Currently it seems other code is fixing this case. If we need this, it's here.
+               Don't forget the other 2 pf_node__init functions!
             if (!is_allied_city_tile(ptile, params->owner) */
               node->behavior = TB_DONT_LEAVE; /* Can enter to do the action, but not path through */
           }
@@ -1390,8 +1390,8 @@ static inline bool pf_danger_node_init(struct pf_danger_map *pfdm,
             else {
               node->zoc_number = ZOC_ALLIED;
             }
-          } 
-          
+          }
+
           // No units on a non-city tile that's not our ZOC:
           else {
             node->zoc_number = ZOC_NO;
@@ -1642,11 +1642,11 @@ pf_danger_map_construct_path(const struct pf_danger_map *pfdm,
 
   Example: be A, B, C and D points safe positions, E a dangerous one.
     A B
-     E 
+     E
     C D
   We have found dangerous path from A to D, and later one from C to B:
     A B             A B
-     \               / 
+     \               /
     C D             C D
   If we didn't save the segment from A to D when a new segment passing by E
   is found, then finding the path from A to D will produce an error. (The
@@ -1846,7 +1846,7 @@ static bool pf_danger_map_iterate(struct pf_map *pfm)
         /* Is the move ZOC-ok? */
         if (node->zoc_number != ZOC_MINE && node1->zoc_number == ZOC_NO) {
           continue;
-        } 
+        }
         /* Is the move ZOC-ok if zoc_purity is enabled? */
         if (game.server.zoc_purity) {
           if (zoc_purity_disallowed(node->zoc_number,node1->zoc_number,tile,tile1,pplayer))
@@ -2364,7 +2364,7 @@ static inline bool pf_fuel_node_init(struct pf_fuel_map *pffm,
 
   /* For non-omniscient goto_path_req, server only blocks access to
      illegal tiles if player knows they're illegal: */
-  bool blind_to_illegality = !params->omniscience 
+  bool blind_to_illegality = !params->omniscience
                               && node_known_type < TILE_KNOWN_SEEN;
 
   /* Establish the tile behavior. */
@@ -2510,8 +2510,8 @@ static inline bool pf_fuel_node_init(struct pf_fuel_map *pffm,
             else {
               node->zoc_number = ZOC_ALLIED;
             }
-          } 
-          
+          }
+
           // No units on a non-city tile that's not our ZOC:
           else {
             node->zoc_number = ZOC_NO;
@@ -3575,7 +3575,7 @@ long pf_map_move_cost(struct pf_map *pfm, struct tile *ptile)
 /************************************************************************//**
   Tries to find the best path in the given map to the position ptile.
   If NULL is returned no path could be found. The pf_path_last_position()
-  of such path would be the same (almost) as the result of the call to 
+  of such path would be the same (almost) as the result of the call to
   pf_map_position(). If ptile has not been reached yet, iterate the map
   until we reach it or run out of map.
 ****************************************************************************/

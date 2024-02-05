@@ -349,9 +349,9 @@ struct city {
   int unhappy_penalty[O_LAST]; /* Penalty from unhappy cities. */
   int prod[O_LAST]; /* Production is total minus waste and penalty. */
   int citizen_base[O_LAST]; /* Base production from citizens. */
-  /* Static recorded base trade avoids R/T tile arrangement issues 
+  /* Static recorded base trade avoids R/T tile arrangement issues
      between foreign cities with trade routes: */
-  int base_trade_recorded;   
+  int base_trade_recorded;
   int usage[O_LAST]; /* Amount of each resource being used. */
 
   /* Cached values for CPU savings. */
@@ -408,7 +408,7 @@ struct city {
   int history;                 /* Cumulative culture */
 
   struct worker_task_list *task_reqs;
-  
+
   int steal; /* diplomats steal once; for spies, gets harder */
 
   struct cm_parameter *cm_parameter;

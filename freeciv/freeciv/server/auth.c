@@ -84,7 +84,7 @@ bool auth_user(struct connection *pconn, char *username)
 
     dsend_packet_authentication_req(pconn, AUTH_LOGIN_FIRST, buffer);
     pconn->server.auth_settime = time(NULL);
-    return TRUE;      
+    return TRUE;
   }
 
 #endif /* FREECIV_WEB */
@@ -110,7 +110,7 @@ bool auth_user(struct connection *pconn, char *username)
       return FALSE;
     }
   } else {
-    /* we are not a guest, we need an extra check as to whether a 
+    /* we are not a guest, we need an extra check as to whether a
      * connection can be established: the client must authenticate itself */
     char buffer[MAX_LEN_MSG];
     bool exists = FALSE;
@@ -178,12 +178,12 @@ bool auth_handle_reply(struct connection *pconn, char *password)
       // Change existing password:
       sz_strlcpy(srvarg.server_password, password);
       // Remove password if a null password is sent:
-      if (strlen(password)==0 
-          || strncmp(password, "empty", MAX_LEN_PASSWORD) == 0) { 
+      if (strlen(password)==0
+          || strncmp(password, "empty", MAX_LEN_PASSWORD) == 0) {
        srvarg.server_password_enabled = FALSE;
-       notify_conn(NULL, NULL, E_SETTING, ftc_server, 
+       notify_conn(NULL, NULL, E_SETTING, ftc_server,
                   _("Server password removed."));
-      } else notify_conn(NULL, NULL, E_SETTING, ftc_server, 
+      } else notify_conn(NULL, NULL, E_SETTING, ftc_server,
                        _("Server password changed to new value."));
     } else if (strncmp(srvarg.server_password, password, MAX_LEN_PASSWORD) == 0) {
       establish_new_connection(pconn);
@@ -361,7 +361,7 @@ static bool is_good_password(const char *password, char *msg)
   fc_snprintf(msg, MAX_LEN_MSG,
               _("The password must have at least %d capital letters, %d "
                 "numbers, and be at minimum %d [printable] characters long. "
-                "Try again."), 
+                "Try again."),
               MIN_PASSWORD_CAPS, MIN_PASSWORD_NUMS, MIN_PASSWORD_LEN);
 
   for (i = 0; i < strlen(password); i++) {

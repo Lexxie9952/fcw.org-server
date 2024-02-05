@@ -69,7 +69,7 @@ struct player *player_leading_spacerace(void)
 }
 
 /*******************************************************************//**
-  Calculate average distances to other players. We calculate the 
+  Calculate average distances to other players. We calculate the
   average distance from all of our cities to the closest enemy city.
 ***********************************************************************/
 int player_distance_to_player(struct player *pplayer, struct player *target)

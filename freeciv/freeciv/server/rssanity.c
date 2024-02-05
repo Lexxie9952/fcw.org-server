@@ -1294,7 +1294,7 @@ bool sanity_check_ruleset_data(bool ignore_retired)
 bool autoadjust_ruleset_data(void)
 {
   bool ok = TRUE;
-  
+
   extra_type_by_cause_iterate(EC_RESOURCE, pextra) {
     extra_type_by_cause_iterate(EC_RESOURCE, pextra2) {
       if (pextra != pextra2) {

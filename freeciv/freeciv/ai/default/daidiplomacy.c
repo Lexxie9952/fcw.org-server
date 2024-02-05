@@ -115,7 +115,7 @@ static void dai_diplo_notify(struct player *pplayer, const char *text, ...)
   Send a diplomatic chat-style message from AI player to human player
 **********************************************************************/
 static void dai_diplo_chat(struct player *ai_player,
-                           struct player *aplayer, 
+                           struct player *aplayer,
                            const char *text, ...)
 {
   if (diplomacy_verbose) {
@@ -131,7 +131,7 @@ static void dai_diplo_chat(struct player *ai_player,
 }
 
 /******************************************************************//**
-  This is your typical human reaction. Convert lack of love into 
+  This is your typical human reaction. Convert lack of love into
   lust for gold.
 **********************************************************************/
 static int greed(int missing_love)
@@ -347,7 +347,7 @@ static int dai_goldequiv_clause(struct ai_type *ait,
       if (game.info.tech_upkeep_style != TECH_UPKEEP_NONE) {
         /* Consider the upkeep costs! Thus, one can not get an AI player by
          * - given AI lots of techs for gold/cities etc.
-         * - AI losses tech due to high upkeep. 
+         * - AI losses tech due to high upkeep.
          * FIXME: Is there a better way for this? */
         struct research *research = research_get(pplayer);
         int limit = MAX(1, player_tech_upkeep(pplayer)
@@ -538,7 +538,7 @@ static int dai_goldequiv_clause(struct ai_type *ait,
       worth = city_gold_worth(offer);
     }
     if (offer != NULL) {
-      DIPLO_LOG(ait, LOG_DEBUG, pplayer, aplayer, "worth of %s is %d", 
+      DIPLO_LOG(ait, LOG_DEBUG, pplayer, aplayer, "worth of %s is %d",
                 city_name_get(offer), worth);
     }
     break;
@@ -571,7 +571,7 @@ static int dai_goldequiv_clause(struct ai_type *ait,
         worth = -5 * game.info.turn;
       } else {
         worth = MIN(-50 * game.info.turn
-                    + pplayer->ai_common.love[player_index(aplayer)], 
+                    + pplayer->ai_common.love[player_index(aplayer)],
                     -5 * game.info.turn);
       }
     } else if (game.info.tech_leakage == TECH_LEAKAGE_EMBASSIES) {
@@ -614,9 +614,9 @@ void dai_treaty_evaluate(struct ai_type *ait, struct player *pplayer,
     }
     if (pclause->type == CLAUSE_CITY && pclause->from == pplayer) {
 	given_cities++;
-    }    
+    }
   } clause_list_iterate_end;
-  
+
   /* Evaluate clauses */
   clause_list_iterate(ptreaty->clauses, pclause) {
     const struct research *presearch = research_get(pplayer);
@@ -626,7 +626,7 @@ void dai_treaty_evaluate(struct ai_type *ait, struct player *pplayer,
 
     if (pclause->type != CLAUSE_GOLD && pclause->type != CLAUSE_MAP
         && pclause->type != CLAUSE_SEAMAP && pclause->type != CLAUSE_VISION
-        && (pclause->type != CLAUSE_ADVANCE 
+        && (pclause->type != CLAUSE_ADVANCE
             || game.info.tech_cost_style != TECH_COST_CIV1CIV2
             || pclause->value == research_get(pplayer)->tech_goal
             || pclause->value == research_get(pplayer)->researching
@@ -657,7 +657,7 @@ void dai_treaty_evaluate(struct ai_type *ait, struct player *pplayer,
   /* Accept if balance is good */
   if (total_balance >= 0) {
     handle_diplomacy_accept_treaty_req(pplayer, player_number(aplayer));
-    DIPLO_LOG(ait, LOG_DIPL2, pplayer, aplayer, "balance was good: %d", 
+    DIPLO_LOG(ait, LOG_DIPL2, pplayer, aplayer, "balance was good: %d",
               total_balance);
   } else {
     /* AI complains about the treaty which was proposed, unless the AI
@@ -666,7 +666,7 @@ void dai_treaty_evaluate(struct ai_type *ait, struct player *pplayer,
       dai_diplo_chat(pplayer, aplayer, _("This deal was not very good for us, %s!"),
                      player_name(aplayer));
     }
-    DIPLO_LOG(ait, LOG_DIPL2, pplayer, aplayer, "balance was bad: %d", 
+    DIPLO_LOG(ait, LOG_DIPL2, pplayer, aplayer, "balance was bad: %d",
               total_balance);
   }
 }
@@ -850,7 +850,7 @@ static int dai_war_desire(struct ai_type *ait, struct player *pplayer,
   } city_list_iterate_end;
 
   /* Modify by settler/cities ratio to prevent early wars when
-   * we should be expanding. This will eliminate want if we 
+   * we should be expanding. This will eliminate want if we
    * produce settlers in all cities (ie full expansion). */
   want -= abs(want) / MAX(cities - settlers, 1);
 
@@ -902,7 +902,7 @@ static int dai_war_desire(struct ai_type *ait, struct player *pplayer,
   } players_iterate_alive_end;
 
   /* Modify by love. Increase the divisor to make ai go to war earlier */
-  want -= MAX(0, want * pplayer->ai_common.love[player_index(target)] 
+  want -= MAX(0, want * pplayer->ai_common.love[player_index(target)]
                  / (2 * MAX_AI_LOVE));
 
   /* Make novice AI more peaceful with human players */
@@ -927,7 +927,7 @@ static int dai_war_desire(struct ai_type *ait, struct player *pplayer,
   pplayer is the (AI) player suggesting the treaty.
   If to_pplayer, then aplayer is giver in the clause, else pplayer is.
 **********************************************************************/
-static void dai_diplomacy_suggest(struct player *pplayer, 
+static void dai_diplomacy_suggest(struct player *pplayer,
 				  struct player *aplayer,
 				  enum clause_type what,
                                   bool to_pplayer,
@@ -984,7 +984,7 @@ void dai_diplomacy_first_contact(struct ai_type *ait, struct player *pplayer,
                     "while we get to know each other better?"), player_name(aplayer));
     } else if (msg) {
       dai_diplo_chat(pplayer, aplayer, _("Hail, %s! Will you agree to a %d-turn period of "
-                    "cease-fire for our mutual benefit?"), 
+                    "cease-fire for our mutual benefit?"),
                     player_name(aplayer),
                     game.server.ceasefirelength);
     } else {
@@ -1105,7 +1105,7 @@ void dai_diplomacy_begin_new_phase(struct ai_type *ait, struct player *pplayer)
     /* Reduce love due to units in our territory.
      * AI is so naive, that we have to count it even if players are allied */
     amount -= MIN(player_in_territory(pplayer, aplayer) * (MAX_AI_LOVE / 200),
-                  ai->diplomacy.love_incr 
+                  ai->diplomacy.love_incr
                   * ((adip->is_allied_with_enemy != NULL) + 1));
     pplayer->ai_common.love[player_index(aplayer)] += amount;
     if (amount != 0) {
@@ -1113,7 +1113,7 @@ void dai_diplomacy_begin_new_phase(struct ai_type *ait, struct player *pplayer)
                 "our borders", amount);
     }
 
-    /* Increase the love if aplayer has got a building that makes 
+    /* Increase the love if aplayer has got a building that makes
      * us love him more. Typically it's Eiffel Tower */
     if (!NEVER_MET(pplayer, aplayer)) {
       pplayer->ai_common.love[player_index(aplayer)] +=
@@ -1162,7 +1162,7 @@ static void suggest_tech_exchange(struct ai_type *ait,
   struct research *presearch2 = research_get(player2);
   int worth[advance_count()];
   bool is_dangerous;
-    
+
   worth[A_NONE] = 0;
 
   advance_index_iterate(A_FIRST, tech) {
@@ -1194,7 +1194,7 @@ static void suggest_tech_exchange(struct ai_type *ait,
       }
     }
   } advance_index_iterate_end;
-    
+
   advance_index_iterate(A_FIRST, tech) {
     if (worth[tech] <= 0) {
       continue;
@@ -1361,7 +1361,7 @@ static void dai_go_to_war(struct ai_type *ait, struct player *pplayer,
 
   /* Check for Senate obstruction.  If so, dissolve it. */
   if (pplayer_can_cancel_treaty(pplayer, target) == DIPL_SENATE_BLOCKING) {
-    handle_player_change_government(pplayer, 
+    handle_player_change_government(pplayer,
                                     game.info.government_during_revolution_id);
   }
 
@@ -1412,7 +1412,7 @@ static void war_countdown(struct ai_type *ait, struct player *pplayer,
   adip->war_reason = reason;
 
   players_iterate_alive(ally) {
-    if (!pplayers_allied(pplayer, ally) 
+    if (!pplayers_allied(pplayer, ally)
         || ally == target
         || NEVER_MET(pplayer, ally)) {
       continue;
@@ -1427,7 +1427,7 @@ static void war_countdown(struct ai_type *ait, struct player *pplayer,
                          "*We will be launching an all-out war "
                          "against %s in %d turns to stop the spaceship "
                          "launch.",
-                         countdown), 
+                         countdown),
                      player_name(target),
                      countdown);
       dai_diplo_chat(pplayer, ally,
@@ -1454,7 +1454,7 @@ static void war_countdown(struct ai_type *ait, struct player *pplayer,
                         "civilization of %s. We declare war in %d turn.",
                         "*We intend to pillage and plunder the rich "
                         "civilization of %s. We declare war in %d turns.",
-                        countdown), 
+                        countdown),
                     player_name(target),
                     countdown);
       dai_diplo_chat(pplayer, ally, _("If you want a piece of the loot, "
@@ -1574,7 +1574,7 @@ void dai_diplomacy_actions(struct ai_type *ait, struct player *pplayer)
         }
         /* Never forgive this */
         pplayer->ai_common.love[player_index(aplayer)] = -MAX_AI_LOVE;
-      } else if (ship->state == SSHIP_STARTED 
+      } else if (ship->state == SSHIP_STARTED
 		 && adip->warned_about_space == 0) {
         pplayer->ai_common.love[player_index(aplayer)] -= MAX_AI_LOVE / 10;
         adip->warned_about_space = 10 + fc_rand(6);
@@ -1764,11 +1764,11 @@ void dai_diplomacy_actions(struct ai_type *ait, struct player *pplayer)
         }
 
         if (adip->spam <= 0) {
-          /* Count down patience toward AI player (one that can have spam > 0) 
+          /* Count down patience toward AI player (one that can have spam > 0)
            * at the same speed as toward human players. */
           if (adip->ally_patience == 0) {
             dai_diplo_chat(pplayer, aplayer, _("Greetings our most trustworthy "
-                          "ally. We call upon you to destroy our enemy, %s."), 
+                          "ally. We call upon you to destroy our enemy, %s."),
                           player_name(target));
             adip->ally_patience--;
           } else if (adip->ally_patience == -1) {
@@ -1919,7 +1919,7 @@ void dai_diplomacy_actions(struct ai_type *ait, struct player *pplayer)
                             player_name(aplayer),
                             game.server.ceasefirelength);
               break;
-          }   
+          }
         }
         break;
 
@@ -2073,7 +2073,7 @@ static void dai_incident_war(struct player *violator, struct player *victim)
         pplayer->ai_common.love[player_index(violator)] -= MAX_AI_LOVE / 10;
       }
       if (victim == pplayer) {
-        pplayer->ai_common.love[player_index(violator)] = 
+        pplayer->ai_common.love[player_index(violator)] =
           MIN(pplayer->ai_common.love[player_index(violator)] - MAX_AI_LOVE / 3, -1);
         /* Scream for help!! */
         players_iterate_alive(ally) {

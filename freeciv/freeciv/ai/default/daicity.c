@@ -196,10 +196,10 @@ void dont_want_tech_obsoleting_impr(struct ai_type *ait,
 
   TODO: Move this into daimilitary.c
   TODO: It will be called for each city but doesn't depend on the city,
-  maybe cache it?  Although barbarians don't normally have many cities, 
+  maybe cache it?  Although barbarians don't normally have many cities,
   so can be a bigger bother to cache it.
 **************************************************************************/
-static void dai_barbarian_choose_build(struct player *pplayer, 
+static void dai_barbarian_choose_build(struct player *pplayer,
                                        struct city *pcity,
                                        struct adv_choice *choice)
 {
@@ -501,7 +501,7 @@ static void dai_spend_gold(struct ai_type *ait, struct player *pplayer)
   int expenses;
   bool war_footing = dai_on_war_footing(ait, pplayer);
 
-  /* Disband explorers that are at home but don't serve a purpose. 
+  /* Disband explorers that are at home but don't serve a purpose.
    * FIXME: This is a hack, and should be removed once we
    * learn how to ferry explorers to new land. */
   city_list_iterate(pplayer->cities, pcity) {
@@ -601,7 +601,7 @@ static void dai_spend_gold(struct ai_type *ait, struct player *pplayer)
       }
     } else {
       /* We are not a settler. Therefore we increase the cash need we
-       * balance our buy desire with to keep cash at hand for emergencies 
+       * balance our buy desire with to keep cash at hand for emergencies
        * and for upgrades */
       limit *= 2;
     }
@@ -623,7 +623,7 @@ static void dai_spend_gold(struct ai_type *ait, struct player *pplayer)
      * to sell everything in it of non-military value */
 
     if (pplayer->economic.gold - expenses >= buycost
-        && (!expensive 
+        && (!expensive
             || (city_data->grave_danger != 0
                 && assess_defense(ait, pcity) == 0)
             || (bestchoice.want > 200 && city_data->urgency > 1))) {
@@ -633,7 +633,7 @@ static void dai_spend_gold(struct ai_type *ait, struct player *pplayer)
                buycost,
                bestchoice.want);
       really_handle_city_buy(pplayer, pcity);
-    } else if (city_data->grave_danger != 0 
+    } else if (city_data->grave_danger != 0
                && bestchoice.type == CT_DEFENDER
                && assess_defense(ait, pcity) == 0) {
       /* We have no gold but MUST have a defender */
@@ -657,7 +657,7 @@ static void dai_spend_gold(struct ai_type *ait, struct player *pplayer)
     } city_list_iterate_end;
   }
 
-  log_base(LOG_BUY, "%s wants to keep %d in reserve (tax factor %d)", 
+  log_base(LOG_BUY, "%s wants to keep %d in reserve (tax factor %d)",
            player_name(pplayer), cached_limit, pplayer->ai_common.maxbuycost);
 }
 
@@ -796,7 +796,7 @@ static void contemplate_terrain_improvements(struct ai_type *ait,
              want,
              get_activity_text(best_act),
              TILE_XY(best_tile),
-             ai->stats.workers[place], 
+             ai->stats.workers[place],
              adv->stats.cities[place]);
   } else {
     CITY_LOG(LOG_DEBUG, pcity, "wants %s with want %d to do %s at (%d,%d), "
@@ -894,19 +894,19 @@ void dai_manage_cities(struct ai_type *ait, struct player *pplayer)
                                                  * Recalculate immediately in such situation. */
       continue; /* Go, soldiers! */
     }
-    /* Will record its findings in pcity->worker_want */ 
+    /* Will record its findings in pcity->worker_want */
     TIMING_LOG(AIT_CITY_TERRAIN, TIMER_START);
     contemplate_terrain_improvements(ait, pcity);
     TIMING_LOG(AIT_CITY_TERRAIN, TIMER_STOP);
 
     TIMING_LOG(AIT_CITY_SETTLERS, TIMER_START);
     if (city_data->founder_turn <= game.info.turn) {
-      /* Will record its findings in pcity->founder_want */ 
+      /* Will record its findings in pcity->founder_want */
       contemplate_new_city(ait, pcity);
       /* Avoid recalculating all the time.. */
       /* This means AI is not very opportunistic if there happens to open up spot for
        * a new city. */
-      city_data->founder_turn = 
+      city_data->founder_turn =
         game.info.turn + fc_rand(AI_CITY_RECALC_SPEED) + AI_CITY_RECALC_SPEED;
     } else if (pcity->server.debug) {
       /* recalculate every turn */
@@ -939,7 +939,7 @@ static bool building_crucial(const struct player *plr,
                              struct impr_type *pimprove,
                              const struct city *pcity)
 {
-#if 0 /* This check will become more complicated now. */ 
+#if 0 /* This check will become more complicated now. */
   if (ai_wants_no_science(plr)
       && building_has_effect(pimprove, EFT_SCIENCE_BONUS)) {
     return FALSE;
@@ -1388,7 +1388,7 @@ static bool adjust_wants_for_reqs(struct ai_type *ait,
   nothing in the city has changed, and you just want to know the
   base want of a city.
 **************************************************************************/
-adv_want dai_city_want(struct player *pplayer, struct city *acity, 
+adv_want dai_city_want(struct player *pplayer, struct city *acity,
                        struct adv_data *adv, struct impr_type *pimprove)
 {
   adv_want want = 0;
@@ -1574,7 +1574,7 @@ static void adjust_improvement_wants_by_effects(struct ai_type *ait,
     /* Base want is calculated above using a more direct approach. */
     v += base_want(ait, pplayer, pcity, pimprove);
     if (v != 0) {
-      CITY_LOG(LOG_DEBUG, pcity, "%s base_want is " ADV_WANT_PRINTF " (range=%d)", 
+      CITY_LOG(LOG_DEBUG, pcity, "%s base_want is " ADV_WANT_PRINTF " (range=%d)",
                improvement_rule_name(pimprove),
                v,
                ai->impr_range[improvement_index(pimprove)]);
@@ -1664,7 +1664,7 @@ static void adjust_improvement_wants_by_effects(struct ai_type *ait,
 
     n_needed_techs = tech_vector_size(&needed_techs);
     if ((active || n_needed_techs) && !impossible_to_get) {
-      adv_want v1 = dai_effect_value(pplayer, gov, ai, pcity, capital, 
+      adv_want v1 = dai_effect_value(pplayer, gov, ai, pcity, capital,
                                      turns, peffect, range, nplayers);
       /* v1 could be negative (the effect could be undesirable),
        * although it is usually positive.
@@ -1673,7 +1673,7 @@ static void adjust_improvement_wants_by_effects(struct ai_type *ait,
 
       if (!present) {
         /* Building removes the effect */
-        /* Currently v1 is (v + delta). Make it (v - delta) instead */ 
+        /* Currently v1 is (v + delta). Make it (v - delta) instead */
         v1 = -v1;
       }
 
@@ -1982,7 +1982,7 @@ void dai_build_adv_adjust(struct ai_type *ait, struct player *pplayer,
   city_list_iterate(pplayer->cities, pcity) {
     improvement_iterate(pimprove) {
       if (pcity->server.adv->building_want[improvement_index(pimprove)] != 0) {
-        CITY_LOG(LOG_DEBUG, pcity, "want to build %s with " ADV_WANT_PRINTF, 
+        CITY_LOG(LOG_DEBUG, pcity, "want to build %s with " ADV_WANT_PRINTF,
                  improvement_rule_name(pimprove),
                  pcity->server.adv->building_want[improvement_index(pimprove)]);
       }
@@ -1995,7 +1995,7 @@ void dai_build_adv_adjust(struct ai_type *ait, struct player *pplayer,
     struct ai_city *city_data = def_ai_city_data(pcity, ait);
 
     if (city_data->building_turn <= game.info.turn) {
-      /* This will spread recalcs out so that no one turn end is 
+      /* This will spread recalcs out so that no one turn end is
        * much longer than others */
       city_data->building_wait = fc_rand(AI_BA_RECALC_SPEED) + AI_BA_RECALC_SPEED;
       city_data->building_turn = game.info.turn
@@ -2039,7 +2039,7 @@ Impr_type_id dai_find_source_building(struct city *pcity,
           building = preq->source.value.building;
 
           if (!can_city_build_improvement_now(pcity, building)
-              || !is_improvement(building)) {          
+              || !is_improvement(building)) {
             building = NULL;
             break;
           }

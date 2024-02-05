@@ -121,7 +121,7 @@ void global_warming(int effect)
 **************************************************************************/
 void nuclear_winter(int effect)
 {
-  // It can take a while so notify first.                
+  // It can take a while so notify first.
   notify_player(NULL, NULL, E_GLOBAL_ECO, ftc_server,
                 _("[`events/nuclearwinter`]<br>[`snow`] Nuclear winter is happening!<br>"
                   "Wetlands are drying. Ranges of plains and "
@@ -151,8 +151,8 @@ void climate_change(bool warming, int effect)
     struct tile *ptile;
     int i;
 
-    // If we can't find an unused tile after 30 tries then escape from lag hell: 
-    int iteration_escape = 30;  
+    // If we can't find an unused tile after 30 tries then escape from lag hell:
+    int iteration_escape = 30;
     do {
       /* We want to transform a tile at most once due to a climate change. */
       ptile = rand_map_pos(&(wld.map));
@@ -198,7 +198,7 @@ void climate_change(bool warming, int effect)
       if (!terrain_surroundings_allow_change(ptile, new)) {
         continue;
       }
-      
+
       /* OK! */
       break;
     }
@@ -213,7 +213,7 @@ void climate_change(bool warming, int effect)
       /* Really change the terrain. */
       tile_change_terrain(ptile, new);
 
-      terrain_change_check(ptile, old, false); 
+      terrain_change_check(ptile, old, false);
         // false == don't re-calculate continents every time
 
       update_tile_knowledge(ptile);
@@ -251,7 +251,7 @@ bool upgrade_city_extras(struct city *pcity, struct extra_type **gained)
               && player_can_build_extra(pextra, pplayer, ptile)
         /*    && !tile_has_conflicting_extra(ptile, pextra))*/)) {
         /* if there's a conflicting extra, the higher tech extra is an
-           upgrade. Remove conflicting extra so we can put the new one. */      
+           upgrade. Remove conflicting extra so we can put the new one. */
         if (tile_has_conflicting_extra(ptile, pextra)) {
           int count = 0;
           do {
@@ -262,7 +262,7 @@ bool upgrade_city_extras(struct city *pcity, struct extra_type **gained)
               extra_rule_name(pconfl));
             }
           } while (tile_has_conflicting_extra(ptile, pextra));
-        }        
+        }
         tile_add_extra(pcity->tile, pextra);
         if (gained != NULL) {
           if (upgradet) {
@@ -447,7 +447,7 @@ void give_citymap_from_player_to_player(struct city *pcity,
 /**********************************************************************//**
   Send all tiles known to specified clients.
   If dest is NULL means game.est_connections.
-  
+
   Note for multiple connections this may change "sent" multiple times
   for single player.  This is ok, because "sent" data is just optimised
   calculations, so it will be correct before this, for each connection
@@ -1321,7 +1321,7 @@ struct vision_site *map_get_player_city(const struct tile *ptile,
   struct vision_site *psite = map_get_player_site(ptile, pplayer);
 
   fc_assert_ret_val(psite == NULL || psite->location == ptile, NULL);
- 
+
   return psite;
 }
 
@@ -1649,7 +1649,7 @@ void remove_shared_vision(struct player *pfrom, struct player *pto)
     buffer_shared_vision(pplayer);
     players_iterate(pplayer2) {
       if (!really_gives_vision(pplayer, pplayer2)
-          && BV_ISSET(save_vision[player_index(pplayer)], 
+          && BV_ISSET(save_vision[player_index(pplayer)],
                       player_index(pplayer2))) {
         log_debug("really removing shared vision from %s to %s",
                   player_name(pplayer), player_name(pplayer2));
@@ -1830,7 +1830,7 @@ bool need_to_reassign_continents(const struct terrain *oldter,
                                  const struct terrain *newter)
 {
   bool old_is_ocean, new_is_ocean;
-  
+
   if (!oldter || !newter) {
     return FALSE;
   }
@@ -1881,20 +1881,20 @@ void fix_tile_on_terrain_change(struct tile *ptile,
 /**********************************************************************//**
   Handles local and global side effects for terrain change to a single
   tile. (This is now a wrapper to keep compatibility for other callers.)
-  
+
   Call this in the server immediately after calling tile_change_terrain.
   Assumes an in-game terrain change (e.g., by workers/engineers).
 **************************************************************************/
 void check_terrain_change(struct tile *ptile, struct terrain *oldter)
 {
-  terrain_change_check(ptile, oldter, true); 
+  terrain_change_check(ptile, oldter, true);
      //      __, __, true == recalc continents if needed.
 }
 
 /**********************************************************************//**
   Wrapped version of the above. Provides the ability for climate_change
   function to call this for thousands of repetitions without redundantly
-  re-calculating the continents every time, even recursively while 
+  re-calculating the continents every time, even recursively while
   changing lakes. This eliminates more than half of the lag for Freeciv's
   biggest performance hog.
 **************************************************************************/
@@ -2585,7 +2585,7 @@ void give_distorted_map(struct player *pfrom, struct player *pto,
 /****************************************************************************
   Return a (static) string with a tile's food/prod/trade
 ****************************************************************************/
-static const char *get_tile_base_output_text(const struct tile *ptile, 
+static const char *get_tile_base_output_text(const struct tile *ptile,
 		                        struct player *pplayer)
 {
   static struct astring str = ASTRING_INIT;
@@ -2603,7 +2603,7 @@ static const char *get_tile_base_output_text(const struct tile *ptile,
   Return a (static) string with a tile's food/prod/trade
   bool is_raw lets caller know if there were bonuses or penalties.
 ****************************************************************************/
-static const char *get_tile_output_text(const struct tile *ptile, 
+static const char *get_tile_output_text(const struct tile *ptile,
 		                        struct player *pplayer, bool *is_raw)
 {
   static struct astring str = ASTRING_INIT;
@@ -2615,7 +2615,7 @@ static const char *get_tile_output_text(const struct tile *ptile,
     int before_bonus   = 0;
     char background_color[200];
     sprintf(&background_color[0], "<b class='%s'>",
-                                  (i == O_FOOD) ? "f" 
+                                  (i == O_FOOD) ? "f"
                                                 : (i==O_SHIELD ? "s"
                                                 : "t"));
 
@@ -2634,7 +2634,7 @@ static const char *get_tile_output_text(const struct tile *ptile,
     if (before_penalty > 0 && x > before_penalty) {
       sprintf(output_text[i], "%s%d↓", background_color, x-1);
       *is_raw = false;
-    } 
+    }
     else if (before_bonus > 0 && x>0) {
       sprintf(output_text[i], "%s%d↑", background_color, x+before_bonus);
       *is_raw = false;
@@ -2643,7 +2643,7 @@ static const char *get_tile_output_text(const struct tile *ptile,
       sprintf(output_text[i], "%s%d", background_color, x);
     }
   }
-  
+
   astr_clear(&str);
   astr_add(&str, "%s</b>%s</b>%s</b>%s",
                 output_text[O_FOOD], output_text[O_SHIELD], output_text[O_TRADE], _("​"));
@@ -2685,7 +2685,7 @@ static inline void get_full_nation(char *buf, int buflen,
 /****************************************************************************
   For AIs, fill the buffer with their player name suffixed with "(A.I.)".
   Changed from prefix of "AI" which always looked like Arabic "Al <name>".
-  For humans, just fill it with their PLAYER name. 
+  For humans, just fill it with their PLAYER name.
 ****************************************************************************/
 static inline void get_full_username(char *buf, int buflen,
                                      const struct player *pplayer)
@@ -2727,12 +2727,12 @@ static const char *popup_info_text(struct tile *ptile, struct player *pplayer,
   }
   const char *activity_text;
 
-  if (ptile == NULL || !ptile || !pplayer || pplayer == NULL) return NULL; 
+  if (ptile == NULL || !ptile || !pplayer || pplayer == NULL) return NULL;
   struct city *pcity = tile_city(ptile);
   const char *diplo_nation_plural_adjectives[DS_LAST] =
     {Q_("?nation:Neutral"), Q_("?nation:Hostile"),
      Q_("?nation:Neutral"),
-     Q_("?nation:Peaceful"), Q_("?nation:Friendly"), 
+     Q_("?nation:Peaceful"), Q_("?nation:Friendly"),
      Q_("?nation:Mysterious"), Q_("?nation:Friendly(team)")};
   const char *diplo_city_adjectives[DS_LAST] =
     {Q_("?city:Neutral"), Q_("?city:Hostile"),
@@ -2954,14 +2954,14 @@ static const char *popup_info_text(struct tile *ptile, struct player *pplayer,
             tinfo.seconds_to_phasedone = game.tinfo.seconds_to_phasedone
               - timer_read_seconds(game.server.phase_timer)
               - game.server.additional_phase_seconds;
-            
+
             /* This unit has non-expired UWT on this turn: */
             if (punit->server.action_turn == game.info.turn - 1) {
               astr_add_line(&str, _("Wait Time left this turn: %s%s%s"), bold, uwt_msg, unbold);
             }
             else { /* This unit's UWT comes from an order given this turn: */
               if (game.server.unitwaittime - dt > tinfo.seconds_to_phasedone + 2 /* 0m2s cushion */) {
-                format_time_duration((game.server.unitwaittime - dt) - tinfo.seconds_to_phasedone, 
+                format_time_duration((game.server.unitwaittime - dt) - tinfo.seconds_to_phasedone,
                                      time_release, sizeof(time_release));
                 astr_add_line(&str, _("Wait Time next turn ends in %s%s%s"),
                                        bold, uwt_msg, unbold);
@@ -2974,7 +2974,7 @@ static const char *popup_info_text(struct tile *ptile, struct player *pplayer,
       }
       /* Show bribe cost for own units: */
       astr_add_line(&str, _("Bribe cost: %s%d%s"), bold, unit_bribe_cost(punit, pplayer), unbold);
-    } 
+    }
     else {
          /* We can only give a (lower) boundary for units of other players. */
          astr_add_line(&str, _("Estimated bribe cost: ≥ %s%d%s gold"),

@@ -726,7 +726,7 @@ bool is_action_possible_on_city(action_id act_id,
 
 /* 19November2022: while ideally this would be unexposed/static, some action
    legality checks share use of functions external to actions.c which are also
-   used to check action legalites across the whole platform; e.g., 
+   used to check action legalites across the whole platform; e.g.,
    unit.c::could_unit_load(). To avoid an infinite recursive tangle, as long
    as functions outside action.c are used to render action legality, then
    other files need a way to know whether actions are enbaled: */

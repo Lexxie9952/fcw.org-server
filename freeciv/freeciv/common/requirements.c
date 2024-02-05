@@ -212,7 +212,7 @@ void universal_value_from_str(struct universal *source, const char *value)
     if (unit_activity_is_valid(source->value.activity)) {
       return;
     }
-    break;  
+    break;
   case VUT_MINMOVES:
     source->value.minmoves = atoi(value);
     if (source->value.minmoves > 0) {
@@ -1419,10 +1419,10 @@ is_building_in_range(const struct player *target_player,
                      const struct impr_type *source)
 {
   /* Check if it's certain that the building is obsolete given the
-   * specification we have.             
-    
+   * specification we have.
+
      23Sept2021 (!survives && ...) was added. Its absence was a logic flaw.
-     
+
                 Old way allowed a "dead dummy case" while preventing a
                 needed case. If you want a req to go unfulfilled after
                 an improvement goes obsolete, you don't NEED to check the
@@ -1433,12 +1433,12 @@ is_building_in_range(const struct player *target_player,
                 defining factions/religion/decisions/development paths, or
                 basically any (X || Y && !(X && Y)) type of conditions.
 
-                In theory, this change disallows reqs to test the 'survives' 
+                In theory, this change disallows reqs to test the 'survives'
                 flag on the never-used case of an improvement whose effect
                 would be to prevent other improvements only until it's
-                obsolete. BUT, since obsoleteness makes improvement reqs 
+                obsolete. BUT, since obsoleteness makes improvement reqs
                 render false anyway, the only time you use the 'survives' flag
-                w.r.t. obsolete improvements is to see if they've ever been 
+                w.r.t. obsolete improvements is to see if they've ever been
                 built. e.g., for the theoretical case of a non-obsolete building
                 to have ever been built, test for 'survives' && the conditions for
                 the building's obsoleteness to not be fulfilled.
@@ -1755,7 +1755,7 @@ is_minforeignpct_in_range(const struct city *target_city, enum req_range range,
     } else {
       trade_partners_iterate(target_city, trade_partner) {
         foreign_pct = citizens_nation_foreign(trade_partner) * 100
-          / city_size_get(trade_partner); 
+          / city_size_get(trade_partner);
         if (foreign_pct >= min_foreign_pct) {
           return TRI_YES;
         }
@@ -2744,7 +2744,7 @@ static enum fc_tristate is_unit_state(const struct unit *target_unit,
                              unit_type_get(target_unit)));
     break;
   case USP_MOVED_THIS_TURN:
-    return BOOL_TO_TRISTATE(target_unit->moved);    
+    return BOOL_TO_TRISTATE(target_unit->moved);
   case USP_COUNT:
     fc_assert_msg(uprop != USP_COUNT, "Invalid unit state property.");
     /* Invalid property is unknowable. */
@@ -3518,7 +3518,7 @@ bool are_universals_equal(const struct universal *psource1,
   case VUT_UNITSTATE:
     return psource1->value.unit_state == psource2->value.unit_state;
   case VUT_ACTIVITY:
-    return psource1->value.activity == psource2->value.activity;    
+    return psource1->value.activity == psource2->value.activity;
   case VUT_MINMOVES:
     return psource1->value.minmoves == psource2->value.minmoves;
   case VUT_MINHP:
@@ -3649,7 +3649,7 @@ const char *universal_rule_name(const struct universal *psource)
   case VUT_UNITSTATE:
     return ustate_prop_name(psource->value.unit_state);
   case VUT_ACTIVITY:
-    return unit_activity_name(psource->value.activity);    
+    return unit_activity_name(psource->value.activity);
   case VUT_MINMOVES:
     fc_snprintf(buffer, sizeof(buffer), "%d", psource->value.minmoves);
 
@@ -3683,7 +3683,7 @@ const char *universal_rule_name(const struct universal *psource)
     case VUT_MINFOREIGNPCT:
     fc_snprintf(buffer, sizeof(buffer), "%d", psource->value.minforeignpct);
 
-     return buffer;  
+     return buffer;
   case VUT_AI_LEVEL:
     return ai_level_name(psource->value.ai_level);
   case VUT_MAXTILEUNITS:
@@ -3972,7 +3972,7 @@ const char *universal_name_translation(const struct universal *psource,
     cat_snprintf(buf, bufsz, _("%s possible"),
                  Q_(terrain_alteration_name(psource->value.terrainalter)));
     return buf;
-  /* previous  
+  /* previous
   case VUT_CITYTILE:
     fc_strlcat(buf, _("City center"), bufsz);
     return buf; */
@@ -3988,7 +3988,7 @@ const char *universal_name_translation(const struct universal *psource,
       fc_assert(psource->value.citytile != CITYT_LAST);
       fc_strlcat(buf, "error", bufsz);
       break;
-    }	
+    }
     return buf;
   case VUT_CITYSTATUS:
     switch (psource->value.citystatus) {

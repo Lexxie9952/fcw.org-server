@@ -68,7 +68,7 @@
 /***********************************************************************//**
   Evaluate the need for units (like caravans) that aid wonder construction.
   If another city is building wonder and needs help but pplayer is not
-  advanced enough to build caravans, the corresponding tech will be 
+  advanced enough to build caravans, the corresponding tech will be
   stimulated.
 ****************************************************************************/
 static void dai_choose_help_wonder(struct ai_type *ait,
@@ -91,7 +91,7 @@ static void dai_choose_help_wonder(struct ai_type *ait,
     return;
   }
 
-  if (pcity == wonder_city 
+  if (pcity == wonder_city
       || wonder_city == NULL
       || city_data->distance_to_wonder_city <= 0
       || !city_production_gets_caravan_shields(&wonder_city->production)
@@ -144,7 +144,7 @@ static void dai_choose_help_wonder(struct ai_type *ait,
     fc_assert_ret(VUT_IMPROVEMENT == wonder_city->production.kind);
 
     want /= MAX(dist, 1);
-    CITY_LOG(LOG_DEBUG, pcity, "want %s to help wonder in %s with " ADV_WANT_PRINTF, 
+    CITY_LOG(LOG_DEBUG, pcity, "want %s to help wonder in %s with " ADV_WANT_PRINTF,
              utype_rule_name(unit_type),
              city_name_get(wonder_city),
              want);
@@ -487,7 +487,7 @@ struct adv_choice *domestic_advisor_choose_build(struct ai_type *ait, struct pla
       && pcity->surplus[O_FOOD] > utype_upkeep_cost(worker_type,
                                                     pplayer, O_FOOD)) {
     if (worker_want > 0) {
-      CITY_LOG(LOG_DEBUG, pcity, "desires terrain improvers with passion " ADV_WANT_PRINTF, 
+      CITY_LOG(LOG_DEBUG, pcity, "desires terrain improvers with passion " ADV_WANT_PRINTF,
                worker_want);
       dai_choose_role_unit(ait, pplayer, pcity, choice, CT_CIVILIAN,
                            UTYF_SETTLERS, worker_want, FALSE);
@@ -605,7 +605,7 @@ struct adv_choice *domestic_advisor_choose_build(struct ai_type *ait, struct pla
 /***********************************************************************//**
   Calculate walking distances to wonder city from nearby cities.
 ***************************************************************************/
-void dai_wonder_city_distance(struct ai_type *ait, struct player *pplayer, 
+void dai_wonder_city_distance(struct ai_type *ait, struct player *pplayer,
                               struct adv_data *adv)
 {
   struct pf_map *pfm;

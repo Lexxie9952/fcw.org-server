@@ -219,15 +219,15 @@ bool can_cities_trade(const struct city *pc1, const struct city *pc2)
   /* If you change the logic here, make sure to update the help in
    * helptext_unit(). */
 
-  if (pc1 && pc2 && pc1 != pc2 
+  if (pc1 && pc2 && pc1 != pc2
       && trade_route_type_trade_pct(cities_trade_route_type(pc1, pc2)) > 0) {
     // Domestic:
     if (city_owner(pc1) == city_owner(pc2)) {
-      return map_distance(pc1->tile, pc2->tile) >= game.info.trademindist; 
+      return map_distance(pc1->tile, pc2->tile) >= game.info.trademindist;
     } else {
     // Foreign:
       return map_distance(pc1->tile, pc2->tile) >= game.server.trademinforeign;
-    }    
+    }
   }
   return false;
 }
@@ -302,7 +302,7 @@ bool can_establish_trade_route(const struct city *pc1, const struct city *pc2)
   if (maxpc2 <= 0) {
     return FALSE;
   }
-    
+
   if (city_num_trade_routes(pc1) >= maxpc1) {
     trade = trade_base_between_cities(pc1, pc2);
     /* can we replace trade route? */
@@ -310,7 +310,7 @@ bool can_establish_trade_route(const struct city *pc1, const struct city *pc2)
       return FALSE;
     }
   }
-  
+
   if (city_num_trade_routes(pc2) >= maxpc2) {
     if (trade == -1) {
       trade = trade_base_between_cities(pc1, pc2);
@@ -319,7 +319,7 @@ bool can_establish_trade_route(const struct city *pc1, const struct city *pc2)
     if (city_trade_removable(pc2, NULL) >= trade) {
       return FALSE;
     }
-  }  
+  }
 
   return TRUE;
 }
@@ -349,7 +349,7 @@ int trade_base_between_cities(const struct city *pc1, const struct city *pc2)
   } else if (game.info.trade_revenue_style == TRS_SIMPLE) {
     /* Simple revenue style:
      * Avoid situation where two players are adjusting trade to avoid
-     * disorder, but each player's real-time adjustment is affecting 
+     * disorder, but each player's real-time adjustment is affecting
      * the other. Solution: use the static recorded base trade
      * from last turn.
     */
@@ -357,10 +357,10 @@ int trade_base_between_cities(const struct city *pc1, const struct city *pc2)
         /* The case where there was no trade recorded last turn falls thru
          * to use real-time trade; e.g., new city or reload from savegame.
          * TODO: get upstream to save base_trade_recorded in savegame. */
-        && pc1->base_trade_recorded 
+        && pc1->base_trade_recorded
         && pc2->base_trade_recorded) {
       bonus = (pc1->base_trade_recorded + pc2->base_trade_recorded + 4)
-        * 3;      
+        * 3;
     }
     else {
       bonus = (pc1->citizen_base[O_TRADE] + pc2->citizen_base[O_TRADE] + 4)
@@ -368,7 +368,7 @@ int trade_base_between_cities(const struct city *pc1, const struct city *pc2)
     }
   }
 
-  /* Switched bonus to float: FIXED DOUBLE TRUNC ROUNDING ERROR! */ 
+  /* Switched bonus to float: FIXED DOUBLE TRUNC ROUNDING ERROR! */
   bonus = bonus
           * trade_route_type_trade_pct(cities_trade_route_type(pc1, pc2))
           / 100.0;
@@ -377,7 +377,7 @@ int trade_base_between_cities(const struct city *pc1, const struct city *pc2)
 
 /* Debug:
   notify_conn(NULL, NULL, E_SETTING, ftc_any,_("%s-to-%s: btr:%d + btr:%d = Tbt:%d ==> numerator:%.3f *.35/12:%.3f (r:%d)"),
-              pc1->name, pc2->name, 
+              pc1->name, pc2->name,
               pc1->base_trade_recorded, pc2->base_trade_recorded,
               pc1->base_trade_recorded + pc2->base_trade_recorded,
               (float)((pc1->base_trade_recorded + pc2->base_trade_recorded + 4) * 3),
@@ -486,7 +486,7 @@ static int max_trade_prod(const struct city *pcity)
 
   pgood can be NULL for ignoring good's onetime_pct.
 *************************************************************************/
-int get_caravan_enter_city_trade_bonus(const struct city *pc1, 
+int get_caravan_enter_city_trade_bonus(const struct city *pc1,
                                        const struct city *pc2,
                                        struct goods_type *pgood,
                                        const bool establish_trade)
@@ -686,7 +686,7 @@ bool goods_can_be_provided(struct city *pcity, struct goods_type *pgood,
   } else {
     ptype = NULL;
   }
-  
+
   return are_reqs_active(city_owner(pcity), NULL,
                          pcity, NULL, city_tile(pcity),
                          punit, ptype, NULL, NULL, NULL,

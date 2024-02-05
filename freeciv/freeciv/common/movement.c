@@ -71,7 +71,7 @@ long utype_move_rate(const struct unit_type *utype, const struct tile *ptile,
   move_rate += punit ? get_unit_bonus(punit, EFT_MOVE_BONUS) * mfactor
                      : get_unittype_bonus(pplayer, ptile, utype, EFT_MOVE_BONUS,
                                           V_COUNT) * mfactor;
-  const int min_speed_bonus = punit 
+  const int min_speed_bonus = punit
                       ? get_unit_bonus(punit, EFT_UNIT_MIN_SPEED) * mfactor
                       : get_unittype_bonus(pplayer, ptile, utype,
                                            EFT_UNIT_MIN_SPEED, V_COUNT) * mfactor;
@@ -576,13 +576,13 @@ unit_move_to_tile_test(const struct civ_map *nmap,
   const struct unit_type *punittype = unit_type_get(punit);
   const struct player *puowner = unit_owner(punit);
 
-  /* 1) */ 
-  /* This function is also in the call-chain for 'D'o to adj.tile for embarking, 
+  /* 1) */
+  /* This function is also in the call-chain for 'D'o to adj.tile for embarking,
      which means its activity state could be any number of things such as sentry.
      I don't know what real problem cases this particular test is trying to catch,
      but at the very least a unit on sentry shouldn't be told it's not allowed to
      embark. ACTIVITY_SENTRY is nearly same as ACTIVITY_IDLE so this shouldn't
-     cause problems. Changed to allow ACTIVITY_SENTRY on 17Jan2024 */  
+     cause problems. Changed to allow ACTIVITY_SENTRY on 17Jan2024 */
   if (activity != ACTIVITY_IDLE && activity != ACTIVITY_SENTRY
       && activity != ACTIVITY_GOTO) {
     /* For other activities the unit must be stationary. */

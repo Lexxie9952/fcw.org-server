@@ -143,7 +143,7 @@ static bool pf_action_possible(const struct tile *src,
   if (PF_ACTION_ATTACK == action) {
     return (PF_MS_NATIVE & src_scope
             || can_attack_from_non_native(param->utype));
-            
+
   } else if (PF_ACTION_DIPLOMAT == action
              || PF_ACTION_TRADE_ROUTE == action) {
     /* Don't try to act when inside of a transport over non native terrain
@@ -483,7 +483,7 @@ static long general_extra_cost(const struct tile *ptile,
 /* ===================== Tile Behaviour Callbacks ==================== */
 
 /************************************************************************//**
-  PF callback to prohibit going into the unknown.  Also makes sure we 
+  PF callback to prohibit going into the unknown.  Also makes sure we
   don't plan to attack anyone.
 ****************************************************************************/
 enum tile_behavior no_fights_or_unknown(const struct tile *ptile,
@@ -590,7 +590,7 @@ static bool is_possible_base_fuel(const struct tile *ptile,
     const struct unit_type *trans_utype = unit_type_get(ptrans);
 
     if (pf_transport_check(param, ptrans, trans_utype)
-        && ( 
+        && (
               (utype_can_freely_load(param->utype, trans_utype) && !uclass_has_user_unit_class_flag_named(utype_class(param->utype),"NoCarrierRefuel"))
                || tile_has_native_base(ptile, trans_utype)
             )

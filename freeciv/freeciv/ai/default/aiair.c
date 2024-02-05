@@ -97,8 +97,8 @@ static bool dai_should_we_air_attack_tile(struct ai_type *ait,
   struct city *acity = tile_city(ptile);
 
   /* For a virtual unit (punit->id == 0), all targets are good */
-  /* TODO: There is a danger of producing too many units that will not 
-   * attack anything.  Production should not happen if there is an idle 
+  /* TODO: There is a danger of producing too many units that will not
+   * attack anything.  Production should not happen if there is an idle
    * unit of the same type nearby */
   if (acity && punit->id != 0
       && def_ai_city_data(acity, ait)->invasion.occupy == 0
@@ -140,7 +140,7 @@ static int dai_evaluate_tile_for_air_attack(struct unit *punit,
   /* Cost of our unit */
   unit_cost = unit_build_shield_cost_base(punit);
   /* This is to say "wait, ill unit will get better!" */
-  unit_cost = unit_cost * unit_type_get(punit)->hp / punit->hp; 
+  unit_cost = unit_cost * unit_type_get(punit)->hp / punit->hp;
 
   /* Determine cost of enemy units */
   victim_cost = stack_cost(punit, pdefender);
@@ -164,13 +164,13 @@ static int dai_evaluate_tile_for_air_attack(struct unit *punit,
 
   sortie_time = (unit_has_type_flag(punit, UTYF_ONEATTACK) ? 1 : 0);
 
-  profit = kill_desire(victim_cost, unit_attack, unit_cost, victim_defence, 1) 
+  profit = kill_desire(victim_cost, unit_attack, unit_cost, victim_defence, 1)
     - SHIELD_WEIGHTING + 2 * TRADE_WEIGHTING;
   if (profit > 0) {
-    profit = military_amortize(unit_owner(punit), 
+    profit = military_amortize(unit_owner(punit),
                                game_city_by_number(punit->homecity),
                                profit, sortie_time, balanced_cost);
-    log_debug("%s at (%d, %d) is a worthy target with profit %d", 
+    log_debug("%s at (%d, %d) is a worthy target with profit %d",
               unit_rule_name(pdefender), TILE_XY(dst_tile), profit);
   } else {
     log_debug("%s(%d, %d): %s at (%d, %d) is unworthy with profit %d",
@@ -181,7 +181,7 @@ static int dai_evaluate_tile_for_air_attack(struct unit *punit,
 
   return profit;
 }
-  
+
 
 /******************************************************************//**
   Find something to bomb
@@ -217,7 +217,7 @@ static int find_something_to_bomb(struct ai_type *ait, struct unit *punit,
       continue;
     }
 
-    if (has_handicap(pplayer, H_FOG) 
+    if (has_handicap(pplayer, H_FOG)
         && !map_is_known_and_seen(ptile, pplayer, V_MAIN)) {
       /* The tile is fogged */
       continue;
@@ -231,7 +231,7 @@ static int find_something_to_bomb(struct ai_type *ait, struct unit *punit,
       if (new_best > best) {
         best_tile = ptile;
         best = new_best;
-        log_debug("%s wants to attack tile (%d, %d)", 
+        log_debug("%s wants to attack tile (%d, %d)",
                   unit_rule_name(punit), TILE_XY(ptile));
       }
     }
@@ -247,10 +247,10 @@ static int find_something_to_bomb(struct ai_type *ait, struct unit *punit,
 
   pf_map_destroy(pfm);
   return best;
-} 
+}
 
 /******************************************************************//**
-  Iterates through reachable cities and appraises them as a possible 
+  Iterates through reachable cities and appraises them as a possible
   base for air operations by (air)unit punit.  Returns NULL if not
   found.  The path is stored in the path argument if not NULL.
 **********************************************************************/
@@ -324,7 +324,7 @@ static struct tile *dai_find_strategic_airbase(struct ai_type *ait,
     }
   } else {
     try to attack something
-  } 
+  }
   TODO: distant target selection, support for fuel > 2
 **********************************************************************/
 void dai_manage_airunit(struct ai_type *ait, struct player *pplayer,
@@ -381,7 +381,7 @@ void dai_manage_airunit(struct ai_type *ait, struct player *pplayer,
 
     if (find_something_to_bomb(ait, punit, &path, &dst_tile) > 0) {
       /* Found target, coordinates are in punit's goto_dest.
-       * TODO: separate attacking into a function, check for the best 
+       * TODO: separate attacking into a function, check for the best
        * tile to attack from */
       fc_assert_ret(path != NULL && dst_tile != NULL);
       if (!adv_follow_path(punit, path, dst_tile)) {
@@ -408,7 +408,7 @@ void dai_manage_airunit(struct ai_type *ait, struct player *pplayer,
       }
       pf_path_destroy(path);
     } else {
-      log_debug("%s cannot find anything to kill and is staying put", 
+      log_debug("%s cannot find anything to kill and is staying put",
                 unit_rule_name(punit));
       def_ai_unit_data(punit, ait)->done = TRUE;
       unit_activity_handling(punit, ACTIVITY_IDLE);
@@ -441,7 +441,7 @@ bool dai_choose_attacker_air(struct ai_type *ait, struct player *pplayer,
     return FALSE;
   }
 
-  /* military_advisor_choose_build does something idiotic, 
+  /* military_advisor_choose_build does something idiotic,
    * this function should not be called if there is danger... */
   if (choice->want >= 100 && choice->type != CT_ATTACKER) {
     return FALSE;

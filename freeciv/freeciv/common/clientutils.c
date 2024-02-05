@@ -31,10 +31,10 @@
 /************************************************************************//**
   Creates the activity progress text for a single unit on its tile.
 
-  This should be kept as identical as possible to 
+  This should be kept as identical as possible to
   concat_tile_activity_text() one function below it. The difference is that
   it doesn't concatenate all the activities of all the units on the tile.
-  The number of turns the single punit needs to finish its activity, 
+  The number of turns the single punit needs to finish its activity,
   is passed back via the *finish_turns parameter.
 ****************************************************************************/
 const char *unit_tile_activity_text(struct unit *punit,

@@ -58,7 +58,7 @@
 static struct treaty_list *treaties = NULL;
 
 /**********************************************************************//**
-  Calls treaty_evaluate function if such is set for AI player.    
+  Calls treaty_evaluate function if such is set for AI player.
 **************************************************************************/
 static void call_treaty_evaluate(struct player *pplayer, struct player *aplayer,
                                  struct Treaty *ptreaty)
@@ -166,7 +166,7 @@ void handle_diplomacy_accept_treaty_req(struct player *pplayer,
 
   bool casus_belli =
    (player_diplstate_get(pplayer, pother)->has_reason_to_cancel
-       || player_diplstate_get(pother, pplayer)->has_reason_to_cancel); 
+       || player_diplstate_get(pother, pplayer)->has_reason_to_cancel);
 
 
   if (NULL == pother || pplayer == pother) {
@@ -519,7 +519,7 @@ void handle_diplomacy_accept_treaty_req(struct player *pplayer,
                                       100-game.server.diplbulbcost : game.server.blueprints;
               found_new_blueprint(presearch, pclause->value, blueprint_discount);
             }
-            else {   
+            else {
               script_tech_learned(presearch, pdest,
                                   advance_by_number(pclause->value), "traded");
               research_apply_penalty(presearch, pclause->value,
@@ -590,7 +590,7 @@ void handle_diplomacy_accept_treaty_req(struct player *pplayer,
         }
         /* Agreeing a cease-fire can express two possibilities: (1) resetting casus belli or (2) renewal before expiring.
 
-            What happens in a new cease-fire, given all possible prior states before it's agreed? 
+            What happens in a new cease-fire, given all possible prior states before it's agreed?
                prior state-> | CEASE_FIRE             | WAR (!CEASE-FIRE)
               ---------------|------------------------|-------------------
               no casus belli | tl=15  (renewal)       | tl=15
@@ -601,7 +601,7 @@ void handle_diplomacy_accept_treaty_req(struct player *pplayer,
         bool reaffirmation = false;
         if (old_diplstate == DS_CEASEFIRE && casus_belli) {
           // Already cease-fire with casus belli? It's a request to re-affirm pact && reset casus belli
-          ds_giverdest->turns_left = (ds_giverdest->turns_left>1) 
+          ds_giverdest->turns_left = (ds_giverdest->turns_left>1)
                                    ? ds_giverdest->turns_left : game.server.ceasefirelength;
           ds_destgiver->turns_left = ds_giverdest->turns_left; // ensure equal pact length
           reaffirmation = true;
@@ -646,7 +646,7 @@ void handle_diplomacy_accept_treaty_req(struct player *pplayer,
           pgiver_seen_units = get_units_seen_via_ally(pgiver, pdest);
           pdest_seen_units = get_units_seen_via_ally(pdest, pgiver);
         }
-        /*What happens in a new peace pact, given all possible prior states before it's agreed? 
+        /*What happens in a new peace pact, given all possible prior states before it's agreed?
                prior state-> | ARMISTICE              | (!ARMISTICE && !PEACE) | PEACE
               ---------------|------------------------|------------------------|-----------------
               no casus belli | tl=15  (extension*)    | tl=15                  | shouldn't happen
@@ -657,24 +657,24 @@ void handle_diplomacy_accept_treaty_req(struct player *pplayer,
 
         if (casus_belli && (old_diplstate == DS_ARMISTICE)) {
           // Q:existing armistice, no casus belli, what's the motive? A:extending the armistice, probably for units to still move.
-          ds_giverdest->turns_left = ds_giverdest->turns_left >= 5 
+          ds_giverdest->turns_left = ds_giverdest->turns_left >= 5
                                    ? ds_giverdest->turns_left : 5;
           ds_destgiver->turns_left = ds_giverdest->turns_left; // ensure equality
 
           ds_giverdest->type = DS_ARMISTICE;
           ds_destgiver->type = DS_ARMISTICE;
-        } 
+        }
         else if (old_diplstate != DS_PEACE) {
           ds_giverdest->turns_left = game.server.armisticelength;
           ds_destgiver->turns_left = game.server.armisticelength;
-          
+
           ds_giverdest->type = DS_ARMISTICE;
           ds_destgiver->type = DS_ARMISTICE;
         } else {
           // unhandled cases: we got here because they have a PEACE deal already.
-          if (casus_belli) notify_player(pgiver, NULL, E_TREATY_PEACE, ftc_server, 
+          if (casus_belli) notify_player(pgiver, NULL, E_TREATY_PEACE, ftc_server,
                  _("Re-affirmation of Peace results in casus belli being withdrawn."));
-          else notify_player(pgiver, NULL, E_TREATY_PEACE, ftc_server, 
+          else notify_player(pgiver, NULL, E_TREATY_PEACE, ftc_server,
                  _("Peace offered when there is already Peace and no casus belli. Please report this to developers!"));
         }
         // All cases:
@@ -821,7 +821,7 @@ void handle_diplomacy_remove_clause_req(struct player *pplayer,
   if (pgiver != pplayer && pgiver != pother) {
     return;
   }
-  
+
   ptreaty = find_treaty(pplayer, pother);
 
   if (ptreaty && remove_clause(ptreaty, pgiver, type, value)) {
@@ -858,7 +858,7 @@ void handle_diplomacy_create_clause_req(struct player *pplayer,
   ptreaty = find_treaty(pplayer, pother);
 
   if (ptreaty && add_clause(ptreaty, pgiver, type, value)) {
-    /* 
+    /*
      * If we are trading cities, then it is possible that the
      * dest is unaware of it's existence.  We have 2 choices,
      * forbid it, or lighten that area.  If we assume that
@@ -898,14 +898,14 @@ static void really_diplomacy_cancel_meeting(struct player *pplayer,
 					   player_number(pplayer),
 					   player_number(pplayer));
     notify_player(pother, NULL, E_DIPLOMACY, ftc_server,
-                  _("[`noentry`] %s canceled the meeting!"), 
+                  _("[`noentry`] %s canceled the meeting!"),
                   player_name(pplayer));
     /* Need to send to pplayer too, for multi-connects: */
     dlsend_packet_diplomacy_cancel_meeting(pplayer->connections,
 					   player_number(pother),
 					   player_number(pplayer));
     notify_player(pplayer, NULL, E_DIPLOMACY, ftc_server,
-                  _("[`noentry`] Meeting with %s canceled."), 
+                  _("[`noentry`] Meeting with %s canceled."),
                   player_name(pother));
     treaty_list_remove(treaties, ptreaty);
     clear_treaty(ptreaty);
@@ -986,7 +986,7 @@ void send_diplomatic_meetings(struct connection *dest)
       dsend_packet_diplomacy_init_meeting(dest, player_number(other),
                                           player_number(pplayer));
       clause_list_iterate(ptreaty->clauses, pclause) {
-        dsend_packet_diplomacy_create_clause(dest, 
+        dsend_packet_diplomacy_create_clause(dest,
                                              player_number(other),
                                              player_number(pclause->from),
                                              pclause->type,

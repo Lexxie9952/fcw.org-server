@@ -143,7 +143,7 @@ enum output_type_id {
 #define SPECENUM_VALUE22 ACTIVITY_PLANT
 #define SPECENUM_VALUE22NAME N_("Plant")
 #define SPECENUM_COUNT ACTIVITY_LAST
-#include "specenum_gen.h"       
+#include "specenum_gen.h"
 #define ACTIVITY_VIGIL ACTIVITY_UNKNOWN  // #13 above is now used as Vigil
 
 /* Happens at once, not during turn change. */
@@ -351,7 +351,7 @@ typedef int Unit_Class_id;
 #define SPECENUM_VALUE7 USP_MOVED_THIS_TURN
 #define SPECENUM_VALUE7NAME "MovedThisTurn"
 /* 6Nov2021 "UnitState" "Fortified" is deprecated and we now use "Activity" "Fortified".
-   After all running games using older rulesets are finished, USP_FORTIFIED and all 
+   After all running games using older rulesets are finished, USP_FORTIFIED and all
    supporting code may be removed. All USP_FORTIFIED code to be removed can be found here:
  https://github.com/Lexxie9952/fcw.org-server/commit/c8cd694dfa3314cab1292b4e69d1069247751960 */
 #define SPECENUM_VALUE8 USP_FORTIFIED

@@ -114,11 +114,11 @@ static void restore_access_level(struct connection *pconn)
 void do_longturn_tech_latejoiner_effect(struct player *pplayer)
 {
   struct research *presearch;
-  
+
   int mod = 20;    // if x players have this tech then latejoiner gets it too.
   int num_players;
 
-  
+
   presearch = research_get(pplayer);
   advance_index_iterate(A_FIRST, ptech) {
     if (presearch != NULL && TECH_KNOWN == research_invention_state(presearch, ptech)) {
@@ -129,7 +129,7 @@ void do_longturn_tech_latejoiner_effect(struct player *pplayer)
     players_iterate(aplayer) {
       if (TECH_KNOWN == research_invention_state(research_get(aplayer), ptech)) {
         if (mod <= ++num_players) {
-          found_new_tech(presearch, ptech, FALSE, TRUE);       
+          found_new_tech(presearch, ptech, FALSE, TRUE);
      break;
         }
       }
@@ -146,9 +146,9 @@ void attach_longturn_player(struct connection *pc, struct player *pplayer)
 {
     player_set_under_human_control(pplayer);
 
-    pplayer->economic.gold += game.info.turn * game.server.latejoin_gold; 
-    if (pplayer->economic.gold > game.server.latejoin_gold_max) { 
-      pplayer->economic.gold = game.server.latejoin_gold_max; 
+    pplayer->economic.gold += game.info.turn * game.server.latejoin_gold;
+    if (pplayer->economic.gold > game.server.latejoin_gold_max) {
+      pplayer->economic.gold = game.server.latejoin_gold_max;
     }
 
     // Late joiners get 4 bulbs per turn into Alphabet: no you can't pick
@@ -175,7 +175,7 @@ void attach_longturn_player(struct connection *pc, struct player *pplayer)
   This is used when a new player joins a server, before the game
   has started.  If pconn is NULL, is an AI, else a client.
 
-  N.B. this only attachs a connection to a player if 
+  N.B. this only attachs a connection to a player if
        pconn->username == player->username
 
   Here we send initial packets:
@@ -238,7 +238,7 @@ void establish_new_connection(struct connection *pconn)
                 freeciv_name_version(), srvarg.port);
   }
 
-  /* FIXME: this (getting messages about others logging on) should be a 
+  /* FIXME: this (getting messages about others logging on) should be a
    * message option for the client with event */
 
   /* Notify the console that you're here. */
@@ -282,8 +282,8 @@ void establish_new_connection(struct connection *pconn)
                   "Couldn't get back control of player_name(pplayer)=='%s' from delegation.\n"
                   "pdelegate->username==%s pconn->username==%s"),
                   player_name(pplayer),
-                  (pdelegate 
-                   ? pdelegate->username 
+                  (pdelegate
+                   ? pdelegate->username
                    : "[conn_by_user(player_delegation_get(pplayer)) gave NULL pointer error!]"),
                   pconn->username);
       delegation_error = TRUE;
@@ -313,10 +313,10 @@ void establish_new_connection(struct connection *pconn)
       send_player_info_c(NULL, dest);
     }
   }
-  
+
   send_conn_info(game.est_connections, dest);
-  
-  // Allow admin/gamemaster in other variants 
+
+  // Allow admin/gamemaster in other variants
   if (TRUE /*is_longturn()*/) {
     if (is_supercow(pconn)) {
         pconn->supercow = TRUE;
@@ -434,7 +434,7 @@ void reject_new_connection(const char *msg, struct connection *pconn)
   Returns FALSE if the clients gets rejected and the connection should be
   closed. Returns TRUE if the client get accepted.
 **************************************************************************/
-bool handle_login_request(struct connection *pconn, 
+bool handle_login_request(struct connection *pconn,
                           struct packet_server_join_req *req)
 {
   char msg[MAX_LEN_MSG];
@@ -528,8 +528,8 @@ bool handle_login_request(struct connection *pconn,
 
   /* don't allow duplicate logins */
   conn_list_iterate(game.all_connections, aconn) {
-    if (fc_strcasecmp(req->username, aconn->username) == 0) { 
-      fc_snprintf(msg, sizeof(msg), _("'%s' already connected."), 
+    if (fc_strcasecmp(req->username, aconn->username) == 0) {
+      fc_snprintf(msg, sizeof(msg), _("'%s' already connected."),
                   req->username);
       reject_new_connection(msg, pconn);
       log_normal(_("%s was rejected: Duplicate login name [%s]."),
@@ -652,7 +652,7 @@ void send_conn_info_remove(struct conn_list *src, struct conn_list *dest)
 }
 
 /**********************************************************************//**
-  Returns the # of turns idle a player has to be, at this point in the 
+  Returns the # of turns idle a player has to be, at this point in the
   game, to be taken over by a latejoiner player.
 **************************************************************************/
 static int can_take_idler_turns(void)
@@ -667,7 +667,7 @@ static int can_take_idler_turns(void)
 
   int threshold = 2;
   if (game.info.turn >= 6 && game.info.turn <= 20) threshold = 3;
-  else if (game.info.turn >= 20 && game.info.turn < 25) threshold = 4;  
+  else if (game.info.turn >= 20 && game.info.turn < 25) threshold = 4;
   else if (game.info.turn >= 25 && game.info.turn < 30) threshold = 5;
   else if (game.info.turn >= 30 && game.info.turn < 35) threshold = 6;
   else if (game.info.turn >= 35) threshold = 7;
@@ -685,11 +685,11 @@ struct player *find_uncontrolled_player(struct connection *pconn)
    Helps LT team game setup and GM player assignment */
   if (is_longturn() && pconn) {
     players_iterate(played) {
-      if (fc_strcasecmp(pconn->username, played->username) == 0) { 
+      if (fc_strcasecmp(pconn->username, played->username) == 0) {
         return played;
       }
       /* FIXME: if player-name is spoofing another username, would this return false positive? */
-      if (fc_strcasecmp(pconn->username, played->name) == 0) { 
+      if (fc_strcasecmp(pconn->username, played->name) == 0) {
         return played;
       }
     }
@@ -717,7 +717,7 @@ struct player *find_uncontrolled_player(struct connection *pconn)
          && strncmp("UnavailablePlayer", played->name, 17) != 0
          && played->is_alive) {
       return played; /* return first available unassigned nation */
-    } else if (!played->unassigned_user 
+    } else if (!played->unassigned_user
                 && played->is_alive
                 && strncmp("UnavailablePlayer", played->name, 17) != 0
                 && played->nturns_idle >= idle_cutoff ) {
@@ -754,7 +754,7 @@ struct player *find_uncontrolled_player(struct connection *pconn)
   -----------------------------------------------------------------------
   This function seeks and returns a random uncontrolled idle player IFF
   there are no NewAvailablePlayer slots. If there are unassigned spots
-  available or there are no idle players, it returns NULL.   
+  available or there are no idle players, it returns NULL.
 **************************************************************************/
 struct player *find_uncontrolled_idle_player_longturn(void)
 {
@@ -765,7 +765,7 @@ struct player *find_uncontrolled_idle_player_longturn(void)
 
   /* Make array of available idle players */
   players_iterate(played) {
-    if (!played->unassigned_user 
+    if (!played->unassigned_user
                 && played->is_alive
                 && strncmp("UnavailablePlayer", played->name, 17) != 0
                 && played->nturns_idle >= idle_cutoff ) {
@@ -778,7 +778,7 @@ struct player *find_uncontrolled_idle_player_longturn(void)
                     && played->is_alive) {
       /* We always assign player to a NewAvailable unassigned player before an idler.
          This improves a flaw where the same idler with a bad position kept getting
-         assigned, abandoned, and recycled again, while the fresh spots weren't taken! 
+         assigned, abandoned, and recycled again, while the fresh spots weren't taken!
          By returning NULL, we're instructing the game to not assign an idler because
          there are NewAvailable slots it should assign first, after first letting the
          player pick his nation. */
@@ -842,8 +842,8 @@ static bool connection_attach_real(struct connection *pconn,
           return FALSE;
         }
         /* Flag if we're taking over an idler */
-        if (!pplayer->unassigned_user 
-            && pplayer->is_alive 
+        if (!pplayer->unassigned_user
+            && pplayer->is_alive
             && pplayer->nturns_idle >= idle_cutoff) {
               is_idler=true;
         }
@@ -900,7 +900,7 @@ static bool connection_attach_real(struct connection *pconn,
         server_player_set_name(pplayer, pconn->username);
       }
       // Case 2: pointer to name exists but it's an empty string
-      // Case 3: pointer to name exists but it's NewAvailablePlayer 
+      // Case 3: pointer to name exists but it's NewAvailablePlayer
       // Case 4: taking over an idler player
       else if (pplayer->name) {
         if (strlen(pplayer->name) == 0                                 // 2
@@ -1102,7 +1102,7 @@ void connection_detach(struct connection *pconn, bool remove_unused_player)
 }
 
 /**********************************************************************//**
-  Use a delegation to get control over another player. 
+  Use a delegation to get control over another player.
 **************************************************************************/
 bool connection_delegate_take(struct connection *pconn,
                               struct player *dplayer)
@@ -1161,11 +1161,11 @@ bool connection_delegate_take(struct connection *pconn,
     return FALSE;
   }
 
-  /* Paranoid safety: restore players' names because 
+  /* Paranoid safety: restore players' names because
    * name != username - at very least, capitalised; but maybe an alias*/
   sz_strlcpy(dplayer->name, dplayer_name);
   sz_strlcpy(oplayer->name, oplayer_name);
-  /* Only FCW has to do this here because connection_attach was modified 
+  /* Only FCW has to do this here because connection_attach was modified
      to NOT override playername with username in some connection_attach
      events, because FCW has to worry about idlers, NewAvailablePlayers,
      and other issues */

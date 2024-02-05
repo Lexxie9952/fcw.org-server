@@ -1,4 +1,4 @@
-/********************************************************************** 
+/**********************************************************************
  Freeciv - Copyright (C) 1996-2004 - The Freeciv Project
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -46,7 +46,7 @@ enum command_id {
   CMD_WALL,
   CMD_CONNECTMSG,
   CMD_VOTE,
-  
+
   /* mostly non-harmful: */
   CMD_DEBUG,
   CMD_SET,

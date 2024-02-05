@@ -44,7 +44,7 @@ void worklist_init(struct worklist *pwl)
   for (i = 0; i < MAX_LEN_WORKLIST; i++) {
     /* just setting the entry to zero: */
     pwl->entries[i].kind = VUT_NONE;
-    /* all the union pointers should be in the same place: */ 
+    /* all the union pointers should be in the same place: */
     pwl->entries[i].value.building = NULL;
   }
 }
@@ -104,7 +104,7 @@ bool worklist_peek_ith(const struct worklist *pwl,
 void worklist_advance(struct worklist *pwl)
 {
   worklist_remove(pwl, 0);
-}  
+}
 
 /************************************************************************//**
   Copy contents from worklist src to worklist dst.
@@ -134,7 +134,7 @@ void worklist_remove(struct worklist *pwl, int idx)
   }
   /* just setting the entry to zero: */
   pwl->entries[pwl->length - 1].kind = VUT_NONE;
-  /* all the union pointers should be in the same place: */ 
+  /* all the union pointers should be in the same place: */
   pwl->entries[pwl->length - 1].value.building = NULL;
   pwl->length--;
 }

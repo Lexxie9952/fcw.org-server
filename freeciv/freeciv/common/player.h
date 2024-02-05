@@ -36,7 +36,7 @@ extern "C" {
 #include "vision.h"
 
 #define PLAYER_DEFAULT_TAX_RATE 40
-#define PLAYER_DEFAULT_SCIENCE_RATE 60 // NB: Team game setup resulted in Unassigned with 100% sci keeping this illegal rate when assigned to a human. 
+#define PLAYER_DEFAULT_SCIENCE_RATE 60 // NB: Team game setup resulted in Unassigned with 100% sci keeping this illegal rate when assigned to a human.
 #define PLAYER_DEFAULT_LUXURY_RATE 0
 
 #define ANON_PLAYER_NAME "noname"
@@ -342,7 +342,7 @@ struct player {
       /* The username of who can "/delegate take" this player: */
       char delegate_to[MAX_LEN_NAME];
 
-      /* orig_username is set when a player is one of the two 'involved' players when there 
+      /* orig_username is set when a player is one of the two 'involved' players when there
        * is one player ACTIVELY controlling a delegated player; otherwise it's null.
        * If set, there are two cases:
        *  1. if delegate_to[] is set:

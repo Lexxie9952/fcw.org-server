@@ -1,4 +1,4 @@
-/********************************************************************** 
+/**********************************************************************
  Freeciv - Copyright (C) 1996 - A Kjeldberg, L Gregersen, P Unold
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -169,13 +169,13 @@ struct connection {
   char username[MAX_LEN_NAME];
   char addr[MAX_LEN_ADDR];
 
-  /* 
+  /*
    * "capability" gives the capability string of the executable (be it
    * a client or server) at the other end of the connection.
    */
   char capability[MAX_LEN_CAPSTR];
 
-  /* 
+  /*
    * "access_level" stores the current access level of the client
    * corresponding to this connection.
    */
@@ -214,7 +214,7 @@ struct connection {
       int auth_tries;
 
       /* the time that the server will respond after receiving an auth reply.
-       * this is used to throttle the connection. Also used to reject a 
+       * this is used to throttle the connection. Also used to reject a
        * connection if we've waited too long for a password. */
       time_t auth_settime;
 

@@ -609,7 +609,7 @@ static bool lookup_building(struct section_file *file,
 {
   const char *sval;
   bool ok = TRUE;
- 
+
   sval = secfile_lookup_str_default(file, NULL, "%s.%s", prefix, entry);
   if (!sval || strcmp(sval, "None") == 0) {
     *result = B_NEVER;
@@ -636,7 +636,7 @@ static bool lookup_building(struct section_file *file,
 **************************************************************************/
 static bool lookup_unit_list(struct section_file *file, const char *prefix,
                              const char *entry,
-                             struct unit_type **output, 
+                             struct unit_type **output,
                              const char *filename)
 {
   const char **slist;
@@ -817,7 +817,7 @@ static bool lookup_unit_type(struct section_file *file,
                              const char *description)
 {
   const char *sval;
-  
+
   sval = secfile_lookup_str_default(file, "None", "%s.%s", prefix, entry);
 
   if (strcmp(sval, "None") == 0) {
@@ -1433,7 +1433,7 @@ restart:
       }
     } advance_iterate_end;
 
-    /* Some more consistency checking: 
+    /* Some more consistency checking:
        Non-removed techs depending on removed techs is too
        broken to fix by default, so die.
     */
@@ -1703,7 +1703,7 @@ static bool load_ruleset_veteran(struct section_file *file,
         /* This sanity check was used to prevent setting values other than
            100 for v0, in an attempt to prevent granularity by making
            non-integer base attack strengths. Thus, it's removed for the
-           purposes of improved granularity 
+           purposes of improved granularity
         rs_sanity_veteran(path, "veteran_power_fact", i,
                           (vlist_power[i] != 100), vlist_power[i] = 100); */
       } else if (i == count_name - 1) {
@@ -1977,7 +1977,7 @@ static bool load_ruleset_units(struct section_file *file,
         break;
       }
       u->uclass = pclass;
-    
+
       sz_strlcpy(u->sound_move,
                  secfile_lookup_str_default(file, "-", "%s.sound_move",
                                             sec_name));
@@ -2262,7 +2262,7 @@ static bool load_ruleset_units(struct section_file *file,
       const int i = utype_index(u);
 
       BV_CLR_ALL(u->roles);
-    
+
       slist = secfile_lookup_str_vec(file, &nval, "%s.roles",
                                      section_name(section_list_get(sec, i)));
       for (j = 0; j < nval; j++) {
@@ -2285,7 +2285,7 @@ static bool load_ruleset_units(struct section_file *file,
     } unit_type_iterate_end;
   }
 
-  if (ok) { 
+  if (ok) {
     /* Some more consistency checking: */
     unit_type_iterate(u) {
       if (!valid_advance(u->require_advance)) {
@@ -3304,7 +3304,7 @@ static bool load_ruleset_terrain(struct section_file *file,
           ruleset_error(LOG_ERROR,
                         "\"%s\" extra \"%s\" has illegal unit_seen value \"%s\".",
                         filename, extra_rule_name(pextra),
-                        eus_name); 
+                        eus_name);
           ok = FALSE;
           break;
         }
@@ -3383,7 +3383,7 @@ static bool load_ruleset_terrain(struct section_file *file,
             BV_SET(pextra2->conflicts, extra_index(pextra));
           }
         }
-    
+
         free(slist);
 
         if (!ok) {
@@ -3982,7 +3982,7 @@ static bool load_ruleset_governments(struct section_file *file,
         g->ai.better = NULL;
       }
       requirement_vector_copy(&g->reqs, reqs);
-    
+
       sz_strlcpy(g->graphic_str,
                  secfile_lookup_str(file, "%s.graphic", sec_name));
       sz_strlcpy(g->graphic_alt,
@@ -4096,7 +4096,7 @@ static bool load_ruleset_governments(struct section_file *file,
       }
       requirement_vector_copy(&pmul->reqs, reqs);
 
-      pmul->helptext = lookup_strvec(file, sec_name, "helptext");   
+      pmul->helptext = lookup_strvec(file, sec_name, "helptext");
     } multipliers_iterate_end;
     section_list_destroy(sec);
   }
@@ -4313,7 +4313,7 @@ static bool load_nation_names(struct section_file *file,
 **************************************************************************/
 static bool is_on_allowed_list(const char *name, const char **list, size_t len)
 {
-  int i;  
+  int i;
 
   for (i = 0; i < len; i++) {
     if (!fc_strcasecmp(name, list[i])) {
@@ -5261,15 +5261,15 @@ static bool load_ruleset_styles(struct section_file *file,
     struct requirement_vector *reqs;
     const char *sec_name = section_name(section_list_get(sec, i));
 
-    sz_strlcpy(city_styles[i].graphic, 
+    sz_strlcpy(city_styles[i].graphic,
                secfile_lookup_str(file, "%s.graphic", sec_name));
-    sz_strlcpy(city_styles[i].graphic_alt, 
+    sz_strlcpy(city_styles[i].graphic_alt,
                secfile_lookup_str(file, "%s.graphic_alt", sec_name));
     sz_strlcpy(city_styles[i].citizens_graphic,
-               secfile_lookup_str_default(file, "-", 
+               secfile_lookup_str_default(file, "-",
                                           "%s.citizens_graphic", sec_name));
-    sz_strlcpy(city_styles[i].citizens_graphic_alt, 
-               secfile_lookup_str_default(file, "generic", 
+    sz_strlcpy(city_styles[i].citizens_graphic_alt,
+               secfile_lookup_str_default(file, "generic",
                                           "%s.citizens_graphic_alt", sec_name));
 
     reqs = lookup_req_list(file, compat, sec_name, "reqs", city_style_rule_name(i));
@@ -5512,7 +5512,7 @@ static bool load_ruleset_cities(struct section_file *file,
   if (ok) {
     /* City Parameters */
 
-    game.info.celebratesize = 
+    game.info.celebratesize =
       secfile_lookup_int_default(file, GAME_DEFAULT_CELEBRATESIZE,
                                  "parameters.celebrate_size_limit");
     game.info.add_to_size_limit =
@@ -5521,13 +5521,13 @@ static bool load_ruleset_cities(struct section_file *file,
       secfile_lookup_bool_default(file, GAME_DEFAULT_ANGRYCITIZEN,
                                   "parameters.angry_citizens");
 
-    game.info.changable_tax = 
+    game.info.changable_tax =
       secfile_lookup_bool_default(file, GAME_DEFAULT_CHANGABLE_TAX, "parameters.changable_tax");
-    game.info.forced_science = 
+    game.info.forced_science =
       secfile_lookup_int_default(file, 0, "parameters.forced_science");
-    game.info.forced_luxury = 
+    game.info.forced_luxury =
       secfile_lookup_int_default(file, 100, "parameters.forced_luxury");
-    game.info.forced_gold = 
+    game.info.forced_gold =
       secfile_lookup_int_default(file, 0, "parameters.forced_gold");
     if (game.info.forced_science + game.info.forced_luxury
         + game.info.forced_gold != 100) {

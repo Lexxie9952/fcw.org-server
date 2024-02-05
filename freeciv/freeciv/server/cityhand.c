@@ -108,7 +108,7 @@ void handle_city_change_specialist(struct player *pplayer, int city_id,
   if (!pcity) {
     return;
   }
-  
+
   bool change_all = false;
   /* Adding 100 to Specialist_type_id "to", requests to change all specialists.
     Semi-ugly but maintains compatibility between client/server versions. */
@@ -144,14 +144,14 @@ void handle_city_change_specialist(struct player *pplayer, int city_id,
   Handle request to change city worker in to specialist.
 **************************************************************************/
 void handle_city_make_specialist(struct player *pplayer,
-                                 int city_id, int tile_id, 
+                                 int city_id, int tile_id,
                                  Specialist_type_id specialist_to)
 {
   if (specialist_to < 0) specialist_to = DEFAULT_SPECIALIST;
 
 /* This was a former method of packing selected specialist in the unused
    bits of the city_id (to keep protocol compat). However, in large games
-   city_id surpassed 8192. This block may be deleted several months after 
+   city_id surpassed 8192. This block may be deleted several months after
    15Nov2021, assuming the new method works fine.
 #ifdef FREECIV_WEB
   // FCW uses top 3 bits to represent default specialist, thus city_id is really
@@ -295,7 +295,7 @@ void really_handle_city_sell(struct player *pplayer, struct city *pcity,
                     "[`gold`] You sell %s in %s for %d gold.", price),
                 improvement_name_translation(pimprove),
                 city_link(pcity), price);
-  
+
   city_refresh(pcity);
 
   /* If we sold the walls the other players should see it */
@@ -329,7 +329,7 @@ void really_handle_city_buy(struct player *pplayer, struct city *pcity)
   /* This function corresponds to city_can_buy() in the client. */
 
   fc_assert_ret(pcity && player_owns_city(pplayer, pcity));
- 
+
   if (pcity->turn_founded == game.info.turn) {
     notify_player(pplayer, pcity->tile, E_BAD_COMMAND, ftc_server,
                   _("Cannot buy in city created this turn."));
@@ -365,7 +365,7 @@ void really_handle_city_buy(struct player *pplayer, struct city *pcity)
                   city_link(pcity));
     return;
   }
-  if (game.server.fulldisorder && VUT_IMPROVEMENT == pcity->production.kind 
+  if (game.server.fulldisorder && VUT_IMPROVEMENT == pcity->production.kind
       && pcity->anarchy != 0 && pcity->hangry != 0) {
     notify_player(pplayer, pcity->tile, E_BAD_COMMAND, ftc_server,
                   _("[`mad`] %s can't buy buildings while lawless."),
@@ -379,7 +379,7 @@ void really_handle_city_buy(struct player *pplayer, struct city *pcity)
     return; /* sanity */
   }
   if (cost > pplayer->economic.gold) {
-    /* In case something changed while player tried to buy, or player 
+    /* In case something changed while player tried to buy, or player
      * tried to cheat! */
     /* Split into two to allow localization of two pluralisations. */
     char buf[MAX_LEN_MSG];
@@ -639,7 +639,7 @@ void handle_city_manager(struct player *pplayer, int city_id, bool enabled,
   }
 
   // User requested to apply this parameter only one time, without altering any of the current configuration.
-  else {   
+  else {
       struct cm_parameter backup_parameter;
       bool was_enabled = false;  // whether governor was formerly on or not
 
@@ -662,7 +662,7 @@ void handle_city_manager(struct player *pplayer, int city_id, bool enabled,
 
       // Cases where the city had no former CMA:
       if (!was_enabled) {
-         /* CASE 1. CMA wasn't enabled and temporary order was accepted. Disable 
+         /* CASE 1. CMA wasn't enabled and temporary order was accepted. Disable
             the "virtual temporary" CMA while thanking it for arranging our tiles */
          if (pcity->cm_parameter) {
           free(pcity->cm_parameter);
@@ -675,7 +675,7 @@ void handle_city_manager(struct player *pplayer, int city_id, bool enabled,
           return;
         }
         /* CASE 2: CMA wasn't enabled and temporary order was rejected.
-           Help player to make sense of what happened. */ 
+           Help player to make sense of what happened. */
         else {
           send_city_info(pplayer, pcity);
           notify_player(city_owner(pcity), city_tile(pcity),
@@ -685,13 +685,13 @@ void handle_city_manager(struct player *pplayer, int city_id, bool enabled,
           return;
         }
       }
-      /* CMA was enabled before: undo virtual temporary cm_parameter and restore 
+      /* CMA was enabled before: undo virtual temporary cm_parameter and restore
          everything how it used to be: */
       else {
-        /* CASE 3. CMA was enabled before and if it is still enabled, it means 
+        /* CASE 3. CMA was enabled before and if it is still enabled, it means
            temporary orders were accepted. */
         if (pcity->cm_parameter) {
-          // Restore the old parameter  
+          // Restore the old parameter
           cm_copy_parameter(pcity->cm_parameter, &backup_parameter);
           sync_cities();
           send_city_info(pplayer, pcity);
@@ -703,15 +703,15 @@ void handle_city_manager(struct player *pplayer, int city_id, bool enabled,
         }
         /* CASE 4. CMA was enabled before and now it's disabled. This means the
            city released the virtual temporary governor and disabled the city's
-           CMA. Clean up and restore everything back to sensibility. */  
-        else { 
+           CMA. Clean up and restore everything back to sensibility. */
+        else {
             /* Construct the backup cm_parameter as if it's the creation of a whole
               new Governor. */
             if (!pcity->cm_parameter) {
               pcity->cm_parameter = fc_calloc(1, sizeof(struct cm_parameter));
             }
             cm_copy_parameter(pcity->cm_parameter, &backup_parameter);
-            auto_arrange_workers(pcity); // Back to how we were before failing 
+            auto_arrange_workers(pcity); // Back to how we were before failing
             sync_cities();
             send_city_info(pplayer, pcity);
             notify_player(city_owner(pcity), city_tile(pcity),
@@ -720,7 +720,7 @@ void handle_city_manager(struct player *pplayer, int city_id, bool enabled,
                       city_link(pcity));
             return;
         }
-      }      
+      }
   }
 }
 

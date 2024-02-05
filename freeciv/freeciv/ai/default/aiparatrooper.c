@@ -76,7 +76,7 @@ static struct tile *find_best_tile_to_paradrop_to(struct ai_type *ait,
     if (!map_is_known(ptile, pplayer)) {
       continue;
     }
-  
+
     acity = tile_city(ptile);
     if (acity && city_owner(acity) == unit_owner(punit)
         && unit_list_size(ptile->units) == 0) {
@@ -87,10 +87,10 @@ static struct tile *find_best_tile_to_paradrop_to(struct ai_type *ait,
       }
     }
   } square_iterate_end;
-  
+
   if (best_tile != NULL) {
     acity = tile_city(best_tile);
-    UNIT_LOG(LOGLEVEL_PARATROOPER, punit, 
+    UNIT_LOG(LOGLEVEL_PARATROOPER, punit,
              "Choose to jump in order to protect allied city %s (%d %d). "
              "Benefit: %d",
              city_name_get(acity), TILE_XY(best_tile), best);
@@ -115,10 +115,10 @@ static struct tile *find_best_tile_to_paradrop_to(struct ai_type *ait,
       }
     }
   } square_iterate_end;
-  
+
   if (best_tile != NULL) {
     acity = tile_city(best_tile);
-    UNIT_LOG(LOGLEVEL_PARATROOPER, punit, 
+    UNIT_LOG(LOGLEVEL_PARATROOPER, punit,
              "Choose to jump into enemy city %s (%d %d). Benefit: %d",
              city_name_get(acity), TILE_XY(best_tile), best);
     return best_tile;
@@ -164,7 +164,7 @@ static struct tile *find_best_tile_to_paradrop_to(struct ai_type *ait,
       val *= unit_win_chance(punit, get_defender(punit, target));
       val += pterrain->defense_bonus / 10;
       val -= punit->hp * 100;
-      
+
       if (val > best) {
         best = val;
 	best_tile = ptile;
@@ -209,7 +209,7 @@ void dai_manage_paratrooper(struct ai_type *ait, struct player *pplayer,
   if (punit->moves_left == 0) {
     return;
   }
-  
+
   if (pcity && unit_list_size(unit_tile(punit)->units) == 1) {
     UNIT_LOG(LOGLEVEL_PARATROOPER, punit, "Defending the city.");
     return;
@@ -274,13 +274,13 @@ static int calculate_want_for_paratrooper(struct unit *punit,
   int total, total_cities;
 
   profit += u_type->defense_strength
-          + u_type->move_rate 
+          + u_type->move_rate
 	  + u_type->attack_strength;
-  
+
   square_iterate(&(wld.map), ptile_city, range, ptile) {
     int multiplier;
     struct city *pcity = tile_city(ptile);
-    
+
     if (!pcity) {
       continue;
     }
@@ -289,9 +289,9 @@ static int calculate_want_for_paratrooper(struct unit *punit,
       continue;
     }
 
-    /* We prefer jumping to other continents. On the same continent we 
+    /* We prefer jumping to other continents. On the same continent we
      * can fight traditionally.
-     * FIXME: Handle ocean cities we can attack. */    
+     * FIXME: Handle ocean cities we can attack. */
     if (!is_ocean_tile(ptile)
         && tile_continent(ptile_city) != tile_continent(ptile)) {
       if (get_continent_size(tile_continent(ptile)) < 3) {
@@ -303,12 +303,12 @@ static int calculate_want_for_paratrooper(struct unit *punit,
     } else {
       multiplier = 1;
     }
-    
+
     /* There are lots of units, the city will be safe against paratroopers. */
     if (unit_list_size(ptile->units) > 2) {
       continue;
     }
-    
+
     /* Prefer long jumps.
      * If a city is near we can take/protect it with normal units */
     if (pplayers_allied(pplayer, city_owner(pcity))) {

@@ -94,7 +94,7 @@ struct impr_type {
   bool allows_extras;
   bool prevents_disaster;
   bool protects_vs_actions;
-  
+
 };
 
 

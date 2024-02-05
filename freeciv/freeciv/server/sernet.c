@@ -425,7 +425,7 @@ struct packet_to_handle {
 /*************************************************************************//**
   Simplify a loop by wrapping get_packet_from_connection.
 *****************************************************************************/
-static bool get_packet(struct connection *pconn, 
+static bool get_packet(struct connection *pconn,
                        struct packet_to_handle *ppacket)
 {
   ppacket->data = get_packet_from_connection(pconn, &ppacket->type);
@@ -438,7 +438,7 @@ static bool get_packet(struct connection *pconn,
   Precondition - we have read_socket_data.
   Postcondition - there are no more packets to handle on this connection.
 *****************************************************************************/
-static void incoming_client_packets(struct connection *pconn) 
+static void incoming_client_packets(struct connection *pconn)
 {
   struct packet_to_handle packet;
 #if PROCESSING_TIME_STATISTICS
@@ -472,7 +472,7 @@ static void incoming_client_packets(struct connection *pconn)
     connection_do_unbuffer(pconn);
 
 #if PROCESSING_TIME_STATISTICS
-    log_verbose("processed request %d in %gms", request_id, 
+    log_verbose("processed request %d in %gms", request_id,
                 timer_read_seconds(request_time) * 1000.0);
 #endif /* PROCESSING_TIME_STATISTICS */
 
@@ -622,7 +622,7 @@ enum server_events server_sniff_all_input(void)
              && 0 < timer_list_size(pconn->server.ping_timers)
 	     && timer_read_seconds(timer_list_front
                                    (pconn->server.ping_timers))
-	        > game.server.pingtimeout) 
+	        > game.server.pingtimeout)
             || pconn->ping_time > game.server.pingtimeout) {
           /* cut mute players, except for hack-level ones */
           if (pconn->access_level == ALLOW_HACK) {
@@ -1076,7 +1076,7 @@ int server_make_connection(int new_sock, const char *client_addr,
 
       conn_list_append(game.all_connections, pconn);
 
-      log_verbose("connection (%s) from %s (%s)", 
+      log_verbose("connection (%s) from %s (%s)",
                   pconn->username, pconn->addr, pconn->server.ipaddr);
       /* Give a ping timeout to send the PACKET_SERVER_JOIN_REQ, or close
        * the mute connection. This timer will be canceled into
@@ -1155,7 +1155,7 @@ int server_open_socket(void)
 
 #ifndef FREECIV_HAVE_WINSOCK
     /* SO_REUSEADDR considered harmful on Win, necessary otherwise */
-    if (setsockopt(s, SOL_SOCKET, SO_REUSEADDR, 
+    if (setsockopt(s, SOL_SOCKET, SO_REUSEADDR,
                    (char *)&on, sizeof(on)) == -1) {
       log_error("setsockopt SO_REUSEADDR failed: %s",
                 fc_strerror(fc_get_errno()));
@@ -1402,7 +1402,7 @@ static void finish_unit_waits(void)
   if (!uwt_list_cleaned) {
     while((head = unit_wait_list_front(server.unit_waits))) {
       /* End of "dirty" list / beginning of clean list: */
-      if (head->id == first_unit) break;   
+      if (head->id == first_unit) break;
 
       punit = game_unit_by_number(head->id);
       if (!punit) {  /* Throw away dead units in the list.*/
@@ -1436,7 +1436,7 @@ static void finish_unit_waits(void)
         punit->server.wait = plink;
       }
     } unit_wait_list_link_iterate_end;*/
-  } 
+  }
 
   /* Execute delayed orders on units with expired wait time:*/
   while( (head = unit_wait_list_front(server.unit_waits))
@@ -1613,14 +1613,14 @@ static void send_lanserver_response(void)
 #ifndef FREECIV_HAVE_WINSOCK
   /* Set the Time-to-Live field for the packet.  */
   ttl = SERVER_LAN_TTL;
-  if (setsockopt(socksend, IPPROTO_IP, IP_MULTICAST_TTL, 
+  if (setsockopt(socksend, IPPROTO_IP, IP_MULTICAST_TTL,
                  (const char*)&ttl, sizeof(ttl))) {
     log_error("setsockopt failed: %s", fc_strerror(fc_get_errno()));
     return;
   }
 #endif /* FREECIV_HAVE_WINSOCK */
 
-  if (setsockopt(socksend, SOL_SOCKET, SO_BROADCAST, 
+  if (setsockopt(socksend, SOL_SOCKET, SO_BROADCAST,
                  (const char*)&setting, sizeof(setting))) {
     log_error("Lan response setsockopt failed: %s", fc_strerror(fc_get_errno()));
     return;

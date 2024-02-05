@@ -102,7 +102,7 @@ void action_success_actor_price(struct action *paction,
 }
 
 /**********************************************************************//**
-  Gives casus belli to a victim's allies also. Currently called based 
+  Gives casus belli to a victim's allies also. Currently called based
   on whether game.server.casusbelli_allies is set.
 **************************************************************************/
 void action_give_casus_belli_to_allies(struct player *offender,
@@ -149,17 +149,17 @@ static void action_give_casus_belli(struct player *offender,
 {
   int cb_now;
   int cb_turns = game.server.casusbelliturns;
-  
+
   /* This would prevent casus belli for DS_NO_CONTACT and stop loophole
   cases of Senate or Pax Dei approving breaking treaty for casus belli
   events like incursions prior to meeting. However, since has_reason_to_cancel
-  is also a spam counter, it's not implemented yet here. Instead, after 
-  contact is made (which is needed to pursue war, after all), 
+  is also a spam counter, it's not implemented yet here. Instead, after
+  contact is made (which is needed to pursue war, after all),
   has_reason_to_cancel gets set to 0 right upon meeting and going into
   DS_WAR.
   if (player_diplstate_get(offender, victim_player)->type == DS_NO_CONTACT) {
     // Caller functions let them know a casus belli was given as courtesy,
-    // but we don't set a casus belli if DS_NO_CONTACT, since there is 
+    // but we don't set a casus belli if DS_NO_CONTACT, since there is
     // no reason_to_cancel anything at all. This keeps diplomacy system
     // clean for future upgrades and features done to it.
     return;
@@ -167,13 +167,13 @@ static void action_give_casus_belli(struct player *offender,
   */
 
   /* Team Members can never be at war nor have casus belli (I think?) */
-  if (victim_player && 
+  if (victim_player &&
       player_diplstate_get(offender, victim_player)->type == DS_TEAM) {
     return;
   }
 
   /* Server setting game.server.casusbelli_allies gives casus belli to
-     the victim's allies also: */ 
+     the victim's allies also: */
   if (victim_player && offender != victim_player // pillage your own tile = no casus belli
       && game.server.casusbelli_allies) {
     action_give_casus_belli_to_allies(offender, victim_player);
@@ -713,7 +713,7 @@ static void notify_global_success(struct player *receiver,
     notify_player(receiver, victim_tile,
                   E_DIPLOMATIC_INCIDENT, ftc_server,
                   _("[`unitednations`][`warning`] The %s invasion of your territory gives the world casus belli against "
-                    "the %s!"), 
+                    "the %s!"),
                   nation_adjective_for_player(offender),
                   nation_plural_for_player(offender));
     return;

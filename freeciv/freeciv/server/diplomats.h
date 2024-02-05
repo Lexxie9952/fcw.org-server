@@ -1,4 +1,4 @@
-/********************************************************************** 
+/**********************************************************************
  Freeciv - Copyright (C) 1996 - A Kjeldberg, L Gregersen, P Unold
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -34,7 +34,7 @@ bool spy_sabotage_unit(struct player *pplayer, struct unit *pdiplomat,
 bool diplomat_bribe(struct player *pplayer, struct unit *pdiplomat,
                     struct unit *pvictim, const struct action *paction);
 bool spy_attack(struct player *act_player, struct unit *act_unit,
-                struct tile *tgt_tile, const struct action *paction);                    
+                struct tile *tgt_tile, const struct action *paction);
 int diplomats_unignored_tech_stealings(struct unit *pdiplomat,
                                        struct city *pcity);
 bool diplomat_get_tech(struct player *pplayer, struct unit *pdiplomat,

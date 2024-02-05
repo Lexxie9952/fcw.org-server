@@ -295,7 +295,7 @@ void notify_player(const struct player *pplayer,
                    const struct tile *ptile,
                    enum event_type event,
                    const struct ft_color color,
-                   const char *format, ...) 
+                   const char *format, ...)
 {
   struct conn_list *dest = pplayer ? pplayer->connections : NULL;
   struct packet_chat_msg genmsg;
@@ -319,7 +319,7 @@ void notify_embassies(const struct player *pplayer,
                       const struct tile *ptile,
                       enum event_type event,
                       const struct ft_color color,
-                      const char *format, ...) 
+                      const char *format, ...)
 {
   struct packet_chat_msg genmsg;
   struct event_cache_players *players = NULL;
@@ -767,7 +767,7 @@ void send_pending_events(struct connection *pconn, bool include_public)
 
       if (game.server.event_cache.info) {
         /* Add turn and time to game critical events where the time is important.
-           (Not stuff that was manually initiated like changing prod, or what 
+           (Not stuff that was manually initiated like changing prod, or what
            happens every turn change) */
         switch (pcm.event) {
           case E_CITY_LOST:

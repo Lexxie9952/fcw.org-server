@@ -1001,7 +1001,7 @@ int research_total_bulbs_required(const struct research *presearch,
           continue;
         }
 /* FCW games can have "pseudo-dead" players who are idle and all but dead,
-   and NewAvailablePlayers who are empty slots and not playing */ 
+   and NewAvailablePlayers who are empty slots and not playing */
 #ifdef FREECIV_WEB
 const int IDLE_IS_DEAD = 5;
         if (is_human(aplayer) && aplayer->nturns_idle >= IDLE_IS_DEAD) {

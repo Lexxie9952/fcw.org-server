@@ -233,8 +233,8 @@ static bool dai_gothere_bodyguard(struct ai_type *ait,
                   * POWER_FACTOR * vlevel->power_fact / 100);
 
     if (danger >= my_def) {
-      UNIT_LOG(LOGLEVEL_BODYGUARD, punit, 
-               "want bodyguard @(%d, %d) danger=%d, my_def=%d", 
+      UNIT_LOG(LOGLEVEL_BODYGUARD, punit,
+               "want bodyguard @(%d, %d) danger=%d, my_def=%d",
                TILE_XY(dest_tile), danger, my_def);
       aiguard_request_guard(ait, punit);
       bg_needed = TRUE;
@@ -285,7 +285,7 @@ bool dai_gothere(struct ai_type *ait, struct player *pplayer,
     }
   }
 
-  /* Go where we should be going if we can, and are at our destination 
+  /* Go where we should be going if we can, and are at our destination
    * if we are on a ferry */
   if (goto_is_sane(punit, dest_tile) && punit->moves_left > 0) {
     punit->goto_tile = dest_tile;
@@ -305,7 +305,7 @@ bool dai_gothere(struct ai_type *ait, struct player *pplayer,
     /* We probably just landed, release our boat */
     aiferry_clear_boat(ait, punit);
   }
-  
+
   /* Dead unit shouldn't reach this point */
   CHECK_UNIT(punit);
 
@@ -376,7 +376,7 @@ void dai_log_path(struct unit *punit,
   const struct pf_position *last = pf_path_last_position(path);
   const long cc = PF_TURN_FACTOR * last->total_MC
                  + parameter->move_rate * last->total_EC;
-  const long tc = cc / (PF_TURN_FACTOR *parameter->move_rate); 
+  const long tc = cc / (PF_TURN_FACTOR *parameter->move_rate);
 
   UNIT_LOG(LOG_DEBUG, punit, "path L=%d T=%d(%ld) MC=%ld EC=%ld CC=%ld",
 	   path->length - 1, last->turn, tc,
@@ -782,7 +782,7 @@ bool dai_unit_make_homecity(struct unit *punit, struct city *pcity)
      * so it would be stupid to give it one. There can also be good reasons
      * why it doesn't have a homecity. */
     /* However, until we can do something more useful with them, we
-       will assign explorers to a city so that they can be disbanded for 
+       will assign explorers to a city so that they can be disbanded for
        the greater good -- Per */
     return FALSE;
   }
@@ -1197,7 +1197,7 @@ bool dai_assess_military_unhappiness(struct city *pcity)
       unhap += happy_cost;
     }
   } unit_list_iterate_end;
- 
+
   if (unhap < 0) {
     unhap = 0;
   }

@@ -127,7 +127,7 @@ const char *aifill(int amount);
 extern struct server_arguments srvarg;
 
 extern bool force_end_of_sniff;
-extern bool uwt_list_cleaned; 
+extern bool uwt_list_cleaned;
 
 void update_nations_with_startpos(void);
 

@@ -732,7 +732,7 @@ char *mapimg_help(const char *cmdname)
     astr_str(&defaults[MAPDEF_TURNS]), astr_str(&defaults[MAPDEF_ZOOM]),
     astr_str(&defaults[MAPDEF_MAP]),
     astr_str(&str_format), astr_str(&str_showplr));
-  
+
   mapdef_destroy(pmapdef);
   astr_free(&str_format);
   astr_free(&str_showplr);

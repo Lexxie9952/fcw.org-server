@@ -29,7 +29,7 @@
 
 int build_points_left(struct city *pcity);
 
-void transfer_city_units(struct player *pplayer, struct player *pvictim, 
+void transfer_city_units(struct player *pplayer, struct player *pvictim,
 			 struct unit_list *units, struct city *pcity,
 			 struct city *exclude_city,
 			 int kill_outside, bool verbose);

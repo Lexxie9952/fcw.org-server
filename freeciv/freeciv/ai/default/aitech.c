@@ -47,26 +47,26 @@
 struct ai_tech_choice {
   Tech_type_id choice;        /* The id of the most needed tech */
   adv_want want;              /* Want of the most needed tech */
-  adv_want current_want;      /* Want of the tech which is currently researched 
+  adv_want current_want;      /* Want of the tech which is currently researched
                                * or is our current goal */
 };
 
 /**********************************************************************//**
-  Massage the numbers provided to us by ai.tech_want into unrecognizable 
+  Massage the numbers provided to us by ai.tech_want into unrecognizable
   pulp.
 
   TODO: Write a transparent formula.
 
   Notes: 1. research_goal_unknown_techs returns 0 for known techs, 1 if tech
   is immediately available etc.
-  2. A tech is reachable means we can research it now; tech is available 
+  2. A tech is reachable means we can research it now; tech is available
   means it's on our tech tree (different nations can have different techs).
   3. ai.tech_want is usually upped by each city, so it is divided by number
   of cities here.
   4. A tech isn't a requirement of itself.
 **************************************************************************/
 static void dai_select_tech(struct ai_type *ait,
-                            struct player *pplayer, 
+                            struct player *pplayer,
                             struct ai_tech_choice *choice,
                             struct ai_tech_choice *goal)
 {
@@ -83,7 +83,7 @@ static void dai_select_tech(struct ai_type *ait,
   goal_values[A_UNSET] = -1;
   goal_values[A_NONE] = -1;
 
-  /* if we are researching future techs, then simply continue with that. 
+  /* if we are researching future techs, then simply continue with that.
    * we don't need to do anything below. */
   if (is_future_tech(presearch->researching)) {
     if (choice) {
@@ -99,14 +99,14 @@ static void dai_select_tech(struct ai_type *ait,
     return;
   }
 
-  /* Fill in values for the techs: want of the tech 
+  /* Fill in values for the techs: want of the tech
    * + average want of those we will discover en route */
   advance_index_iterate(A_FIRST, i) {
     if (valid_advance_by_number(i)) {
       int steps = research_goal_unknown_techs(presearch, i);
 
       /* We only want it if we haven't got it (so AI is human after all) */
-      if (steps > 0) { 
+      if (steps > 0) {
         values[i] += plr_data->tech_want[i];
 	advance_index_iterate(A_FIRST, k) {
           if (research_goal_tech_req(presearch, i, k)) {
@@ -128,7 +128,7 @@ static void dai_select_tech(struct ai_type *ait,
 	continue;
       }
 
-      goal_values[i] = values[i];      
+      goal_values[i] = values[i];
       advance_index_iterate(A_FIRST, k) {
         if (research_goal_tech_req(presearch, i, k)) {
 	  goal_values[i] += values[k];
@@ -191,7 +191,7 @@ static void dai_select_tech(struct ai_type *ait,
               num_cities_nonzero);
   }
 
-  /* we can't have this, which will happen in the circumstance 
+  /* we can't have this, which will happen in the circumstance
    * where all ai.tech_wants are negative */
   if (choice && choice->choice == A_UNSET) {
     choice->choice = presearch->researching;
@@ -339,8 +339,8 @@ void dai_manage_tech(struct ai_type *ait, struct player *pplayer)
         && (penalty + research->bulbs_researched
             <= research_total_bulbs_required(research, research->researching,
                                              FALSE))) {
-      TECH_LOG(ait, LOG_DEBUG, pplayer, advance_by_number(choice.choice), 
-               "new research, was %s, penalty was %d", 
+      TECH_LOG(ait, LOG_DEBUG, pplayer, advance_by_number(choice.choice),
+               "new research, was %s, penalty was %d",
                research_advance_rule_name(research, research->researching),
                penalty);
       choose_tech(research, choice.choice);

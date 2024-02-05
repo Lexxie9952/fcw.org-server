@@ -67,7 +67,7 @@ bool could_meet_with_player(const struct player *pplayer,
           && diplomacy_possible(pplayer,aplayer)
           && get_player_bonus(pplayer, EFT_NO_DIPLOMACY) <= 0
           && get_player_bonus(aplayer, EFT_NO_DIPLOMACY) <= 0
-          && (player_has_embassy(aplayer, pplayer) 
+          && (player_has_embassy(aplayer, pplayer)
               || player_has_embassy(pplayer, aplayer)
               || player_diplstate_get(pplayer, aplayer)->contact_turns_left
                  > 0
@@ -93,7 +93,7 @@ bool could_intel_with_player(const struct player *pplayer,
 /**********************************************************************//**
   Initialize treaty structure between two players.
 **************************************************************************/
-void init_treaty(struct Treaty *ptreaty, 
+void init_treaty(struct Treaty *ptreaty,
                  struct player *plr0, struct player *plr1)
 {
   ptreaty->plr0=plr0;
@@ -117,7 +117,7 @@ void clear_treaty(struct Treaty *ptreaty)
 /**********************************************************************//**
   Remove clause from treaty
 **************************************************************************/
-bool remove_clause(struct Treaty *ptreaty, struct player *pfrom, 
+bool remove_clause(struct Treaty *ptreaty, struct player *pfrom,
                    enum clause_type type, int val)
 {
   clause_list_iterate(ptreaty->clauses, pclause) {
@@ -139,7 +139,7 @@ bool remove_clause(struct Treaty *ptreaty, struct player *pfrom,
 /**********************************************************************//**
   Add clause to treaty.
 **************************************************************************/
-bool add_clause(struct Treaty *ptreaty, struct player *pfrom, 
+bool add_clause(struct Treaty *ptreaty, struct player *pfrom,
                 enum clause_type type, int val)
 {
   struct player *pto = (pfrom == ptreaty->plr0
@@ -162,7 +162,7 @@ bool add_clause(struct Treaty *ptreaty, struct player *pfrom,
     log_error("Illegal tech value %i in clause.", val);
     return FALSE;
   }
-  
+
   if (is_pact_clause(type)
       && ((ds == DS_PEACE && type == CLAUSE_PEACE)
           || (ds == DS_ARMISTICE && type == CLAUSE_PEACE)
@@ -176,7 +176,7 @@ bool add_clause(struct Treaty *ptreaty, struct player *pfrom,
                the past and re-affirm a new treaty (i.e., without casus-belli of
                past actions hanging over the agreement: perhaps casus belli was a simple
                mistake or even an action asked or agreed by both parties.)
-            2. Cease-Fire or Armistice coming near the end of its treaty period can be 
+            2. Cease-Fire or Armistice coming near the end of its treaty period can be
                re-affirmed prior to treaty transition to new state. Player enablement over
                their own agreed states!
           */
@@ -184,7 +184,7 @@ bool add_clause(struct Treaty *ptreaty, struct player *pfrom,
      else {
         log_error("Illegal treaty suggested between %s and %s - they "
                   "already have this treaty level.",
-                  nation_rule_name(nation_of_player(ptreaty->plr0)), 
+                  nation_rule_name(nation_of_player(ptreaty->plr0)),
                   nation_rule_name(nation_of_player(ptreaty->plr1)));
         return FALSE;
      }
@@ -241,7 +241,7 @@ bool add_clause(struct Treaty *ptreaty, struct player *pfrom,
   pclause->type  = type;
   pclause->from  = pfrom;
   pclause->value = val;
-  
+
   clause_list_append(ptreaty->clauses, pclause);
 
   ptreaty->accept0 = FALSE;

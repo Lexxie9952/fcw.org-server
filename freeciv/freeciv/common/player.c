@@ -84,10 +84,10 @@ enum diplstate_type cancel_pact_result(enum diplstate_type oldstate)
 }
 
 /*******************************************************************//**
-  The senate may not allow you to break the treaty.  In this 
-  case you must first dissolve the senate then you can break 
-  it.  This is waived if you have statue of liberty since you 
-  could easily just dissolve and then recreate it. 
+  The senate may not allow you to break the treaty.  In this
+  case you must first dissolve the senate then you can break
+  it.  This is waived if you have statue of liberty since you
+  could easily just dissolve and then recreate it.
 ***********************************************************************/
 enum dipl_reason pplayer_can_cancel_treaty(const struct player *p1,
                                            const struct player *p2)
@@ -114,15 +114,15 @@ enum dipl_reason pplayer_can_cancel_treaty(const struct player *p1,
 /*******************************************************************//**
   Returns true iff p1 can be in alliance with p2.
 
-  Check that we are not at war with any of p2's allies. Note 
-  that for an alliance to be made, we need to check this both 
+  Check that we are not at war with any of p2's allies. Note
+  that for an alliance to be made, we need to check this both
   ways.
 
-  The reason for this is to avoid the dread 'love-love-hate' 
+  The reason for this is to avoid the dread 'love-love-hate'
   triad, in which p1 is allied to p2 is allied to p3 is at
   war with p1. These lead to strange situations.
 ***********************************************************************/
-static bool is_valid_alliance(const struct player *p1, 
+static bool is_valid_alliance(const struct player *p1,
                               const struct player *p2)
 {
   players_iterate_alive(pplayer) {
@@ -167,15 +167,15 @@ enum dipl_reason pplayer_can_make_treaty(const struct player *p1,
       || get_player_bonus(p2, EFT_NO_DIPLOMACY) > 0) {
     return DIPL_ERROR;
   }
-  if (treaty == DS_WAR 
-      || treaty == DS_NO_CONTACT 
-      || treaty == DS_ARMISTICE 
+  if (treaty == DS_WAR
+      || treaty == DS_NO_CONTACT
+      || treaty == DS_ARMISTICE
       || treaty == DS_TEAM
       || treaty == DS_LAST) {
     return DIPL_ERROR; /* these are not negotiable treaties */
   }
   if (treaty == DS_CEASEFIRE && existing != DS_WAR) {
-    if (existing == DS_CEASEFIRE && (casus_belli 
+    if (existing == DS_CEASEFIRE && (casus_belli
         || (turns_left >= 1 && turns_left <= 3))) {
       // if casus belli, can re-affirm treaty as way to erase casus
       // belli for old deeds. can renew cease-fire if <=3 turns left
@@ -183,7 +183,7 @@ enum dipl_reason pplayer_can_make_treaty(const struct player *p1,
     }
     else return DIPL_ERROR; /* only available from war */
   }
-  if (treaty == DS_PEACE 
+  if (treaty == DS_PEACE
       && (existing != DS_WAR && existing != DS_CEASEFIRE)) {
     if ((existing == DS_PEACE || existing == DS_ARMISTICE)
         && (casus_belli || (turns_left >= 1 && turns_left <= 3))) {
@@ -1014,10 +1014,10 @@ bool can_player_see_unit_at(const struct player *pplayer,
 
   /* Don't show non-allied units that are in transports.  This is logical
    * because allied transports can also contain our units.  Shared vision
-   * isn't taken into account. 
+   * isn't taken into account.
    OLD CODE:
   if (is_transported && unit_owner(punit) != pplayer
-      && !pplayers_allied(pplayer, unit_owner(punit))) { 
+      && !pplayers_allied(pplayer, unit_owner(punit))) {
 
   CAZFI UPDATED CODE: */
   allied = pplayers_allied(pplayer, unit_owner(punit));
@@ -1027,7 +1027,7 @@ bool can_player_see_unit_at(const struct player *pplayer,
     // currently, ugly placeholder hack waiting for the above:
     const struct unit *tunit = unit_transport_get(punit);
     // possible add later: Galley, Trireme, Longboat, Carrier (planes on deck)
-    if (tunit != NULL 
+    if (tunit != NULL
         && ( 0 == strcmp("Wagon", utype_rule_name(unit_type_get(tunit)))
              ||  0 == strcmp("Boat",  utype_rule_name(unit_type_get(tunit)))
              ||  0 == strcmp("Tribesmen",  utype_rule_name(unit_type_get(tunit)))
@@ -1132,13 +1132,13 @@ bool can_player_see_city_internals(const struct player *pplayer,
 				   const struct city *pcity)
 {
 #ifdef FREECIV_WEB
-  /* FCW allows allies who share vision to see internals, as it 
+  /* FCW allows allies who share vision to see internals, as it
      helps with many things such as planning trade routes. */
   if (pplayers_allied(pplayer, city_owner(pcity))
      && gives_shared_vision(city_owner(pcity), pplayer)) {
      return true;
-  } 
-#endif  
+  }
+#endif
   return (!pplayer || pplayer == city_owner(pcity));
 }
 
@@ -1316,7 +1316,7 @@ bool player_knows_techs_with_flag(const struct player *pplayer,
 }
 
 /*******************************************************************//**
-  Locate the player capital city, (NULL Otherwise) 
+  Locate the player capital city, (NULL Otherwise)
 ***********************************************************************/
 struct city *player_capital(const struct player *pplayer)
 {

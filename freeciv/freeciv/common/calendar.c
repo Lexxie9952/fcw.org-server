@@ -40,11 +40,11 @@ void game_next_year(struct packet_game_info *info)
     info->year_0_hack = FALSE;
   }
 
-    /* !McFred: 
+    /* !McFred:
        - want year += 1 for spaceship.
     */
 
-  /* test game with 7 normal AI's, gen 4 map, foodbox 10, foodbase 0: 
+  /* test game with 7 normal AI's, gen 4 map, foodbox 10, foodbase 0:
    * Gunpowder about 0 AD
    * Railroad  about 500 AD
    * Electricity about 1000 AD

@@ -41,9 +41,9 @@ extern "C" {
       road-type before running out of its (full) move points. */
 #define SPECENUM_VALUE6 RF_PASSIVE_MOVEMENT
 #define SPECENUM_VALUE6NAME N_("PassiveMovement")
-#define SPECENUM_VALUE7 RF_HARD_EXIT_RESTRICT_INFRA 
+#define SPECENUM_VALUE7 RF_HARD_EXIT_RESTRICT_INFRA
 #define SPECENUM_VALUE7NAME N_("HardExitRInfra")
-#define SPECENUM_VALUE8 RF_HARD_ENTRY_RESTRICT_INFRA 
+#define SPECENUM_VALUE8 RF_HARD_ENTRY_RESTRICT_INFRA
 #define SPECENUM_VALUE8NAME N_("HardEntryRInfra")
 #define SPECENUM_COUNT RF_COUNT
 #define SPECENUM_BITVECTOR bv_road_flags

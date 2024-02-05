@@ -86,11 +86,11 @@ bool could_meet_with_player(const struct player *pplayer,
 bool could_intel_with_player(const struct player *pplayer,
                              const struct player *aplayer);
 
-void init_treaty(struct Treaty *ptreaty, 
+void init_treaty(struct Treaty *ptreaty,
                  struct player *plr0, struct player *plr1);
-bool add_clause(struct Treaty *ptreaty, struct player *pfrom, 
+bool add_clause(struct Treaty *ptreaty, struct player *pfrom,
                 enum clause_type type, int val);
-bool remove_clause(struct Treaty *ptreaty, struct player *pfrom, 
+bool remove_clause(struct Treaty *ptreaty, struct player *pfrom,
                    enum clause_type type, int val);
 void clear_treaty(struct Treaty *ptreaty);
 

@@ -49,7 +49,7 @@ struct player_slot *citizens_random(const struct city *pcity);
   player_slots_iterate(_pslot) {                                             \
     citizens _nationality = citizens_nation_get(_pcity, _pslot);             \
     if (_nationality == 0) {                                                 \
-      continue;                                                              \
+      continue;                                                               \
     }
 #define citizens_iterate_end                                                 \
   } player_slots_iterate_end;

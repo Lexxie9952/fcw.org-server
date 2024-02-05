@@ -1137,7 +1137,7 @@ bool req_text_insert(char *buf, size_t bufsz, struct player *pplayer,
     fc_strlcat(buf, prefix, bufsz);
     if (preq->present) {
       cat_snprintf(buf, bufsz,
-                   /* TRANS: "Requires that you are playing Asian style 
+                   /* TRANS: "Requires that you are playing Asian style
                     * nation." */
                    _("Requires that you are playing %s style nation."),
                    style_name_translation(preq->source.value.style));
@@ -1405,7 +1405,7 @@ bool req_text_insert(char *buf, size_t bufsz, struct player *pplayer,
           /* TRANS: %s is a list of unit classes separated by "or". */
           cat_snprintf(buf, bufsz, Q_("?uclasslist:Requires %s units."),
                        astr_str(&list));
-        } else { 
+        } else {
           /* TRANS: %s is a list of unit classes separated by "or". */
           cat_snprintf(buf, bufsz, Q_("?uclasslist:Does not apply to "
                                       "%s units."),
@@ -1457,7 +1457,7 @@ bool req_text_insert(char *buf, size_t bufsz, struct player *pplayer,
             cat_snprintf(buf, bufsz,
                          _("Requires that the unit isn't fortified."));
           }
-          return TRUE;          
+          return TRUE;
         case USP_LIVABLE_TILE:
           fc_strlcat(buf, prefix, bufsz);
           if (preq->present) {
@@ -1531,7 +1531,7 @@ bool req_text_insert(char *buf, size_t bufsz, struct player *pplayer,
             cat_snprintf(buf, bufsz,
                          _("Requires that the unit hasn't moved this turn."));
           }
-          return TRUE;          
+          return TRUE;
         case USP_COUNT:
           fc_assert_msg(preq->source.value.unit_state != USP_COUNT,
                         "Invalid unit state property.");
@@ -1583,7 +1583,7 @@ bool req_text_insert(char *buf, size_t bufsz, struct player *pplayer,
       }
     }
     break;
-    
+
   case VUT_MINMOVES:
     {
       switch (preq->range) {
@@ -1876,7 +1876,7 @@ bool req_text_insert(char *buf, size_t bufsz, struct player *pplayer,
       break;
     }
     break;
-  
+
   case VUT_MINFOREIGNPCT:
     switch (preq->range) {
     case REQ_RANGE_CITY:
@@ -2713,7 +2713,7 @@ bool req_text_insert(char *buf, size_t bufsz, struct player *pplayer,
         break;
       }
     }
-    
+
     case VUT_CITYSTATUS:
     if (preq->source.value.citystatus == CITYS_LAST) {
       break;

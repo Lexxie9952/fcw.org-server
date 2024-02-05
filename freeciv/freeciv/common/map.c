@@ -378,7 +378,7 @@ struct tile *mapstep(const struct civ_map *nmap,
     return NULL;
   }
 
-  index_to_map_pos(&tile_x, &tile_y, tile_index(ptile)); 
+  index_to_map_pos(&tile_x, &tile_y, tile_index(ptile));
   DIRSTEP(dx, dy, dir);
 
   tile_x += dx;
@@ -713,7 +713,7 @@ bool can_thaw_terrain(const struct tile *ptile)
                                                           TER_FROZEN);
 
   // Too MUCH nuclear winter could make so much ice that thawing NEVER
-  // can happen again; therefore, a micro-thaw helps bring it back out:                                                        
+  // can happen again; therefore, a micro-thaw helps bring it back out:
   int override = (fc_rand(100)<=12);
 
   return override ||
@@ -732,7 +732,7 @@ bool can_freeze_terrain(const struct tile *ptile)
 
   // Too MUCH global warming can make all ice caps disappear, causing
   // it so that ice caps could never form again. Therefore, give the
-  // ice age just a little foothold to start... 
+  // ice age just a little foothold to start...
   int override = (fc_rand(1000)<=5);
 
   return override ||
@@ -748,7 +748,7 @@ bool terrain_surroundings_allow_change(const struct tile *ptile,
 {
   bool ret = TRUE;
 
-  if (is_ocean(tile_terrain(ptile)) 
+  if (is_ocean(tile_terrain(ptile))
       //&& !terrain_has_flag(tile_terrain(ptile), TER_FRESHWATER)  //lakes can recede
       && !is_ocean(pterrain) && !can_reclaim_ocean(ptile)) {
     ret = FALSE;
@@ -846,7 +846,7 @@ long tile_move_cost_ptrs(const struct civ_map *nmap,
       * For compatibility to hypothetic rulesets that intended double-move behavior, this
       * mechanic is only operative when game.info.universal_unload is enabled. If it's enabled,
       * then game.info_unload_override can be used to further customise: it sets the move_frags
-      * spent when qualifying units unload from a native tile.   
+      * spent when qualifying units unload from a native tile.
       */
   else if (game.info.slow_invasions && game.info.universal_unload
            && is_native_tile_to_class(pclass, t1)
@@ -860,19 +860,19 @@ long tile_move_cost_ptrs(const struct civ_map *nmap,
             && uclass_has_flag(pclass, UCF_TERRAIN_SPEED)) {
 
             if (game.info.unload_override > 0) {
-              // unload_override = unit uses this amount of moves to unload 
-              penalty = game.info.unload_override; 
+              // unload_override = unit uses this amount of moves to unload
+              penalty = game.info.unload_override;
             } else {
               // no override = unit uses up all moves by unloading
               return punit->moves_left;
-            }  
+            }
         }
       }
   }
 
   cost = game.server.move_cost_in_frags ? tile_terrain(t2)->movement_cost
                                         : tile_terrain(t2)->movement_cost * SINGLE_MOVE;
-  base_cost = cost;  /* record what we started with */  
+  base_cost = cost;  /* record what we started with */
   ri = restrict_infra(pplayer, t1, t2);
   bool rri_active = false; // if ReverseRestrictInfra is in effect
 
@@ -913,10 +913,10 @@ long tile_move_cost_ptrs(const struct civ_map *nmap,
   }
   if (rri_active) goto finish; /* skip extra processing and revoke IGTER */
 
-  long umr = (punit != NULL) 
+  long umr = (punit != NULL)
           ? unit_move_rate(punit)  // includes bonuses/hp/etc.
           : utype_move_rate(punittype, NULL, pplayer, 0, punittype->hp, NULL);
-                    
+
   extra_type_list_iterate(pclass->cache.bonus_roads, pextra) {
     struct road_type *proad = extra_road_get(pextra);
     int proad_cost = proad->move_cost;
@@ -925,7 +925,7 @@ long tile_move_cost_ptrs(const struct civ_map *nmap,
     if (road_has_flag(proad, RF_PASSIVE_MOVEMENT)) {
       proad_cost = umr / proad->move_cost;
       /* LATER: proad_cost could have Banker's rounding for rulesets whose frag systems don't
-         divide evenly, such that proad_cost rounds up or down at ratio of occurences that 
+         divide evenly, such that proad_cost rounds up or down at ratio of occurences that
          comes out right. However, ruleset designers should be aware to use a "highly composite
          number"(*) for move_fragments, in rulesets using passive movement, and for the move cost
          of the particular passive road type to always divide evenly into the total move frags
@@ -955,7 +955,7 @@ long tile_move_cost_ptrs(const struct civ_map *nmap,
             && is_native_extra_to_uclass(iextra, pclass)) {
           if (proad->move_mode == RMM_FAST_ALWAYS) {
             cost = proad_cost;
-            /* if roadA and roadB integrate and source road has the flag 
+            /* if roadA and roadB integrate and source road has the flag
              * "IntegrateCostUp", then going from A-to-B or B-to-A has a
              * symmetric or equal move cost. It's like road<->rail, always
              * the greater move_cost (i.e., the move_cost of the road). */
@@ -974,7 +974,7 @@ long tile_move_cost_ptrs(const struct civ_map *nmap,
               if (road_has_flag(sroad, RF_INTEGRATE_COST_UP)
                   && sroad_cost > cost) {
                 cost = sroad_cost;
-              }              
+              }
             } else {
               switch (proad->move_mode) {
               case RMM_CARDINAL:
@@ -1006,7 +1006,7 @@ long tile_move_cost_ptrs(const struct civ_map *nmap,
                 if (road_has_flag(sroad, RF_INTEGRATE_COST_UP)
                     && sroad_cost > cost) {
                   cost = sroad_cost;
-                }                
+                }
                 break;
               }
             }
@@ -1115,7 +1115,7 @@ bool normalize_map_pos(const struct civ_map *nmap, int *x, int *y)
   struct tile *ptile = map_pos_to_tile(nmap, *x, *y);
 
   if (ptile) {
-    index_to_map_pos(x, y, tile_index(ptile)); 
+    index_to_map_pos(x, y, tile_index(ptile));
     return TRUE;
   } else {
     return FALSE;
@@ -1211,7 +1211,7 @@ void map_distance_vector(int *dx, int *dy,
   int tx0, ty0, tx1, ty1;
 
   index_to_map_pos(&tx0, &ty0, tile_index(tile0));
-  index_to_map_pos(&tx1, &ty1, tile_index(tile1)); 
+  index_to_map_pos(&tx1, &ty1, tile_index(tile1));
   base_map_distance_vector(dx, dy, tx0, ty0, tx1, ty1);
 }
 
@@ -1224,8 +1224,8 @@ struct tile *rand_neighbour(const struct civ_map *nmap,
   int n;
   struct tile *tile1;
 
-  /* 
-   * list of all 8 directions 
+  /*
+   * list of all 8 directions
    */
   enum direction8 dirs[8] = {
     DIR8_NORTHWEST, DIR8_NORTH, DIR8_NORTHEAST, DIR8_WEST, DIR8_EAST,
@@ -1556,12 +1556,12 @@ bool is_singular_tile(const struct tile *ptile, int dist)
 {
   int tile_x, tile_y;
 
-  index_to_map_pos(&tile_x, &tile_y, tile_index(ptile)); 
+  index_to_map_pos(&tile_x, &tile_y, tile_index(ptile));
   do_in_natural_pos(ntl_x, ntl_y, tile_x, tile_y) {
     /* Iso-natural coordinates are doubled in scale. */
     dist *= MAP_IS_ISOMETRIC ? 2 : 1;
 
-    return ((!current_topo_has_flag(TF_WRAPX) 
+    return ((!current_topo_has_flag(TF_WRAPX)
 	     && (ntl_x < dist || ntl_x >= NATURAL_WIDTH - dist))
 	    || (!current_topo_has_flag(TF_WRAPY)
 		&& (ntl_y < dist || ntl_y >= NATURAL_HEIGHT - dist)));

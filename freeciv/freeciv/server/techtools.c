@@ -319,12 +319,12 @@ void send_research_info(const struct research *presearch,
 }
 
 /************************************************************************//**
-  Returns the clean simple base cost of a tech without considering 
-  tech leak, bulbs already acquired, etc. Because formulas need to 
-  know this number: e.g., for blueprints awarding a % 
+  Returns the clean simple base cost of a tech without considering
+  tech leak, bulbs already acquired, etc. Because formulas need to
+  know this number: e.g., for blueprints awarding a %
 ****************************************************************************/
-static int base_tech_cost(struct research *research, 
-                          Tech_type_id tech) 
+static int base_tech_cost(struct research *research,
+                          Tech_type_id tech)
 {
   int base_cost = 0;
   const struct advance *padvance = valid_advance_by_number(tech);
@@ -343,7 +343,7 @@ static int base_tech_cost(struct research *research,
 }
 
 /************************************************************************//**
-  Player receives a blueprint for a technology (from somewhere). Credit 
+  Player receives a blueprint for a technology (from somewhere). Credit
   game.server.blueprints number of bulbs toward the 'multiresearch' bulb
   account for the technology, if applicable. Handle other processing
   events.
@@ -364,7 +364,7 @@ int found_new_blueprint(struct research *research,
   notify_research_embassies(research, NULL, E_TECH_EMBASSY, ftc_server,
        _("[`bulb`] The %s have acquired %s from blueprints."),
        research_name, research_advance_name_translation(research, tech));
-    /* really give the tech */   
+    /* really give the tech */
     found_new_tech(research, tech, FALSE, TRUE);
     return 2;
   }
@@ -373,14 +373,14 @@ int found_new_blueprint(struct research *research,
   if (blueprint_discount > 0 && blueprint_discount < 100) {
     /* Calculate the bulb credit of the blueprint, with fair rounding */
     int cost = base_tech_cost(research, tech);
-    /* The line below would award the blueprint based on the current 
+    /* The line below would award the blueprint based on the current
        cost after techleak, which would nullify the techleak effect on
        cost since your blueprint is just worth less now */
     // int cost = research_total_bulbs_required(research, tech, FALSE);
 
     float award = cost * ((float)blueprint_discount / 100);
     int credit = (int)(award + 0.5);
-    
+
     /* Blueprint award can't exceed current bulb cost of the tech
        or else the theft would give excess "spillover bulbs": */
     if (credit > research_total_bulbs_required(research, tech, FALSE)) {
@@ -389,16 +389,16 @@ int found_new_blueprint(struct research *research,
       /* The lines below would make you automatically discover it. You
          do have the exact number of bulbs for it! However, is that
          what we really want? This allows you to sit on blueprints
-         like the proper blueprints they are, until you click the 
+         like the proper blueprints they are, until you click the
          tech to unlock it (e.g., avoid obsolescence of things, etc.)
       found_new_tech(research, tech, FALSE, TRUE);
       return 2;*/
     }
-      
+
     /* if blueprint credit exceeds current research, award bulb credit */
     if (credit > research->inventions[tech].bulbs_researched_saved) {
       research->inventions[tech].bulbs_researched_saved = credit;
-      
+
       if (tech == research->researching) {
         /* Received a blueprint for current research. Problem: you can't
            transfer blueprint bulbs from current research to a new tech.
@@ -413,7 +413,7 @@ int found_new_blueprint(struct research *research,
        research_advance_name_translation(research, tech));
 
       return 1;
-    }    
+    }
   }
   research_players_iterate(research, pplayer) {
       notify_player(pplayer, NULL, E_MY_DIPLOMAT_FAILED, ftc_server,
@@ -465,7 +465,7 @@ void found_new_tech(struct research *presearch, Tech_type_id tech_found,
             && is_great_wonder(pimprove)
             && (pcity = city_from_great_wonder(pimprove))) {
           notify_player(city_owner(pcity), NULL, E_WONDER_OBSOLETE, ftc_server,
-                        _("[`warning`] Discovery of %s OBSOLETES %s in %s!"), 
+                        _("[`warning`] Discovery of %s OBSOLETES %s in %s!"),
                         research_advance_name_translation
                             (research_get(city_owner(pcity)), tech_found),
                         improvement_name_translation(pimprove),
@@ -1120,11 +1120,11 @@ void choose_tech(struct research *research, Tech_type_id tech)
 
     /* 6Nov2021. When playing with multiresearch enabled, if we were researching
        no target (no future tech target after a tech discovery), then selecting
-       a new tech target made us lose all bulbs sometimes. Very recently, a fix 
+       a new tech target made us lose all bulbs sometimes. Very recently, a fix
        to savegame3.c inserted got_tech_multi into the .sav file. This does fix
        one occurrence of the bug. But the bug happened in a running game that
        wasn't loaded from a savegame (unless another bug had crashed the game
-       and it auto-reloaded (?). So there is a possibility of another unfound bug. 
+       and it auto-reloaded (?). So there is a possibility of another unfound bug.
 
        The unfound bug can be hack-fixed here by relying on logical syllogism:
 
@@ -1138,7 +1138,7 @@ void choose_tech(struct research *research, Tech_type_id tech)
        Therefore, if the player has no tech target, we will force got_tech_multi
        to be true here and the (possible) bug can simply never happen. QED. */
 
-    /* If we have no tech target then select a target, we can never lose saved 
+    /* If we have no tech target then select a target, we can never lose saved
        bulbs. Paranoid insurance to force these bulbs to never be lost. */
     if (research->researching == A_UNSET) research->got_tech_multi = true;
     /* Change tech target to the selected tech */
@@ -1330,21 +1330,21 @@ void give_initial_techs(struct research *presearch, int num_random_techs)
 
 /************************************************************************//**
   Returns true if the blueprints for a tech would result in the player
-  having more bulbs in that tech than they already do. Otherwise the 
+  having more bulbs in that tech than they already do. Otherwise the
   blueprints are useless and the server should pick another random tech
   to steal (or none at all if there are none.)
 ****************************************************************************/
 static bool stealable_blueprints(struct research *research,
                                  Tech_type_id tech) {
   if (game.server.blueprints) {
-      int blueprint_theft_pct = game.server.conquercost 
-                                  ? 100-game.server.conquercost 
+      int blueprint_theft_pct = game.server.conquercost
+                                  ? 100-game.server.conquercost
                                   : game.server.blueprints;
 
     if (blueprint_theft_pct > 0) {
       /* Calculate the bulb credit of the blueprint, with fair rounding */
       int cost = base_tech_cost(research, tech);
-      /* The line below would award the blueprint based on the current 
+      /* The line below would award the blueprint based on the current
         cost after techleak, which would nullify the techleak effect on
         cost since your blueprint is just worth less now */
       // int cost = research_total_bulbs_required(research, tech, FALSE);
@@ -1358,9 +1358,9 @@ static bool stealable_blueprints(struct research *research,
       return false;
     }
     // can't steal: blueprint_theft_pct is 0% due to conquercost setting!
-    return false;   
+    return false;
   } else {
-    // game.server.blueprints is disabled, it's a normal theft 
+    // game.server.blueprints is disabled, it's a normal theft
     return true;
   }
 }
@@ -1395,13 +1395,13 @@ Tech_type_id steal_a_tech(struct player *pplayer, struct player *victim,
                                       game.info.tech_steal_allow_holes)
           && research_invention_state(presearch, i) != TECH_KNOWN
           && research_invention_state(vresearch, i) == TECH_KNOWN
-          /* if blueprints are enabled, don't steal a tech for which we 
+          /* if blueprints are enabled, don't steal a tech for which we
              already have more bulbs than the blueprints */
           && (!game.server.blueprints || stealable_blueprints(presearch, i))) {
         j++;
       }
     } advance_index_iterate_end;
-  
+
     if (j == 0)  {
       /* we've moved on to future tech */
       if (vresearch->future_tech > presearch->future_tech) {
@@ -1418,7 +1418,7 @@ Tech_type_id steal_a_tech(struct player *pplayer, struct player *victim,
                                         game.info.tech_steal_allow_holes)
             && research_invention_state(presearch, i) != TECH_KNOWN
             && research_invention_state(vresearch, i) == TECH_KNOWN
-            /* if blueprints are enabled, don't steal a tech for which we 
+            /* if blueprints are enabled, don't steal a tech for which we
                already have more bulbs than the blueprints */
             && (!game.server.blueprints || stealable_blueprints(presearch, i))) {
 	  j--;
@@ -1501,7 +1501,7 @@ void handle_player_research(struct player *pplayer, int tech)
   if (tech != A_FUTURE && !valid_advance_by_number(tech)) {
     return;
   }
-  
+
   if (tech != A_FUTURE
       && research_invention_state(research, tech) != TECH_PREREQS_KNOWN) {
     return;
