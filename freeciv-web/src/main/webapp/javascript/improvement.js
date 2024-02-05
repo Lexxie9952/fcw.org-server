@@ -20,25 +20,25 @@
 // incomplete list of (well defined) building names - populate as needed
 // Remove in favor of [Effects](https://github.com/freeciv/freeciv-web/issues/208) when implemented.
 // IDs are dynamic based on ruleset
-const B_AIRPORT_NAME = 'Airport';
-const B_RECYCLING_CENTER = "Recycling Center";
-const B_PALACE_NAME = 'Palace';
-const B_ECC_PALACE_NAME = 'Ecclesiastical Palace';
+const B_AIRPORT_NAME = 'Airport'
+const B_RECYCLING_CENTER = "Recycling Center"
+const B_PALACE_NAME = 'Palace'
+const B_ECC_PALACE_NAME = 'Ecclesiastical Palace'
 //--
-const B_ADAM_SMITH_NAME = "A.Smith's Trading Co.";
-const B_AGOGE = "Ag"+String.fromCharCode(0x14D)+"g"+String.fromCharCode(0x113)+" of Sparta";
-const B_ANGKOR_WAT = "Angkor Wat";
-const B_APPIAN_WAY = "Appian Way";
-const B_CHAND_BAORI = "Chand Baori";
-const B_COLOSSUS = "Colossus";
+const B_ADAM_SMITH_NAME = "A.Smith's Trading Co."
+const B_AGOGE = "Ag"+String.fromCharCode(0x14D)+"g"+String.fromCharCode(0x113)+" of Sparta"
+const B_ANGKOR_WAT = "Angkor Wat"
+const B_APPIAN_WAY = "Appian Way"
+const B_CHAND_BAORI = "Chand Baori"
+const B_COLOSSUS = "Colossus"
 const B_GIBRALTAR_FORTRESS = "Gibraltar Fortress"
 const B_HOOVER_DAM = "Hoover Dam"
-const B_LIGHTHOUSE = "Lighthouse";
-const B_MAGNA_CARTA = "Magna Carta";
-const B_MAUSOLEUM = "Mausoleum of Mausolos";
-const B_MEDICI_BANK = "Medici Bank";
-const B_STATUE_OF_LIBERTY_NAME = "Statue of Liberty";
-const B_TESLAS_LABORATORY = "Tesla's Laboratory";
+const B_LIGHTHOUSE = "Lighthouse"
+const B_MAGNA_CARTA = "Magna Carta"
+const B_MAUSOLEUM = "Mausoleum of Mausolos"
+const B_MEDICI_BANK = "Medici Bank"
+const B_STATUE_OF_LIBERTY_NAME = "Statue of Liberty"
+const B_TESLAS_LABORATORY = "Tesla's Laboratory"
 
 var B_LAST = MAX_NUM_BUILDINGS;
 
@@ -65,7 +65,7 @@ var communist_discounts = {
 };
 var nationalist_discounts = {
     "Police Station": 10
-};  
+};
 var colossus_discounts = {
   "Boat": 3,
   "Goods": 5,
@@ -174,12 +174,12 @@ function get_universal_discount_price(ptype, pcity)
 
   // Since 'name' and 'build_cost' are the only fields checked and
   // are universal to both improvements and units, we can adapt this
-  // for everything when needed: 
-  
+  // for everything when needed:
+
   // MP2 communist discounts
-  if (client_rules_flag[CRF_MP2_SPECIAL_UNITS] && 
+  if (client_rules_flag[CRF_MP2_SPECIAL_UNITS] &&
       governments[players[playerno].government].name == "Communism") {
-    
+
     if (communist_discounts[ptype['name']]) {
       if (!client_rules_flag[CRF_MP2_C]) {
         if (ptype['name'] == "Armor") return ptype['build_cost']
@@ -191,10 +191,10 @@ function get_universal_discount_price(ptype, pcity)
     }
   }
   // MP2 nationalist discounts
-  if (client_rules_flag[CRF_MP2_C] && 
+  if (client_rules_flag[CRF_MP2_C] &&
       governments[players[playerno].government].name == "Nationalism") {
 
-    if (nationalist_discounts[ptype['name']])    
+    if (nationalist_discounts[ptype['name']])
       return ptype['build_cost'] - nationalist_discounts[ptype['name']];
   }
   // MP2 Building Prices:
@@ -220,7 +220,7 @@ function get_universal_discount_price(ptype, pcity)
         && (player_invention_state(players[playerno], tech_id_by_name('Metallurgy')) == TECH_KNOWN)) {
             return ptype['build_cost'] + 10;
     }
-  } 
+  }
 
   // MP2 discounts for having Colossus
   if (pcity && client_rules_flag[CRF_COLOSSUS_DISCOUNT]
@@ -228,24 +228,24 @@ function get_universal_discount_price(ptype, pcity)
     && city_has_building(pcity, improvement_id_by_name(B_COLOSSUS))) {
 
     if (colossus_discounts[ptype['name']])
-        return ptype['build_cost'] - colossus_discounts[ptype['name']];      
+        return ptype['build_cost'] - colossus_discounts[ptype['name']];
   }
   // MP2 discount for Appian Way
   if (pcity && client_rules_flag[CRF_MP2_C]
     && player_invention_state(players[playerno], tech_id_by_name('Railroad')) != TECH_KNOWN
     && city_has_building(pcity, improvement_id_by_name(B_APPIAN_WAY))) {
       if (appian_discounts[ptype['name']])
-      return ptype['build_cost'] - appian_discounts[ptype['name']];      
+      return ptype['build_cost'] - appian_discounts[ptype['name']];
   }
   // MP2 discount for Angkor Wat
-  if (pcity && client_rules_flag[CRF_MP2_C] 
+  if (pcity && client_rules_flag[CRF_MP2_C]
     && governments[players[playerno].government].name != "Nationalism"
     && governments[players[playerno].government].name != "Democracy"
     && governments[players[playerno].government].name != "Theocracy"
     && governments[players[playerno].government].name != "Communism"
     && player_has_wonder(playerno, improvement_id_by_name(B_ANGKOR_WAT))) {
       if (angkorwat_discounts[ptype['name']])
-      return ptype['build_cost'] - angkorwat_discounts[ptype['name']];      
+      return ptype['build_cost'] - angkorwat_discounts[ptype['name']];
   }
   // MP2D discounts for Mausoleum:
   if (pcity && client_rules_flag[CRF_MP2_D]
@@ -257,11 +257,11 @@ function get_universal_discount_price(ptype, pcity)
     if (governments[players[playerno].government].name == "Despotism") {
       discount += mausoleum_despot_discounts[ptype['name']];
     }
-    return ptype['build_cost'] - discount; 
+    return ptype['build_cost'] - discount;
   }
   if (pcity && client_rules_flag[CRF_MP2_D]
       && player_has_wonder(playerno, improvement_id_by_name(B_AGOGE))) {
-      
+
       if (agoge_discounts[ptype['name']])
         return ptype['build_cost'] - agoge_discounts[ptype['name']];
   }
@@ -271,7 +271,7 @@ function get_universal_discount_price(ptype, pcity)
 }
 
 /**************************************************************************
-...Make a copy of the improvements object list that is an array sorted 
+...Make a copy of the improvements object list that is an array sorted
    by genus and alphabet. Why? Because this is easier to search through
    than the "Advisor-prioritised order" in the ruleset.
 **************************************************************************/
@@ -318,11 +318,11 @@ function genus_sorts_lower(g1, g2) {
   // Re-order the genera:
   if (g1==0) g1 = 1;      // wonders second
   else if (g1==2) g1 = 0; // improvs first. (spaceship,coinage last)
-  if (g2==0) g2 = 1; 
+  if (g2==0) g2 = 1;
   else if (g2==2) g2 = 0;
   // Now we have 0=building, 1=wonder, 3=coinage or spaceship:
   if (g1 < g2)  return SORT_BEFORE;
   if (g1 == g2) return SORT_SAME;
-  return SORT_AFTER; 
+  return SORT_AFTER;
 }
 

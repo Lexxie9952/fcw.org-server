@@ -6,15 +6,15 @@ If including art on an instance with public access, abide by the below:
    2. Only an original author can release a copyright to render Art as
       General Public License ("GPL".) Artistic content ("Material") does
       not become licensed as GPL unless submitted as GPL by its author or
-      designated legal agent. 
-   3. Including such Material in a repository for copy or download may be 
+      designated legal agent.
+   3. Including such Material in a repository for copy or download may be
       a copyright and/or license violation if no other licensing was made
       operative. This includes copyrighted Material which would otherwise be
       permissibly represented/reproduced under Fair Use provisions or other
       licensing.
    4. Non-GPL Material may be accessed by a project ("Instance") under Fair
       Use, other licensing, and/or exemptions. In many cases, this Material
-      may NOT be distributed in the public respository of said project. 
+      may NOT be distributed in the public respository of said project.
       Moreover, in such cases, non-GPL Material must be non-essential to the
       function of the Instance and established as external to the project.
       Other restrictions may be operative.
@@ -25,7 +25,7 @@ If including art on an instance with public access, abide by the below:
       or inaccurate. When accessing non-GPL content, independently supplied
       content, Creative Commons or other licensed content, or Fair Use content,
       it is strongly advised to retain qualified legal counsel on
-      Intellectual Property law. 
+      Intellectual Property law.
    7. An AGPL Instance which accesses alternative licensed Material in most cases
       must operate with non-dependence on the aforementioned; that is, not be
       dependent upon that Material for it to perform any of its essential purposes,
@@ -38,7 +38,7 @@ If including art on an instance with public access, abide by the below:
 The Freeciv-Web project cannot know the jurisdiction nor individual ownership
 and/or sub-licensing of Art of any particular Instance of Freeciv-Web. Any
 accessed Material partaken by individual Instances must be clearly separated
-from the project and be non-essential to the function of the Instance. 
+from the project and be non-essential to the function of the Instance.
 ******************************************************************************/
 
 
@@ -60,27 +60,27 @@ from the project and be non-essential to the function of the Instance.
 /* The const declaration below represents external and non-essential Material
    to be accessed by an audio component within the project which runs in a
    separate thread as background music.
-   
+
    The data keys are tags that the internal "DJ" uses to select the contnet
    you specify by tags. See music.js if you wish to modify or replace with your
    own DJ/tag system.
 
    You may modify the URL data below to reference your own external Material,
    the supplied GPL material internal to the project, or any other legally
-   accessible external Material. */ 
-   const music_list = { 
+   accessible external Material. */
+   const music_list = {
     "brk_style1": // european *
     [
-      "breaks/british",  
-      "breaks/byzantine",  
-      "breaks/french",  
-      "breaks/goth",  
+      "breaks/british",
+      "breaks/byzantine",
+      "breaks/french",
+      "breaks/goth",
       "breaks/italian",
-      "breaks/magyar",  
-      "breaks/portuguese",  
-      "breaks/slav",  
-      "breaks/spanish",  
-      "breaks/teuton",  
+      "breaks/magyar",
+      "breaks/portuguese",
+      "breaks/slav",
+      "breaks/spanish",
+      "breaks/teuton",
       "breaks/viking",
       "breaks/ambientbreak1",
       "breaks/wardrumbreak",
@@ -123,12 +123,12 @@ from the project and be non-essential to the function of the Instance.
     ],
   "brk_style3": // tropical *
     [
-      "breaks/aztec",  
-      "breaks/inca",  
+      "breaks/aztec",
+      "breaks/inca",
       "breaks/ambientbreak1",
-      "breaks/mayan",  
-      "breaks/teuton",  
-      "breaks/hun",  
+      "breaks/mayan",
+      "breaks/teuton",
+      "breaks/hun",
       "breaks/mongol",
       "breaks/tropicalbreak",
       "breaks/tropicalbreak3",
@@ -148,18 +148,18 @@ from the project and be non-essential to the function of the Instance.
     ],
   "brk_style4": // asian *
     [
-      "breaks/burmese",  
-      "breaks/chinese",  
+      "breaks/burmese",
+      "breaks/chinese",
       "breaks/ambientbreak1",
-      "breaks/goth",  
-      "breaks/hun",  
-      "breaks/indian",  
+      "breaks/goth",
+      "breaks/hun",
+      "breaks/indian",
       "breaks/japanese",
-      "breaks/khmer",  
-      "breaks/korean",  
-      "breaks/malay",  
-      "breaks/mongol",  
-      "breaks/vietnamese",  
+      "breaks/khmer",
+      "breaks/korean",
+      "breaks/malay",
+      "breaks/mongol",
+      "breaks/vietnamese",
       "breaks/teuton",
       "breaks/wardrumbreak",
       "breaks/gong1",
@@ -176,17 +176,17 @@ from the project and be non-essential to the function of the Instance.
     ],
   "brk_style5": // babylonian *
     [
-      "breaks/berber",  
-      "breaks/byzantine",  
+      "breaks/berber",
+      "breaks/byzantine",
       "breaks/ambientbreak1",
-      "breaks/ethiopian",  
-      "breaks/indian",  
-      "breaks/malian",  
-      "breaks/persian",  
-      "breaks/saracen",  
-      "breaks/slav",  
-      "breaks/spanish",  
-      "breaks/teuton",  
+      "breaks/ethiopian",
+      "breaks/indian",
+      "breaks/malian",
+      "breaks/persian",
+      "breaks/saracen",
+      "breaks/slav",
+      "breaks/spanish",
+      "breaks/teuton",
       "breaks/Saladin_Middle_Intro",
       "breaks/wardrumbreak",
       "breaks/SitarSlide",
@@ -203,15 +203,15 @@ from the project and be non-essential to the function of the Instance.
     ],
   "brk_style6": // celtic *
     [
-      "breaks/british", 
-      "breaks/celt",  
+      "breaks/british",
+      "breaks/celt",
       "breaks/ambientbreak1",
-      "breaks/teuton",  
-      "breaks/goth",  
-      "breaks/hun",  
-      "breaks/italian",  
-      "breaks/magyar",  
-      "breaks/viking",  
+      "breaks/teuton",
+      "breaks/goth",
+      "breaks/hun",
+      "breaks/italian",
+      "breaks/magyar",
+      "breaks/viking",
       "breaks/slav",
       "breaks/ShofarCall",
       "breaks/wardrumbreak",
@@ -253,7 +253,7 @@ from the project and be non-essential to the function of the Instance.
     ],
     "brk_style8": // northern *
     [
-      "breaks/aztec", 
+      "breaks/aztec",
       "breaks/dekadrum",
       "breaks/ambientbreak1",
       "breaks/goth",
@@ -312,7 +312,7 @@ from the project and be non-essential to the function of the Instance.
       "tribal/Paleo4",
       "tribal/Paleo5",
       "tribal/Paleowolf",
-      "tribal/Neolithic", 
+      "tribal/Neolithic",
       "tribal/AiwuDrums",
       "tribal/Mammoth",
       "tribal/Chant2",

@@ -173,7 +173,7 @@ function setup_window_size ()
     $('#ui-id-12').parent().show();  // unhide messagebox title
     $(".ui-dialog-titlebar").css({"font-size":"70%", "margin-left":"-3px"});
     $("#game_status_panel_bottom").css("font-size", "0.8em");
-  } else {  // handle case where small window is resized to large again 
+  } else {  // handle case where small window is resized to large again
     $("#map_tab").children().html("<img style='float:left; margin-right:5px;' src='/images/map_tab_icon.png'> Map");
     $("#empire_tab").children().html("<img style='float:left; margin-right:5px;' src='/images/empire_tab_icon.png'> Empire");
     $("#civ_tab").children().html("<img style='float:left; margin-right:5px;' src='/images/gov_tab_icon.png'> Gov.");
@@ -284,7 +284,7 @@ function show_new_game_message()
       "Click on units for giving them orders, and drag units on the map to move them.\n" +
       "Good luck, and have a lot of fun!\n<br><br>This message window reports game events. " +
       "<i style='color:#fed'>Tap the yellow <b>minimize button</b> at the top to enter the game</i>. You can return here to view " +
-      "game messages by hitting the maximize button."; 
+      "game messages by hitting the maximize button.";
 
   } else if (client.conn.playing != null && !game_loaded) {
     var pplayer = client.conn.playing;
@@ -348,7 +348,7 @@ function show_endgame_dialog()
   for (var i = 0; i < endgame_player_info.length; i++) {
     var pplayer = players[endgame_player_info[i]['player_id']];
     var nation_adj = nations[pplayer['nation']]['adjective'];
-    message += (i+1) + ": The " + nation_adj + " ruler " + pplayer['name'] 
+    message += (i+1) + ": The " + nation_adj + " ruler " + pplayer['name']
       + " scored " + endgame_player_info[i]['score'] + " points" + "<br>";
   }
 
@@ -391,7 +391,7 @@ function show_endgame_dialog()
 function update_metamessage_on_gamestart()
 {
   if (!observing && !metamessage_changed && client.conn.playing != null
-      && client.conn.playing['pid'] == players[0]['pid'] 
+      && client.conn.playing['pid'] == players[0]['pid']
       && $.getUrlVar('action') == "new") {
     var pplayer = client.conn.playing;
     var metasuggest = capitalize(username) + " ruler of the " + nations[pplayer['nation']]['adjective'] + ".";
@@ -399,7 +399,7 @@ function update_metamessage_on_gamestart()
     setInterval(update_metamessage_game_running_status, 200000);
   }
 
-  if ($.getUrlVar('action') == "new" || $.getUrlVar('action') == "earthload" 
+  if ($.getUrlVar('action') == "new" || $.getUrlVar('action') == "earthload"
       || $.getUrlVar('scenario') == "true") {
     if (renderer == RENDERER_2DCANVAS) {
       $.post("/freeciv_time_played_stats?type=single2d").fail(function() {});

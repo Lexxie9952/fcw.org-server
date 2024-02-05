@@ -59,7 +59,7 @@ function popup_pillage_selection_dialog(punit)
       id     : button_id_prefix + extra_id,
       'class': 'act_sel_button',
       text   : extras[extra_id]['name'] + (regular_pillage_available ? " -- "+unit_get_pillage_name(punit)+": "+odds+"%" : ""),
-      click  : function() { pillage_target_selected(event); remove_active_dialog(id); /* might need "#"+id*/ 
+      click  : function() { pillage_target_selected(event); remove_active_dialog(id); /* might need "#"+id*/
                             setTimeout(update_unit_focus, update_focus_delay); }
     });
   }
@@ -117,7 +117,7 @@ function popup_pillage_selection_dialog(punit)
 function pillage_target_selected(ev)
 {
   // Standard Pillage: flag overrides iPillage default action.
-  const ACTIVITY_IPILLAGE_OVERRIDE_FLAG = 1024; 
+  const ACTIVITY_IPILLAGE_OVERRIDE_FLAG = 1024;
 
   var id = ev.target.id;
   var params, extra_id;
@@ -133,6 +133,6 @@ function pillage_target_selected(ev)
   }
   request_new_unit_activity(units[parseInt(params[1], 10)],
                             ACTIVITY_PILLAGE, extra_id);
-  
+
   remove_active_dialog(id);
 }

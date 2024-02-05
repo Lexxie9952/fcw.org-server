@@ -30,7 +30,7 @@ var update_player_info_pregame_queued = false;
 var password_reset_count = 0;
 var google_user_token = null;
 /* uncomment specific browsers as needed for correcting client behavior based
-   on whatever quirks they have, then make a detector and set the var in 
+   on whatever quirks they have, then make a detector and set the var in
    check_browser_compatibility, below */
 var browser = {
   "opera": false,
@@ -72,7 +72,7 @@ function pregame_start_game()
   /* Handled now in client_main.js:set_client_state right when it transitions to
      show game page:
      popup_fullscreen_enter_game_dialog();
-  */ 
+  */
 }
 
 /****************************************************************************
@@ -114,10 +114,10 @@ function observe()
 ****************************************************************************/
 function check_browser_compatibility()
 {
-   
+
   browser.opera = (!!window.opr && !!opr.addons) || !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0; // Opera 8.0+
   /*  var isFirefox = typeof InstallTrigger !== 'undefined';  // Firefox 1.0+
-    // Safari 3.0+ "[object HTMLElementConstructor]" 
+    // Safari 3.0+ "[object HTMLElementConstructor]"
     var isSafari = /constructor/i.test(window.HTMLElement) || (function (p) { return p.toString() === "[object SafariRemoteNotification]"; })(!window['safari'] || (typeof safari !== 'undefined' && safari.pushNotification));
   */
   browser.ie = /* @cc_on!@ || */ !!document.documentMode;  // Internet Explorer 6-11
@@ -127,18 +127,18 @@ function check_browser_compatibility()
     var isBlink = (isChrome || isOpera) && !!window.CSS;   // Blink engine detection
   */
   if (browser.ie) {
-    swal({   
-      title: "INCOMPATIBLE BROWSER",   
+    swal({
+      title: "INCOMPATIBLE BROWSER",
       text: "Internet Explorer is not supported. Freeciv-Web is a game with video graphics that " +
-            "require a modern browser. Internet Explorer is obsolete, and was replaced " + 
-            "by Microsoft's Edge browser. We suggest downloading a modern browser and coming " + 
+            "require a modern browser. Internet Explorer is obsolete, and was replaced " +
+            "by Microsoft's Edge browser. We suggest downloading a modern browser and coming " +
             "back to play! Suggestions: Chrome, Opera, Firefox, Safari, Chromium, or Edge. " +
             "Hope to see you soon!",
-      type: "warning",   showCancelButton: false,   
-      confirmButtonColor: "#DD6B55",   
-      confirmButtonText: "OK",   
-      closeOnConfirm: true }, 
-      function(){   
+      type: "warning",   showCancelButton: false,
+      confirmButtonColor: "#DD6B55",
+      confirmButtonText: "OK",
+      closeOnConfirm: true },
+      function(){
         console.log("Incompatible browser: Internet Explorer.");
         $(window).off('beforeunload'); // remove "do you really want to leave?" pop-up
         window.location = 'https://www.google.com/chrome/';
@@ -334,19 +334,19 @@ function update_player_info_pregame_real()
 
 /****************************************************************************
   Draw a nation from a list of playable nations in an ongoing longturn game.
-  Sadly, we can't can just use the AI nation the player is taking over, because 
-  that opens up the possibility of a double nation bug (Player1 joins and 
-  chooses Israel. Player2 joins, chooses to "draw" and takes over an AI Israel.) 
+  Sadly, we can't can just use the AI nation the player is taking over, because
+  that opens up the possibility of a double nation bug (Player1 joins and
+  chooses Israel. Player2 joins, chooses to "draw" and takes over an AI Israel.)
 ****************************************************************************/
 function draw_random_nation_ongoing_longturn(player_nations)
 {
     var available_nations = [];
-    for (nation_id in nations) {               
+    for (nation_id in nations) {
         if (nations[nation_id]['is_playable'] && !(nation_id in player_nations)) available_nations.push({'id' : nation_id, 'nation' : nations[nation_id]});
     }
     chosen_nation = parseInt(available_nations[Math.floor(Math.random() * available_nations.length)]['id']);
     $("#pick_nation_dialog").dialog( "close" );
-    submit_nation_choice_ongoing_longturn();        
+    submit_nation_choice_ongoing_longturn();
 }
 
 /****************************************************************************
@@ -365,8 +365,8 @@ function pick_nation_ongoing_longturn()
 }
 
 /**********************************************************************//**
-  Returns the # of turns idle a player has to be, at this point in the 
-  game, to be taken over by a latejoiner player. Keep this code 
+  Returns the # of turns idle a player has to be, at this point in the
+  game, to be taken over by a latejoiner player. Keep this code
   identical with connecthand.c:can_take_idler_turns() ********* !!!
 **************************************************************************/
 function can_take_idler_turns()
@@ -381,7 +381,7 @@ function can_take_idler_turns()
 
   var threshold = 2;
   if (game_info.turn >= 6 && game_info.turn <= 20) threshold = 3;
-  else if (game_info.turn >= 20 && game_info.turn < 25) threshold = 4;  
+  else if (game_info.turn >= 20 && game_info.turn < 25) threshold = 4;
   else if (game_info.turn >= 25 && game_info.turn < 30) threshold = 5;
   else if (game_info.turn >= 30 && game_info.turn < 35) threshold = 6;
   else if (game_info.turn >= 35) threshold = 7;
@@ -398,8 +398,8 @@ function pick_nation(player_id)
   if (C_S_RUNNING == client_state()) return;
 
   if (player_id == null) player_id = client.conn['player_num'];
-  var pplayer = players[player_id]; 
-  var player_nations = {};    
+  var pplayer = players[player_id];
+  var player_nations = {};
 
   if (pplayer == null && !is_ongoing_longturn()) {
     if (DEBUG_PICK_NATION) console.log("Unable to pick nation because pplayer==null && !is_ongoing_longturn()");
@@ -409,7 +409,7 @@ function pick_nation(player_id)
 
   var player_name = !is_ongoing_longturn() ? pplayer['name'] : simpleStorage.get("username", "");
 
-  if (is_ongoing_longturn()) { 
+  if (is_ongoing_longturn()) {
     /* If player took an idler they can't change the nation of it: */
     var idle_cutoff = can_take_idler_turns();
     if (pplayer && pplayer['nturns_idle'] !== undefined && pplayer['nturns_idle'] >= idle_cutoff) {
@@ -423,7 +423,7 @@ function pick_nation(player_id)
              the player was assigned an idler; we actually try to assign non-idlers
              first ....
             if (players[id]['nturns_idle'] >= idle_cutoff) return;
-            else 
+            else
             // The joining player would have taken over an idler, don't show the dialog
           */
             player_nations[players[id]['nation']] = true;
@@ -442,7 +442,7 @@ function pick_nation(player_id)
   /* prepare a list of flags and nations. */
   var nation_name_list = [];
 
-  for (var nation_id in nations) {    
+  for (var nation_id in nations) {
     var pnation = nations[nation_id];
     if (pnation['is_playable'] && (!is_ongoing_longturn() || !(nation_id in player_nations))) {
       nations_html += "<div class='nation_pickme_line' onclick='select_nation(" + nation_id + ");'>"
@@ -455,7 +455,7 @@ function pick_nation(player_id)
 
   nations_html += "</div><div id='nation_style_choices'></div>"
                + "<div id='nation_legend'></div><div id='select_nation_flag'></div>";
-                
+
 
   var buttons = { "1" : { id: "play", text:"Play this nation!", click: function() { if (chosen_nation != -1) {
                                                                                         $("#pick_nation_dialog").dialog('close');
@@ -467,7 +467,7 @@ function pick_nation(player_id)
 
   if (is_ongoing_longturn()) {
     buttons["3"] = { id: "random", text: "Pick a random nation", click: function() { draw_random_nation_ongoing_longturn(player_nations); } }
-  }     
+  }
 
   $("#pick_nation_dialog").html(nations_html);
   $("#pick_nation_dialog").attr("title", "What Nation Will " + player_name + " Be Ruler Of?");
@@ -479,7 +479,7 @@ function pick_nation(player_id)
             height: $(window).height() - 100,
       buttons: buttons
     });
-  
+
   $("#nation_legend").html("Please choose the nation for " + player_name + ".");
 
 
@@ -496,16 +496,16 @@ function pick_nation(player_id)
   }
 
   if (is_ongoing_longturn()) {
-    $(".ui-dialog-titlebar-close").css("display", "none");    
+    $(".ui-dialog-titlebar-close").css("display", "none");
     $(".ui-dialog-buttonpane").css("width","100%");
     /* Removing the paddings, because I wasn't able to find the default width of the pane (width of 100% + the paddings
     resulted in clipping and a scrollbar) so instead the button margins are set to the default JQuery Dialog value
-    of the right button (the left one doesn't have a margin by default because the default float for the whole buttonset is right) 
+    of the right button (the left one doesn't have a margin by default because the default float for the whole buttonset is right)
     + the value of the respective buttonpane paddings */
     $(".ui-dialog-buttonpane").css("padding-right","0em");
-    $(".ui-dialog-buttonpane").css("padding-left","0em");    
+    $(".ui-dialog-buttonpane").css("padding-left","0em");
     $(".ui-dialog-buttonset").css("width","100%");
-    $("#play").css("float","right");    
+    $("#play").css("float","right");
     $("#play").css("margin-right","1.4em");
     $("#customize").css("float","right");
     $("#random").css("float","left");
@@ -569,7 +569,7 @@ function render_city_style_list()
     var pstyle = city_rules[style_id];
     if (pstyle['rule_name'] == "Industrial") break;  // Beginning of generic styles for all civs
     city_style_html += pstyle['rule_name'] + ":<br>"
-          + "<canvas id='city_style_" + style_id 
+          + "<canvas id='city_style_" + style_id
           + "' data-style-id='" + style_id + "' width='96' height='72' style='cursor: pointer;'></canvas><br>";
   }
   $("#nation_style_choices").html(city_style_html);
@@ -635,9 +635,9 @@ function submit_nation_choice_ongoing_longturn()
   }
   else return;
 
-  var test_packet = {"pid" : packet_ongoing_longturn_nation_select_req, 
+  var test_packet = {"pid" : packet_ongoing_longturn_nation_select_req,
                    "nation_no" : chosen_nation,
-                   "is_male" : true, 
+                   "is_male" : true,
                    "style": style};
 
   send_request(JSON.stringify(test_packet));
@@ -651,13 +651,13 @@ function submit_nation_choice_ongoing_longturn()
 ****************************************************************************/
 function submit_nation_choice()
 {
-  if (chosen_nation == -1 || client.conn['player_num'] == null 
+  if (chosen_nation == -1 || client.conn['player_num'] == null
       || choosing_player == null || choosing_player < 0) return;
 
   var pplayer = players[choosing_player];
   if (pplayer == null) return;
 
-  var leader_name = pplayer['name']; 
+  var leader_name = pplayer['name'];
 
   if (pplayer['flags'].isSet(PLRF_AI)) {
     leader_name = nations[chosen_nation]['leader_name'][0];
@@ -706,14 +706,14 @@ function ruledir_from_ruleset_name(ruleset_name, fall_back_dir)
     case "Avant-garde":
       return "mp2-ag";
     default:
-      /* Prevent the need of hardcoding this client function for every new ruleset, by 
+      /* Prevent the need of hardcoding this client function for every new ruleset, by
         making a way for fall_back_dir to match the name of the ruleset automatically:
         dir_name will be forced to lowercase and replace spaces with hyphen ("-")
         In other words, in game.ruleset, name your ruleset the same as the dir name,
         then you won't have to change this function. */
       if (!fall_back_dir) {
         fall_back_dir = ruleset_name.toLowerCase().replace(" ","-");
-      } 
+      }
       console.log("Don't know the ruleset dir of \"" + ruleset_name
                   + "\". Guessing \"" + fall_back_dir + "\".");
       return fall_back_dir; // af
@@ -745,7 +745,7 @@ function show_ruleset_description_full() {
                                                          "height"),
                  width   : ($(window).width<900?"95%":856)
                });
-  $(id).css("color", default_dialog_text_color);        
+  $(id).css("color", default_dialog_text_color);
 }
 
 /****************************************************************************
@@ -888,22 +888,22 @@ function pregame_settings()
       && server_settings['landmass']['val'] != null) {
     $("#landmass").val(server_settings['landmass']['val']);
   }
-    
+
   if (server_settings['globalwarming_percent'] != null
       && server_settings['globalwarming_percent']['val'] != null) {
     $("#global_warming_percent").val(server_settings['globalwarming_percent']['val']);
   }
-    
+
   if (server_settings['globalwarming'] != null
       && server_settings['globalwarming']['val'] != null) {
     $("#global_warming").val(server_settings['globalwarming']['val']);
   }
-    
+
   if (server_settings['nuclearwinter_percent'] != null
       && server_settings['nuclearwinter_percent']['val'] != null) {
     $("#nuclear_winter_percent").val(server_settings['nuclearwinter_percent']['val']);
   }
-    
+
   if (server_settings['nuclearwinter'] != null
       && server_settings['nuclearwinter']['val'] != null) {
     $("#nuclear_winter").val(server_settings['nuclearwinter']['val']);
@@ -946,7 +946,7 @@ function pregame_settings()
     $("#generator").val(server_settings['generator']['support_names'][
                         server_settings['generator']['val']]);
   }
-      
+
   if (server_settings['temperature'] != null
       && server_settings['temperature']['val'] != null) {
     /* TODO: Should probably be auto generated from setting so help text,
@@ -983,7 +983,7 @@ function pregame_settings()
   }
 
   $(id).dialog('open');
-  $(id).css("color", default_dialog_text_color);        
+  $(id).css("color", default_dialog_text_color);
 
   $('#aifill').change(function() {
     if (parseInt($('#aifill').val()) <= 12) {
@@ -1036,7 +1036,7 @@ function pregame_settings()
   $('#landmass').change(function() {
     send_message("/set landmass " + $('#landmass').val());
   });
-    
+
   $('#global_warming_percent').change(function() {
     send_message("/set globalwarming_percent " + $('#global_warming_percent').val());
   });
@@ -1061,7 +1061,7 @@ function pregame_settings()
   $('#generator').change(function() {
     send_message("/set generator " + $('#generator').val());
   });
-      
+
   $('#temperature').change(function() {
     send_message("/set temperature " + $('#temperature').val());
   });
@@ -1076,16 +1076,16 @@ function pregame_settings()
   });
 
   $('#password').change(function() {
-    swal({   
-      title: "Really set game password?",   
+    swal({
+      title: "Really set game password?",
       text: "Setting a password on this game means that other players can not join this game " +
             "unless they know this password. In multiplayer games, be sure to ask the other players " +
-            "about setting a password.",   
-      type: "warning",   showCancelButton: true,   
-      confirmButtonColor: "#DD6B55",   
-      confirmButtonText: "Yes, set game password",   
-      closeOnConfirm: true }, 
-      function(){   
+            "about setting a password.",
+      type: "warning",   showCancelButton: true,
+      confirmButtonColor: "#DD6B55",
+      confirmButtonText: "Yes, set game password",
+      closeOnConfirm: true },
+      function(){
         var pwd_packet = {"pid" : packet_authentication_reply, "password" : $('#password').val()};
         send_request(JSON.stringify(pwd_packet));
 
@@ -1130,7 +1130,7 @@ function pregame_settings()
   });
 
   $('#scorelog_setting').change(function() {
-    var scorelog_enabled = $('#scorelog_setting').prop('checked');  
+    var scorelog_enabled = $('#scorelog_setting').prop('checked');
     if (scorelog_enabled) {
       send_message("/set scorelog enabled");
     } else {

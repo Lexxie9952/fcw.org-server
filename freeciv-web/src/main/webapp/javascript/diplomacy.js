@@ -33,7 +33,7 @@ var clause_infos = {};
 var diplomacy_clause_map = {};
 
 // sneaky way to send second parameter to key listener.
-var last_dialog_counterpart = -1; 
+var last_dialog_counterpart = -1;
 
 /**************************************************************************
  ...
@@ -243,7 +243,7 @@ function client_diplomacy_clause_string(counterpart, giver, type, value)
   var nation = nations[pplayer['nation']]['adjective'];
 
   /* FIXME: server sends out giver and counterpart as the same player when
-     it offers a dipl_state clause to the counterpart (i.e., to the 
+     it offers a dipl_state clause to the counterpart (i.e., to the
      receiver/non-giver). This hack fixes it. TODO: fix the server @
      diplhand.c::handle_diplomacy_create_clause_req */
   if (counterpart == giver && value == 1) {
@@ -251,7 +251,7 @@ function client_diplomacy_clause_string(counterpart, giver, type, value)
   }
 
   var cb1 = players[counterpart].diplstates[giver]['has_reason_to_cancel'];
-  var cb2 = players[giver].diplstates[counterpart]['has_reason_to_cancel'];  
+  var cb2 = players[giver].diplstates[counterpart]['has_reason_to_cancel'];
   const casus_belli = cb1 || cb2;
   const giver_state = players[giver].diplstates[counterpart].state;
   const counterpart_state = players[counterpart].diplstates[giver].state;
@@ -259,8 +259,8 @@ function client_diplomacy_clause_string(counterpart, giver, type, value)
      for one or the other may not be known. OR'ing them together always
      results in the correct dipl_state: */
   const dipl_state = giver_state | counterpart_state;
-  const new_clause_is_old_state = 
-    (type == CLAUSE_CEASEFIRE && dipl_state == DS_CEASEFIRE) 
+  const new_clause_is_old_state =
+    (type == CLAUSE_CEASEFIRE && dipl_state == DS_CEASEFIRE)
     || (type == CLAUSE_PEACE && dipl_state == DS_ARMISTICE)
     || (type == CLAUSE_PEACE && dipl_state == DS_PEACE)
     || (type == CLAUSE_ALLIANCE && dipl_state == DS_ALLIANCE);
@@ -356,16 +356,16 @@ function create_diplomacy_dialog(counterpart, template) {
   var pplayer = client.conn.playing;
   var counterpart_id = counterpart['playerno'];
 
-  var counterpart_nation_flag = "/images/e/flag/" 
+  var counterpart_nation_flag = "/images/e/flag/"
                               + nations[counterpart['nation']].graphic_str
                               + ".png";
 
   var embassy_meeting;
   // Whether meeting via embassy
-  if ( !(client_rules_flag[CRF_PACTS_SANS_EMBASSY]) ) 
+  if ( !(client_rules_flag[CRF_PACTS_SANS_EMBASSY]) )
        embassy_meeting = true;
-  else embassy_meeting = pplayer.real_embassy[counterpart['playerno']] 
-       || counterpart.real_embassy[pplayer['playerno']];     
+  else embassy_meeting = pplayer.real_embassy[counterpart['playerno']]
+       || counterpart.real_embassy[pplayer['playerno']];
 
   $("#game_page").append(template({
     self: meeting_template_data(embassy_meeting, pplayer, counterpart),
@@ -375,13 +375,13 @@ function create_diplomacy_dialog(counterpart, template) {
   var title = " Diplomacy: " + counterpart['name']
 		 + " of the " + nations[counterpart['nation']]['adjective'];
 
-  var dialog_id = "#diplomacy_dialog_"+counterpart_id;   
+  var dialog_id = "#diplomacy_dialog_"+counterpart_id;
   var diplomacy_dialog = $(dialog_id);
 
   // Set dialog height - (more height is better for fitting more clauses)
   var dialog_height = 500; // 500 minimum
   if ($(window).height()>550) dialog_height = $(window).height() - 50;
-  if (dialog_height > 600) dialog_height = 600;  
+  if (dialog_height > 600) dialog_height = 600;
 
   diplomacy_dialog.dialog({
       title: title,
@@ -423,7 +423,7 @@ function create_diplomacy_dialog(counterpart, template) {
      $(dialog_id).parent().children().first().children().first().html(
          "<img title='"+title+"' height='15' src='"+counterpart_nation_flag+"'>"
          + $(dialog_id).parent().children().first().children().first().html());
-  
+
   if (is_small_screen()) {
     $(dialog_id).css("padding", "0px");
     $(dialog_id).parent().children().first().css("font-size", "70%");
@@ -501,9 +501,9 @@ function create_diplomacy_dialog(counterpart, template) {
 
 /**************************************************************************
  Custom registration for diplomacy dialog, so that proper cleanup triggered
- when player hits 'W' to close pop-up dialog.  
+ when player hits 'W' to close pop-up dialog.
 **************************************************************************/
-function diplomacy_dialog_register(id, counterpart_id) 
+function diplomacy_dialog_register(id, counterpart_id)
 {
   $(id).dialog('widget').keydown(
     function() {
@@ -511,7 +511,7 @@ function diplomacy_dialog_register(id, counterpart_id)
       last_dialog_counterpart = counterpart_id;
       diplomacy_dialog_key_listener(event);
     });
-  $(id).dialog({ autoOpen: true }).bind('dialogclose', function(event, ui) { 
+  $(id).dialog({ autoOpen: true }).bind('dialogclose', function(event, ui) {
     cancel_meeting_req(counterpart_id);
   });
 
@@ -523,7 +523,7 @@ function diplomacy_dialog_key_listener(ev)
 {
 /* Get counterpart_id from global var that was set microseconds ago by
    the wrapper to this (since keylistener can't take a second parameter): */
-  counterpart_id = last_dialog_counterpart;  
+  counterpart_id = last_dialog_counterpart;
   // Check if focus is in chat field, where these keyboard events are ignored.
   if ($('input:focus').length > 0 || !keyboard_input) return;
   if (C_S_RUNNING != client_state()) return;

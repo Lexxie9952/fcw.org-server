@@ -37,10 +37,10 @@ function update_nation_screen()
   var wide_screen = $(window).width()<1340 ? false : true;
   var narrow_screen = $(window).width()<1000 ? true : false;
   var small_screen = is_small_screen();
-  var landscape_screen = $(window).width() > $(window).height() ? true : false; 
+  var landscape_screen = $(window).width() > $(window).height() ? true : false;
   var tiny_screen=false;
   var redux_screen=false;  // mid-size screen
-  
+
   // narrow screen triggers tiny screen (becase we need width for city rows)
   // if small_screen and not landscape, that's also a tiny screen:
   if (small_screen || narrow_screen) {
@@ -117,9 +117,9 @@ function update_nation_screen()
     if (gov_text_modifier) gov_text_modifier +=" ";
     var gov_indicator = (pplayer['government'] || player_gov_known(pplayer))
                       ? "<img class='lowered_gov' src='/images/e/"+governments[pplayer['government']]['name'].toLowerCase() + gov_modifier+".png' title='"
-                        + gov_text_modifier+governments[pplayer['government']]['name']+"'>" 
-                      : "<img class='lowered_gov' src='/images/e/unknowngov.png' title='Unknown Government'>"; 
-    nation_list_html += "<td style='text-align:left;'>" + pplayer['name'] + "</td><td style='text-align:left;' title=\"" 
+                        + gov_text_modifier+governments[pplayer['government']]['name']+"'>"
+                      : "<img class='lowered_gov' src='/images/e/unknowngov.png' title='Unknown Government'>";
+    nation_list_html += "<td style='text-align:left;'>" + pplayer['name'] + "</td><td style='text-align:left;' title=\""
           + html_safe(nations[pplayer['nation']]['legend']) + "\">"
           + gov_indicator + "&nbsp;" + nations[pplayer['nation']]['adjective']  + "</td>"
        + "<td class='nation_attitude'>" + col_love(pplayer) + "</td>"
@@ -129,7 +129,7 @@ function update_nation_screen()
 	   + (pplayer['is_alive'] ? "Alive" : "Dead") +  "</td>";
 
     var our_cb = !observer ? players[client.conn.playing['playerno']].diplstates[player_id]['has_reason_to_cancel'] : 0;
-    var their_cb = !observer ? players[player_id].diplstates[client.conn.playing['playerno']]['has_reason_to_cancel'] : 0;  
+    var their_cb = !observer ? players[player_id].diplstates[client.conn.playing['playerno']]['has_reason_to_cancel'] : 0;
     var contact_time=0;
     if (!observer && client.conn.playing != null && diplstates[player_id] != null && player_id != client.conn.playing['playerno']) {
       /* Former way: we checked the other player's contact turns with us instead of ours with them; yet we are not always privvy
@@ -154,10 +154,10 @@ function update_nation_screen()
           // only cur_player has casus belli, not row player:
           else dstate = "<span title='We have "+pluralize("turn",our_cb)+" Casus Belli' style='color:#ff8000'><u>"+dstate+"</u>&#8224;</span>";
         }
-        // only row player has casus belli against cur player: 
+        // only row player has casus belli against cur player:
         else if (their_cb) {
           dstate = "<span title='They have "+pluralize("turn",their_cb)+" Casus Belli' style='color:#ffe000'><u>"+dstate+"</u>&#x2021;</span>";
-        } 
+        }
       }
       nation_list_html += "<td style='text-align:center'>" + dstate +pact_time+"</td>";
     } else {
@@ -166,7 +166,7 @@ function update_nation_screen()
 
     // Alternate text if no embassy, show contact_turns instead:
     var embassy_status = get_embassy_text(player_id);
-    
+
     // Abbreviate for smaller screen
     if (redux_screen || tiny_screen)
       embassy_status = embassy_status.replace(" embassy", "");  // e.g., "They have embassy" >> "They have"
@@ -291,25 +291,25 @@ function update_nation_screen()
   $("#nation_table").tooltip({
     show: { delay:500, effect:"none", duration: 0 }, hide: {delay:0, effect:"none", duration: 0}
   });
-  
+
   if (tiny_screen) {
     //console.log("Resetting tiny")
     $("#nation_table").css({"zoom":"0.6", "-moz-transform":"0.6"});  // -40% scaling if screen is small
-    $("#nation_header_row").css({"font-size":"90%"}); 
+    $("#nation_header_row").css({"font-size":"90%"});
     $("#nations_title").css({"zoom":"0.85", "-moz-transform":"0.85"});  // -40% scaling if screen is small
     $("#nations_button_div").css({"zoom":"74%"});
-    $("#nations_label").css({"zoom":"85%"});     
+    $("#nations_label").css({"zoom":"85%"});
   }
   else if (redux_screen) {
     //console.log("Resetting redux")
     $("#city_table").css({"zoom":"0.91", "-moz-transform":"0.91"});  // -9% scaling if screen is only slightly smaller
-    $("#nation_header_row").css({"font-size":"90%"});  
+    $("#nation_header_row").css({"font-size":"90%"});
   }
 }
 
 
 /**************************************************************************
- Server sends the same code for unknown_gov and Anarchy. It's up to the 
+ Server sends the same code for unknown_gov and Anarchy. It's up to the
  client to figure out which by using deductive logic.
 **************************************************************************/
 function player_gov_known(pplayer) {
@@ -447,7 +447,7 @@ function select_a_nation()
   } else {
     $('#cancel_treaty_button').button("disable");
   }
-  
+
   if (can_client_control() && !selected_myself) {
     if (diplstates[player_id] == DS_CEASEFIRE || diplstates[player_id] == DS_ARMISTICE || diplstates[player_id] == DS_PEACE) {
       $("#cancel_treaty_button").button("option", "label", "Declare war");
@@ -637,7 +637,7 @@ function aitoggle_player(player_name)
 function center_on_player()
 {
   // This function is sometimes called from Nations Tab and should switch
-  // to map tab first.  
+  // to map tab first.
   if ($("#tabs").tabs("option", "active") != TAB_MAP)
     $("#tabs").tabs("option", "active", TAB_MAP);
 

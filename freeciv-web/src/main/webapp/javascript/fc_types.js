@@ -50,7 +50,7 @@ var ACTIVITY_PILLAGE = 9;
 var ACTIVITY_GOTO = 10;
 var ACTIVITY_EXPLORE = 11;
 var ACTIVITY_TRANSFORM = 12;
-var ACTIVITY_UNUSED = 13; 
+var ACTIVITY_UNUSED = 13;
 var ACTIVITY_VIGIL = 13; // not unused anymore!
 var ACTIVITY_FORTIFYING = 15;
 var ACTIVITY_FALLOUT = 16;
@@ -247,7 +247,7 @@ var GUI_GTK3x   = 8;
 var RPT_POSSIBLE = 0; /* We want to know if it is possible that effect is active */
 var RPT_CERTAIN = 1;  /* We want to know if it is certain that effect is active  */
 
-// Output Types and their Names 
+// Output Types and their Names
 const O_FOOD = 0;
 const O_SHIELD = 1;
 const O_TRADE = 2;
@@ -297,4 +297,4 @@ const GENUS_IMPROVEMENT = 2;
 const GENUS_SPECIAL = 3; // coinage and spaceship parts
 
 const TECH_USER_1 = 32;
-const TECH_SPECIAL_TECH = 32; // reserved for cul-de-sac "specialization" techs which enhance what a parent tech can do 
+const TECH_SPECIAL_TECH = 32; // reserved for cul-de-sac "specialization" techs which enhance what a parent tech can do

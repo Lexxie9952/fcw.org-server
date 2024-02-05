@@ -105,9 +105,9 @@ function city_size_sum(playerno) {
 **************************************************************************/
 function update_game_status_panel() {
   if (C_S_RUNNING != client_state() || was_supercow) {
-    // was_supercow makes a "fake player" to turn off observer interaction lock    
+    // was_supercow makes a "fake player" to turn off observer interaction lock
     return;
-  } 
+  }
 
   var status_html = "";
   var msg_title_prefix = unread_messages > 0 ? "Unread messages.&#013;&#010;&#013;&#010;Click = " : ""
@@ -140,24 +140,24 @@ function update_game_status_panel() {
       var pplayer = client.conn.playing;
       var pnation = nations[pplayer['nation']];
       var tag = pnation ? pnation['graphic_str'] : null;
-  
+
       var civ_flag = "";
       if (!pnation['customized']) {
         civ_flag += "<img class='lowered_gov' style='background-color:transparent;margin-top:-3px;margin-right:3px;' src='/images/flags/" + tag + "-web" + get_tileset_file_extention() + "' width='42'>";
         status_html += "<span>"+civ_flag+"</span>";
-      } 
+      }
     }
-    
+
     if (!is_small_screen()) status_html += "<span style='cursor:default;'><b>" + nations[pplayer['nation']]['adjective'] + "</b></span> &nbsp;";
-    
+
 /*************** Government type mini-icon that's clickable for revolution */
     if (!is_small_screen()) {
 
       status_html += "<span style='cursor:pointer;' onclick='javascript:show_revolution_dialog()'>";
-      
+
       var gov_name = governments[client.conn.playing['government']]['name'];
-      var gov_modifier = get_gov_modifier(client.conn.playing.playerno, "", true);     
-      
+      var gov_modifier = get_gov_modifier(client.conn.playing.playerno, "", true);
+
       if (gov_name == "Anarchy") status_html += "<img class='lowered_gov' src='/images/gov.anarchy.png' title='Anarchy'>";
       else if (gov_name == "Despotism") status_html += "<img class='lowered_gov' src='/images/gov.despotism.png' title='Despotism'>";
       else if (gov_name == "Monarchy") status_html += "<img class='lowered_gov' src='/images/gov.monarchy"+gov_modifier+".png' title='"+gov_modifier+" Monarchy'>";
@@ -178,36 +178,36 @@ function update_game_status_panel() {
     if (!is_small_screen()) status_html += "<b>" + city_size_sum(client.conn.playing.playerno) + "</b>  &nbsp;&nbsp;";
     if (!is_small_screen()) status_html += "<i style='color:#d8dff0' class='fa fa-clock-o' aria-hidden='true' title='Year &mdash; Turn&#013;&#010;&#013;&#010;Click = Demographics Report'></i> <b title='Year &mdash; Turn&#013;&#010;&#013;&#010;Click = Demographics Report'>" + get_year_string() + "</b> &nbsp;&nbsp;</span>";
     status_html += "<img class='v' height='21px' width='24px' style='margin-right:-4px; margin-bottom:3px' src='/images/e/coinage.png' title='Treasury'> ";
-   
+
     var income_color = "<b";
     // colour for positive/zero/negative income
     if (pplayer['expected_income'] < 0) income_color += " class='negative_net_income' title='Deficit'";
-    else if (pplayer['expected_income'] > 0) { 
-      income_color += income_calculated_by_client 
+    else if (pplayer['expected_income'] > 0) {
+      income_color += income_calculated_by_client
        ? " style='color:#89c06a; cursor:default' title='Income'" : " style='color:#a2b095; cursor:default' title='Income'";
     }
-    else { income_color += income_calculated_by_client 
+    else { income_color += income_calculated_by_client
        ? " style='color:#919191; cursor:default' title='No Income'" : " style='color:#a2a2a2; cursor:default' title='No Income'"
     }
-    
-    status_html += "<b style='color:#ffde80; cursor:default;' title='Gold reserves'>"+pplayer['gold'] 
+
+    status_html += "<b style='color:#ffde80; cursor:default;' title='Gold reserves'>"+pplayer['gold']
     + "</b> "+income_color+" style='cursor:default;'>" + net_income + "</b>"+"  &nbsp;&nbsp;";
-    status_html += "<span style='cursor:pointer;' onclick='javascript:show_tax_rates_dialog();'><img class='sb' height='18px' style='margin-right:-4px' src='/images/e/gold.png' title='Gold Tax rate'> <b title='Gold Tax rate' style='color:#fff0d1'>" 
+    status_html += "<span style='cursor:pointer;' onclick='javascript:show_tax_rates_dialog();'><img class='sb' height='18px' style='margin-right:-4px' src='/images/e/gold.png' title='Gold Tax rate'> <b title='Gold Tax rate' style='color:#fff0d1'>"
     + tax + "</b><span title='Gold Tax rate' style='color:#bcbcbc'>%</span> &nbsp;";
     status_html += "<img class='sb' height='17px' width='16px' style='margin-right:-1px' src='/images/e/quavers.png' title='Luxury rate'> <b title='Luxury rate' style='color:#f5e4ff'>" + lux + "</b><span title='Luxury rate' style='color:#bcbcbc'>%</span> &nbsp;";
-    const sci_title = "Science:\n"+(techs[client.conn.playing['researching']]===undefined ? (techs[client.conn.playing['tech_goal']]===undefined ? "No goal" : techs[client.conn.playing['tech_goal']]['name']+" (goal)") 
+    const sci_title = "Science:\n"+(techs[client.conn.playing['researching']]===undefined ? (techs[client.conn.playing['tech_goal']]===undefined ? "No goal" : techs[client.conn.playing['tech_goal']]['name']+" (goal)")
                                                                                           : techs[client.conn.playing['researching']]['name']) +"\n"
                     + client.conn.playing['bulbs_researched']
                     + (client.conn.playing['researching_cost'] ? " / " + client.conn.playing['researching_cost'] +" bulbs\n" + bulb_output_text
-                                                             : " extra bulbs\n" + bulb_output_text);             
+                                                             : " extra bulbs\n" + bulb_output_text);
     status_html += "<img class='sb' height='17px' style='margin-right:-2px' src='/images/e/sci.png' title='"+sci_title+"'> <b title='"+sci_title+"' style='color:#ebfaff'>" + sci + "</b><span title='"+sci_title+"' style='color:#bcbcbc'>%</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> ";
-  
+
   } else if (server_settings != null && server_settings['metamessage'] != null) {    // Status message for gamemasters/admins/supercows:
     status_html += "Observing - Turn <b>" + game_info['turn'] + "</b> -";
     var status_message = "";
     if (server_settings['metamessage']['val'].indexOf('|') != -1) {
       // extract the game identifier string out of the longer metamessage
-      status_message = server_settings['metamessage']['val'].substr(0,server_settings['metamessage']['val'].indexOf('|')); 
+      status_message = server_settings['metamessage']['val'].substr(0,server_settings['metamessage']['val'].indexOf('|'));
     }
     status_html += status_message + " &nbsp; &nbsp; &nbsp; &nbsp; ";  // pad to prevent turn done button overwrite.
   }
@@ -217,12 +217,12 @@ function update_game_status_panel() {
       $("#game_status_panel_bottom").hide();
 
       // Reduce flicker on slower/inefficient browsers: Don't redraw/reset status bar if it hasn't changed.
-      if ( !($("#game_status_panel_top").is(":visible")) ) { 
+      if ( !($("#game_status_panel_top").is(":visible")) ) {
         $("#game_status_panel_top").show();
       }
       if (status_html != $("#game_status_panel_top").html()) {
         $("#game_status_panel_top").html(status_html); //update only if changed
-      } 
+      }
     }
   } else {
     if ($("#game_status_panel_bottom").length) {
@@ -230,8 +230,8 @@ function update_game_status_panel() {
 
       // If show_order_buttons==3, then all lower panels are OFF to maximize map space
       if (show_order_buttons != 3) {
-        if ( !($("#game_status_panel_bottom").is(":visible")) ) { 
-          $("#game_status_panel_bottom").show();  
+        if ( !($("#game_status_panel_bottom").is(":visible")) ) {
+          $("#game_status_panel_bottom").show();
         }
         $("#game_status_panel_bottom").css({"width": $(window).width(),"pointer-events":"none" }); ////
         if (status_html != $("#game_status_panel_bottom").html()) {
@@ -247,7 +247,7 @@ function update_game_status_panel() {
     var status_message = server_settings['metamessage']['val'];
     if (status_message.indexOf('|') != -1) {
       // extract the game identifier string out of the longer metamessage
-      status_message = status_message.substr(0,server_settings['metamessage']['val'].indexOf('|')); 
+      status_message = status_message.substr(0,server_settings['metamessage']['val'].indexOf('|'));
     }
     page_title += " "+status_message;
   }
@@ -298,10 +298,10 @@ function sum_width()
 {
   var sum=0;
   $("#tabs_menu").children().each( function(){
-    if ($(this).is(":visible") 
+    if ($(this).is(":visible")
         && $(this).attr('id') != "game_status_panel_top"
         && $(this).attr('id').startsWith("ixtjkiller")) {
-        
+
         sum += $(this).width();
     }
   });

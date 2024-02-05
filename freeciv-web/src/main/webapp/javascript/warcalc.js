@@ -15,7 +15,7 @@ const WARCALC_DEFENDING = 1;
 var warcalc_role_mode = WARCALC_ATTACKING;
 
 /**************************************************************************
- Updates the Warcalc tab when clicked. 
+ Updates the Warcalc tab when clicked.
 **************************************************************************/
 function warcalc_screen()
 {
@@ -27,16 +27,16 @@ function warcalc_screen()
   warcalc_reset_roles();
 
   // If there is a current_focus unit, replace with values from this one:
-  if (current_focus && current_focus.length>0) 
+  if (current_focus && current_focus.length>0)
     warcalc_set_default_vals(current_focus[0]);
-  
+
   //strength
   $("#id_astr").val(my_str);
   $("#id_dstr").val(their_str);
   //hitpoints
   $("#id_ahp").val(my_hp);
   $("#id_dhp").val(their_hp);
-  //firepower 
+  //firepower
   $("#id_afp").val(my_fp);
   $("#id_dfp").val(their_fp);
   //clear prior results
@@ -52,7 +52,7 @@ function warcalc_screen()
   When new warcalc sessions are requested, we have to reset roles so that
   proper attack strength and defense strength show.
 *************************************************************************/
-function warcalc_reset_roles() 
+function warcalc_reset_roles()
 { // Reset default role mode in case it was previously changed.
   if (warcalc_role_mode != WARCALC_ATTACKING) {
     warcalc_role_mode = WARCALC_ATTACKING;
@@ -74,14 +74,14 @@ function warcalc_update_titles()
   if (warcalc_role_mode == WARCALC_ATTACKING) { //default, we are attacker
     $("#wcamsg").prop("title", "Your "+unit_types[units[my_uid]['type']]['name']+" is set as attacker.\n\nOnly Veteran bonus is auto-calculated");
     $("#wcamsg").html("A:&#11088;"+unit_types[units[my_uid]['type']]['name']);
- 
+
     $("#wcdmsg").prop("title", "Foreign "+unit_types[units[their_uid]['type']]['name']+" is set as defender.\n\nOnly Veteran, Terrain, and Fortify bonuses are included.");
     $("#wcdmsg").html("D:"+unit_types[units[their_uid]['type']]['name']);
   }
   else if (warcalc_role_mode == WARCALC_DEFENDING) {// swapped role
     $("#wcamsg").prop("title", "Foreign "+unit_types[units[their_uid]['type']]['name']+" is set as attacker.\n\nOnly Veteran bonus is auto-calculated");
     $("#wcamsg").html("A:"+unit_types[units[their_uid]['type']]['name']);
- 
+
     $("#wcdmsg").prop("title", "Your "+unit_types[units[my_uid]['type']]['name']+" is set as defender.\n\nOnly Veteran, Terrain, and Fortify bonuses are included.");
     $("#wcdmsg").html("D:&#11088;"+unit_types[units[my_uid]['type']]['name']);
   }
@@ -93,7 +93,7 @@ function warcalc_update_titles()
 function warcalc_swap_roles()
 {
    if (!my_uid || !their_uid) return; // need two real units to swap
-   // Def. strength is existentially dependent on a real unit on a 
+   // Def. strength is existentially dependent on a real unit on a
    // real tile with terrain bonus, fortify state, etc.; other things
    // depend on it being real too, so abort if there aren't 2 real units:
    if ( !(units[my_uid] && units[their_uid]) ) return;
@@ -110,7 +110,7 @@ function warcalc_swap_roles()
 function warcalc_request_server()
 {
   if (!my_uid || !their_uid) return; // need two real units to swap
-  // Def. strength is existentially dependent on a real unit on a 
+  // Def. strength is existentially dependent on a real unit on a
   // real tile with terrain bonus, fortify state, etc.; other things
   // depend on it being real too, so abort if there aren't 2 real units:
   if ( !(units[my_uid] && units[their_uid]) ) return;
@@ -149,7 +149,7 @@ function warcalc_compute_role_strength(my_uid, their_uid)
     //hitpoints
     $("#id_ahp").val(my_hp);
     $("#id_dhp").val(their_hp);
-    //firepower 
+    //firepower
     $("#id_afp").val(my_fp);
     $("#id_dfp").val(their_fp);
     //clear prior results
@@ -163,7 +163,7 @@ function warcalc_compute_role_strength(my_uid, their_uid)
     punit = units[their_uid];
 
     ptype = unit_types[punit['type']];
-    
+
     if (punit['veteran']) {
       if (ptype['veteran_levels'] > 0) {
         power_fact = ptype['power_fact'][punit['veteran']];
@@ -197,7 +197,7 @@ function warcalc_compute_role_strength(my_uid, their_uid)
     //hitpoints
     $("#id_dhp").val(my_hp);
     $("#id_ahp").val(their_hp);
-    //firepower 
+    //firepower
     $("#id_dfp").val(my_fp);
     $("#id_afp").val(their_fp);
     //clear results
@@ -248,7 +248,7 @@ function warcalc_set_default_vals(punit)
 
     their_str *= (power_fact/100);
     their_str = trim_decimals(their_str);
-  }  
+  }
 }
 function trim_decimals(value)
 {
@@ -257,13 +257,13 @@ function trim_decimals(value)
 }
 
 /**************************************************************************
-  Computes BASIC bonuses for defending units who don't know their 
+  Computes BASIC bonuses for defending units who don't know their
   attacker. That is: veteran, terrain, river.
   NOT: Bases, City walls, Coastal Defense, Bonus against mounted, etc.
   Value returned for bonus comes back x100 -- i.e., 1.5x=150
 *************************************************************************/
 function warcalc_get_defense_bonus(punit)
-{ 
+{
   var power_fact = 100;
   if (punit['veteran']) {
     var ptype = unit_types[punit['type']];
@@ -288,7 +288,7 @@ function warcalc_get_defense_bonus(punit)
   }
   if (punit['activity']==ACTIVITY_FORTIFIED) {
     if (!tile_city(ptile)) { // Units in a city get city bonus not fortify bonus
-      power_fact *= 1.5;  
+      power_fact *= 1.5;
     }
   }
   return power_fact;
@@ -311,7 +311,7 @@ function warcalc_compute()
   //hitpoints
   var ahp = $("#id_ahp").val();
   var dhp = $("#id_dhp").val();
-  //firepower 
+  //firepower
   var afp = $("#id_afp").val();
   var dfp = $("#id_dfp").val();
 
@@ -325,19 +325,19 @@ function warcalc_compute()
   The FORMULAS
 *************************************************************************/
 /* these functions can be used for extreme edge cases like high FP or
-   any situation where it only takes 1 or 2 hits to kill, where it is 
+   any situation where it only takes 1 or 2 hits to kill, where it is
    greatly more accurate i.e., not completely inaccurate like the other
    estimate. So they're here in commented code for now. The case of only
-   1 hit needed is a lot simpler and hard coded in one line and that's 
-   all we're using for now 
+   1 hit needed is a lot simpler and hard coded in one line and that's
+   all we're using for now
 function factorial(a) {
   return a*(a>1)?factorial(a-1):1;
 }
-function binomial_coeff (n, k)  { 
-  return factorial(n)/(factorial(k)*factorial(n-k)); 
+function binomial_coeff (n, k)  {
+  return factorial(n)/(factorial(k)*factorial(n-k));
 }
-function P_X_is_x(x, N, p)  { 
-  return binomial_coeff(N,x)*Math.pow(p,x)*Math.pow(1-p,N-x); 
+function P_X_is_x(x, N, p)  {
+  return binomial_coeff(N,x)*Math.pow(p,x)*Math.pow(1-p,N-x);
 }
 function P_X_is_ge_x (x, N, p) {
    return P_X_is_x(x,N,p)+(x<N)?P_X_is_ge_x(x+1,N,p):0;
@@ -390,7 +390,7 @@ function expected_hitpoints(att,ahp,afp,def,dhp,dfp) {
     ahp -= ((1-p)*dfp);
     if (ahp<1 || dhp<1) break;
   }
-  if (ahp<1 && dhp<1) { } // optional TO DO: nicer text for 50/50 death 
+  if (ahp<1 && dhp<1) { } // optional TO DO: nicer text for 50/50 death
   else {
     if (ahp<1) ahp="<b>DEAD</b>";
     if (dhp<1) dhp="<b>DEAD</b>";
@@ -440,7 +440,7 @@ function warcalc_set_tooltips()
   });
   $(".wcttmsg").css("cursor","help");
   const bl = "* ";    // bullet
-  const nbl = "\n* ";  
+  const nbl = "\n* ";
 
   // Wider tool tips for attaker / defender label info:
   $("#wcamsg").tooltip({open: function (event, ui) {ui.tooltip.css("max-width", "450px");}});
@@ -457,7 +457,7 @@ function warcalc_set_tooltips()
           var transX = 88*scale-82;
           if (scale>1) scale=1;
           var tran_str = "scale("+scale+") translateX("+transX+"%)"//scale and undo horizontal movement caused by scale %
-          $('#wcbtbl').css({ transform: tran_str }); 
+          $('#wcbtbl').css({ transform: tran_str });
         }
         // DEFEND BUTTONS
         $("#wc500").hide(); // no 5x bonus in MP2/AG
@@ -535,14 +535,14 @@ function warcalc_set_tooltips()
         }
         return;
   }
-  
+
   // Suppress UI buttons not present in remaining rulesets
   $("#wc133").hide(); $("#wc167").hide(); $("#wc210").hide(); $("#wc220").hide(); $("#wc230").hide(); $("#wc400").hide();
   $("#wca125").hide(); $("#wca133").hide(); $("#wca167").hide(); $("#wca210").hide(); $("#wca220").hide(); $("#wca230").hide();
 
   // Classic/MP/MP+:
-  if (ruleset_control['name']=="Multiplayer-Plus ruleset" 
-  || ruleset_control['name']=="Multiplayer ruleset" 
+  if (ruleset_control['name']=="Multiplayer-Plus ruleset"
+  || ruleset_control['name']=="Multiplayer ruleset"
   || ruleset_control['name']=="Classic ruleset" ) {
     // DEFEND BUTTONS
     $("#wc125").hide(); // unused

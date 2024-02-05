@@ -139,7 +139,7 @@ function tile_init(tile)
 function map_init_topology(set_sizes)
 {
   // UGLY DIRTY HACK to give Arctic terrain some sea cliffs until we have
-  // the other kind figured out and integrated.  It was put here because 
+  // the other kind figured out and integrated.  It was put here because
   // we want to only set this once some time at startup.
   tile_types_setup["l0.arctic"].match_index[0]=2;
 

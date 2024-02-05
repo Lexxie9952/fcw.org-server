@@ -29,12 +29,12 @@ var city_canvas = null;
 var city_map_display_mode = 0;
 const CMDM_SIZE           = 0;   // size of city
 const CMDM_FINISHED       = 1;   // when output is finished
-const CMDM_BUY_COST       = 2;   // cost to buy item 
+const CMDM_BUY_COST       = 2;   // cost to buy item
 const CMDM_GROWS          = 3;   // turns to city growth
 const CMDM_SHIELDS        = 4;   // surplus shields
 const CMDM_POLLUTION      = 5;   // pollution
 // KEEP THIS PENULTIMATE, ONE BEFORE CMDM_LAST:
-const CMDM_CORRUPTION     = 6;   // corruption 
+const CMDM_CORRUPTION     = 6;   // corruption
 const CMDM_LAST           = 7;   // marks end of city_map_display_mode enum
 
 const SOURCE_WAYPOINT     = 1;
@@ -70,7 +70,7 @@ var goto_colors_rally = {
 var goto_colors_patrol = ["0,10,40,1","30,108,255,1","2,14,45,1","197,209,255,1"];            // patrol path
 
 /**************************************************************************
-  Cycles through city map display modes for citybar when user presses 
+  Cycles through city map display modes for citybar when user presses
   ctrl-shift-c
 **************************************************************************/
 function mapview_cycle_city_display_mode()
@@ -79,7 +79,7 @@ function mapview_cycle_city_display_mode()
 
   // Former code that shows an example of how we can filter the custom user info column in cities list.
   //if (client_rules_flag[CRF_DEMOCRACY_NONCORRUPT]
-  //    && !client_is_observer() 
+  //    && !client_is_observer()
   //    && governments[players[client.conn.playing.playerno].government].name == "Democracy") {
   //      last--;
   //}
@@ -110,7 +110,7 @@ function mapview_cycle_city_display_mode()
       break;
     case CMDM_CORRUPTION:
       add_client_message("Showing city corruption.");
-      break;                        
+      break;
   }
 }
 
@@ -294,7 +294,7 @@ function init_cache_sprites()
 function mapview_window_resized ()
 {
   // prevent the glitch: window resizing caused scrolling up the chatbox
-  chatbox_scroll_to_bottom(false); 
+  chatbox_scroll_to_bottom(false);
 
   if (active_city != null || !resize_enabled) return;
   setup_window_size();
@@ -364,7 +364,7 @@ function canvas_put_select_rectangle(canvas_context, canvas_x, canvas_y, width, 
 
 
 /**************************************************************************
-  Gives mapview_put_city_bar() the number and colour it will put in the 
+  Gives mapview_put_city_bar() the number and colour it will put in the
   citybar, according to user selected city_map_display_mode.
 **************************************************************************/
 function mapview_get_citybar_num_and_color(city_id)
@@ -446,7 +446,7 @@ function mapview_get_citybar_num_and_color(city_id)
           col = "rgb(255,128,102)";
         }
       }
-      break; 
+      break;
   }
 
   return {"num":num, "col":col};
@@ -471,7 +471,7 @@ function mapview_put_city_bar(pcanvas, city, canvas_x, canvas_y) {
   const disorder = "%E2%9C%8A ";
   const lose_celeb_color = "rgba(0,0,0,1)";
   const start_celeb_color = "rgb(128,255,128)";
-  var start_celeb = false;  
+  var start_celeb = false;
   var lose_celeb = 0;  // uses 0,1 instead of false,true to also adjust inverted shadows to look better.
 
   // City mood:
@@ -490,15 +490,15 @@ function mapview_put_city_bar(pcanvas, city, canvas_x, canvas_y) {
           case "Disorder":
             mood_text = disorder;
             break;
-          case "Celebrating": 
+          case "Celebrating":
             mood_text = celeb;
             break;
         }
         if (happy_people >= city['size']*0.4999 && unhappy_angry_people==0 && city['size']>=city_celebrate_size(city))  {
-          // case handling: city is going to celebrate next turn. 
+          // case handling: city is going to celebrate next turn.
           if (mood_text == peace) start_celeb = true;
         }
-        else if (unhappy_angry_people > happy_people) { // case: city going into disorder          
+        else if (unhappy_angry_people > happy_people) { // case: city going into disorder
           if (mood_text == celeb) { // if losing celebration, invert size color and size shadow
             size_shadow_color = "rgba(128,128,128,1)";
             size_color = lose_celeb_color;
@@ -530,18 +530,18 @@ function mapview_put_city_bar(pcanvas, city, canvas_x, canvas_y) {
         if (game_info['airlift_dest_divisor'] == 0) { // if no dest_divisor, there is one counter for both source and dest
           // show source airlifts if it has them, otherwise keep the label blank:
           airlift_text = ( city['airlift']>0 ? " "+left_div+src_capacity+right_div : "");
-        } else if (city_has_building(city, improvement_id_by_name(B_AIRPORT_NAME))) {  
+        } else if (city_has_building(city, improvement_id_by_name(B_AIRPORT_NAME))) {
           // We get here if city has airport && airliftdestdivsor > 0. This means destination-airlifts has a separate counter
-          var airlift_receive_text;  
+          var airlift_receive_text;
           var airlift_receive_max_capacity = Math.round(city['size'] / game_info['airlift_dest_divisor']);
 
-          if (game_info['airlifting_style'] & DEST_UNLIMITED) airlift_receive_text = infinity_symbol;  
-          // else destination airlifts allowed = population of city / airliftdivisor, rounded to nearest whole number:   
-          else airlift_receive_text = Math.max(0,city["airlift"] + airlift_receive_max_capacity - effects[1][0]['effect_value']);             
-          
-          airlift_text = (city['airlift']>0  ||  airlift_receive_text==infinity_symbol  || src_capacity==infinity_symbol || airlift_receive_text != "0")  
-                          ? " "+left_div + src_capacity + bullet + airlift_receive_text + right_div  
-                          : " "+left_div + bullet + right_div ;  
+          if (game_info['airlifting_style'] & DEST_UNLIMITED) airlift_receive_text = infinity_symbol;
+          // else destination airlifts allowed = population of city / airliftdivisor, rounded to nearest whole number:
+          else airlift_receive_text = Math.max(0,city["airlift"] + airlift_receive_max_capacity - effects[1][0]['effect_value']);
+
+          airlift_text = (city['airlift']>0  ||  airlift_receive_text==infinity_symbol  || src_capacity==infinity_symbol || airlift_receive_text != "0")
+                          ? " "+left_div + src_capacity + bullet + airlift_receive_text + right_div
+                          : " "+left_div + bullet + right_div ;
         }
       }
     }
@@ -565,7 +565,7 @@ function mapview_put_city_bar(pcanvas, city, canvas_x, canvas_y) {
   pcanvas.fillRect (canvas_x - Math.floor(txt_measure.width / 2) - 14, canvas_y - 17,
                     txt_measure.width + 20, 20);
 
-                    
+
   pcanvas.fillStyle = color;
   pcanvas.fillRect(canvas_x + Math.floor(txt_measure.width / 2) + 5, canvas_y - 17,
                (prod_type != null) ? size_measure.width + 35 : size_measure.width + 8, 20);
@@ -615,7 +615,7 @@ function mapview_put_city_bar(pcanvas, city, canvas_x, canvas_y) {
   pcanvas.fillText(text, canvas_x - Math.floor(txt_measure.width / 2) - 2, canvas_y - 1);
   pcanvas.fillStyle = size_color;
   pcanvas.fillText(size, canvas_x + Math.floor(txt_measure.width / 2) + 8, canvas_y - 1);
-  
+
   if (start_celeb) {
     mood_text = decodeURIComponent(mood_text); // only do when needed - performance
     pcanvas.fillStyle = start_celeb_color;
@@ -703,7 +703,7 @@ function mapview_put_border_line(pcanvas, dir, color, color2, color3, canvas_x, 
     if (border_anim>24*border_anim_delay)
       border_anim=0;
   }
-  
+
   switch (dir) {
     case DIR8_NORTH:
       //primary
@@ -811,7 +811,7 @@ function mapview_territory_fill(pcanvas, color, canvas_x, canvas_y) {
 
 /**************************************************************************
 ...Draws GOTO lines, RALLY lines, existing GOTO orders, and CONNECT
-activities (road/irrigate). mark_new_turn is whether the goto path 
+activities (road/irrigate). mark_new_turn is whether the goto path
 ends/begins a turn on that tile, which lets us know to whether to draw
 a normal tile dot or a turn boundary waypoint marker
 **************************************************************************/
@@ -859,12 +859,12 @@ function mapview_put_goto_line(pcanvas, dir, canvas_x, canvas_y, tile_index)
   /* Waypoint circles - each segment draws 2 tile-waypoint circles, one on source and one on dest. Source overdraws the last dest and dest
     will get overdrawn by the next source (exception of start-path and end-path points.) But we do not want to color both waypoint circles
     with an indicator for a new turn, only the one tile where it happens. */
-  
+
   // Source waypoint circle
-  if ((mark_new_turn & SOURCE_WAYPOINT) || last_turn_marker & DEST_WAYPOINT) {         
+  if ((mark_new_turn & SOURCE_WAYPOINT) || last_turn_marker & DEST_WAYPOINT) {
     pcanvas.lineWidth = 17;
     pcanvas.strokeStyle = 'rgba(225,47,0)';
-  } else {  
+  } else {
     pcanvas.lineWidth = 12;
     pcanvas.strokeStyle = 'rgba('+colors[2]+')';
   }
@@ -875,10 +875,10 @@ function mapview_put_goto_line(pcanvas, dir, canvas_x, canvas_y, tile_index)
   pcanvas.stroke();
 
  // Dest waypoint circle
- if (mark_new_turn & DEST_WAYPOINT) {         
+ if (mark_new_turn & DEST_WAYPOINT) {
     pcanvas.lineWidth = 17;
     pcanvas.strokeStyle = 'rgba(225,47,0)';
-  } else {  
+  } else {
     pcanvas.lineWidth = 12;
     pcanvas.strokeStyle = 'rgba('+colors[2]+')';
   }
@@ -887,7 +887,7 @@ function mapview_put_goto_line(pcanvas, dir, canvas_x, canvas_y, tile_index)
   //Chrome 116 no longer allows drawing points with zero length line, so use .01 length:
   pcanvas.lineTo(x1, y1+.01);
   pcanvas.stroke();
- 
+
   // Waypoint inner dots
   pcanvas.lineWidth = 4;
   pcanvas.strokeStyle = 'rgba('+colors[3]+')';

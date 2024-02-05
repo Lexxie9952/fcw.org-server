@@ -61,7 +61,7 @@ var empire_upkeep_show_zero    = false;  // Default to not show zero-upkeep unit
 empire_screen_updater = new EventAggregator(update_empire_screen, 250, EventAggregator.DP_NONE, 250, 3, 250);
 
 /**************************************************************************
- Updates the Empire tab when clicked. Does basic common setup, then based 
+ Updates the Empire tab when clicked. Does basic common setup, then based
  on what empire_mode the player is in, calls the appropriate function
  to display that mode and populate the tables.
 **************************************************************************/
@@ -69,7 +69,7 @@ function update_empire_screen()
 {
   if (observing || freeze) return;
 
-  // Do all the setup of width, buttons in top panel for switching mode, 
+  // Do all the setup of width, buttons in top panel for switching mode,
   // then call a separate function based on what mode we're in
 
   // start at default width
@@ -80,10 +80,10 @@ function update_empire_screen()
   var wide_screen = $(window).width()<1340 ? false : true;
   var narrow_screen = $(window).width()<1000 ? true : false;
   var small_screen = is_small_screen();
-  var landscape_screen = $(window).width() > $(window).height() ? true : false; 
+  var landscape_screen = $(window).width() > $(window).height() ? true : false;
   var tiny_screen=false;
   var redux_screen=false;  // mid-size screen
-  
+
   // narrow screen triggers tiny screen (becase we need width for city rows)
   // if small_screen and not landscape, that's also a tiny screen:
   if ( (small_screen) || (narrow_screen && !scroll_narrow_x)) {
@@ -130,7 +130,7 @@ function update_empire_screen()
     case EMPIRE_ECON_WORKLISTS:
         empire_econ_worklists_screen(wide_screen,narrow_screen,small_screen,landscape_screen,tiny_screen,redux_screen);
         break;
-  }   
+  }
 }
 
 /**************************************************************************
@@ -146,7 +146,7 @@ function empire_unit_homecity_screen(wide_screen,narrow_screen,small_screen,
   //$("#empire_static").css({"height":"100%", "width":"100%"})
 
   // Set up panel functions for National Units
-  
+
   var panel_html = "<input id='show_hp' type='checkbox' class='css-checkbox' title='Show hit points' name='chHP' value='false' onclick='toggle_empire_show_hitpoints();'>"
   + "<label for='show_hp' name='show_hp_lbl' class='css-label dark-check-red'>HP</label>&ensp;"
   + "<input id='show_mp' type='checkbox' class='css-checkbox' title='Show movement points' name='chMP' value='false' onclick='toggle_empire_show_movepoints();'>"
@@ -237,7 +237,7 @@ function empire_unit_homecity_screen(wide_screen,narrow_screen,small_screen,
   var city_count = 0; // number of cities (total rows)
 
   /* Pre-sort units by type to avoid exponentially more iterations:
-    * If we are in sort mode, then we already created data and just want to resort it. Otherwise, 
+    * If we are in sort mode, then we already created data and just want to resort it. Otherwise,
       we just arrived and need to refresh it, because units may have changed */
   if (empire_sort_mode)  {
     // do not refresh data: it was just re-sorted for re-display
@@ -298,15 +298,15 @@ function empire_unit_homecity_screen(wide_screen,narrow_screen,small_screen,
     var pcity = cities[city_id];
 
     ukf[city_id] = 0;  // set counters at 0 before adding it up
-    ukg[city_id] = 0;  
-    uks[city_id] = 0;  
+    ukg[city_id] = 0;
+    uks[city_id] = 0;
     // Only process legal cities owned by player
     if (client.conn.playing == null || city_owner(pcity) == null || city_owner(pcity).playerno != client.conn.playing.playerno) {
       continue;
     } else city_count++;
 
     //TO DO, we can only adjust height later after we add a unit_count tally then would have to do a $().css("height",rheight)
-    
+
     var rheight = 28 * Math.ceil( (/*unit_count*/11*40) /  ($(window).width()-140) );
     unit_row_html = "<tr class='cities_row' style='height:"+rheight+"px;'>";
     unit_row_html += "<td style='cursor:pointer; font-size:85%; width:35%; text-align:right; padding-right:10px;' onclick='javascript:show_city_dialog_by_id(" + pcity['id']+")' id='citycell"+city_id+"'>"+pcity['name']+"</td>";
@@ -331,20 +331,20 @@ function empire_unit_homecity_screen(wide_screen,narrow_screen,small_screen,
 
         var ptype = unit_type(punit);
 
-        // Generate micro-sprite   
+        // Generate micro-sprite
         var ptype_sprite = {"type":ptype,"sprite":get_unit_type_image_sprite(ptype)};
         var hptype_sprite = {"type":ptype,"sprite":get_full_hp_sprite(punit)};
         var mptype_sprite = {"type":ptype,"sprite":get_full_mp_sprite(punit)};
         var vtype_sprite = {"type":ptype,"sprite":get_full_vet_sprite(punit)};
 
-        if (ptype_sprite != null) { 
+        if (ptype_sprite != null) {
           sprite = ptype_sprite['sprite'];
           var hp_sprite = hptype_sprite['sprite'];
           var mp_sprite = mptype_sprite['sprite'];
           var vet_sprite = vtype_sprite['sprite'];
 
           adjust_oversize = (sprite['width']>64) ? -34 : -26;  // "oversize" images space differently
-          
+
           ptype_img_html = "<span class='prod_img' title='"+html_safe(get_unit_city_info(punit))+"' style='float:left; padding-left:0px padding-right:0px; content-align:right; margin-top:-8px;"
                   + "margin-left:"+adjust_oversize+"px' margin-right:-4px; onclick='city_dialog_activate_unit(units[" + punit['id'] + "]);'>"
                   + "<div style='float:left; content-align:left;"
@@ -383,13 +383,13 @@ function empire_unit_homecity_screen(wide_screen,narrow_screen,small_screen,
                   + " content-align: left;"
                   + "vertical-align:top; float:left;'>"
                   + "</div>";
-          } else vet_badge_html = "";       
+          } else vet_badge_html = "";
         }
-        
+
         if (empire_show_movesleft) ptype_img_html+=moves_left_html;
         if (empire_show_hitpoints) ptype_img_html+=hit_point_html;
         if (punit['veteran'] > 0) ptype_img_html+=vet_badge_html;
-        
+
         unit_row_html += "<span id='u_img" + unit_type_id + "'>"+ptype_img_html+"</span>";
       }
     }
@@ -421,16 +421,16 @@ function empire_unit_homecity_screen(wide_screen,narrow_screen,small_screen,
   if (sum_ukf > 0) $("#f_upkeep_total").html(sum_ukf);
   else $(".food_upkeep_column").remove();
   if (sum_ukg > 0) $("#g_upkeep_total").html(sum_ukg);
-  else $(".gold_upkeep_column").remove();  
+  else $(".gold_upkeep_column").remove();
   if (sum_uks > 0) $("#s_upkeep_total").html(sum_uks);
   // Remove empty shield upkeep column if they don't want to see shield upkeep OR
   // there's at least one other visible upkeep column; this way someone with no
   // upkeep at all still sees 0 shield upkeep to know they have no upkeep at all:
-  else if (sum_ukf+sum_ukg>0 || !empire_upkeep_show_shields) 
+  else if (sum_ukf+sum_ukg>0 || !empire_upkeep_show_shields)
     $(".shield_upkeep_column").remove();
   //---------------------------------------------------------------------
 
-  if (city_count == 0) {                 // city count 
+  if (city_count == 0) {                 // city count
     $("#empire_table").html("You have no cities.");
   }
 
@@ -443,7 +443,7 @@ function empire_unit_homecity_screen(wide_screen,narrow_screen,small_screen,
   }
 }
 
-  
+
 /**************************************************************************
  Display Empire tab when it's in EMPIRE_UNIT_IN_CITY_MODE
 **************************************************************************/
@@ -451,7 +451,7 @@ function empire_unitcity_screen(wide_screen,narrow_screen,small_screen,
   landscape_screen,tiny_screen,redux_screen)
 {
   $("#empire_title").html("City Deployment");
-  if (small_screen) $("#empire_title").hide(); else $("#empire_title").show(); 
+  if (small_screen) $("#empire_title").hide(); else $("#empire_title").show();
 
   //$("#empire_static").css({"height":"100%", "width":"100%"})
 
@@ -494,7 +494,7 @@ function empire_unitcity_screen(wide_screen,narrow_screen,small_screen,
   {
     empire_list_html = "<table class='tablesorter-dark' id='empire_table' style='border=0px;border-spacing=0;padding=0;'>"
         + "<thead id='empire_table_head'>"
-        + "<tr>"  
+        + "<tr>"
         // WEU
         + "<th style='text-align:right;' title='Defense Strength in Warrior Equivalent Units (WEU).\n"
           +"\nIncludes: Veteran, Terrain, Inside-city.\n"
@@ -520,7 +520,7 @@ function empire_unitcity_screen(wide_screen,narrow_screen,small_screen,
   var city_count = 0; // number of cities (total rows)
 
   /* Pre-sort units by type to avoid exponentially more iterations:
-    * If we are in sort mode, then we already created data and just want to resort it. Otherwise, 
+    * If we are in sort mode, then we already created data and just want to resort it. Otherwise,
       we just arrived and need to refresh it, because units may have changed */
   if (empire_sort_mode)  {
     // do not refresh data: it was just re-sorted for re-display
@@ -581,27 +581,27 @@ function empire_unitcity_screen(wide_screen,narrow_screen,small_screen,
         // Get veteran power factor for punit
         var power_fact = warcalc_get_defense_bonus(punit);
         if (unit_has_class_flag(punit, UCF_TERRAIN_DEFENSE)) {
-          // HEURISTIC: currently all rulesets give city bonus of 1.5 only to 
+          // HEURISTIC: currently all rulesets give city bonus of 1.5 only to
           // land units and land units are the only units with terrain bonuses.
             power_fact *= 1.5;
         }
         sumHPD[city_id] += (power_fact/100)*(parseInt(punit['hp'],10) * parseInt(utype_defense_power(ptype),10) * parseInt(ptype['firepower'],10));
         //-------------------------------------------------------------------
 
-        // Generate micro-sprite   
+        // Generate micro-sprite
         var ptype_sprite = {"type":ptype,"sprite":get_unit_type_image_sprite(ptype)};
         var hptype_sprite = {"type":ptype,"sprite":get_full_hp_sprite(punit)};
         var mptype_sprite = {"type":ptype,"sprite":get_full_mp_sprite(punit)};
         var vtype_sprite = {"type":ptype,"sprite":get_full_vet_sprite(punit)};
 
-        if (ptype_sprite != null) { 
+        if (ptype_sprite != null) {
           sprite = ptype_sprite['sprite'];
           var hp_sprite = hptype_sprite['sprite'];
           var mp_sprite = mptype_sprite['sprite'];
           var vet_sprite = vtype_sprite['sprite'];
 
           adjust_oversize = (sprite['width']>64) ? -34 : -26;  // "oversize" images space differently
-          
+
           ptype_img_html = "<span class='prod_img' title='"+html_safe(get_unit_city_info(punit))+"' style='float:left; padding-left:0px padding-right:0px; content-align:right; margin-top:-8px;"
                   + "margin-left:"+adjust_oversize+"px' margin-right:-4px; onclick='city_dialog_activate_unit(units[" + punit['id'] + "]);'>"
                   + "<div style='float:left; content-align:left;"
@@ -640,13 +640,13 @@ function empire_unitcity_screen(wide_screen,narrow_screen,small_screen,
                   + " content-align: left;"
                   + "vertical-align:top; float:left;'>"
                   + "</div>";
-          } else vet_badge_html = "";       
+          } else vet_badge_html = "";
         }
-        
+
         if (empire_show_movesleft) ptype_img_html+=moves_left_html;
         if (empire_show_hitpoints) ptype_img_html+=hit_point_html;
         if (punit['veteran'] > 0) ptype_img_html+=vet_badge_html;
-        
+
         unit_row_html += "<span id='u_img" + unit_type_id + "'>"+ptype_img_html+"</span>";
       }
     }
@@ -669,12 +669,12 @@ function empire_unitcity_screen(wide_screen,narrow_screen,small_screen,
       $("#sumHPD"+city_id).html(weu);
       $("#sumHPD"+city_id).prop("title", weu + " Warrior Equivalent Units");
     } else { // flag undefended in red
-      $("#sumHPD"+city_id).html("<span style='color:#ff4030'>0</span>"); 
+      $("#sumHPD"+city_id).html("<span style='color:#ff4030'>0</span>");
     }
   }
   //---------------------------------------------------------------------
 
-  if (city_count == 0) {                 // city count 
+  if (city_count == 0) {                 // city count
     $("#empire_table").html("You have no cities.");
   }
 
@@ -726,7 +726,7 @@ function empire_econ_improvements_screen(wide_screen,narrow_screen,small_screen,
   landscape_screen,tiny_screen,redux_screen)
 {
   $("#empire_title").html("National Buildings");
-  if (small_screen) $("#empire_title").hide(); else $("#empire_title").show(); 
+  if (small_screen) $("#empire_title").hide(); else $("#empire_title").show();
 
   //$("#empire_static").css({"height":"100%", "width":"100%"})
 
@@ -734,11 +734,11 @@ function empire_econ_improvements_screen(wide_screen,narrow_screen,small_screen,
   //mag factor then becomes % of 66px needed to fit 38 buildings in the available space
   var mag_factor = (real_width/38)/67;  //console.log("1. win.width: "+$(window).width()+"   mag factor:"+mag_factor);
   // If user adjusted mag level before, use that instead
-  if (empire_bldg_tab_saved_mag>0) {   
+  if (empire_bldg_tab_saved_mag>0) {
     mag_factor = empire_bldg_tab_saved_mag;
   } else { // If fitting 38 buildings in 1 row makes them just too tiny, keep boosting mag by exact amount to add one extra row,
            // until the building icons are no longer too tiny. "Too tiny" defined as mag:0.35
-    for (var n=1; n<100; n++) {       
+    for (var n=1; n<100; n++) {
       if (mag_factor<.4) mag_factor = mag_factor * ((n+1)/n);  // if mag<0.4 it's too tiny, increase mag% enough for 1 more row
       else break;
     }
@@ -762,7 +762,7 @@ function empire_econ_improvements_screen(wide_screen,narrow_screen,small_screen,
   //  + "<input type='checkbox' id='show_wonders' title='Show wonders instead of buildings' name='cbSW' value='false' onclick='toggle_empire_show_wonders_only();'>"+wndr_chxbox
       + "<input class='tiny_button' type='button' style='font-size:90%; padding:2px;' value='+1%' onclick='emp_bldgs_mag_plus1("+mag_factor+");'> "
       + "<input class='tiny_button' type='button' style='font-size:90%; padding:2px;' value='-1%' onclick='emp_bldgs_mag_less1("+mag_factor+");'>Zoom ";
-      
+
   $("#empire_mode_panel").html(panel_html);
   $("#show_pb").prop("checked", empire_show_present_buildings);
   $("#show_ab").prop("checked", empire_show_absent_buildings);
@@ -790,7 +790,7 @@ function empire_econ_improvements_screen(wide_screen,narrow_screen,small_screen,
   {
     empire_list_html = "<table class='tablesorter-dark' id='empire_table' style='border=0px;border-spacing=0;padding=0;'>"
         + "<thead id='empire_table_head'>"
-        + "<tr>"  
+        + "<tr>"
         // City coulumn
         + "<th title='Sort alphabetically' style='text-align:right; font-size:93%;'><span style='white-space:nowrap'>City"+updown_sort_arrows+"</span></th>"
         // Units column
@@ -800,7 +800,7 @@ function empire_econ_improvements_screen(wide_screen,narrow_screen,small_screen,
   }
   var alt_click_method = "oncontextmenu";
   if (small_screen) alt_click_method = "ondblclick";
-  
+
   var improvements_html = "";
   var city_count = 0; // number of cities (total rows)
 
@@ -818,11 +818,11 @@ function empire_econ_improvements_screen(wide_screen,narrow_screen,small_screen,
     if (client.conn.playing == null || city_owner(pcity) == null || city_owner(pcity).playerno != client.conn.playing.playerno) {
       continue;
     } else city_count++;
-    
+
     //TO DO, we can only adjust height later after we add a unit_count tally then would have to do a $().css("height",rheight)
     var rheight = 28 * Math.ceil( (/*col_count*/22*40) / ($(window).width()-140) );
     improvements_html = "<tr class='cities_row' style='border-bottom: 3px solid #000; height:"+rheight+"px;'>";
-    improvements_html += "<td style='cursor:pointer; font-size:85%; text-align:right; padding-right:10px;' onclick='javascript:show_city_dialog_by_id(" 
+    improvements_html += "<td style='cursor:pointer; font-size:85%; text-align:right; padding-right:10px;' onclick='javascript:show_city_dialog_by_id("
                       + pcity['id']+")' id='citycell"+city_id+"'>"+pcity['name']+"</td>";
     improvements_html += "<td style='padding-left:10px;' id='u"+city_id+"'>";
     // Go through the improvements one at a time and determine whether to show it
@@ -842,7 +842,7 @@ function empire_econ_improvements_screen(wide_screen,narrow_screen,small_screen,
       var sprite = get_improvement_image_sprite(improvements[z]);
 
       // Set cell colour/opacity based on: if present / can build
-      var opacity = 1; 
+      var opacity = 1;
       var border = "";
       var bg = "background:#335 ";
       var title_text = "";
@@ -856,9 +856,9 @@ function empire_econ_improvements_screen(wide_screen,narrow_screen,small_screen,
          if (shields_invested>=improvements[z]['build_cost']) {
            product_finished=true;
            var verb = " is finishing ";
-         } 
+         }
        }
-      
+
       if (pcity['improvements'].isSet(z)) {  // city has improvement: white bg
         opacity = 1;
         border = "border:3px solid #000000;";
@@ -874,16 +874,16 @@ function empire_econ_improvements_screen(wide_screen,narrow_screen,small_screen,
           right_click_action = alt_click_method+"='city_add_improv_to_worklist(" +city_id+","+ z + ");' ";
         } else {    // city has improvement AND CAN MAKE IT
           opacity = 1;
-          border = (is_city_making ? (product_finished ? "border:3px solid #308000;" : "border:3px solid #80E0FF;") : "border:3px solid #000000;"); 
+          border = (is_city_making ? (product_finished ? "border:3px solid #308000;" : "border:3px solid #80E0FF;") : "border:3px solid #000000;");
           bg =     (is_city_making ? (product_finished ? "background:#BFBE " : "background:#8D87 ") : "background:#AD68 ");
           right_click_action = alt_click_method+"='city_change_prod_and_buy(null," +city_id+","+ z + ");' "
-          title_text = is_city_making 
+          title_text = is_city_making
             ? ("title='"+html_safe(pcity['name'])+verb+improvements[z]['name']+".\n\nRIGHT_CLICK: Buy "+html_safe(improvements[z]['name'])+"'")
-            : ("title='"+html_safe(pcity['name'])+":\n\nCLICK: Change production\n\nRIGHT-CLICK: Buy "+html_safe(improvements[z]['name'])+"'");   
+            : ("title='"+html_safe(pcity['name'])+":\n\nCLICK: Change production\n\nRIGHT-CLICK: Buy "+html_safe(improvements[z]['name'])+"'");
         }
       }
       if (!show_building) opacity = 0.21;  // we show a ghost ability to see grid.
-      if (is_city_making) opacity = 1;     // always show current production 
+      if (is_city_making) opacity = 1;     // always show current production
       // Put improvement sprite in the cell:
       improvements_html = improvements_html +
         "<div style='padding:0px; opacity:"+opacity+"; "+magnification
@@ -891,9 +891,9 @@ function empire_econ_improvements_screen(wide_screen,narrow_screen,small_screen,
             + sprite['image-src'] +
             ");background-position:-" + sprite['tileset-x'] + "px -" + sprite['tileset-y']
             + "px;  width: " + sprite['width'] + "px;height: " + sprite['height'] + "px;float:left;' "
-            + title_text 
+            + title_text
             + right_click_action
-            + "onclick='change_city_prod_to(event," +city_id+","+ z + ");'>"  
+            + "onclick='change_city_prod_to(event," +city_id+","+ z + ");'>"
             +"</span></div>";
     }
     empire_list_html += (improvements_html +"</td></tr>");      // Add the row
@@ -939,7 +939,7 @@ function empire_econ_upkeep_screen(wide_screen,narrow_screen,small_screen,
   landscape_screen,tiny_screen,redux_screen)
 {
   $("#empire_title").html("Building Upkeep");
-  if (small_screen) $("#empire_title").hide(); else $("#empire_title").show(); 
+  if (small_screen) $("#empire_title").hide(); else $("#empire_title").show();
 
   //$("#empire_static").css({"height":"100%", "width":"100%"})
 
@@ -952,11 +952,11 @@ function empire_econ_upkeep_screen(wide_screen,narrow_screen,small_screen,
   //mag factor then becomes % of 66px needed to fit 38 buildings in the available space
   var mag_factor = (real_width/estimated_max_bldgs)/67;  //console.log("1. win.width: "+$(window).width()+"   mag factor:"+mag_factor);
   // If user adjusted mag level before, use that instead
-  if (empire_upkp_tab_saved_mag>0) {  
+  if (empire_upkp_tab_saved_mag>0) {
     mag_factor = empire_upkp_tab_saved_mag;
   } else { // If fitting 38 buildings in 1 row makes them just too tiny, keep boosting mag by exact amount to add one extra row,
            // until the building icons are no longer too tiny. "Too tiny" defined as mag:0.35
-    for (var n=1; n<100; n++) {       
+    for (var n=1; n<100; n++) {
       if (mag_factor<.4) mag_factor = mag_factor * ((n+1)/n);  // if mag<0.4 it's too tiny, increase mag% enough for 1 more row
       else break;
     }
@@ -992,7 +992,7 @@ function empire_econ_upkeep_screen(wide_screen,narrow_screen,small_screen,
   {
     empire_list_html = "<table class='tablesorter-dark' id='empire_table' style='border=0px;border-spacing=0;padding=0;'>"
         + "<thead id='empire_table_head'>"
-        + "<tr>"  
+        + "<tr>"
         // City coulumn
         + "<th title='Sort alphabetically' style='text-align:right; font-size:93%;'><span style='white-space:nowrap'>City"+updown_sort_arrows+"</span></th>"
         + "<th id='gold_upkeep' class='gold_upkeep_column' title='Sort GOLD UPKEEP' style='text-align:center; width:28px'><img class='lowered_gov' src='/images/gold.png'></th>"
@@ -1011,7 +1011,7 @@ function empire_econ_upkeep_screen(wide_screen,narrow_screen,small_screen,
 
   var alt_click_method = "oncontextmenu";
   if (small_screen) alt_click_method = "ondblclick";
-  
+
   var improvements_html = "";
   var city_count = 0; // number of cities (total rows)
   let city_upkeep = new Array(cities.length);
@@ -1034,7 +1034,7 @@ function empire_econ_upkeep_screen(wide_screen,narrow_screen,small_screen,
     //TO DO, we can only adjust height later after we add a unit_count tally then would have to do a $().css("height",rheight)
     var rheight = 28 * Math.ceil( (/*col_count*/22*40) / ($(window).width()-140) );
     improvements_html = "<tr class='cities_row' style='border-bottom: 3px solid #000; height:"+rheight+"px;'>";
-    improvements_html += "<td style='cursor:pointer; font-size:85%; text-align:right; padding-right:10px;' onclick='javascript:show_city_dialog_by_id(" 
+    improvements_html += "<td style='cursor:pointer; font-size:85%; text-align:right; padding-right:10px;' onclick='javascript:show_city_dialog_by_id("
                       + pcity['id']+")' id='citycell"+city_id+"'>"+pcity['name']+"</td>";
     improvements_html += "<td class='gold_upkeep_column' font-size:85%; style='text-align:right; padding-right:10px; color:#ffd52c; font-weight:520;' id='g_upkeep_total"+city_id+"'> </td>"
     improvements_html += "<td style='padding-left:10px; padding-bottom:18px' id='u"+city_id+"'>";
@@ -1065,9 +1065,9 @@ function empire_econ_upkeep_screen(wide_screen,narrow_screen,small_screen,
             + sprite['image-src'] +
             ");background-position:-" + sprite['tileset-x'] + "px -" + sprite['tileset-y']
             + "px;  width: " + sprite['width'] + "px;height: " + sprite['height'] + "px;float:left;' "
-            + title_text 
+            + title_text
             + right_click_action
-            + "onclick='change_city_prod_to(event," +city_id+","+ z + ");'>"  
+            + "onclick='change_city_prod_to(event," +city_id+","+ z + ");'>"
             +"</span><span style='font-size:90%; color:"+upkp_color+"'>"+upkeep+"</span></div>";
     }
     empire_list_html += (improvements_html +"</td></tr>");      // Add the row
@@ -1122,28 +1122,28 @@ function redraw_improv_clipboard()
   for (var z = 0; z < empire_worklist_clipboard.length; z ++) {
     if (empire_worklist_clipboard[z]['kind']==VUT_IMPROVEMENT) {
       sprite = get_improvement_image_sprite(improvements[empire_worklist_clipboard[z]['value']]);
-      bg = "background:#EFFD ";  
+      bg = "background:#EFFD ";
     } else {
       sprite = get_unit_type_image_sprite(unit_types[empire_worklist_clipboard[z]['value']])
-      bg = "background:#EFFD ";  
+      bg = "background:#EFFD ";
     }
     if (sprite == null) continue;
 
     var marginleft = z == 0 ? 10 : -1;
-      
+
     var opacity = 1;
     const click_action = "onclick='cut_improv_clipboard(event, " + z + ");' ";
     // Put improvement sprite in the cell:
     clipboard_html = clipboard_html +
       "<div style='cursor:pointer; padding:0px; opacity:"+opacity+"; "+magnification
           +"'><span style='padding:0px; margin:0px; margin-left:"+marginleft+"px; "+border+" "+bg+" url("
-          + sprite['image-src'] + ");background-position:-" + sprite['tileset-x'] + "px -" 
-          + sprite['tileset-y'] + "px;  width: " + sprite['width'] + "px;height: " 
+          + sprite['image-src'] + ");background-position:-" + sprite['tileset-x'] + "px -"
+          + sprite['tileset-y'] + "px;  width: " + sprite['width'] + "px;height: "
           + sprite['height'] + "px;float:left;' "
           + title_text + click_action
           +"</span></div>";
   }
-  const plural = (empire_worklist_clipboard.length > 1) ? "s" : ""  
+  const plural = (empire_worklist_clipboard.length > 1) ? "s" : ""
   if (empire_worklist_clipboard.length > 0) clipboard_html += empire_worklist_clipboard.length+"&nbsp;item"+plural;
   $("#empire_worklist_clipboard").html(clipboard_html);
 }
@@ -1173,7 +1173,7 @@ function handle_improv_clipboard(event, kind, z)
     }
     empire_worklist_clipboard.push({"kind": kind, "value": z});
   }
-  else {                  // replace (copy to) clipboard 
+  else {                  // replace (copy to) clipboard
     empire_worklist_clipboard = [{"kind": kind, "value": z}];
   }
   redraw_improv_clipboard();
@@ -1185,25 +1185,25 @@ function empire_econ_worklists_screen(wide_screen,narrow_screen,small_screen,
   landscape_screen,tiny_screen,redux_screen)
 {
   $("#empire_title").html("National Production");
-  //if (small_screen) $("#empire_title").hide(); else $("#empire_title").show(); 
-  $("#empire_title").hide(); // always hide: maximise panel space. 
+  //if (small_screen) $("#empire_title").hide(); else $("#empire_title").show();
+  $("#empire_title").hide(); // always hide: maximise panel space.
 
   // MAGNIFICATION ---------------------------------------------------------
   var real_width = ($(window).width()-270);
   //mag factor then becomes % of 66px needed to fit 38 buildings in the available space
   var mag_factor = (real_width/8)/67;  //console.log("1. win.width: "+$(window).width()+"   mag factor:"+mag_factor);
   // If user adjusted mag level before, use that instead
-  if (empire_wklst_tab_saved_mag>0) {  
+  if (empire_wklst_tab_saved_mag>0) {
     mag_factor = empire_wklst_tab_saved_mag;
   } else { // If fitting 38 buildings in 1 row makes them just too tiny, keep boosting mag by exact amount to add one extra row,
            // until the building icons are no longer too tiny. "Too tiny" defined as mag:0.35
-    for (var n=1; n<100; n++) {       
+    for (var n=1; n<100; n++) {
       if (mag_factor<.4) mag_factor = mag_factor * ((n+1)/n);  // if mag<0.4 it's too tiny, increase mag% enough for 1 more row
       else break;
     }
     if (mag_factor<.4) mag_factor = .45;
     if (mag_factor>1) mag_factor = 1.0;
-  } 
+  }
   if (small_screen) mag_factor = 0.8;
   var magnification = "zoom:"+mag_factor+"; -moz-transform:"+mag_factor+";";
   // ---------------------------------------------------------------------
@@ -1213,14 +1213,14 @@ function empire_econ_worklists_screen(wide_screen,narrow_screen,small_screen,
                  + (small_screen ? "" : create_worklist_wonder_div() )    // should be wonder_mode ? wonder_div : improv_div for space economy
                  + create_worklist_unit_div()
                  + "<div><span>"
-             //    + "<input type='button' style='font-size:90%; padding:2px;' value='+2%' onclick='emp_wklst_mag_plus2("+mag_factor+");'>" 
+             //    + "<input type='button' style='font-size:90%; padding:2px;' value='+2%' onclick='emp_wklst_mag_plus2("+mag_factor+");'>"
              //    + "<input type='button' style='font-size:90%; padding:2px;' value='-2%' onclick='emp_wklst_mag_less2("+mag_factor+");'>
                  + "</span>"
                  + "<span style='margin-top:3px' id='empire_worklist_clipboard'></span></div>";
   $("#empire_mode_panel").html(panel_html);
   redraw_improv_clipboard();
-  
-  // MAIN AREA -------------------------------------------------------------  
+
+  // MAIN AREA -------------------------------------------------------------
   $('#empire_scroll').css({"height": $(window).height()-160, "overflow-y":"scroll", "overflow-x":"hidden" });
 
   var sortList = [];
@@ -1243,7 +1243,7 @@ function empire_econ_worklists_screen(wide_screen,narrow_screen,small_screen,
   {
     empire_list_html = "<table class='tablesorter-dark' id='empire_table' style='border=0px;border-spacing=0;padding=0;'>"
         + "<thead id='empire_table_head'>"
-        + "<tr>"  
+        + "<tr>"
         // City coulumn
         + "<th title='Sort alphabetically' style='text-align:right; font-size:93%; width:10px;'><span style='white-space:nowrap'>City"+updown_sort_arrows+"</span></th>"
         // Worklist column
@@ -1255,7 +1255,7 @@ function empire_econ_worklists_screen(wide_screen,narrow_screen,small_screen,
   // saved for later but currently not used
   var alt_click_method = "oncontextmenu";
   if (small_screen) alt_click_method = "ondblclick";
-  
+
   var queue_html = "";
   var city_count = 0; // number of cities (total rows)
 
@@ -1277,11 +1277,11 @@ function empire_econ_worklists_screen(wide_screen,narrow_screen,small_screen,
     // Mobile users have to click empty row to append clipboard:
     //var empty_row_click = small_screen ? " onclick='tap_empty_production_row(event, "+city_id+")'" : "";
     // Now all users can click an empty row to append to clipboard
-    var empty_row_click = is_small_screen() 
+    var empty_row_click = is_small_screen()
                         ? " onclick='tap_empty_production_row(event, "+city_id+")'"
                         : " title='CLICK: paste worklist\nCTRL-CLICK: clear worklist\nSHIFT-CLICK: copy worklist' onclick='tap_empty_production_row(event, "+city_id+")'";
     queue_html = "<tr class='cities_row' style='border-bottom: 3px solid #000; height:"+rheight+"px;'>";
-    queue_html += "<td style='cursor:pointer; font-size:85%; text-align:right; padding-right:10px;' onclick='javascript:show_city_dialog_by_id(" 
+    queue_html += "<td style='cursor:pointer; font-size:85%; text-align:right; padding-right:10px;' onclick='javascript:show_city_dialog_by_id("
                       + pcity['id']+")' id='citycell"+city_id+"'>"+pcity['name']+"</td>";
     queue_html += "<td style='padding-left:10px;' id='WL"+city_id+"'"+empty_row_click+">";
 
@@ -1315,13 +1315,13 @@ function empire_econ_worklists_screen(wide_screen,narrow_screen,small_screen,
       // ------------------------------------------------------------------
       // Set display vars
       var border = "border:2px solid #000000;";
-      var bg = req_state == TECH_KNOWN ? "background:#FEED " : "background:#A769 " 
+      var bg = req_state == TECH_KNOWN ? "background:#FEED " : "background:#A769 "
       var title_text =  "title='";
       var right_click_action = "";
 
       // Special handling of title and background for current production---------------
       if (z==-1) { // -1 == current production (not future worklist)
-        var finish_turns = get_city_production_time(pcity); 
+        var finish_turns = get_city_production_time(pcity);
         // Figure out if production is finished
         var shields_invested = pcity['shield_stock'];
         var shields_needed = -1;  // stays -1 only if Coinage
@@ -1337,12 +1337,12 @@ function empire_econ_worklists_screen(wide_screen,narrow_screen,small_screen,
         }
         if (shields_needed != -1) { // -1 == coinage
           title_text +=  finish_turns + " turns &nbsp;&nbsp;(" + get_production_progress(pcity) + ")\n\n"
-          if (shields_invested>=shields_needed) { 
+          if (shields_invested>=shields_needed) {
             bg = "background:#BFBE ";
             border = "border:2x solid 308000;"
           } else {
               title_text += "RIGHT-CLICK: Buy\n";
-              right_click_action = "oncontextmenu='request_city_id_buy("+pcity['id']+")'";  
+              right_click_action = "oncontextmenu='request_city_id_buy("+pcity['id']+")'";
               if (finish_turns==1) {
               bg = "background:#DFDD ";
               border = "border:2x solid 002000;"
@@ -1360,9 +1360,9 @@ function empire_econ_worklists_screen(wide_screen,narrow_screen,small_screen,
             + sprite['image-src'] +
             ");background-position:-" + sprite['tileset-x'] + "px -" + sprite['tileset-y']
             + "px;  width: " + sprite['width'] + "px;height: " + sprite['height'] + "px;float:left;' "
-            + title_text 
+            + title_text
             + right_click_action
-            + "onclick='handle_worklist_action(event,"+city_id+","+ z + ");' "  
+            + "onclick='handle_worklist_action(event,"+city_id+","+ z + ");' "
             +"</span></div>";
     }
     empire_list_html += (queue_html +"</td></tr>");      // Add the row
@@ -1382,7 +1382,7 @@ function empire_econ_worklists_screen(wide_screen,narrow_screen,small_screen,
   }
 }
 /**************************************************************************
- Handle a worklist action click in Worklist tab 
+ Handle a worklist action click in Worklist tab
 **************************************************************************/
 function handle_worklist_action(event,city_id, z)
 {
@@ -1392,25 +1392,25 @@ function handle_worklist_action(event,city_id, z)
       //console.log("CURPROD.{kind:"+active_city.production_kind+",value:"+active_city.production_value+"}");
       //console.log(active_city.worklist);
   production_selection = empire_worklist_clipboard.slice();  // make a copy of clipboard
-  if (event.ctrlKey) {          // Paste clipboard BEFORE this item 
+  if (event.ctrlKey) {          // Paste clipboard BEFORE this item
     if (z!=-1) {
-      worklist_selection = [z];      
+      worklist_selection = [z];
       city_insert_in_worklist();
     } else { //user clicked on cur_prod not worklist, we have to play a little shell game:
       // Append current city prod into temp. clipboard at last position
       console.log(production_selection)
       const cur_prod = {"kind":active_city['production_kind'], "value":active_city['production_value']};
-      production_selection.push(cur_prod); 
+      production_selection.push(cur_prod);
       console.log(production_selection)
       // Insert new clipboard to top of worklist
       worklist_selection = [0]; // have to reset
       city_insert_in_worklist();
       // Now just delete the current production item to shift it all up
       worklist_selection = [0]; // have to reset
-      city_remove_current_prod();      
+      city_remove_current_prod();
     }
-  } else if (event.shiftKey) {  // Paste clipboard AFTER this item  
-    worklist_selection = [z+1];  // (+1 changes before to after)  
+  } else if (event.shiftKey) {  // Paste clipboard AFTER this item
+    worklist_selection = [z+1];  // (+1 changes before to after)
     city_insert_in_worklist();
   } else {                      // Remove city worklist item
     if (z==-1) {
@@ -1418,7 +1418,7 @@ function handle_worklist_action(event,city_id, z)
       city_remove_current_prod(); //user clicked on cur_prod not worklist
     }
     else {
-      worklist_selection = [z];   
+      worklist_selection = [z];
       city_worklist_task_remove();
     }
   }
@@ -1447,19 +1447,19 @@ function tap_empty_production_row(event, city_id)
     active_city['worklist'] = [];
     send_city_worklist(active_city['id']);
   }
-  else 
+  else
   { // Main function:  append clipboard after worklist
     production_selection = empire_worklist_clipboard.slice();  // make a copy of clipboard
 
     var z = active_city['worklist'].length-1; // pretend we clicked last item in clipboard
-    worklist_selection = [z+1];  // (+1 changes before to after)  
+    worklist_selection = [z+1];  // (+1 changes before to after)
     city_insert_in_worklist();
   }
   active_city = null;
 }
 
 /**************************************************************************
- Super Panel for improvements in National Production/Worklist tab 
+ Super Panel for improvements in National Production/Worklist tab
 **************************************************************************/
 function create_worklist_improv_div()
 {
@@ -1491,7 +1491,7 @@ function create_worklist_improv_div()
     if (improvements[z]['reqs'].length > 0) {
       var req_state = player_invention_state(client.conn.playing, improvements[z]['reqs'][0]['value']);
       if (req_state != TECH_KNOWN) {
-        if (req_state != TECH_PREREQS_KNOWN) continue; 
+        if (req_state != TECH_PREREQS_KNOWN) continue;
       }
     }
     // Set cell colour/opacity based on player has tech_req
@@ -1509,8 +1509,8 @@ function create_worklist_improv_div()
     improvements_html = improvements_html +
       "<div style='cursor:pointer; padding:0px; opacity:"+opacity+"; "+magnification
           +"'><span style='padding:0px; margin:0px; margin-left:-1px; "+border+" "+bg+" url("
-          + sprite['image-src'] + ");background-position:-" + sprite['tileset-x'] + "px -" 
-          + sprite['tileset-y'] + "px;  width: " + sprite['width'] + "px;height: " 
+          + sprite['image-src'] + ");background-position:-" + sprite['tileset-x'] + "px -"
+          + sprite['tileset-y'] + "px;  width: " + sprite['width'] + "px;height: "
           + sprite['height'] + "px;float:left;' "
           + title_text + click_action
           +"</span></div>";
@@ -1518,7 +1518,7 @@ function create_worklist_improv_div()
   return improvements_html;
 }
 /**************************************************************************
- Super Panel for wonders in National Production/Worklist tab 
+ Super Panel for wonders in National Production/Worklist tab
 **************************************************************************/
 function create_worklist_wonder_div()
 {
@@ -1544,7 +1544,7 @@ function create_worklist_wonder_div()
     if (improvements[z].genus>GENUS_SMALL_WONDER) continue; // filter out everything except wonders
     sprite = get_improvement_image_sprite(improvements[z]);
     if (sprite == null) continue;
-    
+
     // FILTER INAPPROPRIATE WONDERS FROM LIST --------------------------
     // OWNED:
     if (owned_wonders[z]) {
@@ -1559,7 +1559,7 @@ function create_worklist_wonder_div()
     // UNREACHABLE and 2 techs away or more:  (TECHS_PREREQS_KNOWN is 1 away)
     if (improvements[z]['reqs'].length > 0) {
       if (player_invention_state(client.conn.playing, improvements[z]['reqs'][0]['value']) == TECH_UNKNOWN) {
-        continue;   
+        continue;
       }
     } //------------------------------------------------------------------
     // Great Wonders already built in the world.
@@ -1580,8 +1580,8 @@ function create_worklist_wonder_div()
     improvements_html = improvements_html +
       "<div style='cursor:pointer; opacity: 1.0; padding:0px; "+magnification
           +"'><span style='padding:0px; margin:0px; margin-left:-1px; "+border+" "+bg+" url("
-          + sprite['image-src'] + ");background-position:-" + sprite['tileset-x'] + "px -" 
-          + sprite['tileset-y'] + "px;  width: " + sprite['width'] + "px;height: " 
+          + sprite['image-src'] + ");background-position:-" + sprite['tileset-x'] + "px -"
+          + sprite['tileset-y'] + "px;  width: " + sprite['width'] + "px;height: "
           + sprite['height'] + "px;float:left;' "
           + title_text + click_action
           +"</span></div>";
@@ -1590,7 +1590,7 @@ function create_worklist_wonder_div()
 }
 
 /**************************************************************************
- Super Panel for units in National Production/Worklist tab 
+ Super Panel for units in National Production/Worklist tab
 **************************************************************************/
 function create_worklist_unit_div()
 {
@@ -1619,7 +1619,7 @@ function create_worklist_unit_div()
     }
 
     // OBSOLETE - See if we have the tech for the unit which obsoletes it:
-    const obs_by_type = unit_types[z]['obsoleted_by']; 
+    const obs_by_type = unit_types[z]['obsoleted_by'];
     if (obs_by_type < ruleset_control.num_unit_types) {  // highest index+1 == flag for never obsolete
       //console.log("Checking "+unit_types[z]['name'])
       if (unit_types[obs_by_type]['tech_requirement']>0) {
@@ -1631,12 +1631,12 @@ function create_worklist_unit_div()
     // FARTHER THAN ONE TECH AWAY:
     var req_state = player_invention_state(client.conn.playing,unit_types[z]['tech_requirement']);
     if (req_state != TECH_KNOWN) {
-        if (req_state != TECH_PREREQS_KNOWN) continue; 
-    } 
+        if (req_state != TECH_PREREQS_KNOWN) continue;
+    }
     // -----------------------------------------------------------------------------------------
     sprite = get_unit_type_image_sprite(unit_types[z]);
     if (sprite == null) continue;
-  
+
     // Set cell colour/opacity based on player has tech_req
     if (unit_types[z]['tech_requirement'] > 0) {
       if (req_state == TECH_PREREQS_KNOWN) {
@@ -1645,7 +1645,7 @@ function create_worklist_unit_div()
       }
       else bg = "background:#EFF4 ";
     } else bg = "background:#EFF4 ";  // some have no reqs
-      
+
     var opacity = 1;
     var title_text="title='"+unit_types[z]['name']+"\n\n"+constant_title;
     const click_action = "onclick='handle_improv_clipboard(event, "+VUT_UTYPE+","+ z + ");' "; // copy/add/remove to clipboard < >/<shift>/<ctrl>
@@ -1653,8 +1653,8 @@ function create_worklist_unit_div()
     units_html = units_html +
       "<div style='cursor:pointer; padding:0px; opacity:"+opacity+"; "+magnification
           +"'><span style='padding:0px; margin:0px; margin-left:-1px; "+border+" "+bg+" url("
-          + sprite['image-src'] + ");background-position:-" + sprite['tileset-x'] + "px -" 
-          + sprite['tileset-y'] + "px;  width: " + sprite['width'] + "px;height: " 
+          + sprite['image-src'] + ");background-position:-" + sprite['tileset-x'] + "px -"
+          + sprite['tileset-y'] + "px;  width: " + sprite['width'] + "px;height: "
           + sprite['height'] + "px;float:left;' "
           + title_text + click_action
           +"</span></div>";
@@ -1666,7 +1666,7 @@ function create_worklist_unit_div()
 **************************************************************************/
 function toggle_empire_show_upkeep(upkeep_type)
 {
-  
+
   switch (upkeep_type) {
     case "food":
       empire_upkeep_show_food = !empire_upkeep_show_food;
@@ -1694,7 +1694,7 @@ function toggle_empire_show_upkeep(upkeep_type)
   empire_sort_mode = SORT_NONE;
 }
 /**************************************************************************
- Toggle whether to show present buildings 
+ Toggle whether to show present buildings
 **************************************************************************/
 function toggle_empire_show_present_buildings()
 {
@@ -1730,8 +1730,8 @@ function toggle_empire_show_wonders_only()
   empire_sort_mode = SORT_NONE;
 }
 /**************************************************************************
- Toggle whether to show hitpoints on units in Empire tab, applies to all 
- modes which show units. 
+ Toggle whether to show hitpoints on units in Empire tab, applies to all
+ modes which show units.
 **************************************************************************/
 function toggle_empire_show_hitpoints()
 {
@@ -1743,8 +1743,8 @@ function toggle_empire_show_hitpoints()
   empire_sort_mode = SORT_NONE;
 }
 /**************************************************************************
- Toggle whether to show hitpoints on units in Empire tab, applies to all 
- modes which show units. 
+ Toggle whether to show hitpoints on units in Empire tab, applies to all
+ modes which show units.
 **************************************************************************/
 function toggle_empire_show_movepoints()
 {
@@ -1756,7 +1756,7 @@ function toggle_empire_show_movepoints()
   empire_sort_mode = SORT_NONE;
 }
 /**************************************************************************
- Sort all unit rows in empire tab by Hit points 
+ Sort all unit rows in empire tab by Hit points
 **************************************************************************/
 function empire_sort_hp()
 {
@@ -1786,7 +1786,7 @@ function compare_hp_sort(u1, u2)
   return 0;
 }
 /**************************************************************************
- Sort all unit rows in empire tab by Hit points 
+ Sort all unit rows in empire tab by Hit points
 **************************************************************************/
 function empire_sort_mp()
 {
@@ -1816,7 +1816,7 @@ function compare_mp_sort(u1, u2)
   return 0;
 }
 /**************************************************************************
- Sort all unit rows in empire tab by Hit points 
+ Sort all unit rows in empire tab by Hit points
 **************************************************************************/
 function empire_sort_vet()
 {
@@ -1911,13 +1911,13 @@ function empire_unittype_screen(wide_screen,narrow_screen,small_screen,
     // -2 columns (selection box, cost). Economised: Sort arrows, Grows In>>grows, Granary>>Grain, Producing>>Output:Image only, Turns/Progress>>Turns
     //console.log("MODE: Small Narrow")
   }
-        
+
   var adjust_oversize = "";               // for style-injecting margin/alignment adjustment on oversize unit images
   var unit_row_html = "";
   var type_count = 0; // number of types of units (total rows)
 
   /* Pre-sort units by type to avoid exponentially more iterations:
-   * If we are in sort mode, then we already created data and just want to resort it. Otherwise, 
+   * If we are in sort mode, then we already created data and just want to resort it. Otherwise,
      we just arrived and need to refresh it, because units may have changed */
   if (empire_sort_mode)  {
     // do not refresh data: it was just re-sorted for re-display
@@ -1941,7 +1941,7 @@ function empire_unittype_screen(wide_screen,narrow_screen,small_screen,
 
   var count = new Array(unit_types.length); // keeps track of how many units of each type
   for (var unit_type_id in unit_types) { //rows (unit types)
-    count[unit_type_id] = 0; 
+    count[unit_type_id] = 0;
 
     var rheight = 28 * Math.ceil( (units_sorted_by_type[unit_type_id].length*40) /  ($(window).width()-140) );
     unit_row_html = "<tr class='cities_row' style='height:"+rheight+"px;'>";
@@ -1950,25 +1950,25 @@ function empire_unittype_screen(wide_screen,narrow_screen,small_screen,
     unit_row_html += "<td style='padding-left:10px;' id='u"+unit_type_id+"'>";
 
     for (var unit_index in units_sorted_by_type[unit_type_id]) { //row elements (individual units)
-      var punit = units_sorted_by_type[unit_type_id][unit_index];      
-      
+      var punit = units_sorted_by_type[unit_type_id][unit_index];
+
       count[unit_type_id]++; //to do: this can be summed in the earlier iteration and we can skip the step of injecting html later
       var ptype = unit_type(punit);
 
-      // Generate micro-sprite   
+      // Generate micro-sprite
       var ptype_sprite = {"type":ptype,"sprite":get_unit_type_image_sprite(ptype)};
       var hptype_sprite = {"type":ptype,"sprite":get_full_hp_sprite(punit)};
       var mptype_sprite = {"type":ptype,"sprite":get_full_mp_sprite(punit)};
       var vtype_sprite = {"type":ptype,"sprite":get_full_vet_sprite(punit)};
 
-      if (ptype_sprite != null) { 
+      if (ptype_sprite != null) {
         sprite = ptype_sprite['sprite'];
         var hp_sprite = hptype_sprite['sprite'];
         var mp_sprite = mptype_sprite['sprite'];
         var vet_sprite = vtype_sprite['sprite'];
 
         adjust_oversize = (sprite['width']>64) ? -34 : -26;  // "oversize" images space differently
-        
+
         ptype_img_html = "<span class='prod_img' title='"+html_safe(get_unit_city_info(punit))+"' style='float:left; padding-left:0px padding-right:0px; content-align:right; margin-top:-8px;"
                 + "margin-left:"+adjust_oversize+"px' margin-right:-4px; onclick='city_dialog_activate_unit(units[" + punit['id'] + "]);'>"
                 + "<div style='float:left; content-align:left;"
@@ -2007,24 +2007,24 @@ function empire_unittype_screen(wide_screen,narrow_screen,small_screen,
                 + " content-align: left;"
                 + "vertical-align:top; float:left;'>"
                 + "</div>";
-        } else vet_badge_html = "";       
+        } else vet_badge_html = "";
       }
-      
+
       if (empire_show_movesleft) ptype_img_html+=moves_left_html;
       if (empire_show_hitpoints) ptype_img_html+=hit_point_html;
       if (punit['veteran'] > 0) ptype_img_html+=vet_badge_html;
-      
+
       unit_row_html += "<span id='u_img" + unit_type_id + "'>"
         + "<span style='font-size:1%; color: rgba(0, 0, 0, 0);'>"+(String.fromCharCode(65+unit_type_id))+"</span>"+ptype_img_html+"</span></span>";
         //invisible tiny char for sorting by native unit_type order; defeats js sorting 10 as prior to 2,3,4,...
-    
+
     }
     // only add a row if we have more than 0 units of this type:
     if (count[unit_type_id]>0) {
       type_count++;
       empire_list_html += (unit_row_html +"</td></tr>");
     }
-  }  
+  }
   empire_list_html += "</tbody></table>";
 
   $("#empire_list").html(empire_list_html);
@@ -2073,10 +2073,10 @@ function empire_keyboard_listener(ev)
   var key_code = ev.keyCode;
 
   switch (key_code) {
-    case 0: 
+    case 0:
       ev.stopImmediatePropagation();
-      setTimeout(function(){  
-       
+      setTimeout(function(){
+
       }, 300);
      break;
   }

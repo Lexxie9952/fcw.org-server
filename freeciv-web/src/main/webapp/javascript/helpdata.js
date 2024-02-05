@@ -21,7 +21,7 @@ var toplevel_menu_items = ["help_terrain", "help_economy", "help_cities",
     "help_city_improvements", "help_wonders_of_the_world", "help_units",
     "help_combat", "help_technology", "help_government"];
 var hidden_menu_items = ["help_connecting", "help_languages", "help_governor",
-    "help_chatline", "help_about", "help_worklist_editor", "help_nations", 
+    "help_chatline", "help_about", "help_worklist_editor", "help_nations",
     "help_copying", "help_overview", "help_strategy_and_tactics",
     "help_economy", "help_goods", "help_cities", "help_combat",
     "help_policies", "help_resources"
@@ -75,7 +75,7 @@ function show_help()
   $("#help_menu").remove();
   $("#help_info_page").remove();
   $("<ul id='help_menu'></ul><div id='help_info_page'></div>").appendTo("#tabs-hel");
-  
+
   generate_help_menu("help_gen_ruleset");
 
   for (var sec_id in helpdata_order) {
@@ -109,7 +109,7 @@ function show_help()
     $("#help_footer").hide();
   } else {
     max_help_pane_width = $(window).width() - $("#help_menu").width() - 60;
-    if (max_help_pane_width > MAX_ALLOWED_HELP_WIDTH) 
+    if (max_help_pane_width > MAX_ALLOWED_HELP_WIDTH)
       max_help_pane_width = MAX_ALLOWED_HELP_WIDTH;
     $("#help_info_page").css("max-width", max_help_pane_width);
     $("#help_footer").show();
@@ -125,7 +125,7 @@ function show_help_intro()
       $("#help_info_page").html(data);
       var help_banner = "/static/images/fcw-front-page"
       + Math.ceil(Math.random()*61) + ".png";
-    
+
       $("#help_banner").prop("src",help_banner);
   });
 }
@@ -180,7 +180,7 @@ function generate_help_menu(key)
           && improvement['name'] == "Manhattan Project") {
           continue; // if major nukes are OFF, suppress illegal prod choice.
       }
-      
+
       $("<li data-helptag='" + key + "_" + improvement['id'] + "'>"
         + improvement['name'] + "</li>").appendTo("#help_wonders_of_the_world_ul");
     }
@@ -298,7 +298,7 @@ function handle_help_menu_select( ui )
 function clear_sidebar()
 {
   if (is_small_screen())
-  { 
+  {
     $("#help_info_page").css("max-width",$(window).width());
     $("#help_info_page").css("padding","1px");
     $("#help_menu").hide();
@@ -322,7 +322,7 @@ function wiki_on_item_button(item_name)
 
   return ("<button class='help_button' onclick=\"show_wikipedia_dialog('"
           + item_name.replace(/\\/g, "\\\\").replace(/'/g, "\\'")
-          + "');\">Wikipedia on " + item_name +  "</button>");        
+          + "');\">Wikipedia on " + item_name +  "</button>");
 }
 
 /**************************************************************************
@@ -352,7 +352,7 @@ function generate_help_text(key)
   var pane_class = "helptext_pane";
   // Temporarily maximize horizontal space for mobile
   if (is_small_screen())
-  { 
+  {
     $("#help_info_page").css("max-width",$(window).width());
     $("#help_info_page").css("padding","1px");
     $("#help_menu").hide();
@@ -366,13 +366,13 @@ function generate_help_text(key)
 
   if (key.indexOf("help_gen_terrain") != -1) {
     var terrain = terrains[parseInt(key.replace("help_gen_terrain_", ""))];
-    msg = "<h1>" + terrain['name'] + "</h1>" 
+    msg = "<h1>" + terrain['name'] + "</h1>"
       + "<img src='/images/terrain/"+terrain['name'].toLowerCase().replace(" ","")+".png'>"
       + "<div class='"+pane_class+"'>"
       + cleaned_text(terrain['helptext'])
 	    + "<br><br>"
       + "<table class='terrain_chart'>"
-      + "<tr><td>Movement cost:</td>" + "<td>" 
+      + "<tr><td>Movement cost:</td>" + "<td>"
       + (server_settings.move_cost_in_frags.val ? move_points_text(terrain['movement_cost']) : terrain['movement_cost']) + "</td></tr>"
 	    + "<tr><td>Defense bonus:</td>" + "<td>" + terrain['defense_bonus']+"%" + "</td></tr>"
 	    + "<tr><td>Base Output:</td>" +"<td>"
@@ -380,15 +380,15 @@ function generate_help_text(key)
         + "<span title='Base Shield Output' style='cursor: help; font-size:120%; font-family: Arial; color:#000; background-color:#f0f0f0'>&hairsp;"+ terrain['output'][1] + "&hairsp;</span>"
         + "<span title='Base Trade Output' style='cursor: help; font-size:120%; font-family: Arial; color:#000; background-color:#f8f020'>&hairsp;"+ terrain['output'][2] + "&hairsp;</span>"
       + "</td></tr>"
-    
+
     let divisor = 1; if (client_rules_flag[CRF_2X_MOVES]) divisor = 2;
     msg += ""
     + (terrain.road_time ? ("<tr><td>Road:</td><td>"
          + "+" + terrain.road_output_incr_pct[2]/100
-         + "<img style='margin-top:-5px;margin-bottom:-5px' src='/images/e/trade.png'></td><td>"  
+         + "<img style='margin-top:-5px;margin-bottom:-5px' src='/images/e/trade.png'></td><td>"
          + terrain.road_time/divisor + " worker-turns</td></tr>") : "")
 
-    + (terrain.irrigation_time && terrain.irrigation_result == terrain.id 
+    + (terrain.irrigation_time && terrain.irrigation_result == terrain.id
         ? ("<tr><td>Irrigation:</td><td>"
            + "+" + terrain.irrigation_food_incr
            + "<img style='margin-top:-5px;margin-bottom:-5px' src='/images/e/food.png'>" + "</td><td>"
@@ -397,12 +397,12 @@ function generate_help_text(key)
 
     + (terrain.irrigation_time && terrain.irrigation_result != terrain.id ? ("<tr><td>Cultivation creates:</td><td>"
         + "<img style='margin-bottom:-5px;margin-top:-5px' src='/images/e/"
-        + terrains[terrain.irrigation_result].name.toLowerCase().replace(" ","")+".png'> &nbsp;" 
+        + terrains[terrain.irrigation_result].name.toLowerCase().replace(" ","")+".png'> &nbsp;"
         + terrains[terrain.irrigation_result].name + "</td><td>"
         + terrain.irrigation_time/divisor + " worker-turns"
         + "</td></tr>") : "")
 
-    + (terrain.mining_time && terrain.mining_result == terrain.id 
+    + (terrain.mining_time && terrain.mining_result == terrain.id
         ? ("<tr><td>Mining:</td><td>"
            + "+" + terrain.mining_shield_incr
            + "<img style='margin-top:-5px;margin-bottom:-5px' src='/images/e/shield.png'>" + "</td><td>"
@@ -412,14 +412,14 @@ function generate_help_text(key)
     + (terrain.mining_time && terrain.mining_result != terrain.id ? ("<tr><td>Planting creates:</td><td>"
         + "<img style='margin-bottom:-5px;margin-top:-5px' src='/images/e/"
         + terrains[terrain.mining_result].name.toLowerCase().replace(" ","")+".png'> &nbsp;"
-        + terrains[terrain.mining_result].name + "</td><td>" 
+        + terrains[terrain.mining_result].name + "</td><td>"
         + terrain.mining_time/divisor + " worker-turns"
         + "</td></tr>") : "")
 
     + (terrain.transform_time && terrain.transform_result != terrain.id ? ("<tr><td>Transforms to:</td><td>"
         + "<img style='margin-bottom:-5px;margin-top:-5px' src='/images/e/"
         + terrains[terrain.transform_result].name.toLowerCase().replace(" ","")+".png'> &nbsp;"
-        + terrains[terrain.transform_result].name + "</td><td>" 
+        + terrains[terrain.transform_result].name + "</td><td>"
         + terrain.transform_time/divisor/2 + " engineer-turns"
         + "</td></tr>") : "");
     msg += "</table>"
@@ -460,7 +460,7 @@ function generate_help_text(key)
         if (!client_rules_flag[CRF_MP2_A]) num_resources = 2;
         break;
       case "Forest":
-        num_resources = 3;        
+        num_resources = 3;
         if (client_rules_flag[CRF_MP2_C]) num_resources ++;
         if (!client_rules_flag[CRF_MP2_B]) num_resources = 2;
         break;
@@ -474,7 +474,7 @@ function generate_help_text(key)
             + "' src='/images/terrain/"+terrain.name.toLowerCase().replace(" ","")+r+".png'>"
       }
     }
-    // General construction of terrain help for other rulesets: TODO: when we can extract an extra sprite and put into a 
+    // General construction of terrain help for other rulesets: TODO: when we can extract an extra sprite and put into a
     // <img> element with position:absolute; left:r*96, then helptext_pane class gets property position:relative, we can
     // put pretty images like the mp2 stuff above (and remove all hardcoding too)
     else {
@@ -605,7 +605,7 @@ function generate_help_text(key)
       msg += "<div"+flex+" id='utype_fact_bombard'>";
       msg += span1 + bombard_name.replace(" ", "&nbsp;") +":&nbsp;&nbsp;"+ span_end + span2_small;
 
-      msg += punit_type['bombard_rate'] 
+      msg += punit_type['bombard_rate']
           + (punit_type['bombard_rate'] > 1 ? " rounds. " : " round. ");
 
       if (pstats.bombard_retaliate_rounds) {
@@ -621,7 +621,7 @@ function generate_help_text(key)
         msg += bstats.bombard_primary_targets;
         msg += (bstats.bombard_primary_targets > 1 ? " targets. " : " target. ");
       }
-      else 
+      else
         msg += "ALL targets. ";
 
       if (bstats.bombard_primary_kills) {
@@ -634,9 +634,9 @@ function generate_help_text(key)
       if (punit_type.bombard_move_cost)
         msg += move_points_text(punit_type.bombard_move_cost, false)
             + (punit_type.bombard_move_cost > SINGLE_MOVE ? " moves." : " move.");
-      else 
+      else
         msg += move_points_text(punit_type['move_rate'], false)+" moves.";
-      
+
       msg += div_end;
     } else if (pstats.bombard_retaliate_rounds) { // SUD ONLY: e.g., helicopter
       var bombard_name = utype_get_bombard_name(punit_type);
@@ -651,7 +651,7 @@ function generate_help_text(key)
         msg += bstats.bombard_primary_targets;
         msg += (bstats.bombard_primary_targets > 1 ? " targets. " : " target. ");
       }
-      else 
+      else
         msg += "ALL targets. ";
 
       if (bstats.bombard_primary_kills) {
@@ -664,9 +664,9 @@ function generate_help_text(key)
       if (punit_type.bombard_move_cost)
         msg += move_points_text(punit_type.bombard_move_cost, false)
             + (punit_type.bombard_move_cost > SINGLE_MOVE ? " moves." : " move.");
-      else 
+      else
         msg += " No move cost.";
-      
+
       msg += div_end;
     }
 
@@ -768,7 +768,7 @@ function generate_help_text(key)
                                    "Upkeep:",
                                    span1+"Upkeep:&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;"+span_end+span2);
                            });
-                           
+
     } else if (key.indexOf("help_gen_governments") != -1) {
       var gov_id = parseInt(key.replace("help_gen_governments_", ""));
 

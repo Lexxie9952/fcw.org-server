@@ -48,7 +48,7 @@ function audio_initialize()
           }
         });
     audio = as[0];
-    audio.setVolume(0.10); // make music proportionate to other sound effects 
+    audio.setVolume(0.10); // make music proportionate to other sound effects
   });
 
 }
@@ -63,13 +63,13 @@ function supports_mp3() {
 **************************************************************************/
 function pick_next_track() {
   if (!audio) return;
-  
+
   var category;
-  var track_name = null;  
-  var fallthru_counter = 100; // because multiple instances of same track 
+  var track_name = null;
+  var fallthru_counter = 100; // because multiple instances of same track
   var dj_approved = false;
   var style;
-  
+
   // TODO: currently based on known techs for standard rulesets. Later,
   // this function will take event-mood tags then construct other tags
   // based on YEAR, civilization style, turn #, etc., and use more special
@@ -113,7 +113,7 @@ function pick_next_track() {
         } while (!dj_approved && fallthru_counter-- >= 0)
     }
   }
-  
+
   if (!track_name || !dj_approved || fallthru_counter < 1) {
     return false; // ran out of songs
   }

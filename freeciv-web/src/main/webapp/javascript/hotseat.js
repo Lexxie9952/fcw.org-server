@@ -26,7 +26,7 @@ var hotseat_pwd = {};
 /**************************************************************************
  Shows the new hotseat game dialog.
 **************************************************************************/
-function show_hotseat_dialog() 
+function show_hotseat_dialog()
 {
   var message = "Now you can start a new hotseat game, where two or more "
    + "players plays on the same device by taking turns playing the game.<br>"
@@ -50,7 +50,7 @@ function show_hotseat_dialog()
 			buttons:
 			{
                                  "Add player" : function() {
-                                    add_hotseat_player(); 
+                                    add_hotseat_player();
                                  },
 				 "New hotseat game": function() {
                                     new_hotseat_game();
@@ -73,7 +73,7 @@ function show_hotseat_dialog()
 /**************************************************************************
  ...
 **************************************************************************/
-function new_hotseat_game() 
+function new_hotseat_game()
 {
   for (var i = 1; i <= num_hotseat_players; i++) {
     if (!validate_hotseat_username("#username_req_" + i)) return;
@@ -89,7 +89,7 @@ function new_hotseat_game()
 /**************************************************************************
  ...
 **************************************************************************/
-function setup_hotseat_game() 
+function setup_hotseat_game()
 {
   if (ws != null && ws.readyState === 1) {
     set_alternate_turns();
@@ -118,7 +118,7 @@ function validate_hotseat_username(field) {
 /**************************************************************************
  ...
 **************************************************************************/
-function add_hotseat_player() 
+function add_hotseat_player()
 {
   if (num_hotseat_players >= 125) {
     swal("Support for more players is not available now.");
@@ -127,7 +127,7 @@ function add_hotseat_player()
   }
   num_hotseat_players += 1;
 
-  $("#new_hotseat_players").append("<div class='hotseat_player'>Player name " + num_hotseat_players 
+  $("#new_hotseat_players").append("<div class='hotseat_player'>Player name " + num_hotseat_players
     + ": <input id='username_req_" + num_hotseat_players + "' type='text' size='25' maxlength='31'></div>");
 
 }
@@ -135,7 +135,7 @@ function add_hotseat_player()
 /**************************************************************************
 ...
 **************************************************************************/
-function is_hotseat() 
+function is_hotseat()
 {
   return ($.getUrlVar('action') == "hotseat") || hotseat_enabled;
 }
@@ -143,7 +143,7 @@ function is_hotseat()
 /**************************************************************************
 ...
 **************************************************************************/
-function hotseat_next_player() 
+function hotseat_next_player()
 {
   hotseat_active_player = ((hotseat_active_player + 1) % num_hotseat_players);
   send_message("/take " + hotseat_players[hotseat_active_player]);
@@ -158,12 +158,12 @@ function hotseat_next_player()
 /**************************************************************************
 ...
 **************************************************************************/
-function show_hotseat_new_phase() 
+function show_hotseat_new_phase()
 {
 
   if (hotseat_players.length == 0) hotseat_load_refresh();
 
-  var message = "It is now " + hotseat_players[hotseat_active_player] 
+  var message = "It is now " + hotseat_players[hotseat_active_player]
                  + "'s turn to play in this hotseat game.";
 
   if (hotseat_pwd[hotseat_players[hotseat_active_player]] != null) {
@@ -178,7 +178,7 @@ function show_hotseat_new_phase()
   $("#hotseat_dialog").dialog({
 			modal: true,
 			width: "50%",
-                        beforeClose: function(event, ui) 
+                        beforeClose: function(event, ui)
                         {
                           if (dialog_close_trigger != "button") {
                             return false;
@@ -225,9 +225,9 @@ function show_hotseat_new_phase()
 /**************************************************************************
 ...
 **************************************************************************/
-function add_hotseat_password() 
+function add_hotseat_password()
 {
-  var message = "Set player password in this hotseat game for " + hotseat_players[hotseat_active_player] 
+  var message = "Set player password in this hotseat game for " + hotseat_players[hotseat_active_player]
                  + ":<br><br><input id='new_hotseat_pwd' type='password' size='25' maxlength='31'>";
 
   if (hotseat_pwd[hotseat_players[hotseat_active_player]] != null) {
@@ -263,7 +263,7 @@ function add_hotseat_password()
                                    set_default_mapview_active();
                                    advance_unit_focus(false);
 
-                                 }			
+                                 }
                         }
 		});
 
@@ -275,7 +275,7 @@ function add_hotseat_password()
 /**************************************************************************
  Initialize hotseat data after loading a hotseat savegame.
 **************************************************************************/
-function hotseat_load_refresh() 
+function hotseat_load_refresh()
 {
   num_hotseat_players = 0;
   for (var player_id in players) {

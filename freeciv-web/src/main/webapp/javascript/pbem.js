@@ -25,7 +25,7 @@ var invited_players = [];
 /**************************************************************************
  Shows the Freeciv play-by-email dialog.
 **************************************************************************/
-function show_pbem_dialog() 
+function show_pbem_dialog()
 {
   var title = "Welcome to Freeciv-web";
   var message = "";
@@ -39,17 +39,17 @@ function show_pbem_dialog()
   } else if ($.getUrlVar('savegame') != null) {
     message = "It is now your turn to play this Play-by-Email game. Please login to play your turn.";
     if (pbem_duplicate_turn_play_check()) return;
-  
+
   } else {
     message = "You are about to start a Play-by-Email game, where you "
     + "can challenge other players, and each player will be notified when "
-    + "it is their turn to play through e-mail. If you are a new player, then click the sign up button below. These are the game rules:<br>" 
+    + "it is their turn to play through e-mail. If you are a new player, then click the sign up button below. These are the game rules:<br>"
     + "<ul><li>The game will have between 2 and 4 human players playing alternating turns. Each player will get an e-mail when it is their turn to play.</li>"
-    + "<li>Standard Freeciv-web rules are used with some changes to map size, research speed, start units and gold to speed up games.</li>"  
+    + "<li>Standard Freeciv-web rules are used with some changes to map size, research speed, start units and gold to speed up games.</li>"
     + "<li>Please complete your turn as soon as possible, and use at no longer than 7 days until you complete your turn.</li>"
     + "<li>Results of games with 2 players are stored to rank players.</li>"
     + "<li>Please post feedback and arrange new games on <a href='https://discord.gg/ZHQGvWeUaP' target='_new'>Discord</a> and the <a href='http://forum.freeciv.org/f/viewforum.php?f=24' target='_new'>Forum</a>.</li>"
-    + "<li id='user_count'></li></ul>"; 
+    + "<li id='user_count'></li></ul>";
   }
 
   // reset dialog page.
@@ -99,12 +99,12 @@ function show_pbem_dialog()
 /**************************************************************************
 ...
 **************************************************************************/
-function login_pbem_user() 
+function login_pbem_user()
 {
 
   var title = "Log in";
   var message = "Log in to your Freeciv-web user account:<br><br>"
-                + "<table><tr><td>Username:</td><td><input id='username' type='text' size='25' maxlength='30' onkeyup='return forceLower(this);'></td></tr>"  
+                + "<table><tr><td>Username:</td><td><input id='username' type='text' size='25' maxlength='30' onkeyup='return forceLower(this);'></td></tr>"
                 + "<tr><td>Password:</td><td><input id='password' type='password' size='25'> &nbsp;"+/* <a class='pwd_reset' href='#' style='color: #666666;'>Forgot password?</a>*/"</td></tr></table><br><br>"
                 + "<div id='username_validation_result' style='display:none;'></div><br><br>";
 
@@ -153,7 +153,7 @@ function login_pbem_user()
 /**************************************************************************
 ...
 **************************************************************************/
-function login_pbem_user_request() 
+function login_pbem_user_request()
 {
 
   username = $("#username").val().trim();
@@ -306,7 +306,7 @@ function validateEmail(email) {
 /**************************************************************************
 ...
 **************************************************************************/
-function forceLower(strInput) 
+function forceLower(strInput)
 {
   strInput.value=strInput.value.toLowerCase();
 }
@@ -432,14 +432,14 @@ function create_new_pbem_game()
 /**************************************************************************
 ...
 **************************************************************************/
-function send_pbem_invitation(email) 
+function send_pbem_invitation(email)
 {
   $.ajax({
    type: 'POST',
    url: "/mailstatus?action=invite&to=" + email + "&from=" + username,
    success: function(data, textStatus, request){
        swal(email + " has been invited to Freeciv-web. You will "
-             + "receive an e-mail when it is your turn to play. Now "  
+             + "receive an e-mail when it is your turn to play. Now "
              + "you can wait for the other player.");
        $("#opponent").val("")
        setSwalTheme();
@@ -494,7 +494,7 @@ function set_human_pbem_players()
 /**************************************************************************
  Is this a Play-By-Email game?
 **************************************************************************/
-function is_pbem() 
+function is_pbem()
 {
   return ($.getUrlVar('action') == "pbem");
 }
@@ -502,13 +502,13 @@ function is_pbem()
 /**************************************************************************
 ...
 **************************************************************************/
-function pbem_end_phase() 
+function pbem_end_phase()
 {
   if (pbem_phase_ended) return;
   pbem_phase_ended = true;
   send_message("/save");
 
-  show_dialog_message("Play By Email turn over", 
+  show_dialog_message("Play By Email turn over",
       "Your turn is now over in this Play By Email game. Now the next player " +
       "will get an email with information about how to complete their turn. " +
       "You will also get an email about when it is your turn to play again. " +
@@ -560,12 +560,12 @@ function activate_pbem_player()
 /**************************************************************************
  Dialog for the user to close their user accounts.
 **************************************************************************/
-function close_pbem_account() 
+function close_pbem_account()
 {
 
   var title = "Close account";
   var message = "To deactivate your account, please enter your username and password:<br><br>"
-                + "<table><tr><td>Username:</td><td><input id='username' type='text' size='25' onkeyup='return forceLower(this);'></td></tr>"  
+                + "<table><tr><td>Username:</td><td><input id='username' type='text' size='25' onkeyup='return forceLower(this);'></td></tr>"
                 + "<tr><td>Password:</td><td><input id='password' type='password' size='25'></td></tr></table><br><br>"
                 + "<div id='username_validation_result' style='display:none;'></div><br><br>";
 
@@ -637,7 +637,7 @@ function pbem_duplicate_turn_play_check()
     } else {
       return false;
     }
-    
+
   }
 
 }

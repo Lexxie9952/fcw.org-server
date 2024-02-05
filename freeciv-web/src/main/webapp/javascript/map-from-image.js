@@ -133,7 +133,7 @@ function doImage(image_data) {
       handle_image_ctx(context);
   };
   img.src = image_data;
- 
+
 }
 
 /**************************************************************************
@@ -197,13 +197,13 @@ function zeroFill( number, width )
   {
     return new Array( width + (/\./.test( number ) ? 2 : 1) ).join( '0' ) + number;
   }
-  return number + ""; 
+  return number + "";
 }
 
 /**************************************************************************
 ...
 **************************************************************************/
-function get_map_terrain_type(x, y, pixel) 
+function get_map_terrain_type(x, y, pixel)
 {
   var rnd = Math.random();
   if (pixel_color(255,255,255, pixel, 20)) return "a";  //arctic
@@ -222,8 +222,8 @@ function get_map_terrain_type(x, y, pixel)
 
   if (rnd < 4) return "p"; //plains
   if (rnd >= 4 && rnd <= 6) return "h";  //hills
-  if (rnd >= 6 && rnd < 7) return "t";  //tundra 
-  if (rnd >= 7) return "g";  //grassland 
+  if (rnd >= 6 && rnd < 7) return "t";  //tundra
+  if (rnd >= 7) return "g";  //grassland
 
 }
 

@@ -137,7 +137,7 @@ function player_number(player)
 **************************************************************************/
 function get_diplstate_text(state_id)
 {
-  // These exact strings are checked elsewhere in nation.js.  If altered, 
+  // These exact strings are checked elsewhere in nation.js.  If altered,
   // just globalise an array diplstate_text[state_id] and use that instead
   // of this function.
   if (DS_ARMISTICE == state_id) {
@@ -161,7 +161,7 @@ function get_diplstate_text(state_id)
 }
 
 /**************************************************************************
-  Returns a universally standard string representing embassy status 
+  Returns a universally standard string representing embassy status
   between current player and foreign player_id player
 **************************************************************************/
 
@@ -314,14 +314,14 @@ function get_invalid_username_reason(username)
 {
   if (username == null || username.length == 0) {
     return "empty";
-  } 
+  }
   else if (username.length <= 2) {
     return "too short";
   }
   else if (username.length >= 32) {
     return "too long";
   }
-  if (username.toLowerCase() == "pbem" 
+  if (username.toLowerCase() == "pbem"
    || username.toLowerCase() == "kickedplayer"
    || username.toLowerCase().startsWith("newavailableplayer")
    ) {
@@ -339,7 +339,7 @@ function get_invalid_username_reason(username)
            || username.includes('[')  || username.includes(']')
            || username.includes('+')  || username.includes('*')
            || username.includes('/')  || username.includes(',')
-           || username.includes('#')  || username.includes(';') 
+           || username.includes('#')  || username.includes(';')
            || username.includes('.')  || username.includes(':')
            || username.includes('$')  || username.includes('%')
            || username.includes('^')  || username.includes('=')
@@ -353,7 +353,7 @@ function get_invalid_username_reason(username)
     return "disallowed. Illegal symbols: \" ' \\ & ^ % : $ ! ~ + / * = ? , etc."
   }
   else if (username != alphanumeric_cleaner(username)) {
-    return "invalid: only alphanumeric and hyphenation allowed";  
+    return "invalid: only alphanumeric and hyphenation allowed";
   }
   else if (!check_text_with_banlist_exact(username)) {
     return "banned";

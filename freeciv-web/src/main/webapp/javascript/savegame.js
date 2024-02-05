@@ -393,7 +393,7 @@ function load_game_toggle()
     $.unblockUI();
     return;
   }
-    
+
   var firstplayer = players[0]['name'].split(" ")[0];
 
   if ($.getUrlVar('scenario') == "true" || scenario_activated) {

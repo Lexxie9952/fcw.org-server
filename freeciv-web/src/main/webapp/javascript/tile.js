@@ -66,9 +66,9 @@ function tile_resource(tile)
 }
 
 /**************************************************************************
-  Returns true iff the specified tile has an adjacent tile which contains 
+  Returns true iff the specified tile has an adjacent tile which contains
   the specified extra. The 'cardinal' parameter tells us to only look
-  for CAdjacent tiles. 
+  for CAdjacent tiles.
 **************************************************************************/
 function is_extra_adjacent(ptile, extra, cardinal)
 {
@@ -136,7 +136,7 @@ function tile_set_worked(ptile, pwork)
 function tile_has_base(ptile)
 {
   if (typeof EXTRA_FORTRESS !== "undefined" && tile_has_extra(ptile, EXTRA_FORTRESS))
-    return true;  
+    return true;
   if (typeof EXTRA_FORT !== "undefined" && tile_has_extra(ptile, EXTRA_FORT))
     return true;
   if (typeof EXTRA_AIRBASE !== "undefined" && tile_has_extra(ptile, EXTRA_AIRBASE))
@@ -156,7 +156,7 @@ function tile_has_base(ptile)
     return true;
   if (typeof EXTRA_AIRSTRIP !== "undefined" && tile_has_extra(ptile, EXTRA_AIRSTRIP))
     return true;
-    
+
   return false;
 }
 
@@ -179,15 +179,15 @@ function tile_city(ptile)
 /**************************************************************************
  Improve tile info message from server
 **************************************************************************/
-function improve_tile_info_dialog(message) 
+function improve_tile_info_dialog(message)
 {
   // other functions: handle_info_text_message (mapctrl.js)
   var added_text = "";
 
   // Default: unknown terrain
-  var ttype = 0; 
+  var ttype = 0;
   var tindex = Object.keys(terrains).length; // code for invalid/impossible terrain
-  var tinvalid = Object.keys(terrains).length; 
+  var tinvalid = Object.keys(terrains).length;
   if (mclick_tile) {
     tindex = mclick_tile['terrain'];
     ttype = terrains[tindex];
@@ -210,26 +210,26 @@ function improve_tile_info_dialog(message)
     // Calculate defense bonus
     var has_river = "";
     var db = parseFloat(1) + parseFloat(ttype['defense_bonus'])/100;
-    if (message.includes("River</b>") 
+    if (message.includes("River</b>")
        || message.includes("River/")
        || message.includes("/River") ) {  // these exact strings ensure no other text gives false positive
       has_river = " (<span style='color:#5d97ed;' class='black_shadow'><b>River</b></span>)";
       if (client_rules_flag[CRF_MP2_C]) db += 0.5;  // additive bonus as in for example real civ2, mp2c
-      else db *= (1+extras[EXTRA_RIVER]['defense_bonus']/100); 
+      else db *= (1+extras[EXTRA_RIVER]['defense_bonus']/100);
       db = Math.round((db + Number.EPSILON) * 100) / 100;
     }
     added_text += "<span class='black_shadow' style='color:rgb("
                + ttype['color_red']+","+ttype['color_green']+","+ttype['color_blue']
                +  ")'><br><br><b>" + ttype['name'] + "</b>"+has_river+"<br></span>";
 
-    added_text += "Defense Bonus: <b>" + db + "&times;</b> &nbsp;&nbsp;&nbsp; Movement Cost: <b>" 
+    added_text += "Defense Bonus: <b>" + db + "&times;</b> &nbsp;&nbsp;&nbsp; Movement Cost: <b>"
     + (server_settings.move_cost_in_frags.val ? move_points_text(ttype['movement_cost']) : ttype['movement_cost'])+ "</b><br>"
-    
+
     if (ttype['irrigation_time']) {
       added_text += "<span class='highlight_irrigation'>Irrigate:<b>" + Math.ceil(ttype['irrigation_time']/wt)+"</b></span>"
       if (ttype['irrigation_food_incr']) added_text+= " (+"+ttype['irrigation_food_incr']+")";
     }
-    if (ttype['irrigation_result'] != null && ttype['irrigation_result'] != tindex && ttype['irrigation_result'] != tinvalid) 
+    if (ttype['irrigation_result'] != null && ttype['irrigation_result'] != tindex && ttype['irrigation_result'] != tinvalid)
       added_text+="&#10145;"+terrains[ttype['irrigation_result']]['name']
 
     if (ttype['mining_time']) {
@@ -248,20 +248,20 @@ function improve_tile_info_dialog(message)
       added_text += "&nbsp;&nbsp; <span class='highlight_roading'>Road:<b>" + Math.ceil(ttype['road_time']/wt)+"</b></span>";
 
     var resource_present = extras[tile_resource(mclick_tile)];
-    var resource_text = resource_present 
+    var resource_text = resource_present
                       ? "<br><img class='v' src='/images/e/_"
                         + freemoji_name_from_universal(ttype.name)
                         + freemoji_name_from_universal(resource_present.name)+".png'>"
-                        + cleaned_text(resource_present.helptext + "<br><br>") 
+                        + cleaned_text(resource_present.helptext + "<br><br>")
                       : "<br><br>";
-    
+
     added_text += "<br>" + cleaned_text(ttype['helptext'])+resource_text;
   }
-  
+
   // Warcalc odds.
   warcalc_reset_roles();
   var sunits = tile_units(mclick_tile);
- 
+
   if (my_hp && sunits && sunits.length > 0) warcalc_set_default_vals(sunits[0]);
   if (my_hp && their_hp && sunits && units[my_uid] && units[their_uid] && sunits.length > 0) {
     // Store values in Warcalc Tab, to allow future reference + function re-use:
@@ -271,7 +271,7 @@ function improve_tile_info_dialog(message)
     //hitpoints
     $("#id_ahp").val(my_hp);
     $("#id_dhp").val(their_hp);
-    //firepower 
+    //firepower
     $("#id_afp").val(my_fp);
     $("#id_dfp").val(their_fp);
     //results

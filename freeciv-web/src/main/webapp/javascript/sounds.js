@@ -25,7 +25,7 @@ var sound_delay_timestamp = null; // timestamp for measuring sound_delayer
 
 
 /**************************************************************************
- Plays the unit sound for movement, if the unit has moved and is visible. 
+ Plays the unit sound for movement, if the unit has moved and is visible.
 **************************************************************************/
 function check_unit_sound_play(old_unit, new_unit)
 {
@@ -63,40 +63,40 @@ function unit_move_sound_play(unit)
   }
 
   var ptype = unit_type(unit);
-  move_sound = soundset[ptype['sound_move']];  
+  move_sound = soundset[ptype['sound_move']];
 
   // Figure out if this unit is moving for the first time or has already moved
   var full_moves = ptype['move_rate'];
   var used_moves = full_moves - unit['movesleft'];
 
   // Negative used_moves means move bonus in effect. Adjust full_moves to properly reflect move bonus:
-  if (used_moves<0) {  
+  if (used_moves<0) {
     if (ptype['name']=="Train") {
-      if (player_invention_state(client.conn.playing, tech_id_by_name('Electricity')) == TECH_KNOWN) 
+      if (player_invention_state(client.conn.playing, tech_id_by_name('Electricity')) == TECH_KNOWN)
         full_moves += 9;
-      if (player_invention_state(client.conn.playing, tech_id_by_name('Combustion')) == TECH_KNOWN) 
+      if (player_invention_state(client.conn.playing, tech_id_by_name('Combustion')) == TECH_KNOWN)
         full_moves += 9;
     }
     /* unnecessary, since we set this unit to simply always use partial move sound even with full moves
     if (ptype['name']=="Airplane") {
-      if (player_invention_state(client.conn.playing, tech_id_by_name('Radio')) == TECH_KNOWN) 
+      if (player_invention_state(client.conn.playing, tech_id_by_name('Radio')) == TECH_KNOWN)
         full_moves += 18;
-      if (player_invention_state(client.conn.playing, tech_id_by_name('Advanced Flight')) == TECH_KNOWN) 
+      if (player_invention_state(client.conn.playing, tech_id_by_name('Advanced Flight')) == TECH_KNOWN)
         full_moves += 18;
-      if (player_invention_state(client.conn.playing, tech_id_by_name('Radar')) == TECH_KNOWN) 
+      if (player_invention_state(client.conn.playing, tech_id_by_name('Radar')) == TECH_KNOWN)
         full_moves += 18;
-      if (player_invention_state(client.conn.playing, tech_id_by_name('Rocketry')) == TECH_KNOWN) 
+      if (player_invention_state(client.conn.playing, tech_id_by_name('Rocketry')) == TECH_KNOWN)
         full_moves += 18;
-      if (player_invention_state(client.conn.playing, tech_id_by_name('Avionics')) == TECH_KNOWN) 
+      if (player_invention_state(client.conn.playing, tech_id_by_name('Avionics')) == TECH_KNOWN)
         full_moves += 18;
-      if (player_invention_state(client.conn.playing, tech_id_by_name('Space Flight')) == TECH_KNOWN) 
+      if (player_invention_state(client.conn.playing, tech_id_by_name('Space Flight')) == TECH_KNOWN)
         full_moves += 18;
     }
     */
   }
-  
-  // PARTIAL MOVE SOUNDS.  Some sounds are loud or long duration and shouldn't repeat for each step 
-  if ( unit['movesleft'] < full_moves )  { 
+
+  // PARTIAL MOVE SOUNDS.  Some sounds are loud or long duration and shouldn't repeat for each step
+  if ( unit['movesleft'] < full_moves )  {
     switch(ptype['name']) {
       case "Armor":
         break;
@@ -104,10 +104,10 @@ function unit_move_sound_play(unit)
         move_sound = "pm_armor.ogg"
         break;
       case "Medium Bomber":
-      case "Heavy Bomber": 
-      case "Strategic Bomber": 
+      case "Heavy Bomber":
+      case "Strategic Bomber":
       case "Bomber":
-        move_sound = "pm_prop_bombers.ogg"; 
+        move_sound = "pm_prop_bombers.ogg";
         break;
       case "Cruise Missile":
       case "Nuclear Missile":
@@ -117,7 +117,7 @@ function unit_move_sound_play(unit)
         break;
       case "Dive Bomber":
       case "Airplane":
-      case "Fighter":  
+      case "Fighter":
       case "Escort Fighter":
         move_sound = "pm_prop_fighters.ogg";
         break;
@@ -135,7 +135,7 @@ function unit_move_sound_play(unit)
       case "Train":
         move_sound = "pm_train.ogg";
         break;
-      // TO DO: Armor, Cruise Missile, Nuclear 
+      // TO DO: Armor, Cruise Missile, Nuclear
     }
   }
   // PLAY MOVE SOUND
@@ -151,7 +151,7 @@ function unit_move_sound_play(unit)
  Plays the hostile event sound specified by 'key' if that tile is visible
  to the player (which we know only by if units are visible on that tile.)
 **************************************************************************/
-function play_hostile_event_sound(key, ptile, ptype) 
+function play_hostile_event_sound(key, ptile, ptype)
 {
   if (!sounds_enabled) return;
 
@@ -176,7 +176,7 @@ function play_hostile_event_sound(key, ptile, ptype)
 /**************************************************************************
  Plays the combat sound for the unit if visible.
 **************************************************************************/
-function play_combat_sound(unit) 
+function play_combat_sound(unit)
 {
   if (!sounds_enabled) return;
   if (unit == null) return;
@@ -213,16 +213,16 @@ function combat_sound_special_case(attacker,attacker_hp,defender)
   if (unit_types[attacker['type']]['name'] == "Submarine"
      && unit_types[defender['type']]['name'] == "Destroyer"
      && attacker_hp == 0) {
-     
-       play_sound("depth-charge.ogg") 
+
+       play_sound("depth-charge.ogg")
        return true;
      }
   // Destroyer attacked Sub and won, make depth charge sound
   if (unit_types[defender['type']]['name'] == "Submarine"
      && unit_types[attacker['type']]['name'] == "Destroyer"
      && attacker_hp > 0) {
-     
-       play_sound("depth-charge.ogg") 
+
+       play_sound("depth-charge.ogg")
        return true;
      }
 
@@ -232,17 +232,17 @@ function combat_sound_special_case(attacker,attacker_hp,defender)
    // Sea unit dies, a "glub glub" sinking sound played concurrent
    // Air units die, "crash and burn" sound
    // Foot unit death sound.
-     
+
   return false; // no special case, play normal combat sound for victor
 }
 
 /**************************************************************************
  Plays a sound file based on a gived filename.
 **************************************************************************/
-function play_sound(sound_file) 
+function play_sound(sound_file)
 {
   var current_time = new Date().getTime();
-  
+
   // if first time, set up sound traffic controls:
   if (sound_delay_timestamp == null) {
     sound_delay_timestamp = current_time;
@@ -259,7 +259,7 @@ function play_sound(sound_file)
     sound_traffic_counter = 0;
     sound_delay_timestamp = current_time;
   }
-  
+
   sound_traffic_counter ++; // increment counter, it will keep incrementing until a reset happens
 
   // check if attempting to play MORE sounds within the allowed time span and abort if so:

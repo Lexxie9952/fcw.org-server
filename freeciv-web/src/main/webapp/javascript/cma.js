@@ -17,7 +17,7 @@
 
 ***********************************************************************/
 
-var power_cma = true;  /* Whether or not "Your Cities" text in Cities list becomes 
+var power_cma = true;  /* Whether or not "Your Cities" text in Cities list becomes
 power-user buttons for mass-paste or mass-apply of clipboard to each city */
 
 // Global vars that allow multiple functions to work on the City Governor
@@ -40,7 +40,7 @@ var _cma_val_sliders = [1,0,0,0,0,0];
 var _cma_min_sliders = [1,0,0,0,0,0];
 var _cma_happy_slider = 0;
 var _cma_celebrate = false;
-var _cma_allow_disorder = false; 
+var _cma_allow_disorder = false;
 var _cma_no_farmer = false;
 var _cma_allow_specialists = true;
 var _cma_max_growth = false;
@@ -133,7 +133,7 @@ function show_city_governor_tab()
 function cma_init_data()
 {
   const pcity = active_city;
-  cma_user_changed = false;   
+  cma_user_changed = false;
 
   cma_enabled = pcity['cma_enabled'];
   if (cma_enabled) {
@@ -164,14 +164,14 @@ function create_cma_sliders() {
     $("#cma-min-slider-"+name).slider({ value: cma_min_sliders[i], min:-20, max:MIN_SURPLUS_MAX });
     $("#cma-min-slider-"+name).slider("enable");
     $("#cma-val-slider-"+name).css("width", 160);
-    $("#cma-min-slider-"+name).css("width", 160); 
+    $("#cma-min-slider-"+name).css("width", 160);
 
     $("#cma-val-slider-"+name).slider({"slide": cma_user_slide, "change": cma_user_input});
     $("#cma-min-slider-"+name).slider({"slide": cma_user_slide, "change": cma_user_input});
   }
   $("#cma-happy-slider").slider({ value: cma_happy_slider, min:0, max:50 });
   $("#cma-happy-slider").slider("enable");
-  $("#cma-happy-slider").css("width", 160); 
+  $("#cma-happy-slider").css("width", 160);
   $("#cma-happy-slider").slider({"slide": cma_user_slide, "change": cma_user_input});
 }
 /**************************************************************************
@@ -244,7 +244,7 @@ function cma_user_input()
 }
 /**************************************************************************
   Called when the user is in the process of sliding a slider.
-  Has to correct for glitch in jquery slider that reports a different 
+  Has to correct for glitch in jquery slider that reports a different
   value from what it will decide after mouseup
 **************************************************************************/
 function cma_user_slide()
@@ -258,7 +258,7 @@ function cma_user_slide()
     m = $("#cma-min-slider-"+name).slider("option", "value");
     // Heuristic that fixes majority of glitchy value reporting by jq widget:
     if (v<cma_val_sliders[i]) v--; else if (v>cma_val_sliders[i]) v++;
-    if (m<cma_min_sliders[i]) m--; else if (m>cma_min_sliders[i]) m++;  
+    if (m<cma_min_sliders[i]) m--; else if (m>cma_min_sliders[i]) m++;
     $("#"+name+"_val_result").html("<b>"+v+"</b>");
     $("#"+name+"_min_result").html("<b>"+m+"</b>");
   }
@@ -269,7 +269,7 @@ function cma_user_slide()
 
   // Update all UI that dynamically changes with enabled/disabled state:
   cma_set_title();
-  update_dynamic_UI(); 
+  update_dynamic_UI();
 }
 
 /**************************************************************************
@@ -313,12 +313,12 @@ function button_pushed_cma_apply() {
   cma_enabled = true;     // stand-in "true", will revert to whatever it was
   update_cma_state();     // refresh UI state vars before saving
   // a special cma command; apply once without altering anything:
-  cma_apply_once = true;  
+  cma_apply_once = true;
   request_new_cma();      // send new CMA off to server
   gov_refresh_timer = new Date().getTime(); //tells show_city_dialog this happened
 }
 /**************************************************************************
-  Lets user refresh the screen, make sure it has right values or is 
+  Lets user refresh the screen, make sure it has right values or is
   represented correctly.
 **************************************************************************/
 function button_pushed_refresh_cma() {
@@ -328,7 +328,7 @@ function button_pushed_refresh_cma() {
   The title is dynamic: it tells whether CMA is enabled or disabled.
 **************************************************************************/
 function cma_set_title() {
-  dhtml = cma_get_status_icon()+" City Governor <b>" 
+  dhtml = cma_get_status_icon()+" City Governor <b>"
         + cma_get_status_text(cma_enabled) + "d</b>."
   $("#cma_status").html(dhtml);
 }
@@ -365,22 +365,22 @@ function request_new_cma() {
 /**************************************************************************
  Set default UI values to emulate cityturn.c::set_default_city_manager(..)
 **************************************************************************/
-function cma_set_default_city_manager() 
+function cma_set_default_city_manager()
 {
   const pcity = active_city;
   // Reset global UI vars
-  cma_val_sliders = [0,0,0,0,0,0];   
-  cma_min_sliders = [0,0,0,0,0,0];  
+  cma_val_sliders = [0,0,0,0,0,0];
+  cma_min_sliders = [0,0,0,0,0,0];
   cma_celebrate = false;
   cma_allow_disorder = false;
   cma_no_farmer = false;
   cma_allow_specialists = true;
   cma_max_growth = false; /* temp. used as substitute for no_farmer because wasn't latter wasn't building into our return packets! */
-  
+
   if (pcity.size > 1) {
     if (pcity.size <= game_info.notradesize) {
       cma_val_sliders[O_FOOD] = 15;
-    } 
+    }
     else {
       if (pcity.granary_size == pcity.food_stock) {
         /* We don't need more food if the granary is full. */
@@ -390,7 +390,7 @@ function cma_set_default_city_manager()
         cma_val_sliders[O_FOOD] = 10;
       }
     }
-  } 
+  }
   else {
     /* Growing to size 2 is the highest priority. */
     cma_val_sliders[O_FOOD] = 20;
@@ -456,7 +456,7 @@ function cma_paste_clipboard() {
 /**************************************************************************
   Pastes CMA clipboard into a city's CMA settings on the server.
   Set apply_once=true if this is a temporary application,
-  set apply_once=false if this is a permanent save to server  
+  set apply_once=false if this is a permanent save to server
 **************************************************************************/
 function cma_paste_to_city_id(city_id, apply_once)
 {

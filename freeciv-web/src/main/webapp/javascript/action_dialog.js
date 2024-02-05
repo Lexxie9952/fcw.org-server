@@ -67,11 +67,11 @@ var action_images = {
   61: "orders/fortress",
   62: "orders/mine_default",
   63: "orders/irrigate_default",
-  64: "orders/deboard",                   // deboard            
+  64: "orders/deboard",                   // deboard
   65: "orders/unload",                    // unload transport
   66: "orders/unload",                    // disembark
   68: "orders/board",                     // board
-  69: "orders/board",                     // embark 
+  69: "orders/board",                     // embark
   71: "e/spy",
   75: "e/pollution",
   76: "e/fallout",
@@ -170,16 +170,16 @@ function act_sel_queue_done(actor_unit_id)
   the "Wait" button. This helps us know if we need to re-create the
   pop-up when acting on the same tile again.
 **************************************************************************/
-function is_unit_act_sel_waiting(punit) 
-{ 
-  return !unit_has_act_sel_dialog(punit['id']) 
+function is_unit_act_sel_waiting(punit)
+{
+  return !unit_has_act_sel_dialog(punit['id'])
          && should_ask_server_for_actions(punit);
 }
 
 /**********************************************************************//**
   Returns true if the unit has an open act_sel_dialog.
 **************************************************************************/
-function unit_has_act_sel_dialog(unit_id) 
+function unit_has_act_sel_dialog(unit_id)
 {
    return active_dialogs.includes("#act_sel_dialog_"+unit_id);
 }
@@ -366,7 +366,7 @@ function act_sel_click_function(parent_id,
       send_request(JSON.stringify(packet));
       is_more_user_input_needed = true;
       /* Siege Rams do targeted sabotage but do NOT select their target:
-         Only City Walls are the only allowed target. We must set 
+         Only City Walls are the only allowed target. We must set
          is_more_user_input_needed = false to avoid the UI getting stuck */
       if (action_id == ACTION_SPY_TARGETED_SABOTAGE_CITY_ESC
           && client_rules_flag[CRF_MP2_C]
@@ -484,7 +484,7 @@ function render_action_image_into_button(text, action_id, sub_tgt, order, activi
     }
 
     text = "<img style='max-height:24px; position:absolute; left:2px;top:4px;' "
-        + "src='/images/" + action_images[key] + ".png'" + ">&emsp;" 
+        + "src='/images/" + action_images[key] + ".png'" + ">&emsp;"
         + text;
   }
   //console.log("text returns as %s\n",text);
@@ -508,7 +508,7 @@ function create_act_sel_button(parent_id,
   // Fix inaccurate "Conquer City" to "Raze City" for size 1 city:
   if (button_text.includes("Conquer")) {
     var pcity = cities[tgt_id];
-    if (pcity && pcity['size']==1 
+    if (pcity && pcity['size']==1
         && unit_has_class_flag(units[actor_unit_id], UCF_KILLCITIZEN)) {
       button_text = button_text.replace("Conquer", "Raze");
     }
@@ -647,8 +647,8 @@ function popup_action_selection(actor_unit, action_probabilities,
       if (actions[action_id]['tgt_kind'] == tgt_kind
           && action_prob_possible(
               action_probabilities[action_id])) {
-        //---------------------------------------------------------------------------------        
-        // Capture is illegal on FCW server IFF:        
+        //---------------------------------------------------------------------------------
+        // Capture is illegal on FCW server IFF:
         // Longturn && idle nation && human && unit isn't trespassing on player's territory.
         // Therefore, don't show button and give a courtesy message about the rule.
         if (action_id == ACTION_CAPTURE_UNITS && is_longturn() ) {
@@ -657,7 +657,7 @@ function popup_action_selection(actor_unit, action_probabilities,
             var player_id = sunits[0].owner;
             // Disallow if idle and human:
             if (players[player_id]['nturns_idle'] > 1 && !(players[player_id]['flags'].isSet(PLRF_AI))) {
-              // Disallow if idler is NOT trespassing on player's own territory: 
+              // Disallow if idler is NOT trespassing on player's own territory:
               if (tiles[tgt_id].owner != client.conn.playing.playerno) {
                 add_client_message("Info: Capture is unavailable on idlers except in your homeland.");
                 continue; // don't add button for illegal action
@@ -666,10 +666,10 @@ function popup_action_selection(actor_unit, action_probabilities,
           }
         }
         //-------------------------------------------------------------------------------------
-        /* TODO: Remove this code when rulesets get actionenablers defined for all complex 
-           (de)Board and (un)Load rules. See "(un)Load (de)Board (dis)Embark rules.txt" in 
+        /* TODO: Remove this code when rulesets get actionenablers defined for all complex
+           (de)Board and (un)Load rules. See "(un)Load (de)Board (dis)Embark rules.txt" in
            ruleset dir. For now, these buttons are disallowed to prevent their appearance
-           in cases where it's disallowed in a ruleset. */ 
+           in cases where it's disallowed in a ruleset. */
         if (action_id == ACTION_TRANSPORT_BOARD) {
           if (!unit_could_possibly_load(actor_unit,
                                         unit_type(actor_unit),
@@ -687,7 +687,7 @@ function popup_action_selection(actor_unit, action_probabilities,
           continue;
         }
         //  if (action_id == ACTION_TRANSPORT_LOAD) {}  action not backported yet
-        //------------------------------------------------------------------------------------ 
+        //------------------------------------------------------------------------------------
 
         if (action_id==ACTION_ATTACK || action_id==ACTION_CONQUER_CITY) {
           // Attack and Conquer should always be first on menu to avoid
@@ -832,7 +832,7 @@ function popup_action_selection(actor_unit, action_probabilities,
       }
     }
   }
-  var ptype = unit_type(actor_unit); 
+  var ptype = unit_type(actor_unit);
   // THIS SECTION DOES OVERRIDE NAMES for special unit actions:
   if (SUA) {
     switch (ptype['rule_name']) {
@@ -928,7 +928,7 @@ function popup_action_selection(actor_unit, action_probabilities,
                                     + "\nFanatics opportunistically damage and degrade foreign occupants\n"
                                     + "of their native land, for 3 rounds of combat on up to 4 foreign\n"
                                     + "occupants of a city or tile."
-          
+
         }
       } break;
       case "Zealots":  for (button_id in buttons) {
@@ -942,7 +942,7 @@ function popup_action_selection(actor_unit, action_probabilities,
                                     + "\Zealots opportunistically damage and degrade foreign occupants\n"
                                     + "of their native land, for 3 rounds of combat on up to 4 foreign\n"
                                     + "occupants of a city or tile."
-          
+
         }
       } break;
       case "Marines":  for (button_id in buttons) {
@@ -952,7 +952,7 @@ function popup_action_selection(actor_unit, action_probabilities,
                                   + "Combat:                3 rounds\n"
                                   + "Targets:                 4 units\n"
                                   + "Move cost:            1 5/9 moves\n"
-                                  + "Max. casualties:     1\n"        
+                                  + "Max. casualties:     1\n"
                                   + "\nHardened Marines use agility/mobility over terrain features for hit-and-run\n"
                                   + "ballistic attacks: 3 rounds of combat on up to 4 occupants of a tile."
         }
@@ -965,7 +965,7 @@ function popup_action_selection(actor_unit, action_probabilities,
                                   + "Targets:                 1 unit\n"
                                   + "Move cost:            2 moves\n"
                                   + "Min. moves:          hasn't moved\n"
-                                  + "Max. casualties:     1\n"        
+                                  + "Max. casualties:     1\n"
                                   + "\nHurls rocks on 1 unit on the target tile for\n"
                                   + "4 rounds. Can't be done to Fortress or City."
         }
@@ -978,7 +978,7 @@ function popup_action_selection(actor_unit, action_probabilities,
                                   + "Targets:                 2 units\n"
                                   + "Move cost:            2 moves\n"
                                   + "Min. moves:          hasn't moved\n"
-                                  + "Max. casualties:     1\n"        
+                                  + "Max. casualties:     1\n"
                                   + "\nBombards up to 2 units on the target tile for\n"
                                   + "5 rounds. Can't be done to Fortress or City."
         }
@@ -991,7 +991,7 @@ function popup_action_selection(actor_unit, action_probabilities,
                                   + "Targets:                 3 units\n"
                                   + "Move cost:            2 moves\n"
                                   + "Min. moves:          hasn't moved\n"
-                                  + "Max. casualties:     1\n"        
+                                  + "Max. casualties:     1\n"
                                   + "\nBombards up to 3 units on the target tile for\n"
                                   + "6 rounds. Can't be done to Fortress or City."
         }
@@ -1004,7 +1004,7 @@ function popup_action_selection(actor_unit, action_probabilities,
                                   + "Targets:                 4 units\n"
                                   + "Move cost:            4 moves\n"
                                   + "Min. moves:          hasn't moved\n"
-                                  + "Max. casualties:     1\n"        
+                                  + "Max. casualties:     1\n"
                                   + "\nBombards up to 4 units on the target tile for\n"
                                   + "7 rounds. Can't be done to Fortress or City."
         }
@@ -1017,7 +1017,7 @@ function popup_action_selection(actor_unit, action_probabilities,
                                   + "Targets:                 4 units\n"
                                   + "Move cost:            5 moves\n"
                                   + "Max. casualties:     1\n"
-                                  + "\nUses the range advantage of massive large guns to safely\n" 
+                                  + "\nUses the range advantage of massive large guns to safely\n"
                                   + "shell and degrade up to 4 distant targets on a tile or city."
         }
       } break;
@@ -1029,7 +1029,7 @@ function popup_action_selection(actor_unit, action_probabilities,
                                   + "Targets:                 2 units\n"
                                   + "Move cost:            2 moves\n"
                                   + "Max. casualties:     1\n"
-                                  + "\nDrops shrapnel bombs in the vicinity of enemies,\n" 
+                                  + "\nDrops shrapnel bombs in the vicinity of enemies,\n"
                                   + "affecting up to 2 units and possibly killing one."
         }
       } break;
@@ -1069,7 +1069,7 @@ function popup_bribe_dialog(actor_unit, target_unit, cost, act_id)
 
   dhtml += "Treasury contains " + unit_owner(actor_unit)['gold'] + " gold. ";
 
-  dhtml += "The cost of " 
+  dhtml += "The cost of "
             + (unit_type(actor_unit)['name'] == "Patriarch" ? "converting " : "bribing ")
             + nations[unit_owner(target_unit)['nation']]['adjective']
             + " " + unit_types[target_unit['type']]['name']
@@ -1243,7 +1243,7 @@ function create_steal_tech_button(parent_id, tech,
 /**************************************************************************
   Select what tech to steal when doing targeted tech theft.
 **************************************************************************/
-function popup_steal_tech_selection_dialog(actor_unit, target_city, 
+function popup_steal_tech_selection_dialog(actor_unit, target_city,
                                            act_probs, action_id)
 {
   var id = "stealtech_dialog_" + actor_unit['id'];
@@ -1252,7 +1252,7 @@ function popup_steal_tech_selection_dialog(actor_unit, target_city,
 
   /* Reset dialog page. */
   remove_active_dialog("#"+id);
-  
+
   $("<div id='" + id + "'></div>").appendTo("div#game_page");
 
   /* Set dialog title */
@@ -1459,7 +1459,7 @@ function create_select_tgt_unit_button(parent_id, actor_unit_id,
     tclass = unit_classes[ttype.unit_class_id];
     if (ttype['transport_capacity'] > 0) {
       if (!normal_ruleset || unit_could_possibly_load(punit, ptype, ttype, tclass)) {
-        show_transport_info = true; 
+        show_transport_info = true;
         // Determine cargo qty. TODO:make reusable get_cargo_qty(transport) function
         for (t = 0; t < units_on_tile.length; t++ ) {
           var aunit = units_on_tile[t];
@@ -1472,7 +1472,7 @@ function create_select_tgt_unit_button(parent_id, actor_unit_id,
         }
         if (carrying > 1) cargo_text = "Carrying " + carrying+ " units: "+cargo_text;
         else if (carrying==1) cargo_text = "Carrying " + cargo_text;
-        else cargo_text = "No Cargo" 
+        else cargo_text = "No Cargo"
       }
     }
   }
@@ -1498,7 +1498,7 @@ function create_select_tgt_unit_button(parent_id, actor_unit_id,
   text += " (";
   text += nations[unit_owner(target_unit)['nation']]['adjective'];
   text += ")";
-  */ 
+  */
 
   button = {
     html  : dhtml,
@@ -1635,7 +1635,7 @@ function create_select_tgt_extra_button(parent_id, actor_unit_id,
     if (extra_owner(target_tile) != null) {
       text += " "+nations[extra_owner(target_tile)['nation']]['adjective'];
     } else {
-      // TODO: some kind of unit_can_target check for legality 
+      // TODO: some kind of unit_can_target check for legality
       text += " <img class='v' style='float:right;transform:scale(0.67);' title='target' src='/images/e/targetextra.png'>";
     }
   } else {
@@ -1683,7 +1683,7 @@ function create_load_transport_button(actor, ttile, tid, tmoves, tloaded, tcapac
   var cargo_text = "";
   var text = "";
 
-  // Loaded cargo info 
+  // Loaded cargo info
   if (tloaded  >= tcapacity) {
     tloaded = " FULL";
     disable = true;
@@ -1711,14 +1711,14 @@ function create_load_transport_button(actor, ttile, tid, tmoves, tloaded, tcapac
 
   // Segment 1. Unit Emoji
   text += html_emoji_from_universal(ttype['name'])+" ";
-  // Segment 2. Txxx Unit_type 
-  text += "T" + tid 
+  // Segment 2. Txxx Unit_type
+  text += "T" + tid
         + " " + unit_type(target_unit)['name'] +" "
   // Segment 3. If unit is cargo, tell who is transporting it.
   if (target_unit['transported_by']) text+="on T"+target_unit['transported_by']+" ";
   // Segment 4. M:moves L:cargo_qty C:capacity
   text += moves_text
-        + "<span style='cursor:help' title='"+cargo_text+"'>"+tloaded+"</span>" 
+        + "<span style='cursor:help' title='"+cargo_text+"'>"+tloaded+"</span>"
         + " C:" + tcapacity;
   // Segment 5. Nationality + Home city
   if (get_unit_homecity_name(target_unit) != null) text += " ("+get_unit_homecity_name(target_unit)+")";
@@ -1732,7 +1732,7 @@ function create_load_transport_button(actor, ttile, tid, tmoves, tloaded, tcapac
     click : function() {
       request_unit_do_action(ACTION_TRANSPORT_BOARD, actor, tid);
       // Loaded units don't ask orders later:
-      remove_unit_id_from_waiting_list(actor['id']); 
+      remove_unit_id_from_waiting_list(actor['id']);
       actor['done_moving'] = true;
       setTimeout(update_active_units_dialog, 600);
 
@@ -1782,7 +1782,7 @@ function select_tgt_extra(actor_unit, target_unit,
       the_button['height'] = '31px';
 
       buttons.push(the_button);
-      /* sort_order.push(i); 
+      /* sort_order.push(i);
         TODO, sort the buttons alphabetically based on simple array of text
         names without the images
       */
@@ -1813,7 +1813,7 @@ function select_last_action()
   var ptype = current_focus.length ? unit_type(current_focus[0]) : null;
   var actor_id = current_focus.length ? current_focus[0].id : -1;
   var uname = ptype ? ptype.name : null;
-  var can_vigil = ptype 
+  var can_vigil = ptype
                   ? (uname.includes("Fighter") || uname.includes("Anti-Ballistic Missile"))
                   : true; /* unknown type may or may not be able to, assume true */
   const msub = (uname == "Missile Submarine") /* "DIVE DEEP" fools utype_can_do_action
@@ -1859,14 +1859,14 @@ function select_last_action()
     buttons = add_action_last_button(buttons, ACTION_ROAD, "Canal, coastal", ORDER_PERFORM_ACTION, null, null, EXTRA_CANAL);
     buttons = add_action_last_button(buttons, ACTION_ROAD, "Canal, inland", ORDER_PERFORM_ACTION, null, null, EXTRA_WATERWAY);
   }
-  buttons = add_action_last_button(buttons, ACTION_CAPTURE_UNITS, "Capture Unit"); 
+  buttons = add_action_last_button(buttons, ACTION_CAPTURE_UNITS, "Capture Unit");
 
   if (!msub) {
     buttons = add_action_last_button(buttons, ACTION_COUNT, "Clean Pollution", ORDER_ACTIVITY, ACTIVITY_POLLUTION, null, EXTRA_POLLUTION);
     buttons = add_action_last_button(buttons, ACTION_COUNT, "Clean Fallout", ORDER_ACTIVITY, ACTIVITY_FALLOUT, null, EXTRA_FALLOUT);
   }
 
-  buttons = add_action_last_button(buttons, ACTION_CONQUER_CITY);    
+  buttons = add_action_last_button(buttons, ACTION_CONQUER_CITY);
   buttons = add_action_last_button(buttons, ACTION_CONVERT);
   if (!msub)
     buttons = add_action_last_button(buttons, ACTION_CULTIVATE);
@@ -1887,7 +1887,7 @@ function select_last_action()
     buttons = add_action_last_button(buttons, ACTION_IRRIGATE, "Irrigate Farmland", ORDER_PERFORM_ACTION, null, null, EXTRA_FARMLAND);
   buttons = add_action_last_button(buttons, ACTION_JOIN_CITY);
   //buttons = add_action_last_button(buttons, ACTION_TRANSPORT_LOAD); // GET FROM SVEINUNG WHO FINISHED THIS RECENTLY
-  
+
   if (client_rules_flag[CRF_MAGLEV] && tech_known('Superconductors') && !msub)
     buttons = add_action_last_button(buttons, ACTION_ROAD, "MagLev", ORDER_PERFORM_ACTION, null, null, EXTRA_MAGLEV);
   if (uname !="Trawler") {
@@ -1900,16 +1900,16 @@ function select_last_action()
   if (!msub) {
     buttons = add_action_last_button(buttons, ACTION_PLANT, "Plant");
     buttons = add_action_last_button(buttons, ACTION_SPY_POISON_ESC, "Poison City");
-  
+
     if (tech_known('Railroad')) {
       buttons = add_action_last_button(buttons, ACTION_ROAD, "Railroad", ORDER_PERFORM_ACTION, null, null, EXTRA_RAILROAD);
     }
     buttons = add_action_last_button(buttons, ACTION_ROAD, "Road", ORDER_PERFORM_ACTION, null, null, EXTRA_ROAD);
   }
-  
+
   buttons = add_action_last_button(buttons, ACTION_RECYCLE_UNIT);
   buttons = add_action_last_button(buttons, ACTION_SPY_SABOTAGE_UNIT_ESC, "Sabotage Unit");
-  buttons = add_action_last_button(buttons, ACTION_COUNT, "Sentry", ORDER_ACTIVITY, ACTIVITY_SENTRY, null, -1);  
+  buttons = add_action_last_button(buttons, ACTION_COUNT, "Sentry", ORDER_ACTIVITY, ACTIVITY_SENTRY, null, -1);
   buttons = add_action_last_button(buttons, ACTION_SPY_ATTACK, "Spy vs. Spy");
   buttons = add_action_last_button(buttons, ACTION_STEAL_MAPS, "Steal Map");
   buttons = add_action_last_button(buttons, ACTION_STEAL_MAPS_ESC, "Steal Map Escape");
@@ -1961,7 +1961,7 @@ function add_action_last_button(buttons, action_id, override_name, order, activi
       if (!utype_can_do_action(unit_types[rally_virtual_utype_id],action_id)) {
         return buttons; // don't add
       }
-    } 
+    }
   }
   // Eliminate illegal actions for a selected utype under Go...And
   else if (current_focus.length) {
@@ -2025,7 +2025,7 @@ function create_action_last_button(title_text, action, order, activity, target, 
  opened dialog (First In Last Out). Also binds the dialog close function
  to clean-up function remove_active_dialog(..)
 
- Optional 'actor_id' is for actor units' Action Selection Dialogs to 
+ Optional 'actor_id' is for actor units' Action Selection Dialogs to
  unregister themselves as no longer awaiting user action selection (which
  the system needs to know for sorting the advancing of unit focus, etc.)
 
@@ -2038,7 +2038,7 @@ function dialog_register(id, actor_id, input_maybe_needed) {
   $(id).dialog('widget').keydown(dialog_key_listener);
   active_dialogs.push(id);
   //close, cancel, and [x]
-  $(id).dialog({ 
+  $(id).dialog({
       autoOpen: true
   }).bind('dialogclose', function(event, ui) {
     if (actor_id) {
@@ -2114,8 +2114,8 @@ function dialog_key_listener(ev)
     return;
   }
   switch (keyboard_key) {
-    case 'W': 
-      if (active_dialogs.length) { 
+    case 'W':
+      if (active_dialogs.length) {
         ev.stopPropagation();
         remove_active_dialog_handler();
       }
@@ -2133,7 +2133,7 @@ function remove_active_dialog_handler()
   kill_dialog_id = active_dialogs.pop();
   if (action_selection_in_progress_for && kill_dialog_id.endsWith("_"+action_selection_in_progress_for)) {
     did_not_decide = true;
-    remove_action_selection_dialog(kill_dialog_id, action_selection_in_progress_for, false);     
+    remove_action_selection_dialog(kill_dialog_id, action_selection_in_progress_for, false);
   } else {
     remove_active_dialog(kill_dialog_id);
   }
@@ -2187,7 +2187,7 @@ function action_selection_close(not_over)
   // Remove action selection dialog only if it exists:
   if ($(id).length) $(id).remove();
   /* previous code did this, but is potentially risky since city_name_dialog
-     is currently not a registered action selection dialog but rather, is an 
+     is currently not a registered action selection dialog but rather, is an
      "off the registry" type of dialog:
      if ($(id).length) remove_action_selection_dialog(id, actor_unit_id) */
 

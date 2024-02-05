@@ -2,7 +2,7 @@
    dialog pop-up */
  var restore_emojibox_vals = { "h" : null,
                                "w" : null,
-                               "x": null, 
+                               "x": null,
                                "y": null,
 };
 
@@ -698,7 +698,7 @@ function emoji_popup() {
   var id = "#emoji_dialog";
   var dhtml = "";
 
-  const row_count = 15; // group the spans by 15; this does nothing but 
+  const row_count = 15; // group the spans by 15; this does nothing but
                         // possibly allow smart upgrades one day later
 
   /* Reset/refresh dialog */
@@ -714,7 +714,7 @@ function emoji_popup() {
           +" onclick='emoji_insert(\""+freemoji[index]+"\")'"
           +" src='/images/e/"+freemoji[index]+".png'>"
      }
-   dhtml += "</span>"; 
+   dhtml += "</span>";
   }
   $(id).html(dhtml);
   /* Add a cancel button and a SEND button (for convenience) */
@@ -723,7 +723,7 @@ function emoji_popup() {
                  send_text_input($("#game_text_input"));}
   };
 
-  /* Our dialog loses height after making a thin titlebar. The very first time we go through this, 
+  /* Our dialog loses height after making a thin titlebar. The very first time we go through this,
    * we don't even have user_prefs for the height. So we have to do spaghetti jquery gymnastics */
   var first_loss = null; // first time loss of dialog height? assume no at first
   var height_loss = HEIGHT_LOSS_UNRECORDED; // assume this is the unrecorded first time
@@ -757,14 +757,14 @@ function emoji_popup() {
       $(id).dialog({bgiframe: true,
         modal: false,
         buttons: other_buttons,
-        height: (is_small_screen() ? "auto" 
+        height: (is_small_screen() ? "auto"
                                   : (restore_emojibox_vals.h ? restore_emojibox_vals.h : "auto")
                 ),
-        width:  (is_small_screen() ? "100%" 
+        width:  (is_small_screen() ? "100%"
                                   : (restore_emojibox_vals.w ? restore_emojibox_vals.w : "50%")
                 )
       });
-    }  
+    }
   }
   /* Emoji has been sized for height and width ***********************/
 
@@ -792,23 +792,23 @@ function emoji_popup() {
   // Small screen, it's nice and easy for a change:
   if (is_small_screen()) {
     $(id).dialog('widget').position({my:"left top", at:"left top", of:window})
-  } 
+  }
   // Big screen:
   else {
-      if (first_loss) { // A messy boolean, but suffices to know it's first time; pick a default dialog positioning 
+      if (first_loss) { // A messy boolean, but suffices to know it's first time; pick a default dialog positioning
         $(id).dialog('widget').position({my:"center top", at:"center top", of:window})
-      } 
+      }
       else { // Not the first time, use user_pref dialog positioning:
         $(id).dialog('widget').position({my:"left+"+restore_emojibox_vals.x+"px top+"+restore_emojibox_vals.y,
-                                         at:"left top", of:window}) 
+                                         at:"left top", of:window})
       }
   }
   /* Dialog positioned *************************************/
 
-  
+
   // Don't let mini-map or other windows obscure the emoji dialog:
   $("#emoji_dialog").parent().css("zIndex","1000");
-  
+
   // Register the dialog:
   dialog_register(id);
 
@@ -844,7 +844,7 @@ function emojibox_save(position_only)
 {
   if (!position_only) {
     restore_emojibox_vals.h = $("#emoji_dialog").parent().height();
-    if (restore_emojibox_vals.height_loss) 
+    if (restore_emojibox_vals.height_loss)
       restore_emojibox_vals.h += restore_emojibox_vals.height_loss;
 
     restore_emojibox_vals.w = $("#emoji_dialog").parent().width();
@@ -859,9 +859,9 @@ function emojibox_save(position_only)
   simpleStorage.set('emojiDlg', restore_emojibox_vals);
 }
 
-/* The following unused .png files COULD be deleted if you're super careful to not delete 
+/* The following unused .png files COULD be deleted if you're super careful to not delete
    the ones markked 'don't delete' since the server will send those as a code in some rulesets,
-   AND if you're super careful to review them all for one that was forgotten to be marked as 
+   AND if you're super careful to review them all for one that was forgotten to be marked as
    "don't delete" */
 //'kr',
 //'leonardo',
@@ -936,7 +936,7 @@ function emojibox_save(position_only)
 //'armor2',
 //'cm',
 //'mechinf',         don't delete
-//'nuke',            don't delete 
+//'nuke',            don't delete
 //'oldfreight',
 //'swordsmen',
 //'commie',

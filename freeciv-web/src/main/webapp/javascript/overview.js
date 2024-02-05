@@ -121,15 +121,15 @@ function init_overview()
   $('#overview_map').on('dragstart', function(event) { event.preventDefault(); });
   // globe icon symbol
   /* old fa-icon, deprecated
-  $("#game_overview_panel").parent().children().not("#game_overview_panel").children().get(0).innerHTML 
+  $("#game_overview_panel").parent().children().not("#game_overview_panel").children().get(0).innerHTML
     = "<div style='font-size:97%; vertical-align:top; font-family:Arial; margin-bottom: 1px;'><i style='color #5df !important' class='fa fa-globe' aria-hidden='true'></i></div>";
   */
-  $("#game_overview_panel").parent().children().not("#game_overview_panel").children().get(0).innerHTML 
+  $("#game_overview_panel").parent().children().not("#game_overview_panel").children().get(0).innerHTML
   = "<div margin-bottom: 1px;'><img src='/images/e/earth.png' height='16px'></div>";
 
   // adjust minimize/maximize icons
   $("#game_overview_panel").siblings().children().next().css("margin-top", "-7px");
-  
+
   // This affects the titlebar and map itself. Map is already square. Titlebar will lose rounding
   // on lower corners but not top corners which are applied to its parent.  This removes annoying
   // illusion that stone panel under the overviewmap is overwriting or invading the titlebar.
@@ -159,7 +159,7 @@ function redraw_overview()
 /****************************************************************************
   Forces a redraw the overview map.
 ****************************************************************************/
-function force_redraw_overview() 
+function force_redraw_overview()
 {
   var hash = generate_overview_hash(map['xsize'], map['ysize'])
   bmp_lib.render('overview_img', generate_overview_grid(map['xsize'], map['ysize']),
@@ -372,7 +372,7 @@ function generate_palette() {
               else if (diplstates[player_id] == DS_PEACE) pcolor = [0,202,32];              // peace     = green
               else if (diplstates[player_id] == DS_ARMISTICE) pcolor = [105,197,32];        // armistice = green hinting olive
               else if (diplstates[player_id] == DS_CEASEFIRE){pcolor = [160,192,32];        // ceasefire = ochre
-                if (pplayer.diplstates[client.conn.playing.playerno].turns_left 
+                if (pplayer.diplstates[client.conn.playing.playerno].turns_left
                    && pplayer.diplstates[client.conn.playing.playerno].turns_left <=3)
                    pcolor = [222,192,32];                                                   // expiring cease-fire = yellow/orange (concerned citizens!)
               }
@@ -429,9 +429,9 @@ function overview_tile_color(map_x, map_y)
     if (ptile['owner'] != null && ptile['owner'] != 255) {
       return palette_color_offset + ptile['owner'];
     } else {
-      if (minimap_color == 0 
+      if (minimap_color == 0
         // diplomatic relations mode: dull terrain color to just see relations
-          && !is_ocean_tile(ptile)) return COLOR_OVERVIEW_GENERIC; 
+          && !is_ocean_tile(ptile)) return COLOR_OVERVIEW_GENERIC;
 
       return palette_terrain_offset + tile_terrain(ptile)['id'];
     }

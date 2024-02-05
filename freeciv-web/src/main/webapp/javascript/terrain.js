@@ -71,9 +71,9 @@ function tile_terrain_near(ptile)
 **************************************************************************/
 function is_ocean_tile(ptile)
 {
-  if (!ptile) return false; 
+  if (!ptile) return false;
   var pterrain = tile_terrain(ptile);
   if (!pterrain || !pterrain['graphic_str'] ) return false;
-  
+
   return (pterrain['graphic_str'] == "floor" || pterrain['graphic_str'] == "coast");
 }

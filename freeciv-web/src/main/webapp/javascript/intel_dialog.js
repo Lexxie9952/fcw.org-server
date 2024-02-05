@@ -53,7 +53,7 @@ function show_intelligence_report_hearsay(pplayer)
   if (pplayer['gold'] > 0) {
       msg += "Gold: " + pplayer['gold'] + "<br>";
     }
-  
+
 
   if (pplayer['researching'] != null && pplayer['researching'] > 0 && techs[pplayer['researching']] != null) {
     msg += "Researching: " + techs[pplayer['researching']]['name'] + "<br>";
@@ -129,8 +129,8 @@ function show_intelligence_report_embassy(pplayer)
       let bp_them_code = player_has_blueprints(pplayer, tech_id) ? "1" : "0";
       let bp_active = bp_me_code == "1" || bp_them_code == "1";
 
-      if (research['inventions'][tech_id] == TECH_KNOWN 
-          || (myresearch != null && myresearch[tech_id] == TECH_KNOWN) 
+      if (research['inventions'][tech_id] == TECH_KNOWN
+          || (myresearch != null && myresearch[tech_id] == TECH_KNOWN)
           || bp_active ) {
 
         let style = "";
@@ -150,13 +150,13 @@ function show_intelligence_report_embassy(pplayer)
         /*let bp_title = "";
         if (bp_them_code == "1") {
           bp_title += nations[pplayer.nation].adjective + " have blueprints."
-        }        
+        }
         if (bp_me_code == "1") {
           bp_title += " We have blueprints."
         }*/
         let tech_name = techs[tech_id]['name']
                       + (bp_active == "1" ? " 📘" : "");
-        
+
         intel_data['tech'].push({
           name: tech_name,
           who: style + bp_me_code + bp_them_code
@@ -204,7 +204,7 @@ function show_intelligence_report_embassy(pplayer)
   // Smaller titlebar font to fit long titles better:
   $("#intel_dialog").parent().children().first().css("font-size", "85%");
 
-  if (gov_name) 
+  if (gov_name)
     $("#intel_gov").css({"color": color_gov_color(gov_name,1),
                          "text-shadow": "1px 1px "+color_gov_color(gov_name,2)});
 
@@ -270,7 +270,7 @@ function show_intelligence_report_embassy(pplayer)
     $("#intel_tabs li").children().css("padding", "6px");
 
   dialog_register("#intel_dialog");
-  
+
   $("#intel_tabs").tabs();
   $("#game_text_input").blur();
 }

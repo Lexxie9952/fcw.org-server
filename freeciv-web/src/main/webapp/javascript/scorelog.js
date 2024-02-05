@@ -91,9 +91,9 @@ function handle_scorelog(scorelog) {
         playernames.push(pname);
         var pplayer = player_by_name(pname);
         if (pplayer == null) {
-          scorecolors.push("#ff0000"); 
+          scorecolors.push("#ff0000");
         } else {
-          scorecolors.push(nations[pplayer['nation']]['color']); 
+          scorecolors.push(nations[pplayer['nation']]['color']);
         }
 
       } else if (scoredata[0] == "turn") {
@@ -172,15 +172,15 @@ function get_scorelog_name(tag) {
   "mfg" : "Production",
   "cities" : "Cities",
   "techs" : "Techs",
-  "munits" : "Military units", 
+  "munits" : "Military units",
   "wonders" : "Wonders",
-  "techout" : "Tech output", 
+  "techout" : "Tech output",
   "landarea" : "Land area",
   "settledarea" : "Settled area",
   "gold" : "Gold",
   "unitsbuilt" : "Units built",
   "unitskilled" : "Units killed",
-  "unitslost" : "Units lost" 
+  "unitslost" : "Units lost"
   };
   return names[tag];
 }

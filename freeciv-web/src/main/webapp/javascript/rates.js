@@ -52,13 +52,13 @@ function show_tax_rates_dialog()
 
   sliders_adjusted = false;
   if (client_is_observer()) return;
-  
+
   var id = "#rates_dialog";
   $(id).remove();
-  
+
   // Having an active_city while adjusting rates degrades events/updates/refreshes
   if (active_city) {
-    close_city_dialog_trigger();    
+    close_city_dialog_trigger();
     active_city = null;
   }
 
@@ -91,7 +91,7 @@ function show_tax_rates_dialog()
     + "<tr><td>Research:  </td> <td><span class='sci_text' id='bulbs_info'></span></td></tr>"
     + "<tr><td>Net Luxury:  </td> <td><span class='lux_text' id='lux_info'></span></td></tr>"
     + "</table>"
-    
+
     + "<div id='max_tax_rate' style='text-align:center; margin:10px;'></div>"
 
   $(id).html(dhtml);
@@ -125,7 +125,7 @@ function show_tax_rates_dialog()
   }
 
   update_rates_dialog();
-  // Remove [X] to close, because it bypasses clean-up functions  
+  // Remove [X] to close, because it bypasses clean-up functions
   $(".ui-dialog-titlebar-close").hide();
   freeze=true; // turn off updates to cities,empire,tech,map tabs
 
@@ -137,7 +137,7 @@ function set_resolution_button_title() {
   $("#rates_dialog").next().children().first().children().first().html(
       ""+new_increment+"% Rates (𝗥)");
 
-  $("#rates_dialog").next().children().first().children().first().prop('title', 
+  $("#rates_dialog").next().children().first().children().first().prop('title',
       "switch to "+new_increment+"% increments");
 
   $("#rates_dialog").next().children().first().children().first().blur();
@@ -149,7 +149,7 @@ function tax_rate_key_listener(ev)
     if (C_S_RUNNING != client_state()) return;
     var keyboard_key = String.fromCharCode(ev.keyCode).toUpperCase();
     var key_code = ev.keyCode;
-  
+
     switch (key_code) {
       case 13: //hit enter on 'Done'
         ev.stopPropagation();
@@ -175,7 +175,7 @@ function tax_rate_key_listener(ev)
 }
 
 /**************************************************************************
-  This is periodically called to submit and display rates, in order to 
+  This is periodically called to submit and display rates, in order to
   avoid laggy overload and unneeded server packet sending/receiving
 **************************************************************************/
 function rate_refresh()
@@ -191,7 +191,7 @@ function rate_refresh()
   if (!sliders_adjusted) {
     $("#slider-tax").children().next().next().css("background-image", "url('/images/slider_gold.png')");
     $("#slider-lux").children().next().next().css("background-image", "url('/images/slider_lux.png')");
-    $("#slider-sci").children().next().next().css("background-image", "url('/images/slider_sci.png')");  
+    $("#slider-sci").children().next().next().css("background-image", "url('/images/slider_sci.png')");
   }
 }
 
@@ -216,7 +216,7 @@ function update_rates_dialog()
   if (govt == "Monarchy") {
     if (player_has_wonder(client.conn.playing.playerno, improvement_id_by_name(B_MAGNA_CARTA))) {
       govt = "Constitutional Monarchy"
-    }  
+    }
   }
 
   $("#max_tax_rate").html("<i style='color:#a88'>" + govt + " max rate: &nbsp;</i>" + maxrate + "%");

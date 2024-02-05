@@ -98,7 +98,7 @@ const override_colors = {
   "Venetian": { "c1": null,                "c2": "rgb(243, 244, 208)", "c3": null                 },
   "Vermont": { "c1": null,                 "c2": "rgb(49, 71, 121)",   "c3": "rgb(240, 242, 245)" },
   "West Indian": { "c1": null,             "c2": "rgb(255, 204, 0)",   "c3": null                 },
-  
+
   "LAST": {}
 };
 
@@ -113,16 +113,16 @@ const gov_colors = {
   "Democracy":               {"1": "#6aa1e2", "2": "#8789B6"},
   "Fundamentalism":          {"1": "#ffff00", "2": "#000"},
   "Theocracy":               {"1": "#E22864", "2": "#322487"},
-  "Communism":               {"1": "#EC0000", "2": "#747200"},  
-  "Nationalism":             {"1": "#ff720d", "2": "#fff17170"},  
-  "Federation":              {"1": "#d8d8d8", "2": "#6565e5"},  
+  "Communism":               {"1": "#EC0000", "2": "#747200"},
+  "Nationalism":             {"1": "#ff720d", "2": "#fff17170"},
+  "Federation":              {"1": "#d8d8d8", "2": "#6565e5"},
 }
 
 /****************************************************************************
-  Returns either primary or secondary color of a government, based on 
+  Returns either primary or secondary color of a government, based on
     'index'
 ****************************************************************************/
-function color_gov_color(gov_name, index) 
+function color_gov_color(gov_name, index)
 {
   if (gov_colors[gov_name][index])
     return gov_colors[gov_name][index];
@@ -130,7 +130,7 @@ function color_gov_color(gov_name, index)
 }
 
 /****************************************************************************
-  Assigns the nation's colors based on the color of their flag, 
+  Assigns the nation's colors based on the color of their flag,
   CURRENTLY: Three most frequent dissimilar colors are rank-sorted.
   FORMERLY: The most common color in the flag was chosen.
 ****************************************************************************/
@@ -159,20 +159,20 @@ function assign_nation_color(nation_id)
     var current_color = "rgb(" + img_data[i+RED] + "," + img_data[i+GRN] + ","
                         + img_data[i+BLU] + ")";
     if (current_color in color_counts) {
-      if (img_data[i+OPQ]>128) // Transparent pixels don't get ranked                    
+      if (img_data[i+OPQ]>128) // Transparent pixels don't get ranked
         color_counts[current_color] ++;
     } else {
-      if (img_data[i+OPQ]>128) // New opaque pixel, insert into ranking array                   
+      if (img_data[i+OPQ]>128) // New opaque pixel, insert into ranking array
         color_counts[current_color] = 1;
-      else 
+      else
         color_counts[current_color] = 0; // Register transparent as 0; avoids undefined situation
     }
   }
 
-  /* New algorithm: rank 3 most significant colors: 
+  /* New algorithm: rank 3 most significant colors:
         (former algorithm is commented at end of function) */
 
-  // Create sortable array: 
+  // Create sortable array:
   var sorted_colors = [];
   for (var current_color in color_counts) {
     var element = {color: current_color, count: color_counts[current_color]};
@@ -264,7 +264,7 @@ function color_SSD(color_a, color_b)
   // "false negatives" between different luminosities of same hues.
   // (Similar hues are a lot less distant to the eye than SSD would
   // have us believe, while different hues are more distant):
-  
+
   var hue1 = get_hue(pcolor_a[RED], pcolor_a[GRN], pcolor_a[BLU]);
   var hue2 = get_hue(pcolor_b[RED], pcolor_b[GRN], pcolor_b[BLU]);
   var diff = angular_difference(hue1, hue2);
@@ -278,7 +278,7 @@ function color_SSD(color_a, color_b)
     if (diff>135) color_distance *= 1.33;
     if (diff>150) color_distance *= 1.33;
   }
-  
+
   return color_distance;
 }
 
@@ -291,7 +291,7 @@ function get_hue(red, green, blue) {
   var hue = 0;
 
   if (min == max) return 0;
-  
+
   if (max == red) hue = (green - blue) / (max - min);
   else if (max == green)
     hue = 2 + (blue - red) / (max - min);
@@ -337,20 +337,20 @@ function colorfulness(color) {
 
   // Greyishness is a quality of monochrome colors that are not very black or white,
   // and also a quality of dull colors that are close to a medium grey.
-  var non_greyish = (Math.abs(color[RED]-128)) 
+  var non_greyish = (Math.abs(color[RED]-128))
                   + (Math.abs(color[GRN]-128))
                   + (Math.abs(color[RED]-128));
-  
+
   var coef = 1;
   // Heuristics which more heavily undervalue bland monochromish greyish colors
-  if (colorishness < .15 && non_greyish<220)     coef = 0.4285; // WORST PENALTY:  very monochrome and also a little greyish         
+  if (colorishness < .15 && non_greyish<220)     coef = 0.4285; // WORST PENALTY:  very monochrome and also a little greyish
   else if (colorishness < .30 && non_greyish<60) coef = 0.5714; // HUGE PENALTY:   rather monochromish and quite greyish
   else if (colorishness < .8 && non_greyish<120) coef = 0.66;   // STRONG PENALTY: kinda monochrome and kinda grey
   else if (colorishness < .8 && non_greyish>360) coef = 0.91;   // LIGHT PENALTY:  white/black are more "colorful" than greys
   else if (colorishness < .8) coef = .8; // NORMAL PENALTY: not too greyish; but somewhat monochromish.
-  
+
   // give a slight tie-breaker to NON-red colors, since it's the most overused flag color:
-  if (angular_difference(hue, 0) < 30) coef *= 0.90;  
+  if (angular_difference(hue, 0) < 30) coef *= 0.90;
 
   return coef; // Weigh all other colors at 100%, if they survived the penalty cutoffs above.
 }
@@ -362,7 +362,7 @@ function colorfulness(color) {
 function color_rgb_to_list(pcolor)
 {
   if (pcolor == null) return null;
-  if (pcolor.length == 3) return pcolor;   
+  if (pcolor.length == 3) return pcolor;
   var color_rgb = pcolor.match(/\d+/g);
   color_rgb[0] = parseFloat(color_rgb[0]);
   color_rgb[1] = parseFloat(color_rgb[1]);

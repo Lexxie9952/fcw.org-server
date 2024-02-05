@@ -44,7 +44,7 @@ function show_revolution_dialog()
     revo_width = "780"; // extra horizontal to accomodate more verbosity
   }
   if (revo_height + extended_height >= $(window).height()) {
-    extended_height = $(window).height() - revo_height - 4; 
+    extended_height = $(window).height() - revo_height - 4;
   }
 
   var id = "#revolution_dialog";
@@ -136,7 +136,7 @@ function update_govt_dialog()
 
   var gov_modifier = "";
   for (govt_id in governments) {
-    govt = governments[govt_id]; 
+    govt = governments[govt_id];
     gov_modifier = (govt['name'] == "Monarchy" ? magna_carta : "");
 
     label_html = "<img class='lowered_gov' src='/images/e/"+govt['name'].toLowerCase()+gov_modifier+".png'>&nbsp;&nbsp;&nbsp;"
@@ -174,7 +174,7 @@ function start_revolution()
           if (punit['activity']==ACTIVITY_CONVERT) {
             request_new_unit_activity(punit, ACTIVITY_IDLE, EXTRA_NONE);
           }
-        }    
+        }
       }
       var cur_gov = governments[client.conn.playing['government']]['id'];
       if (do_worklists(cur_gov, governments[requested_gov]['id']))
@@ -217,7 +217,7 @@ function do_worklists(cur_gov_id, new_gov_id)
         }
       }
     }
-    // If illegal types were removed from worklist, tell the server our new worklist for this city. 
+    // If illegal types were removed from worklist, tell the server our new worklist for this city.
     if (prev_worklist_len != pcity['worklist'].length) {
       send_city_worklist(pcity['id']);
       altered = true; // lets caller know we might be making heavy server traffic on changing lots of worklists
@@ -266,7 +266,7 @@ function government_max_rate(govt_id)
   } else if (govt == "Despotism") {
     return 60;
   } else if (govt == "Monarchy") {
-    if (client_rules_flag[CRF_MP2_E] 
+    if (client_rules_flag[CRF_MP2_E]
         && player_has_wonder(client.conn.playing.playerno, improvement_id_by_name(B_MAGNA_CARTA))) {
       return 75;  // MP2E onward gets 75% max rate for Magna Carta
     }
@@ -338,13 +338,13 @@ function show_climate_dialog(rtype)
   var cold_toler = Math.round((game_info['coolinglevel']*100)/server_settings['nuclearwinter_percent']['val']);
   var cold_accum = game_info['nuclearwinter'] + cold_toler;
 
-  message += "<span title='IF global warming occurs, the impact strength on the surface tiles of the planet.\n0% = none.\n100% = normal.\n101-10000 = elevated.'>" 
+  message += "<span title='IF global warming occurs, the impact strength on the surface tiles of the planet.\n0% = none.\n100% = normal.\n101-10000 = elevated.'>"
           +"<b>Global Warming Strength</b>:&nbsp; " + game_info['global_warming'] +"%"
           + "</span><br>";
 
   message += "<span title='The current cumulative impact of existing pollution over recent turns, possibly accumulating higher beyond the tolerance to trigger Global Warming. A certain amount will naturally disperse each turn, if the impact caused by existing pollution is not greater.'>"
-          +"<b>Global Warming Impact</b>:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; " 
-          + (game_info['globalwarming'] > 0 ? warm_accum : "<span title='The impact is below tolerance or a major climate disaster has recently reset the climate models.'>[unknown]</span>") 
+          +"<b>Global Warming Impact</b>:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "
+          + (game_info['globalwarming'] > 0 ? warm_accum : "<span title='The impact is below tolerance or a major climate disaster has recently reset the climate models.'>[unknown]</span>")
           + "<span title='One unit of Accumulated Climate Stress, whether in measuring impact to climate, or tolerance to the stress.'> ACS</span>"
           + "</span><br>";
 
@@ -367,7 +367,7 @@ function show_climate_dialog(rtype)
           + "</span><br>";
 
   message += "<span title='The current cumulative impact of existing fallout over recent turns, possibly accumulating higher beyond the tolerance to trigger Nuclear Winter. A certain amount will naturally disperse each turn, if the impact caused by existing fallout is not greater.'>"
-          + "<b>Nuclear Winter Impact</b>:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; " 
+          + "<b>Nuclear Winter Impact</b>:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "
           + (game_info['nuclearwinter'] > 0 ? cold_accum : "<span title='The impact is below tolerance or a major climate disaster has recently reset the climate models.'>[unknown]</span>")
           + "<span title='One unit of Accumulated Climate Stress, whether in measuring impact to climate, or tolerance to that stress.'> ACS </span>"
           + "</span><br>";
@@ -378,9 +378,9 @@ function show_climate_dialog(rtype)
           + "</span><br>";
 
   message += "<span title='This is a server setting. Higher numbers make Nuclear Winter more likely, by altering the Nuclear Winter Tolerance shown above. Default of 100% = unchanged.'>"
-          +"<b>Nuclear Winter Percent</b>:&nbsp;&nbsp;&nbsp; " + server_settings['nuclearwinter_percent']['val'] 
+          +"<b>Nuclear Winter Percent</b>:&nbsp;&nbsp;&nbsp; " + server_settings['nuclearwinter_percent']['val']
           + "%</span><br><br>";
-        
+
   if (game_info['nuclearwinter'] > game_info['coolinglevel'])
       message += "Scientists recommend immediate international action to halt habitat destruction from Nuclear Winter!!<br>"
   else if (game_info['nuclearwinter'] > game_info['coolinglevel'] *.5)
@@ -414,7 +414,7 @@ function get_gov_modifier(playerno, gov_name, uppercase) {
 
   if (!gov_name) gov_name = governments[players[playerno]['government']]['name'];
   var gov_modifier = "";
-   
+
   if (players[playerno].wonders[improvement_id_by_name(B_MAGNA_CARTA)]) {
     if (gov_name == "Monarchy") gov_modifier = uppercase ? "Constitutional" : "constitutional";
   }

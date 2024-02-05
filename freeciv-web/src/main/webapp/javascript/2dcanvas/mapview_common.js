@@ -66,11 +66,11 @@ function center_tile_mapcanvas_2d(ptile)
   if (ptile == null) return;
   /* We don't want to center the map on units near y=0 or y=ysize, because
    * then half the displayed map is black void. Fix: center the map by
-   * [polar_buffer] number of tiles from the polar edges of the map. 
+   * [polar_buffer] number of tiles from the polar edges of the map.
    * TODO: There is also a bug where tiny ysize maps on UHD displays will
    * further down the call-chain somehow flip or lose the gui_y calculated
    * here, for units near the south pole. Centering farther from the poles
-   * eliminates the the large majority of that bug, but extreme 
+   * eliminates the the large majority of that bug, but extreme
    * (resolution/ysize) vals still trigger it. e.g.,2160p/40.
    * This could also be fixed by bumping zoom to ~125% if 2160p
    * AND low ysize are detected. */
@@ -100,9 +100,9 @@ function center_tile_id(ptile_id)
 {
   var ptile = tiles[ptile_id];
 
-  if (is_small_screen() && current_message_dialog_state == "maximized" 
+  if (is_small_screen() && current_message_dialog_state == "maximized"
       && $("#tabs").tabs("option", "active") == TAB_MAP) {
-    // mobile chatbox is maximized over screen and calls this function 
+    // mobile chatbox is maximized over screen and calls this function
     // from clicking a link in the chatbox... minimize chatbox first
     $('.mobile_chatbox_dialog .ui-icon-circle-minus').click();
     // .click() calls internal minimizing things that we can't do
@@ -111,7 +111,7 @@ function center_tile_id(ptile_id)
   center_tile_mapcanvas(ptile);
 }
 /**************************************************************************
-  Centers the mapview on tile with given id and executes a virtual user 
+  Centers the mapview on tile with given id and executes a virtual user
   click: used for letting user focus on unit events reported in chatbox
   messages which come from the server with only tile_id info.
 **************************************************************************/
@@ -330,7 +330,7 @@ function update_map_canvas(canvas_x, canvas_y, width, height)
   if (!stop_checking) {
     var startTime = Date.now();
   } */
-  var gui_x0 = mapview['gui_x0'] + canvas_x; 
+  var gui_x0 = mapview['gui_x0'] + canvas_x;
   var gui_y0 = mapview['gui_y0'] + canvas_y;
 
   /* Clear the area, if the mapview extends beyond map borders.
@@ -359,7 +359,7 @@ function update_map_canvas(canvas_x, canvas_y, width, height)
       var startLayer = Date.now();
     }*/   ///
     // set layer-specific canvas properties here.
-    
+
     if (layer == LAYER_SPECIAL1) {
       // this is now done inside mapview_put_border_line().
       ////mapview_canvas_ctx.lineWidth = 2;
@@ -481,10 +481,10 @@ function update_map_canvas(canvas_x, canvas_y, width, height)
           //    to['gui_dx'] = (parseInt(to['gui_dx'],10) + (tileset_tile_width/2) * correct_x); // 48 left for every tile
           //    to['gui_dy'] = (parseInt(to['gui_dy'],10) + (tileset_tile_height/2) * correct_x); // 24 up for every tile
           //    console.log(to);
-          //  } 
+          //  }
             mapview_canvas_ctx.lineWidth = 3;
             if (!observing) {
-              if (cities[src].owner !=null && cities[src].owner != client.conn.playing.playerno 
+              if (cities[src].owner !=null && cities[src].owner != client.conn.playing.playerno
                 && cities[dest].owner != null && cities[dest].owner != client.conn.playing.playerno) {
                 mapview_canvas_ctx.strokeStyle = 'rgb(255,128,0)';      // Orange:  others' traderoutes
               } else mapview_canvas_ctx.strokeStyle = 'rgb(255,255,0)'; // Yellow:  my traderoutes
@@ -492,7 +492,7 @@ function update_map_canvas(canvas_x, canvas_y, width, height)
 
             mapview_canvas_ctx.beginPath();
             mapview_canvas_ctx.moveTo(from['gui_dx']-mapview.gui_x0, from['gui_dy']-mapview.gui_y0);
-            mapview_canvas_ctx.lineTo(to['gui_dx']-mapview.gui_x0,   to['gui_dy']-mapview.gui_y0);  
+            mapview_canvas_ctx.lineTo(to['gui_dx']-mapview.gui_x0,   to['gui_dy']-mapview.gui_y0);
             mapview_canvas_ctx.stroke();
           }
         }
@@ -501,7 +501,7 @@ function update_map_canvas(canvas_x, canvas_y, width, height)
   }
 
   if (map_select_active && map_select_setting_enabled) {
-    canvas_put_select_rectangle(mapview_canvas_ctx, map_select_x, map_select_y, 
+    canvas_put_select_rectangle(mapview_canvas_ctx, map_select_x, map_select_y,
                                 mouse_x - map_select_x, mouse_y - map_select_y);
   }
 /* ///
@@ -531,7 +531,7 @@ function update_map_canvas(canvas_x, canvas_y, width, height)
           else if (MAPVIEW_REFRESH_INTERVAL>140) MAPVIEW_REFRESH_INTERVAL=140;
         }
         console.log(MAPVIEW_REFRESH_INTERVAL+"ms refresh interval was permanently set for this session.");
-      } 
+      }
     }
   }
   */

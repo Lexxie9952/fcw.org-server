@@ -17,7 +17,7 @@ function console_filter_radio_clicked(which_btn)
 {
   if (which_btn)
     console_filters[which_btn] = !console_filters[which_btn];
-  
+
     if (console_filters['combat']) {
     $("li.e_unit_win_att").show();
     $("li.e_unit_win_def").show();
@@ -35,7 +35,7 @@ function console_filter_radio_clicked(which_btn)
   }
   if (console_filters['sentry'])
     $("li.e_unit_sentry_wake").show();
-  else 
+  else
     $("li.e_unit_sentry_wake").hide();
   if (console_filters['actions']) {
     $("li.e_bad_command").show();
@@ -147,21 +147,21 @@ function console_filter_radio_clicked(which_btn)
     $("li.e_enemy_diplomat_poison").hide();
     $("li.e_enemy_spy_nuke").hide();
     $("li.e_enemy_diplomat_bribe").hide();
-    $("li.e_enemy_diplomat_embassy").hide();        
+    $("li.e_enemy_diplomat_embassy").hide();
     $("li.e_enemy_diplomat_incite").hide();
     $("li.e_enemy_diplomat_poison").hide();
     $("li.e_enemy_diplomat_sabotage").hide();
     $("li.e_enemy_diplomat_theft").hide();
-    $("li.e_enemy_spy_steal_map").hide();        
+    $("li.e_enemy_spy_steal_map").hide();
     $("li.e_treaty_shared_vision").hide();
     $("li.e_treaty_alliance").hide();
     $("li.e_treaty_peace").hide();
     $("li.e_treaty_ceasefire").hide();
-    $("li.e_treaty_embassy").hide();        
-    $("li.e_diplomatic_incident").hide();        
+    $("li.e_treaty_embassy").hide();
+    $("li.e_diplomatic_incident").hide();
     $("li.e_treaty_broken").hide();
-    $("li.e_civil_war").hide();              
-    $("li.e_city_transfer").hide();              
+    $("li.e_civil_war").hide();
+    $("li.e_city_transfer").hide();
   }
   if (console_filters['cityprod']) {
     $("li.e_worklist").show();
@@ -233,7 +233,7 @@ function console_filter_radio_clicked(which_btn)
     $("li.e_tech_lost").hide();
     $("li.e_tech_embassy").hide();
     $("li.e_tech_goal").hide();
-  }  
+  }
   if (console_filters['chat']) {
     $("li.e_chat_error").show();
     $("li.e_chat_msg").show();
@@ -327,7 +327,7 @@ function console_filter_dialog()
   $("<div id='" + rid + "'></div>").appendTo("div#game_page");
 
   //dhtml += "Filter existing messages by type:<br><br>";
-  
+
   dhtml += "<input type='checkbox' class='css-checkbox' id='f_combat' value='false' onclick='console_filter_radio_clicked(\"combat\");'>"
   + "<label for='f_combat' title='' class='css-label dark-check-blue'><span class='e_unit_win_att'>Unit Combat</span></label><br>";
 
@@ -342,13 +342,13 @@ function console_filter_dialog()
 
   dhtml += "<input type='checkbox' class='css-checkbox' id='f_tech' value='false' onclick='console_filter_radio_clicked(\"tech\");'>"
   + "<label for='f_tech' title='' class='css-label dark-check-cyan'><span class='e_tech_gain'>Technology</span></label><br>";
-  
+
   dhtml += "<input type='checkbox' class='css-checkbox' id='f_diplomacy' value='false' onclick='console_filter_radio_clicked(\"diplomacy\");'>"
   + "<label for='f_diplomacy' title='' class='css-label dark-check-green'><span class='e_diplomacy'>Diplomatic Events</span></label><br>";
-  
+
   dhtml += "<input type='checkbox' class='css-checkbox' id='f_cityprod' value='false' onclick='console_filter_radio_clicked(\"cityprod\");'>"
   + "<label for='f_cityprod' title='' class='css-label dark-check-yellow'><span class='e_unit_buy'>City Production</span></label><br>";
-    
+
   dhtml += "<input type='checkbox' class='css-checkbox' id='f_citywarn' value='false' onclick='console_filter_radio_clicked(\"citywarn\");'>"
   + "<label for='f_citywarn' title='' class='css-label dark-check-red'><span class='e_city_famine'>City Events</span></label><br>";
 
@@ -362,7 +362,7 @@ function console_filter_dialog()
   + "<label for='f_setting' title='' class='css-label dark-check-white'><span class='e_setting'>System Events & Player Delegation</span></label><br>";
 
 
-  
+
   $(id).html(dhtml);
   $("#f_combat").prop("checked", console_filters['combat']);
   $("#f_actions").prop("checked", console_filters['actions']);

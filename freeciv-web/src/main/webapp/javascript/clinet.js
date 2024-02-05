@@ -37,8 +37,8 @@ var last_user_action_time = new Date().getTime();
 /* to disable auto-logout, use:  kick_inactive_time = Number.MAX_VALUE; */
 var kick_inactive_time = 40 * 60000; // 40min inactive = kick off time
 
-/* Tracking and knowing ping performance can be used later to adjust 
- * setTimeout(..) delays to perform better on fast connections and 
+/* Tracking and knowing ping performance can be used later to adjust
+ * setTimeout(..) delays to perform better on fast connections and
  * slow down enough for slow connections  */
  var last_ping_measurement = 0;
 
@@ -51,7 +51,7 @@ function network_init_manual_hack(civserverport_manual, username_manual,
     $.ajax({
         type: 'POST',
         url: "/validate_twit?username="+username_manual+"&type=manual_hack&port="+civserverport_manual,
-    });    
+    });
 }
 
 /****************************************************************************
@@ -123,7 +123,7 @@ function websocket_init()
           }
         }
       }
-        
+
      } else {
        console.error("Error, freeciv-web not compiled correctly. Please "
              + "run sync.sh in freeciv-proxy correctly.");
@@ -137,7 +137,7 @@ function websocket_init()
       +"min inactivity. Please reload the page to reconnect.", "error");
       setSwalTheme();
     } else {
-      /* If client.conn.id == -1 the user already has a SWAL saying they're already logged in: */ 
+      /* If client.conn.id == -1 the user already has a SWAL saying they're already logged in: */
       if (client.conn.id != -1) {
         swal("Server Disconnected", "Connection to server is closed. Please reload the page to restart.", "error");
         setSwalTheme();
@@ -224,10 +224,10 @@ function network_stop()
 ****************************************************************************/
 function send_request(packet_payload)
 {
-/* send_request_secure() optionally allows server operator to patch in 
+/* send_request_secure() optionally allows server operator to patch in
   a secure network encryption and/or security protocol between client and
   server. if you do not patch one, it will default to use vanilla insecure
-  communication 
+  communication
 
 https://github.com/freeciv/freeciv-web/blob/develop/freeciv-web/src/main/webapp/javascript/clinet.js
 
@@ -238,15 +238,15 @@ https://github.com/freeciv/freeciv-web/blob/develop/freeciv-web/src/main/webapp/
     if (ws != null) {
       ws.send(packet_payload);
     }
-  
+
     if (debug_active) {
       clinet_last_send = new Date().getTime();
     }
 
     var packet_type = jQuery.parseJSON("["+packet_payload+"]")[0]['pid'];
-    if (packet_type==packet_conn_pong || packet_type==packet_chat_msg_req) 
+    if (packet_type==packet_conn_pong || packet_type==packet_chat_msg_req)
       return;
-    set_last_user_action_time();  
+    set_last_user_action_time();
   }
 }
 
@@ -312,7 +312,7 @@ function send_message_delayed(message, delay)
 ****************************************************************************/
 function send_message(message)
 {
-  var packet = {"pid" : packet_chat_msg_req, 
+  var packet = {"pid" : packet_chat_msg_req,
                 "message" : message};
   send_request(JSON.stringify(packet));
 }

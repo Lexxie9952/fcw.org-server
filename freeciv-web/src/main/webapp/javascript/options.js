@@ -33,7 +33,7 @@ var server_settings = {};
 var Game_UID;   // (semi)-Unique-enough identifier for the particular game
 var myGameVars; // User persistent storage tied to a unique game
 // Hard-coded client behaviours specific to certain rulesets get custom ruleset flags (CRF)
-// assigned to them inside handle_ruleset_control() (packhand.js). You can then hard-code 
+// assigned to them inside handle_ruleset_control() (packhand.js). You can then hard-code
 // specific client behaviour by checking for (client_rules_flag & CRF_FLAG_NAME):
 var client_rules_flag              = []; // bit-flag for exceptional rules hard-coded into client
 const CRF_CARGO_HEURISTIC          =  0; // conventional ruleset generalisations for which cargo units go on which transports: filters a cleaner UI for transport loading
@@ -70,10 +70,10 @@ const CRF_2X_MOVES                 = 30;
 const CRF_EXTRA_WATCHTOWER         = 31;
 const CRF_EXTRA_HIGHWAY            = 32;
 const CRF_GRANULAR_COMBAT_STRENGTH = 33; // How much to divide combat values for granularity. Instead of true/false, contains the actual divisor.
-const CRF_DEBOARD_RESTRICT         = 34; // Any ruleset allowing transports on land tiles shouldn't allow 0-cost deboarding anywhere and everywhere 
+const CRF_DEBOARD_RESTRICT         = 34; // Any ruleset allowing transports on land tiles shouldn't allow 0-cost deboarding anywhere and everywhere
 const CRF_CLASSIC_PLUS             = 35;
 const CRF_MP2                      = 36; // rules flags for "minimum" mp2 ruleset, for when new feature came in.
-const CRF_MP2_A                    = 37; 
+const CRF_MP2_A                    = 37;
 const CRF_MP2_B                    = 38;
 const CRF_MP2_C                    = 39;
 const CRF_MP2_D                    = 40;
@@ -231,14 +231,14 @@ function init_options_dialog()
     }
   });
 
-  
+
   if (audio != null && !audio.source.src) {
     if (supports_mp3()) {
       pick_next_track();
       if (play_music) audio.play();
     }
   }
-  
+
 
   $(".setting_button").tooltip({
     show: { delay:200, effect:"none", duration: 0 }, hide: {delay:120, effect:"none", duration: 0}
@@ -273,13 +273,13 @@ function init_options_dialog()
     map_drag_enabled = this.checked;
     simpleStorage.set('mapdrag', map_drag_enabled);
   });
-  // GOTO DRAG ENABLED  
+  // GOTO DRAG ENABLED
   $('#enable_goto_drag').prop('checked', enable_goto_drag);
   $('#enable_goto_drag').change(function() {
     enable_goto_drag = this.checked;
     simpleStorage.set('gotodrag', enable_goto_drag);
   });
-  // AUTOEXPLORE HOTKEY 'X' ENABLED  
+  // AUTOEXPLORE HOTKEY 'X' ENABLED
   $('#enable_autoexplore').prop('checked', enable_autoexplore);
   $('#enable_autoexplore').change(function() {
     enable_autoexplore = this.checked;
@@ -297,7 +297,7 @@ function init_options_dialog()
     $("#game_unit_orders_default").show();
     update_unit_order_commands();
   }
-  else { 
+  else {
     $("#game_unit_orders_default").hide();
   }
   $('#show_order_buttons').change(function() {
@@ -317,7 +317,7 @@ function init_options_dialog()
     else {
       $("#game_unit_orders_default").hide();
     }
-    simpleStorage.set('showorderoption', show_order_option); 
+    simpleStorage.set('showorderoption', show_order_option);
   });
   // AUTO ATTACK
   $('#auto_attack').prop('checked', auto_attack);
@@ -353,68 +353,68 @@ function init_options_dialog()
    $('#draw_city_output').prop('checked', draw_city_output);
    $('#draw_city_output').change(function() {
      draw_city_output = this.checked;
-     simpleStorage.set('drawTiles', draw_city_output); 
+     simpleStorage.set('drawTiles', draw_city_output);
    });
-   // MOBILE: WIDER TABLE ROWS 
+   // MOBILE: WIDER TABLE ROWS
    $('#scroll_narrow_x').prop('checked', scroll_narrow_x);
    $('#scroll_narrow_x').change(function() {
      scroll_narrow_x = this.checked;
-     simpleStorage.set('xScroll', scroll_narrow_x); 
+     simpleStorage.set('xScroll', scroll_narrow_x);
    });
     // BORDER FLAGS
     $('#fill_borders').prop('checked', draw_border_flags);
     $('#fill_borders').change(function() {
       draw_border_flags = this.checked;
-      simpleStorage.set('borderFlags', draw_border_flags); 
+      simpleStorage.set('borderFlags', draw_border_flags);
     });
-    // TRICOLORE BORDERS 
+    // TRICOLORE BORDERS
     $('#tricolor_borders').prop('checked', draw_tertiary_colors);
     $('#tricolor_borders').change(function() {
       draw_tertiary_colors = this.checked;
       draw_border_mode |= 1;
-      simpleStorage.set('tricolore', draw_tertiary_colors); 
+      simpleStorage.set('tricolore', draw_tertiary_colors);
     });
     // THICK BORDERS
     $('#thick_borders').prop('checked', draw_thick_borders);
     $('#thick_borders').change(function() {
       draw_thick_borders = this.checked;
-      simpleStorage.set('thickBorders', draw_thick_borders); 
+      simpleStorage.set('thickBorders', draw_thick_borders);
     });
-    // CLASSIC DASHED BORDERS (override) 
+    // CLASSIC DASHED BORDERS (override)
     $('#dashed_borders').prop('checked', draw_dashed_borders);
     $('#dashed_borders').change(function() {
       draw_dashed_borders = this.checked;
-      simpleStorage.set('dashedBorders', draw_dashed_borders); 
+      simpleStorage.set('dashedBorders', draw_dashed_borders);
     });
-    // NO BORDERS (override) 
+    // NO BORDERS (override)
     $('#no_borders').prop('checked', (draw_border_mode & 2));
     $('#no_borders').change(function() {
       if (this.checked) draw_border_mode |= 2;
       else draw_border_mode &= 1;
-      //simpleStorage.set('noBorders', draw_border_mode & 2); 
+      //simpleStorage.set('noBorders', draw_border_mode & 2);
     });
-    // MOVING BORDERS 
+    // MOVING BORDERS
     $('#moving_borders').prop('checked', draw_moving_borders);
     $('#moving_borders').change(function() {
       draw_moving_borders = this.checked;
-      simpleStorage.set('movingBorders', draw_moving_borders); 
+      simpleStorage.set('movingBorders', draw_moving_borders);
     });
-    // SHOW EMPIRE TAB 
+    // SHOW EMPIRE TAB
     $('#show_empire').prop('checked', show_empire_tab);
     $('#show_empire').change(function() {
       show_empire_tab = this.checked;
       if (show_empire_tab) $("#ui-id-2").show(); else $("#ui-id-2").hide();
-      simpleStorage.set('showEmpire', show_empire_tab); 
+      simpleStorage.set('showEmpire', show_empire_tab);
     });
-    // Show Move Points % on units on map 
+    // Show Move Points % on units on map
     $('#show_unit_mp').prop('checked', show_unit_movepct);
     $('#show_unit_mp').change(function() {
       show_unit_movepct = this.checked;
       if (show_unit_movepct) hp_bar_offset = -5;
       else hp_bar_offset = 0;
-      simpleStorage.set('showMoves', show_unit_movepct); 
+      simpleStorage.set('showMoves', show_unit_movepct);
     });
-    // SHOW WARCALC TAB 
+    // SHOW WARCALC TAB
     $('#show_warcalc').prop('checked', show_warcalc);
     $('#show_warcalc').change(function() {
       show_warcalc = this.checked;
@@ -426,9 +426,9 @@ function init_options_dialog()
         setTimeout(function(){$("#show_warcalc").prop("checked", false);},100);
       }
       //else $("#ui-id-8").hide();
-      //simpleStorage.set('showCalc', show_warcalc); 
+      //simpleStorage.set('showCalc', show_warcalc);
     });
-    // Show Map Compass 
+    // Show Map Compass
     $('#show_compass').prop('checked', show_compass);
     $('#show_compass').change(function() {
       show_compass = this.checked;
@@ -450,7 +450,7 @@ function init_options_dialog()
         $(".ts").css("display", "none");
       }
     });
-    
+
    // Graphic Theme
    graphic_theme_path = simpleStorage.get('grtheme');
    if (!graphic_theme_path) graphic_theme_path = "themes/greek/";
@@ -459,7 +459,7 @@ function init_options_dialog()
      //console.log("1-Theme Path = "+graphic_theme_path);
    $('#graphic_theme').change(function() {
      graphic_theme_path = $('#graphic_theme').val();
-     simpleStorage.set('grtheme', graphic_theme_path); 
+     simpleStorage.set('grtheme', graphic_theme_path);
      change_graphic_theme();
    });
    //----------------------------------------------------------------^^USER OPTIONS^^
@@ -491,7 +491,7 @@ function init_options_dialog()
     $("#surrender_button").hide();
   }
 
-  if (is_supercow())     
+  if (is_supercow())
     $("#save_button").show();
     $("#timeout_setting_div").show(); // doesn't do anything yet, but one day we can change metamessage here.
 }
@@ -525,7 +525,7 @@ function change_graphic_theme()
 
   $('.chatbox_dialog').removeClass(clearall).toggleClass(graphic_theme_path+'6');
   $('.ui-dialog-titlebar').removeClass(clearall).toggleClass(graphic_theme_path+'6');
-  
+
   $('#freeciv_logo').removeClass(clearall).toggleClass(graphic_theme_path+'7');
   */
 }
@@ -542,7 +542,7 @@ function change_graphic_theme()
 
 
 .tablesorter-dark {
-  background: url("/images/bg-dark.jpg") repeat scroll 0 0 ;  
+  background: url("/images/bg-dark.jpg") repeat scroll 0 0 ;
 
 
 .city_panel {
@@ -564,16 +564,16 @@ background-image: url('/images/bg.jpg');
   background-image: url('/images/bg.jpg');
 
 #tech_info_box {
-  background: url("/images/bg-dark.jpg") repeat scroll 0 0 ; 
+  background: url("/images/bg-dark.jpg") repeat scroll 0 0 ;
 
 #city_present_units, #city_supported_units {
   background:  url("/images/bg-dark.jpg") repeat scroll 0 0 ;
 
 #city_improvements {
-  background: url("/images/bg-dark.jpg") repeat scroll 0 0 ; 
+  background: url("/images/bg-dark.jpg") repeat scroll 0 0 ;
 
 .diplomacy_messages {
-  background: url("/images/bg-dark.jpg") repeat scroll 0 0 ;  
+  background: url("/images/bg-dark.jpg") repeat scroll 0 0 ;
 
 */
 

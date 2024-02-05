@@ -33,9 +33,6 @@ function init_replay()
     quality: 1,
     workerScript: "/javascript/libs/gif.worker.js"
   });
-
-
-
 }
 
 /**************************************************************************

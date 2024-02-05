@@ -21,25 +21,25 @@
 var doubletaptimer = 0;
 var touch_start_x;
 var touch_start_y;
-/* Recently some browsers RARELY start acting glitchy and not processing map clicks. 
+/* Recently some browsers RARELY start acting glitchy and not processing map clicks.
    Are they so fast, (or bog down too slow?), or are sensitive or touchy, or perhaps it's
    device specific to certain mice or touchpads, or some hacky state-machine code
    triggering extra fires of the event will happen when the browser is unusually fast/laggy?
    Whatever the reason, on *rare* occasion, chromium-based browsers (not Firefox) will
    start making 5 calls to update_mouse_cursor() BEFORE the click from the last mouse event
-   is able to finish do_map_click(). (Always fixed by rebooting computer). 
+   is able to finish do_map_click(). (Always fixed by rebooting computer).
 
    Normally, the temporary state var mapview_mouse_movement gets temporarily set to true when
-   a click is made, to figure out if later we're going to start map dragging. And gets reset 
+   a click is made, to figure out if later we're going to start map dragging. And gets reset
    to false after do_map_click() is processed. However, if update_mouse_cursor() is called
    and that var is true, this results in real_mouse_move_mode = true, to set map dragging
    mode on. If real_mouse_move_mode is set true before do_map_click() is called, then
-   this results in do_map_click() quickly exiting out of itself when it hits:  
+   this results in do_map_click() quickly exiting out of itself when it hits:
        if (real_mouse_move_mode == true) return;
    , and therefore not able to process the original click event! The answer is to freeze all
    calls to update_mouse_cursor() when a click event gets started, so it has time to finish
    processing. Which is what the var below does.... */
-var freeze_update_mouse_cursor = false; 
+var freeze_update_mouse_cursor = false;
 
 var map_select_setting_enabled = true;
 var map_select_check = false;
@@ -52,7 +52,7 @@ var mouse_click_mod_key = {shiftKey:false};
 var dblclick_count = 0;
 var dblclick_timeout = 0;
 
-// number of 'false' touchmove events to suppress after touchstart based on 
+// number of 'false' touchmove events to suppress after touchstart based on
 // non-universal inconsistency in this behaviour among browsers:
 var num_suppressions = (navigator.userAgent.indexOf("Chrome") !== -1) ? 2 : 0;
 var suppress_touch_move = num_suppressions;  // hack to fix false touchmove events in mobile Chrome
@@ -86,7 +86,7 @@ function mapview_mouse_click(e)
   mouse_click_mod_key = e;  // stored to remember if shift- or ctrl- click
 
   //console.log("mapview_mouse_click called for mouse UP.");
-                        
+
   if (e.which) {
     rightclick = (e.which == 3);
     middleclick = (e.which == 2);
@@ -100,7 +100,7 @@ function mapview_mouse_click(e)
     if (mouse_click_mod_key.shiftKey && mouse_click_mod_key.ctrlKey && !mouse_click_mod_key.altKey) {
       paste_tile_target_for_prod(mouse_x, mouse_y);
     } else if (mouse_click_mod_key.shiftKey && !mouse_click_mod_key.ctrlKey && !mouse_click_mod_key.altKey) {
-      copy_tile_target_for_prod(mouse_x, mouse_y);  
+      copy_tile_target_for_prod(mouse_x, mouse_y);
     } else if (mouse_click_mod_key.altKey && mouse_click_mod_key.ctrlKey) {
       key_paste_link_under_cursor();  // paste a link to a unit or tile
     }
@@ -128,7 +128,7 @@ function mapview_mouse_click(e)
     } else {   // PROCESS NORMAL LEFT CLICK HERE
       //console.log("mapview_mouse_click about to call action_button_pressed")
       action_button_pressed(mouse_x, mouse_y, SELECT_POPUP);
-    
+
       mapview_mouse_movement = false;
       update_mouse_cursor();
     }
@@ -148,8 +148,8 @@ function mapview_mouse_down(e)
     // TO DO: we can put alternate behaviour for touch devices here
     if ($(".context-menu-list").is(":visible"))
     {
-      mouse_touch_started_on_unit = false; 
-      context_menu_active = true; 
+      mouse_touch_started_on_unit = false;
+      context_menu_active = true;
       came_from_context_menu = false;
       mapview_mouse_movement = false;
       real_mouse_move_mode = false;
@@ -157,20 +157,20 @@ function mapview_mouse_down(e)
       return; // leave to avoid triggering a mouse event
     }
   }
-  else if ($(".context-menu-list").is(":visible")) // Context menu click-to-leave functionality for non-touch devices  
+  else if ($(".context-menu-list").is(":visible")) // Context menu click-to-leave functionality for non-touch devices
   { /* Any mouse-down event during an active context menu will:
         -Release/kill the context menu
         -Not activate other types of mouse mechanics or special states
         -Reset all mouse/UI states to a fresh clean condition
     */
-    mouse_touch_started_on_unit = false; 
-    context_menu_active = true; 
+    mouse_touch_started_on_unit = false;
+    context_menu_active = true;
     came_from_context_menu = false;
     mapview_mouse_movement = false;
     real_mouse_move_mode = false;
     //last_unit_clicked = -1;  ??? optional
     return; // leave to avoid triggering a mouse-drag event
-  } 
+  }
 
   var rightclick = false;
   var middleclick = false;
@@ -193,8 +193,8 @@ function mapview_mouse_down(e)
       map_select_x = mouse_x;
       map_select_y = mouse_y;
       map_select_check_started = new Date().getTime();
-  
-      // The context menu blocks the right-click mouse up event on some browsers. 
+
+      // The context menu blocks the right-click mouse up event on some browsers.
       context_menu_active = false;
       return;
     }
@@ -202,18 +202,18 @@ function mapview_mouse_down(e)
     // if (airlift_active) return;  <<<<<<<<<< TODO was this line missing?
     if (action_tgt_sel_active) return; // prevent selecting a unit when we're selecting an action tile.
     if (goto_active || rally_active) return;
-    if (paradrop_active) return; // left-clicking on your own unit in paradrop mode was selecting it, in spite of 
-                                 // action_button_pressed and do_map_click checking for paradrop_active; test for fix.      
+    if (paradrop_active) return; // left-clicking on your own unit in paradrop mode was selecting it, in spite of
+                                 // action_button_pressed and do_map_click checking for paradrop_active; test for fix.
     set_mouse_touch_started_on_unit(canvas_pos_to_tile(mouse_x, mouse_y));
     // After exhaustive debugging, it was determined that check_mouse_drag_unit breaks shift-clicking
     if (!mouse_click_mod_key['shiftKey']) {
       check_mouse_drag_unit(canvas_pos_to_tile(mouse_x, mouse_y));
       // initial condition for possibly starting map drag mode
-      if (!map_select_check // no map drag if we're in selection rectangle or leaving it 
+      if (!map_select_check // no map drag if we're in selection rectangle or leaving it
           && !mouse_touch_started_on_unit // no map drag if we're dragging a unit to move it
           && map_drag_enabled             // can't drag if user disabled the mode
           && !came_from_context_menu) {   // we don't start a drag if coming out of context menu
-         
+
           set_mapview_mouse_movement(); // if you clicked out of a context menu, don't do map drag
       }
     }
@@ -221,29 +221,29 @@ function mapview_mouse_down(e)
     touch_start_y = mouse_y;
   } else if (rightclick && e.altKey && e.ctrlKey) {
     // ctrl-alt-rightclick, which pastes link to chat
-    // this section just prevents other things like tile info or 
+    // this section just prevents other things like tile info or
     // context menu from happening
     context_menu_active = false;
     return false;
   } else if (middleclick || e['altKey']) {
-    if (!e['ctrlKey']) { 
+    if (!e['ctrlKey']) {
       popit();
       context_menu_active = false;
       return false;
-    } 
+    }
   } else if (rightclick && !map_select_active && is_right_mouse_selection_supported()) {
     map_select_check = true;
     map_select_x = mouse_x;
     map_select_y = mouse_y;
     map_select_check_started = new Date().getTime();
 
-    // The context menu blocks the right-click mouse up event on some browsers. 
+    // The context menu blocks the right-click mouse up event on some browsers.
     context_menu_active = false;
   }
 }
 /****************************************************************************
-  This function sets the temporary state var mapview_mouse_movement used 
-  to later figure out whether to set real_mouse_move_mode to turn on 
+  This function sets the temporary state var mapview_mouse_movement used
+  to later figure out whether to set real_mouse_move_mode to turn on
   map dragging mode. Because of how some browsers RARELY behave, it also
   sets a state var to FREEZE update_mouse_cursor() from firing BEFORE
   the previous mouse-click event was able to finish processing; see longer
@@ -288,7 +288,7 @@ function mapview_touch_start(e)
 
   doubletaptimer = Date.now();
   // Mobile Chrome generates 2 false touchmoves after every touchstart
-  suppress_touch_move = num_suppressions;  
+  suppress_touch_move = num_suppressions;
 }
 
 /****************************************************************************
@@ -306,9 +306,9 @@ function mapview_touch_end(e)
 
   // Handle touchend event iff we were map dragging:
   if ((touch_drag_mode && !mouse_touch_started_on_unit) && !(goto_active || rally_active) ) {
-    /* We're on a touch device and just came out of map dragging, therefore 
+    /* We're on a touch device and just came out of map dragging, therefore
      * this touch_end event is NOT the user actually tapping an action.
-     * Interpreting such would make the tile the drag ended on become the 
+     * Interpreting such would make the tile the drag ended on become the
      * target for airlift, paradrop, and goto !! */
     touch_drag_mode = false; // dragging has ended, turn off and return
     /* DEBUG
@@ -332,7 +332,7 @@ function mapview_touch_move(e)
   suppress_touch_move--;
   if (suppress_touch_move>=0) return; // probable false touchmove event
 
-  // on Mobile, touch_drag_mode represents if we're in a touchmove cycle, which may or 
+  // on Mobile, touch_drag_mode represents if we're in a touchmove cycle, which may or
   // MAY NOT be concurrent with actual map dragging (e.g., could be doing touchmove on goto pathing)
   touch_drag_mode = true;
   /* DEBUG
@@ -352,7 +352,7 @@ function mapview_touch_move(e)
     check_mouse_drag_unit(canvas_pos_to_tile(mouse_x, mouse_y));
 
     // This is how we know if this touchmove is dragging the map:
-    if ( !(goto_active||rally_active) && !mouse_touch_started_on_unit) { 
+    if ( !(goto_active||rally_active) && !mouse_touch_started_on_unit) {
       mapview['gui_x0'] += diff_x;
       mapview['gui_y0'] += diff_y;
     }
@@ -423,7 +423,7 @@ function action_button_pressed(canvas_x, canvas_y, qtype)
      do_map_click(ptile, qtype, true);
      //console.log("       abp2: current_focus.length at this point is "+current_focus.length);
      //console.log("         abp2: current_focus[0] location is: "+tiles[current_focus[0]['tile']]['x']+","+tiles[current_focus[0]['tile']]['y']);
-  } 
+  }
 
 }
 
@@ -446,9 +446,9 @@ function city_action_button_pressed(canvas_x, canvas_y)
 
 
 /**************************************************************************
-  This will select and set focus to all the units which are in the 
+  This will select and set focus to all the units which are in the
   selected rectangle on the map when the mouse is selected using the right
-  mouse button. 
+  mouse button.
   [canvas_x, canvas_y, map_select_x, map_select_y].
 **************************************************************************/
 function map_select_units(canvas_x, canvas_y)
@@ -457,10 +457,10 @@ function map_select_units(canvas_x, canvas_y)
   var selected_units = [];
   if (client_is_observer()) return;
 
-  var start_x = (map_select_x < canvas_x) ? map_select_x : canvas_x; 
-  var start_y = (map_select_y < canvas_y) ? map_select_y : canvas_y; 
-  var end_x = (map_select_x < canvas_x) ? canvas_x : map_select_x; 
-  var end_y = (map_select_y < canvas_y) ? canvas_y : map_select_y; 
+  var start_x = (map_select_x < canvas_x) ? map_select_x : canvas_x;
+  var start_y = (map_select_y < canvas_y) ? map_select_y : canvas_y;
+  var end_x = (map_select_x < canvas_x) ? canvas_x : map_select_x;
+  var end_y = (map_select_y < canvas_y) ? canvas_y : map_select_y;
 
 
   for (var x = start_x; x < end_x; x += 15) {
@@ -530,7 +530,7 @@ function recenter_button_pressed(canvas_x, canvas_y)
 }
 
 /**************************************************************************
-  Prevent a double-tap for GOTO on a city, from doing context menu or 
+  Prevent a double-tap for GOTO on a city, from doing context menu or
   show_city_dialog. Return TRUE if cooldown period is fulfilled.
 **************************************************************************/
 function city_click_goto_cooldown(ptile)
@@ -542,7 +542,7 @@ function city_click_goto_cooldown(ptile)
       return false; // Clicked on a city only milliseconds after GOTO to this
                     // city! Return false to block unwanted click-actions.
     }
-  } 
+  }
   return true;
 }
 
@@ -605,15 +605,15 @@ function handle_info_text_message(packet)
   message = message.replace(/<br>\n<b>Hostile/g, " <b class='black_shadow' style='color:d85454'>Hostile");
   message = message.replace(/<br>\nHostile/g, " <b class='black_shadow' style='color:d85454'>Hostile</b>");
   message = message.replace(/<b>Hostile/g, "<b class='black_shadow' style='color:d85454'>Hostile");
-  
+
   message = message.replace(/<br>\n<b>Friendly/g, " <b class='black_shadow' style='color:#1b1'>Friendly");
   message = message.replace(/<br>\nFriendly/g, " <b class='black_shadow' style='color:#1b1'>Friendly</b>");
   message = message.replace(/<b>Friendly/g, "<b class='black_shadow' style='color:#1b1'>Friendly");
-  
+
   message = message.replace(/<br>\n<b>Neutral/g, " <b class='black_shadow' style='color:#40a4d6'>Neutral");
   message = message.replace(/<br>\nNeutral/g, " <b class='black_shadow' style='color:#40a4d6'>Neutral</b>");
   message = message.replace(/<b>Neutral/g, "<b class='black_shadow' style='color:#40a4d6'>Neutral");
-  
+
   message = message.replace(/<br>\n<b>Mysterious/g, " <b class='black_shadow' style='color:#9072de'>Mysterious");
   message = message.replace(/<br>\nMysterious/g, " <b class='black_shadow' style='color:#9072de'Mysterious</b>");
   message = message.replace(/<b>Mysterious/g, "<b class='black_shadow' style='color:#9072de'>Mysterious");
