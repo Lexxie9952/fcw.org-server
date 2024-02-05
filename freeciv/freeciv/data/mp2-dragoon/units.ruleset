@@ -5287,7 +5287,7 @@ roles         = ""
 helptext      = _("\
 ABMs intercept enemy missiles. Because there is seldom enough time to\
  order a launch against incoming missiles, ABMs are usually set to Vigil,\
- which makes them automatically intercept adjacent missiles. In the case\
+ which makes them automatically intercept adjacent offensive missiles (not other ABMs). In the case\
  of a missile trying non-adjacent nuclear detonation, each ABM on vigil has a 29% chance to\
  intercept it within a 5x5 area of effect (minus the corners). \n\
 ABMs are useful for anti-missile defense outside of cities. They must be\
