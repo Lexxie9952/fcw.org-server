@@ -468,9 +468,9 @@ static int antinuke_unit_try_defend(const struct player *nuke_owner,
   //--See if a unit on a surrounding tile defends---------------------//
   circle_dxyr_iterate(&(wld.map), ptile, MAX_ALLOWED_SDI_RADIUS_SQ, ptile1, dx, dy, dr) {
 
-    /* DEBUG: notify_player(nuke_owner, ptile, E_CHAT_MSG_ALLY, ftc_server,
+    /* DEBUG: */ notify_player(nuke_owner, ptile, E_CHAT_MSG_ALLY, ftc_server,
                           _("Check tile with dx:%d dy:%d rad:%.2f dr:%d"),
-                          dx, dy, sqrt(dx*dx + dy*dy), dr); */
+                          dx, dy, sqrt(dx*dx + dy*dy), dr);
 
     // Check units on each tile
     unit_list_iterate_safe(ptile1->units, punit) {
@@ -500,11 +500,11 @@ static int antinuke_unit_try_defend(const struct player *nuke_owner,
 
       bool reachable = can_defender_sdi_nuker(defender_uclass, nuke_uclass);
 
-      /* DEBUG
+      /* DEBUG */
       if (odds_pm)
           notify_player(nuke_owner, unit_tile(punit), E_UNIT_LOST_ATT, ftc_server,
               _("Radius check on %s. defense_radius:%.2f, dgz: %.2f, dr:%d"),
-              unit_tile_link(punit), defense_radius, radius_from_ground0, dr); */
+              unit_tile_link(punit), defense_radius, radius_from_ground0, dr);
 
       if (defense_radius >= radius_from_ground0
           && odds_pm > 0
@@ -523,6 +523,17 @@ static int antinuke_unit_try_defend(const struct player *nuke_owner,
             notify_player(nuke_owner, unit_tile(punit), E_UNIT_WIN_ATT, ftc_server,
               _("<i style='color:#999'>[`dice`]%s has %d.%d%% odds to intercept nuke. FAILED!</i>"),
               unit_tile_link(punit), (odds_pm)/10, (odds_pm % 10));
+              /* FIXME: We can't do this because this function is incorrectly put in /common
+                 where it frankly shouldn't be. Move this and its callers higher up to
+                 /server and wipe the failed ABM units here:
+              // Successful missiles get wiped by caller functions, but failed missiles get no
+              // success code back and have to happen here. Mind you it's not as bad
+              // as it looks because mostly failed missiles get nuked anyway, but there can
+              // be range differences or perhaps a huge stack of ABM and later ones are
+              // successful.
+              if (uclass_has_user_unit_class_flag_named(unit_class_get(punit), "Missile")) {
+                wipe_unit(punit, ULR_MISSILE, NULL);
+              }*/
         }
       }
     } unit_list_iterate_safe_end;
