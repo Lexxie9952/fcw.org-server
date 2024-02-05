@@ -178,7 +178,7 @@ static bool insert_veteran_help(char *outbuf, size_t outlen,
             /* TRANS: Header for fixed-width veteran level table.
              * TRANS: Translators cannot change column widths :(
              * TRANS: "Level name" left-justified, other two right-justified */
-             is_server() 
+             is_server()
              ? _("<table class=\'vet_level\'><tbody><tr><th>Veteran level</th><th>Power factor</th><th>Promotion Odds</th><th>Move bonus</th></tr><tr></tr>")
              : _("<table class=\'vet_level\'><tbody><tr><th>Veteran level</th><th>Power factor</th><th>Move bonus</th></tr><tr></tr>")
              );
@@ -192,7 +192,7 @@ static bool insert_veteran_help(char *outbuf, size_t outlen,
             "<tr><td>%s</td><td>%4d%%</td><td>%4d%%</td><td>%12s</td></tr>",
             name,
             level->power_fact,
-            (level->base_raise_chance ? level->base_raise_chance : level->work_raise_chance), 
+            (level->base_raise_chance ? level->base_raise_chance : level->work_raise_chance),
             move_points_text_full(level->move_bonus, TRUE, "+ ", "&#8212", false));
       } else {
         cat_snprintf(outbuf, outlen,
@@ -241,7 +241,7 @@ static bool insert_generated_text(char *outbuf, size_t outlen, const char *name)
         fc_snprintf(transform_time, sizeof(transform_time),
                     "%d", pterrain->transform_time);
         terrain = terrain_name_translation(pterrain);
-        irrigation_result = 
+        irrigation_result =
           (pterrain->irrigation_result == pterrain
            || pterrain->irrigation_result == T_NONE
            || !univs_have_action_enabler(ACTION_CULTIVATE, NULL, &for_terr)) ? ""
@@ -673,7 +673,7 @@ static void insert_allows(struct universal *psource,
 static struct help_item *new_help_item(int type)
 {
   struct help_item *pitem;
-  
+
   pitem = fc_malloc(sizeof(struct help_item));
   pitem->topic = NULL;
   pitem->text = NULL;
@@ -1105,9 +1105,9 @@ void boot_help_texts(void)
           continue;
         }
       }
-      
+
       /* It wasn't a "generate" node: */
-      
+
       pitem = new_help_item(HELP_TEXT);
       pitem->topic = fc_strdup(Q_(secfile_lookup_str(sf, "%s.name",
                                                      sec_name)));
@@ -1169,7 +1169,7 @@ int num_help_items(void)
 const struct help_item *get_help_item(int pos)
 {
   int size;
-  
+
   check_help_nodes_init();
   size = help_list_size(help_nodes);
   if (pos < 0 || pos > size) {
@@ -1212,7 +1212,7 @@ get_help_item_spec(const char *name, enum help_page_type htype, int *pos)
     idx++;
   }
   help_list_iterate_end;
-  
+
   if (!pitem) {
     idx = -1;
     vitem.topic = vtopic;
@@ -1254,7 +1254,7 @@ void help_iter_start(void)
 const struct help_item *help_iter_next(void)
 {
   const struct help_item *pitem;
-  
+
   check_help_nodes_init();
   pitem = help_list_link_data(help_nodes_iterator);
   if (pitem) {
@@ -1740,7 +1740,7 @@ char *helptext_unit(char *buf, size_t bufsz, struct player *pplayer,
   int fuel;
 
   /* Had to change user_text to NULL in civmanual:701 call to avoid segfault here
-   * But now it works mysteriously 
+   * But now it works mysteriously
   fc_assert_ret_val(NULL != buf && 0 < bufsz, NULL); */
   fc_assert_ret_val(NULL != buf && 0 < bufsz && NULL != user_text, NULL);
 
@@ -1760,7 +1760,7 @@ char *helptext_unit(char *buf, size_t bufsz, struct player *pplayer,
   utype_get_bombard_stats(&bstats, utype);
   utype_get_extra_stats(&pstats, utype);
 
-/* Non-FCW layout puts helptext at the very bottom */  
+/* Non-FCW layout puts helptext at the very bottom */
 #ifdef FREECIV_WEB
   if (NULL != utype->helptext) {
     strvec_iterate(utype->helptext, text) {
@@ -1772,7 +1772,10 @@ char *helptext_unit(char *buf, size_t bufsz, struct player *pplayer,
   CATLSTR(buf, bufsz, "%s", user_text);
   CATLSTR(buf, bufsz, "<hr style='border-top: 1px solid #000'>");
 #endif
-
+  if (utype_has_flag(utype, UTYF_MULTISLOT)) {
+    CATLSTR(buf, bufsz, _("%s <b style='color:rgb(67, 145, 255)'><u>Multislot</u>:</b> can use additional city build slots.\n"), BULLET_BIG);
+    CATLSTR(buf, bufsz, "<hr style='border-top: 1px solid #000'>");
+  }
   cat_snprintf(buf, bufsz,
                _("%s Belongs to <b style=\'color:#ffc\'>%s</b> unit class."), BULLET_BIG,
                uclass_name_translation(pclass));
@@ -1928,7 +1931,7 @@ char *helptext_unit(char *buf, size_t bufsz, struct player *pplayer,
                        BULLET_BIG, cbonus->value,
                        astr_build_or_list(&list, against, targets));
         }
-        break;      
+        break;
       case CBONUS_DEFENSE_DIVIDER_PCT:
         if (cbonus->value<0) {
           cat_snprintf(buf, bufsz,
@@ -1988,10 +1991,6 @@ char *helptext_unit(char *buf, size_t bufsz, struct player *pplayer,
 
   if (utype_has_flag(utype, UTYF_NOBUILD)) {
     CATLSTR(buf, bufsz, _("%s May not be built in cities.\n"), BULLET_BIG);
-  }
-  if (utype_has_flag(utype, UTYF_MULTISLOT)) {
-    CATLSTR(buf, bufsz, _("%s <b style=\'color:#9aa\'>Multislot</b>: Under certain conditions, cities can make one (or more) "
-                          "multislot unit(s) per turn, plus one of any other unit type.\n"), BULLET_BIG);
   }
   if (utype_has_flag(utype, UTYF_BARBARIAN_ONLY)) {
     CATLSTR(buf, bufsz, _("%s Only barbarians may build this.\n"), BULLET_BIG);
@@ -2065,7 +2064,7 @@ char *helptext_unit(char *buf, size_t bufsz, struct player *pplayer,
   }
   if (utype_has_flag(utype, UTYF_UNIQUE)) {
     CATLSTR(buf, bufsz,
-	    _("%s Each player may only have one %s.\n"), 
+	    _("%s Each player may only have one %s.\n"),
             BULLET_BIG, utype_name_translation(utype));
   }
   if (utype->pop_cost > 0) {
@@ -2314,8 +2313,8 @@ char *helptext_unit(char *buf, size_t bufsz, struct player *pplayer,
     /* Pollution, fallout. */
     extra_type_by_rmcause_iterate(ERM_CLEANPOLLUTION, pextra) {
       if (help_is_extra_cleanable(pextra, utype)) {
-        /* any Mil unit that can build anything at all is forced to be able 
-           to clean pollution due to hard-coded Settlers flag. This is a 
+        /* any Mil unit that can build anything at all is forced to be able
+           to clean pollution due to hard-coded Settlers flag. This is a
            UNCLEANED fix until we get actionenablers for fallout/pollution */
         if (utype_has_flag(utype, UTYF_CIVILIAN))
           strvec_append(extras_vec, extra_name_translation(pextra));
@@ -2329,11 +2328,11 @@ char *helptext_unit(char *buf, size_t bufsz, struct player *pplayer,
                    BULLET_BIG, astr_str(&extras_and));
       strvec_clear(extras_vec);
     }
-    
+
     extra_type_by_rmcause_iterate(ERM_CLEANFALLOUT, pextra) {
       if (help_is_extra_cleanable(pextra, utype)) {
-        /* any Mil unit that can build anything at all is forced to be able 
-           to clean fallout due to hard-coded Settlers flag. This is a 
+        /* any Mil unit that can build anything at all is forced to be able
+           to clean fallout due to hard-coded Settlers flag. This is a
            UNCLEANED fix until we get actionenablers for fallout/pollution */
         if (utype_has_flag(utype, UTYF_CIVILIAN))
           strvec_append(extras_vec, extra_name_translation(pextra));
@@ -2395,7 +2394,7 @@ char *helptext_unit(char *buf, size_t bufsz, struct player *pplayer,
   }
   if (utype_has_flag(utype, UTYF_IGTER)) {
     cat_snprintf(buf, bufsz,
-                 /* TRANS: "MP" = movement points. %s may have a 
+                 /* TRANS: "MP" = movement points. %s may have a
                   * fractional part. */
                  _("%s Ignores terrain effects (moving costs at most %s MP "
                    "per tile).\n"), BULLET_BIG,
@@ -2446,7 +2445,7 @@ char *helptext_unit(char *buf, size_t bufsz, struct player *pplayer,
     if (game.server.autoattack_style) {
         CATLSTR(buf, bufsz,
             _("%s An enemy unit on vigil will auto attack this unit if "
-              "it is reachable.\n"), BULLET_BIG);          
+              "it is reachable.\n"), BULLET_BIG);
     }
     else {
       CATLSTR(buf, bufsz,
@@ -2594,7 +2593,7 @@ char *helptext_unit(char *buf, size_t bufsz, struct player *pplayer,
               _("    <i style=\'color:#aa9\'>%s %d targets</i>\n"), BULLET,
               bstats.bombard_primary_targets);
     if (bstats.bombard_primary_kills) {
-      cat_snprintf(buf, bufsz,                    
+      cat_snprintf(buf, bufsz,
                     PL_("    <i style=\'color:#aa9\'>%s maximum of %d kill</i>\n",
                         "    <i style=\'color:#aa9\'>%s maximum of %d kills</i>\n",
                         bstats.bombard_primary_kills),
@@ -2892,18 +2891,18 @@ char *helptext_unit(char *buf, size_t bufsz, struct player *pplayer,
       case ACTION_PILLAGE:
         if (pstats.iPillage) {
           cat_snprintf(buf, bufsz,
-                      _("    %s <b style=\'color:#9aa\'>iPillage</b>: can instantly destroy extras on tile</i>\n"), BULLET);          
+                      _("    %s <b style=\'color:#9aa\'>iPillage</b>: can instantly destroy extras on tile</i>\n"), BULLET);
           cat_snprintf(buf, bufsz,
                       _("      \u25e6 <i style=\'color:#aa9\'>%d%% odds of iPillage success per strike</i>\n"),
-                      pstats.iPillage_odds); 
+                      pstats.iPillage_odds);
           if (pstats.iPillage_random_targets) {
             cat_snprintf(buf, bufsz,
                         _("      \u25e6 <i style=\'color:#aa9\'>up to %d random targets destroyed</i>\n"),
-                        pstats.iPillage_random_targets);             
+                        pstats.iPillage_random_targets);
           }
           cat_snprintf(buf, bufsz,
             _("      \u25e6 <i style=\'color:#aa9\'>action consumes %d move-points</i>\n"),
-            pstats.iPillage_moves);        
+            pstats.iPillage_moves);
         }
         break;
       case ACTION_BOMBARD:
@@ -2923,7 +2922,7 @@ char *helptext_unit(char *buf, size_t bufsz, struct player *pplayer,
                        " targets all defenders on a tile</i>\n"), BULLET);
         }
         if (bstats.bombard_primary_kills) {
-          cat_snprintf(buf, bufsz,                       
+          cat_snprintf(buf, bufsz,
                        PL_("    <i style=\'color:#aa9\'>%s maximum of %d kill</i>\n",
                            "    <i style=\'color:#aa9\'>%s maximum of %d kills</i>\n",
                            bstats.bombard_primary_kills),
@@ -3079,7 +3078,7 @@ char *helptext_unit(char *buf, size_t bufsz, struct player *pplayer,
     /* Verbosity reduction: actions whose legality is more rare than
       the reverse. Telling which cases are legal is more informative
       than telling that the majority of cases are impossible. */
-    if (action_by_number(act)->id == ACTION_CAPTURE_UNITS 
+    if (action_by_number(act)->id == ACTION_CAPTURE_UNITS
     || action_by_number(act)->id == ACTION_EXPEL_UNIT)
     {
       if (vulnerable) {
@@ -3168,7 +3167,8 @@ char *helptext_unit(char *buf, size_t bufsz, struct player *pplayer,
       CATLSTR(buf, bufsz, "\n\n");
     }
   }
-/* FCW layout puts natural language text at top */  
+
+/* FCW layout puts natural language text at top */
 #ifndef FREECIV_WEB
     if (NULL != utype->helptext) {
       strvec_iterate(utype->helptext, text) {
@@ -3277,7 +3277,7 @@ void helptext_advance(char *buf, size_t bufsz, struct player *pplayer,
 
   {
     int j;
-    
+
     for (j = 0; j < MAX_NUM_TECH_LIST; j++) {
       if (game.rgame.global_init_techs[j] == A_LAST) {
         break;
@@ -4363,7 +4363,7 @@ void helptext_government(char *buf, size_t bufsz, struct player *pplayer,
          * requirements were simple enough. */
         struct output_type *potype =
           output_type != O_LAST ? get_output_type(output_type) : NULL;
-        world_value = 
+        world_value =
           get_target_bonus_effects(NULL, NULL, NULL, NULL, NULL, NULL,
                                    NULL, unittype, potype, NULL, NULL,
                                    peffect->type, V_COUNT);
@@ -5034,7 +5034,7 @@ void helptext_nation(char *buf, size_t bufsz, struct nation_type *pnation,
         astr_init(&utype_names[i]);
         if (count[i] > 1) {
           /* TRANS: a unit type followed by a count. For instance,
-           * "Fighter (2)" means two Fighters. Count is never 1. 
+           * "Fighter (2)" means two Fighters. Count is never 1.
            * Used in a list. */
           astr_set(&utype_names[i], _("%s (%d)"),
                    utype_name_translation(utypes[i]), count[i]);
