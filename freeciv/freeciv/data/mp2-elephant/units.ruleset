@@ -2066,6 +2066,7 @@ helptext      = _("\
 Marines are experts at all-terrain warfare. Armed with diverse\
  weaponry, they are the strongest foot unit, with special abilities.\
  They can：\n\
+ ▪ Be transported without losing moves. \n\
  ▪ Attack Sea units (at a 50% penalty). \n\
  ▪ Attack and remain fortified. \n\
  ▪ Attack from a Transport or Helicopter. \n\
@@ -3099,14 +3100,14 @@ bonuses       =
      "AirAttacker", "DefenseDivider", 1
      "AirAttacker", "DefenseMultiplier", 1
    }
-flags         = "NeverBlocked", "AntiAir", "WillNever", "TransportDefender", "NonNativeAttack"
+flags         = "NeverBlocked", "AntiAir", "TransportDefender", "NonNativeAttack"
 roles         = ""
 helptext      = _("\
 Anti-Aircraft Artillery (AAA) get a 2× bonus against Air units. They can attack any tile.\
- They can be transported by any unit that can carry Marines.\
+ They can be transported by any unit that can carry Marines, without losing moves.\
  Transported AAA can always defend their tile, even at sea. AAA can’t attack while transported,\
  and cannot attack Submarines, Missiles, and High Altitude aircraft.\n\n\
- Like Siege class units, AAA can vigil if in a city or base and they have their full move-points\
+ Like Siege class units, AAA can vigil if in a city or base if they have their full move-points\
  left.\n\n\
 "), _("
 After Space Flight and 9 turns of service, AAA can be converted to\
