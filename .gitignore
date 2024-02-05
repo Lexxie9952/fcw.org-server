@@ -76,6 +76,7 @@ tornado*
 resin*
 models.zip
 freeciv-web/src/main/webapp/build.txt
+freeciv-web/src/main/webapp/.vscode/*.*
 */__pycache__/*
 logs/
 out/
