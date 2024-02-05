@@ -256,4 +256,5 @@ i.e., 6 in 5 (swamp), 5 in 4 (mine), 4 in 3 (angkor wat swamp drain) goes to:
 90. Combined Arms no longer requires computers but is demoted one tier. Reason: allow more advanced troops and capabilities. Before, by the time this tech was available, it was not as appealing as other available techs, and thus became
       much less relevant. In addition, this helps buff Project Infantry another step and makes "necessity" of Mechanization for Mech.Inf slightly less.
 91. palace gives a multislot in early times
+92. Hydrogen bomb cost increase to 200 (was 190).
 
