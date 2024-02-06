@@ -631,18 +631,42 @@ Peaceful_Field_Unit_Bonus
 
 Passenger_Move_Cost_Bp
    🔷BACKGROUND:______________________________________________________________________________________
-    Ride a ship for 24 hours and get off: you AND the ship lost all your moves for the day. Legacy
-    Rulesets suffer "double-move exploits." Realism is not the highest goal for games, but one realist
-    fix isn't always worse than many hacks patching move costs and legality for transportation.
-   🔷EFFECT VALUES:___________________________________________________________________________________
-    Effect value is measured in SA Basis Points, i.e. 10080 = 100% (used instead of 10k since it's
-    _superabundant_, the best numbers for killing rounding error!) It's recommended for rulesets to
-    use this effect with "superabundant" or "highly composite" move_fragments (e.g., 12,60,360,10080).
-    🔷HOW TO USE THE EFFECT:___________________________________________________________________________
+    Legacy Rulesets suffer "double-move exploits." In reality, when you ride a ship for 24 hours and
+    get off, the ship AND the passenger lost all move-points for the day. In legacy rules, passengers
+    lose no moves and can board a new ship and ride again. Somehow, Warriors with 2 move points
+    circumnavigate the planet and have more moves left than a supersonic Stealth Fighter!
+    Of course we can try to make numerous rules and exceptions to try to prevent it, but each time we
+    do that, we also prohibit countless real and intuitively viable tactical possibilities.
+    It's folly to make realism the highest goal for a game. But sometimes, a simple realistic
+    fix isn't worse than adding to a plethora of exceptions and prohibitions that use duct tape,
+    superglue, and sewn patches over a multitudinous bestiary of flaws that keep finding new ways
+    to exploit wild violations of the physical laws of time, distance, velocity. Such problems
+    are then compounded by suffering many complex and unintuitive rules that accumulate over time
+    that squash natural tactical possibilities, in an attempt to prevent the unnatural physics from
+    being exploited.
+   🔷EFFECT VALUES:____________________________________________________________________________________
+    Effect value is the numerator in the expression: (x/move_fragments). This represents the
+    fraction of the passenger's total move points charged to it, relative to the fraction of total
+    move points charged to the transport, during movement. If the fraction == 1, the passenger
+    and transport will run out of moves at the same time. If the fraction == 0.5, the passenger will
+    experience moves_left -= (total_move_rate * fraction.) See "How to Use" for more info.
+   🔷NOTES ON RULESET move_fragments __________________________________________________________________
+    This effect was designed and optimised to work best when move_fragments (SINGLE_MOVE) is set to
+    Superabundant Basis Points. SA Basis points (10080) are superior to normal Basis Points (10000),
+    because superabundant numbers "magically" avoid rounding error for the greatest diversity of
+    x/y ratios. This means you also avoid having situations like units with 1 6373/10000 move points,
+    because under SA basis points everything will proportionately track and reduce into simple
+    recognizable fractions. Whether or not a ruleset chooses 10080 (SA Basis Points), it's recommended
+    for rulesets that use Passenger_Move_Cost_Bp to use "superabundant" move_fragments or at very least,
+    "highly composite" move_fragments (e.g., 12,60,360,10080). Note that SA and HC values are also used
+    in measuring time, global positioning, angular geoemetries, and so on--for the exact same reason.
+    You can display your move fragments as 0-60 seconds, which people are familiar with already when
+    thinking of fractions of a minute.
+    🔷HOW TO USE THE EFFECT:_____(examples use recommended 10080 move_fragments)_________________________
       🔸 A value of 10080 = the same % of the Cargo's move_rate is spent per move as the Transport.
-         Cargo on a Transport that uses half its moves will also lose half its moves.
+         A Transport that travels half its moves will have its cargo lose half its moves.
       🔸 A value of 5040 makes the Cargo's move-points decay at half the % rate of the Transport's.
-         If a Transport uses all its moves, the Cargo will have half its moves left.
+         If a Transport uses all its moves, the Cargo will only lose half its moves.
       🔸 A value of 0 means Cargo incurs no cost at being transported. (DEFAULT. Legacy rulesets.)
       🔸 Values over 10080 will consume more moves for the Cargo than for the Transport.
       🔸 Negative values would give the Cargo extra moves while being transported.

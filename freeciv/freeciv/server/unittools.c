@@ -5228,10 +5228,10 @@ bool unit_move_real(struct unit *punit, struct tile *pdesttile, long move_cost,
      * If the transport took a year to get somewhere, the cargo also waited all year to
      * get there. Finally, a solution to double-haul move problems! Leaving the effect
      * EFT_PASSENGER_MOVE_COST_BP as 0 leaves legacy behaviour (no moves charged to
-     * units on long voyages). A value of 100 gives full real proportonality: an 8mp
-     * transport moving 50% of its range (4 tiles) will charge a 4mp cargo 2mp (50%).
-     * Somewhere between 0-100 can be used if you want to leniently leave some moves
-     * left to disembark or start an activity.
+     * units on long voyages). A value of SINGLE_MOVE gives full real proportonality
+     * (an 8mp transport using 50% of its range will charge a 4mp cargo 2mp==50%).
+     * Somewhere between 0-SINGLE_MOVE can be used if you want to leniently leave some
+     * moves left to disembark or start an activity.
      *
      * Notice utype_move_rate() is used for the pcargo because it might be on a non-native
      * tile while transported, or is getting flown over a move-penalty tile like mountains,
