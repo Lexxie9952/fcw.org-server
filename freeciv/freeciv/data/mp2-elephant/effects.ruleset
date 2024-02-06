@@ -1544,9 +1544,8 @@ reqs	=
 ;since we're getting rid of that, I think we need to keep a Board cost at very least, or Deboard
 ;(decide which is better).
 ;
-; Currently Paratroopers are hard-coded in unit_move_real() to ignore this iff they are transported by a Cargo Plane
-; obviously that's ugly but if we ever change that we need to re-introduce other ways to not charge them move points
-; when on a Cargo Plane.
+; Currently Paratroopers are hard-coded in unit_move_real() to ignore this iff they are transported by a UTYF_FREE_RIDE
+; unit.
 ;
 ;BASE RATE of 50% while transported:
 ;Military land units who aren't LandAirSea.
@@ -1566,7 +1565,7 @@ reqs	=
       "UnitFlag",      "Infra",         "Local", FALSE     ; except worker types
       "UnitFlag",      "NonMil",        "Local", FALSE     ; except NonMil types
       "UnitClass",     "LandAirSea",    "Local", FALSE     ; except Marines, AAA. (AAA slated to vigil on ships)
-;      "UnitType",      "Paratroopers",  "Local", FALSE     ; See notes around here.
+;      "UnitType",      "Paratroopers",  "Local", FALSE     ; NOT CHARGED if on a UTYF_FREE_RIDE transport
     }
 
 ; Siege: 0.5mp, Mounted: 1 mp. Motor: 1.5 mp. Absolutely great. Could get rewrite after deboard liberalization?
@@ -1578,7 +1577,7 @@ value	= 2520   ; 5040 + 2520 = 7560 / 10080 = 75%
 reqs	=
     { "type",          "name",          "range", "present"
       "UnitClassFlag", "TerrainSpeed",  "Local", TRUE      ; all Land units at least 50% passenger move cost
-      "UnitFlag",      "FootSoldier",   "Local", FALSE     ; not worker types
+      "UnitFlag",      "FootSoldier",   "Local", FALSE     ; not foot soldiers
       "UnitFlag",      "NonMil",        "Local", FALSE     ; not NonMil types
       "UnitClass",     "LandAirSea",    "Local", FALSE     ; Marines no; AAA need to vigil on Transports
     }
