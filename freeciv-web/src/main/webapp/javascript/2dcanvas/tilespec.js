@@ -53,11 +53,13 @@ const CITY_WALLS = 1,
       CITY_PYRAMID = 64,
       CITY_ANGKOR_WAT = 128,
       CITY_HANGING_GARDEN = 256,
-      CITY_CHICHEN_ITZA = 512,
+      //CITY_CHICHEN_ITZA = 512,
       CITY_MAUSOLEUM = 1024,
       CITY_HAMMURABI = 2048,
       CITY_CHAND_BAORI = 4096,
       CITY_SPHINX = 8192;
+// MASK Bit field for determining quickly if city is replaced by a wonder sprite
+const CITY_REPLACED_BY_WONDER_MASK = (CITY_HANGING_GARDEN | CITY_ANGKOR_WAT | CITY_MAUSOLEUM | CITY_ZIGGURAT | CITY_PYRAMID | CITY_CITADEL /* | CITY_CHICHEN_ITZA*/);
 
 var current_select_sprite = 0;
 var max_select_sprite = 4;
@@ -1751,19 +1753,23 @@ function get_city_wonder_overlay_sprite(pcity) {
 function get_city_sprite(pcity)
 {
   var tag;
-  // Wonders that define the entire sprite of the city go here...
-  if (pcity['walls'] & CITY_CITADEL) tag = "city.citadel_overlay";
-  else if (pcity['walls'] & CITY_ZIGGURAT) tag = "city.ziggurat_overlay";
-  else if (pcity['walls'] & CITY_PYRAMID) tag = "city.pyramid_overlay";
-  else if (pcity['walls'] & CITY_ANGKOR_WAT) tag = "city.angkor_overlay";
-  else if (pcity['walls'] & CITY_HANGING_GARDEN) tag = "city.hgarden_overlay";
-  else if (pcity['walls'] & CITY_CHICHEN_ITZA) tag = "city.chichen_overlay";
-  else if (pcity['walls'] & CITY_MAUSOLEUM) tag = "city.mausoleum_overlay";
+  /* Wonders that define the entire sprite of the city go here... Make quick
+     exit from checking every type by checking if there are any at all, first: */
+  if (pcity['walls'] & (CITY_REPLACED_BY_WONDER_MASK)) {
+    if (pcity['walls'] & CITY_MAUSOLEUM) tag = "city.mausoleum_overlay";
+    else if (pcity['walls'] & CITY_ANGKOR_WAT) tag = "city.angkor_overlay";
+    else if (pcity['walls'] & CITY_CITADEL) tag = "city.citadel_overlay";
+    else if (pcity['walls'] & CITY_PYRAMID) tag = "city.pyramid_overlay";
+    else if (pcity['walls'] & CITY_HANGING_GARDEN) tag = "city.hgarden_overlay";
+    else if (pcity['walls'] & CITY_ZIGGURAT) tag = "city.ziggurat_overlay";
+//  else if (pcity['walls'] & CITY_CHICHEN_ITZA) tag = "city.chichen_overlay";   RESERVED FOR FUTURE
+  }
   else {
     var style_id = pcity['style'];
     if (style_id == -1) style_id = 0;   /* sometimes a player has no city_style. */
     var city_rule = city_rules[style_id];
 
+    /* Old method
     var size = 0;
     if (pcity['size'] >=4 && pcity['size'] <=7) {
       size = 1;
@@ -1773,6 +1779,16 @@ function get_city_sprite(pcity)
       size = 3;
     } else if (pcity['size'] >=16) {
       size = 4;
+    } */
+
+    /* New High Performance Method: Fewer comparisons by avoiding compound expressions (a && b)
+       Fewer comparisons for larger cities: optimized for late game, not early game */
+    let size = 4;
+    if (pcity['size']<=15) {
+      if      (pcity['size'] >=12) size = 3;
+      else if (pcity['size'] >=8)  size = 2;
+      else if (pcity['size'] >=4)  size = 1;
+      else                         size = 0;
     }
 
     var city_walls = (pcity['walls'] & CITY_WALLS) ? "wall" : "city";
