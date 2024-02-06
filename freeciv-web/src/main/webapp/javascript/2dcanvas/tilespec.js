@@ -20,7 +20,7 @@
 
 // Unit offset arrays for graphics placement of units and their various icon components
 var UO_dx = [], UO_dy = []; // Unit graphic delta.
-var UO_sx = [], UO_sy = [];             // Shield graphic
+var UO_sx = [], UO_sy = []; // Shield graphic
 var UO_vx = [], UO_vy = []; // Vet badge graphic
 var UO_mx = [], UO_my = []; // Multi-unit graphic (stacked "+" icon)
 
@@ -2583,16 +2583,15 @@ function fill_layer3_sprite_array(ptile, stacked, st_unit)
 }
 
 /**************************************************************************
- One step closer to all unit graphics having all their offsets defined in
- a file. This currently hard-codes it but the function could be easily
- changed to load from a file once there is some standard for that.
+ Insert unit_type into the UO_ offset arrays for optimized tile positioning
+ of the unit and its auxiliary icon graphics (vet, nation, etc.)
+ 'i' is the index of the unit_type
+ ...
+ This could eventually be loaded once from a single file.
 **************************************************************************/
-function create_unit_offset_arrays()
+function insert_utype_into_offset_arrays(i)
 {
-  var num_utypes = Object.keys(unit_types).length;
-  for (i=0; i < num_utypes; i++) {
     var ptype = unit_types[i];
-
     // **WARNING for all y values: positive moves up, negative moves down
     var dx = unit_offset_adj_x;  // this is a base value to allow adjusting all unit offsets
     var dy = unit_offset_adj_y;
@@ -2649,6 +2648,10 @@ function create_unit_offset_arrays()
       case "Caravel":
           dx -= 3; dy -= 3;
           vx += 3; vy -= 3;
+          break;
+      case "Cargo Plane":
+          dy -= 1;
+          sx = 8;
           break;
       case "Carrier":
           dx -= 3; dy -= 4;
@@ -2919,5 +2922,5 @@ function create_unit_offset_arrays()
     UO_sx[i] = sx; UO_sy[i] = sy;
     UO_vx[i] = vx; UO_vy[i] = vy;
     UO_mx[i] = mx; UO_my[i] = my;
-  }
+
 }

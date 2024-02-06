@@ -2106,10 +2106,10 @@ function handle_web_ruleset_unit_addition(packet)
 {
   /* Decode bit vector. */
   packet['utype_actions'] = new BitVector(packet['utype_actions']);
-
-  unit_types[packet['id']] = $.extend(unit_types[packet['id']], packet);
-
-  create_unit_offset_arrays();
+  let id = packet['id'];
+  unit_types[id] = $.extend(unit_types[id], packet);
+  // Add utype into the tile positioning offset arrays:
+  insert_utype_into_offset_arrays(id);
 }
 
 /* 100% complete */
