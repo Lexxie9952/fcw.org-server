@@ -6,6 +6,7 @@ Brief Explanations of goals and challenges.
 Focus goals for MP2-Elephant
    Compress phenomenon where first 25% of era history happens in first 50% of game length.
       (e.g., first quarter of game happening in first half of game length.) Goal: MP2D's T60 should be roughly T50 in MP2E
+   Do the opposite and extend out a little more later game periods that seem to progress too fast.
    Simplify unnecessary complexities.
    Evolve movement system
       passive movement vs active movement: boats with horses shouldn't move on rivers faster, nor should trains
@@ -137,17 +138,23 @@ and can now be built with veteran levels.
     The general rule is that if a transport takes a whole turn to cross an ocean, the units on it shouldn't have full moves
     as if the voyage took no time for the passengers. The physics/mechanics that allowed this in the past may have made the
     game simple, but unfortunately created outlier cases with tragic loss of realism and shockingly counterintuitive exploits.
+    All known examples of such exploits were squashed with unnatural and unintuitive rules for what's allowed to board/deboard
+    when and where under what conditions, while new ones were always being found. The answer seems to be to embrace natural
+    physics and by taking this medicine, fix all the other diseases.
+
     Therefore, in general, the percent of moves a transport uses in going somewhere, is and should be the percent of moves lost
-    by its cargo. For casual and intuitive play this will generally seem to be the case. However, some adjustments to this rule
-    do exist just to smooth over all the game mechanics, game balance, and behaviors. Please not then:
+    by its cargo. For casual and intuitive play this will generally seem to be the case. And the rules were already much better
+    under initial playtesting. However, some adjustments to this rule do exist to smooth over some game mechanics, game balance,
+    and ease-of-live playability. Please note the adjustments to the general rule:
 
       0% Goods/Freight, Civilian: Punishing ability to cash in on traderoutes/wonders/recycle is not relevant. Workers, etc.,
                                   were intended to enjoy logistical bonuses in efficiency from using transport/river/canal/quay
                                   infrastructural investment. Therefore, rule doesn't apply to these units.
-      0% Bombs. (The move-point of Bomb-types is simply to allow it an attack something adjacent, which presumably it can always do.)
-      0% AAA/Marines. (Keeps original movement abilities intact; AAA needs full moves to vigil.)
-      50% Foot Soldiers - 50% accounts for balance with board/deboard costs and therefore ability to gain any slight edge in mobility
-                           from using faster transportation.
+      0% Bombs. (The move-point of Bomb-types is simply to allow it to be dropped in an attack, which it can always do.)
+      0% Marines. (Keeps original movement abilities intact)
+      0% AAA.     (AAA needs full moves to vigil, and we allow it to stay in vigil while transported.)
+      50% Foot Soldiers - 50% accounts reflects flexibility of such units to go in/out quickly from transports and also was an opportunity
+                          to give further balance to the ongoing project to punish Foot Soldiers less for their loss of mobility in 2x rulesets.
       50% Aircraft, Missiles - The high speed and "internal fuel" of these units is not meant to be 100% depleted and hampered by the
                                 "slower speed" steps taken by the carriers. e.g., one Fighter (20mp) offloads from a
                                 a carrier (10mp) before it moves 5 tiles, and another stays on and then takes off. The Fighter who offloaded

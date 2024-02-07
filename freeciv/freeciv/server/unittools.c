@@ -5265,7 +5265,7 @@ bool unit_move_real(struct unit *punit, struct tile *pdesttile, long move_cost,
                                            NULL, unit_owner(pcargo),
                                            pcargo->veteran, pcargo->hp,
                                            NULL);
-    double cargo_move_cost = MIN(SINGLE_MOVE,
+    double cargo_move_cost = MIN(SINGLE_MOVE,  // "EASE OF LIFE EXCEPTION" never charges >1mp see README.effects
                                  (double)move_cost/(double)unit_move_rate(punit)
                                  * cargo_move_rate
                                  * get_unit_bonus(pcargo, EFT_PASSENGER_MOVE_COST_BP) / SINGLE_MOVE

@@ -630,47 +630,67 @@ Peaceful_Field_Unit_Bonus
         etc.)
 
 Passenger_Move_Cost_Bp
-   🔷BACKGROUND:______________________________________________________________________________________
-    Legacy Rulesets suffer "double-move exploits." In reality, when you ride a ship for 24 hours and
-    get off, the ship AND the passenger lost all move-points for the day. In legacy rules, passengers
-    lose no moves and can board a new ship and ride again. Somehow, Warriors with 2 move points
-    circumnavigate the planet and have more moves left than a supersonic Stealth Fighter!
-    Of course we can try to make numerous rules and exceptions to try to prevent it, but each time we
-    do that, we also prohibit countless real and intuitively viable tactical possibilities.
-    It's folly to make realism the highest goal for a game. But sometimes, a simple realistic
-    fix isn't worse than adding to a plethora of exceptions and prohibitions that use duct tape,
-    superglue, and sewn patches over a multitudinous bestiary of flaws that keep finding new ways
-    to exploit wild violations of the physical laws of time, distance, velocity. Such problems
-    are then compounded by suffering many complex and unintuitive rules that accumulate over time
-    that squash natural tactical possibilities, in an attempt to prevent the unnatural physics from
-    being exploited.
-   🔷EFFECT VALUES:____________________________________________________________________________________
-    Effect value is the numerator in the expression: (x/move_fragments). This represents the
-    fraction of the passenger's total move points charged to it, relative to the fraction of total
-    move points charged to the transport, during movement. If the fraction == 1, the passenger
-    and transport will run out of moves at the same time. If the fraction == 0.5, the passenger will
-    experience moves_left -= (total_move_rate * fraction.) See "How to Use" for more info.
-   🔷NOTES ON RULESET move_fragments __________________________________________________________________
-    This effect was designed and optimised to work best when move_fragments (SINGLE_MOVE) is set to
-    Superabundant Basis Points. SA Basis points (10080) are superior to normal Basis Points (10000),
-    because superabundant numbers "magically" avoid rounding error for the greatest diversity of
-    x/y ratios. This means you also avoid having situations like units with 1 6373/10000 move points,
-    because under SA basis points everything will proportionately track and reduce into simple
-    recognizable fractions. Whether or not a ruleset chooses 10080 (SA Basis Points), it's recommended
-    for rulesets that use Passenger_Move_Cost_Bp to use "superabundant" move_fragments or at very least,
-    "highly composite" move_fragments (e.g., 12,60,360,10080). Note that SA and HC values are also used
-    in measuring time, global positioning, angular geoemetries, and so on--for the exact same reason.
-    You can display your move fragments as 0-60 seconds, which people are familiar with already when
-    thinking of fractions of a minute.
-    🔷HOW TO USE THE EFFECT:_____(examples use recommended 10080 move_fragments)_________________________
-      🔸 A value of 10080 = the same % of the Cargo's move_rate is spent per move as the Transport.
-         A Transport that travels half its moves will have its cargo lose half its moves.
+   🔷 INTRODUCTION:_____________________________________________________________________________________
+    Unnatural physics breaks natural movement in Legacy Rulesets. In Real Physics, when a ship moves for
+    24 hours, the ship AND the passenger lose 24 hours of movement. In Legacy Physics, cargo loses zero
+    moves, thus can keep boarding new ships to circumnavigate the planet! Broken physics can be patched
+    with more and more rules--but whenever physics disobeys the laws of time, distance, and velocity,
+    loopholes thrive and breed. Hack-patching them creates complex restrictions which stifle natural
+    modes of movement. In gaming, pursuing strict realism is folly--but in the case of movement, coming
+    closer to nature may be simpler: countless problems disappear, removing the need for unintuitive
+    rules with side-effects that harm many kinds of natural movement.
+        .
+   🔷 EFFECT:___________________________________________________________________________________________
+    Passenger_Move_Cost_Bp charges move_points to cargo whenever its transport is charged move_points
+    from the act of moving. (NOT other actions which deplete moves, e.g., attacking.)
+    * Effect value sets a ratio between moves charged to the passenger, relative to moves charged to the
+    transport. This ratio doesn't track absolute move_cost: rather, it is relative to the "speed" of
+    each unit:  👉🏽 A passenger is not charged the same as its transport. A foot unit with 2mp, gets a
+    ride on a supersonic jet with 20mp; the jet uses 10mp to deliver its cargo to a destination. The jet
+    used half its moves. The foot unit shouldn't be charged 10mp, but rather, half of its own moves
+    for that turn. And that is exactly what is charged when the effect's value is set to a 100%
+    (1:1 ratio) between the passenger and the transport.
+    * Effect values are NOT set as a percent (0-100), as that creates rounding errors. Values are set
+    as a fraction of the ruleset's move_fragments (from 'terrain.ruleset'). So for example, to achieve
+    a 100% ratio, set value = move_fragments. To achieve a 50% ratio, set value = move_fragments/2. If
+    no effect is defined for the cargo, legacy behavior occurs.
+    After explaining why rulesets should change their move_fragments, examples will be given at bottom.
+        .
+   🔷 NOTES ON RULESET MOVE_FRAGMENTS ___________________________________________________________________
+    This effect works best when move_fragments is set to Superabundant Basis Points (=10080). SA numbers
+    "mathemagically" escape rounding errors in the MAXIMUM number of possible x/y ratios, and reduce to
+    simple fractions. You need not choose 10080 move_fragments, but you should set move_fragments to a
+    superabundant number like 12,60,360,10080. In real life, SA numbers are favored for their excellence
+    in measuring time, global positioning, and geoemetry--for the same reasons that it's great for
+    measuring movement in Freeciv. (Babylonians even did it for wheat!) The modest annoyance paid for
+    using SA move_fragments yields huge dividends in natural movement, tactical flexibility, eliminating
+    "double-move exploits", and liberation from hacky fake restrictions on transportation.
+        .
+    🔷 EXAMPLES OF HOW TO USE THE EFFECT:________________________________________________________________
+    (10080 move_fragments will be used in these examples. You could substitute 12, 60, or 360.)
+      GENERAL BEHAVIOR:
+      🔸 A value of 10080 means the same % of the Cargo's move_rate is spent per move as the Transport:
+         a Transport that travels half its moves will cause its cargo to also lose half its moves.
       🔸 A value of 5040 makes the Cargo's move-points decay at half the % rate of the Transport's.
          If a Transport uses all its moves, the Cargo will only lose half its moves.
       🔸 A value of 0 means Cargo incurs no cost at being transported. (DEFAULT. Legacy rulesets.)
-      🔸 Values over 10080 will consume more moves for the Cargo than for the Transport.
-      🔸 Negative values would give the Cargo extra moves while being transported.
-      🔸 Multiple active effects will add together, increasing the move-point decay for Cargo.
+      🔸 Multiple defined effects whose reqs are fulfilled, are added together, thus increasing the
+         move-point decay for the Cargo.
+      RARE CASES:
+      🔸 Values over 10080 can be set, and consume more moves for the Cargo than for the Transport.
+      🔸 Negative values can be set, but would give the Cargo extra moves while being transported!
+        .
+    🔷 The "EASE-OF-LIFE EXCEPTION":
+      Cargo units enjoy a "quality-of-life" exception: they are never charged more than 1mp per tile
+      traveled. This only affects cargo with a higher move_rate than its transport; for example, planes on
+      Carriers. This "ease of life exception" means players aren't forced to deboard planes before their
+      Carrier moves, fly along the same path as the Carrier, then land on the Carrier when it arrives at
+      its destination, in order to lose less move_points than they'd lose if they stayed on the Carrier.
+      The "ease-of-life exception" relieves players of the burden of deboarding fast cargo units
+      and reboarding at the end of the trip.
+      (Fun fact: this exception is a gentle patch for another law of physics broken by Freeciv: a unit's
+      moves_left don't decay proportional to the turn timer, because that would result in Freeciv being a
+      continuous-timeflow RTS game!)
 
 Performance
     Value is how much performance type culture city produces.
