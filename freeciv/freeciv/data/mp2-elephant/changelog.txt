@@ -264,4 +264,7 @@ i.e., 6 in 5 (swamp), 5 in 4 (mine), 4 in 3 (angkor wat swamp drain) goes to:
       much less relevant. In addition, this helps buff Project Infantry another step and makes "necessity" of Mechanization for Mech.Inf slightly less.
 91. palace gives a multislot in early times
 92. Hydrogen bomb cost increase to 200 (was 190).
-
+93. In Despotism, cities can celebrate at size 2. (possibly reserved for tribalism when that gov is added?)
+      Ongoing gradual project to decrease all-out pressure on rushing next gov and playing out some parts of Bronze Age.
+      Possible slight more balance to equalize Monarchy-first and Republic-first (gives slightest corrective to the latter)
+94.

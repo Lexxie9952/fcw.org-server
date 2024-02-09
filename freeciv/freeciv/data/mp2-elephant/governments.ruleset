@@ -79,6 +79,7 @@ Anarchy is simply the absence of any recognizable government.\
 Anarchy offers slightly less corruption than Despotism,\
  but slightly more unhappiness. \n\
 "), _("\
+Cities may celebrate at size 3. \n\
 No citizens are made unhappy by each aggressive unit.\n\
 25% Base corruption in cities\n\
 2% Extra corruption per each tile in distance from capital\n\
@@ -105,12 +106,14 @@ Under Despotism, you are the absolute ruler of your people.  Your\
 Despotism suffers the highest level of corruption of all\
  forms of government.\n\ \
 "), _("\
-Gulag：You can starve cities without disorder with a martial count of 2; \n\
-needing +2 more at 20 population and +2 more for each 10 population thereafter. \n\
+Celebrating cities cannot rapture. \n\
+Cities may celebrate at size 2. \n\
 No citizens are made unhappy by each aggressive unit. \n\
 37% Base corruption in cities \n\
 4% Extra corruption per each tile in distance from capital \n\
 Newly founded cities get +2 food (+4 for capital.) \n\
+Gulag：You can starve cities without disorder with a martial count of 2; \n\
+needing +2 more at 20 population and +2 more for each 10 population thereafter. \n\
 ")
 
 ;------------------------------------------------------------------------
@@ -135,6 +138,7 @@ Monarchy suffers the same small amount of corruption that\
  the Republic does. Each city gets 3 shields and\
  1 gold of free unit upkeep.\
 "), _("\
+Cities may celebrate at size 3. \n\
 No citizens are made unhappy by each aggressive unit. \n\
 15% Base corruption in cities \n\
 2% Extra corruption per each tile in distance from capital \n\
@@ -161,6 +165,7 @@ Under a Republican government, citizens hold an election to select a\
  easily, but the self-sufficiency of your citizens allows high levels\
  of trade. \n\
 "), _("\
+Cities may celebrate at size 3. \n\
 1 citizen is made unhappy by each aggressive unit*. \n\
      (* first aggressive unit does not cause unhappy)\n\
 15% Base corruption in cities\n\
@@ -189,6 +194,7 @@ Under Democracy, citizens govern directly by voting on issues.\
  Cities and units belonging to Democracy have triple the cost\
  to incite or bribe, respectively. \n\
 "), _("\
+Cities may celebrate at size 3. \n\
 2 citizens are made unhappy by each aggressive unit. \n\
 8% Base corruption in cities\n\
 0.4% Extra corruption per each tile in distance from capital\n\
@@ -222,6 +228,7 @@ Improvements that appease unhappy citizens add +1 gold in tithes for each\
  military units may impose martial law, affecting one citizen each. Pilgrims\
  can be made to migrate and grow cities. \n\
 "), _("\
+Cities may celebrate at size 3. \n\
 Celebrating cities rapture 2 out of 5 turns (with a Cathedral, 4 out of 7). \
 No citizens are made unhappy by each aggressive unit. \n\
 0% Base corruption in cities\n\
@@ -260,12 +267,13 @@ Communists can transfer Proletarians between cities to\
  to convert Workers to Riflemen and vice versa, if in domestic\
  territory and possessing the necessary tech. \n\
 "), _("\
-Gulag：You can starve cities without disorder with a martial count of 3; \n\
-needing +2 more at 20 population and +2 more for each 10 population thereafter. \n\
+Cities may celebrate at size 3. \n\
 Your nation is completely unaffected by empire size and number of cities. \n\
 No citizens are made unhappy by aggressive units. \n\
 20% Base corruption in cities \n\
 No Extra corruption per each tile in distance from capital \n\
+Gulag：You can starve cities without disorder with a martial count of 3; \n\
+needing +2 more at 20 population and +2 more for each 10 population thereafter. \n\
 ")
 
 ;------------------------------------------------------------------------
@@ -301,6 +309,7 @@ Police Stations cost 10 shields less.\
  worker turn free. Cost of upgrades is 25% less. Riflemen are produced at +1 vet\
  level. Armor types get a +1 move bonus. Fighters and Dive Bombers have 50% higher odds of promotion. \n\
 "), _("\
+Cities may celebrate at size 3. \n\
 No citizens are made unhappy by each aggressive unit.\n\
 8% Base corruption in capital,\n\
 2% Extra corruption per each tile in distance from capital\n\

@@ -8865,6 +8865,16 @@ reqs    =
       "Gov", "Despotism", "Player"
     }
 
+;Despotism can celebrate at s2 (Totem Pole gambit)
+[effect_despotism_celebrate_size]
+type = "Celebrate_Size_Add"
+value = -1
+reqs	=
+    { "type", "name", "range", "present"
+      "Gov",      "Despotism",  "Player", TRUE
+      "Building", "Angkor Wat", "Player", FALSE ;already gets this bonus
+    }
+
 [effect_despotism_city_founding_nomad_food_bonus]
 type    = "Growth_Food"
 value	= 34 ; 34% of 15 = +5

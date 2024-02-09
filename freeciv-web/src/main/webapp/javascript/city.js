@@ -1150,6 +1150,11 @@ function city_celebrate_size(pcity) {
   if (client_rules_flag[CRF_MP2_D]) {
     if (player_has_wonder(players[pcity.owner].playerno, improvement_id_by_name(B_ANGKOR_WAT))) {
       csize -= 1;
+    } else if (client_rules_flag[CRF_MP2_E]) {  // "else if" because Angkor and Despotism can't both be co-active
+        if (
+          governments[players[pcity.owner]['government']]['name']=="Despotism") {
+          csize -= 1;
+        }
     }
   }
   return csize;
