@@ -267,4 +267,5 @@ i.e., 6 in 5 (swamp), 5 in 4 (mine), 4 in 3 (angkor wat swamp drain) goes to:
 93. In Despotism, cities can celebrate at size 2. (possibly reserved for tribalism when that gov is added?)
       Ongoing gradual project to decrease all-out pressure on rushing next gov and playing out some parts of Bronze Age.
       Possible slight more balance to equalize Monarchy-first and Republic-first (gives slightest corrective to the latter)
+      Get closer to the goal that each gov is superior to next govs until you're "ready" for them.
 94.
