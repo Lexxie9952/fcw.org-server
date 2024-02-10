@@ -2982,7 +2982,9 @@ static struct setting settings[] = {
           N_("Players may meet for diplomacy this number of turns "
              "after their units have last met, even when they do not have "
              "an embassy. If set to zero, then players cannot meet unless "
-             "they have an embassy."),
+             "they have an embassy. In legacy rulesets, this setting enables "
+             "full diplomatic contact. In advanced rulesets, this setting only "
+             "allows Peace and Cease-fire pacts."),
           NULL, NULL, NULL,
           GAME_MIN_CONTACTTURNS, GAME_MAX_CONTACTTURNS,
           GAME_DEFAULT_CONTACTTURNS)
@@ -3302,14 +3304,17 @@ static struct setting settings[] = {
           N_("Minimum time between unit actions over turn change"),
           /* TRANS: The string between single quotes is a setting name and
            * should not be translated. */
-          N_("This setting gives the minimum amount of time in seconds "
-             "between unit moves and other significant actions (such as "
-             "building cities) after a turn change occurs. For example, "
-             "if this setting is set to 20 and a unit moves 5 seconds "
-             "before the turn change, it will not be able to move or act "
-             "in the next turn for at least 15 seconds. This value is "
-             "limited to a maximum value of 2/3 'timeout'. Also see: "
-             "'unitwaittime_style', 'fortifywaittime'."),
+          N_("UWT sets the minimum time a unit must "
+             "wait before taking another action, if a turn change takes "
+             "place between the two actions. For example, if this setting "
+             "is set to 10 hours, and a unit moves 10 minutes before the turn "
+             "change, it will not be able to move or act in the next turn "
+             "until 9 hours and 50 minutes into that turn. This prevents a "
+             "player from doing instant \"double moves\" before other players "
+             "have a chance to respond to the first move. \n\n"
+             "This value is measured in seconds. \n"
+             "This value cannot be greater than 2/3 the value of 'timeout'. \n\n"
+             "Also see: 'unitwaittime_style', 'fortifywaittime'."),
           NULL, unitwaittime_callback, NULL, GAME_MIN_UNITWAITTIME,
           GAME_MAX_UNITWAITTIME, GAME_DEFAULT_UNITWAITTIME)
 
