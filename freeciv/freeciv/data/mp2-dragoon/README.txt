@@ -1,21 +1,22 @@
 <img src='https://static.wikia.nocookie.net/freeciv/images/2/2a/Mp2dragoon_large.png'>
 <b><a href="http://freeciv.fandom.com/wiki/Multiplayer_II:_Dragoon,_Game_Manual" target="_blank">Full Game Manual, MP2-Dragoon</a></b>
 <u>Useful supplements to the in-game manual</u>:
-<a href="http://freeciv.fandom.com/wiki/Combat.mp2d" target="_blank">Combat</a>
-<a href="http://freeciv.fandom.com/wiki/Economy.mp2d" target="_blank">Economy</a>
-<a href="http://freeciv.fandom.com/wiki/Diplomacy.mp2d" target="_blank">Diplomacy</a>
+<a href="https://freeciv.fandom.com/wiki/Combat.mp2d" target="_blank">Combat</a>
+<a href="https://freeciv.fandom.com/wiki/Economy.mp2d" target="_blank">Economy</a>
+<a href="https://freeciv.fandom.com/wiki/Diplomacy.mp2d" target="_blank">Diplomacy</a>
 <a href="https://freeciv.fandom.com/wiki/Cities.mp2d#City_Output_Sequence" target="_blank">City Output Sequence</a>
-<a href="http://freecivweb.fandom.com/wiki/Strategy_Guide" target='_blank'>Multiplayer Strategy Guide</a>
+<a href="https://freecivweb.fandom.com/wiki/Strategy_Guide" target='_blank'>Multiplayer Strategy Guide</a>
+<a href="https://freecivweb.fandom.com/wiki/RTS" target='_blank'>RTS</a>
 <u>Charts:</u>
-<a href="http://freecivweb.fandom.com/wiki/Bases.mp2d" target="_blank">Bases</a>
-<a href="http://freeciv.fandom.com/wiki/Terrain.mp2d#Terrain_Chart" target="_blank">Terrain</a>
-<a href="http://freeciv.fandom.com/wiki/Government.mp2d#Government_Chart" target="_blank">Governments</a>
-<a href="http://freecivweb.fandom.com/wiki/Special_Unit_Attacks#MP2_Units_with_Special_Unit_Attacks" target="_blank">Special Unit Attacks</a>
-<a href="http://freecivweb.fandom.com/wiki/Special_Unit_Attacks#Special_Unit_Defense" target="_blank">Special Unit Defense</a>
-<a href="http://freeciv.fandom.com/wiki/Defense_bonus_chart.mp2c" target="_blank">Terrain+Base Defense Bonus Quick-Reference</a>
-<a href="http://freeciv.fandom.com/wiki/Diplomatic_Action_Chart.mp2" target="_blank">Diplomatic Odds Charts</a>
-<a href="http://freeciv.fandom.com/wiki/Vigil_engagement_chart.mp2c" target="_blank">Vigil Engagement Chart</a>
-<a href="http://freeciv.fandom.com/wiki/Hotkeys.mp" target="_blank">Hotkeys and Mouse Control</a>
+<a href="https://freecivweb.fandom.com/wiki/Bases.mp2d" target="_blank">Bases</a>
+<a href="https://freeciv.fandom.com/wiki/Terrain.mp2d#Terrain_Chart" target="_blank">Terrain</a>
+<a href="https://freeciv.fandom.com/wiki/Government.mp2d#Government_Chart" target="_blank">Governments</a>
+<a href="https://freecivweb.fandom.com/wiki/Special_Unit_Attacks#MP2_Units_with_Special_Unit_Attacks" target="_blank">Special Unit Attacks</a>
+<a href="https://freecivweb.fandom.com/wiki/Special_Unit_Attacks#Special_Unit_Defense" target="_blank">Special Unit Defense</a>
+<a href="https://freeciv.fandom.com/wiki/Defense_bonus_chart.mp2c" target="_blank">Terrain+Base Defense Bonus Quick-Reference</a>
+<a href="https://freeciv.fandom.com/wiki/Diplomatic_Action_Chart.mp2" target="_blank">Diplomatic Odds Charts</a>
+<a href="https://freeciv.fandom.com/wiki/Vigil_engagement_chart.mp2c" target="_blank">Vigil Engagement Chart</a>
+<a href="https://freeciv.fandom.com/wiki/Hotkeys.mp" target="_blank">Hotkeys and Mouse Control</a>
 <hr color="#998">
 MP2 Dragoon is the 4th release of Multiplayer-Evolution II. MP2 games take full advantage of Freeciv development advances. Early versions are like a modernized Civ 2 balanced for massive multiplayer games. Later versions keep the same DNA yet evolve in balance, realism, and sophistication. New players can start with <b>MP2.1 Avant-garde</b>, then progress to the advanced releases.
 <hr color="#998"><div>
