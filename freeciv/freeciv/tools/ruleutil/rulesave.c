@@ -42,7 +42,7 @@
 
 /* Ruleset format version */
 /*
- * 1  - Freeciv-2.6 
+ * 1  - Freeciv-2.6
  * 10 - Freeciv-3.0
  * 20 - Freeciv-3.1
  */
@@ -246,7 +246,7 @@ static bool save_terrain_ref(struct section_file *sfile,
   if (save == NULL) {
     secfile_insert_str(sfile, "none", "%s.%s", path, entry);
   } else if (save == pthis) {
-    secfile_insert_str(sfile, "yes", "%s.%s", path, entry);   
+    secfile_insert_str(sfile, "yes", "%s.%s", path, entry);
   } else {
     secfile_insert_str(sfile, terrain_rule_name(save),
                         "%s.%s", path, entry);
@@ -1642,7 +1642,7 @@ static bool save_nation(struct section_file *sfile, struct nation_type *pnat,
   nation_groups_iterate(pgroup) {
     if (nation_is_in_group(pnat, pgroup)) {
       list_items[set_count++] = nation_group_rule_name(pgroup);
-    } 
+    }
   } nation_groups_iterate_end;
 
   if (set_count > 0) {
@@ -2117,6 +2117,7 @@ static bool save_terrain_ruleset(const char *filename, const char *name)
 
     secfile_insert_str(sfile, pterr->graphic_str, "%s.graphic", path);
     secfile_insert_str(sfile, pterr->graphic_alt, "%s.graphic_alt", path);
+    secfile_insert_str(sfile, pterr->graphic_alt2, "%s.graphic_alt2", path);
     identifier[0] = pterr->identifier;
     identifier[1] = '\0';
     secfile_insert_str(sfile, identifier, "%s.identifier", path);
@@ -2983,7 +2984,7 @@ bool save_ruleset(const char *path, const char *name, struct rule_data *data)
       fc_snprintf(filename, sizeof(filename), "%s/governments.ruleset", path);
       success = save_governments_ruleset(filename, name);
     }
-    
+
     if (success) {
       fc_snprintf(filename, sizeof(filename), "%s/nations.ruleset", path);
       success = save_nations_ruleset(filename, name, data);
