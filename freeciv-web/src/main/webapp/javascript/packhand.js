@@ -1097,7 +1097,7 @@ function handle_ruleset_control(packet)
     case "Classic+ ruleset":
       client_rules_flag[CRF_DEBOARD_RESTRICT]=true;
       client_rules_flag[CRF_CARGO_HEURISTIC]=true;
-      client_rules_flag[CRF_NO_UNIT_GOLD_UPKEEP]=true;
+      client_rules_flag[CRF_NO_UNIT_GOLD_UPKEEP]=false;
       client_rules_flag[CRF_NO_WASTE]=true;
       client_rules_flag[CRF_CLASSIC_PLUS]=true;
       client_rules_flag[CRF_OASIS_IRRIGATE]=true;
