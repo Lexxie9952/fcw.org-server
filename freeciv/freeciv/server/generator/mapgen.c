@@ -1860,11 +1860,12 @@ bool map_fractal_generate(bool autosize, struct unit_type *initial_unit)
         case MAPSTARTPOS_ALL:
           strncpy(mode_name, "all on one continent.", sizeof(mode_name));
           break;
+        case MAPSTARTPOS_DEFAULT:  // create_start_positions() falls back to VARIABLE (if above block didn't override mode==DEFAULT)
         case MAPSTARTPOS_VARIABLE:
           strncpy(mode_name, "on multiple continents according to sizes.", sizeof(mode_name));
           break;
         default:
-          strncpy(mode_name, "error. 'startpos' unknown.", sizeof(mode_name));
+          strncpy(mode_name, "using unknown starting positions!", sizeof(mode_name));
       }
       notify_conn(NULL, NULL, E_SETTING, ftc_server,
         _("<b style='color:#8f7'>Placing players </b>%s"), mode_name);
