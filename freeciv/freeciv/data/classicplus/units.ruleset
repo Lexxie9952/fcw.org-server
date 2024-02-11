@@ -70,8 +70,8 @@ Defends very badly against Fighters.")
     _("Workers")
   }
 
-; RESERVED User-UCF's: these can be included by creators to immediately access special 
-; deluxe game mechanics for any of their ruleset unit_classes. Currently the only 
+; RESERVED User-UCF's: these can be included by creators to immediately access special
+; deluxe game mechanics for any of their ruleset unit_classes. Currently the only
 ; reserved user-UCF is the "Missile" UCF, which tells the server to spend the unit after
 ; Pillage, and destroy the unit if its transporter is lost (unless in a city or native
 ; base or co-existing on a tile with another transport who has remaining capacity to
@@ -190,7 +190,7 @@ veteran_move_bonus = 0, 0, 0, 0, 10080, 10080, 10080
 
 ; **********************************************************************************
 ; **********************************************************************************
-; WARNING：ANY CHANGES TO WHAT TYPES OR CLASSES CAN LOAD ONTO WHICH TRANSPORTS MAY 
+; WARNING：ANY CHANGES TO WHAT TYPES OR CLASSES CAN LOAD ONTO WHICH TRANSPORTS MAY
 ; REQUIRE CHANGES TO FCW function unit_could_possibly_load() in unit.js
 ; **********************************************************************************
 ; **********************************************************************************
@@ -320,7 +320,7 @@ flags         = "Unreachable", "DoesntOccupyTile"
 ; move_rate     = base move rate (whole movement points)
 ; vision_radius_sq = base vision of unit：unit can see tile up to the square
 ;                 root of this value away
-; 1x vision ;    2 = 1 tile. 4 = 1.41 tile,  8 = 2 tile. 
+; 1x vision ;    2 = 1 tile. 4 = 1.41 tile,  8 = 2 tile.
 ; 2x:            8=2 tile,  16 = 2.83 tile, 32 = 4 tiles
 ; convert_to    = can be converted to another type of unit by name
 ; convert_time  = number of movement points it takes to convert to
@@ -410,7 +410,7 @@ flags         = "Unreachable", "DoesntOccupyTile"
 ; "FieldUnit"	  = cause unhappiness even when not being aggressive
 ; "BeachLander" = won’t lose all its movement when moving from non-native
 ;                 terrain to native terrain even if slow_invasions is on.
-; "Settlers"	  = "can irrigate and build roads" but really seems to be a required flag for 
+; "Settlers"	  = "can irrigate and build roads" but really seems to be a required flag for
 ;                 any tile improvement at all.
 ; "Diplomat"	  = can defend against diplomat actions (see diplchance
 ;                 server option)
@@ -469,7 +469,7 @@ flags         = "Unreachable", "DoesntOccupyTile"
 ;                 is enabled and the unit class is unreachable
 ; "TransportDefender" = not implemented in upstream freeciv
 ; "SentryAlways" = not implemented in upstream freeciv
-; "NoStackDeath" = not implemented " " " 
+; "NoStackDeath" = not implemented " " "
 ; "Provoking" =   a unit considering to auto attack this unit will choose to
 ;                 do so even if has better odds when defending against it
 ;                 then when attacking it. Applies when the autoattack server
@@ -1192,8 +1192,8 @@ transport_cap = 0
 fuel          = 0
 uk_happy      = 1
 uk_shield     = 0
-uk_food       = 1
-uk_gold       = 0
+uk_food       = 0
+uk_gold       = 1
 targets       = "Balloon", "Helicopter", "Zeppelin"
 flags         = "CantReachAir"
 roles         = "DefendGood", "DefendGoodStartUnit"
@@ -2874,7 +2874,7 @@ uk_happy      = 0
 uk_shield     = 0
 uk_food       = 0
 uk_gold       = 0
-flags         = "IgZOC", "NonMil", "HasNoZOC", "NoBuild", "NoHome", "SuperSpy", 
+flags         = "IgZOC", "NonMil", "HasNoZOC", "NoBuild", "NoHome", "SuperSpy",
                 "EvacuateFirst", "Unbribable", "GameLoss", "Unique",
                 "Provoking"
 ; No veteran levels (level name is never displayed)
