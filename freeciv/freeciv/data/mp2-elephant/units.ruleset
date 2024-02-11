@@ -6022,7 +6022,7 @@ veteran_move_bonus = 0
 roles         = ""
 helptext      = _("\
 While bombers carry standard weaponry included, the Bombs unit\
- includes a payload of large numbers of smaller weaponry. This lets bombers\
+ represents an extra payload of target-degrading weaponry. This lets bombers\
  disrupt target defenses before coming in for a riskier fatal\
  strike. Only bombers with high capacity can carry this unit. \n\
 Bombs can only be moved by bombers, trains, or the airlift order. They can’t attack\
