@@ -381,23 +381,20 @@ function fill_sprite_array(layer, ptile, pedge, pcorner, punit, pcity, citymode)
 
         if (polluted) sprite_array.push({"key" : "grid.pollute_icon"}); //pollution icon clearly over top
 
-        // Lawless, Disorder, and Famine feared: ----------------------------//
-        // lawless-fists go under plate, disorder-fist goes on top of plate
-        if (pcity.anarchy) {
+        /* Lawless, Disorder, and Famine feared: ----------------------------*/
+        // Lawless fists:  goes under a famine plate and under a Disorder fist
+        if (pcity.anarchy) {         //
           sprite_array.push({"key" : "city.revolt"});
-          // if starving, empty plate goes over double fists (to be visible)
-          if (pcity.granary_turns == -1) {
-            sprite_array.push({"key" : "city.starve"});
-          }
         }
+        // Starving: Empty plate goes over double fists and under Disorder fist
+        if (pcity.granary_turns == -1) {
+          sprite_array.push({"key" : "city.starve"});
+        }
+        // Disorder (Lawlessness feared): goes over famine plate to be visible
         if (pcity['unhappy']) {
-          // if starving, single fist goes over empty plate (to be visible)
-          if (pcity.granary_turns == -1) {
-            sprite_array.push({"key" : "city.starve"});
-          }
           sprite_array.push({"key" : "city.disorder"});
         }
-        //-------------------------------------------------------------------//
+        /*-------------------------------------------------------------------*/
       }
       // Otherwise show highlighted pollution only if user pref is on:
       else if (draw_highlighted_pollution && polluted) {
