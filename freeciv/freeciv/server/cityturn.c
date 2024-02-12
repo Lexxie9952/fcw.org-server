@@ -3827,12 +3827,12 @@ static void update_city_activity(struct city *pcity)
       if (pcity->anarchy == 1) {
         notify_player(pplayer, city_tile(pcity), E_CITY_DISORDER, ftc_server,
                       /* TRANS: second %s is an optional extra sentence */
-                      _("[`mad`] Civil disorder in %s.%s"),
+                      _("[`mad`] Lawlessness in %s.%s"),
                       city_link(pcity), add_message);
       } else {
         notify_player(pplayer, city_tile(pcity), E_CITY_DISORDER, ftc_server,
                       /* TRANS: second %s is an optional extra sentence */
-                      _("[`mad`] CIVIL DISORDER CONTINUES in %s.%s"),
+                      _("[`mad`] LAWLESSNESS CONTINUES in %s.%s"),
                       city_link(pcity), add_message);
       }
     } else {
