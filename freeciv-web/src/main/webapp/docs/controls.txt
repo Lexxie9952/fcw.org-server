@@ -91,7 +91,7 @@ The current and complete list of Freeciv-web controls can be found here:<br>
 
 <tr><td><img src="/images/orders/road_default.png"></td><td><span class="vctr"> Build Road</td><td><span class="hotkey">r</span></span></td></tr>
 
-<tr><td><img src="/images/orders/railroad_default.png"></td><td><span class="vctr"> Build Railroad</td><td><span class="hotkey">r, shift-R (override other types)</span></span></td></tr>
+<tr><td><img src="/images/orders/railroad_default.png"></td><td><span class="vctr"> Build Railroad</td><td><span class="hotkey">r</span></span></td></tr>
 
 <tr><td><img src="/images/orders/maglev.png"></td><td><span class="vctr"> Build MagLev</td><td><span class="hotkey">r</span></span></td></tr>
 
@@ -222,6 +222,7 @@ The current and complete list of Freeciv-web controls can be found here:<br>
 <tr><td><span class="hotkey">ctrl-S</span></td><td> Save game</td></tr>
 <tr><td><span class="hotkey">ctrl-alt-T</span></td><td> Show trade routes on map</td></tr>
 <tr><td><span class="hotkey">alt-shift-T</span></td><td> Change tax rates</td></tr>
+<tr><td><span class="hotkey">ctrl-U</span></td><td> Generate console report for citizens made unhappy about military units</td></tr>
 <tr><td><span class="hotkey">shift-W</span></td><td> Show city tile production on map</td></tr>
 <tr><td><span class="hotkey">alt-W</span></td><td> War calculator</td></tr>
 <tr><td><span class="hotkey">alt-X</span></td><td> Toggle Chalkboard (private map notes, marking mode) </td></tr>
@@ -260,8 +261,8 @@ The current and complete list of Freeciv-web controls can be found here:<br>
 </table>
 <h2>Cities List:</h2><table class="ctrls_tbl"><tr><td><span class="hotkey">hover on city name</span></td><td> Show all buildings in Super Panel</td></tr>
 <tr><td><span class="hotkey">click building in Super Panel</span></td><td> Change production to building in hovered city </td></tr>
-<tr><td><span class="hotkey">right-click building in Super Panel</span></td><td> Buy/Sell building in hovered city; (adds to worklist if can't buy)</td></tr> 
-<tr><td><span class="hotkey">shift-click building in Super Panel</span></td><td> Highlight ON/OFF all cities with this Building</td></tr> 
+<tr><td><span class="hotkey">right-click building in Super Panel</span></td><td> Buy/Sell building in hovered city; (adds to worklist if can't buy)</td></tr>
+<tr><td><span class="hotkey">shift-click building in Super Panel</span></td><td> Highlight ON/OFF all cities with this Building</td></tr>
 <tr><td><span class="hotkey">ctrl-click building in Super Panel</span></td><td> Select/deselect all cities with this Building</td></tr>
 <tr><td><span class="hotkey">SPACE</span></td><td> Clear all highlighted and all selected cities</td></tr>
 </table>
@@ -274,7 +275,7 @@ The current and complete list of Freeciv-web controls can be found here:<br>
 <tr><td><span class="hotkey">Ctrl-double-click</span></td><td>               Change current city production (selection must already be highlighted)</td></tr>
 <tr><td><span class="hotkey">SPACE</span></td><td>                          Flip between Main view and Production view</td></tr>
 <tr><td><span class="hotkey"> up arrow</span>  or <span class="hotkey">M</span></td><td>             <b>M</b>ain view</td></tr>
-<tr><td><span class="hotkey"> down arrow</span> or <span class="hotkey">d</span></td><td>                Pro<b>d</b>uction view</td></tr> 
+<tr><td><span class="hotkey"> down arrow</span> or <span class="hotkey">d</span></td><td>                Pro<b>d</b>uction view</td></tr>
 <tr><td><span class="hotkey"> R</span></td><td>                              show city's trade <b>R</b>outes</td></tr>
 <tr><td><span class="hotkey"> O</span></td><td>                              city <b>O</b>ptions</td></tr>
 <tr><td><span class="hotkey"> H</span></td><td>                              citizen <b>H</b>appiness effects</td></tr>

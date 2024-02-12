@@ -1,8 +1,8 @@
-<div id="game_unit_orders_default">  
+<div id="game_unit_orders_default">
   <div id="order_goand" class="order_button" title="Go-and-Do action (ctrl-alt-G). Shift-click to delay.">
     <span style="cursor:pointer" onclick="unit_go_and_button(event);"><img src="/images/orders/go_and.png" name="goand_button" alt="" border="0" width="30" height="30"></span>
   </div>
-  
+
   <div id="order_goto" class="order_button" title="Go to tile (G). Shift-click to delay.">
     <span style="cursor:pointer" onclick="activate_goto_button(event);"><img src="/images/orders/goto_default.png" name="goto_button" alt="" border="0" width="30" height="30"></span>
   </div>
@@ -17,15 +17,15 @@
 
   <div id="order_convert" class="order_button not_mobile" title="Convert unit (shift-O)">
     <span style="cursor:pointer" onclick="key_unit_convert();"><img src="/images/orders/convert.png" name="convert_button" alt="" border="0" width="30" height="30"></span>
-  </div>  
+  </div>
 
   <div id="order_airlift" class="order_button" title="Airlift (shift-L)">
     <span style="cursor:pointer" onclick="key_unit_airlift();"><img src="/images/orders/airlift.png" name="airlift_button" alt="" border="0" width="30" height="30"></span>
-  </div>  
+  </div>
 
   <div id="order_airlift_disabled" class="order_button" title="0 Airlifts left">
     <span style="cursor:pointer" onclick="key_unit_airlift();"><img src="/images/orders/airlift_disabled.png" name="airlift_button" alt="" border="0" width="30" height="30"></span>
-  </div>  
+  </div>
 
   <div id="order_well" class="order_button not_mobile" title="Dig well (R)">
     <span style="cursor:pointer" onclick="key_unit_well();"><img src="/images/orders/well.png" name="well_button" alt="" border="0" width="30" height="30"></span>
@@ -41,7 +41,7 @@
 
   <div id="order_build_city" class="order_button not_mobile" title="Build new city (B)">
     <span style="cursor:pointer" onclick="request_unit_build_city();"><img src="/images/orders/build_city_default.png" name="build_city_button" alt="" border="0" width="30" height="30"></span>
-  </div>  
+  </div>
 
   <div id="order_road" class="order_button" title="Build road (R)">
     <span style="cursor:pointer" onclick="key_unit_road();"><img src="/images/orders/road_default.png" name="road_button" alt="" border="0" width="30" height="30"></span>
@@ -78,23 +78,23 @@
   <div id="order_oil_well" class="order_button not_mobile" title="Make Oil Well (M)">
       <span style="cursor:pointer" onclick="key_unit_mine();"><img src="/images/orders/oil_well.png" name="oil_well_button" alt="" border="0" width="30" height="30"></span>
   </div>
-  
+
   <div id="order_plant_forest" class="order_button not_mobile" title="Plant forest (M)" >
       <span style="cursor:pointer" onclick="key_unit_mine();"><img src="/images/orders/forest_add_default.png" name="plant_forest_button" alt="" border="0" width="30" height="30"></span>
   </div>
-  
+
   <div id="order_make_swamp" class="order_button not_mobile" title="Make swamp (M)" >
       <span style="cursor:pointer" onclick="key_unit_mine();"><img src="/images/orders/swamp.png" name="make_swamp_button" alt="" border="0" width="30" height="30"></span>
   </div>
-  
+
   <div id="order_pillage" class="order_button not_mobile" title="Pillage (shift-P)">
     <span style="cursor:pointer" onclick="key_unit_pillage();"><img src="/images/orders/pillage.png" name="pillage_button" alt="" border="0" width="30" height="30"></span>
   </div>
 
   <div id="order_explore" class="order_button not_mobile" title="Auto explore map (X)">
     <span style="cursor:pointer" onclick="key_unit_auto_explore();"><img src="/images/orders/auto_explore_default.png" name="auto_explore_button" alt="" border="0" width="30" height="30"></span>
-  </div>  
-    
+  </div>
+
   <div id="order_auto_settlers" class="order_button not_mobile" title="Auto-improve terrain (A)">
     <span style="cursor:pointer" onclick="key_unit_auto_settle();"><img src="/images/orders/auto_settlers_default.png" name="auto_settlers_button" alt="" border="0" width="30" height="30"></span>
   </div>
@@ -107,7 +107,7 @@
     <span style="cursor:pointer" onclick="key_unit_quay();"><img src="/images/orders/quay.png" name="quay_button" alt="" border="0" width="30" height="30"></span>
   </div>
 
-  <div id="order_canal" class="order_button not_mobile" title="Build Canal">
+  <div id="order_canal" class="order_button not_mobile" title="Build Canal (alt-shift-C)">
     <span style="cursor:pointer" onclick="key_unit_canal();"><img src="/images/orders/canal.png" name="canal_button" alt="" border="0" width="30" height="30"></span>
   </div>
 
@@ -226,7 +226,7 @@
   <div id="order_sentry" class="order_button" title="Sentry (S)">
     <span style="cursor:pointer" onclick="key_unit_sentry();"><img src="/images/orders/sentry_default.png" name="sentry_button" alt="" border="0" width="30" height="30"></span>
   </div>
-  
+
   <div id="order_more" class="order_button not_mobile" title="Show all orders">
     <span style="cursor:pointer" onclick="button_more_orders();"><img src="/images/orders/more_button.png" name="more_button" alt="" border="0" width="30" height="30"></span>
   </div>
