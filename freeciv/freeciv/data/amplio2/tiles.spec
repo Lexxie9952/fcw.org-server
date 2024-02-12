@@ -1,7 +1,7 @@
 
 [spec]
 
-; Format and options of this spec file: 
+; Format and options of this spec file:
 options = "+Freeciv-spec-Devel-2019-Jul-03"
 
 [info]
@@ -48,40 +48,40 @@ tiles = { "row", "column", "tag"
   8,  8, "unit.hp_15"
   8,  9, "unit.hp_5"
 
-; Numbers: city size: (also used for goto)
+; Numbers: city size: (also used for goto) NOT USED IN FCW
 
-  1,  0, "city.size_000"
-  1,  1, "city.size_100"
-  1,  2, "city.size_200"
-  1,  3, "city.size_300"
-  1,  4, "city.size_400"
-  1,  5, "city.size_500"
-  1,  6, "city.size_600"
-  1,  7, "city.size_700"
-  1,  8, "city.size_800"
-  1,  9, "city.size_900"
+;  1,  0, "city.size_000"
+;  1,  1, "city.size_100"
+;  1,  2, "city.size_200"
+;  1,  3, "city.size_300"
+;  1,  4, "city.size_400"
+;  1,  5, "city.size_500"
+;  1,  6, "city.size_600"
+;  1,  7, "city.size_700"
+;  1,  8, "city.size_800"
+;  1,  9, "city.size_900"
 
-  2, 0, "city.size_00"
-  2, 1, "city.size_10"
-  2, 2, "city.size_20"
-  2, 3, "city.size_30"
-  2, 4, "city.size_40"
-  2, 5, "city.size_50"
-  2, 6, "city.size_60"
-  2, 7, "city.size_70"
-  2, 8, "city.size_80"
-  2, 9, "city.size_90"
+;  2, 0, "city.size_00"
+;  2, 1, "city.size_10"
+;  2, 2, "city.size_20"
+;  2, 3, "city.size_30"
+;  2, 4, "city.size_40"
+;  2, 5, "city.size_50"
+;  2, 6, "city.size_60"
+;  2, 7, "city.size_70"
+;  2, 8, "city.size_80"
+;  2, 9, "city.size_90"
 
-  3,  0, "city.size_0"
-  3,  1, "city.size_1"
-  3,  2, "city.size_2"
-  3,  3, "city.size_3"
-  3,  4, "city.size_4"
-  3,  5, "city.size_5"
-  3,  6, "city.size_6"
-  3,  7, "city.size_7"
-  3,  8, "city.size_8"
-  3,  9, "city.size_9"
+;  3,  0, "city.size_0"
+;  3,  1, "city.size_1"
+;  3,  2, "city.size_2"
+;  3,  3, "city.size_3"
+;  3,  4, "city.size_4"
+;  3,  5, "city.size_5"
+;  3,  6, "city.size_6"
+;  3,  7, "city.size_7"
+;  3,  8, "city.size_8"
+;  3,  9, "city.size_9"
 
 ; Numbers: city tile food/shields/trade y/g/b
 
@@ -118,7 +118,7 @@ tiles = { "row", "column", "tag"
   6, 8, "city.t_trade_8"
   6, 9, "city.t_trade_9"
 
-; Server sends back a single numeral/char for tile output, previously limiting us to 0-9, 
+; Server sends back a single numeral/char for tile output, previously limiting us to 0-9,
 ; which fails in cases like gold+river+colossus+democracy+superhighway (6+3)*1.5 = 13
   7, 0, "city.t_trade_A"  ; 10
   7, 1, "city.t_trade_B"  ; 11
@@ -136,11 +136,11 @@ tiles = { "row", "column", "tag"
 ; Unit Extras(not activities)
 
   3, 10, "unit.connect"
-  4, 10, "unit.auto_attack",
-         "unit.auto_settler"
+;  4, 10, "unit.auto_attack", "unit.auto_settler"         ; unit.auto_attack is unused
+  4, 10, "unit.auto_settler"
   5, 10, "unit.stack"
-  6, 10, "unit.loaded"
-; Alternate display modes for stacked units 
+;  6, 10, "unit.loaded"                                   ; not used in FCW
+; Alternate display modes for stacked units, used only by FCW:
   3, 11, "unit.stack1"
   4, 11, "unit.stk_shld_r"
   5, 11, "unit.stk_shld_l"
@@ -154,7 +154,7 @@ tiles = { "row", "column", "tag"
   9, 6,  "unit.stack8"
   9, 7,  "unit.stack9"  ; NB: 9 or more
 
-; Server sends back a single numeral/char for tile output, previously limiting us to 0-9, 
+; Server sends back a single numeral/char for tile output, previously limiting us to 0-9,
  10, 0, "city.t_food_A"  ; 10
  10, 1, "city.t_food_B"  ; 11
  10, 2, "city.t_food_C"  ; 12
@@ -168,7 +168,7 @@ tiles = { "row", "column", "tag"
 ; 10, 10, "city.t_food_K"  ; 20
 ; 10, 11, "city.t_food_L"  ; 21+
 
-; Server sends back a single numeral/char for tile output, previously limiting us to 0-9, 
+; Server sends back a single numeral/char for tile output, previously limiting us to 0-9,
  11, 0, "city.t_shields_A"  ; 10
  11, 1, "city.t_shields_B"  ; 11
  11, 2, "city.t_shields_C"  ; 12

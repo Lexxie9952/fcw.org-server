@@ -1,3 +1,6 @@
+; ***************************************************************************************************************************
+; NB: THESE GRAPHICS ARE UNUSED BY FCW AND THUS HAVE BEEN DIS-INCLUDED IN THE img-extract.py script for building site images:
+; ***************************************************************************************************************************
 
 [spec]
 
@@ -24,6 +27,9 @@ pixel_border = 1
 tiles = { "row", "column", "tag"
 ; Unit upkeep in city dialog:
 
+; ***************************************************************************************************************************
+; NB: THESE GRAPHICS ARE UNUSED BY FCW AND THUS HAVE BEEN DIS-INCLUDED IN THE img-extract.py script for building site images:
+; ***************************************************************************************************************************
  0,  0, "upkeep.shield"
  0,  1, "upkeep.shield2"
  0,  2, "upkeep.shield3"

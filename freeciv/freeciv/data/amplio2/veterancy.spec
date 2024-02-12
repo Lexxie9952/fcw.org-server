@@ -11,7 +11,7 @@ options = "+Freeciv-spec-Devel-2019-Jul-03"
 
 ; Special thanks go to:
 ; Alex Mor and Captain Nemo for their excellent graphics work
-; in the scenarios 2194 days war, Red Front, 2nd front and other misc graphics. 
+; in the scenarios 2194 days war, Red Front, 2nd front and other misc graphics.
 ; Fairline for his huge collection of original Civ2 unit spanning centuries
 ; Bebro for his collection of mediveal units and ships
 
@@ -63,7 +63,7 @@ tiles = { "row", "column", "tag"
   0, 5, "unit.vet_8"
   0, 6, "unit.vet_9"
 
-  0,  9, "unit.tired"
-  0, 10, "unit.lowfuel"
-;  0, 11, "unit.lowfuel" unused low fuel variant
+;  0,  9, "unit.tired"      unused in fcw
+;  0, 10, "unit.lowfuel"    unused in fcw
+;  0, 11, "unit.lowfuel"    unused low fuel variant
 }
