@@ -1226,11 +1226,13 @@ sabotage	= 100
 sound		= "b_space_component"
 sound_alt	= "b_generic"
 helptext	= _("\
-Space Components can be differentiated into Propulsion and Fuel Components.\
- Each pair of them reduces spaceship travel time.  You can build up to 8 pairs.\
+Space Components come in two kinds: 1) Propulsion and 2) Fuel. Top speed is\
+ increased by each coupled pair of Propulsion + Fuel. (Top speed reduces the\
+ spaceship's travel time.) You can build up to 8 pairs (16 components). Each\
+ Space Component weighs 400 tons. \n\n\
 "), _("\
-Before you can build any spaceship parts, your nation must have built the\
- Apollo Program; and a city needs a Factory.\
+Your nation needs the Apollo Program before it can build a spaceship. Cities\
+ require a Factory.\
 ")
 
 [building_space_module]
@@ -1252,21 +1254,19 @@ sabotage	= 100
 sound		= "b_space_module"
 sound_alt	= "b_generic"
 helptext	= _("\
-Space Modules are the most expensive parts of spaceships.  There\
- are three different types of Space Module：\
+Space Modules are the heaviest most expensive parts of a spaceship. There\
+ are three different types of Space Module：\n\
 "), _("\
-- Habitation Module：provides living space for 10,000 people.\
+- Habitation Module：Living space for 10000 people. (1600 tons.) \n\
 "), _("\
-- Life Support Module：provides food and water for the population of\
- one Habitation Module.\
+- Life Support Module：provides food and water for one Habitation Module. (1600 tons.) \n\
 "), _("\
-- Solar Panels：provides the energy needed for any two of the other\
- Modules.\
+- Solar Panels：provides enough energy for two other Space Modules. (400 tons.) \n\
 "), _("\
-You can build up to 4 Space Modules of each kind.\
+You can build up to 4 Space Modules of each kind. \n\n\
 "), _("\
-Before you can build any spaceship parts, your nation must have built the\
- Apollo Program; and a city needs a Factory.\
+Your nation needs the Apollo Program before it can build a spaceship. Cities\
+ require a Factory.\
 ")
 
 [building_space_structural]
@@ -1288,12 +1288,14 @@ sabotage	= 100
 sound		= "b_space_structural"
 sound_alt	= "b_generic"
 helptext	= _("\
-Space Structurals form the base of your spaceship.  All other\
- spaceship parts need to be connected to Structurals in order to\
- function.  You can build up to 32 Space Structurals.\
+Space Structurals are the skeletal architecture of your spaceship. To become\
+ part of the spaceship, each spaceship part needs to be attached its own Space\
+ Structural. You can build up to 32 Space Structurals. \n\n\
+The first 6 Space Structurals make up the core of the ship, and weigh 200 tons\
+  each. Additional Space Structurals weigh only 100 tons. \n\n\
 "), _("\
-Before you can build any spaceship parts, your nation must have built the\
- Apollo Program; and a city needs a Factory.\
+Your nation needs the Apollo Program before it can build a spaceship. Cities\
+ require a Factory.\
 ")
 
 [building_palace]
