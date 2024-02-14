@@ -3840,9 +3840,9 @@ fragments = 0
 
 ; What labels are used for positive and negative years.
 ; /* TRANS: year label (Anno Domini, Common Era) */
-positive_label = _("AD")
+positive_label = _("A.D.")
 ; /* TRANS: year label (BC was before Common Era became PC) */
-negative_label = _("BC")
+negative_label = _("B.C.")
 
 ; /* <-- avoid gettext warnings
 ;
