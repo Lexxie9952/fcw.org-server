@@ -32,6 +32,7 @@
 					<li><a href="/game/list?v=play-by-email">Play by Email</a></li>
 				</ul>
 			</li>
+			<li><a href="https://www.fciv.net" title="Play Freeciv in 3D">FCIV 3D</a></li>
 			<li id="donate_link"><a href="https://www.patreon.com/freecivweb">Please Donate</a></li>
 			<li><a href="https://github.com/Lexxie9952/fcw.org-server">Development</a></li>
 			<%--<li class="dropdown">
@@ -46,7 +47,9 @@
 					<li><a href="/?locale=zh_TW">Traditional Chinese</a></li>
 				</ul>
 			</li>--%>
+
 		</ul>
+<!--
 		<form class="navbar-form navbar-right hidden-sm hidden-md" action="https://duckduckgo.com/" style="width: 220px;">
 			<input type="hidden" name="sites" value="www.freeciv.org,forum.freeciv.org,freeciv.wikia.com">
 			<div class="form-group">
@@ -58,6 +61,7 @@
 				</div>
 			</div>
 		</form>
+-->
 		</div><!-- end navbar-collapse -->
 	</div><!-- end container-fluid -->
 </nav> <!-- end nav -->
