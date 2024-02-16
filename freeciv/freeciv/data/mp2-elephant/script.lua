@@ -303,9 +303,8 @@ Evangelists warn the End Times are near.\
 "))
 notify.event(nil, nil, E.BEGINNER_HELP,
 _("[`events/endtimes`]<br>Philosophers are concerned that weapons technology is becoming too advanced."))
-  end
-
-  if turn == 2 then
+  --------------------------------------------------------------------------------------------------------------
+elseif turn == 2 then
     notify.event(nil, nil, E.SCRIPT,
 _("<b>Hunt for Food!</b>\n\
 Wild animals are part of the Stone Age diet. Cities can use animal tiles for extra food.\
@@ -313,16 +312,32 @@ Wild animals are part of the Stone Age diet. Cities can use animal tiles for ext
 "))
 notify.event(nil, nil, E.BEGINNER_HELP,
 _("[`events/hunt`]<br>Wild animal resources are available for food."))
-  end
-
-  if turn == 20 then
+  --------------------------------------------------------------------------------------------------------------
+elseif turn == 20 then
     notify.event(nil, nil, E.SCRIPT,
 _("<b>Ecology Report</b>\n\
 Hunting has reduced wild animal populations and frightened them from human settlements.\
 "))
 notify.event(nil, nil, E.BEGINNER_HELP,
 _("[`events/runningdeer`][`events/oldtribesmen`]<br>Animal populations no longer come near human settlements.<br>Next turn, Elder Tribesmen lose bonus for movement, work, vision, and recycle.<br>"))
+  --------------------------------------------------------------------------------------------------------------
+
+  -- Replace "River" on "Mountains", with "Mountain River". Because mapgen doesn't obey extra_reqs !!!!
+elseif turn == 1 then
+    for maptile in whole_map_iterate() do
+      local terr = maptile.terrain
+      local tname = terr:rule_name()
+      if tname == "Mountains" then
+        if maptile:has_extra("River") then
+          --delete River
+          maptile:remove_extra("River")
+          --place Mountain River
+          maptile:create_extra("Mountain River", NIL)
+        end
+      end
+    end
   end
+  --------------------------------------------------------------------------------------------------------------
 end
 
 signal.connect('turn_begin', 'turn_callback')

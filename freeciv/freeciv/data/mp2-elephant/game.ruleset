@@ -3034,9 +3034,10 @@ actor_reqs    =
       "Tech",          "Iron Working", "Player",  TRUE
     }
 target_reqs    =
-    { "type",    "name",     "range"
-      "Terrain", "Forest",   "Local"
-      "Extra",   "River",    "Local"
+    { "type",      "name",     "range"
+      "Terrain",   "Forest",   "Local"
+;     "Extra",     "River",    "Local"
+      "ExtraFlag", "IsRiver",  "Local"
     }
 
 [actionenabler_build_fishtrap_trawler]

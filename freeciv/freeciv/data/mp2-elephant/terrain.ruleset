@@ -42,6 +42,7 @@ extra_flags =
       _("WaterwaySource"), _("Is a water source for inland Canals.")
       _("Railable"), _("Allows Railroads to be built.")
       _("FortressHeal"), _("Damaged Land and Helicopter units +25% hp per turn resting.")
+      _("IsRiver"), _("")                                          ; Gives us a way to have multiple river types !
   }
 
 [parameters]
@@ -258,7 +259,7 @@ graphic_alt          = "coast"
 identifier           = "+"
 class                = "Oceanic"
 movement_cost        = 10080
-defense_bonus        = 0
+defense_bonus        = -50              ; The only time TerrainDefense units are on a lake is when it has a river with +0.50. This cancels that.
 food                 = 1
 shield               = 0
 trade                = 2
@@ -1853,17 +1854,17 @@ act_gfx_alt2   = "-"
 rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
 reqs           =
-    { "type", "name", "range", "present", "quiet"
-      "Extra", "Fortress", "Local", TRUE, FALSE
-      "Extra", "Castle", "Local", FALSE, FALSE
-      "Tech", "Gunpowder", "Player", TRUE, FALSE
-      "Tech", "Steel", "Player", TRUE, FALSE
-      "TerrainClass", "Land", "Local", TRUE, FALSE
-      "UnitFlag", "CanFortress", "Local", TRUE, FALSE
-      "CityTile", "Center", "Local", FALSE, TRUE
-      "UnitType", "Marines",     "Local",  FALSE, TRUE   ; Marines can do Forts only
-      "UnitType", "Trawler",     "Local",  FALSE, TRUE   ; Fishtraps only
-;      "Extra", "River", "Local", FALSE, FALSE
+    { "type",         "name",        "range",  "present", "quiet"
+      "Extra",        "Fortress",    "Local",  TRUE,      FALSE
+      "Extra",        "Castle",      "Local",  FALSE,     FALSE
+      "Tech",         "Gunpowder",   "Player", TRUE,      FALSE
+      "Tech",         "Steel",       "Player", TRUE,      FALSE
+      "TerrainClass", "Land",        "Local",  TRUE,      FALSE
+      "UnitFlag",     "CanFortress", "Local",  TRUE,      FALSE
+      "CityTile",     "Center",      "Local",  FALSE,     TRUE
+      "UnitType",     "Marines",     "Local",  FALSE,     TRUE   ; Marines can do Forts only
+      "UnitType",     "Trawler",     "Local",  FALSE,     TRUE   ; Fishtraps only
+;     "ExtraFlag",    "IsRiver",     "Local",  FALSE,     FALSE
     }
 build_time     = 36
 removal_time   = 0
@@ -2098,7 +2099,7 @@ conflicts      = "Highway"
 native_to      = "Land", "LandNoKill", "LandAirSea", "LandRoad", "Big Land"
 hidden_by      = "Railroad", "Maglev"
 flags          = "AutoOnCityCenter", "NativeTile", "Railable"
-bridged_over   = "River"
+bridged_over   = "Canal", "Waterway", "Mountain River", "River"
 helptext       = _("\
 Roads allow your land units to move more quickly, costing 1/3 move point\
  to travel from one road to another road. On Flatland terrain, they\
@@ -2131,7 +2132,7 @@ build_time     = 0
 removal_time   = 0
 native_to      = "Land", "LandNoKill", "LandAirSea", "LandRoad", "Big Land"
 flags          = "AutoOnCityCenter", "NativeTile", "Railable"
-bridged_over   = "River"
+bridged_over   = "Canal", "Waterway", "Mountain River", "River"
 helptext       = _("\
 Highways allow your land units to move more quickly. On Flatland terrain,\
  they also provide a trade bonus to the tile if it is used by a city. \n\
@@ -2165,7 +2166,7 @@ build_time     = 3
 removal_time   = 0
 native_to      = "Land", "LandNoKill", "LandAirSea", "LandRail", "Cargo", "Big Land" ;NB:if Big Land is non-native we could make interesting movement rebalances (perhaps requiring Train unit for Big Land transport?)
 flags          = "AutoOnCityCenter", "NativeTile"
-bridged_over   = "River"
+bridged_over   = "Canal", "Waterway", "Mountain River", "River"
 helptext       = _("\
 Railroad tech lets you upgrade Roads to Railroads. Units use 1/28th of their\
  full move_rate when using rails. This effectively gives all land units a range of\
@@ -2227,8 +2228,8 @@ generated      = TRUE
 ;defense_bonus  = 33   now a +0.50 flat bonus.
 reqs           =
     { "type",        "name",          "range", "present"
-;      "TerrainClass","Land",          "Local",  TRUE   ;; allow rivers on mountain lakes
       "TerrainFlag", "CanHaveRiver",  "Local",  TRUE
+      "Terrain",     "Mountains",     "Local",  FALSE
       "Tech",        "Pottery",       "Player", FALSE
       "Tech",        "Alphabet",      "Player", FALSE
       "Tech",        "Writing",       "World",  FALSE
@@ -2237,23 +2238,74 @@ reqs           =
     }
 build_time = 2
 removal_time = 0
-flags          = "NativeTile", "Quayable", "IrrigationSource", "WaterwaySource"
+flags          = "IsRiver", "NativeTile", "Quayable", "IrrigationSource", "WaterwaySource"
 native_to      = "Land", "LandNoKill", "LandAirSea", "Trireme", "RiverShip",
                  "Big Land" ; see below:
-; NOTE: PassiveMovement cost of 1/8 effectively makes a moves along a river .75mp
-; this reduces Big Land's non-native penalty in mp2d. So why the change?
+; NOTE: Big Land's non-native penalty is reduced from MP2D. Here's why:
+; Passive move cost: no more supertanks moving 18 tiles on rivers.
 ; Gets the 1.5x defense bonus on rivers, preventing over-nerfing.
 ; Ends up not losing major mobility following river into forest/hill.
-; Does allow movement onto mountain river.
-; Incurs the restrictinfra hard entry/exit penalty for crossing rivers
-; Allows coding the server so only units native-to-road-type get hard entry/exit, thus
-; Allowing trenches and similar to only affect native classes and some TerrainSpeed classes can ignore them.
+; As native, incurs the restrictinfra hard entry/exit penalty for crossing rivers
+; When Mountain Rivers are introduced, still prevents Big Land from going on mountains
 helptext       = _("\
 A River adds +1 trade to the output of a tile, and +0.50 to\
  the terrain defense bonus. Units with full move points\
  can move 8 tiles along a River, regardless of their move rate.\
  That is, units use 1/8th of their full move rate on each river\
- tile.\
+ tile. \n\
+In enemy territory, crossing a river is difficult. If there is no bridge,\
+  stepping onto or off of a river expends full move points. In your own\
+  territory, your people have intimate knowledge of where the better crossing\
+  points are, in order to avoid this penalty. \n\
+"), _("\
+Roads can be built on rivers after you acquire Bridge Building technology.\
+ On Flatland, this gives an additional +1 trade on top of the trade bonus\
+ from the river.\
+")
+
+[extra_mountain_river]
+name           = _("Mountain River")
+category       = "Infra" ;TEST for well-digger
+causes         = "Road"
+;rmcauses       = ""
+graphic        = "road.river"
+graphic_alt    = "-"
+activity_gfx   = "unit.canal"
+act_gfx_alt    = "unit.oil_mine"
+act_gfx_alt2   = "unit.road"
+rmact_gfx      = "None"
+rmact_gfx_alt  = "-"
+buildable      = TRUE
+generated      = FALSE
+;defense_bonus  = 33   now a +0.50 flat bonus.
+reqs           =
+    { "type",        "name",          "range", "present"
+      "TerrainFlag", "CanHaveRiver",  "Local",  TRUE
+      "Terrain",     "Mountains",     "Local",  TRUE
+      "Tech",        "Pottery",       "Player", FALSE
+      "Tech",        "Alphabet",      "Player", FALSE
+      "Tech",        "Writing",       "World",  FALSE
+      "UnitFlag",    "Well-Digger",   "Local",  TRUE
+      "Age",         "10",            "Local",  FALSE
+    }
+build_time = 2
+removal_time = 0
+flags          = "IsRiver", "NativeTile", "Quayable", "IrrigationSource", "WaterwaySource"
+native_to      = "Land", "LandNoKill", "LandAirSea", "Trireme", "RiverShip"
+; NOTE: A River that Big Land units can't use.
+helptext       = _("\
+A Mountain River is a river on a mountain. Land units who can't\
+ go on Mountains cannot go on Mountain Rivers. \n\
+"), _("\
+A River adds +1 trade to the output of a tile, and +0.50 to\
+ the terrain defense bonus. Units with full move points\
+ can move 8 tiles along a River, regardless of their move rate.\
+ That is, units use 1/8th of their full move rate on each river\
+ tile. \n\
+In enemy territory, crossing a river is difficult. If there is no bridge,\
+  stepping onto or off of a river expends full move points. In your own\
+  territory, your people have intimate knowledge of where the better crossing\
+  points are, in order to avoid this penalty. \n\
 "), _("\
 Roads can be built on rivers after you acquire Bridge Building technology.\
  On Flatland, this gives an additional +1 trade on top of the trade bonus\
@@ -2318,7 +2370,9 @@ reqs           =
       "Extra",         "Castle",     "Local",     FALSE
       "Extra",         "Bunker",     "Local",     FALSE
       "Extra",         "Airbase",    "Local",     FALSE
-      "Extra",         "River",      "Local",     FALSE
+      "ExtraFlag",     "IsRiver",    "Local",     FALSE  ; all tests for rivers now use tests for IsRiver instead
+;      "Extra",         "River",      "Local",     FALSE
+;      "Extra",         "Mountain River","Local",  FALSE  ;not needed because not allowed on Mountains anyway.
       "Extra",         "Canal",      "Local",     FALSE
       "Extra",         "Waterway",   "Local",     FALSE
       "DiplRel",       "War",        "Local",     FALSE
@@ -2329,7 +2383,7 @@ reqs           =
     }
 build_time     = 2
 removal_time   = 8
-conflicts      = "Fortress", "Naval Base", "Castle", "Bunker", "Airbase", "River", "Canal", "Waterway"
+conflicts      = "Fortress", "Naval Base", "Castle", "Bunker", "Airbase", "River", "Canal", "Waterway" ;; ,"MountainRiver" -- not needed unless T.Walls allowed back onto Moutains terrain
 defense_bonus  = 0
 native_to      = "Land", "LandNoKill", "LandAirSea", "LandRoad", "Big Land"
 flags          = "NativeTile"
@@ -2367,15 +2421,7 @@ build_time     = 10
 removal_time   = 0
 flags          = "NativeTile", "Quayable", "IrrigationSource", "WaterwaySource"
 native_to      = "Trireme", "Sea", "RiverShip", "Land", "LandAirSea", "LandNoKill", "Helicopter", "Submarine",
-                 "Big Land"; see below
-; NOTE: PassiveMovement cost of 1/6 effectively makes a move along a canal 1mp, same as when
-; Big Land was non-native in mp2d. So why the change? Several differences:
-; Gets the 1.5x defense bonus on rivers, without which Big Land is over-nerfed compared to Foot.
-; Ends up being 1 move point when going on a forest/hill.
-; Does allow movement onto mountain river.
-; Incurs the restrictinfra hard entry/exit penalty for crossing rivers
-; Allows coding the server so only units native-to-road-type get hard entry/exit, thus
-; Allowing trenches and similar to only affect native classes and some TerrainSpeed classes can ignore them.
+                 "Big Land"
 helptext          = _("\
 Canals are a canal-type allowing all ships to travel over land tiles. They provide \
 the same move bonus to land units as a River does. Canals can be \
@@ -2409,15 +2455,7 @@ build_time     = 10
 removal_time   = 0
 flags          = "NativeTile", "Quayable", "IrrigationSource"
 native_to      = "Trireme", "Sea", "RiverShip", "Land", "LandAirSea", "LandNoKill", "Helicopter", "Submarine",
-                 "Big Land"; see below:
-; NOTE: PassiveMovement cost of 1/6 effectively makes a move along a canal 1mp, same as when
-; Big Land was non-native in mp2d. So why the change? Several differences:
-; Gets the 1.5x defense bonus on rivers, without which Big Land is over-nerfed compared to Foot.
-; Ends up being 1 move point when going on a forest/hill.
-; Does allow movement onto mountain river.
-; Incurs the restrictinfra hard entry/exit penalty for crossing rivers
-; Allows coding the server so only units native-to-road-type get hard entry/exit, thus
-; Allowing trenches and similar to only affect native classes and some TerrainSpeed classes can ignore them.
+                 "Big Land"
 helptext          = _("\
 Waterways are an inland canal-type. They’re the same as a Canal, but can use \
 Rivers and ocean-sourced Canals as their water source. Unlike a Canal, however, \
@@ -2910,7 +2948,8 @@ appearance_reqs =
       "Extra",   "Resources","Adjacent", FALSE
       "Extra",   "Fruit",    "Adjacent", FALSE
       "Extra",   "Silk",     "Adjacent", FALSE
-      "Extra",   "River",    "Local",    FALSE ;Forests need help to have less non-trade tiles
+      "ExtraFlag","IsRiver", "Local",    FALSE  ; replaces below
+;      "Extra",   "River",    "Local",    FALSE ;Forests need help to have less non-trade tiles
     }
 helptext = "Berries from the forest give food and trade, as well as shields from forest lumber."
 
@@ -3022,7 +3061,8 @@ appearance_chance       = 390
 appearance_reqs =
     { "type",    "name", "range",  "present"
       "Terrain", "Desert",      "Local", TRUE
-      "Extra",   "River",       "Local", TRUE
+      "ExtraFlag","IsRiver",    "Local", TRUE
+;      "Extra",   "River",       "Local", TRUE ; ^^ now uses above
       "MinYear", "-2200",       "World", FALSE
       "Extra",   "Hippopotamus","Adjacent", FALSE
     }
@@ -3315,8 +3355,19 @@ move_cost      = 8             ; "PassiveMovement" i.e., everyone gets 8 moves o
 move_mode      = "Cardinal"
 trade_incr_const = 1
 compat_special = "River"
-integrates     = "Canal", "Waterway"
+integrates     = "Canal", "Waterway", "Mountain River"
 flags          = "River", "UnrestrictedInfra", "PassiveMovement", "HardExitRInfra", "HardEntryRInfra"
+
+[road_mountain_river]
+extra          = "Mountain River"
+move_cost      = 8             ; "PassiveMovement" i.e., everyone gets 8 moves on it.
+move_mode      = "Cardinal"
+trade_incr_const = 1
+;compat_special = "River"
+integrates     = "Canal", "Waterway", "River"
+flags          = "River", "UnrestrictedInfra", "PassiveMovement", "HardExitRInfra", "HardEntryRInfra"    ; see NOTES line below
+;this extra has set generated=FALSE, so "automatic generated by mapgen" is misdescribed for this flag. Keeping flag set ensures
+;server funcs like tile_has_river, etc., which check for RF_RIVER, will behave exactly the same for this as for original rivers.
 
 [road_sea_bridge]
 extra          = "Sea Bridge"
@@ -3343,7 +3394,7 @@ flags          = "IntegrateCostUp", "ReverseRestrictInfra" ;(allied units ignore
 extra             = "Canal"
 move_cost         = 8                   ; "PassiveMovement"
 move_mode         = "Cardinal"
-integrates        = "River", "Waterway"
+integrates        = "River", "Mountain River", "Waterway"
 compat_special    = "None"
 flags             = "PassiveMovement", "UnrestrictedInfra", "HardExitRInfra", "HardEntryRInfra"
 
@@ -3351,6 +3402,6 @@ flags             = "PassiveMovement", "UnrestrictedInfra", "HardExitRInfra", "H
 extra             = "Waterway"
 move_cost         = 8                   ; "PassiveMovement"
 move_mode         = "Cardinal"
-integrates        = "River", "Canal"
+integrates        = "River", "Mountain River", "Canal"
 compat_special    = "None"
 flags             = "PassiveMovement", "UnrestrictedInfra", "HardExitRInfra", "HardEntryRInfra"

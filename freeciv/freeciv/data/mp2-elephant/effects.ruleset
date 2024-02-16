@@ -948,7 +948,8 @@ type   = "Terrain_Defend_Add_Bonus"
 value  = 50
 reqs	 =
     { "type",          "name",           "range"
-      "Extra",         "River",          "Local"
+;     "Extra",         "River",          "Local"
+      "ExtraFlag",     "IsRiver",        "Local"
       "UnitClassFlag", "TerrainDefense", "Local"
     }
 
@@ -1482,7 +1483,8 @@ reqs    =
     {
       "type",         "name",    "range",    "present"
       "UnitType",     "Boat",    "Local",    TRUE
-      "Extra",        "River",   "Adjacent", TRUE
+      "ExtraFlag",    "IsRiver", "Adjacent", TRUE
+;     "Extra",        "River",   "Adjacent", TRUE
       "TerrainClass", "Oceanic", "Local",    FALSE
     }
 [effect_small_boats_faster_on_rivers_2]
@@ -1492,7 +1494,8 @@ reqs    =
     {
       "type",         "name",    "range",    "present"
       "UnitType",     "Trireme", "Local",    TRUE
-      "Extra",        "River",   "Adjacent", TRUE
+      "ExtraFlag",    "IsRiver", "Adjacent", TRUE
+;     "Extra",        "River",   "Adjacent", TRUE
       "TerrainClass", "Oceanic", "Local",    FALSE
     }
 ;------------------------------------------------------
@@ -4912,26 +4915,28 @@ reqs    =
 type    = "Irrigation_Pct"
 value   = 100
 reqs    =
-  { "type", "name", "range", "present"
-  "Terrain", "Desert", "Local", TRUE
-  "Extra", "River", "Local", TRUE
-  "Extra", "Oasis", "Local", FALSE
-  "Extra", "Irrigation", "Local", TRUE
+  { "type", "name",           "range", "present"
+   "Terrain",   "Desert",     "Local", TRUE
+   "ExtraFlag", "IsRiver",    "Local", TRUE
+;  "Extra",     "River",      "Local", TRUE
+   "Extra",     "Oasis",      "Local", FALSE
+   "Extra",     "Irrigation", "Local", TRUE
   }
 ; ...same for city centers
 [effect_irrigation_3]
 type    = "Irrigation_Pct"
 value   = 100
 reqs    =
-  { "type", "name", "range", "present"
-  "Terrain", "Desert", "Local", TRUE
-  "Extra", "River", "Local", TRUE
-  "Extra", "Oasis", "Local", FALSE
-  "CityTile", "Center", "Local", TRUE
-;  "Extra", "Irrigation", "Local", FALSE
-  "TerrainAlter", "CanIrrigate", "Local", TRUE
-  "Extra", "Mine", "Local", FALSE
-  "Extra", "Oil Well", "Local", FALSE
+  { "type",       "name",        "range",    "present"
+  "Terrain",      "Desert",      "Local",    TRUE
+; "Extra",        "River",       "Local",    TRUE
+  "ExtraFlag",    "IsRiver",     "Local",    TRUE
+  "Extra",        "Oasis",       "Local",    FALSE
+  "CityTile",     "Center",      "Local",    TRUE
+;  "Extra",       "Irrigation",  "Local",    FALSE
+  "TerrainAlter", "CanIrrigate", "Local",    TRUE
+  "Extra",        "Mine",        "Local",    FALSE
+  "Extra",        "Oil Well",    "Local",    FALSE
   }
 
 [effect_irrigation_center]
@@ -7521,18 +7526,19 @@ reqs	=
       "Extra",   "Furs",        "Local",  FALSE
       "Extra",   "Elk",         "Local",  FALSE
     }
+; Desert River needs tile penalty lifted IFF it has no irrigation on it:
 [effect_ziggurat_extra_food_2]
 type    = "Output_Penalty_Tile"
 value = 100
 reqs	=
-    { "type",      "name",     "range",  "present"
-      "Building",  "Ziggurat", "City",    TRUE
-      "OutputType","Food",     "Local",   TRUE
-      "CityTile",  "Center",   "Local",   TRUE
-      ; Desert River needs tile penalty lifted IFF it has no irrigation on it
-      "Terrain", "Desert",      "Local",  TRUE
-      "Extra",   "River",       "Local",  TRUE
-      "Extra",   "Irrigation",  "Local",  FALSE
+    { "type",      "name",        "range",  "present"
+      "Building",  "Ziggurat",    "City",    TRUE
+      "OutputType","Food",        "Local",   TRUE
+      "CityTile",  "Center",      "Local",   TRUE
+      "Terrain",   "Desert",      "Local",  TRUE
+      "ExtraFlag", "IsRiver",     "Local",  TRUE
+;     "Extra",     "River",       "Local",  TRUE
+      "Extra",     "Irrigation",  "Local",  FALSE
     }
 [effect_ziggurat_extra_food_3]
 type    = "Output_Penalty_Tile"
