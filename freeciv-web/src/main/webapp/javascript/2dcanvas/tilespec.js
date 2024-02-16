@@ -1404,7 +1404,7 @@ function get_html_activity_sprite(punit)
     var atype_sprite = {"type":null,"sprite":get_sprite_from_tag(proto_sprite['key'])};
     var action_sprite = atype_sprite['sprite'];
 
-    var ml = -25; var mr = -14; var mt = -14;
+    let ml = -25; let mr = -14; let mt = -14;
     // ugly exception: this one is in tiles.spec and is 96x48 instead of 28x24
     if (proto_sprite['key']=="unit.auto_settler") {  // 96-28-68. 68/2 = 34
       ml -= 38; mr -= 30; mt = -9;
@@ -1900,7 +1900,12 @@ function get_tile_river_like_sprite(ptile, extra, prefix, abort_outlets)
   if (ptile == null) {
     return null;
   }
-  var extra2 = extra;   // 'synonymous' connective extra: extras can be connective to a twin type
+  // set up co-connectives: e.g., navalbases connect to rivers (because ocean traffic passes thru)
+  var extra2 = extra;
+
+  // look for synonymous 'twin' e.g. "Mountain River" in mp2e: this is performance preferrable to
+  // calling this function multiple times in every ruleset just because one ruleset uses a twin-type.
+  var clone_extra = extra_has_synonym(extra);
 
   var integrate_extras = [];
 
@@ -1914,8 +1919,35 @@ function get_tile_river_like_sprite(ptile, extra, prefix, abort_outlets)
   // MP2 and AG.
   // Handle "integrates" feature of roads. Has to be hard-coded until server gives this info.
 
+
+  // MP2_E onward
+  if (client_rules_flag[CRF_MTN_RIVERS]) {
+    // process in order of frequency
+    if (extra == EXTRA_RIVER) {
+      extra2 = EXTRA_NAVALBASE;
+      integrate_extras = [EXTRA_MOUNTAINRIVER, EXTRA_WATERWAY, EXTRA_NAVALBASE, EXTRA_CANAL];
+    }
+    else if (extra == EXTRA_CANAL) {
+      extra2 = EXTRA_NAVALBASE;
+      integrate_extras = [EXTRA_WATERWAY, EXTRA_NAVALBASE, EXTRA_RIVER, EXTRA_MOUNTAINRIVER];
+    }
+    else if (extra == EXTRA_WATERWAY) {
+      extra2 = EXTRA_NAVALBASE;
+      integrate_extras = [EXTRA_RIVER, EXTRA_CANAL, EXTRA_MOUNTAINRIVER, EXTRA_NAVALBASE];
+    }
+    else if (extra == EXTRA_NAVALBASE) {
+      extra2 = EXTRA_RIVER;
+      integrate_extras = [EXTRA_RIVER, EXTRA_CANAL, EXTRA_WATERWAY, EXTRA_MOUNTAINRIVER];
+    } // Isn't needed as long as we only call this function with the clone_extra of EXTRA_RIVER.
+    /*   Which we do to save CPU. But if we get rid of clone_extra then we need to call this
+     *   function with EXTRA_MOUNTAINRIVER also, and have this code block below activated:r
+    else if (extra == EXTRA_MOUNTAINRIVER) {
+      extra2 = EXTRA_NAVALBASE;
+      integrate_extras = [EXTRA_RIVER, EXTRA_WATERWAY, EXTRA_NAVALBASE, EXTRA_CANAL];
+    }*/
+  }
   // Ruleset with Naval base but no Waterway (old MP2):
-  if (client_rules_flag[CRF_CANALS] && typeof EXTRA_WATERWAY === 'undefined') {
+  else if (client_rules_flag[CRF_CANALS] && typeof EXTRA_WATERWAY === 'undefined') {
     // process in order of frequency
     if (extra == EXTRA_RIVER) {
       extra2 = EXTRA_NAVALBASE;
@@ -1950,6 +1982,7 @@ function get_tile_river_like_sprite(ptile, extra, prefix, abort_outlets)
     }
   }
 
+  // SEABRIDGE computes differently because it has opposite outlets: i.e., sea to land, not land to sea
   if (typeof EXTRA_SEABRIDGE !== 'undefined' && extra == EXTRA_SEABRIDGE) {
     if (tile_has_extra(ptile, extra)) {
       var river_str = "";
@@ -1978,19 +2011,23 @@ function get_tile_river_like_sprite(ptile, extra, prefix, abort_outlets)
         }
       }
     }
-  } else // SEABRIDGE has opposite outlets: i.e., sea to land, not land to sea
-  {
-    if (tile_has_extra(ptile, extra)) {
+  }
+  else {  // Dealing with a normal "river-ish" extra with cardinal connect keys and same type of outlet codes:
+    if (tile_has_extra(ptile, extra)
+        || (clone_extra != false && tile_has_extra(ptile, clone_extra))) {
       var river_str = "";
       for (var i = 0; i < num_cardinal_tileset_dirs; i++) {
         var dir = cardinal_tileset_dirs[i];
         var checktile = mapstep(ptile, dir);
         if (checktile
-            && (tile_has_extra(checktile, extra)
+            && (
+              (tile_has_extra(checktile, extra) /*|| (clone_extra != false && tile_has_extra(checktile, clone_extra))*/ // should be caught by the integrates we put in
+              )
             || (is_ocean_tile(checktile) && abort_outlets !==true)
             || tile_has_extra(checktile, integrate_extras[0])
             || tile_has_extra(checktile, integrate_extras[1])
-            || tile_has_extra(checktile, integrate_extras[2])  )  ) {
+            || tile_has_extra(checktile, integrate_extras[2])
+            || tile_has_extra(checktile, integrate_extras[3]) )  ) {
           river_str = river_str + dir_get_tileset_name(dir) + "1";
         } else {
           river_str = river_str + dir_get_tileset_name(dir) + "0";
@@ -2307,7 +2344,7 @@ function fill_road_rail_sprite_array(ptile, pcity)
         if (draw_road[i]) {
           let rtype = hwy ? "hwy" : "road";
           /* if we make a different graphic for bridges just uncommennt this et voilà!
-          if (tile_has_extra(ptile, EXTRA_RIVER)
+          if (tile_has_river(ptile)
               || (CANAL_active  && tile_has_extra(ptile, EXTRA_CANAL))
               || (WATERWAY_active && tile_has_extra(ptile, EXTRA_WATERWAY))) {
                 rtype = "bridge";
