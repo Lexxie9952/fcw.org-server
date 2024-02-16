@@ -18,6 +18,7 @@
 ***********************************************************************/
 
 var extras = {};
+var extra_synonyms = {};
 
 const EXTRA_NONE = -1;
 const RS_DEFAULT_EXTRA_DISAPPEARANCE = 15;
@@ -72,4 +73,30 @@ function is_extra_removed_by(pextra, rmcause)
 function territory_claiming_extra(pextra)
 {
   return pextra['base'] && pextra['base']['border_sq'] > -1;
+}
+
+/************************************************************************//**
+  Add synonymous extra (one type counts as the other for all logic)
+
+    e.g., extra_add_synonyms(EXTRA_MOUNTAINRIVER, EXTRA_RIVER);
+****************************************************************************/
+function extra_add_synonyms(extra_type_id_1, extra_type_id_2)
+{
+  // TODO: Only if needed, there could be more than one synonym so we would
+  // change the data structure for this if that's the case. And in func below
+  extra_synonyms[extra_type_id_1] = extra_type_id_2;
+  extra_synonyms[extra_type_id_2] = extra_type_id_1;
+}
+
+/************************************************************************//**
+  Evalutates as false if there is no synonym for this extra_type, otherwise
+  returns its synonymous extra
+****************************************************************************/
+function extra_has_synonym(extra_id)
+{
+  if (extra_synonyms[extra_id]) {
+     return extra_synonyms[extra_id];
+  }
+
+  return false;
 }
