@@ -268,4 +268,6 @@ i.e., 6 in 5 (swamp), 5 in 4 (mine), 4 in 3 (angkor wat swamp drain) goes to:
       Ongoing gradual project to decrease all-out pressure on rushing next gov and playing out some parts of Bronze Age.
       Possible slight more balance to equalize Monarchy-first and Republic-first (gives slightest corrective to the latter)
       Get closer to the goal that each gov is superior to next govs until you're "ready" for them.
-94.
+94. Clarification of future questions: Lake-rivers defend at 1x (no defense bonus for river), and you can't fortify on river-lakes.
+95. Well-diggers can't do mountain rivers. (Because they had to be made a different type to accomodate new river mechanics vis-a-vis Big Land units). It's an abuse of well-digger anyway to make all mountain river cities.
+96.

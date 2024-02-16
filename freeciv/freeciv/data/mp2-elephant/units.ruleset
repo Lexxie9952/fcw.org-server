@@ -6853,7 +6853,7 @@ This unit can fix unlucky starts, but has very high upkeep.\
  If you have no water, make a Well-Digger in a city that can\
  support it, create a water source, then disband the unit. \n\
  This unit can dig wells to create irrigation sources. It will cost its home city\
- -2 Food -2 Prod. This unit WILL NOT WORK：• Outside your borders,\
+ -2 Food -2 Prod. This unit WILL NOT WORK：• Outside your borders, • On Mountains,\
  • After Alphabet or Pottery, • After any player discovers Writing,\
  • After it reaches an age of 10 turns.\
  >> Don’t fool around：high upkeep will permanently hinder you. Only make this unit if you\
