@@ -39,13 +39,11 @@ function history_turn_notifications(turn, year)
       end
 
     end
-  end
-
-  if turn > 78 and turn < 85 then
+  --------------------------------
+  elseif turn > 78 and turn < 85 then
     notify.all("Philosophy will no longer award a bonus on turn 85.")
-  end
-
-  if turn == 85 then
+  --------------------------------
+  elseif turn == 85 then
   -- Philosophy no longer gives advances after 1600 AD
     notify.all("<font>Philosophers around the world mourn the execution of Giordano Bruno. Philosophy no longer gives a bonus advance.</font>")
     philosophy_possible = 0
@@ -56,6 +54,7 @@ _("[`events/giordano`]<br>[`fire`] Philosophers hide their books after Giordano 
   return false
 end
 signal.connect("turn_begin", "history_turn_notifications")          --  *************** turn_started deprecated in 3.1, renamed turn_begin
+----------------------------------------------------------------------------------------------------------------
 
 -- Place Ruins at the location of the destroyed city.
 function city_destroyed_callback(city, loser, destroyer)
@@ -65,6 +64,7 @@ function city_destroyed_callback(city, loser, destroyer)
 end
 
 signal.connect("city_destroyed", "city_destroyed_callback")
+----------------------------------------------------------------------------------------------------------------
 
 
 -- Hack: record which players already got Philosophy, to avoid
@@ -76,6 +76,7 @@ signal.connect("city_destroyed", "city_destroyed_callback")
 if philo_players == nil then
   philo_players = ""
 end
+----------------------------------------------------------------------------------------------------------------
 
 -- Record that a player got Philosophy in our hacky string.
 function record_philo(player)
@@ -123,10 +124,9 @@ function tech_researched_handler(tech, player, how)
     end
 
     return
-  end
---------------------------------
+  --------------------------------
   -- Inform of free upgrades to Riflemen and Alpines, upon discovering Combined Arms
-  if id == find.tech_type("Combined Arms").id then
+  elseif id == find.tech_type("Combined Arms").id then
     notify.event(player, NIL, E.TECH_GAIN, ("[`events/combinedarms`]<br><font color=#ffff90><b> Combined Arms tech upgrades weaponry for your foot soldiers.</b></font><br>"))
     for u in player:units_iterate() do
       local uname = u.utype:rule_name()
@@ -162,10 +162,9 @@ function tech_researched_handler(tech, player, how)
     end
 
     return
-  end
---------------------------------
+  --------------------------------
   -- Inform of free Workers II upgrade upon discovering Democracy
-  if id == find.tech_type("Democracy").id then
+  elseif id == find.tech_type("Democracy").id then
     notify.event(player, NIL, E.TECH_GAIN,
     _("[`events/democracy`]<br><font color=#ffff90><b>Discovery of Democracy sparks educational socioeconomic trends.<br>Workers everywhere upgrade to Workers II for free.</b></font>"))
 
@@ -183,17 +182,15 @@ function tech_researched_handler(tech, player, how)
     end
 
     return
-  end
-
--------------------------------- Removed in order to nerf Theocracy
-  -- Inform of Theocracy blueprints upon discovering Theology
-  -- if id == find.tech_type("Theology").id then
-  --   gained = player:give_tech(find.tech_type("Theocracy"), 35, false, "researched")
-  --   notify.event(player, NIL, E.TECH_GAIN,
-  --   _("[`events/theology`]<br><font color=#ffff90><b>Theology shows the way to divine laws and new forms of rule. <br>Priests give you blueprints for Theocracy.</b></font>"))
-  -- end
--------------------------
-  if id == find.tech_type("Philosophy").id and how == "researched" then
+  -------------------------------- Removed in order to nerf Theocracy
+    -- Inform of Theocracy blueprints upon discovering Theology
+    -- elseif id == find.tech_type("Theology").id then
+    --   gained = player:give_tech(find.tech_type("Theocracy"), 35, false, "researched")
+    --   notify.event(player, NIL, E.TECH_GAIN,
+    --   _("[`events/theology`]<br><font color=#ffff90><b>Theology shows the way to divine laws and new forms of rule. <br>Priests give you blueprints for Theocracy.</b></font>"))
+    --
+  -------------------------
+  elseif id == find.tech_type("Philosophy").id and how == "researched" then
 
     -- Check potential teammates.
     for p in players_iterate() do
@@ -226,20 +223,6 @@ function tech_researched_handler(tech, player, how)
         return
       end
 
-      forbidden_tech = find.tech_type("Medicine")
-      if researcher:knows_tech(forbidden_tech) then
-        notify.event(player, NIL, E.TECH_GAIN,
-          _("<font color=#ffdf90><b>The knowledge of Medicine prevents a bonus from Philosophy.</b></font>"))
-        return
-      end
-
-      forbidden_tech = find.tech_type("University")
-      if researcher:knows_tech(forbidden_tech) then
-        notify.event(player, NIL, E.TECH_GAIN,
-          _("<font color=#ffdf90><b>The knowledge of University prevents a bonus from Philosophy.</b></font>"))
-        return
-      end
-
       forbidden_tech = find.tech_type("Invention")
       if researcher:knows_tech(forbidden_tech) then
         notify.event(player, NIL, E.TECH_GAIN,
@@ -254,12 +237,29 @@ function tech_researched_handler(tech, player, how)
         return
       end
 
-      forbidden_tech = find.tech_type("Monotheism")
-      if researcher:knows_tech(forbidden_tech) then
-        notify.event(player, NIL, E.TECH_GAIN,
-          _("<font color=#ffdf90><b>The knowledge of Monotheism prevents a bonus from Philosophy.</b></font>"))
-        return
-      end
+      --Philosophy is a req for Medicine so this isn't possible
+      --forbidden_tech = find.tech_type("Medicine")
+      --if researcher:knows_tech(forbidden_tech) then
+      --  notify.event(player, NIL, E.TECH_GAIN,
+      --    _("<font color=#ffdf90><b>The knowledge of Medicine prevents a bonus from Philosophy.</b></font>"))
+      --  return
+      --end
+
+      --Philosophy is a req for University so this isn't possible
+      --forbidden_tech = find.tech_type("University")
+      --if researcher:knows_tech(forbidden_tech) then
+      --  notify.event(player, NIL, E.TECH_GAIN,
+      --    _("<font color=#ffdf90><b>The knowledge of University prevents a bonus from Philosophy.</b></font>"))
+      --  return
+      --end
+
+      --Philosophy is a req for Monotheism so this isn't possible
+      --forbidden_tech = find.tech_type("Monotheism")
+      --if researcher:knows_tech(forbidden_tech) then
+      --  notify.event(player, NIL, E.TECH_GAIN,
+      --    _("<font color=#ffdf90><b>The knowledge of Monotheism prevents a bonus from Philosophy.</b></font>"))
+      --  return
+      --end
 
     -- Give the player free blueprints
     gained = player:give_tech(nil, 35, false, "researched")
@@ -289,13 +289,19 @@ function tech_researched_handler(tech, player, how)
       _("[`events/philosophy`]<br><font color=#ffff90><b>Philosophers from around the world laugh and give you nothing.</b></font>"),
       gained:name_translation())
     end
-
   end
+  -----
 end
 
 signal.connect("tech_researched", "tech_researched_handler")
+--------------------------------------------------------------------------------------------------------------
 
 function turn_callback(turn, year)
+  -- Late game TC has more lag, get out of callback ASAP
+  if turn > 99 then
+    return
+  end
+
   if turn == 99 then
     notify.event(nil, nil, E.SCRIPT,
 _("<b>Prophets have Visions!</b>\n\
@@ -304,7 +310,15 @@ Evangelists warn the End Times are near.\
 notify.event(nil, nil, E.BEGINNER_HELP,
 _("[`events/endtimes`]<br>Philosophers are concerned that weapons technology is becoming too advanced."))
   --------------------------------------------------------------------------------------------------------------
-elseif turn == 2 then
+  elseif turn == 20 then
+    notify.event(nil, nil, E.SCRIPT,
+_("<b>Ecology Report</b>\n\
+Hunting has reduced wild animal populations and frightened them from human settlements.\
+"))
+notify.event(nil, nil, E.BEGINNER_HELP,
+_("[`events/runningdeer`][`events/oldtribesmen`]<br>Animal populations no longer come near human settlements.<br>Next turn, Elder Tribesmen lose bonus for movement, work, vision, and recycle.<br>"))
+  --------------------------------------------------------------------------------------------------------------
+  elseif turn == 2 then
     notify.event(nil, nil, E.SCRIPT,
 _("<b>Hunt for Food!</b>\n\
 Wild animals are part of the Stone Age diet. Cities can use animal tiles for extra food.\
@@ -313,17 +327,8 @@ Wild animals are part of the Stone Age diet. Cities can use animal tiles for ext
 notify.event(nil, nil, E.BEGINNER_HELP,
 _("[`events/hunt`]<br>Wild animal resources are available for food."))
   --------------------------------------------------------------------------------------------------------------
-elseif turn == 20 then
-    notify.event(nil, nil, E.SCRIPT,
-_("<b>Ecology Report</b>\n\
-Hunting has reduced wild animal populations and frightened them from human settlements.\
-"))
-notify.event(nil, nil, E.BEGINNER_HELP,
-_("[`events/runningdeer`][`events/oldtribesmen`]<br>Animal populations no longer come near human settlements.<br>Next turn, Elder Tribesmen lose bonus for movement, work, vision, and recycle.<br>"))
-  --------------------------------------------------------------------------------------------------------------
-
   -- Replace "River" on "Mountains", with "Mountain River". Because mapgen doesn't obey extra_reqs !!!!
-elseif turn == 1 then
+  elseif turn == 1 then
     for maptile in whole_map_iterate() do
       local terr = maptile.terrain
       local tname = terr:rule_name()
@@ -337,10 +342,11 @@ elseif turn == 1 then
       end
     end
   end
-  --------------------------------------------------------------------------------------------------------------
+  -------------------------------------------
 end
 
 signal.connect('turn_begin', 'turn_callback')
+--------------------------------------------------------------------------------------------------------------
 
 -- Currently this is only used for calculating bounty from hunt kills:
 function unit_lost_callback(unit, loser, reason)
@@ -369,6 +375,8 @@ function unit_lost_callback(unit, loser, reason)
           end
         end
       end
+    else            -- not an Animal
+      return false  -- escape quickly
     end
 
     -- We know for certain an animal was killed and who killed it:
@@ -459,19 +467,14 @@ function unit_lost_callback(unit, loser, reason)
 end
 
 signal.connect("unit_lost", "unit_lost_callback")
+--------------------------------------------------------------------------------------------------------------
 
 function building_built_callback(building, city)
-
-  if building:rule_name() == "Chand Baori" then
-    local owner = city.owner
-    local city_name = city.name
-
-    notify.player(owner, "Chand Baori's deep well gives %s a free river.", city_name)
-    city.tile:create_extra("River", NIL)
-    -- continue processing
+  --Speed up TC by skipping checks for 4 wonders every time a player makes any building at all:
+  if building:is_wonder() == false then
     return false
   end
-
+  --
   if building:rule_name() == "Women's Suffrage​" and first_womens_suffrage < 1 then
     first_womens_suffrage = 1
     notify.event(nil, nil, E.SCRIPT,
@@ -480,10 +483,18 @@ function building_built_callback(building, city)
     "))
     notify.event(nil, nil, E.BEGINNER_HELP,
     _("[`events/womenssuffrage`]<br><font color=#ff20ff>Discontent reported in representative governments who lack Women's Suffrage.</font>"))
-  end
+  -----------------------
+  elseif building:rule_name() == "Chand Baori" then
+    local owner = city.owner
+    local city_name = city.name
 
+    notify.player(owner, "Chand Baori's deep well gives %s a free river.", city_name)
+    city.tile:create_extra("River", NIL)
+    -- continue processing
+    return false
+  -----------------------
   -- Grant Code of Laws when the wonder Code of Hammurabi is built.
-  if building:rule_name() == "Code of Hammurabi" then
+  elseif building:rule_name() == "Code of Hammurabi" then
     local player = city.owner
     local city_name = city.name
     local gained = nil;
@@ -501,15 +512,16 @@ function building_built_callback(building, city)
 end
 
 signal.connect("building_built", "building_built_callback")
-
+----------------------------------------------------------------------------------------------------------------
 -- Mobile SAMs, AEGIS, M.Destroyer, Missile Sub, and Carrier get free ABMs if Space.2 is known
 function unit_built_callback(u, city)
   local owner = u.owner
-  local utype = find.unit_type('Anti-Ballistic Missile')
-  --local vigil = find.action('Vigil')
+  --local vigil = find.activity('Vigil')         Later we can do something like this for set_activity, when LUA gets it, but for now we had to use a hack below
   local req_tech = find.tech_type("Space.2")
-  local created_ABM
   if owner:knows_tech(req_tech) then
+    local utype = find.unit_type('Anti-Ballistic Missile')
+    local created_ABM
+
     if u.utype:rule_name() == "Mobile SAM" or u.utype:rule_name() == "AEGIS Cruiser" or u.utype:rule_name() == "Missile Destroyer" or u.utype:rule_name() == "Missile Submarine" or u.utype:rule_name() == "Carrier" or u.utype:rule_name() == "Light Carrier" then
       created_ABM = edit.create_unit_full(owner, u.tile, utype, 0, city, 1, 1, u)
       if created_ABM then
@@ -520,8 +532,8 @@ function unit_built_callback(u, city)
         --when that day happens, remove the commit from 9 Sept 2022
         return true
       end
-    end
-    if u.utype:rule_name() == "Anti-Ballistic Missile" then
+    elseif u.utype:rule_name() == "Anti-Ballistic Missile" then
+        -- I believe this was a hack to set a unit to vigil from LUA. It doesn't actually change u.facing, but rather, the unit_turn() call checks #ifdef FREECIV_WEB and if true, sets unit to vigl
         edit.unit_turn(u, u:facing())
         return true
     end
@@ -532,6 +544,7 @@ function unit_built_callback(u, city)
 end
 
 signal.connect("unit_built", "unit_built_callback")
+----------------------------------------------------------------------------------------------------------------
 
 function action_started_unit_city_callback(action, actor, city)
 
