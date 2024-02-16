@@ -52,6 +52,9 @@ function tile_has_extra(ptile, extra)
   return ptile['extras'].isSet(extra);
 }
 
+/**************************************************************************
+  Returns the [first] resource type on a tile, if any; otherwise null
+**************************************************************************/
 function tile_resource(tile)
 {
   if (tile != null && tile.extras != null) {
@@ -63,6 +66,29 @@ function tile_resource(tile)
     }
   }
   return null;
+}
+
+/**************************************************************************
+  Returns if the tile has a river
+
+  (not canal unless ruleset hard-coded it to be in extra_synonyms[])
+**************************************************************************/
+function tile_has_river(ptile)
+{
+  // Ideally we'd look for roadflag RF_RIVER, but since we can't,
+  // we look for EXTRA_RIVER and any clone synonyms it may have:
+  if (!ptile) {
+    return false;
+  }
+
+  const extra = EXTRA_RIVER;
+
+  if (ptile['extras'].isSet(extra)) return true;
+
+  let clone = extra_has_synonym(extra);
+  if (clone && ptile['extras'].isSet(clone)) return true;
+
+  return false;
 }
 
 /**************************************************************************
