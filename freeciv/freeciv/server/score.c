@@ -45,14 +45,14 @@ static int get_spaceship_score(const struct player *pplayer);
 
 /**************************************************************************
   Allocates, fills and returns a land area claim map.
-  Call free_landarea_map(&cmap) to free allocated memory.
 **************************************************************************/
 
+/* One tile = USER_AREA_MULT km² */
 #define USER_AREA_MULT 1000
 
 struct claim_map {
   struct {
-    int landarea, settledarea;
+    int landarea, settledarea, pollutedarea;
   } player[MAX_NUM_PLAYER_SLOTS];
 };
 
@@ -157,25 +157,34 @@ static void print_landarea_map(struct claim_map *pcmap, int turn)
 #endif /* LAND_AREA_DEBUG > 2 */
 
 /**********************************************************************//**
-  Count landarea, settled area, and claims map for all players.
+  Tallies territorial area, settled area, and polluted area,
+  for all players' demographics and scores.
+
+  Formerly:
+    static void build_landarea_map(..)
 **************************************************************************/
-static void build_landarea_map(struct claim_map *pcmap)
+static void tally_player_land_scores(struct claim_map *pcmap)
 {
   bv_player *claims = fc_calloc(MAP_INDEX_SIZE, sizeof(*claims));
-
   memset(pcmap, 0, sizeof(*pcmap));
 
-  /* First calculate claims: which tiles are owned by each player. */
-  players_iterate(pplayer) {
-    city_list_iterate(pplayer->cities, pcity) {
-      struct tile *pcenter = city_tile(pcity);
+  const bool tiles_have_owners = (game.info.borders != BORDERS_DISABLED);
 
-      city_tile_iterate(city_map_radius_sq_get(pcity), pcenter, tile1) {
-	BV_SET(claims[tile_index(tile1)], player_index(city_owner(pcity)));
-      } city_tile_iterate_end;
-    } city_list_iterate_end;
-  } players_iterate_end;
+  /* If tiles have owners, we'll use that info directly--no need to waste CPU
+  making claim_map. Otherwise, build the claim_map of tile ownership here: */
+  if (!tiles_have_owners) {
+    players_iterate(pplayer) {
+      city_list_iterate(pplayer->cities, pcity) {
+        struct tile *pcenter = city_tile(pcity);
+        city_tile_iterate(city_map_radius_sq_get(pcity), pcenter, tile1) {
+          BV_SET(claims[tile_index(tile1)], player_index(city_owner(pcity)));
+        } city_tile_iterate_end;
+      } city_list_iterate_end;
+    } players_iterate_end;
+  }
 
+  /* Tally settled area: all domestic land tiles which are:
+     1. worked by a city, OR 2. occupied by a domestic unit. */
   whole_map_iterate(&(wld.map), ptile) {
     struct player *owner = NULL;
     bv_player *pclaim = &claims[tile_index(ptile)];
@@ -189,20 +198,46 @@ static void build_landarea_map(struct claim_map *pcmap)
       owner = city_owner(tile_worked(ptile));
       pcmap->player[player_index(owner)].settledarea++;
     } else if (unit_list_size(ptile->units) > 0) {
-      /* Because of allied stacking these calculations are a bit off. */
-      owner = unit_owner(unit_list_get(ptile->units, 0));
-      if (BV_ISSET(*pclaim, player_index(owner))) {
-	pcmap->player[player_index(owner)].settledarea++;
-      }
+        /* These calcs are approximate due to allied stacking. */
+        owner = unit_owner(unit_list_get(ptile->units, 0));
+        if (tiles_have_owners) {
+          if (tile_owner(ptile) == owner) {
+            pcmap->player[player_index(owner)].settledarea++;
+          }
+        } else if (BV_ISSET(*pclaim, player_index(owner))) {
+          pcmap->player[player_index(owner)].settledarea++;
+        }
     }
 
-    if (BORDERS_DISABLED != game.info.borders) {
-      /* If borders are enabled, use owner information directly from the
-       * map.  Otherwise use the calculations above. */
+    if (tiles_have_owners) {
       owner = tile_owner(ptile);
     }
+
+    /* NB: if borders enabled, ocean tiles get added to 'landarea' */
     if (owner) {
       pcmap->player[player_index(owner)].landarea++;
+
+    /* Every extra in the owner's territory is a source of demographic info we could
+       use. Pollution+Fallout count is more politically important than % odds of city
+       pollution. It exposes who doesn't clean, and thus who impacts climate change!
+       ⎣  Examples of what's possible to add here:
+            ◽️ Tile development (worker improvements),
+            ◽️ Agriculture,
+            ◽️ Fishing,
+            ◽️ Mineral Extraction,
+            ◽️ Transportation infrastructure,     ... and so on ... */
+      extra_type_iterate(pextra) {
+        if (tile_has_extra(ptile, pextra)) {
+          // Check for polluted and fallout tiles:
+          if (is_extra_caused_by(pextra, EC_POLLUTION)
+             || is_extra_caused_by(pextra, EC_FALLOUT)) {
+            pcmap->player[player_index(owner)].pollutedarea++;
+          }
+          // Agriculture:
+          // Mining:
+          // Transportation:
+        }
+      } extra_type_iterate_end;
     }
   } whole_map_iterate_end;
 
@@ -215,143 +250,148 @@ static void build_landarea_map(struct claim_map *pcmap)
 
 /**********************************************************************//**
   Returns the given player's land and settled areas from a claim map.
+  Formerly known as:
+    static void get_player_landarea
 **************************************************************************/
-static void get_player_landarea(struct claim_map *pcmap,
-				struct player *pplayer,
-				int *return_landarea,
-				int *return_settledarea)
+static void set_player_land_scores(struct claim_map *pcmap,
+                                   struct player *pplayer,
+                                   int *return_landarea,
+                                   int *return_settledarea,
+                                   int *return_pollutedarea)
 {
   if (pcmap && pplayer) {
-#if LAND_AREA_DEBUG >= 1
-    printf("%-14s", player_name(pplayer));
-#endif
-    if (return_landarea) {
-      *return_landarea
-	= USER_AREA_MULT * pcmap->player[player_index(pplayer)].landarea;
-#if LAND_AREA_DEBUG >= 1
-      printf(" l=%d", *return_landarea / USER_AREA_MULT);
-#endif
+    if (return_landarea && return_settledarea && return_pollutedarea) {
+      *return_landarea = USER_AREA_MULT * pcmap->player[player_index(pplayer)].landarea;
+      *return_settledarea = USER_AREA_MULT * pcmap->player[player_index(pplayer)].settledarea;
+      *return_pollutedarea = USER_AREA_MULT * pcmap->player[player_index(pplayer)].pollutedarea;
+
+      #if LAND_AREA_DEBUG >= 1
+          printf("%-14s", player_name(pplayer));
+          printf(" l=%d", *return_landarea / USER_AREA_MULT);
+          printf(" s=%d", *return_settledarea / USER_AREA_MULT);
+          //printf(" p=%d", *return_pollutedarea / USER_AREA_MULT);
+          printf("\n");
+      #endif
     }
-    if (return_settledarea) {
-      *return_settledarea
-	= USER_AREA_MULT * pcmap->player[player_index(pplayer)].settledarea;
-#if LAND_AREA_DEBUG >= 1
-      printf(" s=%d", *return_settledarea / USER_AREA_MULT);
-#endif
-    }
-#if LAND_AREA_DEBUG >= 1
-    printf("\n");
-#endif
   }
 }
 
 /**********************************************************************//**
-  Calculates the civilization score for the player.
+  Calculates the civilization score for all players, if parameter is null.
+  Otherwise, it does specified player (which no one used it for.)
+  ---
+  Rev.C: Retain original function prototype and parameter; use NULL player
+  as flag to calculate all players. Maintains compatibility to old call
+  if passed a player--but now it's way better for how/when it actually
+  gets used: it iterates the map n=1 times instead of n=num_players !!
+  ---
+  ⎣ History of this quirky problematic function:
+    Rev.A:  Caller would call this once for each player in an iteration.
+    Each and every time it was called, RE-build a new claim_map, literally
+    iterating over every map tile once for each player. i.e.,
+    (num_players * num_map_tiles) iterations! 😱
+
 **************************************************************************/
-void calc_civ_score(struct player *pplayer)
+void calc_civ_score(struct player *optional_player)
 {
-  const struct research *presearch;
-  //struct city *wonder_city;
-  int landarea = 0, settledarea = 0;
   static struct claim_map cmap;
+  tally_player_land_scores(&cmap);
 
-  pplayer->score.happy = 0;
-  pplayer->score.content = 0;
-  pplayer->score.unhappy = 0;
-  pplayer->score.angry = 0;
-  pplayer->score.wonders = 0;
-  pplayer->score.techs = 0;
-  pplayer->score.landarea = 0;
-  pplayer->score.settledarea = 0;
-  pplayer->score.population = 0;
-  pplayer->score.cities = 0;
-  pplayer->score.units = 0;
-  pplayer->score.pollution = 0;
-  /* These are calculated here if (game.server.city_output_style !=WYSIWYG) */
-  if (!game.server.city_output_style) {
-    specialist_type_iterate(sp) {
-      pplayer->score.specialists[sp] = 0;
-    } specialist_type_iterate_end;
-    pplayer->score.bnp = 0;
-    pplayer->score.techout = 0;
-  }
-  /* This is never calculated after city growth so was commented out here */
-  //pplayer->score.mfg = 0;
-  pplayer->score.literacy = 0;
-  pplayer->score.spaceship = 0;
-  pplayer->score.culture = player_culture(pplayer);
-  pplayer->score.traderoutes = 0;
+  players_iterate_alive(pplayer) { // No need to recalculate for dead players?
+    if (optional_player != NULL && pplayer != optional_player) continue;
 
-  if (is_barbarian(pplayer)) {
-    return;
-  }
-
-  city_list_iterate(pplayer->cities, pcity) {
-    int bonus;
-
-    pplayer->score.happy += pcity->feel[CITIZEN_HAPPY][FEELING_FINAL];
-    pplayer->score.content += pcity->feel[CITIZEN_CONTENT][FEELING_FINAL];
-    pplayer->score.unhappy += pcity->feel[CITIZEN_UNHAPPY][FEELING_FINAL];
-    pplayer->score.angry += pcity->feel[CITIZEN_ANGRY][FEELING_FINAL];
-    pplayer->score.population += city_population(pcity);
-    pplayer->score.cities++;
-    /* 25May2023: Don't add pcity->pollution for next turn, to this turn's pollution score. Used
-       cached version of pollution shields as it stood before Factories etc. were built: */
-    pplayer->score.pollution += pcity->server.cached_pollution;
+    const struct research *presearch;
+    pplayer->score.happy = 0;
+    pplayer->score.content = 0;
+    pplayer->score.unhappy = 0;
+    pplayer->score.angry = 0;
+    pplayer->score.wonders = 0;
+    pplayer->score.techs = 0;
+    pplayer->score.landarea = 0;
+    pplayer->score.settledarea = 0;
+    pplayer->score.population = 0;
+    pplayer->score.cities = 0;
+    pplayer->score.units = 0;
+    pplayer->score.pollution = 0;
+    pplayer->score.polluted = 0;
     /* These are calculated here if (game.server.city_output_style !=WYSIWYG) */
     if (!game.server.city_output_style) {
       specialist_type_iterate(sp) {
-        pplayer->score.specialists[sp] += pcity->specialists[sp];
+        pplayer->score.specialists[sp] = 0;
       } specialist_type_iterate_end;
-      pplayer->score.bnp += pcity->surplus[O_TRADE];
-      pplayer->score.techout += pcity->prod[O_SCIENCE];
+      pplayer->score.bnp = 0;
+      pplayer->score.techout = 0;
+    }
+    /* score.mfg must be done elsewhere for timing accuracy:
+    pplayer->score.mfg = 0; */
+    pplayer->score.literacy = 0;
+    pplayer->score.spaceship = 0;
+    pplayer->score.culture = player_culture(pplayer);
+    pplayer->score.traderoutes = 0;
+
+    if (is_barbarian(pplayer)) {
+      continue;
     }
 
-    trade_routes_iterate(pcity, proute) {
-      pplayer->score.traderoutes += proute->value;
-    } trade_routes_iterate_end;
+    city_list_iterate(pplayer->cities, pcity) {
+      int bonus;
 
-    // This has to be calculated prior to update_city_activity or else gives wildly incorrect results
-    //pplayer->score.mfg += pcity->surplus[O_SHIELD];
+      pplayer->score.happy += pcity->feel[CITIZEN_HAPPY][FEELING_FINAL];
+      pplayer->score.content += pcity->feel[CITIZEN_CONTENT][FEELING_FINAL];
+      pplayer->score.unhappy += pcity->feel[CITIZEN_UNHAPPY][FEELING_FINAL];
+      pplayer->score.angry += pcity->feel[CITIZEN_ANGRY][FEELING_FINAL];
+      pplayer->score.population += city_population(pcity);
+      pplayer->score.cities++;
+      pplayer->score.pollution += pcity->server.cached_pollution;
 
-    bonus = get_final_city_output_bonus(pcity, O_SCIENCE) - 100;
-    bonus = CLIP(0, bonus, 100);
-    pplayer->score.literacy += (city_population(pcity) * bonus) / 100;
-
-    // Wonders moved from below because small wonders deserve a score too.
-    city_built_iterate(pcity, pimprove) {
-      if (is_wonder(pimprove) && player_owns_city(pplayer, pcity)) {
-        pplayer->score.wonders++;
+      /* These are calculated here if (game.server.city_output_style !=WYSIWYG) */
+      if (!game.server.city_output_style) {
+        specialist_type_iterate(sp) {
+          pplayer->score.specialists[sp] += pcity->specialists[sp];
+        } specialist_type_iterate_end;
+        pplayer->score.bnp += pcity->surplus[O_TRADE];
+        pplayer->score.techout += pcity->prod[O_SCIENCE];
       }
-    } city_built_iterate_end;
-  } city_list_iterate_end;
 
-  build_landarea_map(&cmap);
+      trade_routes_iterate(pcity, proute) {
+        pplayer->score.traderoutes += proute->value;
+      } trade_routes_iterate_end;
 
-  get_player_landarea(&cmap, pplayer, &landarea, &settledarea);
-  pplayer->score.landarea = landarea;
-  pplayer->score.settledarea = settledarea;
+      bonus = get_final_city_output_bonus(pcity, O_SCIENCE) - 100;
+      bonus = CLIP(0, bonus, 100);
+      pplayer->score.literacy += (city_population(pcity) * bonus) / 100;
 
-  presearch = research_get(pplayer);
-  advance_index_iterate(A_FIRST, i) {
-    if (research_invention_state(presearch, i) == TECH_KNOWN) {
-      pplayer->score.techs++;
-    }
-  } advance_index_iterate_end;
-  pplayer->score.techs += research_get(pplayer)->future_tech * 5 / 2;
+      /* Get scores from great and small wonders too: */
+      city_built_iterate(pcity, pimprove) {
+        if (is_wonder(pimprove) && player_owns_city(pplayer, pcity)) {
+          pplayer->score.wonders++;
+        }
+      } city_built_iterate_end;
+    } city_list_iterate_end;
 
-  unit_list_iterate(pplayer->units, punit) {
-    if (is_military_unit(punit)) {
-      pplayer->score.units++;
-    }
-  } unit_list_iterate_end
+    /* build_landarea_map(&cmap); used to be called here. 😱 */
 
-  // see commit around 27Feb2021 for what this used to be (Great Wonders only)
-  // this is now handled inside the city_list_iterate above.
+    set_player_land_scores(&cmap, pplayer, &pplayer->score.landarea,
+                           &pplayer->score.settledarea, &pplayer->score.polluted);
 
-  pplayer->score.spaceship = pplayer->spaceship.state;
+    presearch = research_get(pplayer);
+    advance_index_iterate(A_FIRST, i) {
+      if (research_invention_state(presearch, i) == TECH_KNOWN) {
+        pplayer->score.techs++;
+      }
+    } advance_index_iterate_end;
+    pplayer->score.techs += research_get(pplayer)->future_tech * 5 / 2;
 
-  pplayer->score.game = get_civ_score(pplayer);
+    unit_list_iterate(pplayer->units, punit) {
+      if (is_military_unit(punit)) {
+        pplayer->score.units++;
+      }
+    } unit_list_iterate_end
+
+    pplayer->score.spaceship = pplayer->spaceship.state;
+    pplayer->score.game = get_civ_score(pplayer);
+
+  } players_iterate_alive_end;
 }
 
 /**********************************************************************//**

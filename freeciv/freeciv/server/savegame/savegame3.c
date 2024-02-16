@@ -4172,6 +4172,9 @@ static void sg_load_player_main(struct loaddata *loading,
   plr->score.pollution =
     secfile_lookup_int_default(loading->file, 0,
                                "score%d.pollution", plrno);
+  plr->score.polluted =
+    secfile_lookup_int_default(loading->file, 0,
+                               "score%d.polluted", plrno);
   plr->score.literacy =
     secfile_lookup_int_default(loading->file, 0,
                                "score%d.literacy", plrno);
@@ -4520,6 +4523,8 @@ static void sg_save_player_main(struct savedata *saving,
                      "score%d.units", plrno);
   secfile_insert_int(saving->file, plr->score.pollution,
                      "score%d.pollution", plrno);
+  secfile_insert_int(saving->file, plr->score.polluted,
+                     "score%d.polluted", plrno);
   secfile_insert_int(saving->file, plr->score.literacy,
                      "score%d.literacy", plrno);
   secfile_insert_int(saving->file, plr->score.bnp,

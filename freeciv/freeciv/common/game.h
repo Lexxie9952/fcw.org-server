@@ -656,7 +656,7 @@ extern struct world wld;
  * First report is GAME_DEFAULT_SCORETURN + 5
  * Since reports are generated at the end of the turn,
  * first report gets generated at (SCORETURN - 1) */
-#define GAME_DEFAULT_SCORETURN       10
+#define GAME_DEFAULT_SCORETURN       1 ///////////////////////////////////////////////////////////////// fixme debug only
 
 #define GAME_DEFAULT_VICTORY_CONDITIONS (1 << VC_SPACERACE | 1 << VC_ALLIED)
 #define GAME_DEFAULT_END_SPACESHIP   TRUE
@@ -818,7 +818,7 @@ extern struct world wld;
 #define GAME_HARDCODED_DEFAULT_SKILL_LEVEL 3 /* that was 'easy' in old saves */
 #define GAME_OLD_DEFAULT_SKILL_LEVEL 5  /* normal; for oldest save games */
 
-#define GAME_DEFAULT_DEMOGRAPHY      "NASRLPETsMOCUKDqrb"
+#define GAME_DEFAULT_DEMOGRAPHY      "NASRLPETsMOoCUKDqrb"
 #define GAME_DEFAULT_ALLOW_TAKE      "HAhadOo"
 
 #define GAME_DEFAULT_EVENT_CACHE_TURNS    1

@@ -15,7 +15,7 @@
 
 #include "fc_types.h"
 
-void calc_civ_score(struct player *pplayer);
+void calc_civ_score(struct player *optional_player);
 
 int get_civ_score(const struct player *pplayer);
 

@@ -102,7 +102,8 @@ struct player_score {
   int population; 	/* in thousand of citizen */
   int cities;
   int units;
-  int pollution;
+  int pollution;        /* This counts the sum of the CHANCE OF GENERATING pollution in cities */
+  int polluted;         /* This is actually how POLLUTED the player's tiles are! */
   int literacy;
   int bnp;
   int mfg;

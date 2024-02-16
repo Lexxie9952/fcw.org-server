@@ -83,7 +83,31 @@ enum historian_type {
         HISTORIAN_HAPPIEST=3,
         HISTORIAN_POPULOUS=4,
         HISTORIAN_LARGEST=5,
-        HISTORIAN_POLLUTED=6
+        HISTORIAN_POLLUTING=6,
+        HISTORIAN_POLLUTED=7
+};
+/* Whether being #1 is a bad thing: e.g., being a major polluter isn't glorious */
+static const bool historian_best_is_worst[] = {
+/* HISTORIAN_RICHEST   */ false,
+/* HISTORIAN_ADVANCED  */ false,
+/* HISTORIAN_MILITARY  */ false,
+/* HISTORIAN_HAPPIEST  */ false,
+/* HISTORIAN_POPULOUS  */ false,
+/* HISTORIAN_LARGEST   */ false,
+/* HISTORIAN_POLLUTING */ true,
+/* HISTORIAN_POLLUTED  */ true,
+};
+
+/* Avoid reports that aren't relevant in a certain era: */
+static const int historian_min_year[] = {
+/* HISTORIAN_RICHEST   */ -1500,
+/* HISTORIAN_ADVANCED  */ -3000,
+/* HISTORIAN_MILITARY  */ -4000,
+/* HISTORIAN_HAPPIEST  */ -2000,
+/* HISTORIAN_POPULOUS  */ -4000,
+/* HISTORIAN_LARGEST   */ -4000,
+/* HISTORIAN_POLLUTING */  1000,
+/* HISTORIAN_POLLUTED  */  1000,
 };
 
 #define HISTORIAN_FIRST		HISTORIAN_RICHEST
@@ -91,19 +115,31 @@ enum historian_type {
 
 static const char *historian_message[]={
     /* TRANS: year <name> reports ... */
-    N_("%s %s reports on the RICHEST nations in the world."),
+    N_("%s %s reports on the WEALTHIEST nations of the world."),
     /* TRANS: year <name> reports ... */
-    N_("%s %s reports on the most ADVANCED nations in the world."),
+    N_("%s %s reports on the most TECHNOLOGICAL nations of the world."),
     /* TRANS: year <name> reports ... */
     N_("%s %s reports on the most MILITARIZED nations in the world."),
     /* TRANS: year <name> reports ... */
     N_("%s %s reports on the HAPPIEST nations in the world."),
     /* TRANS: year <name> reports ... */
-    N_("%s %s reports on the most POPULOUS nations in the world."),
+    N_("%s %s reports on the most POPULOUS nations of the world."),
     /* TRANS: year <name> reports ... */
-    N_("%s %s reports on the nations with greatest LAND AREA, in the world."),
+    N_("%s %s reports on nations of greatest TERRITORIAL SIZE in the world."),
     /* TRANS: year <name> reports ... */
-    N_("%s %s reports on the most POLLUTING nations in the world.")
+    N_("%s %s reports on nations with the highest POLLUTING cities."),
+    /* TRANS: year <name> reports ... */
+    N_("%s %s ranks CLIMATE IMPACT of the world\'s most POLLUTED nations:")
+};
+
+/* Messages reserved for climate crisis; could be 15x more frequent than other
+   reports so need some variety: */
+static const char *activist_message[]={
+    N_("%s %s demands Climate Crusade against the MOST POLLUTED lands on Earth:"),
+    N_("%s %s calls on the world to punish the MOST POLLUTED nations on Earth:"),
+    N_("%s %s calls for war against the MOST POLLUTED nations in the world:"),
+    N_("%s %s reports on WORST POLLUTED nations causing most CLIMATE CHANGE:"),
+    N_("%s %s demands unity against the nation with worst CLIMATE IMPACT:")
 };
 
 static const char *historian_name[]={
@@ -125,6 +161,33 @@ static const char *historian_name[]={
     N_("Pan Ku")
 };
 
+static const char *climate_influencers[]={
+    /* TRANS: [year] <name> [reports ...] */
+    N_("Albert Gore"),
+    /* TRANS: [year] <name> [reports ...] */
+    N_("Greenpeace"),
+    /* TRANS: [year] <name> [reports ...] */
+    N_("The Green Party"),
+    /* TRANS: [year] <name> [reports ...] */
+    N_("The IPCC"),
+    /* TRANS: [year] <name> [reports ...] */
+    N_("The Sierra Club"),
+    /* TRANS: [year] <name> [reports ...] */
+    N_("John Kerry")
+    /* TRANS: [year] <name> [reports ...] */
+};
+
+static const char *climate_radicals[]={
+    /* TRANS: [year] <name> [reports ...] */
+    N_("Greta Thunberg"),
+    /* TRANS: [year] <name> [reports ...] */
+    N_("The Green Party"),
+    /* TRANS: [year] <name> [reports ...] */
+    N_("Earth Liberation Front"),
+    /* TRANS: [year] <name> [reports ...] */
+    N_("Eco-Alliance")
+};
+
 static const char scorelog_magic[] = "#FREECIV SCORELOG2 ";
 
 struct player_score_entry {
@@ -137,13 +200,16 @@ struct city_score_entry {
   int value;
 };
 
-static int get_population(const struct player *pplayer);
+/* Turned off in favor of pop.density, for now.
+static int get_population(const struct player *pplayer); */
+static int get_pop_density(const struct player *pplayer);
 static int get_landarea(const struct player *pplayer);
 static int get_settledarea(const struct player *pplayer);
 static int get_research(const struct player *pplayer);
 static int get_production(const struct player *pplayer);
 static int get_economics(const struct player *pplayer);
-static int get_pollution(const struct player *pplayer);
+static int get_polluting(const struct player *pplayer);
+static int get_polluted(const struct player *pplayer);
 static int get_mil_service(const struct player *pplayer);
 static int get_culture(const struct player *pplayer);
 static int get_units_built(const struct player *pplayer);
@@ -155,6 +221,7 @@ static int get_specialists(const struct player *pplayer);
 static const char *area_to_text(int value);
 static const char *percent_to_text(int value);
 static const char *production_to_text(int value);
+static const char *pollution_to_text(int value);
 static const char *economics_to_text(int value);
 static const char *science_to_text(int value);
 static const char *mil_service_to_text(int value);
@@ -162,6 +229,7 @@ static const char *pollution_to_text(int value);
 static const char *culture_to_text(int value);
 static const char *units_to_text(int value);
 static const char *citizens_to_text(int value);
+static const char *pop_density_to_text(int value);
 
 #define GOOD_PLAYER(p) ((p)->is_alive && !is_barbarian(p))
 
@@ -175,21 +243,24 @@ static struct dem_row {
   const char *(*to_text) (int);
   bool greater_values_are_better; /* use FALSE when lower is better */
 } rowtable[] = {
-  {'N', N_("<td><img class='v' src='/images/e/peasants.png'></td> <td>Population</td>"),       get_population,   population_to_text,  TRUE },
-  {'A', N_("<td><img class='v' src='/images/e/earth.png'></td> <td>Land Area</td>"),           get_landarea,     area_to_text,        TRUE },
-  {'S', N_("<td><img class='v' src='/images/e/settlers.png'></td> <td>Settled Area</td>"),     get_settledarea,  area_to_text,        TRUE },
-  {'R', N_("<td><img class='v' src='/images/e/science.png'></td> <td>Research Speed</td>"),    get_research,     science_to_text,     TRUE },
-  {'L', N_("<td><img class='v' src='/images/e/library.png'></td> <td>Literacy</td>"),          get_literacy,     percent_to_text,     TRUE },
-  {'P', N_("<td><img class='v' src='/images/e/shield.png'></td> <td>Production</td>"),         get_production,   production_to_text,  TRUE },
-  {'E', N_("<td><img class='v' src='/images/e/coinage.png'></td> <td>Net Trade</td>"),         get_economics,    economics_to_text,   TRUE },
-  {'T', N_("<td><img class='v' src='/images/e/camel.png'></td> <td>Trade Routes</td>"),        get_trade,        economics_to_text,   TRUE },
-  {'s', N_("<td><img class='v' src='/images/e/taxman.png'></td> <td>Specialists</td>"),        get_specialists,  citizens_to_text,    TRUE },
-  {'M', N_("<td><img class='v' src='/images/e/v6.png'></td> <td>Military Service</td>"),       get_mil_service,  mil_service_to_text, TRUE },
-  {'O', N_("<td><img class='v' src='/images/e/pollution.png'></td> <td>Pollution</td>"),       get_pollution,    pollution_to_text,   TRUE },
-  {'C', N_("<td><img class='v' src='/images/e/amphitheater.png'></td> <td>Culture</td>"),      get_culture,      culture_to_text,     TRUE },
-  {'U', N_("<td><img class='v' src='/images/e/hammer.png'></td> <td>Units Built</td>"),        get_units_built,  units_to_text,       TRUE },
-  {'K', N_("<td><img class='v' src='/images/e/war.png'></td> <td>Units Killed</td>"),          get_units_killed, units_to_text,       TRUE },
-  {'D', N_("<td><img class='v' src='/images/e/headstone.png'></td> <td>Units Lost</td>"),      get_units_lost,   units_to_text,       TRUE },
+/* Deprecated as a mostly useless fake stat. It does reveal to experts who has fewer (but larger) cities, while unfairly misleading everyone else.
+  {'N', N_("<td><img class='v' src='/images/e/peasants.png'></td> <td>Population</td>"),       get_population,   population_to_text,  TRUE }, */
+  {'A', N_("<td><img title='{Domestic tiles} ✕ 1000km²' class='v' src='/images/e/earth.png'></td> <td>Territorial Area</td>"),                                 get_landarea,     area_to_text,        TRUE },
+  {'S', N_("<td><img title='{Domestic land tiles utilized by units OR cities} ✕ 1000km²' class='v' src='/images/e/settlers.png'></td> <td>Settled Area</td>"), get_settledarea,  area_to_text,        TRUE },
+  {'N', N_("<td><img title='Population/Land Area' class='v' src='/images/e/peasants.png'></td> <td>Pop. Density</td>"),                                        get_pop_density,  pop_density_to_text, TRUE },
+  {'R', N_("<td><img title='Science generated last turn' class='v' src='/images/e/science.png'></td> <td>Research Speed</td>"),                                get_research,     science_to_text,     TRUE },
+  {'L', N_("<td><img title='Percent of population in cities with Library' class='v' src='/images/e/library.png'></td> <td>Literacy</td>"),                     get_literacy,     percent_to_text,     TRUE },
+  {'P', N_("<td><img title='Shields generated last turn' class='v' src='/images/e/shield.png'></td> <td>Production</td>"),                                     get_production,   production_to_text,  TRUE },
+  {'E', N_("<td><img title='Total trade in all cities' class='v' src='/images/e/coinage.png'></td> <td>Net Trade</td>"),                                       get_economics,    economics_to_text,   TRUE },
+  {'T', N_("<td><img title='Trade from trade routes' class='v' src='/images/e/camel.png'></td> <td>Trade Routes</td>"),                                        get_trade,        economics_to_text,   TRUE },
+  {'s', N_("<td><img title='Scientists and other specialists' class='v' src='/images/e/taxman.png'></td> <td>Specialists</td>"),                               get_specialists,  citizens_to_text,    TRUE },
+  {'M', N_("<td><img title='Military units per capita ✕ life expectancy' class='v' src='/images/e/v6.png'></td> <td>Military Service</td>"),                   get_mil_service,  mil_service_to_text, TRUE },
+  {'O', N_("<td><img title='Each 100K tons generate 1 new polluted tile, on average' class='v' src='/images/e/coalplant.png'></td> <td>Polluting</td>"),       get_polluting,    pollution_to_text,   TRUE },
+  {'o', N_("<td><img title='{Number of polluted tiles} ✕ 1000 km². Impacts climate change.' class='v' src='/images/e/pollution.png'></td> <td>Polluted</td>"), get_polluted,     area_to_text,        TRUE },
+  {'C', N_("<td><img title='Bonuses from some Wonders. Culture only increases score.' class='v' src='/images/e/amphitheater.png'></td> <td>Culture</td>"),     get_culture,      culture_to_text,     TRUE },
+  {'U', N_("<td><img title='Units created in the game' class='v' src='/images/e/hammer.png'></td> <td>Units Built</td>"),                                      get_units_built,  units_to_text,       TRUE },
+  {'K', N_("<td><img title='Units killed by your units in the game' class='v' src='/images/e/war.png'></td> <td>Units Killed</td>"),                           get_units_killed, units_to_text,       TRUE },
+  {'D', N_("<td><img title='Unit casualties suffered' class='v' src='/images/e/headstone.png'></td> <td>Units Lost</td>"),                                     get_units_lost,   units_to_text,       TRUE },
 };
 
 /* Demographics columns. */
@@ -206,36 +277,62 @@ static struct dem_col {
 
 /* prime number of entries makes for better scaling */
 static const char *ranking[] = {
-  /* TRANS: <#>: The <ranking> Poles */
+  /* TRANS: <#>: The <ranking> Poles 1*/
   N_("%2d: The Supreme %s"),
-  /* TRANS: <#>: The <ranking> Poles */
+  /* TRANS: <#>: The <ranking> Poles 2*/
   N_("%2d: The Magnificent %s"),
-  /* TRANS: <#>: The <ranking> Poles */
-  N_("%2d: The Great %s"),
-  /* TRANS: <#>: The <ranking> Poles */
+  /* TRANS: <#>: The <ranking> Poles 3*/
   N_("%2d: The Glorious %s"),
-  /* TRANS: <#>: The <ranking> Poles */
+  /* TRANS: <#>: The <ranking> Poles 4*/
+  N_("%2d: The Great %s"),
+  /* TRANS: <#>: The <ranking> Poles 5*/
   N_("%2d: The Excellent %s"),
-  /* TRANS: <#>: The <ranking> Poles */
-  N_("%2d: The Eminent %s"),
-  /* TRANS: <#>: The <ranking> Poles */
+  /* TRANS: <#>: The <ranking> Poles 6*/
+  N_("%2d: The Remarkable %s"),
+  /* TRANS: <#>: The <ranking> Poles 7*/
   N_("%2d: The Distinguished %s"),
-  /* TRANS: <#>: The <ranking> Poles */
+  /* TRANS: <#>: The <ranking> Poles 9*/
+  N_("%2d: The Impressive %s"),
+  /* TRANS: <#>: The <ranking> Poles 8*/
+  N_("%2d: The Significant %s"),
+  /* TRANS: <#>: The <ranking> Poles 10*/
+  N_("%2d: The Capable %s"),
+  /* TRANS: <#>: The <ranking> Poles 11*/
+  N_("%2d: The Noteworthy %s"),
+  /* TRANS: <#>: The <ranking> Poles 12*/
+  N_("%2d: The Competent %s"),
+  /* TRANS: <#>: The <ranking> Poles 13*/
+  N_("%2d: The Interesting %s"),
+  /* TRANS: <#>: The <ranking> Poles 14*/
+  N_("%2d: The Adequate %s"),
+  /* TRANS: <#>: The <ranking> Poles 15*/
   N_("%2d: The Average %s"),
-  /* TRANS: <#>: The <ranking> Poles */
-  N_("%2d: The Mediocre %s"),
-  /* TRANS: <#>: The <ranking> Poles */
+  /* TRANS: <#>: The <ranking> Poles 16*/
   N_("%2d: The Ordinary %s"),
-  /* TRANS: <#>: The <ranking> Poles */
-  N_("%2d: The Pathetic %s"),
-  /* TRANS: <#>: The <ranking> Poles */
-  N_("%2d: The Useless %s"),
-  /* TRANS: <#>: The <ranking> Poles */
-  N_("%2d: The Valueless %s"),
-  /* TRANS: <#>: The <ranking> Poles */
-  N_("%2d: The Worthless %s"),
-  /* TRANS: <#>: The <ranking> Poles */
-  N_("%2d: The Wretched %s"),
+  /* TRANS: <#>: The <ranking> Poles 17*/
+  N_("%2d: The Mediocre %s"),
+  /* TRANS: <#>: The <ranking> Poles 18*/
+  N_("%2d: The Undistinguished %s"),
+  /* TRANS: <#>: The <ranking> Poles 19*/
+  N_("%2d: The Unimpressive %s"),
+  /* TRANS: <#>: The <ranking> Poles 20*/
+  N_("%2d: The Insignficant %s"),
+  /* TRANS: <#>: The <ranking> Poles 21*/
+  N_("%2d: The Forgettable %s"),
+  /* TRANS: <#>: The <ranking> Poles 22*/
+  N_("%2d: The Lamentable %s"),
+  /* TRANS: <#>: The <ranking> Poles 23*/
+  N_("%2d: The Pitiful %s"),
+  /* TRANS: <#>: The <ranking> Poles 24*/
+  N_("%2d: The Miserable %s"),
+  /* TRANS: <#>: The <ranking> Poles 25*/
+  N_("%2d: The Dismal %s"),
+  /* TRANS: <#>: The <ranking> Poles 26*/
+  N_("%2d: The Tragic %s"),
+  /* TRANS: <#>: The <ranking> Poles 27*/
+  N_("%2d: The Abysmal %s"),
+  /* TRANS: <#>: The <ranking> Poles 28*/
+  N_("%2d: The Wretched %s")
 };
 
 /**********************************************************************//**
@@ -251,9 +348,10 @@ static int secompare(const void *a, const void *b)
   Construct Historian Report
 **************************************************************************/
 static void historian_generic(struct history_report *report,
-                              enum historian_type which_news)
+                              enum historian_type which_news,
+                              bool trigger)
 {
-  int i, j = 0, rank = 0;
+  int i, j = 0, rank = 0, adjective_rank = 0;
   struct player_score_entry size[player_count()];
 
   report->turn = game.info.turn;
@@ -281,8 +379,11 @@ static void historian_generic(struct history_report *report,
         case HISTORIAN_LARGEST:
           size[j].value = get_landarea(pplayer);
           break;
+        case HISTORIAN_POLLUTING:
+          size[j].value = get_polluting(pplayer);
+          break;
         case HISTORIAN_POLLUTED:
-          size[j].value = get_pollution(pplayer);
+          size[j].value = get_polluted(pplayer);
           break;
       }
       size[j].player = pplayer;
@@ -292,6 +393,7 @@ static void historian_generic(struct history_report *report,
 
   qsort(size, j, sizeof(size[0]), secompare);
   report->body[0] = '\0';
+
   for (i = 0; i < j; i++) {
     if (i > 0 && size[i].value < size[i - 1].value) {
       /* since i < j, only top entry reigns Supreme */
@@ -301,15 +403,44 @@ static void historian_generic(struct history_report *report,
       /* clamp to final entry */
       rank = ARRAY_SIZE(ranking) - 1;
     }
+    /* Invert adjective used if being #1 is a bad thing: */
+    adjective_rank = historian_best_is_worst[which_news]
+                   ? (ARRAY_SIZE(ranking)-1) - rank
+                   : rank;
+
     cat_snprintf(report->body, REPORT_BODYSIZE,
-		 _(ranking[rank]),
-		 i + 1,
-		 nation_plural_for_player(size[i].player));
+		             _(ranking[adjective_rank]),
+		             i + 1,
+		            nation_plural_for_player(size[i].player));
     fc_strlcat(report->body, "\n", REPORT_BODYSIZE);
   }
-  fc_snprintf(report->title, REPORT_TITLESIZE, _(historian_message[which_news]),
-              calendar_text(),
-              _(historian_name[fc_rand(ARRAY_SIZE(historian_name))]));
+  /* Just for fun, but also to provoke more in-game politics, add some
+   * "climatista fun" to the end game reports on climate change...*/
+
+  // Earth is past its tolerance and report is on most polluted: give an
+  // activist report from climate radicals:
+  if (trigger && which_news == HISTORIAN_POLLUTED) {
+    fc_snprintf( report->title, REPORT_TITLESIZE,
+                 _(activist_message[fc_rand(ARRAY_SIZE(activist_message))]),
+                 calendar_text(),
+                 _(climate_radicals[fc_rand(ARRAY_SIZE(climate_radicals))]) );
+  }
+  // Earth is past its tolerance but report is only about POLLUTING not
+  // polluted, OR, Earth is not past its tolerance and message is about
+  // polluting or polluted. Give normal history report from one of the
+  // less radical climate influencers:
+  else {
+    if (which_news == HISTORIAN_POLLUTED || which_news == HISTORIAN_POLLUTING) {
+      fc_snprintf( report->title, REPORT_TITLESIZE,
+                  _(historian_message[which_news]),
+                  calendar_text(),
+                  _(climate_influencers[fc_rand(ARRAY_SIZE(climate_influencers))]) );
+    } else { // Message is a normal history report that's not about pollution:
+      fc_snprintf(report->title, REPORT_TITLESIZE, _(historian_message[which_news]),
+                  calendar_text(),
+                  _(historian_name[fc_rand(ARRAY_SIZE(historian_name))]));
+    }
+  }
 }
 
 /**********************************************************************//**
@@ -529,11 +660,20 @@ void report_wonders_of_the_world(struct conn_list *dest)
 **************************************************************************/
 
 /**********************************************************************//**
-  Population of player
-**************************************************************************/
+  Population of player (with no strong correlation to any in-game measure)
+  Uncomment this and comment get_pop_density to flip-flop which to use
+***************************************************************************
 static int get_population(const struct player *pplayer)
 {
   return pplayer->score.population;
+}
+*/
+/**********************************************************************//**
+  A substitute useful metric for "population", shows real game data.
+**************************************************************************/
+static int get_pop_density(const struct player *pplayer)
+{
+  return 100.0 * get_settledarea(pplayer) / get_landarea(pplayer);
 }
 
 /**********************************************************************//**
@@ -615,11 +755,19 @@ static int get_trade(const struct player *pplayer)
 }
 
 /**********************************************************************//**
-  Pollution of player
+  Sum of cities % chance to pollute each turn, of player
 **************************************************************************/
-static int get_pollution(const struct player *pplayer)
+static int get_polluting(const struct player *pplayer)
 {
   return pplayer->score.pollution;
+}
+
+/**********************************************************************//**
+  Sum of polluted tiles inside the national territory, of player
+**************************************************************************/
+static int get_polluted(const struct player *pplayer)
+{
+  return pplayer->score.polluted;
 }
 
 /**********************************************************************//**
@@ -890,7 +1038,17 @@ static const char *value_units(int val, const char *uni)
 static const char *area_to_text(int value)
 {
   /* TRANS: abbreviation of "square miles" */
-  return value_units(value, PL_(" sq. mi.", " sq. mi.", value));
+  return value_units(value, PL_(" km²", " km²", value));
+}
+
+/**********************************************************************//**
+  Helper functions which transform the given value to a string
+  depending on the unit.
+**************************************************************************/
+static const char *pop_density_to_text(int value)
+{
+  /* TRANS: abbreviation of "square miles" */
+  return value_units(value, PL_("  per km²", " per km²", value));
 }
 
 /**********************************************************************//**
@@ -910,7 +1068,16 @@ static const char *production_to_text(int value)
 {
   int clip = MAX(0, value);
   /* TRANS: "M tons" = million tons, so always plural */
-  return value_units(clip, PL_(" M tons", " M tons", clip));
+  return value_units(clip, PL_("M tons", "M tons", clip));
+}
+
+/**********************************************************************//**
+  Construct string containing value followed by unit suitable for
+  pollution stats.
+**************************************************************************/
+static const char *pollution_to_text(int value)
+{
+  return value_units(value, PL_("K ton", "K tons", value));
 }
 
 /**********************************************************************//**
@@ -920,7 +1087,7 @@ static const char *production_to_text(int value)
 static const char *economics_to_text(int value)
 {
   /* TRANS: "M goods" = million goods, so always plural */
-  return value_units(value, PL_(" M goods", " M goods", value));
+  return value_units(value, PL_("M goods", "M goods", value));
 }
 
 /**********************************************************************//**
@@ -939,15 +1106,6 @@ static const char *science_to_text(int value)
 static const char *mil_service_to_text(int value)
 {
   return value_units(value, PL_(" month", " months", value));
-}
-
-/**********************************************************************//**
-  Construct string containing value followed by unit suitable for
-  pollution stats.
-**************************************************************************/
-static const char *pollution_to_text(int value)
-{
-  return value_units(value, PL_(" ton", " tons", value));
 }
 
 /**********************************************************************//**
@@ -1615,39 +1773,107 @@ log_civ_score_disable:
 }
 
 /**********************************************************************//**
-  Produce random history report if it's time for one.
+  Decide on a history report if it's time for one, and return it.
+  Otherwise returns -1 to indicate no report should be given.
 **************************************************************************/
-void make_history_report(int trigger_pollution_report)
+static int get_valid_report_for_era(int trigger_pollution_report)
 {
+  int report_code = -1;
 
-  if (player_count() == 1) {
-    return;
-  }
-
-enum historian_type report_code;
-
+  /* Handle Pollution Crisis: */
   // Never skip a pollution report when levels demand international action:
   if (trigger_pollution_report == 2) {
-    report_code = HISTORIAN_POLLUTED;
+    /* {0} = Sum of city chance to pollute; {1-3}: Most polluted land */
+    report_code = (fc_rand(4) ? HISTORIAN_POLLUTED : HISTORIAN_POLLUTING);
+    return report_code;
   }
   // Every third turn, if there's high pollution, report that:
   else if (trigger_pollution_report == 1
            && game.info.turn % 3 == 0) {
-    report_code = HISTORIAN_POLLUTED;
+    report_code = (fc_rand(2) ? HISTORIAN_POLLUTED : HISTORIAN_POLLUTING);
+    return report_code;
   }
-  // No pollution crisis and not a normal "Historian Report Turn":
-  else if (game.server.scoreturn  > game.info.turn) {
+
+  //----If we got this far there is no pollution crisis-------------------//
+
+  // Abort if it's not a "Historian Report Turn"
+  if (game.server.scoreturn  > game.info.turn) {
+    return -1;  // abort, do nothing.
+  }
+
+  // Default report to give is deterministic to which turn it is:
+  report_code = game.server.scoreturn % (HISTORIAN_LAST + 1);
+  int fail_count = 0;
+  bool invalid_report = false;
+  bool pollution_invalid = false;
+  /* Starting with default report, keep looping until we get a valid report
+   * or die trying: */
+  do {
+    // If the last report failed, pick a new one:
+    if (fail_count) {
+      report_code = fc_rand(HISTORIAN_LAST);
+    }
+    // Reject any report that isn't germaine to the era we're in:
+    if (historian_min_year[report_code] > game.info.year) {
+      invalid_report = true;
+    }
+    // Don't give pollution reports if there's no pollution to talk about
+    else if (report_code == HISTORIAN_POLLUTING
+             || report_code == HISTORIAN_POLLUTED) {
+      if (pollution_invalid) {
+        invalid_report = true; // We've done this rodeo before!
+      } /* First time we've rolled dice on a pollution report. We must follow the
+      rule that historians don't report pollution when there's none to talk about: */
+      else {
+        int total_pollution = 0, polluted_players = 0;
+        players_iterate_alive(pplayer) {
+          if (get_polluted(pplayer)) {
+            polluted_players ++;
+            // A city with 100% pollution counts the same as 1 real polluted tile:
+            total_pollution += get_polluted(pplayer) + get_polluting(pplayer)/100;
+          }
+        } players_iterate_alive_end;
+        if (polluted_players < 2 || total_pollution < 10) {
+          invalid_report = true;    // There's no pollution to talk about, and, once we...
+          pollution_invalid = true; // ...know that, we don't need to ever check that again.
+        } else {
+          invalid_report = false; // Pollution report passed all checks! Send it off!
+        }
+      }
+    }
+    else {
+      invalid_report = false;
+    }
+  } while (invalid_report && ++fail_count < 50);
+
+  if (fail_count < 50) {
+    return report_code;
+  }
+
+  return -1;
+}
+
+/**********************************************************************//**
+  Produce random history report if it's time for one.
+**************************************************************************/
+void make_history_report(int trigger_pollution_report)
+{
+  if (player_count() == 1) {
+    return;
+  }
+
+  enum historian_type report_code = get_valid_report_for_era(trigger_pollution_report);
+
+  // Not time for a report this turn:
+  if (report_code == -1) {
     return;  // abort, do nothing.
-  }
-  // If we get here, it's a normal History Report with no pollution crisis:
-  else {
-    report_code = game.server.scoreturn % (HISTORIAN_LAST + 1);
   }
 
   game.server.scoreturn = (game.info.turn + GAME_DEFAULT_SCORETURN
                            + fc_rand(GAME_DEFAULT_SCORETURN));
 
-  historian_generic(&latest_history_report, report_code);
+  historian_generic(&latest_history_report, report_code,
+                     (trigger_pollution_report==2));
   send_current_history_report(game.est_connections);
 }
 

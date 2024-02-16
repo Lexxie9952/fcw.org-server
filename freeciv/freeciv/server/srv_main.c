@@ -840,7 +840,17 @@ static int update_environmental_upset(enum environment_upset_type type,   // EUT
                                          : "[`anger`] <font color='#ddd'>Scientists recommend keeping impact below Climate Tolerance.</font>")
     );
 
-    trigger_pollution_report = (*accum >= new_level) ? 2 : 1;
+    /* > When over the tolerance limit, climate change is imminent, triggers a code 2, and this forces a 100% chance of getting a
+         world history report on pollution. 33% chance it will be about polluting cities from climate influencers, and 67% it will be
+         about polluted lands from climate_activists.
+       > When not over the climate tolerance limit but an IPCC report was triggered: the chance of sending a 'flag' is:
+            33% if < 75% of climate tolerance limit, or 100% if >=75% of the climate tolerance limit.
+         >> If a flag was sent:
+            33% chance (i.e., 100% chance on every third turn), of force-triggering a history report that is 50%/50% on whether it's
+            on polluted cities or polluted lands, and this report will be from climate_influencers (less radical than activists.) */
+    trigger_pollution_report = (*accum >= new_level)
+                             ? 2
+                             : ((*accum > .75 * new_level || fc_rand(3) == 0) ? 1 : 0);
   }
 
   if (*accum < new_level) {
@@ -1217,11 +1227,8 @@ static void begin_turn(bool is_new_turn)
 
     /* We build scores at the beginning of every turn.  We have to
      * build them at the beginning so that the AI can use the data,
-     * and we are sure to have it when we need it. Unfortunately this
-     * means score.mfg has to be calculated outside calc_civ_score function */
-    players_iterate(pplayer) {
-      calc_civ_score(pplayer);
-    } players_iterate_end;
+     * and we are sure to have it when we need it. */
+    calc_civ_score(NULL); // null = iterate all players
     log_civ_score_now();
 
     /* Retire useless barbarian units */
@@ -3202,10 +3209,7 @@ static void srv_prepare(void)
 static void srv_scores(void)
 {
   /* Recalculate the scores in case of a spaceship victory */
-  players_iterate(pplayer) {
-    calc_civ_score(pplayer);
-  } players_iterate_end;
-
+  calc_civ_score(NULL);
   log_civ_score_now();
 
   report_final_scores(NULL);

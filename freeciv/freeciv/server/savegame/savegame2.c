@@ -3796,7 +3796,7 @@ static bool sg_load_player_unit(struct loaddata *loading,
    * after all factors and calculations stripped it down to simple move_frags:
      TODO: savegame compat for long ints */
   int tmp;
-  sg_warn_ret_val(secfile_lookup_int(loading->file, &tmp, 
+  sg_warn_ret_val(secfile_lookup_int(loading->file, &tmp,
                                      "%s.moves", unitstr), FALSE,
                   "%s", secfile_error());
   punit->moves_left = tmp;
@@ -5194,9 +5194,7 @@ static void sg_load_sanitycheck(struct loaddata *loading)
     if (loading->version < 30) {
       /* For older savegames we have to recalculate the score with current data,
        * instead of using beginning-of-turn saved scores. */
-      players_iterate(pplayer) {
-        calc_civ_score(pplayer);
-      } players_iterate_end;
+      calc_civ_score(NULL);
     }
   }
 
