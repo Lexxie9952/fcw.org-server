@@ -279,7 +279,7 @@ function warcalc_get_defense_bonus(punit)
     const terrain = terrains[ptile['terrain']];
     var terrain_fact = (1+terrain['defense_bonus']/100);
 
-    if (tile_has_extra(ptile, EXTRA_RIVER)) {
+    if (tile_has_river(ptile)) {
       if (client_rules_flag[CRF_MP2_C]) terrain_fact += 0.50; // +0.5 river defense for rivers
       else terrain_fact *= (1+extras[EXTRA_RIVER]['defense_bonus']/100);
     }
