@@ -2042,7 +2042,7 @@ removal_time   = 0
 native_to      = "Land", "LandNoKill", "LandAirSea", "LandRoad", "Big Land"
 hidden_by      = "Railroad", "Maglev"
 flags          = "AutoOnCityCenter", "NativeTile", "Railable"
-bridged_over   = "River"
+bridged_over   = "River", "Canal", "Waterway"
 helptext       = _("\
 Roads allow your land units to move more quickly, and on Flatland terrain,\
  also provide a trade output bonus to the tile. \n\
@@ -2075,7 +2075,7 @@ build_time     = 3
 removal_time   = 0
 native_to      = "Land", "LandNoKill", "LandAirSea", "LandRail", "Big Land" ;NB:by making this non-native we could equalize movement without "Train" unit
 flags          = "AutoOnCityCenter", "NativeTile"
-bridged_over   = "River"
+bridged_over   = "River", "Canal", "Waterway"
 helptext       = _("\
 Railroad tech lets you upgrade Roads to Railroads.\
  Units travel three times faster along Railroads than\
