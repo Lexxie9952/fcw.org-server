@@ -71,14 +71,15 @@ const CRF_EXTRA_WATCHTOWER         = 31;
 const CRF_EXTRA_HIGHWAY            = 32;
 const CRF_GRANULAR_COMBAT_STRENGTH = 33; // How much to divide combat values for granularity. Instead of true/false, contains the actual divisor.
 const CRF_DEBOARD_RESTRICT         = 34; // Any ruleset allowing transports on land tiles shouldn't allow 0-cost deboarding anywhere and everywhere
-const CRF_CLASSIC_PLUS             = 35;
-const CRF_MP2                      = 36; // rules flags for "minimum" mp2 ruleset, for when new feature came in.
-const CRF_MP2_A                    = 37;
-const CRF_MP2_B                    = 38;
-const CRF_MP2_C                    = 39;
-const CRF_MP2_D                    = 40;
-const CRF_MP2_E                    = 41;
-const CRF_LAST                     = 42;
+const CRF_MTN_RIVERS               = 35;
+const CRF_CLASSIC_PLUS             = 36;
+const CRF_MP2                      = 37; // rules flags for "minimum" mp2 ruleset, for when new feature came in.
+const CRF_MP2_A                    = 38;
+const CRF_MP2_B                    = 39;
+const CRF_MP2_C                    = 40;
+const CRF_MP2_D                    = 41;
+const CRF_MP2_E                    = 42;
+const CRF_LAST                     = 43;
 
 var graphic_theme_path;
 

@@ -1135,6 +1135,7 @@ function handle_ruleset_control(packet)
       client_rules_flag[CRF_EXTRA_WATCHTOWER] = true;
       client_rules_flag[CRF_EXTRA_HIGHWAY] = true;
       client_rules_flag[CRF_GRANULAR_COMBAT_STRENGTH] = 10; // all combat scores are 10x to allow for gradations of 0.1
+      client_rules_flag[CRF_MTN_RIVERS] = true;
     case "MP2 Dragoon":
       client_rules_flag[CRF_MP2_D] = true;
     case "MP2 Caravel":
@@ -2541,6 +2542,13 @@ function handle_ruleset_extra(packet)
   if (packet['name'] == "Watchtower") window["EXTRA_WATCHTOWER"] = packet['id'];
   if (packet['rule_name'] == "Depth") window["EXTRA_DEEPDIVE"] = packet['id'];
   if (packet['name'] == "Highway") window["EXTRA_HIGHWAY"] = packet['id'];
+  if (packet['name'] == "Mountain River") {
+    window["EXTRA_MOUNTAINRIVER"] = packet['id'];
+    // When we want two extras to act like they're the same.
+    extra_add_synonyms(EXTRA_MOUNTAINRIVER, EXTRA_RIVER);
+    // Warning, not everywhere is coded to check for synonyms: quite the
+    // opposite, we only add it where it's needed, so be careful!
+  }
 }
 
 /**************************************************************************
