@@ -6,6 +6,7 @@
 <a href="https://freeciv.fandom.com/wiki/Diplomacy.mp2e" target="_blank">Diplomacy</a>
 <a href="https://freeciv.fandom.com/wiki/Cities.mp2e#City_Output_Sequence" target="_blank">City Output Sequence</a>
 <a href="https://freecivweb.fandom.com/wiki/Strategy_Guide" target='_blank'>Multiplayer Strategy Guide</a>
+<a href="https://freecivweb.fandom.com/wiki/Movement_in_MP2-Elephant" target='_blank'>Movement Rules in MP2-Elephant</a>
 <a href="https://freecivweb.fandom.com/wiki/RTS" target='_blank'>RTS</a>
 <u>Charts:</u>
 <a href="https://freecivweb.fandom.com/wiki/Bases.mp2e" target="_blank">Bases</a>
