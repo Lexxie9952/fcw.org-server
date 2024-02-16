@@ -418,7 +418,7 @@ function update_tile_extras(ptile) {
   var extra_resource = (extra_id === null) ? null : extras[extra_id];
   if (extra_resource != null && scene != null && tile_extra_positions[extra_resource['id'] + "." + ptile['index']] == null) {
     if (extra_resource['name'] != "Fish" && extra_resource['name'] != "Whales"
-        && (!tile_has_extra(ptile, EXTRA_RIVER)) /* rendering specials on rivers is not supported yet. */) {
+        && (!tile_has_river(ptile)) /* rendering specials on rivers is not supported yet. */) {
       var key = extra_resource['graphic_str'];
       var extra_mesh = get_extra_mesh(key);
 

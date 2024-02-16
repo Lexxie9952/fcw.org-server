@@ -104,9 +104,9 @@ function map_tiletype_tile_color(map_x, map_y)
 {
   var ptile = map_pos_to_tile(map_x, map_y);
 
-  if (ptile != null && tile_terrain(ptile) != null && !tile_has_extra(ptile, EXTRA_RIVER)) {
+  if (ptile != null && tile_terrain(ptile) != null && !tile_has_river(ptile)) {
       return tile_terrain(ptile)['id'] * 2;
-  } else if (ptile != null && tile_terrain(ptile) != null && tile_has_extra(ptile, EXTRA_RIVER)) {
+  } else if (ptile != null && tile_terrain(ptile) != null && tile_has_river(ptile)) {
     return tile_terrain(ptile)['id'] * 2 + 1;
   }
 
