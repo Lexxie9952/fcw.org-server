@@ -727,7 +727,7 @@ void update_city_activities(struct player *pplayer)
       pplayer->score.mfg += cities[r]->surplus[O_SHIELD];
       /* New factories are built before check_pollution() is called, but we
          mustn't incur pollution from prod. bonuses not yet received: */
-      cities[r]->server.cached_pollution = city_pollution(cities[r], cities[r]->surplus[O_SHIELD]);
+      cities[r]->server.cached_pollution = city_pollution(cities[r], cities[r]->prod[O_SHIELD]);
       /* Specialists are calculated before re-arrange IFF (game.server.city_output_style == WYSIWYG) */
       if (game.server.city_output_style) {
         specialist_type_iterate(sp) {
