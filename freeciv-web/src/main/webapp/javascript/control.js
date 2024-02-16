@@ -1689,7 +1689,7 @@ function update_unit_order_commands()
     const TILE_HAS_RADAR     = RADAR      && tile_has_extra(ptile,EXTRA_RADAR);
     const TILE_HAS_DEEPDIVE  = DEEPDIVE   && tile_has_extra(ptile,EXTRA_DEEPDIVE);
     //-- Misc reqs:
-    const TILE_HAS_RIVER     = tile_has_extra(ptile,EXTRA_RIVER);
+    const TILE_HAS_RIVER     = tile_has_river(ptile);
     const NO_RIVER_BASE      = client_rules_flag[CRF_NO_BASES_ON_RIVERS];
     const TILE_HAS_OVERFORT  = TILE_HAS_FORTRESS || TILE_HAS_NAVALBASE || TILE_HAS_CASTLE || TILE_HAS_BUNKER;
     // TODO: civ2civ3 also needs flag for Airbase conflicts with other bases.
@@ -1806,7 +1806,7 @@ function update_unit_order_commands()
     if ((client_rules_flag[CRF_LEGION_WORK]) && ptype['name'] == "Legion") {
       if (!tile_has_extra(ptile, EXTRA_ROAD)) {
         const domestic = (ptile['owner'] == client.conn.playing.playerno)
-        const has_river = tile_has_extra(ptile, EXTRA_RIVER);
+        const has_river = tile_has_river(ptile);
         const knows_bridges = tech_known('Bridge Building');
         var show = false;
 
@@ -1875,7 +1875,7 @@ function update_unit_order_commands()
             $("#order_seabridge").show();
             unit_actions["road"] = {name: "Sea Bridge"+r_hotkey};
           }
-          else if (rtypes[rd] == (EXTRA_RIVER)) {
+          else if (rtypes[rd] == (EXTRA_RIVER)) {  // Well-diggers can't make EXTRA_MOUNTAIN_RIVER so this check is fine.
             $("#order_well").show();
             unit_actions["road"] = {name: "dig Well"+r_hotkey};
           }
@@ -1891,7 +1891,7 @@ function update_unit_order_commands()
             $("#order_road").show();
             $("#order_railroad").hide();
           }
-          if (!(tile_has_extra(ptile, EXTRA_RIVER) && !tech_known('Bridge Building'))) {
+          if (!(tile_has_river(ptile) && !tech_known('Bridge Building'))) {
             unit_actions["road"] = {name: "Road (R)"};
           }
         }
@@ -1917,7 +1917,7 @@ function update_unit_order_commands()
           $("#order_road").hide();
       } else $("#order_road").prop('title', "Build Road (R)")
 
-      if (tile_has_extra(ptile, EXTRA_RIVER) && !tech_known('Bridge Building')) {
+      if (tile_has_river(ptile) && !tech_known('Bridge Building')) {
         $("#order_road").hide();
       }
       */
@@ -6046,7 +6046,7 @@ function create_connect_packet(packet)
       order['target'] = -1; // Could set a connect_target for advanced commands
 
       if (upgrade_extra == EXTRA_ROAD
-          || upgrade_extra == EXTRA_RIVER
+          || upgrade_extra == EXTRA_RIVER         // NB: non-inclusive of Mountain River EXTRA_MOUNTAINRIVER, but it's fine as we don't use that in 2024
           || upgrade_extra == EXTRA_RAIL
           || (client_rules_flag[CRF_CANALS] && (upgrade_extra == EXTRA_CANAL || upgrade_extra == EXTRA_WATERWAY))
           || (client_rules_flag[CRF_EXTRA_HIGHWAY] && upgrade_extra == EXTRA_HIGHWAY)
@@ -6515,7 +6515,7 @@ function can_build_well(punit, ptile)
   */
 
   return ( (punit != null && ptile != null)
-      &&  (!tile_has_extra(ptile, EXTRA_RIVER))
+      &&  (!tile_has_river(ptile))
       &&  tile_owner(ptile) == punit['owner']
       &&  (unit_types[punit['type']]['name'] == "Well-Digger")
 /*      &&  (is_lowland)  */
@@ -6579,7 +6579,7 @@ function can_build_canal(punit, ptile)
           break;
         }
         // Line below now assuming all rulesets have consistent canal reqs 19.Oct.2022
-        else if (tile_has_extra(tile1, EXTRA_RIVER)
+        else if (tile_has_river(tile1)
                  || tile_has_extra(tile1, EXTRA_CANAL)) { // a WATERWAY source is CAdj.
           water_near = EXTRA_WATERWAY; // this is a double code for TRUE and what kind of canal can be made
           //break; DON'T BREAK BECAUSE OTHERWISE WE WON'T CHECK IF THE PREFERABLE CANAL IS POSSIBLE IN OTHER ADJACENT DIRECTIONS!
@@ -6620,7 +6620,7 @@ function can_build_quay(punit, ptile)
       &&  !tile_has_extra(ptile, EXTRA_QUAY)
       &&  !(typeof EXTRA_QUAY2 !== "undefined" && tile_has_extra(ptile, EXTRA_QUAY2) ) // can't put quay on a quay2 in a city
       &&  (!client_rules_flag[CRF_EXTRA_HIDEOUT] || !tile_has_extra(ptile, EXTRA_))
-      &&  (tile_has_extra(ptile, EXTRA_RIVER)
+      &&  (tile_has_river(ptile)
            || (client_rules_flag[CRF_CANALS]
               && (tile_has_extra(ptile, EXTRA_CANAL) || tile_has_extra(ptile, EXTRA_WATERWAY)))
           )
@@ -6706,7 +6706,7 @@ function can_irrigate(punit, ptile, assume_water_near)
     return false;
 
   // Check central tile for water source:
-  var water_near = tile_has_extra(ptile, EXTRA_RIVER) // irrigation is also a water source but, it's already irrigated! ;)
+  var water_near = tile_has_river(ptile) // irrigation is also a water source but, it's already irrigated! ;)
       || (tile_has_extra(ptile, EXTRA_OASIS) && (client_rules_flag[CRF_OASIS_IRRIGATE]))
       || ((client_rules_flag[CRF_MP2_C]) && tile_has_extra(ptile, EXTRA_CANAL))
       || ((client_rules_flag[CRF_MP2_C]) && tile_has_extra(ptile, EXTRA_WATERWAY))
@@ -6729,7 +6729,7 @@ function can_irrigate(punit, ptile, assume_water_near)
          || terrain_name == "Deep Ocean"
          || (chand_baori && tile_city(cadj_tile))
          || tile_has_extra(cadj_tile, EXTRA_IRRIGATION)
-         || tile_has_extra(cadj_tile, EXTRA_RIVER)
+         || tile_has_river(cadj_tile)
          || (client_rules_flag[CRF_MP2_C] && (tile_has_extra(cadj_tile, EXTRA_CANAL)))
          || (client_rules_flag[CRF_MP2_C] && (tile_has_extra(cadj_tile, EXTRA_WATERWAY)))
          || (tile_has_extra(cadj_tile, EXTRA_OASIS) && (client_rules_flag[CRF_OASIS_IRRIGATE])) ) {
@@ -6919,7 +6919,7 @@ function button_unit_road_type(rtype)
 function get_what_roads_are_legal(punit, ptile, connect_mode)
 {
   var road_list = [];
-  const has_river = tile_has_extra(ptile, EXTRA_RIVER);
+  const has_river = tile_has_river(ptile);
   const knows_bridges = tech_known("Bridge Building");
   const can_rail = tech_known("Railroad");
   const hwy_rules = client_rules_flag[CRF_EXTRA_HIGHWAY];
@@ -6938,7 +6938,7 @@ function get_what_roads_are_legal(punit, ptile, connect_mode)
   }
 
   if (unit_types[punit['type']]['name'] == "Well-Digger") {
-    if (!tile_has_extra(ptile, EXTRA_RIVER)
+    if (!tile_has_river(ptile)
         && !is_ocean_tile(ptile)) {
           road_list.push(extras['River']['id']);
     }
