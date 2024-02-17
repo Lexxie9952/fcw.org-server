@@ -40,13 +40,13 @@ misc_files = [
   "wonders-large.spec",
   "colors.tilespec",
   "buildings-large.spec",
-  "overlays.spec",
+#  "overlays.spec",
   "shields.spec",
   "small.spec",
   "governments.spec",
   "specialists.spec",
-  "space.spec",
-  "editor.spec",
+#  "space.spec",               sadly, not used yet
+#  "editor.spec",
   "techs.spec",
   "treaty.spec",
   "citybar.spec",
@@ -71,7 +71,7 @@ spec_files = {
     "grassland.spec",
     "desert.spec",
     "ocean.spec",
-    "select.spec",
+    "select.spec",        # rotating ring around selected unit
     "terrain2.spec",
     "tiles.spec",
     "units.spec",
@@ -350,7 +350,8 @@ for tileset_id in sorted(files.keys()):
               if (tag2 != None and len(tag2) > 0):
                 coords[tileset_id][tag2] = (curr_x, curr_y, w, h, tileset_inc);
 
-  if not (tileset_id == "amplio2" or tileset_id == "isotrident"):
+#  if not (tileset_id == "amplio2" or tileset_id == "isotrident"):            don't use isotrident
+  if not (tileset_id == "amplio2"):
     increment_tileset_image(tileset_id);
   else:
     for src_key in dither_map.keys():
