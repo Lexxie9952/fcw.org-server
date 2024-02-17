@@ -288,7 +288,7 @@ function show_new_game_message()
 
   } else if (client.conn.playing != null && !game_loaded) {
     var pplayer = client.conn.playing;
-    var player_nation_text = "Welcome, " + capitalize(username) + ", ruler of the " + nations[pplayer['nation']]['adjective'] + " empire.";
+    var player_nation_text = "Welcome, " + capitalize(username) + ", ruler of the " + nations[pplayer['nation']]['adjective'] + " peoples.";
 
     if (is_touch_device()) {
       message = player_nation_text + " Your\n" +
