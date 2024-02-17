@@ -21,8 +21,8 @@ dx = 15
 dy = 20
 
 tiles = { "row", "column", "tag"
-  0,  0, "specialist.elvis_0"
-  0,  1, "specialist.elvis_1"
+;  0,  0, "specialist.elvis_0"              all rulesets now use entertainer, not elvis
+;  0,  1, "specialist.elvis_1"
   0,  0, "specialist.entertainer_0"
   0,  1, "specialist.entertainer_1"
   0,  2, "specialist.scientist_0"
@@ -35,6 +35,6 @@ tiles = { "row", "column", "tag"
   0,  9, "specialist.farmer_1"
   0, 10, "specialist.merchant_0"
   0, 11, "specialist.merchant_1"
-  0, 12, "specialist.police_0"  
-  0, 13, "specialist.police_1"   
+;  0, 12, "specialist.police_0"         not used currently
+;  0, 13, "specialist.police_1"
 }

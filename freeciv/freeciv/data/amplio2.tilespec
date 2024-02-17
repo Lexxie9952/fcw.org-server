@@ -15,7 +15,7 @@ priority = 25
 summary = _("Large isometric tileset.")
 ;description = ""
 
-; TODO: add more overall information fields on tiles, 
+; TODO: add more overall information fields on tiles,
 ; eg, authors, colors, etc.
 
 ; What is the primary ruleset this tileset is meant for.
@@ -128,8 +128,8 @@ tilelabel_offset_y = 15
 ; This is special because it gets freed and reloaded as required:
 main_intro_file    = "misc/intro"
 
-; Below, the graphics spec files; must be somewhere (anywhere) in 
-; the data path. Order may be important for color allocation on 
+; Below, the graphics spec files; must be somewhere (anywhere) in
+; the data path. Order may be important for color allocation on
 ; low-color systems, and if there are any duplicate tags (lattermost
 ; tag is used).
 files =
@@ -141,12 +141,12 @@ files =
   "amplio2/ocean.spec",
   "amplio2/water.spec",
   "amplio2/tiles.spec",
-  "amplio2/upkeep.spec",
+;  "amplio2/upkeep.spec",               ** UNUSED BY FCW
   "amplio2/activities.spec",
   "amplio2/fog.spec",
   "amplio2/canal.spec",
   "misc/small.spec",
-  "misc/events.spec",
+;  "misc/events.spec",                  ** UNUSED BY FCW
   "misc/governments.spec",
   "misc/specialists.spec",
   "amplio2/units.spec",
@@ -158,7 +158,7 @@ files =
   "misc/flags-large.spec",
   "misc/buildings-large.spec",
   "misc/wonders-large.spec",
-  "misc/space.spec",
+;  "misc/space.spec",                   ** UNUSED BY FCW
   "misc/techs.spec",
   "misc/treaty.spec",
   "amplio2/nuke.spec",
@@ -168,12 +168,12 @@ files =
   "amplio2/bases.spec",
   "amplio2/select.spec",
   "amplio2/grid.spec",
-  "misc/cursors.spec",
-  "misc/overlays.spec",
+;  "misc/cursors.spec",                 ** UNUSED BY FCW
+;  "misc/overlays.spec",                ** UNUSED BY FCW
   "misc/citybar.spec",
   "misc/shields-large.spec",
-  "misc/editor.spec",
-  "misc/icons.spec"
+;  "misc/editor.spec",                  ** UNUSED BY FCW
+;  "misc/icons.spec"                    ** UNUSED BY FCW
 
 
 ; Include color definitions
