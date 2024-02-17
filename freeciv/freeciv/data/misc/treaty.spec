@@ -17,8 +17,8 @@ gfx = "misc/treaty"
 
 x_top_left = 0
 y_top_left = 0
-dx = 30
-dy = 30
+dx = 50
+dy = 50
 
 tiles = { "row", "column", "tag"
 
