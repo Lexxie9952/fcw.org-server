@@ -375,7 +375,7 @@ function show_city_dialog(pcity)
 
     for (var u = 0; u < num_specialists; u++) {
       var spec_type_name = specialists[u]['plural_name'];
-      var spec_gfx_key = "specialist." + specialists[u]['rule_name'] + "_0";
+      var spec_gfx_key = specialists[u]['graphic_str'] + "_0";
       var border = (selected_specialist == u) ? specialist_border_select : specialist_border_normal;
       var htitle = (selected_specialist == u) ? ("Unselect "+spec_type_name)
                                               : ("Assign "+spec_type_name);
@@ -857,7 +857,7 @@ function show_city_dialog(pcity)
 
   for (var u = 0; u < pcity['specialists_size']; u++) {
     var spec_type_name = specialists[u]['plural_name'];
-    var spec_gfx_key = "specialist." + specialists[u]['rule_name'] + "_0";
+    var spec_gfx_key = specialists[u]['graphic_str'] + "_0";
     for (var j = 0; j < pcity['specialists'][u]; j++) {
       sprite = get_specialist_image_sprite(spec_gfx_key);
       specialist_html = specialist_html +
@@ -2511,7 +2511,7 @@ function show_city_happy_tab()
       //SPECIALISTS
       for (var u = 0; u < pcity['specialists_size']; u++) {
         var spec_type_name = specialists[u]['plural_name'];
-        var spec_gfx_key = "specialist." + specialists[u]['rule_name'] + "_0";
+        var spec_gfx_key = specialists[u]['graphic_str'] + "_0";
         for (var j = 0; j < pcity['specialists'][u]; j++) {
           sprite = get_specialist_image_sprite(spec_gfx_key);
           citizen_html = citizen_html +
