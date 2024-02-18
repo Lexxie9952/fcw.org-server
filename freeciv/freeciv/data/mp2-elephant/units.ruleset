@@ -688,8 +688,10 @@ flags         = "NeverTired", "Unreachable", "DoesntOccupyTile", "Airliftable"
 ;		                      defended by a city wall (or other city building defense)
 ; "BadCityDefender"     = if attacked while in a city, firepower is set to 1
 ;		                      and firepower of attacker is doubled (the Pearl Harbour rule)
-; "BeachLander"         = won’t lose all its movement when moving from non-native                    UPSTREAM DEPRECATED? still HARDCODED IN FCW'S
-;                         terrain to native terrain even if slow_invasions is on.                    universal_unload AND unload_override MECHANICS
+; "BeachLander"         = Won’t lose all its movement when moving from non-native                    UPSTREAM DEPRECATED? still HARDCODED IN FCW'S universal_unload AND unload_override MECHANICS and HardEntryRInfra/HardExitRInfra
+;                         terrain to native terrain:
+;                               (1) even if slow_invasions is on.
+;                               (2) HardEntryRInfra/HardExitRInfra road types (e.g. rivers)
 ; "BarbarianOnly"       = only barbarians can build this unit
 ; "Shield2Gold"         = Switch from shield upkeep to gold upkeep possible.
 ; "NewCityGamesOnly"    = unit can’t be built on scenarios where founding new cities
@@ -2075,6 +2077,7 @@ Marines are experts at all-terrain warfare. Armed with diverse\
  ▪ Bazooka attack ocean tiles, if not transported. \n\
  ▪ Disembark from non-native tiles with 1 move. \n\
  ▪ De/board,un/load without using moves. \n\
+ ▪ Step on/off enemy Rivers without extra move penalties. \n\
  ▪ Make Forts and Airbases. \n\
 "), _("
 Marines gain greater strength bonuses with veterancy, and more\
