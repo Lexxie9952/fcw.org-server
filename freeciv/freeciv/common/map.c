@@ -781,11 +781,16 @@ bool terrain_surroundings_allow_change(const struct tile *ptile,
   values are used only to get the river bonus correct.
 
   May also be used with punit == NULL, in which case punit
-  tests are not done (for unit-independent results).
+  tests are not done (for unit-independent results),
+  --NB: perilously assuming punit facts don't matter for move cost
+  should be absolutely avoided if possible because it does matter.
+  Except for a rally-point goto pathing request I can't think of any
+  case where it should ever be done without introducing inaccuracy
+  to the pathfinding (or other calc/testing.)
 
-  This already evaluates real_road_move_cost() even better than that
-  function because it has more info, so doesn't need to call that
-  wrapper.
+  This function is the 'gold master truth' calculation for move
+  cost. Calls like real_road_move_cost() are only a 'silver guess'
+  because they lack info.
 ***********************************************************************/
 long tile_move_cost_ptrs(const struct civ_map *nmap,
                         const struct unit *punit,
@@ -794,82 +799,83 @@ long tile_move_cost_ptrs(const struct civ_map *nmap,
                         const struct tile *t1, const struct tile *t2)
 {
   const struct unit_class *pclass = utype_class(punittype);
-  long base_cost, cost;
-  long penalty = 0; // unload penalty from game.info.unload_override
 
-  bool cardinality_checked = FALSE;
-  bool cardinal_move BAD_HEURISTIC_INIT(FALSE);
-  bool ri;
-  bool igter = utype_has_flag(punittype, UTYF_IGTER);
-
-  /* Try to exit early for detectable conditions */
+  // FAST-EXIT #1: non-Land units just use 1 move.
   if (!uclass_has_flag(pclass, UCF_TERRAIN_SPEED)) {
     /* units without UCF_TERRAIN_SPEED have a constant cost. */
     return SINGLE_MOVE;
+  }
 
-  } else if (!is_native_tile_to_class(pclass, t2)) {
+  // ++Accumulated logic:  Terrain_Speed unit
+  // FAST-EXIT #2: non-native embarking (e.g., Land Units stepping out to ship at sea)
+  const bool igter = utype_has_flag(punittype, UTYF_IGTER);
+  if (!is_native_tile_to_class(pclass, t2)) {
     /* Loading to transport or entering port.
      * UTYF_IGTER units get move benefit. */
     return (igter ? MOVE_COST_IGTER : SINGLE_MOVE);
+  }
 
-  } else if (!is_native_tile_to_class(pclass, t1)) {
-    if (game.info.slow_invasions
-        && !(punit && unit_has_type_flag(punit, UTYF_BEACH_LANDER))
+  const bool beachlander = utype_has_flag(punittype, UTYF_BEACH_LANDER);
+  long base_cost, cost;
+  long penalty = 0; // unload penalty from game.info.unload_override
+  bool cardinality_checked = FALSE;
+  bool cardinal_move BAD_HEURISTIC_INIT(FALSE);
+  bool ri;
+
+  // ++Accumulated logic:  Terrain_Speed unit moving to native tile:
+  /* Moving from non-native tile to a native tile (a.k.a. disembarking): */
+  if (!is_native_tile_to_class(pclass, t1)) {
+    // Make anyone but "Marines"(-like) units lose all moves:
+    if (game.info.slow_invasions       // Default setting: Disembark = full moves
+        && !beachlander
         && tile_city(t1) == NULL) {
-      /* If "slowinvasions" option is turned on, units moving from
-       * non-native terrain (from transport) to native terrain lose all
-       * their movement unless they have the BeachLander unit type flag.
-       * e.g. ground units moving from sea to land */
       if (punit != NULL) {
         return punit->moves_left;
       } else {
-        /* Needs to be bigger than SINGLE_MOVE * move_rate * MAX(1, fuel)
-         * for the most mobile unit possible. */
-        return FC_INFINITY;
+        return FC_INFINITY; // must be > (SINGLE_MOVE * move_rate * MAX(1, fuel))
       }
-    } else {
+    } else {                            // (Non-default setting || Marines) == TRUE:
       /* Disembarking from transport or leaving port.
        * UTYF_IGTER units get move benefit. */
         return (igter ? MOVE_COST_IGTER : SINGLE_MOVE);
     }
-  }  /* if (on transport) && !(beach-lander) && !(in a city) && !(uclass_flag terrain_speed)
-      * && (from native tile)...Then:  We have a terrain limited (i.e. land) unit with no
-      * amphibious bonus, unloading from a transport, not in a city, and on a native tile,
-      * and offloading to a native tile. What does the combination of all these things mean?
-      * It means: fair consistency in unload behaviour would make it lose all moves_left.
-      * Note: the litmus test is terrain_speed movement: Terrain_speed becomes synonymous with
-      * "unloading is a terrestrial challenge". What this really targets is: unloading from a boat
-      * which floats on any kind of water should be equal. This patches a double-move flaw in
-      * freeciv that made everyone remove river-ships from their rulesets, and avoid making
-      * units like cargo trucks and trains.
-      *
-      * For compatibility to hypothetic rulesets that intended double-move behavior, this
-      * mechanic is only operative when game.info.universal_unload is enabled. If it's enabled,
-      * then game.info_unload_override can be used to further customise: it sets the move_frags
-      * spent when qualifying units unload from a native tile.
-      */
-  else if (game.info.slow_invasions && game.info.universal_unload
-           && is_native_tile_to_class(pclass, t1)
-           /* check t2 nativity: this behaviour doesn't apply when loading
-            * on non-native transport */
-           && is_native_tile_to_class(pclass, t2)) {
-      if (punit != NULL) { // can't check a null unit
-        if (unit_transported(punit)
-            && tile_city(t1) == NULL
-            && !unit_has_type_flag(punit, UTYF_BEACH_LANDER)
-            && uclass_has_flag(pclass, UCF_TERRAIN_SPEED)) {
+  } // Terrain_Speed unit moving from native tile to native tile:
+  /* 👉🏽 We MIGHT be disembarking native-to-native. If so, universal_unload decides move_cost:
+   * if (transported && !beach-lander && !in_city) in English means:  We have a land unit being
+   * transported on land, who is disembarking from a transport that's not in a city, onto a
+   * land tile. (And cargo has no beachlander disembark bonuses.) If all that's true,
+   * universal_unload will ensure uniform move_cost for ALL disembarks.
 
-            if (game.info.unload_override > 0) {
-              // unload_override = unit uses this amount of moves to unload
-              penalty = game.info.unload_override;
-            } else {
-              // no override = unit uses up all moves by unloading
-              return punit->moves_left;
-            }
+   * The litmus test is UCF terrain_speed: a.k.a., "disembarking is a terrestrial challenge".
+   * Example: unloading from a boat floating in a river or near shore should be equal move
+   * cost. This patches old double-haul-flaw that made river-ships & land-transports anathema.
+
+   (game.info.universal_unload==disabled treats native-to-native disembarks as a simple move) */
+
+  // ++Accumulated logic:  Terrain_Speed unit moving from native tile to native tile:
+  else if (game.info.slow_invasions && game.info.universal_unload
+           && is_native_tile_to_class(pclass, t1)    // <----- FIXME: t1 is native if we got here.
+           && is_native_tile_to_class(pclass, t2)) { // <----- FIXME: so is t2
+    if (punit != NULL) { // can't check a null unit
+      if (unit_transported(punit)
+          && tile_city(t1) == NULL     // disembarking from a city gives a "free deboard"
+          && !beachlander
+          && uclass_has_flag(pclass, UCF_TERRAIN_SPEED)) {
+
+        if (game.info.unload_override > 0) {
+          // When set, overrides universal_unload with a move_cost set in game settings:
+          penalty = game.info.unload_override;
+        }
+        else {
+          // no override = unit uses up all moves by unloading
+          return punit->moves_left;
         }
       }
+    }
   }
 
+  /* ++Accumulated logic:  Terrain_Speed unit moving from native tile to native tile,
+   * who is not disembarking:      (or ruleset treated disembark like a normal move) */
   cost = game.server.move_cost_in_frags ? tile_terrain(t2)->movement_cost
                                         : tile_terrain(t2)->movement_cost * SINGLE_MOVE;
   base_cost = cost;  /* record what we started with */
@@ -894,9 +900,15 @@ long tile_move_cost_ptrs(const struct civ_map *nmap,
         /* A hard_ri flag means this tile uses all moves entering, or exiting, or both.
           (e.g., river crossing); BUT, that's only the case if 'cost' isn't reduced by some
           other lower road cost (including the road-type connecting to its own road-type) */
-        if (hard_ri_exit && src_has_road && cost == base_cost) {
+        if (hard_ri_exit
+            && src_has_road
+            && cost == base_cost
+            && !beachlander) {
           cost = 999 * SINGLE_MOVE;
-        } else if (hard_ri_entry && dest_has_road && cost == base_cost) {
+        } else if (hard_ri_entry
+                   && dest_has_road
+                   && cost == base_cost
+                   && !beachlander) {
           cost = 999 * SINGLE_MOVE;
         }
 
@@ -1051,10 +1063,18 @@ static bool restrict_infra(const struct player *pplayer, const struct tile *t1,
     return FALSE;
   }
 
+  if ((plr1 && !pplayers_in_peace(plr1, pplayer))
+      || (plr2 && !pplayers_in_peace(plr2, pplayer))) {
+    return TRUE;
+  }
+/* FORMER CODE: allows an invader breaking a cease-fire to use your infra
+   as if he's an ally!! 😱
+
   if ((plr1 && pplayers_at_war(plr1, pplayer))
       || (plr2 && pplayers_at_war(plr2, pplayer))) {
     return TRUE;
   }
+*/
 
   return FALSE;
 }
