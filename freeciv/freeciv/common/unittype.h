@@ -305,8 +305,9 @@ struct unit_class {
 /* Only barbarians can build this unit */
 #define SPECENUM_VALUE27 UTYF_BARBARIAN_ONLY
 #define SPECENUM_VALUE27NAME N_("?unitflag:BarbarianOnly")
-/* Unit won't lose all its movement when moving from non-native terrain to
- * native terrain even if slow_invasions is turned on. */
+/* Unit won't lose all its movement when moving from non-native terrain to native
+ * terrain even if slow_invasions is turned on. Nor lose its moves on road_types
+ * marked as RF_HARD_ENTRY_RESTRICT_INFRA or RF_HARD_EXIT_RESTRICT_INFRA */
 #define SPECENUM_VALUE28 UTYF_BEACH_LANDER
 #define SPECENUM_VALUE28NAME N_("?unitflag:BeachLander")
 /* Unit can't be built in scenarios where founding new cities is prevented. */
