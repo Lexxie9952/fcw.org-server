@@ -2813,6 +2813,18 @@ actor_reqs    =
       "DiplRel",       "Foreign",      "Local",   FALSE
     }
 
+[actionenabler_base_buoy]                                   ; Because they're transported which is illegal above, needs this enabler:
+action        = "Build Base"
+actor_reqs    =
+    { "type",          "name",            "range", "present"
+      "UnitFlag",      "CanFortress",     "Local", TRUE
+      "UnitFlag",      "Well-Digger",     "Local", FALSE
+      "UnitState",     "Transported",     "Local", TRUE
+      "TerrainClass",  "Oceanic",         "Local", TRUE
+      "UnitFlag",      "Diplomat",        "Local", FALSE
+      "UnitFlag",      "NonMil",          "Local", TRUE
+    }
+
 [actionenabler_build_hideout_domestic]
 action        = "Build Base"
 actor_reqs    =
