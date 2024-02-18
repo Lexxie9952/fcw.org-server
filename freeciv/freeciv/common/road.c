@@ -93,20 +93,30 @@ int compare_road_move_cost(const struct extra_type *const *p,
 }
 
 /************************************************************************//**
-  real_road_move_cost -- A kind of fictional function because we can't
-  know the move_cost of a road without all contexts. However, this
-  appears to only be called by the AI.
+  real_road_move_cost -- Bad misnomer: A fictional guessy function for
+  move_costs on a road. It lacks vital info that alters move costs:
+
+  It can never properly evaluate:
+    * RestrictedInfra: lacks 2 tiles; lacks a pplayer if no punit
+    * ReverseRestrictInfra - same reason as above.
+    * Hard Entry and Exit RestrictedInfra move costs (same reason)
+    * IntegrateCostUp - lacks two tiles
+    * Vet bonusus - if no punit, no vet info
+    * Passive Movement - if no punit, lacks unit_move_rate() for
+        tired-when-damaged, etc.
+
+  However, this func appears to only be called by the AI and
+  road_integrators_cache_init().
 
   This function can be thought of as a general wrapper for interpreting
-  proad->move_cost for specific contexts that only know about 1 or zero
-  tiles. Or, it is like map.c::tile_move_cost_ptrs() but for the
-  move_cost of a road only evaluated for one tile, with more optional
-  contexts to evaluate it but not necessarily needing all the contexts
-  the former function needs.
+  proad->move_cost for vague disembodied contexts that only know about
+  1 or zero tiles. map.c::tile_move_cost_ptrs() is the only gold master
+  copy for determining the true cost of movement on a tile and that means
+  roads also.
 
-  Since some road types are "PassiveMovement", this returns the real road
-  move cost. punit, punittype, and ptile can be NULL but provide accuracy
-  for real in-game calcs. Returns as a float in case comparisons using
+  Since some road types are "PassiveMovement", this re-interprets Passive Cost
+  to "Real Cost". punit, punittype, and ptile can be NULL but are needed for
+  accurate real in-game calcs. Returns as a float in case comparisons using
   this function split hairs over fractions of a move_frag.
 ****************************************************************************/
 float real_road_move_cost(const struct road_type *proad,
