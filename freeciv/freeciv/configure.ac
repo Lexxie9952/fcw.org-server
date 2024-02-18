@@ -576,7 +576,7 @@ fi
 LIBS="$LIBS $LIBICONV"
 
 dnl I18n support
-ALL_LINGUAS="ar bg cs ca da de el en_GB eo es et fa fi fr ga gd he hu id it ja 
+ALL_LINGUAS="ar bg cs ca da de el en_GB eo es et fa fi fr ga gd he hu id it ja
 ko lt nl nb pl pt pt_BR ro ru sr sv tr uk zh_CN zh_TW"
 PODOMAINS="freeciv nations ruledit"
 
@@ -733,10 +733,10 @@ dnl Check for zlib
 AC_CHECK_LIB([z], [gzgets],
   [AC_DEFINE([FREECIV_HAVE_LIBZ], [1], [zlib is available])
 UTILITY_LIBS="${UTILITY_LIBS} -lz"
-COMMON_LIBS="$COMMON_LIBS -lz"], 
+COMMON_LIBS="$COMMON_LIBS -lz"],
   AC_MSG_ERROR([Could not find zlib library.]))
 
-AC_CHECK_HEADER(zlib.h, , 
+AC_CHECK_HEADER(zlib.h, ,
   AC_MSG_ERROR([zlib found but not zlib.h.
 You may need to install a zlib devel package.]))
 
@@ -1195,7 +1195,7 @@ if test "x$modinst" != "xfound" &&
    test "x$fcmp_gtk3x" != "xyes" &&
    test "x$fcmp_qt" != "xyes" ;then
   AC_MSG_ERROR([Cannot build modpack installer with any gui])
-fi 
+fi
 
 if test "x$modinst" != "xno" && test "x$MINGW" != "xyes" ; then
   dnl Hack to get a run-time icon -- not needed on Windows
@@ -1439,7 +1439,7 @@ dnl (if fcntl or ioctl exists)
 AC_CHECK_FUNC([fcntl],
               [AC_DEFINE([HAVE_FCNTL], [1], [fcntl support])
                AC_DEFINE([NONBLOCKING_SOCKETS], [1], [nonblocking sockets support])],
-               [AC_CHECK_FUNC([ioctl], 
+               [AC_CHECK_FUNC([ioctl],
                              [AC_DEFINE([HAVE_IOCTL], [1], [ioctl support])
                               AC_DEFINE([NONBLOCKING_SOCKETS], [1], [nonblocking sockets support])])])
 
@@ -1475,7 +1475,7 @@ CPPFLAGS="$CPPFLAGS -DDEFAULT_SCENARIO_PATH=\"\\\"$DEFAULT_SCENARIO_PATH\\\"\""
 
 dnl This has to be last library
 if test -n "$WITH_EFENCE"; then
-  AC_CHECK_LIB(efence, malloc, [ 
+  AC_CHECK_LIB(efence, malloc, [
   if test "x$LIBS" = "x"; then
     LIBS = -lefence
   else
@@ -1636,21 +1636,32 @@ if test "x$AR_FLAGS" = "xcru" ; then
   AR_FLAGS="cr"
 fi
 
+#ifdef THESE_FILES_WERE_REMOVED_FROM_BELOW
+#	  data/hex2t/Makefile
+#          data/hexemplio/Makefile
+#          data/alio/Makefile
+#	  data/cimpletoon/Makefile
+#	  data/trident/Makefile
+#	  data/isophex/Makefile
+#	  data/isotrident/Makefile
+#	  data/mp2/Makefile
+# 	  data/mp2-ag/Makefile
+# 	  data/mp2-brava/Makefile
+# 	  data/mp2-caravel/Makefile
+# 	  data/mp2-dragoon/Makefile
+# 	  data/mp2-elephant/Makefile
+#          data/stdmusic/Makefile
+#	  data/icons/Makefile
+#endif
+
+
 AC_CONFIG_FILES([Makefile
           data/Makefile
-	  data/hex2t/Makefile
-          data/hexemplio/Makefile
 	  data/amplio2/Makefile
-          data/alio/Makefile
 	  data/buildings/Makefile
 	  data/flags/Makefile
 	  data/misc/Makefile
-	  data/cimpletoon/Makefile
-	  data/trident/Makefile
-	  data/isophex/Makefile
-	  data/isotrident/Makefile
 	  data/stdsounds/Makefile
-          data/stdmusic/Makefile
           data/override/Makefile
 	  data/default/Makefile
 	  data/classic/Makefile
@@ -1662,7 +1673,6 @@ AC_CONFIG_FILES([Makefile
 	  data/civ2/Makefile
 	  data/webperimental/Makefile
 	  data/mpplus/Makefile
-	  data/mp2/Makefile
 	  data/scenarios/Makefile
 	  data/nation/Makefile
           data/ruledit/Makefile
@@ -1718,7 +1728,6 @@ AC_CONFIG_FILES([Makefile
 	  data/themes/gui-sdl2/Makefile
 	  data/themes/gui-sdl2/human/Makefile
 	  data/wonders/Makefile
-	  data/icons/Makefile
 	  utility/Makefile
 	  dependencies/Makefile
 	  dependencies/lua-5.4/Makefile
