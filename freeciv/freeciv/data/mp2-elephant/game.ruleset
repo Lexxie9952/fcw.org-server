@@ -2886,17 +2886,17 @@ action        = "Build Base"
 actor_reqs    =
     { "type",          "name",            "range", "present"
       "UnitFlag",      "CanFortress",     "Local", TRUE
-      "UnitType",      "Marines",         "Local", FALSE
       "UnitFlag",      "Well-Digger",     "Local", FALSE
+      "UnitState",     "Transported",     "Local", FALSE    ; Prevent forting from ship/heli/cargo plane, in enemy territory
     }
-;Marines are able to build Forts and Airbases
-[actionenabler_marines_can_fort_only]
+[actionenabler_base_domestic]
 action        = "Build Base"
 actor_reqs    =
     { "type",          "name",            "range", "present"
-      "UnitType",      "Marines",         "Local", TRUE
-      "UnitState",     "Transported",     "Local", FALSE
       "UnitFlag",      "CanFortress",     "Local", TRUE
+      "UnitFlag",      "Well-Digger",     "Local", FALSE
+      "UnitState",     "Transported",     "Local", TRUE
+      "DiplRel",       "Foreign",      "Local",   FALSE
     }
 
 [actionenabler_build_hideout_domestic]
@@ -2936,6 +2936,7 @@ action        = "Build Base"
 actor_reqs    =
     { "type",          "name",            "range", "present"
        "UnitState",     "OnLivableTile",   "Local",  TRUE
+       "UnitState",     "Transported",     "Local",  FALSE
 ; Hard contradiction between Tile Claim and Hideout is necessary so that
 ; the actionenabler for one never allows the other to be made. TODO:
 ; req is just a CanHide unit, when actionenabler req can check base type:
@@ -2970,6 +2971,7 @@ action        = "Build Base"
 actor_reqs    =
     { "type",            "name",          "range",   "present"
        "UnitState",      "OnLivableTile", "Local",    TRUE   ; disallow sea claims
+       "UnitState",      "Transported",   "Local",    FALSE
        "UnitFlag",       "CanClaim",      "Local",    TRUE
        "UnitFlag",       "CanHide",       "Local",    FALSE
        "Extra",          "Tile Claim",    "Adjacent", TRUE
