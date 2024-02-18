@@ -50,7 +50,7 @@ and can now be built with veteran levels.
    speed down a river. This is 1/8 of mp. This only effects Land-type units, Sea units aren't TerrainSpeed and are always 1mp wherever
    they go.
    A. Rivers gain hard-entry and hard-exit flags, using all move points to go from non-river tile to river tile and vice versa,
-   simulating to difficulty of crossing an unbridged/unquayed river.
+   simulating to difficulty of crossing an unbridged/unquayed river. Note: Marines and IgTer units are immune to this effect.
    B. Big Land units are native to rivers again. This implies certain differences and has certain reasons:
    ** New PassiveMovement cost of 1/8 effectively makes all units, including motor, get the same
          "virtual boat speed" now.
