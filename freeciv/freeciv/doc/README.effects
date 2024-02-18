@@ -130,8 +130,11 @@ MaxLatitude         Tile, Adjacent, CAdjacent, World
 
 
 MinSize is the minimum size of a city required.
+
 AI is ai player difficulty level.
+
 TerrainClass is either "Land" or "Oceanic".
+
 CityTile is either "Center" (city center) or "Claimed" (owned).
 Requirement is:                         fulfilled when the tile is:
                                      | domestic | unclaimed | foreign
@@ -1008,17 +1011,26 @@ unfulfilled. This applies to both present and not present requirements. The
 ranges Alliance, Team, Player and Local needs a player. The Local range also
 needs the player the first player's relationship is to.
 
-Example: The requirements below are about the relationship to the owner of a
-tile. The table shows in what situations a requirement is fulfilled.
-
-Requirement is                          fulfilled when the tile is
-                                     | domestic | unclaimed | foreign
-"DiplRel", "Foreign", "Local", TRUE  | no       | no        | yes
-"DiplRel", "Foreign", "Local", FALSE | yes      | no        | no
-"CityTile","Claimed", "Local", TRUE  | yes      | no        | yes
-"CityTile","Claimed", "Local", FALSE | no       | yes       | no
+Example: The chart below tells how to get an effect or actionenabler
+         to trigger under the 8 possibilities you may want for tiles
+         belong to domestic player, unclaimed land, and or foreign
+         player. If it can be achieved with a single REQ, that is
+         shown on the left. If it requires multiple enablers or effects,
+         explanation is on far right column.
+The table shows in what situations a requirement is fulfilled:
 ------------------------------------------------------------------------
-But I want "not in foreign territory"| yes      | yes       | no  << requires OR-ING 2 enablers/effects, one for claimed=false, one for foreign=false
+Requirement is........................⬇ fulfilled when the tile is: ⬇
+                                     | domestic | unclaimed | foreign  | Notes:
+                                     | no       | no        | no       | ⛔️ DEFECTIVE ⛔️ Never gets fulfilled. (Effect/Enabler is wasting CPU, memory, and disk space.)
+"DiplRel", "Foreign", "Local", TRUE  | no       | no        | yes      | Tile in foreign territory.
+"CityTile","Claimed", "Local", FALSE | no       | yes       | no       | Tile in unclaimed territory
+                                     | no       | yes       | yes      | Unclaimed OR Foreign = !Domestic. You need to stack 2 effects/enablers: 1) "Claimed",FALSE; 2) "Foreign", TRUE
+"DiplRel", "Foreign", "Local", FALSE | yes      | no        | no       | Tile in domestic territory.
+"CityTile","Claimed", "Local", TRUE  | yes      | no        | yes      | Tile in a territory = Not unclaimed.
+                                     | yes      | yes       | no       | Domestic OR Unclaimed = !Foreign_Claimed_Territory: Stack 2 effects/enablers: 1) "Foreign", FALSE; 2) "Claimed", TRUE
+                                     | yes      | yes       | yes      | No DiplRel or CityTile reqs required: always evaluates true.
+------------------------------------------------------------------------
+
 
 
 The MaxUnitsOnTile requirement type
