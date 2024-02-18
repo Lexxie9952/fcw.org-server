@@ -656,7 +656,8 @@ extern struct world wld;
  * First report is GAME_DEFAULT_SCORETURN + 5
  * Since reports are generated at the end of the turn,
  * first report gets generated at (SCORETURN - 1) */
-#define GAME_DEFAULT_SCORETURN       1 ///////////////////////////////////////////////////////////////// fixme debug only
+#define GAME_DEFAULT_SCORETURN       9 // =10:15, 30, 45, 60, 75, 90, 105 (7)   =9:14, 28, 42, 56, 70, 84, 98, 112
+
 
 #define GAME_DEFAULT_VICTORY_CONDITIONS (1 << VC_SPACERACE | 1 << VC_ALLIED)
 #define GAME_DEFAULT_END_SPACESHIP   TRUE
