@@ -412,6 +412,13 @@ static long combined_land_sea_move(const struct tile *src_tile,
     /* Land-to-Land */
     move_cost = map_move_cost(&(wld.map), param->owner, param->utype,
                               src_tile, tgt_tile);
+
+/* 95% likely to work better but not going to test it now. This would pick
+   up accurate results for injured units' move rates and especially on
+   PASSIVE road types:
+
+    move_cost = map_move_cost_umr(&(wld.map), param->owner, param->utype,
+                              src_tile, tgt_tile, param->move_rate);      */
   }
 
   return move_cost;

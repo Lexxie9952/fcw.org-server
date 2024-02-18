@@ -361,7 +361,7 @@ static long normal_move(const struct tile *src,
                        const struct pf_parameter *param)
 {
   if (pf_move_possible(src, src_scope, dst, dst_scope, param)) {
-    return map_move_cost(param->map, param->owner, param->utype, src, dst);
+    return map_move_cost_umr(param->map, param->owner, param->utype, src, dst, param->move_rate);
   }
   return PF_IMPOSSIBLE_MC;
 }
@@ -380,7 +380,7 @@ static long overlap_move(const struct tile *src,
                         const struct pf_parameter *param)
 {
   if (pf_move_possible(src, src_scope, dst, dst_scope, param)) {
-    return map_move_cost(param->map, param->owner, param->utype, src, dst);
+    return map_move_cost_umr(param->map, param->owner, param->utype, src, dst, param->move_rate);
   } else if (!(PF_MS_NATIVE & dst_scope)) {
     /* This should always be the last tile reached. */
     return param->move_rate;
@@ -813,7 +813,7 @@ pft_fill_unit_default_parameter(struct pf_parameter *parameter,
 
   parameter->start_tile = unit_tile(punit);
   parameter->moves_left_initially = punit->moves_left;
-  parameter->move_rate = unit_move_rate(punit);
+  parameter->move_rate = unit_move_rate(punit);                       //Wow this is great info, too bad we don't actually use it when calling move_cost
   if (utype_fuel(ptype)) {
     parameter->fuel_left_initially = punit->fuel;
     parameter->fuel = utype_fuel(ptype);

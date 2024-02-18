@@ -280,7 +280,16 @@ long tile_move_cost_ptrs(const struct civ_map *nmap,
                         const struct unit *punit,
                         const struct unit_type *punittype,
                         const struct player *pplayer,
-                        const struct tile *t1, const struct tile *t2);
+                        const struct tile *t1, const struct tile *t2,
+                        const long umr_code);
+
+/* tile_move_cost_ptrs() can't assume that a NULL punit ptr means
+ * its caller doesn't know the real punit's unit_move_rate: Because
+ * pathfinding sends a NULL punit IN SPITE OF pathing for a known
+ * real unit! Solution: MC_IGNORE flag-codes the last param of
+ * tile_move_cost_ptrs() to be ignored, otherwise last param uses
+ * itself as known unit_move_rate of real but unpassed punit! 😓  */
+#define MC_IGNORE    -999
 
 /***************************************************************
   The cost to move punit from where it is to tile x,y.
@@ -292,11 +301,15 @@ static inline long map_move_cost_unit(const struct civ_map *nmap,
 {
   return tile_move_cost_ptrs(nmap, punit,
                              unit_type_get(punit), unit_owner(punit),
-                             unit_tile(punit), ptile);
+                             unit_tile(punit), ptile, MC_IGNORE);
 }
 
 /***************************************************************
-  Move cost between two tiles
+  Move cost between two tiles for a utype with no real unit.
+  When, you ask, should that ever be the case? Perhaps a rally
+  point. But in all other cases someone was negligent and
+  didn't keep all possible punit infos to get a better result
+  instead of using this little wretched function.
 ***************************************************************/
 static inline long map_move_cost(const struct civ_map *nmap,
                                 const struct player *pplayer,
@@ -305,8 +318,26 @@ static inline long map_move_cost(const struct civ_map *nmap,
                                 const struct tile *dst_tile)
 {
   return tile_move_cost_ptrs(nmap, NULL, punittype, pplayer,
-                             src_tile, dst_tile);
+                             src_tile, dst_tile, MC_IGNORE);
 }
+
+/***************************************************************
+  Same as above but without making our virtual unit lose
+  important information needed for accurate calculation of
+  move costs between two tiles; like, for instance, the
+  unit's move_rate! '😱' D'OH !
+***************************************************************/
+static inline long map_move_cost_umr(const struct civ_map *nmap,
+                                     const struct player *pplayer,
+                                     const struct unit_type *punittype,
+                                     const struct tile *src_tile,
+                                     const struct tile *dst_tile,
+                                     const long umr)
+{
+  return tile_move_cost_ptrs(nmap, NULL, punittype, pplayer,
+                             src_tile, dst_tile, umr);
+}
+
 
 bool is_safe_ocean(const struct civ_map *nmap, const struct tile *ptile);
 bv_extras get_tile_infrastructure_set(const struct tile *ptile,

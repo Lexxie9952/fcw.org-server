@@ -793,10 +793,11 @@ bool terrain_surroundings_allow_change(const struct tile *ptile,
   because they lack info.
 ***********************************************************************/
 long tile_move_cost_ptrs(const struct civ_map *nmap,
-                        const struct unit *punit,
-                        const struct unit_type *punittype,
-                        const struct player *pplayer,
-                        const struct tile *t1, const struct tile *t2)
+                         const struct unit *punit,
+                         const struct unit_type *punittype,
+                         const struct player *pplayer,
+                         const struct tile *t1, const struct tile *t2,
+                         const long umr_code)
 {
   const struct unit_class *pclass = utype_class(punittype);
 
@@ -925,9 +926,9 @@ long tile_move_cost_ptrs(const struct civ_map *nmap,
   }
   if (rri_active) goto finish; /* skip extra processing and revoke IGTER */
 
-  long umr = (punit != NULL)
-          ? unit_move_rate(punit)  // includes bonuses/hp/etc.
-          : utype_move_rate(punittype, NULL, pplayer, 0, punittype->hp, NULL);
+  long umr = (umr_code == MC_IGNORE)
+           ? ((punit != NULL) ? unit_move_rate(punit) : utype_move_rate(punittype, NULL, pplayer, 0, punittype->hp, NULL))
+           : umr_code;
 
   extra_type_list_iterate(pclass->cache.bonus_roads, pextra) {
     struct road_type *proad = extra_road_get(pextra);
