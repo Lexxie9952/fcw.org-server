@@ -813,7 +813,9 @@ pft_fill_unit_default_parameter(struct pf_parameter *parameter,
 
   parameter->start_tile = unit_tile(punit);
   parameter->moves_left_initially = punit->moves_left;
-  parameter->move_rate = unit_move_rate(punit);                       //Wow this is great info, too bad we don't actually use it when calling move_cost
+  /* Wow this is great info, and now we actually USE it
+     when figuring out move_cost !! 👏🏼 */
+  parameter->move_rate = unit_move_rate(punit);
   if (utype_fuel(ptype)) {
     parameter->fuel_left_initially = punit->fuel;
     parameter->fuel = utype_fuel(ptype);
