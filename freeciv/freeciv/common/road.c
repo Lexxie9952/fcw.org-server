@@ -93,6 +93,10 @@ int compare_road_move_cost(const struct extra_type *const *p,
 }
 
 /************************************************************************//**
+  real_road_move_cost -- A kind of fictional function because we can't
+  know the move_cost of a road without all contexts. However, this
+  appears to only be called by the AI.
+
   This function can be thought of as a general wrapper for interpreting
   proad->move_cost for specific contexts that only know about 1 or zero
   tiles. Or, it is like map.c::tile_move_cost_ptrs() but for the
@@ -112,6 +116,11 @@ float real_road_move_cost(const struct road_type *proad,
 {
   int igter = 0; /* default to 0==false */
 
+  /* if (punit) then we have enough info to construct the real data from
+     tile_move_cost_ptrs however that is a more expensive function and
+     we want AI to be cheap. TODO / FIXME: we could contextually call the
+     better func when we see critical roadflags in a certain context. */
+
   if (punittype) {
     if (!uclass_has_flag(utype_class(punittype), UCF_TERRAIN_SPEED))
       return SINGLE_MOVE;
@@ -122,11 +131,14 @@ float real_road_move_cost(const struct road_type *proad,
 /* Process normal road-types first then leave: */
   if (!road_has_flag(proad, RF_PASSIVE_MOVEMENT)) {
     /* if IGTER unit, return the lesser of igter_cost or proad->move_cost */
-    return igter ? (igter < proad->move_cost ? igter : proad->move_cost) : proad->move_cost;
+    if (igter) {
+      return MIN(igter, proad->move_cost);
+    }
+    return proad->move_cost;
   }
 
 /* If we got here, we have the wonderful case of a road with PASSIVE
-    move_cost. This is more like a distance value: a passve road with move_cost==6
+    move_cost. This is more like a distance value: a passive road with move_cost==6
     means a unit using the road can travel 6 tiles down these roads before
     expending all move points. (i.e. it uses 1/6 of its total moves on the road.) */
 
