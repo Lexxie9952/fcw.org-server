@@ -2239,8 +2239,7 @@ reqs           =
 build_time = 2
 removal_time = 0
 flags          = "IsRiver", "NativeTile", "Quayable", "IrrigationSource", "WaterwaySource"
-native_to      = "Land", "LandNoKill", "LandAirSea", "Trireme", "RiverShip",
-                 "Big Land" ; see below:
+native_to      = "Land", "LandNoKill", "LandAirSea", "Trireme", "RiverShip", "Big Land" ; see below:
 ; NOTE: Big Land's non-native penalty is reduced from MP2D. Here's why:
 ; Passive move cost: no more supertanks moving 18 tiles on rivers.
 ; Gets the 1.5x defense bonus on rivers, preventing over-nerfing.
@@ -3266,13 +3265,14 @@ flags          = "NoAggressive"
 ;                           types provide transport at a lower cost. This helps, for example,
 ;                           in simulating the move cost of crossing a foreign river without
 ;                           any friendly-river-infra present to assist that operation.
+;                           Does not affect IgTer or UTYF_BEACH_LANDER units.
 ;   - "HardEntryRInfra"   = When entering this road-type from a tile which has no integrating
 ;                           road-type, a hard restrictinfra penalty is assessed which spends
 ;                           all remaining move points. Penalty not assessed if other road
 ;                           types provide transport at a lower cost. This helps, for example,
 ;                           in simulating the move cost of crossing a foreign river without
 ;                           any friendly-river-infra present to assist that operation.
-
+;                           Does not affect IgTer or UTYF_BEACH_LANDER units.
 ; */ <— avoid gettext warnings
 
 [road_road]
