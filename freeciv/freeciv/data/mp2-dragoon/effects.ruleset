@@ -3986,7 +3986,6 @@ reqs	=
       "Building", "Police Station",   "City"
       "Gov",      "Democracy",        "Player" ;Action_Resist_Pct uses target player.
       "Action",   "Investigate City", "Local"
-      "UnitType", "Satellite",        "Local", FALSE
     }
 
 [effect_port_facility]
@@ -7443,7 +7442,14 @@ reqs	=
       "Action", "Investigate City", "Local", TRUE
       "UnitType", "Satellite", "Local", TRUE
     }
-
+[effect_satellite_evades_discovery_and_diplomatic_combat]
+type	= "Combat_Rounds"
+value	= 1000                      ;ensure 100%
+reqs	=
+    { "type", "name", "range", "present"
+      "Action", "Investigate City", "Local", TRUE
+      "UnitType", "Satellite", "Local", TRUE
+    }
 [effect_reduced_chance_steal_maps_escape]
 type	= "Action_Odds_Pct"
 value	= -32                      ;80 minus 31%*80 = 55%
