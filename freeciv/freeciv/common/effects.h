@@ -234,6 +234,8 @@ extern "C" {
 #define SPECENUM_VALUE85NAME "Max_Trade_Routes"
 #define SPECENUM_VALUE86 EFT_GOV_CENTER
 #define SPECENUM_VALUE86NAME "Gov_Center"
+/* Rounds applies to attacker; also used for evasion of discovery
+   and diplomatic combat by agents doing Investigate City: */
 #define SPECENUM_VALUE87 EFT_COMBAT_ROUNDS
 #define SPECENUM_VALUE87NAME "Combat_Rounds"
 #define SPECENUM_VALUE88 EFT_IMPR_BUY_COST_PCT

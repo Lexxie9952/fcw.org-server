@@ -318,14 +318,32 @@ Coinage_Bonus_Pm
     when the req vector is actively true).
 
 Combat_Rounds
-    Maximum number of rounds combat lasts. Unit is the attacker. Zero and
-    negative values mean that combat continues until either side dies.
-    Local tile reqs resolve to the tile the battle is fought on; that is,
-    the defender's tile. Thus a ruleset can reduce combat_rounds for
-    contexts like non-native attacks, attacking vs. mountains, etc.
-    If this and Defender_Combat_Rounds are both in effect, the stronger
-    effect takes precedence (i.e. the one with the least rounds.)
-    Also see: Defender_Combat_Rounds
+    ** For Attacking Military units:
+    -------------------------------
+        Maximum number of rounds combat lasts. Unit is the attacker. Zero and
+        negative values mean that combat continues until either side dies.
+        Local tile reqs resolve to the tile the battle is fought on; that is,
+        the defender's tile. Thus a ruleset can reduce combat_rounds for
+        contexts like non-native attacks, attacking vs. mountains, etc.
+        If this and Defender_Combat_Rounds are both in effect, the stronger
+        effect takes precedence (i.e. the one with the least rounds.)
+     👉🏽 See also: Defender_Combat_Rounds
+    ** For Agents doing ACTION_INVESTIGATE_CITY (see "README.actions"):
+    -------------------------------------------
+        Amount to add to (or subtract from) the base odds of avoiding discovery
+        while doing ACTION_INVESTIGATE_CITY. Base odds are game.server.diplchance.
+        Care should be taken to craft the effect to apply to the scope of this
+        action. Below is an example for a satellite that can never be discovered
+        or engaged in diplomatic combat by defending spies on the ground:
+
+            [effect_satellite_evades_discovery_and_diplomatic_combat]
+            type	= "Combat_Rounds"
+            value	= 1000 ;ensure 100% success at avoiding discovery and diplomatic combat
+            reqs	=
+                { "type",     "name",             "range", "present"
+                "Action",   "Investigate City", "Local", TRUE
+                "UnitType", "Satellite",        "Local", TRUE
+                }
 
 Conquest_Tech_Pct
     Percent chance that a player conquering a city learns a tech from the

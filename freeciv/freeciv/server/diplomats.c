@@ -316,8 +316,8 @@ bool spy_spread_plague(struct player *act_player, struct unit *act_unit,
 
   - It costs some minimal movement to investigate a city.
 
-  - The actor unit always survives the investigation unless the action
-    being performed is configured to always consume the actor unit.
+  - Oversimplified rules hard-coded to legacy civ rulesets replaced.
+    Read notes in comments below for more info.
 
   Returns TRUE iff action could be done, FALSE if it couldn't. Even if
   this returns TRUE, unit may have died during the action.
@@ -350,25 +350,50 @@ bool diplomat_investigate(struct player *pplayer, struct unit *pdiplomat,
     return FALSE;
   }
 
-  /* FCW: Investigate City has:
-     1. diplchance odds of avoiding diplomatic battle even if enemy spy is present,
-     2. then [possibly] diplomatic battle,
-     3. then diplchance + EFT_Action_Odds_Pct for the action to succeed.
-     Allows subtle ruleset control instead of ridiculously hard-coded 100% odds.
+  /* FCW: "Investigate City" is reworked. It allows rulesets to control all 3 phases
+     and odds for {discovery, combat, investigation}. Legacy or new behaviours can
+     be achieved through this dynamic.
+
+     1. (diplchance+adjustment_effect †) Odds to avoiding (discovery, diplomatic battle)
+        a.  if odds fail:  victim is informed they discovered someone spying on them
+          i. if enemy diplo present, diplomatic battle takes place
+        b. if odds succeed, victim is uninformed and loses chance for a diplomatic contest
+
+     2. if still alive, investigator now has (diplchance + EFT_Action_Odds_Pct) for
+        investigate city action to succeed.
+
+        † Operation success (2) is controlled by EFT_Action_Odds_Pct. To achieve
+          separate control over Discovery/Combat Avoidance, another EFT must be
+          tapped. EFT_Combat_Rounds is selected for this since it suggests
+          evasion of lethal combat, applies to diplomatic (NonMil "non-attacker")
+          so can't contaminate other mechanics, and can be easily slapped and
+          layered over the actor units.
+
+          We could make another EFT and maybe will (TODO?), but there is an
+          argument not to unnecessarily overextend list of EFTs when other EFT's
+          can get dual duties; this also allows fcw rulesets to be more quasi-compatible
+          or portable to other servers.
   **********************************************************************************/
   // Investigating allied cities can't trigger any of the above:
-  if (!pplayers_allied(city_owner(pcity), pplayer)) {
+  if (!pplayers_allied(cplayer, pplayer)) {
+    /* Odds of discovery avoidance (and diplomatic combat avoidance): */
+    int odds = game.server.diplchance
+             + get_target_bonus_effects(NULL, pplayer, cplayer,
+                                        pcity, NULL, NULL,
+                                        pdiplomat, act_utype,
+                                        NULL, NULL, paction,
+                                        EFT_COMBAT_ROUNDS, V_COUNT);
+    odds = CLIP(0,odds,100);
     /* Check if the Diplomat/Spy slips past defending Diplomats/Spies. */
     int your_roll = (int)fc_rand(100);
-    // Notify acting player of odds, to provide transparency of what's going on!
 
+    // Notify acting player of odds, to provide transparency of what's going on!
     notify_player(pplayer, city_tile(pcity), E_UNIT_ACTION_TARGET_OTHER, ftc_server,
                     _("<font color='#C0C0C0'><u>Discovery Avoidance Odds</u>: %d%%. %s</font>"),
-                    game.server.diplchance, (your_roll < game.server.diplchance
-                                               ? "<font color='#30D050'><b>SUCCESS!</b></font>"
-                                               : "<font color='#E04040'><b>FAILED!</b></font>"));
+                    odds, (your_roll < odds ? "<font color='#30D050'><b>SUCCESS!</b></font>"
+                                            : "<font color='#E04040'><b>FAILED!</b></font>"));
 
-    if (your_roll >= game.server.diplchance) {
+    if (your_roll >= odds) {
       // Didn't slip past:
       notify_player(cplayer, city_tile(pcity), E_ENEMY_DIPLOMAT_FAILED, ftc_server,
                     _("[`anger`] %s %s %s %s discovered spying on %s!"),
