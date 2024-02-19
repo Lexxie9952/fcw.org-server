@@ -17,235 +17,235 @@
 
 ***********************************************************************/
 
-var TRUE = true;
-var FALSE = false;
+const TRUE = true;
+const FALSE = false;
 
-var TRI_NO = 0;
-var TRI_YES = 1;
-var TRI_MAYBE = 2;
+const TRI_NO = 0;
+const TRI_YES = 1;
+const TRI_MAYBE = 2;
 
-var MAX_NUM_ITEMS = 200;
-var MAX_NUM_ADVANCES = 250;
-var MAX_NUM_UNITS = 250;
-var MAX_NUM_BUILDINGS = 200;
-var MAX_EXTRA_TYPES = 128;
-var MAX_LEN_NAME = 48;
-var MAX_LEN_CITYNAME = 50;
+const MAX_NUM_ITEMS = 200;
+const MAX_NUM_ADVANCES = 250;
+const MAX_NUM_UNITS = 250;
+const MAX_NUM_BUILDINGS = 200;
+const MAX_EXTRA_TYPES = 128;
+const MAX_LEN_NAME = 48;
+const MAX_LEN_CITYNAME = 50;
 
 const UNCLAIMED_LAND = 255;
 
-var FC_INFINITY = (1000 * 1000 * 1000);
+const FC_INFINITY = (1000 * 1000 * 1000);
 const FC_NEG_HUGE = -2147483648
 
 const CONNECT_ACTION_ILLEGAL = -2;
 
-var ACTIVITY_IDLE = 0;
-var ACTIVITY_POLLUTION = 1;
+const ACTIVITY_IDLE = 0;
+const ACTIVITY_POLLUTION = 1;
 /* 2 == old deprecated ACTIVITY_OLD_ROAD */
-var ACTIVITY_MINE = 3;
-var ACTIVITY_IRRIGATE = 4;
-var ACTIVITY_FORTIFIED = 5;
-var ACTIVITY_SENTRY = 7;
-var ACTIVITY_PILLAGE = 9;
-var ACTIVITY_GOTO = 10;
-var ACTIVITY_EXPLORE = 11;
-var ACTIVITY_TRANSFORM = 12;
-var ACTIVITY_UNUSED = 13;
-var ACTIVITY_VIGIL = 13; // not unused anymore!
-var ACTIVITY_FORTIFYING = 15;
-var ACTIVITY_FALLOUT = 16;
-var ACTIVITY_BASE = 18;			/* building base */
-var ACTIVITY_GEN_ROAD = 19;
-var ACTIVITY_CONVERT = 20;
-var ACTIVITY_CULTIVATE = 21;
-var ACTIVITY_PLANT = 22;
-var ACTIVITY_LAST = 23;   /* leave this one last */
+const ACTIVITY_MINE = 3;
+const ACTIVITY_IRRIGATE = 4;
+const ACTIVITY_FORTIFIED = 5;
+const ACTIVITY_SENTRY = 7;
+const ACTIVITY_PILLAGE = 9;
+const ACTIVITY_GOTO = 10;
+const ACTIVITY_EXPLORE = 11;
+const ACTIVITY_TRANSFORM = 12;
+const ACTIVITY_UNUSED = 13;
+const ACTIVITY_VIGIL = 13; // not unused anymore!
+const ACTIVITY_FORTIFYING = 15;
+const ACTIVITY_FALLOUT = 16;
+const ACTIVITY_BASE = 18;			/* building base */
+const ACTIVITY_GEN_ROAD = 19;
+const ACTIVITY_CONVERT = 20;
+const ACTIVITY_CULTIVATE = 21;
+const ACTIVITY_PLANT = 22;
+const ACTIVITY_LAST = 23;   /* leave this one last */
 
-var IDENTITY_NUMBER_ZERO = 0;
+const IDENTITY_NUMBER_ZERO = 0;
 
 /* Corresponds to the enum action_target_kind */
-var ATK_CITY  = 0;
-var ATK_UNIT  = 1;
-var ATK_UNITS = 2;
-var ATK_TILE  = 3;
-var ATK_SELF  = 4;
-var ATK_COUNT = 5;
+const ATK_CITY  = 0;
+const ATK_UNIT  = 1;
+const ATK_UNITS = 2;
+const ATK_TILE  = 3;
+const ATK_SELF  = 4;
+const ATK_COUNT = 5;
 
 /* Corresponds to the enum action_sub_target_kind */
-var ASTK_NONE = 0;
-var ASTK_BUILDING = 1;
-var ASTK_TECH = 2;
-var ASTK_EXTRA = 3;
-var ASTK_EXTRA_NOT_THERE = 4;
-var ASTK_COUNT = 5;
+const ASTK_NONE = 0;
+const ASTK_BUILDING = 1;
+const ASTK_TECH = 2;
+const ASTK_EXTRA = 3;
+const ASTK_EXTRA_NOT_THERE = 4;
+const ASTK_COUNT = 5;
 
 /* The unit_orders enum from unit.h */
-var ORDER_MOVE = 0;
-var ORDER_ACTIVITY = 1;
-var ORDER_FULL_MP = 2;
-var ORDER_ACTION_MOVE = 3;
-var ORDER_PERFORM_ACTION = 4;
-var ORDER_LAST = 5;
+const ORDER_MOVE = 0;
+const ORDER_ACTIVITY = 1;
+const ORDER_FULL_MP = 2;
+const ORDER_ACTION_MOVE = 3;
+const ORDER_PERFORM_ACTION = 4;
+const ORDER_LAST = 5;
 
 /* The unit_ss_data_type enum from unit.h */
-var USSDT_QUEUE = 0;
-var USSDT_UNQUEUE = 1;
-var USSDT_BATTLE_GROUP = 2;
+const USSDT_QUEUE = 0;
+const USSDT_UNQUEUE = 1;
+const USSDT_BATTLE_GROUP = 2;
 
 /* Actions */
-var ACTION_ESTABLISH_EMBASSY = 0;
-var ACTION_ESTABLISH_EMBASSY_STAY = 1;
-var ACTION_SPY_INVESTIGATE_CITY = 2;
-var ACTION_INV_CITY_SPEND = 3;
-var ACTION_SPY_POISON = 4;
-var ACTION_SPY_POISON_ESC = 5;
-var ACTION_SPY_STEAL_GOLD = 6;
-var ACTION_SPY_STEAL_GOLD_ESC = 7;
-var ACTION_SPY_SABOTAGE_CITY = 8;
-var ACTION_SPY_SABOTAGE_CITY_ESC = 9;
-var ACTION_SPY_TARGETED_SABOTAGE_CITY = 10;
-var ACTION_SPY_TARGETED_SABOTAGE_CITY_ESC = 11;
-var ACTION_SPY_SABOTAGE_CITY_PRODUCTION = 12;
-var ACTION_SPY_SABOTAGE_CITY_PRODUCTION_ESC = 13;
-var ACTION_SPY_STEAL_TECH = 14;
-var ACTION_SPY_STEAL_TECH_ESC = 15;
-var ACTION_SPY_TARGETED_STEAL_TECH = 16;
-var ACTION_SPY_TARGETED_STEAL_TECH_ESC = 17;
-var ACTION_SPY_INCITE_CITY = 18;
-var ACTION_SPY_INCITE_CITY_ESC = 19;
-var ACTION_TRADE_ROUTE = 20;
-var ACTION_MARKETPLACE = 21;
-var ACTION_HELP_WONDER = 22;
-var ACTION_SPY_BRIBE_UNIT = 23;
-var ACTION_SPY_SABOTAGE_UNIT = 24;
-var ACTION_SPY_SABOTAGE_UNIT_ESC = 25;
-var ACTION_CAPTURE_UNITS = 26;
-var ACTION_FOUND_CITY = 27;
-var ACTION_JOIN_CITY = 28;
-var ACTION_STEAL_MAPS = 29;
-var ACTION_STEAL_MAPS_ESC = 30;
-var ACTION_BOMBARD = 31;
-var ACTION_BOMBARD2 = 32;
-var ACTION_BOMBARD3 = 33;
-var ACTION_SPY_NUKE = 34;
-var ACTION_SPY_NUKE_ESC = 35;
-var ACTION_NUKE = 36;
-var ACTION_NUKE_CITY = 37;
-var ACTION_NUKE_UNITS = 38;
-var ACTION_DESTROY_CITY = 39;
-var ACTION_EXPEL_UNIT = 40;
-var ACTION_RECYCLE_UNIT = 41;
-var ACTION_DISBAND_UNIT = 42;
-var ACTION_HOME_CITY = 43;
-var ACTION_UPGRADE_UNIT = 44;
-var ACTION_PARADROP = 45;
-var ACTION_AIRLIFT = 46;
-var ACTION_ATTACK = 47;
-var ACTION_SUICIDE_ATTACK = 48;
-var ACTION_STRIKE_BUILDING = 49;
-var ACTION_STRIKE_PRODUCTION = 50;
-var ACTION_CONQUER_CITY = 51;
-var ACTION_CONQUER_CITY2 = 52;
-var ACTION_HEAL_UNIT = 53;
-var ACTION_TRANSFORM_TERRAIN = 54;
-var ACTION_CULTIVATE = 55;
-var ACTION_PLANT = 56;
-var ACTION_PILLAGE = 57;
-var ACTION_FORTIFY = 58;
-var ACTION_ROAD = 59;
-var ACTION_CONVERT = 60;
-var ACTION_BASE = 61;
-var ACTION_MINE = 62;
-var ACTION_IRRIGATE = 63;
-var ACTION_TRANSPORT_DEBOARD = 64;
-var ACTION_TRANSPORT_UNLOAD = 65;
-var ACTION_TRANSPORT_DISEMBARK1 = 66;
-var ACTION_TRANSPORT_DISEMBARK2 = 67;
-var ACTION_TRANSPORT_BOARD = 68;
-var ACTION_TRANSPORT_EMBARK = 69;
-var ACTION_SPY_SPREAD_PLAGUE = 70;
-var ACTION_SPY_ATTACK = 71;
-var ACTION_USER_ACTION1 = 72;
-var ACTION_USER_ACTION2 = 73;
-var ACTION_USER_ACTION3 = 74;
-var ACTION_CLEAN_POLLUTION = 75;
-var ACTION_CLEAN_FALLOUT = 76;
-var ACTION_COUNT = 77;
+const ACTION_ESTABLISH_EMBASSY = 0;
+const ACTION_ESTABLISH_EMBASSY_STAY = 1;
+const ACTION_SPY_INVESTIGATE_CITY = 2;
+const ACTION_INV_CITY_SPEND = 3;
+const ACTION_SPY_POISON = 4;
+const ACTION_SPY_POISON_ESC = 5;
+const ACTION_SPY_STEAL_GOLD = 6;
+const ACTION_SPY_STEAL_GOLD_ESC = 7;
+const ACTION_SPY_SABOTAGE_CITY = 8;
+const ACTION_SPY_SABOTAGE_CITY_ESC = 9;
+const ACTION_SPY_TARGETED_SABOTAGE_CITY = 10;
+const ACTION_SPY_TARGETED_SABOTAGE_CITY_ESC = 11;
+const ACTION_SPY_SABOTAGE_CITY_PRODUCTION = 12;
+const ACTION_SPY_SABOTAGE_CITY_PRODUCTION_ESC = 13;
+const ACTION_SPY_STEAL_TECH = 14;
+const ACTION_SPY_STEAL_TECH_ESC = 15;
+const ACTION_SPY_TARGETED_STEAL_TECH = 16;
+const ACTION_SPY_TARGETED_STEAL_TECH_ESC = 17;
+const ACTION_SPY_INCITE_CITY = 18;
+const ACTION_SPY_INCITE_CITY_ESC = 19;
+const ACTION_TRADE_ROUTE = 20;
+const ACTION_MARKETPLACE = 21;
+const ACTION_HELP_WONDER = 22;
+const ACTION_SPY_BRIBE_UNIT = 23;
+const ACTION_SPY_SABOTAGE_UNIT = 24;
+const ACTION_SPY_SABOTAGE_UNIT_ESC = 25;
+const ACTION_CAPTURE_UNITS = 26;
+const ACTION_FOUND_CITY = 27;
+const ACTION_JOIN_CITY = 28;
+const ACTION_STEAL_MAPS = 29;
+const ACTION_STEAL_MAPS_ESC = 30;
+const ACTION_BOMBARD = 31;
+const ACTION_BOMBARD2 = 32;
+const ACTION_BOMBARD3 = 33;
+const ACTION_SPY_NUKE = 34;
+const ACTION_SPY_NUKE_ESC = 35;
+const ACTION_NUKE = 36;
+const ACTION_NUKE_CITY = 37;
+const ACTION_NUKE_UNITS = 38;
+const ACTION_DESTROY_CITY = 39;
+const ACTION_EXPEL_UNIT = 40;
+const ACTION_RECYCLE_UNIT = 41;
+const ACTION_DISBAND_UNIT = 42;
+const ACTION_HOME_CITY = 43;
+const ACTION_UPGRADE_UNIT = 44;
+const ACTION_PARADROP = 45;
+const ACTION_AIRLIFT = 46;
+const ACTION_ATTACK = 47;
+const ACTION_SUICIDE_ATTACK = 48;
+const ACTION_STRIKE_BUILDING = 49;
+const ACTION_STRIKE_PRODUCTION = 50;
+const ACTION_CONQUER_CITY = 51;
+const ACTION_CONQUER_CITY2 = 52;
+const ACTION_HEAL_UNIT = 53;
+const ACTION_TRANSFORM_TERRAIN = 54;
+const ACTION_CULTIVATE = 55;
+const ACTION_PLANT = 56;
+const ACTION_PILLAGE = 57;
+const ACTION_FORTIFY = 58;
+const ACTION_ROAD = 59;
+const ACTION_CONVERT = 60;
+const ACTION_BASE = 61;
+const ACTION_MINE = 62;
+const ACTION_IRRIGATE = 63;
+const ACTION_TRANSPORT_DEBOARD = 64;
+const ACTION_TRANSPORT_UNLOAD = 65;
+const ACTION_TRANSPORT_DISEMBARK1 = 66;
+const ACTION_TRANSPORT_DISEMBARK2 = 67;
+const ACTION_TRANSPORT_BOARD = 68;
+const ACTION_TRANSPORT_EMBARK = 69;
+const ACTION_SPY_SPREAD_PLAGUE = 70;
+const ACTION_SPY_ATTACK = 71;
+const ACTION_USER_ACTION1 = 72;
+const ACTION_USER_ACTION2 = 73;
+const ACTION_USER_ACTION3 = 74;
+const ACTION_CLEAN_POLLUTION = 75;
+const ACTION_CLEAN_FALLOUT = 76;
+const ACTION_COUNT = 77;
 
 /* The action_decision enum */
 /* Doesn't need the player to decide what action to take. */
-var ACT_DEC_NOTHING = 0;
+const ACT_DEC_NOTHING = 0;
 /* Wants a decision because of something done to the actor. */
-var ACT_DEC_PASSIVE = 1;
+const ACT_DEC_PASSIVE = 1;
 /* Wants a decision because of something the actor did. */
-var ACT_DEC_ACTIVE = 2;
+const ACT_DEC_ACTIVE = 2;
 
 /* The kind of universals_u (value_union_type was req_source_type).
  * Used in the network protocol. */
-var VUT_NONE = 0;
-var VUT_ADVANCE = 1;
-var VUT_GOVERNMENT = 2;
-var VUT_IMPROVEMENT = 3;
-var VUT_TERRAIN = 4;
-var VUT_NATION = 5;
-var VUT_UTYPE = 6;
-var VUT_UTFLAG = 7;
-var VUT_UCLASS = 8;
-var VUT_UCFLAG = 9;
-var VUT_OTYPE = 10;
-var VUT_SPECIALIST = 11;
-var VUT_MINSIZE = 12;		/* Minimum size: at city range means city size */
-var VUT_AI_LEVEL = 13;		/* AI level of the player */
-var VUT_TERRAINCLASS = 14;	/* More generic terrain type, currently "Land" or "Ocean" */
-var VUT_MINYEAR = 15;
-var VUT_TERRAINALTER = 16;      /* Terrain alterations that are possible */
-var VUT_CITYTILE = 17;          /* Target tile is used by city. */
-var VUT_GOOD = 18;
-var VUT_TERRFLAG = 19;
-var VUT_NATIONALITY = 20;
-var VUT_BASEFLAG = 21;
-var VUT_ROADFLAG = 22;
-var VUT_EXTRA = 23;
-var VUT_TECHFLAG = 24;
-var VUT_ACHIEVEMENT = 25;
-var VUT_DIPLREL = 26;
-var VUT_MAXTILEUNITS = 27;
-var VUT_STYLE = 28;
-var VUT_MINCULTURE = 29;
-var VUT_UNITSTATE = 30;
-var VUT_MINMOVES = 31;
-var VUT_MINVETERAN = 32;
-var VUT_MINHP = 33;
-var VUT_AGE = 34;
-var VUT_NATIONGROUP = 35;
-var VUT_TOPO = 36;
-var VUT_IMPR_GENUS = 37;
-var VUT_ACTION = 38;
-var VUT_MINTECHS = 39;
-var VUT_EXTRAFLAG = 40;
-var VUT_MINCALFRAG = 41;
-var VUT_SERVERSETTING = 42;
-var VUT_COUNT = 43;             /* Keep this last. */
+const VUT_NONE = 0;
+const VUT_ADVANCE = 1;
+const VUT_GOVERNMENT = 2;
+const VUT_IMPROVEMENT = 3;
+const VUT_TERRAIN = 4;
+const VUT_NATION = 5;
+const VUT_UTYPE = 6;
+const VUT_UTFLAG = 7;
+const VUT_UCLASS = 8;
+const VUT_UCFLAG = 9;
+const VUT_OTYPE = 10;
+const VUT_SPECIALIST = 11;
+const VUT_MINSIZE = 12;		/* Minimum size: at city range means city size */
+const VUT_AI_LEVEL = 13;		/* AI level of the player */
+const VUT_TERRAINCLASS = 14;	/* More generic terrain type, currently "Land" or "Ocean" */
+const VUT_MINYEAR = 15;
+const VUT_TERRAINALTER = 16;      /* Terrain alterations that are possible */
+const VUT_CITYTILE = 17;          /* Target tile is used by city. */
+const VUT_GOOD = 18;
+const VUT_TERRFLAG = 19;
+const VUT_NATIONALITY = 20;
+const VUT_BASEFLAG = 21;
+const VUT_ROADFLAG = 22;
+const VUT_EXTRA = 23;
+const VUT_TECHFLAG = 24;
+const VUT_ACHIEVEMENT = 25;
+const VUT_DIPLREL = 26;
+const VUT_MAXTILEUNITS = 27;
+const VUT_STYLE = 28;
+const VUT_MINCULTURE = 29;
+const VUT_UNITSTATE = 30;
+const VUT_MINMOVES = 31;
+const VUT_MINVETERAN = 32;
+const VUT_MINHP = 33;
+const VUT_AGE = 34;
+const VUT_NATIONGROUP = 35;
+const VUT_TOPO = 36;
+const VUT_IMPR_GENUS = 37;
+const VUT_ACTION = 38;
+const VUT_MINTECHS = 39;
+const VUT_EXTRAFLAG = 40;
+const VUT_MINCALFRAG = 41;
+const VUT_SERVERSETTING = 42;
+const VUT_COUNT = 43;             /* Keep this last. */
 
 /* Freeciv's gui_type enum */
 /* Used for options which do not belong to any gui. */
-var GUI_STUB    = 0;
-var GUI_GTK2    = 1;
-var GUI_GTK3    = 2;
-var GUI_GTK3_22 = 3;
+const GUI_STUB    = 0;
+const GUI_GTK2    = 1;
+const GUI_GTK3    = 2;
+const GUI_GTK3_22 = 3;
 /* GUI_SDL remains for now for keeping client options alive until
  * user has migrated them to sdl2-client */
-var GUI_SDL     = 4;
-var GUI_QT      = 5;
-var GUI_SDL2    = 6;
-var GUI_WEB     = 7;
-var GUI_GTK3x   = 8;
+const GUI_SDL     = 4;
+const GUI_QT      = 5;
+const GUI_SDL2    = 6;
+const GUI_WEB     = 7;
+const GUI_GTK3x   = 8;
 
 /* Sometimes we don't know (or don't care) if some requirements for effect
  * are currently fulfilled or not. This enum tells lower level functions
  * how to handle uncertain requirements. */
-var RPT_POSSIBLE = 0; /* We want to know if it is possible that effect is active */
-var RPT_CERTAIN = 1;  /* We want to know if it is certain that effect is active  */
+const RPT_POSSIBLE = 0; /* We want to know if it is possible that effect is active */
+const RPT_CERTAIN = 1;  /* We want to know if it is certain that effect is active  */
 
 // Output Types and their Names
 const O_FOOD = 0;
@@ -259,34 +259,34 @@ const O_NAME = ["Food", "Shield", "Trade", "Gold", "Luxury", "Science"];
 const O_PIC = ["/images/wheat.png","/images/shield14x18.png","/images/trade.png","/images/gold.png","/images/lux.png","/images/sci.png"];
 
 /* vision_layer enum */
-var V_MAIN = 0;
-var V_INVIS = 1;
-var V_SUBSURFACE = 2;
-var V_COUNT = 3;
+const V_MAIN = 0;
+const V_INVIS = 1;
+const V_SUBSURFACE = 2;
+const V_COUNT = 3;
 
 /* causes for extra */
-var EC_IRRIGATION = 0;
-var EC_MINE = 1;
-var EC_ROAD = 2;
-var EC_BASE = 3;
-var EC_POLLUTION = 4;
-var EC_FALLOUT = 5;
-var EC_HUT = 6;
-var EC_APPEARANCE = 7;
-var EC_RESOURCE = 8;
+const EC_IRRIGATION = 0;
+const EC_MINE = 1;
+const EC_ROAD = 2;
+const EC_BASE = 3;
+const EC_POLLUTION = 4;
+const EC_FALLOUT = 5;
+const EC_HUT = 6;
+const EC_APPEARANCE = 7;
+const EC_RESOURCE = 8;
 
 /* causes for extra removal */
-var ERM_PILLAGE = 0;
-var ERM_CLEANPOLLUTION = 1;
-var ERM_CLEANFALLOUT = 2;
-var ERM_DISAPPEARANCE = 3;
+const ERM_PILLAGE = 0;
+const ERM_CLEANPOLLUTION = 1;
+const ERM_CLEANFALLOUT = 2;
+const ERM_DISAPPEARANCE = 3;
 
 /* barbarian types */
-var NOT_A_BARBARIAN = 0;
-var LAND_BARBARIAN = 1;
-var SEA_BARBARIAN = 2;
-var ANIMAL_BARBARIAN = 3;
-var LAND_AND_SEA_BARBARIAN = 4;
+const NOT_A_BARBARIAN = 0;
+const LAND_BARBARIAN = 1;
+const SEA_BARBARIAN = 2;
+const ANIMAL_BARBARIAN = 3;
+const LAND_AND_SEA_BARBARIAN = 4;
 
 /* improvement genera */
 // unknown if these exist elsewhere; but it's nasty to hard-code
