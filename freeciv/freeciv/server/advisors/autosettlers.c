@@ -295,7 +295,7 @@ adv_want adv_settlers_road_bonus(struct tile *ptile, struct road_type *proad)
   discounting the total value by the time it would take to do the work
   and multiplying by some factor.
 **************************************************************************/
-static void consider_settler_action(const struct player *pplayer, 
+static void consider_settler_action(const struct player *pplayer,
                                     enum unit_activity act,
                                     struct extra_type *target,
                                     adv_want extra,
@@ -888,7 +888,7 @@ struct city *settler_evaluate_city_requests(struct unit *punit,
   Find some work for our settlers and/or workers.
 **************************************************************************/
 #define LOG_SETTLER LOG_DEBUG
-void auto_settler_findwork(struct player *pplayer, 
+void auto_settler_findwork(struct player *pplayer,
                            struct unit *punit,
                            struct settlermap *state,
                            int recursion)
@@ -1122,10 +1122,10 @@ bool adv_settler_safe_tile(const struct player *pplayer, struct unit *punit,
 }
 
 /**********************************************************************//**
-  Run through all the players settlers and let those on ai.control work 
+  Run through all the players settlers and let those on ai.control work
   automagically.
 **************************************************************************/
-void auto_settlers_player(struct player *pplayer) 
+void auto_settlers_player(struct player *pplayer)
 {
   struct settlermap *state;
 
@@ -1141,7 +1141,7 @@ void auto_settlers_player(struct player *pplayer)
 
   whole_map_iterate(&(wld.map), ptile) {
     state[tile_index(ptile)].enroute = -1;
-    state[tile_index(ptile)].eta = FC_INFINITY;    
+    state[tile_index(ptile)].eta = FC_INFINITY;
   } whole_map_iterate_end;
 
   /* Initialize the infrastructure cache, which is used shortly. */
@@ -1366,7 +1366,7 @@ bool auto_settlers_speculate_can_act_at(const struct unit *punit,
                                   punit, unit_home(punit), ptile,
                                   omniscient_cheat,
                                   ptile, target));
-                                  
+
   case ACTIVITY_FALLOUT:
     return action_prob_possible(action_speculate_unit_on_tile(
                                   ACTION_CLEAN_FALLOUT,
@@ -1385,7 +1385,7 @@ bool auto_settlers_speculate_can_act_at(const struct unit *punit,
   case ACTIVITY_AIRBASE:
   case ACTIVITY_PATROL_UNUSED:
   case ACTIVITY_LAST:
-  case ACTIVITY_UNKNOWN:
+  case ACTIVITY_VIGIL:
     return can_unit_do_activity_targeted_at(punit, activity, target, ptile);
   }
 

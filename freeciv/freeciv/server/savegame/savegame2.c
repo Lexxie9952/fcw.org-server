@@ -652,7 +652,7 @@ static char activity2char(enum unit_activity activity)
     return 'R';
   case ACTIVITY_CONVERT:
     return 'c';
-  case ACTIVITY_UNKNOWN:
+  case ACTIVITY_VIGIL:
     return 'v';           // new vigil activity
   case ACTIVITY_PATROL_UNUSED:
   case ACTIVITY_CULTIVATE:
