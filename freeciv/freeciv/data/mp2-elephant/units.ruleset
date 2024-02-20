@@ -4466,7 +4466,7 @@ veteran_names =
   _("?vet_rank:crack"),
   _("?vet_rank:ace"),
   _("?vet_rank:top gun")
-veteran_base_raise_chance = 40, 25, 16, 10, 10, 10, 0
+veteran_base_raise_chance = 50, 33, 20, 15, 15, 15, 0
 veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
 veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
 veteran_move_bonus = 0, 0, 0, 0, 10080, 10080, 10080
