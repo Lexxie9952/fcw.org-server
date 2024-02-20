@@ -24,8 +24,6 @@ var ruleset_control = null;
 var ruleset_summary = null;
 var ruleset_description = null;
 
-var IDENTITY_NUMBER_ZERO = 0;
-
 // Define all tab placements here for centralised control.
 const TAB_MAP = 0,
       TAB_EMPIRE = 1,
