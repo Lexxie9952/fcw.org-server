@@ -253,6 +253,7 @@ nuke_pop_loss_pct = 55         ; (100-nuke_pop_survival_pct)
 ; 0 no defenders will survive. When set to 100 all defenders will survive.
 nuke_defender_survival_chance_pct = 25
 
+;————————————————————————————————————————————————————————————————————————————————————————————————————————————
 [auto_attack]
 ; An auto attack may be triggered when another unit moves to an adjacent
 ; tile and the autoattack server setting is enabled. The following details
@@ -265,17 +266,31 @@ nuke_defender_survival_chance_pct = 25
 ;   will_never - units with this unit type flag will never auto attack.
 
 ;possible attack_actions= "Capture Units", "Bombard", "Bombard 2", "Bombard 3", "Attack", "Suicide Attack"
-attack_actions= "Bombard", "Bombard 2", "Attack", "Suicide Attack"
 
-; Which flags mark units who don't ever auto-attack.
+      ;The minute you change this so Bombard isn't first, which you likely will because each unit needs its
+      ;own preferential order, then you will need to also change unit_survive_autoattack(..). Currently, units
+      ;who can bombard are hard-coded in that func to get an exceptional privilege to bomard units whose cargo
+      ;they can't see, because bombard isn't afraid of secret cargo retaliations. The minute such units prefer
+      ;attacking from some upgraded logic, it brings in exploits against these units when using secret cargo.
+      ;There is even an argument that someone could invent a way to possibly exploit transporting major SUD
+      ;retaliators who are on vigil. Though the ability to transport on vigil is a good thing -- it's the other
+      ;things that need to change so that it doesn't make problems.
+;⬆️ ⬆️ ⬆️ ⬆️ ⬆️ ⬆️ ⬆️ ⬆️ ⬆️ ⬆️ ⬆️ ⬆️ ⬆️ ⬆️ ⬆️ ⬆️ ⬆️ ⬆️ ⬆️ ⬆️ ⬆️ ⬆️ ⬆️
+;README 〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰
+attack_actions= "Bombard", "Bombard 2", "Attack", "Suicide Attack" ;
+;README 〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰
+
+; DEPRECATED: flags mark units who don't ever auto-attack.
 will_never = "WillNever"
 
+; NEW VERSION
 if_attacker =
-    { "type",         "name",      "range", "present"
-      "DiplRel",      "War",       "Local",  TRUE
-      "MinMoveFrags", "10080",         "Local",  TRUE
-      "UnitFlag",     "WillNever", "Local",  FALSE  ;replaces: will_never="WillNever"
+    { "type",         "name",      "range",  "present"
+      "UnitFlag",     "WillNever", "Local",  FALSE
+      "MinMoveFrags", "10080",     "Local",  TRUE
+      "DiplRel",      "War",       "Local",  TRUE  ;also hard-coded into can_unit_autoattack_unit(), the one with slower performance could be removed
     }
+;————————————————————————————————————————————————————————————————————————————————————————————————————————————
 
 [actions]
 ; If force_trade_route is set to TRUE it is illegal for an actor unit to
