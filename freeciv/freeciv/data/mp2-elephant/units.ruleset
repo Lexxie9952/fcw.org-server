@@ -775,9 +775,15 @@ flags         = "NeverTired", "Unreachable", "DoesntOccupyTile", "Airliftable"
 ;| A1-3 = AlwaysAttackClass1-3
 ;| ""   = Has no UTYF flags related to autoattack
 ;| N-   = AA_NO     = overrides any possible autoattack, will never auto-attack
-;| YES  = AA_ALWAYS = ALWAYS auto-attacks (unless overridden by "N-")
+;| YES  = AA_ALWAYS = ALWAYS auto-attacks (unless overridden by "N-" or abort_threshold*)
 ;| ODDS = AA_ODDS   = auto-attack if odds are better (unless overridden by N- or YES)
 ;| --   = AA_NO     = no auto-attack (unless overridden by YES or ODDS)
+;   *abort_threshold is 25%
+;   FUTURE will have AGGRESSIVE_VIGIL and its abort threshold will be 1% which is
+;     approximate probability needed for 3 units to knock off a unit; allowing
+;     proper use of cheap cannon fodder attrition tactics. Could also factor unit
+;     cost comparisons into that threshold somehow, perhaps choosing to not lose
+;     more than 1x to 3x cost assuming 3 units will die.
 ;—————————————————————————————————————————————————————————————————————————————————————
 ; Following actions require extra fields:
 ;  "Attack" and "Suicide Attack"
