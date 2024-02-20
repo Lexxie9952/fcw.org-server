@@ -779,6 +779,18 @@ flags         = "NeverTired", "Unreachable", "DoesntOccupyTile", "Airliftable"
 ;| ODDS = AA_ODDS   = auto-attack if odds are better (unless overridden by N- or YES)
 ;| --   = AA_NO     = no auto-attack (unless overridden by YES or ODDS)
 ;   *abort_threshold is 25%
+;SEQUENTIAL FLOW LOGIC for an autoattack candidate to decide whether to attack or not:
+;  ALL CASES, pre-processing
+;    🔹NOT ON VIGIL?                             ABORT
+;    🔹NON-PROVOKING                             ABORT
+;    🔹ODDS < 25%                                ABORT
+;  🔻...... if no prior abort has occurred, then .....🔻
+;    🔹Auto_attack ALWAYS = YES?              💥 ATTACK 💥
+;  AA_ODDS:
+;    🔹Attacking their tile is better odds
+;    than them attacking our tile?          💥 ATTACK 💥 (NOTE abort_threshold<25% pre-fails before this check.)
+;    🔹Attack anyway odds ≥ 5/6 83⅓% ?      💥 ATTACK 💥
+;   ﹍﹍﹍﹍﹍﹍﹍﹍﹍﹍﹍﹍﹍﹍﹍﹍﹍﹍﹍﹍﹍﹍﹍﹍﹍﹍﹍﹍﹍﹍﹍﹍﹍﹍﹍﹍﹍﹍﹍﹍﹍﹍﹍﹍﹍﹍﹍﹍
 ;   FUTURE will have AGGRESSIVE_VIGIL and its abort threshold will be 1% which is
 ;     approximate probability needed for 3 units to knock off a unit; allowing
 ;     proper use of cheap cannon fodder attrition tactics. Could also factor unit
