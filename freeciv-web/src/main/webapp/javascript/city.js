@@ -339,7 +339,9 @@ function show_city_dialog(pcity)
          rename_city();
        }
      });
-     dialog_buttons = $.extend(dialog_buttons, {"Exit (𝗪)": close_city_dialog_trigger});
+     dialog_buttons = $.extend(dialog_buttons, {"Exit (<black->W</black->)": close_city_dialog_trigger});
+
+//     dialog_buttons = $.extend(dialog_buttons, {"Exit (𝗪)": close_city_dialog_trigger});
   } else {   // small screen control buttons
        dialog_buttons = $.extend(dialog_buttons,
          {
@@ -467,9 +469,9 @@ function show_city_dialog(pcity)
     // align "Change Production" and "Add to Worklist" buttons with the wood panel and tab selector buttons to their left.
     $("#prod_buttons").css({"margin-top": "39px", "margin-right": "2px"});
     if (!touch_device) { // Highlight keyboard shortcuts for large screens with keyboards (i.e. not touch device)
-      $("#city_dialog").next().children().children().first().html("<u><b style='font-family: FreecivBlack'>P</b></u>revious City");
-      $("#city_dialog").next().children().children().first().next().html("<u><b style='font-family: FreecivBlack'>N</b></u>ext City");
-      $("#city_dialog").next().children().children().first().next().next().html("<u><b style='font-family: FreecivBlack'>B</b></u>uy");
+      $("#city_dialog").next().children().children().first().html("<u><b style='font-family: HelveticaBlack'>P</b></u>revious City");
+      $("#city_dialog").next().children().children().first().next().html("<u><b style='font-family: HelveticaBlack'>N</b></u>ext City");
+      $("#city_dialog").next().children().children().first().next().next().html("<u><b style='font-family: HelveticaBlack'>B</b></u>uy");
     }
   }
   $("#city_dialog").dialog('open');
@@ -487,10 +489,10 @@ function show_city_dialog(pcity)
     $("#city_tabs-i").hide();       // "Inside" tab for units, not needed on large screen.
     $(".extra_tabs_small").remove();  // class identified for "Inside" tab for units, not needed on large screen.
     $("#mobile_cma_checkbox").remove();
-    $("#ct2").html("Routes"+ (pcity['traderoute_count']!=0
+    $("#ct2").html("<u><black->R</black-></u>outes"+ (pcity['traderoute_count']!=0
       ?"&nbsp;&nbsp; <img style='position:absolute; margin-left:-5px;' src='/images/e/trade.png'>"
       :""));
-    $("#ctg").html("<u><b style='font-family:FreecivBlack'>G</b></u>overnor"+(pcity.cma_enabled?" &#x1F539;":"")); // blue diamond to show governor active.
+    $("#ctg").html("<u><b style='font-family:HelveticaBlack'>G</b></u>overnor"+(pcity.cma_enabled?" &#x1F539;":"")); // blue diamond to show governor active.
   } else {
     // CMA tab elements: (tight fit)
     $("#cma_surplus_hdr").css("font-size", "105%");
@@ -1385,10 +1387,10 @@ function generate_production_list(pcity)
                         "helptext": cleaned_text(punit_type['helptext']),
                        "rule_name": punit_type['rule_name'],
                       "build_cost": get_universal_discount_price(punit_type),
-                    "unit_details": "A<b style='font-family:Arial'>" + fractionalize(utype_real_base_attack_strength(punit_type))
-                                  + "</b>D<b style='font-family:Arial'>" + fractionalize(utype_real_base_defense_strength(punit_type))
-                                  + (punit_type['firepower']>1 ? "F<b style='font-family:Arial'>"+punit_type['firepower']+"</b> " : "")
-                                  + "</b>H<b style='font-family:Arial'>"+punit_type['hp'],
+                    "unit_details": "A<b style='font-family:Helvetica'>" + fractionalize(utype_real_base_attack_strength(punit_type))
+                                  + "</b>D<b style='font-family:Helvetica'>" + fractionalize(utype_real_base_defense_strength(punit_type))
+                                  + (punit_type['firepower']>1 ? "F<b style='font-family:Helvetica'>"+punit_type['firepower']+"</b> " : "")
+                                  + "</b>H<b style='font-family:Helvetica'>"+punit_type['hp'],
                          "sprite" : get_unit_type_image_sprite(punit_type)});
 
     } else {
@@ -1399,17 +1401,17 @@ function generate_production_list(pcity)
                        "rule_name": punit_type['rule_name'],
                       "build_cost": get_universal_discount_price(punit_type),
                     "unit_details": (utype_real_base_attack_strength(punit_type) > 0
-                                    ? ("A<b style='font-family:Arial'>"+fractionalize(utype_real_base_attack_strength(punit_type)) + "</b> ")
-                                    : ("")) //("<s>A</s><style='font-family:Arial'> "))
+                                    ? ("A<b style='font-family:Helvetica'>"+fractionalize(utype_real_base_attack_strength(punit_type)) + "</b> ")
+                                    : ("")) //("<s>A</s><style='font-family:Helvetica'> "))
                                   + (utype_real_base_defense_strength(punit_type) > 0
-                                    ? ("D<b style='font-family:Arial'>"+fractionalize(utype_real_base_defense_strength(punit_type)) + "</b> ")
-                                    : ("")) //("<s>D</s><style='font-family:Arial'> "))
-                                  + (punit_type['firepower']>1 ? "F<b style='font-family:Arial'>"+punit_type['firepower']+"</b> " : "")
-                                  + "H<b style='font-family:Arial'>"+punit_type['hp']+"</b> "
-                                  + "M<b style='font-family:Arial'>"
+                                    ? ("D<b style='font-family:Helvetica'>"+fractionalize(utype_real_base_defense_strength(punit_type)) + "</b> ")
+                                    : ("")) //("<s>D</s><style='font-family:Helvetica'> "))
+                                  + (punit_type['firepower']>1 ? "F<b style='font-family:Helvetica'>"+punit_type['firepower']+"</b> " : "")
+                                  + "H<b style='font-family:Helvetica'>"+punit_type['hp']+"</b> "
+                                  + "M<b style='font-family:Helvetica'>"
                                   + move_points_text((parseInt(punit_type['move_rate'])+move_bonus), true)+""
                                     + (punit_type['fuel'] ? "</b><sub>"+punit_type['fuel']+"</sub>" : "</b>")
-                                  + (punit_type['transport_capacity'] ? " C<b style='font-family:Arial'>"+punit_type['transport_capacity']+"</b>" : "")+"",
+                                  + (punit_type['transport_capacity'] ? " C<b style='font-family:Helvetica'>"+punit_type['transport_capacity']+"</b>" : "")+"",
                           "sprite": get_unit_type_image_sprite(punit_type)});
     }
   }
@@ -4244,7 +4246,7 @@ function update_city_screen()
 
   if (power_cma==true) {
     var power_panel =
-      "<button title='Click: Refresh tile arrangement in selected cities.\nCTRL-Click: Save Governor Clipboard to selected cities.\nShift-Click: Use Governor Clipboard to arrange tiles, without saving.' class='button ui-button ui-corner-all ui-widget' style='padding:1px; margin:1px; font-size:100%; float:left;' onclick='cma_clipboard_macro(event,false);'>&#x1F4CB; "+count+" Cities</button>";
+      "<button title='Click: Refresh tile arrangement in selected cities.\nCTRL-Click: Save Governor Clipboard to selected cities.\nShift-Click: Use Governor Clipboard to arrange tiles, without saving.' class='button ui-button ui-corner-all ui-widget' style='padding:1px; margin:1px; font-size:100%; float:left;' onclick='cma_clipboard_macro(event,false);'>&#x1F4CB; "+pluralize("City", count)+"</button>";
     $("#cities_title_cma_panel").html(power_panel);
   }
 
