@@ -260,7 +260,7 @@ See http://bgrins.github.io/spectrum/themes/ for instructions.
     padding: 0;
 }
 .sp-container, .sp-container button, .sp-container input, .sp-color, .sp-hue, .sp-clear {
-    font: normal 12px "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Geneva, Verdana, sans-serif;
+    font: normal 12px Helvetica, "Lucida Sans Unicode", "Lucida Sans", Geneva, Verdana, sans-serif;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     -ms-box-sizing: border-box;
