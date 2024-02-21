@@ -2,12 +2,12 @@
   <ul id="city_tabs_panel">
     <li class="city_tab">
       <div id="ixtjkiller2" style="color: rgb(0, 0, 0); position: absolute; cursor: pointer; background: rgba(0, 0, 0, 0); overflow: hidden; left: 0px; top: 0px; z-index: 999 !important;" onclick="clickMask(event, 2)"><img id="ixtjkiller22" src="/images/ixtjkiller.png"></div>
-      <a id="ct0" href="#city_tabs-0" onclick="city_change_tab(0);">&#x2191;<u><b style='font-family:FreecivBlack'>M</b></u>ain</a></li>
-    <li class="city_tab"><a id="ct1" href="#city_tabs-1" onclick="city_change_tab(1);">&#x2193;Pro<u><b style='font-family:FreecivBlack'>d</b></u>uction</a></li>
-    <li class="city_tab"><a id="ct2" href="#city_tabs-2" onclick="city_change_tab(2);"><u><b style='font-family:FreecivBlack'>R</b></u>outes</a></li> 
-    <li class="city_tab extra_tabs_big" onclick="city_change_tab(3);"><a id="ct3" href="#city_tabs-3"><u><b style='font-family:FreecivBlack'>O</b></u>ptions</a></li>
-    <li class="city_tab"><a id="ct4" href="#city_tabs-h" onclick="city_change_tab(4);"><u><b style='font-family:FreecivBlack'>H</b></u>appy</a></li> 
-    <li class="city_tab"><a id="ctg" href="#city_tabs-g" onclick="city_change_tab(5);"><u><b style='font-family:FreecivBlack'>G</b></u>overnor</a></li>
+      <a id="ct0" href="#city_tabs-0" onclick="city_change_tab(0);">&#x2191;<u><b style='font-family:HelveticaBlack'>M</b></u>ain</a></li>
+    <li class="city_tab"><a id="ct1" href="#city_tabs-1" onclick="city_change_tab(1);">&#x2193;Pro<u><b style='font-family:HelveticaBlack'>d</b></u>uction</a></li>
+    <li class="city_tab"><a id="ct2" href="#city_tabs-2" onclick="city_change_tab(2);"><u><b style='font-family:HelveticaBlack'>R</b></u>outes</a></li>
+    <li class="city_tab extra_tabs_big" onclick="city_change_tab(3);"><a id="ct3" href="#city_tabs-3"><u><b style='font-family:HelveticaBlack'>O</b></u>ptions</a></li>
+    <li class="city_tab"><a id="ct4" href="#city_tabs-h" onclick="city_change_tab(4);"><u><b style='font-family:HelveticaBlack'>H</b></u>appy</a></li>
+    <li class="city_tab"><a id="ctg" href="#city_tabs-g" onclick="city_change_tab(5);"><u><b style='font-family:HelveticaBlack'>G</b></u>overnor</a></li>
     <li class="city_tab extra_tabs_small" onclick="city_change_tab(6);"><a id="cti" href="#city_tabs-i">Inside</a></li>
   </ul>
 
@@ -15,7 +15,7 @@
     <div id="city_overview_tab" class="citydlg_tabs">
     <div id="city_viewport">
     <div id="specialist_panel"></div>
-    
+
     <div class="city_panel">
             <div id="city_canvas_top_div" class="city_panel" style='float:left;margin-top:0px'>
             <div id="city_canvas_div">
@@ -27,7 +27,7 @@
     <div id="city_panel_top" class="city_panel">
       <div id="city_panel_stats" class="city_panel" style='float:left;margin-top:0px'>
       <div id="city_dialog_info">
-      <div id="city_panel_left_info" style='float:left;'> 
+      <div id="city_panel_left_info" style='float:left;'>
       <div id="rapture_citizen_panel" style='height:20px;'></div>
 	  <div><b>City information:</b></div>
         <div id="city_size_production_info" style="float:left;">
@@ -37,8 +37,8 @@
 	  <div id='city_production_turns_overview'></div>
 	  <div id='city_airlift_capacity' class='airlift' style='padding-top:2px'>{{{airlift}}}</div>
 	</div>
-    <div style='float:left; margin-top: -23px;'> 
-	<div style='float: left; padding-left: 20px;'> 
+    <div style='float:left; margin-top: -23px;'>
+	<div style='float: left; padding-left: 20px;'>
 	  <table id="city_stats">
 	  <tr style='line-height:17.5px;'><td id="rapture_food" style='padding-bottom:8px;'></td><td id="rapture_status" title='The city status (Celebrating, Peace or Disorder)'></td><td></td></tr>
 	  <tr><td>Food: </td><td id="city_food"></td><td id="city_food2"></td></tr>
@@ -65,7 +65,7 @@
         <div id="city_improvements_title">City Improvements:</div>
         <div id="city_improvements_list"></div>
       </div>
-      
+
       <div id="city_present_units" >
         <div id="city_present_units_title">Present Units:</div>
         <div class="noscrollbars" id="city_present_units_list"></div>
@@ -81,7 +81,7 @@
 
   </div>
   </div>
-  </div> 
+  </div>
   <div id="city_tabs-1">
     <div id="city_production_tab" class="citydlg_tabs">
       <div id='worklist_left'>
@@ -106,10 +106,10 @@
          id="city_add_to_worklist_btn" title="or SHIFT-click item to append, ALT-SHIFT-click to insert above.">Add to worklist</button>
       </div>
       <div id="worklist_control">
-        <button type="button" class="button" onClick="city_change_production();" id="city_worklist_change_btn" title="Change production to selected (ALT-click)"><i class="fa fa-mail-reply fa-fw"></i></button>        
+        <button type="button" class="button" onClick="city_change_production();" id="city_worklist_change_btn" title="Change production to selected (ALT-click)"><i class="fa fa-mail-reply fa-fw"></i></button>
         <div class="wc_spacer" style="height:4%"></div>
         <button type="button" class="button" onClick="city_insert_in_worklist();" id="city_worklist_insert_btn" title="Insert first in queue or before selected task (ALT-SHIFT-Click)"><i class="fa fa-chevron-left fa-fw"></i></button>
-        <button type="button" class="button" onClick="city_add_to_worklist();" id="city_worklist_append_btn" title="Append to end of worklist (SHIFT-click)"><i class="fa fa-download fa-fw"></i></button>        
+        <button type="button" class="button" onClick="city_add_to_worklist();" id="city_worklist_append_btn" title="Append to end of worklist (SHIFT-click)"><i class="fa fa-download fa-fw"></i></button>
         <div class="wc_spacer"></div>
         <button type="button" class="button" onClick="city_worklist_task_up();" id="city_worklist_up_btn" title="Move selected tasks up"><i class="fa fa-chevron-up fa-fw"></i></button>
         <button type="button" class="button" onClick="city_worklist_task_down();" id="city_worklist_down_btn" title="Move selected tasks down"><i class="fa fa-chevron-down fa-fw"></i></button>
@@ -119,10 +119,10 @@
         <button type="button" class="button" onClick="city_worklist_task_remove();" id="city_worklist_remove_btn" title="Remove selected tasks (Double-click)"><i class="fa fa-trash fa-fw"></i></button>
       </div>
     </div>
-  </div> 
+  </div>
   <div id="city_tabs-2">
     <div id="city_traderoutes_tab" class="citydlg_tabs"></div>
-  </div> 
+  </div>
   <div id="city_tabs-3">
     <div id="city_settings_tab" class="citydlg_tabs">
       <div id="city_disband_options" >
@@ -134,7 +134,7 @@
   </div>
 
    <div id="city_tabs-h" class="citydlg_tabs">
-      <div id="city_happy_tab">           
+      <div id="city_happy_tab">
       </div>
    </div>
 
@@ -146,11 +146,11 @@
         <span class="mobile_remove"> <input title="Suppress all Farmer specialists." type="checkbox" onchange="cma_user_input();" id="cma_nofarmer" class="css-checkbox"><label for="cma_nofarmer" name="cma_nofarmer_lbl" class="css-label dark-check-red"><span style="font-size:110%;">No Farmers</span></label>
         <span class="mobile_remove"> <input type="checkbox" onchange="cma_user_input();" id="cma_disorder" class="css-checkbox"><label for="cma_disorder" name="cma_disorder_lbl" class="css-label dark-check-red"><span style="font-size:110%;">Allow Disorder</span></label><br><br></span><form name="cma_min_vals"><table border="0"><tbody><tr><th id="cma_surplus_hdr" style="color: rgb(211, 173, 143); text-shadow: 1px 2px #000; font-size:133%">Minimum Surplus</th></tr><tr> <td><span style="margin-left:-30px; float:right"><b>Food </b><img style="" class="lowered_gov" src="/images/wheat.png"></span></td> <td><div class="cma_slider" id="cma-min-slider-Food"></div> </td><td> <div class="food_text cma_slider no_bg" id="Food_min_result" style="text-shadow: 2px 1px #000; float:left;"></div> </td></tr><tr> <td><span style="margin-left:-30px; float:right"><b>Shield </b><img style="" class="lowered_gov" src="/images/shield14x18.png"></span></td> <td><div class="cma_slider" id="cma-min-slider-Shield"></div> </td><td> <div class="prod_text cma_slider no_bg" id="Shield_min_result" style="text-shadow: 2px 1px #000; float:left;"></div> </td></tr><tr> <td><span style="margin-left:-30px; float:right"><b>Trade </b><img style="" class="lowered_gov" src="/images/trade.png"></span></td> <td><div class="cma_slider" id="cma-min-slider-Trade"></div> </td><td> <div class="trade_text cma_slider no_bg" id="Trade_min_result" style="text-shadow: 2px 1px #000; float:left;"></div> </td></tr><tr> <td><span style="margin-left:-30px; float:right"><b>Gold </b><img style="" class="lowered_gov" src="/images/gold.png"></span></td> <td><div class="cma_slider" id="cma-min-slider-Gold"></div> </td><td> <div class="gold_text cma_slider no_bg" id="Gold_min_result" style="text-shadow: 2px 1px #000; float:left;"></div> </td></tr><tr> <td><span style="margin-left:-30px; float:right"><b>Luxury </b><img style="" class="lowered_gov" src="/images/lux.png"></span></td> <td><div class="cma_slider" id="cma-min-slider-Luxury"></div> </td><td> <div class="lux_text cma_slider no_bg" id="Luxury_min_result" style="text-shadow: 2px 1px #000; float:left;"></div> </td></tr><tr> <td><span style="margin-left:-30px; float:right"><b>Science </b><img style="" class="lowered_gov" src="/images/sci.png"></span></td> <td><div class="cma_slider" id="cma-min-slider-Science"></div> </td><td> <div class="sci_text cma_slider no_bg" id="Science_min_result" style="text-shadow: 2px 1px #000; float:left;"></div> </td></tr></tbody></table></form><br class="mobile_remove"><button class="mobile_shrink" type="button" class="button ui-button ui-corner-all" onclick="button_pushed_cma_save();" id="btn_set_cma" title="Save On-Screen Settings as the new City Governor Setttings for this city.">Save</button><button class="mobile_shrink" type="button" class="button ui-button ui-corner-all" onclick="button_pushed_cma_apply();" id="btn_apply_cma" title="Set city tiles to match On-Screen Settings without changing the current City Governor Settings.">Set Once</button><button class="mobile_shrink" type="button" class="button ui-button ui-corner-all" onclick="cma_copy_current();" title="Copy On-Screen Settings to Clipboard.">Copy</button><button class="mobile_shrink" type="button" class="button ui-button ui-corner-all" onclick="cma_paste_clipboard();" title="Paste Clipboard to the On-Screen Settings.">Paste</button><button id="btn_cma_setall" class="mobile_shrink" type="button" class="button ui-button ui-corner-all" onclick="cma_all_cities(true);" title="Set tiles in all cities to match the Clipboard, without changing City Governor Settings.">&#x26A0;&#xFE0F;Set All</button><button id="btn_cma_saveall" class="mobile_shrink" type="button" class="button ui-button ui-corner-all" onclick="cma_all_cities(false);" title="Paste and save Clipboard as the new City Governor Settings, for all cities.">&#x26A0;&#xFE0F;Save All</button><button id="btn_cma_refreshall" class="mobile_shrink" type="button" class="button ui-button ui-corner-all" onclick="cma_clipboard_macro(null,true);" title="Auto-arrange tiles in all cities with a Governor">&#x26A0;&#xFE0F;Refresh All</button><div id="cma_unsaved_warning" style="display: none;"></div></header></header>
       </div>
-  </div> 
+  </div>
 
   <div id="city_tabs-i" class="citydlg_tabs">
     <div id="city_units_tab"></div>
-  </div> 
+  </div>
 
 
 </div>
