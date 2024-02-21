@@ -1601,7 +1601,7 @@ function handle_unit_packet_common(packet_unit)
      2. If focused on a new unit, OR if ANY unit on the tile was the packet-unit
         that underwent state change: update ORDERS buttons and active_units_dialog.
 
-     TODO: this probably removes the need for numerous hacky update_focus_units_panel()
+     TODO: this probably removes the need for numerous hacky update_game_unit_panel()
      calls that are sent, often with a timeout, after sending a packet for the unit to
      do an action.
 
@@ -1616,7 +1616,8 @@ function handle_unit_packet_common(packet_unit)
     var tunits = tile_units(index_to_tile(current_focus[0]['tile']));
     for (i = 0; i < tunits.length; i++) {
       if (tunits[i]['id'] == packet_unit['id']) {
-        update_focus_units_panel();
+
+        update_game_unit_panel();
         update_unit_order_commands();
         break;
       }
@@ -1748,7 +1749,7 @@ function handle_unit_combat_info(packet)
           update_tile_unit(units[packet['attacker_unit_id']]);
           update_tile_unit(units[packet['defender_unit_id']]);
           auto_center_on_focus_unit();
-          update_focus_units_panel();
+          update_game_unit_panel();
           update_unit_order_commands();
 */
           //setTimeout(update_unit_focus, 700);  // remove this if unit redraw still doesn't work
@@ -2037,7 +2038,7 @@ function handle_begin_turn(packet)
   }
   waiting_units_list = [];
   update_unit_focus();
-  update_focus_units_panel();
+  update_game_unit_panel();
   update_game_status_panel();
 
   var funits = get_units_in_focus();

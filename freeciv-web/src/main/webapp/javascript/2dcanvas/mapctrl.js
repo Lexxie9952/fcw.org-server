@@ -486,7 +486,7 @@ function map_select_units(canvas_x, canvas_y)
 
   current_focus = selected_units;
   action_selection_next_in_focus(IDENTITY_NUMBER_ZERO);
-  update_focus_units_panel();
+  update_game_unit_panel();
 }
 
 /**************************************************************************
