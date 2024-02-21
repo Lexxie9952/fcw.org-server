@@ -126,7 +126,7 @@ Server:
 
   Once the server is started, a prompt will appear:
 
-  |  For introductory help, type 'help'.
+  |  For introductory help, type /help
   |  >
 
   and, you can see this information by using the help command:
@@ -135,26 +135,26 @@ Server:
   |  Welcome - this is the introductory help text for the Freeciv server.
   |
   |  Two important server concepts are Commands and Options.
-  |  Commands, such as 'help', are used to interact with the server.
+  |  Commands, such as /help are used to interact with the server.
   |  Some commands take one or more parameters, separated by spaces.
   |  In many cases commands and command arguments may be abbreviated.
   |  Options are settings which control the server as it is running.
   |
   |  To find out how to get more information about commands and options,
-  |  use 'help help'.
+  |  use /help help
   |
   |  For the impatient, the main commands to get going are:
-  |    show   -  to see current options
-  |    set    -  to set options
-  |    start  -  to start the game once players have connected
-  |    save   -  to save the current game
-  |    quit   -  to exit
+  |    /show   -  to see current options
+  |    /set    -  to set options
+  |    /start  -  to start the game once players have connected
+  |    /save   -  to save the current game
+  |    /quit   -  to exit
   |  >
 
   If you like, you can use the 'set' command to set any of the various
   server options for the game.  You can get a list of the options
-  with the 'show' command, and detailed descriptions of each with the
-  'help <option-name>' command.
+  with the 'show' command, and detailed descriptions of each with:
+  /help <option-name>
 
   For example:
 

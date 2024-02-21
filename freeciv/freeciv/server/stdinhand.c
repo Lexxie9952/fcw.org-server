@@ -1832,11 +1832,11 @@ static void show_help_option_list(struct connection *caller,
 {
   cmd_reply(help_cmd, caller, C_COMMENT, horiz_line);
   cmd_reply(help_cmd, caller, C_COMMENT,
-   _("CTRL-Click link below for a full list and server settings and options:"));
-  notify_conn(caller->self, NULL, E_SETTING, ftc_any,
-              _("<a href='https://freecivweb.fandom.com/wiki/Game_Server_Settings'>Settings</a>"));
+   _("/HELP OPTIONS.  (CTRL-Click link below for full reference)"));
+  notify_conn(caller->self, NULL, E_BEGINNER_HELP, ftc_any,
+              _("<a href='https://freecivweb.fandom.com/wiki/Game_Server_Settings'>FCW Settings Wiki</a>"));
   cmd_reply(help_cmd, caller, C_COMMENT,
-	    _("Explanations are available for the following server options:"));
+	    _("Use /help <i>&lt;option name&gt;</i> for explanations for the following server options:"));
   cmd_reply(help_cmd, caller, C_COMMENT, horiz_line);
   if (!caller && con_get_style()) {
     settings_iterate(SSET_ALL, pset) {
@@ -2283,15 +2283,15 @@ static bool show_settings(struct connection *caller,
   cmd_reply_show(horiz_line);
   /* Only emit this additional help for bona fide 'show' command */
   if (called_as == CMD_SHOW) {
-    cmd_reply_show(_("A help text for each option is available via 'help "
+    cmd_reply_show(_("A help text for each option is available via <b>/help</b> "
                      "<option>'."));
     cmd_reply_show(horiz_line);
     if (level == SSET_VITAL) {
-      cmd_reply_show(_("Try 'show situational' or 'show rare' to show "
+      cmd_reply_show(_("Try <b>/show situational</b> or 'show rare' to show "
                        "more options.\n"
-                       "Try 'show changed' to show settings with "
+                       "Try <b>/show changed</b> to show settings with "
                        "non-default values.\n"
-                       "Try 'show locked' to show settings locked "
+                       "Try <b>/show locked</b> to show settings locked "
                        "by the ruleset."));
       cmd_reply_show(horiz_line);
     }
@@ -6773,21 +6773,21 @@ static void show_help_intro(struct connection *caller,
     _("Welcome - this is the introductory help text for the Freeciv "
       "server.\n"
       "\n"
-      "Two important server concepts are Commands and Options. Commands, "
-      "such as 'help', are used to interact with the server. Some commands "
+      "Two important server concepts are Commands and Options. Commands "
+      "such as <b>/help</b> are used to interact with the server. Some commands "
       "take one or more arguments, separated by spaces. In many cases "
       "commands and command arguments may be abbreviated. Options are "
       "settings which control the server as it is running.\n"
       "\n"
       "To find out how to get more information about commands and options, "
-      "use 'help help'.\n"
+      "use <b>/help help</b>\n"
       "\n"
       "For the impatient, the main commands to get going are:\n"
-      "  show   -  to see current options\n"
-      "  set    -  to set options\n"
-      "  start  -  to start the game once players have connected\n"
-      "  save   -  to save the current game\n"
-      "  quit   -  to exit"));
+      "  /show   -  to see current options\n"
+      "  /set    -  to set options\n"
+      "  /start  -  to start the game once players have connected\n"
+      "  /save   -  to save the current game\n"
+      "  /quit   -  to exit"));
 
   fc_break_lines(help, LINE_BREAK);
   cmd_reply(help_cmd, caller, C_COMMENT, "%s", help);
@@ -6921,7 +6921,7 @@ static void cmd_reply_matches(enum command_id cmd,
 }
 
 /**************************************************************************
-  Additional 'help' arguments
+  Additional /help arguments
 **************************************************************************/
 #define SPECENUM_NAME help_general_args
 #define SPECENUM_VALUE0     HELP_GENERAL_COMMANDS
@@ -7828,7 +7828,7 @@ static bool contains_str_before_start(int start, const char *cmd,
 
 /**********************************************************************//**
   Return whether we are completing command name. This can be either
-  command itself, or argument to 'help'.
+  command itself, or argument to /help
 **************************************************************************/
 static bool is_command(int start)
 {

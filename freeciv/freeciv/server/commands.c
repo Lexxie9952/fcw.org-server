@@ -147,10 +147,10 @@ static struct command commands[] = {
    N_("explain\n"
       "explain <option-name>"),
    N_("Explain server options."),
-   N_("The 'explain' command gives a subset of the functionality of 'help', "
+   N_("The /explain command gives a subset of the functionality of /help "
       "and is included for backward compatibility. With no arguments it "
-      "gives a list of options (like 'help options'), and with an argument "
-      "it gives help for a particular option (like 'help <option-name>')."),
+      "gives a list of options (like /help options), and with an argument "
+      "it gives help for a particular option (like /help <option-name>)."),
    NULL,
    CMD_ECHO_NONE, VCF_NONE, 0
   },

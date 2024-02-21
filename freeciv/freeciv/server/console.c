@@ -273,7 +273,7 @@ void con_prompt_init(void)
 
   if (first) {
     con_puts(C_COMMENT, "");
-    con_puts(C_COMMENT, _("For introductory help, type 'help'."));
+    con_puts(C_COMMENT, _("For introductory help, type /help"));
     first = FALSE;
   }
 }

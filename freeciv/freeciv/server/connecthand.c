@@ -352,7 +352,7 @@ void establish_new_connection(struct connection *pconn)
     }
   } else {
     notify_conn(dest, NULL, E_CONNECTION, ftc_server,
-		_("You are logged in as '%s' connected to %s."),
+		_("You are logged in as '%s' connected to %s.<br>Command line is active."),
                 pconn->username,
                 player_name(pconn->playing));
   }
