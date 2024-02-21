@@ -765,13 +765,13 @@ function pregame_settings()
       + "<div id='pregame_settings_tabs-1'><table id='settings_table'> "
       + "<tr title='Ruleset version'><td>Ruleset:</td>"
       + "<td><select name='ruleset' id='ruleset'>"
-      + "<option value='mp2-elephant'>Multiplayer 2.5 (under development)</option>"
-      + "<option value='mp2-dragoon'>Multiplayer 2.4 Dragoon</option>"
-      + "<option value='mp2-caravel'>Multiplayer 2.3 Caravel</option>"
-      + "<option value='mp2-brava'>Multiplayer 2.2 Brava</option>"
-      + "<option value='mp2-ag'>Multiplayer 2.1 Avant-garde</option>"
-      + "<option value='mpplus'>Multiplayer+ 1.1</option>"
-      + "<option value='multiplayer'>Multiplayer 1.0</option>"
+      + "<option value='mp2-elephant'>MP 2.5 (under development)</option>"
+      + "<option value='mp2-dragoon'>Dragoon MP 2.4</option>"
+      + "<option value='mp2-caravel'>Caravel MP 2.3</option>"
+      + "<option value='mp2-brava'>Brava MP 2.2</option>"
+      + "<option value='mp2-ag'>Avant-garde MP 2.1</option>"
+      + "<option value='mpplus'>MP+ 1.1</option>"
+      + "<option value='multiplayer'>MP 1.0</option>"
       + "<option value='classicplus'>Classic+ 1.1</option>"
       + "<option value='classic'>Classic</option>"
       + "<option value='civ2civ3'>Civ2Civ3</option>"
@@ -1274,7 +1274,7 @@ function show_intro_dialog(title, message) {
     join_game_customize_text = "Join Game";
     join_game_title_text = "Join this active game";
   } else {
-    join_game_customize_text = "Start";
+    join_game_customize_text = "Game Setup";
     join_game_title_text = "Go to Game Launch area.";
   }
 
