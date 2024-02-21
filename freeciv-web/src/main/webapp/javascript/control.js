@@ -1144,7 +1144,7 @@ function control_unit_killed(punit)
       current_focus = unit_list_without(current_focus, punit);
     }
 
-    update_active_units_dialog();
+    update_focus_units_panel();
     update_unit_order_commands();
   }
 }
@@ -1303,7 +1303,7 @@ function advance_unit_focus(same_type)
     save_last_unit_focus();
     current_focus = []; /* Reset focus units. */
     unit_may_have_lost_focus();
-    update_active_units_dialog();
+    update_focus_units_panel();
     $("#game_unit_orders_default").hide();
 
     if (touch_device || is_small_screen() || (!is_longturn() && browser.opera && fullscreen))
@@ -1393,7 +1393,7 @@ function advance_focus_inactive_units()
     unit_may_have_lost_focus();
     waiting_units_list = []; /* Reset waiting units list */
     if (renderer == RENDERER_WEBGL) webgl_clear_unit_focus();
-    update_active_units_dialog();
+    update_focus_units_panel();
     $("#game_unit_orders_default").hide();
   }
 }
@@ -2346,7 +2346,7 @@ function init_game_unit_panel()
                                               $(".unit_dialog").css("float","left");
                                               $(".unit_dialog").css(
                                                 {"position":{my: 'right bottom', at: 'right bottom', of: window, within: $("#tabs-map")}});
-                                                update_active_units_dialog(); //update properly resets position
+                                                update_focus_units_panel(); //update properly resets position
 
                                               //$("#game_unit_panel").parent().css(
                                               //    {"position":{my: 'right bottom', at: 'right bottom', of: window, within: $("#tabs-map")}});
@@ -2367,7 +2367,7 @@ function init_game_unit_panel()
     // = "<div style='font-size:90%; vertical-align:top;'>&#x265F;</div>";
        = "<img src='/images/e/phalanx.png' height='16px'>";
 
-  update_active_units_dialog();
+  update_focus_units_panel();
 }
 
 /**************************************************************************
@@ -2551,7 +2551,7 @@ function set_unit_focus(punit)
   }
 
   if (punit) warcalc_set_default_vals(punit);
-  update_active_units_dialog();
+  update_focus_units_panel();
   update_unit_order_commands();
 }
 
@@ -2581,7 +2581,7 @@ function click_unit_in_panel(e, punit)
     if (renderer == RENDERER_WEBGL) update_unit_position ( index_to_tile(punit['tile']));
     auto_center_on_focus_unit();
 
-    update_active_units_dialog(); //previously only doing this but it lost unselected units in the panel
+    update_focus_units_panel(); //previously only doing this but it lost unselected units in the panel
 
     // added these lines below to emulate same code as non-shift-click which doesn't lose units in the panel:
     update_unit_order_commands();
@@ -2619,7 +2619,7 @@ function set_unit_focus_and_redraw(punit)
   last_saved_tile = recent_saved_tile;
   if (punit != null) recent_saved_tile = index_to_tile(punit['tile']);
   auto_center_on_focus_unit();
-  update_active_units_dialog();
+  update_focus_units_panel();
   update_unit_order_commands();
   if (current_focus.length > 0 && $("#game_unit_orders_default").length > 0 && show_order_option ) {
     $("#game_unit_orders_default").show();
@@ -3528,7 +3528,7 @@ function do_map_click(ptile, qtype, first_time_called)
               }
             }
           }
-          update_active_units_dialog();
+          update_focus_units_panel();
         }
         // END OF SHIFT-CLICK handling -----------------------------------------------------------------------------
 
@@ -3547,7 +3547,7 @@ function do_map_click(ptile, qtype, first_time_called)
               set_unit_focus_and_redraw(sunits[0]); //this shouldn't happen but, select first unit[0] if player doesn't have own unit.
               console.log("Logic fault: player has own unit supposedly present but we're selecting sunit[0] instead.")
             }
-          update_active_units_dialog();
+          update_focus_units_panel();
         }
 
         if (touch_device) { // show context menu unless we clicked on a city prior to GOTO_COOLDOWN period
@@ -3569,7 +3569,7 @@ function do_map_click(ptile, qtype, first_time_called)
         if (current_focus.length>0) // just for insurance ;)
           warcalc_set_default_vals(current_focus[0]);  // feeds the warcalc with default values from current_focus[0]
         $("#game_unit_orders_default").hide();
-        update_active_units_dialog();
+        update_focus_units_panel();
       }
     }
   }
@@ -4322,7 +4322,7 @@ function map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
         goto_request_map = {};
         goto_turns_request_map = {};
         clear_goto_tiles();
-        update_active_units_dialog();
+        update_focus_units_panel();
 
         // clear out of special UI-states, too
         map_select_active = false;
@@ -4881,7 +4881,7 @@ function deactivate_goto(will_advance_unit_focus)
     setTimeout(update_unit_focus, update_focus_delay);
   /* if leaving goto mode but not advancing, restore unit dialog to
      display unit stats instead of 'turns for goto' */
-  else update_active_units_dialog();
+  else update_focus_units_panel();
 
   /* Clear the order this action would have performed. */
   goto_last_order = ORDER_LAST;
@@ -5008,7 +5008,7 @@ function key_unit_load(scoop_units)
     add_client_message("Loading " + pluralize("unit", loaded)
                        + ". " + loaded_list
                        + " &#8594; [`" + freemoji_name_from_universal(unit_type(sunit).name) +"`] ");
-    setTimeout(update_active_units_dialog, update_focus_delay*1.55);
+    setTimeout(update_focus_units_panel, update_focus_delay*1.55);
     return;
   } // *********** END PHASE I *************************************************************************************
   // PHASE II: if no selected units given 'L' order succeeded, then we just want to Board a transport.
@@ -5155,7 +5155,7 @@ function key_unit_load(scoop_units)
 //             + freemoji_name_from_universal(unit_type(units[boarded_on[punit.id]]).name) +"`] " : "") );
              + freemoji_name_from_universal(unit_type(units[last_successful_transport]).name) +"`] " : "") );
 
-    setTimeout(update_active_units_dialog, update_focus_delay);
+    setTimeout(update_focus_units_panel, update_focus_delay);
   }
   // Don't advance focus if more than one dialog open, it would reset our focus units
   // which we need for upcoming dialogs for each additional unit
@@ -5345,7 +5345,7 @@ function key_select_all_units_on_tile()
           }
       }
     }
-    update_active_units_dialog();
+    update_focus_units_panel();
   }
 }
 
@@ -5371,7 +5371,7 @@ function key_select_same_type_units_on_tile()
           }
       }
     }
-    update_active_units_dialog();
+    update_focus_units_panel();
   }
 }
 
@@ -5401,7 +5401,7 @@ function key_select_different_units_on_tile()
           }
       }
     }
-    update_active_units_dialog();
+    update_focus_units_panel();
   }
 }
 
@@ -5436,7 +5436,7 @@ function key_select_same_global_type(continent_only)
           }
       }
     }
-    update_active_units_dialog();
+    update_focus_units_panel();
 }
 
 /**************************************************************************
@@ -5477,7 +5477,7 @@ function key_filter_for_units_in_queue() {
       }
     }
   }
-  update_active_units_dialog();
+  update_focus_units_panel();
 }
 
 /**************************************************************************
@@ -5537,7 +5537,7 @@ function key_unit_show_cargo()
   }
 
   deactivate_goto(false);
-  update_active_units_dialog();
+  update_focus_units_panel();
   if (current_focus.length>0) warcalc_set_default_vals(current_focus[0]);
   update_unit_order_commands();
 }
@@ -6203,7 +6203,7 @@ function key_unit_upgrade()
     request_unit_do_action(ACTION_UPGRADE_UNIT, punit['id'], target_id);
   }
   deactivate_goto(false);
-  setTimeout(update_active_units_dialog, update_focus_delay*.85);
+  setTimeout(update_focus_units_panel, update_focus_delay*.85);
   setTimeout(update_unit_focus, update_focus_delay);
 }
 
@@ -7299,7 +7299,7 @@ function request_unit_build_city()
           },
           function(){
              send_request(JSON.stringify(packet));
-             setTimeout(update_active_units_dialog, update_focus_delay);
+             setTimeout(update_focus_units_panel, update_focus_delay);
           });
           setSwalTheme();
         }
@@ -7425,7 +7425,7 @@ function key_unit_disband()
       //remove_unit_id_from_waiting_list(punit['id']); // definitely don't want dead unit on wait list
     }
     setTimeout(update_unit_focus, update_focus_delay);
-    setTimeout(update_active_units_dialog, update_focus_delay+100);
+    setTimeout(update_focus_units_panel, update_focus_delay+100);
   });
   setSwalTheme();
   deactivate_goto(false);
@@ -7874,9 +7874,12 @@ function center_on_any_city()
 }
 
 /**************************************************************************
- This function shows the dialog containing active units on the current tile.
+ This function shows the panel containing focused units, by default on
+ the current tile but also any units on other tiles that were selected by
+ shift-click, area-select (right-click-drag), select-all-on-continent,
+ and so on.
 **************************************************************************/
-function update_active_units_dialog()
+function update_focus_units_panel()
 {
   var unit_info_html = "";
   var ptile = null;
@@ -8292,7 +8295,7 @@ function check_mouse_drag_unit(ptile)
 
   var ptile_units = tile_units(ptile);
   if (ptile_units.length > 1) {
-     update_active_units_dialog();
+     update_focus_units_panel();
   }
 }
 /**************************************************************************

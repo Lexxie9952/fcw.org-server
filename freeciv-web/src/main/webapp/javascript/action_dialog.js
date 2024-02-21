@@ -425,7 +425,7 @@ function act_sel_click_function(parent_id,
       // unit lost hp, mp, or died or promoted after attack, so update it:
       /* REMOVAL CANDIDATE: this may no longer be necessary since handle_unit_packet_common()
          updates active unit dialog whenever a selected unit received new unit info packet */
-      setTimeout(update_active_units_dialog, update_focus_delay);
+      setTimeout(update_focus_units_panel, update_focus_delay);
       remove_action_selection_dialog(parent_id, actor_unit_id);
     };
   default:
@@ -781,7 +781,7 @@ function popup_action_selection(actor_unit, action_probabilities,
             click   : function() {
                 request_unit_do_action(ACTION_ATTACK,
                   actor_unit['id'], target_tile['index']);
-                setTimeout(update_active_units_dialog, update_focus_delay);
+                setTimeout(update_focus_units_panel, update_focus_delay);
                 auto_attack = true;
                 remove_action_selection_dialog(id, actor_unit['id']);
             }
@@ -1734,7 +1734,7 @@ function create_load_transport_button(actor, ttile, tid, tmoves, tloaded, tcapac
       // Loaded units don't ask orders later:
       remove_unit_id_from_waiting_list(actor['id']);
       actor['done_moving'] = true;
-      setTimeout(update_active_units_dialog, 600);
+      setTimeout(update_focus_units_panel, 600);
 
       // for very last dialog, click advances unit focus
       if (dialog_num==last_dialog) setTimeout(function() {advance_unit_focus(false)}, 700);

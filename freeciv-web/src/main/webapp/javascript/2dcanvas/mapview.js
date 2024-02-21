@@ -983,7 +983,7 @@ function set_default_mapview_active()
   }
 
   if (unitpanel_active) {
-    update_active_units_dialog();
+    update_game_unit_panel();
   }
 
   if (chatbox_active) {
