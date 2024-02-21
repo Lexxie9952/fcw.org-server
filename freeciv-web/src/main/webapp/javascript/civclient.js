@@ -54,11 +54,42 @@ $(document).ready(function() {
   civclient_init();
 });
 
+
+
+/**************************************************************************
+ Set up frequently used html elements to reduce markup verbosity
+**************************************************************************/
+function define_autonomous_html_element_tags() {
+  class font_ultra_light extends HTMLElement { constructor() {super();} };
+  customElements.define("ulight-", font_ultra_light);
+
+  class font_thin extends HTMLElement { constructor() {super();} };
+  customElements.define("thin-", font_thin);
+
+  class font_light extends HTMLElement { constructor() {super();} };
+  customElements.define("light-", font_light);
+
+  class font_regular extends HTMLElement { constructor() {super();} };
+  customElements.define("reg-", font_regular);
+
+  class font_medium extends HTMLElement { constructor() {super();} };
+  customElements.define("med-", font_medium);
+
+  class font_semibold extends HTMLElement { constructor() {super();} };
+  customElements.define("sb-", font_semibold);
+
+  class font_black extends HTMLElement { constructor() {super();} };
+  customElements.define("black-", font_black);
+}
+
+
 /**************************************************************************
  This function is called on page load.
 **************************************************************************/
 function civclient_init()
 {
+  define_autonomous_html_element_tags();
+
   $.blockUI.defaults['css']['backgroundColor'] = "#222";
   $.blockUI.defaults['css']['color'] = default_dialog_text_color;
   $.blockUI.defaults['theme'] = true;
@@ -434,26 +465,20 @@ function init_common_intro_dialog() {
       //+" (<a class='pwd_reset' href='#' style='color: #404A6F;'>Forgot password?</a>) Have fun! <br>");
       //$(".pwd_reset").click(forgot_pbem_password);
   }
-  $("#pregame_message_area").html("<b>Game</b>: Select rules and game settings.<br>"+
-  "<b>Load</b>: Load saved game.<br>"+
-  "<b>Nation</b>: Pick nation.<br>"+
-  "<b>Start</b>: Do <u>after</u> you set rules and settings.<br><br>"+
-  ($.getUrlVar('action') != "multi"
+  $("#pregame_message_area").html("<light->"
+  + ($.getUrlVar('action') != "multi"
      ?
-     "<u>Starting a game confirms consent with our <a href='https://www.freecivweb.org/rules'>Terms of Service</a>.</u><br><br>"+
-     "<b>WARNING:</b> Default rules for Singleplayer are now <b><u>Classic+.</u></b><br><br>"+
-     "<u>All rulesets are suitable for Singleplayer.</u><br><br>"+
-     "<b>NOTE:</b> Rulesets named 'Multiplayer' are simply the more modern rulesets that work well with any number of players.<br>"+
-     "You can play Singleplayer with a Multiplayer ruleset if you wish to improve for multiplayer games with other humans.<br>"+
-     "&nbsp;&bull; If you do this, try: &nbsp; <b>/set sciencebox 80</b> &nbsp; (or similar) to set a singleplayer research pace. <b>/help sciencebox</b> for more info.<br>"
-     : "Default rules for multiplayer games are: <b>Multiplayer II Evolution Avant-garde.</b> (mp2-ag)<br><br>"   ) +
+     "Game version currently set to: <b>Classic+</b><br><br>"
+     : "Game version currently set to: <b>Avant-garde MP 2.1</b><br><br>"   )
 
-  "Click <b>Game</b> button to select Game Version (ruleset).<br><br>"+
-  "Advanced: You can tune more settings with the command line.<br>"+
-  "&nbsp;&nbsp;&nbsp;To see all options: <b>/show all</b><br>"+
-  "&nbsp;&nbsp;&nbsp;Set option to ####: <b>/set</b> option_name ####<br> &nbsp;&nbsp;&nbsp;<i>(use </i><b>empty</b><i> to set empty value of \"\")</i>"+
-  "&nbsp;&nbsp;&nbsp;To see option help: <b>/help</b> option_name<br><br><br>"
-   );
+    + "Click <b>SETUP</b> for the modern versions or game settings.<br>"
+    + "Click <b>Start</b> to launch game with current settings.<br><br>"
+    + "<reg->Experienced players can tune advanced settings in the command line:</reg-><br>"
+    + "&nbsp;&nbsp;&nbsp;<thin->&#x2022; To see all options: <reg->/show all</reg-><br>"
+    + "&nbsp;&nbsp;&nbsp;&#x2022; To see option help: <reg->/help <i>&lt;option name&gt;</i></reg-><br>"
+    + "&nbsp;&nbsp;&nbsp;&#x2022; To change an option: <reg->/set option <i>&lt;setting&gt;</i></reg-><br> "
+    + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ... <reg->/set option empty</reg-><i> sets it to \"\"</i></light-></thin-><br><br><br><br><br><br>"
+  );
 }
 
 /**************************************************************************
