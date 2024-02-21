@@ -170,6 +170,9 @@ function empire_unit_homecity_screen(wide_screen,narrow_screen,small_screen,
                   + "<label for='show_free' name='show_free_lbl' title='Show units with upkeep cost who are receiving free bonus upkeep' class='css-label dark-check-white'>Free</label>&ensp;";
   panel_html += "<input type='checkbox' class='css-checkbox' id='show_zero' name='cbZR' value='false' onclick='toggle_empire_show_upkeep(\"zero\");'>"
                   + "<label for='show_zero' name='show_zero_lbl' title='Show unit types who never pay upkeep' class='css-label dark-check-cyan'>Zero</label>";
+  panel_html += "<span style='margin-left: 90px;'>&nbsp;</span>"; // spacer
+  panel_html += "<button id='button_hpy_rpt' type='button' class='button ui-button ui-corner-all ui-widget' onclick='empire_do_unit_unhappy_report();'"
+  + "title='Show report on all aggressive units in the empire which anger citizens. (Hotkey: CTRL-U)' style='padding:5px; margin-bottom:2px;'>&#x270A;&#x1F3FD; National Units Impact Report &#x270A;&#x1F3FD;</button>";
 
   $("#empire_mode_panel").html(panel_html);
   $("#show_hp").prop("checked", empire_show_hitpoints);
@@ -442,7 +445,15 @@ function empire_unit_homecity_screen(wide_screen,narrow_screen,small_screen,
   } else if (wide_screen) {
   }
 }
-
+/**************************************************************************
+ Button click in unit home cities to generate nationwide report on all
+ units causing unhappines, in the console.
+**************************************************************************/
+function empire_do_unit_unhappy_report()
+{
+  unit_unhappy_report();
+  $("#map_tab").click();
+}
 
 /**************************************************************************
  Display Empire tab when it's in EMPIRE_UNIT_IN_CITY_MODE

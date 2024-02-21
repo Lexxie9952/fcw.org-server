@@ -230,6 +230,98 @@ function unit_type(unit)
 }
 
 /**************************************************************************
+  Returns the number of people in a city whose mood is affected by
+  military units.
+  POSITIVE numbers:  citizens made unhappy by military units.
+  NEGATIVE numbers:  citizens pacified by military units (martial law.)
+**************************************************************************/
+function unit_military_unhappy_in_city(pcity)
+{
+  if (!pcity) return 0;
+  if (!pcity['ppl_unhappy'].length) return 0;  // May not have intel on this info
+
+  /* The number can be deduced from the difference in total unhappy in
+   * phase-layer 3 (NATIONALITY) and phase-layer 4 (UNITS) */
+  const natl_unhappy = pcity['ppl_angry'][FEELING_NATIONALITY] * 2
+                     + pcity['ppl_unhappy'][FEELING_NATIONALITY];
+  const unit_unhappy = pcity['ppl_angry'][FEELING_MARTIAL] * 2
+                     + pcity['ppl_unhappy'][FEELING_MARTIAL];
+
+  return (unit_unhappy - natl_unhappy);
+}
+/**************************************************************************
+  Returns the happy cost this unit is charging its city.
+  This is currently using a repurposed punit.facing property which is
+  unused in FCW, to save on data bandwidth. If we ever change that,
+  this is the wrapper function to change.
+**************************************************************************/
+function unit_happy_cost(punit)
+{
+  if (punit) {
+    /* TODO: Reloaded games seem to make all units face dir 6
+       but I can't seem to find/fix that. */
+    if (inside(0, punit['facing'], 6)) {
+      return punit['facing'];
+    }
+  }
+  return 0;
+}
+/**************************************************************************
+  Prints a report in the client console for units causing unhappiness to
+  their home city. If city_id parameter is set, it will do a report for the
+  single city specified by city_id. Otherwise it will do a nation-wide
+  report.
+**************************************************************************/
+function unit_unhappy_report(city_id)
+{
+  // Fail out if invalid/unknown city requested:
+  if (city_id) {
+    if (!cities[city_id]) return;
+  }
+
+  const city_str = (city_id ? (" in "+cities[city_id]['name']) : "");
+
+  add_client_message("<i style='color:#ff5e5f'><b>Report on citizens unhappy about units"+city_str+"</b></i>:")
+  let total = 0;
+  for (u in units) {
+    let punit = units[u];
+
+    // Pass over ineligible units:
+    if (!punit) continue;
+    else if (punit['owner'] != client.conn.playing.playerno) continue;
+    else if (city_id && (punit['homecity'] != city_id)) continue;
+
+    // If current iterated unit causes unhappy, report it:
+    let num = unit_happy_cost(punit);
+    if (num) {
+      total ++;
+      let pcity = cities[punit['homecity']];
+      let ctile = index_to_tile(pcity['tile']);
+
+      add_client_message(
+        '<div class="fake_table_grid">'
+
+      + '<div onclick="set_unit_id_focus_and_activate('+punit['id']+');">'
+      + '<b class="contrast_text">'+num+'</b> unhappy from '
+      + '[`' + freemoji_name_from_universal(unit_type(punit).name) +'`]'
+      + '<span class="active_link chatbox_text_tileinfo" style="float:right"> '
+      + '<u>' + unit_type(punit)['name'] + '</u>'
+      + '</span></div>'
+
+      + '<div onclick="show_city_dialog_by_id('+pcity.id+');">'
+      + '<span class="chatbox_text_tileinfo">&nbsp;in '
+      + '<u class="active_link">' + '<l tgt="tile" x="'+ctile.x+'" y="'+ctile.y+'">' + pcity.name + '</l></u>'
+      + '</span>'
+      + '</div>'
+
+      + '</div>');
+    }
+  }
+  if (!total) add_client_message("<i style='color:#ff5e5f;font-size:smaller'>No units to report.");
+  else add_client_message("<i style='color:#ff5e5f;font-size:smaller'>"+ total + "" + (total-1 ? " total units." : " unit."));
+}
+
+/**************************************************************************
   Return TRUE iff this unit can do the specified generalized (ruleset
   defined) action enabler controlled action.
 **************************************************************************/
@@ -347,7 +439,7 @@ function unit_can_deboard(punit)
   //if (pclass == "Bomb") return false; // only allowed in city, handled above.
 
   if (!quay_rules) {
-    if (tile_has_extra(ptile, EXTRA_RIVER)) return false;
+    if (tile_has_river(ptile)) return false;
     return true;
   }
   // AG onward:
@@ -371,7 +463,7 @@ function unit_can_deboard(punit)
     return false;  // City already unloaded; Marines and Balloons already got off higher above.
   }
   if (tile_has_extra(ptile, EXTRA_QUAY)) return true;
-  if (tile_has_extra(ptile, EXTRA_RIVER)) return false;
+  if (tile_has_river(ptile)) return false;
   if (tile_has_extra(ptile, EXTRA_CANAL)) return false;
   if (tile_has_extra(ptile, EXTRA_WATERWAY)) return false;
   return true;
@@ -1047,22 +1139,54 @@ function get_unit_city_info(punit, plaintext)
   // HOME CITY, IF ANY OR KNOWN:
   if (get_unit_homecity_name(punit)) {
     result += ": "+get_unit_homecity_name(punit);
+    let happy_cost = unit_happy_cost(punit);
 
     // UPKEEP only happens for home city units
     if (upkeep_mode == 3) {
-      result += "\nFood/Gold/Shield: ";
-      if (punit['upkeep'] != null) {
-        result += punit['upkeep'][O_FOOD] + "/"
-              + punit['upkeep'][O_GOLD] + "/"
-              + punit['upkeep'][O_SHIELD];
+      prior = false;
+      let odata = "";
+      result += "\n";
+      if (punit['upkeep'][O_FOOD]) {
+        result+="Food";
+        odata += punit['upkeep'][O_FOOD];
+        prior = true;
       }
+      if (punit['upkeep'][O_GOLD]) {
+        if (prior) result+= "/";
+        result+="Gold";
+        odata += (prior?"/":"") + punit['upkeep'][O_GOLD];
+        prior = true;
+      }
+      if (punit['upkeep'][O_SHIELD]) {
+        if (prior) result+= "/";
+        result+="Shield";
+        odata += (prior?"/":"") + punit['upkeep'][O_SHIELD];
+        prior = true;
+      }
+      if (happy_cost) {
+        if (prior) result+= "/";
+        result+="Mad";             // MAD: "Military Agitation Disorder"
+        odata += (prior?"/":"") + happy_cost;
+        prior = true;
+      }
+      if (prior) result += ": " + odata;
     }
     else if (upkeep_mode==1) {
       result += "\nUpkeep: ";
       if (punit['upkeep'] != null) {
-        var food_string = punit['upkeep'][O_FOOD] ? punit['upkeep'][O_FOOD]+"f " : "";
-        result += food_string + punit['upkeep'][O_SHIELD];
-        if (food_string) result+="s";
+        let prior = false;
+        if (punit['upkeep'][O_FOOD]) {
+          prior = true;
+          result += punit['upkeep'][O_FOOD]+"f ";
+        }
+        if (punit['upkeep'][O_SHIELD]) {
+          result += punit['upkeep'][O_SHIELD];
+          if (prior || happy_cost) result += "s";
+          if (happy_cost) result += " ";
+        }
+        if (happy_cost) {
+          result += happy_cost +"m";
+        }
       }
     }
   } else if (client.conn.playing != null && punit['owner'] != client.conn.playing.playerno) {
@@ -1097,8 +1221,10 @@ function get_unit_city_info(punit, plaintext)
     if (tiles[punit['tile']]['owner'] == UNCLAIMED_LAND) {
       result += "\nTerritory: Unclaimed"
     } // if not in a city, it's informative to tell you it's in your nation:
-    else if (!pcity && tiles[punit['tile']]['owner'] == client.conn.playing.playerno) {
-      result += "\nTerritory: Homeland"
+    else if (tiles[punit['tile']]['owner'] == client.conn.playing.playerno) {
+      if (!pcity) result += "\nTerritory: Homeland"
+      else if (pcity['owner']==client.conn.playing.playerno) result += "🛖";
+      else result += "🛏️"
     }
     else if (tiles[punit['tile']]['owner'] != client.conn.playing.playerno) {
       var player_id = tiles[punit['tile']]['owner'];

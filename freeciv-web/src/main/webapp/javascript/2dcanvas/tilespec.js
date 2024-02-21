@@ -1420,6 +1420,23 @@ function get_html_activity_sprite(punit)
   }
   return "";
 }
+/**************************************************************************
+  Returns a <div> string that can be appended to an html string containing
+    a unit sprite, that will place the unhappy sprite over it in the
+    right place and keep the image underneath clickable.
+**************************************************************************/
+function get_html_cause_unhappy_sprite(punit)
+{
+  const protest_url = "/images/e/fist.png";
+  const ml = -44; const mr = -14; const mt = 44;
+  return "<div style='pointer-events: none; margin-left:"+ml+"px; margin-top:"+mt+"px; margin-right: "+mr+"px; float:left; content-align:left;"
+  + "background: transparent url("
+  + protest_url
+  + ");transform: scale(0.75); width: 24px;height: 24px;"
+  + " content-align: left;"
+  + "vertical-align:top; float:left;'>"
+  + "</div>";
+}
 
 /****************************************************************************
  gives an html-ready sprite from the tileset, by tag name

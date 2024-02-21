@@ -690,7 +690,7 @@ bool activity_requires_target(enum unit_activity activity)
   case ACTIVITY_IDLE:
   case ACTIVITY_FORTIFIED:
   case ACTIVITY_SENTRY:
-  case ACTIVITY_UNKNOWN:   // now used as vigil
+  case ACTIVITY_VIGIL:   // now used as vigil
   case ACTIVITY_GOTO:
   case ACTIVITY_EXPLORE:
   case ACTIVITY_TRANSFORM:
@@ -754,7 +754,6 @@ static bool is_real_activity(enum unit_activity activity)
           && activity != ACTIVITY_AIRBASE
           && activity != ACTIVITY_OLD_ROAD
           && activity != ACTIVITY_OLD_RAILROAD
-         // && activity != ACTIVITY_UNKNOWN   Vigil command
           && activity != ACTIVITY_PATROL_UNUSED;
 }
 
@@ -802,7 +801,7 @@ const char *get_activity_text(enum unit_activity activity)
     return _("Road");
   case ACTIVITY_CONVERT:
     return _("Convert");
-  case ACTIVITY_UNKNOWN:
+  case ACTIVITY_VIGIL:
     return _("Vigil");
   case ACTIVITY_OLD_ROAD:
   case ACTIVITY_OLD_RAILROAD:
@@ -1080,9 +1079,9 @@ bool can_unit_do_activity_targeted(const struct unit *punit,
   location.
 **************************************************************************/
 bool can_unit_do_activity_targeted_at(const struct unit *punit,
-				      enum unit_activity activity,
+				                              enum unit_activity activity,
                                       struct extra_type *target,
-				      const struct tile *ptile)
+				                              const struct tile *ptile)
 {
   struct terrain *pterrain = tile_terrain(ptile);
 
@@ -1104,10 +1103,14 @@ bool can_unit_do_activity_targeted_at(const struct unit *punit,
   }
 
   switch (activity) {
+/*case ACTIVITY_VIGIL:
+        return is_action_enabled_unit_on_tile(ACTION_VIGIL,
+                                              punit, ptile, target);  */
   case ACTIVITY_IDLE:
   case ACTIVITY_GOTO:
-  case ACTIVITY_VIGIL:  // new vigil command: TODO: may need some reqs put in
+  case ACTIVITY_VIGIL:  // TODO: Needs ACTION_VIGIL_1, _2, _3 added to trigger, then test legality here
     return TRUE;
+
 
   case ACTIVITY_POLLUTION:
      /* FIXME: The call below doesn't support actor tile speculation.
@@ -1534,7 +1537,7 @@ void unit_activity_astr(const struct unit *punit, struct astring *astr)
     astr_add_line(astr, "%s: %s", get_activity_text(punit->activity),
                   extra_name_translation(punit->activity_target));
     return;
-  case ACTIVITY_UNKNOWN:          // Vigil
+  case ACTIVITY_VIGIL:          // Vigil
     astr_add_line(astr, "%s", get_activity_text(punit->activity));
     return;
   case ACTIVITY_PATROL_UNUSED:
@@ -2035,8 +2038,11 @@ struct unit *unit_virtual_create(struct player *pplayer, struct city *pcity,
   punit->nationality = pplayer;
 
   punit->refcount = 1;
+#ifdef FREECIV_WEB
+  punit->facing = 0;
+#else
   punit->facing = rand_direction();
-
+#endif
   if (pcity) {
     unit_tile_set(punit, pcity->tile);
     punit->homecity = pcity->id;

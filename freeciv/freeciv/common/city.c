@@ -3247,6 +3247,9 @@ int city_unit_unhappiness(struct unit *punit, int *free_unhappy)
   happy_cost = utype_happy_cost(ut, plr);
 
   if (happy_cost <= 0) {
+#ifdef FREECIV_WEB
+    punit->facing = 0;
+#endif
     return 0;
   }
 
@@ -3255,6 +3258,9 @@ int city_unit_unhappiness(struct unit *punit, int *free_unhappy)
   if (!unit_being_aggressive(punit)) {
     if (!is_field_unit(punit)) {
       /* Non-aggressive non-field unit: 0 unhappy */
+#ifdef FREECIV_WEB
+      punit->facing = 0;
+#endif
       return 0;
     }
     /* Non-aggressive Field unit: let ruleset differentiate happy_cost for aggressive
@@ -3268,17 +3274,26 @@ int city_unit_unhappiness(struct unit *punit, int *free_unhappy)
   happy_cost -= get_city_bonus(pcity, EFT_MAKE_CONTENT_MIL_PER, V_COUNT);
 
   if (happy_cost <= 0) {
+#ifdef FREECIV_WEB
+    punit->facing = 0;
+#endif
     return 0;
   }
 
   if (*free_unhappy >= happy_cost) {
     *free_unhappy -= happy_cost;
+#ifdef FREECIV_WEB
+    punit->facing = 0;
+#endif
     return 0;
   } else {
     happy_cost -= *free_unhappy;
     *free_unhappy = 0;
   }
 
+#ifdef FREECIV_WEB
+  punit->facing = happy_cost;
+#endif
   return happy_cost;
 }
 
@@ -3339,7 +3354,8 @@ static inline void city_support(struct city *pcity)
 
   free_unhappy = get_city_bonus(pcity, EFT_MAKE_CONTENT_MIL, V_COUNT);
   unit_list_iterate(pcity->units_supported, punit) {
-    pcity->unit_happy_upkeep += city_unit_unhappiness(punit, &free_unhappy);
+    int unhappy = city_unit_unhappiness(punit, &free_unhappy);
+    pcity->unit_happy_upkeep += unhappy;
     output_type_iterate(o) {
       if (O_GOLD != o) {
         /* O_GOLD is handled with "game.info.gold_upkeep_style", see over. */

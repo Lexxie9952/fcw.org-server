@@ -4849,6 +4849,9 @@ static bool unit_move_consequences(struct unit *punit,
   bool refresh_homecity_end_pos = FALSE;
   int saved_id = punit->id;
   bool alive = TRUE;
+#ifdef FREECIV_WEB
+  int facing = punit->facing;
+#endif
 
   if (tocity && conquer_city_allowed) {
     if (!passenger) {
@@ -4939,6 +4942,14 @@ static bool unit_move_consequences(struct unit *punit,
 
   city_map_update_tile_now(dst_tile);
   sync_cities();
+
+#ifdef FREECIV_WEB
+    /* Update unhappiness-causality for units vis-à-vis their home cities. We only need to update
+       those units whose unhappy-causality got modified. The exception is passengers because their
+       unhappy-causality already got modified when their transport moved, so we don't know if they
+       were modified or not. Lets client know which units are angering their cities. */
+    if (alive && (passenger || punit->facing != facing)) send_unit_info(player_reply_dest(unit_owner(punit)), punit);
+#endif
 
   return alive;
 }
@@ -5172,11 +5183,13 @@ bool unit_move_real(struct unit *punit, struct tile *pdesttile, long move_cost,
   pdata = unit_move_data(punit, psrctile, pdesttile);
   unit_move_data_list_prepend(plist, pdata);
 
+#ifndef FREECIV_WEB
   /* Set unit orientation */
   if (adj) {
     /* Only change orientation when moving to adjacent tile */
     punit->facing = facing;
   }
+#endif
 
   /* Move magic. */
   //if (!unit_transported(punit)) punit->moved = TRUE;

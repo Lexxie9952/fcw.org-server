@@ -2636,6 +2636,12 @@ function set_unit_focus_and_activate(punit)
     ////////request_new_unit_activity(punit, ACTIVITY_IDLE, EXTRA_NONE);
   }
 }
+function set_unit_id_focus_and_activate(id)
+{
+  if (units[id]) {
+    set_unit_focus_and_redraw(units[id]);
+  }
+}
 
 /**************************************************************************
  See set_unit_focus_and_redraw()
@@ -4090,7 +4096,14 @@ function map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
         key_unit_move(DIR8_WEST);  // alt+U=7
       }
       //else if (shift) key_unit_show_cargo(); deprecated; moved to shift-A
-      else key_unit_upgrade();
+      else if (!ctrl && !shift && !alt) {
+        key_unit_upgrade();
+      }
+      // Unhappy report
+      else if (ctrl && !alt && !shift) {
+        the_event.preventDefault(); // override possible browser shortcut
+        unit_unhappy_report();
+      }
     break;
     case 'I':
       if (alt) {

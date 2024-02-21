@@ -57,8 +57,9 @@ const CURV_TRADE_REVENUE  = 3;
 const CURV_GOLD_PER_SHIELD= 4;
 const CURV_FOREIGNERS     = 5;
 const CURV_TURN_FOUNDED   = 6;
-const CURV_BUILD_SLOTS    = 7
-const CURV_LAST           = 8;
+const CURV_BUILD_SLOTS    = 7;
+const CURV_MIL_UNHAPPY    = 8;
+const CURV_LAST           = 9;
 const clkmsg = "\n\nClick top to sort.\nClick column BELOW to set info type";
 const CURV_icons = ["/images/city_user_row.png",
                     "/images/corrupt.png",
@@ -67,7 +68,8 @@ const CURV_icons = ["/images/city_user_row.png",
                     "/images/goldpershield.png",
                     "/images/foreigner.png",
                     "/images/stone_henge.png",
-                    "/images/e/factory.png"];
+                    "/images/e/factory.png",
+                    "/images/e/warriors.png"];
 const CURV_title = ["User Info Column:\nClick top to sort\nClick column BELOW to choose",
                     "Corruption"+clkmsg,
                     "Pollution Probability"+clkmsg,
@@ -75,7 +77,8 @@ const CURV_title = ["User Info Column:\nClick top to sort\nClick column BELOW to
                     "Gold cost per Shield"+clkmsg,
                     "Foreign Citizens"+clkmsg,
                     "Turn Founded"+clkmsg,
-                    "Unit Build Slots"+clkmsg];
+                    "Unit Build Slots"+clkmsg,
+                    "RED = Unhappy about Military.\nBLUE = Pacified by Martial Law"+clkmsg];
 
 // *****************************************************************
 
@@ -666,8 +669,10 @@ function show_city_dialog(pcity)
               + "px;  width: " + sprite['width'] + "px;height: " + sprite['height'] + "px;float:left; '"
               + " onclick='city_dialog_activate_unit(units[" + punit['id'] + "]);'"
               +"></div>";
-        } else { // foreign unit gets a flag drawn on it too
-          //console.log("Unit present.");
+
+        }
+        // Foreign unit gets a flag drawn on it too
+        else {
           var tag = nations[players[punit['owner']]['nation']]['graphic_str']
 
           var civ_flag_url = "";
@@ -695,10 +700,11 @@ function show_city_dialog(pcity)
                   +"></div>";
           }
         }
-        present_units_html = present_units_html + get_html_vet_sprite(punit);
-        //if (show_unit_movepct) present_units_html = present_units_html + get_html_mp_sprite(punit, false); // TO DO: showing both hp&mp messes up flow
-        present_units_html = present_units_html + get_html_hp_sprite(punit, false);
-        present_units_html = present_units_html + get_html_activity_sprite(punit);
+        present_units_html = present_units_html
+                           + get_html_vet_sprite(punit)
+                           + get_html_hp_sprite(punit, false)
+                           + get_html_activity_sprite(punit)
+                           + (unit_happy_cost(punit) ? get_html_cause_unhappy_sprite(punit) : "");
       }
       $("#city_present_units_list").html(present_units_html);
       // trick to compensate for removed scrollbar clipping the top:
@@ -710,14 +716,17 @@ function show_city_dialog(pcity)
   if (sunits != null) {
     var supported_units_html = "";
     var upkeep_str = "";
-    var fu=0,gu=0,su=0;   // total upkeep counters
+    var fu=0,gu=0,su=0,mu=0;   // total upkeep counters
     for (var t = 0; t < sunits.length; t++) {
       punit = sunits[t];
+      var happy_cost = unit_happy_cost(punit);
       if (punit['upkeep'] != null) {
         su += parseInt(punit['upkeep'][O_SHIELD],10);
         fu += parseInt(punit['upkeep'][O_FOOD],10);
         gu += parseInt(punit['upkeep'][O_GOLD],10);
-      }
+      } // Unhappy upkeep:
+      mu += happy_cost;
+
       sprite = get_unit_image_sprite(punit);
       if (sprite == null) {
          console.log("Missing sprite for " + punit);
@@ -725,20 +734,25 @@ function show_city_dialog(pcity)
        }
 
       supported_units_html = supported_units_html +
-       "<div class='game_unit_list_item' title='" + html_safe(get_unit_city_info(punit))
-           + "' style='cursor:pointer;cursor:hand; background: transparent url("
-           + sprite['image-src'] +
-           ");background-position:-" + sprite['tileset-x'] + "px -" + sprite['tileset-y']
-           + "px;  width: " + sprite['width'] + "px;height: " + sprite['height'] + "px;float:left; '"
-           + " onclick='city_dialog_activate_unit(units[" + punit['id'] + "]);'"
-           +"></div>";
-      supported_units_html = supported_units_html + get_html_vet_sprite(punit)
-                                                  + get_html_hp_sprite(punit,false)
-                                                  + get_html_activity_sprite(punit);
+      "<div class='game_unit_list_item' title='" + html_safe(get_unit_city_info(punit))
+          + "' style='cursor:hand; background: transparent url("
+          + sprite['image-src'] +
+          ");background-position:-" + sprite['tileset-x'] + "px -" + sprite['tileset-y']
+          + "px;  width: " + sprite['width'] + "px;height: " + sprite['height'] + "px;float:left; '"
+          + " onclick='city_dialog_activate_unit(units[" + punit['id'] + "]);'"
+          +"></div>";
+      supported_units_html = supported_units_html
+                           + get_html_vet_sprite(punit)
+                           + get_html_hp_sprite(punit,false)
+                           + get_html_activity_sprite(punit)
+                           + (happy_cost ? get_html_cause_unhappy_sprite(punit): "");
     }
-    if (fu) upkeep_str += "" + fu + "<img class='vu' src='/images/wheat.png'>";
-    if (su) upkeep_str += "" + su + "<img class='vu' style='margin-left:0px' src='/images/e/shield.png'>";
-    if (gu) upkeep_str += "" + gu + "<img class='vu' style='margin-left:-3px' src='/images/gold.png'>";
+    if (fu) upkeep_str += "" + fu + "<img title='City pays "+fu+" food for unit upkeep.' class='vu' src='/images/wheat.png'>";
+    if (su) upkeep_str += "" + su + "<img title='City pays "+(pluralize("shield", su))+" for unit upkeep.' class='vu' style='margin-left:0px' src='/images/e/shield.png'>";
+    if (gu) upkeep_str += "" + gu + "<img title='City pays "+gu+" gold for unit upkeep.' class='vu' style='margin-left:-3px' src='/images/gold.png'>";
+    if (mu) upkeep_str += "" + mu + "<img title='"+mu+" Citizens unhappy about military units.\n"
+                       + "CLICK for console report.' onclick='unit_unhappy_report(" + pcity['id']
+                       + ")' class='vu' style='margin-left:-3px; transform: scale(0.8)' src='/images/e/fist.png'>";
 
     $("#city_supported_units_title").html("Supported Units: <span style='float:right; margin:-1px'>"+upkeep_str+"</span>");
     $("#city_supported_units_list").html(supported_units_html);
@@ -1055,7 +1069,7 @@ function show_city_dialog(pcity)
     $("#city_present_units_title").css( {"width":"4096px"} );
     $("#city_present_units_list").css( {"width":"4096px"} );
     // Continuous horizontal scrolling for mobile:
-    $("#city_supported_units").css( {"width":"100%"} );
+    $("#city_supported_units").css( {"width":"100%"} );           // technically no longer necessary because we defined it thus in the .css for everyone
     $("#city_supported_units_title").css( {"width":"4096px"} );
     $("#city_supported_units_list").css( {"width":"4096px"} );
     // Position adjustment hack
@@ -4086,6 +4100,18 @@ function update_city_screen()
           case CURV_BUILD_SLOTS:
             city_user = "<td class='non_priority' style='text-align:right; padding-right:32px' onclick='javascript:change_city_user_row(" + pcity['id'] + ");'>"
               + "<span style='color:#f44'>" + ((pcity['build_slots'] && pcity['build_slots'] > 1) ? pcity['build_slots'] : "") +"</span>" +  "</td>";
+            break;
+          case CURV_MIL_UNHAPPY:
+            //check that these vars are not undefined
+            //const unit_unhappy = pcity['ppl_angry'][FEELING_MARTIAL] * 2 + pcity['ppl_unhappy'][FEELING_MARTIAL];
+            //const natl_unhappy = pcity['ppl_angry'][FEELING_NATIONALITY] * 2 + pcity['ppl_unhappy'][FEELING_NATIONALITY];
+            const mil_unhappy = unit_military_unhappy_in_city(pcity);
+            let mil_title = (mil_unhappy >= 0) ? (pluralize("citizen", Math.abs(mil_unhappy)) + " unhappy from aggressive units")
+                                                  : (pluralize("citizen", Math.abs(mil_unhappy)) + " pacified by Martial Law");
+            city_user = "<td title='"+mil_title+"' class='non_priority' style='text-align:right; padding-right:32px' onclick='javascript:change_city_user_row("
+              + pcity['id'] + ");'>"
+              + "<span style='color:" + (mil_unhappy>0 ? "#f44" : "#67f")
+              + "'>" + ((mil_unhappy) ? Math.abs(mil_unhappy) : "") +"</span>" +  "</td>";
             break;
           case CURV_FOREIGNERS:
             /* Determine which position in the national populations array is the current owner */

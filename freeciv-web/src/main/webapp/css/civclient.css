@@ -102,6 +102,12 @@ table.terrain_chart td {
   padding-top: 6px;
   padding-bottom: 6px;
 }
+/* When we can't use tables, such as in chatbox, we could ideally align columns with
+   css styling. But it's complex so this is a placeholder for doing that later! */
+.fake_table_grid {
+  display: flex;
+  grid-template-columns: 1fr 1fr;
+}
 /******************************************************************/
 
 #game_chat_box {
@@ -284,6 +290,10 @@ input[type='number'] {
 
 .blue_clickable {
   color: #3498DB;
+  text-decoration:underline;
+}
+.active_link {
+  color: rgb(28, 203, 233);
   text-decoration:underline;
 }
 
@@ -679,7 +689,7 @@ input[type='number'] {
 #city_canvas_div {
   border-radius: 6px;
 }
-#city_present_units, #city_supported_units, #city_improvements {
+#city_improvements {
   float: left;
   height: 105px;
   overflow: auto;
@@ -691,6 +701,20 @@ input[type='number'] {
   min-width: 300px;
   border-radius: 6px;
   scrollbar-width: thin;
+}
+#city_present_units, #city_supported_units {
+  float: left;
+  height: 105px;
+  overflow: auto;
+  background:  url("/images/bg-med-light.jpg") repeat scroll 0 0 ;
+  color: var(--contrast_text_color) !important;
+  border: 1px solid #444444;
+  padding: 6px;
+  margin: 5px;
+  min-width: 300px;
+  border-radius: 6px;
+  scrollbar-width: thin;
+  width: 100%;
 }
 #city_improvements {
   min-width: 280px;

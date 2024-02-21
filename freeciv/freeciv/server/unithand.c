@@ -4353,16 +4353,16 @@ static bool unit_bombard(struct unit *punit, struct tile *ptile,
     }
 
     if (is_unit_reachable_at(pdefender, punit, ptile)) {
-      bool adj;
-      enum direction8 facing;
       int att_hp, def_hp;
 
-      adj = base_get_direction_for_step(&(wld.map),
+#ifndef FREECIV_WEB
+      enum direction8 facing;
+      bool adj = base_get_direction_for_step(&(wld.map),
                                         punit->tile, pdefender->tile, &facing);
       /* Unlike normal attack, no change defender orientation when bombarding */
       if (adj)
         punit->facing = facing;
-
+#endif
       // Bombard unit if: targets=unlimited OR target was randomly selected:
       if (!max_targets || is_target[r]) {
         bool could_kill = (kills>0);
@@ -4892,8 +4892,6 @@ static bool do_attack(struct unit *punit, struct tile *def_tile,
   int old_unit_vet, old_defender_vet, vet;
   int winner_id;
   struct player *pplayer = unit_owner(punit);
-  bool adj;
-  enum direction8 facing;
   int att_hp, def_hp;
   struct unit *pdefender;
   const struct unit_type *act_utype = unit_type_get(punit);
@@ -4926,7 +4924,9 @@ static bool do_attack(struct unit *punit, struct tile *def_tile,
   moves_used = unit_move_rate(punit) - punit->moves_left;
   def_moves_used = unit_move_rate(pdefender) - pdefender->moves_left;
 
-  adj = base_get_direction_for_step(&(wld.map),
+#ifndef FREECIV_WEB
+  enum direction8 facing;
+  bool adj = base_get_direction_for_step(&(wld.map),
                                     punit->tile, pdefender->tile, &facing);
 
   fc_assert(adj);
@@ -4934,6 +4934,7 @@ static bool do_attack(struct unit *punit, struct tile *def_tile,
     punit->facing = facing;
     pdefender->facing = opposite_direction(facing);
   }
+#endif
 
   old_unit_vet = punit->veteran;
   old_defender_vet = pdefender->veteran;
