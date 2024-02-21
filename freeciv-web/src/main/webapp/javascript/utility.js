@@ -537,10 +537,14 @@ function getLength(obj) {
 function pluralize(str, num) {
   if (num > 1) {
     // add rules for making more plurals here, when needed
-    str +="s";
-
+    if (str.endsWith("y")) {
+      str = str.substring(0, str.length - 1) + "ies";
+    } else {
+      str +="s";
+    }
     return ""+num+" "+str;
   }
+
   else return "1 "+str;
 }
 
