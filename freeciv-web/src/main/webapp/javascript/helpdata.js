@@ -376,9 +376,9 @@ function generate_help_text(key)
       + (server_settings.move_cost_in_frags.val ? move_points_text(terrain['movement_cost']) : terrain['movement_cost']) + "</td></tr>"
 	    + "<tr><td>Defense bonus:</td>" + "<td>" + terrain['defense_bonus']+"%" + "</td></tr>"
 	    + "<tr><td>Base Output:</td>" +"<td>"
-        + "<span title='Base Food Output' style='cursor: help; font-size:120%; font-family: Arial; color:#000; background-color:#40ff40'>&hairsp;"+ terrain['output'][0] + "&hairsp;</span>"
-        + "<span title='Base Shield Output' style='cursor: help; font-size:120%; font-family: Arial; color:#000; background-color:#f0f0f0'>&hairsp;"+ terrain['output'][1] + "&hairsp;</span>"
-        + "<span title='Base Trade Output' style='cursor: help; font-size:120%; font-family: Arial; color:#000; background-color:#f8f020'>&hairsp;"+ terrain['output'][2] + "&hairsp;</span>"
+        + "<span title='Base Food Output' style='cursor: help; font-size:120%; font-family: Helvetica; color:#000; background-color:#40ff40'>&hairsp;"+ terrain['output'][0] + "&hairsp;</span>"
+        + "<span title='Base Shield Output' style='cursor: help; font-size:120%; font-family: Helvetica; color:#000; background-color:#f0f0f0'>&hairsp;"+ terrain['output'][1] + "&hairsp;</span>"
+        + "<span title='Base Trade Output' style='cursor: help; font-size:120%; font-family: Helvetica; color:#000; background-color:#f8f020'>&hairsp;"+ terrain['output'][2] + "&hairsp;</span>"
       + "</td></tr>"
 
     let divisor = 1; if (client_rules_flag[CRF_2X_MOVES]) divisor = 2;
@@ -484,9 +484,9 @@ function generate_help_text(key)
         var extra_name = extras[terrain.resources[r]].name;
         if (extra_name.startsWith("?")) extra_name = extra_name.split(":")[1]; // chops out first part of "?animals:Game"
         msg += extra_name +":</td><td>"
-        + "<span title='Base Food Output' style='cursor: help; font-size:120%; font-family: Arial; color:#000; background-color:#40ff40'>&hairsp;"+ (terrain.output[0] + resources[terrain.resources[r]].output[0]) + "&hairsp;</span>"
-        + "<span title='Base Shield Output' style='cursor: help; font-size:120%; font-family: Arial; color:#000; background-color:#f0f0f0'>&hairsp;"+ (terrain.output[1] + resources[terrain.resources[r]].output[1]) + "&hairsp;</span>"
-        + "<span title='Base Trade Output' style='cursor: help; font-size:120%; font-family: Arial; color:#000; background-color:#f8f020'>&hairsp;"+ (terrain.output[2] + resources[terrain.resources[r]].output[2]) + "&hairsp;</span>"
+        + "<span title='Base Food Output' style='cursor: help; font-size:120%; font-family: Helvetica; color:#000; background-color:#40ff40'>&hairsp;"+ (terrain.output[0] + resources[terrain.resources[r]].output[0]) + "&hairsp;</span>"
+        + "<span title='Base Shield Output' style='cursor: help; font-size:120%; font-family: Helvetica; color:#000; background-color:#f0f0f0'>&hairsp;"+ (terrain.output[1] + resources[terrain.resources[r]].output[1]) + "&hairsp;</span>"
+        + "<span title='Base Trade Output' style='cursor: help; font-size:120%; font-family: Helvetica; color:#000; background-color:#f8f020'>&hairsp;"+ (terrain.output[2] + resources[terrain.resources[r]].output[2]) + "&hairsp;</span>"
         msg += "</td>"
       }
       msg += "</tr></table>"
@@ -520,8 +520,8 @@ function generate_help_text(key)
     var flex = " style='display:flex;' ";
     var span1 = "<span style='flex:"+flx_tab+";'>";
     //var span2 = "<span style='font-weight:bold; color:#48F;'>";
-    var span2 = "<span style='font-family:Arial; font-weight:bold; color:#48F;'>";
-    var span2_small = "<span style='font-family:Arial; font-weight:bold; font-size:90%; color:#48F;'>";
+    var span2 = "<span style='font-family:Helvetica; font-weight:bold; color:#48F;'>";
+    var span2_small = "<span style='font-family:Helvetica; font-weight:bold; font-size:90%; color:#48F;'>";
     var span_end = "</span>";
     var div_end = "</span></div>"
 
