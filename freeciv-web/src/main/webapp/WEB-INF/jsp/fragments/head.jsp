@@ -40,7 +40,7 @@
 	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
 
 	ga('create', '<%= gaTrackingId %>', 'auto');
-	ga('send', 'pageview');  
+	ga('send', 'pageview');
 </script>
 <% } %>
 <% if (trackJsToken != null) { %>
@@ -49,11 +49,11 @@
 <% } %>
 <style>
 	/*
-		 _____                   _                        _     
-		|  ___| __ ___  ___  ___(_)_   __   __      _____| |__  
-		| |_ | '__/ _ \/ _ \/ __| \ \ / /___\ \ /\ / / _ \ '_ \ 
+		 _____                   _                        _
+		|  ___| __ ___  ___  ___(_)_   __   __      _____| |__
+		| |_ | '__/ _ \/ _ \/ __| \ \ / /___\ \ /\ / / _ \ '_ \
 		|  _|| | |  __/  __/ (__| |\ V /_____\ V  V /  __/ |_) |
-		|_|  |_|  \___|\___|\___|_| \_/       \_/\_/ \___|_.__/ 
+		|_|  |_|  \___|\___|\___|_| \_/       \_/\_/ \___|_.__/
 
 		The following styles apply to the whole frontend HTML.
 
@@ -62,7 +62,7 @@
 		padding-top: 60px;
 		padding-bottom: 20px;
 		color: #ccc;
-  	background-image: url('/images/bg-dark.jpg'); 
+  	background-image: url('/images/bg-dark.jpg');
 	}
 	a {
     text-shadow: 1px 1px #000 !important;
@@ -75,11 +75,13 @@
 	}
 	h1, h2, h3, h4, h5, h6 {
 		color: #85afaf;
-		font-family: 'Freeciv', 'Segoe UI';
+		font-family: 'Helvetica', 'Freeciv', 'Segoe UI';
+		font-weight: 500;
 		text-shadow: 1px 1px #222;
 	}
 	h1, h2, h3 {
-		font-family: 'Freeciv', 'Segoe UI';
+		font-family: 'Helvetica', 'Freeciv', 'Segoe UI';
+		font-weight: 700;
 		border-bottom: 1px solid #827d70;
 	}
 	.table>thead>tr>th {
@@ -104,17 +106,17 @@
     border-color: #444;
     text-shadow: 1px 1px #888;
 	}
-	/* 
+	/*
 	 * Delimits an area where to put content.
 	 */
 	.panel-freeciv {
-		background-color: rgba(243, 236, 209, 0.5);                
+		background-color: rgba(243, 236, 209, 0.5);
 		border-bottom: 1px solid #827d70;
 		border-radius: 3px;
 		margin-top: 1%;
 		padding: 1%;
 	}
-	.panel-freeciv h1, .panel-freeciv h2, .panel-freeciv h3, 
+	.panel-freeciv h1, .panel-freeciv h2, .panel-freeciv h3,
 	.panel-freeciv h4, .panel-freeciv h5, .panel-freeciv h6 {
 		margin-top: 0px;
 	}

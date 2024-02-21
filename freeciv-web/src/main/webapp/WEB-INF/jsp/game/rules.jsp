@@ -36,41 +36,168 @@
     text-shadow: 1px 1px #000;/* !important;*/
 	}
   h1,h2,h3,h4,h5,h6 {
-		font-family: 'Freeciv', 'Segoe UI';
+		font-family: 'HelveticaBlack', 'Freeciv', 'Segoe UI';
 		text-shadow: 1px 1px #222;
 	}
   body {
 		color: #ccc;
-  	background-image: url('/images/bg-dark.jpg'); 
+  	background-image: url('/images/bg-dark.jpg');
 	}
 	.container {
 		background: none !important;
 		color: #ccc;
 	}
-  
-	@font-face {
-  font-family: Helvetica;
-  src: url('/fonts/arial.ttf');
-	}
-	@font-face {
-		font-family: Freeciv;
-		src: url('/fonts/freeciv.ttf');
-	}
-	@font-face {
-		font-family: FreecivSB;
-		src: url('/fonts/freeciv.m.ttf');
-	}
-	@font-face {
-		font-family: FreecivBold;
-		src: url('/fonts/freeciv.b.ttf');
-	}
-	@font-face {
-		font-family: FreecivBlack;
-		src: url('/fonts/freeciv.bl.ttf');
-	}
-	@font-face {
-		font-family: Arial;
-		src: url('/fonts/arial.ttf');
+
+  /* 〰〰〰〰〰〰〰〰〰〰〰〰〰HELVETICAS〰〰〰〰〰〰〰〰〰〰〰〰〰*/
+  /* Helvetica Ultra-Light 〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰*/
+  @font-face {
+    font-family: "Helvetica";
+    src: url("/fonts/helveticaneue/helveticaneue.ul.ttf");
+    font-weight: 100;
+  }
+  @font-face {
+    font-family: "Helvetica";
+    src: url("/fonts/helveticaneue/helveticaneue.i.ul.ttf");
+    font-weight: 100;
+    font-style: italic;
+  }
+  /* Helvetica Thin 〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰*/
+  @font-face {
+    font-family: "Helvetica";
+    src: url("/fonts/helveticaneue/helveticaneue.th.ttf");
+    font-weight: 200;
+  }
+  @font-face {
+    font-family: "Helvetica";
+    src: url("/fonts/helveticaneue/helveticaneue.i.th.ttf");
+    font-weight: 200;
+    font-style: italic;
+  }
+  /* Helvetica Light 〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰*/
+  @font-face {
+    font-family: "Helvetica";
+    src: url("/fonts/helvetica/helvetica.l.ttf");
+    font-weight: 300;
+  }
+  @font-face {
+    font-family: "Helvetica";
+    src: url("/fonts/helvetica/helvetica.i.l.ttf");
+    font-weight: 300;
+    font-style: italic;
+  }
+  /* Helvetica Regular 〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰*/
+  @font-face {
+    font-family: "Helvetica";
+    src: url("/fonts/helvetica/helvetica.ttf");
+    font-weight: 400;
+  }
+  @font-face {
+    font-family: "Helvetica";
+    src: url("/fonts/helvetica/helvetica.i.ttf");
+    font-weight: 400;
+    font-style: italic;
+  }
+  /* Helvetica Medium 〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰*/
+  @font-face {
+    font-family: "Helvetica";
+    src: url("/fonts/helveticaneue/helveticaneue.med.ttf");
+    font-weight: 500;
+  }
+  @font-face {
+    font-family: "Helvetica";
+    src: url("/fonts/helveticaneue/helveticaneue.i.med.ttf");
+    font-weight: 500;
+    font-style: italic;
+  }
+  /* Helvetica Bold (semi-Bold) 〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰*/
+  @font-face {
+    font-family: "Helvetica";
+    src: url("/fonts/helvetica/helvetica.b.ttf");
+    font-weight: 600;
+  }
+  @font-face {
+    font-family: "Helvetica";
+    src: url("/fonts/helvetica/helvetica.i.b.ttf");
+    font-weight: 600;
+    font-style: italic;
+  }
+  /* Helvetica Bolder (Neue Bold) 〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰*/
+  @font-face {
+    font-family: "Helvetica";
+    src: url("/fonts/helveticaneue/helveticaneue.b.ttf");
+    font-weight: 700;
+  }
+  @font-face {
+    font-family: "Helvetica";
+    src: url("/fonts/helveticaneue/helveticaneue.b.med.ttf");
+    font-weight: 700;
+    font-style: italic;
+  }
+  /* Helvetica Black 〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰*/
+  @font-face {
+    font-family: "Helvetica";
+    src: url("/fonts/helvetica/helvetica.bl.ttf");
+    font-weight: 900;
+  }
+  @font-face {
+    font-family: "HelveticaBlack";
+    src: url("/fonts/helvetica/helvetica.bl.ttf");
+  }
+  /* 〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰*/
+  /* Consolas Regular & Bold 〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰*/
+  @font-face {
+    font-family: Consolas;
+    src: url('/fonts/consola.ttf');
+  }
+  @font-face {
+    font-family: Consolas;
+    src: url('/fonts/consolab.ttf');
+    font-weight: bold;
+  }
+  @font-face {       /* allow picking bold without a <b> */
+    font-family: ConsolasBold;
+    src: url('/fonts/consolab.ttf');
+  }
+
+  /* Elan ITC */
+  @font-face {
+    font-family: Freeciv;
+    src: url('/fonts/freeciv.ttf');
+  }
+  @font-face {
+    font-family: FreecivSB;
+    src: url('/fonts/freeciv.m.ttf');
+  }
+  @font-face {
+    font-family: FreecivBold;
+    src: url('/fonts/freeciv.b.ttf');
+  }
+  @font-face {
+    font-family: FreecivBlack;
+    src: url('/fonts/freeciv.bl.ttf');
+  }
+
+  /* Misc */
+  @font-face {
+    font-family: Arial;
+    src: url('/fonts/arial.ttf');
+  }
+  @font-face {
+    font-family: SegoeSB; /* semi-bold */
+    src: url('/fonts/seg.sb.ttf');
+  }
+  @font-face {
+    font-family: SegoeBold;
+    src: url('/fonts/seg.b.ttf');
+  }
+  @font-face {
+    font-family: SegoeBlack;
+    src: url('/fonts/seg.bl.ttf');
+  }
+  @font-face {
+    font-family: Segoe;
+    src: url('/fonts/seg.ttf');
+  }
 	}
 
 </style>
@@ -98,7 +225,7 @@
   </div>
   <h2><span style="color:#fff">Clarifications to In-game Rules:</span></h2>
   <div style="font-size:100%">
-    <b>1. Idle players may lose their nation</b> after 2 idle turns on <b>Turns 1-5</b>, &nbsp; <b>Turn 6:</b> idle 3 turns &nbsp; 
+    <b>1. Idle players may lose their nation</b> after 2 idle turns on <b>Turns 1-5</b>, &nbsp; <b>Turn 6:</b> idle 3 turns &nbsp;
     <b>T20:</b> idle 4,  &nbsp; <b>T25:</b> idle 5, &nbsp; <b>T30:</b> idle 6, &nbsp; <b>T35:</b> idle 7<br><br>
     <b>2.</b> At game start, GM may customize the victory conditions documented in the ruleset and the <u>game settings</u>.<br><br>
     <b>3. Delegation's purpose is to maximize game integrity.</b><br>
@@ -114,8 +241,8 @@
     &bull; Long-term delegations can be approved by the Gamemaster (GM).<br>
     &bull; Complaints may be made to the GM. GM judgments may be contextual, flexible. GM judgments are final.<br><br>
     <b>4. No RTS, if requested.</b> <i><small>Real-time strategy ("RTS") is simultaneous military moves taken by both players in the same theatre of battle.</small></i><br>
-    &bull; In general (with exceptions*) players should be allowed to take their turns in peace without RTS.<br> 
-    &bull; It is encouraged to be sensitive to this even when a player does NOT make a No-RTS-request.<br> 
+    &bull; In general (with exceptions*) players should be allowed to take their turns in peace without RTS.<br>
+    &bull; It is encouraged to be sensitive to this even when a player does NOT make a No-RTS-request.<br>
     &bull; In the case of a No-RTS-request, the request should be obeyed unless under one of the exceptions.<br>
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; * &nbsp;Units on an automated GOTO action that are delayed by UWT, are not RTS.<br>
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; ** Units on vigil are not considered RTS.<br>
@@ -132,7 +259,7 @@
     &nbsp;&nbsp;&nbsp;&nbsp;&bull;&bull;&bull; The Mexican Standoff rule should be used: (1) as little as possible, (2) not for minor situations.<br>
     &nbsp;&nbsp;&nbsp;&nbsp;&bull;&bull;&bull; In Mexican Standoff, players should negotiate to (a) come to their own agreement, OR (b) confirm an agreement to do RTS, OR (c) agree to alternate 1 (or 2) moves at a time, OR (d) stop moving and await GM moderation.<br>
     &nbsp;&nbsp;&nbsp;&nbsp;&bull;&bull;&bull; NO PLAYER may take unilateral advantage during a Mexican Standoff, without (a),(b),(c), or (d) in place. CONFIRM and COMMUNICATE.<br>
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&bull;&bull;&bull;&bull; Violation of the above allows the other player to seek compensatory justice though moderation.<br> 
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&bull;&bull;&bull;&bull; Violation of the above allows the other player to seek compensatory justice though moderation.<br>
     &bull; After T100 or the discovery of Flight, rules are slightly relaxed in favor of the one who wishes to RTS, especially if:<br>
     &nbsp;&nbsp;&bull;&bull; ...Air unit actions would result in major swaying of outcome due to aircrafts' &bull;mobility, &bull;ZOC, &bull;iPillage, &bull;strong military power in influencing outcomes.<br><br>
     <b>5. No camping.</b><br>
@@ -156,7 +283,7 @@
   <h2>General Rules for Site, Server, and Discord</h2>
   <b>FCW is a private gaming community. By playing in it, you accept membership in the commmunity and represent that you will abide by the following rules:</b><br>
   <div style="font-size:110%">
-  1. Be polite. (Be nice.)<br> 
+  1. Be polite. (Be nice.)<br>
   2. Don't cheat.<br>
   3. Keep in-game conflicts in-the-game. <br>
   4. No ASSHATS: <b>a</b>buse, <b>s</b>pam, <b>s</b>lander, <b>h</b>arrassment, <b>a</b>ntagonism, <b>t</b>hreats, <b>s</b>edition; and similar ilk. <br>
@@ -189,10 +316,10 @@
   &nbsp;&nbsp;&bull;&bull; Address other players as their country's fictional leader. **Third person pronouns are advisable.** <br>
   &nbsp;&nbsp;&bull;&bull; INCORRECT: "You're a lying warmonger, asshole, and I'm going to crush you, pathetic loser!"<br>
   &nbsp;&nbsp;&bull;&bull; CORRECT: "The Mongol nation and its leader are lying warmongers, pathetic losers who deserve to be crushed by the Swiss!"<br><br>
-  4. No <b>ASSHATS</b>.<br> 
+  4. No <b>ASSHATS</b>.<br>
   &bull; NO <u>A</u>buse, <u>S</u>pam, <u>S</u>lander, <u>H</u>arrassment, <u>A</u>ntagonism, <u>T</u>hreats, <u>S</u>edition; no rabble-rowsing, psychoaggression.<br>
-  &bull; Abrasive or disrespectful actions should be limited. Hateful interactions shouldn't happen.<br> 
-  &bull; Interactions deemed unusually dishonorable or lacking sportsmanship; especially if leveraging this to impact outcome in an unnatural or irregular way.<br> 
+  &bull; Abrasive or disrespectful actions should be limited. Hateful interactions shouldn't happen.<br>
+  &bull; Interactions deemed unusually dishonorable or lacking sportsmanship; especially if leveraging this to impact outcome in an unnatural or irregular way.<br>
   &bull; Preserve the game entertainment ambience by keeping in-game chat relative to the in-game play of your player-nation.<br>
   &bull; ASSHATing that affects game outcome or integrity may be punished or corrected by the GM. <br>
   &bull; Keep in-game psycho-aggression/manipulation, psy-ops, gaslighting, mindwarps, dishonesty: a) fictional/role-played: NOT between humans, b) short in duration and frequency, c) lightly done <br>
@@ -207,9 +334,9 @@
   &bull; Politicking against the site or its members can be freely done in locations other than FCW.<br><br>
   8. Religious and political discussions are encouraged in locations other than FCW. Such discussions may be deleted from FCW.<br><br>
   9. <b>Grievances, accusations, or appeals in private.</b><br>
-  &bull; Humans have suspicions, sometimes false accusations, some even have slander or reputational injury as their motive. To protect against a 
-  player, admin, or GM publicly and wrongly suffering degraded reputation: you MUST do accusations, complaints, infraction reports, and similar actions in PRIVATE. Report to an appropriate GM/moderator/admin. You have a right 
-  to a private hearing and to appeal decisions to other admins/moderators/GMs, but the process from start to finish must be handled in private if 
+  &bull; Humans have suspicions, sometimes false accusations, some even have slander or reputational injury as their motive. To protect against a
+  player, admin, or GM publicly and wrongly suffering degraded reputation: you MUST do accusations, complaints, infraction reports, and similar actions in PRIVATE. Report to an appropriate GM/moderator/admin. You have a right
+  to a private hearing and to appeal decisions to other admins/moderators/GMs, but the process from start to finish must be handled in private if
   any content in the complaint either directly, indirectly, or implicitly, impugns, accuses, or maligns FCW, its players, admins, GMs, or moderators.<br><br>
   10. Private DMs must abide by community rules when those DMs were bridged by mutual belonging to FCW Discord or the FCW Game Server which make those communications possible. Private complaints about DMs to other members will be treated the same as if they had been made in public, if those DMs were bridged or conveyed by a FCW server. <br><br>
   11. FCW is not a public square with guaranteed free speech. It is more like a friend's house party. You are not welcome if you break the party's rules.<br><br>
@@ -217,13 +344,13 @@
   &bull; <b>General sharing permission is granted by default:</b> for in-game experiences available from the perspective of the nation you play in-game (so long as it does not violate another user's private content.)<br><br>
 </div>
 <div>
-<h2>Disputes, Issues, and Moderation:</h2>  
+<h2>Disputes, Issues, and Moderation:</h2>
 <i>Be polite, Be nice</i> is the meta-rule of the site. It is a catch-all against all incivility and inappropriate conduct not listed here.<br><br>
 <i>"Who is the injured party and how injured are they?"</i> is the Prime Measure for deciding all adjudication.<br><br>
 <i>GRIEVANCES may be briefly raised in public</i> <u>IF THEY DO NOT <b>IMPUGN</b> in public</u>, and will be procedurally moderated out of public.</i><br><br>
 &bull; Impugning a player, admin, admin decision, the site, or creating public drama that's not in a fun entertainment ambience of gaming, is forbidden. Ask for moderation and appeals in private. <br>
 
-</div>  
+</div>
 
   <br>
   <b>FCW may alter these rules over time. This takes place after admin consultations and such changes will be posted on our Discord #rules channel.</b>

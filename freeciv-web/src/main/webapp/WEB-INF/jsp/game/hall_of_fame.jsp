@@ -53,42 +53,171 @@
     text-shadow: 1px 1px #000;/* !important;*/
 	}
   h1,h2,h3,h4,h5,h6 {
-		font-family: 'Freeciv', 'Segoe UI';
+		font-family: 'HelveticaBlack', 'Freeciv', 'Segoe UI';
 		text-shadow: 1px 1px #222;
 	}
   body {
 		color: #ccc;
-  	background-image: url('/images/bg-dark.jpg'); 
+  	background-image: url('/images/bg-dark.jpg');
 	}
 	.container {
 		background: none !important;
 		color: #ccc;
 	}
-  
-	@font-face {
-  font-family: Helvetica;
-  src: url('/fonts/arial.ttf');
-	}
-	@font-face {
-		font-family: Freeciv;
-		src: url('/fonts/freeciv.ttf');
-	}
-	@font-face {
-		font-family: FreecivSB;
-		src: url('/fonts/freeciv.m.ttf');
-	}
-	@font-face {
-		font-family: FreecivBold;
-		src: url('/fonts/freeciv.b.ttf');
-	}
-	@font-face {
-		font-family: FreecivBlack;
-		src: url('/fonts/freeciv.bl.ttf');
-	}
-	@font-face {
-		font-family: Arial;
-		src: url('/fonts/arial.ttf');
-	}
+
+
+  /* 〰〰〰〰〰〰〰〰〰〰〰〰〰HELVETICAS〰〰〰〰〰〰〰〰〰〰〰〰〰*/
+  /* Helvetica Ultra-Light 〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰*/
+  @font-face {
+    font-family: "Helvetica";
+    src: url("/fonts/helveticaneue/helveticaneue.ul.ttf");
+    font-weight: 100;
+  }
+  @font-face {
+    font-family: "Helvetica";
+    src: url("/fonts/helveticaneue/helveticaneue.i.ul.ttf");
+    font-weight: 100;
+    font-style: italic;
+  }
+  /* Helvetica Thin 〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰*/
+  @font-face {
+    font-family: "Helvetica";
+    src: url("/fonts/helveticaneue/helveticaneue.th.ttf");
+    font-weight: 200;
+  }
+  @font-face {
+    font-family: "Helvetica";
+    src: url("/fonts/helveticaneue/helveticaneue.i.th.ttf");
+    font-weight: 200;
+    font-style: italic;
+  }
+  /* Helvetica Light 〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰*/
+  @font-face {
+    font-family: "Helvetica";
+    src: url("/fonts/helvetica/helvetica.l.ttf");
+    font-weight: 300;
+  }
+  @font-face {
+    font-family: "Helvetica";
+    src: url("/fonts/helvetica/helvetica.i.l.ttf");
+    font-weight: 300;
+    font-style: italic;
+  }
+  /* Helvetica Regular 〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰*/
+  @font-face {
+    font-family: "Helvetica";
+    src: url("/fonts/helvetica/helvetica.ttf");
+    font-weight: 400;
+  }
+  @font-face {
+    font-family: "Helvetica";
+    src: url("/fonts/helvetica/helvetica.i.ttf");
+    font-weight: 400;
+    font-style: italic;
+  }
+  /* Helvetica Medium 〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰*/
+  @font-face {
+    font-family: "Helvetica";
+    src: url("/fonts/helveticaneue/helveticaneue.med.ttf");
+    font-weight: 500;
+  }
+  @font-face {
+    font-family: "Helvetica";
+    src: url("/fonts/helveticaneue/helveticaneue.i.med.ttf");
+    font-weight: 500;
+    font-style: italic;
+  }
+  /* Helvetica Bold (semi-Bold) 〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰*/
+  @font-face {
+    font-family: "Helvetica";
+    src: url("/fonts/helvetica/helvetica.b.ttf");
+    font-weight: 600;
+  }
+  @font-face {
+    font-family: "Helvetica";
+    src: url("/fonts/helvetica/helvetica.i.b.ttf");
+    font-weight: 600;
+    font-style: italic;
+  }
+  /* Helvetica Bolder (Neue Bold) 〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰*/
+  @font-face {
+    font-family: "Helvetica";
+    src: url("/fonts/helveticaneue/helveticaneue.b.ttf");
+    font-weight: 700;
+  }
+  @font-face {
+    font-family: "Helvetica";
+    src: url("/fonts/helveticaneue/helveticaneue.b.med.ttf");
+    font-weight: 700;
+    font-style: italic;
+  }
+  /* Helvetica Black 〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰*/
+  @font-face {
+    font-family: "Helvetica";
+    src: url("/fonts/helvetica/helvetica.bl.ttf");
+    font-weight: 900;
+  }
+  @font-face {
+    font-family: "HelveticaBlack";
+    src: url("/fonts/helvetica/helvetica.bl.ttf");
+  }
+  /* 〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰*/
+  /* Consolas Regular & Bold 〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰*/
+  @font-face {
+    font-family: Consolas;
+    src: url('/fonts/consola.ttf');
+  }
+  @font-face {
+    font-family: Consolas;
+    src: url('/fonts/consolab.ttf');
+    font-weight: bold;
+  }
+  @font-face {       /* allow picking bold without a <b> */
+    font-family: ConsolasBold;
+    src: url('/fonts/consolab.ttf');
+  }
+
+  /* Elan ITC */
+  @font-face {
+    font-family: Freeciv;
+    src: url('/fonts/freeciv.ttf');
+  }
+  @font-face {
+    font-family: FreecivSB;
+    src: url('/fonts/freeciv.m.ttf');
+  }
+  @font-face {
+    font-family: FreecivBold;
+    src: url('/fonts/freeciv.b.ttf');
+  }
+  @font-face {
+    font-family: FreecivBlack;
+    src: url('/fonts/freeciv.bl.ttf');
+  }
+
+  /* Misc */
+  @font-face {
+    font-family: Arial;
+    src: url('/fonts/arial.ttf');
+  }
+  @font-face {
+    font-family: SegoeSB; /* semi-bold */
+    src: url('/fonts/seg.sb.ttf');
+  }
+  @font-face {
+    font-family: SegoeBold;
+    src: url('/fonts/seg.b.ttf');
+  }
+  @font-face {
+    font-family: SegoeBlack;
+    src: url('/fonts/seg.bl.ttf');
+  }
+  @font-face {
+    font-family: Segoe;
+    src: url('/fonts/seg.ttf');
+  }
+
+
 
 </style>
 
@@ -138,7 +267,7 @@
     			</div>
     		</div>
 
-    		
+
 		<!-- Site footer -->
 		<%@include file="/WEB-INF/jsp/fragments/footer.jsp"%>
 	</div> <!-- container -->

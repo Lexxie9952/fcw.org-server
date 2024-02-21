@@ -7,18 +7,18 @@
 <%@include file="/WEB-INF/jsp/fragments/head.jsp"%>
 <style>
 #play-by-email-table {
-	font-family: Segoe;
+	font-family: Helvetica;
 }
 </style>
 
 
 <script>
 (function ($) {
-	
+
 	$(function () {
 		displayPlayByEmailGames();
 	});
-	
+
 	function displayPlayByEmailGames () {
 		$.getJSON('/mailstatus', function(data) {
 			if (data.length === 0) {
@@ -32,23 +32,23 @@
 				var turn = game[0];
 				var phase = game[1];
 				var players = game[2];
-				
+
 				var currentPlayer = game[2][phase];
 				var lastPlayed = game[3];
 				var timeLeft = game[4];
-				
+
 				players = players.map(function (player) {
 					return player === currentPlayer
 						? "<u><span style='font-weight:1000'>" + player + "</u>"
 						: player;
 				}).join(', ');
-				
+
 				if (players.indexOf("@") >= 0) {
 					return;
 				}
 
 				if (players.length > 100) players = players.substring(0, 100) + "...";
-				
+
 				$("#play-by-email-table").append(
 					'<tr>' +
 						'<td>' +
@@ -65,16 +65,16 @@
 						'</td>' +
 					'</tr>'
 				);
-			});			
+			});
 		}).fail(function (err) {
 			$("#play-by-email-table").hide();
 		});
 	}
-	
+
 })($);
 
 </script>
-	
+
 <style>
 	.input-group .form-control:first-child {
 			border-bottom-right-radius: 0;
@@ -138,7 +138,7 @@
     font-weight: 600;
     text-shadow: 1px 1px #543;
 		margin-top: -1px;
-		font-family: sans-serif;
+		font-family: Helvetica;
 	}
 	.table td {
 		vertical-align: middle;
@@ -173,14 +173,14 @@
 	}
 	body {
 		color: #ccc;
-  	background-image: url('/images/bg-dark.jpg'); 
+  	background-image: url('/images/bg-dark.jpg');
 	}
 	.container {
 		background: none !important;
 		color: #ccc;
 	}
 	h1,h2,h3,h4,h5,h6 {
-		font-family: 'Freeciv', 'Segoe UI';
+		font-family: 'HelveticaBlack', 'Freeciv', 'Segoe UI';
 		text-shadow: 1px 1px #222;
 	}
 	.play_button {
@@ -189,39 +189,165 @@
 	.info_button {
 		background-color: #b56f4a;
 	}
-	
+
+	/* 〰〰〰〰〰〰〰〰〰〰〰〰〰HELVETICAS〰〰〰〰〰〰〰〰〰〰〰〰〰*/
+	/* Helvetica Ultra-Light 〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰*/
 	@font-face {
-  font-family: Helvetica;
-  src: url('/fonts/arial.ttf');
+	font-family: "Helvetica";
+	src: url("/fonts/helveticaneue/helveticaneue.ul.ttf");
+	font-weight: 100;
 	}
 	@font-face {
-		font-family: Freeciv;
-		src: url('/fonts/freeciv.ttf');
+	font-family: "Helvetica";
+	src: url("/fonts/helveticaneue/helveticaneue.i.ul.ttf");
+	font-weight: 100;
+	font-style: italic;
+	}
+	/* Helvetica Thin 〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰*/
+	@font-face {
+	font-family: "Helvetica";
+	src: url("/fonts/helveticaneue/helveticaneue.th.ttf");
+	font-weight: 200;
 	}
 	@font-face {
-		font-family: FreecivSB;
-		src: url('/fonts/freeciv.m.ttf');
+	font-family: "Helvetica";
+	src: url("/fonts/helveticaneue/helveticaneue.i.th.ttf");
+	font-weight: 200;
+	font-style: italic;
+	}
+	/* Helvetica Light 〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰*/
+	@font-face {
+	font-family: "Helvetica";
+	src: url("/fonts/helvetica/helvetica.l.ttf");
+	font-weight: 300;
 	}
 	@font-face {
-		font-family: FreecivBold;
-		src: url('/fonts/freeciv.b.ttf');
+	font-family: "Helvetica";
+	src: url("/fonts/helvetica/helvetica.i.l.ttf");
+	font-weight: 300;
+	font-style: italic;
+	}
+	/* Helvetica Regular 〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰*/
+	@font-face {
+	font-family: "Helvetica";
+	src: url("/fonts/helvetica/helvetica.ttf");
+	font-weight: 400;
 	}
 	@font-face {
-		font-family: FreecivBlack;
-		src: url('/fonts/freeciv.bl.ttf');
+	font-family: "Helvetica";
+	src: url("/fonts/helvetica/helvetica.i.ttf");
+	font-weight: 400;
+	font-style: italic;
+	}
+	/* Helvetica Medium 〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰*/
+	@font-face {
+	font-family: "Helvetica";
+	src: url("/fonts/helveticaneue/helveticaneue.med.ttf");
+	font-weight: 500;
 	}
 	@font-face {
-		font-family: Arial;
-		src: url('/fonts/arial.ttf');
+	font-family: "Helvetica";
+	src: url("/fonts/helveticaneue/helveticaneue.i.med.ttf");
+	font-weight: 500;
+	font-style: italic;
+	}
+	/* Helvetica Bold (semi-Bold) 〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰*/
+	@font-face {
+	font-family: "Helvetica";
+	src: url("/fonts/helvetica/helvetica.b.ttf");
+	font-weight: 600;
+	}
+	@font-face {
+	font-family: "Helvetica";
+	src: url("/fonts/helvetica/helvetica.i.b.ttf");
+	font-weight: 600;
+	font-style: italic;
+	}
+	/* Helvetica Bolder (Neue Bold) 〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰*/
+	@font-face {
+	font-family: "Helvetica";
+	src: url("/fonts/helveticaneue/helveticaneue.b.ttf");
+	font-weight: 700;
+	}
+	@font-face {
+	font-family: "Helvetica";
+	src: url("/fonts/helveticaneue/helveticaneue.b.med.ttf");
+	font-weight: 700;
+	font-style: italic;
+	}
+	/* Helvetica Black 〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰*/
+	@font-face {
+	font-family: "Helvetica";
+	src: url("/fonts/helvetica/helvetica.bl.ttf");
+	font-weight: 900;
+	}
+	@font-face {
+	font-family: "HelveticaBlack";
+	src: url("/fonts/helvetica/helvetica.bl.ttf");
+	}
+	/* 〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰*/
+	/* Consolas Regular & Bold 〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰*/
+	@font-face {
+	font-family: Consolas;
+	src: url('/fonts/consola.ttf');
+	}
+	@font-face {
+	font-family: Consolas;
+	src: url('/fonts/consolab.ttf');
+	font-weight: bold;
+	}
+	@font-face {       /* allow picking bold without a <b> */
+	font-family: ConsolasBold;
+	src: url('/fonts/consolab.ttf');
+	}
+
+	/* Elan ITC */
+	@font-face {
+	font-family: Freeciv;
+	src: url('/fonts/freeciv.ttf');
+	}
+	@font-face {
+	font-family: FreecivSB;
+	src: url('/fonts/freeciv.m.ttf');
+	}
+	@font-face {
+	font-family: FreecivBold;
+	src: url('/fonts/freeciv.b.ttf');
+	}
+	@font-face {
+	font-family: FreecivBlack;
+	src: url('/fonts/freeciv.bl.ttf');
+	}
+
+	/* Misc */
+	@font-face {
+	font-family: Arial;
+	src: url('/fonts/arial.ttf');
+	}
+	@font-face {
+	font-family: SegoeSB; /* semi-bold */
+	src: url('/fonts/seg.sb.ttf');
+	}
+	@font-face {
+	font-family: SegoeBold;
+	src: url('/fonts/seg.b.ttf');
+	}
+	@font-face {
+	font-family: SegoeBlack;
+	src: url('/fonts/seg.bl.ttf');
+	}
+	@font-face {
+	font-family: Segoe;
+	src: url('/fonts/seg.ttf');
 	}
 
 </style>
-	
-	
+
+
 </head>
 <body>
 	<%@include file="/WEB-INF/jsp/fragments/header.jsp" %>
-	
+
 	<!-- Begin page content -->
 	<div id="content" class="container" style="padding-left:0px; padding-right:0px;">
 		<div>
@@ -275,7 +401,7 @@
 									<td class="hidden-xs">${game.message}</td>
 									<td class="hidden-xs">${game.players}</td>
 									<td class="hidden-xs">${game.turn}</td>
-									<td><a class="label label-success label-lg" href="/webclient/?action=observe&amp;civserverport=${game.port}&amp;civserverhost=${game.host}&amp;type=${game.type}" title="Observe">Observe</a> 
+									<td><a class="label label-success label-lg" href="/webclient/?action=observe&amp;civserverport=${game.port}&amp;civserverhost=${game.host}&amp;type=${game.type}" title="Observe">Observe</a>
 										<a class="label info_button label-lg" href="/game/details?host=${game.host}&amp;port=${game.port}">Info</a>
 									</td>
 								</tr>
@@ -286,7 +412,7 @@
 							<a class="label play_button" href="/webclient/?action=new&amp;type=singleplayer">Start</a> a new single player game!
 					</c:if>
 				</div>
-	
+
 				<div role="tabpanel" class="tab-pane ${view == 'multiplayer' ? 'active' : ''}" id="multi-player-tab">
 					<c:if test="${fn:length(multiPlayerGamesList) > 0}">
 						<table id="multiplayer-table" class="table">
@@ -353,7 +479,7 @@
 							<c:forEach items="${longturnGamesList}" var="game">
 								<tr
 									class="${game.isProtected() ? 'private-game' : (game.state eq 'Running' ? 'running-game' : (game.players gt 0 ? 'highlight' : ''))}">
-									
+
 									<td class="hidden-xs">
 										<svg width="48" height="48" data-jdenticon-value="${game.message}>"></svg>
 									</td>
@@ -407,19 +533,19 @@
 					<c:if test="${fn:length(longturnGamesList) == 0}">
 						No servers currently listed
 					</c:if>
-				</div>				
+				</div>
 
 				<div role="tabpanel" class="tab-pane ${view == 'play-by-email' ? 'active' : ''}" id="play-by-email-tab">
 					<div class="row">
 						<div class="col-md-12">
 							<p>
-								A Play-By-Email game is a deathmatch on a small map with up to 4 human players, playing 
+								A Play-By-Email game is a deathmatch on a small map with up to 4 human players, playing
 								with alternating turns, and players get an e-mail every time it is
 								their turn to play. These games are often played over a long time
 								period, each player has 7 days to complete their turn.
 							</p>
 							<p>
-								To start a new Play-By-Email game, 
+								To start a new Play-By-Email game,
 								<a href="/webclient/?action=pbem&amp;type=pbem">log in here</a></u>. To play your turn
 								in a running Play-By-Email game, click on the link in the last
 								e-mail you got from Freeciv-web. Games are expired after 7 days if
@@ -427,7 +553,7 @@
 							</p>
 						</div>
 					</div>
-	
+
 					<div class="row top-buffer-2">
 						<div class="col-md-12">
 							<h4>Ongoing games</h4>
@@ -442,7 +568,7 @@
 							<p>Current player is marked in <b><u>bold underline</u></b>.</p>
 						</div>
 					</div>
-	
+
 					<div class="row top-buffer-2">
 						<div class="col-md-12">
 							<h4>Finished games</h4>

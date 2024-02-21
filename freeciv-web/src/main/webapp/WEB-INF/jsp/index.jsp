@@ -1,5 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %> 
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ include file="/WEB-INF/jsp/fragments/i18n.jsp" %>
 <%@page import="java.util.*" %>
 <!DOCTYPE html>
@@ -35,11 +35,12 @@
     border-color: #444;
     text-shadow: 1px 1px #888;
 	}
-	/* Game launcher */          
+	/* Game launcher */
 	#game-launcher {
 		width: 100%;
 		margin: 0 auto;
-		font-family: Arial, Helvetica, 'Open Sans';
+		font-family: Helvetica, Arial, 'Open Sans';
+		font-weight: 400;
 	}
 	#game-launcher .game-type {
 		width: 100%;
@@ -48,7 +49,7 @@
 		top: 0;
     border-radius: 20px 20px 20px 20px;
 	}
-	#game-launcher .game-type:not(:last-child) { 
+	#game-launcher .game-type:not(:last-child) {
 		margin-right: 40px;
 		border: solid 2px #BBA;
     border-radius: 20px 20px 20px 20px;
@@ -57,7 +58,8 @@
 	}
 	#game-launcher .header {
 		color: #000000;
-		font-family: 'Freeciv', 'Tahoma', 'Arial';
+		font-family: 'Helvetica', 'Arial', 'Freeciv', 'Open Sans';
+		font-weight: 500;
 		padding: 15px;
 		margin-bottom: 0px;
 		background-image: url('/images/bg-med-light.jpg');
@@ -75,9 +77,9 @@
 	}
 	#game-launcher .features {
 		list-style: none;
-		text-align: center;               
+		text-align: center;
 		margin: 0;
-		padding: 10px 0 0 0;                
+		padding: 10px 0 0 0;
 		font-size: 0.9em;
 	}
 	#game-launcher .btn {
@@ -92,147 +94,275 @@
 		margin: 20px auto 10px;
 
 		text-shadow: 1px 1px #091a38 !important;
-    color: #39f5;
-    border-radius: 13px;
-    background-image: url(/images/bg-med-light.jpg);
-    background: #c3ffff71;
-    box-shadow: 7px 7px 14px #1f2626, -7px -7px 14px #9bb5;
-    font-family: 'Freeciv';
-    letter-spacing: 0.3px;
-	}
-	/* overrides the above */
-	#game-launcher .btn {
-    color: rgb(154 183 207);
-		text-shadow: 1px 1px #091a38 !important;
-    color: rgb(54 80 100)
-	}
-	#game-launcher .btn:hover {
+		color: #39f5;
 		border-radius: 13px;
-    background: #788888;
-    box-shadow: inset 7px 7px 9px #464646, inset -7px -7px 9px #9ababa;
-    margin: 21px auto 9px;
-	}
-	#game-launcher a.small { width: 130px;	}
-	.multiplayer-games th:last-child { width: 80px; }
-	.multiplayer-games a.label:first-child { margin-right: 3px; }
-	.multiplayer-games .highlight { 
-		color: #9c9;
-		font-weight: bold;
-	}
-	.multiplayer-games .running {
-		color: #ccc;
-	}
-	.table>tbody>tr>td {
-		padding: 2px;
-	}
-	.videoWrapper {
-	position: relative;
-	padding-bottom: 56.25%; /* 16:9 */
-	padding-top: 25px;
-	height: 0;
-    }
-
-	.videoWrapper iframe {
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	}
-	.jumbotron {
-	padding-bottom: 0px;
-	background: #0000 !important;
-	text-shadow: 1px 1px #777;
-	}
-	.dropdown-menu {
-  	background-image: url('/images/bg-med-dark.jpg');
-		border-radius: 5px;
-		border: 2x solid #000e;
-	}
-	.dropdown-menu .divider {
-			height: 1px;
-			margin: 5px 0;
-			border: 1px solid #000;
-			background-color: #000;
-	}
-	.dropdown-menu>li>a {
-			display: block;
-			padding: 3px 20px;
-			clear: both;
-			font-weight: normal;
-			line-height: 1.42857143;
+		background-image: url(/images/bg-med-light.jpg);
+		background: #c3ffff71;
+		box-shadow: 7px 7px 14px #1f2626, -7px -7px 14px #9bb5;
+		font-family: 'Helvetica';
+		letter-spacing: 0.3px;
+		}
+		/* overrides the above */
+		#game-launcher .btn {
+		color: rgb(154 183 207);
+			text-shadow: 1px 1px #091a38 !important;
+		color: rgb(54 80 100)
+		}
+		#game-launcher .btn:hover {
+			border-radius: 13px;
+		background: #788888;
+		box-shadow: inset 7px 7px 9px #464646, inset -7px -7px 9px #9ababa;
+		margin: 21px auto 9px;
+		}
+		#game-launcher a.small { width: 130px;	}
+		.multiplayer-games th:last-child { width: 80px; }
+		.multiplayer-games a.label:first-child { margin-right: 3px; }
+		.multiplayer-games .highlight {
+			color: #9c9;
+			font-weight: bold;
+		}
+		.multiplayer-games .running {
 			color: #ccc;
-			white-space: nowrap;
+		}
+		.table>tbody>tr>td {
+			padding: 2px;
+		}
+		.videoWrapper {
+		position: relative;
+		padding-bottom: 56.25%; /* 16:9 */
+		padding-top: 25px;
+		height: 0;
+		}
+
+		.videoWrapper iframe {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		}
+		.jumbotron {
+		padding-bottom: 0px;
+		background: #0000 !important;
+		text-shadow: 1px 1px #777;
+		}
+		.dropdown-menu {
+		background-image: url('/images/bg-med-dark.jpg');
+			border-radius: 5px;
+			border: 2x solid #000e;
+		}
+		.dropdown-menu .divider {
+				height: 1px;
+				margin: 5px 0;
+				border: 1px solid #000;
+				background-color: #000;
+		}
+		.dropdown-menu>li>a {
+				display: block;
+				padding: 3px 20px;
+				clear: both;
+				font-weight: normal;
+				line-height: 1.42857143;
+				color: #ccc;
+				white-space: nowrap;
+		}
+		.navbar-inverse {
+			background-color: #2220;
+			background: url(/images/bg-med-dark.jpg);
+		}
+		body {
+			color: #ccc;
+		background-image: url('/images/bg-dark.jpg');
+		}
+		.container {
+			background: none !important;
+			color: #ccc;
+		}
+		.lead {
+			color: #ccc;
+		}
+		.panel-freeciv {
+			background-color: #ccc1;
+		}
+		h1,h2,h3,h4,h5,h6 {
+			font-family: 'Helvetica', 'Freeciv', 'Segoe UI';
+			font-weight: 500;
+			text-shadow: 1px 1px #222;
+		}
+		.well {
+			background: #fff1;
+		}
+		a {
+		text-shadow: 1px 1px #000 !important;
+			color: #b1efef;
+		}
+		.name {
+			text-shadow: 1px 2px #777 !important;
+		}
+		.table thead tr th,
+		.table tbody tr th,
+		.table tfoot tr th, .table thead tr td,
+		.table tbody tr td,
+		.table tfoot tr td {
+			padding:3px;
+		}
+		.play_button {
+			background-color: #55968e;
+		}
+		.info_button {
+			background-color: #b56f4a;
+		}
+
+
+	/* 〰〰〰〰〰〰〰〰〰〰〰〰〰HELVETICAS〰〰〰〰〰〰〰〰〰〰〰〰〰*/
+	/* Helvetica Ultra-Light 〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰*/
+	@font-face {
+	font-family: "Helvetica";
+	src: url("/fonts/helveticaneue/helveticaneue.ul.ttf");
+	font-weight: 100;
 	}
-	.navbar-inverse {
-		background-color: #2220;
-		background: url(/images/bg-med-dark.jpg);
+	@font-face {
+	font-family: "Helvetica";
+	src: url("/fonts/helveticaneue/helveticaneue.i.ul.ttf");
+	font-weight: 100;
+	font-style: italic;
 	}
-	body {
-		color: #ccc;
-  	background-image: url('/images/bg-dark.jpg'); 
+	/* Helvetica Thin 〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰*/
+	@font-face {
+	font-family: "Helvetica";
+	src: url("/fonts/helveticaneue/helveticaneue.th.ttf");
+	font-weight: 200;
 	}
-	.container {
-		background: none !important;
-		color: #ccc;
+	@font-face {
+	font-family: "Helvetica";
+	src: url("/fonts/helveticaneue/helveticaneue.i.th.ttf");
+	font-weight: 200;
+	font-style: italic;
 	}
-	.lead {
-		color: #ccc;
+	/* Helvetica Light 〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰*/
+	@font-face {
+	font-family: "Helvetica";
+	src: url("/fonts/helvetica/helvetica.l.ttf");
+	font-weight: 300;
 	}
-	.panel-freeciv {
-		background-color: #ccc1;
+	@font-face {
+	font-family: "Helvetica";
+	src: url("/fonts/helvetica/helvetica.i.l.ttf");
+	font-weight: 300;
+	font-style: italic;
 	}
-	h1,h2,h3,h4,h5,h6 {
-		font-family: 'Freeciv', 'Segoe UI';
-		text-shadow: 1px 1px #222;
+	/* Helvetica Regular 〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰*/
+	@font-face {
+	font-family: "Helvetica";
+	src: url("/fonts/helvetica/helvetica.ttf");
+	font-weight: 400;
 	}
-	.well {
-		background: #fff1;
+	@font-face {
+	font-family: "Helvetica";
+	src: url("/fonts/helvetica/helvetica.i.ttf");
+	font-weight: 400;
+	font-style: italic;
 	}
-	a {
-    text-shadow: 1px 1px #000 !important;
-		color: #b1efef;
+	/* Helvetica Medium 〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰*/
+	@font-face {
+	font-family: "Helvetica";
+	src: url("/fonts/helveticaneue/helveticaneue.med.ttf");
+	font-weight: 500;
 	}
-	.name {
-		text-shadow: 1px 2px #777 !important;
+	@font-face {
+	font-family: "Helvetica";
+	src: url("/fonts/helveticaneue/helveticaneue.i.med.ttf");
+	font-weight: 500;
+	font-style: italic;
 	}
-	.table thead tr th, 
-	.table tbody tr th,
-	.table tfoot tr th, .table thead tr td,
-	.table tbody tr td,
-	.table tfoot tr td {
-		padding:3px;
+	/* Helvetica Bold (semi-Bold) 〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰*/
+	@font-face {
+	font-family: "Helvetica";
+	src: url("/fonts/helvetica/helvetica.b.ttf");
+	font-weight: 600;
 	}
-	.play_button {
-		background-color: #55968e;
+	@font-face {
+	font-family: "Helvetica";
+	src: url("/fonts/helvetica/helvetica.i.b.ttf");
+	font-weight: 600;
+	font-style: italic;
 	}
-	.info_button {
-		background-color: #b56f4a;
+	/* Helvetica Bolder (Neue Bold) 〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰*/
+	@font-face {
+	font-family: "Helvetica";
+	src: url("/fonts/helveticaneue/helveticaneue.b.ttf");
+	font-weight: 700;
+	}
+	@font-face {
+	font-family: "Helvetica";
+	src: url("/fonts/helveticaneue/helveticaneue.b.med.ttf");
+	font-weight: 700;
+	font-style: italic;
+	}
+	/* Helvetica Black 〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰*/
+	@font-face {
+	font-family: "Helvetica";
+	src: url("/fonts/helvetica/helvetica.bl.ttf");
+	font-weight: 900;
+	}
+	@font-face {
+	font-family: "HelveticaBlack";
+	src: url("/fonts/helvetica/helvetica.bl.ttf");
+	}
+	/* 〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰*/
+	/* Consolas Regular & Bold 〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰*/
+	@font-face {
+	font-family: Consolas;
+	src: url('/fonts/consola.ttf');
+	}
+	@font-face {
+	font-family: Consolas;
+	src: url('/fonts/consolab.ttf');
+	font-weight: bold;
+	}
+	@font-face {       /* allow picking bold without a <b> */
+	font-family: ConsolasBold;
+	src: url('/fonts/consolab.ttf');
 	}
 
+	/* Elan ITC */
 	@font-face {
-  font-family: Helvetica;
-  src: url('/fonts/arial.ttf');
+	font-family: Freeciv;
+	src: url('/fonts/freeciv.ttf');
 	}
 	@font-face {
-		font-family: Freeciv;
-		src: url('/fonts/freeciv.ttf');
+	font-family: FreecivSB;
+	src: url('/fonts/freeciv.m.ttf');
 	}
 	@font-face {
-		font-family: FreecivSB;
-		src: url('/fonts/freeciv.m.ttf');
+	font-family: FreecivBold;
+	src: url('/fonts/freeciv.b.ttf');
 	}
 	@font-face {
-		font-family: FreecivBold;
-		src: url('/fonts/freeciv.b.ttf');
+	font-family: FreecivBlack;
+	src: url('/fonts/freeciv.bl.ttf');
+	}
+
+	/* Misc */
+	@font-face {
+	font-family: Arial;
+	src: url('/fonts/arial.ttf');
 	}
 	@font-face {
-		font-family: FreecivBlack;
-		src: url('/fonts/freeciv.bl.ttf');
+	font-family: SegoeSB; /* semi-bold */
+	src: url('/fonts/seg.sb.ttf');
 	}
 	@font-face {
-		font-family: Arial;
-		src: url('/fonts/arial.ttf');
+	font-family: SegoeBold;
+	src: url('/fonts/seg.b.ttf');
+	}
+	@font-face {
+	font-family: SegoeBlack;
+	src: url('/fonts/seg.bl.ttf');
+	}
+	@font-face {
+	font-family: Segoe;
+	src: url('/fonts/seg.ttf');
 	}
 
 </style>
@@ -248,7 +378,7 @@
 <%!
 Random randomValue=new Random();
 %>
-				<img style="border-radius: 20px 20px 20px 20px; box-shadow: 2px 2px #000a; width:65%" 
+				<img style="border-radius: 20px 20px 20px 20px; box-shadow: 2px 2px #000a; width:65%"
 				    src="/static/images/fcw-front-page<%=(Math.abs(randomValue.nextInt())%60)+1 %>.png">
 
 			</div>
@@ -324,14 +454,14 @@ Random randomValue=new Random();
 							</div>
 						</c:if>
 						<a href="/webclient/?action=hotseat&type=singleplayer" class="btn"><i class="fa fa-user-plus"></i> <fmt:message key="index-game-launcher-hotseat" /></a>
-						
+
 					</div>
 				</div>
 		</div> <!-- end game launcher -->
 
 
 		<br>
-		
+
 		<div id="game-launcher" class="row">
 
 			<div class="" style="width:80%; max-width:80%; text-align:center; margin:0 auto;">
@@ -358,7 +488,7 @@ Random randomValue=new Random();
 									<img class="successicon" src="https://zc1.maillist-manage.eu/images/challangeiconenable.jpg" align="absmiddle">
 								</td>
 								<td>
-									<span id="signupSuccessMsg" style="color: rgb(73, 140, 132); font-family: sans-serif; font-size: 14px;word-break:break-word">&nbsp;&nbsp;Thank you for Signing Up</span>
+									<span id="signupSuccessMsg" style="color: rgb(73, 140, 132); font-family: Helvetica; font-size: 14px;word-break:break-word">&nbsp;&nbsp;Thank you for Signing Up</span>
 								</td>
 							</tr>
 						</tbody>
@@ -404,7 +534,7 @@ Random randomValue=new Random();
 </div>
 <!--Zoho Campaigns Web-Optin Form Ends Here-->
 
-					
+
 				</div>
 			</div>
 	</div>
@@ -442,7 +572,7 @@ Random randomValue=new Random();
 							</thead>
 							<tbody>
 								<c:forEach items="${games}" var="game">
-										
+
 										<c:choose>
 											<c:when test="${!fn:contains(game.message, 'New Freeciv-web Multiplayer')}">
 
@@ -457,7 +587,7 @@ Random randomValue=new Random();
 														</b>
 													</td>
 
-													<!-- 
+													<!--
 													<td class="hidden-xs">
 														${game.state}
 													</td> --> <!-- excluded to make more room for tight fit-->
@@ -484,7 +614,7 @@ Random randomValue=new Random();
 											</c:when>
 										</c:choose>
 
-								</c:forEach>		
+								</c:forEach>
 							</tbody>
 						</table>
 					</c:if>
@@ -509,7 +639,7 @@ Random randomValue=new Random();
 							</tr>
 						</thead>
 						<tbody id="play-by-email-list">
-							<!-- 
+							<!--
 								loaded dynamically
 							-->
 						</tbody>
@@ -568,13 +698,13 @@ Random randomValue=new Random();
 				</div>
 			</div>
 		</div> <!-- end press -->
-		
+
 		<c:if test="${default_lang}">
 			<div class="row">
 				<div class="col-md-12">
 					<h2><fmt:message key="index-developers"/></h2>
 				</div>
-			</div> 
+			</div>
 			<div class="row">
 				<div class="col-md-4">
 					<div class="panel-freeciv">
@@ -607,13 +737,13 @@ Random randomValue=new Random();
 						<h4><fmt:message key="index-credits"/></h4>
 						<ul>
 							<li>Lexxie L. <i class="fa fa-github"></i>  <a href="https://github.com/Lexxie9952/">@lexxie9952</a></li>
-							<li>Andreas R&oslash;sdal <i class="fa fa-twitter"></i>  <a href="https://github.com/andreasrosdal/">@andreasrosdal</a></li>
 							<li>Marko Lindqvist <i class="fa fa-github"></i>  <a href="https://github.com/cazfi">@cazfi</a></li>
 							<li>Sveinung Kvilhaugsvik <i class="fa fa-github"></i>  <a href="https://github.com/kvilhaugsvik">@kvilhaugsvik</a></li>
+							<li>Andreas R&oslash;sdal <i class="fa fa-github"></i>  <a href="https://github.com/andreasrosdal/">@andreasrosdal</a></li>
 							<li>M&#xE1;ximo Casta&#xF1;eda <i class="fa fa-github"></i>  <a href="https://github.com/lonemadmax">@lonemadmax</a></li>
 							<li><a href="https://github.com/Lexxie9952/fcw.org-server/graphs/contributors">Full list</a></li>
 						</ul>
-						
+
 					</div>
 				</div>
 			</div> <!-- end developers -->
@@ -628,4 +758,4 @@ Random randomValue=new Random();
 <script src="/static/javascript/jdenticon.min.js">
 </script>
 
-</html>	
+</html>

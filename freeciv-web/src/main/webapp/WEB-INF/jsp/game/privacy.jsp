@@ -36,42 +36,168 @@
     text-shadow: 1px 1px #000;/* !important;*/
 	}
   h1,h2,h3,h4,h5,h6 {
-		font-family: 'Freeciv', 'Segoe UI';
+		font-family: 'HelveticaBlack', 'Freeciv', 'Segoe UI';
 		text-shadow: 1px 1px #222;
 	}
   body {
 		color: #ccc;
-  	background-image: url('/images/bg-dark.jpg'); 
+  	background-image: url('/images/bg-dark.jpg');
 	}
 	.container {
 		background: none !important;
 		color: #ccc;
 	}
-  
-	@font-face {
-  font-family: Helvetica;
-  src: url('/fonts/arial.ttf');
-	}
-	@font-face {
-		font-family: Freeciv;
-		src: url('/fonts/freeciv.ttf');
-	}
-	@font-face {
-		font-family: FreecivSB;
-		src: url('/fonts/freeciv.m.ttf');
-	}
-	@font-face {
-		font-family: FreecivBold;
-		src: url('/fonts/freeciv.b.ttf');
-	}
-	@font-face {
-		font-family: FreecivBlack;
-		src: url('/fonts/freeciv.bl.ttf');
-	}
-	@font-face {
-		font-family: Arial;
-		src: url('/fonts/arial.ttf');
-	}
+
+    /* 〰〰〰〰〰〰〰〰〰〰〰〰〰HELVETICAS〰〰〰〰〰〰〰〰〰〰〰〰〰*/
+    /* Helvetica Ultra-Light 〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰*/
+    @font-face {
+    font-family: "Helvetica";
+    src: url("/fonts/helveticaneue/helveticaneue.ul.ttf");
+    font-weight: 100;
+    }
+    @font-face {
+    font-family: "Helvetica";
+    src: url("/fonts/helveticaneue/helveticaneue.i.ul.ttf");
+    font-weight: 100;
+    font-style: italic;
+    }
+    /* Helvetica Thin 〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰*/
+    @font-face {
+    font-family: "Helvetica";
+    src: url("/fonts/helveticaneue/helveticaneue.th.ttf");
+    font-weight: 200;
+    }
+    @font-face {
+    font-family: "Helvetica";
+    src: url("/fonts/helveticaneue/helveticaneue.i.th.ttf");
+    font-weight: 200;
+    font-style: italic;
+    }
+    /* Helvetica Light 〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰*/
+    @font-face {
+    font-family: "Helvetica";
+    src: url("/fonts/helvetica/helvetica.l.ttf");
+    font-weight: 300;
+    }
+    @font-face {
+    font-family: "Helvetica";
+    src: url("/fonts/helvetica/helvetica.i.l.ttf");
+    font-weight: 300;
+    font-style: italic;
+    }
+    /* Helvetica Regular 〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰*/
+    @font-face {
+    font-family: "Helvetica";
+    src: url("/fonts/helvetica/helvetica.ttf");
+    font-weight: 400;
+    }
+    @font-face {
+    font-family: "Helvetica";
+    src: url("/fonts/helvetica/helvetica.i.ttf");
+    font-weight: 400;
+    font-style: italic;
+    }
+    /* Helvetica Medium 〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰*/
+    @font-face {
+    font-family: "Helvetica";
+    src: url("/fonts/helveticaneue/helveticaneue.med.ttf");
+    font-weight: 500;
+    }
+    @font-face {
+    font-family: "Helvetica";
+    src: url("/fonts/helveticaneue/helveticaneue.i.med.ttf");
+    font-weight: 500;
+    font-style: italic;
+    }
+    /* Helvetica Bold (semi-Bold) 〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰*/
+    @font-face {
+    font-family: "Helvetica";
+    src: url("/fonts/helvetica/helvetica.b.ttf");
+    font-weight: 600;
+    }
+    @font-face {
+    font-family: "Helvetica";
+    src: url("/fonts/helvetica/helvetica.i.b.ttf");
+    font-weight: 600;
+    font-style: italic;
+    }
+    /* Helvetica Bolder (Neue Bold) 〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰*/
+    @font-face {
+    font-family: "Helvetica";
+    src: url("/fonts/helveticaneue/helveticaneue.b.ttf");
+    font-weight: 700;
+    }
+    @font-face {
+    font-family: "Helvetica";
+    src: url("/fonts/helveticaneue/helveticaneue.b.med.ttf");
+    font-weight: 700;
+    font-style: italic;
+    }
+    /* Helvetica Black 〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰*/
+    @font-face {
+    font-family: "Helvetica";
+    src: url("/fonts/helvetica/helvetica.bl.ttf");
+    font-weight: 900;
+    }
+    @font-face {
+    font-family: "HelveticaBlack";
+    src: url("/fonts/helvetica/helvetica.bl.ttf");
+    }
+    /* 〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰*/
+    /* Consolas Regular & Bold 〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰*/
+    @font-face {
+    font-family: Consolas;
+    src: url('/fonts/consola.ttf');
+    }
+    @font-face {
+    font-family: Consolas;
+    src: url('/fonts/consolab.ttf');
+    font-weight: bold;
+    }
+    @font-face {       /* allow picking bold without a <b> */
+    font-family: ConsolasBold;
+    src: url('/fonts/consolab.ttf');
+    }
+
+    /* Elan ITC */
+    @font-face {
+    font-family: Freeciv;
+    src: url('/fonts/freeciv.ttf');
+    }
+    @font-face {
+    font-family: FreecivSB;
+    src: url('/fonts/freeciv.m.ttf');
+    }
+    @font-face {
+    font-family: FreecivBold;
+    src: url('/fonts/freeciv.b.ttf');
+    }
+    @font-face {
+    font-family: FreecivBlack;
+    src: url('/fonts/freeciv.bl.ttf');
+    }
+
+    /* Misc */
+    @font-face {
+    font-family: Arial;
+    src: url('/fonts/arial.ttf');
+    }
+    @font-face {
+    font-family: SegoeSB; /* semi-bold */
+    src: url('/fonts/seg.sb.ttf');
+    }
+    @font-face {
+    font-family: SegoeBold;
+    src: url('/fonts/seg.b.ttf');
+    }
+    @font-face {
+    font-family: SegoeBlack;
+    src: url('/fonts/seg.bl.ttf');
+    }
+    @font-face {
+    font-family: Segoe;
+    src: url('/fonts/seg.ttf');
+    }
 
 </style>
 
@@ -88,10 +214,10 @@
     <h3>FCW is a private gaming community and a private gathering.</h3><br>
 
     <div>
-    <b>Freeciv-Web ("FCW") is a <u>preferred privacy protection site.</u></b> That is, <br> 
+    <b>Freeciv-Web ("FCW") is a <u>preferred privacy protection site.</u></b> That is, <br>
     1) the data we collect is used only to deliver services the best we can, <br>
     2) your data is not shared with third parties, <br>
-    3) we maintain strict privacy protection policies in our <a href="http://www.freecivweb.org/rules">Terms of Service</a> and <a href="http://www.freecivweb.org/rules">code of conduct</a> to ensure our users don't violate each other's privacy.<br> 
+    3) we maintain strict privacy protection policies in our <a href="http://www.freecivweb.org/rules">Terms of Service</a> and <a href="http://www.freecivweb.org/rules">code of conduct</a> to ensure our users don't violate each other's privacy.<br>
     </div>
 <br>
     <div>
@@ -138,7 +264,7 @@
     2. FCW does not use reporting/tracking cookies that communicate with our server or third party servers.<br>
     3. FCW uses <i>User Convenience Cookies.</i><br>
     <b>What is a 'User Convenience Cookie?'</b><br>
-    User convenience cookies may remember your personal setup preferences you may submit for graphic display options, game preferences, and suchlike.<br> 
+    User convenience cookies may remember your personal setup preferences you may submit for graphic display options, game preferences, and suchlike.<br>
     They may remember your username and password and store it locally in your browser, so that you do not have to re-enter this information when re-visiting the site.<br>
     User convenience cookies are not shared with any third parties and are not stored or accessed on our server. They are only used by your browser to fill in information you have indicated you would like your browser to remember, when interacting with our site. <br>
     </div>
@@ -146,7 +272,7 @@
     <div>
     <b>Does FCW disclose any information to outside parties?</b><br>
     1. FCW enforces policies against users supplying any information or communications you share within our sphere of services, to outside parties.<br>
-    2. We do not sell, trade, or otherwise transfer to outside parties your personally identifiable information.<br> 
+    2. We do not sell, trade, or otherwise transfer to outside parties your personally identifiable information.<br>
     3. This does not include trusted third parties whose services integrate to our site for the purpose of operating our site, conducting our business, or servicing you, so long as the policies of those parties do not violate our own privacy policies.<br>
     4. For example, your email address is used during Google_Auth logins that use your gmail account.<br>
     5. We may  use or release information when we believe that is appropriate to comply with the law, enforce our site policies, or protect ours or others rights, property, or safety.<br>
@@ -162,12 +288,12 @@
     <b>Children's Online Privacy Protection Act Compliance</b><br>
     Our site, products and services are all directed to people who are at least 13 years old or older. If you are under the age of 13, per the requirements of COPPA (Children's Online Privacy Protection Act), do not use this site without parental supervision.<br>
     </div>
-<br>    
+<br>
     <div>
     <b>Online Privacy Policy Only</b><br>
     This online privacy policy applies only to information collected through our site and services and not to information collected outside of such.<br>
     </div>
-<br>  
+<br>
     <div>
     <b>Your Consent</b><br>
     By using our site and other services, you consent to our service-wide Privacy Policy and <a href="http://www.freecivweb.org/rules">Terms of Service</a>.<br>

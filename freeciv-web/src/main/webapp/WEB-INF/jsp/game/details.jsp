@@ -1,5 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %> 
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ include file="/WEB-INF/jsp/fragments/i18n.jsp" %>
 <!DOCTYPE html>
 <html lang="en">
@@ -43,25 +43,169 @@
 			background: url(/images/bg-med-dark.jpg);
 		}
 		h1,h2,h3,h4,h5,h6 {
-			font-family: 'Freeciv', 'Segoe UI';
+			font-family: 'Helvetica', 'Freeciv', 'Segoe UI';
+			font-weight: 600;
 			text-shadow: 1px 1px #222;
 		}
 		body {
 			color: #ccc;
-			background-image: url('/images/bg-dark.jpg'); 
+			background-image: url('/images/bg-dark.jpg');
+		}
+
+
+		/* 〰〰〰〰〰〰〰〰〰〰〰〰〰HELVETICAS〰〰〰〰〰〰〰〰〰〰〰〰〰*/
+		/* Helvetica Ultra-Light 〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰*/
+		@font-face {
+		font-family: "Helvetica";
+		src: url("/fonts/helveticaneue/helveticaneue.ul.ttf");
+		font-weight: 100;
 		}
 		@font-face {
-			font-family: Freeciv;
-			src: url('/fonts/freeciv.ttf');
+		font-family: "Helvetica";
+		src: url("/fonts/helveticaneue/helveticaneue.i.ul.ttf");
+		font-weight: 100;
+		font-style: italic;
+		}
+		/* Helvetica Thin 〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰*/
+		@font-face {
+		font-family: "Helvetica";
+		src: url("/fonts/helveticaneue/helveticaneue.th.ttf");
+		font-weight: 200;
 		}
 		@font-face {
-			font-family: Arial;
-			src: url('/fonts/arial.ttf');
+		font-family: "Helvetica";
+		src: url("/fonts/helveticaneue/helveticaneue.i.th.ttf");
+		font-weight: 200;
+		font-style: italic;
+		}
+		/* Helvetica Light 〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰*/
+		@font-face {
+		font-family: "Helvetica";
+		src: url("/fonts/helvetica/helvetica.l.ttf");
+		font-weight: 300;
+		}
+		@font-face {
+		font-family: "Helvetica";
+		src: url("/fonts/helvetica/helvetica.i.l.ttf");
+		font-weight: 300;
+		font-style: italic;
+		}
+		/* Helvetica Regular 〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰*/
+		@font-face {
+		font-family: "Helvetica";
+		src: url("/fonts/helvetica/helvetica.ttf");
+		font-weight: 400;
+		}
+		@font-face {
+		font-family: "Helvetica";
+		src: url("/fonts/helvetica/helvetica.i.ttf");
+		font-weight: 400;
+		font-style: italic;
+		}
+		/* Helvetica Medium 〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰*/
+		@font-face {
+		font-family: "Helvetica";
+		src: url("/fonts/helveticaneue/helveticaneue.med.ttf");
+		font-weight: 500;
+		}
+		@font-face {
+		font-family: "Helvetica";
+		src: url("/fonts/helveticaneue/helveticaneue.i.med.ttf");
+		font-weight: 500;
+		font-style: italic;
+		}
+		/* Helvetica Bold (semi-Bold) 〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰*/
+		@font-face {
+		font-family: "Helvetica";
+		src: url("/fonts/helvetica/helvetica.b.ttf");
+		font-weight: 600;
+		}
+		@font-face {
+		font-family: "Helvetica";
+		src: url("/fonts/helvetica/helvetica.i.b.ttf");
+		font-weight: 600;
+		font-style: italic;
+		}
+		/* Helvetica Bolder (Neue Bold) 〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰*/
+		@font-face {
+		font-family: "Helvetica";
+		src: url("/fonts/helveticaneue/helveticaneue.b.ttf");
+		font-weight: 700;
+		}
+		@font-face {
+		font-family: "Helvetica";
+		src: url("/fonts/helveticaneue/helveticaneue.b.med.ttf");
+		font-weight: 700;
+		font-style: italic;
+		}
+		/* Helvetica Black 〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰*/
+		@font-face {
+		font-family: "Helvetica";
+		src: url("/fonts/helvetica/helvetica.bl.ttf");
+		font-weight: 900;
+		}
+		@font-face {
+		font-family: "HelveticaBlack";
+		src: url("/fonts/helvetica/helvetica.bl.ttf");
+		}
+		/* 〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰*/
+		/* Consolas Regular & Bold 〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰*/
+		@font-face {
+		font-family: Consolas;
+		src: url('/fonts/consola.ttf');
+		}
+		@font-face {
+		font-family: Consolas;
+		src: url('/fonts/consolab.ttf');
+		font-weight: bold;
+		}
+		@font-face {       /* allow picking bold without a <b> */
+		font-family: ConsolasBold;
+		src: url('/fonts/consolab.ttf');
+		}
+
+		/* Elan ITC */
+		@font-face {
+		font-family: Freeciv;
+		src: url('/fonts/freeciv.ttf');
+		}
+		@font-face {
+		font-family: FreecivSB;
+		src: url('/fonts/freeciv.m.ttf');
+		}
+		@font-face {
+		font-family: FreecivBold;
+		src: url('/fonts/freeciv.b.ttf');
+		}
+		@font-face {
+		font-family: FreecivBlack;
+		src: url('/fonts/freeciv.bl.ttf');
+		}
+
+		/* Misc */
+		@font-face {
+		font-family: Arial;
+		src: url('/fonts/arial.ttf');
+		}
+		@font-face {
+		font-family: SegoeSB; /* semi-bold */
+		src: url('/fonts/seg.sb.ttf');
+		}
+		@font-face {
+		font-family: SegoeBold;
+		src: url('/fonts/seg.b.ttf');
+		}
+		@font-face {
+		font-family: SegoeBlack;
+		src: url('/fonts/seg.bl.ttf');
 		}
 		@font-face {
 		font-family: Segoe;
 		src: url('/fonts/seg.ttf');
 		}
+
+
+
 	</style>
 	<script>
 		/****************************************************************************
@@ -82,7 +226,7 @@
 			});
 		  </c:if>
 		}
-	
+
 		/****************************************************************************
 		 Handles the scorelog file
 		****************************************************************************/
@@ -132,7 +276,7 @@
 					}
 				}
 			}
-	
+
 			var ps = 4;
 			if (scoreitems.length >1000) ps = 0;
 			try {
@@ -153,7 +297,7 @@
 </head>
 <body>
 	<%@include file="/WEB-INF/jsp/fragments/header.jsp"%>
-	
+
 	<!-- Begin page content -->
 	<div class="container">
 		<div class="text-center">
@@ -246,7 +390,7 @@
 						</c:if>
 					</div>
 				</div>
-			
+
 				<!-- scores -->
 				<div class="row">
 					<div class="center-block" style="width: 800px;">
@@ -257,7 +401,7 @@
 						</c:if>
 					</div>
 				</div>
-				
+
 				<!-- variables -->
 				<div class="row">
 					<div class="center-block" style="width: 250px;">
@@ -289,13 +433,13 @@
 			</c:if>
 			<a class="btn btn-default" href="/game/list">Return to game list</a>
 		</div>
-		
-		
-		
+
+
+
 		<!-- Site footer -->
 		<%@include file="/WEB-INF/jsp/fragments/footer.jsp"%>
 	</div> <!-- container -->
-		
+
 
 
 </body>

@@ -26,7 +26,7 @@
 
 <font color="#b0e5ff"></font>
 
-<table style="font-family:Segoe; font-size: 90%;" cellspacing="0" cellpadding="0">
+<table style="font-family:Helvetica; font-size: 90%;" cellspacing="0" cellpadding="0">
 <tr class="options_row">
   <td>
     <div style="margin-top:15px" class="main_menu_buttons">
@@ -185,7 +185,7 @@
 </tr>
 
 <tr class="options_row">
-  <td> 
+  <td>
     <div title="Shortcut buttons for unit orders at bottom of screen" class="main_menu_buttons">
         <input type='checkbox' class="css-checkbox" name='show_order_buttons' id='show_order_buttons' checked>
         <label for="show_order_buttons" name="show_order_buttons_lbl" class="css-label dark-check-green"><font color="#e8f8e0">Orders Buttons</font></label>
@@ -289,7 +289,7 @@
   <td>
     <div style="margin-top:15px" class="main_menu_buttons">
       <button id="replay_button" type="button" class="button setting_button" onClick="show_replay();">Game replay</button>
-    </div>  
+    </div>
   </td>
   <td>
     <div style="margin-top:15px" class="main_menu_buttons">
