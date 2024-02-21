@@ -8009,6 +8009,7 @@ function update_active_units_dialog()
   for (var i = 0; i < punits.length; i++) {
     var punit = punits[i];
     var sprite = get_unit_image_sprite(punit);
+    let is_vigil = (punit['activity'] == ACTIVITY_VIGIL);
 
     // TO DO: This is caused sometimes after rebuild when not all images load properly. This is a hack to simply abort
     // making unit panel for this current unit in the stack, but probably we need a check after game load to see if all
@@ -8035,9 +8036,18 @@ function update_active_units_dialog()
     var display_background_css;
     var trans_help_title = "";
     if (active) { // selected units are highlighted, and slightly bluish if on a transport
-      display_background_css = (punit['transported'] && punit['transported_by']>0) ? "transported_focus_unit" : "current_focus_unit";
+      if (is_vigil) {
+        display_background_css = (punit['transported'] && punit['transported_by']>0) ? "transported_focus_vigil_unit" : "current_focus_vigil_unit";
+      } else {
+        display_background_css = (punit['transported'] && punit['transported_by']>0) ? "transported_focus_unit" : "current_focus_unit";
+      }
     } else {      // non-selected units have dark transparent background, also slightly blue if on a transport
-      display_background_css = (punit['transported'] && punit['transported_by']>0) ? "transported_nonfocus_unit" : "nonfocus_unit";
+      if (is_vigil) {
+        display_background_css = (punit['transported'] && punit['transported_by']>0) ? "transported_nonfocus_vigil_unit" : "nonfocus_vigil_unit";
+      } else {
+        display_background_css = (punit['transported'] && punit['transported_by']>0) ? "transported_nonfocus_unit" : "nonfocus_unit";
+
+      }
     }
 
     // hover title to give transport # and transported by

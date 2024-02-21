@@ -1428,19 +1428,35 @@ body:not(.mobile) .ui-dialog.unit_dialog {
 
 .current_focus_unit {
   border: 1px solid white;
-  background-color: rgba(240,240,240,0.5);
+  background-color: rgba(255, 255, 255, 0.60);
+}
+.current_focus_vigil_unit {
+  border: 1px solid rgb(223, 77, 77);
+  background-color: rgba(255, 200, 197, 0.69);
 }
 .transported_focus_unit {
   border: 1px solid skyblue;
-  background-color: rgba(110, 210, 255, 0.75);
+  background-color: rgba(110, 210, 255, 0.65);
+}
+.transported_focus_vigil_unit {
+  border: 1px solid rgb(223, 77, 77);
+  background-color: rgba(141, 168, 255, 0.65);
 }
 .nonfocus_unit {
   border: 1px solid white;
   background-color: rgba(15,0,0,0.55);
 }
+.nonfocus_vigil_unit {
+  border: 1px solid rgb(223, 77, 77);
+  background-color: rgba(55,0,0,0.40);
+}
 .transported_nonfocus_unit {
     border: 1px solid skyblue;
     background-color: rgba(0, 90, 145, 0.75);
+}
+.transported_nonfocus_vigil_unit {
+  border: 1px solid rgb(223, 77, 77);
+  background-color: rgba(63, 74, 168, 0.75);
 }
 
 #active_unit_info {
