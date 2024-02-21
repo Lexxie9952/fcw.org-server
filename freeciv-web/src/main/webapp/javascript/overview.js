@@ -122,7 +122,7 @@ function init_overview()
   // globe icon symbol
   /* old fa-icon, deprecated
   $("#game_overview_panel").parent().children().not("#game_overview_panel").children().get(0).innerHTML
-    = "<div style='font-size:97%; vertical-align:top; font-family:Arial; margin-bottom: 1px;'><i style='color #5df !important' class='fa fa-globe' aria-hidden='true'></i></div>";
+    = "<div style='font-size:97%; vertical-align:top; font-family:Helvetica; margin-bottom: 1px;'><i style='color #5df !important' class='fa fa-globe' aria-hidden='true'></i></div>";
   */
   $("#game_overview_panel").parent().children().not("#game_overview_panel").children().get(0).innerHTML
   = "<div margin-bottom: 1px;'><img src='/images/e/earth.png' height='16px'></div>";
