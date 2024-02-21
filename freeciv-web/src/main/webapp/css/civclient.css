@@ -7,6 +7,40 @@
   --contrast_text_color: #000;
 }
 
+
+/* Custom html elements save a lot of bytes over e.g., style="font-weight:300;" */
+ulight- {                             /* ULTRA-LIGHT font-weight */
+  font-weight: 100;
+}
+
+thin- {
+  font-weight: 200;                   /* THIN font-weight */
+}
+
+light- {
+  font-weight: 300;                   /* LIGHT font-weight */
+}
+
+reg- {
+  font-weight: 400;                   /* REGULAR font-weight */
+}
+
+med- {
+  font-weight: 500;                   /* MEDIUM font-weight */
+}
+
+sb- {
+  font-weight: 600;                   /* SEMI-BOLD font-weight */
+}
+
+b {
+  font-weight: 700;                   /* BOLD font-weight */
+}
+
+black- {
+  font-weight: 900;                   /* BLACK font-weight (we don't have any semi-black 800 weight fonts) */
+}
+
 body
 {
   margin: 0px;
@@ -41,22 +75,13 @@ body, html, div {
 }
 /************************************************/
 
-button {
-  margin: .2em .2em .2em 0;
-  cursor: pointer;
-  padding: .2em .6em .3em .6em;
-  line-height: 1.4em;
-  width:auto;
-  overflow:visible;
-}
-
 .ui-tabs .ui-tabs-panel {
   border-width:0;
   display:block;
   padding:0px;
   margin-right:0px;
   color: var(--default_text_color);
-  font-family: Freeciv;
+  font-family: Helvetica;
 }
 
 #freeciv_logo {
@@ -270,11 +295,11 @@ input[type='number'] {
   font-size: 95%;
   line-height: 110%;
   margin-top: -2px;
-  font-family: Segoe;
+  font-family: Helvetica;
 }
 .helptext_pane {
   max-width: 784px;
-  font-family: Segoe;
+  font-family: Helvetica;
   color: #e2e2e2;
 }
 .helptext_pane_mobile {
@@ -284,8 +309,8 @@ input[type='number'] {
   color: #9aa;
   line-height:115%;
   font-size:115%;
-  font-family:SegoeSB;
-  font-weight:normal;
+  font-family:Helvetica;
+  font-weight:500;
 }
 
 .blue_clickable {
@@ -597,7 +622,7 @@ input[type='number'] {
   margin-left: 0px;
   background: url("/images/bg-dark.jpg") repeat scroll 0 0 ;
   color: rgb(226, 226, 226);
-  font-family: Segoe;
+  font-family: Helvetica;
 }
 
 #tech_goal_box {
@@ -680,7 +705,7 @@ input[type='number'] {
   text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
   padding-right: 150px;
   padding-top: 5px;
-  font-family: Freeciv;
+  font-family: Helvetica;
 }
 
 .ui-dialog .ui-dialog-content {
@@ -1134,10 +1159,12 @@ table.vet_level tr:nth-child(9) td {
   width: 100%;
   border-spacing: 0px;
   border-collapse: separate;
-  font-family: SegoeSB;
+  font-family: Helvetica;
+  font-weight: 700;
   text-shadow: 1px 1px #5554;
   background-image: url(/images/bg-med-light.jpg);
 }
+
 #worklist_dialog_headline {
   width: 100%;
   height: 60px;
@@ -1879,7 +1906,7 @@ li.tech-both00::before { /*  we both have the tech and neither has blueprints */
 
 .ui-dialog:not(#game_message_area, #game_chatbox_panel) {
   color: var(--default_text_color);
-  font-family:Segoe;
+  font-family:Helvetica;
   background: url('/images/bg.jpg');
   border: #432 !important;
 }
@@ -1900,26 +1927,70 @@ li.tech-both00::before { /*  we both have the tech and neither has blueprints */
   box-shadow: 5px 5px 15px #000a, -.01em 0 .27em #ccc5 !important; */
   box-shadow: 6px 6px 23px #000b !important;
   text-shadow: 1px 1px #33222241 !important;
-  font-family: Segoe !important;
+  font-family: Helvetica;
   line-height: 16px;
 }
 body div.ui-tooltip {
   max-width: 360px;
 }
 
+
+
+button {
+  margin: .2em .2em .2em 0;
+  cursor: pointer;
+  padding: .2em .6em .3em .6em;
+  line-height: 1.4em;
+  width:auto;
+  overflow:visible;
+
+  border: 0;
+  padding: 10px;
+  border-radius: 13px;
+  font-family: 'Helvetica' !important;
+
+  background-image: url(/images/bg-light.jpg);
+  background: #d2e5e571;
+  box-shadow: 7px 7px 14px #1f2626, -7px -7px 14px rgba(28, 28, 28, 0.333);
+
+  margin: 10px auto 5px;
+
+  color: rgb(168, 168, 178);
+  text-shadow: 1px 1px #091a3850 !important;
+  color: rgb(76, 76, 76)
+}
+button:hover {
+  border-radius: 13px;
+  background: #788888;
+  background-image: url(/images/bg-med-light.jpg);
+  box-shadow: inset 7px 7px 9px #464646, inset -7px -7px 9px #9ababa;
+  margin: 11px auto 4px;
+}
+button:active {
+  border-radius: 13px;
+  background: #788888;
+  background-image: url(/images/bg-med-light.jpg);
+  box-shadow: inset 7px 7px 9px #464646, inset -7px -7px 9px #9ababa;
+  margin: 11px auto 4px;
+}
 .ui-button, button {
+/*
   color: var(--default_text_color);
   font-family: Freeciv !important;
   background: url('/images/bg-med-dark.jpg') #000;
   border-color: #000;
-  box-shadow: "3px 3px 6px #000b" !important;
+  box-shadow: "3px 3px 6px #000b" !important;*/
 }
 .ui-button:hover, button:hover {
+  /*
   background: url('/images/bg-light.jpg') #000;
   color: #000 !important;
   box-shadow: "4px 4px 7px #0008" !important;
-
+*/
 }
+
+
+
 .ui-button.ui-button-icon-only:not(#turn_done_button) {
   border: 1px solid;
   background: url('/images/bg-med-light.jpg');
@@ -1929,6 +2000,9 @@ body div.ui-tooltip {
 .ui-button-icon-only .ui-icon {
   margin-top: -10px;
 }
+
+
+
 .menu-button-activator {
   float: left;
   margin: 0 4px 40px 20px;
@@ -1940,7 +2014,7 @@ body div.ui-tooltip {
   color: var(--default_text_color) !important;
   border-color: #000 !important;
   box-shadow: "3px 3px 6px #000b" !important;
-  font-family: Freeciv !important;
+  font-family: Helvetica;
   background: url('/images/bg-med-dark.jpg') #000 !important;
 }
 .menu-button-activator .ui-selected {
@@ -1984,7 +2058,7 @@ body div.ui-tooltip {
 }
 
 .ui-tabs-anchor {
-  font-family: "Freeciv";
+  font-family: "Helvetica";
   background: url('/images/bg-med-dark.jpg');
   color: var(--default_text_color) !important;
   border-color: #000;
@@ -2440,22 +2514,24 @@ input[type="email" i], #email {
 /* Font Control over various game elements
 *******************************************************************/
 #pregame_message_area {
-  font-family: SegoeSB;
+  font-family: Helvetica;
+  font-weight: 700;
   line-height:115%;
   font-size:115%;
   color:rgb(218, 218, 218) !important;
 }
 /* override everything in pregame to black */
 #pregame_message_area .e_setting {
-  font-family: ConsolasBold;
-  line-height:90%;
-  font-size:90%;
+  font-family: Helvetica;
+  font-weight: 300;
+  line-height:100%;
+  font-size:100%;
   color: inherit !important;
 }
 #pregame_message_area .e_connection {
-  font-family: ConsolasBold;
-  line-height:90%;
-  font-size:90%;
+  font-family: Helvetica;
+  line-height:100%;
+  font-size:100%;
   color: inherit !important;
 }
 #private_message_text,
@@ -2464,7 +2540,6 @@ input[type="email" i], #email {
 }
 /* info on terrain, gov, wonders, buildings */
 #helptext_pane {
-  /*font-family: Arial;*/
   line-height: 115%;
   font-size: 115%;
 }
@@ -2509,7 +2584,7 @@ input[type="email" i], #email {
   background: url("/images/bg-med-dark.jpg") repeat scroll 0 0 #222222; */
   padding-right: 30px;
   margin-top: 20px;
-  font-family: Segoe;
+  font-family: Helvetica;
   color: var(--default_text_color);
 }
 #city_right_panel {
@@ -2596,20 +2671,119 @@ input[type="email" i], #email {
   background-image: url('/images/slider_prod.png'); /* default grey */
 }
 
-/* Font faces */
+
+/* 〰〰〰〰〰〰〰〰〰〰〰〰〰HELVETICAS〰〰〰〰〰〰〰〰〰〰〰〰〰*/
+/* Helvetica Ultra-Light 〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰*/
 @font-face {
-  font-family: ConsolasBold;
-  src: url('/fonts/consolab.ttf');
+  font-family: "Helvetica";
+  src: url("/fonts/helveticaneue/helveticaneue.ul.ttf");
+  font-weight: 100;
 }
+@font-face {
+  font-family: "Helvetica";
+  src: url("/fonts/helveticaneue/helveticaneue.i.ul.ttf");
+  font-weight: 100;
+  font-style: italic;
+}
+/* Helvetica Thin 〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰*/
+@font-face {
+  font-family: "Helvetica";
+  src: url("/fonts/helveticaneue/helveticaneue.th.ttf");
+  font-weight: 200;
+}
+@font-face {
+  font-family: "Helvetica";
+  src: url("/fonts/helveticaneue/helveticaneue.i.th.ttf");
+  font-weight: 200;
+  font-style: italic;
+}
+/* Helvetica Light 〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰*/
+@font-face {
+  font-family: "Helvetica";
+  src: url("/fonts/helvetica/helvetica.l.ttf");
+  font-weight: 300;
+}
+@font-face {
+  font-family: "Helvetica";
+  src: url("/fonts/helvetica/helvetica.i.l.ttf");
+  font-weight: 300;
+  font-style: italic;
+}
+/* Helvetica Regular 〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰*/
+@font-face {
+  font-family: "Helvetica";
+  src: url("/fonts/helvetica/helvetica.ttf");
+  font-weight: 400;
+}
+@font-face {
+  font-family: "Helvetica";
+  src: url("/fonts/helvetica/helvetica.i.ttf");
+  font-weight: 400;
+  font-style: italic;
+}
+/* Helvetica Medium 〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰*/
+@font-face {
+  font-family: "Helvetica";
+  src: url("/fonts/helveticaneue/helveticaneue.med.ttf");
+  font-weight: 500;
+}
+@font-face {
+  font-family: "Helvetica";
+  src: url("/fonts/helveticaneue/helveticaneue.i.med.ttf");
+  font-weight: 500;
+  font-style: italic;
+}
+/* Helvetica Bold (semi-Bold) 〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰*/
+@font-face {
+  font-family: "Helvetica";
+  src: url("/fonts/helvetica/helvetica.b.ttf");
+  font-weight: 600;
+}
+@font-face {
+  font-family: "Helvetica";
+  src: url("/fonts/helvetica/helvetica.i.b.ttf");
+  font-weight: 600;
+  font-style: italic;
+}
+/* Helvetica Bolder (Neue Bold) 〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰*/
+@font-face {
+  font-family: "Helvetica";
+  src: url("/fonts/helveticaneue/helveticaneue.b.ttf");
+  font-weight: 700;
+}
+@font-face {
+  font-family: "Helvetica";
+  src: url("/fonts/helveticaneue/helveticaneue.i.b.ttf");
+  font-weight: 700;
+  font-style: italic;
+}
+/* Helvetica Black 〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰*/
+@font-face {
+  font-family: "Helvetica";
+  src: url("/fonts/helvetica/helvetica.bl.ttf");
+  font-weight: 900;
+}
+@font-face {
+  font-family: "HelveticaBlack";
+  src: url("/fonts/helvetica/helvetica.bl.ttf");
+}
+/* 〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰*/
+/* Consolas Regular & Bold 〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰*/
 @font-face {
   font-family: Consolas;
   src: url('/fonts/consola.ttf');
 }
-
 @font-face {
-  font-family: Helvetica;
-  src: url('/fonts/arial.ttf');
+  font-family: Consolas;
+  src: url('/fonts/consolab.ttf');
+  font-weight: bold;
 }
+@font-face {       /* allow picking bold without a <b> */
+  font-family: ConsolasBold;
+  src: url('/fonts/consolab.ttf');
+}
+
+/* Elan ITC */
 @font-face {
   font-family: Freeciv;
   src: url('/fonts/freeciv.ttf');
@@ -2626,9 +2800,30 @@ input[type="email" i], #email {
   font-family: FreecivBlack;
   src: url('/fonts/freeciv.bl.ttf');
 }
+
+/* Misc */
 @font-face {
   font-family: Arial;
   src: url('/fonts/arial.ttf');
+}
+@font-face {
+  font-family: Segoe;
+  src: url("/fonts/seg.sb.ttf");
+  font-weight: 500;
+}
+@font-face {
+  font-family: Segoe;
+  src: url('/fonts/seg.ttf');
+}
+@font-face {
+  font-family: Segoe;
+  src: url("/fonts/seg.b.ttf");
+  font-weight: 700;
+}
+@font-face {
+  font-family: Segoe;
+  src: url("/fonts/seg.bl.ttf");
+  font-weight: 900;
 }
 @font-face {
   font-family: SegoeSB; /* semi-bold */
@@ -2642,12 +2837,8 @@ input[type="email" i], #email {
   font-family: SegoeBlack;
   src: url('/fonts/seg.bl.ttf');
 }
-@font-face {
-  font-family: Segoe;
-  src: url('/fonts/seg.ttf');
-}
 body {
-  font-family: Arial;
+  font-family: Helvetica;
   border: none;
   outline: none;
   scrollbar-width: thin !important;
