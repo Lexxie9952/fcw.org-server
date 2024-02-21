@@ -115,6 +115,8 @@ struct unit_move_data {
 struct autoattack_prob {
   int unit_id;
   struct act_prob prob;
+  int can_attack;    // stashes info for AA_ADVANCED and avoid recalculations
+  bool can_bombard;  //    "     "    "       "       "    "        "
 };
 
 #define SPECLIST_TAG autoattack_prob
@@ -4349,18 +4351,22 @@ static int compare_units(const struct autoattack_prob *const *p1,
 }
 
 /**********************************************************************//**
-  Returns a will_attack code of AA_NO, AA_ODDS, or AA_ALWAYS, indicating
-  if 'punit' provokes auto-attack from the unit 'penemy'.
-  Called when autoattack_style == AA_ADVANCED
+  Returns a permission_code for possibility of p_moving_unit to provoke
+  auto-attack from p_adj_unit.  Return codes are:
+          AA_NO               auto-attack illegal
+          AA_ODDS             auto-attacks if odds legality fulfilled
+          AA_ALWAYS           always auto-attacks
+
+  Called only when autoattack_style == AA_ADVANCED
 **************************************************************************/
-static int will_unit_autoattack_unit (struct unit *penemy,
-                                       struct unit *punit)
+static int can_unit_autoattack_unit(const struct unit *p_adj_unit,
+                                    const struct unit *p_moving_unit)
 {
 
 /* Autoattack may happen based on which flags attacker and defender have:
                        attacker ⏩
 ——————————————————————————————————————————————————————————————————————————————————
-defender         ""    AvidAttacker  O1   O2   O3    A1   A2   A3    !if_attacker*
+⬇️defender       ""    AvidAttacker  O1   O2   O3    A1   A2   A3    !if_attacker†
 ——————————————————————————————————————————————————————————————————————————————————
 NonProvoking     N-    N-            N-   N-   N-    N-   N-   N-    N-
 ""               --    ODDS          --   --   --    --   --   --    N-
@@ -4374,52 +4380,91 @@ O1-3 = OddsAttackClass1-3
 A1-3 = AlwaysAttackClass1-3
 ""   = Has no UTYF flags related to autoattack
 N-   = AA_NO     = overrides any possible autoattack, will never auto-attack
-YES  = AA_ALWAYS = ALWAYS auto-attacks (unless overridden by "N-")
-ODDS = AA_ODDS   = auto-attack if odds are better (unless overridden by N- or YES)
+YES  = AA_ALWAYS = ALWAYS auto-attacks (unless overridden by "N-" or abort_threshold‡)
+ODDS = AA_ODDS   = auto-attack if odds are better (unless overridden by N- or YES or or abort_threshold‡)
 --   = AA_NO     = no auto-attack (unless overridden by YES or ODDS)
 
-*if_attacker = (from game.ruleset) - means this unit will never autoattack. This
+†if_attacker = (from game.ruleset) - means this unit will never autoattack. This
                gets filtered during the construction of the autoattack prob_list
-*/
+
+‡abort_threshold is currently hard-coded to 25%. And override-aborts ANY other
+condition for an attack including AA_ALWAYS.
+
+SEQUENTIAL FLOW LOGIC for an autoattack candidate to decide whether to attack or not:
+  ALL CASES, pre-processing
+    🔹NOT ON VIGIL?                             ABORT
+    🔹NON-PROVOKING                             ABORT
+    🔹ODDS < 25%                                ABORT
+  🔻...... if no prior abort has occurred, then .....🔻
+    🔹Auto_attack ALWAYS = YES?              💥 ATTACK 💥
+  AA_ODDS:
+    🔹Attacking their tile is better odds
+    than them attacking our tile?          💥 ATTACK 💥 (NOTE abort_threshold<25% pre-fails before this check.)
+    🔹Attack anyway odds ≥ 5/6 83⅓% ?      💥 ATTACK 💥
+
+〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰EVOLUTION NOTES:〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰
+In future when we program more layers to vigil, abort_threshold of 25% will be
+far too low for a player to voluntarily choose low-cost attrition tactics
+(e.g., throwing away disbandable foot soldiers, Zealots, etc.). This is because
+a 1% chance to win is an expected loss of about 3 attackers, BEFORE the next
+attacker has >83% chance to win. This means that several vigil units whose tactical
+purpose is to be aggressive cannonfodder, would be disallowed from this tactic by
+the 25% abort_threshold. Consequently, in future we'll have alternative
+abort_threshold(s) for allowing more tactical commitment decision-trees in the
+use of vigil. Could even be interesting to have a user-selected abort_threshold
+that's stored in punit->server->abort_threshold, instead of all these extra
+ACTIVITY_VIGIL2,3,4, etc. I can envision a statistical study on the exact percentages
+required for expected losses of 1, 2, 3, 4, 5, 6 units before next unit gets >50% (83%?)
+chance of victory. Then the player when alternate vigil gets a pop-up dialog and
+enters 1-6 and that goes in the punit->server->abort_threshold according to the
+table, and the activity_icon gets a little 1-6 next to it representing how many
+deaths are acceptable before next unit gets its normal 83% odds of an acceptable
+vigil. This allows e.g., setting 3 units to Vigil-5 and 1 unit to Vigil-0 to
+follow up if the units before were successful in reducing hp to an odds favorable
+ value for the last unit! 〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰*/
 
   /* N-, Priority 1: Immediately kick out overriding cases that can never attack: */
-  if (penemy->activity != ACTIVITY_VIGIL) {
+  if (p_adj_unit->activity != ACTIVITY_VIGIL) {
+    return AA_NO;
+  }
+  if (!pplayers_at_war(unit_owner(p_adj_unit),
+                       unit_owner(p_moving_unit))) {
     return AA_NO;
   }
   /* for performance this is checked only once @ start of unit_survive_autoattack()
-  if (unit_has_type_flag(punit, UTYF_NONPROVOKING)) return AA_NO; */
+  if (unit_has_type_flag(p_moving_unit, UTYF_NONPROVOKING)) return AA_NO; */
 
   /* YES, Priority 2: cases that always attack override cases that attack based on good odds: */
-  if (unit_has_type_flag(punit, UTYF_PROVOKINGCLASS1)) {
-    if (unit_has_type_flag(penemy, UTYF_ALWAYSATTACKCLASS1)) {
+  if (unit_has_type_flag(p_moving_unit, UTYF_PROVOKINGCLASS1)) {
+    if (unit_has_type_flag(p_adj_unit, UTYF_ALWAYSATTACKCLASS1)) {
       return AA_ALWAYS;
     }
   }
-  if (unit_has_type_flag(punit, UTYF_PROVOKINGCLASS2)) {
-    if (unit_has_type_flag(penemy, UTYF_ALWAYSATTACKCLASS2)) {
+  if (unit_has_type_flag(p_moving_unit, UTYF_PROVOKINGCLASS2)) {
+    if (unit_has_type_flag(p_adj_unit, UTYF_ALWAYSATTACKCLASS2)) {
       return AA_ALWAYS;
     }
   }
-  if (unit_has_type_flag(punit, UTYF_PROVOKINGCLASS3)) {
-    if (unit_has_type_flag(penemy, UTYF_ALWAYSATTACKCLASS3)) {
+  if (unit_has_type_flag(p_moving_unit, UTYF_PROVOKINGCLASS3)) {
+    if (unit_has_type_flag(p_adj_unit, UTYF_ALWAYSATTACKCLASS3)) {
       return AA_ALWAYS;
     }
   }
   /* ODDS, Priority 3: cases that attack if the odds are good */
-  if (unit_has_type_flag(punit, UTYF_PROVOKING)) return AA_ODDS;
-  if (unit_has_type_flag(penemy, UTYF_AVIDATTACKER)) return AA_ODDS;
-  if (unit_has_type_flag(punit, UTYF_PROVOKINGCLASS1)) {
-    if (unit_has_type_flag(penemy, UTYF_ODDSATTACKCLASS1)) {
+  if (unit_has_type_flag(p_moving_unit, UTYF_PROVOKING)) return AA_ODDS;
+  if (unit_has_type_flag(p_adj_unit, UTYF_AVIDATTACKER)) return AA_ODDS;
+  if (unit_has_type_flag(p_moving_unit, UTYF_PROVOKINGCLASS1)) {
+    if (unit_has_type_flag(p_adj_unit, UTYF_ODDSATTACKCLASS1)) {
       return AA_ODDS;
     }
   }
-  if (unit_has_type_flag(punit, UTYF_PROVOKINGCLASS2)) {
-    if (unit_has_type_flag(penemy, UTYF_ODDSATTACKCLASS2)) {
+  if (unit_has_type_flag(p_moving_unit, UTYF_PROVOKINGCLASS2)) {
+    if (unit_has_type_flag(p_adj_unit, UTYF_ODDSATTACKCLASS2)) {
       return AA_ODDS;
     }
   }
-  if (unit_has_type_flag(punit, UTYF_PROVOKINGCLASS3)) {
-    if (unit_has_type_flag(penemy, UTYF_ODDSATTACKCLASS3)) {
+  if (unit_has_type_flag(p_moving_unit, UTYF_PROVOKINGCLASS3)) {
+    if (unit_has_type_flag(p_adj_unit, UTYF_ODDSATTACKCLASS3)) {
       return AA_ODDS;
     }
   }
@@ -4429,109 +4474,179 @@ ODDS = AA_ODDS   = auto-attack if odds are better (unless overridden by N- or YE
 }
 
 /**********************************************************************//**
-  Check if unit survives enemy autoattacks. We assume that any
-  unit that is adjacent to us can see us.
-**************************************************************************/
-static bool unit_survive_autoattack(struct unit *punit)
-{
-  struct autoattack_prob_list *autoattack;
-  int moves = punit->moves_left;
-  int sanity1 = punit->id;
+  Check if a moving unit survives (potential) enemy autoattacks from
+  adjacent units. We assume that any unit that is adjacent to
+  p_moving_unit can see it.
 
+  👉🏽 Since this is called for every tile for every movement made by real and
+  virtual units in the game, performance is vital. Seek to exit as quickly
+  as possible for majority of cases where there will be no autoattack!
+**************************************************************************/
+static bool unit_survive_autoattack(struct unit *p_moving_unit)
+{
+#undef AUTOATTACK_DEBUG
+
+                    #ifdef AUTOATTACK_DEBUG
+                        notify_player(unit_owner(p_moving_unit), unit_tile(p_moving_unit), E_AI_DEBUG, ftc_server,
+                          _("[`ghost`] 1. Begin: %s checked to get autoattacked."), unit_link(p_moving_unit));
+                    #endif
+
+  /* FAST EXIT when autoattack OFF or it's a nonprovoking unit: */
   if (!game.server.autoattack
-      || unit_has_type_flag(punit, UTYF_NONPROVOKING)) {
+      || unit_has_type_flag(p_moving_unit, UTYF_NONPROVOKING)) {
     return TRUE;
   }
-  autoattack = autoattack_prob_list_new_full(autoattack_prob_free);
 
-  /* Kludge to prevent attack power from dropping to zero during calc */
-  punit->moves_left = MAX(punit->moves_left, 1);
+  bool harmless_cargo = false;
+  bool harmless_cargo_was_set = false; // Performance: set until/if needed
 
-  adjc_iterate(&(wld.map), unit_tile(punit), ptile) {
-    /* First add all eligible units to a autoattack list */
-    unit_list_iterate(ptile->units, penemy) {
-      /* AA_ADVANCED has ruleset filters for whether to auto-attack */
+  /* 1) Keep ID in case of death;
+     2) HACK: prevent attack power from dropping to zero during calc: */
+  int sanity1 = p_moving_unit->id;
+  const struct player *moving_player = unit_owner(p_moving_unit);
+  int moves = p_moving_unit->moves_left;
+  p_moving_unit->moves_left = MAX(p_moving_unit->moves_left, 1);
+
+  /* PHASE ONE: Construct new list of adjacent autoattacker candidates: */
+  struct autoattack_prob_list *autoattack = autoattack_prob_list_new_full(autoattack_prob_free);
+
+  /* Check every adjacent tile: */
+  adjc_iterate(&(wld.map), unit_tile(p_moving_unit), ptile) {
+    /* Add all eligible units on tile to the unified autoattack candidates list: */
+    unit_list_iterate(ptile->units, p_adj_unit) {
+
+      /* Dismiss units who can't legally auto-attack */
+      int can_attack = true;
       if (game.server.autoattack_style == AA_ADVANCED) {
-        if (!will_unit_autoattack_unit(penemy,punit)) {
+        can_attack = can_unit_autoattack_unit(p_adj_unit, p_moving_unit);
+        if (!can_attack) {
           continue;
         }
       }
 
       struct autoattack_prob *probability = fc_malloc(sizeof(*probability));
-      struct tile *tgt_tile = unit_tile(punit);
+      struct tile *mover_tile = unit_tile(p_moving_unit);
 
-      fc_assert_action(tgt_tile, continue);
+      /* Why is this getting called repeatedly inside this scope on
+        a mover_tile that doesn't ever change inside this func?! */
+      fc_assert_action(mover_tile, continue);
 
       probability->prob =
           action_auto_perf_unit_prob(AAPC_UNIT_MOVED_ADJ,
-                                     penemy, unit_owner(punit), NULL,
-                                     tgt_tile, tile_city(tgt_tile),
-                                     punit, NULL);
+                                     p_adj_unit, moving_player, NULL,
+                                     mover_tile, tile_city(mover_tile),
+                                     p_moving_unit, NULL);
+
+      probability->can_attack = can_attack;  // Stash for performant re-usability later.
+
+                    #ifdef AUTOATTACK_DEBUG
+                      notify_player(moving_player, unit_tile(p_moving_unit), E_AI_DEBUG, ftc_server,
+                          _("[`dice`] %s Legit Prob<sub>min,max</sub>: (%d, %d)"),
+                          unit_link(p_adj_unit), probability->prob.min, probability->prob.max );
+                    #endif
 
       if (action_prob_possible(probability->prob)
-          && is_unit_reachable_at(punit, penemy, unit_tile(punit))) {
-          probability->unit_id = penemy->id;
-          autoattack_prob_list_prepend(autoattack, probability);
-      } else {
+          && is_unit_reachable_at(p_moving_unit, p_adj_unit, unit_tile(p_moving_unit))) {
+          probability->unit_id = p_adj_unit->id;
+
+        // Produced values of prob.min==0 are technically accurate, we ameliorate edge cases where prob.min == 0:
+        if (probability->prob.min == 0 && can_attack == AA_ODDS) {
+          if (!harmless_cargo_was_set) { // Performance: we avoid all this unless we need to do it!
+            harmless_cargo_was_set = true;
+            /* Algorithm works MUCH better if it knows when cargo can never defend better than its transport! */
+            harmless_cargo = uclass_has_user_unit_class_flag_named(unit_class_get(p_moving_unit), "HarmlessCargo");
+          }
+          probability->can_bombard = can_unit_bombard(p_adj_unit);  // Stash for later use 😘
+          /* Invisible cargo makes prob.min=0, which scares AA_ODDS auto-attackers. But units known to carry NO
+             threatening cargo (or for attackers only doing bombard), we [semi-]intelligently override this: */
+          if (harmless_cargo   /* 👇🏼 FIXME - Assumes ruleset ALWAYS favors auto-bombard to auto-attacking. A
+                                  better way might be "would_unit_bombard(p_adj_unit, p_moving_unit)": 👇🏼  */
+              || probability->can_bombard) { // 👈🏼 so cannons can bombard coastal ships if (transport_capacity>0)
+            probability->prob.min = probability->prob.max;
+
+                    #ifdef AUTOATTACK_DEBUG
+                      notify_player(moving_player, unit_tile(p_moving_unit), E_AI_DEBUG, ftc_server,
+                        _("[`freight`] %s HrmlsCrg Prob<sub>min,max</sub>: (%d, %d)"),
+                        unit_link(p_adj_unit), probability->prob.min, probability->prob.max );
+                    #endif
+          }
+        }
+
+        autoattack_prob_list_prepend(autoattack, probability);
+      }
+      else {
         FC_FREE(probability);
       }
     } unit_list_iterate_end;
   } adjc_iterate_end;
 
-  /* Sort the potential attackers from highest to lowest success
-   * probability. */
+  /* INTERMISSION BETWEEN PHASE ONE AND PHASE TWO.
+     NB: THIS IS AN IMPORTANT AREA FOR FUTURE UPGRADES TO AUTO-ATTACK. The &compare_units function makes all
+     the difference. The sort order determines the order in which multiple attacks will happen and we know
+     that's tactically significant if upgraded Vigil starts implementing layers and ability to set
+     "suicidal cannonfodder" to attack above a certain expected number of deaths before attacker is
+     expected to be taken out by the 83% threshold of the next attacking unit. Consequently it should be
+     some kind of scoring system where a premium unit over 83% isn't afraid to attack... or is it,
+     because expected_death_chance x unit_cost might be 0.17 * 160 = 27.2, whereas a 25 shield
+     Zealot attacking first renders it as essentially NO chance to lose your 160 shield auto-attacker.
+     Score system can be based on avidness to attack (always/cannonfodder mode vs. odds), certainty
+     of victory (ofc) which starts rewarding much higher the closer to 100 you get and it does that
+     nicely enough by taking (death_chance * unit_cost) as a way to achieve that semi-exponential
+     increase in score as one gets closer and closer to 100, nicely eliminating the preferability
+     of the cannonfodder units to engage at that point. */
+  /* Sort the potential attackers from highest to lowest success probability. */
   if (autoattack_prob_list_size(autoattack) >= 2) {
+    /* NB: the count of units is wonderful info for deciding whether to attack, because it lets a
+       single unit know if it has expected backup for making a lower-odds attack! */
     autoattack_prob_list_sort(autoattack, &compare_units);
   }
 
-  autoattack_prob_list_iterate_safe(autoattack, peprob, penemy) {
-    int will_attack = AA_ODDS;
+  /* PHASE TWO: Iterate candidates and auto-attack with the ones who qualify final checks: */
+  autoattack_prob_list_iterate_safe(autoattack, peprob, p_aa_unit) {
+    int will_attack = peprob->can_attack;
     /* AA_ADVANCED has ruleset filters for whether to auto-attack */
-    if (game.server.autoattack_style == AA_ADVANCED) {
-      will_attack = will_unit_autoattack_unit(penemy, punit);
-      if (will_attack == AA_NO) {
-        continue;
-      }
-    } else { /* autoattack_style==AA_DEFAULT: Legacy hard-coded logic */
-      if (unit_has_type_flag(punit, UTYF_PROVOKING)) {
+    if (game.server.autoattack_style == AA_ADVANCED && will_attack == AA_NO) {
+      continue;   // Shouldn't happen because AA_NO is never prepended to list?
+    }
+    else { /* autoattack_style==AA_DEFAULT: Legacy hard-coded logic */
+      if (unit_has_type_flag(p_moving_unit, UTYF_PROVOKING)) {
         will_attack = AA_ALWAYS;
       }
     }
 
-    int sanity2 = penemy->id;
-    struct tile *ptile = unit_tile(penemy);
-    struct unit *enemy_defender = get_defender(punit, ptile);
-    double punitwin, penemywin;
+    int sanity2 = p_aa_unit->id;
+    struct tile *ptile = unit_tile(p_aa_unit);
+    struct unit *p_aa_unit_tile_defender = get_defender(p_moving_unit, ptile);
+    double odds_moving_unit_wins, odds_aa_unit_wins;
     double abort_threshold = 0.25;                 /* game.server.autoattack_abort_odds   TODO-should be server setting */
     double attack_anyway_threshold = 0.8333333;    /* game.server.autoattack_always_odds  TODO-should be server setting */
-    struct tile *tgt_tile = unit_tile(punit);
+    struct tile *mover_tile = unit_tile(p_moving_unit);
 
      // Make a reference copy for use.
-    char punit_emoji[MAX_LEN_LINK], penemy_emoji[MAX_LEN_LINK];
-    sprintf(punit_emoji, "%s", UNIT_EMOJI(punit));
-    sprintf(penemy_emoji, "%s", UNIT_EMOJI(penemy));
+    char p_moving_unit_emoji[MAX_LEN_LINK], p_aa_unit_emoji[MAX_LEN_LINK];
+    sprintf(p_moving_unit_emoji, "%s", UNIT_EMOJI(p_moving_unit));
+    sprintf(p_aa_unit_emoji, "%s", UNIT_EMOJI(p_aa_unit));
 
-
-    fc_assert(tgt_tile);
+    fc_assert(mover_tile);
 
     if (tile_city(ptile) && unit_list_size(ptile->units) == 1) {
       /* Don't leave city defenseless */
-      abort_threshold = 0.90;                       /* game.server.autoattack_lone_city_odds  TODO-should be server setting */
+      abort_threshold = 0.90;                      /* game.server.autoattack_lone_city_odds  TODO-should be server setting */
     }
 
-    if (NULL != enemy_defender) {
-      punitwin = unit_win_chance(punit, enemy_defender);
+    if (NULL != p_aa_unit_tile_defender) {
+      odds_moving_unit_wins = unit_win_chance(p_moving_unit, p_aa_unit_tile_defender);
     } else {
-      /* 'penemy' can attack 'punit' but it may be not reciproque. */
-      punitwin = 1.0;
+      /* 'p_aa_unit' can attack 'p_moving_unit' but it may be not reciprocal. */
+      odds_moving_unit_wins = 1.0;
     }
 
-    /* Previous attacks may have changed the odds. Recalculate. */
+    /* Previous attacks may have changed the odds. Recalculate. FUCK this means transporters with harmless cargo again */
     peprob->prob =
         action_auto_perf_unit_prob(AAPC_UNIT_MOVED_ADJ,
-                                   penemy, unit_owner(punit), NULL,
-                                   tgt_tile, tile_city(tgt_tile),
-                                   punit, NULL);
+                                   p_aa_unit, moving_player, NULL,
+                                   mover_tile, tile_city(mover_tile),
+                                   p_moving_unit, NULL);
 
     if (!action_prob_possible(peprob->prob)) {
       /* No longer legal. */
@@ -4539,90 +4654,110 @@ static bool unit_survive_autoattack(struct unit *punit)
     }
 
     /* Assume the worst. (i.e., hidden cargo may be ultra-strong defender)*/
-    penemywin = action_prob_to_0_to_1_pessimist(peprob->prob);
-    /* For AA_ADVANCED games, handle two special cases:
-       I. The Transporter is KNOWN to carry defenseless cargo:
+    odds_aa_unit_wins = action_prob_to_0_to_1_pessimist(peprob->prob);
+  /* For AA_ADVANCED games, handle two special cases:
+      I. The Transporter is KNOWN to carry defenseless cargo:
 
-       For example, we wouldn't want a Jet Fighter on vigil to be afraid of a Jet Bomber just because
-       it carries bombs. Rather than make a special hard-coded uclass_flag for these cases, just let
-       the ruleset-coder make their own custom uclass-flag named "HarmlessCargo", for such cases.
-       (This also lets rulesets define whether invisible cargo is never considered a barrier to
-       autoattack: simply give all unit-classes the HarmlessCargo flag.)
+      For example, we wouldn't want a Jet Fighter on vigil to be afraid of a Jet Bomber just because
+      it carries bombs. Rather than make a special hard-coded uclass_flag for these cases, just let
+      the ruleset-coder make their own custom uclass-flag named "HarmlessCargo", for such cases.
+      (This also lets rulesets define whether invisible cargo is never considered a barrier to
+      autoattack: simply give all unit-classes the HarmlessCargo flag.)
 
-       II. auto-BOMBARDERS aren't afraid of invisible cargo as long as they're not afraid of
-       its transport:
+      II. auto-BOMBARDERS aren't afraid of invisible cargo as long as they're not afraid of
+      its transport:
 
-       In AA_ADVANCED rulesets, Bombard is the first (preferred) form of autoattack, due to
-       reduced risk of exploitation from autoattack-baiting. In such games, an autoattacker
-       who (1) is a bombarder, and (2) experiences a penemywin of 0.0, is very likely facing a case
-       of INVISIBLE CARGO which pessimistically is considered as a "superdefender" with 0 chance
-       to win.
+      In AA_ADVANCED rulesets, for now, Bombard is the first (preferred) form of autoattack, due to
+      reduced risk of exploitation from autoattack-baiting. In such games, an autoattacker
+      who (1) is a bombarder, and (2) experiences a odds_aa_unit_wins of 0.0, is very likely facing a case
+      of INVISIBLE CARGO which pessimistically is considered as a "superdefender" with 0 chance
+      to win.
 
-       HOWEVER, a Bombard-autoattack (a) usually faces no retaliation (b) in cases where it does,
-       the cargo by being transported will rarely qualify to retaliate, (c) in cases where it could,
-       will rarely have enough bombard-retaliate combat rounds to result in killing the
-       auto-bombarder.
+      HOWEVER, a Bombard-autoattack (a) usually faces no retaliation (b) in cases where it does,
+      the cargo by being transported will rarely qualify to retaliate, (c) in cases where it could,
+      will rarely have enough bombard-retaliate combat rounds to result in killing the
+      auto-bombarder.
 
-       THUS, for cases where penemywin came back as 0.0, we _probably_ got a 0.0 because of having
-       an _undefined_ win % due to invisible cargo. But we DO know (a,b,c) above to be true. And we DO
-       know that a,b,c together represent a higher % chance to win/survive such a bombard-autoattack
-       than even the case of normal qualifying autoattacks whose thresholds are usually set between
-       80% and 90%. AND we know as devs we want to prevent an exploit where a transporter carrying
-       dummy worthless units, can first occupy a tile in order to allow subsequent movers-to-the-tile
-       to bypass all autoattacks with 100% success. In addition, for the rare case where
-       penemywin came back as 0.0 not because of invisible cargo, but because the adjacent defender
-       itself is Godzilla, we happen to know unit_win_chance(penemy, punit). So if that is a 0.0,
-       then we know the penemywin of 0.0 was created by that and not by invisible enemy cargo.
+      THUS, for cases where odds_aa_unit_wins came back as 0.0, we _probably_ got a 0.0 because of having
+      an _undefined_ win % due to invisible cargo. But we DO know (a,b,c) above to be true. And we DO
+      know that a,b,c together represent a higher % chance to win/survive such a bombard-autoattack
+      than even the case of normal qualifying autoattacks whose thresholds are usually set between
+      80% and 90%. AND we know as devs we want to prevent an exploit where a transporter carrying
+      dummy worthless units, can first occupy a tile in order to allow subsequent movers-to-the-tile
+      to bypass all autoattacks with 100% success. In addition, for the rare case where
+      odds_aa_unit_wins came back as 0.0 not because of invisible cargo, but because the adjacent defender
+      itself is Godzilla, we happen to know unit_win_chance(p_aa_unit, p_moving_unit). So if that is a 0.0,
+      then we know the odds_aa_unit_wins of 0.0 was created by that and not by invisible enemy cargo.
 
-       In other words, we know everything we need, in order to set a more accurate penemywin for just
-       such a case. */
-    if (penemywin == 0 && game.server.autoattack_style == AA_ADVANCED) {
-      if (uclass_has_user_unit_class_flag_named(unit_class_get(punit), "HarmlessCargo")
-          || can_unit_bombard(penemy)) {
-        penemywin = unit_win_chance(penemy, punit);
+      In other words, we know everything we need, in order to set a more accurate odds_aa_unit_wins for just
+      such a case. */
+    if (odds_aa_unit_wins == 0 && game.server.autoattack_style == AA_ADVANCED) {
+      if (harmless_cargo || peprob->can_bombard) {
+
+                              #ifdef AUTOATTACK_DEBUG
+                                      notify_player(moving_player, unit_tile(p_moving_unit), E_AI_DEBUG, ftc_server,
+                                                _("[`book`] 1. AutAtk_UNIT %s had %f %% chance"), unit_link(p_aa_unit), odds_aa_unit_wins);
+                              #endif
+        odds_aa_unit_wins = unit_win_chance(p_aa_unit, get_defender(p_aa_unit, mover_tile));
+
+                              #ifdef AUTOATTACK_DEBUG
+                                      notify_player(moving_player, unit_tile(p_moving_unit), E_AI_DEBUG, ftc_server,
+                                                _("[`arrowup`] 2. AutAtk_UNIT %s upgraded(?) to %f %% chance (hrmlscrg||bmbrd)"), unit_link(p_aa_unit), odds_aa_unit_wins);
+
+                                      notify_player(moving_player, unit_tile(p_moving_unit), E_UNIT_ORDERS, ftc_server,
+                                                _("[`anger`] ENEMY %s switched 0 odds to (%f), and defender is: %s "),
+                                                unit_rule_name(p_aa_unit), odds_aa_unit_wins, unit_link(get_defender(p_aa_unit, unit_tile(p_moving_unit))));
+                              #endif
+
       }
     }
 
     /* Do the attack if the conditions for autoattack are fulfilled: */
-    if ( (penemywin > 1.0 - punitwin || (will_attack == AA_ALWAYS) || penemywin > attack_anyway_threshold)
-         && penemywin > abort_threshold) {
+    if ( (odds_aa_unit_wins > 1.0 - odds_moving_unit_wins || (will_attack == AA_ALWAYS) || odds_aa_unit_wins >= attack_anyway_threshold)
+         && odds_aa_unit_wins > abort_threshold) {
 
-        notify_player(unit_owner(penemy), unit_tile(punit), E_UNIT_ORDERS, ftc_server,
+                              #ifdef AUTOATTACK_DEBUG
+                                      notify_player(moving_player, unit_tile(p_moving_unit), E_UNIT_ORDERS, ftc_server,
+                                              _("AA %s vs %s (%d,%d) EW:%.2f > 1-MW:%.2f && AT> %.2f"),
+                                            unit_rule_name(p_aa_unit), unit_rule_name(p_moving_unit),
+                                            TILE_XY(unit_tile(p_moving_unit)), odds_aa_unit_wins,
+                                            1.0 - odds_moving_unit_wins, abort_threshold);
+                              #endif
+        notify_player(unit_owner(p_aa_unit), unit_tile(p_moving_unit), E_UNIT_ORDERS, ftc_server,
               _("[`anger`] Your %s %s engaged %s %s %s %s while under vigil."),
-              penemy_emoji, unit_link(penemy),
-              (is_unit_plural(punit) ? "" : indefinite_article_for_word(nation_rule_name(nation_of_unit(punit)), false)),
-              nation_rule_name(nation_of_unit(punit)),
-              unit_rule_name(punit), punit_emoji );
+              p_aa_unit_emoji, unit_link(p_aa_unit),
+              (is_unit_plural(p_moving_unit) ? "" : indefinite_article_for_word(nation_rule_name(nation_of_unit(p_moving_unit)), false)),
+              nation_rule_name(nation_of_unit(p_moving_unit)),
+              unit_rule_name(p_moving_unit), p_moving_unit_emoji );
 
-        notify_player(unit_owner(punit), unit_tile(punit), E_UNIT_ORDERS, ftc_server,
+        notify_player(moving_player, unit_tile(p_moving_unit), E_UNIT_ORDERS, ftc_server,
               _("[`anger`] Your %s %s %s engaged by %s %s %s %s under vigil."),
-              unit_link(punit), punit_emoji,
-              (is_unit_plural(punit) ? "were" : "was"),
-              (is_unit_plural(punit) ? "" : indefinite_article_for_word(nation_rule_name(nation_of_unit(penemy)), false)),
-              nation_rule_name(nation_of_unit(penemy)),
-              penemy_emoji, unit_rule_name(penemy) );
+              unit_link(p_moving_unit), p_moving_unit_emoji,
+              (is_unit_plural(p_moving_unit) ? "were" : "was"),
+              (is_unit_plural(p_moving_unit) ? "" : indefinite_article_for_word(nation_rule_name(nation_of_unit(p_aa_unit)), false)),
+              nation_rule_name(nation_of_unit(p_aa_unit)),
+              p_aa_unit_emoji, unit_rule_name(p_aa_unit) );
 
-#ifdef REALLY_DEBUG_THIS
-      log_test("AA %s -> %s (%d,%d) %.2f > %.2f && > %.2f",
-               unit_rule_name(penemy), unit_rule_name(punit),
-               TILE_XY(unit_tile(punit)), penemywin,
-               1.0 - punitwin, abort_threshold);
-#endif
-      // Dumb autoattacks clear orders and set the unit to idle:
+                              #ifdef AUTOATTACK_DEBUG
+                                        notify_player(moving_player, unit_tile(p_moving_unit), E_AI_DEBUG, ftc_server,
+                                          _("AA %s -> %s (%d,%d) %.2f > %.2f && > %.2f"),
+                                            unit_rule_name(p_aa_unit), unit_rule_name(p_moving_unit),
+                                            TILE_XY(unit_tile(p_moving_unit)), odds_aa_unit_wins,
+                                            1.0 - odds_moving_unit_wins, abort_threshold);
+                              #endif
+      /* AA_ADVANCED leaves unit on vigil so it's not baited by a cheap runner: */
       if (game.server.autoattack_style == AA_DEFAULT) {
-        unit_activity_handling(penemy, ACTIVITY_IDLE);
+        unit_activity_handling(p_aa_unit, ACTIVITY_IDLE);
       }
       action_auto_perf_unit_do(AAPC_UNIT_MOVED_ADJ,
-                               penemy, unit_owner(punit), NULL,
-                               tgt_tile, tile_city(tgt_tile), punit, NULL);
-      /* This block of code would have to come back if units are losing their
-         vigil state after their first autoattack. Otherwise, ...
+                               p_aa_unit, moving_player, NULL,
+                               mover_tile, tile_city(mover_tile), p_moving_unit, NULL);
+      /* This block of code would optionally obey some EFFECT or other ruleset
+         configuration to selectively set some units back to vigil but not
+         others. Currently, only AA_DEFAULT sets units back to idle (3 lines up.)
 
-         This used to set vigil unit back on vigil after it was put to idle,
-         but currently appears unnecessary, since only AA_DEFAULT now sets
-         vigiling units back to idle (3 lines up.) This should now avoid
-         segfault from unit_activity_handling() on a possibly dead unit.
-         If we ever change/add features such that we use this code again,
+         This should now avoid segfault from unit_activity_handling() on a possibly
+         dead unit. If we ever change/add features such that we use this code again,
          it's now more secure because it was edited to:
          (1) Check the unit is still alive
          (2) Not use unit_activity_handling() which does a free_unit_orders:
@@ -4632,33 +4767,34 @@ static bool unit_survive_autoattack(struct unit *punit)
                even though we did already fix that in (1) .....
 
       if (game.server.autoattack_style == AA_ADVANCED) {
-        // Set unit back on vigil
         if (game_unit_by_number(sanity2)) {
-          set_unit_activity(penemy, ACTIVITY_IDLE);
+          if (target_bonus_effects || UTYF_PERMA_VIGIL || etc)
+            set_unit_activity(p_aa_unit, ACTIVITY_IDLE);
         }
       } */
 
     } else {
-        notify_player(unit_owner(penemy), unit_tile(punit), E_UNIT_ORDERS, ftc_server,
+        notify_player(unit_owner(p_aa_unit), unit_tile(p_moving_unit), E_UNIT_ORDERS, ftc_server,
               _("[`anger`] Your %s %s declined engaging %s %s %s %s while under vigil."),
-              penemy_emoji, unit_rule_name(penemy),
-              is_unit_plural(punit) ? "" : indefinite_article_for_word(nation_rule_name(nation_of_unit(punit)), false),
-              nation_rule_name(nation_of_unit(punit)),
-              unit_link(punit), punit_emoji );
-#ifdef REALLY_DEBUG_THIS
-      log_test("!AA %s -> %s (%d,%d) %.2f > %.2f && > %.2f",
-               unit_rule_name(penemy), unit_rule_name(punit),
-               TILE_XY(unit_tile(punit)), penemywin,
-               1.0 - punitwin, abort_threshold);
-#endif
+              p_aa_unit_emoji, unit_rule_name(p_aa_unit),
+              is_unit_plural(p_moving_unit) ? "" : indefinite_article_for_word(nation_rule_name(nation_of_unit(p_moving_unit)), false),
+              nation_rule_name(nation_of_unit(p_moving_unit)),
+              unit_link(p_moving_unit), p_moving_unit_emoji );
+                            #ifdef AUTOATTACK_DEBUG
+                                      notify_player(unit_owner(p_aa_unit), unit_tile(p_moving_unit), E_AI_DEBUG, ftc_server,
+                                                    _("!AA %s -> %s (%d,%d) %.2f > %.2f && > %.2f"),
+                                                    unit_rule_name(p_aa_unit), unit_rule_name(p_moving_unit),
+                                                    TILE_XY(unit_tile(p_moving_unit)), odds_aa_unit_wins,
+                                                    1.0 - odds_moving_unit_wins, abort_threshold);
+                            #endif
       continue;
     }
 
     if (game_unit_by_number(sanity2)) {
-      send_unit_info(NULL, penemy);
+      send_unit_info(NULL, p_aa_unit);
     }
     if (game_unit_by_number(sanity1)) {
-      send_unit_info(NULL, punit);
+      send_unit_info(NULL, p_moving_unit);
     } else {
       autoattack_prob_list_destroy(autoattack);
       return FALSE; /* moving unit dead */
@@ -4668,8 +4804,8 @@ static bool unit_survive_autoattack(struct unit *punit)
   autoattack_prob_list_destroy(autoattack);
   if (game_unit_by_number(sanity1)) {
     /* We could have lost movement in combat */
-    punit->moves_left = MIN(punit->moves_left, moves);
-    send_unit_info(NULL, punit);
+    p_moving_unit->moves_left = MIN(p_moving_unit->moves_left, moves);
+    send_unit_info(NULL, p_moving_unit);
     return TRUE;
   } else {
     return FALSE;
