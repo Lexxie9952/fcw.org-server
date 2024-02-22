@@ -337,11 +337,13 @@ function show_city_dialog(pcity)
        },
        "Rename" : function() {
          rename_city();
-       }
+       },
+       "Exit (W)" : function() {
+        close_city_dialog_trigger();
+      }
      });
-     dialog_buttons = $.extend(dialog_buttons, {"Exit (<black->W</black->)": close_city_dialog_trigger});
+     //dialog_buttons = $.extend(dialog_buttons, {"Exit ((W)": close_city_dialog_trigger});
 
-//     dialog_buttons = $.extend(dialog_buttons, {"Exit (𝗪)": close_city_dialog_trigger});
   } else {   // small screen control buttons
        dialog_buttons = $.extend(dialog_buttons,
          {
@@ -472,6 +474,7 @@ function show_city_dialog(pcity)
       $("#city_dialog").next().children().children().first().html("<u><b style='font-family: HelveticaBlack'>P</b></u>revious City");
       $("#city_dialog").next().children().children().first().next().html("<u><b style='font-family: HelveticaBlack'>N</b></u>ext City");
       $("#city_dialog").next().children().children().first().next().next().html("<u><b style='font-family: HelveticaBlack'>B</b></u>uy");
+      $("#city_dialog").next().children().children().first().next().next().next().next().html("Exit (<u><b style='font-family: HelveticaBlack'>W</b></u>)");
     }
   }
   $("#city_dialog").dialog('open');
@@ -4246,7 +4249,7 @@ function update_city_screen()
 
   if (power_cma==true) {
     var power_panel =
-      "<button title='Click: Refresh tile arrangement in selected cities.\nCTRL-Click: Save Governor Clipboard to selected cities.\nShift-Click: Use Governor Clipboard to arrange tiles, without saving.' class='button ui-button ui-corner-all ui-widget' style='padding:1px; margin:1px; font-size:100%; float:left;' onclick='cma_clipboard_macro(event,false);'>&#x1F4CB; "+pluralize("City", count)+"</button>";
+      "<button title='Click: Refresh tile arrangement in selected cities.\nCTRL-Click: Save Governor Clipboard to selected cities.\nShift-Click: Use Governor Clipboard to arrange tiles, without saving.' class='button ui-button ui-corner-all ui-widget' style='padding:1px; margin:1px; font-size:100%; float:left;' onclick='cma_clipboard_macro(event,false);'>&#x1F4CB; "+pluralize("City", count)+"<span>&nbsp;</span></button>";
     $("#cities_title_cma_panel").html(power_panel);
   }
 
