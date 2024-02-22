@@ -2368,7 +2368,7 @@ helptext      = _("\
 Mechanized Infantry have the strongest general defense strength of any land unit.\
  They have decent attack strength in open field engagements, and excellent mobility.\
  Can carry 1 foot soldier or AAA. \
-\nBig Land units can’t enter Mountains without a road, river, or native base. \n\n\
+\nBig Land units can’t enter Mountains without a road or native base. \n\n\
 ")
 
 [unit_scout]
@@ -2752,7 +2752,7 @@ Light Armor is an early mechanized replacement for Cavalry. It is good for mobil
  and also defends better than any unit of its era. The discovery of Automobile gives\
  +1 move point. Units inside Forts get no defense bonus against Light Armor.\
  Units inside Fortresses get a reduced bonus of 1.67× instead of 2×. \
-\nBig Land units can’t enter Mountains without a road, river, or native base. \
+\nBig Land units can’t enter Mountains without a road or native base. \
 \nCommunists pay 5 less for this unit.\
 ")
 
@@ -2793,7 +2793,7 @@ Armor is the mechanized equivalent of a Cavalry unit. They have high attack stre
  superb mobility, and the highest defense of any offensive unit. They are massive all-terrain\
  vehicles, well-suited for penetrating defensive fortifications：Units inside Forts get no defense\
  bonus against Armor. Units inside Fortresses get a reduced bonus of 1.67× instead of 2×. \
-\nBig Land units can’t enter Mountains without a road, river, or native base. \
+\nBig Land units can’t enter Mountains without a road or native base. \
 \nCommunists pay 10 less for this unit. \
 \nStack-Escape：40% odds to evade stack-death if attacker doesn’t have more moves than it does.\
 ")
@@ -2840,7 +2840,7 @@ Armor II is the ultra-modern upgrade to Armor. It features high tech composite a
  its ability to blast and break through fortifications. ECM and composite armor\
  give a 75% defense bonus against Missiles. Unlike most land units,\
  Armor II can attack reachable units regardless of whether unreachable units protect the tile. \
-\nBig Land units can’t enter Mountains without a road, river, or native base. \
+\nBig Land units can’t enter Mountains without a road or native base. \
 \nCommunists pay 10 less for this unit. \
 \nStack-Escape：40% odds to evade stack-death if attacker doesn’t have more moves than it does.\
 ")
@@ -3178,7 +3178,7 @@ The Mobile SAM is the strongest Anti-Air unit on the ground. It can\
  Missiles. The Mobile SAM can also carry 3 Missiles of any type.\
  With upgraded Laser tech, each Mobile SAM has a 33% chance to thwart adjacent nuclear\
  bombs dropped by bombers. \
-\nBig Land units can’t enter Mountains without a road, river, or native base. \
+\nBig Land units can’t enter Mountains without a road or native base. \
 "), _("
 \nAAA can convert to Mobile SAM for free after 9 turns of service.\
  The order must be done in a domestic city and takes 2 turns.\
