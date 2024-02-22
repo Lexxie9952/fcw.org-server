@@ -62,6 +62,7 @@ const gov_help =
 +" The <b>Force Celebrate</b> option orders your Governor to achieve celebration. Usually this needs a higher "
 +" national Luxury rate. You can less forcefully tune celebration with the Happy Factor slider.<br><b>NOTE:</b> In cities with"
 +" overlapping tiles, it's best to avoid competing with your Governor: manage both cities manually, or give both a Governor.<br><br>"
++" <b>SLIDER TIP:</b> For fine-tuning, click a slider and use LEFT- and RIGHT- ARROW keys.<br><br>"
 +" <b>ADVANCED:</b><br><b>I. <u>TILE REFRESH</u>.</b> The Governor only re-arranges tiles when population changes or a foreign military unit occupies"
 +" a worked tile. The City Governor Tab can help you optimally refresh the tile arrangement"
 +" at other important times, such as: (<b>1</b>) New tile improvements"
@@ -156,6 +157,10 @@ Update Governor tab
 function create_cma_sliders() {
   if (client_is_observer() || client.conn.playing == null) return;
 
+  if (!is_small_screen()) {
+    $(".cma_slider").css("width", 720);
+  }
+
   for (i=0; i<O_LAST; i++) {
     const name = O_NAME[i]; // Food, Shield, Trade, Gold, etc.
 
@@ -163,15 +168,15 @@ function create_cma_sliders() {
     $("#cma-val-slider-"+name).slider("enable");
     $("#cma-min-slider-"+name).slider({ value: cma_min_sliders[i], min:-20, max:MIN_SURPLUS_MAX });
     $("#cma-min-slider-"+name).slider("enable");
-    $("#cma-val-slider-"+name).css("width", 160);
-    $("#cma-min-slider-"+name).css("width", 160);
+    //$("#cma-val-slider-"+name).css("width", 160);  // let .css file do it
+    //$("#cma-min-slider-"+name).css("width", 160);
 
     $("#cma-val-slider-"+name).slider({"slide": cma_user_slide, "change": cma_user_input});
     $("#cma-min-slider-"+name).slider({"slide": cma_user_slide, "change": cma_user_input});
   }
   $("#cma-happy-slider").slider({ value: cma_happy_slider, min:0, max:50 });
   $("#cma-happy-slider").slider("enable");
-  $("#cma-happy-slider").css("width", 160);
+  //$("#cma-happy-slider").css("width", 160);
   $("#cma-happy-slider").slider({"slide": cma_user_slide, "change": cma_user_input});
 }
 /**************************************************************************
