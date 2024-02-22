@@ -406,7 +406,7 @@ function init_common_intro_dialog() {
         setTimeout(show_longturn_intro_dialog, 300);
     } else {
       show_intro_dialog("Welcome to Freeciv-web",
-        "You are about to join the game. Please enter your name:");
+        "To join the game, please enter a name:");
     }
   } else if ($.getUrlVar('action') == "earthload") {
     show_intro_dialog("Welcome to Freeciv-web",
