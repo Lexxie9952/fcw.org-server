@@ -295,7 +295,7 @@
 	}
 	@font-face {
 	font-family: "Helvetica";
-	src: url("/fonts/helveticaneue/helveticaneue.b.med.ttf");
+	src: url("/fonts/helveticaneue/helveticaneue.b.ttf");
 	font-weight: 700;
 	font-style: italic;
 	}
