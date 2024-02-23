@@ -135,7 +135,7 @@ function check_browser_compatibility()
             "back to play! Suggestions: Chrome, Opera, Firefox, Safari, Chromium, or Edge. " +
             "Hope to see you soon!",
       type: "warning",   showCancelButton: false,
-      confirmButtonColor: "#DD6B55",
+      //confirmButtonColor: "#DD6B55",
       confirmButtonText: "OK",
       closeOnConfirm: true },
       function(){
@@ -1082,7 +1082,7 @@ function pregame_settings()
             "unless they know this password. In multiplayer games, be sure to ask the other players " +
             "about setting a password.",
       type: "warning",   showCancelButton: true,
-      confirmButtonColor: "#DD6B55",
+      //confirmButtonColor: "#DD6B55",
       confirmButtonText: "Yes, set game password",
       closeOnConfirm: true },
       function(){

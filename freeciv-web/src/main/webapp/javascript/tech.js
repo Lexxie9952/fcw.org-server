@@ -841,8 +841,8 @@ function tech_mapview_mouse_click(e)
                 type: 'info',
                 background: '#a19886',
                 showCancelButton: true,
-                confirmButtonColor: '#38e',
-                cancelButtonColor: '#d33',
+                //confirmButtonColor: '#38e',
+                //cancelButtonColor: '#d33',
                 confirmButtonText: 'Yes',
                 cancelButtonText: 'No'
             },

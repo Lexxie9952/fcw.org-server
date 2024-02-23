@@ -7292,8 +7292,8 @@ function request_unit_build_city()
               type: 'info',
               background: '#a19886',
               showCancelButton: true,
-              confirmButtonColor: '#3085d6',
-              cancelButtonColor: '#d33',
+              //confirmButtonColor: '#3085d6',
+              //cancelButtonColor: '#d33',
               confirmButtonText: 'Yes',
               cancelButtonText: 'No'
           },
@@ -7373,7 +7373,7 @@ function key_unit_disband()
     } else {  // Only ONE unit recycling
       ptitle = "Recycle unit?";
       ptext = "Recycle this unit into city production?";
-      cb_color="#55DD6B";
+      //cb_color="#55DD6B";
       cb_text = "Yes, recycle unit.";
     }
   } else { // At least ONE disbanding unit, it will be permanently lost with no recycle value!
@@ -7393,8 +7393,8 @@ function key_unit_disband()
     text:  ptext,
     type:  swaltype,
     showCancelButton: true,
-    confirmButtonColor: cb_color,
-    confirmButtonText: cb_text,
+    //confirmButtonColor: cb_color,
+    //confirmButtonText: cb_text,
     closeOnConfirm: true,
     html: true
 },

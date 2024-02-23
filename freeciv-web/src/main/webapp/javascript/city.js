@@ -2049,7 +2049,7 @@ function city_sell_improvement_in(city_id, improvement_id)
     text: "Sell "+improvements[improvement_id].name+" in "+cities[city_id]['name']+"?",
     type: "warning",
     showCancelButton: true,
-    confirmButtonColor: "#308030",
+    //confirmButtonColor: "#308030",
     confirmButtonText: "SELL",
     closeOnConfirm: true
   }, function(){
@@ -4519,7 +4519,7 @@ function request_buy_all_selected_cities()
           text: rejection_string,
           type: "warning",
           showCancelButton: false,
-          confirmButtonColor: "#803030",
+          //confirmButtonColor: "#803030",
           confirmButtonText: "OK",
           closeOnConfirm: true
          });
