@@ -2051,7 +2051,8 @@ function city_sell_improvement_in(city_id, improvement_id)
     showCancelButton: true,
     //confirmButtonColor: "#308030",
     confirmButtonText: "SELL",
-    closeOnConfirm: true
+    closeOnConfirm: true,
+    html : true
   }, function(){
        var packet = {"pid" : packet_city_sell, "city_id" : cities[city_id]['id'],
                     "build_id": improvement_id};
