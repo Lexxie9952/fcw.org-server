@@ -408,9 +408,23 @@ function html_safe(text)
 function html_emoji_from_universal(universal_name)
 {
   // Force lower case and remove white space and escape sequences
-  var freemoji_name = freemoji_name_from_universal(universal_name);
-  var path = "/images/e/"+freemoji_name+".png";
-  var element = "<img class='v' src='"+path+"'>";
+  let freemoji_name = freemoji_name_from_universal(universal_name);
+  let path = "/images/e/"+freemoji_name+".png";
+  let element = "<img class='v' src='"+path+"'>";
+  return element;
+}
+
+/**************************************************************************
+ Used by helpdata.js to make an emoji that doesn't expand the vertical
+ space of a line. Could be useful to make a class from it and
+ propagate it into the server and other places.
+**************************************************************************/
+function html_spaceless_emoji_from_universal(universal_name)
+{
+  // Force lower case and remove white space and escape sequences
+  let freemoji_name = freemoji_name_from_universal(universal_name);
+  let path = "/images/e/"+freemoji_name+".png";
+  let element = "<img class='vht' src='"+path+"'>";
   return element;
 }
 
@@ -421,9 +435,11 @@ function html_emoji_from_universal(universal_name)
 **************************************************************************/
 function freemoji_name_from_universal(universal_name)
 {
-  var freemoji_name = universal_name.toLowerCase();
+  let freemoji_name = universal_name.toLowerCase();
   freemoji_name = freemoji_name.replace(/\s+/g, '');
   freemoji_name = freemoji_name.replace('.', '');
+  freemoji_name = freemoji_name.replace(']', '-');
+  freemoji_name = freemoji_name.replace('[', '-');
   freemoji_name = freemoji_name.replace('_', '');   // TODO: /_/g and similar on others is causing blank freemoji string
   freemoji_name = freemoji_name.replace('_', '');   // FIXME: hack for emoji with word<space>word<space>word e.g., Isaac Newton's College
   freemoji_name = freemoji_name.replace('_', '');   // FIXME: hack for emoji with word<space>word<space>word<space>word e.g., Genghis Khan's Equestion School
