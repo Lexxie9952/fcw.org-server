@@ -405,26 +405,16 @@ function html_safe(text)
    returns the html-ready emoji element ready for insertion into html
    code. click_action is optionaly specifiable onclick behaviour of element
 **************************************************************************/
-function html_emoji_from_universal(universal_name)
+function html_emoji_from_universal(universal_name, css_class)
 {
+  var class_name = "v";
+  if (css_class) {
+    class_name = css_class;
+  }
   // Force lower case and remove white space and escape sequences
   let freemoji_name = freemoji_name_from_universal(universal_name);
   let path = "/images/e/"+freemoji_name+".png";
-  let element = "<img class='v' src='"+path+"'>";
-  return element;
-}
-
-/**************************************************************************
- Used by helpdata.js to make an emoji that doesn't expand the vertical
- space of a line. Could be useful to make a class from it and
- propagate it into the server and other places.
-**************************************************************************/
-function html_spaceless_emoji_from_universal(universal_name)
-{
-  // Force lower case and remove white space and escape sequences
-  let freemoji_name = freemoji_name_from_universal(universal_name);
-  let path = "/images/e/"+freemoji_name+".png";
-  let element = "<img class='vht' src='"+path+"'>";
+  let element = "<img class='"+class_name+"' src='"+path+"'>";
   return element;
 }
 
