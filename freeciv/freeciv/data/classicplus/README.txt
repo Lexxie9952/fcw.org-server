@@ -3,6 +3,7 @@
 Click link for: <a href="https://freecivweb.fandom.com/wiki/Strategy_Guide" target='_blank'>Strategy Guide</a>
 <a href="https://freeciv.fandom.com/wiki/Terrain#Terrain_Catalog" target="_blank">Terrain</a>
 <a href="https://freeciv.fandom.com/wiki/Combat" target="_blank">Combat</a>
+<a href="https://freeciv.fandom.com/wiki/Zones_of_control" target="_blank">Zones of Control</a>
 <a href="https://freeciv.fandom.com/wiki/Government" target="_blank">Governments</a>
 <a href="https://freeciv.fandom.com/wiki/Economy" target="_blank">Economy</a>
 <a href="https://freeciv.fandom.com/wiki/Diplomacy" target="_blank">Diplomacy</a>
@@ -58,7 +59,7 @@ Gold now produces +8 trade (previous 0/1/6 was an inferior resource)</li>
 <li>Added Crusaders</li>
 <li>Units who disembark to adjacent tiles from ships lose all their moves, except Marines</li>
 <li>Wood boats can travel on rivers</li>
-<li>Trireme: cost 20. Req: Alphabet. Goes on Rivers and Deep Ocean. Lost at sea if 2 turns away from shore. 
+<li>Trireme: cost 20. Req: Alphabet. Goes on Rivers and Deep Ocean. Lost at sea if 2 turns away from shore.
    Can attack river tiles. Can do trade routes and help build wonders. Does not cause unhappiness</li>
 <li>Added Galley. A2 D2 HP10. Upgrades Trireme</li>
 <li>Added War Galley. A3 D3 HP10. The flagship warship of the ancient seas</li>
@@ -100,7 +101,7 @@ Gold now produces +8 trade (previous 0/1/6 was an inferior resource)</li>
 <li>Air units are unbribable</li>
 <li>Helicopters, which were useless, get buffed:
     13 moves (was 12)
-    Lose 1hp per turn (was 2hp) 
+    Lose 1hp per turn (was 2hp)
     Can carry 1 land unit (was 0)
     Can see Submarines at distance of 2 tiles like Civ2 (was 1 tile)
     Helicopters are not reachable by Artillery-types nor units before Riflemen, Cavalry, Ironclad</li>
