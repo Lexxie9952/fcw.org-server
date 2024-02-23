@@ -46,6 +46,10 @@ var seconds_to_phasedone = 0;
 var seconds_to_phasedone_sync = 0;
 var dialog_close_trigger = "";
 var dialog_message_close_task;
+/* CSS PROPERTIES DEFINED IN civclient.css */
+var default_text_color = "#ccc";
+var default_button_background = "#444";
+var default_dialog_text_color = "#ccc";
 
 /**************************************************************************
  Main starting point for Freeciv-web
@@ -54,10 +58,9 @@ $(document).ready(function() {
   civclient_init();
 });
 
-
-
 /**************************************************************************
- Set up frequently used html elements to reduce markup verbosity
+ Set up custom defined html elements (to reduce markup verbosity)
+ The properties of these elements are then defined in civclient.css
 **************************************************************************/
 function define_autonomous_html_element_tags() {
   class font_ultra_light extends HTMLElement { constructor() {super();} };
@@ -82,6 +85,22 @@ function define_autonomous_html_element_tags() {
   customElements.define("black-", font_black);
 }
 
+/**************************************************************************
+ Pull out important values we need which were defined in civclient.css
+**************************************************************************/
+function get_css_default_properties()
+{
+  var cssProps = window.getComputedStyle(document.body);
+  default_text_color =
+    cssProps.getPropertyValue('--default_text_color');
+  default_button_background =
+    cssProps.getPropertyValue('--default_button_background');
+  default_dialog_text_color =
+    cssProps.getPropertyValue('--default_dialog_text_color');
+
+  /* how to change it later:
+    document.body.style.setProperty('--foo-bar', newValue); */
+}
 
 /**************************************************************************
  This function is called on page load.
@@ -89,6 +108,7 @@ function define_autonomous_html_element_tags() {
 function civclient_init()
 {
   define_autonomous_html_element_tags();
+  get_css_default_properties();
 
   $.blockUI.defaults['css']['backgroundColor'] = "#222";
   $.blockUI.defaults['css']['color'] = default_dialog_text_color;
