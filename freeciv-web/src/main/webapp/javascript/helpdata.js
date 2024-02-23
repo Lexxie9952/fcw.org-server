@@ -162,9 +162,10 @@ function generate_help_menu(key)
           && improvement['name'] == "Enrichment Facility") {
             continue; // if major nukes are OFF, suppress illegal prod choice.
       }
+      let img_element = html_spaceless_emoji_from_universal(improvement['name'])
 
       $("<li data-helptag='" + key + "_" + improvement['id'] + "'>"
-        + improvement['name'] + "</li>").appendTo("#help_city_improvements_ul");
+        + "<div>"+improvement['name'] + img_element + "</div>" + "</li>").appendTo("#help_city_improvements_ul");
     }
   } else if (key == "help_gen_wonders") {
     for (impr_id in improvements) {
@@ -180,9 +181,10 @@ function generate_help_menu(key)
           && improvement['name'] == "Manhattan Project") {
           continue; // if major nukes are OFF, suppress illegal prod choice.
       }
+      let img_element = html_spaceless_emoji_from_universal(improvement['name'])
 
       $("<li data-helptag='" + key + "_" + improvement['id'] + "'>"
-        + improvement['name'] + "</li>").appendTo("#help_wonders_of_the_world_ul");
+        +"<div>" + improvement['name'] + img_element + "</div>" + "</li>").appendTo("#help_wonders_of_the_world_ul");
     }
   } else if (key == "help_gen_units") {
     for (var i = 0; i < unittype_ids_alphabetic().length; i++) {
@@ -196,9 +198,10 @@ function generate_help_menu(key)
           if (punit_type['bombard_rate']<-1) continue;
         }
       }
+      let img_element = html_spaceless_emoji_from_universal(punit_type['name'])
 
       $("<li data-helptag='" + key + "_" + punit_type['id'] + "'>"
-         + punit_type['name'] + "</li>").appendTo("#help_units_ul");
+         +"<div>" + punit_type['name'] + img_element + "</div>" + "</li>").appendTo("#help_units_ul");
     }
   } else if (key == "help_gen_techs") {
     for (var tech_id in techs) {
@@ -498,14 +501,15 @@ function generate_help_text(key)
     msg = "<h1>" + improvement['name'] + "</h1>"+"<div class='"+pane_class+"'>"
 	    + render_sprite(get_improvement_image_sprite(improvement)) + "<br>"
 	    + cleaned_helptext(improvement['helptext'])
-            + "<b><br><br>Cost: " + improvement['build_cost']
-            + "<br>Upkeep: " + improvement['upkeep'];
+            + "<b><br><br>Cost: <span class='help_stats>" + improvement['build_cost'] + "</span>"
+            + "<br>Upkeep: <span class='help_stats>" + improvement['upkeep'] + "</span>";
     var reqs = get_improvement_requirements(improvement['id']);
     if (reqs != null) {
-      msg += "<br>Requirements: ";
+      msg += "<br>Requirements: <span class='help_stats>";
       for (var n = 0; n < reqs.length; n++) {
        msg += techs[reqs[n]]['name'] + " ";
       }
+      msg += "</span>"
     }
     msg += "<br><br></b></div>";
     msg += wiki_on_item_button(improvement['name']);
@@ -520,8 +524,8 @@ function generate_help_text(key)
     var flex = " style='display:flex;' ";
     var span1 = "<span style='flex:"+flx_tab+";'>";
     //var span2 = "<span style='font-weight:bold; color:#48F;'>";
-    var span2 = "<span style='font-family:Helvetica; font-weight:bold; color:#48F;'>";
-    var span2_small = "<span style='font-family:Helvetica; font-weight:bold; font-size:90%; color:#48F;'>";
+    var span2 = "<span class='help_stats'>";
+    var span2_small = "<span class='help_stats' style=' font-size:90%;'>";
     var span_end = "</span>";
     var div_end = "</span></div>"
 
