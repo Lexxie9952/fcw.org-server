@@ -162,7 +162,7 @@ function generate_help_menu(key)
           && improvement['name'] == "Enrichment Facility") {
             continue; // if major nukes are OFF, suppress illegal prod choice.
       }
-      let img_element = html_spaceless_emoji_from_universal(improvement['name'])
+      let img_element = html_emoji_from_universal(improvement['name'], "vht");
 
       $("<li data-helptag='" + key + "_" + improvement['id'] + "'>"
         + "<div>"+improvement['name'] + img_element + "</div>" + "</li>").appendTo("#help_city_improvements_ul");
@@ -181,7 +181,7 @@ function generate_help_menu(key)
           && improvement['name'] == "Manhattan Project") {
           continue; // if major nukes are OFF, suppress illegal prod choice.
       }
-      let img_element = html_spaceless_emoji_from_universal(improvement['name'])
+      let img_element = html_emoji_from_universal(improvement['name'], "vht");
 
       $("<li data-helptag='" + key + "_" + improvement['id'] + "'>"
         +"<div>" + improvement['name'] + img_element + "</div>" + "</li>").appendTo("#help_wonders_of_the_world_ul");
@@ -198,7 +198,7 @@ function generate_help_menu(key)
           if (punit_type['bombard_rate']<-1) continue;
         }
       }
-      let img_element = html_spaceless_emoji_from_universal(punit_type['name'])
+      let img_element = html_emoji_from_universal(punit_type['name'], "vht");
 
       $("<li data-helptag='" + key + "_" + punit_type['id'] + "'>"
          +"<div>" + punit_type['name'] + img_element + "</div>" + "</li>").appendTo("#help_units_ul");
