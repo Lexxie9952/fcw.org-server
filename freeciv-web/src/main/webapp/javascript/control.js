@@ -7368,7 +7368,7 @@ function key_unit_disband()
     if (plural) { // Plural number of units recycling
       ptitle = "Recycle units?";
       ptext = "Recycle these units into city production?";
-      cb_color="#55DD6B";
+      //cb_color="#55DD6B";
       cb_text = "Yes, recycle units.";
     } else {  // Only ONE unit recycling
       ptitle = "Recycle unit?";
@@ -8354,27 +8354,8 @@ function openFullscreen() {
     }
   });
 }
-/****************************************************************************
- This function sets the color theme for swal colors that override the
- .css file on game load.
-****************************************************************************/
-function setSwalTheme() {
-  // Sweet alert recolor for dark-theme (it overwrites civclient.css settings)
-  $(".confirm").css("color", "#5C5");
-  $(".cancel").css("color", "#C55");
-  $(".sweet-alert").children().css("color", "#d4cfb9");
-}
 
-/****************************************************************************
- Takes an onclick() on the invisible pane over tabs, disables the pane's
- clickability temporarily then clickks the tab under it, then displays the
- pane again. This prevents browser authoritarianism in forcing stupid url
- preview links when we hover over our game tabs.
- NOTE: each pane needs a separate index. Current indices are:
- 1 = main game tabs
- 2 = city tabs
- 3 = intel dialog tabs
-****************************************************************************/
+/****************************************************************************/
 function clickMask(ev, pane) {
   x1 = ev.clientX;
   y1 = ev.clientY;

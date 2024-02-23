@@ -16,10 +16,6 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 ***********************************************************************/
-
-
-const default_dialog_text_color = "#ccc";
-
 // National colors that aren't quite perfectly picked by the algorithm. Sometimes they're fine
 // but could be better for holistic integration with all the other nations. null indicates to
 // keep the algorithm's selection for that color.
@@ -384,3 +380,16 @@ function override_color(nation_name, nation_id) {
   }
 }
 
+/****************************************************************************
+ This function sets the color theme for swal colors that override the
+ .css file on game load.
+****************************************************************************/
+function setSwalTheme() {
+  // Sweet alert recolor for dark-theme (it overwrites civclient.css settings)
+
+  /*
+  $(".confirm").css("color", "#5C5");
+  $(".cancel").css("color", "#C55"); */
+  $(".sweet-alert").children().css("color", default_dialog_text_color);
+  //$(".sweet-alert").children().css("button background", default_button_background);
+}
