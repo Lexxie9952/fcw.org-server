@@ -471,10 +471,11 @@ function show_city_dialog(pcity)
     // align "Change Production" and "Add to Worklist" buttons with the wood panel and tab selector buttons to their left.
     $("#prod_buttons").css({"margin-top": "39px", "margin-right": "2px"});
     if (!touch_device) { // Highlight keyboard shortcuts for large screens with keyboards (i.e. not touch device)
-      $("#city_dialog").next().children().children().first().html("<u><b style='font-family: HelveticaBlack'>P</b></u>revious City");
-      $("#city_dialog").next().children().children().first().next().html("<u><b style='font-family: HelveticaBlack'>N</b></u>ext City");
-      $("#city_dialog").next().children().children().first().next().next().html("<u><b style='font-family: HelveticaBlack'>B</b></u>uy");
-      $("#city_dialog").next().children().children().first().next().next().next().next().html("Exit (<u><b style='font-family: HelveticaBlack'>W</b></u>)");
+      $("#city_dialog").next().children().children().first().html("<u><b>P</b></u>revious City");
+      $("#city_dialog").next().children().children().first().next().html("<u><b>N</b></u>ext City");
+      $("#city_dialog").next().children().children().first().next().next().html("<u><b>B</b></u>uy");
+      $("#city_dialog").next().children().children().first().next().next().next().html("<b> </b>Rename"); // forces equal button height
+      $("#city_dialog").next().children().children().first().next().next().next().next().html("Exit (<u><b>W</b></u>)");
     }
   }
   $("#city_dialog").dialog('open');
@@ -492,10 +493,10 @@ function show_city_dialog(pcity)
     $("#city_tabs-i").hide();       // "Inside" tab for units, not needed on large screen.
     $(".extra_tabs_small").remove();  // class identified for "Inside" tab for units, not needed on large screen.
     $("#mobile_cma_checkbox").remove();
-    $("#ct2").html("<u><black->R</black-></u>outes"+ (pcity['traderoute_count']!=0
+    $("#ct2").html("<u><b>R</b></u>outes"+ (pcity['traderoute_count']!=0
       ?"&nbsp;&nbsp; <img style='position:absolute; margin-left:-5px;' src='/images/e/trade.png'>"
       :""));
-    $("#ctg").html("<u><b style='font-family:HelveticaBlack'>G</b></u>overnor"+(pcity.cma_enabled?" &#x1F539;":"")); // blue diamond to show governor active.
+    $("#ctg").html("<u><b>G</b></u>overnor"+(pcity.cma_enabled?" &#x1F539;":"")); // blue diamond to show governor active.
   } else {
     // CMA tab elements: (tight fit)
     $("#cma_surplus_hdr").css("font-size", "105%");
