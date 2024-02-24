@@ -44,7 +44,7 @@ Focus goals for MP2-Elephant
 1. Spy Planes are harder to shoot down because of mass, size, speed, and altitude. Correspondingly, they gain higher defense,
 and can now be built with veteran levels.
 1a. Spy Planes get 75% chance to Stack Escape, since they are in a different "layer" of the tile, like subs.
-2. Scout 10hp (was 8)
+2. Scout 10hp (was 8), move bonuses from vet levels simplified to class.B bonuses for all igTer units
 3. AWACS 30hp (was 20), moved to Rocketry (post WW2 tech: give Escort Fighters a purpose in WW2)
 4. Rivers and Rails are now PASSIVE MOVEMENT: unit is assumed to be a passenger. Therefore Warriors, Horsemen, and Armor all move the same
    speed down a river. This is 1/8 of mp. This only effects Land-type units, Sea units aren't TerrainSpeed and are always 1mp wherever
@@ -124,7 +124,9 @@ and can now be built with veteran levels.
      e.g., a foot unit with 2 moves can attack and still have a move fraction left to fortify or retreat a tile. Note the max_range to
      min_speed ratio in original 1x is 1/1=100% actually more than 1.5/2 = 75% in 2x !! So this makes a lot of sense to improve for units
      plagued by mobility issues ever since 2x modification occurred. (see white paper)
-34. Foot Soldiers gain bigger move bonuses with vet levels. Standard is v0-1 = 0; v2-3 + 1/3; v4-6 +2/3
+34. (non-IgTer) Foot Soldiers gain class.A move bonuses for vet levels. Standard is v0-1 = 0; v2-3 + 1/3; v4-6 +2/3.
+    (IgTer units receive slightly different class.B type bonus) v0-v2 = 0; v3-v4: +1/3, v5-v6: +2/3 (bonus kicks in 1 vet level higher)
+         Reason: IgTer units already enjoy substantial move bonus from no terrain penalties
 35. FootSoldiers get improved promotion odds: 50 33 20 goes 85 50 33, basically bumping all odds up one level.
 36. FootSoldiers who didn't receive discounts in MP2C get ~10% discount. Musket:27, Riflemen:35, Partisan: 40, Alpine:45,
     Marines:50, Ground Troops:35, Paratroopers:50. Zealots which were 25 in MP2D receive discount also and are back to 20.
@@ -243,7 +245,7 @@ i.e., 6 in 5 (swamp), 5 in 4 (mine), 4 in 3 (angkor wat swamp drain) goes to:
 77. Spies gain SentryAlways flag
 78. Magna Carta cost reduced 270
 79. Quay unloading/deboarding costs full moves except in Domestic Territory -- this completes the intended purpose of Quays being fully RestrictInfra (reminder, was also put in mp2d 17.Dec.2023)
-80. Alpine Troops automatically become A7 D7 (a virtual sub-type of Alpines with slightly different appearance), when Combined Arms is discovered. (doc it in Techs.mp2e online page also)
+80. Alpine Troops: automatically become A7 D7 (a virtual sub-type of Alpines with slightly different appearance), when Combined Arms is discovered. (doc it in Techs.mp2e online page also)
 81. Combined Arms now automatically upgrades all Alpines, Riflemen, and Zealots when it is discovered:  no micro-management of moving units around for 4 gold upgrade prices.
 82. Goods and Freight can use railroads because they are passive movement. They can't use Maglev because of their large cargo space requirements.
     This lessens some micromanagement pains and makes good sense too.
@@ -270,4 +272,5 @@ i.e., 6 in 5 (swamp), 5 in 4 (mine), 4 in 3 (angkor wat swamp drain) goes to:
       Get closer to the goal that each gov is superior to next govs until you're "ready" for them.
 94. Clarification of future questions: Lake-rivers defend at 1x (no defense bonus for river), and you can't fortify on river-lakes.
 95. Well-diggers can't do mountain rivers. (Because they had to be made a different type to accomodate new river mechanics vis-a-vis Big Land units). It's an abuse of well-digger anyway to make all mountain river cities.
-96.
+96. igTer units (Scout, Scout II, Partisan, Alpine Troops) all get uniform simplified move bonus with Veterancy
+

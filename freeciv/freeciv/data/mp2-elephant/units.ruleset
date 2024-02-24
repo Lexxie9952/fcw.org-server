@@ -1844,11 +1844,11 @@ veteran_names =
 veteran_base_raise_chance = 85, 50, 33, 20, 20, 20, 0
 veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
 veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
-veteran_move_bonus = 0, 2520, 5040, 7560, 10080, 12600, 15120
+veteran_move_bonus = 0, 0, 0, 3360, 3360, 6720, 6720
 helptext      = _("\
 Partisans are guerilla fighters who can use the terrain to their advantage. Like the Scout\
- that they upgrade, they can slip through ZOC and live off the land with no upkeep, and gain\
- +1⁄4 move per veteran level. Partisans provide sentry intel even if not sentried.\
+ that they upgrade, they can slip through ZOC and live off the land with no upkeep.\
+ Partisans provide sentry intel even if not sentried.\
  Partisans can investigate conquered cities not owned by the original owner. \n\
 "), _("\
 Proportional to city size, up to 8 Partisans appear when an enemy conquers your city. They\
@@ -2026,7 +2026,7 @@ veteran_names =
 veteran_base_raise_chance = 85, 50, 33, 25, 20, 20, 0
 veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
 veteran_power_fact = 100, 150, 175, 250, 300, 350, 400
-veteran_move_bonus = 0, 0, 3360, 3360, 6720, 6720, 6720
+veteran_move_bonus = 0, 0, 0, 3360, 3360, 6720, 6720
 helptext      = _("\
 Alpine Troops are highly mobile units and\
  excellent defenders. Similar to a Scout, they\
@@ -2267,7 +2267,7 @@ veteran_names =
 veteran_base_raise_chance = 85, 50, 33, 25, 20, 20, 0
 veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
 veteran_power_fact = 100, 150, 175, 250, 300, 350, 400
-veteran_move_bonus = 0, 0, 3360, 3360, 6720, 6720, 6720
+veteran_move_bonus = 0, 0, 0, 3360, 3360, 6720, 6720
 helptext      = _("\
 Alpine Troops are highly mobile units and excellent defenders. Similar to a Scout, they\
  treat every land tile like a road were on it. \n\n\
@@ -2411,12 +2411,12 @@ veteran_names =
 veteran_base_raise_chance = 50, 33, 20, 15, 15, 15, 0
 veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
 veteran_power_fact = 100, 150, 175, 250, 300, 350, 400
-veteran_move_bonus = 3360, 5880, 7560, 10080, 12600, 15120, 17640
+veteran_move_bonus = 3360, 6720, 6720, 10080, 10080, 13440, 13440
 helptext      = _("\
 Scouts are explorers of unknown territory. They live off the land with no upkeep.\
  They can slip through ZOC. They ignore terrain penalties, treating every tile as\
  if it had a road. They can move 4 tiles per turn (6 after discovering Map Making.)\
- For each veteran level, they gain an additional +1⁄4 move point. Scouts can Investigate City\
+ Veterancy may provide additional move points. Scouts can Investigate City\
  to gather intel, and their terrain scouting can give tactical advantage. Scouts can make\
  contact with far-off lands to arrange Cease-fire or Peace. In later times, Scouts upgrade\
  to Scout II. \n\
@@ -2466,7 +2466,7 @@ veteran_names =
 veteran_base_raise_chance = 50, 33, 20, 15, 15, 15, 0
 veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
 veteran_power_fact = 100, 150, 175, 250, 300, 350, 400
-veteran_move_bonus = 3360, 5880, 7560, 10080, 12600, 15120, 17640
+veteran_move_bonus = 3360, 6720, 6720, 10080, 10080, 13440, 13440
 helptext      = _("\
 Scout II upgrades the Scout, and gets every bonus and ability its\
  predecessor does. It gains 2 new abilities. It may pillage and engage\
