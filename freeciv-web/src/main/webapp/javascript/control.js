@@ -687,7 +687,7 @@ function chat_context_dialog_show(recipients) {
     maxHeight: 0.9 * $(window).height()
   }).dialogExtend({
     minimizable: true,
-    closable: true,
+    closable: true,  // keep true, only way to exit.
     icons: {
       minimize: "ui-icon-circle-minus",
       restore: "ui-icon-bullet"

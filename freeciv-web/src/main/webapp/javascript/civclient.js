@@ -541,7 +541,7 @@ function show_dialog_message(title, message)
 			}
 		}).dialogExtend({
                    "minimizable" : true,
-                   "closable" : true,
+                   "closable" : false,
                    "icons" : {
                      "minimize" : "ui-icon-circle-minus",
                      "restore" : "ui-icon-bullet"

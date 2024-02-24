@@ -417,7 +417,7 @@ function show_city_dialog(pcity)
             buttons: dialog_buttons
                    }).dialogExtend({
                      "minimizable" : true,
-                     "closable" : true,
+                     "closable" : false,
                      "minimize" : function(evt, dlg){ set_default_mapview_active(); },
                      "icons" : {
                        "minimize" : "ui-icon-circle-minus",

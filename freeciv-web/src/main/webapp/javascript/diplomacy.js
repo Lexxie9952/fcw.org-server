@@ -454,7 +454,7 @@ function create_diplomacy_dialog(counterpart, template) {
 			}
 		}).dialogExtend({
            "minimizable" : true,
-           "closable" : true,
+           "closable" : false,
            "minimize" : function(evt, dlg) {
             // clip title to 16 chars when minimized
             $("#dialog-extend-fixed-container").children().css({"max-width":"16ch",
