@@ -99,7 +99,7 @@ function accept_treaty(counterpart, I_accepted, other_accepted)
            + "</div>";
     // Us = YES.              We have accepted (thumb up):
     if (I_accepted == true) {
-      $("#btn_acpt_trty").html("Reject treaty");
+      $("#btn_acpt_trty").html("<b> </b>Reject treaty");
       $("#btn_acpt_trty").attr("title", "");
       $("#agree_self_" + counterpart).html(agree_html);
       $("#agree_self_" + counterpart).attr("title", "Click to reject." );
@@ -109,19 +109,19 @@ function accept_treaty(counterpart, I_accepted, other_accepted)
       // Us = NO; Them = YES
       if (other_accepted) {  // AI can show 'false acceptance' and flip-flop when you accept ...
         if (is_ai) {         // ...so we have somewhat different hovertext here:
-          $("#btn_acpt_trty").html("Accept treaty");
+          $("#btn_acpt_trty").html("<b> </b>Accept treaty");
           $("#btn_acpt_trty").attr("title", "");
           $("#agree_self_" + counterpart).attr("title", "Click to accept.");
         }
         else {        /* Counterpart is Human -- clicking results in a done deal! */
-          $("#btn_acpt_trty").html("Sign treaty");
+          $("#btn_acpt_trty").html("<b> </b>Sign treaty");
           $("#btn_acpt_trty").attr("title", "Activate treaty.");
           $("#agree_self_" + counterpart).attr("title", "Click to sign treaty.");
         }
       }
       // Us = NO; Them = NO
       else {
-        $("#btn_acpt_trty").html("Offer treaty");
+        $("#btn_acpt_trty").html("<b> </b>Offer treaty");
         $("#agree_self_" + counterpart).attr("title", "Click to offer treaty.");
       }
       $("#agree_self_" + counterpart).html(disagree_html);
@@ -425,7 +425,6 @@ function create_diplomacy_dialog(counterpart, template) {
      }
   });
 
-
   diplomacy_dialog.dialog({
       title: title,
 			bgiframe: true,
@@ -434,7 +433,7 @@ function create_diplomacy_dialog(counterpart, template) {
       height: dialog_height,
 			buttons: {
 				"Accept treaty": {
-           text: "Accept treaty",
+           html: "<b> </b>Accept treaty",
            title: "Changes your stance to the proposed treaty.",
            id: "btn_acpt_trty",
            click: function() {
