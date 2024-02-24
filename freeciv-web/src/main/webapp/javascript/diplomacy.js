@@ -76,6 +76,8 @@ function accept_treaty(counterpart, I_accepted, other_accepted)
 
   } else {
 
+  const is_ai = players[counterpart]['flags'].isSet(PLRF_AI);
+
   var agree_sprite = get_treaty_agree_thumb_up();
   var disagree_sprite = get_treaty_disagree_thumb_down();
 
@@ -85,7 +87,7 @@ function accept_treaty(counterpart, I_accepted, other_accepted)
            + "); background-position:-" + agree_sprite['tileset-x'] + "px -"
 	   + agree_sprite['tileset-y']
            + "px;  width: " + agree_sprite['width'] + "px;height: "
-	   + agree_sprite['height'] + "px; margin: 5px; '>"
+	   + agree_sprite['height'] + "px; margin: 5px;' onclick='accept_treaty_req("+counterpart+");'>"
            + "</div>";
 
   var disagree_html = "<div style='float:left; background: transparent url("
@@ -93,11 +95,35 @@ function accept_treaty(counterpart, I_accepted, other_accepted)
            + "); background-position:-" + disagree_sprite['tileset-x'] + "px -"
 	   + disagree_sprite['tileset-y']
            + "px;  width: " + disagree_sprite['width'] + "px;height: "
-	   + disagree_sprite['height'] + "px; margin: 5px; '>"
+	   + disagree_sprite['height'] + "px; margin: 5px;' onclick='accept_treaty_req("+counterpart+");'>"
            + "</div>";
+    // Us = YES.              We have accepted (thumb up):
     if (I_accepted == true) {
+      $("#btn_acpt_trty").html("Reject treaty");
+      $("#btn_acpt_trty").attr("title", "");
       $("#agree_self_" + counterpart).html(agree_html);
-    } else {
+      $("#agree_self_" + counterpart).attr("title", "Click to reject." );
+    }
+    // Us = NO.               We have not accepted (thumb down):
+    else {
+      // Us = NO; Them = YES
+      if (other_accepted) {  // AI can show 'false acceptance' and flip-flop when you accept ...
+        if (is_ai) {         // ...so we have somewhat different hovertext here:
+          $("#btn_acpt_trty").html("Accept treaty");
+          $("#btn_acpt_trty").attr("title", "");
+          $("#agree_self_" + counterpart).attr("title", "Click to accept.");
+        }
+        else {        /* Counterpart is Human -- clicking results in a done deal! */
+          $("#btn_acpt_trty").html("Sign treaty");
+          $("#btn_acpt_trty").attr("title", "Activate treaty.");
+          $("#agree_self_" + counterpart).attr("title", "Click to sign treaty.");
+        }
+      }
+      // Us = NO; Them = NO
+      else {
+        $("#btn_acpt_trty").html("Offer treaty");
+        $("#agree_self_" + counterpart).attr("title", "Click to offer treaty.");
+      }
       $("#agree_self_" + counterpart).html(disagree_html);
     }
 
@@ -106,6 +132,9 @@ function accept_treaty(counterpart, I_accepted, other_accepted)
     } else {
       $("#agree_counterpart_" + counterpart).html(disagree_html);
     }
+
+    // Block counterpart's thumb from clicks and hovertext:
+    $("#agree_counterpart_" + counterpart).css("pointer-events", "none");
   }
 }
 
@@ -383,6 +412,20 @@ function create_diplomacy_dialog(counterpart, template) {
   if ($(window).height()>550) dialog_height = $(window).height() - 50;
   if (dialog_height > 600) dialog_height = 600;
 
+
+  $("#dlg").dialog({
+    buttons :  {
+       "MyButton" : {
+           text: "My Button",
+           id: "my-button-id",
+           click: function(){
+               alert("here");
+           }
+        }
+     }
+  });
+
+
   diplomacy_dialog.dialog({
       title: title,
 			bgiframe: true,
@@ -390,15 +433,25 @@ function create_diplomacy_dialog(counterpart, template) {
       width: is_small_screen() ? "95%" : "50%",
       height: dialog_height,
 			buttons: {
-				"Accept treaty": function() {
-				    accept_treaty_req(counterpart_id);
-				},
-				"Cancel meeting (𝗪)" : function() {
-				    cancel_meeting_req(counterpart_id);
-				}
+				"Accept treaty": {
+           text: "Accept treaty",
+           title: "Changes your stance to the proposed treaty.",
+           id: "btn_acpt_trty",
+           click: function() {
+				     accept_treaty_req(counterpart_id);
+				   }
+        },
+				"Cancel meeting": {
+          html: "Cancel meeting (<b>W</b>)",
+          title: "Rejects current proposal AND ends the treaty negotiation.",
+          id: "btn_quit_treaty",
+          click: function () {
+            cancel_meeting_req(counterpart_id);
+          }
+        }
 			},
 			close: function() {
-			     cancel_meeting_req(counterpart_id);
+  	     cancel_meeting_req(counterpart_id);
 			}
 		}).dialogExtend({
            "minimizable" : true,
