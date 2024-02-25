@@ -66,7 +66,7 @@ type    = "Retire_Pct"
 value   = 31
 reqs    =
     { "type", "name", "range"
-      "UnitType", "Barbarian Leader", "Local"
+      "UnitType", "[Barbarian Leader]", "Local"
       "Age", "5", "Local"
       "TerrainClass", "Oceanic", "Adjacent"
       "MaxUnitsOnTile", "1", "Local"
@@ -100,7 +100,7 @@ reqs    =
       "Specialist", "taxman", "Local"
       "OutputType", "gold", "Local"
     }
-; *************************** Ruleset Fortify and River Bonus *********************** 
+; *************************** Ruleset Fortify and River Bonus ***********************
 [effect_fortified]
 type    = "Fortify_Defense_Bonus"
 value   = 50
@@ -148,7 +148,7 @@ reqs    =
 ; Vision benefit from mountains (for every land unit)
 [effect_mountains_vision]
 type    = "Unit_Vision_Radius_Sq"
-value   = 2                        ; 8+2=10, range of 3 minus 3 in each corner (+12 tiles)    
+value   = 2                        ; 8+2=10, range of 3 minus 3 in each corner (+12 tiles)
 reqs    =
     { "type",          "name",         "range"
       "Terrain",       "Mountains",    "Local"
@@ -167,7 +167,7 @@ reqs    =
 ; Vision benefit from fortress
 [effect_fortress_vision]
 type    = "Unit_Vision_Radius_Sq"
-value   = 2                       ; 8 +2 = 10, 3x3 -3 tiles in each corner 
+value   = 2                       ; 8 +2 = 10, 3x3 -3 tiles in each corner
 reqs    =
     { "type", "name", "range"
       "Extra", "Fortress", "Local"
@@ -178,7 +178,7 @@ reqs    =
 ; Vision benefit from watchtower
 [effect_watchtower_vision]
 type    = "Unit_Vision_Radius_Sq"
-value   = 9                       ; 8 +9 = 17, giving 1 more tile than unoccupied 
+value   = 9                       ; 8 +9 = 17, giving 1 more tile than unoccupied
 reqs    =
     { "type", "name", "range"
       "Extra", "Watchtower", "Local"
@@ -188,7 +188,7 @@ reqs    =
 ; Helicopters have more vision
 [effect_helicopter_submarine_vision]
 type    = "Unit_Vision_Radius_Sq"
-value   = 6         ; 2 + 6 = 8. srtq(8) = 2.82 = 2x2 
+value   = 6         ; 2 + 6 = 8. srtq(8) = 2.82 = 2x2
 reqs    =
     { "type",        "name",         "range"
       "UnitClass",   "Helicopter",   "Local"
@@ -214,7 +214,7 @@ type    = "Defend_Bonus"
 value   = 33
 reqs    =
     { "type",      "name",             "range", "present"
-      "Extra",     "Fort",             "Local", TRUE  
+      "Extra",     "Fort",             "Local", TRUE
       "Extra",     "Fortress",         "Local", FALSE ; Fortress calculated separately even if a fort is under it.
     }
 ; Fort HP regen
@@ -949,11 +949,11 @@ reqs    =
       "OutputType", "Science", "local"
     }
 [effect_tithes_theocracy_1]
-type    = "Happiness_To_Gold" 
+type    = "Happiness_To_Gold"
 value   = 1
-reqs    = 
-    { "type", "name", "range" 
-      "Gov", "Theocracy", "Player" 
+reqs    =
+    { "type", "name", "range"
+      "Gov", "Theocracy", "Player"
     }
 [effect_tithes_theocracy_2]
 type    = "Output_Bonus_2"
@@ -2698,23 +2698,23 @@ reqs	=
     { "type",       "name",        "range"
       "Building",   "The Sphinx",  "City"
       "CityTile",   "Center",      "Local"
-      "OutputType", "Luxury",      "Local" 
+      "OutputType", "Luxury",      "Local"
     }
 [effect_sphinx_corruption]
 type    = "Output_Waste_Pct"
 value	= 60
 reqs	=
-    { "type",       "name",       "range" 
-      "Building",   "The Sphinx", "City" 
-      "OutputType", "Trade",      "Local" 
+    { "type",       "name",       "range"
+      "Building",   "The Sphinx", "City"
+      "OutputType", "Trade",      "Local"
     }
 [effect_sphinx_corruption1]
 type    = "Output_Waste_Min_Reduce"
 value	= 1    ; if there is corruption, then at least 1 corruption will be removed
 reqs	=
-    { "type",       "name",       "range" 
-      "Building",   "The Sphinx", "City" 
-      "OutputType", "Trade",      "Local" 
+    { "type",       "name",       "range"
+      "Building",   "The Sphinx", "City"
+      "OutputType", "Trade",      "Local"
     }
 ;****************************************************************************
 
@@ -2788,7 +2788,7 @@ reqs    =
     { "type", "name", "range"
       "Tech", "Flight", "Player"
     }
-    
+
 [effect_railroad_trade_revenue_reduce]
 type    = "Trade_Revenue_Bonus"
 value   = -585

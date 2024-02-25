@@ -238,7 +238,7 @@ type    = "Retire_Pct"
 value   = 31
 reqs    =
     { "type", "name", "range"
-      "UnitType", "Barbarian Leader", "Local"
+      "UnitType", "[Barbarian Leader]", "Local"
       "Age", "5", "Local"
       "TerrainClass", "Oceanic", "Adjacent"
       "MaxUnitsOnTile", "1", "Local"

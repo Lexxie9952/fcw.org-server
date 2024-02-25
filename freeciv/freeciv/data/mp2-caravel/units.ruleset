@@ -10,7 +10,7 @@
 ; You should sort role units from worst to better, as often the best
 ; available role unit of a given sort will be picked by choosing
 ; the first available (not obsolete) such unit, or by picking the last
-; such unit directly. When determining starting units, the first 
+; such unit directly. When determining starting units, the first
 ; unit with the relevant role that the player can build will be chosen.
 ; If no such unit can be found (eg Explorers that require Map Making),
 ; then the first unit with this role will be chosen.
@@ -180,7 +180,7 @@ veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
 
 ; **********************************************************************************
 ; **********************************************************************************
-; WARNING：ANY CHANGES TO WHAT TYPES OR CLASSES CAN LOAD ONTO WHICH TRANSPORTS MAY 
+; WARNING：ANY CHANGES TO WHAT TYPES OR CLASSES CAN LOAD ONTO WHICH TRANSPORTS MAY
 ; REQUIRE CHANGES TO FCW function unit_could_possibly_load() in unit.js
 ; **********************************************************************************
 ; **********************************************************************************
@@ -197,7 +197,7 @@ name          = _("?unitclass:Bomb")
 min_speed     = 1
 hp_loss_pct   = 0
 hut_behavior  = "Frighten"
-flags         = "Unreachable", "DoesntOccupyTile", "Airliftable" 
+flags         = "Unreachable", "DoesntOccupyTile", "Airliftable"
 helptext      = _("\
   • Can be airlifted from a suitable city.\
 ")
@@ -259,7 +259,7 @@ min_speed     = 1
 hp_loss_pct   = 0
 flags         = "TerrainSpeed", "DamageSlows", "CanOccupyCity", "BuildAnywhere",
                 "CollectRansom", "ZOC", "CanFortify", "CanPillage",
-                "TerrainDefense", "KillCitizen", "Airliftable", 
+                "TerrainDefense", "KillCitizen", "Airliftable",
                 "AttackNonNative", "AttFromNonNative", "BorderPolice"
 helptext      = _("\
   • Can attack from Ships and Helicopters.\
@@ -274,7 +274,7 @@ helptext      = _("\
   • Crew Repair：each turn, regardless of movement, recovers 8% of its hit points (rounded down).\
 ")
 
-; Separating the Submarine class finally allows it to be unreachable by Air. The old Submarine was 
+; Separating the Submarine class finally allows it to be unreachable by Air. The old Submarine was
 ; far too offensively overpowered while simultaneously almost useless from ultra-vulnerability to Air units.
 ; Because it is now Unreachable, any unit able to attack it needs this class in its targets.
 [unitclass_submarine]
@@ -426,7 +426,7 @@ flags         = "Unreachable", "DoesntOccupyTile"
 ;                 for bit-field for additional flags that won't break save game
 ;                 compatibility.
 ;                 BIT 0 = RESERVED for +1 bombard range.
-;                 BIT 1 =      bombard_stay_fortified, attacks do not lose fortified status. 
+;                 BIT 1 =      bombard_stay_fortified, attacks do not lose fortified status.
 ;                 BITS 2-7   = move frags used (up to 63, 0=turn loss/oneattack)
 ;                 BITS 8-10  = bombard_primary_targets. 0=all, or 1-7.
 ;                 BITS 11-13 = bombard_primary_kills, max kills allowed. 0-7.
@@ -493,8 +493,8 @@ flags         = "Unreachable", "DoesntOccupyTile"
 ;                       Bonus is defined in attackers entry.
 ; "FirePower1"        = Defender firepower is reduced to value 1 when
 ;                       ever this has non-zero value.
-;                       Bonus is defined in attackers entry.  
-;  
+;                       Bonus is defined in attackers entry.
+;
 ; ** Flags **
 ;
 ; "IgZOC"       = ignore Zones of Control (ZOC) even if unit class has
@@ -510,7 +510,7 @@ flags         = "Unreachable", "DoesntOccupyTile"
 ; "FieldUnit"	  = cause unhappiness even when not being aggressive
 ; "BeachLander" = won't lose all its movement when moving from non-native
 ;                 terrain to native terrain even if slow_invasions is on.
-; "Settlers"	  = "can irrigate and build roads" but really seems to be a required flag for 
+; "Settlers"	  = "can irrigate and build roads" but really seems to be a required flag for
 ;                 any tile improvement at all.
 ; "Diplomat"	  = can defend against diplomat actions (see diplchance
 ;                 server option)
@@ -562,7 +562,7 @@ flags         = "Unreachable", "DoesntOccupyTile"
 ;                 the "CanKillEscaping" unit type flag.
 ; "CanKillEscaping" = an attack from this unit ignores the "CanEscape" unit
 ;                 type flag.
-; "Provoking" =   Under autoattack_style=1 which this ruleset uses, only 
+; "Provoking" =   Under autoattack_style=1 which this ruleset uses, only
 ;                 Fighter types will autoattack and will ONLY attack units
 ;                 marked with the Provoking flag.  If overridden to autoattack_style=0,
 ;                 a unit considering to auto attack this unit will choose to
@@ -579,14 +579,14 @@ flags         = "Unreachable", "DoesntOccupyTile"
 ;                  flag can use extra city_build_slots
 ; "TransportDefender" = Unit can always defend while transported, even on non-native
 ;                  terrain.
-; "SentryAlways" = This unit always reports sentry-type information; give this flag to 
-;                  reconnaissance/scouting type units who can't sentry because they are 
+; "SentryAlways" = This unit always reports sentry-type information; give this flag to
+;                  reconnaissance/scouting type units who can't sentry because they are
 ;                  fuel-type units (which can only sentry on refueling tiles.)
-; "AvidAttacker" = Units under activity Vigil with this flag auto-attack everything  
+; "AvidAttacker" = Units under activity Vigil with this flag auto-attack everything
 ;                  except "NonProvoking" units, (rather than only attacking
-;                  units with the "Provoking" flag) (assuming autoattackstyle=1)  
-; "NoStackDeath" = When in a stack whose defender is killed, this unit survives and 
-;                  remains occupying the same tile. 
+;                  units with the "Provoking" flag) (assuming autoattackstyle=1)
+; "NoStackDeath" = When in a stack whose defender is killed, this unit survives and
+;                  remains occupying the same tile.
 ; "Reserved3"     = reserved for future use.
 ; -------------------------------------------
 ; Following actions require extra fields:
@@ -646,7 +646,7 @@ flags         = "Unreachable", "DoesntOccupyTile"
 ; "DefendGoodStartUnit"   = Gets granted as 'D' startunit
 ; "AttackFastStartUnit"   = Gets granted as 'a' startunit
 ; "AttackStrongStartUnit" = Gets granted as 'A' startunit
- 
+
 ; "UserType1Startunit"    = Gets granted as 'u' startunit
 ; "UserType2Startunit"    = Gets granted as 'U' startunit
 ; "UserType3Startunit"    = Gets granted as 'z' startunit
@@ -849,7 +849,7 @@ veteran_power_fact = 100
 veteran_move_bonus = 0
 roles         = "AttackFastStartUnit"     ;this role taken over for well-digger
 helptext      = _("\
-This unit can fix unlucky starts, but has very high upkeep.\ 
+This unit can fix unlucky starts, but has very high upkeep.\
  If you have no water, make a Well-Digger in a city that can\
  support it, create a water source, then disband the unit. \n\
  This unit can dig wells to create irrigation sources. It will cost its home city\
@@ -889,7 +889,7 @@ uk_food       = 1
 uk_gold       = 0
 embarks       = "LandRoad", "LandRail", "Helicopter"    ; transport helicopter only
 disembarks    = "LandRoad", "LandRail", "Helicopter"
-flags         = "Settlers", "Infra", "Cant_Fortify", "NonMil", "HasNoZOC", "AddToCity", "Capturable", "Expellable", "Airbase", 
+flags         = "Settlers", "Infra", "Cant_Fortify", "NonMil", "HasNoZOC", "AddToCity", "Capturable", "Expellable", "Airbase",
                  "CanFortress", "CanRoad", "Proletarian"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
@@ -1405,9 +1405,9 @@ bonuses       =
      ;The values below would be what we use if we went with normal veterancy levels.
      ;"WillNever", "DefenseDividerPct", -90    ;The way to change general attack score on everyone without using integer attack score.
      ;"WillNever", "DefenseMultiplierPct", -98 ;The way to change general defense score on everyone without using integer defense score.
-     ;However, the value below is with using the custom veterancy level. For 20FP unit, a D 20% of A emulates emulates a D 2/3 of A. 
+     ;However, the value below is with using the custom veterancy level. For 20FP unit, a D 20% of A emulates emulates a D 2/3 of A.
      ;********* requires hard-coding fix to packhand.js:handle_non_integer_combat_scores() if changed：******************************
-     "WillNever", "DefenseMultiplierPct", -50 ;The way to change general defense score on everyone without using integer defense score. 
+     "WillNever", "DefenseMultiplierPct", -50 ;The way to change general defense score on everyone without using integer defense score.
    }
 flags         = "FootSoldier", "Capturer", "CantReachAir", "Settlers", "CanHide", "MultiSlot", "WillNever", "Shield2Gold"
 roles         = "DefendGood", "DefendGoodStartUnit", "FirstBuild"
@@ -1570,7 +1570,7 @@ flags         = "MultiSlot",  "Shield2Gold", "FootSoldier", "Capturer", "CantRea
 roles         = "DefendGood", "DefendGoodStartUnit", "FirstBuild"
 helptext      = _("\
 Riflemen are World War-era infantry. They are good at defending cities and\
- strategic Fortresses. They also have good attack capability. \ 
+ strategic Fortresses. They also have good attack capability. \
 "), _("\
 Under Communism this unit costs 5 less. Also, Communism tech allows Communist\
  governments to de-commission Riflemen into Workers via the Convert order. And vice versa. \
@@ -1999,7 +1999,7 @@ uk_gold       = 0
 targets       = "Balloon", "Helicopter", "LandRail"
 bonuses       =
    { "flag", "type", "value"
-     "Helicopter", "DefenseDividerPct", -50 
+     "Helicopter", "DefenseDividerPct", -50
      ; the only ground unit not covered by "FootSoldier" or "Horse", gets an attack bonus of -50% instead of heli defend bonus of +50%
    }
 flags         = "Capturer", "CantReachAir", "WillNever"
@@ -2090,7 +2090,7 @@ Armor II is the ultra-modern upgrade to Armor. It features high tech composite a
  electronic countermeasures (ECM). Forts and Fortresses gain no bonus against\
  its ability to blast and break through fortifications. ECM and composite armor\
  give a 2× defense bonus against Missiles. Unlike most land units,\
- Armor II can attack reachable units regardless of whether unreachable units protect the tile.\ 
+ Armor II can attack reachable units regardless of whether unreachable units protect the tile.\
 ")
 
 [unit_catapult]
@@ -2174,7 +2174,7 @@ Siege Rams may also ram Fortresses, doing up to 4hp of damage\
  bonus, which is partly or fully repaired/recovered next turn. \n\
 Siege Rams can only travel by road. They can carry 1 Land\
  unit as cargo：their slow pace means this serves more for\
- disguise or defense. \n\ 
+ disguise or defense. \n\
 Siege Rams need an escort for protection. They need a minimum of\
  1 move point to attack a Fortress or City Walls.\
  Cities protected by the Great Wall are immune to Siege Rams. \n\
@@ -2479,7 +2479,7 @@ uk_happy      = 0
 uk_shield     = 0
 uk_food       = 0
 uk_gold       = 0
-flags         = "Unbribable", "AirAttacker", "HasNoZOC", "NeverProtects", "Bombarder", 
+flags         = "Unbribable", "AirAttacker", "HasNoZOC", "NeverProtects", "Bombarder",
                 "Provoking", "SentryAlways"
 veteran_names =
   _("?vet_rank:green"),
@@ -2706,15 +2706,15 @@ uk_gold       = 0
 targets       = "Air", "AirProtect", "Balloon", "Helicopter", "LandRail", "Zeppelin"
 bonuses       =
    { "flag", "type", "value"
-     ; A4.5 vs all Surface Units 
-     "CantReachAir",   "DefenseDividerPct",          50 
+     ; A4.5 vs all Surface Units
+     "CantReachAir",   "DefenseDividerPct",          50
      "NonMil",         "DefenseDividerPct",          50 ; NonMil do not have CantReachAir flag
      "AntiAir",        "DefenseDividerPct",          50 ; AntiAir do not have CantReachAir flag
 
      ; Cancel CantReachAir bonus on Bombers
-     "FieldUnit",      "DefenseDividerPct",         -50 
+     "FieldUnit",      "DefenseDividerPct",         -50
      ; D4 vs Anti-Air
-     "AntiAir",        "DefenseMultiplierPct",       33 
+     "AntiAir",        "DefenseMultiplierPct",       33
    }
 flags         = "AirAttacker", "Unbribable", "CanEscape", "NeverProtects", "Provoking", "WillNever"
 veteran_names =
@@ -3162,8 +3162,8 @@ bonuses       =
 cargo         = "LandAirSea"
 flags         = "Helicopter", "AirAttacker", "Unbribable",
                 "CanEscape", "WillNever", "NeverProtects"
-                ; Heli is low-altitude and non-provoking：if it is ever thought to be OP, 
-                ; changing this flag fixes that right away. But currently it MIGHT be UnP 
+                ; Heli is low-altitude and non-provoking：if it is ever thought to be OP,
+                ; changing this flag fixes that right away. But currently it MIGHT be UnP
                 ; because hp_loss, range, city walls, and Ground Strike Fighter
 veteran_names =
   _("?vet_rank:green"),
@@ -3309,9 +3309,9 @@ This aircraft can Stack-Escape：a 60% chance to escape a killed stack if it has
 
 [unit_jet_bomber]
 name          = _("Jet Bomber")
-class         = "Air_High_Altitude"                   
-tech_req      = "Space Flight"           
-obsolete_by   = "None"                   
+class         = "Air_High_Altitude"
+tech_req      = "Space Flight"
+obsolete_by   = "None"
 graphic       = "u.jet_bomber_o"
 graphic_alt   = "-"
 sound_move    = "m_jet_bomber"
@@ -3355,7 +3355,7 @@ helptext      = _("\
 Jet Bombers are stratospheric long-range bombers with 3 turns of fuel：they can be airborne for two\
  turn-changes. Their range makes them useful even after Stealth Bombers are available. Stratospheric\
  altitude is unreachable to propeller-based Fighters and AAA. Jet Bombers can Carpet Bomb, an\
- instant-Pillage of tiles from the air. May carry three Bombs. \n\ 
+ instant-Pillage of tiles from the air. May carry three Bombs. \n\
 "), _("
 Jet Bombers can Stack-Escape：a 60% chance to escape a killed stack if they have more remaining moves than the attacker.\
  NOTE：GOTO disallows unit loss from lack of fuel. You\
@@ -3379,7 +3379,7 @@ attack        = 8
 defense       = 4
 hitpoints     = 20
 firepower     = 2
-move_rate     = 28 
+move_rate     = 28
 vision_radius_sq = 12
 transport_cap = 0
 fuel          = 1
@@ -3435,11 +3435,11 @@ sound_fight   = "f_stealth_bomber"
 sound_fight_alt = "f_generic"
 build_cost    = 160
 pop_cost      = 0
-attack        = 19 
+attack        = 19
 defense       = 5
 hitpoints     = 20
 firepower     = 2
-move_rate     = 24 
+move_rate     = 24
 vision_radius_sq = 12
 transport_cap = 2
 fuel          = 2
@@ -3851,7 +3851,7 @@ defense       = 3
 hitpoints     = 20
 firepower     = 1
 move_rate     = 8
-vision_radius_sq = 4 
+vision_radius_sq = 4
 transport_cap = 4
 fuel          = 0
 uk_happy      = 0
@@ -3917,7 +3917,7 @@ targets       = "Submarine", "LandRail"
 cargo         = "Land", "LandNoKill", "LandAirSea", "LandRoad"
 bonuses       =
    { "flag", "type", "value"
-     "Marines", "DefenseMultiplier", 1    
+     "Marines", "DefenseMultiplier", 1
    }
 veteran_names =
   _("?vet_rank:green"),
@@ -4010,7 +4010,7 @@ uk_gold       = 0
 cargo         = "Land", "LandNoKill", "LandAirSea", "Balloon", "LandRoad", "Cargo", "Zeppelin"
 bonuses       =
    { "flag", "type", "value"
-     "Marines", "DefenseMultiplier", 1    
+     "Marines", "DefenseMultiplier", 1
    }
 flags         = "BadCityDefender", "CanEscape", "CantReachAir"
 veteran_names =
@@ -4063,8 +4063,8 @@ uk_gold       = 0
 targets       = "Balloon", "Submarine", "Helicopter", "LandRail"
 bonuses       =
    { "flag", "type", "value"
-     "Marines", "DefenseMultiplier", 1    
-   }   
+     "Marines", "DefenseMultiplier", 1
+   }
 flags         = "BadCityDefender", "CanEscape", "CantReachAir", "WillNever"
 veteran_names =
   _("?vet_rank:green"),
@@ -4083,7 +4083,7 @@ helptext      = _("\
 The Ironclad is an armored ship that is much more sturdy than the Frigate but\
  loses transport capability and the ability to navigate rivers. From the Ironclad\
  onward, warships are excellent at attacking shore targets, and can also pillage\
- buoys.\ 
+ buoys.\
 "), _("
 Ironclads and all modern ships can Stack-Escape：a 60% chance to escape a killed stack if they have more remaining move points than the attacker.\
 ")
@@ -4118,8 +4118,8 @@ targets       = "Balloon", "Submarine", "Helicopter", "LandRail", "Zeppelin"
 bonuses       =
    { "flag", "type", "value"
      "Submarine", "DefenseMultiplier", 3
-     "Marines", "DefenseMultiplier", 1    
-   }   
+     "Marines", "DefenseMultiplier", 1
+   }
 flags         = "BadCityDefender", "CanEscape", "CantReachAir", "WillNever"
 veteran_names =
   _("?vet_rank:green"),
@@ -4173,7 +4173,7 @@ targets       = "Balloon", "Submarine", "Helicopter", "LandRail", "Zeppelin"
 bonuses       =
    { "flag", "type", "value"
      "Submarine", "DefenseMultiplier", 1
-     "Marines", "DefenseMultiplier", 1    
+     "Marines", "DefenseMultiplier", 1
    }
 flags         = "BadCityDefender", "CanEscape", "CantReachAir", "WillNever"
 veteran_names =
@@ -4226,10 +4226,10 @@ cargo         = "Missile"; , "Virtual"
 bonuses       =
    { "flag", "type", "value"
      "Submarine", "DefenseMultiplier", 1
-     "Marines", "DefenseMultiplier", 1 
+     "Marines", "DefenseMultiplier", 1
      "AirAttacker", "DefenseMultiplier", 1
      "Missile", "DefenseMultiplier", 1
-   }   
+   }
 flags         = "BadCityDefender", "CanEscape", "CantReachAir", "WillNever"
 veteran_names =
   _("?vet_rank:green"),
@@ -4340,7 +4340,7 @@ targets       = "Balloon", "Submarine", "Helicopter", "LandRail", "Zeppelin"
 bonuses       =
    { "flag", "type", "value"
      "Submarine", "DefenseMultiplier", 1
-     "Marines", "DefenseMultiplier", 1    
+     "Marines", "DefenseMultiplier", 1
    }
 flags         = "BadCityDefender", "CanEscape", "CantReachAir", "WillNever", "Bombarder"
 veteran_names =
@@ -4414,7 +4414,7 @@ helptext      = _("\
 Submarines are strong attackers but weak defenders. They can carry 8 Missiles.\
  They are unreachable by Air units, but do not block air attacks on surface ships.\
  Submarines can’t attack units on shore. Submarines can’t be seen by other players\
- unless they have a unit or city adjacent to it. \ 
+ unless they have a unit or city adjacent to it. \
 "), _("\
 Submarines have superior attrition rates when attacking in numbers. They excel\
  at hit-and-run against weaker ships.\
@@ -4451,7 +4451,7 @@ targets       = "Balloon", "Submarine", "Helicopter", "Zeppelin"
 cargo         = "Air", "AirProtect", "Air_High_Altitude", "Missile", "Helicopter", "Balloon", "LandAirSea", "Zeppelin"
 bonuses       =
    { "flag", "type", "value"
-     "Marines", "DefenseMultiplier", 1    
+     "Marines", "DefenseMultiplier", 1
    }
 flags         = "BadCityDefender", "Only_Native_Attack", "CanEscape",
                 "CantReachAir", "WillNever"
@@ -4913,7 +4913,7 @@ veteran_move_bonus = 7, 7, 7, 7, 8, 9, 10
 helptext      = _("\
 Compared to other early Commerce units, the Caravan is the only one who can\
  travel by land off roads and rails, and cause no military threat to\
- trade partners. It can defend itself and also fortify. They have 2 7/9 moves.\n\ 
+ trade partners. It can defend itself and also fortify. They have 2 7/9 moves.\n\
 Commerce units can help build Wonders in any city with whom\
  you are not at war. In foreign cities 15+ tiles distant, they can create Trade Routes,\
  increasing net trade in both cities relative to their combined trade. Routes are inactive\
@@ -4960,7 +4960,7 @@ veteran_move_bonus = 3
 helptext      = _("\
 Wagons are the first Commerce unit that can travel by land. Compared to a Caravan, they are defenseless.\
  They must stay on roads and quays. Wagons are useful for\
- transporting slower units. Wagons have 3⅓ move points, giving a range of 10 tiles on roads. \n\ 
+ transporting slower units. Wagons have 3⅓ move points, giving a range of 10 tiles on roads. \n\
 "), _("\
 Wagons allow units with less than 3 move points to travel your roads faster.\
  Any cargo can board a Wagon anywhere; but needs a city, quay, or base to deboard.\
@@ -5206,7 +5206,7 @@ uk_food       = 0
 uk_gold       = 0
 embarks       = "LandRail", "Helicopter"    ; transport helicopter only
 disembarks    = "LandRail", "Helicopter"
-flags         = "IgZOC", "NonMil", "HasNoZOC", "NoBuild", "NoHome", "SuperSpy", 
+flags         = "IgZOC", "NonMil", "HasNoZOC", "NoBuild", "NoHome", "SuperSpy",
                 "EvacuateFirst", "Unbribable", "GameLoss", "Unique", "WillNever"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
@@ -5251,7 +5251,7 @@ uk_food       = 0
 uk_gold       = 0
 embarks       = "LandRail", "Helicopter"    ; transport helicopter only
 disembarks    = "LandRail", "Helicopter"
-flags         = "IgZOC", "NonMil", "HasNoZOC", "NoBuild", "NoHome", "SuperSpy", 
+flags         = "IgZOC", "NonMil", "HasNoZOC", "NoBuild", "NoHome", "SuperSpy",
                 "EvacuateFirst", "Unbribable", "GameLoss", "Unique", "WillNever"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
@@ -5270,7 +5270,7 @@ You can use the DO command to change the gender of the Leader.\
 ")
 
 [unit_barbarian_leader]
-name          = _("Barbarian Leader")
+name          = _("[Barbarian Leader]")
 class         = "Land"
 tech_req      = "None"
 obsolete_by   = "None"
@@ -5358,7 +5358,7 @@ Peasants are the common people of Monarchies. You can encourage them\
 If managed correctly, Peasants can increase your national population\
  growth. They give a tremendous advantage for growing new colonies\
  and settlements faster. \n\
-Peasants can only be made in one city, but you can make more than one per\ 
+Peasants can only be made in one city, but you can make more than one per\
  turn under the right conditions. When a city completes a unit, it will try\
  to make more of them if it doesn’t have a worklist. So be careful!\
 ")
