@@ -165,7 +165,8 @@ function generate_help_menu(key)
       let img_element = html_emoji_from_universal(improvement['name'], "vht");
 
       $("<li data-helptag='" + key + "_" + improvement['id'] + "'>"
-        + "<div>"+improvement['name'] + img_element + "</div>" + "</li>").appendTo("#help_city_improvements_ul");
+        + "<div class='hmi_wrapper'><span class='hmi_text'>"+improvement['name']+"</span>"
+        + img_element + "</div>" + "</li>").appendTo("#help_city_improvements_ul");
     }
   } else if (key == "help_gen_wonders") {
     for (impr_id in improvements) {
@@ -184,7 +185,8 @@ function generate_help_menu(key)
       let img_element = html_emoji_from_universal(improvement['name'], "vht");
 
       $("<li data-helptag='" + key + "_" + improvement['id'] + "'>"
-        +"<div>" + improvement['name'] + img_element + "</div>" + "</li>").appendTo("#help_wonders_of_the_world_ul");
+      + "<div class='hmi_wrapper'><span class='hmi_text'>"+improvement['name']+"</span>"
+      + img_element + "</div>" + "</li>").appendTo("#help_wonders_of_the_world_ul");
     }
   } else if (key == "help_gen_units") {
     for (var i = 0; i < unittype_ids_alphabetic().length; i++) {
@@ -201,7 +203,8 @@ function generate_help_menu(key)
       let img_element = html_emoji_from_universal(punit_type['name'], "vht");
 
       $("<li data-helptag='" + key + "_" + punit_type['id'] + "'>"
-         +"<div>" + punit_type['name'] + img_element + "</div>" + "</li>").appendTo("#help_units_ul");
+         +"<div class='hmi_wrapper'><span class='hmi_text'>" + punit_type['name'] + "</span>"
+         + img_element + "</div>" + "</li>").appendTo("#help_units_ul");
     }
   } else if (key == "help_gen_techs") {
     for (var tech_id in techs) {
