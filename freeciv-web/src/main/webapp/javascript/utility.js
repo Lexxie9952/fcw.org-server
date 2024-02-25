@@ -87,6 +87,16 @@ const inside = (min, x, max) => {
   return x > min && x < max;
 }
 
+/**************************************************************************
+ Basic Min/Max functionality: might be quicker than Math.max()
+**************************************************************************/
+const MAX = (a, b) => {
+  return (a>b ? a : b);
+}
+const MIN = (a, b) => {
+  return (a<b ? a : b)
+}
+
 /****************************************************************************
  Reduce a fraction by finding the Greatest Common Divisor and dividing by it.
 ****************************************************************************/
