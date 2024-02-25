@@ -379,7 +379,7 @@
 Random randomValue=new Random();
 %>
 				<img style="border-radius: 20px 20px 20px 20px; box-shadow: 2px 2px #000a; width:65%"
-				    src="/static/images/fcw-front-page<%=(Math.abs(randomValue.nextInt())%60)+1 %>.png">
+				    src="/static/images/fcw-front-page<%=(Math.abs(randomValue.nextInt())%64)+1 %>.png">
 
 			</div>
 			<div class="container-fluid">
