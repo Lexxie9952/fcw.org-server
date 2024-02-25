@@ -10,7 +10,7 @@
 		</button>
 		<a class="navbar-brand" href="/">
 			<!--Logo font is: Liberation Sans Bold Italic -->
-			<img src="/static/images/brand.png" alt="Freeciv-web">
+			<img style="margin-right:94px" src="/static/images/brand.png" alt="Freeciv-web">
 		</a>
 		</div>
 

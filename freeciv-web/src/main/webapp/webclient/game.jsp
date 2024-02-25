@@ -1,11 +1,11 @@
-    
+
     <div id="game_page" style="display: none;">
-    
+
 		<div id="tabs">
-		    
+
 			<ul id="tabs_menu">
 			    <div id="freeciv_logo" ></div>
-					<div id="ixtjkiller1" style="position: absolute; cursor: pointer; background: rgba(0, 0, 0, 0.0); overflow: hidden; left: 130px; top: 0px; z-index: 999 !important;" onclick="clickMask(event, 1)"><img id="ixtjkiller11" src="/images/ixtjkiller.png"></div>
+					<div id="ixtjkiller1" style="position: absolute; cursor: pointer; background: rgba(0, 0, 0, 0.0); overflow: hidden; left: 93px; top: 0px; z-index: 999 !important;" onclick="clickMask(event, 1)"><img id="ixtjkiller11" src="/images/ixtjkiller.png"></div>
 				<li class="fcw_tab" id="map_tab"><a href="#tabs-map"><img style='float:left; margin-right:5px;' src='/images/map_tab_icon.png'> Map</a></li>
 				<li class="fcw_tab" id="empire_tab"><a href="#tabs-empire"><img style='float:left; margin-right:5px;' src='/images/empire_tab_icon.png'> Empire</a></li>
 				<li class="fcw_tab" id="civ_tab"><a href="#tabs-civ"><img style='float:left; margin-right:5px;' src='/images/gov_tab_icon.png'> Gov.</a></li>
@@ -20,12 +20,12 @@
                 <div id="game_status_panel_top"></div>
 
 				<div id="turn_done_button_div">
-            			  <button id="turn_done_button" type="button" 
+            			  <button id="turn_done_button" type="button"
 						class="button" title="Ends your turn. (Shift+Enter)">Turn Done</button>
 						<img id="compass" onClick="compass_click();" style="position:absolute; float:right; background-color:transparent;margin-top:-3px;margin-left:-100px; margin-right:3px;margin-top:40px" src="/images/iso-compass.png">
         </div>
 			</ul>
-			
+
 			<div id="tabs-map" tabindex="-1" style='overflow:hidden'>
 			  <jsp:include page="canvas.jsp" flush="false"/>
 			</div>
@@ -54,16 +54,16 @@
 			<div id="tabs-opt">
 				<jsp:include page="options.jsp" flush="false"/>
 			</div>
-			
+
 			<div id="tabs-warcalc">
 					<jsp:include page="warcalc.jsp" flush="false"/>
 			</div>
-			
+
 		</div>
 	</div>
-      
-      
+
+
     <div id="dialog" ></div>
     <div id="city_name_dialog" ></div>
-      
- 
+
+
