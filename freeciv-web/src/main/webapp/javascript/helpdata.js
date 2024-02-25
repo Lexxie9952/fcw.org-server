@@ -186,7 +186,7 @@ function show_help()
     //DEBUG: console.log("w:%d, c:%d, u:%d, max:%d",wwidth,cwidth,uwidth,submenu_margin_space);
 
     let help_pane_width = win_width - submenu_margin_space - helpmenu_margin_space;
-    console.log("Help pane width("+help_pane_width+") is "+(help_pane_width / win_width)+"pct of window("+win_width+")");
+    //console.log("Help pane width("+help_pane_width+") is "+(help_pane_width / win_width)+"pct of window("+win_width+")");
     if ((help_pane_width / win_width) < 0.45) {
       // Because 0.45 of window width might be huge on a wide screen, we have to catch the cramped people only:
       if (help_pane_width < 710) {
