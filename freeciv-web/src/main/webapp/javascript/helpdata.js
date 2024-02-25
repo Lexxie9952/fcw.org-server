@@ -63,7 +63,55 @@ const terrain_help = {
 };
 
 var max_help_pane_width;
-var MAX_ALLOWED_HELP_WIDTH = 984;
+
+/* vars for:
+    1. PREVENTS lengthy creation of splash page if we're doing quick
+        help because it will just get removed again.
+    2. PREVENTS recreation of the help page if it has ever already been
+        been launched, so from then on it will show the last thing you
+        you looked up.
+*/
+var regen_help_tab = true;
+var quick_help_in_progress = false;
+
+/****************************************************************************
+ determined if this is a touch enabled device, such as iPhone, iPad.
+****************************************************************************/
+function help_redirect(vut_type, uid) {
+  set_default_mapview_inactive();
+  quick_help_in_progress = true;
+  $('#ui-id-7').trigger("click");  // docs tab
+
+  switch (vut_type) {
+    case VUT_ADVANCE:
+      return;  // not yet implemented
+      break;
+
+    case VUT_GOVERNMENT:
+      return;  // not yet implemented
+      break;
+
+    case VUT_IMPROVEMENT:
+      setTimeout(function() {
+        $("#qhelp_impr_"+uid+"").click();
+      }, 1);
+      break;
+
+    case VUT_TERRAIN:
+      return;  // not yet implemented
+      break;
+
+    case VUT_EXTRA:
+      return;  // not yet implemented
+      break;
+
+    case VUT_UTYPE:
+      setTimeout(function() {
+        $("#qhelp_utype_"+uid+"").click();
+      }, 1);
+      break;
+  }
+}
 
 /**************************************************************************
  Show the Freeciv-web Help Dialog
@@ -71,48 +119,89 @@ var MAX_ALLOWED_HELP_WIDTH = 984;
 function show_help()
 {
   $("#tabs-hel").show();
-  $("#help_footer").hide();$("#help_footer").remove();
-  $("#help_menu").remove();
-  $("#help_info_page").remove();
-  $("<ul id='help_menu'></ul><div id='help_info_page'></div>").appendTo("#tabs-hel");
+  // never used: $("#help_footer").hide();$("#help_footer").remove();
+  if (regen_help_tab) {   // i.e. if first time coming into page:
+    $("#help_menu").remove();
+    $("#help_info_page").remove();
+    $("<ul id='help_menu'></ul><div id='help_info_page'></div>").appendTo("#tabs-hel");
+    generate_help_menu("help_gen_ruleset");
 
-  generate_help_menu("help_gen_ruleset");
+    for (var sec_id in helpdata_order) {
+      var key = helpdata_order[sec_id];
+      if (sec_id)
 
-  for (var sec_id in helpdata_order) {
-    var key = helpdata_order[sec_id];
-    if (sec_id)
-
-    if (hidden_menu_items.indexOf(key) > -1 || key == "help_gen_ruleset") {
-      continue;
-    } else if (key.indexOf("help_gen") != -1) {
-      generate_help_menu(key);
-    } else if (toplevel_menu_items.indexOf(key) > -1) {
-      generate_help_toplevel(key);
-    } else {
-      var parent_key = find_parent_help_key(key);
-      $("<li id='" + key +  "' data-helptag='" + key +  "'>"
-        + helpdata_tag_to_title(key) + "</li>").appendTo(parent_key);
+      if (hidden_menu_items.indexOf(key) > -1 || key == "help_gen_ruleset") {
+        continue;
+      } else if (key.indexOf("help_gen") != -1) {
+        generate_help_menu(key);
+      } else if (toplevel_menu_items.indexOf(key) > -1) {
+        generate_help_toplevel(key);
+      } else {
+        var parent_key = find_parent_help_key(key);
+        $("<li id='" + key +  "' data-helptag='" + key +  "'>"
+          + helpdata_tag_to_title(key) + "</li>").appendTo(parent_key);
+      }
     }
+
+    $("#help_menu").menu({
+      select: function( event, ui ) {handle_help_menu_select(ui); }
+    });
+
+    if (!quick_help_in_progress) show_help_intro();
+    regen_help_tab = false;
   }
 
-  $("#help_menu").menu({
-    select: function( event, ui ) {handle_help_menu_select(ui); }
-  });
-
-  show_help_intro();
+  // Re-apply styles in case user resized windows:
   $("#tabs-hel").css("height", $(window).height() - 60);
 
   if (is_small_screen()) {
     $("#help_info_page").css("max-width", $(window).width()-165);
     $("#help_info_page").css({"margin":"0px","padding":"0px","font-size":"90%"});
-    $("#help_footer").remove();
-    $("#help_footer").hide();
-  } else {
-    max_help_pane_width = $(window).width() - $("#help_menu").width() - 60;
-    if (max_help_pane_width > MAX_ALLOWED_HELP_WIDTH)
-      max_help_pane_width = MAX_ALLOWED_HELP_WIDTH;
-    $("#help_info_page").css("max-width", max_help_pane_width);
-    $("#help_footer").show();
+    // never used: $("#help_footer").remove();
+    // never used: $("#help_footer").hide();
+  }
+  else { /* large screen */
+                          /* old code */
+                          /* max_help_pane_width = $(window).width() - $("#help_menu").width() - 60;
+                          if (max_help_pane_width > MAX_ALLOWED_HELP_WIDTH) {
+                            max_help_pane_width = MAX_ALLOWED_HELP_WIDTH;
+                          }
+                          $("#help_info_page").css("max-width", max_help_pane_width);   */
+
+    /* ----------- Adjust the help-item helptext pane to fit the screen --------- */
+    /* This var is for blocking 'proposed' widths that are too great. Therefore we
+       filter out those widths greater than 984. We also do it here instead of global
+       because user might have resized window. */
+    var MAX_ALLOWED_HELP_WIDTH = MIN(984, (0.5125 * $(window).width()));
+
+    // Find out which category's submenu pops out to the most width:
+    const wwidth = $("#help_wonders_of_the_world_ul").width();
+    const cwidth = $("#help_city_improvements_ul").width();
+    const uwidth = $("#help_units_ul").width();
+    let submenu_margin_space = MAX( MAX(wwidth,cwidth), uwidth );
+
+    const helpmenu_margin_space = $("#help_menu").width(); // Far left main category help menu
+    const win_width = $(window).width();
+    const horiz_pad_space = 60;
+    //DEBUG: console.log("w:%d, c:%d, u:%d, max:%d",wwidth,cwidth,uwidth,submenu_margin_space);
+
+    let help_pane_width = win_width - submenu_margin_space - helpmenu_margin_space;
+    console.log("Help pane width("+help_pane_width+") is "+(help_pane_width / win_width)+"pct of window("+win_width+")");
+    if ((help_pane_width / win_width) < 0.45) {
+      // Because 0.45 of window width might be huge on a wide screen, we have to catch the cramped people only:
+      if (help_pane_width < 710) {
+        submenu_margin_space = 0;
+        // Cramped! use all the screen we can!
+        MAX_ALLOWED_HELP_WIDTH = win_width - helpmenu_margin_space - horiz_pad_space;
+      }
+    }
+    if (help_pane_width < 700) $("#help_info_page").css("overflow-x", "auto");
+    else $("#help_info_page").css("overflow-x", "hidden");
+    //DEBUG: console.log("help menu margin space = "+submenu_margin_space)
+    $("#help_info_page").css("margin-left", (""+submenu_margin_space+"px"))
+    max_help_pane_width = win_width - submenu_margin_space - helpmenu_margin_space - horiz_pad_space;
+    $("#help_info_page").css("max-width", MIN(max_help_pane_width, MAX_ALLOWED_HELP_WIDTH));
+    // never used: $("#help_footer").show();
   }
 }
 
@@ -163,8 +252,8 @@ function generate_help_menu(key)
             continue; // if major nukes are OFF, suppress illegal prod choice.
       }
       let img_element = html_emoji_from_universal(improvement['name'], "vht");
-
-      $("<li data-helptag='" + key + "_" + improvement['id'] + "'>"
+      let lookup_id = "qhelp_impr_" + improvement['id'];
+      $("<li id ='"+lookup_id+"' data-helptag='" + key + "_" + improvement['id'] + "'>"
         + "<div class='hmi_wrapper'><span class='hmi_text'>"+improvement['name']+"</span>"
         + img_element + "</div>" + "</li>").appendTo("#help_city_improvements_ul");
     }
@@ -183,8 +272,8 @@ function generate_help_menu(key)
           continue; // if major nukes are OFF, suppress illegal prod choice.
       }
       let img_element = html_emoji_from_universal(improvement['name'], "vht");
-
-      $("<li data-helptag='" + key + "_" + improvement['id'] + "'>"
+      let lookup_id = "qhelp_impr_" + improvement['id'];
+      $("<li id ='"+lookup_id+"' data-helptag='" + key + "_" + improvement['id'] + "'>"
       + "<div class='hmi_wrapper'><span class='hmi_text'>"+improvement['name']+"</span>"
       + img_element + "</div>" + "</li>").appendTo("#help_wonders_of_the_world_ul");
     }
@@ -201,8 +290,8 @@ function generate_help_menu(key)
         }
       }
       let img_element = html_emoji_from_universal(punit_type['name'], "vht");
-
-      $("<li data-helptag='" + key + "_" + punit_type['id'] + "'>"
+      let lookup_id = "qhelp_utype_" + punit_type['id'];
+      $("<li id ='"+lookup_id+"' data-helptag='" + key + "_" + punit_type['id'] + "'>"
          +"<div class='hmi_wrapper'><span class='hmi_text'>" + punit_type['name'] + "</span>"
          + img_element + "</div>" + "</li>").appendTo("#help_units_ul");
     }
@@ -373,7 +462,7 @@ function generate_help_text(key)
   if (key.indexOf("help_gen_terrain") != -1) {
     var terrain = terrains[parseInt(key.replace("help_gen_terrain_", ""))];
     msg = "<h1>" + terrain['name'] + "</h1>"
-      + "<img src='/images/terrain/"+terrain['name'].toLowerCase().replace(" ","")+".png'>"
+      + "<img src='/images/terrain/"+terrain['name'].toLowerCase().replace(" ","")+".png'><br><br>"
       + "<div class='"+pane_class+"'>"
       + cleaned_text(terrain['helptext'])
 	    + "<br><br>"
@@ -502,13 +591,13 @@ function generate_help_text(key)
   } else if (key.indexOf("help_gen_improvements") != -1 || key.indexOf("help_gen_wonders") != -1) {
     var improvement = improvements[parseInt(key.replace("help_gen_wonders_", "").replace("help_gen_improvements_", ""))];
     msg = "<h1>" + improvement['name'] + "</h1>"+"<div class='"+pane_class+"'>"
-	    + render_sprite(get_improvement_image_sprite(improvement)) + "<br>"
-	    + cleaned_helptext(improvement['helptext'])
-            + "<b><br><br>Cost: <span class='help_stats>" + improvement['build_cost'] + "</span>"
-            + "<br>Upkeep: <span class='help_stats>" + improvement['upkeep'] + "</span>";
+	    + render_sprite(get_improvement_image_sprite(improvement)) + "<br><br>"
+	    + "<div class='helptext_pane'>"+cleaned_helptext(improvement['helptext'])+"</div>"
+            + "<b><br><br>Cost: <span class='help_stats'>" + improvement['build_cost'] + "</span>"
+            + "<br>Upkeep: <span class='help_stats'>" + improvement['upkeep'] + "</span>";
     var reqs = get_improvement_requirements(improvement['id']);
     if (reqs != null) {
-      msg += "<br>Requirements: <span class='help_stats>";
+      msg += "<br>Requirements: <span class='help_stats'>";
       for (var n = 0; n < reqs.length; n++) {
        msg += techs[reqs[n]]['name'] + " ";
       }
