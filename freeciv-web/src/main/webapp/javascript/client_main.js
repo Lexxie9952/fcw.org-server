@@ -165,7 +165,7 @@ function setup_window_size ()
     // Optimise space/fit in game unit panel:
     $("#game_unit_panel").css({"transform":"scale(0.95)","float":"left","margin-top":"-12px","margin-left":"-22px","width":"100%;"});
     $("#game_unit_info").css({"float":"left", "width":"2000%"}); // continuous horizontal drag-scroll panel
-    $("#help_footer").hide();
+    // WE DON'T HAVE OR USE THIS, NOT SURE WHAT IT WAS PLANNED FOR: $("#help_footer").hide();
 
     $(".ui-dialog-titlebar").show(); // patch:was hidden on mobile for more room, but minimize-disabling is worse
     // TODO: find accurate #id method to do this, ui-id-12 is not for certain:
