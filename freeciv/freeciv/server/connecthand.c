@@ -230,12 +230,12 @@ void establish_new_connection(struct connection *pconn)
   /* introduce the server to the connection */
   if (fc_gethostname(hostname, sizeof(hostname)) == 0) {
     notify_conn(dest, NULL, E_CONNECTION, ftc_any,
-                _("Welcome to the %s Server running at %s port %d."),
-                freeciv_name_version(), hostname, srvarg.port);
+                _("Welcome to FCW Game Launch Area.")/*,
+                 freeciv_name_version(), hostname, srvarg.port*/);
   } else {
     notify_conn(dest, NULL, E_CONNECTION, ftc_any,
-                _("Welcome to the %s Server at port %d."),
-                freeciv_name_version(), srvarg.port);
+                _("Welcome to FCW Server at port %d."),
+                /*freeciv_name_version(),*/ srvarg.port);
   }
 
   /* FIXME: this (getting messages about others logging on) should be a
@@ -350,11 +350,15 @@ void establish_new_connection(struct connection *pconn)
         }
       }
     }
-  } else {
+  } else if (strcmp(pconn->username, player_name(pconn->playing)) == 0){
     notify_conn(dest, NULL, E_CONNECTION, ftc_server,
-		_("You are logged in as '%s' connected to %s.<br>Command line is active."),
+		_("You are logged in as %s.<br>Command line is active."), player_name(pconn->playing));
+  } else {
+        notify_conn(dest, NULL, E_CONNECTION, ftc_server,
+    		_("You are logged in as '%s' connected to %s.<br>Command line is active."),
                 pconn->username,
                 player_name(pconn->playing));
+
   }
 
   /* Send information about delegation(s). */
