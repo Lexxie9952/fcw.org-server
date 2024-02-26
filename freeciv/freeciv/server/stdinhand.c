@@ -1448,8 +1448,8 @@ static bool cmdlevel_command(struct connection *caller, char *str, bool check)
 
   ntokens = get_tokens(str, arg, 2, TOKEN_DELIMITERS);
 
+/* If no argument supplied, list the levels */
   if (ntokens == 0) {
-    /* No argument supplied; list the levels */
     cmd_reply(CMD_CMDLEVEL, caller, C_COMMENT, horiz_line);
     cmd_reply(CMD_CMDLEVEL, caller, C_COMMENT,
               _("Command access levels in effect:"));
@@ -1461,15 +1461,18 @@ static bool cmdlevel_command(struct connection *caller, char *str, bool check)
     cmd_reply(CMD_CMDLEVEL, caller, C_COMMENT,
               _("Command access level for new connections: %s"),
               cmdlevel_name(default_access_level));
-    cmd_reply(CMD_CMDLEVEL, caller, C_COMMENT,
-              _("Command access level for first player to take it: %s"),
-              cmdlevel_name(first_access_level));
-    cmd_reply(CMD_CMDLEVEL, caller, C_COMMENT, horiz_line);
+    if (!is_longturn()) {
+      cmd_reply(CMD_CMDLEVEL, caller, C_COMMENT,
+                _("Command access level for first player to take it: %s"),
+                cmdlevel_name(first_access_level));
+      cmd_reply(CMD_CMDLEVEL, caller, C_COMMENT, horiz_line);
+    }
     return TRUE;
   }
 
-  /* A level name was supplied; set the level. */
-  level = cmdlevel_by_name(arg[0], fc_strcasecmp);
+  level = cmdlevel_by_name(arg[0], fc_strcasecmp);  // Retrieve requested cmdlevel
+
+/* If a nonexistent cmdlevel was passed, fail out with a message: */
   if (!cmdlevel_is_valid(level)) {
     const char *cmdlevel_names[CMDLEVEL_COUNT];
     struct astring astr = ASTRING_INIT;
@@ -1485,7 +1488,10 @@ static bool cmdlevel_command(struct connection *caller, char *str, bool check)
               astr_build_or_list(&astr, cmdlevel_names, i));
     astr_free(&astr);
     goto CLEAN_UP;
-  } else if (caller && level > conn_get_access(caller)) {
+  }
+
+/* Fail out if player tries a disallowed self-promotion: */
+  else if (caller && level > conn_get_access(caller)) {
     cmd_reply(CMD_CMDLEVEL, caller, C_FAIL,
               _("Cannot increase command access level to '%s';"
                 " you only have '%s' yourself."),
@@ -1497,8 +1503,25 @@ static bool cmdlevel_command(struct connection *caller, char *str, bool check)
     return TRUE;                /* looks good */
   }
 
+/* Fail out if a rando tries to change access levels in a public longturn game: */
+  if (is_longturn()) {
+    /* ► If called by the server (!caller):
+           ● Don't lock out completion of the function.
+       ► If called by a player (caller):
+           ● Don't lock out supercows.
+           ● Don't lock out private games. */
+    if (!caller || (is_supercow(caller) || srvarg.server_password_enabled)) {
+      /* Not locked out. Proceed. */
+    } else {
+      cmd_reply(CMD_CMDLEVEL, caller, C_OK,
+              _("Denied: '/cmdlevel' requires Gamemaster"
+                "access for public longturn games."));
+      goto CLEAN_UP;
+    }
+  }
+
+/* No player connection.name supplied: set for all connections */
   if (ntokens == 1) {
-    /* No playername supplied: set for all connections */
     conn_list_iterate(game.est_connections, pconn) {
       if (pconn != caller) {
         (void) set_cmdlevel(caller, pconn, level);
@@ -1518,29 +1541,38 @@ static bool cmdlevel_command(struct connection *caller, char *str, bool check)
               cmdlevel_name(level));
     /* Set default access for first connection. */
     first_access_level = level;
-    cmd_reply(CMD_CMDLEVEL, caller, C_OK,
-              _("Command access level set to '%s' "
-                "for first player to grab it."),
-              cmdlevel_name(level));
-
+    if (!is_longturn() || caller) {
+      cmd_reply(CMD_CMDLEVEL, caller, C_OK,
+                _("Command access level set to '%s' "
+                  "for first player to grab it."),
+                cmdlevel_name(level));
+    }
     ret = TRUE;
+  }
 
-  } else if (fc_strcasecmp(arg[1], "new") == 0) {
+/* arg[1] supplied, which is either 'new', 'first' or 'playename': */
+
+  /* Request to set the access level for 'new' connections: */
+  else if (fc_strcasecmp(arg[1], "new") == 0) {
     default_access_level = level;
     cmd_reply(CMD_CMDLEVEL, caller, C_OK,
               _("Command access level set to '%s' for new players."),
               cmdlevel_name(level));
     if (level > first_access_level) {
       first_access_level = level;
-      cmd_reply(CMD_CMDLEVEL, caller, C_OK,
-                _("Command access level set to '%s' "
-                  "for first player to grab it."),
-                cmdlevel_name(level));
+      /* If longturn and we're here, it's a supercow or the server calling itself.
+         Only a legit admin caller prompts a message about grabbing cmdlevel */
+      if (!is_longturn() || caller) {
+        cmd_reply(CMD_CMDLEVEL, caller, C_OK,
+                  _("Command access level set to '%s' "
+                    "for first player to grab it."),
+                  cmdlevel_name(level));
+      }
     }
-
     ret = TRUE;
-
-  } else if (fc_strcasecmp(arg[1], "first") == 0) {
+  }
+  /* Request to set the access level for the 'first' connection (who decides to grab it): */
+  else if (fc_strcasecmp(arg[1], "first") == 0) {
     first_access_level = level;
     cmd_reply(CMD_CMDLEVEL, caller, C_OK,
               _("Command access level set to '%s' "
@@ -1548,18 +1580,24 @@ static bool cmdlevel_command(struct connection *caller, char *str, bool check)
               cmdlevel_name(level));
     if (level < default_access_level) {
       default_access_level = level;
-      cmd_reply(CMD_CMDLEVEL, caller, C_OK,
-                _("Command access level set to '%s' for new players."),
-                cmdlevel_name(level));
+      // if !longturn OR a supercow did a manual adjustment, send a message:
+      if (!is_longturn() || caller) {
+        cmd_reply(CMD_CMDLEVEL, caller, C_OK,
+                  _("Command access level set to '%s' "
+                    "for first player to grab it."),
+                  cmdlevel_name(level));
+      }
     }
-
     ret = TRUE;
-
-  } else if ((ptarget = conn_by_user_prefix(arg[1], &match_result))) {
-    if (set_cmdlevel(caller, ptarget, level)) {
-      ret = TRUE;
-    }
-  } else {
+  }
+  /* Request to set the access level for a named connection (!playername): */
+  else if ((ptarget = conn_by_user_prefix(arg[1], &match_result))) {
+      if (set_cmdlevel(caller, ptarget, level)) {
+        ret = TRUE;
+       }
+  }
+  /* None of above: FAIL */
+  else {
     cmd_reply_no_such_conn(CMD_CMDLEVEL, caller, arg[1], match_result);
   }
 
