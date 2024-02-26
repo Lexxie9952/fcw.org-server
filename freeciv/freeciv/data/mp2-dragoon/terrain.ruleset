@@ -1575,13 +1575,13 @@ native_to      = "Submarine"
 flags          = "NativeTile"
 helptext       = _("\
 In Deep Ocean, modern submarines can dive deep to be undetected.\
-“Building Depth” affects the tile so all Submarine class units are\
-hidden to adjacent units! They can still be attacked, but can’t be\
-discovered unless moving into the tile. A Missile Submarine is required\
-to “Build Depth”; other subs on the tile will join it at depth. The\
-tile can’t have a Buoy or Fishtrap. The depth associated to the tile\
-remains if any submarines are on it at turn change. A submarine may\
-leave and return, automatically achieving depth on arrival.\
+ “Building Depth” affects the tile so all Submarine class units are\
+ hidden to adjacent units! They can still be attacked, but can’t be\
+ discovered unless moving into the tile. A Missile Submarine is required\
+ to “Build Depth”; other subs on the tile will join it at depth. The\
+ tile can’t have a Buoy or Fishtrap. The depth associated to the tile\
+ remains if any submarines are on it at turn change. A submarine may\
+ leave and return, automatically achieving depth on arrival.\
 ")
 
 
