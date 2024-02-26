@@ -49,6 +49,8 @@
 #include "movement.h"
 #include "player.h"
 #include "version.h"
+#include "extras.h"
+#include "tech.h"
 
 /* client */
 #include "client_main.h"
@@ -84,6 +86,7 @@ enum manuals {
   MANUAL_GOVS,
   MANUAL_UNITS,
   MANUAL_TECHS,
+  MANUAL_EXTRAS,
   MANUAL_COUNT
 };
 
@@ -736,6 +739,27 @@ static bool manual_command(struct tag_types *tag_info)
           fprintf(doc, "%s", tag_info->item_end);
         }
       } advance_iterate_end;
+      break;
+
+    case MANUAL_EXTRAS:
+      /* TRANS: markup ... Freeciv version ... ruleset name ... markup */
+      fprintf(doc, _("%sFreeciv %s extras help (%s)%s\n\n"),
+              tag_info->title_begin, VERSION_STRING, game.control.name,
+              tag_info->title_end);
+      extra_type_iterate(pextra) {
+        char buf[64000];
+
+        fprintf(doc, tag_info->item_begin, "extra", extra_index(pextra));
+        fprintf(doc, "%s%s%s\n\n", tag_info->sect_title_begin,
+                extra_name_translation(pextra), tag_info->sect_title_end);
+
+        fprintf(doc, tag_info->subitem_begin, "helptext");
+        helptext_extra(buf, sizeof(buf), NULL, "", pextra);
+        fprintf(doc, "%s", buf);
+        fprintf(doc, "%s", tag_info->subitem_end);
+
+        fprintf(doc, "%s", tag_info->item_end);
+      } extra_type_iterate_end;
       break;
 
     case MANUAL_COUNT:
