@@ -2419,7 +2419,8 @@ static struct setting settings[] = {
            SSET_RULES_FLEXIBLE, SSET_SOCIOLOGY, SSET_RARE, ALLOW_NONE, ALLOW_CTRL,
            N_("City trading"),
            N_("If turned off, trading cities in the diplomacy dialog "
-              "is not allowed."), NULL, NULL,
+              "is not allowed. In longturn games it may be possible "
+              "with a Gamemaster request."), NULL, NULL,
            GAME_DEFAULT_TRADING_CITY)
 
   GEN_ENUM("caravan_bonus_style", game.info.caravan_bonus_style,
