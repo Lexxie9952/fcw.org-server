@@ -127,6 +127,10 @@ function mapview_mouse_click(e)
       mapview_mouse_movement = false;
     } else {   // PROCESS NORMAL LEFT CLICK HERE
       //console.log("mapview_mouse_click about to call action_button_pressed")
+      if (e.metaKey) {
+        mapview_metakey_click(mouse_x, mouse_y);
+        return;
+      }
       action_button_pressed(mouse_x, mouse_y, SELECT_POPUP);
 
       mapview_mouse_movement = false;
@@ -426,7 +430,24 @@ function action_button_pressed(canvas_x, canvas_y, qtype)
   }
 
 }
+/**************************************************************************
+Kinda same as above but when meta key cmd/win is held down: asks for help
+**************************************************************************/
+function mapview_metakey_click(canvas_x, canvas_y) {
+  var ptile = canvas_pos_to_tile(canvas_x, canvas_y);
 
+  // Units, terrain, or extras... for now, units:
+  let sunits = tile_units(ptile);
+  if (sunits.length > 0) {
+    key_unit_help(sunits[0]);
+  }
+  else {
+      //extras, terrain
+  }
+  // Make sure we didn't trigger any draggy mode stuff:
+  clear_all_modes();
+  mapview_mouse_movement = false;
+}
 
 /**************************************************************************
   Do some appropriate action when the "main" mouse button (usually
