@@ -1278,11 +1278,14 @@ function show_intro_dialog(title, message) {
     join_game_title_text = "Go to Game Launch area.";
   }
 
+  const default_widescreen_width = $(window).width() * .60;
+  const widescreen_width = MIN(default_widescreen_width, 900);  // Don't go too wide
+
   $("#dialog").attr("title", title);
   $("#dialog").dialog({
       bgiframe: true,
       modal: true,
-      width: is_small_screen() ? "90%" : "60%",
+      width: is_small_screen() ? "90%" : (""+widescreen_width+"px"),
       beforeClose: function( event, ui ) {
         // if intro dialog is closed, then check the username and connect to the server.
         if (dialog_close_trigger != "button") {

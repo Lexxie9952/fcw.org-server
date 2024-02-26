@@ -444,7 +444,7 @@ function init_common_intro_dialog() {
     if (is_longturn()) {
         setTimeout(show_longturn_intro_dialog, 300);
     } else {
-      var msg =  "After you Join Game, click the <b>Game</b> button to select rules and settings.<br>" +
+      var msg =  "After you Join Game, click the <b>SETUP</b> button to select rules and settings.<br>" +
                   "Wait for other players <b>before</b> clicking <b>Start</b>.";
       show_intro_dialog("Multiplayer Game", msg);
     }
