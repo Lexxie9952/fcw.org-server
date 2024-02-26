@@ -1,6 +1,7 @@
 <img src='https://static.wikia.nocookie.net/freecivweb/images/f/f6/Mp2elephant_.png'>
 <b><a href="http://freeciv.fandom.com/wiki/Multiplayer_II:_Elephant,_Game_Manual" target="_blank">Full Game Manual, MP2-Elephant</a></b>
-<u>Useful supplements to the in-game manual</u> <i>(from the Full Game Manual)</i>:
+<br>
+<u class="help_stats">Useful supplements to the in-game manual</u> <i>(from the Full Game Manual)</i>:
 <a href="https://freeciv.fandom.com/wiki/Combat.mp2e" target="_blank">Combat</a>
 <a href="https://freeciv.fandom.com/wiki/Zones_of_control" target="_blank">Zones of Control</a>
 <a href="https://freeciv.fandom.com/wiki/Economy.mp2e" target="_blank">Economy</a>
@@ -9,7 +10,8 @@
 <a href="https://freecivweb.fandom.com/wiki/Strategy_Guide" target='_blank'>Multiplayer Strategy Guide</a>
 <a href="https://freecivweb.fandom.com/wiki/Movement_in_MP2-Elephant" target='_blank'>Movement Rules in MP2-Elephant</a>
 <a href="https://freecivweb.fandom.com/wiki/RTS" target='_blank'>RTS</a>
-<u>Charts:</u>
+<br>
+<u class="help_stats">Charts:</u>
 <a href="https://freecivweb.fandom.com/wiki/Bases.mp2e" target="_blank">Bases</a>
 <a href="https://freeciv.fandom.com/wiki/Terrain.mp2e#Terrain_Chart" target="_blank">Terrain</a>
 <a href="https://freeciv.fandom.com/wiki/Government.mp2e#Government_Chart" target="_blank">Governments</a>

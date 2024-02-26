@@ -1,11 +1,13 @@
 <b><a href="http://freeciv.fandom.com/wiki/Multiplayer_II:_Caravel,_Game_Manual" target="_blank">Full Game Manual, MP2-Caravel</a></b>
-<u>Useful supplements to the in-game manual</u> <i>(from the Full Game Manual)</i>:
+<br>
+<u class="help_stats">Useful supplements to the in-game manual</u> <i>(from the Full Game Manual)</i>:
 <a href="http://freeciv.fandom.com/wiki/Combat.mp2c" target="_blank">Combat</a>
 <a href="http://freeciv.fandom.com/wiki/Economy.mp2c" target="_blank">Economy</a>
 <a href="http://freeciv.fandom.com/wiki/Diplomacy.mp2c" target="_blank">Diplomacy</a>
 <a href="https://freeciv.fandom.com/wiki/Cities.mp2c#City_Output_Sequence" target="_blank">City Output Sequence</a>
 <a href="http://freecivweb.fandom.com/wiki/Strategy_Guide" target='_blank'>Multiplayer Strategy Guide</a>
-<u>Charts:</u>
+<br>
+<u class="help_stats">Charts:</u>
 <a href="http://freecivweb.fandom.com/wiki/Bases.mp2c" target="_blank">Bases</a>
 <a href="http://freeciv.fandom.com/wiki/Terrain.mp2c#Terrain_Chart" target="_blank">Terrain</a>
 <a href="http://freeciv.fandom.com/wiki/Government.mp2c#Government_Chart" target="_blank">Governments</a>
