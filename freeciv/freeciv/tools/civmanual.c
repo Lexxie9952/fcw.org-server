@@ -751,7 +751,7 @@ static bool manual_command(struct tag_types *tag_info)
 
         fprintf(doc, tag_info->item_begin, "extra", extra_index(pextra));
         fprintf(doc, "%s%s%s\n\n", tag_info->sect_title_begin,
-                extra_name_translation(pextra), tag_info->sect_title_end);
+                extra_rule_name(pextra), tag_info->sect_title_end);
 
         fprintf(doc, tag_info->subitem_begin, "helptext");
         helptext_extra(buf, sizeof(buf), NULL, "", pextra);
