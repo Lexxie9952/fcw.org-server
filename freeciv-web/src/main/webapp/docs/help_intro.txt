@@ -17,4 +17,5 @@ Freeciv-Web has <b><a href="https://discord.gg/Zj8UQSN" target="_new">Discord ch
 It helps validate your in-game identity in multiplayer games.<br>Also posted there are <a href='https://discord.gg/p9M5RME' target='_new'>#rules</a>
 to ensure fun, fair, friendly games.
 <br><br>
-We're looking for developers to improve the game! Come say hi on <a href="https://discord.gg/Zj8UQSN" target="_new">Discord</a>
+We're looking for developers to improve the game! Come say <q>hi</q> on <a href="https://discord.gg/Zj8UQSN" target="_new">Discord!</a>
+<br>
