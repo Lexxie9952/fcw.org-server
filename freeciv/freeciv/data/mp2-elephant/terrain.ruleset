@@ -1422,12 +1422,12 @@ reqs           =
       "TerrainClass", "Land", "Local"
     }
 helptext = _("\
-Villages (also called \"huts\") are primitive communities spread \
+Villages (also called \"Huts\") are primitive communities spread \
 across the world at the beginning of the game. Any land unit can enter \
 a village, making the village disappear and deliver a random response. \
 If the village is friendly, the player \
-could receive artifacts worth some gold, or a mercenary military unit \
-with no upkeep. \n\
+could receive artifacts worth some gold, a map, a mercenary military unit \
+with no upkeep, some bulbs, or even Goods or a Boat. \n\
 "), _("\
 Later in the game, helicopters may also enter villages, but overflight \
 by other aircraft will cause the villagers to take fright and disband.\
@@ -2382,7 +2382,7 @@ reqs           =
     }
 build_time     = 2
 removal_time   = 8
-conflicts      = "Fortress", "Naval Base", "Castle", "Bunker", "Airbase", "River", "Canal", "Waterway" ;; ,"MountainRiver" -- not needed unless T.Walls allowed back onto Moutains terrain
+conflicts      = "Fortress", "Naval Base", "Castle", "Bunker", "Airbase", "River", "Canal", "Waterway";;,MountainRiver" -- not needed unless T.Walls allowed back onto Moutains terrain
 defense_bonus  = 0
 native_to      = "Land", "LandNoKill", "LandAirSea", "LandRoad", "Big Land"
 flags          = "NativeTile"
@@ -2418,9 +2418,9 @@ reqs           =
     }
 build_time     = 10
 removal_time   = 0
-flags          = "NativeTile", "Quayable", "IrrigationSource", "WaterwaySource"
 native_to      = "Trireme", "Sea", "RiverShip", "Land", "LandAirSea", "LandNoKill", "Helicopter", "Submarine",
                  "Big Land"
+flags          = "NativeTile", "Quayable", "IrrigationSource", "WaterwaySource"
 helptext          = _("\
 Canals are a canal-type allowing all ships to travel over land tiles. They provide \
 the same move bonus to land units as a River does. Canals can be \
@@ -2538,7 +2538,7 @@ appearance_reqs =
       "Extra",   "Wheat",    "Adjacent", FALSE
       "Extra",   "Pheasant", "Adjacent", FALSE
     }
-helptext = "Elk provide lots of food and production and can be irrigated."
+helptext = "Elk provide +2 food and +2 production, and can be irrigated."
 
 [extra_furs]
 name           = _("Furs")
@@ -2576,7 +2576,7 @@ appearance_reqs =
       "Extra",   "Silk",     "Adjacent", FALSE
       "Extra",   "Pheasant", "Adjacent", FALSE
     }
-helptext = "Furs provide surplus food, +1 shield, and a large trade bonus."
+helptext = "Furs provide surplus +1 food, +1 shield, and a large +3 trade bonus."
 
 [extra_coal]
 name           = _("Coal")
@@ -2590,7 +2590,7 @@ act_gfx_alt    = "-"
 act_gfx_alt2   = "-"
 rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
-helptext = "Coal mines provide a massive plenitude of production in any age."
+helptext = "Coal provides a +2 plenitude of production in any age. +5 if mined."
 
 [extra_fish]
 name           = _("Fish")
@@ -2604,7 +2604,7 @@ act_gfx_alt    = "-"
 act_gfx_alt2   = "-"
 rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
-helptext = "Fish provide food and trade which increase with government, Harbors, and Fishtraps."
+helptext = "Fish provide +2 food and trade which increase with government, Harbors, and Fishtraps."
 
 [extra_fruit]
 name           = _("Fruit")
@@ -2618,7 +2618,7 @@ act_gfx_alt    = "-"
 act_gfx_alt2   = "-"
 rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
-helptext = "Fruits provides a copious food, and substantial trade—with no work required."
+helptext = "Fruit providess a copious +4 food, and substantial +2 trade—with no work required."
 
 [extra_gems]
 name           = _("Gems")
@@ -2648,7 +2648,7 @@ appearance_reqs =
       "Extra",   "Wine",     "Adjacent", FALSE
       "Extra",   "Silk",     "Adjacent", FALSE
     }
-helptext = "Gems rival wine and gold in producing high trade and wealth."
+helptext = "With +5 trade, Gems rival wine and gold in producing high trade and wealth."
 
 [extra_rubber]
 name           = _("Rubber")
@@ -2677,7 +2677,7 @@ appearance_reqs =
       "Extra",   "Gems",     "Adjacent", FALSE
       "Extra",   "Resources","Adjacent", FALSE
     }
-helptext = "Rubber gives good production and a small trade bonus."
+helptext = "Rubber gives +2 production and a +2 trade bonus."
 
 [extra_buffalo]
 name           = _("Buffalo")
@@ -2691,7 +2691,7 @@ act_gfx_alt    = "-"
 act_gfx_alt2   = "-"
 rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
-helptext = "Buffalo supply a sizeable resource bonus to production."
+helptext = "Buffalo supply a +2  bonus to production."
 
 [extra_wheat]
 name           = _("Wheat")
@@ -2705,7 +2705,7 @@ act_gfx_alt    = "-"
 act_gfx_alt2   = "-"
 rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
-helptext = "Wheat supplies ample food to boost population growth."
+helptext = "Wheat supplies +2 food to its tile, boosting population growth."
 
 [extra_oasis]
 name           = _("Oasis")
@@ -2735,7 +2735,7 @@ appearance_reqs =
       "Extra",   "Wheat",    "Adjacent", FALSE
       "Extra",   "Fruit",    "Adjacent", FALSE
     }
-helptext = "An Oasis supplies as much food as Wheat and serves as an irrigation source."
+helptext = "An Oasis gives a desert as much food asa  Wheat tile, while also serving as an irrigation source."
 
 [extra_peat]
 name           = _("Peat")
@@ -2763,7 +2763,7 @@ appearance_reqs =
       "Extra",   "Peat",     "Adjacent", FALSE
       "Extra",   "Resources","Adjacent", FALSE
     }
-helptext = "Peat gives superior production and requires no work to collect."
+helptext = "Peat gives a superior +4 production and requires no work to collect."
 
 [extra_pheasant]
 name           = _("Pheasant")
@@ -2791,7 +2791,7 @@ act_gfx_alt    = "-"
 act_gfx_alt2   = "-"
 rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
-helptext = "Resources are valuable materials found beneath the surface of Grasslands."
+helptext = "Resources are valuable materials found beneath the surface of Grasslands, giving +1 bonus production."
 
 [extra_ivory]
 name           = _("Ivory")
@@ -2818,7 +2818,7 @@ appearance_reqs =
       "MinYear", "-3900",    "World",    FALSE
       "Extra",   "Ivory",    "CAdjacent",FALSE
     }
-helptext = "Ivory provides has high trade value, with a small boost in production."
+helptext = "Ivory gives 1 food/1 production/4 trade to an otherwise desolate tile."
 
 [extra_silk]
 name           = _("Silk")
@@ -2832,7 +2832,7 @@ act_gfx_alt    = "-"
 act_gfx_alt2   = "-"
 rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
-helptext = "Silk can provide a city adequate production and a nice trade bonus."
+helptext = "Silk can provide a city adequate production which pairs nicely with +3 trade bonus."
 
 [extra_spice]
 name           = _("Spice")
@@ -2860,7 +2860,7 @@ appearance_reqs =
       "Extra",   "Peat",     "Adjacent", FALSE
       "Extra",   "Resources","Adjacent", FALSE
     }
-helptext = "Spices are coveted food sources that generate high trade."
+helptext = "Spices are coveted +2 food sources that generate high +4 trade."
 
 [extra_whales]
 name           = _("Whales")
@@ -2916,7 +2916,7 @@ rmact_gfx_alt  = "-"
 ;      "MinYear", "-3900",    "World",    FALSE
 ;      "Extra",   "Oil",      "CAdjacent",FALSE
 ;    }
-helptext = "Oil is a major production boost that improves with Oil Wells, railroads, and Refining tech."
+helptext = "Oil is a major +3 production boost that improves with Oil Wells, Railroads, and Refining tech."
 
 [extra_berries]
 name           = _("Berries")
@@ -2950,7 +2950,7 @@ appearance_reqs =
       "ExtraFlag","IsRiver", "Local",    FALSE  ; replaces below
 ;      "Extra",   "River",    "Local",    FALSE ;Forests need help to have less non-trade tiles
     }
-helptext = "Berries from the forest give food and trade, as well as shields from forest lumber."
+helptext = "Berries from the forest give +1 food and +2 trade, as well as shields from forest lumber."
 
 
 ; ************ WANDERING WILD ANIMAL RESOURCES ************************
@@ -2977,7 +2977,7 @@ appearance_reqs =
       "MinYear", "-2200", "World", FALSE
       "Extra", "Deer", "Adjacent", FALSE
     }
-helptext = "Deer wander in herds and when they come near you city, they can provide a windfall in bonus food."
+helptext = "Deer wander in herds and when they come near your city, they can provide a windfall in bonus food."
 
 [extra_wild_boar]
 name           = _("Wild Boar")
