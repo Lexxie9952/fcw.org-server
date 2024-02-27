@@ -232,12 +232,15 @@ function show_load_game_dialog_cb(savegames_data)
   $("#dialog").remove();
   $("<div id='dialog'></div>").appendTo("div#game_page");
 
+  const default_widescreen_width = $(window).width() * .50;
+  const widescreen_width = MIN(default_widescreen_width, 800);  // Don't go too wide
+
   $("#dialog").html(saveHtml);
   $("#dialog").attr("title", "Load saved game");
   $("#dialog").dialog({
 			bgiframe: true,
 			modal: true,
-			width: is_small_screen() ? "90%" : "50%",
+			width: is_small_screen() ? "90%" : (widescreen_width+"px"),
 			height: is_small_screen() ? $(window).height() - 20 : $(window).height() - 80,
 			buttons: dialog_buttons
 		});
@@ -429,13 +432,16 @@ function show_scenario_dialog()
 
   saveHtml += "</ol>";
 
+  const default_widescreen_width = $(window).width() * .40;
+  const widescreen_width = MIN(default_widescreen_width, 800);  // Don't go too wide
+
   $("#dialog").html(saveHtml);
   $("#dialog").attr("title", "Select a scenario to play:");
   $("#selectable").css("height", $(window).height() - 180);
   $("#dialog").dialog({
 			bgiframe: true,
 			modal: true,
-			width: is_small_screen() ? "90%" : "40%",
+			width: is_small_screen() ? "90%" : (widescreen_width+"px"),
 			position: {my: 'center bottom', at: 'center bottom', of: window},
 			buttons: {
                                 "Cancel" : function() {
