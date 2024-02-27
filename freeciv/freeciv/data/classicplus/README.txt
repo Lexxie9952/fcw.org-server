@@ -32,7 +32,7 @@ Classic+ is a refresh of the original Classic, which is an intelligently selecte
 <li>Quay added. Req: Pottery. Quays are ferry-infrastructure to cross rivers using 2/3 move-points.
 Quays let cargo units deboard or be unloaded for free (without disembarking, which loses all moves)</li>
 <li>Canal added. Req: Engineering. Allows all ships to travel through it.</li>
-<li>Sea Bridge added. Req: Steels. Allows constructing bridges over ocean cardinally adjacent to land.</li>
+<li>Sea Bridge added. Req: Steel. Allows constructing bridges over ocean cardinally adjacent to land.</li>
 <li>Terrain transform time for making Hills and dredging Swamp to Ocean were taken from MP2</li>
 <li>Resource adjustments
 Berries added 2/2/2. Forest resource.
