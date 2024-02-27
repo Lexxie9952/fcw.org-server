@@ -28,6 +28,7 @@ printf "\nOverwriting auto-generated manual with release-version: MP2-Dragoon"
 printf "\nOverwriting auto-generated manual with release-version: MP2-Elephant"
    cp ~/freeciv-web/freeciv-web/src/derived/webapp/man/mp2-elephant6.bak.html ~/freeciv-web/freeciv-web/src/derived/webapp/man/mp2-elephant6.html
    cp ~/freeciv-web/freeciv-web/src/derived/webapp/man/mp2-elephant7.bak.html ~/freeciv-web/freeciv-web/src/derived/webapp/man/mp2-elephant7.html
+   cp ~/freeciv-web/freeciv-web/src/derived/webapp/man/mp2-elephant9.bak.html ~/freeciv-web/freeciv-web/src/derived/webapp/man/mp2-elephant9.html
 
 printf "\nDirectly copying rules to Tomcat webapp\n"
    cp ~/freeciv-web/freeciv-web/src/derived/webapp/man/*.* /var/lib/tomcat8/webapps/freeciv-web/man/
