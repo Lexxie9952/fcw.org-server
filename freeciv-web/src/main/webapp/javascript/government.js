@@ -148,7 +148,7 @@ function update_govt_dialog()
     } else if (requested_gov == govt_id) {
     $("#govt_id_" + govt['id'] ).button({label: label_html}).css({"background": "url('/images/bg-light.jpg')", color: "black"});
     } else if (client.conn.playing['government'] == govt_id) {
-      $("#govt_id_" + govt['id'] ).button({label: label_html}).css("background", "url('/images/black-bg.png')").css("font-weight", "bolder");
+      $("#govt_id_" + govt['id'] ).button({label: label_html}).css("background", "url('/images/bg-dark.png')").css("font-weight", "bolder");
     } else {
       $("#govt_id_" + govt['id'] ).button({label: label_html});
     }
