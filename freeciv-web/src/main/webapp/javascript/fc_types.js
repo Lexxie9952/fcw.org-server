@@ -264,6 +264,10 @@ const V_INVIS = 1;
 const V_SUBSURFACE = 2;
 const V_COUNT = 3;
 
+/* Extra categories:
+Corresponds to fc_types.h SPACE_NUM extra_category but implemented here as an array */
+const EXTRA_CATEGORIES = [ "Infra", "Natural", "Nuisance", "Bonus", "Resource" ];
+
 /* causes for extra */
 const EC_IRRIGATION = 0;
 const EC_MINE = 1;
