@@ -10,12 +10,10 @@ Freeciv-web and the game you're playing now are only possible by <a href="https:
 target="_new">donations</a> from users.<br> <i><b>Please support this server by <a style='font-size:110%' href="https://www.patreon.com/freecivweb"
 target="_new">donating to Freeciv-Web!</a></b></i>. Thanks!<br><br>
 
-<a title="Freeciv-Web Discord Chat Community" href="https://discord.gg/Zj8UQSN" target="_new">
-    <img src="https://icons.iconarchive.com/icons/papirus-team/papirus-apps/256/discord-icon.png" style="width:40px">
-</a>
-Freeciv-Web has <b><a href="https://discord.gg/Zj8UQSN" target="_new">Discord chat</a></b> -- this is the preferred method to chat.<br>
-It helps validate your in-game identity in multiplayer games.<br>Also posted there are <a href='https://discord.gg/p9M5RME' target='_new'>#rules</a>
+<a title="Freeciv-Web Discord Chat Community" href="https://discord.gg/Zj8UQSN" target="_new"><img src="https://icons.iconarchive.com/icons/papirus-team/papirus-apps/256/discord-icon.png" style="width:40px; margin-bottom:-6px;"></a>&nbsp;Freeciv-Web has <b><a href="https://discord.gg/Zj8UQSN" target="_new">Discord chat</a></b> -- this is the preferred method to chat.<br>
+It helps players trust you have a stable identity in multiplayer games.<br>Also posted there are <a href='https://discord.gg/p9M5RME' target='_new'>#rules</a>
 to ensure fun, fair, friendly games.
 <br><br>
 We're looking for developers to improve the game! Come say <q>hi</q> on <a href="https://discord.gg/Zj8UQSN" target="_new">Discord!</a>
-<br>
+<br><br>
+
