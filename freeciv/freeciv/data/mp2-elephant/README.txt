@@ -1,4 +1,4 @@
-<img src='https://static.wikia.nocookie.net/freecivweb/images/f/f6/Mp2elephant_.png'>
+<img style="max-width:100%" src='/images/man/mp2elephant.webp'>
 <b><a href="http://freeciv.fandom.com/wiki/Multiplayer_II:_Elephant,_Game_Manual" target="_blank">Full Game Manual, MP2-Elephant</a></b>
 <br>
 <u class="help_stats">Useful supplements to the in-game manual</u> <i>(from the Full Game Manual)</i>:

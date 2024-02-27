@@ -1,4 +1,4 @@
-<img src='https://static.wikia.nocookie.net/freeciv/images/2/2a/Mp2dragoon_large.png'>
+<img style="max-width:100%" src='/images/man/mp2dragoon.webp'>
 <b><a href="http://freeciv.fandom.com/wiki/Multiplayer_II:_Dragoon,_Game_Manual" target="_blank">Full Game Manual, MP2-Dragoon</a></b>
 <br>
 <u class="help_stats">Useful supplements to the in-game manual</u>:
