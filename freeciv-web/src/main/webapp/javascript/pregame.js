@@ -34,7 +34,12 @@ var google_user_token = null;
    check_browser_compatibility, below */
 var browser = {
   "opera": false,
-  "ie": false /*,
+  "ie": false,
+  "macos": false,
+  "windows": false,
+  "linux": false,
+  "metaKey": "WIN-" //
+   /*,
   "firefox": false,
   "chrome": false,
   "chromium": false,
@@ -145,8 +150,20 @@ function check_browser_compatibility()
     });
     setSwalTheme();
   }
-}
 
+  if (navigator.userAgent.includes("Mac")) {
+    browser.mac = true;
+    browser.metaKey = "CMD-"; // ⌘
+  }
+  else if (navigator.userAgent.includes("Linux")) {
+    browser.linux = true;
+    browser.metaKey = "🐧";
+  }
+  // Assume Windows for all others, they'll get over it.
+  else /*if (navigator.userAgent.includes("Windows"))*/ {
+    browser.windows = true;
+  }
+}
 
 /****************************************************************************
   Show information about the current game
