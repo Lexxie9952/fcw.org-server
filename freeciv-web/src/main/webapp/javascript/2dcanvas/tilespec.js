@@ -173,6 +173,53 @@ function tileset_ruleset_entity_tag_str_or_alt(entity, kind_name)
   console.log("No graphic for " + kind_name + " " + entity['name']);
   return null;
 }
+/**************************************************************************
+  Above function doesn't work for bases or roads but we're hard coded not
+  to call them for those when drawing the map. However, the below function
+  is more robust for other cases wanting to retrieve a valid tag.
+  But slower so not replacing the above.
+**************************************************************************/
+function tileset_extra_tag_robust(extra)
+{
+  let kind_name = "extra";
+  if (extra == null) {
+    console.log("No " + kind_name + " to return tag for.");
+    return null;
+  }
+
+  if (tileset_has_tag(extra['graphic_str'])) {
+    return extra['graphic_str'];
+  }
+  if (tileset_has_tag(extra['graphic_str']+"_mg")) {
+    return extra['graphic_str'];
+  }
+  if (tileset_has_tag(extra['graphic_str']+"_bg")) {
+    return extra['graphic_str'];
+  }
+  if (tileset_has_tag(extra['graphic_str']+"_nw")) {
+    return extra['graphic_str'];
+  }
+  if (tileset_has_tag(extra['graphic_str']+"_s_n1e0s1w0")) {
+    return extra['graphic_str'];
+  }
+  if (tileset_has_tag(extra['graphic_alt'])) {
+    return extra['graphic_alt'];
+  }
+  if (tileset_has_tag(extra['graphic_alt']+"_mg")) {
+    return extra['graphic_alt'];
+  }
+  if (tileset_has_tag(extra['graphic_alt']+"_bg")) {
+    return extra['graphic_alt'];
+  }
+  if (tileset_has_tag(extra['graphic_alt']+"_nw")) {
+    return extra['graphic_alt'];
+  }
+  if (tileset_has_tag(extra['graphic_alt']+"_s_n1e0s1w0")) {
+    return extra['graphic_alt'];
+  }
+  console.log("\ntileset_extra_tag_robust() found no graphic for " + kind_name + " " + extra['name']);
+  return null;
+}
 
 /**************************************************************************
   Returns the tag name of the graphic showing the specified Extra on the
