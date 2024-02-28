@@ -1978,9 +1978,10 @@ Quays improve logistics on rivers and canals. River and Canal traffic\
  rivers——the ancient way to cross without a bridge! \n\
 Moving from road-to-quay or quay-to-road uses 2/3 move point.\
  In cities built on river tiles, quays allow exiting to adjacent roads for only\
- 1/3 move. Quays are RestrictedInfra. Only allied units can use them to cross rivers,\
+ 1/3 move. \n\n\
+Quays are RestrictedInfra. Only allied units can use them to cross rivers,\
  and only domestic units can use them to deboard at 1/3 move. Thus, along\
- your border, quays may be a strategic alternative over bridged roads over rivers.\
+ your border, quays may be a strategic alternative over bridged roads.\
  Enemies will incur the full movement cost of crossing the river!\n\
  Non-domestic units may deboard on a quay but lose all moves (except Marines.)\
 "), _("Moves needed to cross a river to a tile on the other side:\n\
