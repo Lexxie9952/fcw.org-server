@@ -2027,21 +2027,22 @@ removal_time   = 0
 native_to      = "Land", "LandRoad", "LandAirSea", "LandNoKill", "Big Land", "Trireme", "Cargo", "Balloon", "Zeppelin", "RiverShip"
 flags          = "NativeTile"
 helptext       = _("\
-Quays improve logistics on rivers. River and Canal traffic can deboard\
- to a quay for 1⁄₃ move instead of disembarking for full moves onto adjacent\
+Quays improve logistics on rivers and canals. River and Canal traffic can deboard\
+ to a quay for 1/3 move instead of disembarking for full moves onto adjacent\
  tiles (domestic units only.) Quays let units ferry across\
- rivers——the ancient way to cross without a bridge!\
- Moving from road-to-quay or quay-to-road uses 2⁄₃ move point.\
- Quays can also be put on Canals. In cities they allow moving to\
- adjacent roads for only 1⁄₃ move. Quays are RestrictedInfra. Only\
- allied units can use them to cross rivers, and only domestic units\
- can use them to deboard at 1⁄₃ move. Non-domestic units may deboard\
- but lose all moves (except Marines.)\
-"), _("Don’t make too many Quays. The ability to unload on rivers helps enemies do surprise attacks.\
+ rivers——the ancient way to cross without a bridge! \n\
+Moving from road-to-quay or quay-to-road uses 2/3 move point.\
+ In cities built on river tiles, quays allow exiting to adjacent roads for only\
+ 1/3 move. \n\n\
+Quays are RestrictedInfra. Only allied units can use them to cross rivers,\
+ and only domestic units can use them to deboard at 1/3 move. Thus, along\
+ your border, quays may be a strategic alternative over bridged roads.\
+Enemies will incur the full movement cost of crossing the river!\n\
+Non-domestic units may deboard on a quay but lose all moves (except Marines.)\
 "), _("Moves needed to cross a river to a tile on the other side:\n\
-⁶⁄₃ moves: No infrastructure.\n\
-⁴⁄₃ moves: Quay connected to roads.\n\
-2⁄₃ moves: Bridge connected to roads.\n\
+6/3 moves: No infrastructure. (2.00 MP) \n\
+4/3 moves: Quay connected to roads. (1.33 MP) \n\
+2⁄3 moves: Bridge connected to roads. (0.66 MP) \n\
 ")
 
 [extra_city_quay] ; distinct quay extra goes on cities to enable conditional logic
