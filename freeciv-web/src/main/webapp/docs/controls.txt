@@ -168,6 +168,7 @@ The current and complete list of Freeciv-web controls can be found here:<br>
 <tr><td><span class="hotkey">shift-S</span></td><td> un(S)entry all units on tile</td></tr>
 <tr><td><span class="hotkey">  t</span></td><td> (t)ransport unload (in City, Naval Base, Quay; or Marines anywhere)</td></tr>
 <tr><td><span class="hotkey">  u</span></td><td> (u)pgrade unit </td></tr>
+<tr><td><span class="hotkey">ctrl-shift-U</span></td><td> (U)nit help and documentation - press to get help on a selected unit type. </td></tr>
 <tr><td><span class="hotkey">  v</span></td><td> select all units on same tile </td></tr>
 <tr><td><span class="hotkey">shift-V</span></td><td> select all units of same TYPE on tile </td></tr>
 <tr><td><span class="hotkey">alt-v</span></td><td> select all units NOT of this type on tile</td></tr>
@@ -235,6 +236,7 @@ The current and complete list of Freeciv-web controls can be found here:<br>
 </table>
 <h2>Main Map (Mouse):</h2><table class="ctrls_tbl"><tr><td><span class="hotkey">  Left-click</span> on city</td><td>            Pop up city dialog</td></tr>
 <tr><td><span class="hotkey">  Left-click</span> on unit</td><td>            Select a single unit</td></tr>
+<tr><td><span class="hotkey">Meta-click</span> on unit</td><td>              Help docs on unit. <b>Meta-</b> is the &#x229e;,⌘,🐧 key on Win,Mac,Linux.</td></tr>
 <tr><td><span class="hotkey">Shift-click</span> unit</td><td>                Add unit(s) on tile or panel to selection</td></tr>
 <tr><td><span class="hotkey">Ctrl-click</span> city</td><td>                 Clicks a city tile as if city isn't there, for selecting units inside it.</td></tr>
 <tr><td><span class="hotkey">Ctrl-Shift click</span> tile</td><td>           Select tile to be worked by city, on main map.</td></tr>
