@@ -1338,7 +1338,7 @@ function get_unit_city_info(punit, plaintext)
   }
 
   // CLICK INSTRUCTIONS
-  result += "\n\nCLICK: see unit on map.\n\n" + browser.metaKey + "CLICK: help on unit type.";
+  result += "\n\nCLICK: see unit on map.\n\n" + browser.metaKey + "-CLICK: help on unit type.";
 
   return result;
 }
