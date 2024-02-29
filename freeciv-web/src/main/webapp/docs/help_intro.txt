@@ -3,7 +3,10 @@
 
 <b>Info Categories</b> are in the top <b>left panel</b> for quick lookup.<br><br>
 
-<b>Full Game Manual</b> -- Click <b id='help_gen_ruleset'>Manual</b> at top left.
+<b>Full Game Manual</b> -- Click <b id='help_gen_ruleset'>Manual</b> at top left.<br>
+
+<b>NOTE:</b> In the game, you can __META__-Click icons of units and buildings to get help on them.
+
 <br><br>
 
 Freeciv-web and the game you're playing now are only possible by <a href="https://www.patreon.com/freecivweb"
@@ -14,6 +17,6 @@ target="_new">donating to Freeciv-Web!</a></b></i>. Thanks!<br><br>
 It helps players trust you have a stable identity in multiplayer games.<br>Also posted there are <a href='https://discord.gg/p9M5RME' target='_new'>#rules</a>
 to ensure fun, fair, friendly games.
 <br><br>
-We're looking for developers to improve the game! Come say <q>hi</q> on <a href="https://discord.gg/Zj8UQSN" target="_new">Discord!</a>
+Developers are welcome to help improve the game! Come say <q>hi</q> on <a href="https://discord.gg/Zj8UQSN" target="_new">Discord!</a>
 <br><br>
 
