@@ -2046,8 +2046,8 @@ Non-domestic units may deboard on a quay but lose all moves (except Marines.)\
 ")
 
 [extra_city_quay] ; distinct quay extra goes on cities to enable conditional logic
-;rule_name       = "Quay2"  ; otherwise the zero-width gets parsed out by some code handling in some places
-name           = _("Quay​") ; has a zero-width space in it in order to create conditional logic for the extra
+;rule_name       = "Quay2"  ; Having a rule_name makes the zero-width space of 'name' get removed by some code somewhere
+name           = _("Quay​")  ; has a zero-width space in it in order to create conditional logic for the extra
 category       = "Infra"
 causes         = "Road"
 rmcauses       = "Pillage"
@@ -2347,7 +2347,7 @@ name           = _("Walls")
 category       = "Infra"
 causes         = "Road"
 rmcauses       = "Pillage"
-graphic        = "road.walls"
+graphic        = "road.wall"
 graphic_alt    = "road.sea_bridge"
 activity_gfx   = "unit.airstrip"
 act_gfx_alt    = "unit.road"
@@ -2394,7 +2394,9 @@ If you own the Great Wall, Walls can be built on land not held by a foreign\
  2.25×. \
 In foreign territory, non-allied land units lose all moves when entering or exiting\
  a tile occupied by Walls. Foreign units caught on Walls with no move points are\
- considered vulnerable from climbing and scaling, and suffer a -50% defense penalty. \
+ considered vulnerable from climbing and scaling, and suffer a -50% defense penalty.\n\n\ \
+To build Walls, use the (D)o command, click your tile, select tile target to Walls, \
+ then click the Walls button.\
 ")
 
 [extra_canal]
