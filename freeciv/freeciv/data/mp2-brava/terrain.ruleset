@@ -1158,7 +1158,7 @@ act_gfx_alt    = "unit.irrigate"
 act_gfx_alt2   = "-"
 rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
-build_time     = 0
+build_time     = 5
 removal_time   = 0
 conflicts      = "Mine", "Oil Well"
 hidden_by      = "Farmland"
@@ -1194,7 +1194,7 @@ reqs           =
     { "type", "name", "range", "present", "quiet"
       "TerrainFlag", "Oil", "Local", FALSE, TRUE
     }
-build_time     = 0
+build_time     = 10
 removal_time   = 0
 conflicts      = "Irrigation", "Farmland"
 helptext       = _("\
@@ -1222,7 +1222,7 @@ reqs           =
     { "type", "name", "range", "quiet"
       "TerrainFlag", "Oil", "Local", TRUE
     }
-build_time     = 0
+build_time     = 5
 removal_time   = 0
 conflicts      = "Irrigation", "Farmland"
 helptext       = _("\
@@ -1340,7 +1340,7 @@ reqs           =
       "Tech", "Refrigeration", "Player"
       "Extra", "Irrigation", "Local"
     }
-build_time     = 0
+build_time     = 5
 removal_time   = 0
 conflicts      = "Mine", "Oil Well"
 flags          = "IrrigationSource"
@@ -1737,7 +1737,7 @@ reqs           =
       "UnitFlag", "CanRoad", "Local"
       "TerrainClass", "Land", "Local"
     }
-build_time     = 0
+build_time     = 2
 removal_time   = 0
 native_to      = "Land", "LandNoKill", "LandAirSea", "LandRoad"
 hidden_by      = "Railroad", "Maglev", "Naval Base"

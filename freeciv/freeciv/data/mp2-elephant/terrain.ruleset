@@ -1231,7 +1231,7 @@ reqs           =
       "TerrainClass", "Land",    "Local", TRUE,      FALSE
       "UnitType",     "Trawler", "Local", FALSE,     TRUE
     }
-build_time     = 0
+build_time     = 5
 removal_time   = 0
 conflicts      = "Mine", "Oil Well"
 hidden_by      = "Farmland"
@@ -1305,7 +1305,7 @@ reqs           =
       "TerrainFlag", "Oil",     "Local", FALSE,     TRUE
       "UnitType",    "Trawler", "Local", FALSE,     TRUE
     }
-build_time     = 0
+build_time     = 10
 removal_time   = 0
 conflicts      = "Irrigation", "Farmland"
 helptext       = _("\
@@ -1334,7 +1334,7 @@ reqs           =
       "TerrainFlag", "Oil",     "Local", TRUE,      FALSE
       "UnitType",    "Trawler", "Local", FALSE,     TRUE
     }
-build_time     = 0
+build_time     = 5
 removal_time   = 0
 conflicts      = "Irrigation", "Farmland"
 helptext       = _("\
@@ -1452,7 +1452,7 @@ reqs           =
       "TerrainClass", "Land",          "Local",  TRUE,     FALSE
       "UnitType",     "Trawler",       "Local",  FALSE,    TRUE
     }
-build_time     = 0
+build_time     = 5
 removal_time   = 0
 conflicts      = "Mine", "Oil Well"
 flags          = "IrrigationSource"
@@ -1589,7 +1589,7 @@ disappearance_reqs =
       ;"UnitClass",      "Submarine", "Tile",   FALSE
     }
 disappearance_chance    = 10000     ; 10000/10000 = 100% will disappear if unoccupied
-build_time     = 0
+build_time     = 1
 removal_time   = 0
 unit_seen      = "Hidden"
 native_to      = "Submarine"
@@ -2067,7 +2067,7 @@ reqs           =
       "UnitFlag",    "CanRoad",    "Local",  TRUE,      TRUE
       "Extra",       "Hideout",    "Local",  FALSE,     TRUE
     }
-build_time     = 0
+build_time     = 1
 removal_time   = 0
 native_to      = "Land", "LandRoad", "LandAirSea", "LandNoKill", "Big Land", "Trireme", "Cargo", "Balloon", "Zeppelin", "RiverShip"
 hidden_by      = "Road", "Highway"
@@ -2094,7 +2094,7 @@ reqs           =
       "TerrainClass", "Land",       "Local",  TRUE
       "Tech",         "Automobile", "Player", FALSE
     }
-build_time     = 0
+build_time     = 2
 removal_time   = 0
 conflicts      = "Highway"
 native_to      = "Land", "LandNoKill", "LandAirSea", "LandRoad", "Big Land"
@@ -2129,7 +2129,7 @@ reqs           =
       "TerrainClass", "Land",       "Local",  TRUE
       "Tech",         "Automobile", "Player", TRUE
     }
-build_time     = 0
+build_time     = 2
 removal_time   = 0
 native_to      = "Land", "LandNoKill", "LandAirSea", "LandRoad", "Big Land"
 flags          = "AutoOnCityCenter", "NativeTile", "Railable"
