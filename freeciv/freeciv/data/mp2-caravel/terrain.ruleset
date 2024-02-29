@@ -55,11 +55,11 @@ land_channel_requirement = 10
 
 ; Percentage of unfrozen tiles (no "Frozen" flag) required to be adjacent
 ; to a frozen tile before it can thaw (0-101; 0=anywhere, default 101=nowhere)
-thaw_requirement = 1   ;1 tile is 12.5% 
+thaw_requirement = 1   ;1 tile is 12.5%
 
 ; Percentage of frozen tiles ("Frozen" flag) required to be adjacent to an
 ; unfrozen tile before it can freeze (0-101; 0=anywhere, default 101=nowhere)
-freeze_requirement = 1     ;1 tile is 12.5% 
+freeze_requirement = 1     ;1 tile is 12.5%
 
 ; Bodies of water up to this size are considered freshwater lakes, if there is
 ; also terrain type(s) with flag "FreshWater" in the ruleset.
@@ -219,7 +219,7 @@ ocean_resources = FALSE
 ; Each parameter has a special logic.
 ; TARGET = all terrains with the passed PARAMTER property will be considered and one will be picked at random based on the % values for each terrain.
 ; PREFERRED =  only terrains with (some of) that property will be chosen.
-; AVOID = all terrains with any of that property will be blacklisted from appearing in this ZONE. 
+; AVOID = all terrains with any of that property will be blacklisted from appearing in this ZONE.
 ;
 ; ZONES are:
 ;  Plains:  MG_TEMPERATE, MG_GREEN, MG_MOUNTAINOUS.
@@ -785,7 +785,7 @@ defense_bonus        = 0
 food                 = 0
 shield               = 0
 trade                = 0
-resources            = "Furs", "Ivory", "Oil" 
+resources            = "Furs", "Ivory", "Oil"
 road_trade_incr_pct  = 0
 base_time            = 1
 road_time            = 4
@@ -987,7 +987,7 @@ identifier  = "i"
 ;food        = 1     ;added in effects because only generated resources tied to a terrain type can access this var
 ;shield      = 1
 ;trade       = 4
-# arctic 
+# arctic
 
 [resource_silk]
 extra       = "Silk"
@@ -1398,7 +1398,7 @@ reqs           =
     }
 removal_time   = 0
 disappearance_chance    = 1500
-disappearance_reqs = 
+disappearance_reqs =
     { "type",           "name", "range"
     }
 flags          = "NuclearWinter"
@@ -1451,7 +1451,7 @@ reqs           =
       "Extra",   "Fort",      "Local", FALSE,    FALSE
       "Extra",   "Quay",      "Local", FALSE,    FALSE ; "Quay"+0-width space = CityTile, already prevented
     }
-disappearance_reqs = 
+disappearance_reqs =
     { "type",           "name", "range",  "present"
       "MaxUnitsOnTile", "0",    "Local",  TRUE
       "Extra",          "Ruins","Local",  FALSE
@@ -1477,7 +1477,7 @@ Since the dawn of time, camouflaged and concealed terrain has been\
  a Hideout on a tile is to move a Land unit onto it. \n\
 "), _("
 TIP: Hideouts are good for guarding a border or setting a trap for\
- intruders. Be careful! An abandoned Hideout can be used against you!\ 
+ intruders. Be careful! An abandoned Hideout can be used against you!\
 ")
 
 [extra_tileclaim]
@@ -1551,18 +1551,18 @@ native_to      = "Land", "LandAirSea", "LandNoKill", "LandRoad", "Helicopter", "
 hidden_by      = "Fortress", "Naval Base", "Castle", "Bunker"
 flags          = "NativeTile", "NoStackDeath"  ;, "Refuel"
 ;NOTE: effect_fortress_regen should give 25% of 20HP to helicopter, +1hp for being stationary
-;thus a fortress should give +6hp -2hp for not being in refuel spot or +4hp/turn. Healing 67% 
-;as fast as an airbase. MEANWHILE, removing the refuel flag allows us to make Forts native 
-;to AirProtect so that they cannot prevent attacks on forts. This is debatable issue of 
-;Fort with no Killstack but not Airprotected vs no fort, Killstack and Airprotect, but 
-;many times fighters over forts have come up as a dynamic. 
+;thus a fortress should give +6hp -2hp for not being in refuel spot or +4hp/turn. Healing 67%
+;as fast as an airbase. MEANWHILE, removing the refuel flag allows us to make Forts native
+;to AirProtect so that they cannot prevent attacks on forts. This is debatable issue of
+;Fort with no Killstack but not Airprotected vs no fort, Killstack and Airprotect, but
+;many times fighters over forts have come up as a dynamic.
 helptext       = _("\
 Forts are rapidly built fortifications which give Land units +33% defense\
  against Land and Sea units. Defending units are lost one at a time instead\
  of the entire stack dying. A fort is necessary to start building a Fortress. \n\
 "), _("
 TIP: Forts make great outposts for keeping watch on your borders. Be careful--\
-an unmanned Fort can be claimed by a foreign unit.\ 
+an unmanned Fort can be claimed by a foreign unit.\
 ")
 
 [extra_fortress]
@@ -1634,7 +1634,7 @@ build_time     = 8
 removal_time   = 0
 conflicts      = "Fortress", "Castle", "Bunker"
 defense_bonus  = 67
-native_to      = "Trireme", "RiverShip", "Sea", "Submarine", "Balloon", "Zeppelin", 
+native_to      = "Trireme", "RiverShip", "Sea", "Submarine", "Balloon", "Zeppelin",
                  "Land", "LandRoad", "Cargo", "LandAirSea", "LandNoKill", "Helicopter"
 flags          = "NativeTile", "NoStackDeath", "Refuel", "FortressHeal"
 helptext       = _("\
@@ -1758,7 +1758,7 @@ name           = _("Radar")
 category       = "Infra"
 causes         = "Base"
 rmcauses       = "Pillage"
-graphic        = "base.airbase"
+graphic        = "base.radar"
 graphic_alt    = "-"
 activity_gfx   = "unit.radar"
 act_gfx_alt    = "unit.airbase"
@@ -1873,7 +1873,7 @@ Quays are structures on both sides of rivers, where boats dock parallel to the r
 "), _("
 TIP: Quays can boost transportational logistics for ancient civilizations who build\
  on rivers. Don’t be tempted to make too many Quays. The ability to unload on a\
- river may help an enemy do a surprise attack.\ 
+ river may help an enemy do a surprise attack.\
 "), _("Moves needed to cross a river to a tile on the other side:\n
 ⁶⁄₃ moves: No infrastructure.\n\
 ⁴⁄₃ moves: Quay connected to roads.\n\
@@ -1964,7 +1964,7 @@ rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
 ;For now this is how we disallow MagLev on ocean: it disappears if you make it.
 disappearance_chance    = 10000
-disappearance_reqs = 
+disappearance_reqs =
     { "type",         "name",      "range", "present"
       "TerrainClass", "Oceanic",   "Local", TRUE
       "Extra",        "Sea Bridge","Local", FALSE
@@ -1972,7 +1972,7 @@ disappearance_reqs =
 reqs           =
     { "type", "name", "range", "present", "quiet"
       "Tech", "Superconductors", "Player", TRUE, FALSE
-      "UnitFlag", "CanRoad", "Local", TRUE, FALSE        
+      "UnitFlag", "CanRoad", "Local", TRUE, FALSE
     }
 build_time     = 3
 removal_time   = 0
@@ -2140,7 +2140,7 @@ rmact_gfx_alt  = "-"
 ;Resource distribution scripting to add more resources in leaner
 ;regions. Adds about +40 to specials, so adjust settings accordingly
 appearance_chance = 1000   ; +10% if no adjacent resource
-appearance_reqs = 
+appearance_reqs =
     { "type",    "name",     "range",   "present"
       "Terrain", "Mountains","Local",    TRUE
 ;if server places resources on T1 then the one line below replaces the two lines below it:
@@ -2168,7 +2168,7 @@ rmact_gfx_alt  = "-"
 ;Resource distribution scripting to add more resources in leaner
 ;regions. Adds about +40 to specials, so adjust settings accordingly
 appearance_chance = 1100   ; +11% if no adjacent resource
-appearance_reqs = 
+appearance_reqs =
     { "type",    "name",     "range",   "present"
       "Terrain", "Tundra",   "Local",    TRUE
 ;if server places resources on T1 then the one line below replaces the two lines below it:
@@ -2197,17 +2197,17 @@ rmact_gfx_alt  = "-"
 ;Resource distribution scripting to add more resources in leaner
 ;regions. Adds about +40 to specials, so adjust settings accordingly
 appearance_chance = 900   ; +9% if no adjacent resource
-appearance_reqs = 
+appearance_reqs =
     { "type",    "name",     "range",   "present"
       ;"Terrain", "Tundra",   "Local",    TRUE
-      "Terrain", "Grassland","Local",    FALSE 
+      "Terrain", "Grassland","Local",    FALSE
       "Terrain", "Desert",   "Local",    FALSE
       "Terrain", "Mountains","Local",    FALSE
       "Terrain", "Hills",    "Local",    FALSE
       "Terrain", "Forest",   "Local",    FALSE
       "Terrain", "Jungle",   "Local",    FALSE
       "Terrain", "Swamp",    "Local",    FALSE
-      "Terrain", "Plains",   "Local",    FALSE 
+      "Terrain", "Plains",   "Local",    FALSE
       "TerrainClass","Oceanic","Local",  FALSE
 ;if server places resources on T1 then the one line below replaces the two lines below it:
 ;     "MinYear", "-4000",    "World",   FALSE
@@ -2273,7 +2273,7 @@ rmact_gfx_alt  = "-"
 ;Resource distribution scripting to add more resources in leaner
 ;regions. Adds about +40 to specials, so adjust settings accordingly
 appearance_chance = 200   ; +2% if no adjacent resource
-appearance_reqs = 
+appearance_reqs =
     { "type",    "name",     "range",   "present"
       "Terrain", "Jungle",   "Local",    TRUE
 ;if server places resources on T1 then the one line below replaces the two lines below it:
@@ -2302,7 +2302,7 @@ rmact_gfx_alt  = "-"
 ;Resource distribution scripting to add more resources in leaner
 ;regions. Adds about +40 to specials, so adjust settings accordingly
 appearance_chance = 300   ; +3% if no adjacent resource
-appearance_reqs = 
+appearance_reqs =
     { "type",    "name",     "range",   "present"
       "Terrain", "Jungle",   "Local",    TRUE
 ;if server places resources on T1 then the one line below replaces the two lines below it:
@@ -2357,7 +2357,7 @@ flags          = "IrrigationSource"
 ;Resource distribution scripting to add more resources in leaner
 ;regions. Adds about +40 to specials, so adjust settings accordingly
 appearance_chance = 400   ; +4% if no adjacent resource
-appearance_reqs = 
+appearance_reqs =
     { "type",    "name",     "range",   "present"
       "Terrain", "Desert",   "Local",    TRUE
 ;if server places resources on T1 then the one line below replaces the two lines below it:
@@ -2385,7 +2385,7 @@ rmact_gfx_alt  = "-"
 ;Resource distribution scripting to add more resources in leaner
 ;regions. Adds about +40 to specials, so adjust settings accordingly
 appearance_chance = 2280   ; +22.8% if no adjacent resource
-appearance_reqs = 
+appearance_reqs =
     { "type",    "name",     "range",   "present"
       "Terrain", "Swamp",    "Local",    TRUE
 ;if server places resources on T1 then the one line below replaces the two lines below it:
@@ -2438,7 +2438,7 @@ rmact_gfx_alt  = "-"
 ;Resource distribution scripting to add more resources in leaner
 ;regions. Adds about +40 to specials, so adjust settings accordingly
 appearance_chance       = 4500  ;+45%
-appearance_reqs = 
+appearance_reqs =
     { "type",    "name",     "range",   "present"
       "Terrain", "Glacier",   "Local",    TRUE
       "TerrainClass","Oceanic","Adjacent",TRUE
@@ -2476,8 +2476,8 @@ rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
 ;Resource distribution scripting to add more resources in leaner
 ;regions. Adds about +40 to specials, so adjust settings accordingly
-appearance_chance = 2420 ;+24.2% extra chance if non-adjacent extra 
-appearance_reqs = 
+appearance_chance = 2420 ;+24.2% extra chance if non-adjacent extra
+appearance_reqs =
     { "type",    "name",     "range",   "present"
       "Terrain", "Swamp",    "Local",    TRUE
 ;if server places resources on T1 then the one line below replaces the two lines below it:
@@ -2530,7 +2530,7 @@ rmact_gfx_alt  = "-"
 ;Resource distribution scripting to add more resources in leaner
 ;regions. Adds about +40 to specials, so adjust settings accordingly
 ;appearance_chance       = 0    ;55% no longer appears because too many permutations for layered bonuses not working.
-;appearance_reqs = 
+;appearance_reqs =
 ;    { "type",    "name",     "range",   "present"
 ;      "Terrain", "Glacier",   "Local",    TRUE
 ;      "TerrainClass","Oceanic","Adjacent",FALSE
@@ -2554,7 +2554,7 @@ rmact_gfx_alt  = "-"
 ;Resource distribution scripting to add more resources in leaner
 ;regions. Adds about +40 to specials, so adjust settings accordingly
 appearance_chance = 700   ; +7% iff no adjacent rivers or resources i.e., far less than 4%
-appearance_reqs = 
+appearance_reqs =
     { "type",    "name",     "range",   "present"
       "Terrain", "Forest",   "Local",    TRUE
 ;if server places resources on T1 then the one line below replaces the two lines below it:
@@ -2585,11 +2585,11 @@ act_gfx_alt2   = "-"
 rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
 disappearance_chance    = 10000
-disappearance_reqs = 
+disappearance_reqs =
     { "type",           "name", "range"
     }
 appearance_chance       = 360
-appearance_reqs = 
+appearance_reqs =
     { "type",    "name", "range",  "present"
       "Terrain", "Grassland","Local", TRUE
       "MinYear", "-2200", "World", FALSE
@@ -2609,11 +2609,11 @@ act_gfx_alt2   = "-"
 rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
 disappearance_chance    = 10000
-disappearance_reqs = 
+disappearance_reqs =
     { "type",           "name", "range"
     }
 appearance_chance       = 360
-appearance_reqs = 
+appearance_reqs =
     { "type",    "name", "range",  "present"
       "Terrain", "Forest","Local", TRUE
       "MinYear", "-2200", "World", FALSE
@@ -2761,22 +2761,22 @@ flags          = "NoAggressive"
 ;   - "JumpTo"            = Allow movement to this tile natively, provided the
 ;                           source tile has a road with "JumpFrom" and the road
 ;                           is considered native
-;   - "IntegrateCostUp"   = If this road (type A) integrates with type B, then  
-;                           the move cost when going from A to B will be the 
+;   - "IntegrateCostUp"   = If this road (type A) integrates with type B, then
+;                           the move cost when going from A to B will be the
 ;                           greater of move_cost(A) and move_cost(B).
 ;                           This gives the ruleset several possibilities:
 ;                           if this flag is given to higher move cost road (A):
-;                              the move cost from A to B will be the same as 
-;                              B to A: the higher of the two; i.e., symmetric 
+;                              the move cost from A to B will be the same as
+;                              B to A: the higher of the two; i.e., symmetric
 ;                              higher move cost. In other words, the same as
 ;                              how roads work with railroads.
 ;                           if this flag is given to lower move cost road (B):
-;                              the move cost from A to B and B to A will be the 
-;                              destination cost -- that is, asymmetric; BUT 
+;                              the move cost from A to B and B to A will be the
+;                              destination cost -- that is, asymmetric; BUT
 ;                              type B will have symmetric move costs integrating
 ;                              with roads of lower move cost than itself.
 ;                           if this flag is not used:
-;                              move_cost will be that of the destination road: 
+;                              move_cost will be that of the destination road:
 ;                              i.e., asymmetric move_cost for A-to-B and B-to-A
 
 ; */ <-- avoid gettext warnings

@@ -54,11 +54,11 @@ land_channel_requirement = 10
 
 ; Percentage of unfrozen tiles (no "Frozen" flag) required to be adjacent
 ; to a frozen tile before it can thaw (0-101; 0=anywhere, default 101=nowhere)
-thaw_requirement = 1   ;1 tile is 12.5% 
+thaw_requirement = 1   ;1 tile is 12.5%
 
 ; Percentage of frozen tiles ("Frozen" flag) required to be adjacent to an
 ; unfrozen tile before it can freeze (0-101; 0=anywhere, default 101=nowhere)
-freeze_requirement = 1     ;1 tile is 12.5% 
+freeze_requirement = 1     ;1 tile is 12.5%
 
 ; Bodies of water up to this size are considered freshwater lakes, if there is
 ; also terrain type(s) with flag "FreshWater" in the ruleset.
@@ -218,7 +218,7 @@ ocean_resources = FALSE
 ; Each parameter has a special logic.
 ; TARGET = all terrains with the passed PARAMTER property will be considered and one will be picked at random based on the % values for each terrain.
 ; PREFERRED =  only terrains with (some of) that property will be chosen.
-; AVOID = all terrains with any of that property will be blacklisted from appearing in this ZONE. 
+; AVOID = all terrains with any of that property will be blacklisted from appearing in this ZONE.
 ;
 ; ZONES are:
 ;  Plains:  MG_TEMPERATE, MG_GREEN, MG_MOUNTAINOUS.
@@ -987,7 +987,7 @@ identifier  = "i"
 food        = 1
 shield      = 1
 trade       = 4
-# arctic 
+# arctic
 
 [resource_silk]
 extra       = "Silk"
@@ -1370,7 +1370,7 @@ reqs           =
     }
 removal_time   = 0
 disappearance_chance    = 2000
-disappearance_reqs = 
+disappearance_reqs =
     { "type",           "name", "range"
     }
 flags          = "NuclearWinter"
@@ -1420,7 +1420,7 @@ reqs           =
       "Extra",   "Quay",      "Local", FALSE,    FALSE
       "ServerSetting","hideouts","World",TRUE,   FALSE
     }
-disappearance_reqs = 
+disappearance_reqs =
     { "type",           "name", "range",  "present"
       "MaxUnitsOnTile", "0",    "Local",  TRUE
       "Extra",          "Ruins","Local",  FALSE
@@ -1445,7 +1445,7 @@ Since the dawn of time, camouflaged and concealed terrain has been\
  a Hideout on a tile is to move a Land unit onto it.\
 "), _("
 TIP: Hideouts are good for guarding a border or setting a trap for\
- intruders. Be careful! An abandoned Hideout can be used against you!\ 
+ intruders. Be careful! An abandoned Hideout can be used against you!\
 ")
 
 [extra_fort]
@@ -1474,18 +1474,18 @@ native_to      = "Land", "LandAirSea", "LandNoKill", "Helicopter", "Balloon", "A
 hidden_by      = "Fortress", "Naval Base"
 flags          = "NativeTile", "NoStackDeath"  ;, "Refuel"
 ;NOTE: effect_fortress_regen should give 25% of 20HP to helicopter, +1hp for being stationary
-;thus a fortress should give +6hp -2hp for not being in refuel spot or +4hp/turn. Healing 67% 
-;as fast as an airbase. MEANWHILE, removing the refuel flag allows us to make Forts native 
-;to AirProtect so that they cannot prevent attacks on forts. This is debatable issue of 
-;Fort with no Killstack but not Airprotected vs no fort, Killstack and Airprotect, but 
-;many times fighters over forts have come up as a dynamic. 
+;thus a fortress should give +6hp -2hp for not being in refuel spot or +4hp/turn. Healing 67%
+;as fast as an airbase. MEANWHILE, removing the refuel flag allows us to make Forts native
+;to AirProtect so that they cannot prevent attacks on forts. This is debatable issue of
+;Fort with no Killstack but not Airprotected vs no fort, Killstack and Airprotect, but
+;many times fighters over forts have come up as a dynamic.
 helptext       = _("\
 Forts are rapidly built fortifications which give Land units +33% defense\
  against Land and Sea units. Defending units are lost one at a time instead\
  of the entire stack dying. A fort is necessary to start building a fortress.\
 "), _("
 TIP: Forts make great outposts for keeping watch on your borders. Be careful--\
-an unmanned Fort can be claimed by a foreign unit.\ 
+an unmanned Fort can be claimed by a foreign unit.\
 ")
 
 [extra_fortress]
@@ -1555,7 +1555,7 @@ native_to      = "Trireme", "RiverShip", "Sea", "Submarine", "Balloon",
                  "Land", "LandAirSea", "LandNoKill", "Helicopter"
 flags          = "NativeTile", "NoStackDeath", "Refuel"
 helptext       = _("\
-Naval bases are coastal Fortresses with ocean access. They allow ships to enter and\ 
+Naval bases are coastal Fortresses with ocean access. They allow ships to enter and\
  receive a 1.33x bonus from superior fortifications and defensive position. Naval\
  Bases are built into Fortresses--all other units get the benefits of a Fortress.\
 "), _("
@@ -1600,7 +1600,7 @@ name           = _("Radar")
 category       = "Infra"
 causes         = "Base"
 rmcauses       = "Pillage"
-graphic        = "base.airbase"
+graphic        = "base.radar"
 graphic_alt    = "-"
 activity_gfx   = "unit.radar"
 act_gfx_alt    = "unit.airbase"
@@ -1713,7 +1713,7 @@ Quays are structures on both sides of rivers, where boats dock parallel to the\
 "), _("
 TIP: Quays can boost transportational logistics for ancient civilisations who have\
  built on rivers. Don't be tempted to make too many Quays. The unloading and movement\
- bonus is often the extra edge an enemy needs for an effective surprise attack.\ 
+ bonus is often the extra edge an enemy needs for an effective surprise attack.\
 "), _("Moves needed to cross a river to a tile on the other side:\n
 ⁶⁄₃ moves: No infrastructure.\n\
 ⁴⁄₃ moves: Quay connected to roads.\n\
@@ -1805,8 +1805,8 @@ rmact_gfx_alt  = "-"
 reqs           =
     { "type", "name", "range", "present", "quiet"
       "Tech", "Superconductors", "Player", TRUE, FALSE
-;      "Extra", "Railroad", "Local", TRUE, FALSE           
-      "UnitFlag", "CanRoad", "Local", TRUE, FALSE        
+;      "Extra", "Railroad", "Local", TRUE, FALSE
+      "UnitFlag", "CanRoad", "Local", TRUE, FALSE
 ;      "UnitClass", "Sea", "Local", FALSE, TRUE
 ;      "TerrainClass", "Land", "Local", TRUE, FALSE
     }
@@ -2102,11 +2102,11 @@ act_gfx_alt2   = "-"
 rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
 disappearance_chance    = 10000
-disappearance_reqs = 
+disappearance_reqs =
     { "type",           "name", "range"
     }
 appearance_chance       = 400
-appearance_reqs = 
+appearance_reqs =
     { "type",    "name", "range",  "present"
       "Terrain", "Grassland","Local", TRUE
       "MinYear", "-2500", "World", FALSE
@@ -2126,11 +2126,11 @@ act_gfx_alt2   = "-"
 rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
 disappearance_chance    = 10000
-disappearance_reqs = 
+disappearance_reqs =
     { "type",           "name", "range"
     }
 appearance_chance       = 400
-appearance_reqs = 
+appearance_reqs =
     { "type",    "name", "range",  "present"
       "Terrain", "Forest","Local", TRUE
       "MinYear", "-2500", "World", FALSE
