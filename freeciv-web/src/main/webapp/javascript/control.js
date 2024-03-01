@@ -1353,7 +1353,12 @@ function clear_all_modes()
   user_last_subtarget = null;
   goto_last_order = ORDER_LAST;
   goto_last_action = ACTION_COUNT;
+
+ /*
+  mapview_mouse_movement = false;      should probably clear this as well ?!
+*/
 }
+
 
 /**************************************************************************
  This function may be called from packhand.c, via update_unit_focus(),
@@ -1615,7 +1620,8 @@ function update_unit_order_commands()
   if (touch_device) unit_actions = $.extend(unit_actions, {"exit": {name: "Exit Menu"} } );
   unit_actions = $.extend(unit_actions, {
                 "goto": {name: "Goto (G)"},
-	              "tile_info": {name: "Tile info"}
+	              "tile_info": {name: "Tile info"},
+                "unit_help": {name: "Unit Help (ctrl-shift-U)"}
               });
 
   for (i = 0; i < funits.length; i++) {
@@ -2561,6 +2567,12 @@ function set_unit_focus(punit)
 *************************************************************************/
 function click_unit_in_panel(e, punit)
 {
+  // Win- and Cmd- click get help on unit_type:
+  if (e.metaKey) {
+    key_unit_help();
+    help_redirect(VUT_UTYPE, unit_type(punit).id);
+    return;
+  }
   // If shift-clicking, add this unit to the selected units
   if (e.shiftKey) {
     if (client.conn.playing != null && punit['owner'] == client.conn.playing.playerno) // only add our own unit to selection
@@ -2646,17 +2658,29 @@ function set_unit_id_focus_and_activate(id)
 /**************************************************************************
  See set_unit_focus_and_redraw()
 **************************************************************************/
-function city_dialog_activate_unit(punit)
+function city_dialog_activate_unit(e, punit)
 {
+  console.log("city_dialog_activate_unit called. event:")
+  console.log(e);
+  console.log("punit:")
+  console.log(punit);
+
   if (TAB_MAP === $("#tabs").tabs("option", "active")) {
     close_city_dialog_trigger();
   }
+  else if(TAB_EMPIRE === $("#tabs").tabs("option", "active")) {
+    if (!e.metaKey)
+      $('#ui-id-1').trigger("click");   // Going to map tab ensures exit from empire tab
+  }
   else {
-    $('#ui-id-1').trigger("click");   // ensures exit from city tab
+    $('#ui-id-1').trigger("click");   // Going to map tab ensures exit from city tab
     close_city_dialog_trigger();
   }
-  //request_new_unit_activity(punit, ACTIVITY_IDLE, EXTRA_NONE);
-  set_unit_focus_and_redraw(punit);
+  if (e.metaKey) {
+    help_redirect(VUT_UTYPE, unit_type(punit).id);
+  } else {
+    set_unit_focus_and_redraw(punit);
+  }
 }
 
 /**************************************************************************
@@ -4091,7 +4115,7 @@ function map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
     // ALT + UIO / JKL / M,. simulates keypad for devices that don't have it, if alt not held
     // execute the primary command for these keys:
     case 'U':
-      if (alt) {
+      if (alt && !ctrl && !shift) {
         the_event.preventDefault(); // override possible browser shortcut
         key_unit_move(DIR8_WEST);  // alt+U=7
       }
@@ -4103,6 +4127,9 @@ function map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
       else if (ctrl && !alt && !shift) {
         the_event.preventDefault(); // override possible browser shortcut
         unit_unhappy_report();
+      }
+      else if (ctrl && shift && !alt) {      // TODO: CMD/WIN/META for help
+        key_unit_help();
       }
     break;
     case 'I':
@@ -4409,6 +4436,10 @@ function handle_context_menu_callback(key)
         popit_req(ptile);
       }
       came_from_context_menu = false;  // reset UI-blocking state
+      break;
+
+    case "unit_help":
+      key_unit_help();
       break;
 
     case "goto":
@@ -6208,6 +6239,19 @@ function key_unit_upgrade()
 }
 
 /**************************************************************************
+ Tell the units to upgrade.
+**************************************************************************/
+function key_unit_help()
+{
+  var funits = get_units_in_focus();
+  if (!funits) return;
+
+  var punit = funits[0];
+  help_redirect(VUT_UTYPE, unit_type(punit).id);
+  deactivate_goto(false);
+}
+
+/**************************************************************************
  Tell the units to paradrop.
 **************************************************************************/
 function key_unit_paradrop()
@@ -6379,6 +6423,11 @@ function unit_can_vigil(punit)
       case "Artillery":
       case "Magnum Turret":
       case "Howitzer":
+        if (client_rules_flag[CRF_MP2_E] && name == "Ballista") {
+          if (punit['movesleft'] / parseFloat(SINGLE_MOVE) > 0.99) {
+            return true;
+          }
+        }
         if (client_rules_flag[CRF_MP2_D]) {
           if (moves_used <= 0 && (tile_city(ptile) || tile_has_base(ptile))) {
             return true;
