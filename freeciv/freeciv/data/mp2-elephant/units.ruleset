@@ -746,6 +746,7 @@ flags         = "NeverTired", "Unreachable", "DoesntOccupyTile", "Airliftable"
 ; "AlwaysAttackClass3"  = Unit always attacks ProvokingClass3 unless alone in a city with <90% odds to win.
 ; "FreeRide"            = Units w/ (paratroopers_range > 0) have no PASSENGER_MOVE_COST if cargo on this unit. Units who
 ;                         can't paradrop may freely use this, but paratroopers will always ride for free in this unit type.
+; "OnlyHitsTargets"   = Only engages units in its targets = "" list and doesn't do stack kill.
 ;—————————————————————————————————————————————————————————————————————————————————————
 ;| Autoattack may happen based on which flags attacker and defender have:
 ;|
@@ -5786,10 +5787,10 @@ bonuses       =
      "Missile",      "DefenseMultiplierPct", 999, TRUE
    }
 flags         = "NeverProtects", "HasNoZOC", "Unbribable", "CantReachAir", "BadCityDefender",
-                "NoHome", "Missile", "NeverBlocked", "AlwaysAttackClass1", "MultiSlot"
+                "NoHome", "Missile", "NeverBlocked", "AlwaysAttackClass1", "MultiSlot", "OnlyHitsTargets"
 roles         = ""
 helptext      = _("\
-ABMs intercept enemy missiles. Because there is seldom enough time to\
+ABMs ignore all other units and only intercept one enemy missile. Because there is seldom enough time to\
  order a launch against incoming missiles, ABMs are usually set to Vigil,\
  which makes them automatically intercept adjacent offensive missiles (not other ABMs). In the case\
  of a missile trying non-adjacent nuclear detonation, each ABM on vigil has a 29% chance to\
