@@ -1324,7 +1324,8 @@ target_reqs    =
 
 ; ***************** BOMBARDS *****************************
 ; **************************************** !!!!!!!!!!!!!!!!!!!!!!!!! NOTE, for every new unit who can bombard, you have to
-; **************************************** !!!!!!!!!!!!!!!!!!!!!!!!! add it to the UnitType, FALSE list below for general Ballistic class
+; **************************************** !!!!!!!!!!!!!!!!!!!!!!!!! add it to the UnitType, FALSE list below so they can't
+; **************************************** !!!!!!!!!!!!!!!!!!!!!!!!! do Ballistic class bombardments
 ;Ballistic units who haven't moved can bombard: i.e., Catapult, Ballista, Canon, Artillery, Howitzer
 [actionenabler_ballistic_SUA_unmoved]
 action = "Bombard"
@@ -1340,6 +1341,7 @@ actor_reqs    =
       "UnitType",     "Zeppelin",      "Local", FALSE
       "UnitType",     "Marines",       "Local", FALSE
       "UnitType",     "Battleship",    "Local", FALSE
+      "UnitType",     "Ballista",      "Local", FALSE
       "UnitState",    "Transported",   "Local", FALSE
       "UnitState",    "MovedThisTurn", "Local", FALSE
       "MinMoveFrags", "1",             "Local", TRUE
@@ -1354,13 +1356,26 @@ target_reqs    =
       "Extra",      "Bunker",    "Local", FALSE
 ;     "TerrainClass", "Oceanic",  "Local", FALSE      can bombard ocean tiles.
     }
+[actionenabler_ballistic_SUA_ballista]               ; The ballista can't attack at all so gets some easier rules
+action = "Bombard"
+actor_reqs    =
+    { "type",         "name",          "range", "present"
+      "UnitFlag",     "Bombarder",     "Local", TRUE
+      "UnitType",     "Ballista",      "Local", TRUE
+      "MinMoveFrags", "10080",         "Local", TRUE
+      "DiplRel",      "War",           "Local", TRUE
+    }
+target_reqs    =
+    { "type",   "name", "range", "present"
+;      "TerrainClass", "Oceanic",  "Local", FALSE      can bombard ocean tiles.
+    }
 [actionenabler_ballistic_SUA_magnum_turret]
 action = "Bombard 2"
 actor_reqs    =
     { "type",         "name",          "range", "present"
       "UnitFlag",     "Bombarder",     "Local", TRUE
       "UnitType",     "Magnum Turret", "Local", TRUE
-      "MinMoveFrags", "1",             "Local", TRUE  ; can do multiple Bombards @ 1 move each. NB: tamps exploit of suicide sacrifice.
+      "MinMoveFrags", "1",             "Local", TRUE  ; can do multiple Bombards @ 1 move each. NB: lessens exploit of suicide sacrifice.
       "DiplRel",      "War",           "Local", TRUE
     }
 target_reqs    =

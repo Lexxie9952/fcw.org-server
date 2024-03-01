@@ -2959,7 +2959,7 @@ move_rate     = 2
 vision_radius_sq = 4
 transport_cap = 0
 fuel          = 0
-city_size     = 4608        ; 000000,010,010,000000,00 = atk_bonus=0, max_kills=2, targets=2, move_cost=all moves, stay_fortfy=0, reserved = 0
+city_size     = 4612        ; 000000,010,010,000001,00 = atk_bonus=0, max_kills=2, targets=2, move_cost=1, stay_fortfy=0, reserved = 0
 paratroopers_mr_sub = 10241 ; 000,00101,00,0000,000,0,1 - max_ATKs=0, bbd_retal_rate=5, iPill_rand_tgts=0, iPill_odds=0, iPill_moves=0, iPillage=0, ATK_Stay_Fortified=1
 uk_happy      = 1
 uk_shield     = 1
@@ -2976,8 +2976,10 @@ helptext      = _("\
 Ballistae can only do Ranged Attack, firing massive bolts through enemy\
  ranks for 5 rounds. This targets and possibly kills 2 units who can’t\
  conventionally retaliate, both of which may die. The Ballista’s A1 5FP is\
- deadlier than an equivalent A5 1FP unit. Ballistae must have all move-points\
- to attack. They can target Ocean tiles but not Fortresses or Cities. \n\
+ deadlier than an equivalent A5 1FP unit. Unlike other Ballistic class,\
+ Ballistae have no requirement to be in a Fort or City: one move point remaining\
+ is required to Vigil or Ranged Attack; one move point is spent on the attack.\
+ Ballistae can target Ocean tiles but not Fortresses or Cities. \n\
 "), _("
 When conventionally defending against foot and mounted units, Ballistae defend\
  at 1/5 strength. However, on defensive terrain it can still be fatal — only 2\
@@ -3115,7 +3117,7 @@ uk_food       = 0
 uk_gold       = 1
 embarks       = "LandRoad", "Helicopter"
 disembarks    = "LandRoad", "Helicopter"
-targets       = "Air", "AirProtect", "Sea", "Balloon", "Helicopter", "LandRail", "Zeppelin"
+targets       = "Air", "AirProtect", "Trireme", "RiverShip", "Sea", "Balloon", "Helicopter", "LandRail", "Zeppelin"
 bonuses       =
    { "flag", "type", "value"
      "AirAttacker", "DefenseDivider", 1

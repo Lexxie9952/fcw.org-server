@@ -8578,6 +8578,14 @@ reqs    =
       "UnitType", "Phalanx",           "Local", TRUE
       "Action",   "Bombard",           "Local", TRUE
     }
+[effect_action_success_move_cost_bombard_ballista]
+type    = "Action_Success_Actor_Move_Cost"
+value   = 10079 ;+1=10080 = 1mp    ; (1 in bitfield prevents loss of all moves)
+reqs    =
+    { "type",     "name",              "range", "present"
+      "UnitType", "Ballista",          "Local", TRUE
+      "Action",   "Bombard",           "Local", TRUE
+    }
 [effect_action_success_move_cost_bombard_archers]
 type    = "Action_Success_Actor_Move_Cost"
 value   = 16127 ;+1=16128/10080=1.6mp    ; 95 + 1 = 96 = 96/60 = 1.6mp (1 in bitfield prevents loss of all moves)
