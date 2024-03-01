@@ -689,7 +689,7 @@ function get_advances_text(tech_id)
   const num = (value) => value === null ? 'null' : value;
   const tech_span = (name, unit_id, impr_id, title) =>
     `<span ${title ? `title='${title}'` : ''}`
-    + ` onclick='show_tech_info_dialog("${name}", ${num(unit_id)}, ${num(impr_id)})'>${name}</span>`;
+    + ` onclick='show_tech_info_dialog(event, "${name}", ${num(unit_id)}, ${num(impr_id)})'>${name}</span>`;
 
   const is_valid_and_required = (next_tech_id) =>
     reqtree.hasOwnProperty(next_tech_id) && is_tech_req_for_tech(tech_id, next_tech_id);
@@ -727,11 +727,11 @@ function get_advances_text(tech_id)
             "A:"+fractionalize(utype_real_base_attack_strength(unit)) +" D:"+fractionalize(utype_real_base_defense_strength(unit)) +(unit.firepower>1?" F:"+unit.firepower:"") +" H:"+unit.hp
             +" M:"+move_points_text(unit.move_rate+(unit.move_bonus[0]?unit.move_bonus[0]:0),true)+(unit.fuel?"("+unit.fuel+")":"")
             +(unit.transport_capacity?" C:"+unit.transport_capacity:"") +" Cost:"+unit.build_cost +"\n\n"
-            + html_safe(cleaned_text(unit.helptext))))),
+            + html_safe(cleaned_text(unit.helptext))+"\n\nCLICK or "+browser.metaKey+"-CLICK to see help manual."))),
         format_list_with_intro('', get_improvements_from_tech(tech_id)
           .map(impr => tech_span(impr.name, null, impr.id,
             "Cost:"+impr.build_cost+" Upkeep:"+impr.upkeep + "\n\n"
-            + html_safe(cleaned_text(impr.helptext))))),
+            + html_safe(cleaned_text(impr.helptext))+"\n\nCLICK or "+browser.metaKey+"-CLICK to see help manual."))),
         format_list_with_intro('', Object.keys(techs)
           .filter(is_valid_and_required)
           .map(tid => techs[tid])
@@ -1047,8 +1047,27 @@ function show_wikipedia_dialog(tech_name)
 /**************************************************************************
  Shows info about a tech, unit or improvement based on helptext and wikipedia.
 **************************************************************************/
-function show_tech_info_dialog(tech_name, unit_type_id, improvement_id)
+function show_tech_info_dialog(event, tech_name, unit_type_id, improvement_id)
 {
+/* Basically we co-opt the cheesy wiki-like dialog on units and improvements
+   to go to the real help tab documentation... if we don't have a unit or
+   building then we fall through to show the wiki stuff on tech. */
+  // Meta-click is show help
+  if (event.metaKey || true) {
+    let kind = -1, value = -1;
+    if (unit_type_id != null) {
+      kind = VUT_UTYPE;
+      value = unit_type_id;
+    } else if (improvement_id != null) {
+      kind = VUT_IMPROVEMENT;
+      value = improvement_id;
+    }
+    if (kind > -1 && value > -1) {
+      remove_active_dialog("#tech_dialog");
+      help_redirect(kind, value);
+      return;
+    }
+  }
   $("#tech_tab_item").css("color", "#aa0000");
 
   var message = "";
@@ -1076,7 +1095,7 @@ function show_tech_info_dialog(tech_name, unit_type_id, improvement_id)
     const num = (value) => value === null ? 'null' : value;
     const tech_span = (name, unit_id, impr_id, title) =>
       `<span ${title ? `title='${title}'` : ''}`
-      + ` onclick='show_tech_info_dialog("${name}", ${num(unit_id)}, ${num(impr_id)}")'>${name}</span>`;
+      + ` onclick='show_tech_info_dialog(event, "${name}", ${num(unit_id)}, ${num(impr_id)}")'>${name}</span>`;
     const is_valid_and_required = (next_tech_id) =>
       reqtree.hasOwnProperty(next_tech_id) && is_tech_req_for_tech(tech_id, next_tech_id);
     const format_list_with_intro = (intro, list) =>

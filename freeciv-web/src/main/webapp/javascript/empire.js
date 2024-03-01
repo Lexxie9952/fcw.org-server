@@ -349,7 +349,7 @@ function empire_unit_homecity_screen(wide_screen,narrow_screen,small_screen,
           adjust_oversize = (sprite['width']>64) ? -34 : -26;  // "oversize" images space differently
 
           ptype_img_html = "<span class='prod_img' title='"+html_safe(get_unit_city_info(punit))+"' style='float:left; padding-left:0px padding-right:0px; content-align:right; margin-top:-8px;"
-                  + "margin-left:"+adjust_oversize+"px' margin-right:-4px; onclick='city_dialog_activate_unit(units[" + punit['id'] + "]);'>"
+                  + "margin-left:"+adjust_oversize+"px' margin-right:-4px; onclick='city_dialog_activate_unit(event, units[" + punit['id'] + "]);'>"
                   + "<div style='float:left; content-align:left;"
                   + "background: transparent url("
                   + sprite['image-src']
@@ -614,7 +614,7 @@ function empire_unitcity_screen(wide_screen,narrow_screen,small_screen,
           adjust_oversize = (sprite['width']>64) ? -34 : -26;  // "oversize" images space differently
 
           ptype_img_html = "<span class='prod_img' title='"+html_safe(get_unit_city_info(punit))+"' style='float:left; padding-left:0px padding-right:0px; content-align:right; margin-top:-8px;"
-                  + "margin-left:"+adjust_oversize+"px' margin-right:-4px; onclick='city_dialog_activate_unit(units[" + punit['id'] + "]);'>"
+                  + "margin-left:"+adjust_oversize+"px' margin-right:-4px; onclick='city_dialog_activate_unit(event, units[" + punit['id'] + "]);'>"
                   + "<div style='float:left; content-align:left;"
                   + "background: transparent url("
                   + sprite['image-src']
@@ -881,16 +881,16 @@ function empire_econ_improvements_screen(wide_screen,narrow_screen,small_screen,
           opacity=0.19;
           border = "border:3px solid #231a13;"
           bg =     "background:#F43F ";
-          title_text = "title='" + pcity['name']+": " + improvements[z]['name'] + " unavailable.\n\nRIGHT-CLICK: Add to worklist.'";
-          right_click_action = alt_click_method+"='city_add_improv_to_worklist(" +city_id+","+ z + ");' ";
+          title_text = "title='" + pcity['name']+": " + improvements[z]['name'] + " unavailable.\n\nRIGHT-CLICK: Add to worklist.\n\n"+browser.metaKey+"-CLICK: get help on building.'";
+          right_click_action = alt_click_method+"='city_add_improv_to_worklist(event" +city_id+","+ z + ");' ";
         } else {    // city has improvement AND CAN MAKE IT
           opacity = 1;
           border = (is_city_making ? (product_finished ? "border:3px solid #308000;" : "border:3px solid #80E0FF;") : "border:3px solid #000000;");
           bg =     (is_city_making ? (product_finished ? "background:#BFBE " : "background:#8D87 ") : "background:#AD68 ");
-          right_click_action = alt_click_method+"='city_change_prod_and_buy(null," +city_id+","+ z + ");' "
+          right_click_action = alt_click_method+"='city_change_prod_and_buy(event," +city_id+","+ z + ");' "
           title_text = is_city_making
-            ? ("title='"+html_safe(pcity['name'])+verb+improvements[z]['name']+".\n\nRIGHT_CLICK: Buy "+html_safe(improvements[z]['name'])+"'")
-            : ("title='"+html_safe(pcity['name'])+":\n\nCLICK: Change production\n\nRIGHT-CLICK: Buy "+html_safe(improvements[z]['name'])+"'");
+            ? ("title='"+html_safe(pcity['name'])+verb+improvements[z]['name']+".\n\nRIGHT_CLICK: Buy "+html_safe(improvements[z]['name'])+"\n\n"+browser.metaKey+"-CLICK: get help on building.\n\n")
+            : ("title='"+html_safe(pcity['name'])+":\n\nCLICK: Change production\n\nRIGHT-CLICK: Buy "+html_safe(improvements[z]['name'])+"\n\n"+browser.metaKey+"-CLICK: get help on building.\n\n'");
         }
       }
       if (!show_building) opacity = 0.21;  // we show a ghost ability to see grid.
@@ -1172,6 +1172,10 @@ function cut_improv_clipboard(event, z)
 **************************************************************************/
 function handle_improv_clipboard(event, kind, z)
 {
+  if (event.metaKey) {
+    help_redirect(kind, z);
+    return;
+  } // end show help
   if (event.ctrlKey) {   // future command
   }
   else if (event.shiftKey) {   // append to clipboard
@@ -1484,7 +1488,7 @@ function create_worklist_improv_div()
     if (mag_factor < 0.3597) mag_factor = 0.3597;
   }
   var magnification = "zoom:"+mag_factor+"; -moz-transform:"+mag_factor+";";
-  const constant_title = "CLICK: Copy to clipboard\n\nSHIFT-CLICK: Add to clipboard' ";
+  const constant_title = "CLICK: Copy to clipboard\n\nSHIFT-CLICK: Add to clipboard\n\n"+browser.metaKey+"-CLICK: go to help manual.' ";
 
   for (var z = 0; z < ruleset_control.num_impr_types; z ++) {
     if (improvements[z].genus<=GENUS_SMALL_WONDER) continue; // filter out great/small wonders from this div
@@ -1543,7 +1547,7 @@ function create_worklist_wonder_div()
     if (mag_factor < 0.3597) mag_factor = 0.3597;
   }
   var magnification = "zoom:"+mag_factor+"; -moz-transform:"+mag_factor+";";
-  const constant_title = "CLICK: Copy to clipboard\n\nSHIFT-CLICK: Add to clipboard' ";
+  const constant_title = "CLICK: Copy to clipboard\n\nSHIFT-CLICK: Add to clipboard\n\n"+browser.metaKey+"-CLICK: go to help manual.' ";
 
   // Create array of owned wonders now: 72 checks instead of 72x72=5184 checks
   var owned_wonders = new Array(ruleset_control.num_impr_types).fill(0);
@@ -1618,7 +1622,7 @@ function create_worklist_unit_div()
     if (mag_factor < 0.3597) mag_factor = 0.3597;
   }
   var magnification = "zoom:"+mag_factor+"; -moz-transform:"+mag_factor+";";
-  const constant_title = "CLICK: Copy to clipboard\n\nSHIFT-CLICK: Add to clipboard' ";
+  const constant_title = "CLICK: Copy to clipboard\n\nSHIFT-CLICK: Add to clipboard\n\n"+browser.metaKey+"-CLICK: go to help manual.' ";
 
   // THIS was a clean-up of DIRTY hard-coding. If it fails, see commits for 23Feb2021 to revert.
   for (var z = 0; z < ruleset_control.num_unit_types; z ++) {
@@ -1981,7 +1985,7 @@ function empire_unittype_screen(wide_screen,narrow_screen,small_screen,
         adjust_oversize = (sprite['width']>64) ? -34 : -26;  // "oversize" images space differently
 
         ptype_img_html = "<span class='prod_img' title='"+html_safe(get_unit_city_info(punit))+"' style='float:left; padding-left:0px padding-right:0px; content-align:right; margin-top:-8px;"
-                + "margin-left:"+adjust_oversize+"px' margin-right:-4px; onclick='city_dialog_activate_unit(units[" + punit['id'] + "]);'>"
+                + "margin-left:"+adjust_oversize+"px' margin-right:-4px; onclick='city_dialog_activate_unit(event, units[" + punit['id'] + "]);'>"
                 + "<div style='float:left; content-align:left;"
                 + "background: transparent url("
                 + sprite['image-src']

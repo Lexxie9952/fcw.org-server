@@ -533,7 +533,7 @@ function show_city_dialog(pcity)
 
   city_worklist_dialog(pcity);
   $("#worklist_dialog_headline").unbind('click');
-  $("#worklist_dialog_headline").click(function(ev) { ev.stopImmediatePropagation(); city_remove_current_prod()} );
+  $("#worklist_dialog_headline").click(function(ev) { ev.stopImmediatePropagation(); city_remove_current_prod(ev)} );
 
   var orig_renderer = renderer;
   if (renderer == RENDERER_WEBGL) renderer = RENDERER_2DCANVAS;
@@ -564,7 +564,10 @@ function show_city_dialog(pcity)
   prod_string += "<b style='color:#fed'>" + (prod_type != null ? prod_type['type']['name']+"</b>" : "None</b>");
   if (is_small_screen() && prod_type != null && prod_type['type']['name'] != null && prod_type['type']['name'].length>16)
     prod_string = "<span style='font-size:90%'>" + prod_string + "</span>";
-  $("#city_production_overview").html("<span style='cursor:pointer' onclick='city_prod_tab();'>"+prod_string+"</span>");
+  let prod_name = (prod_type != null ? prod_type['type']['name'] : "");
+  $("#city_production_overview").html("<span style='cursor:pointer' title='CLICK: Change production.\n\n"
+  + browser.metaKey+"-CLICK: See the help manual for " + prod_name +".' "
+  +" onclick='city_prod_tab(event);'>"+prod_string+"</span>");
 
   turns_to_complete = get_city_production_time(pcity);
 
@@ -648,8 +651,8 @@ function show_city_dialog(pcity)
            + sprite['image-src'] +
            ");background-position:-" + sprite['tileset-x'] + "px -" + sprite['tileset-y']
            + "px;  width: " + sprite['width'] + "px;height: " + sprite['height'] + "px;float:left; '"
-           + "title=\"" + html_safe(cleaned_text(improvements[z]['helptext'])) +"\n\nUpkeep: "+ upkeep + "\" "
-	   + "onclick='city_sell_improvement(" + z + ");'>"
+           + "title=\"" + html_safe(cleaned_text(improvements[z]['helptext'])) +"\n\nUpkeep: "+ upkeep + "\n\n"+browser.metaKey+"-CLICK to see help in manual." + "\" "
+	   + "onclick='city_sell_improvement(event," + z + ");'>"
            +"</div>"+ long_name_font_reducer+improvements[z]['name']+"</div>" + "</div>";
     }
   }
@@ -669,11 +672,11 @@ function show_city_dialog(pcity)
         if (punit['owner'] == client.conn.playing.playerno) {
           present_units_html = present_units_html +
           "<div class='game_unit_list_item' title='" + html_safe(get_unit_city_info(punit))
-              + "' style='cursor:pointer;cursor:hand; background: transparent url("
+              + "' style='cursor:pointer; background: transparent url("
               + sprite['image-src'] +
               ");background-position:-" + sprite['tileset-x'] + "px -" + sprite['tileset-y']
               + "px;  width: " + sprite['width'] + "px;height: " + sprite['height'] + "px;float:left; '"
-              + " onclick='city_dialog_activate_unit(units[" + punit['id'] + "]);'"
+              + " onclick='city_dialog_activate_unit(event, units[" + punit['id'] + "]);'"
               +"></div>";
 
         }
@@ -689,20 +692,20 @@ function show_city_dialog(pcity)
               // flag
               present_units_html = present_units_html +
               "<div class='game_unit_list_item' title='" + nations[players[punit['owner']]['nation']]['adjective']
-                  + "' style='cursor:pointer;cursor:hand; background: transparent url("
+                  + "' style='cursor:pointer; background: transparent url("
                   + civ_flag_url
                   + "); background-size:contain; background-repeat:no-repeat; width:22px; height:14px; float:left; ' "
-                  + "onclick='city_dialog_activate_unit(units[" + punit['id'] + "]);'"
+                  + "onclick='city_dialog_activate_unit(event, units[" + punit['id'] + "]);'"
                   +"></div>";
 
               // unit
               present_units_html = present_units_html +
               "<div class='game_unit_list_item' title='" + html_safe(get_unit_city_info(punit))
-                  + "' style='cursor:pointer;cursor:hand; background: transparent url("
+                  + "' style='cursor:pointer; background: transparent url("
                   + sprite['image-src'] +
                   ");background-position:-" + sprite['tileset-x'] + "px -" + sprite['tileset-y']
                   + "px;  width: " + sprite['width'] + "px;height: " + sprite['height'] + "px;float:left; margin-left:-21px; martin-top:-14px;'"
-                  + " onclick='city_dialog_activate_unit(units[" + punit['id'] + "]);'"
+                  + " onclick='city_dialog_activate_unit(event, units[" + punit['id'] + "]);'"
                   +"></div>";
           }
         }
@@ -741,11 +744,11 @@ function show_city_dialog(pcity)
 
       supported_units_html = supported_units_html +
       "<div class='game_unit_list_item' title='" + html_safe(get_unit_city_info(punit))
-          + "' style='cursor:hand; background: transparent url("
+          + "' style='cursor:pointer; background: transparent url("
           + sprite['image-src'] +
           ");background-position:-" + sprite['tileset-x'] + "px -" + sprite['tileset-y']
           + "px;  width: " + sprite['width'] + "px;height: " + sprite['height'] + "px;float:left; '"
-          + " onclick='city_dialog_activate_unit(units[" + punit['id'] + "]);'"
+          + " onclick='city_dialog_activate_unit(event, units[" + punit['id'] + "]);'"
           +"></div>";
       supported_units_html = supported_units_html
                            + get_html_vet_sprite(punit)
@@ -881,7 +884,7 @@ function show_city_dialog(pcity)
     for (var j = 0; j < pcity['specialists'][u]; j++) {
       sprite = get_specialist_image_sprite(spec_gfx_key);
       specialist_html = specialist_html +
-      "<div class='specialist_item' style='cursor:pointer;cursor:hand; background: transparent url("
+      "<div class='specialist_item' style='cursor:pointer; background: transparent url("
            + sprite['image-src'] +
            ");background-position:-" + sprite['tileset-x'] + "px -" + sprite['tileset-y']
            + "px;  width: " + sprite['width'] + "px;height: " + sprite['height'] + "px;float:left; '"
@@ -2034,8 +2037,30 @@ function previous_city()
 /**************************************************************************
 ..
 **************************************************************************/
-function city_sell_improvement(improvement_id)
+function city_sell_improvement(event, improvement_id)
 {
+  // meta-Click is for show help
+  if (event.metaKey) {
+    /* Manually set quick_help_in_progress because the city dialog can jostle
+     * the touchy sensitive help screen which blanks out when it detects and
+     * resizing or UI changes, and here we triggering the help tab PRIOR to
+     * calling help_redirect() */
+    quick_help_in_progress = true;
+    if (TAB_MAP === $("#tabs").tabs("option", "active")) {
+      close_city_dialog_trigger();
+      $('#ui-id-7').trigger("click");  // help tab
+    }
+    else {
+      close_city_dialog_trigger();
+      $('#ui-id-7').trigger("click");  // help tab
+    }
+    setTimeout(function() {
+      help_redirect(VUT_IMPROVEMENT, improvement_id);
+    },0);
+    return;
+  }
+  // end show_help
+
   city_sell_improvement_in(active_city['id'], improvement_id);
 }
 /**************************************************************************
@@ -2351,7 +2376,7 @@ function city_change_specialist(event, city_id, from_specialist_id)
     if ( player_has_wonder(client.conn.playing.playerno, improvement_id_by_name(B_ADAM_SMITH_NAME)) ) {
       if (to_specialist_id == num_specialists) to_specialist_id = 0;
       // Hitting CTRL, ALT, or COMMAND-key optionally bypasses the 3 extra specialists:
-      if ((event.ctrlKey||event.altKey||event.metaKey) && to_specialist_id >=3) to_specialist_id = 0;
+      if ((event.ctrlKey||event.altKey) && to_specialist_id >=3) to_specialist_id = 0;
     } else { // no Adam Smith, also just cycle first 3
       if (to_specialist_id == 3) to_specialist_id = 0;
     }
@@ -2536,7 +2561,7 @@ function show_city_happy_tab()
         for (var j = 0; j < pcity['specialists'][u]; j++) {
           sprite = get_specialist_image_sprite(spec_gfx_key);
           citizen_html = citizen_html +
-          "<div class='specialist_item' style='cursor:pointer;cursor:hand; background: transparent url("
+          "<div class='specialist_item' style='cursor:pointer; background: transparent url("
               + sprite['image-src'] +
               ");background-position:-" + sprite['tileset-x'] + "px -" + sprite['tileset-y']
               + "px;  width: " + sprite['width'] + "px;height: " + sprite['height'] + "px;float:left; '"
@@ -2720,7 +2745,7 @@ function city_worklist_dialog(pcity)
      + (can_city_build_now(pcity, universal['kind'], universal['value']) ?
         "" : " cannot_build_item")
      + "' data-wlitem='" + j + "' "
-     + " title=\"" + html_safe(cleaned_text(universal['helptext'])) + "\">"
+     + " title=\"" + html_safe(cleaned_text(universal['helptext'])) + (" \n\n"+browser.metaKey)+"-CLICK: See the help manual for "+universal['name'] + "\">"
      + "<td><div class='production_list_item_sub' "
            + "style=' background: transparent url("
            + sprite['image-src'] +
@@ -2765,17 +2790,21 @@ function city_worklist_dialog(pcity)
   worklist_dialog_active = true;
   var turns_to_complete = get_city_production_time(pcity);
   var prod_type = get_city_production_type_sprite(pcity);
+  let title_text = "title='CLICK: Remove from worklist, and move remaining worklist up.\n\n"
+                 + browser.metaKey+"-CLICK: See the help manual for "+(prod_type != null ? prod_type['type']['name'] : "None")+".' ";
   var prod_img_html = "";
   if (prod_type != null) {
     sprite = prod_type['sprite'];
-    prod_img_html = "<div style='background: transparent url("
+    prod_img_html = "<div "
+           + title_text
+           + "style='background: transparent url("
            + sprite['image-src']
            + ");background-position:-" + sprite['tileset-x'] + "px -" + sprite['tileset-y']
            + "px;  width: " + sprite['width'] + "px;height: " + sprite['height'] + "px;float: left; '>"
            +"</div>";
   }
 
-  var headline = prod_img_html + "<div id='prod_descr'>"
+  var headline = prod_img_html + "<div "+title_text+" id='prod_descr'>"
     + (is_small_screen() ? "" : "<b>")
     + (prod_type != null ? prod_type['type']['name'] : "None")
     + (is_small_screen() ? "" : "</b>");
@@ -2803,8 +2832,10 @@ function city_worklist_dialog(pcity)
   if (is_small_screen() ) headline = "<span style='font-size:70%;'>"+headline+"</span>";
 
   $("#worklist_dialog_headline").html(headline + "</div>");
-  $("#worklist_dialog_headline").css({"title":"Click to:\n1.Remove from worklist and move remaining worklist up.\n"
-                                      +"2. If no worklist below, replace with highlighted selection from right.\n"});
+  //this method messes up unicode
+  //const worklist_headline_title = "CLICK: Remove from worklist and move remaining worklist up.\n\n"
+  //                            + browser.metaKey + "-CLICK: Get help on this type from the manual.\n"
+  //$("#worklist_dialog_headline").attr("title", worklist_headline_title);
 
   $(".prod_choice_list_item").tooltip({
     show: { delay:460, effect:"none", duration: 0 }, hide: {delay:50, effect:"none", duration: 0}
@@ -2857,6 +2888,7 @@ function city_worklist_dialog(pcity)
        selected: handle_current_worklist_select,
        unselected: handle_current_worklist_unselect
     });
+    worklist_items.click(handle_worklist_meta_click);
   } else {
     worklist_items.click(handle_current_worklist_click);
   }
@@ -2909,7 +2941,7 @@ function populate_worklist_production_choices(pcity)
       production_html += "<tr class='prod_choice_list_item kindvalue_item"
        + (can_build ? "" : " cannot_build_item")
        + "' data-value='" + value + "' data-kind='" + kind + "'>"
-       + "<td><div class='production_list_item_sub' title=\"" + html_safe(cleaned_text(production_list[a]['helptext']))
+       + "<td><div class='production_list_item_sub' title=\"" + html_safe(cleaned_text(production_list[a]['helptext'])) + "\n\n"+browser.metaKey+"-CLICK: Get help for this type."
            + "\" style=' background: transparent url("
            + sprite['image-src'] +
            ");background-position:-" + sprite['tileset-x'] + "px -" + sprite['tileset-y']
@@ -2963,18 +2995,58 @@ function populate_worklist_production_choices(pcity)
       prod_items.filter(sel.join(",")).addClass("ui-selected");
     }
 
+    $(".kindvalue_item").click(function(e) {
+      var value = parseFloat($(this).data('value'));
+      var kind = parseFloat($(this).data('kind'));
+      // meta-Click is for show help
+      if (e.metaKey) {
+        /* Manually set quick_help_in_progress because the city dialog can jostle
+        * the touchy sensitive help screen which blanks out when it detects and
+        * resizing or UI changes, and here we triggering the help tab PRIOR to
+        * calling help_redirect() */
+        quick_help_in_progress = true;
+        if (TAB_MAP === $("#tabs").tabs("option", "active")) {
+          close_city_dialog_trigger();
+          $('#ui-id-7').trigger("click");  // help tab
+        }
+        else {
+          close_city_dialog_trigger();
+          $('#ui-id-7').trigger("click");  // help tab
+        }
+        setTimeout(function() {
+          help_redirect(kind, value)
+        },0);
+      }
+    });
+
     $(".kindvalue_item").dblclick(function(e) {
       var value = parseFloat($(this).data('value'));
       var kind = parseFloat($(this).data('kind'));
-
-      if (e.ctrlKey || e.metaKey ) {
+      if (e.ctrlKey || e.altKey) {
         city_change_production();
         return;
       }
+      // Shouldn't really happen but, frustrated clicky when it is stuck, who knows?
+      if (e.metaKey) {   // meta-Click is for show help
+        quick_help_in_progress = true;
+        if (TAB_MAP === $("#tabs").tabs("option", "active")) {
+          close_city_dialog_trigger();
+          $('#ui-id-7').trigger("click");  // help tab
+        }
+        else {
+          close_city_dialog_trigger();
+          $('#ui-id-7').trigger("click");  // help tab
+        }
+        help_redirect(value, kind);
+        return;
+      }
+
       send_city_worklist_add(pcity['id'], kind, value);
       production_selection = [];
     });
-  } else {
+  }
+  // TOUCH DEVICE:
+  else {
     $(".kindvalue_item").click(function() {
       var value = parseFloat($(this).data('value'));
       var kind = parseFloat($(this).data('kind'));
@@ -3103,7 +3175,7 @@ function handle_current_worklist_unselect(event, ui)
 }
 
 /**************************************************************************
- Handles an item selection from the tasklist (for touch devices).
+ Handles an item selection from the worklist (for touch devices).
 **************************************************************************/
 function handle_current_worklist_click(event)
 {
@@ -3123,7 +3195,38 @@ function handle_current_worklist_click(event)
 
   update_worklist_actions();
 }
+/**************************************************************************
+ Metaclick a worklist item for help on it.
+**************************************************************************/
+function handle_worklist_meta_click(event)
+{
+  // meta-Click is for show help
+  if (event.metaKey) {
+    /* Manually set quick_help_in_progress because the city dialog can jostle
+     * the touchy sensitive help screen which blanks out when it detects and
+     * resizing or UI changes, and here we triggering the help tab PRIOR to
+     * calling help_redirect() */
+    quick_help_in_progress = true;
+    // Extract whatever unit or building was meta-clicked upon
+    let element = $(this);
+    let item = parseInt(element.data('wlitem'), 10);
+    let kind = active_city.worklist[item].kind;
+    let value = active_city.worklist[item].value;
 
+    if (TAB_MAP === $("#tabs").tabs("option", "active")) {
+      close_city_dialog_trigger();
+      $('#ui-id-7').trigger("click");  // docs tab
+    }
+    else {
+      //w$('#ui-id-1').trigger("click");   // ensures exit from city tab
+      close_city_dialog_trigger();
+      $('#ui-id-7').trigger("click");  // docs tab
+    }
+    setTimeout(function() {
+      help_redirect(kind, value)
+    },0);
+  }
+}
 /**************************************************************************
  Enables/disables buttons in production tab.
 **************************************************************************/
@@ -3281,8 +3384,14 @@ function unselect_improvements()
 /**************************************************************************
   Adds improvement z to city's worklist: called from SuperPanel
 *************************************************************************/
-function city_add_improv_to_worklist(city_id, z)
+function city_add_improv_to_worklist(event, city_id, z)
 {
+  // meta-Click is for show help
+  if (event.metaKey) {
+    help_redirect(VUT_IMPROVEMENT, z);
+    return;
+  } // end show help
+
   if (!can_city_queue_item(cities[city_id], kind, value)) {
     return;  // Don't add illegal items to worklist!
   }
@@ -3300,8 +3409,34 @@ function city_add_improv_to_worklist(city_id, z)
   Remove current production item from worklist (on double click)
   ...requires there to be an item below it.
 *************************************************************************/
-function city_remove_current_prod()
+function city_remove_current_prod(event, override_metaKey_pressed)
 {
+  if (event.metaKey || override_metaKey_pressed) {
+    /* Manually set quick_help_in_progress because the city dialog can jostle
+     * the touchy sensitive help screen which blanks out when it detects and
+     * resizing or UI changes, and here we triggering the help tab PRIOR to
+     * calling help_redirect() */
+    quick_help_in_progress = true;
+    // Get whatever unit or building city is making and was meta-clicked upon:
+    let kind = active_city.production_kind;
+    let value = active_city.production_value;
+
+    if (TAB_MAP === $("#tabs").tabs("option", "active")) {
+      close_city_dialog_trigger();
+      $('#ui-id-7').trigger("click");  // docs tab
+    }
+    else {
+      //w$('#ui-id-1').trigger("click");   // ensures exit from city tab
+      close_city_dialog_trigger();
+      $('#ui-id-7').trigger("click");  // docs tab
+    }
+    setTimeout(function() {
+      help_redirect(kind, value)
+    },0);
+
+    return;
+  }
+
   var wl = active_city['worklist'];
 
   // if worklist items below, move them up
@@ -3328,8 +3463,9 @@ function city_remove_current_prod()
 /**************************************************************************
  Handles dblclick-issued removal
 **************************************************************************/
-function handle_current_worklist_direct_remove()
+function handle_current_worklist_direct_remove(e)
 {
+
   var idx = parseInt($(this).data('wlitem'), 10);
   active_city['worklist'].splice(idx, 1);
 
@@ -3529,24 +3665,30 @@ function show_city_improvement_pane(city_id)
   // therefore, it doesn't show wonders and sticks to genus==2, but it also makes improvements
   // always in the same place whether present or not, so Gestalt processing can check for the
   // improvement.
+  var z = 0;
   var pcity = cities[city_id];
   if (!pcity) return;  // sometimes happens after it's razed, disbanded, etc.
 
   var improvements_html = "";
   var opacity = 1;
   var border = "";
-  var mag_factor = ($(window).width()-519)/2470;   //was 2450 which was .57 on 1920p
-
+  var mag_factor = ($(window).width()-519)/2470;   //was 2450 which was .57 on 1920x1080
+  add_client_message("Mag factor: "+mag_factor)
   //console.log("width: "+$(window).width()+"mag factor:"+mag_factor);
   //var magnification = "zoom:"+mag_factor+";"; // doesn't work right on Firefox, use line below insead:
   var magnification = "transform:scale("+mag_factor+"); transform-origin: top left;";
 
   var bg = "background:#335 ";
   var title_text = "";
-  var right_click_action = "oncontextmenu='city_sell_improvement_in(" +city_id+","+ z + ");' ";
-  var shift_click_text = "\n\nSHIFT-CLICK: Highlight ON/OFF cities with this building.\n\nCTRL-CLICK: &#x2611; select ON/OFF cities with this building.' ";
-    for (var z = 0; z < ruleset_control.num_impr_types; z ++) {
-      if (pcity['improvements'] != null /*&& pcity['improvements'].isSet(z) if present*/ && improvements[z].genus==GENUS_IMPROVEMENT) {
+  var right_click_action;
+  var shift_click_text = "\n\nSHIFT-CLICK: Highlight ON/OFF cities with this building.\n\nCTRL-CLICK: &#x2611; select ON/OFF cities with this building. "+
+                         "\n\n"+browser.metaKey+"-CLICK: get help on building.'"
+    for (zz = -1; zz < ruleset_control.num_impr_types; zz ++) {
+        // Read ugly hack farther below for why we construct TWO improvement number zero, (one is an invisible dummy) 🤣
+        z = zz == -1 ? 0 : zz;
+        var right_click_action = "oncontextmenu='city_sell_improvement_in(" +city_id+","+ z + ");' ";
+
+        if (pcity['improvements'] != null /*&& pcity['improvements'].isSet(z) if present*/ && improvements[z].genus==GENUS_IMPROVEMENT) {
         sprite = get_improvement_image_sprite(improvements[z]);
         if (sprite == null) {
           continue;
@@ -3579,6 +3721,7 @@ function show_city_improvement_pane(city_id)
             var verb = " is finishing ";
           }
         }
+        let spacing = "padding:0px; margin: 0px; ";
 
         // Set cell colour/opacity based on: if present / can build
         if (pcity['improvements'].isSet(z)) {     // city has improvement: white cell
@@ -3593,21 +3736,22 @@ function show_city_improvement_pane(city_id)
             border = "border:3px solid #231A13;"
             bg =     "background:#9873 ";
             title_text = "title='" + html_safe(pcity['name'])+": " + html_safe(improvements[z]['name']) + " unavailable.\n\nRIGHT-CLICK: Add to worklist."+shift_click_text;
-            right_click_action = "oncontextmenu='city_add_improv_to_worklist(" +city_id+","+ z + ");' ";
+            right_click_action = "oncontextmenu='city_add_improv_to_worklist(event, " +city_id+","+ z + ");' ";
           } else {                  // doesn't have and CAN build - dark blue
             opacity = 1;
             border = (is_city_making ? (product_finished ? "border:3px solid #308000;" : "border:3px solid #80E0FF;") : "border:3px solid #000000;");  // highlight if current prod
             bg =     (is_city_making ? (product_finished ? "background:#BFBE " : "background:#8D87 ") : "background:#147F ");
-            right_click_action = "oncontextmenu='city_change_prod_and_buy(null," +city_id+","+ z + ");' "
+            right_click_action = "oncontextmenu='city_change_prod_and_buy(event," +city_id+","+ z + ");' "
             title_text = is_city_making
               ? ("title='"+html_safe(pcity['name'])+verb+html_safe(improvements[z]['name'])+".\n\nRIGHT_CLICK: Buy "+html_safe(improvements[z]['name'])+shift_click_text)
               : ("title='"+html_safe(pcity['name'])+":\n\nCLICK: Change production\n\nRIGHT-CLICK: Buy "+html_safe(improvements[z]['name'])+shift_click_text);
           }
         }
         // Put improvement sprite in the cell:
-            improvements_html = improvements_html +
-            "<div style='padding:0px; opacity:"+opacity+"; "//+magnification
-                +"' id='city_improvement_element' class='cip'><span style='padding:0px; margin:0px; "+border+" "+bg+" url("
+        if (zz != -1) {
+          improvements_html = improvements_html +
+            "<div style='padding:0px; opacity:"+opacity+"; "
+                +"' id='city_improvement_element' class='cip'><span style='"+spacing+border+" "+bg+" url("
                 + sprite['image-src'] +
                 ");background-position:-" + sprite['tileset-x'] + "px -" + sprite['tileset-y']
                 + "px;  width: " + sprite['width'] + "px;height: " + sprite['height'] + "px;float:left;"+magnification+"' "
@@ -3615,6 +3759,22 @@ function show_city_improvement_pane(city_id)
                 + right_click_action
                 + "onclick='change_city_prod_to(event," +city_id+","+ z + ");'>"
                 +"</span></div>";
+        } else {  /* Ugly hack, because of JS/Jquery bug in browser itself. IF (city-list-screen is entered at a zoom-level on a >=UHD display, even if it's emulating 1920x1080p
+                     through its "virtual scaling"), THEN: meta-clicking the 0th improvement often fails in spite of the exact same function with exact same parameters being called.
+                     It literally "forgets" the parameters with which the function was called (and verified to have received via console.logs), and clicks into some random part
+                     of the helpmenu like Terrain or City Improvements, as the passed parameters somehow get corrupted when accessed by JQuery (but not by console.logs). The
+                     solution was to start iterating at -1 and if at -1, conditionally treat it as another improvement #0, but with no pointer-events and fully transparent. The
+                     real improvement #0 is added again but now is in the next position as "improvement #1", so that it enjoys the fact that no improvement whose position in the
+                     pane is greater than 0th experiences the 36-hours-wasted bug! 😱 😮 */
+          improvements_html = improvements_html +
+            "<div style='pointer-events:none; padding:0px; opacity:"+0+"; "
+                +"' id='city_improvement_element' class='cip'><span style='"+spacing+border+" "+bg+" url("
+                + sprite['image-src'] +
+                ");background-position:-" + sprite['tileset-x'] + "px -" + sprite['tileset-y']
+                + "px;  width: " + sprite['width'] + "px;height: " + sprite['height'] + "px;float:left;"+magnification+"' "
+                + ">"
+                +"</span></div>";
+        }
       }
   }
   $("#city_improvements_hover_list").html(improvements_html);
@@ -3623,16 +3783,22 @@ function show_city_improvement_pane(city_id)
 }
 /**************************************************************************
  Changes production in city_id to improvement type #z THEN buys it
-   this function is called from a click from SuperPanel in the city list
+   this function is called from a click from SuperPanel in the city list,
+   also empire tab.
 **************************************************************************/
 function city_change_prod_and_buy(event, city_id, z)
-{/*
+{
   if (event) {
     if (event.ctrlKey) {
       // TO-DO: slice this improvement from the production queue
       return;
     }
-  }*/
+    // meta-Click is for show help
+    else if (event.metaKey) {
+      help_redirect(VUT_IMPROVEMENT, z);
+      return;
+    }
+  } // end show help
 
   // First change production
   change_city_prod_to(null, city_id, z);
@@ -3658,8 +3824,13 @@ function city_filter_prod_type(event, city_id)
   if (pcity == null) return;
   kind = pcity['production_kind'];
   z = pcity['production_value'];
+
+  // meta-click: get help
+  if (event.metaKey) {
+    help_redirect(kind, z);
+  }
   // shift-click: HIGHLIGHT all cities making same as this city
-  if (event.shiftKey) {
+  else if (event.shiftKey) {
     highlight_rows_by_output(kind, z, false);
   }
   // ctrl-click: SELECT all cities make same as this city
@@ -3671,12 +3842,17 @@ function city_filter_prod_type(event, city_id)
 }
 /**************************************************************************
  Changes production in city_id to improvement type #z: clicked from improv
-   panel in the city list screen
+   panel in the city list screen; or from empire tab
 **************************************************************************/
 function change_city_prod_to(event, city_id, z)
 {
+  console.log("z=="+z)
   if (event) {
-    if (event.shiftKey) {   //intercept shift-click and call the right function
+    // meta-Click is for show help
+    if (event.metaKey) {
+        help_redirect(VUT_IMPROVEMENT, z);
+      return;
+    } else if (event.shiftKey) {   //intercept shift-click and call the right function
       highlight_rows_by_improvement(z, false);
       return;
     } else if (event.ctrlKey) {
@@ -4188,7 +4364,7 @@ function update_city_screen()
           prod_img_html = "<div class='prod_img' oncontextmenu='set_mass_prod_city("+pcity['id']+");' "
                   //+ "onclick='city_filter_prod_type(event,"+pcity['id']+");' "
                   + "title='RIGHT-CLICK:  Set mass-selection target\n\nSHIFT-CLICK:  Highlight ON/OFF cities making this item\n\n"
-                  + "CTRL-CLICK:   Select ON/OFF cities making this item' "
+                  + "CTRL-CLICK:   Select ON/OFF cities making this item\n\n"+browser.metaKey+"-CLICK:      See manual documentation for this item.' "
                   + "style='max-height:24px; float:right; padding-left:0px padding-right:0px; content-align:right; margin-top:-14px;"
                   + adjust_oversize+"'>"
                   + "<div style='float:right; content-align:right;"
@@ -4822,10 +4998,18 @@ function city_keyboard_listener(ev)
   }
 }
 /**************************************************************************
- Switches to the city's prod tab
+ Switches to the city's prod tab. Called from main tab when clicking
+ icon of what is being currently made.
 **************************************************************************/
-function city_prod_tab()
+function city_prod_tab(e)
 {
+  // meta-Click is for show help
+  if (e.metaKey) {
+    // Function below does exactly what we want  so call it:
+    city_remove_current_prod(e, true);
+    return;
+  } // end show help
+
   city_tab_index = 1;
   $("#city_tabs").tabs({ active: city_tab_index});
 }

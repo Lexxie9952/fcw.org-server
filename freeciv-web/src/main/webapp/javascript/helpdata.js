@@ -17,16 +17,43 @@
 
 ***********************************************************************/
 
-var toplevel_menu_items = ["help_terrain", "help_economy", "help_cities",
+
+
+
+/* src/derived/webapp/javascript/freeciv-helpdata.js
+   is the file that contains all these 'manual keys' for generating the
+   manual. The vars below instruct us how to deal with them */
+
+// Manual keys that will be put into the top-left main menu 'category selector'
+var toplevel_menu_items = ["help_terrain", "help_extras", "help_economy", "help_cities",
     "help_city_improvements", "help_wonders_of_the_world", "help_units",
     "help_combat", "help_technology", "help_government"];
+
+/* These manual keys are forcefully rejected from top left main menu for
+   whatever reason; often the quality of the writeup is bad; and for certain
+   including them all would be just too much clutter.
+   Some of these it would be good to add them back after their text is made
+   better and/or restructured nicely. */
 var hidden_menu_items = ["help_connecting", "help_languages", "help_governor",
     "help_chatline", "help_about", "help_worklist_editor", "help_nations",
     "help_copying", "help_overview", "help_strategy_and_tactics",
     "help_economy", "help_goods", "help_cities", "help_combat",
-    "help_policies", "help_resources"
+    "help_policies", "help_resources", "help_gen_natural_extras",
+    "help_gen_resource_extras", "help_gen_misc_extras", "help_gen_nations", "help_gen_tileset", "help_gen_ruleset", "help_gen_policies", "help_policies", "", "", "", "", "", "", "", "", ""
+
   ];
 
+  /* And finally, keys not defined in the non-existing var below, are manual
+   keys that will be SUBSUMED into a superclass category via the
+   find_parent_help_key(key)  function */
+const child_menu_items = []; // see note above
+
+/* Terrain help was manually hard-coded in, which is good and bad. Good
+   because we can make it display much richer info, bad because the
+   Food/Prod/Trade outputs are literally hardcoded and not applicable
+   to some rulesets! TODO would be to someday have civmanual.c output
+   ALL the info we need to collect this all up and dynamically generate
+   it for any ruleset. */
 const terrain_help = {
   "Lake1": "Fish:  3/0/2  Harbor: 4/0/2  +Offshore Platform: 4/1/2",
   "Ocean1": "Fish:  3/0/2  Harbor: 4/0/2  +Offshore Platform: 4/1/2",
@@ -80,36 +107,50 @@ var quick_help_in_progress = false;
 function help_redirect(vut_type, uid) {
   set_default_mapview_inactive();
   quick_help_in_progress = true;
-  $('#ui-id-7').trigger("click");  // docs tab
+  if (uid === null) return;
 
   switch (vut_type) {
     case VUT_ADVANCE:
-      return;  // not yet implemented
-      break;
+      $('#ui-id-7').trigger("click");  // docs tab
+      setTimeout(function() {
+        $("#qhelp_tech_"+uid+"").click();
+      }, 1);
+      return;
 
     case VUT_GOVERNMENT:
-      return;  // not yet implemented
-      break;
+      $('#ui-id-7').trigger("click");  // docs tab
+      setTimeout(function() {
+        $("#qhelp_gov_"+uid+"").click();
+      }, 1);
+      return;
 
     case VUT_IMPROVEMENT:
+      $('#ui-id-7').trigger("click");  // docs tab
       setTimeout(function() {
         $("#qhelp_impr_"+uid+"").click();
       }, 1);
-      break;
+      return;
 
     case VUT_TERRAIN:
-      return;  // not yet implemented
-      break;
+      $('#ui-id-7').trigger("click");  // docs tab
+      setTimeout(function() {
+        $("#qhelp_terr_"+uid+"").click();
+      }, 1);
+      return;
 
     case VUT_EXTRA:
-      return;  // not yet implemented
-      break;
+      $('#ui-id-7').trigger("click");  // docs tab
+      setTimeout(function() {
+        $("#qhelp_extr_"+uid+"").click();
+      }, 1);
+      return;
 
     case VUT_UTYPE:
+      $('#ui-id-7').trigger("click");  // docs tab
       setTimeout(function() {
         $("#qhelp_utype_"+uid+"").click();
       }, 1);
-      break;
+      return;
   }
 }
 
@@ -125,11 +166,8 @@ function show_help()
     $("#help_info_page").remove();
     $("<ul id='help_menu'></ul><div id='help_info_page'></div>").appendTo("#tabs-hel");
     generate_help_menu("help_gen_ruleset");
-
     for (var sec_id in helpdata_order) {
       var key = helpdata_order[sec_id];
-      if (sec_id)
-
       if (hidden_menu_items.indexOf(key) > -1 || key == "help_gen_ruleset") {
         continue;
       } else if (key.indexOf("help_gen") != -1) {
@@ -211,7 +249,8 @@ function show_help()
 function show_help_intro()
 {
   $.get( "/docs/help_intro.txt", function( data ) {
-      $("#help_info_page").html(data);
+    data = data.replace("__META__", browser.metaKey);
+    $("#help_info_page").html(data);
       var help_banner = "/static/images/fcw-front-page"
       + Math.ceil(Math.random()*61) + ".png";
 
@@ -228,9 +267,13 @@ function generate_help_menu(key)
   var improvement;
   if (key == "help_gen_terrain") {
     for (var terrain_id in terrains) {
-      var terrain = terrains[terrain_id];
-      $("<li data-helptag='" + key + "_" + terrain['id'] + "'>"
-        + terrain['name'] + "</li>").appendTo("#help_terrain_ul");
+      let terrain = terrains[terrain_id];
+      let lookup_id = "qhelp_terr_" + terrain_id;
+      let img_element = html_emoji_from_universal(terrain['name'], 'vht');
+
+      $("<li id ='"+lookup_id+"' data-helptag='" + key + "_" + terrain['id'] + "'>"
+      + "<div class='hmi_wrapper'><span class='hmi_text'>"+terrain['name']+"</span>"
+      + img_element + "</div>" + "</li>").appendTo("#help_terrain_ul");
     }
   } else if (key == "help_gen_improvements") {
     // Alphabetically sort buildings (because some are unalphabetically grouped by similar type for prod list.)
@@ -273,7 +316,7 @@ function generate_help_menu(key)
       }
       let img_element = html_emoji_from_universal(improvement['name'], "vht");
       let lookup_id = "qhelp_impr_" + improvement['id'];
-      $("<li id ='"+lookup_id+"' data-helptag='" + key + "_" + improvement['id'] + "'>"
+      $("<li id='"+lookup_id+"' data-helptag='" + key + "_" + improvement['id'] + "'>"
       + "<div class='hmi_wrapper'><span class='hmi_text'>"+improvement['name']+"</span>"
       + img_element + "</div>" + "</li>").appendTo("#help_wonders_of_the_world_ul");
     }
@@ -299,16 +342,56 @@ function generate_help_menu(key)
     for (var tech_id in techs) {
       var tech = techs[tech_id];
       if (tech_id == 0) continue;
-      $("<li data-helptag='" + key + "_" + tech['id'] + "'>"
-          + tech['name'] + "</li>").appendTo("#help_technology_ul");
+      let lookup_id = "qhelp_tech_" + tech_id;
+      $("<li id='"+lookup_id+"' data-helptag='" + key + "_" + tech['id'] + "'>"
+          + tech['name'] + "&nbsp;</li>").appendTo("#help_technology_ul");
     }
   } else if (key == "help_gen_governments") {
     for (var gov_id in governments) {
       var pgov = governments[gov_id];
-
-      $("<li data-helptag='" + key + "_" + pgov['id'] + "'>"
+      let lookup_id = "qhelp_gov_" + gov_id;
+      $("<li id='"+lookup_id+"' data-helptag='" + key + "_" + pgov['id'] + "'>"
           + pgov['name'] + "</li>").appendTo("#help_government_ul");
     }
+  } else if (key == "help_gen_extras") {
+
+      let numQuays = 0;
+      var sortedExtras = [];
+      for (extra_id in extras) {
+        /* Filter out string keys, keeps only number keys(extras have duplicate keys by number and by name) */
+        if (extra_id === 0 || extra_id == "0" || extra_id > 0) {
+          // Disable multiple Quays (city quay is separate extra with zero-width space to it)
+          if (extras[extra_id].name.startsWith("Quay")) {
+            //console.log("Extras["+extra_id+" (len:"+extras[extra_id].name.length+"). numQuays == "+numQuays);
+            numQuays ++;
+            if (numQuays >= 2) continue;
+          }
+          sortedExtras.push(extras[extra_id]);
+        }
+      }
+      //console.log("Sorted Extras")
+      //console.log(sortedExtras)
+      //console.log("/end SortedExtras")
+
+      sortedExtras.sort(function(a, b) {
+        return (a['rule_name'] > b['rule_name'] ? 1 : -1);
+      });
+      // done sorting*/
+      for (id in sortedExtras) {
+        //console.log("doing id:"+id+" which is "+sortedExtras[id]['rule_name'])
+        let extra = sortedExtras[id];
+        let img_element = create_half_size_extra_sprite(extra)
+        let lookup_id = "qhelp_extr_" + id;
+        $("<li id ='"+lookup_id+"' data-helptag='" + key + "_" + extra['id'] + "'>"
+        + "<div class='hmextra_wrapper'><span class='hmextra_text'>"+extra['rule_name']+"</span>"
+        + img_element + "</div>" + "</li>").appendTo("#help_extras_ul");
+/* IF YOU GIVE UP JUST USE THIS WITH NO IMG_ELEMENT:
+                                                                      let img_element = create_half_size_extra_sprite(extra)
+                                                                      let lookup_id = "qhelp_extr_" + id;
+                                                                      $("<li id ='"+lookup_id+"' data-helptag='" + key + "_" + extra['id'] + "'>"
+                                                                      + "<div class='hmi_wrapper'><span class='hmi_text'>"+extra['rule_name']+"</span>"
+                                                                      + img_element + "</div>" + "</li>").appendTo("#help_extras_ul");*/
+      }
   } else if (key == "help_gen_ruleset") {
     $("<li id='" + key +  "' data-helptag='" + key +  "'>"
        + "Manual" + "</li>").appendTo(
@@ -319,13 +402,91 @@ function generate_help_menu(key)
 /**************************************************************************
 ...
 **************************************************************************/
-function render_sprite(sprite)
+function create_half_size_extra_sprite(pextra)
+{
+  var msg = "";
+
+  // SPRITE: it's tricky because of bases and hideouts!
+  let extra_tag = tileset_extra_tag_robust(pextra);
+  if (extra_tag && pextra.name != "Tile Claim") //zero-width space for city quay
+  {
+    let first_sprite = null;
+    if (tileset_has_tag(extra_tag)) {
+      first_sprite = render_half_sprite(get_sprite_from_tag(extra_tag));//get_sprite_from_tag(extra_tag));
+    }
+
+    // Might be a base with _mg appended to its extra tag:
+    else if (tileset_has_tag(extra_tag+"_mg")) {
+      // _mg sprites are vertically larger/padded on top so need a different class:
+      first_sprite = render_half_sprite(get_sprite_from_tag(extra_tag+"_mg"), "vexht_mg");
+    }
+    // If we got a single simple sprite, render it:
+    if (first_sprite) {
+      msg += first_sprite
+    }
+    // Might be a two sprite base with _bg and _fg. _fg goes on top:
+    else if (tileset_has_tag(extra_tag+"_bg")) {
+      first_sprite = render_half_sprite(get_sprite_from_tag(extra_tag+"_bg"), "vexht_mg");
+      msg += first_sprite;
+      let second_sprite = render_half_sprite(get_sprite_from_tag(extra_tag+"_fg"), "vexht_mg");
+      msg += second_sprite;
+    }
+    // Might be a road type sprite:
+    else if (tileset_has_tag(extra_tag+"_ne")) {
+      first_sprite = render_half_sprite(get_sprite_from_tag(extra_tag+"_sw"), "vexht");
+      msg += "<span>"+first_sprite+"</span>";
+    }
+    // Might be a river type sprite:
+    else if (tileset_has_tag(extra_tag+"_s_n1e0s1w0")) {
+      first_sprite = render_half_sprite(get_sprite_from_tag(extra_tag+"_s_n1e0s1w0"), "vexht_rvr");
+      msg += "<span>"+first_sprite+"</span>";
+    }
+    // No sprite retrieved for extra_tag, do a Blank DIV:
+    else {
+      console.log("Failed to find sprite for extra "+pextra['rule_name']+" with extra_tag: "+extra_tag);
+      msg += "<span><img class='vht' src='/images/invisible.png'></span>";
+    }
+  }
+  else if (pextra.name == "Tile Claim") {
+    msg += "<span><img class='vht' src='/images/nation_tab_icon.png'></span>";
+  }
+  // No extra_tag at all was retrieved!
+  else {
+    console.log("Failed to retrieve an extra_tag for "+pextra['rule_name']);
+    msg += "<span><img class='vht' src='/images/invisible.png'></span>";
+  }
+return msg;
+}
+
+/**************************************************************************
+...
+**************************************************************************/
+function render_half_sprite(sprite, xclass, marginoverride)
+{
+  if (!xclass) xclass = "vexht";
+  if (!marginoverride) {
+    marginoverride = "";
+  } else marginoverride = "margin-left:"+marginoverride+"px; "
+
+  var msg = "<div class='"+xclass+"' style=' background: transparent url("
+          + sprite['image-src'] +
+          ");background-position:-" + sprite['tileset-x'] + "px -" + sprite['tileset-y']
+          + "px;  width: " + sprite['width'] + "px;height: " + sprite['height'] + "px;"
+          + marginoverride
+          + "'></div>";
+  return msg;
+}
+
+/**************************************************************************
+...
+**************************************************************************/
+function render_sprite(sprite, scale)
 {
   var msg = "<div class='help_unit_image' style=' background: transparent url("
-           + sprite['image-src'] +
-           ");background-position:-" + sprite['tileset-x'] + "px -" + sprite['tileset-y']
-           + "px;  width: " + sprite['width'] + "px;height: " + sprite['height'] + "px;'"
-           +"></div>";
+          + sprite['image-src'] +
+          ");background-position:-" + sprite['tileset-x'] + "px -" + sprite['tileset-y']
+          + "px;  width: " + sprite['width'] + "px;height: " + sprite['height'] + "px;"
+          +"'></div>";
   return msg;
 }
 
@@ -345,7 +506,37 @@ function generate_help_toplevel(key)
 **************************************************************************/
 function find_parent_help_key(key)
 {
-  if (key == "help_terrain_alterations") {
+
+  switch (key) {
+    case "help_civil_war":            return "#help_government_ul";
+
+    case "help_terrain_alterations":
+    case "help_borders":              return "#help_terrain_ul";
+
+    case "help_gen_extras":
+    case "help_villages":             return "#help_extras_ul";
+
+    case "help_food":
+    case "help_production":
+    case "help_trade":                return "#help_economy_ul";
+
+    case "help_specialists":
+    case "help_happiness":
+    case "help_pollution":
+    case "help_plague":
+    case "help_migration":            return "#help_cities_ul";
+
+    case "help_combat_example_1":
+    case "help_combat_example_2":
+  //case "help_zones_of_control":
+                                      return "#help_combat_ul";
+    default:
+      return "#help_menu"
+  }
+  /* old code
+  if (key == "help_gen_extras") {
+    return "help_extras_ul";
+  } else if (key == "help_terrain_alterations") {
     return "#help_terrain_ul";
   } else if (key == "help_villages" || key == "help_borders") {
     return "#help_terrain_ul";
@@ -359,6 +550,7 @@ function find_parent_help_key(key)
   } else  {
     return "#help_menu";
   }
+  */
 }
 
 /**************************************************************************
@@ -411,7 +603,7 @@ function wiki_on_item_button(item_name)
   item_name = string_unqualify(item_name);
 
   if (freeciv_wiki_docs[item_name] == null) {
-    console.log("No wiki data about " + item_name);
+    //console.log("No wiki data about " + item_name);
     return "";
   }
 
@@ -570,7 +762,7 @@ function generate_help_text(key)
       }
     }
     // General construction of terrain help for other rulesets: TODO: when we can extract an extra sprite and put into a
-    // <img> element with position:absolute; left:r*96, then helptext_pane class gets property position:relative, we can
+    // <img> element with position:absolute; left:r*tileset_width, then helptext_pane class gets property position:relative, we can
     // put pretty images like the mp2 stuff above (and remove all hardcoding too)
     else {
       msg += "<table><tr>"
@@ -831,6 +1023,96 @@ function generate_help_text(key)
     msg += "<div id='helptext'><p>" + cleaned_text(pgov['helptext']) + "</p></div></div>";
 
     msg += wiki_on_item_button(pgov['name']);
+  }  else if (key.indexOf("help_gen_extras") != -1) {
+    var pextra
+        = extras[parseInt(key.replace("help_gen_extras_", ""))];
+    var flex = " style='display:flex;' ";
+    var span1 = "<span style='flex:"+flx_tab+";'>";
+    //var span2 = "<span style='font-weight:bold; color:#48F;'>";
+    var span2 = "<span class='help_stats'>";
+    var span2_small = "<span class='help_stats' style=' font-size:90%;'>";
+    var span_end = "</span>";
+    var div_end = "</span></div>"
+
+    // NAME
+    msg = "<h1 style='margin-top:0px;font-size:190%'>" + pextra['rule_name'] + "</h1>";
+
+    // SPRITE: it's tricky because of bases and hideouts!
+    let extra_tag = tileset_extra_tag_robust(pextra);
+    if (extra_tag)
+    {
+      let first_sprite = null;
+      if (tileset_has_tag(extra_tag)) {
+        first_sprite = render_sprite(get_sprite_from_tag(extra_tag));//get_sprite_from_tag(extra_tag));
+      }
+      // Might be a base with _mg appended to its extra tag:
+      else if (tileset_has_tag(extra_tag+"_mg")) {
+        first_sprite = render_sprite(get_sprite_from_tag(extra_tag+"_mg"));
+      }
+      // If we got a single simple sprite, render it:
+      if (first_sprite) {
+        // Foreground sprite or "_mg" type sprite (one layer only), draw it:
+        msg += "<div style='margin-bottom:10px;margin-top:-10px'>"+first_sprite+"</div>";
+      }
+      // Might be a two sprite base with _bg and _fg. _fg goes on top:
+      else if (tileset_has_tag(extra_tag+"_bg")) {
+        first_sprite = render_sprite(get_sprite_from_tag(extra_tag+"_bg"));
+        msg += "<div style='margin-bottom:10px;margin-top:-10px'>"+first_sprite+"</div>";
+        first_sprite = render_sprite(get_sprite_from_tag(extra_tag+"_fg"));
+        msg += "<div style='margin-bottom:10px;margin-top:-84px;margin-left:0px'>"+first_sprite+"</div>";
+      }
+      // Might be a road type sprite:
+      else if (tileset_has_tag(extra_tag+"_ne")) {
+        first_sprite = render_sprite(get_sprite_from_tag(extra_tag+"_sw"));
+        msg += "<div style='margin-bottom:10px;margin-top:-10px'>"+first_sprite+"</div>";
+        /*first_sprite = render_sprite(get_sprite_from_tag(extra_tag+"_ne"));
+        msg += "<div style='margin-bottom:10px;margin-top:-84px;margin-left:0px'>"+first_sprite+"</div>";*/
+      }
+      // Might be a river type sprite:
+      else if (tileset_has_tag(extra_tag+"_s_n1e0s1w0")) {
+        first_sprite = render_sprite(get_sprite_from_tag(extra_tag+"_s_n1e0s1w0"));
+        msg += "<div style='margin-bottom:10px;margin-top:-10px'>"+first_sprite+"</div>";
+      }
+      // No sprite retrieved for extra_tag, do a Blank DIV:
+      else {
+        console.log("Failed to sprite for extra "+pextra['rule_name']+" with extra_tag: "+extra_tag);
+        msg += "<div style='margin-bottom:10px;margin-top:-10px;margin-left:"+tileset_width+"px'></div>";
+      }
+    }
+    // No extra_tag at all was retrieved!
+    else {
+      console.log("Failed to retrieve an extra_tag for "+pextra['rule_name']);
+      msg += "<div style='margin-bottom:10px;margin-top:-10px;margin-right:"+tileset_width+"px'></div>";
+    }
+    msg += "<div id='manual_non_helptext_facts' style='max-width:"+max_help_pane_width+"px;'>";
+
+    // EXTRA CATEGORY
+    msg += "<div"+flex+"id='extra_fact_category'>";
+    msg += span1 + "Category: " + span_end + span2 + EXTRA_CATEGORIES[pextra.category] + div_end;
+
+    // BUILD TIME
+    msg += "<div"+flex+"id='extra_fact_build_time'>";
+    if (pextra['build_time']) {
+      let build_time = pextra['build_time']
+      if (pextra['name'] == "Mine") build_time = 10;
+      if (pextra['name'] == "Mine") build_time = 10;
+
+      // unit_type[0].move_rate cheap proxy for 1x or 2x ruleset
+      let bld_time = pextra['build_time']/(unit_types[0].move_rate/SINGLE_MOVE);
+      if (bld_time != 0) {
+        msg += span1 + "Build Time: " + span_end + span2 + " "+pluralize("worker-turn", pextra['build_time']/(unit_types[0].move_rate/SINGLE_MOVE)) + div_end;
+      } else {
+        msg += span1 + "Build Time: " + span_end + span2 + "Flex Infra. Varies with terrain."+ div_end;
+      }
+    } else if (!pextra['buildable']) {
+      msg += span1 + "Build Time: " + span_end + span2 + "Cannot be built." + div_end;
+    }
+
+    msg += "</div>"+hr;
+
+    msg += "<div id='helptext' style='font-weight:500; max-width:"+max_help_pane_width+"px'><p>"
+        + cleaned_text(pextra['helptext']) + "</p></div>"+hr;
+    msg += "<div id='datastore' hidden='true'></div>";
   }
 
   $("#help_info_page").html(msg);
@@ -872,6 +1154,13 @@ function generate_help_text(key)
        * the government type's help text. */
       $("#helptext").load("../man/" + rulesetdir + "6.html #gov"
                           + gov_id + " .helptext");
+    } else if (key.indexOf("help_gen_extras") != -1) {
+      var extra_id = parseInt(key.replace("help_gen_extras_", ""));
+
+      /* Add the auto generated extra facts freeciv-manual prepends to
+       * the extra type's help text. */
+      $("#helptext").load("../man/" + rulesetdir + "9.html #extra"
+                          + extra_id + " .helptext");
     }
   }
 
@@ -883,6 +1172,9 @@ function generate_help_text(key)
 **************************************************************************/
 function helpdata_tag_to_title(tag)
 {
+  return helpdata[tag]['name'];
+/* old code
   var result = tag.replace("_of_the_world", "").replace("help_", "").replace("gen_", "").replace("misc_", "").replace(/_/g, " ");
   return to_title_case(result);
+*/
 }

@@ -137,7 +137,7 @@ function check_browser_compatibility()
       text: "Internet Explorer is not supported. Freeciv-Web is a game with video graphics that " +
             "require a modern browser. Internet Explorer is obsolete, and was replaced " +
             "by Microsoft's Edge browser. We suggest downloading a modern browser and coming " +
-            "back to play! Suggestions: Chrome, Opera, Firefox, Safari, Chromium, or Edge. " +
+            "back to play! Suggestions: Chrome, Brave, Firefox, Safari, Chromium, or Edge. " +
             "Hope to see you soon!",
       type: "warning",   showCancelButton: false,
       //confirmButtonColor: "#DD6B55",
@@ -153,15 +153,16 @@ function check_browser_compatibility()
 
   if (navigator.userAgent.includes("Mac")) {
     browser.mac = true;
-    browser.metaKey = "CMD-"; // ⌘
+    browser.metaKey = "&#8984;"; // ⌘
   }
   else if (navigator.userAgent.includes("Linux")) {
     browser.linux = true;
-    browser.metaKey = "🐧";
+    browser.metaKey = "&#128039;";
   }
   // Assume Windows for all others, they'll get over it.
   else /*if (navigator.userAgent.includes("Windows"))*/ {
     browser.windows = true;
+    browser.metaKey =  "&#8862;"
   }
 }
 

@@ -57,7 +57,7 @@ function show_revolution_dialog()
   if (gov_name == "Monarchy") gov_name = get_gov_modifier(client.conn.playing.playerno, "Monarchy", true) + " " + gov_name;
 
   var dhtml = "Current form of government: <b>" + gov_name
-	          + "</b><br>To start a revolution, select the new form of government:"
+	          + "</b><br>To start a revolution, select a new form of government:"
             + "<p><div id='governments' >"
             + "<div id='governments_list'>"
             + "</div></div><br> ";
@@ -125,9 +125,16 @@ function update_govt_dialog()
 
   for (govt_id in governments) {
     govt = governments[govt_id];
-    governments_list_html += "<button class='govt_button' id='govt_id_" + govt['id'] + "' "
-	                  + "onclick='set_req_government(" + govt['id'] + ");' "
-			  + "title='" + cleaned_text(govt['helptext']) + "'>" +  govt['name'] + "</button>";
+    let is_requested_gov = (requested_gov == govt_id);
+    let is_current_gov   = (client.conn.playing['government'] == govt_id);
+    let mod_class = "govt_button";
+    if (is_requested_gov) mod_class = "govt_button_selected";
+    if (is_current_gov)   mod_class = "govt_button_current";  // will override class styling of above indicating not a real change
+
+
+    governments_list_html += "<button class='"+mod_class+"' id='govt_id_" + govt['id'] + "' "
+	                  + "onclick='set_req_government(event, " + govt['id'] + ");' "
+			  + "title='" + browser.metaKey +"-CLICK: read manual on " + govt['name']+ "'>" +  govt['name'] + "</button>";
   }
 
   $("#governments_list").html(governments_list_html);
@@ -141,24 +148,25 @@ function update_govt_dialog()
 
     label_html = "<img class='lowered_gov' src='/images/e/"+govt['name'].toLowerCase()+gov_modifier+".png'>&nbsp;&nbsp;&nbsp;"
                + capitalize(gov_modifier) + " " + govt['name']
-               + "<img src='/images/e/techs/"+govt['name'].toLowerCase()+gov_modifier+".png' style='margin:-8px;margin-top:-9x;float:right;' "
-               + "width='36px' height='36px'>"
+               + "<img class='govt_button_image' src='/images/e/techs/"+govt['name'].toLowerCase()+gov_modifier+".png'> "
+          //     + "width='36px' height='36px'>"
+
+    console.log(label_html);
+    //$("#govit_id_"+ govt['id']).removeClass("govt_button")
+    //$("#govit_id_"+ govt['id']).addClass(mod_class);
     if (!can_player_get_gov(govt_id)) {
-      $("#govt_id_" + govt['id'] ).button({ disabled: true, label: label_html});
-    } else if (requested_gov == govt_id) {
-    $("#govt_id_" + govt['id'] ).button({label: label_html}).css({"background": "url('/images/bg-light.jpg')", color: "black"});
-    } else if (client.conn.playing['government'] == govt_id) {
-      $("#govt_id_" + govt['id'] ).button({label: label_html}).css("background", "url('/images/bg-med-dark.jpg')").css("font-weight", "bolder");
-    } else {
-      $("#govt_id_" + govt['id'] ).button({label: label_html});
+      $("#govt_id_" + govt['id']).button({ disabled: true, label: label_html});
+    }
+    else {
+      $("#govt_id_" + govt['id']).button({label: label_html});
     }
   }
-  /*$(".govt_button").tooltip();
+  //$(".govt_button").tooltip();
+  /*
   $(".govt_button").tooltip({
     open: function (event, ui) {
         ui.tooltip.css({"max-width":"100%", "width":"88%", "margin-top":"15px", "margin-left":"-95px", "overflow":"visible"});
-    }
-});*/
+    }});*/
 }
 
 
@@ -237,8 +245,13 @@ function do_worklists(cur_gov_id, new_gov_id)
 /**************************************************************************
    ...
 **************************************************************************/
-function set_req_government(gov_id)
+function set_req_government(event, gov_id)
 {
+  if (event.metaKey) {
+    remove_active_dialog("#revolution_dialog");
+    help_redirect(VUT_GOVERNMENT, gov_id);
+    return;
+  }
   requested_gov = gov_id;
   update_govt_dialog();
 }
