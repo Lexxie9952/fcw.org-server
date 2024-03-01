@@ -2983,7 +2983,7 @@ void kill_unit(struct unit *pkiller, struct unit *punit, bool vet)
     } unit_list_iterate_end;
   }
 
-  if (!is_stack_vulnerable(unit_tile(punit)) || unitcount == 1) {
+  if (!is_stack_vulnerable(unit_tile(punit)) || unitcount == 1 || unit_has_type_flag(pkiller, UTYF_ONLY_HITS_TARGETS)) {
     notify_player(pvictor, unit_tile(pkiller), E_UNIT_WIN_ATT, ftc_server,
                   /* TRANS: "[`boom`]Your attacking 🏇Horsemen eliminated the Polish Horsemen.🏇" */
                   _("[`boom`]Your attacking %s %s the %s %s."),
@@ -4485,8 +4485,10 @@ follow up if the units before were successful in reducing hp to an odds favorabl
 static bool unit_survive_autoattack(struct unit *p_moving_unit)
 {
 #undef AUTOATTACK_DEBUG
-
+// When debugging whether to send messages to mover or autoattacker
+#define DEBUG_NOTIFY_MOVER 1
                     #ifdef AUTOATTACK_DEBUG
+                        // can't notify attacker yet because we don't know if/who it is.
                         notify_player(unit_owner(p_moving_unit), unit_tile(p_moving_unit), E_AI_DEBUG, ftc_server,
                           _("[`ghost`] 1. Begin: %s checked to get autoattacked."), unit_link(p_moving_unit));
                     #endif
@@ -4507,7 +4509,8 @@ static bool unit_survive_autoattack(struct unit *p_moving_unit)
   int moves = p_moving_unit->moves_left;
   p_moving_unit->moves_left = MAX(p_moving_unit->moves_left, 1);
 
-  /* PHASE ONE: Construct new list of adjacent autoattacker candidates: */
+  /* PHASE ONE: Construct new list of adjacent autoattacker CANDIDATES.
+     A candidate is someone who is able to attack : */
   struct autoattack_prob_list *autoattack = autoattack_prob_list_new_full(autoattack_prob_free);
 
   /* Check every adjacent tile: */
@@ -4540,7 +4543,7 @@ static bool unit_survive_autoattack(struct unit *p_moving_unit)
       probability->can_attack = can_attack;  // Stash for performant re-usability later.
 
                     #ifdef AUTOATTACK_DEBUG
-                      notify_player(moving_player, unit_tile(p_moving_unit), E_AI_DEBUG, ftc_server,
+                      notify_player(DEBUG_NOTIFY_MOVER ? moving_player : unit_owner(p_adj_unit), unit_tile(p_moving_unit), E_AI_DEBUG, ftc_server,
                           _("[`dice`] %s Legit Prob<sub>min,max</sub>: (%d, %d)"),
                           unit_link(p_adj_unit), probability->prob.min, probability->prob.max );
                     #endif
@@ -4555,6 +4558,13 @@ static bool unit_survive_autoattack(struct unit *p_moving_unit)
             harmless_cargo_was_set = true;
             /* Algorithm works MUCH better if it knows when cargo can never defend better than its transport! */
             harmless_cargo = uclass_has_user_unit_class_flag_named(unit_class_get(p_moving_unit), "HarmlessCargo");
+
+                    #ifdef AUTOATTACK_DEBUG
+                          if (harmless_cargo)
+                              notify_player(DEBUG_NOTIFY_MOVER ? moving_player : unit_owner(p_adj_unit), unit_tile(p_moving_unit), E_AI_DEBUG, ftc_server,
+                                _("[`freight`] moving_unit's harmless cargo set to true."));
+                            #endif
+
           }
           probability->can_bombard = can_unit_bombard(p_adj_unit);  // Stash for later use 😘
           /* Invisible cargo makes prob.min=0, which scares AA_ODDS auto-attackers. But units known to carry NO
@@ -4565,8 +4575,8 @@ static bool unit_survive_autoattack(struct unit *p_moving_unit)
             probability->prob.min = probability->prob.max;
 
                     #ifdef AUTOATTACK_DEBUG
-                      notify_player(moving_player, unit_tile(p_moving_unit), E_AI_DEBUG, ftc_server,
-                        _("[`freight`] %s HrmlsCrg Prob<sub>min,max</sub>: (%d, %d)"),
+                      notify_player(DEBUG_NOTIFY_MOVER ? moving_player : unit_owner(p_adj_unit), unit_tile(p_moving_unit), E_AI_DEBUG, ftc_server,
+                        _("[`freight`] %s bombard/harmless_cargo Prob<sub>min,max</sub>: (%d, %d)"),
                         unit_link(p_adj_unit), probability->prob.min, probability->prob.max );
                     #endif
           }
@@ -4622,6 +4632,13 @@ static bool unit_survive_autoattack(struct unit *p_moving_unit)
     double attack_anyway_threshold = 0.8333333;    /* game.server.autoattack_always_odds  TODO-should be server setting */
     struct tile *mover_tile = unit_tile(p_moving_unit);
 
+              #ifdef AUTOATTACK_DEBUG
+                        notify_player(DEBUG_NOTIFY_MOVER ? moving_player : unit_owner(p_aa_unit), unit_tile(p_moving_unit), E_AI_DEBUG, ftc_server,
+                          _("[`freight`] Tile defender unit.id is real? (def:%d, tile:%d)"),
+                          (p_aa_unit_tile_defender == NULL ? 0 : p_aa_unit_tile_defender->id),
+                                (p_aa_unit_tile_defender == NULL ? 0 : ptile->index) );
+                      #endif
+
      // Make a reference copy for use.
     char p_moving_unit_emoji[MAX_LEN_LINK], p_aa_unit_emoji[MAX_LEN_LINK];
     sprintf(p_moving_unit_emoji, "%s", UNIT_EMOJI(p_moving_unit));
@@ -4637,20 +4654,58 @@ static bool unit_survive_autoattack(struct unit *p_moving_unit)
     if (NULL != p_aa_unit_tile_defender) {
       odds_moving_unit_wins = unit_win_chance(p_moving_unit, p_aa_unit_tile_defender);
     } else {
-      /* 'p_aa_unit' can attack 'p_moving_unit' but it may be not reciprocal. */
-      odds_moving_unit_wins = 1.0;
+      /*  Apparently the vigil unit has no tile defender so there's a 100% chance
+          of the moving unit would win if IT were the attacker, so this makes sense
+          and should only motivate it to attack more. But I ask you, when/how would
+          this ever happen and what's not reciprocal? When can a tile occupied by a
+          vigil unit NOT defend itself(?):
+          'p_aa_unit' can attack 'p_moving_unit' but it may be not reciprocal. */
+       /* Does it mean that the autoattacker is unreachable because then that should
+          odds_moving_unit_wins = 0.0 */
+                  #ifdef AUTOATTACK_DEBUG
+                                  notify_player(DEBUG_NOTIFY_MOVER ? moving_player : unit_owner(p_aa_unit), unit_tile(p_moving_unit), E_AI_DEBUG, ftc_server,
+                                    _("%s has no reachable defender on tile, should other moving unit get 0%% or 100%% chance to win if IT were to attack?!"),
+                                    unit_link(p_aa_unit) );
+                                #endif
+      /* old code: moving unit can't attack, QED it got a 100% chance to win the attack? This
+         is EXACTLY why we renamed all the vars more specifically in the rewrite of this fun! 😱
+      odds_moving_unit_wins = 1.0; 👀 👀 👁️ 👁️ 👁️ 👁️ 👁️ 👁️ 👁️ 👁️ 👁️ 👁️ WATCH ME BLAME ME FIXME TODO WATCH ME !👁️👁️!*/
+      odds_moving_unit_wins = 0.0;
     }
 
     /* Previous attacks may have changed the odds. Recalculate. FUCK this means transporters with harmless cargo again */
+                  #ifdef AUTOATTACK_DEBUG
+                        notify_player(DEBUG_NOTIFY_MOVER ? moving_player : unit_owner(p_aa_unit), unit_tile(p_moving_unit), E_AI_DEBUG, ftc_server,
+                          _(":::::: autoattack_prob was: (uid:%d, MIN:%d MAX:%d, can_attack: %d, can_bombard: %d)"),
+                            peprob->unit_id,  peprob->prob.min, peprob->prob.max, peprob->can_attack, peprob->can_bombard);
+                      #endif
+
+    /* This will RESET carefully calculated overrides about not being scared of harmless_cargo, or to go ahead
+       and bombard (because duh, no retaliation, so why worry about mere possibility of 0 odds when max odds
+       are extremely likely to be the real odds?) Don't worry though, we saved a copy of what we needed! */
+    bool can_bombard = peprob->can_bombard;
+    int can_attack = peprob->can_attack;
     peprob->prob =
         action_auto_perf_unit_prob(AAPC_UNIT_MOVED_ADJ,
                                    p_aa_unit, moving_player, NULL,
                                    mover_tile, tile_city(mover_tile),
                                    p_moving_unit, NULL);
-
+                  #ifdef AUTOATTACK_DEBUG
+                        notify_player(DEBUG_NOTIFY_MOVER ? moving_player : unit_owner(p_aa_unit), unit_tile(p_moving_unit), E_AI_DEBUG, ftc_server,
+                          _(":::::: and is now:          (uid:%d, MIN:%d MAX:%d, can_attack: %d, can_bombard: %d)"),
+                            peprob->unit_id,  peprob->prob.min, peprob->prob.max, peprob->can_attack, peprob->can_bombard);
+                      #endif
+    if (harmless_cargo || can_bombard) {
+      peprob->can_bombard = true;
+      peprob->prob.min = peprob->prob.max; // There we go!
+    }
     if (!action_prob_possible(peprob->prob)) {
       /* No longer legal. */
-      continue;
+      if (can_attack == AA_ALWAYS && peprob->prob.max > 0) {
+        // Don't continue; this is an Always Attacker with legal chance to attack!
+      } else {
+        continue;
+      }
     }
 
     /* Assume the worst. (i.e., hidden cargo may be ultra-strong defender)*/
@@ -4695,18 +4750,18 @@ static bool unit_survive_autoattack(struct unit *p_moving_unit)
       if (harmless_cargo || peprob->can_bombard) {
 
                               #ifdef AUTOATTACK_DEBUG
-                                      notify_player(moving_player, unit_tile(p_moving_unit), E_AI_DEBUG, ftc_server,
+                                      notify_player(DEBUG_NOTIFY_MOVER ? moving_player : unit_owner(p_aa_unit), unit_tile(p_moving_unit), E_AI_DEBUG, ftc_server,
                                                 _("[`book`] 1. AutAtk_UNIT %s had %f %% chance"), unit_link(p_aa_unit), odds_aa_unit_wins);
                               #endif
         odds_aa_unit_wins = unit_win_chance(p_aa_unit, get_defender(p_aa_unit, mover_tile));
 
                               #ifdef AUTOATTACK_DEBUG
-                                      notify_player(moving_player, unit_tile(p_moving_unit), E_AI_DEBUG, ftc_server,
+                                      notify_player(DEBUG_NOTIFY_MOVER ? moving_player : unit_owner(p_aa_unit), unit_tile(p_moving_unit), E_AI_DEBUG, ftc_server,
                                                 _("[`arrowup`] 2. AutAtk_UNIT %s upgraded(?) to %f %% chance (hrmlscrg||bmbrd)"), unit_link(p_aa_unit), odds_aa_unit_wins);
-
-                                      notify_player(moving_player, unit_tile(p_moving_unit), E_UNIT_ORDERS, ftc_server,
+                                      struct unit *debug_def = get_defender(p_aa_unit, unit_tile(p_moving_unit));
+                                      notify_player(unit_owner(p_aa_unit), unit_tile(p_moving_unit), E_UNIT_ORDERS, ftc_server,
                                                 _("[`anger`] ENEMY %s switched 0 odds to (%f), and defender is: %s "),
-                                                unit_rule_name(p_aa_unit), odds_aa_unit_wins, unit_link(get_defender(p_aa_unit, unit_tile(p_moving_unit))));
+                                                unit_rule_name(p_aa_unit), odds_aa_unit_wins, debug_def ? unit_rule_name(debug_def) : "NULLPTR");
                               #endif
 
       }
@@ -4717,7 +4772,7 @@ static bool unit_survive_autoattack(struct unit *p_moving_unit)
          && odds_aa_unit_wins > abort_threshold) {
 
                               #ifdef AUTOATTACK_DEBUG
-                                      notify_player(moving_player, unit_tile(p_moving_unit), E_UNIT_ORDERS, ftc_server,
+                                      notify_player(DEBUG_NOTIFY_MOVER ? moving_player : unit_owner(p_aa_unit), unit_tile(p_moving_unit), E_UNIT_ORDERS, ftc_server,
                                               _("AA %s vs %s (%d,%d) EW:%.2f > 1-MW:%.2f && AT> %.2f"),
                                             unit_rule_name(p_aa_unit), unit_rule_name(p_moving_unit),
                                             TILE_XY(unit_tile(p_moving_unit)), odds_aa_unit_wins,
@@ -4739,7 +4794,7 @@ static bool unit_survive_autoattack(struct unit *p_moving_unit)
               p_aa_unit_emoji, unit_rule_name(p_aa_unit) );
 
                               #ifdef AUTOATTACK_DEBUG
-                                        notify_player(moving_player, unit_tile(p_moving_unit), E_AI_DEBUG, ftc_server,
+                                        notify_player(DEBUG_NOTIFY_MOVER ? moving_player : unit_owner(p_aa_unit), unit_tile(p_moving_unit), E_AI_DEBUG, ftc_server,
                                           _("AA %s -> %s (%d,%d) %.2f > %.2f && > %.2f"),
                                             unit_rule_name(p_aa_unit), unit_rule_name(p_moving_unit),
                                             TILE_XY(unit_tile(p_moving_unit)), odds_aa_unit_wins,
@@ -4781,7 +4836,7 @@ static bool unit_survive_autoattack(struct unit *p_moving_unit)
               nation_rule_name(nation_of_unit(p_moving_unit)),
               unit_link(p_moving_unit), p_moving_unit_emoji );
                             #ifdef AUTOATTACK_DEBUG
-                                      notify_player(unit_owner(p_aa_unit), unit_tile(p_moving_unit), E_AI_DEBUG, ftc_server,
+                                      notify_player(DEBUG_NOTIFY_MOVER ? moving_player : unit_owner(p_aa_unit), unit_tile(p_moving_unit), E_AI_DEBUG, ftc_server,
                                                     _("!AA %s -> %s (%d,%d) %.2f > %.2f && > %.2f"),
                                                     unit_rule_name(p_aa_unit), unit_rule_name(p_moving_unit),
                                                     TILE_XY(unit_tile(p_moving_unit)), odds_aa_unit_wins,
