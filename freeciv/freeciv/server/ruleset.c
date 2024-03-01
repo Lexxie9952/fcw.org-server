@@ -2168,16 +2168,6 @@ static bool load_ruleset_units(struct section_file *file,
         break;
       }
 
-      /* Set also all classes that are never unreachable as targets,
-       * embarks, and disembarks. */
-      unit_class_iterate(preachable) {
-        if (!uclass_has_flag(preachable, UCF_UNREACHABLE)) {
-          BV_SET(u->targets, uclass_index(preachable));
-          BV_SET(u->embarks, uclass_index(preachable));
-          BV_SET(u->disembarks, uclass_index(preachable));
-        }
-      } unit_class_iterate_end;
-
       u->vlayer = vision_layer_by_name(secfile_lookup_str_default(file, "Main",
                                                                   "%s.vision_layer",
                                                                   sec_name),
@@ -2255,6 +2245,21 @@ static bool load_ruleset_units(struct section_file *file,
       }
     } unit_type_iterate_end;
   }
+
+  /* Set all classes that are never unreachable as targets,
+   * embarks, and disembarks. Moved here because UTYF_ONLY_HITS_TARGETS affects it! */
+  unit_type_iterate(u) {
+    unit_class_iterate(preachable) {
+      if (!uclass_has_flag(preachable, UCF_UNREACHABLE)) {
+        if (!utype_has_flag(u, UTYF_ONLY_HITS_TARGETS)) {
+          BV_SET(u->targets, uclass_index(preachable));
+        }
+        BV_SET(u->embarks, uclass_index(preachable));
+        BV_SET(u->disembarks, uclass_index(preachable));
+
+      }
+    } unit_class_iterate_end;
+  } unit_type_iterate_end;
 
   /* roles */
   if (ok) {

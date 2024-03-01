@@ -2392,6 +2392,11 @@ char *helptext_unit(char *buf, size_t bufsz, struct player *pplayer,
 	    _("%s <b style=\'color:#9aa\'>PORT PENALTY</b>: If attacked while in a city, firepower is set to 1 "
               "and firepower of attacker is doubled.\n"), BULLET_BIG);
   }
+  if (utype_has_flag(utype, UTYF_ONLY_HITS_TARGETS)) {
+    CATLSTR(buf, bufsz,
+	    _("%s <b style=\'color:#9aa\'>SINGLE TARGET</b>: Will only attack a single target from its target list. "
+              "Other units on defending tile are unaffected.\n"), BULLET_BIG);
+  }
   if (utype_has_flag(utype, UTYF_IGTER)) {
     cat_snprintf(buf, bufsz,
                  /* TRANS: "MP" = movement points. %s may have a
