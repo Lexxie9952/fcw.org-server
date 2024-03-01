@@ -561,7 +561,7 @@ function pluralize(str, num) {
     return ""+num+" "+str;
   }
 
-  else return "1 "+str;
+  else return ""+num+" "+str;
 }
 
 /************************************************************************//**
