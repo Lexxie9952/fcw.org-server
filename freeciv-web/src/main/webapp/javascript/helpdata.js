@@ -1094,6 +1094,7 @@ function generate_help_text(key)
     msg += "<div"+flex+"id='extra_fact_build_time'>";
     if (pextra['build_time']
         || pextra['name'] == "Road"                   // these types may be 0 which lets the terrain record define them differently
+        || pextra['name'] == "Highway"
         || pextra['name'] == "Irrigation"
         || pextra['name'] == "Mine"
         || pextra['name'] == "Quay"
