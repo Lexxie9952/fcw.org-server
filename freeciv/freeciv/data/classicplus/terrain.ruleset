@@ -1695,7 +1695,7 @@ reqs           =
       "UnitFlag",     "CanRoad",    "Local"
       "TerrainClass", "Land", "Local"
     }
-build_time     = 2
+build_time     = 0
 removal_time   = 0
 native_to      = "Land"
 hidden_by      = "Railroad"
