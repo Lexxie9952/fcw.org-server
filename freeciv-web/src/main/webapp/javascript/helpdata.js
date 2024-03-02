@@ -1092,17 +1092,21 @@ function generate_help_text(key)
 
     // BUILD TIME
     msg += "<div"+flex+"id='extra_fact_build_time'>";
-    if (pextra['build_time']) {
+    if (pextra['build_time']
+        || pextra['name'] == "Road"                   // these types may be 0 which lets the terrain record define them differently
+        || pextra['name'] == "Irrigation"
+        || pextra['name'] == "Mine"
+        || pextra['name'] == "Quay"
+        || pextra['name'] == "Oil Well") {
       let build_time = pextra['build_time']
-      if (pextra['name'] == "Mine") build_time = 10;
-      if (pextra['name'] == "Mine") build_time = 10;
+      if (pextra['name'] == "Mine") build_time = 10;  // currently all rulesets; so why say varies with terrain?
 
       // unit_type[0].move_rate cheap proxy for 1x or 2x ruleset
-      let bld_time = pextra['build_time']/(unit_types[0].move_rate/SINGLE_MOVE);
+      let bld_time = build_time/(unit_types[0].move_rate/SINGLE_MOVE);
       if (bld_time != 0) {
-        msg += span1 + "Build Time: " + span_end + span2 + " "+pluralize("worker-turn", pextra['build_time']/(unit_types[0].move_rate/SINGLE_MOVE)) + div_end;
+        msg += span1 + "Build Time: " + span_end + span2 + " "+pluralize("worker-turn", build_time/(unit_types[0].move_rate/SINGLE_MOVE)) + div_end;
       } else {
-        msg += span1 + "Build Time: " + span_end + span2 + "Flex Infra. Varies with terrain."+ div_end;
+        msg += span1 + "Build Time: " + span_end + span2 + "Varies with terrain."+ div_end;
       }
     } else if (!pextra['buildable']) {
       msg += span1 + "Build Time: " + span_end + span2 + "Cannot be built." + div_end;
