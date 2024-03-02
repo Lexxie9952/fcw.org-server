@@ -17,7 +17,7 @@
 
 ***********************************************************************/
 
-const ACTIVITY_FACTOR = 100;
+const ACTIVITY_FACTOR = 360;   // Superabundant numbers round very nicely
 
 var units = {};
 
