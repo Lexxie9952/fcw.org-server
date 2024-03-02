@@ -1193,7 +1193,7 @@ reqs           =
     { "type", "name", "range", "quiet"
       "TerrainFlag", "Oil", "Local", TRUE
     }
-build_time     = 5
+build_time     = 0
 removal_time   = 0
 conflicts      = "Irrigation", "Farmland"
 helptext       = _("\
@@ -1311,7 +1311,7 @@ reqs           =
       "Tech", "Refrigeration", "Player"
       "Extra", "Irrigation", "Local"
     }
-build_time     = 5
+build_time     = 0
 removal_time   = 0
 conflicts      = "Mine", "Oil Well"
 flags          = "IrrigationSource"

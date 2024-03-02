@@ -1334,7 +1334,7 @@ reqs           =
       "TerrainFlag", "Oil",     "Local", TRUE,      FALSE
       "UnitType",    "Trawler", "Local", FALSE,     TRUE
     }
-build_time     = 5
+build_time     = 0
 removal_time   = 0
 conflicts      = "Irrigation", "Farmland"
 helptext       = _("\
@@ -1452,7 +1452,7 @@ reqs           =
       "TerrainClass", "Land",          "Local",  TRUE,     FALSE
       "UnitType",     "Trawler",       "Local",  FALSE,    TRUE
     }
-build_time     = 5
+build_time     = 0
 removal_time   = 0
 conflicts      = "Mine", "Oil Well"
 flags          = "IrrigationSource"
