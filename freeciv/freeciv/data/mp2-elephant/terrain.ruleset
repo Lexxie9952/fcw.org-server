@@ -1231,7 +1231,7 @@ reqs           =
       "TerrainClass", "Land",    "Local", TRUE,      FALSE
       "UnitType",     "Trawler", "Local", FALSE,     TRUE
     }
-build_time     = 5
+build_time     = 0
 removal_time   = 0
 conflicts      = "Mine", "Oil Well"
 hidden_by      = "Farmland"
