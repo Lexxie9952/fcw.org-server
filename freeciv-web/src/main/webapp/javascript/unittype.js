@@ -119,15 +119,16 @@ const UTYF_ALWAYSATTACKCLASS1 = 47;       /* Attacks Provoking Class 1 always */
 const UTYF_ALWAYSATTACKCLASS2 = 48        /* Attacks Provoking Class 2 always */
 const UTYF_ALWAYSATTACKCLASS3 = 49;       /* Attacks Provoking Class 3 always */
 
-const UTYF_RESERVED = 50;                 /* future hard-coded server UTYF flags */
-const UTYF_RESERVED1 = 51;
-const UTYF_RESERVED2 = 52;
-const UTYF_RESERVED3 = 53;
-const UTYF_RESERVED4 = 54;
-const UTYF_RESERVED5 = 55;
-const UTYF_RESERVED6 = 56;
-const UTYF_RESERVED7 = 57;
-const UTYF_RESERVED8 = 58;
+const UTYF_FREE_RIDE = 50;                /* Doesn't impart passive movement cost to passengers on transports named "Cargo Plane", if said passengers have a paradrop range > 0 */
+const UTYF_ONLY_HITS_TARGETS = 51;        /* Unit only attacks defenders in a stack which are in its targets list and there's no stack kill but only a single death: use case is ABM */
+
+const UTYF_RESERVED1 = 52;
+const UTYF_RESERVED2 = 53;
+const UTYF_RESERVED3 = 54;
+const UTYF_RESERVED4 = 55;
+const UTYF_RESERVED5 = 56;
+const UTYF_RESERVED6 = 57;
+const UTYF_RESERVED7 = 58;
 
 const UTYF_USER_FLAG_1 = 59;              // Airbase: can build airbases
 const UTYF_USER_FLAG_2 = 60;              // Transform: can transform terrain
