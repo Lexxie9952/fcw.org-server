@@ -31,6 +31,9 @@
 
 #include "tile.h"
 
+/* DEBUG
+#include "../server/notify.h" */
+
 static bv_extras empty_extras;
 
 #ifndef tile_index
@@ -456,6 +459,128 @@ int tile_activity_time(enum unit_activity activity, const struct tile *ptile,
   default:
     return 0;
   }
+}
+/************************************************************************//**
+  Check if it's smart to begin a tile activity. Sometimes it's not, like if
+  you duplicate activity of other unit(s) without reducing time.
+  👉🏽 punit may be null, only returning if activity WON'T complete this turn.
+****************************************************************************/
+bool is_activity_useful_at_tile(enum unit_activity activity,
+                                const struct tile *ptile,
+                                struct extra_type *extra_target,
+                                struct unit *punit)
+{
+  /*💥 A "USEFUL" activity is defined as:
+        (1) It's not a build, clean, or transform activity  TRUE (ALWAYS)
+        (2) No one else is doing the activity on the tile:  TRUE
+        (3) Activity finishes next turn                     FALSE
+        (4a) Turns to finish with me < turns without me     TRUE
+        (4b) Turns to finish with me = turns without me     FALSE */
+#undef DEBUG_USEFUL_ACTIVITY
+                #ifdef DEBUG_USEFUL_ACTIVITY
+                  notify_player(NULL, unit_tile(punit), E_UNIT_ORDERS, ftc_server,
+                                _("%s checking usefulness of action on tile. "
+                                "Activity: %d Extra_target:%s"),
+                                (punit ? unit_link(punit) : "NULL UNIT"), activity,
+                                (extra_target) ? extra_rule_name(extra_target): "NULL");
+                #endif
+  bool is_removal = is_clean_activity(activity);
+  bool is_build = is_build_activity(activity, ptile);
+  bool is_transform = false;
+
+  /* (1) If not building,removing,transforming, then it's impossible for your
+     work to be wasted because you can't "join forces" on this activity: */
+  if (!is_removal && !is_build) {
+    /* Draining swamp, planting forest, removing hills, it's really a type of
+      adding or removal. But no pextra is involved: */
+    switch (activity) {
+      case ACTIVITY_PLANT:
+      case ACTIVITY_CULTIVATE:
+      case ACTIVITY_TRANSFORM:
+        is_transform = TRUE;   // flag for not using extra_target in our logic
+        extra_target = NULL;
+        break;
+      default:
+        return true;
+    }
+  }
+
+/* To decide the rest, we need to know:
+     A. accrued_activity:         (at TC): accrued activity on the tile at upcoming TC
+     B. activity_present:         if someone is working this tile target (else always return true)
+     C. activity_rate_general:    sum of work rates for actors doing activity on this extra_target
+     D. required_activity:        how much accrued activity needed to complete it
+     E. activity_left:            (at TC): required - accrued
+     F. turns_to_finish           at current rate sans our new unit          */
+
+  int accrued_activity      = 0;
+  int activity_rate_general = 0;
+
+  /* Look at other units on the tile who are same activity+target: */
+  unit_list_iterate_safe(ptile->units, aunit) {
+    /* Skip units not doing same activity to same extra_target. */
+    if ((aunit->activity_target != extra_target && !is_transform)
+        || aunit->activity != activity) {
+      continue;
+    }
+      // (A) accrued_activity
+      accrued_activity    += aunit->activity_count;
+      accrued_activity    += get_activity_rate_this_turn(aunit);
+     // gets a logical proxy for (B) and gets (C)
+      activity_rate_general += get_activity_rate(aunit);
+  } unit_list_iterate_safe_end;
+                #ifdef DEBUG_USEFUL_ACTIVITY
+                  notify_player(NULL, unit_tile(punit), E_UNIT_ORDERS, ftc_server,
+                               _("   accrued@TC:%d, rate:%d (0 leaves) "),
+                               accrued_activity, activity_rate_general);
+                #endif
+  // (2) if no activity present, building or removing is never redundant:
+  if (activity_rate_general == 0) return true;
+
+  // (D) required_activity:
+
+  int required_activity = tile_activity_time(activity, ptile, extra_target);
+
+  // (E) activity_left
+  int  activity_left = required_activity - accrued_activity; /* what about accrued ????????????????????????????/*/
+                #ifdef DEBUG_USEFUL_ACTIVITY
+                  notify_player(NULL, unit_tile(punit), E_UNIT_ORDERS, ftc_server,
+                                _("   required: %d  remaining:%d"),
+                                required_activity, activity_left);
+                #endif
+  int turns_to_finish;
+  if (activity_left > 0) {
+    // (F) turns_to_finish
+    turns_to_finish = 1 + (activity_left + activity_rate_general - 1) / activity_rate_general;
+                #ifdef DEBUG_USEFUL_ACTIVITY
+                  notify_player(NULL, unit_tile(punit), E_UNIT_ORDERS, ftc_server,
+                              _("   turns to finish without me: %d"),
+                              turns_to_finish);
+                #endif
+  } else { /* extra will be finished this turn */
+    turns_to_finish = 1;
+    //(3) Activity finishes next turn anyway; NOT useful to add more activity:
+    return false;
+  }
+
+  if (!punit) {
+    return true;
+  }
+
+  int my_rate_this_turn = get_contemplated_activity_rate(punit, activity, extra_target, true);
+  int my_rate_general   = get_contemplated_activity_rate(punit, activity, extra_target, false);
+  int turns_to_finish_with_me = 1 + ((activity_left-my_rate_this_turn)
+                                  + (activity_rate_general+my_rate_general) - 1)
+                                  / (activity_rate_general+my_rate_general);
+              #ifdef DEBUG_USEFUL_ACTIVITY
+                notify_player(NULL, unit_tile(punit), E_UNIT_ORDERS, ftc_server,
+                              _("   turns to finish with me: %d"),
+                              turns_to_finish_with_me);
+              #endif
+  if (turns_to_finish_with_me < turns_to_finish) {
+    return true;
+  }
+  return false;
 }
 
 /************************************************************************//**

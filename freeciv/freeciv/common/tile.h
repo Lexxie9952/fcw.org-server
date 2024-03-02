@@ -168,13 +168,17 @@ bool tile_is_seen(const struct tile *target_tile,
 /* A somewhat arbitrary integer value.  Activity times are multiplied by
  * this amount, and divided by them later before being used.  This may
  * help to avoid rounding errors; however it should probably be removed. */
- /* No, it needs to be increased to allow for granularity and application
-  * of "Work_Bonus" similar to "Move_Bonus" */
+/* No, it shouldn't 😱! Rounding errors *ARE* bad. Value was improved to 360
+  because it's superabundant (robustly resists rounding errors). A win for
+  granularity and application of "Work_Bonus" similar to "Move_Bonus" */
 #define ACTIVITY_FACTOR 360 // must match same value in unit.js
 int tile_activity_time(enum unit_activity activity,
 		       const struct tile *ptile,
                        struct extra_type *tgt);
-
+bool is_activity_useful_at_tile(enum unit_activity activity,
+                                const struct tile *ptile,
+                                struct extra_type *extra_target,
+                                struct unit *punit);
 /* These are higher-level functions that handle side effects on the tile. */
 void tile_change_terrain(struct tile *ptile, struct terrain *pterrain);
 bool tile_apply_activity(struct tile *ptile, Activity_type_id act,

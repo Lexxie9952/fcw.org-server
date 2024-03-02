@@ -354,9 +354,13 @@ void set_unit_activity_base(struct unit *punit,
 void set_unit_activity_road(struct unit *punit,
                             Road_type_id road);
 int get_activity_rate(const struct unit *punit);
+int get_contemplated_activity_rate(struct unit *punit,
+                                   enum unit_activity activity,
+                                   struct extra_type *extra_target,
+                                   bool this_turn);
+int get_activity_rate_this_turn(const struct unit *punit);
 int real_get_activity_rate_this_turn(const struct unit *punit,
                                      bool is_turn_change);
-int get_activity_rate_this_turn(const struct unit *punit);
 int get_turns_for_activity_at(const struct unit *punit,
                               enum unit_activity activity,
                               const struct tile *ptile,

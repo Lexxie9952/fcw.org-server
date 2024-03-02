@@ -6061,14 +6061,31 @@ bool execute_orders(struct unit *punit, const bool fresh)
         }
 
         if (can_unit_do_activity_targeted(punit, activity, pextra)) {
-
-          /* Needed for when connect-activity does cultivate because it got here then failed.
-           * It raises the question why we only look at activity-targeted for non-targeted activites,
-           * whereas upstream is only looking at non-targeted activity for targeted activites! */
+          /* 1. When connect-activity does cultivate, it would fail maybe because cultivate
+             isn't a unit_activity_targeted? This code block fixes that.
+             2. 👉🏽Also, FCW connect-activity irrigates same tile after cultivate. This
+             caused failed orders when activity_useful_at_tile() is false, as EXTRA_IRRIGATION
+             can't go on Jungle; thus you lose connect-orders. By being above code-block
+             below, that no longer happens. See comment below. */
           if (activity == ACTIVITY_CULTIVATE && can_unit_do_activity(punit, activity)) {
             punit->done_moving = TRUE;
             set_unit_activity(punit, activity);
             send_unit_info(NULL, punit);
+            break;
+          }
+          /* Putting this code block above the one above, will result in cultivating units
+             aborting their connect-orders whenever joining another unit's work isn't
+             "useful". (Rare case, only Tribesmen on Jungle because they work at 1
+             work unit per turn and Jungle is an even numbered build-time.) The choice is
+             abort orders then, or just be on super rare occasions inefficient and keep a
+             perhaps long connect-orders chain active. Obviously the latter, for now. */
+          if (!is_activity_useful_at_tile(activity, unit_tile(punit), pextra, punit)) {
+            if (!last_order) notify_player(pplayer, unit_tile(punit), E_UNIT_ORDERS, ftc_server,
+                                 _("Orders for this tile aren't useful. %s skipping to next orders."),
+                                 unit_link(punit));
+            else             notify_player(pplayer, unit_tile(punit), E_UNIT_ORDERS, ftc_server,
+                                 _("Orders for %s aborted since it's not helpful on "
+                                 "this tile."), unit_link(punit));
 
             break;
           }

@@ -528,6 +528,39 @@ int get_activity_rate(const struct unit *punit)
 }
 
 /**********************************************************************//**
+  Same as the function immediately above or below. Last parameter,
+  if true, makes it like function below.
+
+  The difference in this one is that it calculates for a unit who is not
+  currently/actively committed to that activity, but wants to know what
+  its rate will be before it decides to do it.
+
+  The only way to do this and know what the bonuses are, is to pretend
+  we're doing the activity, then restore it back.
+**************************************************************************/
+int get_contemplated_activity_rate(struct unit *punit,
+                                   enum unit_activity activity,
+                                   struct extra_type *extra_target,
+                                   bool this_turn)
+{
+    int sane_activity = punit->activity;
+    int sane_activity_count = punit->activity_count;
+    struct extra_type *sane_activity_target = punit->activity_target;
+
+    punit->activity_count = 0;
+    punit->activity = activity;
+    punit->activity_target = extra_target;
+
+    int result = (this_turn) ? get_activity_rate_this_turn(punit)
+                             : get_activity_rate(punit);
+
+    punit->activity = sane_activity;
+    punit->activity_count = sane_activity_count;
+    punit->activity_target = sane_activity_target;
+
+    return result;
+}
+/**********************************************************************//**
   WRAPPER function for real_get_activity_rate_this_turn(..)
   -----------------------------------------------------------------
   Returns the amount of work a unit would do on an activity this
