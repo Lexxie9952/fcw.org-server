@@ -483,9 +483,9 @@ function render_action_image_into_button(text, action_id, sub_tgt, order, activi
       }
     }
 
-    text = "<img style='max-height:24px; position:absolute; left:2px;top:4px;' "
+    text = "<img class='act_sel_order_image' "
         + "src='/images/" + action_images[key] + ".png'" + ">&emsp;"
-        + text;
+        + "<span style='position:relative; top:1px'>"+text+"</span>";
   }
   //console.log("text returns as %s\n",text);
 
@@ -802,7 +802,7 @@ function popup_action_selection(actor_unit, action_probabilities,
   buttons.push({
       id      : "act_sel_cancel" + actor_unit['id'],
       "class" : 'act_sel_button',
-      html    : render_action_image_into_button('Cancel (𝗪)', 'cancel'),
+      html    : render_action_image_into_button('Cancel (<b>W</b>)', 'cancel'),
       click   : function() {
         remove_action_selection_dialog(id, actor_unit['id']);
       } });
@@ -1087,7 +1087,7 @@ function popup_bribe_dialog(actor_unit, target_unit, cost, act_id)
   var close_button = {	"Close (𝗪)": function() {
                         remove_action_selection_dialog(id, actor_unit['id']); }
                      };
-  var bribe_close_button = {	"Cancel (𝗪)": function() { remove_action_selection_dialog(id, actor_unit['id']); },
+  var bribe_close_button = {	" Cancel (𝗪)": function() { remove_action_selection_dialog(id, actor_unit['id']); },
   				"Do it!": function() {
       request_unit_do_action(act_id, actor_unit['id'], target_unit['id']);
       remove_action_selection_dialog(id, actor_unit['id']);
@@ -1145,7 +1145,7 @@ function popup_incite_dialog(actor_unit, target_city, cost, act_id)
   $(id).html(dhtml);
 
   var close_button = {         'Close (𝗪)':    function() {remove_action_selection_dialog(id, actor_unit['id']);}};
-  var incite_close_buttons = { 'Cancel (𝗪)': function() {remove_action_selection_dialog(id, actor_unit['id']);},
+  var incite_close_buttons = { ' Cancel (𝗪)': function() {remove_action_selection_dialog(id, actor_unit['id']);},
                                'Do it!': function() {
                                           request_unit_do_action(act_id, actor_unit['id'], target_city['id']);
                                           remove_action_selection_dialog(id, actor_unit['id']);
@@ -1196,7 +1196,7 @@ function popup_unit_upgrade_dlg(actor_unit, target_city, cost, act_id)
   $(id).html(dhtml);
 
   var close_button = {          'Close (𝗪)':    function() {remove_action_selection_dialog(id, actor_unit['id']);}};
-  var upgrade_close_buttons = { 'Cancel (𝗪)': function() {remove_action_selection_dialog(id, actor_unit['id']);},
+  var upgrade_close_buttons = { ' Cancel (𝗪)': function() {remove_action_selection_dialog(id, actor_unit['id']);},
                                 'Do it!': function() {
                                   request_unit_do_action(act_id, actor_unit['id'], target_city['id']);
                                   remove_action_selection_dialog(id, actor_unit['id']);
@@ -1308,7 +1308,7 @@ function popup_steal_tech_selection_dialog(actor_unit, target_city,
 
   /* Allow the user to cancel. */
   buttons.push({
-                 html : 'Cancel (𝗪)',
+                 html : 'Cancel (<b>W</b>)',
                  click : function() {
                   remove_action_selection_dialog("#"+id, actor_unit['id']);
                  }
@@ -1406,7 +1406,7 @@ function popup_sabotage_dialog(actor_unit, target_city, city_imprs, act_id)
 
   /* Allow the user to cancel. */
   buttons.push({
-                 html : 'Cancel (𝗪)',
+                 html : ' Cancel (<b>W</b>)',
                  click : function() {
                   remove_action_selection_dialog("#"+id, actor_unit['id'])
                  }
@@ -1551,7 +1551,7 @@ function select_tgt_unit(actor_unit, target_tile, potential_tgt_units)
                                                tgt_unit['id']));
   }
 
-  var close_button = {html: "Cancel (𝗪)", click: function() {
+  var close_button = {html: " Cancel (<b>W</b>)", click: function() {
     remove_action_selection_dialog(id, actor_unit['id']);
   }};
   buttons.push(close_button);
@@ -1926,7 +1926,7 @@ function select_last_action()
   }
   buttons = add_action_last_button(buttons, ACTION_COUNT, "NO ACTION", ORDER_LAST);
   var close_button = {
-    html: render_action_image_into_button("Cancel (𝗪)", "cancel"),
+    html: render_action_image_into_button("<span style='position:relative; top:-1px; left:8px;'>Cancel (<b>W</b>)</span>", "cancel"),
     click: function() {
       remove_active_dialog(id);
       deactivate_goto(false);
@@ -1974,7 +1974,7 @@ function add_action_last_button(buttons, action_id, override_name, order, activi
   var new_button = create_action_last_button(override_name, action_id, order, activity, target, subtarget);
 
   new_button.html = render_action_image_into_button(new_button.html, action_id, subtarget, order, activity);
-
+  new_button.html = new_button.html.replace("act_sel_order_image", "go_and_do_order_image");
   buttons.push(new_button);
   return buttons;
 }
@@ -2058,7 +2058,7 @@ function dialog_register(id, actor_id, input_maybe_needed) {
 **************************************************************************/
 function create_a_close_button(parent_id)
 {
-  var close_button = {html: render_action_image_into_button("Cancel (𝗪)", "cancel"), click: function() {
+  var close_button = {html: render_action_image_into_button(" Cancel (<b>W</b>)", "cancel"), click: function() {
       remove_active_dialog(parent_id);
   }};
   return close_button;
