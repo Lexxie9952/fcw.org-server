@@ -1,7 +1,7 @@
 <img style="max-width:100%" src='/images/man/mp2dragoon.webp'>
-<b><a href="http://freeciv.fandom.com/wiki/Multiplayer_II:_Dragoon,_Game_Manual" target="_blank">Full Game Manual, MP2-Dragoon</a></b>
+<b><a href="http://freeciv.fandom.com/wiki/Multiplayer_II:_Dragoon,_Game_Manual" target="_blank">MP2 Dragoon Game Manual</a></b>
 <br>
-<u class="help_stats">Frequently used chapters</u> <i>(from the Full Game Manual)</i>:
+<u class="help_stats">Frequently used chapters</u> <i>(from the Game Manual)</i>:
 <a href="https://freeciv.fandom.com/wiki/Combat.mp2d" target="_blank">Combat</a>
 <a href="https://freeciv.fandom.com/wiki/Diplomacy.mp2d" target="_blank">Diplomacy</a>
 <a href="https://freeciv.fandom.com/wiki/Cities.mp2d#City_Output_Sequence" target="_blank">City Output Sequence</a><br>

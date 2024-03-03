@@ -1,6 +1,6 @@
-<b><a href="http://freeciv.fandom.com/wiki/Multiplayer_II:_Caravel,_Game_Manual" target="_blank">Full Game Manual, MP2-Caravel</a></b>
+<b><a href="http://freeciv.fandom.com/wiki/Multiplayer_II:_Caravel,_Game_Manual" target="_blank">MP2 Caravel Game Manual</a></b>
 <br>
-<u class="help_stats">Useful supplements to the in-game manual</u> <i>(from the Full Game Manual)</i>:
+<u class="help_stats">Useful supplements to the in-game manual</u> <i>(from the Game Manual)</i>:
 <a href="http://freeciv.fandom.com/wiki/Combat.mp2c" target="_blank">Combat</a>
 <a href="http://freeciv.fandom.com/wiki/Economy.mp2c" target="_blank">Economy</a>
 <a href="http://freeciv.fandom.com/wiki/Diplomacy.mp2c" target="_blank">Diplomacy</a>
