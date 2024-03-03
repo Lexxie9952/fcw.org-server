@@ -4,7 +4,7 @@ td {
   bottom: 3px;
 }
 </style>
-<h1>Controls</h1>
+<h1>Commands</h1>
 
 The current and complete list of Freeciv-web controls can be found here:<br>
 <a href="https://freeciv.fandom.com/wiki/Hotkeys.mp" target="_blank">Freeciv-web complete command list</a>
