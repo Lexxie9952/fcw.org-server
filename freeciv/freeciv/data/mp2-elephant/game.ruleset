@@ -4247,7 +4247,7 @@ set =
       "move_cost_in_frags", "ENABLED", TRUE    ;locked
       "multiresearch", "ENABLED", FALSE
       "nationset", "all", FALSE
-      "nuclearwinter_percent", 50, FALSE
+      "nuclearwinter_percent", 100, FALSE
       "nukes_minor", "ENABLED", FALSE      ; set to DISABLED to completely disallow nuclear detonations
       "nukes_major", "ENABLED", FALSE      ; set to DISABLED to disallow nuclear fusion weapons
       "partisan_max_spawns", 2, FALSE      ; each city can spawn max. of 2 times
