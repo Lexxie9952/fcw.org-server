@@ -1235,7 +1235,7 @@ reqs    =
 ;(Obviously, 40-50% if adjacent on vigil, as it uses regular combat odds)
 [effect_abm_sdi_effect]
 type    = "Nuke_Intercept_Radius_Odds_Pm"
-value   = 5293  ; 29.3% = (1 - sqrt(0.5)) probability. i.e., each 2 ABM halves the chance of nuke success.
+value   = 5293  ; %1000 = sqrt_rad(5). 293/1000 = 29.3% one intercepts =  each 2 ABM halves the chance of nuke success (1 - sqrt(0.5))
 reqs    =
    { "type",      "name",                   "range", "present"
       "UnitType", "Anti-Ballistic Missile", "Local", TRUE
@@ -1244,7 +1244,7 @@ reqs    =
 ;AEGIS have a 50% chance to intercept 8-adjacent bombs (but not missiles)
 [effect_aegis_sdi_effect]
 type    = "Nuke_Intercept_Radius_Odds_Pm"
-value   = 2500  ; radius < 2 == adjacent. 500/100 = 50% probability of survival
+value   = 2500  ; %1000 = sqrt_rad(2) = adjecent. 500/1000 = 50% probability of SDI effect.
 reqs    =
    {  "type",     "name",           "range", "present"
       "UnitType", "AEGIS Cruiser",  "Local",  TRUE
