@@ -130,7 +130,7 @@ function player_invention_state(pplayer, tech_id)
   }
 }
 /**************************************************************************
-  Two easier wrappers to get bool-like response from the above function.
+  Three easier wrappers to get bool-like response from the above function.
 **************************************************************************/
 function tech_known(tech_str) { // active player knows tech by name?
   return (player_invention_state(client.conn.playing,
@@ -138,6 +138,10 @@ function tech_known(tech_str) { // active player knows tech by name?
 }
 function playerno_knows_tech(plr_no, tech_str) { // player_no knows tech?
   return (player_invention_state(players[plr_no],
+          tech_id_by_name(tech_str)) == TECH_KNOWN);
+}
+function player_knows_tech(pplayer, tech_str) { // player_no knows tech?
+  return (player_invention_state(pplayer,
           tech_id_by_name(tech_str)) == TECH_KNOWN);
 }
 /**************************************************************************/
