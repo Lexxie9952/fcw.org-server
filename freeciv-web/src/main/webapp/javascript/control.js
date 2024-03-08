@@ -2660,10 +2660,11 @@ function set_unit_id_focus_and_activate(id)
 **************************************************************************/
 function city_dialog_activate_unit(e, punit)
 {
+  /*
   console.log("city_dialog_activate_unit called. event:")
   console.log(e);
   console.log("punit:")
-  console.log(punit);
+  console.log(punit); */
 
   if (TAB_MAP === $("#tabs").tabs("option", "active")) {
     close_city_dialog_trigger();
