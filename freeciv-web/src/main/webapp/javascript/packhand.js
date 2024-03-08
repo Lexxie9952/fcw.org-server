@@ -2069,6 +2069,13 @@ function handle_thaw_client(packet)
 {
   client_frozen = false;
   update_ui_after_thaw();
+
+  /* This is potentially the area for all processing after we know the game
+     is loaded and we have valid players, map, etc. */
+
+  if (filtered_tracklist.length == 0) {
+    tracklist_init();
+  }
 }
 
 function handle_spaceship_info(packet)
