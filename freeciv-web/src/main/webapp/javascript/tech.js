@@ -130,12 +130,18 @@ function player_invention_state(pplayer, tech_id)
   }
 }
 /**************************************************************************
-  95% of the time the above function is called to see if active player
-  knows specific tech X. This wrapper makes it a lot easier.
+  Two easier wrappers to get bool-like response from the above function.
 **************************************************************************/
-function tech_known(tech_str) {
-  return (player_invention_state(client.conn.playing, tech_id_by_name(tech_str)) == TECH_KNOWN);
+function tech_known(tech_str) { // active player knows tech by name?
+  return (player_invention_state(client.conn.playing,
+          tech_id_by_name(tech_str)) == TECH_KNOWN);
 }
+function playerno_knows_tech(plr_no, tech_str) { // player_no knows tech?
+  return (player_invention_state(players[plr_no],
+          tech_id_by_name(tech_str)) == TECH_KNOWN);
+}
+/**************************************************************************/
+
 
 /**************************************************************************
  Sets the reqtree for the ruleset
