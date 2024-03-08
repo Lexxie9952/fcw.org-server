@@ -151,7 +151,7 @@ function update_govt_dialog()
                + "<img class='govt_button_image' src='/images/e/techs/"+govt['name'].toLowerCase()+gov_modifier+".png'> "
           //     + "width='36px' height='36px'>"
 
-    console.log(label_html);
+    //console.log(label_html);
     //$("#govit_id_"+ govt['id']).removeClass("govt_button")
     //$("#govit_id_"+ govt['id']).addClass(mod_class);
     if (!can_player_get_gov(govt_id)) {
