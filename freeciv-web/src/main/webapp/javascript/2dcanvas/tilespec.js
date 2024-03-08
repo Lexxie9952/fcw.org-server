@@ -217,7 +217,7 @@ function tileset_extra_tag_robust(extra)
   if (tileset_has_tag(extra['graphic_alt']+"_s_n1e0s1w0")) {
     return extra['graphic_alt'];
   }
-  console.log("\ntileset_extra_tag_robust() found no graphic for " + kind_name + " " + extra['name']);
+  //console.log("\ntileset_extra_tag_robust() found no graphic for " + kind_name + " " + extra['name']);
   return null;
 }
 

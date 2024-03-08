@@ -452,7 +452,8 @@ function create_half_size_extra_sprite(pextra)
   }
   // No extra_tag at all was retrieved!
   else {
-    console.log("Failed to retrieve an extra_tag for "+pextra['rule_name']);
+    if (pextra['rule_name'] != "Hideout" && pextra['rule_name'] != "Depth")
+      console.log("Failed to retrieve an extra_tag for "+pextra['rule_name']);
     msg += "<span><img class='vht' src='/images/invisible.png'></span>";
   }
 return msg;
