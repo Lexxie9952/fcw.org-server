@@ -45,11 +45,13 @@ Non-GPL Material must be non-essential to the function of the Instance.
    and the supercession of EU Copyright Directive 93/98/EEC.
 ******************************************************************************/
 
+/*————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————*/
 
-var silent_track = "breaks/30secondbreak"; // Specifies track to play for silence.
+var silent_track = "breaks/30secondbreak.mp3"; // Specifies track to play for silence.
 /* Used in tags conditional to player's civ graphics style: */
 const styles = ["european", "classical", "tropical", "asian", "babylonian", "celtic", "steppes", "northern"]
 
+/*————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————*/
 /* The tracklist declaration below represents external and non-essential Material
    to be accessed by an audio component within the project which runs in a
    separate thread as background music.
@@ -87,11 +89,11 @@ const styles = ["european", "classical", "tropical", "asian", "babylonian", "cel
                         a track with only (P) as it would always evaluate false.)
 
     "!" in front of the tag's key name, serves as NOT: evaluates false when true and vice versa: e.g. "!turn>" is equivalent to turn<=,
-    example 2: {"!gov":"Despotism"} evaluates as (gov != Despotism)
-*/
-
+    example 2: {"!gov":"Despotism"} evaluates as (gov != Despotism) */
+/*—————————————————*/
 var tracklist = [
 /* Soundtrack rev1 */
+/*—————————————————*/
 /* Tribal */
   {filepath: "ancient/AncientSoundtrack1",conditions: [[{"turn<":18},{"!tech":"Alphabet"}]],provenance: "" },
   {filepath: "ancient/AncientSoundtrack3",conditions: [[{"turn<":18},{"!tech":"Alphabet"}]],provenance: "" },
@@ -170,6 +172,7 @@ var tracklist = [
   {filepath: "tribal/FromPastToPresent",conditions: [[{"turn<":18},{"!tech":"Alphabet"}]],provenance: "" },
   {filepath: "tribal/Hunter2",conditions: [[{"turn<":18},{"!tech":"Alphabet"}]],provenance: "" },
 
+/*—————————————————*/
   /* Ancient */
   {filepath: "tribal/Foreigner",conditions: [[{"turn>":17},{"!tech":"Feudalism"},{"!tech":"Navigation"},{"!tech":"Philosophy"},{"!tech":"Invention"}],[{"tech":"Alphabet"},{"!tech":"Feudalism"},{"!tech":"Navigation"},{"!tech":"Philosophy"},{"!tech":"Invention"}]],provenance: "" },
   {filepath: "ancient/Intro1",conditions: [[{"turn>":17},{"!tech":"Feudalism"},{"!tech":"Navigation"},{"!tech":"Philosophy"},{"!tech":"Invention"}],[{"tech":"Alphabet"},{"!tech":"Feudalism"},{"!tech":"Navigation"},{"!tech":"Philosophy"},{"!tech":"Invention"}]],provenance: "" },
@@ -307,6 +310,7 @@ var tracklist = [
   {filepath: "ancient/WelcomeToKostantiniyye",conditions: [[{"turn>":17},{"!tech":"Invention"}]],provenance: "" },
   {filepath: "ancient/WolfWitch",conditions: [[{"turn>":17},{"!tech":"Invention"}]],provenance: "" },
 
+/*—————————————————*/
   /* Middle */
   {filepath: "middle/battle-epic",conditions: [[{"turn>":45},{"!tech":"Gunpowder"}],[{"tech":"Feudalism"},{"!tech":"Gunpowder"},{"!tech":"Magnetism"}],[{"tech":"Philosophy"},{"!tech":"Gunpowder"},{"!tech":"Magnetism"}]],provenance: "GPL" },
   {filepath: "middle/AllegriMiserere",conditions: [[{"turn>":45},{"!tech":"Gunpowder"},{"tech":"Monotheism"}]],provenance: "" },
@@ -399,6 +403,7 @@ var tracklist = [
   {filepath: "middle/RaghseChoupani",conditions: [[{"turn>":45},{"!tech":"Gunpowder"}],[{"tech":"Feudalism"},{"!tech":"Gunpowder"},{"!tech":"Magnetism"}],[{"tech":"Philosophy"},{"!tech":"Gunpowder"},{"!tech":"Magnetism"}]],provenance: "" },
   {filepath: "middle/RingForFreedom",conditions: [[{"turn>":45},{"!tech":"Industrialization"},{"!tech":"Conscription"}]],provenance: "" },
 
+/*—————————————————*/
   /* Colonial */
   {filepath: "colonial/Washington_Middle",conditions: [[{"tech":"Gunpowder"},{"!tech":"Industrialization"},{"!tech":"Conscription"}]],provenance: "" },
   {filepath: "colonial/DeliusAppalachia",conditions: [[{"tech":"Gunpowder"},{"!tech":"Industrialization"},{"!tech":"Conscription"}]],provenance: "" },
@@ -468,6 +473,7 @@ var tracklist = [
   {filepath: "colonial/CanariosKapsberger",conditions: [[{"tech":"Gunpowder"},{"!tech":"Industrialization"},{"!tech":"Conscription"}]],provenance: "" },
   {filepath: "colonial/DreamQuest",conditions: [[{"tech":"Gunpowder"},{"!tech":"Industrialization"},{"!tech":"Conscription"}]],provenance: "" },
 
+/*—————————————————*/
   /* Industrial */
   {filepath: "ancient/FuneralPyre",conditions: [[{"tech":"Industrialization"},{"!tech":"Computers"}],[{"tech":"Conscription"},{"!tech":"Computers"}]],provenance: "" },
   {filepath: "colonial/SerenadeVW",conditions: [[{"tech":"Industrialization"},{"!tech":"Computers"}],[{"tech":"Conscription"},{"!tech":"Computers"}]],provenance: "" },
@@ -527,6 +533,7 @@ var tracklist = [
   {filepath: "industrial/Wifeing",conditions: [[{"tech":"Industrialization"},{"!tech":"Computers"}],[{"tech":"Conscription"},{"!tech":"Computers"}]],provenance: "" },
   {filepath: "industrial/DuelingWizards",conditions: [[{"tech":"Industrialization"},{"!tech":"Computers"}],[{"tech":"Conscription"},{"!tech":"Computers"}]],provenance: "" },
 
+/*—————————————————*/
   /* Modern */
   {filepath: "tribal/ArktauCove",conditions: [[{"tech":"Computers"}]],provenance: "" },
   {filepath: "tribal/ArktauGeometry",conditions: [[{"tech":"Computers"}]],provenance: "" },
@@ -658,14 +665,23 @@ var tracklist = [
   {filepath: "modern/Vapor",conditions: [[{"tech":"Computers"}]],provenance: "" },
   {filepath: "modern/Venture2",conditions: [[{"tech":"Computers"}]],provenance: "" },
   {filepath: "modern/Viewpoint",conditions: [[{"tech":"Computers"}]],provenance: "" },
-  {filepath: "modern/WayAhead1",conditions: [[{"tech":"Computers"}]],provenance: "" }
+  {filepath: "modern/WayAhead1",conditions: [[{"tech":"Computers"}]],provenance: "" },
 /* end of Soundtrack rev1 */
-
+/*————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————*/
 /* Soundtrack II: */
+/*————————————————*/
+{filepath: "1/BenHur2016.TheCircus.Beltrami",conditions: [[{"tech":"Iron Working"},{"!tech":"University"}]],provenance: "" },
+{filepath: "1/Ronroco.Coyita.Santaolalla",conditions: [[{"tech":"Literacy"},{"!tech":"Conscription"}]],provenance: "" },
+{filepath: "2/Babel.Iguazu.Santaolalla",conditions: [[{"tech":"Magnetism"},{"!tech":"Combustion"}]],provenance: "" },
+{filepath: "2/ThinRedLine.Silence.HZ",conditions: [[{"tech":"Invention"}]],provenance: "" },
+{filepath: "3/ThinRedLine.CoralAtoll.HZ",conditions: [[{"tech":"Amphibious Warfare"}]],provenance: "" },
+{filepath: "3/ThinRedLine.Light.HZ",conditions: [[{"tech":"Chemistry"}]],provenance: "" }
 
 ]; // end tracklist[]
 
+/*————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————*/
 /* These are digestif breaks played every nth track to give pause/rest from the soundtrack */
+/*————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————*/
 var breaklist = [
   {filepath: "breaks/british",conditions: [[{"civ":"european"}], [{"civ":"celtic"}]],provenance: "" },
   {filepath: "breaks/byzantine",conditions: [[{"civ":"european"}], [{"civ":"classical"}], [{"civ":"babylonian"}]],provenance: "" },

@@ -310,11 +310,22 @@ function get_filtered_break() {
   }
   f_track = Math.floor(Math.random() * filtered_breaklist.length);
 
-  track_name = filtered_breaklist[f_track]['filepath'] + ".mp3";
+  track_name = filtered_breaklist[f_track]['filepath'] + get_extension(filtered_breaklist[f_track]);
   if (DEBUG_AUDIO) console.log("Break #"+(f_track+1)+" of "+filtered_breaklist.length+". Playing "+track_name);
   filtered_breaklist.splice(f_track, 1);
 
   return track_name;
+}
+
+/**************************************************************************
+...Gets the format file extension if not default (mp3)
+**************************************************************************/
+function get_extension(track_object) {
+  if (!track_object) return ".mp3";
+  if (track_object.f) {
+    return "." + track.object.f;
+  }
+  else return ".mp3";
 }
 
 /**************************************************************************
@@ -329,7 +340,7 @@ function pick_next_track() {
   /* When game first loads we still need to prime the audio pump and get it
      playing something; and preferably not start music right away: */
   if (!tracklist_loaded) {
-    track_name = silent_track + ".mp3";
+    track_name = silent_track;
   }
   else {
     trackcounter ++;
@@ -355,7 +366,7 @@ function pick_next_track() {
         f_track = Math.floor(Math.random() * filtered_tracklist.length);
       }
       //if (DEBUG_AUDIO) console.log("f_track "+(f_track)+" f_t.len== "+filtered_tracklist.length);
-      track_name = filtered_tracklist[f_track]['filepath'] + ".mp3";
+      track_name = filtered_tracklist[f_track]['filepath'] + get_extension(filtered_tracklist[f_track]);
 
       if (DEBUG_AUDIO) console.log("Song track #"+(f_track+1)+" of "+filtered_tracklist.length+". Playing "+track_name);
 
