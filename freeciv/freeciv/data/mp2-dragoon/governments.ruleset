@@ -105,7 +105,7 @@ Under Despotism, you are the absolute ruler of your people.  Your\
 Despotism suffers the highest level of corruption of all\
  forms of government.\n\ \
 "), _("\
-Gulag：You can starve cities without disorder with a martial count of 2; \n\
+Gulag：You can starve cities without lawlessness with a martial count of 2; \n\
 needing +2 more at 20 population and +2 more for each 10 population thereafter. \n\
 No citizens are made unhappy by each aggressive unit. \n\
 37% Base corruption in cities \n\
@@ -185,7 +185,7 @@ Under Democracy, citizens govern directly by voting on issues.\
  Democracy offers the highest level of trade. Base corruption\
  is half that of Republic or Monarchy, and corruption from distance to\
  a capital is very low. Citizens become very upset during wars.\
- Democracy revolts to Anarchy if any city remains in disorder for two turns.\
+ Democracy revolts to Anarchy if any city remains in lawlessness for two turns.\
  Cities and units belonging to Democracy have triple the cost\
  to incite or bribe, respectively. \n\
 "), _("\
@@ -260,7 +260,7 @@ Communists can transfer Proletarians between cities to\
  to convert Workers to Riflemen and vice versa, if in domestic\
  territory and possessing the necessary tech. \n\
 "), _("\
-Gulag：You can starve cities without disorder with a martial count of 3; \n\
+Gulag：You can starve cities without lawlessness with a martial count of 3; \n\
 needing +2 more at 20 population and +2 more for each 10 population thereafter. \n\
 Your nation is completely unaffected by empire size and number of cities. \n\
 No citizens are made unhappy by aggressive units. \n\

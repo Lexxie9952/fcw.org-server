@@ -2642,7 +2642,7 @@ The Statue of Liberty allows you to change government, including governments not
 The Statue of Liberty also allows unprovoked declaration of war\
  regardless of any Senate or United Nations. Also, United Nations\
  or Democracy doesn’t cause Anarchy from two turns of city\
- disorder. \n\
+ lawlessness. \n\
 "), _("\
 This Wonder does not become obsolete.\
 ")
@@ -2806,7 +2806,7 @@ helptext	= _("\
 The United Nations creates a World Senate with the following effects：\n\
  1. Breaking of a treaty by any nation, will give casus belli to all other nations.\
  2. May block declarations of war, as if each national government had a Senate.\
- 3. If any city in the world is in revolt for more than two turns, its government\
+ 3. If any city in the world is lawless for more than two turns, its government\
   goes into Anarchy for a turn. This Wonder does not become obsolete.\
 ")
 

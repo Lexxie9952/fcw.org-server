@@ -274,3 +274,4 @@ i.e., 6 in 5 (swamp), 5 in 4 (mine), 4 in 3 (angkor wat swamp drain) goes to:
 95. Well-diggers can't do mountain rivers. (Because they had to be made a different type to accomodate new river mechanics vis-a-vis Big Land units). It's an abuse of well-digger anyway to make all mountain river cities.
 96. igTer units (Scout, Scout II, Partisan, Alpine Troops) all get uniform simplified move bonus with Veterancy
 97. Ballista may Vigil or Ranged Attack with 1 move point remaining. Fort or City not required for either. R.A. loses only lose 1 move in doing so. This exception from other Ballistic class units is because they can't conventionally attack.
+98. Temple of Artemis must be built before Monotheism
