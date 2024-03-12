@@ -12,7 +12,8 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU Affero General Public License for more details.
 ******************************************************************************/
-var DEBUG_AUDIO = false;
+var DEBUG_AUDIO = 3;            // 0=none, 1=light, 2=normal, 3=verbose
+var DEBUG_TESTLOAD_ALL = true;  // force load all tracks to check for errors
 var audio = null;
 
 var playcount;                // BitVector for whether each song has been played
@@ -31,7 +32,7 @@ var trackcounter = 0;         // # of tracks played so far (used to determine if
 **************************************************************************/
 function tracklist_init() {
   if (tracklist_loaded) return;
-  if (DEBUG_AUDIO) console.log("tracklist_init()");
+  if (DEBUG_AUDIO > 1) console.log("tracklist_init()");
 
   handle_game_uid();
 
@@ -41,14 +42,14 @@ function tracklist_init() {
   }
   // Retrieve or set playcount bitvector here:
   let playcount_data = simpleStorage.get("playcount"+Game_UID);
-  if (DEBUG_AUDIO) console.log(playcount_data);
+  if (DEBUG_AUDIO > 2) console.log(playcount_data);
 
   if (playcount_data == null) {
     playcount = new BitVector([]);
-    if (DEBUG_AUDIO) console.log("tracklist_init() retrieved null BitVector. Making a new one.");
+    if (DEBUG_AUDIO > 1) console.log("tracklist_init() retrieved null BitVector. Making a new one.");
   } else {
     playcount = new BitVector(playcount_data);
-    if (DEBUG_AUDIO) console.log("tracklist_init() retrieved a BitVector for Game_UID:"+Game_UID);
+    if (DEBUG_AUDIO > 1) console.log("tracklist_init() retrieved a BitVector for Game_UID:"+Game_UID);
   }
   // Make the filtered tracklist:
   do_filtered_tracklist();
@@ -65,7 +66,7 @@ function tracklist_init() {
 /**************************************************************************
   Constructs a parallel filtered_tracklist of legal tracks available,
   used by the DJ selection algorithm. 'override' sets all tracks as legal.
-  'override' is flag if no legal tracks, to force all tracks as legal.
+  'override' forces all tracks as legal.
 **************************************************************************/
 function do_filtered_tracklist(override) {
   // Reset the tracklist
@@ -74,7 +75,6 @@ function do_filtered_tracklist(override) {
     if (!override && !is_legal_track(track)) continue;
     // Priority tracks go to the top of the list
     if (is_priority_track(track, false)) {
-      //console.log("PRIORITY FOUND");
       filtered_tracklist.splice(0, 0, tracklist[track]);
     }
     // Normal case:
@@ -84,41 +84,64 @@ function do_filtered_tracklist(override) {
   }
 }
 /**************************************************************************
-  Whether track #tr has a priority tag.  'is_filtered_tracklist', if
-  true, instructs it to check filtered_tracklist rather than tracklist
+  Whether track #tr has a priority tag.  'test_filtered', if true,
+  instructs it to check filtered_tracklist rather than tracklist
 **************************************************************************/
-function is_priority_track(tr, is_filtered_tracklist) {
-  if (is_filtered_tracklist) {
-    if (filtered_tracklist[tr].conditions[0][0].priority == "priority") {
-      return true;
+function is_priority_track(tr, test_filtered) {
+  try {
+
+    if (test_filtered) {
+      if (filtered_tracklist[tr].conditions[0][0].priority == "priority") {
+        return true;
+      }
+      else return false;
     }
-    else return false;
-  }
-  else {
-    if (tracklist[tr].conditions[0][0].priority == "priority") {
-      return true;
+    else {
+      if (tracklist[tr].conditions[0][0].priority == "priority") {
+        return true;
+      }
+      else return false;
     }
-    else return false;
+
+  } // Caught exceptions expose corrupt data from data entry errors:
+  catch(err) {
+    console.log(err);
+    console.log("is_priority_track("
+                +(test_filtered?"filtered":"master"+") failed on track "+tr))
   }
 }
 
 /**************************************************************************
-   After we've played every legal song once, there are no more to play.
-   This function reconstructs the filtered_tracklist again for a fresh
-   playlist. And resets the playcount BitVector.
+   After every legal song played once, this function is used to reconstruct
+   a fresh filtered_tracklist. And resets the playcount BitVector.
 
-   override is a "shouldn't happen" condition when no tags render a
-   playlist, to force all songs to be legal.
+   If condition tags render no legal playlist, 'override' flag can be used
+   to force all tracks to be rendered legal.
 **************************************************************************/
 function reset_filtered_tracklist(override) {
   if (DEBUG_AUDIO) console.log("reset_filtered_tracklist()");
+
   // Clear the playcounts for all tracks
   for (track in tracklist) {
+    /* After a reset, we don't want all the priority tracks to FIFO because
+       'priority' tracks are for playing a track when a context first comes
+       true. So, literally un-prioritize such tracks: */
+    if (playcount.isSet(track)
+        && tracklist[track].conditions[0][0].priority == "priority") {
+      tracklist[track].conditions[0][0].priority = null;
+      /* After next login it gains its priority again but, then it's too
+         late to really come first. ;) TODO? simpleStorage.set another bit
+         vector for fulfilled priorities? */
+    }
     playcount.unset(track);
   }
+
   if (override) {
     do_filtered_tracklist(override);
-  } else do_filtered_tracklist();
+  }
+  else {
+    do_filtered_tracklist();
+  }
   simpleStorage.set("playcount"+Game_UID, playcount.raw);
 }
 
@@ -127,48 +150,55 @@ function reset_filtered_tracklist(override) {
    Returns whether it is valid according to its tag conditions.
 **************************************************************************/
 function is_legal_track(track) {
-  //if (DEBUG_AUDIO) console.log("\n----------------------------------------"+tracklist[track].filepath+":")
+  if (DEBUG_AUDIO > 2) console.log("\n----------------------------------------"+tracklist[track].filepath+":")
+
   if (client_is_observer()) {
-    /* For now, best way to handle that we have no player info to evaluate
-       logical conditions. In future, we can take the player with the
-       nth best score and 'become them' in a virtual pseudo entity */
     if (playcount.isSet(track)) return false;
-    else return true;
+    /* For now, EVERY unplayed track is legal to observers. In future,
+       we could find the player with the nth best score and set plr_idx
+       to that; but how important is context-DJ for observers? */
+    return true;
   }
+
   plr_idx = client.conn.playing.playerno;
+  if (playcount.isSet(track)) return false; // Skip already played tracks
 
-  /* If this track has been played before, it's not legal to play again: */
-  if (playcount.isSet(track)) return false;
+  /* tracklist[track].conditions are evaluated as true/false here.
+  👉🏽 We evaluate logic in the form of (Operand_1 || ... || Operand_n) where
+     each Operand is in the form of (Suboperand_1 && ... && Suboperand_n).
+     For example, 4 Operands, some with multiple Suboperands:
+     (A) || (B && C) || (!D) || (E && !F && !G)
 
-  /* The legality of tracklist[track].conditions are evaluated here:
-     We evaluate logic conditions in the form of "OR'd operands", such as:
-        (A) || (B && C) || !D || (E && !F && !G)    {4 parenthesized operands}
+     Under DeMorgan's Laws, any expression with any possible composition of
+     AND, OR, (), and NOT, can be reformulated in the above structure (but
+     it won't always be the simplest human-readable formulation.)
+     TIP: if you want to do OR inside an Operand, you must split it into two
+     Operands: e.g., (A && (B || !C)) gets rendered as (A && B) || (A && !C)
 
-     *(Any operand of the form (B || !C) can be evaluated by simplifying the
-     single operand out into two higher tier operands: e.g., (B) || (!C) ...
-
-     Each parenthesized operand between OR's is an "or_index": only one of them
-     is needed to evaluate the whole "expression" as true. Inside each operand
-     is an array of and_index length where all must evaluate true for that single
-     operand to be true—and thus also the whole thing since only one or_index
-     need be true. (See tracklist.js for how a 2D array specifies an expression
-     like the example higher above.) */
+  An array of OR'd Operands interates via "or_index". Each Operand is an array of
+  AND'd Suboperands iterated by "and_index". All Suboperands must be true for the
+  Operand to be true. If ANY Operand is true, the whole expression is true.
+  (See tracklist.js to see how the 'conditions' property structures the above.) */
   var or_legal = false;
   for (or_index in tracklist[track].conditions) {
     let and_legal = true;
     for (and_index in tracklist[track].conditions[or_index]) {
       if (!evaluate_condition(tracklist[track].conditions[or_index][and_index], plr_idx)) {
-        and_legal = false; //if (DEBUG_AUDIO) console.log("   sub-operand was FALSE: renders whole operand FALSE.")
+        and_legal = false; if (DEBUG_AUDIO == 2) console.log("   sub-operand FALSE: renders operand FALSE.")
         break;
-      } //else if (DEBUG_AUDIO) console.log("  sub-operand was TRUE: (if all true, operand true)");
+      } else if (DEBUG_AUDIO > 2) console.log("  sub-operand TRUE &&");
     }
     if (and_legal == true) {
-      or_legal = true; //if (DEBUG_AUDIO) console.log(" all sub-operands were TRUE, renders whole expression TRUE.")
+      or_legal = true;
+      if (DEBUG_AUDIO > 2) console.log(" all sub-operands TRUE: renders operand TRUE.")
       break;
     }
   }
   if (or_legal) return true;
-  //if (DEBUG_AUDIO) console.log(" all sub-operands were FALSE, renders whole expression FALSE.")
+
+      if (DEBUG_AUDIO > 2) console.log(" all operands FALSE: renders expression FALSE.")
+
+      if (DEBUG_TESTLOAD_ALL) return true;
   return false;
 }
 /**************************************************************************
@@ -183,8 +213,6 @@ function evaluate_condition(obj, plr_idx)
   var key = Object.keys(obj)[0];
   var val = obj[key];
 
-  //if (DEBUG_AUDIO) console.log("  evaluate condition: ("+key+":"+val+")");
-
   // Undefined key/value pairs return true
   if (!key) return true;
 
@@ -193,27 +221,47 @@ function evaluate_condition(obj, plr_idx)
     not = true;             // flag to return !result
     key = key.substring(1); // strip off the !
   }
+  // Not proper format but you'd be surprised how many typos come this way:
+  if (val.startsWith("!")) {
+    not = true;
+    val = val.substring(1);
+    console.log(obj.filepath+" has ! operator in value instead of key, in evaluate_condition() *************")
+  }
 
   switch(key) {
     case "priority":  result = false; break; // in and of itself doesn't qualify track to always be played
-    case "turn>":     result = (game_info.turn > val); break;
-    case "turn<":     result = (game_info.turn < val); break;
+    case "turn>":     result = (game_info.turn > parseInt(val)); break;
+    case "turn<":     result = (game_info.turn < parseInt(val)); break;
     case "gov":       result = (governments[players[plr_idx]['government']].name == val); break;
-    case "tech":      result = (playerno_knows_tech(plr_idx, val)); break;
+    case "tech":      result = eval_tech(plr_idx,val);
+     if (result==-1) {result=false;console.log(obj)};
+     break;
     case "wonderplr": result = eval_wonderplr(plr_idx,val); break;
     case "wonderwld": result = eval_wonderwld(val); break;
     case "civ":       result = (styles[players[plr_idx].style].toLowerCase() == val.toLowerCase()); break;
-    case "modality":  result = (music_modality == val); break;
+    case "modality":  result = eval_modality(val.toLowerCase()); break;
     default:
+      console.log("Music evaluate_condition() unrecognized key:"+key+". Please report!")
       result = true;  // unrecognised keys evaluate as true
   }
+  if (DEBUG_AUDIO > 1)
+    console.log("evaluate: ("+(not?"!":"")+key+":"+val+"):"+ ((not ? !result : result))+":::"+obj.filepath);
 
   if (not) return !result;
   return result;
 }
 /**************************************************************************
-...evaluate tag .conditions for wonders:
+...evaluate tag .conditions:
 ***************************************************************************/
+function eval_tech(plr_idx, val) {
+  if (tech_id_by_name(val) === null) {
+    console.log("********************************************* WARNING !!!");
+    console.log("music.js:eval_tech tried to evaluate non-existent tech: "+val
+    +", which may render song as never/always playable.");
+    return -1;
+  }
+  return (playerno_knows_tech(plr_idx, val));
+}
 function eval_wonderwld(val) {
   w = improvement_id_by_name(val);
   // if ruleset doesn't have wonder:
@@ -235,6 +283,58 @@ function eval_wonderplr(plr_idx, val) {
     return false;
   }
   return player_has_wonder(plr_idx, w);
+}
+
+/**************************************************************************
+  evals some tricky logic:  for battle music there are two kinds and
+  multiple modalities to face it.
+  1. tracks that are acceptable for a player wanting battle music only, but
+     also normal acceptable in the soundtrack
+  2. tracks that are so intense they are only acceptable for a player
+     who wants battle music only.
+  MEANWHILE, if player wants peaceful music, anything at all qualifying
+    as possible battle music is filtered out.
+**************************************************************************/
+function eval_modality(val) {
+  // Player wants battle music:
+  if (music_modality == "battle") {
+    if (!val.includes("battle")) return false;
+    else return true;
+  }
+  if (!music_modality) {
+    if (val == "battle only") return false;
+  }
+  else if (music_modality == "peaceful") {
+    if (val.includes("battle")) return false;
+  }
+  if (music_modality == "all") {
+    return true;
+  }
+  return true;
+}
+
+/**************************************************************************
+  Function to change modality of the music. Does not reset the playcount,
+  (unless it needs to), so that changing modality doesn't force us to re-
+  hear stuff again. possible vals:
+  〰 〰 〰 〰 〰 〰 〰 〰 〰 〰 〰 〰 〰
+  null    = play all modalities except "battle only"
+  battle  = play only "battle" and "battle only" modalities
+  peaceful= do not play "battle" nor "battle only" modalities
+  all     = play all modalities
+**************************************************************************/
+function change_modality(val) {
+  if (music_modality == val) return;
+  else {
+    music_modality = val;
+    do_filtered_tracklist();
+    if (!filtered_tracklist.length) {
+      reset_filtered_tracklist();
+      if (!filtered_tracklist.length) {
+        reset_filtered_tracklist(true);
+      }
+    }
+  }
 }
 
 /**************************************************************************
@@ -323,7 +423,7 @@ function get_filtered_break() {
 function get_extension(track_object) {
   if (!track_object) return ".mp3";
   if (track_object.f) {
-    return "." + track.object.f;
+    return "." + track_object.f;
   }
   else return ".mp3";
 }
@@ -332,8 +432,10 @@ function get_extension(track_object) {
 ...Picks a random track to play for audioplayer
 **************************************************************************/
 function pick_next_track() {
-  if (DEBUG_AUDIO) console.log("pick_next_track()");
+  if (DEBUG_AUDIO > 1) console.log("pick_next_track()");
   if (!audio) return;
+
+  if (DEBUG_TESTLOAD_ALL) setTimeout(pick_next_track, 1450);
 
   var f_track;
   var track_name;
@@ -365,10 +467,9 @@ function pick_next_track() {
       else {
         f_track = Math.floor(Math.random() * filtered_tracklist.length);
       }
-      //if (DEBUG_AUDIO) console.log("f_track "+(f_track)+" f_t.len== "+filtered_tracklist.length);
       track_name = filtered_tracklist[f_track]['filepath'] + get_extension(filtered_tracklist[f_track]);
 
-      if (DEBUG_AUDIO) console.log("Song track #"+(f_track+1)+" of "+filtered_tracklist.length+". Playing "+track_name);
+      if (DEBUG_AUDIO > 1) console.log("Song track #"+(f_track+1)+" of "+filtered_tracklist.length+". Playing "+track_name);
 
       /* Register this track as played, for future sessions. Note the index in our
       filtered_tracklist is not same as in tracklist; we use retrieved 'id':  */
@@ -392,7 +493,7 @@ function pick_next_track() {
 **************************************************************************/
 function audio_initialize()
 {
-  if (DEBUG_AUDIO) console.log("audio_initialize()");
+  if (DEBUG_AUDIO > 1) console.log("audio_initialize()");
 
   /* Initialze audio.js music player */
   audiojs.events.ready(function() {
