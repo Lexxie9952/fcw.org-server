@@ -154,7 +154,7 @@ cost = 150
 [advance_atomic_theory]
 name     = _("Atomic Theory")
 req1     = "Theory of Gravity"
-req2     = "Physics"
+req2     = "None"
 flags    = ""
 graphic     = "a.atomic_theory"
 graphic_alt = "-"
@@ -958,7 +958,7 @@ cost = 450
 
 [advance_theory_of_gravity]
 name     = _("Theory of Gravity")
-req1     = "Astronomy"
+req1     = "Physics"
 req2     = "University"
 flags    = ""
 graphic     = "a.theory_of_gravity"
