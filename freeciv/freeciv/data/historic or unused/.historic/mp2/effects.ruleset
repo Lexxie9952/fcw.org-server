@@ -148,7 +148,7 @@ reqs    =
       "Specialist", "merchant", "Local"
       "OutputType", "gold", "Local"
       "Building", "A.Smith's Trading Co.", "Player"
-    }    
+    }
 
 [effect_worker]
 type    = "Specialist_Output"
@@ -173,7 +173,7 @@ reqs    =
 ; Vision benefit from mountains (for every land unit)
 [effect_mountains_vision]
 type    = "Unit_Vision_Radius_Sq"
-value   = 5    
+value   = 5
 reqs    =
     { "type",      "name",      "range"
       "Terrain",   "Mountains", "Local"
@@ -207,7 +207,7 @@ value   = 3
 type    = "Max_Trade_Routes"
 value   = 1
 
-;pow(2, value/1000) -> Base = 50% 
+;pow(2, value/1000) -> Base = 50%
 [effect_base_trade_revenue_reduce]
 type    = "Trade_Revenue_Bonus"
 value   = -1000
@@ -235,21 +235,21 @@ reqs    =
 ;Now it's a one time bonus with potentially slight ROI.
 [effect_enter_marketplace_bonus_increase]
 type	= "Trade_Revenue_Bonus"
-value	= 2000 
+value	= 2000
 reqs	=
     { "type", "name", "range"
       "Action", "Enter Marketplace", "Local"
-    } 
-;TO-DO: pay x more than gold value of vessel entering marketplace, with ROI being somewhat inferior to most 
+    }
+;TO-DO: pay x more than gold value of vessel entering marketplace, with ROI being somewhat inferior to most
 ;investments but hinting toward same order of magnitude.
 
 [effect_establish_traderoute_bonus]
 type	= "Trade_Revenue_Bonus"
-value	= -2400 
-;this -2400 should go into base effect above 
-;then reqs action = "Establish Trade Route" can be an increase to counter both the -2400 subtracted above then to 
-;further tune upward any one time bonus to what it needs to be. reqs can look at unit type also to compensate higher cost 
-;of making certain units, since route-creating units now vary from 20 shields to 50 shields in cost. 
+value	= -2400
+;this -2400 should go into base effect above
+;then reqs action = "Establish Trade Route" can be an increase to counter both the -2400 subtracted above then to
+;further tune upward any one time bonus to what it needs to be. reqs can look at unit type also to compensate higher cost
+;of making certain units, since route-creating units now vary from 20 shields to 50 shields in cost.
 
 ; ***************************** SEA UNIT REPAIR *******************************
 ; Sea units have crews which pro-actively repair damage regardless of movement.
@@ -259,22 +259,22 @@ value	= -2400
 ; 10hp units:  +0 hp/turn   20hp units:  +1 hp/turn
 ; 30hp units:  +2 hp/turn   40hp units:  +3 hp/turn
 ;[effect_sea_hp_regen]
-;type    = "Unit_Recover_Pct"    
-;value   = 8   
+;type    = "Unit_Recover_Pct"
+;value   = 8
 ;reqs    =
 ;    { "type", "name", "range"
 ;      "UnitClass", "Sea", "Local"
 ;    }
 ;[effect_sub_hp_regen]
 ;type    = "Unit_Recover_Pct"
-;value   = 8   
+;value   = 8
 ;reqs    =
 ;    { "type", "name", "range"
 ;      "UnitClass", "Submarine", "Local"
 ;    }
 ;[effect_rivership_hp_regen]
 ;type    = "Unit_Recover_Pct"
-;value   = 8   
+;value   = 8
 ;reqs    =
 ;    { "type", "name", "range"
 ;      "UnitClass", "RiverShip", "Local"
@@ -283,21 +283,21 @@ value	= -2400
 ; The effects below substitute if Unit_Recover_Pct is missing from server
 [effect_sea_hp_regen]
 type    = "Unit_Recover" ;30 hp units get + 2
-value   = 2   
+value   = 2
 reqs    =
     { "type", "name", "range"
       "UnitClass", "Sea", "Local"
     }
 [effect_sub_hp_regen] ;30 hp units get + 2
 type    = "Unit_Recover"
-value   = 2   
+value   = 2
 reqs    =
     { "type", "name", "range"
       "UnitClass", "Submarine", "Local"
     }
 [effect_rivership_hp_regen] ;20 hp units get + 1
 type    = "Unit_Recover"
-value   = 1   
+value   = 1
 reqs    =
     { "type",     "name",       "range", "present"
       "UnitClass", "RiverShip", "Local", TRUE
@@ -322,7 +322,7 @@ reqs    =
     { "type", "name", "range"
       "UnitType", "Carrier", "Local"
     }
-; *************************** Ruleset Fortify Bonus *********************** 
+; *************************** Ruleset Fortify Bonus ***********************
 [effect_fortified]
 type    = "Fortify_Defense_Bonus"
 value   = 50
@@ -366,7 +366,7 @@ type    = "Defend_Bonus"
 value   = 33
 reqs    =
     { "type",      "name",         "range", "present"
-      "Extra",     "Fort",         "Local", TRUE  
+      "Extra",     "Fort",         "Local", TRUE
       "Extra",     "Fortress",     "Local", FALSE ; Fortress calculated separately even if a fort is under it.
       "UnitClass", "Helicopter",   "Local", FALSE ; ... these attackers do not activate Fort defense bonus
       "UnitClass", "Air",          "Local", FALSE ; ...   "       "      "  "      "      "    "       "
@@ -403,26 +403,26 @@ reqs    =
 
 ; **** FORTRESS **************************************************************
 
-; Adjust the 1.67xdefense_bonus in terrain.ruleset for some attackers: 
+; Adjust the 1.67xdefense_bonus in terrain.ruleset for some attackers:
 ; ****************************************************************************
 [effect_fortress_nonfortbuster]
 type    = "Defend_Bonus"
-value   = 20 ;increase 1.67x to 2x except when defending against FortBuster types. 
+value   = 20 ;increase 1.67x to 2x except when defending against FortBuster types.
 ;note: 1.20*1.67=2.0 (this bonus is multiplied after terrain defense_bonus was multiplied)
 reqs    =
     { "type", "name", "range", "present"
       "Extra", "Fortress", "Local", TRUE
       "UnitFlag", "FortBuster", "Local", FALSE
-      "UnitFlag", "FortressBuster", "Local", FALSE 
+      "UnitFlag", "FortressBuster", "Local", FALSE
       "UnitFlag", "AirAttacker", "Local", FALSE
     }
 [effect_fortressbuster]
 type    = "Attack_Bonus"
-value   = 67 ;Cancel defender's 1.67x with attacker getting 1.67x 
+value   = 67 ;Cancel defender's 1.67x with attacker getting 1.67x
 reqs    =
     { "type", "name", "range", "present"
       "Extra", "Fortress", "Local", TRUE
-      "UnitFlag", "FortressBuster", "Local", TRUE 
+      "UnitFlag", "FortressBuster", "Local", TRUE
     }
 
 ; ****** ^^ defense_bonus_correctives ^^ *************************************
@@ -430,7 +430,7 @@ reqs    =
 ; Vision benefit from fortress watchtowers
 [effect_fortress_vision]
 type    = "Unit_Vision_Radius_Sq"
-value   = 8   
+value   = 8
 reqs    =
     { "type", "name", "range"
       "Extra", "Fortress", "tile"
@@ -502,7 +502,7 @@ reqs    =
 ; ****************** NAVAL BASE ******************************
 [effect_navbase_vision]
 type    = "Unit_Vision_Radius_Sq"
-value   = 8   
+value   = 8
 reqs    =
     { "type", "name", "range"
       "Extra", "Naval Base", "tile"
@@ -511,7 +511,7 @@ reqs    =
     }
 [effect_navbase_vision1]
 type    = "Unit_Vision_Radius_Sq"
-value   = 8   
+value   = 8
 reqs    =
     { "type", "name", "range"
       "Extra", "Naval Base", "tile"
@@ -520,7 +520,7 @@ reqs    =
     }
 [effect_navbase_vision2]
 type    = "Unit_Vision_Radius_Sq"
-value   = 8   
+value   = 8
 reqs    =
     { "type", "name", "range"
       "Extra", "Naval Base", "tile"
@@ -580,7 +580,7 @@ reqs    =
     }
 
 ;PERCENTAGE CHANCE OF STEALING A TECH WHEN CONQUERING A CITY.
-[effect_conquest_tech]                       
+[effect_conquest_tech]
 type    = "Conquest_Tech_Pct"
 value   = 100
 
@@ -1212,7 +1212,7 @@ reqs	=
     { "type", "name", "range"
       "Building", "Airport", "City"
     }
-    
+
 [effect_airport_v0]
 type    = "Veteran_Build"
 value	= 1
@@ -1750,7 +1750,7 @@ reqs	=
     { "type",       "name",      "range"
       "Building", "Courthouse", "City", TRUE
       "OutputType", "Shield", "Local"
-    }    
+    }
 [effect_courthouse_spy_resistance]
 type	= "Spy_Resistant"
 value	= 25 ;25% reduction of 50% base chance is 12.5% bonus. 50%-12.5%=37.5% success rate
@@ -2032,7 +2032,7 @@ reqs	=
     { "type", "name", "range"
       "Building", "Mass Transit", "City"
     }
-; Increased citizen mobility and ticket revenues increase city base trade by +2 
+; Increased citizen mobility and ticket revenues increase city base trade by +2
 [effect_mass_transit_1]
 type    = "Output_Add_Tile"
 value   = 2
@@ -2330,21 +2330,21 @@ reqs	=
     { "type", "name", "range", "present"
       "Building", "Police Station", "City", TRUE
       "UnitFlag", "NoVeteran", "Local", FALSE
-      "UnitFlag", "Diplomat", "Local", TRUE      
+      "UnitFlag", "Diplomat", "Local", TRUE
     }
 [effect_police_station_spy_resistant]
 type	= "Spy_Resistant"
 value	= 25 ; 25% of 50% = -12.5% 4/8-1/8 = 3/8
 reqs	=
     { "type", "name", "range", "present"
-      "Building", "Police Station", "City", TRUE 
+      "Building", "Police Station", "City", TRUE
     }
 [effect_police_station_hostile_diplomat_0]
 type	= "Action_Odds_Pct"
 value	= -25 ;// -25*.8 = -20
 reqs	=
     { "type", "name", "range", "present"
-      "Building", "Police Station", "City", TRUE 
+      "Building", "Police Station", "City", TRUE
       "Action", "Steal Tech", "Local", TRUE
     }
 [effect_police_station_hostile_diplomat_1]
@@ -2663,7 +2663,7 @@ reqs	=
     { "type", "name", "range", "present"
       "Building", "SAM Battery", "City", TRUE
       "UnitType", "Stealth Bomber", "Local", TRUE
-    }    
+    }
 [effect_sam_battery_stealth_fighter]
 type    = "Defend_Bonus"
 value	= 25
@@ -2790,7 +2790,7 @@ reqs	=
 ;    }
 ;1 year per turn ensures spaceship travel time calibrated.
 ;this can be removed after game.info.spacerace bug of not changing
-;timeline gets fixed in server. 
+;timeline gets fixed in server.
 [effect_spaceflight_slowdown]
 type    = "Turn_Years"
 value   = 1
@@ -2970,7 +2970,7 @@ reqs   =
     { "type", "name", "range"
       "Tech", "Electricity", "Player"
     }
- 
+
  ; Air+Sea+LandAirSea CLASS units REQUIRE PHYSICS so their BONUS is in their stats to AVOID more [effect_] entries.
 [effect_physics_vision]
 type    = "Unit_Vision_Radius_Sq"
@@ -2995,7 +2995,7 @@ reqs	=
     { "type", "name", "range"
       "Tech", "Physics", "Player"
       "UnitClass", "Trireme", "Local"
-    }   
+    }
 [effect_physics_vision_3]
 type    = "Unit_Vision_Radius_Sq"
 value	= 4
@@ -3003,7 +3003,7 @@ reqs	=
     { "type", "name", "range"
       "Tech", "Physics", "Player"
       "UnitClass", "RiverShip", "Local"
-    }  
+    }
 
 [effect_satellite_vision]  ;Vision benefit from satellite communication to land units
 type    = "Unit_Vision_Radius_Sq"
@@ -3067,32 +3067,32 @@ type    = "Move_Bonus"
 value	= 3
 reqs	=
     { "type", "name", "range", "present"
-      "Building", "Agōgē of Sparta", "Player", TRUE
-      "UnitFlag", "FootSoldier", "Local", TRUE 
+      "Building", "Agoge of Sparta", "Player", TRUE
+      "UnitFlag", "FootSoldier", "Local", TRUE
     }
 [effect_agoge_move_bonus_2]
 type    = "Move_Bonus"
 value	= 6    ; 3/9 + 6/9 = 1
 reqs	=
     { "type", "name", "range", "present"
-      "Building", "Agōgē of Sparta", "City", TRUE
-      "UnitFlag", "FootSoldier", "Local", TRUE 
+      "Building", "Agoge of Sparta", "City", TRUE
+      "UnitFlag", "FootSoldier", "Local", TRUE
     }
 [effect_agoge_phalanx]
 type    = "Attack_Bonus"
-value   = 50  
+value   = 50
 reqs    =
     { "type", "name", "range", "present"
-      "Building", "Agōgē of Sparta", "Player", TRUE
-      "UnitType", "Phalanx", "Local", TRUE 
+      "Building", "Agoge of Sparta", "Player", TRUE
+      "UnitType", "Phalanx", "Local", TRUE
     }
 [effect_agoge_pikemen]
 type    = "Attack_Bonus"
-value   = 50  
+value   = 50
 reqs    =
     { "type", "name", "range", "present"
-      "Building", "Agōgē of Sparta", "Player", TRUE
-      "UnitType", "Pikemen", "Local", TRUE 
+      "Building", "Agoge of Sparta", "Player", TRUE
+      "UnitType", "Pikemen", "Local", TRUE
     }
 
 [effect_asmiths_trading_co]
@@ -3130,8 +3130,8 @@ value	= 2
       "Tech", "Genetic Engineering", "Player"
      }
 
-; HACK: there's all kinds of nasty hard-coded stuff to this Wonder, so it had to be 
-; given a different name (Voyage of Darwin) to avoid potential messyness 
+; HACK: there's all kinds of nasty hard-coded stuff to this Wonder, so it had to be
+; given a different name (Voyage of Darwin) to avoid potential messyness
 [effect_darwins_voyage]
 type    = "Output_Inc_Tile"
 value	= 1
@@ -3166,7 +3166,7 @@ reqs	=
       "Building", "Supreme Court", "Player", TRUE
       "OutputType", "Shield", "local", TRUE
     }
-[effect_supreme_court_democracy]   
+[effect_supreme_court_democracy]
 type    = "Make_Content"
 value	= 1
 reqs	=
@@ -3189,7 +3189,7 @@ reqs	=
     { "type", "name", "range", "present"
       "MaxUnitsOnTile", "0", "Local", TRUE
       "Building", "Supreme Court", "Player", TRUE
-    }   
+    }
 [effect_supreme_court_upkeep]
 type    = "Unit_Upkeep_Free_Per_City"
 value	= 1
@@ -3199,7 +3199,7 @@ reqs	=
       "OutputType", "Shield", "Local"
     }
 ; Removes penalties (Despotism/Anarchy) for tiles >3 output
-[effect_supreme_court_tile_corruption]         
+[effect_supreme_court_tile_corruption]
 type    = "Output_Penalty_Tile"
 value   = 100
 reqs	=
@@ -3214,7 +3214,7 @@ value	= 25 ;25% reduction of 50% base chance is 12.5% bonus. 50%-12.5%=37.5% suc
            ; No protection= 1/2, HL = 3/8, CH+HL = 1/4, CH+HL+PS = 1/8
 reqs	=
     { "type", "name", "range", "present"
-      "Building", "Homeland Security", "City", TRUE 
+      "Building", "Homeland Security", "City", TRUE
     }
 [effect_homeland_security_hostile_diplomat0]
 type	= "Action_Odds_Pct"
@@ -3481,7 +3481,7 @@ value	= 9
 reqs	=
     { "type", "name", "range", "present"
       "Building", "Genghis Khan's Equestrian School", "Player", TRUE
-      "UnitFlag", "Horse", "Local", TRUE 
+      "UnitFlag", "Horse", "Local", TRUE
     }
 [effect_genghis_khans_equestrian_school2]
 type    = "Move_Bonus"
@@ -3489,7 +3489,7 @@ value	= 9
 reqs	=
     { "type", "name", "range", "present"
       "Building", "Genghis Khan's Equestrian School", "Player", TRUE
-      "UnitType", "Explorer", "Local", TRUE 
+      "UnitType", "Explorer", "Local", TRUE
     }
 
 [effect_lighthouse]
@@ -3565,7 +3565,7 @@ reqs	=
       "Building", "Magellan's Expedition", "Player", TRUE
       "UnitClass", "Sea", "Local", TRUE
       "UnitFlag", "NonMil", "Local", FALSE
-      "UnitFlag", "NoVeteran", "Local", FALSE      
+      "UnitFlag", "NoVeteran", "Local", FALSE
     }
 [effect_magellans_expedition_a]
 type    = "Veteran_Build"
@@ -3575,7 +3575,7 @@ reqs	=
       "Building", "Magellan's Expedition", "Player", TRUE
       "UnitClass", "RiverShip", "Local", TRUE
       "UnitFlag", "NonMil", "Local", FALSE
-      "UnitFlag", "NoVeteran", "Local", FALSE      
+      "UnitFlag", "NoVeteran", "Local", FALSE
     }
 [effect_magellans_expedition_b]
 type    = "Veteran_Build"
@@ -3720,7 +3720,7 @@ reqs    =
       "OutputType", "Luxury", "Local"
     }
 ;Note: the city applies +1 to 0-shield city tiles on grass,swamp,hills,tundra
-;Thus this bonus negates the condition of getting that +1 and needs a 
+;Thus this bonus negates the condition of getting that +1 and needs a
 ;compensating +1 further below
 [effect_temple_of_artemis_1]
 type    = "Output_Add_Tile"
@@ -3732,9 +3732,9 @@ reqs    =
       "CityTile", "Center", "Local"
       "OutputType", "Shield", "Local"
     }
-;--------    
-;Give the city its extra shield if it was built on a 0-shield (grass/hills/swamp/tundra) 
-;tile or +1-shield resource (grass-shield,fur) 
+;--------
+;Give the city its extra shield if it was built on a 0-shield (grass/hills/swamp/tundra)
+;tile or +1-shield resource (grass-shield,fur)
 [effect_temple_of_artemis_1a]
 type    = "Output_Add_Tile"
 value	= 1
@@ -3821,7 +3821,7 @@ value   = -20
 reqs    =
     { "type", "name", "range"
       "Building", "Tesla's Laboratory", "Player"
-    } 
+    }
 
 [effect_oracle]
 type    = "Make_Content"
@@ -3847,7 +3847,7 @@ reqs	=
     { "type", "name", "range"
       "Building", "Pyramids", "City"
     }
- 
+
 [effect_internet]
 type    = "Output_Bonus"
 value	= 100
@@ -4019,11 +4019,11 @@ reqs    =
     }
 
 [effect_tithes_fundamentalism]
-type    = "Happiness_To_Gold" 
-value   = 1 
-reqs    = 
-    { "type", "name", "range" 
-      "Gov", "Fundamentalism", "Player" 
+type    = "Happiness_To_Gold"
+value   = 1
+reqs    =
+    { "type", "name", "range"
+      "Gov", "Fundamentalism", "Player"
     }
 
 [effect_sabotage_bonus_fundamentalism1]
@@ -4251,7 +4251,7 @@ reqs	=
       "UnitFlag", "NonMil", "Local"
     }
 
-;LOSING MOVES FROM ILLEGAL ACTION NEVER MADE SENSE. JUST FORBID IT AND LET THEM PICK A LEGAL ACTION. 
+;LOSING MOVES FROM ILLEGAL ACTION NEVER MADE SENSE. JUST FORBID IT AND LET THEM PICK A LEGAL ACTION.
 ;[effect_illegal_action_move_cost_base]
 ;type	= "Illegal_Action_Move_Cost"
 ;value	= 0

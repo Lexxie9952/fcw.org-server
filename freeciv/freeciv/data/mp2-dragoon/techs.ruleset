@@ -442,7 +442,7 @@ flags    = ""
 graphic     = "a.gunpowder"
 graphic_alt = "-"
 cost = 1900
-helptext = _("Obsoletes early foot soldiers, Barracks, Agōgē of Sparta. Disables new Castles.")
+helptext = _("Obsoletes early foot soldiers, Barracks, Agoge of Sparta. Disables new Castles.")
 
 [advance_horseback_riding]
 name     = _("Horseback Riding")

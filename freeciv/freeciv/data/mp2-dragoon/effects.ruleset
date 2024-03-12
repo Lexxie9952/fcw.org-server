@@ -4975,7 +4975,7 @@ type    = "Move_Bonus"
 value	= 3
 reqs	=
     { "type", "name", "range", "present"
-      "Building", "Agōgē of Sparta", "Player", TRUE
+      "Building", "Agoge of Sparta", "Player", TRUE
       "UnitFlag", "FootSoldier", "Local", TRUE
     }
 [effect_agoge_move_bonus_2]
@@ -4983,7 +4983,7 @@ type    = "Move_Bonus"
 value	= 6    ; 3/9 + 6/9 = 1
 reqs	=
     { "type", "name", "range", "present"
-      "Building", "Agōgē of Sparta", "Player", TRUE
+      "Building", "Agoge of Sparta", "Player", TRUE
       "CityTile", "Center", "Local", TRUE
       "UnitFlag", "FootSoldier", "Local", TRUE
     }
@@ -4992,7 +4992,7 @@ type    = "Attack_Bonus"
 value   = 50
 reqs    =
     { "type", "name", "range", "present"
-      "Building", "Agōgē of Sparta", "Player", TRUE
+      "Building", "Agoge of Sparta", "Player", TRUE
       "UnitType", "Phalanx", "Local", TRUE
     }
 [effect_agoge_pikemen]
@@ -5000,7 +5000,7 @@ type    = "Attack_Bonus"
 value   = 50
 reqs    =
     { "type", "name", "range", "present"
-      "Building", "Agōgē of Sparta", "Player", TRUE
+      "Building", "Agoge of Sparta", "Player", TRUE
       "UnitType", "Pikemen", "Local", TRUE
     }
 [effect_agoge_phalanx_discount]
@@ -5009,7 +5009,7 @@ value	  = -18 ; 16 - 3 = 13
 reqs    =
     {
       "type",     "name",            "range",  "present"
-      "Building", "Agōgē of Sparta", "Player", TRUE
+      "Building", "Agoge of Sparta", "Player", TRUE
       "UnitType", "Phalanx",         "Local",  TRUE
     }
 [effect_agoge_veteran_raise]
@@ -5017,7 +5017,7 @@ type    = "Veteran_Combat"
 value	= 52  ; 76, 50, 30, 22 22 22
 reqs	=
     { "type", "name", "range", "present"
-      "Building", "Agōgē of Sparta", "Player", TRUE
+      "Building", "Agoge of Sparta", "Player", TRUE
       "UnitType", "Phalanx",         "Local",  TRUE
     }
 [effect_agoge_veteran_build]
@@ -5025,7 +5025,7 @@ type    = "Veteran_Build"
 value	= 1
 reqs	=
     { "type",      "name",            "range", "present"
-      "Building",  "Agōgē of Sparta", "City",   TRUE
+      "Building",  "Agoge of Sparta", "City",   TRUE
       "Building",  "Barracks",        "City",   FALSE
       "Building",  "Ziggurat",        "City",   FALSE
       "UnitClassFlag","TerrainSpeed", "Local",  TRUE
@@ -5038,7 +5038,7 @@ type    = "Veteran_Build"
 value	= 1
 reqs	=
     { "type",      "name",            "range", "present"
-      "Building",  "Agōgē of Sparta", "City",   TRUE
+      "Building",  "Agoge of Sparta", "City",   TRUE
       "Building",  "Barracks",        "City",   FALSE
       "Building",  "Ziggurat",        "City",   FALSE
       "UnitType",  "Scout",           "Local",  TRUE
@@ -5048,7 +5048,7 @@ type    = "Veteran_Build"
 value	= 1
 reqs	=
     { "type",      "name",            "range", "present"
-      "Building",  "Agōgē of Sparta", "City",   TRUE
+      "Building",  "Agoge of Sparta", "City",   TRUE
       "UnitType",  "Phalanx",         "Local",  TRUE
       "UnitFlag",  "NonMil",          "Local",  FALSE
       "UnitFlag",  "NoVeteran",       "Local",  FALSE
@@ -5058,7 +5058,7 @@ type    = "HP_Regen"
 value	= 100
 reqs	=
     { "type",          "name",            "range", "present"
-      "Building",      "Agōgē of Sparta", "City",  TRUE
+      "Building",      "Agoge of Sparta", "City",  TRUE
       "UnitClassFlag", "TerrainSpeed",    "Local", TRUE
     }
 

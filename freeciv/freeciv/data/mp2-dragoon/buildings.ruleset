@@ -1418,12 +1418,12 @@ Adam Smith’s Trading Company increases your nation’s knowledge of\
 ")
 
 [building_agoge]
-name		= _("Agōgē of Sparta")
+name		= _("Agoge of Sparta")
 genus		= "SmallWonder"
 reqs	=
     { "type",     "name",            "range",  "present", "quiet"
       "Tech",     "Bronze Working",  "Player", TRUE,      FALSE
-      "Building", "Agōgē of Sparta", "Player", FALSE,     TRUE
+      "Building", "Agoge of Sparta", "Player", FALSE,     TRUE
     }
 graphic	= "b.agoge"
 graphic_alt	= "b.sun_tzus_war_academy"
@@ -1437,13 +1437,13 @@ sabotage	= 0
 sound		= "w_agoge"
 sound_alt	= "w_generic"
 helptext	= _("\
-The Agōgē creates a culture of extreme fitness, and is famous for\
+The Agoge creates a culture of extreme fitness, and is famous for\
  vigilant patrols, secret shortcut trails, and battle readiness.\
  All your foot soldiers get +⅓ move. Phalanx and Pikemen receive a\
  +50% attack bonus. Phalanx promotions are 50% more frequent, and\
  their cost is reduced by 3 shields. \n\
 "), _("
-In the city with the Agōgē, a Barracks is not needed to make veteran\
+In the city with the Agoge, a Barracks is not needed to make veteran\
  land units. If you have a Barracks, then Phalanxes will be made at\
  +2 veteran level; but other units will still be made with +1 veteran\
  level. \

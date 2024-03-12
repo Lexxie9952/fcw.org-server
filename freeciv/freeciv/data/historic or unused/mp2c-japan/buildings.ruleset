@@ -672,7 +672,7 @@ Sets the main capital of your nation. Loss of your main capital：\
  enjoy a further reduction of corruption by half.\
 "), _("\
  You can rebuild your Palace in another city. This may secure\
- a safer location or reduce corruption for nearby cities.\ 
+ a safer location or reduce corruption for nearby cities.\
 "), _("\
  The Palace gives a production bonus of +75% under Despotism,\
  +50% under Monarchy, +25% under Communism, +15% under\
@@ -762,12 +762,12 @@ Adam Smith’s Trading Company increases your nation’s knowledge of\
 ")
 
 [building_agoge]
-name		= _("Agōgē of Sparta")
+name		= _("Agoge of Sparta")
 genus		= "SmallWonder"
 reqs	=
     { "type",     "name",            "range",  "present", "quiet"
       "Tech",     "Bronze Working",  "Player", TRUE,      FALSE
-      "Building", "Agōgē of Sparta", "Player", FALSE,     TRUE
+      "Building", "Agoge of Sparta", "Player", FALSE,     TRUE
     }
 graphic	= "b.agoge"
 graphic_alt	= "b.sun_tzus_war_academy"
@@ -781,10 +781,10 @@ sabotage	= 0
 sound		= "w_agoge"
 sound_alt	= "w_generic"
 helptext	= _("\
-The Agōgē creates a culture of extreme fitness, and is famous for\
+The Agoge creates a culture of extreme fitness, and is famous for\
  vigilant patrols, secret shortcut trails, and battle readiness.\
  All your foot soldiers get +⅓ move. Phalanx and Pikemen receive a\
- +50% attack bonus. Foot units in the city with the Agōgē begin\
+ +50% attack bonus. Foot units in the city with the Agoge begin\
  their turn with +1 move. Obsolete by：Gunpowder.\
 ")
 
@@ -823,7 +823,7 @@ Angkor Wat gives you the glorious ancient city of\
  shields. \n\
 "), _("
 This Wonder is never obsolete, but it only has an effect in\
- Despotism, Monarchies, and Republic. \ 
+ Despotism, Monarchies, and Republic. \
 "), _("
 Angkor Wat is a Civil Wonder. You can build only one Civil Wonder.\
 ")
@@ -1029,7 +1029,7 @@ reqs	=
     { "type",         "name",       "range",    "present", "quiet"
       "Tech",         "Horseback Riding", "Player",   TRUE,      FALSE
       "Building",     "Genghis Khan's Equestrian School", "Player",   FALSE,     TRUE
-      "Building",     "Barracks", "City", TRUE, FALSE 
+      "Building",     "Barracks", "City", TRUE, FALSE
     }
 graphic	= "b.genghis_khans_equestrian_school"
 graphic_alt	= "b.sun_tzus_war_academy"
@@ -1087,7 +1087,7 @@ reqs	=
     { "type",     "name",          "range", "present","quiet"
       "Tech",     "Construction",  "Player", TRUE,     FALSE
       "Building", "Great Wall",    "Player", FALSE,    TRUE
-      "Tech",     "Machine Tools", "World",  FALSE,    FALSE 
+      "Tech",     "Machine Tools", "World",  FALSE,    FALSE
     }
 graphic	= "b.great_wall"
 graphic_alt	= "-"
@@ -1335,11 +1335,11 @@ This Wonder increases Trade, the very lifeblood of your tax income, science outp
  This Wonder does not become obsolete, and cannot be lost.\
 ")
 
-[building_mausoleum_of_mausolos]     
+[building_mausoleum_of_mausolos]
 name		= _("Mausoleum of Mausolos")
 genus		= "SmallWonder"
 reqs	=
-    { "type", "name",                      "range","present","quiet", "survives"  
+    { "type", "name",                      "range","present","quiet", "survives"
       "Tech", "Ceremonial Burial",         "Player", TRUE,   FALSE, FALSE
       "Building", "Mausoleum of Mausolos", "Player", FALSE,  TRUE,  FALSE
 ;requires 23Sept2021 changes to requirements.c, so obsolete wonders don't re-enable others
@@ -1378,7 +1378,7 @@ The Mausoleum of Mausolos is a Civil Wonder. You can make only one Civil Wonder.
 Obsolete by：Radio.\
 ")
 
-[building_medici_bank]     
+[building_medici_bank]
 name		= _("Medici Bank")
 genus		= "SmallWonder"
 reqs	=
@@ -1497,7 +1497,7 @@ graphic	= "b.pax_dei"
 graphic_alt	= "-"
 obsolete_by	=
     { "type", "name",      "range", "survives"
-      "Tech", "Theocracy", "World",  FALSE   
+      "Tech", "Theocracy", "World",  FALSE
     }
 build_cost	= 115
 upkeep		= 0
@@ -1622,7 +1622,7 @@ Obsolete by：Philosophy.\
 ")
 
 ;this should be wonder #65 if we counted correctly and need it for the "statue hack" to determine if player can get gov.
-[building_statue_of_liberty]  
+[building_statue_of_liberty]
 name		= _("Statue of Liberty")
 genus		= "SmallWonder"
 reqs	=
@@ -1776,7 +1776,7 @@ graphic	= "b.ziggurat"
 graphic_alt	= "-"
 obsolete_by	=
     { "type", "name",     "range",  "present"
-      "Tech", "Monarchy", "Player", TRUE 
+      "Tech", "Monarchy", "Player", TRUE
     }
 build_cost	= 80
 upkeep		= 0

@@ -4715,7 +4715,7 @@ type    = "Move_Bonus"
 value	= 3
 reqs	=
     { "type", "name", "range", "present"
-      "Building", "Agōgē of Sparta", "Player", TRUE
+      "Building", "Agoge of Sparta", "Player", TRUE
       "UnitFlag", "FootSoldier", "Local", TRUE
     }
 [effect_agoge_move_bonus_2]
@@ -4723,7 +4723,7 @@ type    = "Move_Bonus"
 value	= 6    ; 3/9 + 6/9 = 1
 reqs	=
     { "type", "name", "range", "present"
-      "Building", "Agōgē of Sparta", "City", TRUE
+      "Building", "Agoge of Sparta", "City", TRUE
       "UnitFlag", "FootSoldier", "Local", TRUE
     }
 [effect_agoge_phalanx]
@@ -4731,7 +4731,7 @@ type    = "Attack_Bonus"
 value   = 50
 reqs    =
     { "type", "name", "range", "present"
-      "Building", "Agōgē of Sparta", "Player", TRUE
+      "Building", "Agoge of Sparta", "Player", TRUE
       "UnitType", "Phalanx", "Local", TRUE
     }
 [effect_agoge_pikemen]
@@ -4739,7 +4739,7 @@ type    = "Attack_Bonus"
 value   = 50
 reqs    =
     { "type", "name", "range", "present"
-      "Building", "Agōgē of Sparta", "Player", TRUE
+      "Building", "Agoge of Sparta", "Player", TRUE
       "UnitType", "Pikemen", "Local", TRUE
     }
 ;************************************************************************ Angkor Wat
