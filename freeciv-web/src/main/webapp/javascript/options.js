@@ -232,14 +232,6 @@ function init_options_dialog()
     }
   });
 
-/* 8Mar2024. Probable vestige of old program flow doesn't seem needed anymore:
-  if (audio != null && !audio.source.src) {
-    if (supports_mp3()) {
-      pick_next_track();
-      if (play_music) audio.play();
-    }
-  } */
-
   $(".setting_button").tooltip({
     show: { delay:200, effect:"none", duration: 0 }, hide: {delay:120, effect:"none", duration: 0}
   });
