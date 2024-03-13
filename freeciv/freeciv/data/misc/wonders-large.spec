@@ -1,6 +1,6 @@
 [spec]
 
-; Format and options of this spec file: 
+; Format and options of this spec file:
 options = "+Freeciv-spec-Devel-2019-Jul-03"
 
 [info]
@@ -13,6 +13,7 @@ artists = "
   b.angkor_wat
   b.appian_way
   b.apollo_program
+  b.basiliad
   b.chand_baori
   b.chichen_itza
   b.citadel_aleppo
@@ -58,7 +59,7 @@ artists = "
   b.united_nations
   b.womens_suffrage
   b.ziggurat
- 
+
   Daniel Markstedt
   b.darwins_voyage
 
@@ -82,6 +83,7 @@ sprites =
                 "b.appian_way", "wonders/appian_way"
 		"b.asmiths_trading_co", "wonders/asmiths_trading_co"
 		"b.apollo_program", "wonders/apollo_program"
+                "b.basiliad", "wonders/basiliad_of_caesarea"
                 "b.chand_baori", "wonders/chand_baori"
                 "b.citadel_aleppo", "wonders/citadel_aleppo"
 		"b.colossus", "wonders/colossus"
