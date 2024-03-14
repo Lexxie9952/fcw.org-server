@@ -3,6 +3,14 @@
 <h2>Game Options</h2>
 
 <div style="white-space: nowrap; display:inline" title="&#9654; to toggle audio. shift-\ to skip to next track"><span><b style="display:inline">Music:</b><audio id="audioplayer" style="display:inline" preload="none">Music</audio></span></div>
+<div id="music_modality_select">Civ DJ:&nbsp;
+<select title="Toggle normal/battle music: ctrl-alt-B" name="select_music_modality" id="select_music_modality" onchange="change_modality(this.value)">
+  <option id="mmo_normal" name="mmo_normal" title="Everything except (intense) battle music" value="normal" selected>Normal</option>
+  <option id="mmo_battle" name="mmo_battle" title="Only military music and (intense) battle music" value="battle">Battle</option>
+  <option id="mmo_peaceful" name="mmo_peaceful" title="No military nor (intense) battle music" value="peaceful">Peaceful</option>
+  <option id="mmo_all" name="mmo_all" value="all">All</option>
+</select>
+</div>
 
 <table>
 <tr>

@@ -3657,19 +3657,21 @@ function global_keyboard_listener(ev)
 function civclient_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
 {
   switch (keyboard_key) {
+    case 'B':
+      if (ctrl && alt && !shift) {   // Change DJ's operational mood.
+        the_event.preventDefault(); // override possible browser shortcut
+        let new_mode = (music_modality == "battle" ? "normal" : "battle");
+        change_modality(new_mode);
+        $("#select_music_modality").val(new_mode);
+        add_client_message("Music switched to "+new_mode+" mood on next track. Shift-\\ for next track.");
+      }
+      break;
+
     case 'C':
       if (alt && !ctrl && !shift) {
         the_event.preventDefault();     // override possible browser shortcut
         $('#ui-id-5').trigger("click"); // cities tab
       }
-    break;
-
-    case 'H':
-      if ((!shift) && (ctrl)) {
-        the_event.preventDefault(); // override possible browser shortcut
-        show_debug_info();
-      }
-      else if (alt && !ctrl && !shift) $('#ui-id-7').trigger("click");  // docs tab
     break;
 
     case 'E':
@@ -3691,6 +3693,14 @@ function civclient_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_even
         the_event.preventDefault(); // override possible browser shortcut
         $('#ui-id-3').trigger("click"); // gov tab
       }
+    break;
+
+    case 'H':
+      if ((!shift) && (ctrl)) {
+        the_event.preventDefault(); // override possible browser shortcut
+        show_debug_info();
+      }
+      else if (alt && !ctrl && !shift) $('#ui-id-7').trigger("click");  // docs tab
     break;
 
     case 'M':

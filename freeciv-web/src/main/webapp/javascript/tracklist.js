@@ -55,7 +55,7 @@ Non-GPL Material must be non-essential to the function of the Instance.
 /*————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————*/
 
 // Specifies which track to play for silence.
-var silent_track = "breaks/30secondbreak.mp3";
+var silent_track = "breaks/10secondbreak.mp3";
 // Used in tags conditional to player's civ graphics style:
 const styles = ["european", "classical", "tropical", "asian", "babylonian", "celtic", "steppes", "northern"]
 /*————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————*/
@@ -113,16 +113,16 @@ var tracklist = [
   {filepath: "ancient/WarDrums_Early",conditions: [[{"turn<":18},{"!tech":"Alphabet"}]],creds: "" },
   {filepath: "ancient/Walrus",conditions: [[{"turn<":18},{"!tech":"Alphabet"}]],creds: "" },
   {filepath: "tribal/Touchee",conditions: [[{"turn>":1},{"turn<":16},{"!tech":"Writing"}],[{"turn>":123}]],creds: "" },                                                                       //
-  {filepath: "tribal/ArktauCove",conditions: [[{"turn<":21},{"!tech":"Code of Laws"},{"!tech":"Writing"}],[{"wonderwld":"Manhattan Project"}]],creds: "" },               //
+  {filepath: "tribal/ArktauCove",conditions: [[{"turn<":21},{"!tech":"Code of Laws"},{"!tech":"Writing"}],[{"wonderwld":"Manhattan Project"}]],creds: "" },                                  //
   {filepath: "tribal/ArktauGeometry",conditions: [[{"turn<":17},{"!tech":"Writing"}]],creds: "" },
-  {filepath: "tribal/DreamGen",conditions: [[{"turn>":1},{"turn<":35}]],creds: "" },
+  {filepath: "tribal/DreamGen",conditions: [[{"turn>":1},{"turn<":35},{"!tech":"Literacy"}]],creds: "" },
   {filepath: "tribal/Forever",conditions: [[{"turn<":11},{"!tech":"Writing"}],[{"tech":"Superconductors"}]],creds: "" },                                                                      //
   {filepath: "tribal/GrottoStrata",conditions: [[{"turn<":5},{"!tech":"Writing"}], [{"tech":"Nuclear Power"}]],creds: "" },                                                                   //
   {filepath: "tribal/LoveMagic",conditions: [[{"turn<":16},{"!tech":"Bronze Working"}]],creds: "" },
-  {filepath: "tribal/LunaStrata",conditions: [[{"turn<":16},{"!tech":"Warrior Code"}],[{"tech":"Computers"}]],creds: "" },                                                //
+  {filepath: "tribal/LunaStrata",conditions: [[{"turn<":16},{"!tech":"Warrior Code"}],[{"tech":"Computers"}]],creds: "" },                                                                   //
   {filepath: "tribal/Mica",conditions: [[{"priority":"priority"}],[{"turn<":5},{"!tech":"Alphabet"}]],creds: "" },
-  {filepath: "tribal/Iguana",conditions: [[{"turn<":6},{"!tech":"Writing"}],[{"tech":"Mysticism"},{"turn<":31},{"!tech":"Banking"}],[{"tech":"Superconductors"}]],creds: "" },                                    //
-  {filepath: "tribal/CeremonyStrata",conditions: [[{"tech":"Pottery"}],[{"turn>":125}]],creds: "" },                                                                      //
+  {filepath: "tribal/Iguana",conditions: [[{"turn<":6},{"!tech":"Writing"}],[{"tech":"Mysticism"},{"turn<":31},{"!tech":"Banking"}],[{"tech":"Superconductors"}]],creds: "" },                //
+  {filepath: "tribal/CeremonyStrata",conditions: [[{"tech":"Pottery"},{"!tech":"Feudalism"},{"!tech":"Republic"}],[{"turn>":125}]],creds: "" },                                               //
   {filepath: "tribal/EchoSmall",conditions: [[{"turn>":2},{"turn<":25},{"!tech":"Banking"}],[{"tech":"Space Flight"}]],creds: "" },                                                           //
   {filepath: "tribal/SilkRidgeRoach",conditions: [[{"turn>":2},{"turn<":18},{"!tech":"Writing"}],[{"tech":"Fusion Power"},{"turn>":120}]],creds: "" },                                        //
   {filepath: "tribal/RichMoss",conditions: [[{"turn<":13},{"!tech":"Writing"}]],creds: "" },
@@ -139,22 +139,22 @@ var tracklist = [
   {filepath: "tribal/MoonChant",conditions: [[{"turn>":2},{"!tech":"Pottery"},{"!tech":"Alphabet"}]],creds: "" },
   {filepath: "tribal/Homeworld",conditions: [[{"tech":"Warrior Code"},{"turn<":18},{"!tech":"Literacy"}],[{"turn<":22},{"tech":"Bronze Working"},{"!tech":"Literacy"}],[{"tech":"Combined Arms"}]],creds: "" },       //
   {filepath: "tribal/Fella",conditions: [[{"turn>":1},{"tech":"Warrior Code"},{"!tech":"The Republic"}]],creds: "" },
-  {filepath: "tribal/Etmn",conditions: [[{"turn>":1},{"!tech":"Writing"}],[{"tech":"Mysticism"}]],creds: "" },
+  {filepath: "tribal/Etmn",conditions: [[{"turn>":1},{"!tech":"Writing"}],[{"tech":"Mysticism"},{"!tech":"Monotheism"},{"!tech":"Conscription"},{"!tech":"Industrialization"}]],creds: "" },
   {filepath: "tribal/DoruTree",conditions: [[{"turn>":1},{"turn<":18},{"!tech":"Alphabet"}]],creds: "" },
   {filepath: "tribal/AncientCall",conditions: [[{"turn<":18},{"!tech":"Code of Laws"}]],creds: "" },
   {filepath: "tribal/TribalAwakening",conditions: [[{"turn>":2},{"turn<":25},{"!tech":"Alphabet"}]],creds: "" },
-  {filepath: "tribal/Origins",conditions: [[{"turn>":1},{"!tech":"Ceremonial Burial"}], [{"wonderwld":"Fusion Reactor"}], [{"wonderwld":"Manhattan Project"}]],creds: "" },   //
+  {filepath: "tribal/Origins",conditions: [[{"turn>":1},{"!tech":"Ceremonial Burial"}], [{"wonderwld":"Fusion Reactor"}], [{"wonderwld":"Manhattan Project"}]],creds: "" },                     //
   {filepath: "tribal/Echolalia",conditions: [[{"priority":"priority"}],
                                              [{"tech":"Ceremonial Burial"},{"!tech":"Polytheism"},{"!tech":"Monarchy"},{"!tech":"Mysticism"}]],creds: "" },
   {filepath: "tribal/MotherTongue",conditions: [[{"priority":"priority"}],
                                                 [{"tech":"Horseback Riding"},{"turn<":58},{"!tech":"The Wheel"},{"!tech":"Polytheism"}]],creds: "" },
-  {filepath: "tribal/MossCarpetSkyBlanket",conditions: [[{"turn>":4},{"!tech":"Literacy"}],[{"tech":"Fusion Power"}]],creds: "" },                                            //
+  {filepath: "tribal/MossCarpetSkyBlanket",conditions: [[{"turn>":4},{"!tech":"Literacy"}],[{"tech":"Fusion Power"}]],creds: "" },                                                                 //
   {filepath: "tribal/ProfligateEarth",conditions: [[{"turn>":2},{"turn<":16},{"!tech":"Writing"}],[{"tech":"Environmentalism"}]],creds: "" },
   {filepath: "tribal/Raku",conditions: [[{"turn>":1},{"turn<":18},{"!tech":"Alphabet"}]],creds: "" },
   {filepath: "tribal/VoiceOfRust",conditions: [[{"turn>":1},{"turn<":19},{"!tech":"Writing"}]],creds: "" },
   {filepath: "tribal/SoftRainsFall",conditions: [[{"turn>":1},{"turn<":13},{"!tech":"Writing"}]],creds: "" },
   {filepath: "tribal/Transpiration",conditions: [[{"turn>":2},{"turn<":20},{"!tech":"Writing"}]],creds: "" },
-  {filepath: "tribal/CorvidCollections",conditions: [[{"turn<":18},{"!tech":"Writing"}],[{"tech":"Mysticism"}]],creds: "" },
+  {filepath: "tribal/CorvidCollections",conditions: [[{"turn<":18},{"!tech":"Writing"}],[{"tech":"Mysticism"},{"!tech":"Philosophy"}]],creds: "" },
   {filepath: "tribal/AerialOnWarmSeas",conditions: [[{"turn<":23},{"!tech":"Literacy"}]],creds: "" },
   {filepath: "tribal/NeverHunger",conditions: [[{"turn<":9},{"!tech":"Writing"}]],creds: "" },
   {filepath: "tribal/WhatWeLeftBehind",conditions: [[{"turn>":1},{"turn<":16},{"!tech":"Writing"}],[{"turn>":126}]],creds: "" },                                                                    //
@@ -177,7 +177,7 @@ var tracklist = [
   {filepath: "tribal/Hunter2",conditions: [[{"turn<":15},{"!tech":"Pottery"}],[{"tech":"Warrior Code"},{"turn<":24},{"!tech":"Literacy"}]],creds: "" },
   /* Tribal and Ancient */
   {filepath: "tribal/anvildrumintro",conditions: [[{"!tech":"Feudalism"},{"!tech":"Navigation"},{"!tech":"Philosophy"},{"!tech":"Invention"}]],creds: "" },
-  {filepath: "tribal/Foreigner",conditions: [[{"tech":"Mysticism"},{"turn<":63},{"!tech":"Banking"}],[{"wonderplr":"Fusion Reactor"}]]},                                                                   //
+  {filepath: "tribal/Foreigner",conditions: [[{"tech":"Mysticism"},{"turn<":63},{"!tech":"Banking"}],[{"wonderplr":"Fusion Reactor"}]]},                                                              //
 
 /*—————————————————*/
   /* Ancient */
@@ -452,7 +452,7 @@ var tracklist = [
   {filepath: "industrial/Clownfish",conditions: [[{"tech":"Gunpowder"},{"!tech":"Industrialization"},{"!tech":"Conscription"}]],creds: "" },
   {filepath: "industrial/ManOfWar",conditions: [[{"tech":"Gunpowder"},{"!tech":"Industrialization"},{"!tech":"Conscription"}]],creds: "" },
   {filepath: "industrial/OceanDeep",conditions: [[{"tech":"Gunpowder"},{"!tech":"Industrialization"},{"!tech":"Conscription"}]],creds: "" },
-  {filepath: "industrial/WarDrums_Late",conditions: [[{"tech":"Gunpowder"},{"!tech":"Industrialization"},{"!tech":"Conscription"}]],creds: "" },
+  {filepath: "industrial/WarDrums_Late",conditions: [[{"tech":"Gunpowder"},{"!tech":"Industrialization"},{"!tech":"Conscription"}]],modality: "battle", creds: "" },
   {filepath: "industrial/SibeliusKarelia",conditions: [[{"tech":"Gunpowder"},{"!tech":"Industrialization"},{"!tech":"Conscription"}]],creds: "" },
   {filepath: "industrial/Albatross",conditions: [[{"tech":"Gunpowder"},{"!tech":"Industrialization"},{"!tech":"Conscription"}]],creds: "" },
   {filepath: "industrial/Ducks",conditions: [[{"tech":"Gunpowder"},{"!tech":"Industrialization"},{"!tech":"Conscription"}]],creds: "" },
@@ -853,7 +853,7 @@ var tracklist = [
 {filepath: "2/ChurchoftheHeavenlyRest,NYC.TheEmbrace.SteveRoach",conditions: [[{"priority":"priority"}],
                                                                               [{"tech":"Astronomy"},{"!tech":"Philosophy"},{"turn<":86}],
                                                                               [{"!tech":"Astronomy"},{"tech":"Philosophy"},{"turn<":86}],
-                                                                              [{"wonderplr":"Apollo Program"}],{"turn<":119}],f:"m4a",creds: "" },
+                                                                              [{"wonderplr":"Apollo Program"},{"turn<":119}]],f:"m4a",creds: "" },
 {filepath: "2/CircleofDrums.DawnIdaji.BabatundeOlatunji",conditions: [[{"tech":"Bronze Working"},{"!tech":"Feudalism"}],
                                                                       [{"wonderplr":"Agoge of Sparta"},{"tech":"Warrior Code"},{"!tech":"Gunpowder"}]],f:"m4a",creds: "" },
 {filepath: "2/CircleofDrums.Embracement.BabatundeOlatunji",conditions: [[{"priority":"priority"}],
@@ -976,8 +976,8 @@ var tracklist = [
 {filepath: "1/ElephantOST.PalmIsland.RaminDjawadi",conditions: [[{"priority":"priority"}],[{"wonderplr":"Statue of Liberty"},{"!tech":"Refining"}]],f:"m4a",creds: "" },
 {filepath: "1/ElephantOST.SteppingStones.RaminDjawadi",conditions: [[{"turn<":18},{"!tech":"Alphabet"}]],f:"m4a",creds: "" },
 {filepath: "1/ElephantOST.UndertheStars.RaminDjawadi",conditions: [[{"turn<":18},{"!tech":"Alphabet"}],[{"tech":"Map Making"},{"!tech":"Construction"},{"!tech":"Seafaring"},{"!tech":"Trade"}]],f:"m4a",creds: "" },
-{filepath: "1/Elimination.DrumWarfare.DavidFesliyan",conditions: [[{"!tech":"Gunpowder"}]],f:"m4a",modality:"battle only",creds: "" },
-{filepath: "1/Elimination.DrumWarfare.DavidFesliyan",conditions: [[{"turn>":1},{"turn<":10},{"!tech":"Writing"}]],f:"m4a",creds: "" },
+{filepath: "1/Elimination.DrumWarfare.DavidFesliyan",conditions: [[{"!tech":"Gunpowder"},{"turn>":10}]],f:"m4a",modality:"battle only",creds: "" },
+{filepath: "1/Elimination.DrumWarfare.DavidFesliyan",conditions: [[{"turn>":1},{"turn<":10},{"!tech":"Writing"}]],f:"m4a",modality:"battle",creds: "" },
 {filepath: "3/EndersGameOST.EndersWar.SteveJablonsky",conditions: [[{"tech":"Monotheism"},{"!tech":"Mechanization"}],[{"tech":"Chivalry"},{"!tech":"Mechanization"}]],modality:"battle",f:"m4a",creds: "" },
 {filepath: "3/EpicCoverSession2.WhenWereTogetherFromOlafsFrozenAdventure.FrostudioChambersonic",conditions: [[{"tech":"Sanitation"},{"!tech":"Refining"}],
                                                                                                              [{"tech":"Democracy"},{"!tech":"Refining"}],
@@ -1188,6 +1188,9 @@ var breaklist = [
   {filepath: "breaks/BoysEye",conditions: [[{}]],creds: "" },
   {filepath: "breaks/30secondbreak",conditions: [[{}]],creds: "" },
   {filepath: "breaks/30secondbreak",conditions: [[{}]],creds: "" },
+  {filepath: "breaks/10secondbreak",conditions: [[{}]],creds: "" },
+  {filepath: "breaks/10secondbreak",conditions: [[{}]],creds: "" },
+  {filepath: "breaks/10secondbreak",conditions: [[{}]],creds: "" },
   {filepath: "breaks/ColdWindBreak",conditions: [[{}]],creds: "" },
   {filepath: "breaks/StreetOfDeviants",conditions: [[{}]],creds: "" },
   {filepath: "breaks/DeeperSilence45s",conditions: [[{}]],creds: "" },

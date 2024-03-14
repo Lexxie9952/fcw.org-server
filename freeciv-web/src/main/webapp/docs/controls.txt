@@ -201,6 +201,7 @@ The current and complete list of Freeciv-web controls can be found here:<br>
 <tr><td><span class="hotkey">ctrl-shift-B</span></td><td> Toggle national colors on minimap: primary,secondary,tertiary,diplomatic state</td></tr>
 <tr><td><span class="hotkey">alt-shift-B</span></td><td> Animate borders for visibility assistance</td></tr>
 <tr><td><span class="hotkey">alt-B</span></td><td> Toggle between tri-color and bi-color borders</td></tr>
+<tr><td><span class="hotkey">ctrl-alt-B</span></td><td> Toggle DJ mood between normal music and battle music</td></tr>
 <tr><td><span class="hotkey">shift-C</span></td><td> Select all same type units on (c)ontinent</td></tr>
 <tr><td><span class="hotkey">ctrl-C</span></td><td>  City labels on/off</td></tr>
 <tr><td><span class="hotkey">ctrl-shift-C</span></td><td> Cycle city info display mode on map</td></tr>

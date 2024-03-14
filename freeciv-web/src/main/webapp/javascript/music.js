@@ -25,7 +25,7 @@ var music_modality = null;    // client can switch modes for what kinda music to
 const breakfrequency = 4;     // the 'n' for breaking every nth song
 var filtered_breaklist = [];  // A constructed list from breaklist of all break-tracks that are legal to play
 var trackcounter = 0;         // # of tracks played so far (used to determine if we get a break)
-
+var current_track_info;       // allows inspecting the current playing track (for debug or other purposes)
 /**************************************************************************
 ...Called the first time in a session before a track is to be played. This
    sets up all our data structures and maintenance vars.
@@ -151,7 +151,7 @@ function reset_filtered_tracklist(override) {
    Returns whether it is valid according to its tag conditions.
 **************************************************************************/
 function is_legal_track(track) {
-  if (DEBUG_AUDIO >= 3) console.log("\n----------------------------------------"+tracklist[track].filepath+":")
+  if (DEBUG_AUDIO >= 3) console.log("\n"+track+". ---------------------------------------"+tracklist[track].filepath+":")
 
   if (client_is_observer()) {
     if (playcount.isSet(track)) return false;
@@ -309,36 +309,36 @@ function eval_wonderplr(plr_idx, val) {
     as possible battle music is filtered out.
 **************************************************************************/
 function eval_modality(val) {
-  console.log("music_modality:'"+music_modality+"' track.modality:'"+val+"'");
+  if (DEBUG_AUDIO >= 2) console.log("music_modality:'"+music_modality+"' track.modality:'"+val+"'");
   // Player wants battle music:
   if (music_modality == "battle") {
     if (!val) {
-      console.log("  wanted 'battle' modality, but not a battle track: eval_modality returns FALSE!")
+      if (DEBUG_AUDIO >= 2) console.log("  wanted 'battle' modality, but not a battle track: eval_modality returns FALSE!")
       return false;
     }
     if (val && val.includes("battle")) {
-      console.log("  wanted 'battle' modality, and is a battle track: eval_modality returns TRUE!");
+      if (DEBUG_AUDIO >= 2) console.log("  wanted 'battle' modality, and is a battle track: eval_modality returns TRUE!");
       return true;
     }
-    console.log("  wanted 'battle' modality, but some kinda problem occurred testing track modality!!!!!!!!!!!!!!!!!!!! returns TRUE just to annoy you!!!!!!!!!!!!!");
+    if (DEBUG_AUDIO >= 2) console.log("  wanted 'battle' modality, but some kinda problem occurred testing track modality!!!!!!!!!!!!!!!!!!!! returns TRUE just to annoy you!!!!!!!!!!!!!");
     return true;
   }
   if (!music_modality) {
-    if (val == "battle only") {
-      console.log("  'battle only' track without battle modality, eval_modality returns FALSE!");
+    if (val && val == "battle only") {
+      if (DEBUG_AUDIO >= 2) console.log("  'battle only' track without battle modality, eval_modality returns FALSE!");
       return false;
     }
-    console.log("    'battle' track allowed with no modality set, track eval_modality returns TRUE!");
+    if (DEBUG_AUDIO >= 2) console.log("    'battle' track allowed with no modality set, track eval_modality returns TRUE!");
     return true;
   }
   else if (music_modality == "peaceful") {
-    if (val.includes("battle")) {
-      console.log("  'peaceful' modality rejecting a 'battle/[only]' track, eval_modality returns FALSE!");
+    if (val && val.includes("battle")) {
+      if (DEBUG_AUDIO >= 2) console.log("  'peaceful' modality rejecting a 'battle/[only]' track, eval_modality returns FALSE!");
       return false;
     }
   }
   if (music_modality == "all") {
-    console.log("  'all' modality: eval_modality returns TRUE!");
+    if (DEBUG_AUDIO >= 2) console.log("  'all' modality: eval_modality returns TRUE!");
     return true;
   }
   console.log("  should it happen? eval_modality DEFAULT FAILS AND returns TRUE!");
@@ -356,7 +356,14 @@ function eval_modality(val) {
   all     = play all modalities
 **************************************************************************/
 function change_modality(val) {
-  if (music_modality == val) return;
+  if (DEBUG_AUDIO >= 2) console.log("change_modality("+val+")");
+
+  if (!val || val == "" || val == "normal") val = null;
+
+  if (music_modality == val) {
+    if (DEBUG_AUDIO >= 2) console.log(music_modality+" == "+val+" so aborting.")
+    return;
+  }
   else {
     music_modality = val;
     do_filtered_tracklist();
@@ -514,6 +521,7 @@ function pick_next_track() {
       playcount.set(filtered_tracklist[f_track].id)
       simpleStorage.set("playcount"+Game_UID, playcount.raw);
       // Remove this track from list of legal future selections:
+      current_track_info = filtered_tracklist[f_track];
       filtered_tracklist.splice(f_track, 1);
     }
   }
@@ -557,7 +565,7 @@ function audio_initialize()
           }
         });
     audio = as[0];
-    audio.setVolume(0.10); // make music proportionate to other sound effects
+    audio.setVolume(0.225); // make music proportionate to other sound effects
   });
 
 }
