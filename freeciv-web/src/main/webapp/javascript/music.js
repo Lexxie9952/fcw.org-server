@@ -61,6 +61,7 @@ function tracklist_init() {
   do_filtered_breaklist();
 
   tracklist_loaded = true;
+  audio_add_skip_button();
 }
 
 /**************************************************************************
@@ -569,7 +570,28 @@ function audio_initialize()
   });
 
 }
+/**************************************************************************
+...add in a hacked button to play next track to the audio component;
+   clean up some other styling while we're at it.
+**************************************************************************/
+function audio_add_skip_button() {
+  skip_html = '<span id="audio_skip" onclick="javascript:{if (pick_next_track()) audio.play();}" title="Skip to next track (shift-\\)" style="cursor:pointer; width: 25px; height: 40px; padding: 0px 9px 4px 8px; margin-top: -1px; float:right; overflow: hidden; border-left: 1px solid #000; border-right: 1px solid #000;font-size:16px">&#9197;</span>';
 
+  $("#audiojs_wrapper0").children().first().next().next().next().children().first().next().after(skip_html);
+
+  $('#audio_skip').tooltip({
+    tooltipClass: "wider-tooltip" , position: { my:"center bottom", at: "center top-3"},
+    show: { delay:200, effect:"none", duration: 0 }, hide: {delay:120, effect:"none", duration: 0}
+  });
+  $('#select_music_modality').tooltip({
+    tooltipClass: "wider-tooltip" , position: { my:"center bottom", at: "center top-3"},
+    show: { delay:200, effect:"none", duration: 0 }, hide: {delay:120, effect:"none", duration: 0}
+  });
+  $('.play').tooltip({
+    tooltipClass: "wider-tooltip" , position: { my:"left bottom", at: "left-90 bottom-40"},
+    show: { delay:200, effect:"none", duration: 0 }, hide: {delay:120, effect:"none", duration: 0}
+  });
+}
 /**************************************************************************
 ...
 **************************************************************************/
