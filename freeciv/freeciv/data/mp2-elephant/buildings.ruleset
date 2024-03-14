@@ -1576,11 +1576,11 @@ sabotage	= 0
 sound		= "w_basiliad"
 sound_alt	= "w_generic"
 helptext	= _("\
-The Basiliad of Caesarea was the first hospital in history. \n\n\
-This wonder alters the healing effect from Medicine tech, into the\
-  following nationwide bonus for non-mechanical land units：\n\
- ➤ +10% healing if inside a city when the turn ends. \n\
- ➤ +1hp healing for units with moves left, in the open field. \n\n\
+The Basiliad of Caesarea was the first hospital. \n\n\
+This healing bonus from Medicine changes into the\
+  following, for non-mechanical land units：\n\
+ ➤ +10% healing if inside a city, regardless of movement. \n\
+ ➤ +1hp healing in the open field, if unit has moves left. \n\n\
 In the city with the Basiliad: \n\
  ➤ Non-mechanical land units are healed 35% if not resting. \n\
  ➤ If resting, they heal 100%——as if a Barracks were present.\n\n\
