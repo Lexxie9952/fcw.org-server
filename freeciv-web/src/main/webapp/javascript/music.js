@@ -12,8 +12,8 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU Affero General Public License for more details.
 ******************************************************************************/
-var DEBUG_AUDIO = 3;            // 0=none, 1=light, 2=normal, 3=verbose
-var DEBUG_TESTLOAD_ALL = true;  // force load all tracks to check for errors
+var DEBUG_AUDIO = 1;            // 0=none, 1=light, 2=normal, 3=verbose
+var DEBUG_TESTLOAD_ALL = null;  // force load all tracks to check for errors
 var audio = null;
 
 var playcount;                // BitVector for whether each song has been played
@@ -32,7 +32,7 @@ var trackcounter = 0;         // # of tracks played so far (used to determine if
 **************************************************************************/
 function tracklist_init() {
   if (tracklist_loaded) return;
-  if (DEBUG_AUDIO > 1) console.log("tracklist_init()");
+  if (DEBUG_AUDIO >= 2) console.log("tracklist_init()");
 
   handle_game_uid();
 
@@ -42,14 +42,14 @@ function tracklist_init() {
   }
   // Retrieve or set playcount bitvector here:
   let playcount_data = simpleStorage.get("playcount"+Game_UID);
-  if (DEBUG_AUDIO > 2) console.log(playcount_data);
+  if (DEBUG_AUDIO >= 3) console.log(playcount_data);
 
   if (playcount_data == null) {
     playcount = new BitVector([]);
-    if (DEBUG_AUDIO > 1) console.log("tracklist_init() retrieved null BitVector. Making a new one.");
+    if (DEBUG_AUDIO >= 2) console.log("tracklist_init() retrieved null BitVector. Making a new one.");
   } else {
     playcount = new BitVector(playcount_data);
-    if (DEBUG_AUDIO > 1) console.log("tracklist_init() retrieved a BitVector for Game_UID:"+Game_UID);
+    if (DEBUG_AUDIO >= 2) console.log("tracklist_init() retrieved a BitVector for Game_UID:"+Game_UID);
   }
   // Make the filtered tracklist:
   do_filtered_tracklist();
@@ -109,6 +109,7 @@ function is_priority_track(tr, test_filtered) {
     console.log("is_priority_track("
                 +(test_filtered?"filtered":"master"+") failed on track "+tr))
   }
+  return false;
 }
 
 /**************************************************************************
@@ -119,7 +120,7 @@ function is_priority_track(tr, test_filtered) {
    to force all tracks to be rendered legal.
 **************************************************************************/
 function reset_filtered_tracklist(override) {
-  if (DEBUG_AUDIO) console.log("reset_filtered_tracklist()");
+  if (DEBUG_AUDIO >= 1) console.log("reset_filtered_tracklist()");
 
   // Clear the playcounts for all tracks
   for (track in tracklist) {
@@ -150,7 +151,7 @@ function reset_filtered_tracklist(override) {
    Returns whether it is valid according to its tag conditions.
 **************************************************************************/
 function is_legal_track(track) {
-  if (DEBUG_AUDIO > 2) console.log("\n----------------------------------------"+tracklist[track].filepath+":")
+  if (DEBUG_AUDIO >= 3) console.log("\n----------------------------------------"+tracklist[track].filepath+":")
 
   if (client_is_observer()) {
     if (playcount.isSet(track)) return false;
@@ -184,19 +185,19 @@ function is_legal_track(track) {
     let and_legal = true;
     for (and_index in tracklist[track].conditions[or_index]) {
       if (!evaluate_condition(tracklist[track].conditions[or_index][and_index], plr_idx)) {
-        and_legal = false; if (DEBUG_AUDIO == 2) console.log("   sub-operand FALSE: renders operand FALSE.")
+        and_legal = false; if (DEBUG_AUDIO >= 3) console.log("   sub-operand FALSE: renders operand FALSE.")
         break;
-      } else if (DEBUG_AUDIO > 2) console.log("  sub-operand TRUE &&");
+      } else if (DEBUG_AUDIO >= 3) console.log("  sub-operand TRUE &&");
     }
     if (and_legal == true) {
       or_legal = true;
-      if (DEBUG_AUDIO > 2) console.log(" all sub-operands TRUE: renders operand TRUE.")
+      if (DEBUG_AUDIO >= 3) console.log(" all sub-operands TRUE: renders operand TRUE.")
       break;
     }
   }
   if (or_legal) return true;
 
-      if (DEBUG_AUDIO > 2) console.log(" all operands FALSE: renders expression FALSE.")
+      if (DEBUG_AUDIO >= 3) console.log(" all operands FALSE: renders expression FALSE.")
 
       if (DEBUG_TESTLOAD_ALL) return true;
   return false;
@@ -222,10 +223,10 @@ function evaluate_condition(obj, plr_idx)
     key = key.substring(1); // strip off the !
   }
   // Not proper format but you'd be surprised how many typos come this way:
-  if (val.startsWith("!")) {
+  if (typeof val === "string" && val.startsWith("!")) {
     not = true;
     val = val.substring(1);
-    console.log(obj.filepath+" has ! operator in value instead of key, in evaluate_condition() *************")
+    console.log("Condition has ! operator in value instead of key *************")
   }
 
   switch(key) {
@@ -244,9 +245,8 @@ function evaluate_condition(obj, plr_idx)
       console.log("Music evaluate_condition() unrecognized key:"+key+". Please report!")
       result = true;  // unrecognised keys evaluate as true
   }
-  if (DEBUG_AUDIO > 1)
-    console.log("evaluate: ("+(not?"!":"")+key+":"+val+"):"+ ((not ? !result : result))+":::"+obj.filepath);
-
+  if (DEBUG_AUDIO >= 2)
+    console.log("evaluate: ("+(not?"!":"")+key+":"+val+"):"+ ((not ? !result : result)));
   if (not) return !result;
   return result;
 }
@@ -265,7 +265,7 @@ function eval_tech(plr_idx, val) {
 function eval_wonderwld(val) {
   w = improvement_id_by_name(val);
   // if ruleset doesn't have wonder:
-  if (w==-1) {
+  if (w==-1) {rr
     // !wonderwld == !false == true; wonderwld == false
     return false;
   }
@@ -298,6 +298,7 @@ function eval_wonderplr(plr_idx, val) {
 function eval_modality(val) {
   // Player wants battle music:
   if (music_modality == "battle") {
+    console.log("modality: "+music_modality+" val:"+val)
     if (!val.includes("battle")) return false;
     else return true;
   }
@@ -359,7 +360,7 @@ function do_filtered_breaklist(override) {
    which then allows any song to play.
 **************************************************************************/
 function reset_filtered_breaklist(override) {
-  if (DEBUG_AUDIO) console.log("reset_filtered_breaklist()");
+  if (DEBUG_AUDIO >= 1) console.log("reset_filtered_breaklist()");
 
   if (override) {
     do_filtered_breaklist(override);
@@ -410,8 +411,13 @@ function get_filtered_break() {
   }
   f_track = Math.floor(Math.random() * filtered_breaklist.length);
 
-  track_name = filtered_breaklist[f_track]['filepath'] + get_extension(filtered_breaklist[f_track]);
-  if (DEBUG_AUDIO) console.log("Break #"+(f_track+1)+" of "+filtered_breaklist.length+". Playing "+track_name);
+  track_name = filtered_breaklist[f_track]['filepath']
+             + get_extension(filtered_breaklist[f_track]);
+
+        if (DEBUG_AUDIO >= 1) console.log("  Break #"+(f_track+1)
+                           + " of "+filtered_breaklist.length
+                           + ". Playing "+track_name);
+
   filtered_breaklist.splice(f_track, 1);
 
   return track_name;
@@ -432,7 +438,7 @@ function get_extension(track_object) {
 ...Picks a random track to play for audioplayer
 **************************************************************************/
 function pick_next_track() {
-  if (DEBUG_AUDIO > 1) console.log("pick_next_track()");
+  if (DEBUG_AUDIO >= 2) console.log("pick_next_track()");
   if (!audio) return;
 
   if (DEBUG_TESTLOAD_ALL) setTimeout(pick_next_track, 1450);
@@ -469,7 +475,7 @@ function pick_next_track() {
       }
       track_name = filtered_tracklist[f_track]['filepath'] + get_extension(filtered_tracklist[f_track]);
 
-      if (DEBUG_AUDIO > 1) console.log("Song track #"+(f_track+1)+" of "+filtered_tracklist.length+". Playing "+track_name);
+      if (DEBUG_AUDIO >= 1) console.log("Song track #"+(f_track+1)+" of "+filtered_tracklist.length+". Playing "+track_name);
 
       /* Register this track as played, for future sessions. Note the index in our
       filtered_tracklist is not same as in tracklist; we use retrieved 'id':  */
@@ -493,7 +499,7 @@ function pick_next_track() {
 **************************************************************************/
 function audio_initialize()
 {
-  if (DEBUG_AUDIO > 1) console.log("audio_initialize()");
+  if (DEBUG_AUDIO >= 2) console.log("audio_initialize()");
 
   /* Initialze audio.js music player */
   audiojs.events.ready(function() {
