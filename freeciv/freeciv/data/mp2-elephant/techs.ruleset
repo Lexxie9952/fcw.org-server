@@ -588,6 +588,7 @@ req2     = "Trade"
 flags    = ""
 graphic     = "a.medicine"
 graphic_alt = "-"
+helptext = _("Non-mechanical land units in cities heal a minimum +1hp, even if not resting.")
 cost = 475
 
 [advance_metallurgy]
