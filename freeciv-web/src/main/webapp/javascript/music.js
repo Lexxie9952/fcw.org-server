@@ -12,7 +12,7 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU Affero General Public License for more details.
 ******************************************************************************/
-var DEBUG_AUDIO = 1;            // 0=none, 1=light, 2=normal, 3=verbose
+var DEBUG_AUDIO = 3;            // 0=none, 1=light, 2=normal, 3=verbose
 var DEBUG_TESTLOAD_ALL = null;  // force load all tracks to check for errors
 var audio = null;
 
@@ -195,7 +195,20 @@ function is_legal_track(track) {
       break;
     }
   }
-  if (or_legal) return true;
+
+  if (or_legal) {
+    // Normal logic .conditions were true, now check modality
+    let check_modality = true;  // defaults to true unless invalidated below:
+    if (music_modality || tracklist[track].modality) {
+      if (!tracklist[track].modality) {
+        check_modality = evaluate_condition({"modality":null});
+      } else {
+        check_modality = evaluate_condition({"modality":tracklist[track].modality})
+      }
+    }
+    // If modality didn't invalidate, return true==this track is valid.
+    return (check_modality != false);
+  }
 
       if (DEBUG_AUDIO >= 3) console.log(" all operands FALSE: renders expression FALSE.")
 
@@ -240,7 +253,7 @@ function evaluate_condition(obj, plr_idx)
     case "wonderplr": result = eval_wonderplr(plr_idx,val); break;
     case "wonderwld": result = eval_wonderwld(val); break;
     case "civ":       result = (styles[players[plr_idx].style].toLowerCase() == val.toLowerCase()); break;
-    case "modality":  result = eval_modality(val.toLowerCase()); break;
+    case "modality":  result = eval_modality(val); break;
     default:
       console.log("Music evaluate_condition() unrecognized key:"+key+". Please report!")
       result = true;  // unrecognised keys evaluate as true
@@ -296,21 +309,39 @@ function eval_wonderplr(plr_idx, val) {
     as possible battle music is filtered out.
 **************************************************************************/
 function eval_modality(val) {
+  console.log("music_modality:'"+music_modality+"' track.modality:'"+val+"'");
   // Player wants battle music:
   if (music_modality == "battle") {
-    console.log("modality: "+music_modality+" val:"+val)
-    if (!val.includes("battle")) return false;
-    else return true;
-  }
-  if (!music_modality) {
-    if (val == "battle only") return false;
-  }
-  else if (music_modality == "peaceful") {
-    if (val.includes("battle")) return false;
-  }
-  if (music_modality == "all") {
+    if (!val) {
+      console.log("  wanted 'battle' modality, but not a battle track: eval_modality returns FALSE!")
+      return false;
+    }
+    if (val && val.includes("battle")) {
+      console.log("  wanted 'battle' modality, and is a battle track: eval_modality returns TRUE!");
+      return true;
+    }
+    console.log("  wanted 'battle' modality, but some kinda problem occurred testing track modality!!!!!!!!!!!!!!!!!!!! returns TRUE just to annoy you!!!!!!!!!!!!!");
     return true;
   }
+  if (!music_modality) {
+    if (val == "battle only") {
+      console.log("  'battle only' track without battle modality, eval_modality returns FALSE!");
+      return false;
+    }
+    console.log("    'battle' track allowed with no modality set, track eval_modality returns TRUE!");
+    return true;
+  }
+  else if (music_modality == "peaceful") {
+    if (val.includes("battle")) {
+      console.log("  'peaceful' modality rejecting a 'battle/[only]' track, eval_modality returns FALSE!");
+      return false;
+    }
+  }
+  if (music_modality == "all") {
+    console.log("  'all' modality: eval_modality returns TRUE!");
+    return true;
+  }
+  console.log("  should it happen? eval_modality DEFAULT FAILS AND returns TRUE!");
   return true;
 }
 
@@ -370,6 +401,7 @@ function reset_filtered_breaklist(override) {
 /**************************************************************************
    Receives a track number index to the master tracklist.
    Returns whether tags evaluate as allowed to be played.
+   music_modality not evaluated in breaklist
    (NB: that all tracks in the filtered_tracklist are valid.)
 **************************************************************************/
 function is_legal_break(track) {
