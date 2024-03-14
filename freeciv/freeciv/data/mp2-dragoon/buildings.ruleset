@@ -2359,7 +2359,7 @@ sabotage	= 0
 sound		= "w_michelangelos_chapel"
 sound_alt	= "w_generic"
 helptext	= _("\
-Michelangelo’s Chaepl gives the primary effect of a Cathedral to all cities which lack one.\
+Michelangelo’s Chapel gives the primary effect of a Cathedral to all cities which lack one.\
  That is, it makes 3 unhappy citizens content in each city,\
  but does not affect citizens unhappy about military activity.\
  (Theology increases the effect by +1. Communist government\
