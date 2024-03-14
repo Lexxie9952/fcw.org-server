@@ -275,3 +275,21 @@ i.e., 6 in 5 (swamp), 5 in 4 (mine), 4 in 3 (angkor wat swamp drain) goes to:
 96. igTer units (Scout, Scout II, Partisan, Alpine Troops) all get uniform simplified move bonus with Veterancy
 97. Ballista may Vigil or Ranged Attack with 1 move point remaining. Fort or City not required for either. R.A. loses only lose 1 move in doing so. This exception from other Ballistic class units is because they can't conventionally attack.
 98. Temple of Artemis must be built before Monotheism
+99. +1 minimum healing for TC in a city was removed. However, see below
+100. Medicine tech gives the same effect as above, however not for mechanical units like armor, cannons, etc.
+101. New wonder Basiliad of Caesarea
+Slight damper on building lots of ancient wonders at inappropriate times when they're cheaper (may make slightly fewer wonders or incur more risk by being a wonder-monger)
+102. Pyramids must be built before Democracy is discovered.
+103. Roman Colosseum must be built before Gunpowder is discovered
+104. Copernicus must be built before University is discovered.
+105. Eifel Tower, must be built before Flight.
+106. Gibraltar Fortress must be built before Mass Production.
+107. Agoge must be built before Feudalism is discovered.
+108. Great Wall must be built before you discover Gunpowder.
+109. Magellan must be built before Electricity.
+110. Michelangelo's Chapel must be built before Communism.
+111. Shakespeare must be built before Refining.
+112. Statue of Liberty must be built before Communism is discovered.
+113. Sun Tzu must be built before Gunpowder.
+114. Voyage of Darwin must be built before Electronics.
+115. Medici Bank must be built before The Corporation.
