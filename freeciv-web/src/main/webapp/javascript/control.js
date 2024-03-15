@@ -3662,7 +3662,6 @@ function civclient_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_even
         the_event.preventDefault(); // override possible browser shortcut
         let new_mode = (music_modality == "battle" ? "normal" : "battle");
         change_modality(new_mode);
-        $("#select_music_modality").val(new_mode);
         add_client_message("Music switched to "+new_mode+" mood on next track. Shift-\\ for next track.");
       }
       break;

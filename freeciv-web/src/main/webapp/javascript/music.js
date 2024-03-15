@@ -16,21 +16,24 @@ var DEBUG_AUDIO = 3;            // 0=none, 1=light, 2=normal, 3=verbose
 var DEBUG_TESTLOAD_ALL = null;  // force load all tracks to check for errors
 var audio = null;
 
-var playcount;                // BitVector for whether each song has been played
+var playcount;                  // BitVector for whether each song has been played
 var tracklist_loaded = false;
-var filtered_tracklist = [];  // A constructed list from tracklist of all tracks that are legal to be played
-var music_modality = null;    // client can switch modes for what kinda music to play (battle music)
+var filtered_tracklist = [];    // A constructed list from tracklist of all tracks that are legal to be played
+var music_modality = "normal";  // client can switch modes for what kinda music to play (battle music)
 
 /* Breaks every nth song get separate list and management vars: */
-const breakfrequency = 4;     // the 'n' for breaking every nth song
-var filtered_breaklist = [];  // A constructed list from breaklist of all break-tracks that are legal to play
-var trackcounter = 0;         // # of tracks played so far (used to determine if we get a break)
-var current_track_info;       // allows inspecting the current playing track (for debug or other purposes)
+const breakfrequency = 4;       // the 'n' for breaking every nth song
+var filtered_breaklist = [];    // A constructed list from breaklist of all break-tracks that are legal to play
+var trackcounter = 0;           // # of tracks played so far (used to determine if we get a break)
+var current_track_info;         // allows inspecting the current playing track (for debug or other purposes)
 /**************************************************************************
 ...Called the first time in a session before a track is to be played. This
    sets up all our data structures and maintenance vars.
 **************************************************************************/
 function tracklist_init() {
+  music_modality = simpleStorage.get("music_modality");
+  if (!music_modality) music_modality = "normal";
+  $("#select_music_modality").val(music_modality);
   if (tracklist_loaded) return;
   if (DEBUG_AUDIO >= 2) console.log("tracklist_init()");
 
@@ -125,17 +128,44 @@ function reset_filtered_tracklist(override) {
 
   // Clear the playcounts for all tracks
   for (track in tracklist) {
-    /* After a reset, we don't want all the priority tracks to FIFO because
+    /* After a reset, we don't want to FIFO all the priority tracks, because
        'priority' tracks are for playing a track when a context first comes
-       true. So, literally un-prioritize such tracks: */
+       true. Not predictably and overmuch playing it first every time we
+       reset the filtered_tracklist. So, literally un-prioritize such tracks: */
     if (playcount.isSet(track)
         && tracklist[track].conditions[0][0].priority == "priority") {
       tracklist[track].conditions[0][0].priority = null;
       /* After next login it gains its priority again but, then it's too
          late to really come first. ;) TODO? simpleStorage.set another bit
-         vector for fulfilled priorities? */
+         vector for fulfilled priorities? Yeah if we start to experience
+         annoyance at how often reset tracklists overplay certain songs.
+         But it might not be too bad since a large soundtrack means old
+         contexts expire and new contexts come true by the time the tracklist
+         finishes. NB: this is especially true the more we chronological
+         sort all the tracks in tracklist.js. */
     }
-    playcount.unset(track);
+    /* Resetting already-played songs is the nominal purpose of the function. But NB:
+     * We do NOT unset the playcount of all tracks because we might be in a different
+     * modality. We only want to reset all the tracks that have been played within the
+     * current modality. Otherwise we'd get repetition of songs in other modalities
+     * when returning to those modalities, just from depleting all songs in cur.modality.
+     * Here some reductive logic works nicely: we don't care about tracks that are already
+     * not set (invalid for other reasons), such that any SET track that comes up legal
+     * when unset is a test for it being within the current modality, and those are the
+     * only ones we want to reset, QED.
+     */
+    if (playcount.isSet(track)) {      // No need to unset a track that's not set
+      /* logic trick: unsetting before we know if it's legal in our modality allows us
+         to TEST if it's in our modality (because songs invalid for other reasons
+         weren't set and don't arrive at this code anyway! */
+      playcount.unset(track);
+      if (is_legal_track(track)) {     // the track is legal so needs to remain unset so it can be played again
+        /* do nothing, track was already unset in order to test it. */
+      } else { /* The track was not legal, so not in our modality. Set it back to
+                  'played' so it's not replayed when we return to its modality. */
+        playcount.set(track);
+      }
+    }
   }
 
   if (override) {
@@ -200,9 +230,9 @@ function is_legal_track(track) {
   if (or_legal) {
     // Normal logic .conditions were true, now check modality
     let check_modality = true;  // defaults to true unless invalidated below:
-    if (music_modality || tracklist[track].modality) {
+    if (music_modality != "normal" || tracklist[track].modality) {
       if (!tracklist[track].modality) {
-        check_modality = evaluate_condition({"modality":null});
+        check_modality = evaluate_condition({"modality":"normal"});
       } else {
         check_modality = evaluate_condition({"modality":tracklist[track].modality})
       }
@@ -313,19 +343,19 @@ function eval_modality(val) {
   if (DEBUG_AUDIO >= 2) console.log("music_modality:'"+music_modality+"' track.modality:'"+val+"'");
   // Player wants battle music:
   if (music_modality == "battle") {
-    if (!val) {
+    if (val == "normal") {
       if (DEBUG_AUDIO >= 2) console.log("  wanted 'battle' modality, but not a battle track: eval_modality returns FALSE!")
       return false;
     }
-    if (val && val.includes("battle")) {
+    if (val.includes("battle")) {
       if (DEBUG_AUDIO >= 2) console.log("  wanted 'battle' modality, and is a battle track: eval_modality returns TRUE!");
       return true;
     }
     if (DEBUG_AUDIO >= 2) console.log("  wanted 'battle' modality, but some kinda problem occurred testing track modality!!!!!!!!!!!!!!!!!!!! returns TRUE just to annoy you!!!!!!!!!!!!!");
     return true;
   }
-  if (!music_modality) {
-    if (val && val == "battle only") {
+  if (music_modality == "normal") {
+    if (val == "battle only") {
       if (DEBUG_AUDIO >= 2) console.log("  'battle only' track without battle modality, eval_modality returns FALSE!");
       return false;
     }
@@ -333,7 +363,7 @@ function eval_modality(val) {
     return true;
   }
   else if (music_modality == "peaceful") {
-    if (val && val.includes("battle")) {
+    if (val.includes("battle")) {
       if (DEBUG_AUDIO >= 2) console.log("  'peaceful' modality rejecting a 'battle/[only]' track, eval_modality returns FALSE!");
       return false;
     }
@@ -342,7 +372,9 @@ function eval_modality(val) {
     if (DEBUG_AUDIO >= 2) console.log("  'all' modality: eval_modality returns TRUE!");
     return true;
   }
-  console.log("  should it happen? eval_modality DEFAULT FAILS AND returns TRUE!");
+  console.log("  Shouldn't happen: eval_modality() fail-falls through and returns TRUE!");
+  console.log(val+":val, "+music_modality+":music_modality");
+
   return true;
 }
 
@@ -359,14 +391,18 @@ function eval_modality(val) {
 function change_modality(val) {
   if (DEBUG_AUDIO >= 2) console.log("change_modality("+val+")");
 
-  if (!val || val == "" || val == "normal") val = null;
+  if (!val) val = "normal";
 
   if (music_modality == val) {
-    if (DEBUG_AUDIO >= 2) console.log(music_modality+" == "+val+" so aborting.")
+    if (DEBUG_AUDIO >= 2) console.log(music_modality+" == "+val+"; no change executed.")
     return;
   }
   else {
     music_modality = val;
+    // Any change of music_modality needs to always do housekeeping:
+    simpleStorage.set("music_modality", val);
+    $("#select_music_modality").val(val);
+
     do_filtered_tracklist();
     if (!filtered_tracklist.length) {
       reset_filtered_tracklist();
@@ -496,6 +532,9 @@ function pick_next_track() {
     if (trackcounter % breakfrequency == 0) {
       track_name = get_filtered_break();
     }
+    else if (Math.floor(Math.random() * 5) == 0) {  // 25% + (20 × 3/4) = 40%
+      track_name = silent_track;
+    }
     /* Not a break-track, but rather a normal track. Pick a random track from the
        filtered_tracklist of songs with approved qualities for the game context: */
     else {
@@ -530,8 +569,9 @@ function pick_next_track() {
     audio.load("/music/" + track_name);
     return true;
   } catch (err) {
+    console.log(track_name+": audio.load() had exception:");
     console.log(err);
-    return false;
+    return false; // Three strikes you're out.
   }
 }
 
