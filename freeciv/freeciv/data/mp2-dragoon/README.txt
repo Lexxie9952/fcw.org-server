@@ -18,6 +18,7 @@
 <a href="https://freecivweb.fandom.com/wiki/Strategy_Guide" target='_blank'>Multiplayer Strategy Guide</a>
 <a href="https://freecivweb.fandom.com/wiki/RTS" target='_blank'>RTS</a>
 <a href="https://freeciv.fandom.com/wiki/Hotkeys.mp" target="_blank">Hotkeys and Mouse Control</a>
+<a href="https://freeciv.fandom.com/wiki/Freeciv-Web_Game_Formats" target="_blank">Longturn Game Format rules</a>
 <hr color="#606097">
 MP2 Dragoon is the 4th release of Multiplayer-Evolution II. MP2 games take full advantage of Freeciv development advances. Early versions are like a modernized Civ 2 balanced for massive multiplayer games. Later versions keep the same DNA yet evolve in balance, realism, and sophistication. New players can start with <b>MP2.1 Avant-garde</b>, then progress to the advanced releases.
 <hr color="#606097"><div>
