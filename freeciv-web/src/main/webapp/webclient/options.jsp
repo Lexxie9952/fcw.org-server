@@ -2,10 +2,10 @@
 
 <h2>Game Options</h2>
 
-<div style="white-space: nowrap; display:inline; padding:0px; margin-left:9px; " title="Play or pause music)"><span><b style="display:inline">Music:</b><select title="Music style (ctrl-alt-B)" name="select_music_modality" id="select_music_modality" onchange="change_modality(this.value)">
-  <option id="mmo_normal" name="mmo_normal" title="Everything except (intense) battle music" value="normal" selected>Normal</option>
-  <option id="mmo_battle" name="mmo_battle" title="Only military music and (intense) battle music" value="battle">Battle</option>
-  <option id="mmo_peaceful" name="mmo_peaceful" title="No military nor (intense) battle music" value="peaceful">Peaceful</option>
+<div style="white-space: nowrap; display:inline; padding:0px; margin-left:9px;"><span><b style="display:inline">Music:</b><select title="Music style (ctrl-alt-B)" name="select_music_modality" id="select_music_modality" onchange="change_modality(this.value)">
+  <option id="mmo_normal" name="mmo_normal" title="Everything except hardcore battle music" value="normal" selected>Normal</option>
+  <option id="mmo_battle" name="mmo_battle" title="Only battle music" value="battle">Battle</option>
+  <option id="mmo_peaceful" name="mmo_peaceful" title="No battle music nor 'intense' music" value="peaceful">Peaceful</option>
   <option id="mmo_all" name="mmo_all" value="all">All</option>
 </select><audio id="audioplayer" style="display:inline" preload="none">Music</audio></span></div>
 <table>
