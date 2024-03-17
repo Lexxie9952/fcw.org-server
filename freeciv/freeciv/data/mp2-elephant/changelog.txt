@@ -6,7 +6,9 @@ Brief Explanations of goals and challenges.
 Focus goals for MP2-Elephant
    Compress phenomenon where first 25% of era history happens in first 50% of game length.
       (e.g., first quarter of game happening in first half of game length.) Goal: MP2D's T60 should be roughly T50 in MP2E
-   Do the opposite and extend out a little more later game periods that seem to progress too fast.
+   Do the opposite and extend out a little more later game periods that seem to progress too fast. PROBLEM: ERAS THEN GO TOO FAST
+   AND AREN'T FOUGHT IN. THE EARLY GAME WAS THE BEST FOR ENJOYMENT AND BALANCE.
+
    Simplify unnecessary complexities.
    Evolve movement system
       passive movement vs active movement: boats with horses shouldn't move on rivers faster, nor should trains
