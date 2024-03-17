@@ -12,11 +12,12 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU Affero General Public License for more details.
 ******************************************************************************/
-var DEBUG_AUDIO = 3;            // 0=none, 1=light, 2=normal, 3=verbose
-var DEBUG_TESTLOAD_ALL = null;  // force load all tracks to check for errors
+var DEBUG_AUDIO = 0;            // 0=none, 1=light, 2=normal, 3=verbose
+var DEBUG_TESTLOAD_ALL = false;  // force load all tracks to check for errors
 var audio = null;
 
 var playcount;                  // BitVector for whether each song has been played
+var banned_tracks;              // BitVector for songs out of which the user has opted ;)
 var tracklist_loaded = false;
 var filtered_tracklist = [];    // A constructed list from tracklist of all tracks that are legal to be played
 var music_modality = "normal";  // client can switch modes for what kinda music to play (battle music)
@@ -45,15 +46,28 @@ function tracklist_init() {
   }
   // Retrieve or set playcount bitvector here:
   let playcount_data = simpleStorage.get("playcount"+Game_UID);
+
   if (DEBUG_AUDIO >= 3) console.log(playcount_data);
 
   if (playcount_data == null) {
     playcount = new BitVector([]);
-    if (DEBUG_AUDIO >= 2) console.log("tracklist_init() retrieved null BitVector. Making a new one.");
+    if (DEBUG_AUDIO >= 2) console.log("tracklist_init() playcount null BitVector. Making a new one.");
   } else {
     playcount = new BitVector(playcount_data);
-    if (DEBUG_AUDIO >= 2) console.log("tracklist_init() retrieved a BitVector for Game_UID:"+Game_UID);
+    if (DEBUG_AUDIO >= 2) console.log("tracklist_init() got a playcount BitVector for Game_UID:"+Game_UID);
   }
+
+  let banned_tracks_data = simpleStorage.get("banned_tracks");
+  if (DEBUG_AUDIO >= 3) console.log(banned_tracks_data);
+
+  if (banned_tracks_data == null) {
+    banned_tracks = new BitVector([]);
+    if (DEBUG_AUDIO >= 2) console.log("tracklist_init() banned_tracks null BitVector. Making a new one.");
+  } else {
+    banned_tracks = new BitVector(banned_tracks_data);
+    if (DEBUG_AUDIO >= 2) console.log("tracklist_init() got a banned_tracks BitVector ");
+  }
+
   // Make the filtered tracklist:
   do_filtered_tracklist();
 
@@ -144,8 +158,7 @@ function reset_filtered_tracklist(override) {
          finishes. NB: this is especially true the more we chronological
          sort all the tracks in tracklist.js. */
     }
-    /* Resetting already-played songs is the nominal purpose of the function. But NB:
-     * We do NOT unset the playcount of all tracks because we might be in a different
+    /* NB: We do NOT unset the playcount of all tracks because we might be in a different
      * modality. We only want to reset all the tracks that have been played within the
      * current modality. Otherwise we'd get repetition of songs in other modalities
      * when returning to those modalities, just from depleting all songs in cur.modality.
@@ -184,6 +197,8 @@ function reset_filtered_tracklist(override) {
 function is_legal_track(track) {
   if (DEBUG_AUDIO >= 3) console.log("\n"+track+". ---------------------------------------"+tracklist[track].filepath+":")
 
+  if (banned_tracks.isSet(track)) return false;
+
   if (client_is_observer()) {
     if (playcount.isSet(track)) return false;
     /* For now, EVERY unplayed track is legal to observers. In future,
@@ -192,7 +207,7 @@ function is_legal_track(track) {
     return true;
   }
 
-  plr_idx = client.conn.playing.playerno;
+  var plr_idx = client.conn.playing.playerno;
   if (playcount.isSet(track)) return false; // Skip already played tracks
 
   /* tracklist[track].conditions are evaluated as true/false here.
@@ -231,6 +246,7 @@ function is_legal_track(track) {
     // Normal logic .conditions were true, now check modality
     let check_modality = true;  // defaults to true unless invalidated below:
     if (music_modality != "normal" || tracklist[track].modality) {
+      // less data wasted to assume null/undefined track.modality means "normal":
       if (!tracklist[track].modality) {
         check_modality = evaluate_condition({"modality":"normal"});
       } else {
@@ -337,42 +353,52 @@ function eval_wonderplr(plr_idx, val) {
   2. tracks that are so intense they are only acceptable for a player
      who wants battle music only.
   MEANWHILE, if player wants peaceful music, anything at all qualifying
-    as possible battle music is filtered out.
+    as possible battle music is filtered out; and also "!peaceful" tracks
 **************************************************************************/
 function eval_modality(val) {
-  if (DEBUG_AUDIO >= 2) console.log("music_modality:'"+music_modality+"' track.modality:'"+val+"'");
+                                                                                                if (DEBUG_AUDIO >= 2) console.log("music_modality:'"+music_modality+"' track.modality:'"+val+"'");
   // Player wants battle music:
   if (music_modality == "battle") {
-    if (val == "normal") {
-      if (DEBUG_AUDIO >= 2) console.log("  wanted 'battle' modality, but not a battle track: eval_modality returns FALSE!")
+    if (val == "normal" || val == "!peaceful") {  // !peaceful is how we disqualify from peaceful modality without playing it in battle modality
+                                                                                                if (DEBUG_AUDIO >= 2) console.log("  wanted 'battle' modality, but not a battle track: eval_modality returns FALSE!")
       return false;
     }
     if (val.includes("battle")) {
-      if (DEBUG_AUDIO >= 2) console.log("  wanted 'battle' modality, and is a battle track: eval_modality returns TRUE!");
+                                                                                                if (DEBUG_AUDIO >= 2) console.log("  wanted 'battle' modality, and is a battle track: eval_modality returns TRUE!");
       return true;
     }
-    if (DEBUG_AUDIO >= 2) console.log("  wanted 'battle' modality, but some kinda problem occurred testing track modality!!!!!!!!!!!!!!!!!!!! returns TRUE just to annoy you!!!!!!!!!!!!!");
+    if (val == "war&peace") { //"war&peace" is like "normal" but gets INCLUDED in battle modality
+                                                                                                if (DEBUG_AUDIO >= 2) console.log("  wanted 'battle' modality, and qualifies under war&peace: eval_modality returns TRUE!");
+      return true;
+    }
+                                                                                                if (DEBUG_AUDIO >= 2) console.log("  *** ERROR!: wanted 'battle' modality; fell thru to failover to TRUE! ****** SHOULDN'T HAPPEN");
     return true;
   }
   if (music_modality == "normal") {
     if (val == "battle only") {
-      if (DEBUG_AUDIO >= 2) console.log("  'battle only' track without battle modality, eval_modality returns FALSE!");
+                                                                                                if (DEBUG_AUDIO >= 2) console.log("  'battle only' track without battle modality, eval_modality returns FALSE!");
       return false;
     }
-    if (DEBUG_AUDIO >= 2) console.log("    'battle' track allowed with no modality set, track eval_modality returns TRUE!");
+                                                                                                if (DEBUG_AUDIO >= 2) console.log("    '"+val+"' track allowed under 'normal' music_modality. eval_modality returns TRUE!");
     return true;
   }
   else if (music_modality == "peaceful") {
     if (val.includes("battle")) {
-      if (DEBUG_AUDIO >= 2) console.log("  'peaceful' modality rejecting a 'battle/[only]' track, eval_modality returns FALSE!");
+                                                                                                if (DEBUG_AUDIO >= 2) console.log("  'peaceful' modality rejecting a 'battle/[only]' track, eval_modality returns FALSE!");
       return false;
     }
+    if (val == "!peaceful") {
+                                                                                                if (DEBUG_AUDIO >= 2) console.log("  'peaceful' modality rejecting a '!peaceful' track, eval_modality returns FALSE!");
+      return false;
+    }
+                                                                                                if (DEBUG_AUDIO >= 2) console.log("  'peaceful' modality accepted val:"+val+". eval_modality returns TRUE!");
+    return true; // normal and war@peace get to this point and get qualified
   }
   if (music_modality == "all") {
-    if (DEBUG_AUDIO >= 2) console.log("  'all' modality: eval_modality returns TRUE!");
+                                                                                                if (DEBUG_AUDIO >= 2) console.log("  'all' modality: eval_modality returns TRUE!");
     return true;
   }
-  console.log("  Shouldn't happen: eval_modality() fail-falls through and returns TRUE!");
+  console.log("************  Shouldn't happen: eval_modality() double fail-falls through and returns TRUE! *********** ERROR!!");
   console.log(val+":val, "+music_modality+":music_modality");
 
   return true;
@@ -383,9 +409,9 @@ function eval_modality(val) {
   (unless it needs to), so that changing modality doesn't force us to re-
   hear stuff again. possible vals:
   〰 〰 〰 〰 〰 〰 〰 〰 〰 〰 〰 〰 〰
-  null    = play all modalities except "battle only"
+  normal  = play all modalities except "battle only"
   battle  = play only "battle" and "battle only" modalities
-  peaceful= do not play "battle" nor "battle only" modalities
+  peaceful= do not play modalities "battle", "battle only", "!peaceful"
   all     = play all modalities
 **************************************************************************/
 function change_modality(val) {
@@ -531,9 +557,14 @@ function pick_next_track() {
     /* Every nth track is a short interlude */
     if (trackcounter % breakfrequency == 0) {
       track_name = get_filtered_break();
+      current_track_info = null;
+      audio_ban_button_state("hide"); // can't ban break tracks
     }
-    else if (Math.floor(Math.random() * 5) == 0) {  // 25% + (20 × 3/4) = 40%
+    else if (Math.floor(Math.random() * 10) == 0) {  // 25% + (1/10 × 3/4) = 32.5 %
       track_name = silent_track;
+      current_track_info = null;
+      audio_ban_button_state("hide");  // can't ban silent breaks
+      if (DEBUG_AUDIO >= 1) console.log("  Random silent break injected. Playing "+track_name);
     }
     /* Not a break-track, but rather a normal track. Pick a random track from the
        filtered_tracklist of songs with approved qualities for the game context: */
@@ -563,6 +594,7 @@ function pick_next_track() {
       // Remove this track from list of legal future selections:
       current_track_info = filtered_tracklist[f_track];
       filtered_tracklist.splice(f_track, 1);
+      audio_ban_button_state("show");  // songs from main soundtrack are 'bannable', make ban button enabled
     }
   }
   try {
@@ -575,6 +607,32 @@ function pick_next_track() {
   }
 }
 
+/**************************************************************************
+...
+**************************************************************************/
+function unban_tracks() {
+  for (tr in tracklist) {
+    banned_tracks.unset(tr);
+  }
+  simpleStorage.set("banned_tracks", banned_tracks.raw);
+}
+/**************************************************************************
+...
+**************************************************************************/
+function ban_current_track() {
+
+  if (current_track_info) {
+    if (banned_tracks.isSet(current_track_info['id'])) {
+      // clicking twice (i.e. banning an already banned), unbans all tracks:
+      unban_tracks();
+      add_client_message("All banned tracks reset to playable.")
+      return;
+    }
+    // clicking an unbanned track bans it:
+    banned_tracks.set(current_track_info['id']);
+    simpleStorage.set("banned_tracks", banned_tracks.raw);
+  }
+}
 /**************************************************************************
 ...
 **************************************************************************/
@@ -608,18 +666,24 @@ function audio_initialize()
     audio = as[0];
     audio.setVolume(0.225); // make music proportionate to other sound effects
   });
-
 }
+
 /**************************************************************************
 ...add in a hacked button to play next track to the audio component;
    clean up some other styling while we're at it.
 **************************************************************************/
 function audio_add_skip_button() {
-  skip_html = '<span id="audio_skip" onclick="javascript:{if (pick_next_track()) audio.play();}" title="Skip to next track (shift-\\)" style="cursor:pointer; width: 25px; height: 40px; padding: 0px 9px 4px 8px; margin-top: -1px; float:right; overflow: hidden; border-left: 1px solid #000; border-right: 1px solid #000;font-size:16px">&#9197;</span>';
+  skip_html = '<span id="audio_skip" onclick="javascript:{if (pick_next_track()) audio.play();}" title="Skip to next track (shift-\\)" style="cursor:pointer; width: 25px; height: 40px; padding: 0px 8px 0px 8px; margin-top: -1px; float:right; overflow: hidden; border-left: 1px solid #000; font-size:16px">&#9197;</span>';
+  ban_html = '<span id="audio_ban" onclick="javascript:{ban_current_track();if (pick_next_track()) audio.play();}" style="cursor:pointer; width: 25px; height: 40px; padding: 0px 8px 0px 8px; margin-top: -1px; float:right; overflow: hidden; border-left: 1px solid #000; font-size:16px" title="Start soundtrack">👉🏼</span>';
 
   $("#audiojs_wrapper0").children().first().next().next().next().children().first().next().after(skip_html);
+  $("#audiojs_wrapper0").children().first().next().next().next().children().first().next().next().after(ban_html);
 
   $('#audio_skip').tooltip({
+    tooltipClass: "wider-tooltip" , position: { my:"center bottom", at: "center top-3"},
+    show: { delay:200, effect:"none", duration: 0 }, hide: {delay:120, effect:"none", duration: 0}
+  });
+  $('#audio_ban').tooltip({
     tooltipClass: "wider-tooltip" , position: { my:"center bottom", at: "center top-3"},
     show: { delay:200, effect:"none", duration: 0 }, hide: {delay:120, effect:"none", duration: 0}
   });
@@ -631,6 +695,25 @@ function audio_add_skip_button() {
     tooltipClass: "wider-tooltip" , position: { my:"left bottom", at: "left-90 bottom-40"},
     show: { delay:200, effect:"none", duration: 0 }, hide: {delay:120, effect:"none", duration: 0}
   });
+  $('.pause').tooltip({
+    tooltipClass: "wider-tooltip" , position: { my:"left bottom", at: "left-90 bottom-40"},
+    show: { delay:200, effect:"none", duration: 0 }, hide: {delay:120, effect:"none", duration: 0}
+  });
+  $(".play").attr("title", "Pause this track.")
+  $(".pause").attr("title", "Play this track.")
+}
+/**************************************************************************
+...
+**************************************************************************/
+function audio_ban_button_state(state) {
+  if (state=="hide") {
+    $("#audio_ban").html("👉🏼");
+    $("#audio_ban").attr("title","Start next track");
+  }
+  else {
+    $("#audio_ban").html("👎🏼");
+    $("#audio_ban").attr("title","Ban this track\nClick twice to reset all bans.");
+  }
 }
 /**************************************************************************
 ...
