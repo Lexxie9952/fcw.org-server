@@ -229,7 +229,7 @@ cost = 900
 [advance_chivalry]
 name     = _("Chivalry")
 req1     = "Feudalism"
-req2     = "Horseback Riding"
+req2     = "The Wheel"
 flags    = ""
 graphic     = "a.chivalry"
 graphic_alt = "-"
@@ -249,11 +249,12 @@ cost = 50
 name     = _("Combined Arms")
 req1     = "Mobile Warfare"
 req2     = "Advanced Flight"
+req3     = "Mechanization"
 flags    = ""
 graphic     = "a.combined_arms"
 graphic_alt = "-"
 helptext = _("Auto-upgrades Riflemen, Zealots, Alpine Troops. Free Cargo Plane")
-cost = 2300
+cost = 2900
 
 [advance_combustion]
 name     = _("Combustion")
@@ -540,7 +541,7 @@ req2     = "None"
 flags    = ""
 graphic     = "a.map_making"
 graphic_alt = "-"
-helptext = _("Scouts can move +2 tiles per turn")
+helptext = _("Reveals map around cities and units. Scouts can move +2 tiles per turn")
 cost = 50
 
 [advance_masonry]
@@ -1057,7 +1058,7 @@ helptext = _("Missile transporters are created with 1 free ABM.")
 [advance_carms.2]
 name     = _("C.Arms.2")
 req1     = "Combined Arms"
-req2     = "None"
+req2     = "Radar"
 flags    = "Specialization"
 graphic     = "a.combined_arms" ;this pic won't be shown in the tech tree but will show in other places
 graphic_alt = "-"

@@ -264,8 +264,7 @@ i.e., 6 in 5 (swamp), 5 in 4 (mine), 4 in 3 (angkor wat swamp drain) goes to:
       finally become viable. Air defenses now have proper ability to prevent transport planes from easily paradropping in their interior, if deployed properly.
    As a courtesy for playability and lack of micromanagement, Paratroopers CAN paradrop within a 5 tile range, considered a quick and easy paradrop on more readily available planes than a dedicated military class Cargo Plane.
 89. Discovery of Combined Arms gives a free Cargo Transport in the capital.
-90. Combined Arms no longer requires computers but is demoted one tier. Reason: allow more advanced troops and capabilities. Before, by the time this tech was available, it was not as appealing as other available techs, and thus became
-      much less relevant. In addition, this helps buff Project Infantry another step and makes "necessity" of Mechanization for Mech.Inf slightly less.
+90. Combined Arms no longer requires computers but is demoted one tier; gets a third req mechanization instead. Reason: allow more advanced troops and capabilities. Before, by the time this tech was available, it was not as appealing as other available techs, and thus became much less relevant. In addition, this helps buff Project Infantry another step and makes necessity for Mech.Inf slightly less.
 91. palace gives a multislot in early times
 92. Hydrogen bomb cost increase to 200 (was 190).
 93. In Despotism, cities can celebrate at size 2. (possibly reserved for tribalism when that gov is added?)
@@ -295,3 +294,5 @@ Slight damper on building lots of ancient wonders at inappropriate times when th
 113. Sun Tzu must be built before Gunpowder.
 114. Voyage of Darwin must be built before Electronics.
 115. Medici Bank must be built before The Corporation.
+116. Map Making reveals map around cities and units. (sqrt(40) and sqrt(29) respectively)
+117. Chivalry req The Wheel instead of Horseback Riding; unlikely to make a game difference except cleans up tech tree (and is more realistic and slightly slows rare possibility of totally skipping bronze age)

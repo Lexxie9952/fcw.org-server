@@ -91,6 +91,7 @@ end
 -- 2. Announce Horseback ridng before T15
 -- 3. Democracy upgrades to Workers II
 -- 4. Combined Arms upgrades Zealots, Riflemen, and Alpines.
+-- 5. Map Making gives a flash of free vision.
 function tech_researched_handler(tech, player, how)
   local id
   local gained
@@ -120,6 +121,24 @@ function tech_researched_handler(tech, player, how)
           notify.all( _("<img src='/images/e/scout.png'> A tribe has learned to ride wild beasts near %s (%i,%i)"),
            c.name, c.tile.x, c.tile.y)
         end
+      end
+    end
+
+    return
+  --------------------------------
+  -- Map Making gives free vision around cities and units:
+  elseif id == find.tech_type("Map Making").id then
+    notify.event(player, NIL, E.TECH_GAIN, ("<font color=#ffff90><b> Map Making tech brings in knowledge of the area around cities and units.</b></font><br>"))
+
+    for c in player:cities_iterate() do
+      for revealtile in c.tile:circle_iterate(40) do
+        revealtile:show(player)
+      end
+    end
+
+    for u in player:units_iterate() do
+      for revealtile in u.tile:circle_iterate(29) do
+        revealtile:show(player)
       end
     end
 
