@@ -12,8 +12,8 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU Affero General Public License for more details.
 ******************************************************************************/
-var DEBUG_AUDIO = 1;            // 0=none, 1=light, 2=normal, 3=verbose
-var DEBUG_TESTLOAD_ALL = false;  // force load all tracks to check for errors
+var DEBUG_AUDIO = 3;            // 0=none, 1=light, 2=normal, 3=verbose
+var DEBUG_TESTLOAD_ALL = true;  // force load all tracks to check for errors
 var audio = null;
 
 var playcount;                  // BitVector for whether each song has been played
@@ -329,7 +329,7 @@ function eval_tech(plr_idx, val) {
 function eval_wonderwld(val) {
   w = improvement_id_by_name(val);
   // if ruleset doesn't have wonder:
-  if (w==-1) {rr
+  if (w==-1) {
     // !wonderwld == !false == true; wonderwld == false
     return false;
   }
