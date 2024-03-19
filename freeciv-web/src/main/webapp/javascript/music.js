@@ -12,7 +12,7 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU Affero General Public License for more details.
 ******************************************************************************/
-var DEBUG_AUDIO = 0;            // 0=none, 1=light, 2=normal, 3=verbose
+var DEBUG_AUDIO = 1;            // 0=none, 1=light, 2=normal, 3=verbose
 var DEBUG_TESTLOAD_ALL = false;  // force load all tracks to check for errors
 var audio = null;
 
@@ -230,6 +230,7 @@ function is_legal_track(track) {
   for (or_index in tracklist[track].conditions) {
     let and_legal = true;
     for (and_index in tracklist[track].conditions[or_index]) {
+      //console.log(tracklist[track])   use for finding an unrecognized key
       if (!evaluate_condition(tracklist[track].conditions[or_index][and_index], plr_idx)) {
         and_legal = false; if (DEBUG_AUDIO >= 3) console.log("   sub-operand FALSE: renders operand FALSE.")
         break;
@@ -283,10 +284,12 @@ function evaluate_condition(obj, plr_idx)
     key = key.substring(1); // strip off the !
   }
   // Not proper format but you'd be surprised how many typos come this way:
-  if (typeof val === "string" && val.startsWith("!")) {
+  if (typeof val === "string" && key!="modality" && val.startsWith("!")) {
     not = true;
     val = val.substring(1);
-    console.log("Condition has ! operator in value instead of key *************")
+    console.log("******************************************************** Condition has ! operator in value instead of key *************");
+    console.log("value:"+val+"\nobject:");
+    console.log(obj);
   }
 
   switch(key) {
@@ -302,7 +305,8 @@ function evaluate_condition(obj, plr_idx)
     case "civ":       result = (styles[players[plr_idx].style].toLowerCase() == val.toLowerCase()); break;
     case "modality":  result = eval_modality(val); break;
     default:
-      console.log("Music evaluate_condition() unrecognized key:"+key+". Please report!")
+      console.log("Music evaluate_condition() unrecognized key:"+key+". Please report!");
+      //debugger;   use for hunting what the key is
       result = true;  // unrecognised keys evaluate as true
   }
   if (DEBUG_AUDIO >= 2)
