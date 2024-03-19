@@ -338,7 +338,7 @@ helptext = _("Obsoletes Emissary.")
 [advance_electricity]
 name     = _("Electricity")
 req1     = "Metallurgy"
-req2     = "Magnetism"
+req2     = "Steam Engine"
 flags    = ""
 graphic     = "a.electricity"
 graphic_alt = "-"

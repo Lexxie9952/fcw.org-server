@@ -2358,7 +2358,7 @@ fuel          = 0
 uk_happy      = 1
 uk_shield     = 0
 uk_food       = 0
-uk_gold       = 1
+uk_gold       = 2
 cargo         = "Land", "LandAirSea"
 embarks       = "Helicopter"    ; transport helicopter only
 ;disembarks    = "Helicopter"
@@ -2368,7 +2368,9 @@ roles         = "DefendGood", "DefendGoodStartUnit"
 helptext      = _("\
 Mechanized Infantry have the strongest general defense strength of any land unit.\
  They have decent attack strength in open field engagements, and excellent mobility.\
- Can carry 1 foot soldier or AAA. \
+ They can also carry 1 foot soldier or AAA. All this makes them an excellent general\
+ purpose unit for military operations. The upkeep of 2 gold exceeds that of foot\
+ soldiers, but is less costly than 1 shield upkeep for most other units. \
 \nBig Land units can’t enter Mountains without a road or native base. \n\n\
 ")
 

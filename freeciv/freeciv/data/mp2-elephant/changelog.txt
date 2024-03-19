@@ -296,3 +296,9 @@ Slight damper on building lots of ancient wonders at inappropriate times when th
 115. Medici Bank must be built before The Corporation.
 116. Map Making reveals map around cities and units. (sqrt(40) and sqrt(29) respectively)
 117. Chivalry req The Wheel instead of Horseback Riding; unlikely to make a game difference except cleans up tech tree (and is more realistic and slightly slows rare possibility of totally skipping bronze age)
+118. Mech.Inf are 2 gold upkeep, a mid-point between 1 gold for foot soldiers and 1 shield for other units. This may slightly:
+         help combat income inflation as MP2 heads toward larger more efficient mega cities
+         give slight balance correction for usability of foot soldiers
+         perhaps slightly reduce the ability to use multislots to pile invincible stacks of 200 mech.inf
+119. Electricity requires Steam Engine as second req to keep proper continuity on upgrade path from Ironclads. Since Magnetism is req for Steam Engine it loses that req.
+120.
