@@ -153,7 +153,9 @@ struct advance *valid_advance(struct advance *padvance)
 {
   if (NULL == padvance
       || A_NEVER == padvance->require[AR_ONE]
-      || A_NEVER == padvance->require[AR_TWO]) {
+      || A_NEVER == padvance->require[AR_TWO]
+      || A_NEVER == padvance->require[AR_THREE]
+      || A_NEVER == padvance->require[AR_FOUR]) {
     return NULL;
   }
 
@@ -470,11 +472,15 @@ void techs_init(void)
   name_set(&a_none->name, NULL, N_("?tech:None"));
   a_none->require[AR_ONE] = a_none;
   a_none->require[AR_TWO] = a_none;
+  a_none->require[AR_THREE] = a_none;
+  a_none->require[AR_FOUR] = a_none;
   a_none->require[AR_ROOT] = A_NEVER;
 
   name_set(&a_future->name, NULL, "Future");
   a_future->require[AR_ONE] = A_NEVER;
   a_future->require[AR_TWO] = A_NEVER;
+  a_future->require[AR_THREE] = A_NEVER;
+  a_future->require[AR_FOUR] = A_NEVER;
   a_future->require[AR_ROOT] = A_NEVER;
 }
 

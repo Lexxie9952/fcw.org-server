@@ -544,6 +544,10 @@ void research_update(struct research *presearch)
                      == TECH_KNOWN)
                  && (presearch->inventions[advance_required(i, AR_TWO)].state
                      == TECH_KNOWN)
+                 && (presearch->inventions[advance_required(i, AR_THREE)].state
+                     == TECH_KNOWN)
+                 && (presearch->inventions[advance_required(i, AR_FOUR)].state
+                     == TECH_KNOWN)
                  && research_is_allowed(presearch, i)
                  ? TECH_PREREQS_KNOWN : TECH_UNKNOWN);
       }

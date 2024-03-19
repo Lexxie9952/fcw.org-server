@@ -849,6 +849,16 @@ pick_random_tech_to_lose(const struct research *presearch)
           eligible--;
           BV_CLR(eligible_techs, prereq);
         }
+        prereq = advance_required(i, AR_THREE);
+        if (prereq != A_NONE && BV_ISSET(eligible_techs, prereq)) {
+          eligible--;
+          BV_CLR(eligible_techs, prereq);
+        }
+        prereq = advance_required(i, AR_FOUR);
+        if (prereq != A_NONE && BV_ISSET(eligible_techs, prereq)) {
+          eligible--;
+          BV_CLR(eligible_techs, prereq);
+        }
       }
     }
   } advance_index_iterate_end;
@@ -1607,7 +1617,9 @@ bool tech_transfer(struct player *plr_recv, struct player *plr_donor,
           && (advance_required(i, AR_ROOT) == tech
               || (!game.info.tech_trade_loss_allow_holes
                   && (advance_required(i, AR_ONE) == tech
-                      || advance_required(i, AR_TWO) == tech)))) {
+                      || advance_required(i, AR_TWO) == tech
+                      || advance_required(i, AR_THREE) == tech
+                      || advance_required(i, AR_FOUR) == tech)))) {
         donor_can_lose = FALSE;
         break;
       }

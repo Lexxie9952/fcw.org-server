@@ -585,7 +585,7 @@ static bool lookup_tech(struct section_file *file,
 
     if (A_NEVER == *result) {
       ruleset_error(LOG_ERROR,
-                    "\"%s\" %s %s: couldn't match \"%s\".",
+                    "\"%s\" %s %s: no tech found named \"%s\".",
                     filename, (description ? description : prefix), entry, sval);
       return FALSE;
     }
@@ -1300,21 +1300,48 @@ static bool load_ruleset_techs(struct section_file *file,
                      filename, rule_name_get(&a->name))
         || !lookup_tech(file, &a->require[AR_TWO], sec_name, "req2",
                         filename, rule_name_get(&a->name))
+        || !lookup_tech(file, &a->require[AR_THREE], sec_name, "req3",
+                        filename, rule_name_get(&a->name))
+        || !lookup_tech(file, &a->require[AR_FOUR], sec_name, "req4",
+                        filename, rule_name_get(&a->name))
         || !lookup_tech(file, &a->require[AR_ROOT], sec_name, "root_req",
                         filename, rule_name_get(&a->name))) {
       ok = FALSE;
       break;
     }
 
+    /* Assignments for req2,req3,req4 default to "None" if not specified
+     in tech.ruleset: */
+    if (a->require[AR_TWO] == A_NEVER) a->require[AR_TWO] = a_none;
+    if (a->require[AR_THREE] == A_NEVER) a->require[AR_THREE] = a_none;
+    if (a->require[AR_FOUR] == A_NEVER) a->require[AR_FOUR] = a_none;
+
+    /* Replaces commented code block below */
+    enum tech_req req;
+    bool has_never=false, has_non_never=false;
+    for (req = AR_ONE; req < AR_ROOT; req++) {
+      if (a->require[req] == A_NEVER) has_never = true;
+      else has_non_never = true;
+    }
+    if (has_never && has_non_never) {
+      ruleset_error(LOG_ERROR, "\"%s\" [%s] \"%s\": \"Never\" with non-\"Never\".",
+                    filename, sec_name, rule_name_get(&a->name));
+      ok = FALSE;
+      break;
+    }
+/* This code was replaced with the above because now we have 4 reqs instead of 2:
     if ((A_NEVER == a->require[AR_ONE] && A_NEVER != a->require[AR_TWO])
         || (A_NEVER != a->require[AR_ONE] && A_NEVER == a->require[AR_TWO])) {
       ruleset_error(LOG_ERROR, "\"%s\" [%s] \"%s\": \"Never\" with non-\"Never\".",
                     filename, sec_name, rule_name_get(&a->name));
       ok = FALSE;
       break;
-    }
-    if (a_none == a->require[AR_ONE] && a_none != a->require[AR_TWO]) {
-      ruleset_error(LOG_ERROR, "\"%s\" [%s] \"%s\": should have \"None\" second.",
+    } */
+
+    if ((a_none == a->require[AR_ONE] && a_none != a->require[AR_TWO])
+        || (a_none == a->require[AR_TWO] && a_none != a->require[AR_THREE])
+        || (a_none == a->require[AR_THREE] && a_none != a->require[AR_FOUR])) {
+      ruleset_error(LOG_ERROR, "\"%s\" [%s] \"%s\": \"None\" reqs should be last.",
                     filename, sec_name, rule_name_get(&a->name));
       ok = FALSE;
       break;
@@ -1408,7 +1435,10 @@ restart:
         advance_iterate(A_FIRST, b) {
           if (valid_advance(b)
               && A_NEVER == b->require[AR_ROOT]
-              && (a == b->require[AR_ONE] || a == b->require[AR_TWO])) {
+              && (a == b->require[AR_ONE]
+                  || a == b->require[AR_TWO]
+                  || a == b->require[AR_THREE]
+                  || a == b->require[AR_FOUR])) {
             b->require[AR_ROOT] = a->require[AR_ROOT];
             b->inherited_root_req = TRUE;
             if (b < a) {
@@ -1452,6 +1482,22 @@ restart:
         if (!valid_advance(a->require[AR_TWO])) {
           ruleset_error(LOG_ERROR,
                         "\"%s\" tech \"%s\": req2 leads to removed tech.",
+                        filename,
+                        advance_rule_name(a));
+          ok = FALSE;
+          break;
+        }
+        if (!valid_advance(a->require[AR_THREE])) {
+          ruleset_error(LOG_ERROR,
+                        "\"%s\" tech \"%s\": req3 leads to removed tech.",
+                        filename,
+                        advance_rule_name(a));
+          ok = FALSE;
+          break;
+        }
+        if (!valid_advance(a->require[AR_FOUR])) {
+          ruleset_error(LOG_ERROR,
+                        "\"%s\" tech \"%s\": req4 leads to removed tech.",
                         filename,
                         advance_rule_name(a));
           ok = FALSE;
@@ -7407,7 +7453,7 @@ static void send_ruleset_techs(struct conn_list *dest)
     /* Current size of the packet's research_reqs requirement vector. */
     i = 0;
 
-    /* The requirements req1 and req2 are needed to research a tech. Send
+    /* The requirements req1 - req4 are needed to research a tech. Send
      * them in the research_reqs requirement vector. Range is set to player
      * since pooled research is configurable. */
 
@@ -7425,6 +7471,22 @@ static void send_ruleset_techs(struct conn_list *dest)
           = req_from_values(VUT_ADVANCE, REQ_RANGE_PLAYER,
                             FALSE, TRUE, FALSE,
                             advance_number(a->require[AR_TWO]));;
+    }
+
+    if ((a->require[AR_THREE] != A_NEVER)
+        && advance_number(a->require[AR_THREE]) > A_NONE) {
+      packet.research_reqs[i++]
+          = req_from_values(VUT_ADVANCE, REQ_RANGE_PLAYER,
+                            FALSE, TRUE, FALSE,
+                            advance_number(a->require[AR_THREE]));
+    }
+
+    if ((a->require[AR_FOUR] != A_NEVER)
+        && advance_number(a->require[AR_FOUR]) > A_NONE) {
+      packet.research_reqs[i++]
+          = req_from_values(VUT_ADVANCE, REQ_RANGE_PLAYER,
+                            FALSE, TRUE, FALSE,
+                            advance_number(a->require[AR_FOUR]));
     }
 
     /* The requirements of the tech's research_reqs also goes in the

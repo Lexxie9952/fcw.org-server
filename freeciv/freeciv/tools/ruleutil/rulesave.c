@@ -1978,6 +1978,8 @@ static bool save_techs_ruleset(const char *filename, const char *name)
 
       save_tech_ref(sfile, pa->require[AR_ONE], path, "req1");
       save_tech_ref(sfile, pa->require[AR_TWO], path, "req2");
+      save_tech_ref(sfile, pa->require[AR_THREE], path, "req3");
+      save_tech_ref(sfile, pa->require[AR_FOUR], path, "req4");
       if (pa->require[AR_ROOT] != a_none && !pa->inherited_root_req) {
         save_tech_ref(sfile, pa->require[AR_ROOT], path, "root_req");
       }

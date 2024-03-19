@@ -110,7 +110,9 @@ typedef int Tech_type_id;
 enum tech_req {
   AR_ONE = 0,
   AR_TWO = 1,
-  AR_ROOT = 2,
+  AR_THREE = 2,
+  AR_FOUR = 3,
+  AR_ROOT = 4,
   AR_SIZE
 };
 

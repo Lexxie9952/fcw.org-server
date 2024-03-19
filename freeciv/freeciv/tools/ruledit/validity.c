@@ -165,6 +165,8 @@ bool is_tech_needed(struct advance *padv, requirers_cb cb, void *data)
   advance_iterate(A_FIRST, pdependant) {
     if (pdependant->require[AR_ONE] == padv
         || pdependant->require[AR_TWO] == padv
+        || pdependant->require[AR_THREE] == padv
+        || pdependant->require[AR_FOUR] == padv
         || pdependant->require[AR_ROOT] == padv) {
       cb(advance_rule_name(pdependant), data);
       needed = TRUE;
