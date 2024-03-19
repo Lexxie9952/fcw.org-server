@@ -2162,7 +2162,7 @@ function recreate_old_tech_req(packet)
   }
 
   /* Fill in A_NONE just in case Freeciv-web assumes its size is 2. */
-  while (packet['req'].length < 2) {
+  while (packet['req'].length < 4) {
     packet['req'].push(A_NONE);
   }
 }
@@ -2172,7 +2172,6 @@ function handle_ruleset_tech(packet)
 {
   packet['name'] = packet['name'].replace("?tech:", "");
   techs[packet['id']] = packet;
-
   recreate_old_tech_req(packet);
 }
 

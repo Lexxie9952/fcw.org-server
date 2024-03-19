@@ -51,10 +51,12 @@ var TECH_UNKNOWN = 0;
 var TECH_PREREQS_KNOWN = 1;
 var TECH_KNOWN = 2;
 
-var AR_ONE = 0;
-var AR_TWO = 1;
-var AR_ROOT = 2;
-var AR_SIZE = 3;
+var AR_ONE =    0;
+var AR_TWO =    1;
+var AR_THREE =  2;
+var AR_FOUR =   3;
+var AR_ROOT =   4;
+var AR_SIZE =   5;
 
 
 var TF_BONUS_TECH = 0; /* player gets extra tech if rearched first */
