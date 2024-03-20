@@ -589,7 +589,9 @@ function pick_next_track() {
       }
       track_name = filtered_tracklist[f_track]['filepath'] + get_extension(filtered_tracklist[f_track]);
 
-      if (DEBUG_AUDIO >= 1) console.log("Song track #"+(f_track+1)+" of "+filtered_tracklist.length+". Playing "+track_name);
+      if (DEBUG_AUDIO >= 1) console.log("Song track #"+(f_track+1)+" of "+filtered_tracklist.length+". Playing "
+         + track_name + " "
+         + (filtered_tracklist[f_track]['modality'] ? "("+filtered_tracklist[f_track]['modality']+")" : ""));
 
       /* Register this track as played, for future sessions. Note the index in our
       filtered_tracklist is not same as in tracklist; we use retrieved 'id':  */
