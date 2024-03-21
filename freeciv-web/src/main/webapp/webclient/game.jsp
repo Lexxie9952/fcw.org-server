@@ -6,10 +6,12 @@
 			<ul id="tabs_menu">
 			    <div id="freeciv_logo" ></div>
 					<div id="ixtjkiller1" style="position: absolute; cursor: pointer; background: rgba(0, 0, 0, 0.0); overflow: hidden; left: 93px; top: 0px; z-index: 999 !important;" onclick="clickMask(event, 1)"><img id="ixtjkiller11" src="/images/ixtjkiller.png"></div>
-				<li class="fcw_tab" id="map_tab"><a href="#tabs-map"><img style='float:left; margin-right:5px;' src='/images/map_tab_icon.png'> Map</a></li>
+
+					<li class="fcw_tab" id="map_tab"><a href="#tabs-map"><img style='float:left; margin-right:5px;' src='/images/map_tab_icon_m.png'> Map</a></li>
 				<li class="fcw_tab" id="empire_tab"><a href="#tabs-empire"><img style='float:left; margin-right:5px;' src='/images/empire_tab_icon.png'> Empire</a></li>
 				<li class="fcw_tab" id="civ_tab"><a href="#tabs-civ"><img style='float:left; margin-right:5px;' src='/images/gov_tab_icon.png'> Gov.</a></li>
-				<li class="fcw_tab" id="tech_tab"><a id="tech_tab_item" href="#tabs-tec"><img style='float:left; margin-right:5px;' src='/images/tech_tab_icon.png'> Tech</a></li>
+
+				<li class="fcw_tab" id="tech_tab"><a id="tech_tab_item" href="#tabs-tec"><img style='float:left; margin-right:5px;' src='/images/tech_tab_icon_m.png'> Tech</a></li>
 				<li class="fcw_tab" id="players_tab"><a href="#tabs-nat"><img style='float:left; margin-right:5px;' src='/images/nation_tab_icon.png'> Nations</a></li>
 				<li class="fcw_tab" id="cities_tab"><a href="#tabs-cities"><img style='float:left; margin-right:5px;' src='/images/cities_tab_icon.png'> Cities</a></li>
 				<li class="fcw_tab" id="opt_tab"><a href="#tabs-opt"><img style='float:left; margin-right:5px;' src='/images/prefs_tab_icon.png'> Prefs</a></li>
