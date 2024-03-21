@@ -494,6 +494,10 @@ function init_options_dialog()
   if (is_supercow())
     $("#save_button").show();
     $("#timeout_setting_div").show(); // doesn't do anything yet, but one day we can change metamessage here.
+
+  $("#tabs_opt").tooltip({
+    show: { delay:460, effect:"none", duration: 0 }, hide: {delay:50, effect:"none", duration: 0}
+  });
 }
 
 function change_graphic_theme()
