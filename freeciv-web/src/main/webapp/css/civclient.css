@@ -2,11 +2,11 @@
   /* Chrome browser family: */
   color-scheme: dark;
 
-  /* Also adjust: default_dialog_text_color in colortools.js */
-  --default_text_color: #ccc;
+  --default_text_color: #b9b9be;
   --contrast_text_color: #000;
+  --default_button_background: #d2e5e571;
+  --default_dialog_text_color: #b9b9be;
 }
-
 
 /* Custom html elements save a lot of bytes over e.g., style="font-weight:300;" */
 ulight- {                             /* ULTRA-LIGHT font-weight */
@@ -52,8 +52,9 @@ body
 body, html, div {
 /* ***************** Scrollbars *****************/
 /* Firefox scrollbar */
-  scrollbar-color: #4d4632 #000 !important;
-  scrollbar-width: thin !important;
+  scrollbar-color: #514f4a #000 !important;
+  scrollbar-width: thin;
+  cursor: default;
 }
 ::-webkit-scrollbar {
   height: 8px;
@@ -61,13 +62,13 @@ body, html, div {
   background: #000;
 }
 ::-webkit-scrollbar-thumb {
-  background: #4d4632;
+  background: #514f4a;
 /*	-webkit-border-radius:4px; */
   -webkit-border-radius: 1ex;
   -webkit-box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.75);
 }
 ::-webkit-scrollbar-thumb:hover{
-	background-color:#42411a;
+	background-color:#514f4a;
 	-webkit-border-radius:4px;
 }
 ::-webkit-scrollbar-corner {
@@ -84,18 +85,108 @@ body, html, div {
   font-family: Helvetica;
 }
 
+/**************************************************************************************** BUTTONS */
+button {
+  margin: .2em .2em .2em 0;
+  cursor: pointer;
+  padding: .2em .6em .3em .6em;
+  line-height: 1.4em;
+  width:auto;
+  overflow:visible;
+
+  color: #a8a8b2 !important;
+  text-shadow: 1px 1px #091a3850 !important;
+  color: #4c4c4c !important;
+
+  border: 0;
+  padding: 10px;
+  font-family: 'Helvetica' !important;
+
+  border-radius: 7px !important;
+  background: var(--default_button_background);
+  background-image: url(/images/bg-light.jpg);
+  box-shadow: 7px 7px 14px #1f2626, -7px -7px 14px rgba(28, 28, 28, 0.333) !important;
+
+  margin: 10px auto 5px !important;
+}
+button:hover {
+  border-radius: 8px !important;
+  background: #aaaaaa !important;
+  background-image: url(/images/bg-med-light.jpg);
+  box-shadow: inset 7px 7px 9px #464646, inset -7px -7px 9px #bfbfbf !important;
+
+  margin: 11px auto 4px !important;
+}
+button:active {
+  border-radius: 9px !important;
+  background: #aaaaaa !important;
+  background-image: url(/images/bg-med-light.jpg);
+  box-shadow: inset 7px 7px 9px #262626, inset -7px -7px 9px #dfdfdf !important;
+  margin: 12px auto 3px !important;
+}
+
+.ui-button.ui-button-icon-only:not(#turn_done_button) {
+  border: 1px solid;
+  background: url('/images/bg-med-light.jpg');
+  margin-right: 4px;
+}
+/* fixes position of dialog-close button */
+.ui-button-icon-only .ui-icon {
+  margin-top: -10.5px;
+}
+/* Fix issues where little red X circle to close dialogs is vertically mispositioned  */
+.ui-icon-closethick {
+  margin-top: -10.5px !important;
+}
+/* prevent it turning to an orange x while pushed */
+.ui-icon-closethick:active {
+  background-image: url(images/ui-icons_cb672b_256x240.png) !important;
+}
+/* thankfully not needed at the moment
+.ui-icon-closethick:hover {
+}*/
+
+/*************************************************************************************/
+.menu-button-activator {
+  float: left;
+  margin: 0 4px 40px 20px;
+  padding: .4em 1em;
+  text-decoration: none !important;
+  cursor: pointer;
+  position: relative;
+  text-align: center;
+  color: var(--default_text_color) !important;
+  border-color: #000 !important;
+  box-shadow: "3px 3px 6px #000b" !important;
+  font-family: Helvetica;
+  background: url('/images/bg-med-dark.jpg') #000 !important;
+}
+.menu-button-activator .ui-selected {
+  color: #fff !important;
+}
+.menu-button-activator .ui-icon {
+  position: absolute;
+  top: 50%;
+  margin-top: -8px;
+  left: auto;
+  margin-left: 0;
+  right: .2em;
+}
+/**************************************************************************** swal SWEETALERT */
+
+.sweet-alert {
+  background: #000 url(/images/bg.jpg)
+}
+
+/************************************************/
+
 #freeciv_logo {
   float:left;
   background-image: url(/images/freeciv-web-logo2.png);
-  width: 118px;
-  height: 30px;
+  width: 81px;
+  height: 29px;
+  margin: 3px 7px 0px 3px;
   margin-right: 10px;
-}
-
-#game_logo {
-  width: 100%;
-  height: 50px;
-  background-color: #aaaaff;
 }
 
 #freeciv_custom_scrollbar_div {
@@ -113,7 +204,7 @@ body, html, div {
 }
 /* highlights the actual hotkey sequence in different color */
 .hotkey {
-  color: #cc8080;
+  color: #c2b189;
   text-shadow:2px 2px #c1183750;
 }
 .ctrls_tbl tr td {
@@ -132,6 +223,42 @@ table.terrain_chart td {
 .fake_table_grid {
   display: flex;
   grid-template-columns: 1fr 1fr;
+}
+/******************************************************************/
+#audiojs_wrapper0 {
+  width: fit-content !important;
+  background-image: none;
+  background-color: #82e0fd3b;
+  border-radius: 21px;
+  margin-top: 10px;
+}
+.audiojs .progress {
+  border-radius: 2px;
+  background: rgba(250, 235, 215, 0.79);
+  background-image: none;
+}
+.audiojs .loaded {
+  background: #0006;
+}
+.time .duration {
+  padding-right: 12px !important;
+}
+.audiojs .time {
+  padding: 0px 0px 0px 12px !important;
+}
+.audiojs .scrubber {
+  background: #01060540;
+}
+.audiojs {
+  font-family: Verdana, Monaco, monospace;
+}
+#select_music_modality {
+  padding: 0px;
+  margin-left: 9px;
+  background-image: url(/images/bg-dark.jpg);
+  color: #b5b1b1;
+  border-radius: 3px;
+  border-color: #1b536a;
 }
 /******************************************************************/
 
@@ -236,6 +363,7 @@ table.terrain_chart td {
   float: left;
   margin-top: 0px;
   padding:7px;
+  margin-top: 0px !important;
   border-color: #000 !important;
 }
 
@@ -285,32 +413,8 @@ input[type='number'] {
   margin: 0px;
   border-radius: 3px 3px 3px 3px;
   font-size:85%;
-  background: #444;
-  color: rgb(216, 209, 196);
+  background: #987;
   border-color: rgb(111, 111, 111);
-}
-
-.helptext {
-  white-space: pre-wrap;
-  font-size: 95%;
-  line-height: 110%;
-  margin-top: -2px;
-  font-family: Helvetica;
-}
-.helptext_pane {
-  max-width: 784px;
-  font-family: Helvetica;
-  color: #e2e2e2;
-}
-.helptext_pane_mobile {
-  max-width: 984px;
-}
-.unit_desc {
-  color: #9aa;
-  line-height:115%;
-  font-size:115%;
-  font-family:Helvetica;
-  font-weight:500;
 }
 
 .blue_clickable {
@@ -695,6 +799,7 @@ input[type='number'] {
 /*!*/
 .ui-widget-content {
   background: url("/images/bg.jpg") repeat scroll 50% 50%;
+  /*text-shadow: 1px 1px 2px black;*/
 } /* theme classes 4 */
 
 #game_status_panel_top {
@@ -702,8 +807,9 @@ input[type='number'] {
   color: #d6d0c3;
   height: 30px;
   text-align: center;
-  text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
-  padding-right: 150px;
+ /* text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black; */
+  text-shadow: 1px 1px 0 #281a02a0;
+  padding-right: 100px;
   padding-top: 5px;
   font-family: Helvetica;
 }
@@ -799,6 +905,8 @@ input[type='number'] {
 } /* theme classes 5 */
 .ui-dialog .ui-dialog-title {
   float: none;
+  color: #d9d5c6;
+  text-shadow: 1px 1px 1px black;
 }
 
 #tabs {
@@ -812,10 +920,11 @@ input[type='number'] {
 #tabs_menu {
   font-size: 0.98em;
   overflow: hidden;
- /* background: #444 url("images/ui-bg_highlight-soft_44_444444_1x100.png") 50% 50% repeat-x; */
-  background: rgb(73, 60, 47) url("/images/ui-widget-header.png") 50% 50% repeat-x;
-  border-color: rgb(73, 60, 47);
+  /*background: rgb(73, 60, 47) url("/images/ui-widget-header.png") 50% 50% repeat-x;*/
+  background: rgb(62, 81, 115) url("/images/bg-med-light.cyn.jpg") 50% 50% repeat-x;
+  border-color: #1c2e3b;
   color: var(--default_text_color);
+  padding: 0em .2em 0;
 }
 
 .specialist_item {
@@ -879,8 +988,36 @@ input[type='number'] {
 
 /* makes a button appear as a tab */
 .tab_emulator_button {
-  border-radius: 8px 8px 0px 0px;
-  margin-right: -5px;
+  border-radius: 8px 8px 0px 0px !important;
+  margin-right: -5px !important;
+  background-image: url(/images/bg-med-light.cyn.jpg);
+  color: #ded9d7 !important;
+  border: 1px solid #39617d;
+}
+.tab_emulator_button:hover {
+  border-radius: 8px 8px 0px 0px !important;
+  border: 1px solid #457ba2;
+  margin-right: -5px !important;
+  color: #090e27 !important;
+  background-image: url(/images/bg-med-light.cyn.jpg) !important;
+}
+/* didn't do anything
+.tab_emulator_button:active {
+  border-radius: 8px 8px 0px 0px !important;
+  margin-right: -5px !important;
+  background-image: url(/images/bg-med-light.jpg) !important;
+  background-color: none !important;
+ color: #0ff;
+  background: none !important;
+}*/
+.tab_emulator_button:focus {
+  border-radius: 8px 8px 0px 0px !important;
+  margin-right: -5px !important;
+  background-image: url(/images/bg-med-light.jpg) !important;
+  background-color: none !important;
+  color: #090e27 !important;
+  background: url(/images/bg-med-light.jpg) !important;
+  border: 1px solid #366e95;
 }
 
 #nations_list {
@@ -910,6 +1047,7 @@ input[type='number'] {
 .act_sel_dialog .ui-dialog-content {
   text-align: center;
   min-width: 250px;
+  background-image: url(/images/bg-text.jpg);
 }
 
 .act_sel_dialog .ui-dialog-buttonpane {
@@ -918,8 +1056,23 @@ input[type='number'] {
 
 .act_sel_button {
   width: 250px;
-  margin-bottom: auto !important;
-  margin-top: auto !important;
+  /*margin-bottom: auto !important;
+  margin-top: auto !important;*/
+}
+.act_sel_order_image {
+  max-height:24px;
+  position:absolute;
+  left:2px;
+  top:4px;
+}
+.go_and_do_order_image {
+  max-height: 24px;
+  position: relative;
+  top: 4px;
+  left: 2px;
+  margin-top: -12px;
+  margin-bottom: -4px;
+  margin-left: -15px
 }
 
 .ui-selected {
@@ -943,10 +1096,8 @@ input[type='number'] {
 }
 
 .alternate-row-color tr:not(.ui-selected):nth-child(even) {
-  background-color: rgba(255, 255, 255, 0.015);
+  background-color: rgba(255, 255, 255, 0.05);
 }
-
-
 
 .nation_table_body tr td {
   padding-left:20px;
@@ -1027,36 +1178,245 @@ input[type='number'] {
   margin: 5px;
   float: right;
 }
-#help_menu {
-  float: left;
-  background-image: url('/images/bg-dark.jpg');
-  color: rgb(226, 226, 226);
-}
+/* 〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰 HELP TAB 〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰 */
 #help_info_page {
   float: left;
-  padding-left: 25px;
+  padding-left: 15px;
+  padding-right: 15px;
+  background-image: url(/images/bg-med-dark-text.jpg);
+  border: 2px solid #2b3857;
+  max-height:98% !important;
+  overflow-y:auto !important;  /* makes the help entry on items scrollable instead of the whole page scrolling off the screen */
+  overflow-x:hidden;  /* prevents horiz. scrollbar that shows dead space. show_help() automatically prevents too small a size for clipping */
+  scrollbar-width: unset;
 }
-.help_submenu {
-  max-height:  600px;
-  overflow: auto;
-  min-width: 320px;
-  background-image: url('/images/bg-dark.jpg');
-  color: rgb(226, 226, 226);
-  scrollbar-width: thin;
+#help_info_page p {
+  line-spacing: 1.27em;
+}
+#help_info_page h1 {
+  color: #dfdfdf;
+  text-shadow: 3px 3px 7px #ffdbfbb2;
 }
 
+#helptext_pane {
+  line-height: 115%;
+  font-size: 115%;
+}
+#help_intro_jumbotron {
+  border-radius:10px;
+  max-width: 100%;
+  border: 2px solid #2b3857;
+}
+
+#help_terrain {
+  color: #b86 !important;
+}
+#help_extras {
+  color: #ccc !important;
+}
+#help_city_improvements {
+  color: #8bf !important;
+}
+#help_wonders_of_the_world {
+  color: #fc9 !important;
+}
+#help_units {
+  color: #e67 !important;
+}
+#help_government {
+  color: #8b7 !important;
+}
+#help_technology {
+  color: #88b5bb !important;
+}
+#help_gen_ruleset {
+  color: #a6f !important;
+}
+#help_controls {
+  color: #cd6 !important;
+}
+
+/* Left-hand side pop-out menus in HELP tab */
+#help_menu {
+  float: left;
+  background-image: url('/images/bg-med-dark.jpg') !important;
+  color: rgb(226, 226, 226);
+  border: 2px solid #2b3857 !important;
+}
+#help_menu, #help_terrain_ul, #help_extras_ul, #help_city_improvements_ul,
+#help_wonders_of_the_world_ul, #help_units_ul, #help_government_ul,
+#help_technology_ul {
+  background-image: url('/images/bg-med-dark.jpg') !important;
+  overflow-x: hidden;
+}
+#help_technology_ul {
+  max-height: 82%;
+}
+
+/* Spacing of individual text entries in e.g., in HELP >> UNITS */
+#help_menu .ui-menu-item {
+  padding: 0em 0.3em 0px 0em;
+  white-space: nowrap;
+  color: #807c7f;
+  font-size: 1.15em;
+}
+/* mini-sprites in upper-left help menu categories */
+#help_menu .ui-menu-item:hover {
+  white-space: nowrap;
+/*  color: #ffeded; */
+  display: block;
+  margin-top: inherit;
+}
+
+/* Left-hand side pop-out menu text item entry: padding before image */
+.hmi_text {
+  padding-right: 0.75em;
+  margin-right: 40px;       /* define some space so we can ... */
+}
+/* The whole div for help menu line item */
+.hmi_wrapper {
+  padding-right: 0px !important;  /* (future inherited) padding would render as non-highlighted dead-space:  use
+                                     padding/margins INSIDE the div for full horizontal highlight of list item; */
+}
+/* Image after text */
+.vht {
+  vertical-align: top;
+  float:right;
+  /*padding-left: 1.7em;*/
+  margin-left: -40em;       /* eat it back up: prevents img forced to line below and highlight bar not getting image */
+  margin-right: -1px;
+}
+
+/* Same stuff as above but for nefarious niggling difficult menu items for extras: */
+.hmextra_text {
+  padding-right: 0.75em;
+  margin-right: 40px;       /* define some space so we can ... */
+}
+/* The whole div for help menu line item, for an extra */
+.hmextra_wrapper {
+  padding-right: 0px !important;  /* (future inherited) padding would render as non-highlighted dead-space:  use
+                                     padding/margins INSIDE the div for full horizontal highlight of list item; */
+  font-size: 1.15em;   /* better vertically centers the text in the list item space */
+}
+/* Half-size extra sprite after text */
+.vexht {
+  float:right;
+  margin-left: -40em;
+  margin-right: -30px;
+  margin-top: -13px;
+  transform:scale(70%);
+}
+.vexht_mg { /* same as above but for base_mg which has more vert */
+  float:right;
+  margin-left: -40em;
+  margin-right: -30px;
+  margin-top: -28px;
+  transform:scale(53%);
+}
+.vexht_rvr { /* river types */
+  float:right;
+  margin-left: -40em;
+  margin-right: -30px;
+  margin-top: -14px;
+  transform:scale(54%);
+}
+.help_submenu {
+  max-height:  86%;
+  overflow: auto;
+  min-width: auto;
+  background-image: url('/images/bg-dark.jpg');
+  /*color: rgb(226, 226, 226);  NOW USING --default_text_color */
+  scrollbar-width: unset;
+  /*overflow: hidden !important; */
+  /* scrollbar-color: */
+  border: 2px solid #2b3857 !important;
+}
+/* helptext pane for for all items except units */
+.helptext_pane {
+  max-width: 784px;
+  font-family: Helvetica;
+  color: #a49b9b;
+}
+.helptext_pane:first-letter {
+  color: rgb(67, 53, 29);
+  text-shadow: 3px 3px 7px rgb(193, 125, 0);
+  background-image: url('/images/bg-med-light.jpg');
+  border-radius: 2px;
+  box-shadow: 2px 2px 0 rgb(142, 28, 2);
+  font-size: 220%;
+  font-family: FreecivBlack, 'Franklin Gothic Medium', Garamond, 'Times New Roman', 'Arial Narrow', serif;
+  padding: 6px 3px;
+  margin-top: -8px;
+  margin-right: 6px;
+  float: left;
+}
+.helptext_pane_mobile {
+  max-width: 984px;
+}
+.helptext {
+  white-space: pre-wrap;
+  font-size: 95%;
+  line-height: 110%;
+  margin-top: -2px;
+  font-family: Helvetica;
+  color: #a2a2a2;
+  font-weight: 300;
+  color: #a3a2a4; /* #807e88; #8f8c85; #887c64; */
+}
+
+.unit_desc {
+  color: #718daa;
+  line-height:115%;
+  font-size:115%;
+  font-family:Helvetica;
+  font-weight:500;
+}
+/* Unit helptext pages have lots of text under; these different highlights
+   make it more intelligible and break it up: */
+.help_units_emphasis {
+  color: #7193c6;
+}
+.help_units_limited {
+  color: #ae7373
+}
+.help_units_green {
+  color: #358f53;
+}
+.help_units_uclass {
+  color: #aa9c7b;
+  font-weight: 700;
+}
+.help_units_multislot {
+  color: rgb(67, 145, 255);
+  font-weight: 500;
+}
+/* build costs, reqs, other kinds of stats for units, wonders, etc. */
+.help_stats {
+  color: #dfdfdf;
+  font-weight: 500;
+}
+/* less overhwelming bright by making subtext muted, currently not implemented
+.help_units_subtext {
+  color: #876;
+}
+*/
 #tabs-hel.manual_doc {
   background-image: url('/images/bg-dark.jpg');
-  color: rgb(226, 226, 226);
+  color: #807e88;
+}
+#tabs-hel.manual_doc h1 {
+  color: #dfdfdf;
+  text-shadow: 3px 3px 7px #ffdbfbb2;
 }
 
 #tabs-hel.manual_doc a {
-  color: #9cf;
+  color: #4da9c6
 }
 
 #tabs-hel.ui-icon, #tabs-hel.ui-widget-content .ui-icon {
   background-image: url("images/ui-icons_cb672b_256x240.png");
 }
+/*〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰 </end HELP TAB>*/
 
 /* tech report table */
 .tech_report {
@@ -1160,7 +1520,7 @@ table.vet_level tr:nth-child(9) td {
   border-spacing: 0px;
   border-collapse: separate;
   font-family: Helvetica;
-  font-weight: 700;
+  font-weight: 500;
   text-shadow: 1px 1px #5554;
   background-image: url(/images/bg-med-light.jpg);
 }
@@ -1233,10 +1593,33 @@ body:not(.mobile) .ui-dialog.unit_dialog {
 
 .govt_button {
   width: 60%;
-  margin: 6px;
-  line-height: 110%;
-  font-size: 115%;
-  margin-bottom:-5px;
+  line-height: 100%;
+  border: 4px ridge #848484 !important;
+  line-height: 100%;
+  border-radius: 12px !important;
+}
+.govt_button_selected, .govt_button:active {
+  width: 60%;
+  border: 4px ridge #41a0f5 !important;
+  line-height: 100%;
+  background: #fffc;
+  box-shadow: inset 5px 5px 7px #464646,inset -5px -5px 7px #bfbfbf !important;
+  border-radius: 12px !important;
+}
+.govt_button_current {
+  width: 60%;
+  border: 4px ridge #ffc20c !important;
+  line-height: 100%;
+  border-radius: 12px !important;
+}
+.govt_button_image
+{
+  margin: -6px -15px -8px -8px !important;
+  float: right;
+  border: none !important;
+  border-radius: 5px !important;
+  height: 32px;
+  width: 32px;
 }
 
 /* Government Docs table showing content/unhappy citizens per empire size */
@@ -1326,9 +1709,7 @@ body:not(.mobile) .ui-dialog.unit_dialog {
 }
 
 /* vertically aligned images */
-.v,
-.lowered_gov
-{
+.lowered_gov, .v {
   vertical-align: middle;
 }
 
@@ -1395,6 +1776,9 @@ body:not(.mobile) .ui-dialog.unit_dialog {
 #empire_mode_panel div span {
   max-height:48px; /* 48px is normal height for improvements and units */
 }
+.empire_tooltip {
+  padding:0px;
+}
 
 /* city tabs will be on the bottom of the dialog. */
 #city_tabs .ui-tabs-nav {
@@ -1423,7 +1807,11 @@ body:not(.mobile) .ui-dialog.unit_dialog {
 }
 
 .wider-tooltip {
-    max-width:800px;
+  max-width:800px;
+  padding: 3px;
+  font-size:14px;
+  font-family: Helvetica;
+  color: #000 !important;
 }
 
 .no-close .ui-dialog-titlebar-close {
@@ -1511,8 +1899,8 @@ body:not(.mobile) .ui-dialog.unit_dialog {
 }
 
 .cities_row {
+  background-image: url(/images/bg-dark-text.jpg);
   cursor:pointer;
-  cursor:hand;
 }
 
 .cities_row td {
@@ -1896,6 +2284,7 @@ li.tech-both00::before { /*  we both have the tech and neither has blueprints */
   margin-bottom:0px;
   border: none !important;
   background-image: url('/images/string.png') repeat-x scroll 0 0 !important;
+  width: 160px;        /* mobile: wider width is set in create_cma_sliders() for wider screens */
   height: 12px;
 }
 .no_bg {
@@ -1921,7 +2310,7 @@ li.tech-both00::before { /*  we both have the tech and neither has blueprints */
 /* jquery */
 .ui-tooltip {
   white-space: pre-line;
-  background-image: url('/images/bg-light.jpg') !important;
+  background-image: url('/images/themes/bg.jpg') !important;
   color: var(--contrast_text_color) !important;
   /* box-shadow: none !important;
   box-shadow: 5px 5px 15px #000a, -.01em 0 .27em #ccc5 !important; */
@@ -1929,104 +2318,11 @@ li.tech-both00::before { /*  we both have the tech and neither has blueprints */
   text-shadow: 1px 1px #33222241 !important;
   font-family: Helvetica;
   line-height: 16px;
+  border-radius:3px;
+  border-color: #0000 !important;
 }
 body div.ui-tooltip {
   max-width: 360px;
-}
-
-
-
-button {
-  margin: .2em .2em .2em 0;
-  cursor: pointer;
-  padding: .2em .6em .3em .6em;
-  line-height: 1.4em;
-  width:auto;
-  overflow:visible;
-
-  border: 0;
-  padding: 10px;
-  border-radius: 13px;
-  font-family: 'Helvetica' !important;
-
-  background-image: url(/images/bg-light.jpg);
-  background: #d2e5e571;
-  box-shadow: 7px 7px 14px #1f2626, -7px -7px 14px rgba(28, 28, 28, 0.333);
-
-  margin: 10px auto 5px;
-
-  color: rgb(168, 168, 178);
-  text-shadow: 1px 1px #091a3850 !important;
-  color: rgb(76, 76, 76)
-}
-button:hover {
-  border-radius: 13px;
-  background: #788888;
-  background-image: url(/images/bg-med-light.jpg);
-  box-shadow: inset 7px 7px 9px #464646, inset -7px -7px 9px #9ababa;
-  margin: 11px auto 4px;
-}
-button:active {
-  border-radius: 13px;
-  background: #788888;
-  background-image: url(/images/bg-med-light.jpg);
-  box-shadow: inset 7px 7px 9px #464646, inset -7px -7px 9px #9ababa;
-  margin: 11px auto 4px;
-}
-.ui-button, button {
-/*
-  color: var(--default_text_color);
-  font-family: Freeciv !important;
-  background: url('/images/bg-med-dark.jpg') #000;
-  border-color: #000;
-  box-shadow: "3px 3px 6px #000b" !important;*/
-}
-.ui-button:hover, button:hover {
-  /*
-  background: url('/images/bg-light.jpg') #000;
-  color: #000 !important;
-  box-shadow: "4px 4px 7px #0008" !important;
-*/
-}
-
-
-
-.ui-button.ui-button-icon-only:not(#turn_done_button) {
-  border: 1px solid;
-  background: url('/images/bg-med-light.jpg');
-  margin-right: 4px;
-}
-/* fixes position of dialog-close button */
-.ui-button-icon-only .ui-icon {
-  margin-top: -10px;
-}
-
-
-
-.menu-button-activator {
-  float: left;
-  margin: 0 4px 40px 20px;
-  padding: .4em 1em;
-  text-decoration: none !important;
-  cursor: pointer;
-  position: relative;
-  text-align: center;
-  color: var(--default_text_color) !important;
-  border-color: #000 !important;
-  box-shadow: "3px 3px 6px #000b" !important;
-  font-family: Helvetica;
-  background: url('/images/bg-med-dark.jpg') #000 !important;
-}
-.menu-button-activator .ui-selected {
-  color: #fff !important;
-}
-.menu-button-activator .ui-icon {
-  position: absolute;
-  top: 50%;
-  margin-top: -8px;
-  left: auto;
-  margin-left: 0;
-  right: .2em;
 }
 
 .ui-dialog-titlebar-minimize,
@@ -2047,25 +2343,16 @@ button:active {
   margin-right: -3px;
 }
 
-/* while pushed */
-.ui-button:active {
-  background: url('/images/bg-light.jpg') #000;
-  color: rgb(117, 47, 0) !important;
-}
-
-#turn_done_button:hover {
-  color: #000 !important;
-}
-
 .ui-tabs-anchor {
   font-family: "Helvetica";
   background: url('/images/bg-med-dark.jpg');
   color: var(--default_text_color) !important;
   border-color: #000;
   border-radius: 5px 5px 0 0;
+  font-weight: 500;
 }
 .ui-tabs-anchor:hover {
-  background: url('/images/bg-light.jpg') #000;
+  background: url('/images/bg-med-light.cyn.jpg') #000;
   color: #000 !important;
   border-radius: 5px 5px 0 0;
 }
@@ -2098,9 +2385,10 @@ button:active {
 a:focus { outline: thin dotted; border:none;}
 .ui-tabs-active .ui-tabs-anchor {
   top: -1px;
-  background: url('/images/bg-med-light.jpg') #000 !important;
-  color:#000 !important;
+  background: url('/images/bg-med-light.cyn.jpg') #000 !important;
+  color:#fff0ed !important;
   border: none !important;
+  text-shadow: 0.5px 0.5px black;
   border-radius: 5px 5px 0 0;
 }
 .citytab, .fcw_tab {
@@ -2163,10 +2451,6 @@ input[type="email" i], #email {
 }
 #pick_nation_dialog {
   color: var(--default-text-color);
-}
-
-.sweet-alert {
-  background: #000 url(/images/bg-dark.jpg)
 }
 
 .chatbox_dialog {
@@ -2515,7 +2799,7 @@ input[type="email" i], #email {
 *******************************************************************/
 #pregame_message_area {
   font-family: Helvetica;
-  font-weight: 700;
+  font-weight: 500;
   line-height:115%;
   font-size:115%;
   color:rgb(218, 218, 218) !important;
@@ -2537,29 +2821,6 @@ input[type="email" i], #email {
 #private_message_text,
 #pregame_text_input {
   font-family: Consolas;
-}
-/* info on terrain, gov, wonders, buildings */
-#helptext_pane {
-  line-height: 115%;
-  font-size: 115%;
-}
-#help_city_improvements {
-  color: #8bf;
-}
-#help_wonders_of_the_world {
-  color: #fc9;
-}
-#help_units {
-  color: #e67;
-}
-#help_government {
-  color: #8b7;
-}
-#help_gen_ruleset {
-  color: #a6f
-}
-#help_controls {
-  color: #cd6;
 }
 
 #city_canvas_div {
@@ -2841,7 +3102,7 @@ body {
   font-family: Helvetica;
   border: none;
   outline: none;
-  scrollbar-width: thin !important;
+  scrollbar-width: thin;
 }
 
 /* CSS Created by CSS CHECKBOX */
@@ -2943,3 +3204,39 @@ input[type=checkbox].css-checkbox.lrg + label.css-label.lrg {
 input[type=checkbox].css-checkbox.lrg:checked + label.css-label.lrg{
       background-position: 0 -20px;
   }
+
+
+
+
+
+  /*
+#game_logo {
+  width: 100%;
+  height: 50px;
+  background-color: #aaaaff;
+}
+*/
+/* while pushed
+.ui-button:active {
+  background: url('/images/bg-light.jpg') #000;
+  color: rgb(117, 47, 0) !important;
+}*/
+/*
+#turn_done_button:hover {
+  color: #000 !important;
+}
+*/
+/*
+.ui-button, button {
+  color: var(--default_text_color);
+  font-family: Freeciv !important;
+  background: url('/images/bg-med-dark.jpg') #000;
+  border-color: #000;
+  box-shadow: "3px 3px 6px #000b" !important;
+}
+.ui-button:hover, button:hover {
+  background: url('/images/bg-light.jpg') #000;
+  color: #000 !important;
+  box-shadow: "4px 4px 7px #0008" !important;
+}
+*/
