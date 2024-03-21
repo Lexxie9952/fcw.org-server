@@ -138,7 +138,7 @@ const packet_names = {
 //  "END_PHASE": 125,
 //  "START_PHASE": 126,
 //  "NEW_YEAR": 127,
-//  "BEGIN_TURN": 128,
+    "BEGIN_TURN": 128,
 //  "END_TURN": 129,
 //  "FREEZE_CLIENT": 130,
 //  "THAW_CLIENT": 131,
@@ -2040,6 +2040,8 @@ function handle_begin_turn(packet)
   update_unit_focus();
   update_game_unit_panel();
   update_game_status_panel();
+
+  if (tracklist_loaded && play_music && refilter_music_at_TC) reset_filtered_tracklist();
 
   var funits = get_units_in_focus();
   if (funits != null && funits.length == 0) {
