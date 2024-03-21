@@ -15,7 +15,8 @@ body {
 
 
 #pregame_options {
-  background: #cb842e url("/images/ui-widget-header.png") 50% 100% repeat-x;
+ /* background: #cb842e url("/images/ui-widget-header.png") 50% 100% repeat-x;*/
+  background: #cb842e url("/images/bg-med-light.cyn.jpg") 50% 100% repeat-x;
   width: 99%;
   min-height: 30px;
   padding: 10px;
