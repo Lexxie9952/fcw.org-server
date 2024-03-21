@@ -438,7 +438,9 @@ function empire_unit_homecity_screen(wide_screen,narrow_screen,small_screen,
   }
 
   $("#empire_table").tablesorter({theme:"dark", sortList: sortList});
-
+  $(".prod_img").tooltip({
+    show: { delay:460, effect:"none", duration: 0 }, hide: {delay:50, effect:"none", duration: 0}
+  });
   if (tiny_screen) {
   }
   else if (redux_screen) {
@@ -690,7 +692,9 @@ function empire_unitcity_screen(wide_screen,narrow_screen,small_screen,
   }
 
   $("#empire_table").tablesorter({theme:"dark", sortList: sortList});
-
+  $(".prod_img").tooltip({
+    show: { delay:460, effect:"none", duration: 0 }, hide: {delay:50, effect:"none", duration: 0}
+  });
   if (tiny_screen) {
   }
   else if (redux_screen) {
@@ -898,7 +902,7 @@ function empire_econ_improvements_screen(wide_screen,narrow_screen,small_screen,
       // Put improvement sprite in the cell:
       improvements_html = improvements_html +
         "<div style='padding:0px; opacity:"+opacity+"; "+magnification
-            +"' id='city_improvement_element'><span style='padding:0px; margin:0px; "+border+" "+bg+" url("
+            +"' id='city_improvement_element'><span class='empire_tooltip' style='padding:0px; margin:0px; "+border+" "+bg+" url("
             + sprite['image-src'] +
             ");background-position:-" + sprite['tileset-x'] + "px -" + sprite['tileset-y']
             + "px;  width: " + sprite['width'] + "px;height: " + sprite['height'] + "px;float:left;' "
@@ -918,7 +922,9 @@ function empire_econ_improvements_screen(wide_screen,narrow_screen,small_screen,
     $("#empire_table").html("You have no cities.");
   }
   $("#empire_table").tablesorter({theme:"dark", sortList: sortList});
-
+  $(".empire_tooltip").tooltip({
+    show: { delay:460, effect:"none", duration: 0 }, hide: {delay:50, effect:"none", duration: 0}
+  });
   if (tiny_screen) {
   }
   else if (redux_screen) {
@@ -1072,7 +1078,7 @@ function empire_econ_upkeep_screen(wide_screen,narrow_screen,small_screen,
       // Put improvement sprite in the cell:
       improvements_html = improvements_html +
         "<div style='padding:0px; opacity:"+opacity+"; "+magnification
-            +"' id='city_improvement_element'><span style='padding:0px; margin:0px; "+border+" "+bg+" url("
+            +"' id='city_improvement_element'><span class='empire_tooltip' style='padding:0px; margin:0px; "+border+" "+bg+" url("
             + sprite['image-src'] +
             ");background-position:-" + sprite['tileset-x'] + "px -" + sprite['tileset-y']
             + "px;  width: " + sprite['width'] + "px;height: " + sprite['height'] + "px;float:left;' "
@@ -1106,7 +1112,9 @@ function empire_econ_upkeep_screen(wide_screen,narrow_screen,small_screen,
     $("#empire_table").html("You have no cities.");
   }
   $("#empire_table").tablesorter({theme:"dark", sortList: sortList});
-
+  $(".empire_tooltip").tooltip({
+    show: { delay:460, effect:"none", duration: 0 }, hide: {delay:50, effect:"none", duration: 0}
+  });
   if (tiny_screen) {
   }
   else if (redux_screen) {
@@ -1147,7 +1155,7 @@ function redraw_improv_clipboard()
     // Put improvement sprite in the cell:
     clipboard_html = clipboard_html +
       "<div style='cursor:pointer; padding:0px; opacity:"+opacity+"; "+magnification
-          +"'><span style='padding:0px; margin:0px; margin-left:"+marginleft+"px; "+border+" "+bg+" url("
+          +"'><span class='empire_tooltip' style='padding:0px; margin:0px; margin-left:"+marginleft+"px; "+border+" "+bg+" url("
           + sprite['image-src'] + ");background-position:-" + sprite['tileset-x'] + "px -"
           + sprite['tileset-y'] + "px;  width: " + sprite['width'] + "px;height: "
           + sprite['height'] + "px;float:left;' "
@@ -1371,7 +1379,7 @@ function empire_econ_worklists_screen(wide_screen,narrow_screen,small_screen,
       // Put improvement sprite in the cell:
       queue_html = queue_html +
         "<div style='padding:0px; "+magnification
-            +"' id='worklist_element'><span style='padding:0px; margin:0px; "+border+" "+bg+" url("
+            +"' id='worklist_element'><span class='empire_tooltip' style='padding:0px; margin:0px; "+border+" "+bg+" url("
             + sprite['image-src'] +
             ");background-position:-" + sprite['tileset-x'] + "px -" + sprite['tileset-y']
             + "px;  width: " + sprite['width'] + "px;height: " + sprite['height'] + "px;float:left;' "
@@ -1389,7 +1397,9 @@ function empire_econ_worklists_screen(wide_screen,narrow_screen,small_screen,
     $("#empire_table").html("You have no cities.");
   }
   $("#empire_table").tablesorter({theme:"dark", sortList: sortList});
-
+  $(".empire_tooltip").tooltip({
+    show: { delay:460, effect:"none", duration: 0 }, hide: {delay:50, effect:"none", duration: 0}
+  });
   if (tiny_screen) {
   }
   else if (redux_screen) {
@@ -1523,7 +1533,7 @@ function create_worklist_improv_div()
     // Put improvement sprite in the cell:
     improvements_html = improvements_html +
       "<div style='cursor:pointer; padding:0px; opacity:"+opacity+"; "+magnification
-          +"'><span style='padding:0px; margin:0px; margin-left:-1px; "+border+" "+bg+" url("
+          +"'><span class='empire_tooltip' style='padding:0px; margin:0px; margin-left:-1px; "+border+" "+bg+" url("
           + sprite['image-src'] + ");background-position:-" + sprite['tileset-x'] + "px -"
           + sprite['tileset-y'] + "px;  width: " + sprite['width'] + "px;height: "
           + sprite['height'] + "px;float:left;' "
@@ -1594,7 +1604,7 @@ function create_worklist_wonder_div()
     // Put improvement sprite in the cell:
     improvements_html = improvements_html +
       "<div style='cursor:pointer; opacity: 1.0; padding:0px; "+magnification
-          +"'><span style='padding:0px; margin:0px; margin-left:-1px; "+border+" "+bg+" url("
+          +"'><span class='empire_tooltip' style='padding:0px; margin:0px; margin-left:-1px; "+border+" "+bg+" url("
           + sprite['image-src'] + ");background-position:-" + sprite['tileset-x'] + "px -"
           + sprite['tileset-y'] + "px;  width: " + sprite['width'] + "px;height: "
           + sprite['height'] + "px;float:left;' "
@@ -1667,7 +1677,7 @@ function create_worklist_unit_div()
     // Put improvement sprite in the cell:
     units_html = units_html +
       "<div style='cursor:pointer; padding:0px; opacity:"+opacity+"; "+magnification
-          +"'><span style='padding:0px; margin:0px; margin-left:-1px; "+border+" "+bg+" url("
+          +"'><span class='empire_tooltip' style='padding:0px; margin:0px; margin-left:-1px; "+border+" "+bg+" url("
           + sprite['image-src'] + ");background-position:-" + sprite['tileset-x'] + "px -"
           + sprite['tileset-y'] + "px;  width: " + sprite['width'] + "px;height: "
           + sprite['height'] + "px;float:left;' "
@@ -2056,6 +2066,10 @@ function empire_unittype_screen(wide_screen,narrow_screen,small_screen,
   }
 
   $("#empire_table").tablesorter({theme:"dark", sortList: sortList});
+
+  $(".prod_img").tooltip({
+    show: { delay:460, effect:"none", duration: 0 }, hide: {delay:50, effect:"none", duration: 0}
+  });
 
   if (tiny_screen) {
   }
