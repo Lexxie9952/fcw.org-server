@@ -657,6 +657,9 @@ function show_city_dialog(pcity)
     }
   }
   $("#city_improvements_list").html(improvements_html);
+  $(".buildings_present").tooltip({
+    show: { delay:460, effect:"none", duration: 0 }, hide: {delay:50, effect:"none", duration: 0}
+  });
 
   var punits = tile_units(city_tile(pcity));
   if (punits != null) {
@@ -3780,6 +3783,9 @@ function show_city_improvement_pane(city_id)
   $("#city_improvements_hover_list").html(improvements_html);
   $(".cip").width(mag_factor*64); // improvement images are 64px wide
   $(".cip").height(mag_factor*48); // improvement images are 64px wide
+  $(".cip").tooltip({
+    show: { delay:460, effect:"none", duration: 0 }, hide: {delay:50, effect:"none", duration: 0}
+  });
 }
 /**************************************************************************
  Changes production in city_id to improvement type #z THEN buys it
@@ -4347,7 +4353,7 @@ function update_city_screen()
           city_buy_cost = " ";   // blank is less visual noise than a 0.
         } else if (wide_screen) {
           city_buy_cost = "<u>"+pcity['buy_cost']+"</u>";
-          city_buy_cost = "<div title='Click to buy' style='padding-right:10px;'>" + city_buy_cost + "</div>" // last column not forced to very edge of screen
+          city_buy_cost = "<div class='empire_tooltip' title='Click to buy' style='padding-right:10px;'>" + city_buy_cost + "</div>" // last column not forced to very edge of screen
         } else {
           city_buy_cost = "<u>"+pcity['buy_cost']+"</u>"
           city_buy_cost = "<div style='text-align:right; title='Click to buy' style='padding-right:1em;'>" + city_buy_cost + "</div>" // last column not forced to very edge of screen
@@ -4424,6 +4430,10 @@ function update_city_screen()
      + " <button title='BUY in selected cities' class='button ui-button ui-corner-all ui-widget' style='padding:5px; margin:4px; font-size:70%; float:right;' onclick='request_buy_all_selected_cities();'>&#x2611; Buy selected</button>";
   } else $('#cities_title').css({"font-size":"100%"});
   $('#cities_title').html(title_text);
+  $("#cities_title").tooltip({
+    show: { delay:460, effect:"none", duration: 0 }, hide: {delay:50, effect:"none", duration: 0}
+  });
+
 
   if (power_cma==true) {
     var power_panel =
@@ -4514,6 +4524,16 @@ function update_city_screen()
     else
       active_superpanel_cityid = -1; // deactive refresh mode.
   }
+
+  $(".prod_img").tooltip({
+    show: { delay:460, effect:"none", duration: 0 }, hide: {delay:50, effect:"none", duration: 0}
+  });
+  $(".empire_tooltip").tooltip({
+    show: { delay:460, effect:"none", duration: 0 }, hide: {delay:50, effect:"none", duration: 0}
+  });
+  $(".cities_row").tooltip({
+    show: { delay:460, effect:"none", duration: 0 }, hide: {delay:50, effect:"none", duration: 0}
+  });
 }
 
 
