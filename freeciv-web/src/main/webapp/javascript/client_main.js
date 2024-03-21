@@ -174,10 +174,10 @@ function setup_window_size ()
     $(".ui-dialog-titlebar").css({"font-size":"70%", "margin-left":"-3px"});
     $("#game_status_panel_bottom").css("font-size", "0.8em");
   } else {  // handle case where small window is resized to large again
-    $("#map_tab").children().html("<img style='float:left; margin-right:5px;' src='/images/map_tab_icon.png'> Map");
+    $("#map_tab").children().html("<img style='float:left; margin-right:5px;' src='/images/map_tab_icon_m.png'> Map");
     $("#empire_tab").children().html("<img style='float:left; margin-right:5px;' src='/images/empire_tab_icon.png'> Empire");
     $("#civ_tab").children().html("<img style='float:left; margin-right:5px;' src='/images/gov_tab_icon.png'> Gov.");
-    $("#tech_tab").children().html("<img style='float:left; margin-right:5px;' src='/images/tech_tab_icon.png'> Tech");
+    $("#tech_tab").children().html("<img style='float:left; margin-right:5px;' src='/images/tech_tab_icon_m.png'> Tech");
     $("#players_tab").children().html("<img style='float:left; margin-right:5px;' src='/images/nation_tab_icon.png'> Nations");
     $("#cities_tab").children().html("<img style='float:left; margin-right:5px;' src='/images/cities_tab_icon.png'> Cities");
     $("#opt_tab").children().html("<img style='float:left; margin-right:5px;' src='/images/prefs_tab_icon.png'> Prefs");
