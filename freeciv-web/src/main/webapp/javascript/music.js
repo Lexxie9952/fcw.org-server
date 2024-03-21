@@ -12,7 +12,7 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU Affero General Public License for more details.
 ******************************************************************************/
-var DEBUG_AUDIO = 1;            // 0=none, 1=trackinfo only, 2=light, 3=normal, 4=verbose
+var DEBUG_AUDIO = 0;            // 0=none, 1=trackinfo only, 2=light, 3=normal, 4=verbose
 var DEBUG_TESTLOAD_ALL = false;  // force load all tracks to check for errors
 var audio = null;
 
