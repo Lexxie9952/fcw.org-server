@@ -12,8 +12,8 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU Affero General Public License for more details.
 ******************************************************************************/
-var DEBUG_AUDIO = 3;            // 0=none, 1=light, 2=normal, 3=verbose
-var DEBUG_TESTLOAD_ALL = true;  // force load all tracks to check for errors
+var DEBUG_AUDIO = 1;            // 0=none, 1=trackinfo only, 2=light, 3=normal, 4=verbose
+var DEBUG_TESTLOAD_ALL = false;  // force load all tracks to check for errors
 var audio = null;
 
 var playcount;                  // BitVector for whether each song has been played
@@ -21,10 +21,15 @@ var banned_tracks;              // BitVector for songs out of which the user has
 var tracklist_loaded = false;
 var filtered_tracklist = [];    // A constructed list from tracklist of all tracks that are legal to be played
 var music_modality = "normal";  // client can switch modes for what kinda music to play (battle music)
+// Whether to refilter our tracks @TC in packhand.js::handle_begin_turn(..) This should always be true in ...
+var refilter_music_at_TC = true; // ... singleplayer, in longturn it's good for wonders but maybe bad
+// ... for techs, since the units/buildings of a new tech usually take at least one turn to kick in.
 
 /* Breaks every nth song get separate list and management vars: */
-const breakfrequency = 4;       // the 'n' for breaking every nth song
+var breakfrequency = 3;         // the 'n' for breaking every nth song
+var musicbreakfrequency = 2;    // Every nth break will a "music break", the rest will be silent break
 var filtered_breaklist = [];    // A constructed list from breaklist of all break-tracks that are legal to play
+var breakcounter = 0;           // used for counting when musicbreakfrequency will play music or silence
 var trackcounter = 0;           // # of tracks played so far (used to determine if we get a break)
 var current_track_info;         // allows inspecting the current playing track (for debug or other purposes)
 /**************************************************************************
@@ -36,7 +41,7 @@ function tracklist_init() {
   if (!music_modality) music_modality = "normal";
   $("#select_music_modality").val(music_modality);
   if (tracklist_loaded) return;
-  if (DEBUG_AUDIO >= 2) console.log("tracklist_init()");
+  if (DEBUG_AUDIO >= 3) console.log("tracklist_init()");
 
   handle_game_uid();
 
@@ -47,14 +52,14 @@ function tracklist_init() {
   // Retrieve or set playcount bitvector here:
   let playcount_data = simpleStorage.get("playcount"+Game_UID);
 
-  if (DEBUG_AUDIO >= 3) console.log(playcount_data);
+  if (DEBUG_AUDIO >= 4) console.log(playcount_data);
 
   if (playcount_data == null) {
     playcount = new BitVector([]);
-    if (DEBUG_AUDIO >= 2) console.log("tracklist_init() playcount null BitVector. Making a new one.");
+    if (DEBUG_AUDIO >= 3) console.log("tracklist_init() playcount null BitVector. Making a new one.");
   } else {
     playcount = new BitVector(playcount_data);
-    if (DEBUG_AUDIO >= 2) console.log("tracklist_init() got a playcount BitVector for Game_UID:"+Game_UID);
+    if (DEBUG_AUDIO >= 3) console.log("tracklist_init() got a playcount BitVector for Game_UID:"+Game_UID);
   }
 
   let banned_tracks_data = simpleStorage.get("banned_tracks");
@@ -62,10 +67,10 @@ function tracklist_init() {
 
   if (banned_tracks_data == null) {
     banned_tracks = new BitVector([]);
-    if (DEBUG_AUDIO >= 2) console.log("tracklist_init() banned_tracks null BitVector. Making a new one.");
+    if (DEBUG_AUDIO >= 3) console.log("tracklist_init() banned_tracks null BitVector. Making a new one.");
   } else {
     banned_tracks = new BitVector(banned_tracks_data);
-    if (DEBUG_AUDIO >= 2) console.log("tracklist_init() got a banned_tracks BitVector ");
+    if (DEBUG_AUDIO >= 3) console.log("tracklist_init() got a banned_tracks BitVector ");
   }
 
   // Make the filtered tracklist:
@@ -138,7 +143,7 @@ function is_priority_track(tr, test_filtered) {
    to force all tracks to be rendered legal.
 **************************************************************************/
 function reset_filtered_tracklist(override) {
-  if (DEBUG_AUDIO >= 1) console.log("reset_filtered_tracklist()");
+  if (DEBUG_AUDIO >= 2) console.log("reset_filtered_tracklist()");
 
   // Clear the playcounts for all tracks
   for (track in tracklist) {
@@ -195,7 +200,7 @@ function reset_filtered_tracklist(override) {
    Returns whether it is valid according to its tag conditions.
 **************************************************************************/
 function is_legal_track(track) {
-  if (DEBUG_AUDIO >= 3) console.log("\n"+track+". ---------------------------------------"+tracklist[track].filepath+":")
+  if (DEBUG_AUDIO >= 4) console.log("\n"+track+". ---------------------------------------"+tracklist[track].filepath+":")
 
   if (banned_tracks.isSet(track)) return false;
 
@@ -232,13 +237,13 @@ function is_legal_track(track) {
     for (and_index in tracklist[track].conditions[or_index]) {
       //console.log(tracklist[track])   use for finding an unrecognized key
       if (!evaluate_condition(tracklist[track].conditions[or_index][and_index], plr_idx)) {
-        and_legal = false; if (DEBUG_AUDIO >= 3) console.log("   sub-operand FALSE: renders operand FALSE.")
+        and_legal = false; if (DEBUG_AUDIO >= 4) console.log("   sub-operand FALSE: renders operand FALSE.")
         break;
-      } else if (DEBUG_AUDIO >= 3) console.log("  sub-operand TRUE &&");
+      } else if (DEBUG_AUDIO >= 4) console.log("  sub-operand TRUE &&");
     }
     if (and_legal == true) {
       or_legal = true;
-      if (DEBUG_AUDIO >= 3) console.log(" all sub-operands TRUE: renders operand TRUE.")
+      if (DEBUG_AUDIO >= 4) console.log(" all sub-operands TRUE: renders operand TRUE.")
       break;
     }
   }
@@ -258,7 +263,7 @@ function is_legal_track(track) {
     return (check_modality != false);
   }
 
-      if (DEBUG_AUDIO >= 3) console.log(" all operands FALSE: renders expression FALSE.")
+      if (DEBUG_AUDIO >= 4) console.log(" all operands FALSE: renders expression FALSE.")
 
       if (DEBUG_TESTLOAD_ALL) return true;
   return false;
@@ -309,7 +314,7 @@ function evaluate_condition(obj, plr_idx)
       //debugger;   use for hunting what the key is
       result = true;  // unrecognised keys evaluate as true
   }
-  if (DEBUG_AUDIO >= 2)
+  if (DEBUG_AUDIO >= 3)
     console.log("evaluate: ("+(not?"!":"")+key+":"+val+"):"+ ((not ? !result : result)));
   if (not) return !result;
   return result;
@@ -360,46 +365,46 @@ function eval_wonderplr(plr_idx, val) {
     as possible battle music is filtered out; and also "!peaceful" tracks
 **************************************************************************/
 function eval_modality(val) {
-                                                                                                if (DEBUG_AUDIO >= 2) console.log("music_modality:'"+music_modality+"' track.modality:'"+val+"'");
+                                                                                                if (DEBUG_AUDIO >= 3) console.log("music_modality:'"+music_modality+"' track.modality:'"+val+"'");
   // Player wants battle music:
   if (music_modality == "battle") {
     if (val == "normal" || val == "!peaceful") {  // !peaceful is how we disqualify from peaceful modality without playing it in battle modality
-                                                                                                if (DEBUG_AUDIO >= 2) console.log("  wanted 'battle' modality, but not a battle track: eval_modality returns FALSE!")
+                                                                                                if (DEBUG_AUDIO >= 3) console.log("  wanted 'battle' modality, but not a battle track: eval_modality returns FALSE!")
       return false;
     }
     if (val.includes("battle")) {
-                                                                                                if (DEBUG_AUDIO >= 2) console.log("  wanted 'battle' modality, and is a battle track: eval_modality returns TRUE!");
+                                                                                                if (DEBUG_AUDIO >= 3) console.log("  wanted 'battle' modality, and is a battle track: eval_modality returns TRUE!");
       return true;
     }
     if (val == "war&peace") { //"war&peace" is like "normal" but gets INCLUDED in battle modality
-                                                                                                if (DEBUG_AUDIO >= 2) console.log("  wanted 'battle' modality, and qualifies under war&peace: eval_modality returns TRUE!");
+                                                                                                if (DEBUG_AUDIO >= 3) console.log("  wanted 'battle' modality, and qualifies under war&peace: eval_modality returns TRUE!");
       return true;
     }
-                                                                                                if (DEBUG_AUDIO >= 2) console.log("  *** ERROR!: wanted 'battle' modality; fell thru to failover to TRUE! ****** SHOULDN'T HAPPEN");
+                                                                                                if (DEBUG_AUDIO >= 3) console.log("  *** ERROR!: wanted 'battle' modality; fell thru to failover to TRUE! ****** SHOULDN'T HAPPEN");
     return true;
   }
   if (music_modality == "normal") {
     if (val == "battle only") {
-                                                                                                if (DEBUG_AUDIO >= 2) console.log("  'battle only' track without battle modality, eval_modality returns FALSE!");
+                                                                                                if (DEBUG_AUDIO >= 3) console.log("  'battle only' track without battle modality, eval_modality returns FALSE!");
       return false;
     }
-                                                                                                if (DEBUG_AUDIO >= 2) console.log("    '"+val+"' track allowed under 'normal' music_modality. eval_modality returns TRUE!");
+                                                                                                if (DEBUG_AUDIO >= 3) console.log("    '"+val+"' track allowed under 'normal' music_modality. eval_modality returns TRUE!");
     return true;
   }
   else if (music_modality == "peaceful") {
     if (val.includes("battle")) {
-                                                                                                if (DEBUG_AUDIO >= 2) console.log("  'peaceful' modality rejecting a 'battle/[only]' track, eval_modality returns FALSE!");
+                                                                                                if (DEBUG_AUDIO >= 3) console.log("  'peaceful' modality rejecting a 'battle/[only]' track, eval_modality returns FALSE!");
       return false;
     }
     if (val == "!peaceful") {
-                                                                                                if (DEBUG_AUDIO >= 2) console.log("  'peaceful' modality rejecting a '!peaceful' track, eval_modality returns FALSE!");
+                                                                                                if (DEBUG_AUDIO >= 3) console.log("  'peaceful' modality rejecting a '!peaceful' track, eval_modality returns FALSE!");
       return false;
     }
-                                                                                                if (DEBUG_AUDIO >= 2) console.log("  'peaceful' modality accepted val:"+val+". eval_modality returns TRUE!");
+                                                                                                if (DEBUG_AUDIO >= 3) console.log("  'peaceful' modality accepted val:"+val+". eval_modality returns TRUE!");
     return true; // normal and war@peace get to this point and get qualified
   }
   if (music_modality == "all") {
-                                                                                                if (DEBUG_AUDIO >= 2) console.log("  'all' modality: eval_modality returns TRUE!");
+                                                                                                if (DEBUG_AUDIO >= 3) console.log("  'all' modality: eval_modality returns TRUE!");
     return true;
   }
   console.log("************  Shouldn't happen: eval_modality() double fail-falls through and returns TRUE! *********** ERROR!!");
@@ -419,12 +424,12 @@ function eval_modality(val) {
   all     = play all modalities
 **************************************************************************/
 function change_modality(val) {
-  if (DEBUG_AUDIO >= 2) console.log("change_modality("+val+")");
+  if (DEBUG_AUDIO >= 3) console.log("change_modality("+val+")");
 
   if (!val) val = "normal";
 
   if (music_modality == val) {
-    if (DEBUG_AUDIO >= 2) console.log(music_modality+" == "+val+"; no change executed.")
+    if (DEBUG_AUDIO >= 3) console.log(music_modality+" == "+val+"; no change executed.")
     return;
   }
   else {
@@ -465,7 +470,7 @@ function do_filtered_breaklist(override) {
    which then allows any song to play.
 **************************************************************************/
 function reset_filtered_breaklist(override) {
-  if (DEBUG_AUDIO >= 1) console.log("reset_filtered_breaklist()");
+  if (DEBUG_AUDIO >= 2) console.log("reset_filtered_breaklist()");
 
   if (override) {
     do_filtered_breaklist(override);
@@ -520,7 +525,7 @@ function get_filtered_break() {
   track_name = filtered_breaklist[f_track]['filepath']
              + get_extension(filtered_breaklist[f_track]);
 
-        if (DEBUG_AUDIO >= 1) console.log("  Break #"+(f_track+1)
+        if (DEBUG_AUDIO >= 1) console.log("--Break #"+(f_track+1)
                            + " of "+filtered_breaklist.length
                            + ". Playing "+track_name);
 
@@ -544,7 +549,7 @@ function get_extension(track_object) {
 ...Picks a random track to play for audioplayer
 **************************************************************************/
 function pick_next_track() {
-  if (DEBUG_AUDIO >= 2) console.log("pick_next_track()");
+  if (DEBUG_AUDIO >= 3) console.log("pick_next_track()");
   if (!audio) return;
 
   if (DEBUG_TESTLOAD_ALL) setTimeout(pick_next_track, 1450);
@@ -560,16 +565,25 @@ function pick_next_track() {
     trackcounter ++;
     /* Every nth track is a short interlude */
     if (trackcounter % breakfrequency == 0) {
-      track_name = get_filtered_break();
+      if (++breakcounter != musicbreakfrequency) {
+        track_name = silent_track;
+        if (DEBUG_AUDIO >= 1) console.log("--Break SILENCE ("+breakcounter+"/"+musicbreakfrequency+").  Playing "+track_name);
+      }
+      else {
+        breakcounter = 0;  //reset tally
+        track_name = get_filtered_break();
+      }
       current_track_info = null;
       audio_ban_button_state("hide"); // can't ban break tracks
-    }
-    else if (Math.floor(Math.random() * 10) == 0) {  // 25% + (1/10 × 3/4) = 32.5 %
+    }/*
+    else if (trackcounter % breakfrequency != 1  // don't inject silence after a break played
+            && trackcounter % breakfrequency != breakfrequency-1 // don't inject right before a break plays
+            && Math.floor(Math.random() * silentbreakfrequency) == 0) {
       track_name = silent_track;
       current_track_info = null;
       audio_ban_button_state("hide");  // can't ban silent breaks
       if (DEBUG_AUDIO >= 1) console.log("  Random silent break injected. Playing "+track_name);
-    }
+    }*/
     /* Not a break-track, but rather a normal track. Pick a random track from the
        filtered_tracklist of songs with approved qualities for the game context: */
     else {
@@ -644,7 +658,7 @@ function ban_current_track() {
 **************************************************************************/
 function audio_initialize()
 {
-  if (DEBUG_AUDIO >= 2) console.log("audio_initialize()");
+  if (DEBUG_AUDIO >= 3) console.log("audio_initialize()");
 
   /* Initialze audio.js music player */
   audiojs.events.ready(function() {
