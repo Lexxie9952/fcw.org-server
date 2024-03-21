@@ -149,24 +149,17 @@ function update_govt_dialog()
     label_html = "<img class='lowered_gov' src='/images/e/"+govt['name'].toLowerCase()+gov_modifier+".png'>&nbsp;&nbsp;&nbsp;"
                + capitalize(gov_modifier) + " " + govt['name']
                + "<img class='govt_button_image' src='/images/e/techs/"+govt['name'].toLowerCase()+gov_modifier+".png'> "
-          //     + "width='36px' height='36px'>"
 
-    //console.log(label_html);
-    //$("#govit_id_"+ govt['id']).removeClass("govt_button")
-    //$("#govit_id_"+ govt['id']).addClass(mod_class);
     if (!can_player_get_gov(govt_id)) {
       $("#govt_id_" + govt['id']).button({ disabled: true, label: label_html});
     }
     else {
       $("#govt_id_" + govt['id']).button({label: label_html});
+      $("#govt_id_" + govt['id']).tooltip({
+        show: { delay:460, effect:"none", duration: 0 }, hide: {delay:50, effect:"none", duration: 0}
+      });
     }
   }
-  //$(".govt_button").tooltip();
-  /*
-  $(".govt_button").tooltip({
-    open: function (event, ui) {
-        ui.tooltip.css({"max-width":"100%", "width":"88%", "margin-top":"15px", "margin-left":"-95px", "overflow":"visible"});
-    }});*/
 }
 
 
