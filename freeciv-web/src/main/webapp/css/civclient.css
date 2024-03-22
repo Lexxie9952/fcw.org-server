@@ -363,7 +363,7 @@ table.terrain_chart td {
   float: left;
   margin-top: 0px;
   padding:7px;
-  margin-top: 0px !important;
+  margin-top: -2.5px !important;
   border-color: #000 !important;
 }
 
