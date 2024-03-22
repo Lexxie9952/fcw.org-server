@@ -145,6 +145,9 @@ function is_priority_track(tr, test_filtered) {
 function reset_filtered_tracklist(override) {
   if (DEBUG_AUDIO >= 2) console.log("reset_filtered_tracklist()");
 
+  if (!tracklist_loaded) {
+    tracklist_init();
+  }
   // Clear the playcounts for all tracks
   for (track in tracklist) {
     /* After a reset, we don't want to FIFO all the priority tracks, because
@@ -573,6 +576,7 @@ function pick_next_track() {
      playing something; and preferably not start music right away: */
   if (!tracklist_loaded) {
     track_name = silent_track;
+    tracklist_init();
   }
   else {
     trackcounter ++;
