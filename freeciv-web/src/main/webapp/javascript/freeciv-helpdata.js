@@ -217,7 +217,7 @@ var helpdata = {
     +"<ul><li>ZOC only restricts movement. It does not restrict attacks.</li></ul>"
     +"<ul><li>An enemy city counts as an enemy occupied ZOC tile, but only if it's occupied.</li></ul>"
     +"<ul><li>Moving from or to an ocean square is usually always allowed "
-    +"because ZOC is inactive on all ocean tiles. Also, embarking is usually"
+    +"because ZOC is inactive on all ocean tiles. Also, embarking is usually "
     +"allowed because the allied unit you board is present in the tile.</li></ul>"
     +"<ul><li>* Exception: In MP2 rules from \"MP2-Elephant\" onward, Sea units do impose ZOC</li></ul>"
     +"</div><br><br>"
