@@ -98,27 +98,27 @@
 		margin-top: 5px;
 	}
 	.nav>li>a:hover {
-		background-color: #796f6f;
-		background: url('/images/bg.jpg');
+		background-color: #7496be;
+		background: url('/images/bg-med-light.cyn.jpg');
 		color:  #eed;
 		text-shadow: 1px 1px #ccc
 	}
 	.nav-tabs>li>a {
-		background-color: #ecb66a;
+		background-color: #7496be;
 		text-transform: uppercase;
-		background: url('/images/bg.jpg');
+		background: url('/images/bg-med-light.cyn.jpg');
 		color:  #eed;
 		font-weight: 700;
 		text-shadow: 1px 1px #000
 	}
 	.nav-tabs>li.active>a {
-		background: url('/images/bg.jpg');
+		/* background: url('/images/bg-light.jpg'); */
 		color: #eed;
 		text-shadow: 1px 1px #888
 	}
 	.nav-tabs>li.active>a, .nav-tabs>li.active>a:hover, .nav-tabs>li.active>a:focus {
-			background: url('/images/bg-light.jpg');
-	    background-color: #be602d;
+		background: url('/images/bg-light.jpg');
+	    background-color: #b2b2b2;
 	    color: #000;
 	}
 	.navbar-inverse {
