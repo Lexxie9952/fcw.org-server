@@ -3676,7 +3676,7 @@ function show_city_improvement_pane(city_id)
   var opacity = 1;
   var border = "";
   var mag_factor = ($(window).width()-519)/2470;   //was 2450 which was .57 on 1920x1080
-  add_client_message("Mag factor: "+mag_factor)
+  //add_client_message("Mag factor: "+mag_factor)
   //console.log("width: "+$(window).width()+"mag factor:"+mag_factor);
   //var magnification = "zoom:"+mag_factor+";"; // doesn't work right on Firefox, use line below insead:
   var magnification = "transform:scale("+mag_factor+"); transform-origin: top left;";
