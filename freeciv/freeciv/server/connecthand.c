@@ -146,7 +146,7 @@ void attach_longturn_player(struct connection *pc, struct player *pplayer)
 {
     player_set_under_human_control(pplayer);
 
-    pplayer->economic.gold += game.info.turn * game.server.latejoin_gold;
+    pplayer->economic.gold += (game.info.turn - 1) * game.server.latejoin_gold;
     if (pplayer->economic.gold > game.server.latejoin_gold_max) {
       pplayer->economic.gold = game.server.latejoin_gold_max;
     }
