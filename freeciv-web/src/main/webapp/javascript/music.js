@@ -324,9 +324,22 @@ function evaluate_condition(obj, plr_idx)
 ***************************************************************************/
 function eval_tech(plr_idx, val) {
   if (tech_id_by_name(val) === null) {
-    console.log("********************************************* WARNING !!!");
-    console.log("music.js:eval_tech tried to evaluate non-existent tech: "+val
-    +", which may render song as never/always playable.");
+    switch(val) {
+      /* Suppress known cases of techs not shared by rulesets */
+      case "Genetic Engineering":
+      case "Microbiology":
+      case "Labor Union":
+      case "Mechanization":
+      case "Radio.2":
+      case "Space.2":
+      case "Combu.2":
+      case "Flight.2":
+        break;
+      default:
+        console.log("********************************************* WARNING !!!");
+        console.log("music.js:eval_tech tried to evaluate non-existent tech: "+val
+        +", which may render song as never/always playable.");
+    }
     return -1;
   }
   return (playerno_knows_tech(plr_idx, val));
