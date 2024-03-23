@@ -340,7 +340,8 @@ function eval_tech(plr_idx, val) {
       case "Space.2":
       case "Combu.2":
       case "Flight.2":
-        break;
+      case "C.Arms.2":
+          return false;
       default:
         console.log("********************************************* WARNING !!!");
         console.log("music.js:eval_tech tried to evaluate non-existent tech: "+val
@@ -772,7 +773,7 @@ function get_fake_player() {
   for (plr in players) {
     if (players[plr] && players[plr].score) {
       if (players[fake_player_num].score < players[plr].score) {
-        fake_player_num = plr;
+        fake_player_num = parseInt(plr);
       }
     }
   }
