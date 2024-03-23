@@ -181,7 +181,7 @@ function setup_window_size ()
     $("#players_tab").children().html("<img style='float:left; margin-right:5px;' src='/images/nation_tab_icon.png'> Nations");
     $("#cities_tab").children().html("<img style='float:left; margin-right:5px;' src='/images/cities_tab_icon.png'> Cities");
     $("#opt_tab").children().html("<img style='float:left; margin-right:5px;' src='/images/prefs_tab_icon.png'> Prefs");
-    $("#hel_tab").children().html("<img style='float:left; margin-right:5px;' src='/images/help_tab_icon.png'> Help");
+    $("#hel_tab").children().html("<img style='float:left; margin-right:5px;' src='/images/help_tab_icon_m.png'> Help");
   }
 
   if (overview_active) init_overview();
