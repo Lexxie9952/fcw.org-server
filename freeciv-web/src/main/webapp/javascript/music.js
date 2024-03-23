@@ -615,7 +615,8 @@ function pick_next_track() {
         }
       }
       // If we have a priority track queued at top of list, pick it:
-      if (filtered_tracklist.length > 0 && is_priority_track(0, true)) {
+      if (filtered_tracklist.length > 0 && is_priority_track(0, true) && !client_is_observer()) {
+        // (Observers get priority tracks as legal but not prioritised, since they aren't really that player)
         f_track = 0;
       }
       // Otherwise pick a random track from remaining list of unplayed appropriate tracks:
