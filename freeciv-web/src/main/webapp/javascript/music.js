@@ -236,7 +236,7 @@ function is_legal_track(track) {
      TIP: if you want to do OR inside an Operand, you must split it into two
      Operands: e.g., (A && (B || !C)) gets rendered as (A && B) || (A && !C)
 
-  An array of OR'd Operands interates via "or_index". Each Operand is an array of
+  An array of OR'd Operands iterates via "or_index". Each Operand is an array of
   AND'd Suboperands iterated by "and_index". All Suboperands must be true for the
   Operand to be true. If ANY Operand is true, the whole expression is true.
   (See tracklist.js to see how the 'conditions' property structures the above.) */
