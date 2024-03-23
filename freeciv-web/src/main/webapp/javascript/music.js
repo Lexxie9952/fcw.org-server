@@ -32,6 +32,8 @@ var filtered_breaklist = [];    // A constructed list from breaklist of all brea
 var breakcounter = 0;           // used for counting when musicbreakfrequency will play music or silence
 var trackcounter = 0;           // # of tracks played so far (used to determine if we get a break)
 var current_track_info;         // allows inspecting the current playing track (for debug or other purposes)
+
+var fake_player_num = 0;        // virtual playerno for observers to hear era-appropriate music
 /**************************************************************************
 ...Called the first time in a session before a track is to be played. This
    sets up all our data structures and maintenance vars.
@@ -72,6 +74,8 @@ function tracklist_init() {
     banned_tracks = new BitVector(banned_tracks_data);
     if (DEBUG_AUDIO >= 3) console.log("tracklist_init() got a banned_tracks BitVector ");
   }
+
+  if (client_is_observer()) get_fake_player();
 
   // Make the filtered tracklist:
   do_filtered_tracklist();
@@ -207,15 +211,14 @@ function is_legal_track(track) {
 
   if (banned_tracks.isSet(track)) return false;
 
+  var plr_idx;
+
   if (client_is_observer()) {
-    if (playcount.isSet(track)) return false;
-    /* For now, EVERY unplayed track is legal to observers. In future,
-       we could find the player with the nth best score and set plr_idx
-       to that; but how important is context-DJ for observers? */
-    return true;
+    plr_idx = fake_player_num;
+  } else {
+    plr_idx = client.conn.playing.playerno;
   }
 
-  var plr_idx = client.conn.playing.playerno;
   if (playcount.isSet(track)) return false; // Skip already played tracks
 
   /* tracklist[track].conditions are evaluated as true/false here.
@@ -758,4 +761,19 @@ function audio_ban_button_state(state) {
 function supports_mp3() {
   var a = document.createElement('audio');
   return !!(a.canPlayType && a.canPlayType('audio/mpeg;').replace(/no/, ''));
+}
+
+/**************************************************************************
+   For observers, sets a fake_player_num in order to eval music, based
+   on highest score player in the game.
+**************************************************************************/
+function get_fake_player() {
+  fake_player_num = 0;
+  for (plr in players) {
+    if (players[plr] && players[plr].score) {
+      if (players[fake_player_num].score < players[plr].score) {
+        fake_player_num = plr;
+      }
+    }
+  }
 }
