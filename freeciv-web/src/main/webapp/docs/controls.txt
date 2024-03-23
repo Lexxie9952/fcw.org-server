@@ -71,7 +71,7 @@ The current and complete list of Freeciv-web controls can be found here:<br>
 
 <tr><td><img src="/images/orders/swamp.png"></td><td><span class="vctr"> Make Swamp</td><td><span class="hotkey">m</span></span></td></tr>
 
-<tr><td><img src="/images/orders/pollution.png"></td><td><span class="vctr"> Clean Nuclear Fallout</td><td><span class="hotkey">N</span></span></td></tr>
+<tr><td><img src="/images/fallout.png"></td><td><span class="vctr"> Clean Nuclear Fallout</td><td><span class="hotkey">N</span></span></td></tr>
 
 <tr><td><img src="/images/orders/navalbase.png"></td><td><span class="vctr"> Build Naval Base</td><td><span class="hotkey">shift-N</span></span></td></tr>
 
