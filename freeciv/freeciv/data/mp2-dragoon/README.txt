@@ -12,7 +12,7 @@
 <a href="https://freecivweb.fandom.com/wiki/Special_Unit_Attacks#MP2_Units_with_Special_Unit_Attacks" target="_blank">Special Unit Attacks and Special Unit Defense</a>
 <a href="https://freeciv.fandom.com/wiki/Defense_bonus_chart.mp2c" target="_blank">Terrain+Base Defense Bonus Quick-Reference</a>
 <a href="https://freeciv.fandom.com/wiki/Diplomatic_Action_Chart.mp2" target="_blank">Diplomatic Odds Charts</a>
-<a href="https://static.wikia.nocookie.net/freeciv/images/3/3a/Vigil-Flowchart-FCW.png" target='_blank'>Vigil Flowchart</a>
+<a href="https://freecivweb.org/images/man/VigilFlowChart.png" target='_blank'>Vigil Flowchart</a>
 <a href="https://freeciv.fandom.com/wiki/Vigil_engagement_chart.mp2c" target="_blank">Vigil Engagement Chart</a><br>
 <u class="help_stats">Misc</u>:
 <a href="https://freecivweb.fandom.com/wiki/Strategy_Guide" target='_blank'>Multiplayer Strategy Guide</a>
