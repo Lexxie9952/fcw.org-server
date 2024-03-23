@@ -168,7 +168,10 @@ function reset_filtered_tracklist(override) {
          But it might not be too bad since a large soundtrack means old
          contexts expire and new contexts come true by the time the tracklist
          finishes. NB: this is especially true the more we chronological
-         sort all the tracks in tracklist.js. */
+         sort all the tracks in tracklist.js.
+         ALTERNATIVELY, don't reset playcount bit for priorities ever,
+         this will help greatly against overplayed fatigue, if that happens.
+         */
     }
     /* NB: We do NOT unset the playcount of all tracks because we might be in a different
      * modality. We only want to reset all the tracks that have been played within the
