@@ -3695,7 +3695,7 @@ function civclient_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_even
     break;
 
     case 'H':
-      if ((!shift) && (ctrl)) {
+      if (ctrl && !shift && !alt) {
         the_event.preventDefault(); // override possible browser shortcut
         show_debug_info();
       }
@@ -3724,7 +3724,7 @@ function civclient_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_even
       break;
 
     case 'Q':
-      if (alt) civclient_benchmark(0);
+      if (alt && !ctrl && !shift) civclient_benchmark(0);
     break;
 
     case 'S':
@@ -3771,14 +3771,16 @@ function civclient_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_even
   switch (key_code)
   {
     case 13:
-      if (shift && C_S_RUNNING == client_state()) {
+      if (shift && !ctrl && !alt &&  C_S_RUNNING == client_state()) {
         send_end_turn();
       }
       break;
 
     case 27:
-      the_event.preventDefault();
-      $('#ui-id-1').trigger("click");
+      if (!alt && !ctrl && !shift) {
+        the_event.preventDefault();
+        $('#ui-id-1').trigger("click");
+      }
       break;
 
     case 32:
@@ -3791,7 +3793,7 @@ function civclient_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_even
       break;
 
       case 220:   // | (pipe) = next music track
-        if (shift) {
+        if (shift && !ctrl && !alt) {
           if (supports_mp3()) {
             if (pick_next_track()) audio.play();
           }
@@ -3815,7 +3817,7 @@ function map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
         auto_attack = !auto_attack;
         //simpleStorage.set('autoattack', auto_attack); //session only
         add_client_message("<b>Ctrl-A</b>. Auto-attack set to "+(auto_attack ? "ON." : "OFF."));
-      } else key_unit_auto_settle();
+      } else if (!ctrl && !shift && !alt) key_unit_auto_settle();
     break;
 
     case 'B':
@@ -3845,11 +3847,11 @@ function map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
         if (minimap_color >= 4) { minimap_color = 0; }
         palette = generate_palette();
         force_redraw_overview();
-      } else if (current_focus.length==1 &&   // check if single focused unit can found or join city
+      } else if (!ctrl && !shift && !alt && current_focus.length==1 &&   // check if single focused unit can found or join city
                  (utype_can_do_action(unit_type(current_focus[0]),ACTION_JOIN_CITY)
                  || utype_can_do_action(unit_type(current_focus[0]),ACTION_FOUND_CITY))) {
           request_unit_build_city();
-      } else {   // otherwise hover over city while hitting B sends instant-buy command to it
+      } else if (!ctrl && !shift && !alt) {   // otherwise hover over city while hitting B sends instant-buy command to it
         var ptile = canvas_pos_to_tile(mouse_x, mouse_y); // get tile
         var pcity = tile_city(ptile); // check if it's a city
         if (pcity!=null) request_city_id_buy(pcity['id']); // send buy order
@@ -3871,7 +3873,7 @@ function map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
         if (typeof EXTRA_CANAL !== "undefined") {
           key_unit_connect(EXTRA_CANAL);
         }
-      } else if (current_focus.length > 0) {
+      } else if (!ctrl && !shift && !alt && current_focus.length > 0) {
           auto_center_on_focus_unit();
       }
     break;
@@ -3919,7 +3921,7 @@ function map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
         the_event.preventDefault();
         console_filter_dialog();
       }
-      else {
+      else if (!ctrl && !alt && !shift) {
         key_unit_fortify();
       }
     break;
@@ -3929,12 +3931,12 @@ function map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
         the_event.preventDefault(); // override possible browser shortcut
         draw_map_grid = !draw_map_grid;
         simpleStorage.set('mapgrid', draw_map_grid);
-      } else if ( (ctrl&&alt)) {
+      } else if (ctrl && alt) {  // && (shift || !shift)
         the_event.preventDefault(); // override possible browser shortcut
         key_unit_go_and(shift);
         goto_path_skip_count = goto_path_trigger + 1;
       }
-      else if (current_focus.length > 0) {
+      else if (!ctrl && !alt && !shift && current_focus.length > 0) {
         if (!goto_active && !connect_active && !rally_active) {
           activate_goto();
           delayed_goto_active = false;
@@ -3950,17 +3952,17 @@ function map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
     break;
 
     case 'H':
-      if (shift) {
+      if (shift && !ctrl && !alt) {
         key_unit_hideout();
-      } else key_unit_homecity();
+      } else if (!ctrl && !alt && !shift) key_unit_homecity();
     break;
 
     case 'K':
-      key_unit_wait(true);
+      if (!ctrl && !alt && !shift) key_unit_wait(true);
     break;
 
     case 'N':
-      if (shift) {
+      if (shift && !ctrl && !alt) {
         if (current_focus.length>0) {
           if (unit_types[current_focus[0]['type']]['name'].includes("Atom")
               || unit_types[current_focus[0]['type']]['name'].includes("Nuclear")
@@ -3971,7 +3973,7 @@ function map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
           } else key_unit_naval_base();
         }
       }
-      else {
+      else if (!ctrl && !alt && !shift) {
         key_unit_fallout();
       }
     break;
@@ -3994,7 +3996,7 @@ function map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
         the_event.preventDefault(); // override possible browser shortcut
         key_unit_connect(ACTIVITY_PILLAGE * -1);
       }
-      else {
+      else if (!ctrl && !alt && !shift) {
         if (current_focus.length>0) {
           if (unit_types[current_focus[0]['type']]['name'] == "Paratroopers") key_unit_paradrop();
           else key_unit_pollution();
@@ -4003,9 +4005,9 @@ function map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
     break;
 
     case 'Q':
-      if (shift){
+      if (shift && !ctrl && !alt){
         key_filter_for_units_in_queue();
-      } else {
+      } else if (!ctrl && !alt && !shift) {
         key_unit_quay();
       }
     break;
@@ -4088,10 +4090,10 @@ function map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
     break;
 
     case 'W':
-      if (shift) {
+      if (shift && !ctrl && !alt) {
         draw_city_output = !draw_city_output;
         simpleStorage.set('drawTiles', draw_city_output);
-      } else if (!alt && !ctrl) key_unit_wait(false);
+      } else if (!alt && !ctrl && !shift) key_unit_wait(false);
     break;
 
     case 'X':
@@ -4119,7 +4121,7 @@ function map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
         }
         else if (enable_autoexplore && !ctrl && !shift && !alt) {
           key_unit_auto_explore();
-        } else if (!enable_autoexplore) add_client_message("X hotkey was disabled in user PREFS.");
+        } else if (!enable_autoexplore && !ctrl && !shift && !alt) add_client_message("X hotkey was disabled in user PREFS.");
     break;
 
     // ALT + UIO / JKL / M,. simulates keypad for devices that don't have it, if alt not held
@@ -4161,35 +4163,38 @@ function map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
       else if (!shift && !alt && !ctrl) key_unit_irrigate();
     break;
     case 'O':
-      if (alt) {
+      if (alt && !ctrl && !shift) {
         the_event.preventDefault(); // override possible browser shortcut
         key_unit_move(DIR8_NORTH);  // alt+O=9
-      } else if (shift) {
+      } else if (shift && !ctrl && !alt) {
         key_unit_convert();
       }
-      else key_unit_transform();
+      else if (!shift && !ctrl && !alt) key_unit_transform();
     break;
     case 'J':
-      if (shift) {
+      if (shift && !ctrl && !alt) {
         key_unit_idle();
       }
-      else if (alt) {
+      else if (alt && !ctrl && !shift) {
         the_event.preventDefault(); // override possible browser shortcut
         key_unit_move(DIR8_SOUTHWEST); // alt+J=4
       }
-      else {
+      else if (!alt && !ctrl && !shift) {
         key_unit_noorders();
       }
     break;
     case 'L':
-      if (shift) {
+      if (shift && !ctrl && !alt) {
         key_unit_airlift();
-      } else if (alt) key_unit_move(DIR8_NORTHEAST); // alt+L=6
-      else if (ctrl) {
+      }
+      else if (alt && !ctrl && !shift){
+        key_unit_move(DIR8_NORTHEAST); // alt+L=6
+      }
+      else if (ctrl && !alt && !shift) {
         the_event.preventDefault(); // override possible browser shortcut
         draw_city_airlift_counter = !draw_city_airlift_counter;
       }
-      else {
+      else if (!alt && !ctrl && !shift) {
         key_unit_load();
       }
     break;
@@ -4247,7 +4252,7 @@ function map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
     case 40: // 2 (or down arrow key)
     case 98:
     case 188:  // , key
-      if (key_code==188 && shift) {  // The "<"" key selects last unit
+      if (key_code==188 && shift && !ctrl && !alt) {  // The "<"" key selects last unit
         // we have to save last_focus before we use it so we do a little shell game
         var penultimate_focus = last_focus;
         save_last_unit_focus();
@@ -4260,16 +4265,16 @@ function map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
         }
 
       }
-      // if alt not pressed then ignore , key
-      if (key_code==188 && !alt) break; // alt , is a virtual numpad arrow
-
-      the_event.preventDefault(); // override possible browser shortcut
-      key_unit_move(DIR8_SOUTHEAST);
+      // alt , key
+      else if (key_code==188 && alt && !shift && !ctrl) { // alt , is a virtual numpad arrow
+        the_event.preventDefault(); // override possible browser shortcut
+        key_unit_move(DIR8_SOUTHEAST);
+      }
       break;
 
     case 34: // 3
     case 99:
-    case 190:
+    case 190: // . key (period,full stop)
       if (key_code==190 && shift) {
         advance_focus_inactive_units();
       }
@@ -4343,12 +4348,12 @@ function map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
     // shift-space, return to previous map position
     // space, will clear selection and goto.
     case 32:
-      if (shift &&!ctrl && !alt) auto_center_last_location();
+      if (shift && !ctrl && !alt) auto_center_last_location();
       else if (ctrl && alt && !shift) {
         the_event.preventDefault();
         key_paste_link_under_cursor();
       }
-      else {
+      else if (!alt && !ctrl && !shift) {
         save_last_unit_focus();
 
         current_focus = [];
@@ -4370,15 +4375,17 @@ function map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
       break;
 
     case 222:  // ' key = focus in chat window
-      the_event.preventDefault(); // don't put the ' in the input box
+      if (!alt && !ctrl && !shift) {
+        the_event.preventDefault(); // don't put the ' in the input box
 
-      // Auto-restore chatbox if it's minimised
-      if (current_message_dialog_state == "minimized")
-        $(".chatbox_dialog .ui-icon-bullet").click();
+        // Auto-restore chatbox if it's minimised
+        if (current_message_dialog_state == "minimized")
+          $(".chatbox_dialog .ui-icon-bullet").click();
 
-      $("#game_text_input").focus();
+        $("#game_text_input").focus();
+      }
       break;
-
+/* re-activate if 3D WEB GL reintegrated:
     case 107:
       //zoom in
       if (renderer == RENDERER_WEBGL) {
@@ -4412,7 +4419,7 @@ function map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
         camera_look_at(camera_current_x, camera_current_y, camera_current_z);
       }
       break;
-
+*/
   }
 
 }
