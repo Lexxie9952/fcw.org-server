@@ -16,7 +16,7 @@
 				<li class="fcw_tab" id="cities_tab"><a href="#tabs-cities"><img style='float:left; margin-right:5px;' src='/images/cities_tab_icon.png'> Cities</a></li>
 				<li class="fcw_tab" id="opt_tab"><a href="#tabs-opt"><img style='float:left; margin-right:5px;' src='/images/prefs_tab_icon.png'> Prefs</a></li>
 									<%--			<li class="fcw_tab" id="chat_tab"><a href="#tabs-chat">💬 Chat</a></li> --%>
-				<li class="fcw_tab" id="hel_tab"><a href="#tabs-hel"><img style='float:left; margin-right:5px;' src='/images/help_tab_icon.png'> Help</a></li>
+				<li class="fcw_tab" id="hel_tab"><a href="#tabs-hel"><img style='float:left; margin-right:5px;' src='/images/help_tab_icon_m.png'> Help</a></li>
 				<li class="fcw_tab" id="warcalc_tab"><a href="#tabs-warcalc">&#x1F3B2;Odds</a></li>
 
                 <div id="game_status_panel_top"></div>
