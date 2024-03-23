@@ -162,7 +162,7 @@ The current and complete list of Freeciv-web controls can be found here:<br>
 <tr><td><span class="hotkey">ctrl-P</span></td><td> (p)atrol to location: go, report seen units (and stop), return, and repeat</td></tr>
 <tr><td><span class="hotkey">ctrl-shift-P</span></td><td> (p)atrol to location: delayed patrol</td></tr>
 <tr><td><span class="hotkey">  q</span></td><td> build (q)uay</td></tr>
-<tr><td><span class="hotkey">shift-Q</span></td><td> select all units from the (Q)ueue awaiting orders (also filters multi-selections)</td></tr>
+<tr><td><span class="hotkey">shift-Q</span></td><td> 1. (if no units selected) select (Q)ueue of all units awaiting orders 2. (if units selected) unselect units who have orders</td></tr>
 <tr><td><span class="hotkey">  r</span></td><td> build (r)oad/railroad  (settler/worker units)</td></tr>
 <tr><td><span class="hotkey">rr</span></td><td> build (r)ailroad only, not maglev</td></tr>
 <tr><td><span class="hotkey">alt-shift-R</span></td><td> connect roads along goto path</td></tr>
