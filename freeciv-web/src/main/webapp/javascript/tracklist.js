@@ -1439,7 +1439,7 @@ var tracklist = [
 {filepath: "2/PillarsofEternityOST.TheFoxandtheFarmer.JustinBell",conditions: [[{"tech":"Feudalism"},{"tech":"Bridge Building"},{"!tech":"Metallurgy"},{"!tech":"Steam Engine"}]],f:"m4a",creds: "" },
 {filepath: "1/PlanetDrum25thAnniversary.TempleCaves.MickeyHart",conditions: [[{"!gov":"Republic"},{"!tech":"Invention"},{"!tech":"Philosophy"}]],f:"m4a",modality:"peace&war",creds: "" },
 {filepath: "4/Pompeii.TheEndoftheWorld.ClintonShorter",conditions: [[{"tech":"Refining"},{"!tech":"Computers"}],[{"turn>":110}]],f:"m4a",creds: "" },
-{filepath: "3/PopsChristmasParty.HanselAndGretelDreamPantomine.BostonPopsOrchestra,ArthurFiedler",conditions: [[{"tech":"Sanitation"},{"!tech":"Combustion"}],[{"turn>":110}]],f:"m4a",creds: "" },
+{filepath: "3/PopsChristmasParty.HanselAndGretelDreamPantomine.BostonPopsOrchestra,ArthurFiedler",conditions: [[{"tech":"Sanitation"},{"tech":"Economics"},{"!tech":"Combustion"}],[{"turn>":110}]],f:"m4a",creds: "" },
 {filepath: "1/PrehistoricMeditations.Origins.excerpt.Paleowolf",conditions: [[{"turn<":11},{"!tech":"Alphabet"}]],f:"mp3",creds: "" },
 {filepath: "1/PrehistoricMeditations.Origins.except2.Paleowolf",conditions: [[{"turn<":11},{"!tech":"Pottery"}]],f:"mp3",creds: "" },
 {filepath: "1/PrehistoricMeditations.Origins.excerpt4.Paleowolf",conditions: [[{"turn<":6},{"!tech":"Alphabet"},{"!tech":"Pottery"},{"!tech":"Masonry"}]],f:"mp3",creds: "" },

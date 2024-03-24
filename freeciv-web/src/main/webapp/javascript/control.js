@@ -2568,7 +2568,7 @@ function set_unit_focus(punit)
 function click_unit_in_panel(e, punit)
 {
   // Win- and Cmd- click get help on unit_type:
-  if (e.metaKey) {
+  if (metaKey(e)) {
     key_unit_help();
     help_redirect(VUT_UTYPE, unit_type(punit).id);
     return;
@@ -2670,14 +2670,14 @@ function city_dialog_activate_unit(e, punit)
     close_city_dialog_trigger();
   }
   else if(TAB_EMPIRE === $("#tabs").tabs("option", "active")) {
-    if (!e.metaKey)
+    if (!metaKey(e))
       $('#ui-id-1').trigger("click");   // Going to map tab ensures exit from empire tab
   }
   else {
     $('#ui-id-1').trigger("click");   // Going to map tab ensures exit from city tab
     close_city_dialog_trigger();
   }
-  if (e.metaKey) {
+  if (metaKey(e)) {
     help_redirect(VUT_UTYPE, unit_type(punit).id);
   } else {
     set_unit_focus_and_redraw(punit);
@@ -3531,7 +3531,7 @@ function do_map_click(ptile, qtype, first_time_called)
 
         // SHIFT CLICK HANDLING -----------------------------------------------------------------------------------------------
         // Shift-click means the user wants to add the units in this stack to selected units, OR de-select if already selected:
-        if (mouse_click_mod_key['shiftKey'])  {
+        if (mouse_click_mod_key['shiftKey'] && !mouse_click_mod_key['ctrlKey'] && !mouse_click_mod_key['altKey'])  {
           var preclick_current_focus_length = current_focus.length;
 
 				  for (var i = 0; i < sunits.length; i++) { // Process each unit on the shift-clicked tile
@@ -4070,7 +4070,7 @@ function map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
         the_event.stopPropagation();
         the_event.preventDefault(); // override possible browser shortcut
         show_tax_rates_dialog();
-      } else if (ctrl && alt /*&& !shift || shift*/) {
+      } else if ((ctrl && alt && !shift) || (browser.linux && ctrl && shift && !alt)) {
         the_event.preventDefault(); // override possible browser shortcut
         draw_city_traderoutes = !draw_city_traderoutes;
       } else key_unit_unload();

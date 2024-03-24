@@ -224,7 +224,8 @@ The current and complete list of Freeciv-web controls can be found here:<br>
 <tr><td><span class="hotkey">ESC</span></td><td> Exit Fullscreen mode.</td></tr>
 <tr><td><span class="hotkey">shift-S</span></td><td> Stack display mode (multiple units on tile)</td></tr>
 <tr><td><span class="hotkey">ctrl-S</span></td><td> Save game</td></tr>
-<tr><td><span class="hotkey">ctrl-alt-T</span></td><td> Show trade routes on map</td></tr>
+<tr><td><span class="hotkey">ctrl-alt-T</span></td><td> Show trade routes on map (Windows, Mac)</td></tr>
+<tr><td><span class="hotkey">ctrl-shift-T</span></td><td> Show trade routes on map (Linux players)</td></tr>
 <tr><td><span class="hotkey">alt-shift-T</span></td><td> Change tax rates</td></tr>
 <tr><td><span class="hotkey">ctrl-U</span></td><td> Generate console report for citizens made unhappy about military units</td></tr>
 <tr><td><span class="hotkey">shift-W</span></td><td> Show city tile production on map</td></tr>
@@ -240,6 +241,7 @@ The current and complete list of Freeciv-web controls can be found here:<br>
 <h2>Main Map (Mouse):</h2><table class="ctrls_tbl"><tr><td><span class="hotkey">  Left-click</span> on city</td><td>            Pop up city dialog</td></tr>
 <tr><td><span class="hotkey">  Left-click</span> on unit</td><td>            Select a single unit</td></tr>
 <tr><td><span class="hotkey">Meta-click</span> on unit</td><td>              Help docs on unit. <b>Meta-</b> is the &#x229e;,⌘,🐧 key on Win,Mac,Linux.</td></tr>
+<tr><td><span class="hotkey">Alt-Shift-click</span> on unit</td><td>         Alternate method for the above, if set in PREFS tab.</td></tr>
 <tr><td><span class="hotkey">Shift-click</span> unit</td><td>                Add unit(s) on tile or panel to selection</td></tr>
 <tr><td><span class="hotkey">Ctrl-click</span> city</td><td>                 Clicks a city tile as if city isn't there, for selecting units inside it.</td></tr>
 <tr><td><span class="hotkey">Ctrl-Shift click</span> tile</td><td>           Select tile to be worked by city, on main map.</td></tr>

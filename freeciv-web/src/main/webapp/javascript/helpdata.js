@@ -251,9 +251,10 @@ function show_help_intro()
   $.get( "/docs/help_intro.txt", function( data ) {
     data = data.replace("__META__", browser.metaKey);
     $("#help_info_page").html(data);
-      var help_banner = "/static/images/fcw-front-page"
-      + Math.ceil(Math.random()*61) + ".png";
-
+      var help_banner = "/static/images/fcw-front-page" + Math.ceil(Math.random()*61) + ".png";
+      if (browser.firefox) {
+        $("#firefox_warning").html("<br><b color='#fff !important'>FIREFOX detected. Click <a href='https://freecivweb.fandom.com/wiki/Firefox_Settings' target='_new'>here</a> to set Firefox compatibility for all FCW features.</b><br><br>")
+      }
       $("#help_banner").prop("src",help_banner);
   });
 }

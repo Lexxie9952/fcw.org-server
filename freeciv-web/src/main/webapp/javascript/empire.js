@@ -1180,7 +1180,7 @@ function cut_improv_clipboard(event, z)
 **************************************************************************/
 function handle_improv_clipboard(event, kind, z)
 {
-  if (event.metaKey) {
+  if (metaKey(event)) {
     help_redirect(kind, z);
     return;
   } // end show help

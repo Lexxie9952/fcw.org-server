@@ -112,6 +112,7 @@ var fullscreen_mode = false;
 var replace_capital_i = null; // option to fix bad capital I in some default sans fonts
 var play_music = true;
 var show_timestamps = false;  // show ec_info timestamps on critical events that occurred while not logged in (useful in longturn only)
+var reconfig_metakey = false; // substitute CTRL-SHIFT-ALT.Click for Meta.Click for help-clicking
 
 /** Local Options: **/
 var scroll_narrow_x = false;  // wider scrollable table rows for mobile to see more info
@@ -436,7 +437,7 @@ function init_options_dialog()
       if (show_compass) $("#compass").show();
       else $("#compass").hide();
     });
-
+    // Show timestamps for messages from server in console:
     $('#show_timestamps').prop('checked', show_timestamps);
     $('#show_timestamps').change(function() {
       show_timestamps = this.checked;
@@ -449,6 +450,17 @@ function init_options_dialog()
         $(".ts").hide();
         $(".ts").css("display", "none");
       }
+    });
+    // Reconfigure help-click as ALT-SHIFT click instead of Meta-click
+    $('#reconfig_metakey').prop('checked', reconfig_metakey);
+    $('#reconfig_metakey').change(function() {
+      reconfig_metakey = this.checked;
+      if (reconfig_metakey) {
+        if (browser.mac) browser.metaKey="&#8997;&#8679;";  // ⌥⬆︎
+        else browser.metaKey="ALT-SHIFT";
+      }
+      else browser.metaKey=browser.metaKeySymbol;
+      simpleStorage.set('reconfig_metakey', reconfig_metakey);
     });
 
    // Graphic Theme

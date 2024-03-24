@@ -1,12 +1,11 @@
 <h1>Freeciv Help</h1>
 <img id="help_intro_jumbotron" src='/static/images/frontpage-jumbotron.png'><br><br>
-
+<b style="color:#fff !important" id="firefox_warning"></b>
 <b>Info Categories</b> are in the top <b>left panel</b> for quick lookup.<br><br>
 
 <b>Full Game Manual</b> -- Click <b id='help_gen_ruleset'>Manual</b> at top left.<br><br>
 
 <b>NOTE:</b> In the game, you can __META__-Click icons of units and buildings to get help on them.
-
 <br><br>
 
 Freeciv-web and the game you're playing are only possible by <a href="https://www.patreon.com/freecivweb"

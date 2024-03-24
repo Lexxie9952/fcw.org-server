@@ -226,6 +226,10 @@
     </div>
   </td>
   <td>
+    <div title="Set Help-click to ALT-SHIFT-Click (for users who can't Win-Click or CMD-Click)" class="main_menu_buttons">
+      <input type='checkbox' class="css-checkbox" name='reconfig_metakey' id='reconfig_metakey' checked>
+      <label for="reconfig_metakey" name="reconfig_metakey_lbl" class="css-label dark-check-green"><font id="metakeytext" color="#e8f8e0">ALT-SHIFT-Click = Help-click</font></label>
+  </div>
   </td>
 </tr>
 

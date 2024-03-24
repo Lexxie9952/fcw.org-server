@@ -354,6 +354,14 @@ function civclient_init()
     changeCss(".ts", "display:none");
   }
 
+  reconfig_metakey = simpleStorage.get('reconfig_metakey');
+  if (reconfig_metakey == null) reconfig_metakey = false;  // default case
+  if (reconfig_metakey) {
+    browser.metaKey="ALT-SHIFT";
+  }
+  else browser.metaKey=browser.metaKeySymbol;
+  //console.log("civclient.js set browser.metaKey to "+browser.metaKey+" because reconfig_metakey is "+reconfig_metakey)
+
   audio_initialize();
 
   //------------------------------------------------------------------------------------------------

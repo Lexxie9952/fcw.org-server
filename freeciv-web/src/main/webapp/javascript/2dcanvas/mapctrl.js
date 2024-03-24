@@ -80,6 +80,8 @@ function mapctrl_init_2d()
 ****************************************************************************/
 function mapview_mouse_click(e)
 {
+  //console.log("mapview_mouse_click called for mouse UP.");
+
   var rightclick = false;
   var middleclick = false;
 
@@ -127,7 +129,7 @@ function mapview_mouse_click(e)
       mapview_mouse_movement = false;
     } else {   // PROCESS NORMAL LEFT CLICK HERE
       //console.log("mapview_mouse_click about to call action_button_pressed")
-      if (e.metaKey) {
+      if (metaKey(e)) {
         mapview_metakey_click(mouse_x, mouse_y);
         return;
       }
@@ -192,7 +194,7 @@ function mapview_mouse_down(e)
   if (!rightclick && !middleclick) { /* Left mouse button is down */
     if (user_marking_mode) return; // user markup mode, let them mark their map in peace
     // Alt-click substitute for right-click drag for trackpad users:
-    if (e.altKey && /* !e.shiftKey && !e.ctrlKey && */ !map_select_active && is_right_mouse_selection_supported()) {
+    if (e.altKey && !e.shiftKey && !e.ctrlKey && !map_select_active && is_right_mouse_selection_supported()) {
       map_select_check = true;
       map_select_x = mouse_x;
       map_select_y = mouse_y;
@@ -210,7 +212,7 @@ function mapview_mouse_down(e)
                                  // action_button_pressed and do_map_click checking for paradrop_active; test for fix.
     set_mouse_touch_started_on_unit(canvas_pos_to_tile(mouse_x, mouse_y));
     // After exhaustive debugging, it was determined that check_mouse_drag_unit breaks shift-clicking
-    if (!mouse_click_mod_key['shiftKey']) {
+    if (!mouse_click_mod_key['shiftKey'] || metaKey(mouse_click_mod_key)) { // including metaKey makes mouse-down select the unit, so mouseup tells help-click which unit is selected
       check_mouse_drag_unit(canvas_pos_to_tile(mouse_x, mouse_y));
       // initial condition for possibly starting map drag mode
       if (!map_select_check // no map drag if we're in selection rectangle or leaving it
@@ -229,8 +231,8 @@ function mapview_mouse_down(e)
     // context menu from happening
     context_menu_active = false;
     return false;
-  } else if (middleclick || e['altKey']) {
-    if (!e['ctrlKey']) {
+  } else if (middleclick || e.altKey) {
+    if (!e.ctrlKey) {
       popit();
       context_menu_active = false;
       return false;

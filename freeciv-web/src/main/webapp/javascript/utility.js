@@ -67,6 +67,14 @@ function FC_WRAP(value, range)
      : ((value) >= (range) ? (value) % (range) : (value)));
 }
 
+/**************************************************************************
+  Get whether metaKey or "reconfigured metaKey" (alt+shift) was active
+  during an event click.
+**************************************************************************/
+const metaKey = (ev) => {
+  return (reconfig_metakey ? (!ev.ctrlKey && ev.shiftKey && ev.altKey) : ev.metaKey);
+}
+
 /****************************************************************************
  ...
 ****************************************************************************/

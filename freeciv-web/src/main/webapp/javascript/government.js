@@ -240,7 +240,7 @@ function do_worklists(cur_gov_id, new_gov_id)
 **************************************************************************/
 function set_req_government(event, gov_id)
 {
-  if (event.metaKey) {
+  if (metaKey(e)) {
     remove_active_dialog("#revolution_dialog");
     help_redirect(VUT_GOVERNMENT, gov_id);
     return;

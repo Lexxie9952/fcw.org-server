@@ -1065,7 +1065,7 @@ function show_tech_info_dialog(event, tech_name, unit_type_id, improvement_id)
    to go to the real help tab documentation... if we don't have a unit or
    building then we fall through to show the wiki stuff on tech. */
   // Meta-click is show help
-  if (event.metaKey || true) {
+  if (metaKey(event) || true) {
     let kind = -1, value = -1;
     if (unit_type_id != null) {
       kind = VUT_UTYPE;

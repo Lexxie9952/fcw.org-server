@@ -35,10 +35,12 @@ var google_user_token = null;
 var browser = {
   "opera": false,
   "ie": false,
+  "firefox": false,
   "macos": false,
   "windows": false,
   "linux": false,
-  "metaKey": "WIN-" //
+  "metaKey": "WIN-",        //
+  "metaKeySymbol": "WIN-"   // read-only (backup) version of prop. above
    /*,
   "firefox": false,
   "chrome": false,
@@ -119,7 +121,6 @@ function observe()
 ****************************************************************************/
 function check_browser_compatibility()
 {
-
   browser.opera = (!!window.opr && !!opr.addons) || !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0; // Opera 8.0+
   /*  var isFirefox = typeof InstallTrigger !== 'undefined';  // Firefox 1.0+
     // Safari 3.0+ "[object HTMLElementConstructor]"
@@ -151,19 +152,26 @@ function check_browser_compatibility()
     setSwalTheme();
   }
 
+  if (navigator.userAgent.includes("Firefox")) {
+    browser.firefox = true;
+  }
+
   if (navigator.userAgent.includes("Mac")) {
     browser.mac = true;
-    browser.metaKey = "&#8984;"; // ⌘
+    browser.metaKeySymbol = "&#8984;";
+    if (reconfig_metakey) browser.metaKey="&#8997;&#8679;";  // ⌥⬆︎
+
   }
   else if (navigator.userAgent.includes("Linux")) {
     browser.linux = true;
-    browser.metaKey = "&#128039;";
+    browser.metaKeySymbol = "&#128039;";
   }
-  // Assume Windows for all others, they'll get over it.
+  // Assume Windows for all others.
   else /*if (navigator.userAgent.includes("Windows"))*/ {
     browser.windows = true;
-    browser.metaKey =  "&#8862;"
+    browser.metaKeySymbol = "&#8862;"
   }
+  if (!reconfig_metakey) browser.metaKey = browser.metaKeySymbol;
 }
 
 /****************************************************************************

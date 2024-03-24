@@ -568,7 +568,9 @@ function show_city_dialog(pcity)
   $("#city_production_overview").html("<span style='cursor:pointer' title='CLICK: Change production.\n\n"
   + browser.metaKey+"-CLICK: See the help manual for " + prod_name +".' "
   +" onclick='city_prod_tab(event);'>"+prod_string+"</span>");
-
+  $("#city_production_overview").tooltip({
+    show: { delay:200, effect:"none", duration: 0 }, hide: {delay:120, effect:"none", duration: 0}
+  });
   turns_to_complete = get_city_production_time(pcity);
 
   if (turns_to_complete != FC_INFINITY) {
@@ -2043,7 +2045,7 @@ function previous_city()
 function city_sell_improvement(event, improvement_id)
 {
   // meta-Click is for show help
-  if (event.metaKey) {
+  if (metaKey(event)) {
     /* Manually set quick_help_in_progress because the city dialog can jostle
      * the touchy sensitive help screen which blanks out when it detects and
      * resizing or UI changes, and here we triggering the help tab PRIOR to
@@ -3002,7 +3004,7 @@ function populate_worklist_production_choices(pcity)
       var value = parseFloat($(this).data('value'));
       var kind = parseFloat($(this).data('kind'));
       // meta-Click is for show help
-      if (e.metaKey) {
+      if (metaKey(e)) {
         /* Manually set quick_help_in_progress because the city dialog can jostle
         * the touchy sensitive help screen which blanks out when it detects and
         * resizing or UI changes, and here we triggering the help tab PRIOR to
@@ -3030,7 +3032,7 @@ function populate_worklist_production_choices(pcity)
         return;
       }
       // Shouldn't really happen but, frustrated clicky when it is stuck, who knows?
-      if (e.metaKey) {   // meta-Click is for show help
+      if (metaKey(e)) {   // meta-Click is for show help
         quick_help_in_progress = true;
         if (TAB_MAP === $("#tabs").tabs("option", "active")) {
           close_city_dialog_trigger();
@@ -3204,7 +3206,7 @@ function handle_current_worklist_click(event)
 function handle_worklist_meta_click(event)
 {
   // meta-Click is for show help
-  if (event.metaKey) {
+  if (metaKey(event)) {
     /* Manually set quick_help_in_progress because the city dialog can jostle
      * the touchy sensitive help screen which blanks out when it detects and
      * resizing or UI changes, and here we triggering the help tab PRIOR to
@@ -3390,7 +3392,7 @@ function unselect_improvements()
 function city_add_improv_to_worklist(event, city_id, z)
 {
   // meta-Click is for show help
-  if (event.metaKey) {
+  if (metaKey(event)) {
     help_redirect(VUT_IMPROVEMENT, z);
     return;
   } // end show help
@@ -3414,7 +3416,7 @@ function city_add_improv_to_worklist(event, city_id, z)
 *************************************************************************/
 function city_remove_current_prod(event, override_metaKey_pressed)
 {
-  if (event.metaKey || override_metaKey_pressed) {
+  if (metaKey(event) || override_metaKey_pressed) {
     /* Manually set quick_help_in_progress because the city dialog can jostle
      * the touchy sensitive help screen which blanks out when it detects and
      * resizing or UI changes, and here we triggering the help tab PRIOR to
@@ -3800,7 +3802,7 @@ function city_change_prod_and_buy(event, city_id, z)
       return;
     }
     // meta-Click is for show help
-    else if (event.metaKey) {
+    else if (metaKey(event)) {
       help_redirect(VUT_IMPROVEMENT, z);
       return;
     }
@@ -3832,7 +3834,7 @@ function city_filter_prod_type(event, city_id)
   z = pcity['production_value'];
 
   // meta-click: get help
-  if (event.metaKey) {
+  if (metaKey(event)) {
     help_redirect(kind, z);
   }
   // shift-click: HIGHLIGHT all cities making same as this city
@@ -3855,7 +3857,7 @@ function change_city_prod_to(event, city_id, z)
   console.log("z=="+z)
   if (event) {
     // meta-Click is for show help
-    if (event.metaKey) {
+    if (metaKey(event)) {
         help_redirect(VUT_IMPROVEMENT, z);
       return;
     } else if (event.shiftKey) {   //intercept shift-click and call the right function
@@ -5024,7 +5026,7 @@ function city_keyboard_listener(ev)
 function city_prod_tab(e)
 {
   // meta-Click is for show help
-  if (e.metaKey) {
+  if (metaKey(e)) {
     // Function below does exactly what we want  so call it:
     city_remove_current_prod(e, true);
     return;
