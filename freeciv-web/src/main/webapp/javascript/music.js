@@ -339,6 +339,8 @@ function eval_tech(plr_idx, val) {
       case "Microbiology":
       case "Labor Union":
       case "Mechanization":
+      case "Fundamentalism":
+      case "Theocracy":
       case "Radar":
       case "Avionics":
       case "Radio.2":
