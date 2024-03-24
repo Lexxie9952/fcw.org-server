@@ -1335,7 +1335,7 @@ Palaces set the main capital of nations. Loss of your main capital：\
  a safer location or reduce corruption for nearby cities.\
 "), _("\
  The Palace gives a production bonus of +75% under Despotism,\
- +50% under Monarchy, +25% under Communism, +15% under\
+ +50% under Monarchy, +40% under Communism, +15% under\
  Nationalism; and Theocracy gets a +50% gold bonus.\
 "), _("\
  A Palace automatically appears in your first city. This nullifies\
