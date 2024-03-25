@@ -168,6 +168,7 @@ function update_govt_dialog()
 **************************************************************************/
 function start_revolution()
 {
+  console.log("start revolution()")
   if (requested_gov != -1) {
       for (var unit_id in units) {
         punit = units[unit_id];
@@ -240,7 +241,7 @@ function do_worklists(cur_gov_id, new_gov_id)
 **************************************************************************/
 function set_req_government(event, gov_id)
 {
-  if (metaKey(e)) {
+  if (metaKey(event)) {
     remove_active_dialog("#revolution_dialog");
     help_redirect(VUT_GOVERNMENT, gov_id);
     return;
@@ -254,6 +255,7 @@ function set_req_government(event, gov_id)
 **************************************************************************/
 function send_player_change_government(govt_id)
 {
+  console.log("send_player_change_government")
   var packet = {"pid" : packet_player_change_government,
                 "government" : govt_id };
   send_request(JSON.stringify(packet));
