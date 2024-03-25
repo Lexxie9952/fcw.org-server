@@ -4265,8 +4265,10 @@ function map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
         }
 
       }
+      // if alt not pressed then ignore , key
+      if ((key_code==188) && (!alt || (shift || ctrl))) break; // alt , is a virtual numpad arrow
       // alt , key
-      else if (key_code==188 && alt && !shift && !ctrl) { // alt , is a virtual numpad arrow
+      else  { // alt , is a virtual numpad arrow
         the_event.preventDefault(); // override possible browser shortcut
         key_unit_move(DIR8_SOUTHEAST);
       }
