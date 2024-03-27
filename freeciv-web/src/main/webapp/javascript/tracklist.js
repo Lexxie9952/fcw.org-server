@@ -696,6 +696,10 @@ var tracklist = [
 {filepath: "1/Archetypal.Thundertribe.Paleowolf",conditions: [[{"priority":"priority"}],
                                                               [{"tech":"Iron Working"},{"!tech":"Feudalism"},{"!tech":"Bridge Building"},{"!tech":"Philosophy"}],
                                                               [{"wonderplr":"Agoge of Sparta"},{"!tech":"Feudalism"},{"turn<":80}]],f:"m4a",modality:"battle",creds: "" },
+                                                              {filepath: "1/Archetypal.Thundertribe.Paleowolf",conditions: [
+                                                              [{"!tech":"Feudalism"},{"!tech":"Bridge Building"},{"!tech":"Philosophy"}],
+                                                              [{"wonderplr":"Agoge of Sparta"},{"!tech":"Feudalism"},{"turn<":80}]],f:"m4a",modality:"battle only",creds: "" },
+
 {filepath: "1/AlkazaarsAppendixAnaurochDesert.IvanDuch",conditions: [[{"priority":"priority"}],
                                                                      [{"tech":"Currency"},{"!tech":"Astronomy"},{"!tech":"Trade"},{"!tech":"Construction"},{"!tech":"Philosophy"}],
                                                                      [{"tech":"Astronomy"},{"!tech":"Philosophy"},{"!tech":"Navigation"},{"!tech":"Currency"}],
