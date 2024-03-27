@@ -671,7 +671,7 @@ var tracklist = [
 // Game-start songs
    // T1 in reverse order
 {filepath: "1/AfricanSerenadeVoodoo.PoorAfricanKids.YogaTribe,NaturesRootRevival",conditions: [[{"priority":"priority"}],[{"turn<":3},{"!tech":"Alphabet"},{"!tech":"Pottery"}]],f:"m4a",creds: "" },
-{filepath: "1/DunePart2OST.BeginningsAreSuchDelicateTimes.HZ",conditions: [[{"priority":"priority"}],[{"turn<":2},{"!tech":"Ceremonial Burial"}]],f:"m4a",creds: "" },
+{filepath: "1/DunePart2OST.BeginningsAreSuchDelicateTimes.HZ",conditions: [/*[{"priority":"priority"}],*/[{"turn<":2},{"!tech":"Ceremonial Burial"}]],f:"m4a",creds: "" },
    // T2
 {filepath: "1/AVATAR.BecomingoneofThePeopleBecomingonewithNeytiri.JamesHorner",conditions: [[{"priority":"priority"}],[{"turn>":1},{"turn<":3},{"!tech":"Ceremonial Burial"}]],f:"m4a",creds: "" },
    // T3

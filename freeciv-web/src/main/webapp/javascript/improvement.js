@@ -26,7 +26,7 @@ const B_PALACE_NAME = 'Palace'
 const B_ECC_PALACE_NAME = 'Ecclesiastical Palace'
 //--
 const B_ADAM_SMITH_NAME = "A.Smith's Trading Co."
-const B_AGOGE = "Ag"+String.fromCharCode(0x14D)+"g"+String.fromCharCode(0x113)+" of Sparta"
+const B_AGOGE = "Agoge of Sparta"
 const B_ANGKOR_WAT = "Angkor Wat"
 const B_APPIAN_WAY = "Appian Way"
 const B_CHAND_BAORI = "Chand Baori"
