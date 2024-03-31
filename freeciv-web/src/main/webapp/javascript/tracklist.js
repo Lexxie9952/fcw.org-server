@@ -692,7 +692,10 @@ var tracklist = [
                                                                 [{"wonderplr":"Genghis Khan's Equestrian School"},{"turn<":88},{"!tech":"Gunpowder"}]],f:"m4a",creds: "" },
 {filepath: "1/Archetypal.Animus.Paleowolf",conditions: [[{"priority":"priority"}],
                                                         [{"tech":"Warrior Code"},{"!tech":"Horseback Riding"},{"turn<":28}],
-                                                        [{"tech":"Horseback Riding"},{"!tech":"Warrior Code"},{"turn<":28}]],f:"m4a",creds: "" },
+                                                        [{"tech":"Horseback Riding"},{"!tech":"Warrior Code"},{"turn<":28}]],f:"m4a",modality:"battle",creds: "" },
+                                                        {filepath: "1/Archetypal.Animus.Paleowolf",conditions: [
+                                                        [{"tech":"Warrior Code"},{"!tech":"Horseback Riding"},{"turn<":28}],
+                                                        [{"tech":"Horseback Riding"},{"!tech":"Warrior Code"},{"turn<":28}]],f:"m4a",modality:"battle only",creds: "" },
 {filepath: "1/Archetypal.Thundertribe.Paleowolf",conditions: [[{"priority":"priority"}],
                                                               [{"tech":"Iron Working"},{"!tech":"Feudalism"},{"!tech":"Bridge Building"},{"!tech":"Philosophy"}],
                                                               [{"wonderplr":"Agoge of Sparta"},{"!tech":"Feudalism"},{"turn<":80}]],f:"m4a",modality:"battle",creds: "" },

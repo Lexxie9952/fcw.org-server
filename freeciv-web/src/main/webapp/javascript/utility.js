@@ -96,13 +96,13 @@ const inside = (min, x, max) => {
 }
 
 /**************************************************************************
- Basic Min/Max functionality: might be quicker than Math.max()
+ "Alias" Min/Max to be consistent with the rest of freeciv project
 **************************************************************************/
 const MAX = (a, b) => {
-  return (a>b ? a : b);
+  return Math.max(a,b);
 }
 const MIN = (a, b) => {
-  return (a<b ? a : b)
+  return Math.min(a,b);
 }
 
 /****************************************************************************
