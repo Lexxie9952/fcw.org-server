@@ -126,6 +126,21 @@ function show_city_governor_tab()
   $("#cma-min-slider-Luxury").children().css("background-image", "url('/images/slider_lux.png')");
   $("#cma-min-slider-Science").children().css("background-image", "url('/images/slider_sci.png')");
 
+  if (!is_small_screen() && !touch_device) {
+    $('#btn_toggle_cma').tooltip({ position: { my:"right bottom", at: "center top-4"}, show: { delay:200, effect:"none", duration: 0 }, hide: {delay:120, effect:"none", duration: 0} });
+    $('#btn_refresh_cma').tooltip({ position: { my:"right bottom", at: "right top-4"}, show: { delay:200, effect:"none", duration: 0 }, hide: {delay:120, effect:"none", duration: 0} });
+    $('#btn_cma_help').tooltip({ position: { my:"right bottom", at: "right top-4"}, show: { delay:200, effect:"none", duration: 0 }, hide: {delay:120, effect:"none", duration: 0} });
+
+    $('#btn_set_cma').tooltip({ position: { my:"right top", at: "right bottom-4"}, show: { delay:200, effect:"none", duration: 0 }, hide: {delay:120, effect:"none", duration: 0} });
+    $('#btn_apply_cma').tooltip({ position: { my:"right top", at: "right bottom-4"}, show: { delay:200, effect:"none", duration: 0 }, hide: {delay:120, effect:"none", duration: 0} });
+    $('#btn_copy_cma').tooltip({ position: { my:"center top", at: "center bottom-4"}, show: { delay:200, effect:"none", duration: 0 }, hide: {delay:120, effect:"none", duration: 0} });
+    $('#btn_paste_cma').tooltip({ position: { my:"center top", at: "center bottom-4"}, show: { delay:200, effect:"none", duration: 0 }, hide: {delay:120, effect:"none", duration: 0} });
+    $('#btn_cma_setall').tooltip({ position: { my:"center top", at: "center bottom-4"}, show: { delay:200, effect:"none", duration: 0 }, hide: {delay:120, effect:"none", duration: 0} });
+    $('#btn_setall_cma').tooltip({ position: { my:"center top", at: "center bottom-4"}, show: { delay:200, effect:"none", duration: 0 }, hide: {delay:120, effect:"none", duration: 0} });
+    $('#btn_cma_saveall').tooltip({ position: { my:"center top", at: "center bottom-4"}, show: { delay:200, effect:"none", duration: 0 }, hide: {delay:120, effect:"none", duration: 0} });
+    $('#btn_cma_refreshall').tooltip({ position: { my:"center top", at: "center bottom-4"}, show: { delay:200, effect:"none", duration: 0 }, hide: {delay:120, effect:"none", duration: 0} });
+  }
+
   return true;
 }
 /**************************************************************************
