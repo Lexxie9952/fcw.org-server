@@ -2925,7 +2925,7 @@ actor_reqs    =
       "UnitFlag",      "Settlers",     "Local",   TRUE
       "UnitFlag",      "CanHide",      "Local",   FALSE
       "UnitFlag",      "CanClaim",     "Local",   FALSE
-      "UnitType",      "Tribesmen",    "Local",   FALSE
+;      "UnitType",      "Tribesmen",    "Local",   FALSE    ;Chand Baori lets Tribesmen be workers
       "UnitFlag",      "Well-Digger",  "Local",   FALSE
       "Tech",          "Construction", "Player",  TRUE
     }
@@ -2942,7 +2942,7 @@ actor_reqs    =
       "UnitFlag",      "CanHide",      "Local",   FALSE
       "UnitFlag",      "CanClaim",     "Local",   FALSE
       "UnitFlag",      "Well-Digger",  "Local",   FALSE
-      "UnitType",      "Tribesmen",    "Local",   FALSE
+;      "UnitType",      "Tribesmen",    "Local",   FALSE    ;Chand Baori lets Tribesmen be workers
       "Tech",          "Refining",     "Player",  TRUE
     }
 target_reqs    =
