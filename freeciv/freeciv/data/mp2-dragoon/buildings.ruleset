@@ -1540,7 +1540,7 @@ helptext	= _("\
 Appian Way is the first stone-paved highway that can drain\
  rainwater. The Appian Way gives the following National bonuses：\n\
  ➤ Trade Routes with 4 or more revenue get a slight increase in revenue. \n\
- ➤ Tile-workers build Roads at twice the speed. \n\
+ ➤ Tile-workers build Roads and Canals at twice the speed. \n\
 If not in Foreign territory：\n\
  ➤ Wagons, Chariots, and Foot soldiers gain +⅓ move when starting\
   their turn on a Road. \n\
