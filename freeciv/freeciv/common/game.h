@@ -217,6 +217,7 @@ struct civ_game {
       bool start_city;
       int start_year;
       char supercows[MAX_NUM_SUPERCOWS][MAX_LEN_NAME]; /* admins/Gamemasters/supercows for this game */
+      int techleakstyle;
       int techloss_restore;
       int techlost_donor;
       int techlost_recv;
@@ -527,6 +528,10 @@ extern struct world wld;
 #define GAME_MIN_TECHLEAK            0
 #define GAME_MAX_TECHLEAK            300
 
+#define GAME_DEFAULT_TECHLEAKSTYLE   0
+#define GAME_MIN_TECHLEAKSTYLE       0
+#define GAME_MAX_TECHLEAKSTYLE       1
+
 #define GAME_DEFAULT_CITYMINDIST     2
 #define GAME_MIN_CITYMINDIST         1
 #define GAME_MAX_CITYMINDIST         11
@@ -601,7 +606,7 @@ extern struct world wld;
 #define GAME_MAX_MGR_WORLDCHANCE      100
 
 #define GAME_DEFAULT_MOVE_BONUS_IN_FRAGS  FALSE
-#define GAME_DEFAULT_MOVE_COST_IN_FRAGS FALSE
+#define GAME_DEFAULT_MOVE_COST_IN_FRAGS   FALSE
 
 #define GAME_DEFAULT_AQUEDUCTLOSS    0
 #define GAME_MIN_AQUEDUCTLOSS        0

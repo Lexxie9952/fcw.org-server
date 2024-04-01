@@ -455,6 +455,7 @@ static void game_defaults(bool keep_ruleset_value)
       game.server.supercows[i][0] = '\0';
     }
     game.server.tcptimeout        = GAME_DEFAULT_TCPTIMEOUT;
+    game.server.techleakstyle     = GAME_DEFAULT_TECHLEAKSTYLE;
     game.server.techlost_donor    = GAME_DEFAULT_TECHLOST_DONOR;
     game.server.techlost_recv     = GAME_DEFAULT_TECHLOST_RECV;
     game.server.techpenalty       = GAME_DEFAULT_TECHPENALTY;

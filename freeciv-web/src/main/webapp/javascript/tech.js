@@ -1476,7 +1476,23 @@ function player_has_blueprints(pplayer, tech_id)
   // server doesn't reset bulbs_saved or doesn't send_player_info right after discovery:
   if (player_invention_state(pplayer, tech_id) == TECH_KNOWN) return false;
 
-  var bp_cutoff = Math.trunc(server_settings.blueprints.val * techs[tech_id].cost / 100);
+  var cost = Math.floor(techs[tech_id].cost);
+
+  /* UNCOMMENTING THIS WILL MAKE THE TECHBOX BLUE BASED ON BLUEPRINT% OF REAL COST FOR PLAYER,
+     RATHER THAN 'RULESET COST' OF TECH, BUT COULD HAVE SIDE EFFECTS!
+  if (game_info["sciencebox"] != 100)   {
+    cost = techs[tech_id].cost * game_info["sciencebox"] / 100;
+    cost = Math.floor(cost);
+  }
+ if (!client_is_observer() && pplayer == client.conn.playing.playerno) {
+    if (client.conn.playing.advance_costs) {
+      if (client.conn.playing.advance_costs[tech_id]) {
+        cost = client.conn.playing.advance_costs[tech_id];
+        saved = client.conn.playing.advance_saved_bulbs[tech_id];
+      }
+    }
+  }  */
+  var bp_cutoff = Math.trunc(server_settings.blueprints.val * cost / 100);
 
   /* The case where saved bulbs are greater than the max blueprint award: */
   if (pplayer.advance_saved_bulbs[tech_id] >= bp_cutoff) return true;

@@ -31,7 +31,6 @@
 
 #include "research.h"
 
-
 struct research_iter {
   struct iterator vtable;
   int index;
@@ -868,6 +867,10 @@ bool research_goal_tech_req(const struct research *presearch,
                          of normal players (human and AI) which already know
                          the tech.
 
+  techleakstyle:
+  0 (LINEAR): techleak cost reduction is players/numplayers * techleak%
+  1 (LOG2):   first player to discover tech reduces by (1/2)*techleak,
+              then next by 1/4, 1/8, 1/16, etc.
   At the end we multiply by the sciencebox value, as a percentage.  The
   cost can never be less than 1.
 
@@ -970,8 +973,17 @@ int research_total_bulbs_required(const struct research *presearch,
 
       fc_assert_ret_val(0 < players, base_cost);
       fc_assert(players >= players_with_tech_and_embassy);
-      leak = base_cost * players_with_tech_and_embassy
-             * game.info.tech_leak_pct / players / 100;
+      if (game.server.techleakstyle == 1) { // LOG2
+        // Avoid overflow in MMO and treat 0.99999999977% as cutoff to be 1.0:
+        unsigned long denominator = players_with_tech_and_embassy < 32
+                                  ? (1 << players_with_tech_and_embassy) : 1;
+        unsigned long numerator = players_with_tech_and_embassy < 32
+                                ? (denominator - 1) : 1;
+        leak = (base_cost * numerator * game.info.tech_leak_pct) / (100*denominator);
+      } else { // LINEAR
+        leak = base_cost * players_with_tech_and_embassy
+              * game.info.tech_leak_pct / players / 100;
+      }
     }
     break;
 
@@ -991,8 +1003,17 @@ int research_total_bulbs_required(const struct research *presearch,
 
       fc_assert_ret_val(0 < players, base_cost);
       fc_assert(players >= players_with_tech);
-      leak = base_cost * players_with_tech * game.info.tech_leak_pct
-             / players / 100;
+      if (game.server.techleakstyle == 1) { // LOG2
+        // Avoid overflow in MMO and treat 0.99999999977% as cutoff to be 1.0:
+        unsigned long denominator = players_with_tech < 32
+                                  ? (1 << players_with_tech) : 1;
+        unsigned long numerator = players_with_tech < 32
+                                ? (denominator - 1) : 1;
+        leak = (base_cost * numerator * game.info.tech_leak_pct) / (100*denominator);
+      } else { // LINEAR
+        leak = base_cost * players_with_tech * game.info.tech_leak_pct
+              / players / 100;
+      }
     }
     break;
 
@@ -1026,8 +1047,17 @@ const int IDLE_IS_DEAD = 5;
 
       fc_assert_ret_val(0 < players, base_cost);
       fc_assert(players >= players_with_tech);
-      leak = base_cost * players_with_tech * game.info.tech_leak_pct
-             / players / 100;
+      if (game.server.techleakstyle == 1) { // LOG2
+        // Avoid overflow in MMO and treat 0.99999999977% as cutoff to be 1.0:
+        unsigned long denominator = players_with_tech < 32
+                                  ? (1 << players_with_tech) : 1;
+        unsigned long numerator = players_with_tech < 32
+                                ? (denominator - 1) : 1;
+        leak = (base_cost * numerator * game.info.tech_leak_pct) / (100*denominator);
+      } else { // LINEAR
+        leak = base_cost * players_with_tech * game.info.tech_leak_pct
+              / players / 100;
+      }
     }
     break;
   }
@@ -1054,6 +1084,8 @@ const int IDLE_IS_DEAD = 5;
   base_cost = total_cost / members;
 
   base_cost *= (double) game.info.sciencebox / 100.0;
+/* DEBUG
+  if (leak>0) notify_player(NULL, NULL, E_BAD_COMMAND, ftc_server, "%0.1f(-%0.1f) %s",base_cost,leak*game.info.sciencebox/100,research_advance_rule_name(presearch,tech));*/
 
   return MAX(base_cost, 1);
 }

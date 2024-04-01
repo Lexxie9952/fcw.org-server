@@ -2151,6 +2151,18 @@ static struct setting settings[] = {
              "to another tech."), NULL, NULL,
           GAME_DEFAULT_MULTIRESEARCH)
 
+  GEN_INT("techleakstyle", game.server.techleakstyle,
+          SSET_RULES, SSET_SCIENCE, SSET_RARE, ALLOW_NONE, ALLOW_BASIC,
+          N_("Speed of techleak"),
+          N_("Sets one of two possible styles in which discounts to tech "
+             "costs occur after players discover a tech: LINEAR and LOG2.\n\n"
+             "0: LINEAR - Tech costs decrease by the same amount after "
+             "each new player discovers a tech. \n"
+             "1: LOG2 - Tech costs decrease by 1/2 of the total techleak percentage "
+             "after first discovery, then by 1/4, 1/8, 1/16, etc.\n"), NULL, NULL, NULL,
+          GAME_MIN_TECHLEAKSTYLE, GAME_MAX_TECHLEAKSTYLE,
+          GAME_DEFAULT_TECHLEAKSTYLE)
+
   GEN_INT("techpenalty", game.server.techpenalty,
           SSET_RULES, SSET_SCIENCE, SSET_RARE, ALLOW_NONE, ALLOW_BASIC,
           N_("Percentage penalty when changing tech"),
@@ -2182,8 +2194,11 @@ static struct setting settings[] = {
           SSET_RULES_FLEXIBLE, SSET_SCIENCE, SSET_RARE, ALLOW_NONE, ALLOW_CTRL,
           N_("Tech leakage percent"),
           N_("The discount % on a tech's cost if 100% of nations know it. If no "
-             "nations know it, there's no discount. If between 0% and 100%, cost "
-             "is reduced by (percent_knowing * techleak) %"),
+             "nations know it, there's no discount. Under LINEAR techleakstyle, "
+             "if players knowing the tech are between 0% and 100%, cost is reduced "
+             "by (percent_knowing * techleak)%. If under LOG2 techleakstyle, then "
+             "the discount is higher after the first discovery of the tech, "
+             "but slows down after each subsequent discovery. (See 'techleakstyle'.)"),
           NULL, NULL, NULL, GAME_MIN_TECHLEAK, GAME_MAX_TECHLEAK,
           GAME_DEFAULT_TECHLEAK)
 
