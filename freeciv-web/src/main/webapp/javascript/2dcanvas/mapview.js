@@ -187,8 +187,8 @@ function init_mapview()
 
 
 /**************************************************************************
-  ...
-**************************************************************************/
+  ...subtituted for below for possibly better minification performance
+*************************************************************************
 function is_small_screen()
 {
   if ($(window).width() <= 640 || $(window).height() <= 590) {
@@ -196,9 +196,27 @@ function is_small_screen()
   } else {
     return false;
   }
+}*/
 
+/**************************************************************************
+  Detects "medium" screens like 1366x768, which need css fitting
+  adjustments. WARNING:  may also return true for small screens!
+**************************************************************************/
+const not_large_screen = () => { // helps figure out a medium screen like 1376 x 768
+    if ($(window).width() <= 1400 || $(window).height() <= 768) {
+      return true;
+    }
 }
-
+/**************************************************************************
+  Detect "small" screens e.g., mobile phones.
+**************************************************************************/
+const is_small_screen = () => {
+  if ($(window).width() <= 640 || $(window).height() <= 590) {
+    return true;
+  } else {
+    return false;
+  }
+}
 /**************************************************************************
   This will load the tileset, blocking the UI while loading.
 **************************************************************************/
