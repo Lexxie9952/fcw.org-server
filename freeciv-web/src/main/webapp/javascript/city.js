@@ -47,6 +47,7 @@ var prod_selection_city =null;  // the city_id whose current production will be 
 var worklist_dialog_active = false;
 var production_selection = [];
 var worklist_selection = [];
+var prodlists_have_been_fitted = 0; // First time prodlist is viewed, it must be custom-fitted to screensize: it won't work if not being viewed.
 
 // User definable row in city list:   *****************************
 var city_user_row_val = 0;
@@ -276,6 +277,13 @@ function city_force_income_update()
 function show_city_dialog(pcity)
 {
   const playerno = pcity.owner;
+  const is_small = is_small_screen();
+  const not_large = not_large_screen();
+  const is_medium = not_large && !is_small;
+  const is_large = !is_small && !is_medium;
+  const winwidth = $(window).width();
+  const winheight = $(window).height();
+
   //console.log("show_city_dialog() called.")
   //console.log("    caller is " + show_city_dialog.caller.toString().substring(0,35));
   var turns_to_complete;
@@ -323,7 +331,7 @@ function show_city_dialog(pcity)
 
   var dialog_buttons = {};
 
-  if (!is_small_screen() && !touch_device) {
+  if (!is_small && !touch_device) {
     dialog_buttons = $.extend(dialog_buttons,
       {
         "Previous city" : function() {
@@ -369,7 +377,7 @@ function show_city_dialog(pcity)
   // CREATE THE TITLE AND THE SPECIALIST CONTROL PANE IN THE TITLE (for large screens) --------------------------------------
   var city_dialog_title = "<div><span style='float:left;margin-right:70px;'>"
                         + decodeURIComponent(pcity['name']) + " (" + pcity['size'] + ")</span>";
-  if (!is_small_screen() && !client_is_observer() && client.conn.playing.playerno == pcity['owner'] && specialists != null && Object.keys(specialists) != null) {
+  if (!is_small && !client_is_observer() && client.conn.playing.playerno == pcity['owner'] && specialists != null && Object.keys(specialists) != null) {
     // Create specialist control pane in title bar.
     var num_specialists = Object.keys(specialists).length;
     if (client_rules_flag[CRF_ASMITH_SPECIALISTS]) {
@@ -407,12 +415,21 @@ function show_city_dialog(pcity)
   }
   city_dialog_title += "</div>";
   //----------------------------------------------------------------------------------------------------------------------
+  const city_dialog_height = is_large ? $(window).height() - 80
+                                    : $(window).height() + 10;
+  let city_dialog_width;
+  if (is_large) city_dialog_width = "80%";
+  else if (is_small) city_dialog_width = "99%";
+  else if (winwidth<1025 && winwidth>912) city_dialog_width = "912px";
+  else if (winwidth<=912) city_dialog_width = "99%";
+  else city_dialog_width = "80%";
+
   $("#city_dialog").dialog({
       bgiframe: true,
       titleIsHtml: true,
 			modal: false,
-			width: is_small_screen() ? "99%" : "80%",
-                        height: is_small_screen() ? $(window).height() + 10 : $(window).height() - 80,
+			width: city_dialog_width,
+                        height: city_dialog_height,
                         close : close_city_dialog,
             buttons: dialog_buttons
                    }).dialogExtend({
@@ -432,44 +449,86 @@ function show_city_dialog(pcity)
   $("#city_dialog").dialog('widget').children().css( {"margin-top":"20px", "padding":"0px", "visibility":"hidden"} ); */
 
   // Fine tune mobile screen elements
-  if (is_small_screen()) {
-    // Next/Buy/Exit buttons more compact for Mobile
-    $("#city_dialog").dialog('widget').children().children().children().css( {"padding-top":"2px", "padding-bottom":"3px",
-        "padding-right":"6px", "padding-left":"6px", "margin-bottom":"3px", "margin-right":"0px" } );
-    // If there is another way to put unicode in these buttons, let me know! But you'd still
-    // get problems with iPhone 5 and narrower screens auto-sizing elements to wrong size.
-    // We name these buttons here, after the buttons are resized and parent height is locked.
-    $("#city_dialog").next().children()[0].children[0].innerHTML = "&#9194;Last";
-    $("#city_dialog").next().children()[0].children[1].innerHTML = "Next&#9193;"
-    $("#city_dialog").next().children()[0].children[2].innerHTML = "Buy";
-    $("#city_dialog").next().children()[0].children[3].innerHTML = "Name";
-    // Swipeleft Swiperight go to prev/next city:
-    /* TODO: when jquery.mobile.min.js is installed right, this will add swipe left/swipe right
-       for next/prev city. Just need to know how to install. ALSO, will be important to do the
-       .off() function when city dialog exited.
-    $("#city_dialog").next().children()[0].children[0].id="prev_city_button"; // give id to buttons so we can virtual click them
-    $("#city_dialog").next().children()[0].children[1].id="next_city_button"; // when we swipe left/right
-    $(document).on("swipeleft", "html", function(e) { console.log("SWIPE LEFT!!!") } )
-    $(document).on("swiperight", "html", function(e) { console.log("SWIPE RIGHT!!!") } )
-    */
-    // City worked tiles map canvas, tight fit positioning
-    $("#city_canvas_top_div").css("padding", "0px");
-    $("#city_canvas_top_div").css("margin", "0px");
-    $("#city_canvas_top_div").css("width", "100%");
-    $("#city_canvas_top_div").css("margin-left", "-5px");
+  if (!is_large) {
+    if (is_small) {
+      // Next/Buy/Exit buttons more compact for Mobile
+      $("#city_dialog").dialog('widget').children().children().children().css( {"padding-top":"2px", "padding-bottom":"3px",
+          "padding-right":"6px", "padding-left":"6px", "margin-bottom":"3px", "margin-right":"0px" } );
+      // If there is another way to put unicode in these buttons, let me know! But you'd still
+      // get problems with iPhone 5 and narrower screens auto-sizing elements to wrong size.
+      // We name these buttons here, after the buttons are resized and parent height is locked.
+      $("#city_dialog").next().children()[0].children[0].innerHTML = "&#9194;Last";
+      $("#city_dialog").next().children()[0].children[1].innerHTML = "Next&#9193;"
+      $("#city_dialog").next().children()[0].children[2].innerHTML = "Buy";
+      $("#city_dialog").next().children()[0].children[3].innerHTML = "Name";
+      // Swipeleft Swiperight go to prev/next city:
+      /* TODO: when jquery.mobile.min.js is installed right, this will add swipe left/swipe right
+        for next/prev city. Just need to know how to install. ALSO, will be important to do the
+        .off() function when city dialog exited.
+      $("#city_dialog").next().children()[0].children[0].id="prev_city_button"; // give id to buttons so we can virtual click them
+      $("#city_dialog").next().children()[0].children[1].id="next_city_button"; // when we swipe left/right
+      $(document).on("swipeleft", "html", function(e) { console.log("SWIPE LEFT!!!") } )
+      $(document).on("swiperight", "html", function(e) { console.log("SWIPE RIGHT!!!") } )
+      */
+      // City worked tiles map canvas, tight fit positioning
+      $("#city_canvas_top_div").css("padding", "0px");
+      $("#city_canvas_top_div").css("margin", "0px");
+      $("#city_canvas_top_div").css("width", "100%");
+      $("#city_canvas_top_div").css("margin-left", "-5px");
 
-    $("#city_panel").css("padding", "0px")
-    $("#city_dialog").addClass("noscrollbars");
-    $("#city_dialog").css("overflow-y", "hidden");
-    $("#city_dialog").css("overflow-x", "hidden"); // let children overflow if needed but not the whole dialog
-    $("#city_dialog_info").css("width", "100%");
-    $("#city_dialog_info").addClass("noscrollbars");
-    $("#city_viewport").addClass("noscrollbars");
-    $("#city_tabs_0").css("padding","0px");
-    $("#city_dialog").css("margin-left", "-3px");
-  } else {
+      $("#city_panel").css("padding", "0px")
+      $("#city_dialog").addClass("noscrollbars");
+      $("#city_dialog").css("overflow-y", "hidden");
+      $("#city_dialog").css("overflow-x", "hidden"); // let children overflow if needed but not the whole dialog
+      $("#city_dialog_info").css("width", "100%");
+      $("#city_dialog_info").addClass("noscrollbars");
+      $("#city_viewport").addClass("noscrollbars");
+      $("#city_tabs-0").css("padding","0px");
+      $("#city_dialog").css("margin-left", "-3px");
+      $(".ui-dialog .ui-dialog-title").css("font-size","125%"); // down from 140% default
+    }
+    else { // is_medium screen: e.g. 1366x768 laptops
+      // Shrinks a LOT of different components within the city dialog for tighter fit:
+      $("#city_dialog").dialog('widget').children().children().children().css( {"padding-top":"0px", "padding-bottom":"0px",
+          "padding-right":"0px", "padding-left":"0px", "margin-bottom":"0px", "margin-right":"0px" } );
+
+      $("#city_overview_tab").css({"padding-top":"0px", "padding-bottom":"0px",
+          "padding-right":"0px", "padding-left":"0px", "margin-bottom":"0px", "margin-right":"0px"})
+      $("#city_canvas_top_div").css("padding", "0px");
+      $("#city_canvas_top_div").css("margin", "0px");
+      $("#city_canvas_top_div").css("width", "100%");
+      $("#city_canvas_top_div").css("margin-left", "-5px");
+      $("#city_panel").css("padding", "0px")
+      $("#city_tabs-0").css("padding","0px");
+      const pheight = $("#city_tabs").parent().parent().height();
+      $("#city_tabs").css("height",pheight);
+      $("worklist_control").css("padding-top","0px");
+      $(".wc_spacer").css("height","2%");
+      $(".ui-dialog .ui-dialog-title").css("font-size","115%"); // down from default 140%: vert.space at premium
+      /* At this point we have shrunken Previous/Next/Rename/Buy buttons which are suitable and necessary even for 1024px screen, but
+         unnecessarily small and mismatched out of place on >1280horiz screens: */
+      if (winwidth>1270) {
+        // Button container, space efficient and positioned right:
+        $(".ui-dialog-buttonset").last().css({"padding-top":"0px", "padding-bottom":"0px",
+        "padding-right":"0px", "padding-left":"0px", "margin-top":"11px", "margin-right":"-8px" });
+        // Buttons themselves:
+        $(".ui-dialog-buttonset").last().children().css({"padding-top":"4px", "padding-bottom":"4px",
+        "padding-right":"13px", "padding-left":"13px", "margin-bottom":"0px", "margin-right":"0px" })
+      } else {  // Medium screen with compromised <1280p horizontal:
+        // Buttons container
+        $(".ui-dialog-buttonset").last().css({"padding-top":"0px", "padding-bottom":"0px",
+        "padding-right":"0px", "padding-left":"0px", "margin-top":"11px", "margin-right":"-15px" });
+        // Reduce font size on buttons by 1px
+        $(".ui-dialog-buttonset").last().children().css({"font-size":"14.5px" });
+        // Heighten but don't widen button
+        $(".ui-dialog-buttonset").last().children().css({"padding-top":"4px", "padding-bottom":"4px"});
+      }
+    }
+  } else { // is_large screen
+    // 16:10 screens of certain size tend to need some verticality on worklist_control buttons:
+    if (winheight<1050 && winwidth>1600) $(".wc_spacer").css("height","6.5%");
     // align "Change Production" and "Add to Worklist" buttons with the wood panel and tab selector buttons to their left.
-    $("#prod_buttons").css({"margin-top": "39px", "margin-right": "2px"});
+    //$("#prod_buttons").css({"margin-top": "39px", "margin-right": "2px"});   // these buttons were removed.
     if (!touch_device) { // Highlight keyboard shortcuts for large screens with keyboards (i.e. not touch device)
       $("#city_dialog").next().children().children().first().html("<u><b>P</b></u>revious City");
       $("#city_dialog").next().children().children().first().next().html("<u><b>N</b></u>ext City");
@@ -489,7 +548,7 @@ function show_city_dialog(pcity)
   $("#city_dialog").parent().focus();
 
   /* prepare city dialog for small screens. */
-  if (!is_small_screen()) {
+  if (!is_small) {
     $("#city_tabs-i").hide();       // "Inside" tab for units, not needed on large screen.
     $(".extra_tabs_small").remove();  // class identified for "Inside" tab for units, not needed on large screen.
     $("#mobile_cma_checkbox").remove();
@@ -525,11 +584,20 @@ function show_city_dialog(pcity)
     $("#ct4").html("Happy");    $("#cti").html("Inside");
     $("#ctg").html("Gov"+(pcity.cma_enabled?"&#x1F539;":""));
     $("#cma_allow_disorder").remove();
+    if (is_medium) {  // medium size screen e.g. 1366x768
+      $("#city_overview_tab").css("height", ($("#city_overview_tab").parent().parent().height()))
+    }
    }
 
   $("#city_tabs").tabs({ active: city_tab_index});
 
-  $(".citydlg_tabs").height(is_small_screen() ? $(window).height() - 110 : $(window).height() - 225);
+  if (is_medium) {
+    $(".citydlg_tabs").height($(window).height() - 120);
+  } else if (is_small) {
+    $(".citydlg_tabs").height($(window).height() - 110);
+  } else { // is_large
+    $(".citydlg_tabs").height($(window).height() - 225);
+  }
 
   city_worklist_dialog(pcity);
   $("#worklist_dialog_headline").unbind('click');
@@ -548,7 +616,7 @@ function show_city_dialog(pcity)
 
   if (orig_renderer == RENDERER_WEBGL) renderer = orig_renderer;
 
-  var pop_string = is_small_screen() ? city_population(pcity)+"K" : numberWithCommas(city_population(pcity)*1000);
+  var pop_string = is_small ? city_population(pcity)+"K" : numberWithCommas(city_population(pcity)*1000);
   var change_string = pcity['granary_turns'] < 0 ? "Starves in: " : "Growth in: ";
   $("#city_size").html("Population: "+ pop_string + "<br>"
                        + "Size: " + pcity['size'] + "<br>"
@@ -562,7 +630,7 @@ function show_city_dialog(pcity)
     prod_string += html_emoji_from_universal(prod_type['type']['name'])+"&thinsp;";
   }
   prod_string += "<b style='color:#fed'>" + (prod_type != null ? prod_type['type']['name']+"</b>" : "None</b>");
-  if (is_small_screen() && prod_type != null && prod_type['type']['name'] != null && prod_type['type']['name'].length>16)
+  if (is_small && prod_type != null && prod_type['type']['name'] != null && prod_type['type']['name'].length>16)
     prod_string = "<span style='font-size:90%'>" + prod_string + "</span>";
   let prod_name = (prod_type != null ? prod_type['type']['name'] : "");
   $("#city_production_overview").html("<span style='cursor:pointer' title='CLICK: Change production.\n\n"
@@ -1048,7 +1116,7 @@ function show_city_dialog(pcity)
   });
 
   // HANDLE FOREIGN CITIZENS, APPEND AFTER UNIT PANELS
-  var spacer = is_small_screen() ? "" : "<br>";
+  var spacer = is_small ? "" : "<br>";
   var foreigners_html = "<div id='city_foreigners'>"+spacer+"Citizen nationality:";
   if (pcity['nationalities_count']>0) { // foreigners present !
     for (ethnicity in pcity['nation_id']) {
@@ -1058,7 +1126,7 @@ function show_city_dialog(pcity)
     }
     foreigners_html+="</div>"
 
-    $("#city_overview_tab").append(foreigners_html);
+    $("#city_improvements_panel").append(foreigners_html);
   }
 
   if ($("#city_improvements").parent().width() - $("#city_improvements").width() < 50) {
@@ -1070,7 +1138,7 @@ function show_city_dialog(pcity)
     $("#city_improvements").css( {"padding-bottom":"0px"} );
   }
 
-  if (is_small_screen()) {
+  if (is_small) {
     $(".ui-tabs-anchor").css("padding", "2px");
     $("#city_panel_stats").css( {"width":"100%", "margin-top":"17px", "padding":"0px"} );
     $("#city_panel_top").css( {"width":"100%"} );
@@ -1095,12 +1163,45 @@ function show_city_dialog(pcity)
     $("#dialog-extend-fixed-container").hide();
   }
   // Either/OR, worked better on iPad:
-  if (is_small_screen() || touch_device) {
+  if (!is_large || touch_device) {
     // City tab buttons lock to bottom of screen in landscape:
     if(window.innerHeight < window.innerWidth) {
       $('#city_tabs').css( {"position":"static"} );
     }
   }
+  if (!is_small) adjust_prodlist_sizes_to_screen();
+}
+
+/**************************************************************************
+  Currently not for mobile. For all other screen sizes, this function
+  does delicate fittings to get the worklist, prodlist, and worklist
+  control buttoms sized and positioned optimally.
+**************************************************************************/
+function adjust_prodlist_sizes_to_screen() {
+  const winheight = $(window).height();
+  var mp, mw, b;
+
+  if (winheight<1025)      {mp=10000; mw=10000; b=-7;}     // 1280x1024,1600x1000 or x900,1366x768 etc.
+  else if (winheight<1081) {mp=54; mw=51; b=33;}           // HD
+  else if (winheight<1601) {mp=50; mw=49; b=33;}           // QHD 1600p
+  else if (winheight<2161) {mp=55; mw=38; b=32;}           // UHD "4K"
+  else                     {mp=50; mw=49; b=33;}           // "8K"
+  // -------------------------------------------------
+
+  // Worklist control buttons:
+  $("#worklist_control").css("padding","0");
+  let prod_tab_height = $("#worklist_control").parent().height();
+  $("#worklist_control").height(prod_tab_height);
+  // Worklist height
+  $("#worklist_right").height(prod_tab_height);
+  let prodlist_height =  $("#worklist_right").height() - $("#tasks_heading").height() - b;
+  prodlist_height -= (winheight-656)/mp; // slack space needed grows proportional to winheight
+  $("#worklist_production_choices").css("height", prodlist_height);
+  // Production choices height
+  $("#worklist_left").height(prod_tab_height);
+  let worklist_height = $("#worklist_left").height() - $("#worklist_dialog_headline").height() - $("#worklist_heading").height() - b;
+  worklist_height -= (winheight-656)/mw; // slack space needed grows proportional to winheight
+  $("#city_current_worklist").css("height",worklist_height);
 }
 
 /**************************************************************************
@@ -1166,6 +1267,8 @@ function city_rapture_text(rapture_status) {
 **************************************************************************/
 function city_change_tab(tab_num) {
   city_tab_index = tab_num;
+  if (tab_num==1 && ++prodlists_have_been_fitted < 2)
+    setTimeout(adjust_prodlist_sizes_to_screen, 500);
 }
 
 /**************************************************************************
@@ -2849,9 +2952,10 @@ function city_worklist_dialog(pcity)
     show: { delay:460, effect:"none", duration: 0 }, hide: {delay:50, effect:"none", duration: 0}
   });
 
+  /* prod buttons removed
   if (is_touch_device()) {
     $("#prod_buttons").html("<x-small>1st&thinsp;tap:&thinsp;change. Next&thinsp;taps:&thinsp;add. Tap-tap:&thinsp;clear</x-small>");
-  }
+  }*/
 
   $(".button").button();
 
@@ -2901,6 +3005,12 @@ function city_worklist_dialog(pcity)
   worklist_items.dblclick(handle_current_worklist_direct_remove);
 
   update_worklist_actions();
+
+  $("#worklist_control").children().tooltip({
+    show: { delay:200, effect:"none", duration: 0 }, hide: {delay:120, effect:"none", duration: 0}
+  });
+
+  adjust_prodlist_sizes_to_screen();
 }
 
 /**************************************************************************
@@ -3256,7 +3366,7 @@ function update_worklist_actions()
   }
 
   if (production_selection.length > 0) {
-    $("#prod_buttons").show();
+    //$("#prod_buttons").show();  //prod buttons removed
     $("#city_add_to_worklist_btn").button("enable");
     $("#city_worklist_insert_btn").button("enable");
     $("#city_worklist_append_btn").button("enable");
@@ -3274,7 +3384,7 @@ function update_worklist_actions()
     }
 
   } else {
-    $("#prod_buttons").hide();
+    //$("#prod_buttons").hide();   //prod buttons removed
     $("#city_add_to_worklist_btn").button("disable");
     $("#city_worklist_insert_btn").button("disable");
     $("#city_worklist_change_btn").button("disable");

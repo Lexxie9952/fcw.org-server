@@ -682,10 +682,6 @@ input[type='number'] {
   overflow: auto;
 }
 
-#city_overview_tab {
-  background-image: url('/images/bg-med-dark.jpg');
-}
-
 .ui-dialog {
   border: 1px #432 solid;
   max-height: 100%;
@@ -1493,9 +1489,9 @@ table.vet_level tr:nth-child(9) td {
   padding: 0;
   margin: 0;
   width: 80%;
-  height: 9%;
-  min-height: 1.2em;
-  max-height: 5em;
+  height: 8%;
+  min-height: 1.3em;
+  max-height: 4em;
 }
 
 #worklist_control .wc_spacer {
@@ -1800,12 +1796,13 @@ body:not(.mobile) .ui-dialog.unit_dialog {
     top: -1px;
 }
 
-
+/* These were removed from city.hbs as they're redundant to others
+   and multiply layout issue complexities at different resolutions:
 #prod_buttons {
   float: right;
   clear: both;
 }
-
+*/
 .wider-tooltip {
   max-width:800px;
   padding: 3px;
@@ -2872,9 +2869,14 @@ input[type="email" i], #email {
 #city_foreigners {
   color: var(--default_text_color) !important;
 }
-#city_production_tab {
-  background: url("/images/bg-med-dark.jpg");
+#city_production_tab,
+#city_governor_tab,
+#city_happy_tab,
+#city_traderoutes_tab,
+#city_overview_tab {
+  background: url("/images/bg-dark.jpg");
 }
+
 #city_current_worklist {
   width: 100%;
   float: left;

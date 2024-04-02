@@ -129,51 +129,58 @@ function setup_window_size ()
   $("#cities_tab").show();
   $("#freeciv_logo").show();
   $("#tabs-hel").hide();
+  if (not_large_screen()) {
+    if (is_small_screen()) {
+      // Adjustments for mobile: spatial economy, fit
+      $("#turn_done_button").css({"padding-left":"7px", "padding-right":"7px", "padding-bottom":"8px"});
+      $("#tabs_menu").css("margin-left","-3px");
+      $(".ui-tabs-anchor").css("padding", "7px");
+      $("#freeciv_logo").hide();
+      // Remove text from tabs: icons only:
+      $("#map_tab").children().html("<img style='float:left' src='/images/map_tab_icon_m.png'>");
+      $("#empire_tab").children().html("<img style='float:left' src='/images/empire_tab_icon.png'>");
+      $("#civ_tab").children().html("<img style='float:left' src='/images/gov_tab_icon.png'>");
+      $("#tech_tab").children().html("<img style='float:left' src='/images/tech_tab_icon_m.png'>");
+      $("#players_tab").children().html("<img style='float:left' src='/images/nation_tab_icon.png'>");
+      $("#cities_tab").children().html("<img style='float:left' src='/images/cities_tab_icon.png'>");
+      $("#opt_tab").children().html("<img style='float:left' src='/images/prefs_tab_icon.png'>");
+      $("#hel_tab").children().html("<img style='float:left' src='/images/help_tab_icon_m.png'>");
+      $("#warcalc_tab").children().html("&#x1F3B2;")
+      $("#button_national_units").html("&#9823;");
+      $("#button_unit_homecity").html("&#x1F3E0;");
+      $("#button_unit_deployment").html("&#x2299;");
+      $("#button_city_buildings").html("&#x1F3E2;");
+      $("#button_empire_upkeep").html("&#x1f4b0;");
+      $("#button_empire_prod").html("&#x1F528;");
+      // Remove mini-map
+      $(".overview_dialog").hide(); overview_active = false;
+      // Remove orders buttons
+      //if ($("#game_unit_orders_default").length > 0) $("#game_unit_orders_default").remove();
+      $(".not_mobile").remove(); // gets rid of all except goto,paradrop,airlift,nuke,and "hide buttons"
+      $("#game_unit_orders_default").css("position","absolute");
+      $("#game_unit_orders_default").css("top","48px");
+      $(".order_button").css("padding","1px 1px 0px 6px");
 
-  if (is_small_screen()) {
-    // Adjustments for mobile: spatial economy, fit
-    $("#turn_done_button").css({"padding-left":"7px", "padding-right":"7px", "padding-bottom":"8px"});
-    $("#tabs_menu").css("margin-left","-3px");
-    $(".ui-tabs-anchor").css("padding", "7px");
-    $("#freeciv_logo").hide();
-    // Remove text from tabs: icons only:
-    $("#map_tab").children().html("<img style='float:left' src='/images/map_tab_icon_m.png'>");
-    $("#empire_tab").children().html("<img style='float:left' src='/images/empire_tab_icon.png'>");
-    $("#civ_tab").children().html("<img style='float:left' src='/images/gov_tab_icon.png'>");
-    $("#tech_tab").children().html("<img style='float:left' src='/images/tech_tab_icon_m.png'>");
-    $("#players_tab").children().html("<img style='float:left' src='/images/nation_tab_icon.png'>");
-    $("#cities_tab").children().html("<img style='float:left' src='/images/cities_tab_icon.png'>");
-    $("#opt_tab").children().html("<img style='float:left' src='/images/prefs_tab_icon.png'>");
-    $("#hel_tab").children().html("<img style='float:left' src='/images/help_tab_icon_m.png'>");
-    $("#warcalc_tab").children().html("&#x1F3B2;")
-    $("#button_national_units").html("&#9823;");
-    $("#button_unit_homecity").html("&#x1F3E0;");
-    $("#button_unit_deployment").html("&#x2299;");
-    $("#button_city_buildings").html("&#x1F3E2;");
-    $("#button_empire_upkeep").html("&#x1f4b0;");
-    $("#button_empire_prod").html("&#x1F528;");
-    // Remove mini-map
-    $(".overview_dialog").hide(); overview_active = false;
-    // Remove orders buttons
-    //if ($("#game_unit_orders_default").length > 0) $("#game_unit_orders_default").remove();
-    $(".not_mobile").remove(); // gets rid of all except goto,paradrop,airlift,nuke,and "hide buttons"
-    $("#game_unit_orders_default").css("position","absolute");
-    $("#game_unit_orders_default").css("top","48px");
-    $(".order_button").css("padding","1px 1px 0px 6px");
+      if ($("#game_unit_orders_settlers").length > 0) $("#game_unit_orders_settlers").remove();
+      // Optimise space/fit in game unit panel:
+      $("#game_unit_panel").css({"transform":"scale(0.95)","float":"left","margin-top":"-12px","margin-left":"-22px","width":"100%;"});
+      $("#game_unit_info").css({"float":"left", "width":"2000%"}); // continuous horizontal drag-scroll panel
+      // WE DON'T HAVE OR USE THIS, NOT SURE WHAT IT WAS PLANNED FOR: $("#help_footer").hide();
 
-    if ($("#game_unit_orders_settlers").length > 0) $("#game_unit_orders_settlers").remove();
-    // Optimise space/fit in game unit panel:
-    $("#game_unit_panel").css({"transform":"scale(0.95)","float":"left","margin-top":"-12px","margin-left":"-22px","width":"100%;"});
-    $("#game_unit_info").css({"float":"left", "width":"2000%"}); // continuous horizontal drag-scroll panel
-    // WE DON'T HAVE OR USE THIS, NOT SURE WHAT IT WAS PLANNED FOR: $("#help_footer").hide();
-
-    $(".ui-dialog-titlebar").show(); // patch:was hidden on mobile for more room, but minimize-disabling is worse
-    // TODO: find accurate #id method to do this, ui-id-12 is not for certain:
-    $(".ui-dialog-titlebar").find("#ui-id-12").parent().css({"background":"none","border-style":"none","height":"16px","width":"1px"}); // remove background image
-    $('#ui-id-12').parent().show();  // unhide messagebox title
-    $(".ui-dialog-titlebar").css({"font-size":"70%", "margin-left":"-3px"});
-    $("#game_status_panel_bottom").css("font-size", "0.8em");
-  } else {  // handle case where small window is resized to large again
+      $(".ui-dialog-titlebar").show(); // patch:was hidden on mobile for more room, but minimize-disabling is worse
+      // TODO: find accurate #id method to do this, ui-id-12 is not for certain:
+      $(".ui-dialog-titlebar").find("#ui-id-12").parent().css({"background":"none","border-style":"none","height":"16px","width":"1px"}); // remove background image
+      $('#ui-id-12').parent().show();  // unhide messagebox title
+      $(".ui-dialog-titlebar").css({"font-size":"70%", "margin-left":"-3px"});
+      $("#game_status_panel_bottom").css("font-size", "0.8em");
+    }
+    else {  // medium screen e.g. 1366 x 768, has some issues it needs TLC on:
+      $(".wc_spacer").css("height","2%")
+      $("#worklist_control button").css("height","7%")
+      $(".ui-dialog .ui-dialog-title").css("font-size","115%"); // vert space at premium
+    }
+  }
+  else {  // handle case where small window is resized to large again
     $("#map_tab").children().html("<img style='float:left; margin-right:5px;' src='/images/map_tab_icon_m.png'> Map");
     $("#empire_tab").children().html("<img style='float:left; margin-right:5px;' src='/images/empire_tab_icon.png'> Empire");
     $("#civ_tab").children().html("<img style='float:left; margin-right:5px;' src='/images/gov_tab_icon.png'> Gov.");
