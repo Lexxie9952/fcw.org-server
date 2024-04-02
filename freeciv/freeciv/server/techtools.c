@@ -348,7 +348,7 @@ static int base_tech_cost(struct research *research,
   account for the technology, if applicable. Handle other processing
   events.
   Returns a code indicating the consequences of the blueprint acquisition:
-  0 - Got not bulbs because already had more than blueprint award
+  0 - Got no bulbs because already had more than blueprint award
   1 - Got extra bulbs from the blueprints
   2 - Got enough bulbs from blueprints to discover the tech.
 ****************************************************************************/
@@ -372,7 +372,7 @@ int found_new_blueprint(struct research *research,
   /* blueprint_discount 1-100 possibly credits bulbs for the tech */
   if (blueprint_discount > 0 && blueprint_discount < 100) {
     /* Calculate the bulb credit of the blueprint, with fair rounding */
-    int cost = base_tech_cost(research, tech);
+    int cost = base_tech_cost(research, tech) * game.info.sciencebox/100;
     /* The line below would award the blueprint based on the current
        cost after techleak, which would nullify the techleak effect on
        cost since your blueprint is just worth less now */
