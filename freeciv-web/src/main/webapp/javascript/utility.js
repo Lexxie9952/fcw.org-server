@@ -72,6 +72,7 @@ function FC_WRAP(value, range)
   during an event click.
 **************************************************************************/
 const metaKey = (ev) => {
+  if (!ev) return false;
   return (reconfig_metakey ? (!ev.ctrlKey && ev.shiftKey && ev.altKey) : ev.metaKey);
 }
 
