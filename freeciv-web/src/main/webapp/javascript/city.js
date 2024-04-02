@@ -283,6 +283,7 @@ function show_city_dialog(pcity)
   const is_large = !is_small && !is_medium;
   const winwidth = $(window).width();
   const winheight = $(window).height();
+  const is_med_large = is_large && (winheight > 848) && (winheight < 1050) && (winwidth > 1550) && (winwidth < 1720);
 
   //console.log("show_city_dialog() called.")
   //console.log("    caller is " + show_city_dialog.caller.toString().substring(0,35));
@@ -505,7 +506,7 @@ function show_city_dialog(pcity)
       $("worklist_control").css("padding-top","0px");
       $(".wc_spacer").css("height","2%");
       $(".ui-dialog .ui-dialog-title").css("font-size","115%"); // down from default 140%: vert.space at premium
-      /* At this point we have shrunken Previous/Next/Rename/Buy buttons which are suitable and necessary even for 1024px screen, but
+      /* At this point we have shrunken Previous/Next/Rename/Buy buttons which are suitable and necessary even for 1024horiz screen, but
          unnecessarily small and mismatched out of place on >1280horiz screens: */
       if (winwidth>1270) {
         // Button container, space efficient and positioned right:
@@ -526,7 +527,14 @@ function show_city_dialog(pcity)
     }
   } else { // is_large screen
     // 16:10 screens of certain size tend to need some verticality on worklist_control buttons:
-    if (winheight<1050 && winwidth>1600) $(".wc_spacer").css("height","6.5%");
+    if (is_med_large) {
+      $(".wc_spacer").css("height","6.5%");
+      $(".ui-dialog-buttonset").last().css({"padding-top":"0px", "padding-bottom":"0px",
+      "padding-right":"0px", "padding-left":"0px", "margin-bottom":"-11px", "margin-top":"11px", "margin-right":"-8px" });
+      // Buttons themselves:
+      $(".ui-dialog-buttonset").last().children().css({"padding-top":"4px", "padding-bottom":"4px",
+      "padding-right":"13px", "padding-left":"13px", "margin-bottom":"0px", "margin-right":"0px" })
+    }
     // align "Change Production" and "Add to Worklist" buttons with the wood panel and tab selector buttons to their left.
     //$("#prod_buttons").css({"margin-top": "39px", "margin-right": "2px"});   // these buttons were removed.
     if (!touch_device) { // Highlight keyboard shortcuts for large screens with keyboards (i.e. not touch device)
@@ -1163,7 +1171,7 @@ function show_city_dialog(pcity)
     $("#dialog-extend-fixed-container").hide();
   }
   // Either/OR, worked better on iPad:
-  if (!is_large || touch_device) {
+  if (!is_large || is_med_large || touch_device) {
     // City tab buttons lock to bottom of screen in landscape:
     if(window.innerHeight < window.innerWidth) {
       $('#city_tabs').css( {"position":"static"} );

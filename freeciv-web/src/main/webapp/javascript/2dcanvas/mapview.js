@@ -206,6 +206,7 @@ const not_large_screen = () => { // helps figure out a medium screen like 1376 x
     if ($(window).width() <= 1400 || $(window).height() <= 768) {
       return true;
     }
+    return false;
 }
 /**************************************************************************
   Detect "small" screens e.g., mobile phones.
