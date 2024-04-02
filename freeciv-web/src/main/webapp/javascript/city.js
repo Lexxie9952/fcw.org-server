@@ -283,7 +283,7 @@ function show_city_dialog(pcity)
   const is_large = !is_small && !is_medium;
   const winwidth = $(window).width();
   const winheight = $(window).height();
-  const is_med_large = is_large && (winheight > 848) && (winheight < 1050) && (winwidth > 1550) && (winwidth < 1720);
+  const is_med_large = is_large && (winheight > 768) && (winheight < 1050) && (winwidth > 1400) && (winwidth < 1720);
 
   //console.log("show_city_dialog() called.")
   //console.log("    caller is " + show_city_dialog.caller.toString().substring(0,35));
