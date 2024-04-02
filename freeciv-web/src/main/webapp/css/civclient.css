@@ -2856,6 +2856,7 @@ input[type="email" i], #email {
   clear: left;
   width: 95%;
   line-height:11px !important;
+  margin-bottom: 4px;  /* can prevent clipping on citizen nationality/foreigners */
 }
 #prod_descr,
 #city_dialog,
