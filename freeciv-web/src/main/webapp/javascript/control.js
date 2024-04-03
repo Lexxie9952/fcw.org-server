@@ -6114,13 +6114,15 @@ function create_connect_packet(packet)
           || (client_rules_flag[CRF_CANALS] && (upgrade_extra == EXTRA_CANAL || upgrade_extra == EXTRA_WATERWAY))
           || (client_rules_flag[CRF_EXTRA_HIGHWAY] && upgrade_extra == EXTRA_HIGHWAY)
           || (client_rules_flag[CRF_SEABRIDGE] && upgrade_extra == EXTRA_SEABRIDGE)
+          || (client_rules_flag[CRF_EXTRA_QUAY] && upgrade_extra == EXTRA_QUAY)
           || (typeof EXTRA_MAGLEV !== "undefined" && upgrade_extra == EXTRA_MAGLEV)
           || upgrade_extra == EXTRA_FARMLAND
           || upgrade_extra == EXTRA_IRRIGATION
           || upgrade_extra == EXTRA_MINE
           || upgrade_extra == EXTRA_OIL_WELL
-          || upgrade_extra == EXTRA_NONE)
+          || upgrade_extra == EXTRA_NONE) {
         order['sub_target'] = upgrade_extra;
+      }
       else order['sub_target'] = 0; // Could set a connect_target for advanced commands
       order['action'] = ACTION_COUNT; // Could set a connect_ACTION for more commands
 
@@ -6155,7 +6157,7 @@ function extra_dep(punit, ptile, extra_id, irrigated_before)
 
   if (extra_id == EXTRA_ROAD) {
     var possible_roads = get_what_roads_are_legal(punit, ptile, true);
-    if (possible_roads.length) extra_id = possible_roads[0];
+    if (possible_roads && possible_roads.length) extra_id = possible_roads[0];
     else extra_id = CONNECT_ACTION_ILLEGAL;
 
     return extra_id;
@@ -7003,8 +7005,16 @@ function get_what_roads_are_legal(punit, ptile, connect_mode)
   const has_river = tile_has_river(ptile);
   const knows_bridges = tech_known("Bridge Building");
   const can_rail = tech_known("Railroad");
+  const can_quay = tech_known("Pottery");
   const hwy_rules = client_rules_flag[CRF_EXTRA_HIGHWAY];
   const maglev_rules = client_rules_flag[CRF_MAGLEV];
+  const quay_rules = client_rules_flag[CRF_EXTRA_QUAY];
+  var quay_mode;
+  // For now allow console setting of connect_quays to override default, later
+  // can be a simpleStorage setting:
+  if (typeof(connect_quays) !== "undefined") {
+    quay_mode = connect_quays;
+  } else quay_mode = true;   // set false if we want to stop defaulting to make quays
 
   var roading_already = false;
   /* In connect mode, we don't override road-type priority on distant tiles
@@ -7073,13 +7083,25 @@ function get_what_roads_are_legal(punit, ptile, connect_mode)
 //......
   if (!tile_has_extra(ptile, EXTRA_ROAD)) { //  (!hwy_rules || !automobile) && !road
     if (!hwy_rules) { // !hwy_rules && automobile && !road
-      if (!has_river || knows_bridges)
+      if (!has_river || knows_bridges) {
         road_list.push(extras['Road']['id']);
+      }
+      else if (has_river && quay_rules && !tile_has_extra(ptile, EXTRA_QUAY)) {
+        if (quay_mode && can_quay) road_list.push(extras['Quay']['id']);
+      }
       return road_list;
     }
 //......
     else if (!tile_has_extra(ptile, EXTRA_HIGHWAY)) { // hwy_rules && !automobile && !highway && !road
-      if (has_river && !knows_bridges) return null;
+      if (has_river && !knows_bridges) {
+        if (has_river && quay_rules && !tile_has_extra(ptile, EXTRA_QUAY)) {
+          if (quay_mode && can_quay) road_list.push(extras['Quay']['id']);
+          return road_list;
+        }
+        else {
+          return null;
+        }
+      }
 
       road_list.push(extras['Road']['id']);
       return road_list;
