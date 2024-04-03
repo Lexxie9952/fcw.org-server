@@ -136,6 +136,7 @@ sprites =
 		"f.corsica-large", "flags/corsica-large"
 		"f.cossack-large", "flags/cossack-large"
 		"f.costa_rica-large", "flags/costa_rica-large"
+		"f.couto_misto-large", "flags/couto_misto-large"
 		"f.courland-large", "flags/courland-large"
 		"f.crete-large", "flags/crete-large"
 		"f.crimean_tatar-large", "flags/crimean_tatar-large"
@@ -493,7 +494,7 @@ sprites =
     "f.spartan-large", "flags/spartan-large"
 		"f.srilanka-large", "flags/srilanka-large"
 		"f.srivijaya-large", "flags/srivijaya-large"
-;		"f.stpatrick-large", "flags/stpatrick-large"	; Alternate Irish 
+;		"f.stpatrick-large", "flags/stpatrick-large"	; Alternate Irish
 		"f.sudan-large", "flags/sudan-large"
 		"f.suebian-large", "flags/suebian-large"
 		"f.sumeria-large", "flags/sumeria-large"

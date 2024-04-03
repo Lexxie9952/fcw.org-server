@@ -1,0 +1,58 @@
+[nation_coutense]
+translation_domain="freeciv"
+
+name=_("Coutense")
+plural=_("?plural:Coutenses")
+groups= "Medieval", "Early Modern", "European"
+legend = _("Couto Misto was a microstate on the border between Portugal\
+ and Spain. It consisted of three villages ruled by a republic, where\
+ the heads of families voted for a 'Juiz.' It was formed in the 10th\
+ century and annexed by Portugal and Spain in 1868 under the Treaty of\
+ Lisbon. In the 1990s, interest in recovering the Couto Misto emerged.")
+
+leaders = {
+ "name",                      "sex"
+ "Delfim Modesto Brandão",    "Male"
+ "Astrud Modesta Brandão",    "Female"
+}
+
+ruler_titles = {
+ "government",      "male_title",           "female_title"
+ "Despotism",       _("Lord %s"),           _("Lady %s")
+ "Fundamentalism",  _("Bishop %s"),         _("Mother Superior %s")
+ "Democracy",       _("Juiz %s"),           _("Juiza %s")
+ "Republic",        _("Juiz %s"),           _("Juiza %s")
+}
+
+flag="couto_misto"
+flag_alt = "-"
+style = "Classical"
+
+init_techs=""
+init_buildings=""
+init_units=""
+
+civilwar_nations = "galician", "portuguese", "spanish"
+
+cities =
+  "Rubiás",
+  "Santiago de Rubiás",
+  "Meaus",
+  "Camiño Privilexiado",
+  "Tosende",
+  "San Paio",
+  "Paradela",
+  "A Quinta",
+  "San Martiño",
+  "Sabucedo Dos Peros",
+  "Calvos de Randín",
+  "Vilar",
+  "Vilariño",
+  "Rioseco",
+  "Vilamaior Da Boullosa",
+  "Lomear",
+  "Padroso",
+  "Feas",
+  "Calvos",
+  "Covas",
+  "São Antonino"

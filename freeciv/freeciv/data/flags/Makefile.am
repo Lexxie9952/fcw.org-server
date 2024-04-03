@@ -126,6 +126,7 @@ flag_files =				\
 		cossack.png		\
 		costa_rica.png		\
 		courland.png		\
+ 		couto_misto.png		\
 		crete.png		\
 		crimean_tatar.png	\
 		croatia.png		\

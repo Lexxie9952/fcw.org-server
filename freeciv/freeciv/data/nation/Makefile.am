@@ -132,6 +132,7 @@ pkgdata_DATA = \
 		corsican.ruleset \
 		cossack.ruleset \
 		costarican.ruleset \
+ 		coutense.ruleset \
 		cree.ruleset \
 		cretan.ruleset \
 		crimeantatar.ruleset \
@@ -564,7 +565,7 @@ pkgdata_DATA = \
 		zapotec.ruleset \
 		zhuang.ruleset \
 		zimbabwean.ruleset \
-		zulu.ruleset 
+		zulu.ruleset
 
 EXTRA_DIST = $(pkgdata_DATA) Makefile.am.sh
 
