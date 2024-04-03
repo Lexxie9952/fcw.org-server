@@ -4267,6 +4267,7 @@ set =
       "startunits", "DDDwwwtuuuU", "FALSE"  ;3 Tribesmen, 3 Workers, 1 Caravan, 1 Founders, 2 Settlers, 1 Well-Digger
       "steepness", 20, FALSE
       "techleak", 50, FALSE
+      "techleakstyle", 1, FALSE             ; sets LOG2 techleakstyle: first discovery -1/2 of techleak, second -1/4, third -1/8, etc.
       "techlossforgiveness", 200, FALSE
       "techlossrestore", 100, FALSE
       "techpenalty", 0, FALSE
