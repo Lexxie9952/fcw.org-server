@@ -4416,7 +4416,7 @@ veteran_move_bonus = 0, 0, 0, 0, 10080, 10080, 10080
 roles         = ""
 helptext      = _("\
 The most advanced Fighter, with improved attack and longer range. Stealth Fighters can’t be seen unless adjacent\
- to an enemy. Stealth evasion gives a 25% bonus against all Anti-Air units, and reduces\
+ to an enemy. Stealth evasion gives a 25% attack bonus against all Anti-Air units, and reduces\
  SAM Batteries down to a smaller 25% bonus. A Stealth Fighter can do 3\
  attacks per turn. \n\
 "), _("
@@ -4478,7 +4478,7 @@ veteran_move_bonus = 0, 0, 0, 0, 10080, 10080, 10080
 roles         = ""
 helptext      = _("\
 Stealth Multi-Fighters can’t be seen unless adjacent to an enemy. Stealth evasion gives a\
- 25% bonus against all Anti-Air units, and reduces SAM Batteries down to a smaller 25% bonus.\
+ 25% attack bonus against all Anti-Air units, and reduces SAM Batteries down to a smaller 25% bonus.\
  A Stealth Multi-Fighter can do 2 attacks per turn, and can Vigil any tile it occupies. \n\
 "), _("
 INTERCEPTOR：the Vigil order lets Stealth Fighters auto-attack adjacent Air units if they\
@@ -4540,7 +4540,7 @@ veteran_move_bonus = 0, 0, 0, 0, 10080, 10080, 10080
 roles         = ""
 helptext      = _("\
 The deadliest Bomber, with improved attack and speed. Stealth Bombers can’t be seen\
- unless adjacent to an enemy. Stealth evasion gives a 25% bonus against all Anti-Air\
+ unless adjacent to an enemy. Stealth evasion gives a 25% attack bonus against all Anti-Air\
  units, and reduces SAM Batteries down to only a 25% bonus. A Stealth Bomber may do\
  a maximum of three attacks per turn. Stealth Bombers can Bomb Strike, an\
  instant-Pillage of tiles from the air. May carry two Bombs. \n\
