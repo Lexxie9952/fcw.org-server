@@ -427,6 +427,7 @@ artists = "
    Rep. Congo		J.M. Maalderink
    Rhineland		J.M. Maalderink
    Rif			Mysid (Wikipedia)
+   Romani               Lexxie (Wikipedia)
    Romania		Daniel McRae
    Rome			Vasco Alexandre Da Silva Costa, Patricia Fidi
    Russia		Oleg Krivosheev
@@ -486,6 +487,7 @@ artists = "
    Southern Sudan	J.M. Maalderink
    South Yemen		J.M. Maalderink
    Soviet		Sigge Kotliar
+   Sparta               Lexxie
    Spain		Pedro A. Gracia Fajardo
    Sri Lanka		Tobias Jakobs
    Sri Vijaya		Dan Cottrell and Daniel Markstedt
@@ -1000,6 +1002,7 @@ sprites =
 		"f.r_congo", "flags/r_congo"
 		"f.rhineland", "flags/rhineland"
 		"f.rif", "flags/rif"
+		"f.romani", "flags/romani"
 		"f.romania", "flags/romania"
 		"f.rome", "flags/rome"			; Roman republic flag
 		"f.russia", "flags/russia"

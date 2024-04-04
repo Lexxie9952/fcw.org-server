@@ -412,8 +412,9 @@ pkgdata_DATA = \
 		rhenish.ruleset \
 		riffian.ruleset \
 		riograndense.ruleset \
-		romanian.ruleset \
 		roman.ruleset \
+		romani.ruleset \
+		romanian.ruleset \
 		romansh.ruleset \
 		russian.ruleset \
 		rusyn.ruleset \

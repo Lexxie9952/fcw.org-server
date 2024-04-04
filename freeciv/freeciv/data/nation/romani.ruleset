@@ -1,0 +1,103 @@
+[nation_romani]
+
+name   = _("Rom")
+plural = _("?plural:Romani")
+groups = "Medieval", "Early Modern", "Modern"
+
+legend = _("The Romani are an ethnic group of Indo-Aryan origin, who traditionally\
+ lived a nomadic lifestyle. Originally from near Rajasthan in India, the name\
+ डोम means 'travelling musicians and dancers.' Their westward migration happened\
+ in waves starting around 1000 CE. Confused by natives as Egyptians, they were\
+ also called 'Gypsies.' Although they are widely dispersed, their most\
+ concentrated populations today are in Bulgaria, Hungary, Romania, Spain,\
+ and Turkey.")
+
+leaders = {
+ "name",               "sex"
+ "Scaramuccia",        "Male"
+ "Iulian Rădulescu",   "Male"
+ "Matiasz Korolewicz", "Male"
+ "Johnne Wanne",       "Male"
+ "Haniel Boswell",     "Male"
+ "Jacob Rewbrey",      "Male"
+ "Harry Burton",       "Male"
+ "Mustafa Shibil",     "Male"
+}
+
+ruler_titles = {
+ "government",      "male_title",           "female_title"
+ "Despotism",   _("Caravan Master %s"), _("Caravan Mistress %s")
+ "Monarchy",    _("Nomad King %s"),     _("Nomad Queen %s")
+}
+
+flag = "romani"
+flag_alt = "-"
+style = "Steppes"
+
+init_techs = ""
+init_buildings = ""
+init_units = ""
+
+civilwar_nations = "bulgaria", "romania", "hungary", "turkey"
+
+cities =
+  "Stolipinovo",
+  "Fakulteta",
+  "Tokaito",
+  "Kalderaš",
+  "Nadezhda",
+  "Maksuda",
+  "Ursari",
+  "Romungro",
+  "Gurbet",
+  "Sinti Gar",
+  "Sremski Gurbet",
+  "Gurbari",
+  "Sheker",
+  "Hristo Botev",
+  "Shesti",
+  "Probuda",
+  "Lăutari",
+  "Arli",
+  "Karmen",
+  "Lozenets",
+  "Lovari",
+  "Filipovtsi",
+  "Bukovlak",
+  "Varbitsa",
+  "Dolni Tsibar",
+  "Belomortsi",
+  "Moravitsa",
+  "Kuršanec",
+  "Janov",
+  "Bedřiška",
+  "Mojžíř",
+  "Muszkástelep",
+  "Mésztelep",
+  "Csenyéte",
+  "Bresje",
+  "Dabnica",
+  "Vulcănești",
+  "Ferentari",
+  "Fântânele",
+  "Cornetu",
+  "Pata-Rât",
+  "Gămăcești",
+  "Elbaevo",
+  "Kartonsko Naselje",
+  "Podhorany",
+  "Sacromonte",
+  "Drosero",
+  "Athigganochori",
+  "Sukapı",
+  "Banatiski",
+  "Bugurdži",
+  "Prekmurski",
+  "Petrescu Gar",
+  "Džambazi",
+  "Dolenjski Gar",
+  "Veršend",
+  "Sepečides Gar",
+  "Cioaba Gar",
+  "Mariska",
+  "Sinte"

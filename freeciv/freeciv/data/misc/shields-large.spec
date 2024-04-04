@@ -429,6 +429,7 @@ sprites =
 		"f.shield.r_congo", "flags/r_congo-shield-large"
 		"f.shield.rhineland", "flags/rhineland-shield-large"
 		"f.shield.rif", "flags/rif-shield-large"
+		"f.shield.romani", "flags/romani-shield-large"
 		"f.shield.romania", "flags/romania-shield-large"
 		"f.shield.rome", "flags/rome-shield-large"
 		"f.shield.russia", "flags/russia-shield-large"

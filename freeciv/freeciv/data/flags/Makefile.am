@@ -420,6 +420,7 @@ flag_files =				\
 		r_congo.png		\
 		rhineland.png		\
 		rif.png			\
+		romani.png		\
 		romania.png		\
 		rome.png		\
 		rvn.png			\
