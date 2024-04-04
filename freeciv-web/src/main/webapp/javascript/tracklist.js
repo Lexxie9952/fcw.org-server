@@ -1522,7 +1522,7 @@ var tracklist = [
 {filepath: "1/Saga.VinternsDrom.AdrianVonZiegler",conditions: [[{"tech":"Masonry"},{"!tech":"Invention"}],[{"tech":"Alphabet"},{"!tech":"Invention"}],[{"tech":"Pottery"},{"!tech":"Invention"}]],f:"m4a",creds: "" },
 {filepath: "2/SalutetotheSun.StressRelease.YogaTribe",conditions: [[{"tech":"Medicine"},{"!tech":"Steel"}]],f:"m4a",creds: "" },
 {filepath: "1/SauriaBloodforBloodOST.TauroxsFate.IvanDuch",conditions: [[{"tech":"Ceremonial Burial"},{"!tech":"Mysticism"}]],f:"m4a",creds: "" },
-{filepath: "1/SauriaBloodforBloodOST.TauroxsRoar.IvanDuch",conditions: [[{"tech":"Iron Working"},{"!tech":"Invention"},{"!tech":"Philsophy"}]],f:"m4a",modality:"battle only",creds: "" },
+{filepath: "1/SauriaBloodforBloodOST.TauroxsRoar.IvanDuch",conditions: [[{"tech":"Iron Working"},{"!tech":"Invention"},{"!tech":"Philosophy"}]],f:"m4a",modality:"battle only",creds: "" },
 {filepath: "2/SauriaBloodforBloodOST.WhispersintheCell.IvanDuch",conditions: [[{"tech":"Bronze Working"},{"!tech":"Monotheism"}]],f:"m4a",creds: "" },
 {filepath: "3/Screenplaying.OnceUponATimeStorybookLove.MarkKnopfler",conditions: [[{"tech":"Sanitation"},{"!tech":"Combustion"}]],f:"m4a",creds: "" },
 {filepath: "2/SeaMeditation.Bathtub.HTakahashi",conditions: [[{"tech":"Philosophy"},{"!tech":"Gunpowder"},{"!tech":"Steam Engine"}]],f:"m4a",creds: "" },

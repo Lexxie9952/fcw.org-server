@@ -2041,7 +2041,7 @@ function handle_begin_turn(packet)
   update_game_unit_panel();
   update_game_status_panel();
 
-  if (tracklist_loaded && play_music && refilter_music_at_TC) reset_filtered_tracklist();
+  if (tracklist_loaded && play_music && refilter_music_at_TC) do_filtered_tracklist();
 
   var funits = get_units_in_focus();
   if (funits != null && funits.length == 0) {
