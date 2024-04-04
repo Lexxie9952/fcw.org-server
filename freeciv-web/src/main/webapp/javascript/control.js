@@ -8425,7 +8425,7 @@ function openFullscreen() {
     if (active_dialogs.length) {
       var dialog_id = active_dialogs.pop();
       remove_active_dialog(dialog_id);
-     }
+    }
     return;
   }
   fullscreen = true;
