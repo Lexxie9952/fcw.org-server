@@ -502,6 +502,7 @@ flags    = ""
 graphic     = "a.masonry"
 graphic_alt = "-"
 cost = 24
+helptext    = _("Allows Forts.")
 
 [advance_mass_production]
 name     = _("Mass Production")
