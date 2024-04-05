@@ -63,7 +63,7 @@ Gold now produces +8 trade (previous 0/1/6 was an inferior resource)</li>
    Can attack river tiles. Can do trade routes and help build wonders. Does not cause unhappiness</li>
 <li>Added Galley. A2 D2 HP10. Upgrades Trireme</li>
 <li>Added War Galley. A3 D3 HP10. The flagship warship of the ancient seas</li>
-<li>Caravel is now: A4 D4 HP10. Cost 30. 7 moves</li>
+<li>Caravel is now: A4 D4 HP10. Cost 35. 7 moves</li>
 <li>Galleon combat improved A2 D3 HP20</li>
 <li>Frigate combat improved A4 D3 HP20</li>
 <li>Submarine is now A9: the balanced sweet spot between Civ1 and Civ2. Carries 4 missiles not 8.
