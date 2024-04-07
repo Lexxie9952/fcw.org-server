@@ -33,19 +33,31 @@ var breakcounter = 0;           // used for counting when musicbreakfrequency wi
 var trackcounter = 0;           // # of tracks played so far (used to determine if we get a break)
 var current_track_info;         // allows inspecting the current playing track (for debug or other purposes)
 
-var fake_player_num = 0;        // virtual playerno for observers to hear era-appropriate music
+var fake_player_num = 0;        // virtual playerno for observers and GM to hear era-appropriate music
+var play_priority_tracks = true;// opt-out for playing priority tracks first
 /**************************************************************************
 ...Called the first time in a session before a track is to be played. This
    sets up all our data structures and maintenance vars.
 **************************************************************************/
 function tracklist_init() {
+  // Get music modality from local storage
   music_modality = simpleStorage.get("music_modality");
   if (!music_modality) music_modality = "normal";
   $("#select_music_modality").val(music_modality);
+
+  // Don't call this function more than once:
   if (tracklist_loaded) return;
+
   if (DEBUG_AUDIO >= 3) console.log("tracklist_init()");
 
   handle_game_uid();
+  /* Priority tracks are triggered by in-game events but are potentially a big nuisance if user is on
+    a browser without cached local storage. e.g., private mode browser would always play the same songs
+    first in each new session; playing on different computer/browser would trigger same song, etc. */
+  if (browser.firstOrPrivateSession) {
+    // first time in this browser OR incognito mode: no local storage: don't prioritize 'priority tracks'
+    play_priority_tracks = false;
+  }
 
   // Set all .id properties
   for (track in tracklist) {
@@ -622,8 +634,10 @@ function pick_next_track() {
         }
       }
       // If we have a priority track queued at top of list, pick it:
-      if (filtered_tracklist.length > 0 && is_priority_track(0, true) && !client_is_observer()) {
-        // (Observers get priority tracks as legal but not prioritised, since they aren't really that player)
+      if (filtered_tracklist.length > 0
+          && play_priority_tracks        // 'false' is opt-out: e.g., incognito sessions with no local storage
+          && is_priority_track(0, true)
+          && !client_is_observer()) {    // 'fake players' can't trigger player-specific priority conditions
         f_track = 0;
       }
       // Otherwise pick a random track from remaining list of unplayed appropriate tracks:
