@@ -33,16 +33,17 @@ var google_user_token = null;
    on whatever quirks they have, then make a detector and set the var in
    check_browser_compatibility, below */
 var browser = {
-  "opera": false,
-  "ie": false,
-  "firefox": false,
   "macos": false,
   "windows": false,
   "linux": false,
-  "metaKey": "WIN-",        //
-  "metaKeySymbol": "WIN-"   // read-only (backup) version of prop. above
+  "metaKey": "&#8862;", // defaults as unicode 4-paned window symbol for windows key
+  "metaKeySymbol": "&#8862;",   // read-only (backup) version of prop. above
+  "firstOrPrivateSession": false, // whether local storage from previous sessions recalled
+  //on as-needed basis for cases needing different handling:
+  "opera": false,  // opera mis-locates the turn done button
+  "ie": false,     // internet explorer is garbage, disallow
+  "firefox": false // firefox hijacks alt-shift and ctrl-shift clicking
    /*,
-  "firefox": false,
   "chrome": false,
   "chromium": false,
   "edge": false,
@@ -159,6 +160,7 @@ function check_browser_compatibility()
   if (navigator.userAgent.includes("Mac")) {
     browser.mac = true;
     browser.metaKeySymbol = "&#8984;";
+    // Mac users are accustomed to ⌥⬆︎ symbols for option-shift:
     if (reconfig_metakey) browser.metaKey="&#8997;&#8679;";  // ⌥⬆︎
 
   }
@@ -1281,6 +1283,8 @@ function show_intro_dialog(title, message) {
   var stored_username = simpleStorage.get("username", "");
   if (stored_username != null && stored_username != false) {
     $("#username_req").val(stored_username);
+  } else {
+    browser.firstOrPrivateSession = true;
   }
   var stored_password = simpleStorage.get("password", "");
   if (stored_password != null && stored_password != false) {
