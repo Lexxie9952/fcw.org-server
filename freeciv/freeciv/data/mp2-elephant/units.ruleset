@@ -4755,7 +4755,7 @@ helptext      = _("\
 The Galley is an all-purpose sea unit and upgrades the Trireme. It has decent\
  combat strength, can transport, and is a Commerce unit. The entry on Caravan\
  explains what Commerce units may do. Galleys can attack and travel on rivers,\
- but can’t attack the shore. Galleys do not cause unhappiness.\
+ but can’t attack the shore. They neither impose nor or subject to ZOC. Galleys do not cause unhappiness.\
  Veteran wooden ships gain 1 extra move point.\
 "), _("
 Like most early sea units, when it initiates an attack, there will be 15 rounds\
@@ -4905,7 +4905,7 @@ helptext      = _("\
 Caravels upgrade older sea units, and are a big advance in combat, speed,\
  range, and transport capacity. They have the commerce ability of the Galley,\
  but cannot build Wonders. Caravels can attack and travel on rivers and do\
- shore attacks. As a Commerce unit, the Caravel does not cause unhappiness.\
+ shore attacks. They impose no ZOC, but are subject to ZOC. As a Commerce unit, the Caravel does not cause unhappiness.\
  Veteran wooden ships gain 1 extra move point.\
 "), _("
 Like most early sea units, when it initiates an attack, there will be 15 rounds\
@@ -4965,7 +4965,7 @@ Like most early sea units, when it initiates combat there will be 15 rounds\
  result in the loss of one of the units. Although the Galleon is not a Commerce\
  unit, it retains one vestige of the commercial abilities for the ships it upgrades.\
  It can enter Peace waters to deliver commercial cargo, and does not cause\
- unhappiness. Veteran wooden ships gain 1 extra move point.\
+ unhappiness. They impose no ZOC, but are subject to ZOC. Veteran wooden ships gain 1 extra move point.\
 "), _("
 Stack-Escape：60% odds to evade stack-death if attacker doesn’t have more moves than it does.\
 ")
@@ -5052,7 +5052,7 @@ uk_gold       = 1
 cargo         = "Land", "LandNoKill", "LandAirSea", "Big Land", "LandRoad", "Cargo",
                 "RiverShip", "Sea", "Submarine", "Trireme"
 flags         = "Settlers", "Infra", "CanRoad", "CanFortress", "Cant_Pillage", "NonMil", "NonProvoking",
-                "HasNoZOC", "NoVeteran", "Capturable", "Expellable", "BadCityDefender", "Multislot",
+                "NoVeteran", "Capturable", "Expellable", "BadCityDefender", "Multislot",
                 "Airbase", "HasNoZOC" ;Airbase for buoys
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
@@ -5556,7 +5556,7 @@ veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
 veteran_move_bonus = 0, 0, 0, 0, 10080, 10080, 10080
 roles         = "Hunter"
 helptext      = _("\
-Submarines are strong attackers but weak defenders. They are unreachable by Air units,\
+Submarines are strong attackers but weak defenders. They neither impose nor or subject to ZOC. They are unreachable by Air units,\
  but do not block air attacks on surface ships. Submarines can’t attack units on shore. \n\n
 Submarines can’t be seen by other players unless they have：a buoy cardinally\
  adjacent, an air unit or city adjacent, a Destroyer or more modern naval unit adjacent,\

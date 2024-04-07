@@ -2919,6 +2919,22 @@ AAA can convert to Mobile SAM for free after 9 turns of service. The order must 
   • Gets the 50% defensive bonus automatically while in cities.
 ➤ May acquire veteran status.
   • Veterans have increased strength in combat.
+
+Veteran Levels for Mobile SAM are the standard ruleset default:
+<table class="vet_level">
+<tr><th>Veteran level</th><th>Power factor</th><th>Promotion Odds</th><th>Move bonus</th></tr>
+<tr><hr style="border-top: 1px solid #000"></tr>
+<tr><td>green</td><td>100%</td><td>50%</td> <td>-</td></tr>
+<tr><td>veteran</td><td>150%</td><td>33%</td> <td>-</td></tr>
+<tr><td>hardened</td><td>175%</td><td>20%</td> <td>-</td></tr>
+<tr><td>elite</td><td>200%</td><td>15%</td> <td>-</td></tr>
+<tr><td>crack</td><td>210%</td><td>15%</td> <td>+ 1/9</td></tr>
+<tr><td>master</td><td>220%</td><td>15%</td> <td>+ 1/9</td></tr>
+<tr><td>champion</td><td>230%</td><td>-</td><td>+ 1/9</td></tr></table>
+<br><b style="font-family:Helvetica; font-size:larger">Transport Loading Logistics</b>
+<img src="/images/man/logistics_artillery_load.png">
+<b style="font-family:Helvetica; font-size:larger">Transport Unloading Logistics</b>
+<img src="/images/man/logistics_artillery_unload.png">
 </pre>
 </div>
 <div class='item' id='utype46'>
@@ -4467,7 +4483,7 @@ Veteran Levels for Longboat:
 <pre class='firepower'>Firepower: 1</pre>
 <pre class='hitpoints'>Hitpoints: 10</pre>
 <pre class='obsolete'>Obsolete by: Caravel</pre>
-<pre class='helptext'><b class='unit_desc'>The Galley is an all-purpose sea unit and upgrades the Trireme. It has decent combat strength, can transport, and is a Commerce unit. The entry on Caravan explains what Commerce units may do. Galleys can attack and travel on rivers, but cannot attack the shore. Galleys do not cause unhappiness. Veteran wooden ships gain 1 extra move point.</b>
+<pre class='helptext'><b class='unit_desc'>The Galley is an all-purpose sea unit and upgrades the Trireme. It has decent combat strength, can transport, and is a Commerce unit. The entry on Caravan explains what Commerce units may do. Galleys can attack and travel on rivers, but cannot attack the shore. They neither impose nor or subject to ZOC. Galleys do not cause unhappiness. Veteran wooden ships gain 1 extra move point.</b>
 
 <b class='unit_desc'>Like most early sea units, when it initiates an attack, there will be 15 rounds of combat and 15 total hp lost between both units. This may or may not result in the loss of one of the units.</b>
 <hr style='border-top: 1px solid #000'>➤ Belongs to <b class='help_units_uclass'>RiverShip</b> unit class.
@@ -4621,7 +4637,7 @@ Veteran Levels for Ram Ships:
 <pre class='firepower'>Firepower: 1</pre>
 <pre class='hitpoints'>Hitpoints: 10</pre>
 <pre class='obsolete'>Obsolete by: Galleon</pre>
-<pre class='helptext'><b class='unit_desc'>Caravels upgrade older sea units, and are a big advance in combat, speed, range, and transport capacity. They have the commerce ability of the Galley, but cannot build Wonders. Caravels can attack and travel on rivers and do shore attacks. As a Commerce unit, the Caravel does not cause unhappiness. Veteran wooden ships gain 1 extra move point.</b>
+<pre class='helptext'><b class='unit_desc'>Caravels upgrade older sea units, and are a big advance in combat, speed, range, and transport capacity. They have the commerce ability of the Galley, but cannot build Wonders. Caravels can attack and travel on rivers and do shore attacks. They impose no ZOC, but are subject to ZOC. As a Commerce unit, the Caravel does not cause unhappiness. Veteran wooden ships gain 1 extra move point.</b>
 
 <b class='unit_desc'>Like most early sea units, when it initiates an attack, there will be 15 rounds of combat and 15 total hitpoints lost between both units. This may or may not result in the loss of one of the units.</b>
 <hr style='border-top: 1px solid #000'>➤ Belongs to <b class='help_units_uclass'>RiverShip</b> unit class.
@@ -4675,7 +4691,7 @@ Veteran Levels for Caravels:
 <pre class='firepower'>Firepower: 1</pre>
 <pre class='hitpoints'>Hitpoints: 20</pre>
 <pre class='obsolete'>Obsolete by: Transport</pre>
-<pre class='helptext'><b class='unit_desc'>The Galleon is a heavily armed transport ship that can carry up to 4 units. Galleons can attack and travel on rivers, and also do shore attacks. Galleon crews repair their ship an extra +2hp per turn, regardless of whether it has moved. Although the Galleon is not a Commerce unit, it retains one vestige of the commercial abilities for the ships it upgrades. It can enter Peace waters to deliver commercial cargo, and does not cause unhappiness. Veteran wooden ships gain 1 extra move point.</b>
+<pre class='helptext'><b class='unit_desc'>The Galleon is a heavily armed transport ship that can carry up to 4 units. Galleons can attack and travel on rivers, and also do shore attacks. Galleon crews repair their ship an extra +2hp per turn, regardless of whether it has moved. Although the Galleon is not a Commerce unit, it retains one vestige of the commercial abilities for the ships it upgrades. It can enter Peace waters to deliver commercial cargo, and does not cause unhappiness. They impose no ZOC, but are subject to ZOC. Veteran wooden ships gain 1 extra move point.</b>
 
 <b class='unit_desc'>Like most early sea units, when it initiates combat there will be 15 rounds of combat and 15 total hitpoints lost between both units. This may or may not result in the loss of one of the units.</b>
 
@@ -5253,7 +5269,7 @@ Veteran Levels for Battleship:
 <pre class='firepower'>Firepower: 2</pre>
 <pre class='hitpoints'>Hitpoints: 28</pre>
 <pre class='obsolete'>Obsolete by: Missile Submarine</pre>
-<pre class='helptext'><b class='unit_desc'>Submarines are strong attackers but weak defenders. They are unreachable by Air units, but do not block air attacks on surface ships. Submarines can’t attack units on shore.
+<pre class='helptext'><b class='unit_desc'>Submarines are strong attackers but weak defenders. They neither impose nor or subject to ZOC. They are unreachable by Air units, but do not block air attacks on surface ships. Submarines can’t attack units on shore.
 
 Submarines can’t be seen by other players unless they have：a buoy cardinally adjacent, an Air unit or city adjacent, a Destroyer or more modern naval unit adjacent, a naval base adjacent or cardinally 2 tiles distant, or a helicopter 2 tiles distant. See the chart in Help >> Units >> Submarine.
 </b>
