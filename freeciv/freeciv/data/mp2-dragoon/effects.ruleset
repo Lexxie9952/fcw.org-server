@@ -1188,11 +1188,50 @@ reqs    =
     }
 ; ***********************************************************
 
+; NUCLEAR BLAST SURVIVAL LAYERS.
+; ***********************************************************
+; FIRST LAYER: 25% units in city, 0% units in open, 45% citizens in city.   (see <game.ruleset> around line 250.)
+; SECOND LAYER: Applies to all nukes but isn't incorporated in first layer because this layer confers "survival in the open" odds:
+[effect_second_base_layer_nuclear_survival_odds]  ; NUCLEAR MISSILE and TACTICAL NUKE do not adjust these base odds.
+type    = "Nuke_Survival_Pct"
+value   = 10  ; UNITS in city: 25+10 = 35% survival. In open:         10% survival. When attacking a nuke in a city: (35+10) * 2 = 90% survival
+              ; CITIZENS:      45+10 = 55% survival.                                When attacking a nuke in open:   (10+10) * 2 = 40% survival
+reqs    =
+   { "type",      "name",                   "range", "present"
+     "UnitFlag",  "Nuclear",                "Local", TRUE
+   }
+
+;ADJUSTED UNITS____________________________________________________________
+[effect_abomb_survival_odds]
+type    = "Nuke_Survival_Pct"
+value   = 10  ; UNITS in city: 35+10 = 45% survival. In open: 10+10 = 20% survival. When attacking a nuke in a city: (45+10) * 2 = 110% survival
+              ; CITIZENS:      55+10 = 65% survival.                                When attacking a nuke in a open: (20+10) * 2 =  60% survival
+reqs    =
+   { "type",      "name",                   "range", "present"
+     "UnitType",  "Atom Bomb",              "Local", TRUE
+   }
+[effect_hbomb_survival_odds_base_level]
+type    = "Nuke_Survival_Pct"
+value   = -15 ; UNITS in city: 35-15 = 20% survival. In open: 10-15 = 0% survival. When attacking a nuke in a city: (20+10) * 2 = 60% survival
+              ; CITIZENS:      55-15 = 40% survival.  ANNIHILATION AT GROUND ZERO. When attacking a nuke in a open: (-5+10) * 2 = 10% survival
+reqs    =
+   { "type",      "name",                   "range", "present"
+     "UnitType",  "Hydrogen Bomb",          "Local", TRUE
+   }
+[effect_doomsday_survival_odds_base_level]
+type    = "Nuke_Survival_Pct"
+value   = -25 ; UNITS in city: 35-25 = 10% survival. In open: 10-25 = 0% survival. When attacking a nuke in a city: (10+10) * 2  = 40% survival
+              ; CITIZENS:      55-25 = 30% survival.  ANNIHILATION AT GROUND ZERO. When attacking a nuke in a city: (-15+10) * 2 = -10% survival (0%)
+reqs    =
+   { "type",      "name",                   "range", "present"
+      "UnitType", "Doomsday Bomb",          "Local", TRUE
+   }
+
 ;ABMs have 29.3% chance to intercept nuclear missiles (but not bombs)
 ;(Obviously, 40-50% if adjacent on vigil, as it uses regular combat odds)
 [effect_abm_sdi_effect]
 type    = "Nuke_Intercept_Radius_Odds_Pm"
-value   = 5293  ; %1000 = sqrt_rad(5). 293/1000 = 29.3% one intercepts =  each 2 ABM halves the chance of nuke success (1 - sqrt(0.5))
+value   = 5293  ; 29.3% = (1 - sqrt(0.5)) probability. i.e., each 2 ABM halves the chance of nuke success.
 reqs    =
    { "type",      "name",                   "range", "present"
       "UnitType", "Anti-Ballistic Missile", "Local", TRUE
@@ -1201,7 +1240,7 @@ reqs    =
 ;AEGIS have a 50% chance to intercept 8-adjacent bombs (but not missiles)
 [effect_aegis_sdi_effect]
 type    = "Nuke_Intercept_Radius_Odds_Pm"
-value   = 2500  ; %1000 = sqrt_rad(2) = adjecent. 500/1000 = 50% probability of SDI effect.
+value   = 2500  ; radius < 2 == adjacent. 500/100 = 50% probability of survival
 reqs    =
    {  "type",     "name",           "range", "present"
       "UnitType", "AEGIS Cruiser",  "Local",  TRUE
