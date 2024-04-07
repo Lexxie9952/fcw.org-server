@@ -200,7 +200,7 @@ var helpdata = {
     +"<li>Only some types of units can have their movement limited by ZOC. If they're not <b>subject to ZOC</b>, then it doesn't apply."
     +"<ul><li>Only land units are subject to ZOC.*</li></ul>"
     +"<ul><li>On land, there are several types of units who <b>ignore ZOC</b> (\"igZOC\"). They're not subject to ZOC. For example, <b>Diplomats</b>.</li></ul></li>"
-    +"<li>Air and Sea units are not subject to ZOC. For example, Aircraft, Missiles, Submarines, etc.</li></ul></li>"
+    +"<li>Air and Sea units are not subject to ZOC.* For example, Aircraft, Missiles, Submarines, etc.</li></ul></li>"
     +"<li>If an enemy unit is in a base where it is unseen, it does not impose ZOC. (Castle, Bunker, Hideout).</li>"
     +"<li>The <b>enemy unit</b> does not impose ZOC if it's on non-native terrain (<b>Oceanic</b>)."
     +"<ul><li><b>Transported</b> units never impose ZOC. </li></ul></li>"
@@ -219,8 +219,9 @@ var helpdata = {
     +"<ul><li>Moving from or to an ocean square is usually always allowed "
     +"because ZOC is inactive on all ocean tiles. Also, embarking is usually "
     +"allowed because the allied unit you board is present in the tile.</li></ul>"
-    +"<ul><li>* Exception: In MP2 rules from \"MP2-Elephant\" onward, Sea units do impose ZOC</li></ul>"
-    +"</div><br><br>"
+    +"</div>"
+    +"* Exceptions: In MP2, Dive Bombers and Ground Strike Fighters impose ZOC. From MP2-Elephant onward, naval units impose ZOC<br><br>"
+
 },
   "help_government": {
     "name": "Government",
