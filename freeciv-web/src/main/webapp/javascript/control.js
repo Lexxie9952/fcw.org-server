@@ -7087,7 +7087,12 @@ function get_what_roads_are_legal(punit, ptile, connect_mode)
         road_list.push(extras['Road']['id']);
       }
       else if (has_river && quay_rules && !tile_has_extra(ptile, EXTRA_QUAY)) {
-        if (quay_mode && can_quay) road_list.push(extras['Quay']['id']);
+        if (quay_mode && can_quay) {
+          if (typeof EXTRA_QUAY2 !== "undefined" && tile_has_extra(ptile, EXTRA_QUAY2)) {
+            // do nothing
+          }
+          else road_list.push(extras['Quay']['id']);
+        }
       }
       return road_list;
     }
