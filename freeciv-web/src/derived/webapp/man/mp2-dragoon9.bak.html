@@ -7,20 +7,19 @@
 <div class='item' id='extra0'>
 <h3 class='section'>Irrigation</h3>
 
-<pre class='helptext'>Irrigating a suitable tile causes it to produce extra food each turn. Most tiles yield +1 extra food. A desert river that does not already benefit from an oasis will yield +2, or +3 if it is a city on a desert river.
+<pre class='helptext'>To irrigate you must have a water source on a <a href='https://freeciv.fandom.com/wiki/Adjacency#Cardinal_Adjacency' title='Cardinal Adjacency' target='_blank'>cardinally adjacent</a> tile. Water sources are Oceans, Lakes, Rivers, Canals, Oases, or any other irrigated land.
 
+Irrigating a suitable tile causes it to produce extra food each turn. Most tiles yield +1 extra food. A desert river that does not already benefit from an oasis will yield +2. A city on a desert river can yield +3 but only when it is manually and actually irrigated by a real unit.
 
-Irrigating a tile with a mine or oil well will destroy it.
+Irrigating a tile with a mine or oil well will destroy the mine or oil well.
 
+City center tiles get their terrain irrigation bonus automatically, if there is no conflicting mine or oil well on the tile. However, this does not make cities count as a water source for further irrigation. Irrigation can be built on the city tile simply to allow irrigating elsewhere, but will not give the tile any further bonus except in the case of a desert river (see above.)
 
-City center tiles get their terrain irrigation bonus automatically, if there is no conflicting mine or oil well on the tile; however, this does not make cities count as a water source for further irrigation. Irrigation can be built on the city tile simply to allow irrigating elsewhere, but will not give the tile any further bonus except in the case of a desert river (see above.)
-
-Build by issuing an "irrigate" order.
+• Build by issuing an "Irrigate" order (i).
 Requirements to build:
 • Requires Land terrain on the tile.
 
-Can be pillaged by units (takes 1 turn).
-
+• Can be pillaged by units (takes 1 turn).
 • Is a water source for Irrigation.
 
 Time to build depends on terrain:
@@ -43,51 +42,48 @@ Time to build depends on terrain:
 <div class='item' id='extra1'>
 <h3 class='section'>Fishtrap</h3>
 
-<pre class='helptext'>Fishtraps become available with Refrigeration technology. Any Worker-type transported at sea can make one. A Fishtrap provides +2 food to its tile. Any Fish adjacent to the tile will also be raised by +2 food output and gain +1 trade. Fishtraps must be made adjacent to Fish, but cannot be made cardinally adjacent to each other. Nor can they be built directly on a tile
+<pre class='helptext'>Fishtraps become available with Refrigeration technology. Any Worker-type transported at sea can make one. A Fishtrap provides +2 food to its tile. Any Fish <a href='https://freeciv.fandom.com/wiki/Adjacency' title='Adjacency' target='_blank'>adjacent</a> to the tile will also be raised by +2 food output and gain +1 trade. Fishtraps must be made adjacent to Fish, but cannot be made cardinally adjacent to each other. Nor can they be built directly on a tile
  with Fish, Whales, or a Buoy.
 
-Build by issuing a "build base" order.
+• Build by issuing an "Irrigate" order (i).
 Requirements to build:
 • To build, requires Workers or similar units.
 • Requires Oceanic terrain on the tile.
 • Prevented by Buoy on the tile.
 • Prevented by Fish on the tile.
 • Prevented by Whales on the tile.
-• Prevented by Fishtrap on the tile or any cardinally adjacent tile.
-• Requires Fish on the tile or an adjacent tile.
+• Prevented by Fishtrap on any <a href='https://freeciv.fandom.com/wiki/Adjacency#Cardinal_Adjacency' title='Cardinal Adjacency' target='_blank'>cardinally adjacent</a> tile.
+• Requires Fish on an <a href='https://freeciv.fandom.com/wiki/Adjacency' title='Adjacency' target='_blank'>adjacent</a> tile.
 • Requires knowledge of the technology Refrigeration.
 
-Can be pillaged by units (takes 1 turn).
+• Can be pillaged by units (takes 1 turn).
 
 </pre>
 </div>
 <div class='item' id='extra2'>
 <h3 class='section'>Mine</h3>
 
-<pre class='helptext'>Mines can be built on some types of terrain, which increases the number of production points produced by that tile. Hills get an extra 3 production points per tile; other terrains get 1 extra production point.
-
+<pre class='helptext'>Mines can be built on some types of terrain. This increases the number of production points produced by that tile. Hills get an extra 3 production points per tile; other terrains get 1 extra production point.
 
 Building a mine on an irrigated tile will destroy the irrigation.
 
-Build by issuing a "mine" order.
-
-Can be pillaged by units (takes 1 turn).
+• Build by issuing a "Mine" order (m).
+• Can be pillaged by units (takes 1 turn).
 
 </pre>
 </div>
 <div class='item' id='extra3'>
 <h3 class='section'>Oil Well</h3>
 
-<pre class='helptext'>Oil wells behave like mines (giving an extra production point), but require more technology. Oil wells can be built on Desert with knowledge of Construction, and on Arctic terrain with knowledge of Refining.
-
+<pre class='helptext'>Oil wells behave like mines (giving an extra production point). Oil wells require technology: they can be built on Desert with knowledge of Construction, and on Arctic terrain with knowledge of Refining.
 
 Building an oil well on an irrigated tile will destroy the irrigation.
 
-Build by issuing a "mine" order.
+• Build by issuing a "Mine" order (m).
 Requirements to build:
 • Requires terrain with the "Oil" flag on the tile.
 
-Can be pillaged by units (takes 1 turn).
+• Can be pillaged by units (takes 1 turn).
 
 Time to build depends on terrain:
 <table class="vet_level">
@@ -111,27 +107,24 @@ Time to build depends on terrain:
 <div class='item' id='extra4'>
 <h3 class='section'>Pollution</h3>
 
-<pre class='helptext'>Pollution appears on land tiles around cities with high production or population. It halves all output from its tile, and contributes to the risk of global warming.
+<pre class='helptext'>Pollution appears on land tiles around cities with high production or population. Pollution creates an 'output penalty' of 50% of gross output. (The penalty amount is rounded down.) The output of all food, production, and trade is reduced by this penalty.
 
-The pollution can only be cleared by dispatching Workers, Settlers, or Engineers with the "clean pollution" order.
+Each polluted tile contributes to the risk of global warming.
 
-Pollution from production is likely to start becoming important as your civilization becomes more industrialized, giving you buildings such as Factory and Coal Plant which boost production. Replacing a Coal Plant with cleaner forms of energy — a Hydro Plant / Hoover Dam, Nuclear Plant, or Solar Plant — will reduce pollution from production, as will a Recycling Center or knowledge of Environmentalism.
+Pollution can only be cleared by giving Worker-types a "clean pollution" order.
 
+Pollution from production is likely to start becoming important as your civilization becomes more industrialized, giving you buildings such as Factory and Coal Plant which boost production. Replacing a Coal Plant with cleaner forms of energy — a Hydro Plant / Hoover Dam, Nuclear Plant, or Solar Plant — will reduce pollution from production, as will a Recycling Center.
 
-The city population starts adding to pollution with the discovery of Industrialization, and Automobile, Mass Production, and Plastics make this worse. Building a Mass Transit in a city eliminates the populational contribution to pollution.
+City population starts adding to pollution with the discovery of Industrialization. Combustion, Mass Production, and Plastics make it worse. Building a Mass Transit in a city eliminates the populational contribution to pollution. Knowledge of Environmentalism cuts it by half.
 
-
-The contribution of these factors can be seen in the city dialog; once it exceeds a threshold, the excess is the percent chance of pollution appearing each turn.
-
+The contribution of these factors can be seen in the Main tab of a city. Once the factors exceed an allowed threshold, the excess becomes the percent chance of pollution appearing near the city each turn.
 
 When an unused tile becomes polluted, there is the temptation to avoid the effort of cleaning it; but the spread of pollution has far more terrible results than the immediate economic impact — every polluted tile increases the chance of global warming. Each time global warming advances, the entire world loses coastal land to the sea and to jungles and swamps, and inland tiles are lost to desert. This tends to devastate cities and leads to global impoverishment.
 
-
 The risk of global warming is cumulative; the longer polluted tiles are left uncleaned, the higher the risk becomes, and the risk can linger for some time even after all pollution has been cleaned. If a long time passes with an elevated risk of warming, its effects will be all the more severe when it does occur.
 
-May randomly appear around polluting city.
-
-Can be cleaned by units (time is terrain-dependent).
+• May randomly appear around polluting city.
+• Can be cleaned by units (time is terrain-dependent).
 
 </pre>
 </div>
@@ -140,12 +133,11 @@ Can be cleaned by units (time is terrain-dependent).
 
 <pre class='helptext'>Villages (also called "Huts") are primitive communities spread across the world at the beginning of the game. Any land unit can enter a village, making the village disappear and deliver a random response. If the village is friendly, the player could receive artifacts worth some gold, a map, a mercenary military unit with no upkeep, some bulbs, or even Goods or a Boat.
 
+Later in the game, Helicopters may also enter villages, but overflight by other aircraft will cause the villagers to take fright and disband.
 
-Later in the game, helicopters may also enter villages, but overflight by other aircraft will cause the villagers to take fright and disband.
-
-Placed by map generator.
-Can be explored by certain units.
-Requires Land terrain on the tile.
+• Placed by map generator.
+• Can be explored by certain units.
+• Requires Land terrain on the tile.
 
 </pre>
 </div>
@@ -154,17 +146,17 @@ Requires Land terrain on the tile.
 
 <pre class='helptext'>Once Refrigeration is known, irrigation systems can be upgraded to Farmland by irrigating them a second time; if the city working the tile has a Supermarket, a Farmland tile provides twice as much food.
 
+Once you have Refrigeration, it makes sense to irrigate your city center tile twice: Supermarkets provide only a +50% bonus, whereas Farmland provides a +100% bonus.
 
 Like irrigation, Farmland is incompatible with mines and oil wells.
 
-Build by issuing an "irrigate" order.
+• Build by issuing an "Irrigate" order (i).
 Requirements to build:
 • Requires knowledge of the technology Refrigeration.
 • Requires Irrigation on the tile.
 • Requires Land terrain on the tile.
 
-Can be pillaged by units (takes 1 turn).
-
+• Can be pillaged by units (takes 1 turn).
 • Is a water source for Irrigation.
 
 Time to build depends on terrain:
@@ -188,53 +180,46 @@ Time to build depends on terrain:
 <div class='item' id='extra7'>
 <h3 class='section'>Fallout</h3>
 
-<pre class='helptext'>Nuclear Fallout can appear on land tiles when a Nuclear unit is detonated. It halves all output from its tile.
-
+<pre class='helptext'>Nuclear Fallout can appear on land tiles when a Nuclear unit is detonated. Like Pollution, it halves all output from its tile.
 
 Every tile with Fallout also increases the risk of global nuclear winter. If nuclear winter occurs, land across the globe changes to colder terrain.
 
-
 Worker types can clean Fallout. Fallout disperses and disappears randomly over time. On average, it lasts for about 6 turns.
 
-
-May randomly appear around nuclear blast.
-
-Can be cleaned by units (time is terrain-dependent).
+• May randomly appear around nuclear blast.
+• Can be cleaned by units (time is terrain-dependent).
 
 </pre>
 </div>
 <div class='item' id='extra8'>
 <h3 class='section'>Hideout</h3>
 
-<pre class='helptext'>Since the dawn of time, concealed terrain was used for Hideouts, to evade aggressors or set ambushes. Hideouts can be made by Foot Soldiers in Forests, Swamps, Mountains, and Jungle. Warrior Code must be known. Tile must be Friendly or Unclaimed. Only Land units and Helicopters are hidden. Other units are seen. Units inside are immune to killstack. Hideouts can’t exist with other bases. For each turn it is unoccupied, a Hideout has a 15% chance of disappearing, unless built on ruins. The only way to know if a tile has a Hideout is to have a Land unit inside.
-
+<pre class='helptext'>Since the dawn of time, concealed terrain was used for Hideouts, to evade aggressors or set ambushes. Hideouts require Warrior Code technology and can be built by Foot soldiers in Forests, Swamps, Mountains, Jungle, and the Ruins of a former city. They cannot be built in someone else’s territory. Units in a Hideout are invisible to other players. Land units and Helicopter-types are hidden in them. Other units will be seen. Hideouts are invisible to anyone not inside them, including their owner—so it's important to remember your Hideouts. Units inside display an icon to indicate they are hiding. For each turn unoccupied, a Hideout has a 15% chance of being lost, unless built on the ruins of a city. Hideouts can't co-exist with other base types. Units in a Hideout do not undergo stack death. The hot-key to make a hideout is shift-H. The only way to know if a tile has a Hideout is to have a Land unit inside.
 
 Be careful! An abandoned Hideout can be used against you!
 
-Build by issuing a "build base" order.
+• Build by issuing a "Build Hideout" order (shift-H).
 Requirements to build:
-• Requires that the server setting hideouts is enabled.
-• Requires Warriors or similar units.
-• Does not apply to Emissary, Diplomat, Spy, or Patriarch.
+• Only Foot soldiers can build it.
 • Requires knowledge of the technology Warrior Code.
 • Requires Land terrain on the tile.
 • Requires Forest, Mountains, Jungle, or Swamp on the tile.
-• Prevented by Naval Base on the tile.
+• Prevented by Quay on the tile.
+• Prevented by Fort on the tile.
 • Prevented by Fortress on the tile.
+• Prevented by Naval Base on the tile.
 • Prevented by Castle on the tile.
 • Prevented by Bunker on the tile.
 • Prevented by Airbase on the tile.
-• Prevented by Fort on the tile.
-• Prevented by Quay on the tile.
-• Prevented by Watchtower on the tile.
+• Requires that the server setting hideouts is enabled.
 
-Can be pillaged by units (takes 1 turn).
+• Can be pillaged by units (takes 1 turn).
 
 • Units inside are hidden from non-allied players.
 • Native to Land, Big Land, LandNoKill, LandAirSea, LandRail, LandRoad, Cargo, and Helicopter units.
   • Such units can move onto this tile even if it would not normally be suitable terrain.
 • Defeat of one unit does not cause death of all other units on this tile.
-• Grants permanent vision of an area around the tile to its owner.
+• Grants vision of all adjacent tiles to its owner.
 </pre>
 </div>
 <div class='item' id='extra9'>
@@ -242,121 +227,144 @@ Can be pillaged by units (takes 1 turn).
 
 <pre class='helptext'>In Deep Ocean, modern submarines can dive deep to be undetected. “Building Depth” affects the tile so all Submarine class units are hidden to adjacent units! They can still be attacked, but can’t be discovered unless moving into the tile. A Missile Submarine is required to “Build Depth”; other subs on the tile will join it at depth. The tile can’t have a Buoy or Fishtrap. The depth associated to the tile remains if any submarines are on it at turn change. A submarine may leave and return, automatically achieving depth on arrival.
 
-Build by issuing a "build base" order.
+• Build by issuing a "Dive Deep" order (ctrl-D).
 Requirements to build:
 • Requires Missile Submarine.
 • Requires Deep Ocean on the tile.
 • Prevented by Buoy on the tile.
 • Prevented by Fishtrap on the tile.
 
-• Units inside are hidden from non-allied players.
+• Submarine units on tile are hidden from non-allied players.
+  • Invisible to units on adjacent tiles, which can normally see Submarines.
 • Native to Submarine units.
-  • Such units can move onto this tile even if it would not normally be suitable terrain.
+
+• Disappears at Turn Change if not occupied by a Submarine type unit.
+
 
 </pre>
 </div>
 <div class='item' id='extra10'>
 <h3 class='section'>Tile Claim</h3>
 
-<pre class='helptext'>A Tile Claim asserts sovereignty over a tile. Tile Claims can be made in domestic territory with a single diplomatic unit. Non-domestic territory requires adjacency to an existing Tile Claim, and the Diplomat must be supported by another unit. Claiming foreign tiles gives casus belli. If a claimed tile is unoccupied, foreign units entering the tile will take possession of it for their own nation, also giving casus belli.
+<pre class='helptext'>A Tile Claim asserts sovereignty over a tile. A Tile Claim can be used to prevent a populous foreign city from claiming your border tiles. Or it can be used to annex border tiles from a foreign nation.
 
-Build by issuing a "build base" order.
+Tile Claims can be made in domestic territory with a single diplomatic unit. Non-domestic territory requires adjacency to an existing Tile Claim, and the Diplomat must be supported by another unit. Claiming foreign tiles gives casus belli. If a claimed tile is unoccupied, foreign units entering the tile will take possession of it for their own nation, also giving casus belli.
+
+• Build by issuing a "Claim Tile" order.
+  • Order can be issued from dropdown menu or Orders button.
+  • Order can be issued with DO (d) ⮕ (select tile) ⮕ Build Tile Claim.
+
 Requirements to build:
 • Requires Emissary, Diplomat, Spy, or Patriarch.
-• Does not apply to Warriors or similar units.
 • Requires Land terrain on the tile.
+• If in non-domestic territory:
+  • Requires two units on the tile.
+  • Requires a Tile Claim to be adjacent to the tile.
+  • Gives casus belli to tile's original owner.
 
-Can be pillaged by units (takes 1 turn).
+• Can be pillaged by units (takes 1 turn).
 
 • Native to Land, Big Land, LandNoKill, and LandAirSea units.
   • Such units can move onto this tile even if it would not normally be suitable terrain.
   • Can be captured by such units if at war with the nation that currently owns it.
 • Extends national borders of the building nation.
+• Seizing a foreign Tile Claim triggers casus belli.
+
 </pre>
 </div>
 <div class='item' id='extra11'>
 <h3 class='section'>Fort</h3>
 
-<pre class='helptext'>Forts are rapidly built fortifications which give Land units +33% defense against Land and Sea units. Defending units are lost one at a time instead of the entire stack dying. A fort is necessary to start building a Fortress.
+<pre class='helptext'>After discovering Masonry, Forts can be built as rapidly constructed fortifications which give Land units +33% defense against Land, Sea, and Missile units. A Fort gives no bonuses against Air units, Helicopters, or Armor. Defending units are lost one at a time instead of the entire stack dying.
 
+Forts can be made by Workers, Settlers, Founders, Legions, Engineers, Proletarians, and Marines.
+
+A Fort is first required on a tile before building a Fortress. A Settler inside a Fort can claim that tile to found a city.
+
+Forts make great outposts for border security: they establish vision one tile out on all adjacent tiles, and 2 tiles out in all cardinal directions--even when unoccupied. They do not claim national territory, however.
 
 Be careful—an unmanned Fort can be claimed by a foreign unit.
 
-Build by issuing a "Build Fort/Buoy" order.
+• Build by issuing a "Build Fort" order (shift-F).
 Requirements to build:
 • Requires knowledge of the technology Masonry.
 • Requires Land terrain on the tile.
-• To build, requires Workers or similar units.
+• To build, requires Workers, Legions, Marines,  or similar units.
 • Prevented by Hideout on the tile.
 
-Can be pillaged by units (takes 1 turn).
+• Can be pillaged by units (takes 1 turn).
 
 • Native to Land, Big Land, LandNoKill, LandAirSea, LandRoad, Helicopter, AirProtect, and Balloon units.
   • Such units can move onto this tile even if it would not normally be suitable terrain.
 • Defeat of one unit does not cause death of all other units on this tile.
-• Grants permanent vision of an area around the tile to its owner.
+• Grants permanent vision of an area around the tile to its owner, at a distance of 2.0 tiles (sqrt(4)).
 </pre>
 </div>
 <div class='item' id='extra12'>
 <h3 class='section'>Fortress</h3>
 
-<pre class='helptext'>Fortresses are improvements built on top of Forts which greatly improve defense: the bonus against most land attackers is 2x.
-A Land unit remaining in a Fortress for a whole turn without moving recovers an additional 25% of its hit points. With Invention, Fortresses can see farther.
+<pre class='helptext'>Fortresses are available with Construction tech and can be made by Workers, Settlers, Legions, Engineers, and Proletarians. They first require a Fort to be built. Unlike Forts, they give defense bonuses against Air, Armor I, and Helicopters. Fortresses claim national territory and establish borders. They give vision which gets a bonus after Invention tech is known.
 
+Against most land attackers, Fortresses give a defense bonus of 2x. However, against Armor I and Helicopters, the bonus is only 1.67x. Fortresses provide no bonus against Armor II.
+Diplomatic units get a 25% defense bonus in diplomatic fights.
 
-Units in a Fortress die one at a time instead of the entire stack being lost. Diplomatic units get a 25% defense bonus in diplomatic fights.
+A Land unit remaining in a Fortress for a whole turn without moving recovers an additional 25% of its hit points.
 
-Build by issuing a "Build Fort/Buoy" order.
+Units in a Fortress die one at a time instead of the entire stack being lost.
+
+• Build by issuing a "Build Fort" order (shift-F).
 Requirements to build:
 • Requires Fort on the tile.
 • Prevented by Hideout on the tile.
 • Requires knowledge of the technology Construction.
 • Requires Land terrain on the tile.
-• To build, requires Workers or similar units.
+• To build, requires Settlers, Workers, Legions,  or similar units.
 
-
-Can be pillaged by units (takes 1 turn).
+• Can be pillaged by units (takes 1 turn).
 
 • Native to Land, Big Land, LandNoKill, LandAirSea, LandRoad, Cargo, Helicopter, Balloon, and Zeppelin units.
+  • Such units get a +100% defense bonus on this tile.
+    • Defense bonus reduced to +67% vs Helicopters and Armor.
+    • Offers no defense bonus vs Armor II.
   • Such units can move onto this tile even if it would not normally be suitable terrain.
   • Such units situated here are not considered aggressive if this tile is within 3 tiles of a friendly city.
   • Can be captured by such units if at war with the nation that currently owns it.
-  • Such units get a 67% defense bonus on this tile.
 • Defeat of one unit does not cause death of all other units on this tile.
 • Extends national borders of the building nation.
-• Grants permanent vision of an area around the tile to its owner.
+• Grants permanent vision of an area around the tile to its owner, at a distance of 2.0 tiles (sqrt(4)). Area increases after discovery of Invention to 3.16 tiles (sqrt(10)).
 • Damaged Land and Helicopter units +25% hp per turn resting.
 </pre>
 </div>
 <div class='item' id='extra13'>
 <h3 class='section'>Naval Base</h3>
 
-<pre class='helptext'>Naval bases are coastal Fortresses with ocean access. Naval Bases are built on top of Forts. They allow ships to enter and receive a 2x bonus from coastal weaponry and fortifications. All other units get the benefits of a Fortress.
-Naval bases are the only location where ships can be sure to avoid stack-death without suffering the “Pearl Harbor” penalty of A:FPx2 D:FP1
+<pre class='helptext'>Naval bases are coastal Fortresses with ocean access. Naval Bases are built on top of Forts. They allow ships to enter and receive a 2x bonus against Sea, Land, and Missile attacks. All other units get the benefits of a Fortress. Against Aircraft and Armor I, the bonus is reduced to 1.67x. Naval Bases offer no defense bonus against Armor II.
+Naval bases are the only location where ships can be sure to avoid stack-death without suffering the “Pearl Harbor” penalty of A:FPx2 D:FP1.
 Naval bases can see submarines at a distance of 2 tiles, in cardinal directions.
 
-Build by issuing a "Build Fort/Buoy" order.
+• Build by issuing a "Build Naval Base" order (shift-N).
 Requirements to build:
 • Requires Fort on the tile.
 • Prevented by Hideout on the tile.
 • Requires knowledge of the technology Engineering.
 • Requires terrain with the "Low Land" flag on the tile.
-• Requires Oceanic terrain on the tile or a cardinally adjacent tile.
-• To build, requires Workers or similar units.
+• Requires Oceanic terrain on a cardinally adjacent tile.
+• To build, requires Workers, Legions, or similar units.
 
-
-Can be pillaged by units (takes 1 turn).
+• Can be pillaged by units (takes 1 turn).
 
 • Native to Land, Big Land, LandNoKill, LandAirSea, LandRoad, Cargo, Trireme, RiverShip, Sea, Submarine, Helicopter, Balloon, and Zeppelin units.
+• Such units get a +100% defense bonus on this tile.
+    • Defense bonus reduced to +67% vs Helicopters and Armor.
+    • Offers no defense bonus vs Armor II.
   • Such units can move onto this tile even if it would not normally be suitable terrain.
   • Such units situated here are not considered aggressive if this tile is within 3 tiles of a friendly city.
   • Can be captured by such units if at war with the nation that currently owns it.
-  • Such units get a 67% defense bonus on this tile.
 • Defeat of one unit does not cause death of all other units on this tile.
 • Extends national borders of the building nation.
-• Grants permanent vision of an area around the tile to its owner.
-• Allows the owner to see normally invisible subsurface units in an area around the tile.
-• Damaged Land and Helicopter units +25% hp per turn resting.
+• Grants permanent vision of an area around the tile to its owner, at a distance of 2.0 tiles (sqrt(4)). Area increases after discovery of Invention to 3.16 tiles (sqrt(10)).
+• Allows the owner to see normally invisible subsurface units in an area around the tile at a distance of 2.0 tiles (sqrt(4))
+• Damaged Sea, Land, and Helicopter units +25% hp per turn resting.
 </pre>
 </div>
 <div class='item' id='extra14'>
@@ -364,35 +372,39 @@ Can be pillaged by units (takes 1 turn).
 
 <pre class='helptext'>Before the age of Gunpowder, Castles were built as fortresses with an administration center. Construction on them can only begin once the underlying Fortress is complete. Units inside can’t be seen, and are immune to Siege Rams. The high towers on castles provide excellent vision. Castles can also control much terrain far from the borders of its nation’s cities.
 
-Build by issuing a "Build Fort/Buoy" order.
+• Build by issuing a "Build Fort" order (shift-F).
 Requirements to build:
 • Requires Fortress on the tile.
 • Requires knowledge of the technology Construction.
 • Requires knowledge of the technology Feudalism.
 • Prevented by knowledge of the technology Gunpowder.
 • Requires Land terrain on the tile.
-• To build, requires Workers or similar units.
+• To build, requires Workers, Legions, or similar units.
 
-
-Can be pillaged by units (takes 1 turn).
+• Can be pillaged by units (takes 1 turn).
 
 • Units inside are hidden from non-allied players.
 • Native to Land, Big Land, LandNoKill, LandAirSea, LandRoad, Cargo, Helicopter, Balloon, and Zeppelin units.
+  • Such units get a +100% defense bonus on this tile.
+      • Defense bonus reduced to +67% vs Helicopters and Armor.
+      • Offers no defense bonus vs Armor II.
   • Such units can move onto this tile even if it would not normally be suitable terrain.
   • Such units situated here are not considered aggressive if this tile is within 3 tiles of a friendly city.
   • Can be captured by such units if at war with the nation that currently owns it.
 • Defeat of one unit does not cause death of all other units on this tile.
 • Extends national borders of the building nation.
-• Grants permanent vision of an area around the tile to its owner.
+• Grants permanent vision of an area around the tile to its owner, at a distance of 4.470 tiles (sqrt(20)). Area increases after discovery of Invention to 5.29 tiles (sqrt(28)).
 • Damaged Land and Helicopter units +25% hp per turn resting.
 </pre>
 </div>
 <div class='item' id='extra15'>
 <h3 class='section'>Bunker</h3>
 
-<pre class='helptext'>Bunkers are underground Fortresses made of concrete and steel, immune to air and missile attacks. In some respects they are the modern equivalent of a Castle. Odds of surviving a nuclear blast are 90%. Units inside can’t be seen.
+<pre class='helptext'>Bunkers are underground Fortresses made of concrete and steel, immune from air and missile attacks. In some respects they are the modern equivalent of a Castle. Odds of surviving a nuclear blast are 90%. Units inside can’t be seen.
 
-Build by issuing a "Build Fort/Buoy" order.
+Bunkers cannot be pillaged normally. (This makes them impervious to iPillage.) To remove a Bunker requires building a Fortress (shift-F) on top of the Bunker.
+
+• Build by issuing a "Build Fort" order (shift-F).
 Requirements to build:
 • Requires Fortress on the tile.
 • Prevented by Castle on the tile.
@@ -401,36 +413,38 @@ Requirements to build:
 • Requires Land terrain on the tile.
 • To build, requires Workers or similar units.
 
-
 • Units inside are hidden from non-allied players.
 • Native to Land, Big Land, LandNoKill, LandAirSea, LandRoad, Cargo, Helicopter, Balloon, and Zeppelin units.
+  • Such units get a +100% defense bonus on this tile.
+    • Defense bonus reduced to +67% vs Armor I.
+    • Offers no defense bonus vs Armor II.
+    • Units inside can't be attacked by Sea, Air, or Missile.
   • Such units can move onto this tile even if it would not normally be suitable terrain.
   • Such units situated here are not considered aggressive if this tile is within 3 tiles of a friendly city.
   • Can be captured by such units if at war with the nation that currently owns it.
 • Defeat of one unit does not cause death of all other units on this tile.
 • Extends national borders of the building nation.
-• Grants permanent vision of an area around the tile to its owner.
+• Grants permanent vision of an area around the tile to its owner, at a distance of 2.0 tiles (sqrt(4)).
 • Damaged Land and Helicopter units +25% hp per turn resting.
 </pre>
 </div>
 <div class='item' id='extra16'>
 <h3 class='section'>Airbase</h3>
 
-<pre class='helptext'>Airbases allow air units outside cities to land, refuel, and repair. Airbases repair damaged aircraft at 20% of their hitpoints per turn. Air units in an airbase may be attacked by land units, but are immune to stack-death.
+<pre class='helptext'>Airbases allow air units outside cities to land, refuel, and repair. Airbases repair damaged <a href="https://freeciv.fandom.com/wiki/Aeroplane" title="Special term in MP2 rulesets" target="_blank">Aeroplanes</a> and Zeppelins at 20% of their hitpoints per turn. Helicopters receive 25% of their hp per turn. Air units in an Airbase may be attacked by land units, but are immune to stack-death.
 
-Paratroopers can paradrop from airbases.
+Paratroopers can paradrop from Airbases.
 
-Build by issuing a "Build Airbase" order.
+• Build by issuing a "Build Airbase" order (shift-E).
 Requirements to build:
 • Requires knowledge of the technology Radio.
 • Prevented by Hideout on the tile.
 • Requires Land terrain on the tile.
-• Requires Workers or similar units.
+• Requires Workers, Marines, or similar units.
 
+• Can be pillaged by units (takes 1 turn).
 
-Can be pillaged by units (takes 1 turn).
-
-• Native to Cargo, Helicopter, Air, AirProtect, Air_High_Altitude, Balloon, Zeppelin, Missile, Bomb, and Bomb2 units.
+• Native to Cargo, Helicopter, Air, AirProtect, Air_High_Altitude, Balloon, Zeppelin, Bomb, and Bomb2 units.
 • Defeat of one unit does not cause death of all other units on this tile.
 </pre>
 </div>
@@ -439,20 +453,18 @@ Can be pillaged by units (takes 1 turn).
 
 <pre class='helptext'>With the available tech, Radar can be added to an Airbase, significantly increasing its vision.
 
-Build by issuing a "Build Airbase" order.
+• Build by issuing a "Build Radar" order (shift-E).
 Requirements to build:
 • Requires knowledge of the technology Radar.
 • Prevented by Hideout on the tile.
 • Requires Airbase on the tile.
 • Requires Land terrain on the tile.
-• Requires Workers or similar units.
+• Requires Workers, Marines, or similar units.
 
+• Can be pillaged by units (takes 1 turn).
 
-Can be pillaged by units (takes 1 turn).
-
-• Native to Helicopter, Air, AirProtect, Air_High_Altitude, Balloon, Zeppelin, Missile, and Bomb units.
-• Grants permanent vision of an area around the tile to its owner.
-• Allows the owner to see normally invisible stealth units in an area around the tile.
+• Native to Helicopter, Air, AirProtect, Air_High_Altitude, Balloon, Zeppelin, and Bomb units.
+• Grants permanent vision of a large area around the tile to its owner at a distance of 5.47 tiles (sqrt(30)).
 </pre>
 </div>
 <div class='item' id='extra18'>
@@ -460,18 +472,17 @@ Can be pillaged by units (takes 1 turn).
 
 <pre class='helptext'>Buoys may be built in the ocean and allow their owner to see surrounding tiles. They report nearby visible activity like a sentry, and are even able to see enemy submarines, if cardinally adjacent.
 
-Build by issuing a "Build Fort/Buoy" order.
+Build by issuing a "Build Buoy" order (shift-F).
 Requirements to build:
 • Requires knowledge of the technology Radio.
 • Requires Oceanic terrain on the tile.
 • Requires Workers or similar units.
 • To build, requires Workers or similar units.
 
-
 Can be pillaged by units (takes 1 turn).
 
-• Grants permanent vision of an area around the tile to its owner.
-• Allows the owner to see normally invisible subsurface units in an area around the tile.
+• Grants permanent vision of an area around the tile to its owner at a distance of 2.24 tiles (sqrt(5)).
+• Allows the owner to see normally invisible subsurface units if they are cardinally adjacent to its tile.
 </pre>
 </div>
 <div class='item' id='extra19'>
@@ -479,10 +490,9 @@ Can be pillaged by units (takes 1 turn).
 
 <pre class='helptext'>Ruins mark the former site of a city that was destroyed or abandoned. Land units in Ruins do not experience Stack-Kill. Also, Hideouts made in Ruins will never disappear.
 
-Requires Land terrain on the tile.
+• Can't be built. Created on map when a city is destroyed.
 
-
-Can be pillaged by units (takes 1 turn).
+• Can be pillaged by units (takes 1 turn).
 
 • Native to Land, Big Land, LandNoKill, and LandAirSea units.
 • Defeat of one unit does not cause death of all other units on this tile.
@@ -491,8 +501,8 @@ Can be pillaged by units (takes 1 turn).
 <div class='item' id='extra20'>
 <h3 class='section'>Quay</h3>
 
-<pre class='helptext'>Quays improve logistics on rivers and canals. River and Canal traffic can deboard to a quay for 1/3 move instead of disembarking for full moves onto adjacent tiles (domestic units only.) Quays let units ferry across rivers——the ancient way to cross without a bridge! Moving from road-to-quay or quay-to-road uses 2/3 move point. Quays can also be put
-on Canals. In cities they allow moving to adjacent roads for only 1/3 move.
+<pre class='helptext'>Quays improve logistics on rivers and canals. River and Canal traffic can deboard to a quay for 1/3 move instead of disembarking for full moves onto adjacent tiles (domestic units only.) Quays let units ferry across rivers——the ancient way to cross without a bridge! Moving from road-to-quay or quay-to-road uses 2/3 move point. Quays can also be put on Canals. In cities they allow exiting to adjacent roads for only 1/3 move.
+
 Quays are RestrictedInfra. Only allied units can use them to cross rivers, and only domestic units can use them to deboard at 1/3 move. Thus, along your border, quays may be a better strategic alternative than bridged roads. Enemies will incur the full movement cost of crossing the river!
 Non-domestic units may deboard but lose all moves (except Marines.)
 
@@ -501,13 +511,13 @@ Moves needed to cross a river to a tile on the other side:
 4/3 moves: Quay connected to roads. (1.33 MP)
 2/3 moves: Bridge connected to roads. (0.67 MP)
 
-Built by issuing a "quay" order (<b>Q</b>).
+• Built by issuing a "Build Quay" order (<b>Q</b>).
 Requirements to build:
-• Requires an river or canal on the tile.
+• Requires a river or canal on the tile.
 • Requires knowledge of the technology Pottery.
 • Requires Land terrain on the tile.
 
-Can be pillaged by units (takes 1 turn).
+• Can be pillaged by units (takes 1 turn).
 
 • Can be traveled by Land, Big Land, LandNoKill, LandAirSea, LandRoad, Cargo, Trireme, RiverShip, Balloon, and Zeppelin units.
 • Movement cost along Quay is 2/3 MP.
@@ -519,19 +529,21 @@ Can be pillaged by units (takes 1 turn).
 
 <pre class='helptext'>Quays in cities allow exiting the city to an adjacent road with only 1⁄₃ move point.
 
-Build by issuing a "road" order.
+• Build by issuing a "Build Quay" order.
+  • Issue order via the Orders button, OR
+  • double-clicking unit for dropdown, "Build Quay" OR
+  • DO (d) ⮕ (select tile) ⮕ (tile target) ⮕ Quay ⮕ Build Quay
 Requirements to build:
 • Requires an extra with the "Quayable" flag on the tile.
 • Requires knowledge of the technology Pottery.
 • Requires Land terrain on the tile.
 
-
-Can be pillaged by units (takes 1 turn).
+• Can be pillaged by units (takes 1 turn).
 
 • Can be traveled by Land, Big Land, LandNoKill, LandAirSea, LandRoad, Cargo, Trireme, RiverShip, Balloon, and Zeppelin units.
   • Such units can move onto this tile even if it would not normally be suitable terrain.
 • Movement cost along Quay​ is 2/3 MP.
-
+• RESTRICTED INFRA: non-allied units do not receive a move bonus from Quays.
 </pre>
 </div>
 <div class='item' id='extra22'>
@@ -542,14 +554,13 @@ Can be pillaged by units (takes 1 turn).
 
 Building roads on river tiles requires knowledge of Bridge Building. City center tiles automatically get roads (unless they are on a river tile and you do not yet know Bridge Building).
 
-Build by issuing a "road" order.
+• Build by issuing a "Build Road" order (r).
 Requirements to build:
 • To build, requires Workers or similar units.
 • Requires Land terrain on the tile.
 • Prevented by knowledge of the technology Automobile.
 
-
-Can be pillaged by units (takes 1 turn).
+• Can be pillaged by units (takes 1 turn).
 
 • Can be traveled by Land, Big Land, LandNoKill, LandAirSea, and LandRoad units.
   • Such units can move onto this tile even if it would not normally be suitable terrain.
@@ -576,65 +587,64 @@ Time to build and output bonus depends on terrain:
 <div class='item' id='extra23'>
 <h3 class='section'>Railroad</h3>
 
-<pre class='helptext'>Railroad tech lets you upgrade Roads to Railroads. Units travel three times faster along Railroads than along Roads.
-
+<pre class='helptext'>Railroad tech lets you upgrade Roads to Railroads. Units travel three times faster along Railroads than along Roads. Non-allied units cannot use the movement bonus of a Railroad, but do gain the movement bonus of the Road that was built underneath it.
 
 Railroads increase tile shield output by 50% (rounded down). A tile whose road is upgraded to rails retains the trade bonus from the road.
 
 City center tiles are automatically upgraded with railroads when you acquire Railroad technology.
 
-Build by issuing a "road" order.
+• Build by issuing a "Build Railroad" order (r).
 Requirements to build:
 • Requires knowledge of the technology Railroad.
 • Requires an extra with the "Railable" flag on the tile.
 • To build, requires Workers or similar units.
 
-
-Can be pillaged by units (takes 1 turn).
+• Can be pillaged by units (takes 1 turn).
 
 • Can be traveled by Land, Big Land, LandNoKill, LandAirSea, and LandRail units.
   • Such units can move onto this tile even if it would not normally be suitable terrain.
 • Movement cost along Railroad is 1/9 MP.
+• RESTRICTED INFRA: non-allied units do not receive a move bonus from Railroads.
 </pre>
 </div>
 <div class='item' id='extra24'>
 <h3 class='section'>Maglev</h3>
 
-<pre class='helptext'>With Superconductors, you may build MAGnetic LEVitation tracks. Land units expend no move-points when riding MagLevs; you may ride indefinitely.
-
+<pre class='helptext'>With Superconductors, you may build MAGnetic LEVitation tracks. Land units expend no move-points when riding MagLevs; you may ride indefinitely. Non-allied units do not receive a move bonus from Maglevs, but do receive any bonus from roads built underneath.
 
 City center tiles are automatically upgraded to MagLev when you acquire Superconductor tech.
 
-Build by issuing a "road" order.
+• Build by issuing a "Build Maglev" order (r).
 Requirements to build:
 • Requires knowledge of the technology Superconductors.
 • Requires an extra with the "Railable" flag on the tile.
 • To build, requires Workers or similar units.
 
-
-Can be pillaged by units (takes 1 turn).
+• Can be pillaged by units (takes 1 turn).
 
 • Can be traveled by Land, Big Land, LandNoKill, and LandAirSea units.
   • Such units can move onto this tile even if it would not normally be suitable terrain.
 • Allows infinite movement.
+• RESTRICTED INFRA: non-allied units do not receive a move bonus from Maglevs.
 </pre>
 </div>
 <div class='item' id='extra25'>
 <h3 class='section'>River</h3>
 
-<pre class='helptext'>A River adds +1 trade to the output of a tile, and +0.50 to the terrain defense bonus. Non-motorized units can move cardinally adjacent along rivers for 1/3 move point.
+<pre class='helptext'>A River adds +1 trade to the output of a tile, and +0.50 to the terrain defense bonus. Non-motorized units can move in cardinally directions along Rivers for 1/3 move point.
 
-Roads can be built on rivers after you acquire Bridge Building technology. On Flatland, this gives an additional +1 trade on top of the trade bonus from the river.
+Roads can be built on Rivers after you acquire Bridge Building technology. On Flatland, this gives an additional +1 trade on top of the trade bonus from the River.
 
-Build by issuing a "road" order.
-Placed by map generator.
+• Placed by map generator.
+
+• Build by issuing a "Road" order to a Well-Digger (r).
 Requirements to build:
 • Requires terrain with the "CanHaveRiver" flag on the tile.
 • Prevented by knowledge of the technology Pottery.
 • Prevented by knowledge of the technology Alphabet.
 • Requires that no player knows the technology Writing.
 • Requires Well-Digger.
-• Prevented if age is over 10 turns.
+  • Prevented if age is over 10 turns.
 
 Allows Hydro Plant (with Electronics and Factory if not having Hoover Dam, Fusion Reactor, or Nuclear Plant).
 Allows Hoover Dam (with Electronics).
@@ -644,7 +654,7 @@ Allows Hoover Dam (with Electronics).
 • Movement cost along River is 1/3 MP.
 • Allows Quays to be built.
 • Is a water source for Irrigation.
-• Is a water source for inland Canals.
+• Is a water source for inland Canals (Waterways).
 </pre>
 </div>
 <div class='item' id='extra26'>
@@ -652,20 +662,19 @@ Allows Hoover Dam (with Electronics).
 
 <pre class='helptext'>Sea Bridges span lakes and seas. They must be built cardinally adjacent to land. Railroads and MagLev can be built on top, and ships can pass under them. By itself, a Sea Bridge counts as a Road.
 
-Build by issuing a "road" order.
+• Build by issuing a "Build Road" order (r).
 Requirements to build:
 • Requires Oceanic terrain on the tile.
 • Requires Land terrain on the tile or a cardinally adjacent tile.
 • Requires knowledge of the technology Steel.
 • To build, requires Workers or similar units.
 
-
-Can be pillaged by units (takes 1 turn).
+• Can be pillaged by units (takes 1 turn).
 
 • Can be traveled by Land, Big Land, LandNoKill, LandAirSea, and LandRoad units.
   • Such units can move onto this tile even if it would not normally be suitable terrain.
 • Movement cost along Sea Bridge is 1/3 MP.
-• Allows Railroads to be built.
+• Allows Railroads and Maglevs to be built.
 </pre>
 </div>
 <div class='item' id='extra27'>
@@ -673,16 +682,17 @@ Can be pillaged by units (takes 1 turn).
 
 <pre class='helptext'>If you own the Great Wall, Walls can be built on land not held by a foreign nation. Walls can’t be built on Mountains, Swamp, Rivers, or Bases. Domestic units on the Walls get a free defense bonus of 1.5×. When fortified, 2.25×. In foreign territory, non-allied land units lose all moves when entering or exiting a tile occupied by Walls. Foreign units caught on Walls with no move points are considered vulnerable from climbing and scaling, and suffer a -50% defense penalty.
 
-Build by issuing a "road" order.
+• Build by issuing a "Build Walls" order.
+  • Issue order via the Orders button, OR
+  • DO (d) ⮕ (select tile) ⮕ (tile target) ⮕ Walls ⮕ Build Walls.
 Requirements to build:
-• Requires Land terrain on the tile.
-• Prevented by Mountains on the tile.
-• Prevented by Swamp on the tile.
 • Requires you to own Great Wall, which must not be obsolete.
-• Requires Land terrain on the tile or a cardinally adjacent tile.
+• Requires Land terrain on the tile.
 • To build, requires Workers or similar units.
 • Does not apply to Trawler.
 • Does not apply to city centers.
+• Prevented by Mountains on the tile.
+• Prevented by Swamp on the tile.
 • Prevented by Naval Base on the tile.
 • Prevented by Fortress on the tile.
 • Prevented by Castle on the tile.
@@ -692,17 +702,18 @@ Requirements to build:
 • Prevented by Canal on the tile.
 • Prevented by Waterway on the tile.
 • Requires that you do not have the relationship 'War' with the other player.
-• Requires that you do not have the relationship 'Peace' with the other player.
-• Requires that you do not have the relationship 'Armistice' with the other player.
-• Requires that you do not have the relationship 'Cease-fire' with the other player.
+• Requires that you do not have the relationship 'Peace' with the tile's owner.
+• Requires that you do not have the relationship 'Armistice' with the tile's owner.
+• Requires that you do not have the relationship 'Cease-fire' with the tile's owner.
 • Requires that no player knows the technology Machine Tools.
 
-
-Can be pillaged by units (takes 8 turns).
+• Can be pillaged by units (takes 8 turns).
+• Can be iPillaged by units.
 
 • Can be traveled by Land, Big Land, LandNoKill, LandAirSea, and LandRoad units.
-  • Such units can move onto this tile even if it would not normally be suitable terrain.
-• Movement cost along Walls is 7281 MP.
+  • Hard ENTRY Penalty: A Land unit entering a Walls tile in enemy territory will expend all its moves unless it ignores Terrain (Scout, Partisan, Alpine Troops).
+  • Hard EXIT Penalty: A Land unit exiting a Walls tile in enemy territory will expend all its moves unless it ignores Terrain (Scout, Partisan, Alpine Troops).
+  • Enemy land units with 0 moves left receive a -50% defense penalty.
 </pre>
 </div>
 <div class='item' id='extra28'>
@@ -712,22 +723,24 @@ Can be pillaged by units (takes 8 turns).
 * A Waterway is a second canal-type that can use ocean-sourced Canals and Rivers as a water source.
 All canal-types enable Irrigation and Quays, but give no tile output bonus.
 
-Build by issuing a "road" order.
+• Build by issuing a "Build Canal" order.
+  • issued via Orders button, OR
+  • double-clicking unit for dropdown, "Build Canal" OR
+  • DO (d) ⮕ (select tile) ⮕ (Tile Target) ⮕ Canal ⮕ Build Canal
 Requirements to build:
 • Requires terrain with the "Low Land" flag on the tile.
 • Requires Oceanic terrain on the tile or a cardinally adjacent tile.
 • Requires knowledge of the technology Engineering.
 • To build, requires Workers or similar units.
 
-
-Can be pillaged by units (takes 1 turn).
+• Can be pillaged by units (takes 1 turn).
 
 • Can be traveled by Land, LandNoKill, LandAirSea, Trireme, RiverShip, Sea, Submarine, and Helicopter units.
   • Such units can move onto this tile even if it would not normally be suitable terrain.
 • Movement cost along Canal is 1 MP.
 • Allows Quays to be built.
 • Is a water source for Irrigation.
-• Is a water source for inland Canals.
+• Is a water source for inland Canals (Waterways).
 </pre>
 </div>
 <div class='item' id='extra29'>
@@ -736,7 +749,10 @@ Can be pillaged by units (takes 1 turn).
 <pre class='helptext'>Waterways are an inland canal-type. They’re the same as a Canal, but can use Rivers and ocean-sourced Canals as their water source. Unlike a Canal, however, they can’t serve as a water source for any canal-types. However, Waterways allow for dredging a river into a full-length canal system able to accomodate modern naval ships.
 On tiles where you can build both Canals and Waterways, it’s better to build a Canal, since a Canal can serve as a water source for extending the length of your canal system. The rare exception would be if you didn’t want an enemy to be able to connect a Waterway into your canal system!
 
-Build by issuing a "road" order.
+• Build by issuing a "Build Canal" order.
+  • issued via Orders button, OR
+  • double-clicking unit for dropdown, "Build Canal" OR
+  • DO (d) ⮕ (select tile) ⮕ (Tile Target) ⮕ Waterway ⮕ Build Waterway
 Requirements to build:
 • Requires terrain with the "Low Land" flag on the tile.
 • Prevented by Oceanic terrain on the tile or any cardinally adjacent tile.
@@ -744,8 +760,7 @@ Requirements to build:
 • Requires knowledge of the technology Engineering.
 • To build, requires Workers or similar units.
 
-
-Can be pillaged by units (takes 1 turn).
+• Can be pillaged by units (takes 1 turn).
 
 • Can be traveled by Land, LandNoKill, LandAirSea, Trireme, RiverShip, Sea, Submarine, and Helicopter units.
   • Such units can move onto this tile even if it would not normally be suitable terrain.
