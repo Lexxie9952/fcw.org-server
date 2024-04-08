@@ -1245,7 +1245,7 @@ With Combined Arms, Alpine Troops get +2 to combat strength.</b>
   • Slowed down while damaged.
   • <b class="help_units_emphasis">AIRLIFT</b>: Can be airlifted if it has remaining moves.
   • Can't attack as Cargo. Must first unload.
-➤ <b class="help_units_green">Ignores terrain effects (moving costs at most ⅓ MP per tile).</b>
+➤ <b class="help_units_green">Ignores terrain effects (moving costs at most 1/3 MP per tile).</b>
   • Stepping off/onto an enemy river does not incur movement penalty.
 ➤ <b class="help_units_emphasis">RESTRICTED by Zones of Control.</b>
 ➤ <b class="help_units_limited">IMPOSES Zone of Control on adjacent native tiles.</b>
@@ -1692,7 +1692,7 @@ Big Land units can’t enter Mountains without a road or native base.</b>
 ➤ Unable to attack air units.
 ➤ May load onto Transport Helicopters even when underway.
 ➤ Can attack against Helicopter units, which are usually not reachable.
-➤ Can carry up to 3 qualifying units: Foot Soldiers and Anti-Aircraft Artillery.
+➤ Can carry 1 qualifying unit: Foot Soldier or Anti-Aircraft Artillery.
   • Cargo can't embark. Must be on same tile to Board.
   • Cargo can disembark outside a City, and loses all moves.
   • Cargo cannot deboard outside a City, Quay, or Base.
@@ -2819,9 +2819,9 @@ After Space Flight and 9 turns of service, AAA can be converted to Mobile SAM. T
   • <b class="help_units_emphasis">Can attack reachable units on ocean tiles.</b>
   • <b class="help_units_emphasis">AIRLIFT</b>: Can be airlifted if it has remaining moves.
   • Can't attack as Cargo. Must first unload.
-  ➤ <b class="help_units_emphasis">RESTRICTED by Zones of Control.</b>
-  ➤ <b class="help_units_limited">IMPOSES Zone of Control on adjacent native tiles.</b>
-    • <b class="help_units_emphasis">Prevents enemy cities from working the tile it's on.</b>
+➤ <b class="help_units_emphasis">RESTRICTED by Zones of Control.</b>
+➤ <b class="help_units_limited">IMPOSES Zone of Control on adjacent native tiles.</b>
+  • <b class="help_units_emphasis">Prevents enemy cities from working the tile it's on.</b>
 ➤ <b class="help_units_emphasis">2× attack bonus</b> when attacking Aircraft.
 ➤ <b class="help_units_emphasis">2× defense bonus</b> if attacked by Aircraft.
   • Stealth aircraft have a 25% attack bonus against this unit, effectively reducing its 2× defense bonus to a 1.6× defense bonus.
@@ -3027,7 +3027,7 @@ GOTO forces layovers on refuel-tiles. To override, shift-click goal-tile or move
   • Not able to enter terrain type 'Mountains'.
   • Does not get defense bonuses from terrain.
   • <b class="help_units_emphasis">Unreachable</b>. Units before Riflemen and Ironclad can't attack this one.
-  ◦ Doesn't prevent enemy units from attacking other units on its tile.
+    ◦ Doesn't prevent enemy units from attacking other units on its tile.
   • <b class="help_units_emphasis">AIRLIFT</b>: Can be airlifted if it has remaining moves.
 ➤ A non-military unit:
   • Cannot attack.
@@ -3303,11 +3303,11 @@ Communists pay 10 less for this unit. Stack-Escape：60% odds to evade stack-dea
   • Speed is not affected by terrain.
   • Does not get defense bonuses from terrain.
   • <b class="help_units_emphasis">Unreachable</b>. Most units cannot attack this one.
-  ◦ Doesn't prevent enemy units from attacking other units on its tile.
+    ◦ Doesn't prevent enemy units from attacking other units on its tile.
   • <b class="help_units_emphasis">Doesn't prevent enemy cities from working the tile it's on.</b>
   • <b class="help_units_emphasis">AIRLIFT</b>: Can be airlifted if it has remaining moves.
 ➤ <b class="help_units_green">IGNORES Zones of Control.</b>
-➤ <b class="help_units_emphasis">Imposes NO Zone of Control.</b>
+➤ <b class="help_units_limited">IMPOSES Zone of Control on adjacent tiles.</b>
 ➤ Can safely <b class="help_units_emphasis">iPillage</b>: Instant <u>Ground Strike</u> against tile infrastructure.
   • <b class="help_units_emphasis">50%</b> odds of success. <b>+5%</b> for each veteran level.
   • Destroys <b>1 selected</b> infrastructural improvement on the tile, instantly.
@@ -3320,7 +3320,6 @@ Communists pay 10 less for this unit. Stack-Escape：60% odds to evade stack-dea
   • Applies to all Sea units (except Submarines are unreachable.)
 ➤ <b class="help_units_emphasis">Attacks at 3</b> when attacking Air units.
 ➤ <b class="help_units_emphasis">+33% defense bonus</b> if attacked by Anti-Aircraft Artillery, Mobile SAM, or AEGIS Cruiser.
-➤ May impose a Zone of Control on its adjacent tiles.
 ➤ <b class="help_units_emphasis">INTERCEPTED</b> by Fighter types on Vigil: they auto-attack if they have better odds attacking than defending.
 ➤ Can attack against Helicopter units, which are usually not reachable.
 ➤ Can attack against Air units, which are usually not reachable.
@@ -3369,7 +3368,7 @@ GOTO forces layovers on refuel-tiles. To override, shift-click goal-tile or move
   • Speed is not affected by terrain.
   • Does not get defense bonuses from terrain.
   • <b class="help_units_emphasis">Unreachable</b>. Most units cannot attack this one.
-  ◦ Doesn't prevent enemy units from attacking other units on its tile.
+    ◦ Doesn't prevent enemy units from attacking other units on its tile.
   • <b class="help_units_emphasis">Doesn't prevent enemy cities from working the tile it's on.</b>
   • <b class="help_units_emphasis">AIRLIFT</b>: Can be airlifted if it has remaining moves.
 ➤ <b class="help_units_green">IGNORES Zones of Control.</b>
@@ -3428,7 +3427,7 @@ GOTO forces layovers on refuel-tiles. To override, shift-click goal-tile or move
   • Speed is not affected by terrain.
   • Does not get defense bonuses from terrain.
   • <b class="help_units_emphasis">Unreachable</b>. Most units cannot attack this one.
-  ◦ Doesn't prevent enemy units from attacking other units on its tile.
+    ◦ Doesn't prevent enemy units from attacking other units on its tile.
   • <b class="help_units_emphasis">Doesn't prevent enemy cities from working the tile it's on.</b>
   • <b class="help_units_emphasis">AIRLIFT</b>: Can be airlifted if it has remaining moves.
 ➤ <b class="help_units_green">IGNORES Zones of Control.</b>
@@ -3484,7 +3483,7 @@ GOTO forces layovers on refuel-tiles. To override, shift-click goal-tile or move
   • Speed is not affected by terrain.
   • Does not get defense bonuses from terrain.
   • <b class="help_units_emphasis">Unreachable</b>. Most units cannot attack this one.
-  ◦ Doesn't prevent enemy units from attacking other units on its tile.
+    ◦ Doesn't prevent enemy units from attacking other units on its tile.
   • <b class="help_units_emphasis">Doesn't prevent enemy cities from working the tile it's on.</b>
   • <b class="help_units_emphasis">AIRLIFT</b>: Can be airlifted if it has remaining moves.
 ➤ <b class="help_units_green">IGNORES Zones of Control.</b>
@@ -3593,7 +3592,7 @@ GOTO forces layovers on refuel-tiles. To override, shift-click goal-tile or move
   • Speed is not affected by terrain.
   • Does not get defense bonuses from terrain.
   • <b class="help_units_emphasis">Unreachable</b>. Most units cannot attack this one.
-  ◦ Doesn't prevent enemy units from attacking other units on its tile.
+    ◦ Doesn't prevent enemy units from attacking other units on its tile.
   • <b class="help_units_emphasis">Doesn't prevent enemy cities from working the tile it's on.</b>
   • <b class="help_units_emphasis">AIRLIFT</b>: Can be airlifted if it has remaining moves.
 ➤ <b class="help_units_green">IGNORES Zones of Control.</b>
@@ -3632,7 +3631,7 @@ GOTO forces layovers on refuel-tiles. To override, shift-click goal-tile or move
   • Speed is not affected by terrain.
   • Does not get defense bonuses from terrain.
   • <b class="help_units_emphasis">Unreachable</b>. Most units cannot attack this one.
-  ◦ Doesn't prevent enemy units from attacking other units on its tile.
+    ◦ Doesn't prevent enemy units from attacking other units on its tile.
   • <b class="help_units_emphasis">Doesn't prevent enemy cities from working the tile it's on.</b>
   • <b class="help_units_emphasis">AIRLIFT</b>: Can be airlifted if it has remaining moves.
 ➤ <b class="help_units_green">IGNORES Zones of Control.</b>
@@ -3672,7 +3671,7 @@ NOTE:  Due to game mechanics, Satellites block terrestrial movement over a tile.
   • Speed is not affected by terrain.
   • Does not get defense bonuses from terrain.
   • <b class="help_units_emphasis">Unreachable</b>. Only missile types can attack this unit.
-  ◦ Doesn't prevent enemy units from attacking other units on its tile.
+    ◦ Doesn't prevent enemy units from attacking other units on its tile.
   • <b class="help_units_emphasis">Doesn't prevent enemy cities from working the tile it's on.</b>
   • <b class="help_units_emphasis">Never provokes an auto-attack</b>
 ➤ <b class="help_units_green">IGNORES Zones of Control.</b>
@@ -3832,6 +3831,7 @@ GOTO forces layovers on refuel-tiles. To override, shift-click goal-tile or move
   • <b class="help_units_emphasis">AIRLIFT</b>: Can be airlifted if it has remaining moves.
 ➤ <b class="help_units_emphasis">STACK ESCAPE</b>: 60% odds to escape if stack defender loses, if attacker doesn’t have more moves than it does.
 ➤ Anti-Air units have bonuses against this unit.
+➤ <b class="help_units_green">IGNORES Zones of Control.</b>
 ➤ <b class="help_units_emphasis">Imposes NO Zone of Control.</b>
 ➤ <b class="help_units_emphasis">INTERCEPTED</b> by Fighter types on Vigil: they auto-attack if they have better odds attacking than defending.
 ➤ Can attack against Missile units, which are usually not reachable.
@@ -3949,7 +3949,7 @@ GOTO forces layovers on refuel-tiles. To override, shift-click goal-tile or move
   • Speed is not affected by terrain.
   • Does not get defense bonuses from terrain.
   • <b class="help_units_emphasis">Unreachable</b>. Most units cannot attack this one.
-  ◦ Doesn't prevent enemy units from attacking other units on its tile.
+    ◦ Doesn't prevent enemy units from attacking other units on its tile.
   • <b class="help_units_emphasis">Doesn't prevent enemy cities from working the tile it's on.</b>
   • <b class="help_units_emphasis">AIRLIFT</b>: Can be airlifted if it has remaining moves.
 ➤ <b class="help_units_green">IGNORES Zones of Control.</b>
@@ -3962,7 +3962,6 @@ GOTO forces layovers on refuel-tiles. To override, shift-click goal-tile or move
 ➤ <b class="help_units_emphasis">Unblockable</b>: unreachable units can't block its attacks on reachable units.
 ➤ <b class="help_units_emphasis">STACK ESCAPE</b>: 60% odds to escape if stack defender loses, if attacker doesn’t have more moves than it does.
 ➤ Anti-Air units have bonuses against this unit.
-➤ May impose a Zone of Control on its adjacent tiles.
 ➤ <b class="help_units_emphasis">INTERCEPTED</b> by Fighter types on Vigil: they auto-attack if they have better odds attacking than defending.
 ➤ Can attack against Helicopter units, which are usually not reachable.
 ➤ Can attack against Bomber types and AWACS, which are usually not reachable.
@@ -3998,7 +3997,7 @@ Veteran Levels for Ground Strike Fighters are the default for offensive Air unit
 <pre class='firepower'>Firepower: 2</pre>
 <pre class='hitpoints'>Hitpoints: 20</pre>
 <pre class='obsolete'>Obsolete by: None</pre>
-<pre class='helptext'><b class='unit_desc'>Jet Bombers are stratospheric long-range bombers with 3 turns of fuel: they can be airborne for two turn-changes. Their range makes them useful even after Stealth Bombers are available. A Jet Bomber may do a maximum of three attacks per turn. Stratospheric altitude is unreachable to propeller-based Fighters and AAA. Jet Bombers can carpet-bomb, pillaging tiles from the air. May carry three Bombs.
+<pre class='helptext'><b class='unit_desc'>Jet Bombers are stratospheric long-range bombers with 3 turns of fuel: they can be airborne for two turn-changes. Their range makes them useful even after Stealth Bombers are available. A Jet Bomber may do a maximum of two attacks per turn. Stratospheric altitude is unreachable to propeller-based Fighters and AAA. Jet Bombers can carpet-bomb, pillaging tiles from the air. May carry three Bombs.
 </b><b class='unit_desc'>
 Stack-Escape：60% odds to evade stack-death if attacker doesn’t have more moves than it does.
 GOTO forces layovers on refuel-tiles. To override, shift-click goal-tile or move one tile off the refuel spot.</b>
@@ -4006,7 +4005,7 @@ GOTO forces layovers on refuel-tiles. To override, shift-click goal-tile or move
   • Speed is not affected by terrain.
   • Does not get defense bonuses from terrain.
   • <b class="help_units_emphasis">Unreachable</b>. Most units cannot attack this one, including AAA and propeller aircraft.
-  ◦ Doesn't prevent enemy units from attacking other units on its tile.
+    ◦ Doesn't prevent enemy units from attacking other units on its tile.
   • <b class="help_units_emphasis">Doesn't prevent enemy cities from working the tile it's on.</b>
   • <b class="help_units_emphasis">AIRLIFT</b>: Can be airlifted if it has remaining moves.
 ➤ <b class="help_units_green">IGNORES Zones of Control.</b>
@@ -4066,7 +4065,7 @@ GOTO forces layovers on refuel-tiles. To override, shift-click goal-tile or move
   • Speed is not affected by terrain.
   • Does not get defense bonuses from terrain.
   • <b class="help_units_emphasis">Unreachable</b>. Most units cannot attack this one, including AAA and propeller aircraft.
-  ◦ Doesn't prevent enemy units from attacking other units on its tile.
+    ◦ Doesn't prevent enemy units from attacking other units on its tile.
   • <b class="help_units_emphasis">Doesn't prevent enemy cities from working the tile it's on.</b>
   • <b class="help_units_emphasis">AIRLIFT</b>: Can be airlifted if it has remaining moves.
 ➤ <b class="help_units_green">IGNORES Zones of Control.</b>
@@ -4260,7 +4259,7 @@ GOTO forces layovers on refuel-tiles. To override, shift-click goal-tile or move
   • Speed is not affected by terrain.
   • Does not get defense bonuses from terrain.
   • <b class="help_units_emphasis">Unreachable</b>. Most units cannot attack this one.
-  ◦ Doesn't prevent enemy units from attacking other units on its tile.
+    ◦ Doesn't prevent enemy units from attacking other units on its tile.
   • <b class="help_units_emphasis">Doesn't prevent enemy cities from working the tile it's on.</b>
   • <b class="help_units_emphasis">AIRLIFT</b>: Can be airlifted if it has remaining moves.
 ➤ <b class="help_units_green">IGNORES Zones of Control.</b>
@@ -5276,7 +5275,7 @@ Submarines can’t be seen by other players unless they have：a buoy cardinally
 <b class='unit_desc'>Submarines have superior attrition rates when attacking in numbers. Attacks cost no move points (except those incurred by taking damage.) They excel at hit-and-run against weaker ships. They have a minimum speed of 5 when damaged. </b>
 <b class='unit_desc'>
 Stack-Escape：75% odds to evade stack-death if attacker doesn’t have more moves than it does.</b>
-<hr style='border-top: 1px solid #000'>➤ Belongs to Submarine unit class.
+<hr style='border-top: 1px solid #000'>➤ Belongs to <b class='help_units_uclass'>Submarine</b> unit class.
   • <b class="help_units_emphasis">Invisible</b> except when next to an enemy unit or city.
   • <b class="help_units_emphasis">Crew Repair</b>: Automatically repairs 10% of its hitpoints each turn, regardless of movement (+3hp)
   • Speed is not affected by terrain.
@@ -5340,7 +5339,7 @@ Missile Submarines are unreachable by Air units, but don’t block air attacks o
 <b class='unit_desc'>Attacks cost no move points (except those incurred by taking damage.) Minimum speed is 5, when damaged.
 </b><b class='unit_desc'>
 Stack-Escape：75% odds to evade stack-death if attacker doesn’t have more moves than it does.</b>
-<hr style='border-top: 1px solid #000'>➤ Belongs to Submarine unit class.
+<hr style='border-top: 1px solid #000'>➤ Belongs to <b class='help_units_uclass'>Submarine</b> unit class.
   • <b class="help_units_emphasis">Invisible</b> except when next to an enemy unit or city.
   • <b class="help_units_emphasis">Crew Repair</b>: Automatically repairs 10% of its hitpoints each turn, regardless of movement (+3hp)
   • Speed is not affected by terrain.
@@ -5513,7 +5512,7 @@ The only way to transport a Missile is by: 1) ending its turn in a city, or 2) A
   • Speed is not affected by terrain.
   • Does not get defense bonuses from terrain.
   • <b class="help_units_emphasis">Unreachable</b>. Cannot be attacked except by Fighter types, Mobile SAM, AEGIS Cruiser, and nuclear weapons.
-  ◦ Doesn't prevent enemy units from attacking other units on its tile.
+    ◦ Doesn't prevent enemy units from attacking other units on its tile.
   • <b class="help_units_emphasis">Doesn't prevent enemy cities from working the tile it's on.</b>
   • <b class="help_units_emphasis">AIRLIFT</b>: Can be airlifted if it has remaining moves.
 ➤ <b class="help_units_emphasis"><u>SINGLE TARGET</u></b>: Can and will attack only a single missile. Ignores other units, which do not suffer stack kill.
@@ -5568,9 +5567,8 @@ The only way to transport a Missile is by: 1) ending its turn in a city, or 2) A
 <hr style='border-top: 1px solid #000'>➤ Belongs to <b class='help_units_uclass'>Missile</b> unit class.
   • Speed is not affected by terrain.
   • Does not get defense bonuses from terrain.
-  • Not subject to zones of control.
   • <b class="help_units_emphasis">Unreachable</b>. Cannot be attacked except by Fighter types, Mobile SAM, AEGIS Cruiser, and nuclear weapons.
-  ◦ Doesn't prevent enemy units from attacking other units on its tile.
+    ◦ Doesn't prevent enemy units from attacking other units on its tile.
   • <b class="help_units_emphasis">Doesn't prevent enemy cities from working the tile it's on.</b>
   • <b class="help_units_emphasis">AIRLIFT</b>: Can be airlifted if it has remaining moves.
 ➤ <b class="help_units_emphasis">Unblockable</b>: unreachable units can't block its attacks on reachable units.
@@ -5616,7 +5614,7 @@ The only way to transport a Missile is by: 1) ending its turn in a city, or 2) A
   • Speed is not affected by terrain.
   • Does not get defense bonuses from terrain.
   • <b class="help_units_emphasis">Unreachable</b>. Cannot be attacked except by Fighter types, Mobile SAM, AEGIS Cruiser, and nuclear weapons.
-  ◦ Doesn't prevent enemy units from attacking other units on its tile.
+    ◦ Doesn't prevent enemy units from attacking other units on its tile.
   • <b class="help_units_emphasis">Doesn't prevent enemy cities from working the tile it's on.</b>
   • <b class="help_units_emphasis">AIRLIFT</b>: Can be airlifted if it has remaining moves.
 ➤ <b class="help_units_emphasis">Imposes NO Zone of Control.</b>
@@ -5660,7 +5658,7 @@ The only way to transport a Missile is by: 1) ending its turn in a city, or 2) A
   • Speed is not affected by terrain.
   • Does not get defense bonuses from terrain.
   • <b class="help_units_emphasis">Unreachable</b>. Cannot be attacked except by Fighter types, Mobile SAM, AEGIS Cruiser, and nuclear weapons.
-  ◦ Doesn't prevent enemy units from attacking other units on its tile.
+    ◦ Doesn't prevent enemy units from attacking other units on its tile.
   • <b class="help_units_emphasis">Doesn't prevent enemy cities from working the tile it's on.</b>
   • <b class="help_units_emphasis">AIRLIFT</b>: Can be airlifted if it has remaining moves.
 ➤ <b class="help_units_emphasis">Imposes NO Zone of Control.</b>
@@ -5731,7 +5729,7 @@ Bombs can only be moved by bombers, trains, or the airlift order. They can’t a
 <hr style='border-top: 1px solid #000'>➤ Belongs to <b class='help_units_uclass'>Bomb</b> unit class.
   • Speed is not affected by terrain.
   • <b class="help_units_emphasis">Unreachable</b>. Most units cannot attack this one.
-  ◦ Doesn't prevent enemy units from attacking other units on its tile.
+    ◦ Doesn't prevent enemy units from attacking other units on its tile.
   • <b class="help_units_emphasis">Doesn't prevent enemy cities from working the tile it's on.</b>
   • <b class="help_units_emphasis">AIRLIFT</b>: Can be airlifted if it has remaining moves.
 ➤ <b class="help_units_emphasis">Imposes NO Zone of Control.</b>
@@ -5771,7 +5769,7 @@ If you have Fusion Power and the Manhattan Project was built, a Hydrogen Bomb ca
 <hr style='border-top: 1px solid #000'>➤ Belongs to <b class='help_units_uclass'>Bomb</b> unit class.
   • Speed is not affected by terrain.
   • <b class="help_units_emphasis">Unreachable</b>. Most units cannot attack this one.
-  ◦ Doesn't prevent enemy units from attacking other units on its tile.
+    ◦ Doesn't prevent enemy units from attacking other units on its tile.
   • <b class="help_units_emphasis">Doesn't prevent enemy cities from working the tile it's on.</b>
   • <b class="help_units_emphasis">AIRLIFT</b>: Can be airlifted if it has remaining moves.
 ➤ Can only be built if there is Enrichment Facility in the city.
@@ -5812,7 +5810,7 @@ If you have Fusion Power and the Manhattan Project was built, a Doomsday Bomb ca
 <hr style='border-top: 1px solid #000'>➤ Belongs to <b class='help_units_uclass'>Bomb</b> unit class.
   • Speed is not affected by terrain.
   • <b class="help_units_emphasis">Unreachable</b>. Most units cannot attack this one.
-  ◦ Doesn't prevent enemy units from attacking other units on its tile.
+    ◦ Doesn't prevent enemy units from attacking other units on its tile.
   • <b class="help_units_emphasis">Doesn't prevent enemy cities from working the tile it's on.</b>
   • <b class="help_units_emphasis">AIRLIFT</b>: Can be airlifted if it has remaining moves.
 ➤ Can only be built if there is Enrichment Facility in the city.
@@ -5869,7 +5867,6 @@ Emissaries have no upgrade cost. Full rules for Emissaries are in the Manual.</b
 ➤ <b class="help_units_green">IGNORES Zones of Control.</b>
 ➤ <b class="help_units_emphasis">Imposes NO Zone of Control.</b>
   • <b class="help_units_emphasis">Doesn't prevent enemy cities from working the tile it's on.</b>
-➤ <b class="help_units_green">IGNORES Zones of Control.</b>
 ➤ A non-military unit:
   • Cannot attack.
   • Doesn't impose martial law.
@@ -5950,7 +5947,6 @@ Espionage tech allows Diplomats to establish hostile embassies vs. Courthouse an
 ➤ <b class="help_units_emphasis">Imposes NO Zone of Control.</b>
   • <b class="help_units_emphasis">Doesn't prevent enemy cities from working the tile it's on.</b>
 ➤ Defends cities against diplomatic actions.
-➤ <b class="help_units_green">IGNORES Zones of Control.</b>
 ➤ A non-military unit:
   • Cannot attack.
   • Doesn't impose martial law.
@@ -6031,7 +6027,6 @@ Spies may claim a tile for your nation if adjacent to a tile claim made inside y
   • <b class="help_units_emphasis">Doesn't prevent enemy cities from working the tile it's on.</b>
 ➤ Strong in diplomatic battles.
 ➤ Defends cities against diplomatic actions.
-➤ <b class="help_units_green">IGNORES Zones of Control.</b>
 ➤ A non-military unit:
   • Cannot attack.
   • Doesn't impose martial law.
@@ -6259,13 +6254,13 @@ Caravans have their own veteran levels:
 <table class="vet_level">
 <tr><th>Veteran level</th><th>Power factor</th><th>Promotion odds</th><th>Move bonus</th></tr>
 <tr><hr style="border-top: 1px solid #000"></tr>
-<tr><td>v0</td><td>100%</td><td>50%</td> <td>-</td></tr>
-<tr><td>v1</td><td>150%</td><td>33%</td> <td>-</td></tr>
-<tr><td>v2</td><td>175%</td><td>20%</td> <td>-</td></tr>
-<tr><td>v3</td><td>250%</td><td>15%</td> <td>-</td></tr>
-<tr><td>v4</td><td>300%</td><td>15%</td> <td>+ 1/10</td></tr>
-<tr><td>v5</td><td>350%</td><td>15%</td> <td>+ 1/4</td></tr>
-<tr><td>v6</td><td>400%</td><td>-</td><td>+ 1/3</td></tr></table>
+<tr><td>green</td><td>100%</td><td>50%</td> <td>-</td></tr>
+<tr><td>veteran</td><td>150%</td><td>33%</td> <td>-</td></tr>
+<tr><td>hardened</td><td>175%</td><td>20%</td> <td>-</td></tr>
+<tr><td>elite runner</td><td>250%</td><td>15%</td> <td>-</td></tr>
+<tr><td>caravaneer</td><td>300%</td><td>15%</td> <td>+ 1/10</td></tr>
+<tr><td>master runner</td><td>350%</td><td>15%</td> <td>+ 1/4</td></tr>
+<tr><td>zaeim alqafila</td><td>400%</td><td>-</td><td>+ 1/3</td></tr></table>
 
 <br><b style="font-family:Helvetica; font-size:larger">Transport Loading Logistics</b>
 <img src="/images/man/logistics_generic_load.png">
