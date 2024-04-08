@@ -1217,14 +1217,17 @@ conflicts      = "Mine", "Oil Well"
 hidden_by      = "Farmland"
 flags          = "IrrigationSource"
 helptext       = _("\
+To irrigate you must have a water source on a cardinally adjacent tile. Water\
+ sources are Oceans, Lakes, Rivers, Canals, Oases, or any other irrigated land.\n\n\
 Irrigating a suitable tile causes it to produce extra food each turn. Most\
- tiles yield +1 extra food. A desert river that does not already benefit\
- from an oasis will yield +2, or +3 if it is a city on a desert river. \n\
+ tiles yield +1 extra food. A desert river that does not already benefit from\
+ an oasis will yield +2. A city on a desert river can yield +3 but only when it is\
+ manually and actually irrigated by a real unit. \n\n\
 "), _("\
-Irrigating a tile with a mine or oil well will destroy it. \n\
+Irrigating a tile with a mine or oil well will destroy the mine or well. \n\
 "), _("\
-City center tiles get their terrain irrigation bonus automatically, \
-if there is no conflicting mine or oil well on the tile; however, \
+City center tiles get a terrain irrigation bonus automatically, \
+if there is no conflicting mine or oil well on the tile. However, \
 this does not make cities count as a water source for further \
 irrigation. Irrigation can be built on the city tile simply to allow \
 irrigating elsewhere, but will not give the tile any further bonus \
@@ -1289,7 +1292,7 @@ build_time     = 10
 removal_time   = 0
 conflicts      = "Irrigation", "Farmland"
 helptext       = _("\
-Mines can be built on some types of terrain, which increases the \
+Mines can be built on some types of terrain. This increases the \
 number of production points produced by that tile. Hills get an extra \
 3 production points per tile; other terrains get 1 extra production \
 point. \n\
@@ -1318,8 +1321,8 @@ build_time     = 0
 removal_time   = 0
 conflicts      = "Irrigation", "Farmland"
 helptext       = _("\
-Oil wells behave like mines (giving an extra production point), but \
-require more technology. Oil wells can be built on Desert with knowledge \
+Oil wells behave like mines (giving an extra production point). Oil \
+wells require technology: They can be built on Desert with knowledge \
 of Construction, and on Arctic terrain with knowledge of Refining. \n\
 "), _("\
 Building an oil well on an irrigated tile will destroy the irrigation.\
@@ -1344,30 +1347,30 @@ reqs           =
 removal_time   = 0
 flags          = "GlobalWarming"
 helptext       = _("\
-Pollution appears on land tiles around cities with high production or \
-population. \
-It halves all output from its tile, and contributes to the risk of \
-global warming.\
+Pollution appears on land tiles around cities with high production or population. \
+Pollution creates an output penalty of 50% of gross output. (The penalty amount is \
+rounded down.) The output of all food, production, and trade is reduced by this penalty.\n\n\
+Each polluted tile contributes to the risk of global warming.\n\n
 "), _("\
-The pollution can only be cleared by dispatching Workers, \
-Settlers, or Engineers with the \"clean pollution\" order. \
+Pollution can only be cleared by giving Worker-types \
+a \"clean pollution\" order. \
 "), _("\
 Pollution from production is likely to start becoming important as \
 your civilization becomes more industrialized, giving you buildings \
 such as Factory and Coal Plant which boost production. Replacing a \
 Coal Plant with cleaner forms of energy — a Hydro Plant / Hoover \
 Dam, Nuclear Plant, or Solar Plant — will reduce pollution from \
-production, as will a Recycling Center or knowledge of \
-Environmentalism. \n\
+production, as will a Recycling Center. \n\
 "), _("\
-The city population starts adding to pollution with the discovery of \
-Industrialization, and Automobile, Mass Production, and Plastics make \
-this worse. Building a Mass Transit in a city eliminates the \
-populational contribution to pollution. \n\
+City population starts adding to pollution with the discovery of \
+Industrialization. Combustion, Mass Production, and Plastics make \
+it worse. Building a Mass Transit in a city eliminates the \
+populational contribution to pollution. Knowledge of Environmentalism \
+cuts it by half. \n\
 "), _("\
-The contribution of these factors can be seen in the city dialog; once \
-it exceeds a threshold, the excess is the percent chance of pollution \
-appearing each turn. \n\
+The contribution of these factors can be seen in the Main tab of a city. Once \
+the factors exceed a threshold, the excess becomes the percent chance of pollution \
+appearing near the city each turn. \n\
 "), _("\
 When an unused tile becomes polluted, there is the temptation to avoid \
 the effort of cleaning it; but the spread of pollution has far more \
@@ -1409,7 +1412,7 @@ If the village is friendly, the player \
 could receive artifacts worth some gold, a map, a mercenary military unit \
 with no upkeep, some bulbs, or even Goods or a Boat. \n\
 "), _("\
-Later in the game, helicopters may also enter villages, but overflight \
+Later in the game, Helicopters may also enter villages, but overflight \
 by other aircraft will cause the villagers to take fright and disband.\
 ")
 
@@ -1441,6 +1444,9 @@ Once Refrigeration is known, irrigation systems can be upgraded to \
 Farmland by irrigating them a second time; if the city working the tile \
 has a Supermarket, a Farmland tile provides twice as much food. \n\
 "), _("\
+Once you have Refrigeration, it makes sense to irrigate your city center \
+tile twice: Supermarkets provide only a +50% bonus, whereas Farmland \
+provides a +100% bonus.\n\
 Like irrigation, Farmland is incompatible with mines and oil wells.\
 ")
 
@@ -1468,7 +1474,7 @@ disappearance_reqs =
 flags          = "NuclearWinter"
 helptext       = _("\
 Nuclear Fallout can appear on land tiles when a Nuclear unit is \
-detonated. It halves all output from its tile. \n\
+detonated. Like Pollution, it halves all output from its tile. \n\
 "), _("\
 Every tile with Fallout also increases the risk of global \
 nuclear winter. If nuclear winter occurs, land across the globe \
@@ -1528,15 +1534,17 @@ native_to      = "Land", "Big Land", "LandNoKill", "LandAirSea", "LandRoad", "La
                  "Cargo", "Helicopter"
 flags          = "NativeTile", "NoStackDeath"
 helptext       = _("\
-Since the dawn of time, concealed terrain was\
- used for Hideouts, to evade\
- aggressors or set ambushes. Hideouts can be made by Foot Soldiers in Forests,\
- Swamps, Mountains, and Jungle. Warrior Code must be known. Tile must be\
- Friendly or Unclaimed. Only Land units and Helicopters are hidden.\
- Other units are seen. Units inside are immune to killstack. Hideouts can’t\
- exist with other bases. For each turn it is unoccupied, a Hideout has a\
- 15% chance of disappearing, unless built on ruins. The only way to know if\
- a tile has a Hideout is to have a Land unit inside. \
+Since the dawn of time, concealed terrain was used for Hideouts, to evade aggressors\
+ or set ambushes. Hideouts require Warrior Code technology and can be built by Foot\
+ soldiers in Forests, Swamps, Mountains, Jungle, and the Ruins of a former city. They\
+ cannot be built in someone else’s territory. Units in a Hideout are invisible to other\
+ players. Land units and Helicopter-types are hidden in them. Other units will be seen.\
+ Hideouts are invisible to anyone not inside them, including their owner—so it's important\
+ to remember your Hideouts. Units inside display an icon to indicate they are hiding. For\
+ each turn unoccupied, a Hideout has a 15% chance of being lost, unless built on the ruins\
+ of a city. Hideouts can't co-exist with other base types. Units in a Hideout do not undergo\
+ stack death. The hot-key to make a hideout is shift-H. The only way to know if a tile has\
+ a Hideout is to have a Land unit inside.\n\n\
 "), _("
 Be careful! An abandoned Hideout can be used against you!\
 ")
@@ -1620,7 +1628,10 @@ defense_bonus  = 0
 native_to      = "Land", "LandAirSea", "LandNoKill", "Big Land"
 flags          = "ShowFlag", "NativeTile"
 helptext       = _("\
-A Tile Claim asserts sovereignty over a tile. Tile Claims can be made in\
+A Tile Claim asserts sovereignty over a tile. A Tile Claim can be used to prevent\
+ a populous foreign city from claiming your border tiles. Or it can be used to\
+ annex border tiles from a foreign nation.\n\
+Tile Claims can be made in\
  domestic territory with a single diplomatic unit. Non-domestic territory\
  requires adjacency to an existing Tile Claim, and the Diplomat must be\
  supported by another unit. Claiming foreign tiles gives casus belli.\
@@ -1661,9 +1672,15 @@ flags          = "NativeTile", "NoStackDeath"  ;, "Refuel"
 ;Fort with no Killstack but not Airprotected vs no fort, Killstack and Airprotect, but
 ;many times fighters over forts have come up as a dynamic.
 helptext       = _("\
-Forts are rapidly built fortifications which give Land units +33% defense\
- against Land and Sea units. Defending units are lost one at a time instead\
- of the entire stack dying. A fort is necessary to start building a Fortress. \
+After discovering Masonry, Forts can be built as rapidly constructed fortifications which give Land\
+ units +33% defense against Land, Sea, and Missile units. A Fort gives no bonuses against Air units,\
+ Helicopters, or Armor. Defending units are lost one at a time instead of the entire stack dying.\n\n\
+Forts can be made by Workers, Settlers, Founders, Legions, Engineers, Proletarians, and Marines.\n\n\
+A Fort is first required on a tile before building a Fortress. A Settler inside a Fort can claim that\
+ tile to found a city.\n\n\
+Forts make great outposts for border security: they establish vision one tile out on all adjacent tiles,\
+ and 2 tiles out in all cardinal directions--even when unoccupied. They do not claim national territory,\
+ however.\n\n\
 "), _("
 Be careful—an unmanned Fort can be claimed by a foreign unit.\
 ")
@@ -1700,13 +1717,17 @@ native_to      = "Land", "LandAirSea", "LandNoKill", "Big Land", "LandRoad", "Ca
 hidden_by      = "Castle", "Bunker"
 flags          = "NativeTile", "Refuel", "NoStackDeath", "FortressHeal"
 helptext       = _("\
-Fortresses are improvements built on top of Forts which greatly improve defense:\
- the bonus against most land attackers is 2x. \n\
-A Land unit remaining in a Fortress for a whole turn without moving recovers an\
- additional 25% of its hit points. With Invention, Fortresses can see farther. \n\
+Fortresses are available with Construction tech and can be made by Workers, Settlers, Legions,\
+ Engineers, and Proletarians. They first require a Fort to be built. Unlike Forts, they give\
+ defense bonuses against Air, Armor I, and Helicopters. Fortresses claim national territory\
+ and establish borders. They give vision which gets a bonus after Invention tech is known.\n\n\
+Against most land attackers, Fortresses give a defense bonus of 2x. However, against Armor I and\
+ Helicopters, the bonus is only 1.67x. Fortresses provide no bonus against Armor II.\
+ Diplomatic units get a 25% defense bonus in diplomatic fights.\n\n\
+A Land unit remaining in a Fortress for a whole turn without moving recovers an additional +25%\
+ of its hit points.\n\n\
 "), _("\
 Units in a Fortress die one at a time instead of the entire stack being lost.\
- Diplomatic units get a 25% defense bonus in diplomatic fights.\
 ")
 
 [extra_navalbase]
@@ -1743,10 +1764,11 @@ native_to      = "Trireme", "RiverShip", "Sea", "Submarine", "Balloon", "Zeppeli
 flags          = "NativeTile", "NoStackDeath", "Refuel", "FortressHeal"
 helptext       = _("\
 Naval bases are coastal Fortresses with ocean access. Naval Bases are built on top of\
- Forts. They allow ships to enter and receive a 2x bonus from coastal weaponry and\
- fortifications. All other units get the benefits of a Fortress. \n\
+ Forts. They allow ships to enter and receive a 2x bonus against Sea, Land, and Missile\
+ attacks. All other units get the benefits of a Fortress. Against Aircraft and Armor I,\
+ the bonus is reduced to 1.67x. Naval Bases offer no defense bonus against Armor II.\n\
 Naval bases are the only location where ships can be sure to avoid stack-death without\
- suffering the “Pearl Harbor” penalty of A:FPx2 D:FP1 \n\
+ suffering the “Pearl Harbor” penalty of A:FPx2 D:FP1. \n\
 Naval bases can see submarines at a distance of 2 tiles, in cardinal directions.\
 ")
 
@@ -1821,9 +1843,11 @@ conflicts      = "Airbase", "Naval Base", "Castle"
 flags          = "NativeTile", "Refuel", "NoStackDeath", "FortressHeal"
 helptext       = _("\
 Bunkers are underground Fortresses made of concrete and steel, \
-immune to air and missile attacks. In some respects they are the \
+immune from air and missile attacks. In some respects they are the \
 modern equivalent of a Castle. Odds of surviving a nuclear blast \
-are 90%. Units inside can’t be seen.\
+are 90%. Units inside can’t be seen.\n\n\
+Bunkers cannot be pillaged normally. (This makes them impervious to iPillage.)\
+ To remove a Bunker requires building a Fortress (shift-F) on top of the Bunker.\
 ")
 
 [extra_airbase]
@@ -1854,10 +1878,12 @@ conflicts      = "Castle", "Bunker"
 flags          = "Refuel", "NoStackDeath"
 helptext       = _("\
 Airbases allow air units outside cities to land, refuel, and repair. \
-Air units in an airbase may be attacked by land units, but are \
+Airbases repair damaged Aeroplanes and Zeppelins at 20% of their hitpoints per turn. \
+Helicopters receive 25% of their hp per turn. \
+Air units in an Airbase may be attacked by land units, but are \
 immune to stack-death. \
 "), _("\
-Paratroopers can paradrop from airbases.\
+Paratroopers can paradrop from Airbases.\
 ")
 
 [extra_radar]
@@ -1976,12 +2002,12 @@ Quays improve logistics on rivers and canals. River and Canal traffic\
  can deboard to a quay for 1/3 move instead of disembarking for full moves\
  onto adjacent tiles (domestic units only.) Quays let units ferry across\
  rivers——the ancient way to cross without a bridge! \n\
-Moving from road-to-quay or quay-to-road uses 2/3 move point.\
- In cities built on river tiles, quays allow exiting to adjacent roads for only\
+Moving from road-to-quay or quay-to-road uses 2/3 move point. Quays can also be\
+ put on Canals. In cities they allow exiting to adjacent roads for only\
  1/3 move. \n\n\
 Quays are RestrictedInfra. Only allied units can use them to cross rivers,\
  and only domestic units can use them to deboard at 1/3 move. Thus, along\
- your border, quays may be a strategic alternative over bridged roads.\
+ your border, quays may be a better strategic alternative than bridged roads.\
  Enemies will incur the full movement cost of crossing the river!\n\
  Non-domestic units may deboard on a quay but lose all moves (except Marines.)\
 "), _("Moves needed to cross a river to a tile on the other side:\n\
@@ -2018,7 +2044,7 @@ native_to      = "Land", "LandRoad", "LandAirSea", "LandNoKill", "Big Land", "Tr
 hidden_by      = "Road"
 flags          = "NativeTile", "AutoOnCityCenter"
 helptext       = _("\
-Quays in cities allow exiting the city to an adjacent road with only 1⁄₃ move point.\
+Quays in cities allow exiting the city to an adjacent road with only 1/3 move point.\
 ")
 
 [extra_road]
@@ -2045,7 +2071,8 @@ hidden_by      = "Railroad", "Maglev"
 flags          = "AutoOnCityCenter", "NativeTile", "Railable"
 bridged_over   = "River", "Canal", "Waterway"
 helptext       = _("\
-Roads allow your land units to move more quickly, and on Flatland terrain,\
+Roads allow your land units to move more quickly, costing 1/3 move point\
+ to travel from one road to another road. On Flatland terrain, they\
  also provide a trade output bonus to the tile. \n\
 "), _("\
 Building roads on river tiles requires knowledge of Bridge Building.\
@@ -2080,7 +2107,9 @@ bridged_over   = "River", "Canal", "Waterway"
 helptext       = _("\
 Railroad tech lets you upgrade Roads to Railroads.\
  Units travel three times faster along Railroads than\
- along Roads. \n\
+ along Roads. Non-allied units cannot use the movement bonus\
+ of a Railroad, but do gain the movement bonus of the Road\
+ that was built underneath it.\n\
 "), _("\
 Railroads increase tile shield output by 50% (rounded down).\
  A tile whose road is upgraded to rails retains the trade bonus\
@@ -2114,8 +2143,9 @@ native_to      = "Land", "LandNoKill", "LandAirSea", "Big Land"
 flags          = "NativeTile", "AutoOnCityCenter"
 helptext       = _("\
 With Superconductors, you may build MAGnetic LEVitation tracks.\
- Land units expend no move-points\
- when riding MagLevs; you may ride indefinitely. \n\
+ Land units expend no move-points when riding MagLevs; you may ride\
+ indefinitely. Non-allied units do not receive a move bonus from Maglevs,\
+ but do receive any bonus from roads built underneath.\n\
 "), _("\
 City center tiles are automatically upgraded to MagLev\
  when you acquire Superconductor tech.\
@@ -2153,9 +2183,9 @@ native_to      = "Land", "LandNoKill", "LandAirSea", "Trireme", "RiverShip" ;NOT
 helptext       = _("\
 A River adds +1 trade to the output of a tile, and +0.50 to\
  the terrain defense bonus. Non-motorized units can move\
- cardinally adjacent along rivers for 1/3 move point.\
+ cardinal directions along Rivers for 1/3 move point.\
 "), _("\
-Roads can be built on rivers after you acquire Bridge Building technology.\
+Roads can be built on Rivers after you acquire Bridge Building technology.\
  On Flatland, this gives an additional +1 trade on top of the trade bonus\
  from the river.\
 ")
