@@ -4302,7 +4302,7 @@ roles         = ""
 helptext      = _("\
 Jet Bombers are stratospheric long-range bombers with 3 turns of fuel：they can be airborne for two\
  turn-changes. Their range makes them useful even after Stealth Bombers are available. Stratospheric\
- altitude is unreachable to propeller-based Fighters and AAA. A Jet Bomber may do a maximum of three\
+ altitude is unreachable to propeller-based Fighters and AAA. A Jet Bomber may do a maximum of two\
  attacks per turn. Jet Bombers can Carpet Bomb, an\
  instant-Pillage of tiles from the air. May carry three Bombs. \
 "), _("
