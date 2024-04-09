@@ -1796,13 +1796,7 @@ body:not(.mobile) .ui-dialog.unit_dialog {
     top: -1px;
 }
 
-/* These were removed from city.hbs as they're redundant to others
-   and multiply layout issue complexities at different resolutions:
-#prod_buttons {
-  float: right;
-  clear: both;
-}
-*/
+/*************************************************** TOOLTIPS */
 .wider-tooltip {
   max-width:800px;
   padding: 3px;
@@ -1810,6 +1804,19 @@ body:not(.mobile) .ui-dialog.unit_dialog {
   font-family: Helvetica;
   color: #000 !important;
 }
+/* Special tooltip in upper right of City Production Tab */
+#info_city_prod2, .monospace_tooltip {
+  max-width:940px !important;
+  padding: 2px;
+  font-size:13px !important;
+  font-family: Consolas, Monaco, monospace !important;
+  color: #000 !important;
+}
+#prodhelpicon {
+  font-family: Helvtica !important;
+  font-size:15px !important;
+}
+/***************************************************************/
 
 .no-close .ui-dialog-titlebar-close {
   display: none
