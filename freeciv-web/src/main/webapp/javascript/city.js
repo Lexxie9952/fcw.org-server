@@ -1024,7 +1024,7 @@ function city_dialog_size_adjust_1(cd) {
       $("#city_panel").css("padding", "0px")
       $("#city_tabs-0").css("padding","0px");
       const pheight = $("#city_tabs").parent().parent().height();
-      console.log("setting pheight to "+pheight+"!");
+      //console.log("setting pheight to "+pheight+"!");
       $("#city_tabs").css("height",pheight);
       $("worklist_control").css("padding-top","0px");
       $(".wc_spacer").css("height","2%");
@@ -1051,7 +1051,7 @@ function city_dialog_size_adjust_1(cd) {
   }
   else if (cd.is_portrait_large) {
     if (cd.winwidth>1270) { // Spacious portrait QHD or 4K:
-      console.log("Button adjust for is_portrait_large w>1270 wide")
+      //console.log("Button adjust for is_portrait_large w>1270 wide")
       // Button container, space efficient and positioned right:
       $(".ui-dialog-buttonset").last().css({"padding-top":"0px", "padding-bottom":"0px",
       "padding-right":"0px", "padding-left":"0px", "margin-top":"0px", "margin-bottom":"-10px", "margin-right":"-8px" });
@@ -1059,7 +1059,7 @@ function city_dialog_size_adjust_1(cd) {
       $(".ui-dialog-buttonset").last().children().css({"padding-top":"5px", "padding-bottom":"5px",
       "padding-right":"13px", "padding-left":"13px", "margin-bottom":"0px", "margin-right":"0px" })
     } else {  // Compromised <1280p horizontal:
-      console.log("Button adjust for is_portrait_large w<=1270 small")
+      //console.log("Button adjust for is_portrait_large w<=1270 small")
       if (cd.winwidth<1020) { // Very narrow
         $(".ui-dialog-buttonset").last().css({"padding-top":"0px", "padding-bottom":"0px",
         "padding-right":"0px", "padding-left":"0px", "margin-top":"0px", "margin-bottom":"-10px", "margin-right":"-17px" });
@@ -1135,10 +1135,10 @@ function city_dialog_size_adjust_2(cd) {
     $("#ctg").html("Gov"+(cd.pcity.cma_enabled?"&#x1F539;":""));
     $("#cma_allow_disorder").remove();
     if (cd.is_medium) {  // medium size screen e.g. 1366x768
-      console.log("city_overview_tab height, ^, ^^:")
-      console.log($("#city_overview_tab").height());
-      console.log($("#city_overview_tab").parent().height());
-      console.log($("#city_overview_tab").parent().parent().height());
+      //console.log("city_overview_tab height, ^, ^^:")
+      //console.log($("#city_overview_tab").height());
+      //console.log($("#city_overview_tab").parent().height());
+      //console.log($("#city_overview_tab").parent().parent().height());
 
       $("#city_overview_tab").css("height", ($("#city_overview_tab").parent().parent().height()))
     }
@@ -1222,7 +1222,7 @@ function city_adjust_prodlist_sizes_to_screen() {
   // -------------------------------------------------
   // Worklist control buttons:
   let prod_tab_height, prodlist_height, worklist_height;
-  console.log("mp:"+mp +", mw:" +mw+", b:"+b+", b2:"+b2);
+  //console.log("mp:"+mp +", mw:" +mw+", b:"+b+", b2:"+b2);
 
   $("#worklist_control").css("padding","0");
   prod_tab_height = $("#worklist_control").parent().height();
@@ -1313,13 +1313,13 @@ function city_get_dialog_sizing_object(pcity) {
   obj.is_portrait = obj.winheight > obj.winwidth * 1.25;
   obj.is_portrait_large = obj.winwidth > 880 && obj.winheight > 1500;
 
-  /* Debug */
+  /* Debug
   console.log("\nw,h:"+obj.winwidth+","+obj.winheight); console.log("is_small: "+obj.is_small);
   console.log("not_large: "+obj.not_large);             console.log("is_medium: "+obj.is_medium);
   console.log("is_large: "+obj.is_large);               console.log("is_med_large: "+obj.is_med_large);
   console.log("is_portrait: "+obj.is_portrait);         console.log("is_portrait_large: "+obj.is_portrait_large);
   console.log("--------------------");
-
+  */
   return obj;
 }
 
@@ -4134,7 +4134,7 @@ function city_filter_prod_type(event, city_id)
 **************************************************************************/
 function change_city_prod_to(event, city_id, z)
 {
-  console.log("z=="+z)
+  //console.log("z=="+z)
   if (event) {
     // meta-Click is for show help
     if (metaKey(event)) {
