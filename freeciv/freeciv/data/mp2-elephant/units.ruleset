@@ -2031,7 +2031,7 @@ veteran_move_bonus = 0, 0, 0, 3360, 3360, 6720, 6720
 helptext      = _("\
 Alpine Troops are highly mobile units and\
  excellent defenders. Similar to a Scout, they\
- treat every land tile like a road were on it. \n\n\
+ treat every land tile like a road were on it, including rivers. \n\n\
 With Combined Arms, Alpine Troops get +2 to combat strength. \n\n\
 ")
 
@@ -2271,7 +2271,7 @@ veteran_power_fact = 100, 150, 175, 250, 300, 350, 400
 veteran_move_bonus = 0, 0, 0, 3360, 3360, 6720, 6720
 helptext      = _("\
 Alpine Troops are highly mobile units and excellent defenders. Similar to a Scout, they\
- treat every land tile like a road were on it. \n\n\
+ treat every land tile like a road were on it, including rivers. \n\n\
 Alpine Troops are A7 D7 from Combined Arms technology. \n\n\
 ")
 
@@ -3788,10 +3788,10 @@ cargo         = "Land", "LandAirSea", "Cargo"
 helptext      = _("\
 Cargo Planes can carry 5 foot soldiers, diplomatic units, worker-types, or commerce cargo. \n\
 Cargo Planes have a variety of uses: \n\
- ‣ They can airlift cargo to a friendly airport for only 1 airlift point. \n\
+ ‣ They can airlift multiple cargo units to a friendly airport for only 1 airlift point. \n\
  ‣ They can quickly bring needed troops to a distant city or airbase. \n\
- ‣ Paratroopers can jump below (T) the Cargo Plane with no move cost. \n\
  ‣ They can bring Freight to distant cities for commercial or industrial purposes. \n\
+ ‣ Paratroopers can jump (T) from the Cargo Plane with no move cost. \n\
  ‣ Diplomatic missions (a legal landing spot is needed). \n\n\
 A Cargo Plane is delivered free to the capital with discovery of Combined Arms.\n\n\
 "), _("
