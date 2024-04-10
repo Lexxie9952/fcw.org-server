@@ -764,7 +764,6 @@ function show_ruleset_description_full() {
 
   $(id).dialog({
                  title   : ruleset_control['name'],
-                 color: default_dialog_text_color,
                  buttons : {
                    Close : function () {
                      $(id).dialog('close');
@@ -775,6 +774,7 @@ function show_ruleset_description_full() {
                  width   : ($(window).width<900?"95%":856)
                });
   $(id).css("color", default_dialog_text_color);
+  $(id).css("background-image","url(/images/bg-med-dark-text.jpg)");
 }
 
 /****************************************************************************
