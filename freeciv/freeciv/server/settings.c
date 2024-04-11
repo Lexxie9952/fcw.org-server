@@ -2465,9 +2465,8 @@ static struct setting settings[] = {
           N_("Minimum distance for domestic trade routes"),
           N_("In order for two cities in the same civilization to establish "
              "a trade route, they must be at least this far apart on the "
-             "map. For square grids, the distance is calculated as "
-             "\"Manhattan distance\", that is, the sum of the displacements "
-             "along the x and y directions."), NULL, NULL, NULL,
+             "map. This distance is \"Manhattan Distance\": "
+             "the sum of the x and y distances, |x+y|"), NULL, NULL, NULL,
           GAME_MIN_TRADEMINDIST, GAME_MAX_TRADEMINDIST,
           GAME_DEFAULT_TRADEMINDIST)
 
@@ -2476,9 +2475,8 @@ static struct setting settings[] = {
           N_("Minimum distance for foreign trade routes"),
           N_("In order for two foreign cities to establish "
              "a trade route, they must be at least this far apart on the "
-             "map. For square grids, the distance is calculated as "
-             "\"Manhattan distance\", that is, the sum of the displacements "
-             "along the x and y directions."), NULL, NULL, NULL,
+             "map. This distance is \"Manhattan Distance\": "
+             "the sum of the x and y distances, |x+y|"), NULL, NULL, NULL,
           GAME_MIN_TRADEMINFOREIGN, GAME_MAX_TRADEMINFOREIGN,
           GAME_DEFAULT_TRADEMINFOREIGN)
 
