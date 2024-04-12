@@ -13,7 +13,8 @@
 <a href="https://freeciv.fandom.com/wiki/Defense_bonus_chart.mp2c" target="_blank">Terrain+Base Defense Bonus Quick-Reference</a>
 <a href="https://freeciv.fandom.com/wiki/Diplomatic_Action_Chart.mp2" target="_blank">Diplomatic Odds Charts</a>
 <a href="https://freecivweb.org/images/man/VigilFlowChart.png" target='_blank'>Vigil Flowchart</a>
-<a href="https://freeciv.fandom.com/wiki/Vigil_engagement_chart.mp2c" target="_blank">Vigil Engagement Chart</a><br>
+<a href="https://freeciv.fandom.com/wiki/Vigil_engagement_chart.mp2c" target="_blank">Vigil Engagement Chart</a>
+<a href="https://freeciv.fandom.com/wiki/Distances_in_Freeciv" target="_blank">Distance Calculations in Freeciv</a><br>
 <u class="help_stats">Misc</u>:
 <a href="https://freecivweb.fandom.com/wiki/Strategy_Guide" target='_blank'>Multiplayer Strategy Guide</a>
 <a href="https://freecivweb.fandom.com/wiki/RTS" target='_blank'>RTS</a>
