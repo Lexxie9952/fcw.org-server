@@ -73,16 +73,14 @@ helptext = _("\
 Anarchy is simply the absence of any recognizable government.\
  Citizens are disorganized and unproductive, and will spend all\
  income as quickly as possible, rather than paying taxes or\
- conducting research. Under Anarchy, tiles suffer a -1 tile output\
- penalty if they produce 3 or more of any resource.\
+ conducting research. Unless a city has a Courthouse or is\
+ celebrating, worked tiles suffer an output penalty of -1\
+ if they produce 3 or more of any resource.\
 "), _("\
-Anarchy offers slightly less corruption than Despotism,\
- but slightly more unhappiness. \n\
+Anarchy pays no upkeep for buildings. \n\
 "), _("\
-Cities may celebrate at size 3. \n\
-No citizens are made unhappy by each aggressive unit.\n\
-25% Base corruption in cities\n\
-2% Extra corruption per each tile in distance from capital\n\
+Cities may celebrate at size 3.
+Celebrating cities cannot rapture.
 ")
 
 ;------------------------------------------------------------------------
@@ -101,19 +99,12 @@ helptext = _("\
 Under Despotism, you are the absolute ruler of your people.  Your\
  control over your citizens is maintained largely by martial law.\
  Under Despotism, tiles suffer a -1 tile output penalty if they\
- produce 3 resource points. Each city gets 3 shields of free unit upkeep. \n\
+ produce 3 resource points. Despotism suffers the highest level\
+ of corruption of all forms of government.\n\
 "), _("\
-Despotism suffers the highest level of corruption of all\
- forms of government.\n\ \
-"), _("\
-Celebrating cities cannot rapture. \n\
-Cities may celebrate at size 2. \n\
-No citizens are made unhappy by each aggressive unit. \n\
-37% Base corruption in cities \n\
-4% Extra corruption per each tile in distance from capital \n\
-Newly founded cities get +2 food (+4 for capital.) \n\
-Gulag：You can starve cities without lawlessness with a martial count of 2; \n\
-needing +2 more at 20 population and +2 more for each 10 population thereafter. \n\
+On the plus side, there is no limit to martial law units. The capital\
+ gets a +75% production bonus. Each city gets 3 shields of free unit\
+ upkeep. There is no limit to martial law units.\
 ")
 
 ;------------------------------------------------------------------------
@@ -136,12 +127,7 @@ Under Monarchy, a king or queen serves as a hereditary figurehead\
 "), _("\
 Monarchy suffers the same small amount of corruption that\
  the Republic does. Each city gets 3 shields and\
- 1 gold of free unit upkeep.\
-"), _("\
-Cities may celebrate at size 3. \n\
-No citizens are made unhappy by each aggressive unit. \n\
-15% Base corruption in cities \n\
-2% Extra corruption per each tile in distance from capital \n\
+ 1 gold of free unit upkeep. The capital gets a 50% production bonus.\
 ")
 
 ;------------------------------------------------------------------------
@@ -158,18 +144,12 @@ ruler_male_title = _("President %s")
 ruler_female_title = _("?female:President %s")
 
 helptext = _("\
-Under a Republican government, citizens hold an election to select a\
+Under the Republic government, citizens hold an election to select a\
  representative who will govern them; since elected leaders must\
  remain popular to remain in control, citizens are given a greater\
  degree of freedom.  Citizens under the Republic become unhappy\
  easily, but the self-sufficiency of your citizens allows high levels\
  of trade. \n\
-"), _("\
-Cities may celebrate at size 3. \n\
-1 citizen is made unhappy by each aggressive unit*. \n\
-     (* first aggressive unit does not cause unhappy)\n\
-15% Base corruption in cities\n\
-2% Extra corruption per each tile in distance from capital\n\
 ")
 
 ;------------------------------------------------------------------------

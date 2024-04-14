@@ -2091,7 +2091,7 @@ reqs	=
     }
 [effect_empire_size_base_constitutional_monarchy]
 type    = "Empire_Size_Base"
-value   = 12
+value   = 12                  ; 11+12 = 23
 reqs	=
     { "type",       "name",        "range"
       "Gov",        "Monarchy",    "Player"
@@ -2194,7 +2194,7 @@ reqs	=
     }
 [effect_max_rates_constitutional_monarchy]   ; Adds +5 to above.
 type    = "Max_Rates"
-value   = 5
+value   = 5          ; 70+5 = 75
 reqs	=
     { "type", "name",     "range"
       "Gov",  "Monarchy", "Player"

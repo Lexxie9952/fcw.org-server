@@ -38,7 +38,7 @@ Focus goals for MP2-Elephant
       Early game types
       Differentiate Napoleonic / WW1 / WW2 foot units better, partly through new units but partly through
          bonuses achieved from techs / vet levels / movement / etc. e.g., sub-techs for musket/rifle techs.
-========================================================================================================================
+==============================================================================================================
 
 0. Attack and Defense strength are all 10x higher across the board. This makes a basic unit like the Warriors as
    A10 D10 HP10. However, the strengths are represented at 1/10 so A10 stll shows as A1. This allows fine-tuning

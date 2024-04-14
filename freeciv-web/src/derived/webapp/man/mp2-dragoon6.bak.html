@@ -11,13 +11,9 @@
 <div class='item' id='gov0'>
 <h3 class='section'>Anarchy</h3>
 
-<pre class='helptext'>Anarchy is simply the absence of any recognizable government. Citizens are disorganized and unproductive, and will spend all income as quickly as possible, rather than paying taxes or conducting research. Under Anarchy, tiles suffer a -1 tile output penalty if they produce 3 or more of any resource.
+<pre class='helptext'>Anarchy is simply the absence of any recognizable government. Citizens are disorganized and unproductive, and will spend all income as quickly as possible, rather than paying taxes or conducting research. Unless a city has a Courthouse or is celebrating, worked tiles suffer an output penalty of  -1 if they produce 3 or more of any resource.
 
-Anarchy offers slightly less corruption than Despotism, but slightly more unhappiness.
-
-Celebrating cities cannot rapture.
-No citizens are made unhappy by each aggressive unit.
-25% base corruption in cities increases 2% per each tile in distance from a capital
+Anarchy pays no upkeep for buildings.
 
 <table class="gov_city_happy_table">
 <b title="Profile of citizen happiness in each city, based on the number of cities in the empire.">City Happiness vs. Empire Size</b>
@@ -56,14 +52,24 @@ No citizens are made unhappy by each aggressive unit.
       </tr>
 </table>
 
-Features:
-• Each of your cities will avoid paying 3 Shield upkeep for your units.
-• If you lose your capital, the base chance of civil war is 90%.
-• You can have up to 9 cities before an additional unhappy citizen appears in each city due to civilization size.
-• After the first unhappy citizen due to civilization size, for each 6 additional cities another unhappy citizen will appear.
-• Science/gold/luxuries rates will be ignored, and all trade will be alotted to luxury.
-• Your units may impose martial law. Each military unit inside a city will force 1 unhappy citizen to become content.
-• Each worked tile that gives more than 2 Food, Shield, or Trade suffers a -1 penalty unless its city is celebrating. (Cities below size 3 will not celebrate.)
+<table class="gov_info_tbl"><tbody>
+<tr><th>Anarchy traits</th> <th>[a]</th> <th>[b]</th> <th>notes</th></tr>
+<tr><td>Capital bonus</td> <td></td> <td></td> <td>production [a]% &nbsp; gold [b]%</td> </tr>
+<tr><td>Free Unit Upkeep</td> <td style="color:#f00">3<img class="v" src="/images/e/shield.png" height="20" style="margin-top:-1.9px"></td> <td style="color:#e37501">0<img class="v" src="/images/e/gold.png" style="margin: -4px 0px 0px -2px;"></td> <td>free upkeep of [a] shields and [b] gold</td> </tr>
+<tr><td>Corruption</td> <td style="color:#351e0b">25%<img class="v" src="/images/corrupt.png" style="margin-top:-5px"></td> <td style="color:#351e0b">2%</td> <td>base [a]% corruption plus [b]% for each tile distant from a capital</td> </tr>
+<tr><td>Martial Law</td> <td>♾️<img class="v" src="/images/e/musketeers.png" height="20" style="margin: -1.7px -6.5px 0px 1.2px"></td> <td>1<img class="v" src="/images/e/contentcitizen.png" style="margin-top:-1px"></td> <td>max. [a] units, which appease [b] each</td> </tr>
+<tr><td>Civil War</td> <td></td> <td>90%</td> <td>chance if capital lost</td> </tr>
+<tr><td>Maximum Tax Rate</td> <td></td> <td style="color:purple">0%</td> <td>all trade goes to luxury</td> </tr>
+<tr><td>Tile Penalty</td> <td style="color:red">1</td> <td>3</td> <td>tile penalty of [a] for outputs of [b] or more, unless celebrating</td> </tr>
+<tr><td>Content Cities</td> <td style="color:#26f">9</td> <td style="color:#0085a9">6</td> <td>first [a] cities no penalty; extra +1 discontent after each extra [b] cities</td> </tr>
+<tr><td>Razed Buildings</td> <td>21%</td> <td>10%</td> <td>in conquest of [a] foreign city, [b] liberating own city</td> </tr>
+<tr><td>Homeless Unit Disbanding</td> <td>100%</td> <td>75%</td> <td>if not in city, disband-odds if home city lost: [a] normal [b] nuclear units</td> </tr>
+<tr><td>Military Unhappiness</td> <td></td> <td></td> <td>first [a] units cause no discontent; afterward, each causes [b] discontent</td> </tr>
+</tbody></table>
+• Cities may celebrate at size <b>3</b>.
+• Each worked tile has no output penalty while its city is celebrating.
+• Celebrating cities cannot rapture.
+• Anarchy pays no upkeep for buildings.
 
 
 </pre>
@@ -71,15 +77,9 @@ Features:
 <div class='item' id='gov1'>
 <h3 class='section'>Despotism</h3>
 
-<pre class='helptext'>Under Despotism, you are the absolute ruler of your people.  Your control over your citizens is maintained largely by martial law. Under Despotism, tiles suffer a -1 tile output penalty if they produce 3 resource points. Each city gets 3 shields of free unit upkeep.
+<pre class='helptext'>Under Despotism, you are the absolute ruler of your people. Your control over your citizens is maintained largely by martial law. Under Despotism, tiles suffer a -1 tile output penalty if they produce 3 resource points. Despotism suffers the highest level of corruption of all forms of government.
 
-Despotism suffers the highest level of corruption of all forms of government.
-
-Celebrating cities cannot rapture.
-No citizens are made unhappy by each aggressive unit.
-37% base corruption in cities increases 4% per each tile in distance from a capital
-Gulag：You can starve cities without lawlessness with a martial count of 2; needing +2 more at 20 population and +2 more for each 10 population thereafter.
-Authoritarian: Police Stations force an additional 2 citizens to be content.
+On the plus side, there is no limit to martial law units. The capital gets a +75% production bonus. Each city gets 3 shields of free unit upkeep. There is no limit to martial law units.
 
 <table class="gov_city_happy_table">
 <b title="Profile of citizen happiness in each city, based on the number of cities in the empire.">City Happiness vs. Empire Size</b>
@@ -118,18 +118,26 @@ Authoritarian: Police Stations force an additional 2 citizens to be content.
       </tr>
 </table>
 
-Features:
-• Capital city (with Palace) gains +75% shield production.
+<table class="gov_info_tbl"><tbody>
+<tr><th>Despotism traits</th> <th>[a]</th> <th>[b]</th> <th>notes</th></tr>
+<tr><td>Capital bonus</td> <td style="color:#f00">75%<img class="v" src="/images/e/shield.png" height="20" style="margin-top:-1.9px"></td> <td></td> <td>production [a]% &nbsp; gold [b]%</td> </tr>
+<tr><td>Free Unit Upkeep</td> <td style="color:#f00">3<img class="v" src="/images/e/shield.png" height="20" style="margin-top:-1.9px"></td> <td style="color:#e37501">0<img class="v" src="/images/e/gold.png" style="margin: -4px 0px 0px -2px;"></td> <td>free upkeep of [a] shields and [b] gold</td> </tr>
+<tr><td>Corruption</td> <td style="color:#351e0b">37%<img class="v" src="/images/corrupt.png" style="margin-top:-5px"></td> <td style="color:#351e0b">4%</td> <td>base [a]% corruption plus [b]% for each tile distant from a capital</td> </tr>
+<tr><td>Martial Law</td> <td>♾️<img class="v" src="/images/e/musketeers.png" height="20" style="margin: -1.7px -6.5px 0px 1.2px"></td> <td>1<img class="v" src="/images/e/contentcitizen.png" style="margin-top:-1px"></td> <td>max. [a] units, which appease [b] each</td> </tr>
+<tr><td>Civil War</td> <td></td> <td>80%</td> <td>chance if capital lost</td> </tr>
+<tr><td>Maximum Tax Rate</td> <td></td> <td style="color:purple">60%</td> <td>for gold/luxury/science</td> </tr>
+<tr><td>Tile Penalty</td> <td style="color:red">1</td> <td>3</td> <td>tile penalty of [a] for outputs of [b] or more, unless celebrating</td> </tr>
+<tr><td>Content Cities</td> <td style="color:#26f">10</td> <td style="color:#0085a9">10</td> <td>first [a] cities no penalty; extra +1 discontent after each extra [b] cities</td> </tr>
+<tr><td>Razed Buildings</td> <td>21%</td> <td>10%</td> <td>in conquest of [a] foreign city, [b] liberating own city</td> </tr>
+<tr><td>Homeless Unit Disbanding</td> <td>75%</td> <td >50%</td> <td>if not in city, disband-odds if home city lost: [a] normal [b] nuclear units</td> </tr>
+<tr><td>Military Unhappiness</td> <td></td> <td></td> <td>first [a] units cause no discontent; afterward, each causes [b] discontent</td> </tr>
+</tbody></table>
+• Cities may celebrate at size <b>3</b>.
+• Each worked tile has no output penalty while its city is celebrating.
+• Celebrating cities cannot rapture.
 • Newly founded cities get +2 food (+4 for capital.)
-• Trade production suffers massive losses.
-• Trade losses increase quickly with distance from capital.
-• Each of your cities will avoid paying 3 Shield upkeep for your units.
-• If you lose your capital, the base chance of civil war is 80%.
-• You can have up to 10 cities before an additional unhappy citizen appears in each city due to civilization size.
-• After the first unhappy citizen due to civilization size, for each 10 additional cities another unhappy citizen will appear.
-• The maximum rate you can set for science, gold, or luxuries is 60%.
-• Your units may impose martial law. Each military unit inside a city will force 1 unhappy citizen to become content.
-• Each worked tile that gives more than 2 Food, Shield, or Trade suffers a -1 penalty, unless its city is celebrating. (Cities below size 3 will not celebrate.)
+• Gulag：You can starve cities without lawlessness with a martial count of 2; needing +2 more at 20 population and +2 more for each 10 population thereafter.
+• Authoritarian: Police Stations force an additional 2 citizens to be content.
 
 
 </pre>
@@ -139,11 +147,7 @@ Features:
 
 <pre class='helptext'>Under Monarchy, a king or queen serves as a hereditary figurehead for your government.
 
-Monarchy suffers the same small amount of corruption that the Republic does. Each city gets 3 shields and 1 gold of free unit upkeep.
-
-Celebrating cities cannot rapture.
-No citizens are made unhappy by each aggressive unit.
-15% base corruption in cities increases 2% per each tile in distance from a capital
+Monarchy suffers the same small amount of corruption that the Republic does. Each city gets 3 shields and 1 gold of free unit upkeep. The capital gets a 50% production bonus.
 
 Requires knowledge of the technology Monarchy.
 
@@ -183,18 +187,22 @@ Requires knowledge of the technology Monarchy.
       </tr>
 </table>
 
-Features:
-• Capital city (with Palace) gains +50% shield production.
-• Trade losses increase with distance from capital.
-• Each of your cities will avoid paying 3 Shield upkeep for your units.
-• Each of your cities will avoid paying 1 Gold upkeep for your units.
-• If you lose your capital, the base chance of civil war is 70%.
-• You can have up to 11 cities before an additional unhappy citizen appears in each city due to civilization size.
-• After the first unhappy citizen due to civilization size, for each 12 additional cities another unhappy citizen will appear.
-• The maximum rate you can set for science, gold, or luxuries is 70%.
-• Your units may impose martial law. Each military unit inside a city will force 1 unhappy citizen to become content.
-• A maximum of 3 units in each city can enforce martial law.
-• Each worked tile with Trade will yield +1 more Trade while its city is celebrating. (Cities below size 3 will not celebrate.)
+<table class="gov_info_tbl"><tbody>
+<tr><th>Monarchy traits</th> <th>[a]</th> <th>[b]</th> <th>notes</th></tr>
+<tr><td>Capital bonus</td> <td style="color:#f00">50%<img class="v" src="/images/e/shield.png" height="20" style="margin-top:-1.9px"></td> <td></td></td> <td>production [a]% &nbsp; gold [b]%</td> </tr>
+<tr><td>Free Unit Upkeep</td> <td style="color:#f00">3<img class="v" src="/images/e/shield.png" height="20" style="margin-top:-1.9px"></td> <td style="color:#e37501">1<img class="v" src="/images/e/gold.png" style="margin: -4px 0px 0px -2px;"></td> <td>free upkeep of [a] shields and [b] gold</td> </tr>
+<tr><td>Corruption</td> <td style="color:#351e0b">15%<img class="v" src="/images/corrupt.png" style="margin-top:-5px"></td> <td style="color:#351e0b">2%</td> <td>base [a]% corruption plus [b]% for each tile distant from a capital</td> </tr>
+<tr><td>Martial Law</td> <td>3<img class="v" src="/images/e/musketeers.png" height="20" style="margin: -1.7px -6.5px 0px 1.2px"></td> <td>1<img class="v" src="/images/e/contentcitizen.png" style="margin-top:-1px"></td> <td>max. [a] units, which appease [b] each</td> </tr>
+<tr><td>Civil War</td> <td></td> <td>70%</td> <td>chance if capital lost</td> </tr>
+<tr><td>Maximum Tax Rate</td> <td></td> <td style="color:purple">70%</td> <td>for gold/luxury/science</td> </tr>
+<tr><td>Tile Penalty</td> <td></td> <td></td> <td>tile penalty of [a] for outputs of [b] or more, unless celebrating</td> </tr>
+<tr><td>Content Cities</td> <td style="color:#26f">11</td> <td style="color:#0085a9">12</td> <td>first [a] cities no penalty; extra +1 discontent after each extra [b] cities</td> </tr>
+<tr><td>Razed Buildings</td> <td>14%</td> <td>7%</td> <td>in conquest of [a] foreign city, [b] liberating own city</td> </tr>
+<tr><td>Homeless Unit Disbanding</td> <td>65%</td> <td >40%</td> <td>if not in city, disband-odds if home city lost: [a] normal [b] nuclear units</td> </tr>
+<tr><td>Military Unhappiness</td> <td></td> <td></td> <td>first [a] units cause no discontent; afterward, each causes [b] discontent</td> </tr>
+</tbody></table>
+• Cities may celebrate at size <b>3</b>.
+• Each worked tile with trade will yield +1 more trade while its city is celebrating.
 
 
 <h1 style='font-family: Freeciv'><img src="/images/e/techs/monarchyconstitutional.png"> &nbsp;Constitutional Monarchy</h1>
@@ -203,10 +211,6 @@ Constitutional Monarchy is somewhat between Monarchy and representative governme
 Celebrating cities founded by you can rapture 4 out of 5 turns.
 Celebrating cities not founded by you rapture 1 out of 4 turns.
 Celebrating cities not founded by you can rapture 3 out of 5 turns, if they have no foreign citizens.
-1 citizen is made unhappy by each aggressive unit*.
-    (* first two aggressive units do not cause unhappy)
-Each city gets 1 shield and 1 gold of free unit upkeep.
-15% base corruption in cities increases 2% extra per each tile in distance from a capital
 
 Requires knowledge of the technology Monarchy and the Magna Carta Wonder.
 
@@ -278,25 +282,28 @@ Requires knowledge of the technology Monarchy and the Magna Carta Wonder.
           <td>25%</td>
           <td>60%</td>
         </tr>
-  </table>
+</table>
 
-Features:
-• Capital city (with Palace) gains +50% shield production.
-• Trade losses increase with distance from capital.
-• Each of your cities will avoid paying 1 Shield upkeep for your units.
-• Each of your cities will avoid paying 1 Gold upkeep for your units.
-• If you lose your capital, the base chance of civil war is 50%.
-• You can have up to <b>23</b> cities before an additional unhappy citizen appears in each city due to civilization size.
-• After the first unhappy citizen due to civilization size, for each 12 additional cities another unhappy citizen will appear.
-• The maximum rate you can set for science, gold, or luxuries is 70%.
-• One unit may impose martial law, forcing 1 unhappy citizen to become content.
-• • •
-• When not celebrating, +1 Trade on each Land tile that produces trade.
-• When celebrating, +1 Trade on every tile that produces Trade. (Cities below size 3 will not celebrate.)
-• Celebrating cities can grow by rapture. (Cities below size 3 cannot grow in this way.)
-• Military units away from home and field units will each cause 1 citizen to become unhappy.
-• Each of your cities will avoid 2 unhappiness caused by aggressive units.
+<table class="gov_info_tbl"><tbody>
+<tr><th>Constitutional Monarchy</th> <th>[a]</th> <th>[b]</th> <th>notes</th></tr>
+<tr><td>Capital bonus</td> <td style="color:#f00">50%<img class="v" src="/images/e/shield.png" height="20" style="margin-top:-1.9px"></td> <td></td></td> <td>production [a]% &nbsp; gold [b]%</td> </tr>
+<tr><td>Free Unit Upkeep</td> <td style="color:#f00">1<img class="v" src="/images/e/shield.png" height="20" style="margin-top:-1.9px"></td> <td style="color:#e37501">1<img class="v" src="/images/e/gold.png" style="margin: -4px 0px 0px -2px;"></td> <td>free upkeep of [a] shields and [b] gold</td> </tr>
+<tr><td>Corruption</td> <td style="color:#351e0b">15%<img class="v" src="/images/corrupt.png" style="margin-top:-5px"></td> <td style="color:#351e0b">2%</td> <td>base [a]% corruption plus [b]% for each tile distant from a capital</td> </tr>
+<tr><td>Martial Law</td> <td>1<img class="v" src="/images/e/musketeers.png" height="20" style="margin: -1.7px -6.5px 0px 1.2px"></td> <td>1<img class="v" src="/images/e/contentcitizen.png" style="margin-top:-1px"></td> <td>max. [a] units, which appease [b] each</td> </tr>
+<tr><td>Civil War</td> <td></td> <td>50%</td> <td>chance if capital lost</td> </tr>
+<tr><td>Maximum Tax Rate</td> <td></td> <td style="color:purple">70%</td> <td>for gold/luxury/science</td> </tr>
+<tr><td>Tile Penalty</td> <td></td> <td></td> <td>tile penalty of [a] for outputs of [b] or more, unless celebrating</td> </tr>
+<tr><td>Content Cities</td> <td style="color:#26f">23</td> <td style="color:#0085a9">12</td> <td>first [a] cities no penalty; extra +1 discontent after each extra [b] cities</td> </tr>
+<tr><td>Razed Buildings</td> <td>14%</td> <td>7%</td> <td>in conquest of [a] foreign city, [b] liberating own city</td> </tr>
+<tr><td>Homeless Unit Disbanding</td> <td>45%</td> <td>20%</td> <td>if not in city, disband-odds if home city lost: [a] normal [b] nuclear units</td> </tr>
+<tr><td>Military Unhappiness</td> <td>2</td> <td >1</td> <td>first [a] units cause no discontent; afterward, each causes [b] discontent</td> </tr>
+</tbody></table>
+• +1 trade on each land tile that produces trade.
+• Cities may celebrate at size <b>3</b>.
+• When celebrating, +1 trade on every ocean tile.
+• Celebrating cities can grow by rapture.
 • Allows you to build Peasants in the city with Magna Carta.
+• Gives +1 build slot in the city with Magna Carta.
 • Has a senate that may prevent declaration of war.
 • May ignore senate if you have the Statue of Liberty; OR both King Richard’s Crusade and J.S. Bach’s Cathedral.
 
@@ -306,14 +313,11 @@ Features:
 <div class='item' id='gov3'>
 <h3 class='section'>Republic</h3>
 
-<pre class='helptext'>Under a Republican government, citizens hold an election to select a representative who will govern them; since elected leaders must remain popular to remain in control, citizens are given a greater degree of freedom.  Citizens under the Republic become unhappy easily, but the self-sufficiency of your citizens allows high levels of trade.
+<pre class='helptext'>Under the Republic government, citizens hold an election to select a representative who will govern them; since elected leaders must remain popular to remain in control, citizens are given a greater degree of freedom.  Citizens under the Republic become unhappy easily, but the self-sufficiency of your citizens allows high levels of trade.
 
 Celebrating cities can rapture 9 out of 10 turns.
 Celebrating cities not founded by you can rapture 1 out of 3 turns.
 Celebrating cities not founded by you can rapture 4 out of 5 turns, if they have no foreign citizens.
-1 citizen is made unhappy by each aggressive unit*.
-     (* first aggressive unit does not cause unhappy)
-15% base corruption in cities increases 2% per each tile in distance from a capital
 
 Requires knowledge of the technology The Republic.
 
@@ -386,18 +390,24 @@ Requires knowledge of the technology The Republic.
           <td>80%</td>
         </tr>
   </table>
-
-Features:
-• Trade losses increase with distance from capital.
-• Each of your cities will avoid 1 unhappiness caused by units.
+<table class="gov_info_tbl"><tbody>
+<tr><th>Republic traits</th> <th>[a]</th> <th>[b]</th> <th>notes</th></tr>
+<tr><td>Capital bonus</td> <td></td> <td></td> <td>production [a]% &nbsp; gold [b]%</td> </tr>
+<tr><td>Free Unit Upkeep</td> <td></td> <td></td> <td>free upkeep of [a] shields and [b] gold</td> </tr>
+<tr><td>Corruption</td> <td style="color:#351e0b">15%<img class="v" src="/images/corrupt.png" style="margin-top:-5px"></td> <td style="color:#351e0b">2%</td> <td>base [a]% corruption plus [b]% for each tile distant from a capital</td> </tr>
+<tr><td>Martial Law</td> <td></td> <td></td> <td>max. [a] units, which appease [b] each</td> </tr>
+<tr><td>Civil War</td> <td></td> <td>40%</td> <td>chance if capital lost</td> </tr>
+<tr><td>Maximum Tax Rate</td> <td></td> <td style="color:purple">80%</td> <td>for gold/luxury/science</td> </tr>
+<tr><td>Tile Penalty</td> <td></td> <td></td> <td>tile penalty of [a] for outputs of [b] or more, unless celebrating</td> </tr>
+<tr><td>Content Cities</td> <td style="color:#26f">13</td> <td style="color:#0085a9">14</td> <td>first [a] cities no penalty; extra +1 discontent after each extra [b] cities</td> </tr>
+<tr><td>Razed Buildings</td> <td>14%</td> <td>7%</td> <td>in conquest of [a] foreign city, [b] liberating own city</td> </tr>
+<tr><td>Homeless Unit Disbanding</td> <td>35%</td> <td>10%</td> <td>if not in city, disband-odds if home city lost: [a] normal [b] nuclear units</td> </tr>
+<tr><td>Military Unhappiness</td> <td>1</td> <td >1</td> <td>first [a] units cause no discontent; afterward, each causes [b] discontent</td> </tr>
+</tbody></table>
+• +1 trade on each worked tile that produces trade.
+• Cities may celebrate at size <b>3</b>.
 • You pay 2 times normal Food upkeep for your units.
-• Military units away from home and field units will each cause 1 citizen to become unhappy.
-• If you lose your capital, the base chance of civil war is 40%.
-• You can have up to 13 cities before an additional unhappy citizen appears in each city due to civilization size.
-• After the first unhappy citizen due to civilization size, for each 14 additional cities another unhappy citizen will appear.
-• The maximum rate you can set for science, gold, or luxuries is 80%.
-• Celebrating cities may grow by rapture. (Cities below size 3 cannot grow in this way.)
-• Each worked tile with at least 1 Trade will yield +1 more Trade.
+• Celebrating cities may grow by rapture.
 • Has a senate that may prevent declaration of war.
 • May ignore senate if you have the Statue of Liberty.
 
@@ -411,8 +421,6 @@ Features:
 
 All celebrating cities with no foreign citizens can rapture every turn.
 See table below for other rapture rates.
-2 citizens are made unhappy by each aggressive unit.
-8% base corruption in cities increases 0.4% per each tile in distance from a capital
 
 Requires knowledge of the technology Democracy.
 
@@ -486,18 +494,25 @@ Requires knowledge of the technology Democracy.
         </tr>
   </table>
 
-Features:
-• Trade production suffers small losses.
-• Trade losses increase very slowly with distance from capital.
+<table class="gov_info_tbl"><tbody>
+<tr><th>Democracy traits</th> <th>[a]</th> <th>[b]</th> <th>notes</th></tr>
+<tr><td>Capital bonus</td> <td></td> <td></td> <td>production [a]% &nbsp; gold [b]%</td> </tr>
+<tr><td>Free Unit Upkeep</td> <td></td> <td></td> <td>free upkeep of [a] shields and [b] gold</td> </tr>
+<tr><td>Corruption</td> <td style="color:#351e0b">8%<img class="v" src="/images/corrupt.png" style="margin-top:-5px"></td> <td style="color:#351e0b">0.4%</td> <td>base [a]% corruption plus [b]% for each tile distant from a capital</td> </tr>
+<tr><td>Martial Law</td> <td></td> <td></td> <td>max. [a] units, which appease [b] each</td> </tr>
+<tr><td>Civil War</td> <td></td> <td>30%</td> <td>chance if capital lost</td> </tr>
+<tr><td>Maximum Tax Rate</td> <td></td> <td style="color:purple">100%</td> <td>for gold/luxury/science</td> </tr>
+<tr><td>Tile Penalty</td> <td></td> <td></td> <td>tile penalty of [a] for outputs of [b] or more, unless celebrating</td> </tr>
+<tr><td>Content Cities</td> <td style="color:#26f">14</td> <td style="color:#0085a9">16</td> <td>first [a] cities no penalty; extra +1 discontent after each extra [b] cities</td> </tr>
+<tr><td>Razed Buildings</td> <td>7%</td> <td>3%</td> <td>in conquest of [a] foreign city, [b] liberating own city</td> </tr>
+<tr><td>Homeless Unit Disbanding</td> <td>20%</td> <td>0%</td> <td>if not in city, disband-odds if home city lost: [a] normal [b] nuclear units</td> </tr>
+<tr><td>Military Unhappiness</td> <td>0</td> <td >2</td> <td>first [a] units cause no discontent; afterward, each causes [b] discontent</td> </tr>
+</tbody></table>
+• +1 trade on each worked tile that produces trade.
 • You pay 2 times normal Food upkeep for your units.
-• Military units away from home and field units will each cause 2 citizens to become unhappy.
-• If you lose your capital, the base chance of civil war is 30%.
-• You can have up to 14 cities before an additional unhappy citizen appears in each city due to civilization size.
-• After the first unhappy citizen due to civilization size, for each 16 additional cities another unhappy citizen will appear.
-• Has unlimited science/gold/luxuries rates.
-• Celebrating cities can grow by rapture. (Cities below size 3 cannot grow in this way.)
-• Each worked tile with at least 1 Trade will yield +1 more Trade.
-• If a city is lawless for more than 2 turns in a row, government will fall into anarchy.
+• Cities may celebrate at size <b>3</b>.
+• Celebrating cities may grow by rapture.
+• If a city is lawless for more than 2 turns in a row, government will fall into Anarchy.
 • Has a senate that may prevent declaration of war.
 • May ignore senate if you have the Statue of Liberty.
 
@@ -515,8 +530,6 @@ Improvements that appease unhappy citizens add +1 gold in tithes for each citize
 
 Celebrating cities can rapture 2 out of 5 turns.
 Celebrating cities can rapture 4 out of 7 turns if they have a Cathedral building present in the city.
-No citizens are made unhappy by each aggressive unit.
-0% base corruption in cities increases 1% per each tile in distance from a capital
 
 Requires knowledge of the technology Theocracy.
 
@@ -590,28 +603,31 @@ Requires knowledge of the technology Theocracy.
         </tr>
   </table>
 
-Features:
-• Capital city (with Palace) gains +50% gold production.
-• No trade losses from base corruption.
-• Trade losses only accrue based on distance to a capital, at a slow rate.
+<table class="gov_info_tbl"><tbody>
+<tr><th>Theocracy traits</th> <th>[a]</th> <th>[b]</th> <th>notes</th></tr>
+<tr><td>Capital bonus</td> <td></td> <td style="color:#e37501">50%<img class="v" src="/images/e/gold.png" style="margin: -4px 0px 0px -2px;"></td> <td>production [a]% &nbsp; gold [b]%</td> </tr>
+<tr><td>Free Unit Upkeep</td> <td style="color:#f00">2<img class="v" src="/images/e/shield.png" height="20" style="margin-top:-1.9px"></td> <td style="color:#e37501">2<img class="v" src="/images/e/gold.png" style="margin: -4px 0px 0px -2px;"></td> <td>free upkeep of [a] shields and [b] gold</td> </tr>
+<tr><td>Corruption</td> <td style="color:#351e0b">0%<img class="v" src="/images/corrupt.png" style="margin-top:-5px"></td> <td style="color:#351e0b">1%</td> <td>base [a]% corruption plus [b]% for each tile distant from a capital</td> </tr>
+<tr><td>Martial Law</td> <td>2<img class="v" src="/images/e/zealots.png" height="20" style="margin: -1.7px -6.5px 0px 1.2px"></td> <td>1<img class="v" src="/images/e/contentcitizen.png" style="margin-top:-1px"></td> <td>max. [a] units, which appease [b] each</td> </tr>
+<tr><td>Civil War</td> <td></td> <td>0%</td> <td>chance if capital lost</td> </tr>
+<tr><td>Maximum Tax Rate</td> <td></td> <td style="color:purple">80%</td> <td>for gold/luxury/science</td> </tr>
+<tr><td>Tile Penalty</td> <td></td> <td></td> <td>tile penalty of [a] for outputs of [b] or more, unless celebrating</td> </tr>
+<tr><td>Content Cities</td> <td style="color:#26f">14</td> <td style="color:#0085a9">15</td> <td>first [a] cities no penalty; extra +1 discontent after each extra [b] cities</td> </tr>
+<tr><td>Razed Buildings</td> <td>7%</td> <td>3%</td> <td>in conquest of [a] foreign city, [b] liberating own city</td> </tr>
+<tr><td>Homeless Unit Disbanding</td> <td>10%</td> <td>0%</td> <td>if not in city, disband-odds if home city lost: [a] normal [b] nuclear units</td> </tr>
+<tr><td>Military Unhappiness</td> <td></td> <td></td> <td>first [a] units cause no discontent; afterward, each causes [b] discontent</td> </tr>
+</tbody></table>
+• Cities may celebrate at size <b>3</b>.
+• When celebrating, +1 trade on each worked tile that produces trade.
+• Celebrating cities can grow by rapture.
 • You pay 2 times normal Food upkeep for your units.
-• Each of your cities will avoid paying 2 Shield upkeep for your units.
-• Each of your cities will avoid paying 2 Gold upkeep for your units.
-• You can have up to 14 cities before an additional unhappy citizen appears in each city due to civilization size.
-• After the first unhappy citizen due to civilization size, for each 15 additional cities another unhappy citizen will appear.
-• The maximum rate you can set for science, gold, or luxuries is 80%.
-• Celebrating cities can grow by rapture. (Cities below size 3 cannot grow in this way.)
-• Your units may impose martial law. Each military unit inside a city will force 1 unhappy citizen to become content.
-• A maximum of 2 units in each city can enforce martial law.
-• Each worked tile with Trade will yield +1 more Trade while its city is celebrating. (Cities below size 3 will not celebrate.)
 • Science production is decreased 30%.
-• Buildings and Wonders that make citizens content give 1 base gold per citizen affected.
-• Pays no upkeep for Pilgrims, Zealots, or Fanatics.
-• Allows Pilgrims.
-• Allows Falconeers.
-• Allows Patriarch (with Ecclesiastical Palace.)
-• Allows Zealots (with Conscription.)
-• Allows Fanatics (with Combined Arms.)
+• Buildings and Wonders that make citizens content give +1 gold per citizen affected.
+• Bribe cost for units is 2×.
+• Can incite foreign cities for 1/3 the cost.
+• Enemies can't establish embassies without first making Cease-fire or Peace.
+• Pays no upkeep for Pilgrims, Patriarch, Zealots, or Fanatics.
+• Allows Pilgrims, Falconeers, Patriarch, Zealots, Fanatics.
 
 
 </pre>
@@ -619,27 +635,16 @@ Features:
 <div class='item' id='gov6'>
 <h3 class='section'>Communism</h3>
 
-<pre class='helptext'>In Communism, all work, output, and goods are owned by the state.
+<pre class='helptext'>Communism puts all output under state control. Each city gets 4 shields and 3 gold of free unit upkeep. Buildings with 1 upkeep are free. <b>Irrigated</b> tiles receive +1 trade.
 
-Content cities get +1 trade on irrigated tiles that produce trade. Each city gets 4 shields and 3 gold of free unit upkeep. Buildings with 1 upkeep are free.
+The capital gets +40% production. Each city gets the effects of a Supermarket for free. Celebrating cities with Granary get +1 food output, if not on Mountains. These bonuses stack with all other food bonuses. The effect of Cathedrals and Michelangelo's Chapel is reduced -1.
 
-The city with a Palace gets +40% production.
-Each city gets the effects of a Supermarket for free. Celebrating cities with Granaries get +1 food on non-mountainous city center tiles. These bonuses stack with all other food bonuses.
-The effect of Cathedrals and Michelangelo's Chapel is reduced -1.
+Riflemen, Ground Troops, Light Armor, Armor, Armor II, and Dive Bombers cost less. New diplomatic units are v1.
 
-Riflemen, Ground Troops, and Light Armor cost 5 less; Armor, Armor II, and Dive Bombers, 10 less. Diplomats and Spies get +1 vet level.
-
-Communists can transfer Proletarians between cities to re-distribute population, or use them as workers on State projects. The Communism tech allows a Communist government to convert Workers to Riflemen and vice versa, if in domestic territory and possessing the necessary tech.
+Communists can use Proletarians to re-distribute population, or as workers. Communism tech allows Communists to convert Workers to Riflemen and vice versa, in domestic territory.
 
 Your nation is completely unaffected by empire size and number of cities.
 Celebrating cities can rapture 2 out of 5 turns.
-Celebrating cities which have a Granary gain +1 food output, if not on Mountains.
-No citizens are made unhappy by aggressive units.
-20% base corruption in cities increases 0% per each tile in distance from a capital.
-Gulag：You can starve cities without lawlessness with a martial count of 3; needing +2 more at 20 population and +2 more for each 10 population thereafter.
-Authoritarian: Police Stations force an additional 2 citizens to be content.
-
-Requires knowledge of the technology Communism.
 
 <table class="gov_city_happy_table">
 <b title="Profile of citizen happiness in each city, based on the number of cities in the empire.">City Happiness vs. Empire Size</b>
@@ -701,26 +706,35 @@ Requires knowledge of the technology Communism.
         </tr>
   </table>
 
-Features:
-• Capital city (with Palace) gains +40% shield production.
-• Trade production will suffer moderate losses.
-• Distance from capital does not increase trade losses.
-• Each of your cities will avoid paying 4 Shield upkeep for your units.
-• Each of your cities will avoid paying 3 Gold upkeep for your units.
-• If you lose your capital, the base chance of civil war is 50%.
-• You may have an unlimited number of cities without an increase in unhappy citizens.
-• The maximum rate you can set for science, gold, or luxuries is 80%.
-• Celebrating cities can grow by rapture. (Cities below size 3 cannot grow in this way.)
-• When not celebrating, +1 trade on each <b>irrigated tile</b> that produces trade.
-• When celebrating, +1 trade on each tile that produces trade and +1 food on non-mountainous city center tile if it has a Granary.
+<table class="gov_info_tbl"><tbody>
+<tr><th>Communism traits</th> <th>[a]</th> <th>[b]</th> <th>notes</th></tr>
+<tr><td>Capital bonus</td> <td style="color:#f00">40%<img class="v" src="/images/e/shield.png" height="20" style="margin-top:-1.9px"></td> <td></td></td> <td>production [a]% &nbsp; gold [b]%</td> </tr>
+<tr><td>Free Unit Upkeep</td> <td style="color:#f00">4<img class="v" src="/images/e/shield.png" height="20" style="margin-top:-1.9px"></td> <td style="color:#e37501">3<img class="v" src="/images/e/gold.png" style="margin: -4px 0px 0px -2px;"></td> <td>free upkeep of [a] shields and [b] gold</td> </tr>
+<tr><td>Corruption</td> <td style="color:#351e0b">20%<img class="v" src="/images/corrupt.png" style="margin-top:-5px"></td> <td style="color:#351e0b">0%</td> <td>base [a]% corruption plus [b]% for each tile distant from a capital</td> </tr>
+<tr><td>Martial Law</td> <td>3<img class="v" src="/images/e/zealots.png" height="20" style="margin: -1.7px -6.5px 0px 1.2px"></td> <td>2<img class="v" src="/images/e/contentcitizen.png" style="margin-top:-1px"></td> <td>max. [a] units, which appease [b] each</td> </tr>
+<tr><td>Civil War</td> <td></td> <td>50%</td> <td>chance if capital lost</td> </tr>
+<tr><td>Maximum Tax Rate</td> <td></td> <td style="color:purple">80%</td> <td>for gold/luxury/science</td> </tr>
+<tr><td>Tile Penalty</td> <td></td> <td></td> <td>tile penalty of [a] for outputs of [b] or more, unless celebrating</td> </tr>
+<tr><td>Content Cities</td> <td style="color:#26f">14</td> <td style="color:#0085a9">15</td> <td>first [a] cities no penalty; extra +1 discontent after each extra [b] cities</td> </tr>
+<tr><td>Razed Buildings</td> <td>21%</td> <td>10%</td> <td>in conquest of [a] foreign city, [b] liberating own city</td> </tr>
+<tr><td>Homeless Unit Disbanding</td> <td>45%</td> <td>20%</td> <td>if not in city, disband-odds if home city lost: [a] normal [b] nuclear units</td> </tr>
+<tr><td>Military Unhappiness</td> <td></td> <td></td> <td>first [a] units cause no discontent; afterward, each causes [b] discontent</td> </tr>
+</tbody></table>
+• +1 trade on each <b>irrigated tile</b> that produces trade.
+• Cities may celebrate at size <b>3</b>.
+• Celebrating cities can grow by rapture.
+• When celebrating, +1 trade on each trade tile not already getting a trade bonus.
+• When celebrating, +1 food on city center tile if it has a Granary and the city is not on Mountains.
 • Each city has the effect of a Supermarket for free.
-• Your units may impose martial law. Each military unit inside a city will force 2 unhappy citizens to become content.
-• A maximum of 3 units in each city can enforce martial law.
+• Can convert Workers and Workers II to Riflemen and vice versa, in domestic territory.
 • New Emissary, Diplomat, and Spy units will be veteran.
-• Each worked tile with Trade will yield +1 more Trade while its city is celebrating. (Cities below size 3 will not celebrate.)
 • Cathedral and Michelangelo effects diminished by -1.
 • Disqualified from all bonuses to Coinage.
+• Riflemen, Ground Troops, and Light Armor cost 5 less
+• Armor, Armor II, and Dive Bombers cost 10 less.
 • Allows Proletarians.
+• Gulag：You can starve cities without lawlessness with a martial count of 3; needing +2 more at 20 population and +2 more for each 10 population thereafter.
+• Authoritarian: Police Stations force an additional 2 citizens to be content.
 
 
 </pre>
@@ -730,22 +744,11 @@ Features:
 
 <pre class='helptext'>Nationalism glorifies national supremacy over other peoples. Citizens and corporatations align under a dictator who rules over a unified populace, military, and isolationist economy.
 
-
 Content cities get a +1 trade bonus on Land tiles only. Celebrating cities also get Ocean tiles. Cities may rapture at a 100% rate if founded under the original national hegemony. Luxury suffers a 15% penalty. Government mandated Science gets +20% in original cities.
-
 
 Each city gets 1 shield of free unit upkeep. The city with a Palace gets +15% production. Original cities have a 3x incite cost, otherwise cost one third.
 
-
 Police Stations cost 10 shields less. Five military units may impose martial law, affecting one citizen each. Migrants can be made to help grow cities. Tile workers gain a ⅑ move bonus; and for every three worker turns of work put in, get a fourth worker turn free. Cost of upgrades is 25% less. Riflemen are produced at +1 vet level. Armor types get a +1 move bonus. Fighters and Dive Bombers have 50% higher odds of promotion.
-
-
-Celebrating cities founded by you can rapture every turn.
-Celebrating cities not founded by you can rapture 1 out of 3 turns.
-Celebrating cities not founded by you can rapture 2 out of 3 turns, if they have no foreign citizens.
-No citizens are made unhappy by each aggressive unit.
-8% base corruption in cities increases 2% per each tile in distance from a capital
-Authoritarian: Police Stations force an additional 2 citizens to be content.
 
 Requires knowledge of the technology Nationalism.
 
@@ -819,25 +822,33 @@ Requires knowledge of the technology Nationalism.
         </tr>
   </table>
 
-Features:
-• Capital city (with Palace) gains +15% shield production.
-• Trade production suffers a small amount of losses.
-• Trade losses increase with distance from capital.
+<table class="gov_info_tbl"><tbody>
+<tr><th>Nationalism traits</th> <th>[a]</th> <th>[b]</th> <th>notes</th></tr>
+<tr><td>Capital bonus</td> <td style="color:#f00">15%<img class="v" src="/images/e/shield.png" height="20" style="margin-top:-1.9px"></td> <td></td></td> <td>production [a]% &nbsp; gold [b]%</td> </tr>
+<tr><td>Free Unit Upkeep</td> <td style="color:#f00">1<img class="v" src="/images/e/shield.png" height="20" style="margin-top:-1.9px"></td> <td style="color:#e37501">0<img class="v" src="/images/e/gold.png" style="margin: -4px 0px 0px -2px;"></td> <td>free upkeep of [a] shields and [b] gold</td> </tr>
+<tr><td>Corruption</td> <td style="color:#351e0b">8%<img class="v" src="/images/corrupt.png" style="margin-top:-5px"></td> <td style="color:#351e0b">2%</td> <td>base [a]% corruption plus [b]% for each tile distant from a capital</td> </tr>
+<tr><td>Martial Law</td> <td>5<img class="v" src="/images/e/zealots.png" height="20" style="margin: -1.7px -6.5px 0px 1.2px"></td> <td>1<img class="v" src="/images/e/contentcitizen.png" style="margin-top:-1px"></td> <td>max. [a] units, which appease [b] each</td> </tr>
+<tr><td>Civil War</td> <td></td> <td>40%</td> <td>chance if capital lost</td> </tr>
+<tr><td>Maximum Tax Rate</td> <td></td> <td style="color:purple">90%</td> <td>for gold/luxury/science</td> </tr>
+<tr><td>Tile Penalty</td> <td></td> <td></td> <td>tile penalty of [a] for outputs of [b] or more, unless celebrating</td> </tr>
+<tr><td>Content Cities</td> <td style="color:#26f">21</td> <td style="color:#0085a9">12</td> <td>first [a] cities no penalty; extra +1 discontent after each extra [b] cities</td> </tr>
+<tr><td>Razed Buildings</td> <td>14%</td> <td>7%</td> <td>in conquest of [a] foreign city, [b] liberating own city</td> </tr>
+<tr><td>Homeless Unit Disbanding</td> <td>35%</td> <td>10%</td> <td>if not in city, disband-odds if home city lost: [a] normal [b] nuclear units</td> </tr>
+<tr><td>Military Unhappiness</td> <td></td> <td></td> <td>first [a] units cause no discontent; afterward, each causes [b] discontent</td> </tr>
+</tbody></table>
+• +1 trade on each land tile that produces trade.
+• Cities may celebrate at size <b>3</b>.
+• Celebrating cities can grow by rapture.
+• When celebrating, ocean tiles get +1 trade.
 • You pay 2 times normal Food upkeep for your units.
-• Each of your cities will avoid paying 1 Shield upkeep for your units.
-• If you lose your capital, the base chance of civil war is 40%.
-• You can have up to 20 cities before an additional unhappy citizen appears in each city due to civilization size.
-• After the first unhappy citizen due to civilization size, for each 12 additional cities another unhappy citizen will appear.
-• The maximum rate you can set for science, gold, or luxuries is 90%.
-• Celebrating cities can grow by rapture. (Cities below size 3 cannot grow in this way.)
-• Your units may impose martial law. Each military unit inside a city will force 1 unhappy citizen to become content.
-• A maximum of 5 units in each city can enforce martial law.
-* New Riflemen units will have the rank of veteran.
-* Fighter and Dive Bomber units are promoted 50% more frequently.
-• Luxury production is decreased 15%.
+• New Riflemen units will have the rank of veteran.
+• Armor units gain +1 move.
+• Fighter and Dive Bomber units are promoted 50% more frequently.
+• Police Stations cost 10 less.
 • Science production is increased 20% in original cities.
-• When not celebrating, +1 trade on each Land tile that produces trade.
-• Each worked Sea tile yields +1 more Trade while its city is celebrating. (Cities below size 3 will not celebrate.)
+• Luxury production is decreased 15%.
+• Cities founded by you have double the cost to incite them.
+• Cities not founded by you cost 1/3 to incite.
 • Allows Migrants.
 • Tile workers gain a ⅑ move bonus
 • For every three worker-turns, tile workers get a fourth worker-turn free (1.34x worker-turn bonus).

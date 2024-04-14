@@ -1222,6 +1222,37 @@ input[type='number'] {
 #help_government {
   color: #8b7 !important;
 }
+/* Table the replaces "Features:" in ruleset6.bak.html for additional government info: */
+.gov_info_tbl {
+  background-image: url('/images/bg-light.jpg');
+  color :#000;
+  font-weight: 500;
+  border: solid 2px 2px var(--default_button_background);
+  text-shadow: .6px .6px #b7b7b7;
+  border-radius: 5px;
+}
+.gov_info_tbl thead {
+  font-size: 115%;
+  background-image: url('/images/bg-light.jpg');
+  font-weight: 600;
+}
+.gov_info_tbl tbody tr td {
+  background-image: url('/images/bg-light.jpg');
+  background: #fff6;
+  border: solid 1px #000;
+  border-radius: 1px;
+  vertical-align:middle;
+  padding:4px;
+}
+.gov_info_tbl tbody tr td:nth-child(+n +2) {
+  text-align:center; /* center all text except first column */
+  text-indent:2px;
+}
+.gov_info_tbl tbody tr td:nth-child(4) {
+  background: #0003;
+  font-size: 90%; /* explanation column is de-emphasis */
+  text-align:left !important;
+}
 #help_technology {
   color: #88b5bb !important;
 }
