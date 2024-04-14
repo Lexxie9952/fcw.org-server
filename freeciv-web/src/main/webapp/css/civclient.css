@@ -1828,6 +1828,21 @@ body:not(.mobile) .ui-dialog.unit_dialog {
 }
 
 /*************************************************** TOOLTIPS */
+/* Assign class="tt" to elements that will get a tooltip, so that
+   $(".tt").tooltip({show: { delay:200, effect:"none", duration: 0 }, hide: {delay:120, effect:"none", duration: 0}});
+   Can activate everything in the displayed section easily. */
+.tt {
+  overflow-y: visible;
+  overflow-x: visible;
+}
+.tt_slim, .tt_tiny {
+  padding: 2px;
+  font-size:12px !important;
+}
+.tt_tiny {
+  width: 100%;
+}
+
 .wider-tooltip {
   max-width:800px;
   padding: 3px;

@@ -5155,6 +5155,7 @@ function key_unit_load(scoop_units)
         modal: true,
         position: { my: ("center+" + (i*3) + " center+" + (i*3) ), at: "center" },
         buttons: buttons,
+        overflow: "visible",
         height: "auto",
         zIndex: 9999,
        /* width: "auto",*/
@@ -5163,6 +5164,9 @@ function key_unit_load(scoop_units)
       $(id).dialog('open');
       $(id).dialog('widget').position({my:"center top", at:"center top", of:window})
       dialog_register(id);
+      $(id).parent().css("overflow", "visible"); // prevents tooltip clipping
+      $(".tt").tooltip({ tooltipClass: "tt_slim", show: { delay:300, effect:"none", duration: 0 },
+                                 hide: {delay:120, effect:"none", duration: 0} });
     }
     // otherwise, only one transporter candidate, load automatically with no GUI input from user:
     // Only one legal transport, no need to do pop-up to choose which one:

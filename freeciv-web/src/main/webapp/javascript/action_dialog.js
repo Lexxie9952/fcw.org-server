@@ -534,7 +534,7 @@ function create_act_sel_button(parent_id,
   /* Create the initial button with this action */
   var button = {
     id      : "act_sel_" + action_id + "_" + actor_unit_id,
-    "class" : 'act_sel_button',
+    "class" : 'act_sel_button tt',
     html    : button_text,
     title   : format_action_tooltip(action_id,
                                     action_probabilities),
@@ -775,7 +775,7 @@ function popup_action_selection(actor_unit, action_probabilities,
         if (!auto_attack) {
           var button = {
             id      : "act_sel_" + ACTION_ATTACK + "_" + actor_unit['id'],
-            "class" : 'act_sel_button',
+            "class" : 'act_sel_button tt',
             html    : render_action_image_into_button("Auto attack from now on!", "autoattack"),
             title   : "Attack without showing this attack dialog in the future",
             click   : function() {
@@ -1041,6 +1041,7 @@ function popup_action_selection(actor_unit, action_probabilities,
       bgiframe: true,
      // modal: true,   // non-modal: allows player to see and witness large multi-unit battle with many dialogs
       dialogClass: "act_sel_dialog",
+      overflow: "visible",
       width: is_small_screen() ? "99%" : dialog_width,
       buttons: buttons });
 
@@ -1048,6 +1049,9 @@ function popup_action_selection(actor_unit, action_probabilities,
   is_more_user_input_needed = false;
   $(id).dialog('widget').position({my:"center top", at:"center top", of:window})
   dialog_register(id, actor_unit['id'], true);
+  $(id).parent().css("overflow", "visible");
+  $(".tt").tooltip({ tooltipClass: "tt_tiny", position: { my:"left top", at: "right+5 top"},
+    show: { delay:700, effect:"none", duration: 0 }, hide: {delay:70, effect:"none", duration: 0} });
   if (focus_button) $("#"+focus_button).focus(); // default focus to attack button
 }
 
@@ -1228,6 +1232,7 @@ function create_steal_tech_button(parent_id, tech,
   /* Create the initial button with this tech */
   var button = {
     html : tech['name'],
+    "class": "tt",
     click : function() {
 
       request_unit_do_action(action_id, actor_id, city_id, tech['id']);
@@ -1487,7 +1492,7 @@ function create_select_tgt_unit_button(parent_id, actor_unit_id,
   // Segment 4. Extra transport-distinguishing info (iff legally embarkable)
   if (show_transport_info) {
     dhtml += moves_text;
-    dhtml += "<span style='cursor:help' title='"+cargo_text+"'>"+"L:"+carrying+" </span> ";
+    dhtml += "<span class='tt' style='cursor:help' title='"+cargo_text+"'>"+"L:"+carrying+" </span> ";
     dhtml += "C:"+ttype['transport_capacity']+" ";
   }
   // Segment 5. Nationality + Home city
@@ -1502,8 +1507,14 @@ function create_select_tgt_unit_button(parent_id, actor_unit_id,
 
   button = {
     html  : dhtml,
+    "class": "tt",
     title: title_text,
-    click : function() {
+    click : function(e) {
+      if (metaKey(e)) {
+        help_redirect(VUT_UTYPE, target_unit['type']);
+        remove_active_dialog(parent_id);
+        return;
+      }
       var packet = {
         "pid"            : packet_unit_get_actions,
         "actor_unit_id"  : actor_unit_id,
@@ -1561,6 +1572,7 @@ function select_tgt_unit(actor_unit, target_tile, potential_tgt_units)
   $(id).dialog({
       title    : "Target unit selection",
       bgiframe : true,
+      overflow: "visible",
       style :  "text-align:center",
       width: is_small_screen() ? "99%" : dialog_width,
       modal    : true,
@@ -1569,6 +1581,9 @@ function select_tgt_unit(actor_unit, target_tile, potential_tgt_units)
   $(id).dialog('open');
   $(id).dialog('widget').position({my:"center top", at:"center top", of:window})
   dialog_register(id, actor_unit['id']);
+  $(id).parent().css("overflow","visible");
+  // Tooltip for target buttons
+  $(".tt").tooltip({ tooltipClass: "tt_slim", show: { delay:350, effect:"none", duration: 0 }, hide: {delay:120, effect:"none", duration: 0} });
 }
 
 /**************************************************************************
@@ -1645,8 +1660,13 @@ function create_select_tgt_extra_button(parent_id, actor_unit_id,
 
   button = {
     html  : text,
-    title:  html_safe(extras[target_extra_id].helptext),
-    click : function() {
+    title:  html_safe(extras[target_extra_id].helptext+("\nMETA-CLICK: See help for "+extras[target_extra_id].rule_name)),
+    click : function(e) {
+      if (metaKey(e)) {
+        help_redirect(VUT_EXTRA, target_extra_id);
+        remove_active_dialog(parent_id);
+        return;
+      }
       var packet = {
         "pid"            : packet_unit_get_actions,
         "actor_unit_id"  : actor_unit_id,
@@ -1718,7 +1738,7 @@ function create_load_transport_button(actor, ttile, tid, tmoves, tloaded, tcapac
   if (target_unit['transported_by']) text+="on T"+target_unit['transported_by']+" ";
   // Segment 4. M:moves L:cargo_qty C:capacity
   text += moves_text
-        + "<span style='cursor:help' title='"+cargo_text+"'>"+tloaded+"</span>"
+        + "<span style='cursor:help' class='tt' title='"+cargo_text+"'>"+tloaded+"</span>"
         + " C:" + tcapacity;
   // Segment 5. Nationality + Home city
   if (get_unit_homecity_name(target_unit) != null) text += " ("+get_unit_homecity_name(target_unit)+")";
@@ -1728,8 +1748,14 @@ function create_load_transport_button(actor, ttile, tid, tmoves, tloaded, tcapac
   var load_button = {
     title : title_text,
     html  : text,
+    "class" : "tt",
     disabled :  disable,
-    click : function() {
+    click : function(e) {
+      if (metaKey(e)) {
+        help_redirect(VUT_UTYPE, units[tid]['type']);
+        remove_action_selection_dialog(dialog_id, actor['id'])
+        return;
+      }
       request_unit_do_action(ACTION_TRANSPORT_BOARD, actor, tid);
       // Loaded units don't ask orders later:
       remove_unit_id_from_waiting_list(actor['id']);
@@ -1778,7 +1804,13 @@ function select_tgt_extra(actor_unit, target_unit,
                                                     target_tile['index'],
                                                     tgt_extra['id']);
     if (the_button != null) {
-      the_button['class'] = 'act_sel_button';
+
+      // last half of list needs tooltip to position differently
+      if (i>potential_tgt_extras.length/2)
+        the_button['class'] = 'act_sel_button tbot';
+      else
+        the_button['class'] = 'act_sel_button ttop';
+
       the_button['height'] = '31px';
 
       buttons.push(the_button);
@@ -1792,6 +1824,7 @@ function select_tgt_extra(actor_unit, target_unit,
   $(id).dialog({
       title    : "Tile target",
       bgiframe : true,
+      "overflow": "visible",
       modal    : true,
       width    : "320px",
       buttons  : buttons });
@@ -1800,6 +1833,11 @@ function select_tgt_extra(actor_unit, target_unit,
   $(id).next().css("text-align", "center");
   $(id).dialog('widget').position({my:"center top", at:"center top", of:window})
   dialog_register(id, actor_unit['id']);
+  $(id).parent().css("overflow", "visible"); // prevent clipping of tooltips
+  $(".ttop").tooltip({ tooltipClass: "tt_tiny", position: { my:"left top-50", at: "right+5 top"},
+    show: { delay:700, effect:"none", duration: 0 }, hide: {delay:70, effect:"none", duration: 0} });
+  $(".tbot").tooltip({ tooltipClass: "tt_tiny", position: { my:"left bottom", at: "right+5 bottom"},
+    show: { delay:700, effect:"none", duration: 0 }, hide: {delay:70, effect:"none", duration: 0} });
 }
 
 /**************************************************************************
@@ -1936,6 +1974,7 @@ function select_last_action()
 
   $(id).dialog({
   title    : "Go and ...",
+  overflow: "visible",
   width    : (is_small_screen() ? "99%" : "450px"),
   bgiframe : true,
   html:    dhtml,
@@ -1946,6 +1985,8 @@ function select_last_action()
   $(id).dialog('widget').position({my:"center top", at:"center top", of:window})
 
   dialog_register(id);
+  $(".tt").tooltip({ tooltipClass: "tt_slim", show: { delay:700, effect:"none", duration: 0 }, hide: {delay:20, effect:"none", duration: 0} });
+  $(id).parent().css("overflow","visible");
 }
 
 /**************************************************************************
@@ -1985,6 +2026,7 @@ function create_action_last_button(title_text, action, order, activity, target, 
 {
   var button = {
     title: "Perform "+title_text+" after completing GOTO",
+    "class": "tt",
     html:  title_text,
     click: function() {
       if (order) {

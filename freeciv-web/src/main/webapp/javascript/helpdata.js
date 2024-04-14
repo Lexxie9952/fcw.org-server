@@ -382,7 +382,7 @@ function generate_help_menu(key)
         //console.log("doing id:"+id+" which is "+sortedExtras[id]['rule_name'])
         let extra = sortedExtras[id];
         let img_element = create_half_size_extra_sprite(extra)
-        let lookup_id = "qhelp_extr_" + id;
+        let lookup_id = "qhelp_extr_" + extra['id'];
         $("<li id ='"+lookup_id+"' data-helptag='" + key + "_" + extra['id'] + "'>"
         + "<div class='hmextra_wrapper'><span class='hmextra_text'>"+extra['rule_name']+"</span>"
         + img_element + "</div>" + "</li>").appendTo("#help_extras_ul");
@@ -671,9 +671,9 @@ function generate_help_text(key)
       + (server_settings.move_cost_in_frags.val ? move_points_text(terrain['movement_cost']) : terrain['movement_cost']) + "</td></tr>"
 	    + "<tr><td>Defense bonus:</td>" + "<td>" + terrain['defense_bonus']+"%" + "</td></tr>"
 	    + "<tr><td>Base Output:</td>" +"<td>"
-        + "<span title='Base Food Output' style='cursor: help; font-size:120%; font-family: Helvetica; color:#000; background-color:#40ff40'>&hairsp;"+ terrain['output'][0] + "&hairsp;</span>"
-        + "<span title='Base Shield Output' style='cursor: help; font-size:120%; font-family: Helvetica; color:#000; background-color:#f0f0f0'>&hairsp;"+ terrain['output'][1] + "&hairsp;</span>"
-        + "<span title='Base Trade Output' style='cursor: help; font-size:120%; font-family: Helvetica; color:#000; background-color:#f8f020'>&hairsp;"+ terrain['output'][2] + "&hairsp;</span>"
+        + "<span class='tt' title='Base Food Output' style='cursor: help; font-size:120%; font-family: Helvetica; color:#000; background-color:#40ff40'>&hairsp;"+ terrain['output'][0] + "&hairsp;</span>"
+        + "<span class='tt' title='Base Shield Output' style='cursor: help; font-size:120%; font-family: Helvetica; color:#000; background-color:#f0f0f0'>&hairsp;"+ terrain['output'][1] + "&hairsp;</span>"
+        + "<span class='tt' title='Base Trade Output' style='cursor: help; font-size:120%; font-family: Helvetica; color:#000; background-color:#f8f020'>&hairsp;"+ terrain['output'][2] + "&hairsp;</span>"
       + "</td></tr>"
 
     let divisor = 1; if (client_rules_flag[CRF_2X_MOVES]) divisor = 2;
@@ -764,7 +764,7 @@ function generate_help_text(key)
     // MP2 rulesets.
     if (client_rules_flag[CRF_MP2]) {
       for (let r=1; r <= num_resources; r++) {
-        msg += "<img style='cursor:help' title='"
+        msg += "<img style='cursor:help' class='tt' title='"
             + (client_rules_flag[CRF_MP2] ? terrain_help[terrain.name+r] : "")
             + "' src='/images/terrain/"+terrain.name.toLowerCase().replace(" ","")+r+".png'>"
       }
@@ -779,9 +779,9 @@ function generate_help_text(key)
         var extra_name = extras[terrain.resources[r]].name;
         if (extra_name.startsWith("?")) extra_name = extra_name.split(":")[1]; // chops out first part of "?animals:Game"
         msg += extra_name +":</td><td>"
-        + "<span title='Base Food Output' style='cursor: help; font-size:120%; font-family: Helvetica; color:#000; background-color:#40ff40'>&hairsp;"+ (terrain.output[0] + resources[terrain.resources[r]].output[0]) + "&hairsp;</span>"
-        + "<span title='Base Shield Output' style='cursor: help; font-size:120%; font-family: Helvetica; color:#000; background-color:#f0f0f0'>&hairsp;"+ (terrain.output[1] + resources[terrain.resources[r]].output[1]) + "&hairsp;</span>"
-        + "<span title='Base Trade Output' style='cursor: help; font-size:120%; font-family: Helvetica; color:#000; background-color:#f8f020'>&hairsp;"+ (terrain.output[2] + resources[terrain.resources[r]].output[2]) + "&hairsp;</span>"
+        + "<span class='tt' title='Base Food Output' style='cursor: help; font-size:120%; font-family: Helvetica; color:#000; background-color:#40ff40'>&hairsp;"+ (terrain.output[0] + resources[terrain.resources[r]].output[0]) + "&hairsp;</span>"
+        + "<span class='tt' title='Base Shield Output' style='cursor: help; font-size:120%; font-family: Helvetica; color:#000; background-color:#f0f0f0'>&hairsp;"+ (terrain.output[1] + resources[terrain.resources[r]].output[1]) + "&hairsp;</span>"
+        + "<span class='tt' title='Base Trade Output' style='cursor: help; font-size:120%; font-family: Helvetica; color:#000; background-color:#f8f020'>&hairsp;"+ (terrain.output[2] + resources[terrain.resources[r]].output[2]) + "&hairsp;</span>"
         msg += "</td>"
       }
       msg += "</tr></table>"
@@ -1129,6 +1129,10 @@ function generate_help_text(key)
   }
 
   $("#help_info_page").html(msg);
+  // Tooltip all elements above that were classed with .tt
+  $(".tt").tooltip({ show: { delay:200, effect:"none", duration: 0 },
+                             hide: {delay:120, effect:"none", duration: 0} });
+
 
   /* Freeciv has code that generates certain help texts based on the
    * ruleset. This code is written in C. It is huge. Replicating it in
