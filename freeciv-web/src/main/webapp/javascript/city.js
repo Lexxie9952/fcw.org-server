@@ -3273,7 +3273,7 @@ function populate_worklist_production_choices(pcity)
           close_city_dialog_trigger();
           $('#ui-id-7').trigger("click");  // help tab
         }
-        help_redirect(value, kind);
+        help_redirect(kind, value);
         return;
       }
 
