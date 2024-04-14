@@ -601,7 +601,12 @@ function clear_sidebar()
 **************************************************************************/
 function wiki_on_item_button(item_name)
 {
-  /* Item name shouldn't be a qualified string. */
+  /* Returning nothing disables wikipedia buttons. Remove this and
+     uncomment section below it, to re-enable wikipedia buttons. */
+  return "";
+
+  /*
+  // Item name shouldn't be a qualified string.
   item_name = string_unqualify(item_name);
 
   if (freeciv_wiki_docs[item_name] == null) {
@@ -612,6 +617,7 @@ function wiki_on_item_button(item_name)
   return ("<button class='help_button' onclick=\"show_wikipedia_dialog('"
           + item_name.replace(/\\/g, "\\\\").replace(/'/g, "\\'")
           + "');\">Wikipedia on " + item_name +  "</button>");
+  */
 }
 
 /**************************************************************************
