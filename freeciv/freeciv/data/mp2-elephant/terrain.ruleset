@@ -121,8 +121,8 @@ ocean_resources = FALSE
 ;                        released, you should set "rule_name" to the original
 ;                        value of "name".
 ; graphic              = preferred graphic; Tilespec [tile_*] section
-;                        with 'tag' matching this will be used.
-; graphic_alt          = alternate graphic. When no tilespec 'tag' matching
+;                        with ’tag’ matching this will be used.
+; graphic_alt          = alternate graphic. When no tilespec ’tag’ matching
 ;                        preferred graphic is not found, this will be used.
 ;                        Otherwise may be "-"
 ; identifier           = single-character identifier used in savegames. This
@@ -142,22 +142,22 @@ ocean_resources = FALSE
 ;                        Nonzero values only affect extras with build_time 0.
 ; road_time            = time to build roads; if 0, cannot build any roads.
 ;                        Nonzero values only affect extras with build_time 0.
-; irrigation_result    = result of 'irrigate' activity; one of:
+; irrigation_result    = result of ’irrigate’ activity; one of:
 ;                        "no"  — cannot irrigate
 ;                        "yes" — can build extra
 ;                        terrain section — irrigation changes to that terrain
 ; irrigation_food_incr = increment to food if tile is 100% irrigated
 ;                        (actual bonus controlled by Irrigation_Pct effect)
-; irrigation_time      = time for 'irrigate' activity; if 0, cannot irrigate
+; irrigation_time      = time for ’irrigate’ activity; if 0, cannot irrigate
 ;                        Nonzero values only affect extras with build_time 0.
 ;                        Such extras can modify time with build_time_factor.
-; mining_result        = result of 'mine' activity; one of:
+; mining_result        = result of ’mine’ activity; one of:
 ;                        "no"  — cannot mine
 ;                        "yes" — can build extra
 ;                        terrain section — mining changes to that terrain
 ; mining_shield_incr   = increment to shields if tile is 100% mined
 ;                        (actual bonus controlled by Mining_Pct effect)
-; mining_time          = time for 'mine' activity; if 0, cannot mine
+; mining_time          = time for ’mine’ activity; if 0, cannot mine
 ;                        Nonzero values only affect extras with build_time 0.
 ;                        Such extras can modify time with build_time_factor.
 ; transform_result     = result of transformation; one of:
@@ -167,9 +167,9 @@ ocean_resources = FALSE
 ; transform_time       = time to transform; if 0, cannot transform
 ; pillage_time         = time to pillage extra from the tile (0 = impossible)
 ;                        Nonzero values only affect extras with removal_time 0.
-; clean_pollution_time = time for 'clean pollution' activity (0 = impossible)
+; clean_pollution_time = time for ’clean pollution’ activity (0 = impossible)
 ;                        Nonzero values only affect extras with removal_time 0.
-; clean_fallout_time   = time for 'clean fallout' activity (0 = impossible)
+; clean_fallout_time   = time for ’clean fallout’ activity (0 = impossible)
 ;                        Nonzero values only affect extras with removal_time 0.
 ; animal               = unit type that can appear as animal on the terrain
 ; warmer_wetter_result = result of global warming for wet terrains; one of:
@@ -1044,7 +1044,7 @@ trade       = 4
 extra       = "Oil"
 identifier  = "x"
 ;was added in effects so it could be appearing resource; too many layer permutations to work out.
-shield      = 3 ; arctic used to have 4, now it's 3+2 allowing an 0 2 0 tile.
+shield      = 3 ; arctic used to have 4, now it’s 3+2 allowing an 0 2 0 tile.
 # arctic, desert
 
 [resource_berries]
@@ -1142,7 +1142,7 @@ ui_name_base_other = _("?gui_type:Make Tile Claim/Hideout")
 ; buildable               = Can extra be built? Defaults to TRUE if extra has
 ;                           any causes indicating it can result from worker
 ;                           activity. If extra is not buildable, it can appear
-;                           in-game only if placed in the editor, it's placed by
+;                           in-game only if placed in the editor, it’s placed by
 ;                           map generator, or on city tile if the extra
 ;                           also has "AlwaysOnCityCenter" flag set.
 ; generated               = Can map generator place the extra? Applicable
@@ -1198,8 +1198,8 @@ ui_name_base_other = _("?gui_type:Make Tile Claim/Hideout")
 ;                           Global Warming
 ;   - "NuclearWinter"     = Instances of this extra on map count towards
 ;                           Nuclear Winter
-;   - "ShowFlag"          = Draw owner's flag
-;   - "NaturalDefense"    = Extra's defense bonus will be counted to "Natural"
+;   - "ShowFlag"          = Draw owner’s flag
+;   - "NaturalDefense"    = Extra’s defense bonus will be counted to "Natural"
 ;                           defense layer. The defense bonus of all the extras
 ;                           located at the tile, native to defending unit,
 ;                           is calculated as a 1 + sum of bonuses from the extras
@@ -1560,12 +1560,12 @@ Since the dawn of time, concealed terrain was used for Hideouts, to evade aggres
  soldiers in Forests, Swamps, Mountains, Jungle, and the Ruins of a former city. They\
  cannot be built in someone else’s territory. Units in a Hideout are invisible to other\
  players. Land units and Helicopter-types are hidden in them. Other units will be seen.\
- Hideouts are invisible to anyone not inside them, including their owner—so it's important\
+ Hideouts are invisible to anyone not inside them, including their owner—so it’s important\
  to remember your Hideouts. Units inside display an icon to indicate they are hiding. For\
  each turn unoccupied, a Hideout has a 15% chance of being lost, unless built on the ruins\
- of a city. Hideouts can't co-exist with other base types. Units in a Hideout do not undergo\
+ of a city. Hideouts can’t co-exist with other base types. Units in a Hideout do not undergo\
  stack death. The hot-key to make a hideout is shift-H. The only way to know if a tile has\
- a Hideout is to have a Land unit inside.\n\n\
+ a Hideout is to have a Land unit inside.\n\
 "), _("
 Be careful! An abandoned Hideout can be used against you!\
 ")
@@ -1632,14 +1632,14 @@ reqs           =
 ; the actionenabler for one never allows the other to be made. Currently,
 ; "CanClaim" and "CanHide" never exist in the same unit.
 ;     "MaxUnitsOnTile", "1",     "Local",  FALSE, FALSE
-;     "Extra",   "Naval Base",   "Local",  FALSE, FALSE  ; we now allow claiming a tile so you'd keep it after
+;     "Extra",   "Naval Base",   "Local",  FALSE, FALSE  ; we now allow claiming a tile so you’d keep it after
 ;     "Extra",   "Fortress",     "Local",  FALSE, FALSE  ; removing a base. no conflicts seen yet but we can
 ;     "Extra",   "Castle",       "Local",  FALSE, FALSE  ; bring it back if any found.
 ;     "Extra",   "Bunker",       "Local",  FALSE, FALSE
 ;—————————-
       "UnitFlag", "CanClaim",    "Local",  TRUE,  FALSE
       "UnitFlag", "CanHide",     "Local",  FALSE, FALSE
-      "TerrainClass", "Land",    "Local",  TRUE,  FALSE  ; Can't claim sea tiles on a boat.
+      "TerrainClass", "Land",    "Local",  TRUE,  FALSE  ; Can’t claim sea tiles on a boat.
       "CityTile", "Center",      "Local",  FALSE, TRUE
     }
 build_time     = 1
@@ -1985,7 +1985,7 @@ reqs           =
       "Tech", "Radio", "Player", TRUE, FALSE
       "TerrainClass", "Oceanic", "Local", TRUE, FALSE
       "UnitFlag", "Airbase", "Local", TRUE, FALSE
-      "UnitFlag", "NonMil", "Local", TRUE, FALSE  ;Missile Submarine can't do buoys
+      "UnitFlag", "NonMil", "Local", TRUE, FALSE  ;Missile Submarine can’t do buoys
       "CityTile", "Center", "Local", FALSE, TRUE
     }
 build_time     = 3
@@ -2068,7 +2068,7 @@ Quays are RestrictedInfra. Only allied units can use them to cross rivers,\
 ")
 
 [extra_city_quay] ; distinct quay extra goes on cities to enable conditional logic
-;rule_name       = "Quay2"  ; Having a rule_name makes the zero-width space of 'name' get removed by some code somewhere
+;rule_name       = "Quay2"  ; Having a rule_name makes the zero-width space of ’name’ get removed by some code somewhere
 name           = _("Quay​")  ; has a zero-width space in it in order to create conditional logic for the extra
 category       = "Infra"
 causes         = "Road"
@@ -2183,7 +2183,7 @@ reqs           =
       "Tech",      "Railroad", "Player"
       "ExtraFlag", "Railable", "Local"
       "UnitFlag",  "CanRoad",  "Local"
-;     "TerrainClass", "Land", "Local" ;if there's a railable extra that's all we need: cf. Sea Bridge.
+;     "TerrainClass", "Land", "Local" ;if there’s a railable extra that’s all we need: cf. Sea Bridge.
     }
 build_time     = 3
 removal_time   = 0
@@ -2266,7 +2266,7 @@ build_time = 2
 removal_time = 0
 flags          = "IsRiver", "NativeTile", "Quayable", "IrrigationSource", "WaterwaySource"
 native_to      = "Land", "LandNoKill", "LandAirSea", "Trireme", "RiverShip", "Big Land" ; see below:
-; NOTE: Big Land's non-native penalty is reduced from MP2D. Here's why:
+; NOTE: Big Land’s non-native penalty is reduced from MP2D. Here’s why:
 ; Passive move cost: no more supertanks moving 18 tiles on rivers.
 ; Gets the 1.5x defense bonus on rivers, preventing over-nerfing.
 ; Ends up not losing major mobility following river into forest/hill.
@@ -2317,9 +2317,9 @@ build_time = 2
 removal_time = 0
 flags          = "IsRiver", "NativeTile", "Quayable", "IrrigationSource", "WaterwaySource"
 native_to      = "Land", "LandNoKill", "LandAirSea", "Trireme", "RiverShip"
-; NOTE: A River that Big Land units can't use.
+; NOTE: A River that Big Land units can’t use.
 helptext       = _("\
-A Mountain River is a river on a mountain. Land units who can't\
+A Mountain River is a river on a mountain. Land units who can’t\
  go on Mountains cannot go on Mountain Rivers. \n\
 "), _("\
 A River adds +1 trade to the output of a tile, and +0.50 to\
@@ -2335,7 +2335,7 @@ In enemy territory, crossing a river is difficult. If there is no bridge,\
 Roads can be built on rivers after you acquire Bridge Building technology.\
  On Flatland, this gives an additional +1 trade on top of the trade bonus\
  from the river.\n\n\
-• Mountain Rivers can't be built by Well-Diggers.\
+• Mountain Rivers can’t be built by Well-Diggers.\
 ")
 
 [extra_sea_bridge]
@@ -3250,7 +3250,7 @@ flags          = "NoAggressive"
 ;   - "River"             = Automatically generated by map generator, always
 ;                           flowing from land tiles to ocean
 ;   - "UnrestrictedInfra" = Use of the enemy owned road is not restricted
-;                           even if server setting 'restrictinfra' is set
+;                           even if server setting ’restrictinfra’ is set
 ;   - "JumpFrom"          = Allows movement to a dest tile natively, provided it
 ;                           has a "JumpTo" road which is considered native
 ;   - "JumpTo"            = Allow movement to this tile natively, provided the
@@ -3283,7 +3283,7 @@ flags          = "NoAggressive"
 ;   - "PassiveMovement"   = The move cost on this terrain comes from a passive infra
 ;                           source; e.g., rivers cost less move_frags because of
 ;                           boats on which the actor unit becomes a PASSIVE passenger.
-;                           in other words move_cost is a divisor of the actor unit's
+;                           in other words move_cost is a divisor of the actor unit’s
 ;                           move_rate. This means that the "move_cost" value really
 ;                           reflects the max moves any unit can make while "passively"
 ;                           using it. This solves age-old problem of the trains and boats

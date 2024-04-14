@@ -100,8 +100,8 @@ ocean_resources = FALSE
 ;                        released, you should set "rule_name" to the original
 ;                        value of "name".
 ; graphic              = preferred graphic; Tilespec [tile_*] section
-;                        with 'tag' matching this will be used.
-; graphic_alt          = alternate graphic. When no tilespec 'tag' matching
+;                        with ’tag’ matching this will be used.
+; graphic_alt          = alternate graphic. When no tilespec ’tag’ matching
 ;                        preferred graphic is not found, this will be used.
 ;                        Otherwise may be "-"
 ; identifier           = single-character identifier used in savegames. This
@@ -121,22 +121,22 @@ ocean_resources = FALSE
 ;                        Nonzero values only affect extras with build_time 0.
 ; road_time            = time to build roads; if 0, cannot build any roads.
 ;                        Nonzero values only affect extras with build_time 0.
-; irrigation_result    = result of 'irrigate' activity; one of:
+; irrigation_result    = result of ’irrigate’ activity; one of:
 ;                        "no"  -- cannot irrigate
 ;                        "yes" -- can build extra
 ;                        terrain section -- irrigation changes to that terrain
 ; irrigation_food_incr = increment to food if tile is 100% irrigated
 ;                        (actual bonus controlled by Irrigation_Pct effect)
-; irrigation_time      = time for 'irrigate' activity; if 0, cannot irrigate
+; irrigation_time      = time for ’irrigate’ activity; if 0, cannot irrigate
 ;                        Nonzero values only affect extras with build_time 0.
 ;                        Such extras can modify time with build_time_factor.
-; mining_result        = result of 'mine' activity; one of:
+; mining_result        = result of ’mine’ activity; one of:
 ;                        "no"  -- cannot mine
 ;                        "yes" -- can build extra
 ;                        terrain section -- mining changes to that terrain
 ; mining_shield_incr   = increment to shields if tile is 100% mined
 ;                        (actual bonus controlled by Mining_Pct effect)
-; mining_time          = time for 'mine' activity; if 0, cannot mine
+; mining_time          = time for ’mine’ activity; if 0, cannot mine
 ;                        Nonzero values only affect extras with build_time 0.
 ;                        Such extras can modify time with build_time_factor.
 ; transform_result     = result of transformation; one of:
@@ -146,9 +146,9 @@ ocean_resources = FALSE
 ; transform_time       = time to transform; if 0, cannot transform
 ; pillage_time         = time to pillage extra from the tile (0 = impossible)
 ;                        Nonzero values only affect extras with removal_time 0.
-; clean_pollution_time = time for 'clean pollution' activity (0 = impossible)
+; clean_pollution_time = time for ’clean pollution’ activity (0 = impossible)
 ;                        Nonzero values only affect extras with removal_time 0.
-; clean_fallout_time   = time for 'clean fallout' activity (0 = impossible)
+; clean_fallout_time   = time for ’clean fallout’ activity (0 = impossible)
 ;                        Nonzero values only affect extras with removal_time 0.
 ; animal               = unit type that can appear as animal on the terrain
 ; warmer_wetter_result = result of global warming for wet terrains; one of:
@@ -1021,7 +1021,7 @@ trade       = 4
 extra       = "Oil"
 identifier  = "x"
 ;was added in effects so it could be appearing resource; too many layer permutations to work out.
-shield      = 3 ; arctic used to have 4, now it's 3+2 allowing an 0 2 0 tile.
+shield      = 3 ; arctic used to have 4, now it’s 3+2 allowing an 0 2 0 tile.
 # arctic, desert
 
 [resource_berries]
@@ -1106,7 +1106,7 @@ ui_name_base_other = _("?gui_type:Make Tile Claim/Hideout")
 ; buildable               = Can extra be built? Defaults to TRUE if extra has
 ;                           any causes indicating it can result from worker
 ;                           activity. If extra is not buildable, it can appear
-;                           in-game only if placed in the editor, it's placed by
+;                           in-game only if placed in the editor, it’s placed by
 ;                           map generator, or on city tile if the extra
 ;                           also has "AlwaysOnCityCenter" flag set.
 ; generated               = Can map generator place the extra? Applicable
@@ -1162,8 +1162,8 @@ ui_name_base_other = _("?gui_type:Make Tile Claim/Hideout")
 ;                           Global Warming
 ;   - "NuclearWinter"     = Instances of this extra on map count towards
 ;                           Nuclear Winter
-;   - "ShowFlag"          = Draw owner's flag
-;   - "NaturalDefense"    = Extra's defense bonus will be counted to "Natural"
+;   - "ShowFlag"          = Draw owner’s flag
+;   - "NaturalDefense"    = Extra’s defense bonus will be counted to "Natural"
 ;                           defense layer. The defense bonus of all the extras
 ;                           located at the tile, native to defending unit,
 ;                           is calculated as a 1 + sum of bonuses from the extras
@@ -1499,14 +1499,14 @@ reqs           =
 ; the actionenabler for one never allows the other to be made. Currently,
 ; "CanClaim" and "CanHide" never exist in the same unit.
 ;     "MaxUnitsOnTile", "1",     "Local",  FALSE, FALSE
-;     "Extra",   "Naval Base",   "Local",  FALSE, FALSE  ; we now allow claiming a tile so you'd keep it after
+;     "Extra",   "Naval Base",   "Local",  FALSE, FALSE  ; we now allow claiming a tile so you’d keep it after
 ;     "Extra",   "Fortress",     "Local",  FALSE, FALSE  ; removing a base. no conflicts seen yet but we can
 ;     "Extra",   "Castle",       "Local",  FALSE, FALSE  ; bring it back if any found.
 ;     "Extra",   "Bunker",       "Local",  FALSE, FALSE
 ;-------------------
       "UnitFlag", "CanClaim",    "Local",  TRUE,  FALSE
       "UnitFlag", "CanHide",     "Local",  FALSE, FALSE
-      "TerrainClass", "Land",    "Local",  TRUE,  FALSE  ; Can't claim sea tiles on a boat.
+      "TerrainClass", "Land",    "Local",  TRUE,  FALSE  ; Can’t claim sea tiles on a boat.
       "CityTile", "Center",      "Local",  FALSE, TRUE
     }
 build_time     = 1
@@ -1929,7 +1929,7 @@ reqs           =
       "Tech",      "Railroad", "Player"
       "ExtraFlag", "Railable", "Local"
       "UnitFlag",  "CanRoad",  "Local"
-;     "TerrainClass", "Land", "Local" ;if there's a railable extra that's all we need: cf. Sea Bridge.
+;     "TerrainClass", "Land", "Local" ;if there’s a railable extra that’s all we need: cf. Sea Bridge.
     }
 build_time     = 3
 removal_time   = 0
@@ -2109,7 +2109,7 @@ removal_time   = 0
 native_to      = "Trireme", "Sea", "RiverShip", "Land", "LandAirSea", "LandNoKill", "Helicopter", "Submarine"
 flags          = "NativeTile", "Quayable", "IrrigationSource"
 helptext          = _("\
-Waterways are navigational channels that connect canals with rivers. Essentially, they're the same as canals.\
+Waterways are navigational channels that connect canals with rivers. Essentially, they’re the same as canals.\
 ")
 
 [extra_gold]
@@ -2755,7 +2755,7 @@ flags          = "NoAggressive"
 ;   - "River"             = Automatically generated by map generator, always
 ;                           flowing from land tiles to ocean
 ;   - "UnrestrictedInfra" = Use of the enemy owned road is not restricted
-;                           even if server setting 'restrictinfra' is set
+;                           even if server setting ’restrictinfra’ is set
 ;   - "JumpFrom"          = Allows movement to a dest tile natively, provided it
 ;                           has a "JumpTo" road which is considered native
 ;   - "JumpTo"            = Allow movement to this tile natively, provided the
