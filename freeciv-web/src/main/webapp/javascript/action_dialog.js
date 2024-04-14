@@ -1050,9 +1050,9 @@ function popup_action_selection(actor_unit, action_probabilities,
   $(id).dialog('widget').position({my:"center top", at:"center top", of:window})
   dialog_register(id, actor_unit['id'], true);
   $(id).parent().css("overflow", "visible");
+  if (focus_button) $("#"+focus_button).focus(); // default focus to attack button
   $(".tt").tooltip({ tooltipClass: "tt_tiny", position: { my:"left top", at: "right+5 top"},
     show: { delay:700, effect:"none", duration: 0 }, hide: {delay:70, effect:"none", duration: 0} });
-  if (focus_button) $("#"+focus_button).focus(); // default focus to attack button
 }
 
 /**************************************************************************
