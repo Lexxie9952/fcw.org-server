@@ -1051,7 +1051,7 @@ function popup_action_selection(actor_unit, action_probabilities,
   dialog_register(id, actor_unit['id'], true);
   $(id).parent().css("overflow", "visible");
   if (focus_button) $("#"+focus_button).focus(); // default focus to attack button
-  $(".tt").tooltip({ tooltipClass: "tt_tiny", position: { my:"left top", at: "right+5 top"},
+  $(".tt").tooltip({ tooltipClass: "tt_sm_side", position: { my:"left top", at: "right+5 top"},
     show: { delay:700, effect:"none", duration: 0 }, hide: {delay:70, effect:"none", duration: 0} });
 }
 
@@ -1660,7 +1660,7 @@ function create_select_tgt_extra_button(parent_id, actor_unit_id,
 
   button = {
     html  : text,
-    title:  html_safe(extras[target_extra_id].helptext+("\nMETA-CLICK: See help for "+extras[target_extra_id].rule_name)),
+    title:  html_safe(extras[target_extra_id].helptext+("\n"+browser.metaKeyText+"-CLICK: See help for "+extras[target_extra_id].rule_name)),
     click : function(e) {
       if (metaKey(e)) {
         help_redirect(VUT_EXTRA, target_extra_id);
@@ -1834,9 +1834,9 @@ function select_tgt_extra(actor_unit, target_unit,
   $(id).dialog('widget').position({my:"center top", at:"center top", of:window})
   dialog_register(id, actor_unit['id']);
   $(id).parent().css("overflow", "visible"); // prevent clipping of tooltips
-  $(".ttop").tooltip({ tooltipClass: "tt_tiny", position: { my:"left top-50", at: "right+5 top"},
+  $(".ttop").tooltip({ tooltipClass: "tt_sm_side", position: { my:"left top", at: "right+5 top"},
     show: { delay:700, effect:"none", duration: 0 }, hide: {delay:70, effect:"none", duration: 0} });
-  $(".tbot").tooltip({ tooltipClass: "tt_tiny", position: { my:"left bottom", at: "right+5 bottom"},
+  $(".tbot").tooltip({ tooltipClass: "tt_sm_side", position: { my:"left bottom", at: "right+5 bottom"},
     show: { delay:700, effect:"none", duration: 0 }, hide: {delay:70, effect:"none", duration: 0} });
 }
 

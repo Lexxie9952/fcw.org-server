@@ -38,6 +38,7 @@ var browser = {
   "linux": false,
   "metaKey": "&#8862;", // defaults as unicode 4-paned window symbol for windows key
   "metaKeySymbol": "&#8862;",   // read-only (backup) version of prop. above
+  "metaKeyText": "WIN",
   "firstOrPrivateSession": false, // whether local storage from previous sessions recalled
   //on as-needed basis for cases needing different handling:
   "opera": false,  // opera mis-locates the turn done button
@@ -160,18 +161,24 @@ function check_browser_compatibility()
   if (navigator.userAgent.includes("Mac")) {
     browser.mac = true;
     browser.metaKeySymbol = "&#8984;";
+    browser.metaKeyText = "CMD";
     // Mac users are accustomed to ⌥⬆︎ symbols for option-shift:
-    if (reconfig_metakey) browser.metaKey="&#8997;&#8679;";  // ⌥⬆︎
+    if (reconfig_metakey) {
+      browser.metaKey="&#8997;&#8679;";  // ⌥⬆︎
+      browser.metaKeyText = "OPTION-SHIFT";
+    }
 
   }
   else if (navigator.userAgent.includes("Linux")) {
     browser.linux = true;
     browser.metaKeySymbol = "&#128039;";
+    browser.metaKeyText = "META";
   }
   // Assume Windows for all others.
   else /*if (navigator.userAgent.includes("Windows"))*/ {
     browser.windows = true;
     browser.metaKeySymbol = "&#8862;"
+    browser.metaKeyText = "WIN";
   }
   if (!reconfig_metakey) browser.metaKey = browser.metaKeySymbol;
 }

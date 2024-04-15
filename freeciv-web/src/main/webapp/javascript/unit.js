@@ -1339,7 +1339,7 @@ function get_unit_city_info(punit, plaintext)
 
   // CLICK INSTRUCTIONS
   if (plaintext) {
-    result += "\n\nMETA-CLICK: help on "+ptype['name'];
+    result += "\n\n"+browser.metaKeyText+"-CLICK: help on "+ptype['name'];
   }
   else {
     result += "\n\nCLICK: see unit on map.\n\n" + browser.metaKey + "-CLICK: help on "+ptype['name'];

@@ -1835,12 +1835,15 @@ body:not(.mobile) .ui-dialog.unit_dialog {
   overflow-y: visible;
   overflow-x: visible;
 }
-.tt_slim, .tt_tiny {
+.tt_sm_side, .tt_slim, .tt_tiny {
   padding: 2px;
   font-size:12px !important;
 }
 .tt_tiny {
   width: 100%;
+}
+.tt_sm_side {
+  width:max-content;
 }
 
 .wider-tooltip {

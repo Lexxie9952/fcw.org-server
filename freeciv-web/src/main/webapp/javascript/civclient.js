@@ -51,6 +51,12 @@ var default_text_color = "#ccc";
 var default_button_background = "#444";
 var default_dialog_text_color = "#ccc";
 
+/* Useful graphical client stuff to know:
+  screen_x, screen_y:  real display resolution mode of the monitor
+  browser_zoom:  the zoom level of browser (assumes browser is maximized) */
+const screen_x = window.screen.width * window.devicePixelRatio;
+const screen_y = window.screen.height * window.devicePixelRatio;
+var browser_zoom = 1;
 /**************************************************************************
  Main starting point for Freeciv-web
 **************************************************************************/
@@ -358,9 +364,19 @@ function civclient_init()
   if (reconfig_metakey == null) reconfig_metakey = false;  // default case
   if (reconfig_metakey) {
     browser.metaKey="ALT-SHIFT";
+    browser.metaKeyText = "ALT-SHIFT";
   }
   else browser.metaKey=browser.metaKeySymbol;
   //console.log("civclient.js set browser.metaKey to "+browser.metaKey+" because reconfig_metakey is "+reconfig_metakey)
+
+  /* Roughly accurate zoom-level if browser maximized; precision not really needed as we use a simple cutoff
+     to determine whether to use higher res images in some places, e.g., large shields vs. small */
+  let bz = (window.outerWidth / window.innerWidth).toFixed(2);
+  browser_zoom = simpleStorage.get('browser_zoom');
+  if (browser_zoom == null) {
+    browser_zoom = (bz > 1.25);
+    simpleStorage.set('browser_zoom', bz);
+  }
 
   audio_initialize();
 
