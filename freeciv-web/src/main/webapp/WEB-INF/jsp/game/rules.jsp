@@ -36,12 +36,13 @@
     text-shadow: 1px 1px #000;/* !important;*/
 	}
   h1,h2,h3,h4,h5,h6 {
-		font-family: 'HelveticaBlack', 'Freeciv', 'Segoe UI';
+		font-family: 'Helvetica', 'Freeciv', 'Segoe UI';
+    font-weight: 700;
 		text-shadow: 1px 1px #222;
 	}
   body {
 		color: #ccc;
-  	background-image: url('/images/bg-dark.jpg');
+  	background-image: url('/images/bg-dark50.png');
 	}
 	.container {
 		background: none !important;
@@ -208,60 +209,53 @@
 
 
 <div class="container">
-    <h2>In-game Rules</h2>
+    <h1>Rules Summary</h1>
     <div style="font-size:110%">
     <b>1.</b> Idle players may lose their nation.<br>
     <b>2.</b> Victory conditions may be set by the Gamemaster (<b>GM</b>) at the start of the game.<br>
-    <i><u><b style="color:#85AFAF">Customary practices</b></u> preserve integrity and the spirit of game:</i><br>
-    <b>3.</b> Delegation should be short and infrequent. Use it only as needed for game integrity*<br>
-    <b>4.</b> Allow players to take their turns in peace: No RTS, if requested*<br>
+    <b>3.</b> <a href="https://freeciv.fandom.com/wiki/Delegation" target="_blank">Delegation</a> should be short and infrequent. Use it only as needed for game integrity*<br>
+    <b>4.</b> No <a href="https://freecivweb.fandom.com/wiki/RTS" target="_blank">RTS</a>, when requested, except during legal times.<br>
     <b>5.</b> No camping.<br>
-    <b>6.</b> Never declare victory for anyone but yourself. Your surrender is not a surrender for anyone else.<br>
+    <b>6.</b> Never declare victory for anyone but yourself. Your surrender is not a surrender for everyone else.<br>
     <b>7.</b> Players may request longer turns in the late game.<br>
-    <b>8.</b> GM may make settings corrections in the early game.<br>
+    <b>8.</b> GM may make settings corrections and fairness adjustments in the early game.<br>
     <b>9.</b> Multiple players in the same household are not allowed without prior GM approval.<br>
     <b>10.</b> When the game ends, screenshots and story lines should be shared among players.<br>
     <br>
   </div>
-  <h2><span style="color:#fff">Clarifications to In-game Rules:</span></h2>
+  <h2><span style="color:#fff">Rules</span></h2>
   <div style="font-size:100%">
     <b>1. Idle players may lose their nation</b> after 2 idle turns on <b>Turns 1-5</b>, &nbsp; <b>Turn 6:</b> idle 3 turns &nbsp;
     <b>T20:</b> idle 4,  &nbsp; <b>T25:</b> idle 5, &nbsp; <b>T30:</b> idle 6, &nbsp; <b>T35:</b> idle 7<br><br>
     <b>2.</b> At game start, GM may customize the victory conditions documented in the ruleset and the <u>game settings</u>.<br><br>
-    <b>3. Delegation's purpose is to maximize game integrity.</b><br>
-    &bull; <b>Delegation is good when...</b><br>
+    <b>3. <a href="https://freeciv.fandom.com/wiki/Delegation" target="_blank">Delegation</a>'s purpose is to maximize game integrity.</b><br>
+    &bull; <b><a href="https://freeciv.fandom.com/wiki/Delegation" target="_blank">Delegation</a> is good when...</b><br>
     &nbsp;&nbsp;&bull;&bull; (a) it lets a nation make self-interested rational moves at the right times, when it could not otherwise.<br>
     &nbsp;&nbsp;&bull;&bull; (b) an idle nation would unfairly affect game outcome.<br>
-    &bull; <b>Delegation is bad when...</b><br>
+    &bull; <b><a href="https://freeciv.fandom.com/wiki/Delegation" target="_blank">Delegation</a> is bad when...</b><br>
     &nbsp;&nbsp;&bull;&bull; it lasts longer than a week with no attempt made for a replacement.<br>
-    &nbsp;&nbsp;&bull;&bull; A more experienced player micro-manages moves for a less experienced player (instead of advising them).<br>
-    &nbsp;&nbsp;&bull;&bull; It's any situation where common sense shows it is unfair or degrades game integrity.<br>
-    &bull; Delegations can't be done before turn 3<br>
-    &bull; One delegation per player is allowed.<br>
-    &bull; Long-term delegations can be approved by the Gamemaster (GM).<br>
+    &nbsp;&nbsp;&bull;&bull; a more experienced player micro-manages moves for a less experienced player (instead of advising them).<br>
+    &nbsp;&nbsp;&bull;&bull; common sense shows it is unfair or degrades game integrity.<br>
+    &bull; <a href="https://freeciv.fandom.com/wiki/Delegation" target="_blank">Delegation</a> can't be done before turn 3<br>
+    &bull; One <a href="https://freeciv.fandom.com/wiki/Delegation" target="_blank">delegation</a> per player is allowed.<br>
+    &bull; Long-term <a href="https://freeciv.fandom.com/wiki/Delegation" target="_blank">delegations</a> can be approved by the Gamemaster (GM).<br>
     &bull; Complaints may be made to the GM. GM judgments may be contextual, flexible. GM judgments are final.<br><br>
-    <b>4. No RTS, if requested.</b> <i><small>Real-time strategy ("RTS") is simultaneous military moves taken by both players in the same theatre of battle.</small></i><br>
-    &bull; In general (with exceptions*) players should be allowed to take their turns in peace without RTS.<br>
-    &bull; It is encouraged to be sensitive to this even when a player does NOT make a No-RTS-request.<br>
-    &bull; In the case of a No-RTS-request, the request should be obeyed unless under one of the exceptions.<br>
+    <b>4. No <a href="https://freecivweb.fandom.com/wiki/RTS" target="_blank">RTS</a>, when <a href="https://freecivweb.fandom.com/wiki/RTS#NO_RTS_Requests">requested</a>.</b> <i><small>Real-time strategy ("<a href="https://freecivweb.fandom.com/wiki/RTS" target="_blank">RTS</a>") is simultaneous military moves taken by both players in the same theatre of battle.</small></i><br>
+    &bull; In general (with exceptions*) players should be allowed to take their turns in peace without ("<a href="https://freecivweb.fandom.com/wiki/RTS" target="_blank">RTS</a>.<br>
+    &bull; It is encouraged to be sensitive to this even when a player hasn't made a <a href="https://freecivweb.fandom.com/wiki/RTS#NO_RTS_Requests">No RTS Request</a>.<br>
+    &bull; In the case of a <a href="https://freecivweb.fandom.com/wiki/RTS#NO_RTS_Requests">No RTS Request</a>, the request should be obeyed unless under one of the exceptions.<br>
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; * &nbsp;Units on an automated GOTO action that are delayed by UWT, are not RTS.<br>
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; ** Units on vigil are not considered RTS.<br>
-    &bull; Players who are online longer are EXPECTED to be MORE tolerant of No-RTS-requests, and the GM should consider this in their decisions.<br>
+    &bull; Players who are online longer are EXPECTED to be MORE tolerant of <a href="https://freecivweb.fandom.com/wiki/RTS#NO_RTS_Requests">No RTS Requests</a>, and the GM should consider this in their decisions.<br>
     &bull; Yield to players who cannot log in multiple times per day, especially if you are online longer than them.<br>
+    &bull; Player availability and online schedules make RTS rules problematic. Therefore, <b>Sporting Honor</b> is encouraged. <br>
+    &bull; <a href="https://freecivweb.fandom.com/wiki/RTS#Gentlemen_agreements" target="_blank">Gentlemen's Agreements</a> should be negotiated over fair play when both players wish to move:<br>
+    &bull; <b><a href="https://freecivweb.fandom.com/wiki/RTS#Micro-Turn_Agreements" target="_blank">Micro-Turn Agreements</a></b> are the funnest, fairest, and preferred method to resolve all RTS issues and disputes.<br><br>
     <b>There are key times when <u>RTS is expected, allowed, and necessary.</u></b><br>
-    <a href="https://static.wikia.nocookie.net/freecivweb/images/e/ee/RTS_chart.png/revision/latest?cb=20230726172842" target="_blank">Click here for RTS timing chart</a><br>
-    Players may deny No-RTS-requests:</i><br>
-    &nbsp;&nbsp;&bull;&bull; <b>One hour BEFORE and AFTER a Turn Change.</b><br>
-    &nbsp;&nbsp;&bull;&bull; <b>Ten hours after Turn Change, for one hour (after all UWT expires)</b>.<br>
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; * <small>UWT = unitwaittime. For more info, type: /help unitwaittime</small><br>
-    &nbsp;&nbsp;&bull;&bull; <b>When there is 11h on the turn timer, for one hour.</b> (One hour BEFORE movements incur UWT next turn.)<br>
-    &nbsp;&nbsp;&bull;&bull; <b>During "Mexican Standoff"</b> -- whoever would request "No RTS" first would gain major advantage over the other:<br>
-    &nbsp;&nbsp;&nbsp;&nbsp;&bull;&bull;&bull; The Mexican Standoff rule should be used: (1) as little as possible, (2) not for minor situations.<br>
-    &nbsp;&nbsp;&nbsp;&nbsp;&bull;&bull;&bull; In Mexican Standoff, players should negotiate to (a) come to their own agreement, OR (b) confirm an agreement to do RTS, OR (c) agree to alternate 1 (or 2) moves at a time, OR (d) stop moving and await GM moderation.<br>
-    &nbsp;&nbsp;&nbsp;&nbsp;&bull;&bull;&bull; NO PLAYER may take unilateral advantage during a Mexican Standoff, without (a),(b),(c), or (d) in place. CONFIRM and COMMUNICATE.<br>
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&bull;&bull;&bull;&bull; Violation of the above allows the other player to seek compensatory justice though moderation.<br>
-    &bull; After T100 or the discovery of Flight, rules are slightly relaxed in favor of the one who wishes to RTS, especially if:<br>
-    &nbsp;&nbsp;&bull;&bull; ...Air unit actions would result in major swaying of outcome due to aircrafts' &bull;mobility, &bull;ZOC, &bull;iPillage, &bull;strong military power in influencing outcomes.<br><br>
+    &bull; <a href="https://freecivweb.fandom.com/wiki/RTS#Chart" target="_blank">Click here for RTS timing chart</a><br>
+    &bull; Players may <a href="https://freecivweb.fandom.com/wiki/RTS#Players_may_deny_NO_RTS_requests" target="_blank">DENY</a> "NO RTS Requests" when <a href="https://freecivweb.fandom.com/wiki/RTS#Players_may_deny_NO_RTS_requests" target="_blank">legally allowed</a><br>
+    &bull; It is sporting custom to offer a <b><a href="https://freecivweb.fandom.com/wiki/RTS#Micro-Turn_Agreements" target="_blank">Micro-Turn Agreement</a></b> when legally denying a No RTS Request, but not required.<br>
+    <b>Violation of the above rules allows the other player to seek compensatory justice though GM moderation.</b></b><br><br>
     <b>5. No camping.</b><br>
     &bull; A player should not be online for most the day. Remaining online all day is unfair to everyone else.<br><br>
     <b>6. NEVER declare victory for anyone but yourself.</b><br>
@@ -273,7 +267,7 @@
     &bull; &bull; After turn 100, an extension to 35h or 37h turns is common practice.<br>
     &bull; &bull; 47h turns could judiciously be decided for very late game, very large nation(s), or any other conditions that help game integrity.<br>
     &bull; A minority of players may need longer turns and be given them, in order that ALL players have time to play correctly.<br><br>
-    <b>8.</b> For obvious settings errors, a Gamemaster (GM) can fix any such settings before T10 provided they do not affect any player and provided the GM fully announces such changes, giving at least 1 turn notice before making the change. Exception: announcing creates an exploit, in which case the GM may elect not to give notice (but must inform those members of the admin council who are non-players in the game.)<br><br>
+    <b>8.</b> For obvious settings errors, a Gamemaster (GM) can fix any such settings before T10 provided they do not affect any player and provided the GM fully announces such changes, giving at least 1 turn notice before making the change. Exception: announcing creates an exploit, in which case the GM may elect not to give notice (but must inform those members of the admin council who are non-players in the game.) In the first 7 turns, the GM can make slight adjustments to players' starting conditions if and only if it <b>improves</b> an imbalance in fair starting conditions.<br><br>
     <b>9.</b> Regarding multiple players in the same household OR sharing the same device:  The GM can approve such cases if asked privately in advance of you joining the game; otherwise it is forbidden. Gamemaster decision will be final. GM may make special rules for allowing the case, like: making all players aware of it, or forbidding alliance between the two players. <br><br>
     <b>10.</b> Most of the game's events are an unknown mystery. Players deserve to know what other players thought and did. Please share your contribution to world history when the game finishes! Hint: use your private discord channels to collect these stories as the game progresses.<br> <br>
   </div>
