@@ -293,12 +293,12 @@ function improve_tile_info_dialog(message)
   // Make helptext for unit types
   for (ut in unit_types) {
     let utname = unit_types[ut]['name'];
-    console.log(ut+"(ut). "+utname);
+    //console.log(ut+"(ut). "+utname);
 
     if (message.includes("<b>"+utname+"</b>")
         || message.includes("("+utname+")")) {
 
-      console.log("  message includes")
+      //console.log("  message includes")
 
       if (message != message.replace("<b>"+utname+"</b>", "<span style='color:#faeb9a; cursor:pointer' title='CLICK: Help on "
       + utname + "' onclick='javascript:tile_info_help_redirect(VUT_UTYPE, "+ut+")' class='black_shadow tt'><u><b>"
