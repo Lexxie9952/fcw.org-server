@@ -1985,7 +1985,7 @@ function select_last_action()
   $(id).dialog('widget').position({my:"center top", at:"center top", of:window})
 
   dialog_register(id);
-  $(".tt").tooltip({ tooltipClass: "tt_slim", show: { delay:700, effect:"none", duration: 0 }, hide: {delay:20, effect:"none", duration: 0} });
+  $(".tt").tooltip({ tooltipClass: "tt_slim", show: { delay:1100, effect:"none", duration: 0 }, hide: {delay:2, effect:"none", duration: 0} });
   $(id).parent().css("overflow","visible");
 }
 
