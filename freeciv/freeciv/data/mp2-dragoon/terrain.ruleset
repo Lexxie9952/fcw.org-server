@@ -2852,7 +2852,7 @@ appearance_reqs =
       "MinYear", "-2200", "World", FALSE
       "Extra", "Deer", "Adjacent", FALSE
     }
-helptext = "Deer wander in herds and when they come near your city, they can provide a windfall in bonus food."
+helptext = "Deer wander in herds and when they come near your city, providing a windall of +3 in bonus food."
 
 [extra_wild_boar]
 name           = _("Wild Boar")
@@ -2877,7 +2877,7 @@ appearance_reqs =
       "MinYear", "-2200", "World", FALSE
       "Extra", "Wild Boar", "Adjacent", FALSE
     }
-helptext = "Wild Boars roam the forest at random, and provide more food than Pheasants."
+helptext = "Wild Boars roam the forest at random, and provide +3 food: more than Pheasants."
 
 [extra_mtn_goat]
 name           = _("Mountain Goat")
