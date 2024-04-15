@@ -544,8 +544,12 @@ function closing_dialog_message() {
 **************************************************************************/
 function show_dialog_message(title, message, text_friendly)
 {
-  if (title=="Tile Information" || title=="Tile Info")
+  let is_tile_info = false;
+  if (title=="Tile Information" || title=="Tile Info") {
+    is_tile_info = true;
     message = improve_tile_info_dialog(message);
+    text_friendly = true;
+  }
 
   // reset dialog page.
   remove_active_dialog("#generic_dialog");
@@ -600,6 +604,12 @@ function show_dialog_message(title, message, text_friendly)
   if (text_friendly) {
     $('#generic_dialog').css("background-image", "url(/images/bg-med-dark-text.jpg");
     $('#generic_dialog').css("line-height", "21px");
+    if (is_tile_info) {
+      $('.tt').tooltip({
+        tooltipClass:"tt_slim", position: { my:"left bottom", at: "left top-9"},
+        show: { delay:460, effect:"none", duration: 0 }, hide: {delay:50, effect:"none", duration: 0}
+      });
+    }
   }
 }
 

@@ -202,6 +202,16 @@ function tile_city(ptile)
   return null;
 }
 
+
+
+/**************************************************************************
+ Liaison for launching help_redirect from a link in the Tile Info window.
+**************************************************************************/
+function tile_info_help_redirect(kind, value) {
+  help_redirect(kind, value);
+  close_dialog_message();
+}
+
 /**************************************************************************
  Improve tile info message from server
 **************************************************************************/
@@ -231,22 +241,100 @@ function improve_tile_info_dialog(message)
     }
   }
 
+  // Make help links to all extras on the tile:
+  for (ex in extras) {
+    let exname = extras[ex]['name'];
+    if (exname.length < 2) continue; // Hideout,Depth, etc.
+    if (exname == ex) continue;      // key = extras[key], redundant extras keyed by extra_name, skip
+    //console.log(ex+"(ex). "+exname);
+
+    if (message.includes("<b>"+exname)
+        || message.includes(exname+"/")
+        || message.includes("/"+exname)
+        || message.includes("("+exname+")</b>")
+      ) {
+
+      //console.log("  message includes");
+
+      if (message != message.replace("<b>"+exname, "<span style='color:#80f0ff; cursor:pointer' title='CLICK: Help on "
+                + exname + "' onclick='javascript:tile_info_help_redirect(VUT_EXTRA, "+ex+")' class='black_shadow tt'><u><b>"
+                + exname+"</b></u></span>")) {
+
+          message = message.replace("<b>"+exname, "<span style='color:#80f0ff; cursor:pointer' title='CLICK: Help on "
+                          + exname + "' onclick='javascript:tile_info_help_redirect(VUT_EXTRA, "+ex+")' class='black_shadow tt'><u><b>"
+                          + exname+"</b></u></span>");
+      }
+      else if (message != message.replace(exname+"/", "<span style='color:#80f0ff; cursor:pointer' title='CLICK: Help on "
+          + exname + "' onclick='javascript:tile_info_help_redirect(VUT_EXTRA, "+ex+")' class='black_shadow tt'><u><b>"
+          + exname+"</b></u></span>/") ) {
+
+        message = message.replace(exname+"/", "<span style='color:#80f0ff; cursor:pointer' title='CLICK: Help on "
+                + exname + "' onclick='javascript:tile_info_help_redirect(VUT_EXTRA, "+ex+")' class='black_shadow tt'><u><b>"
+                + exname+"</b></u></span>/")
+      }
+      else if (message != message.replace("/"+exname, "/<span style='color:#80f0ff; cursor:pointer' title='CLICK: Help on "
+                + exname + "' onclick='javascript:tile_info_help_redirect(VUT_EXTRA, "+ex+")' class='black_shadow tt'><u><b>"
+                + exname+"</b></u></span>")) {
+
+        message = message.replace("/"+exname, "/<span style='color:#80f0ff; cursor:pointer' title='CLICK: Help on "
+                + exname + "' onclick='javascript:tile_info_help_redirect(VUT_EXTRA, "+ex+")' class='black_shadow tt'><u><b>"
+                + exname+"</b></u></span>");
+      }
+      else if (message != message.replace("("+exname+")</b>", "<span style='color:#80f0ff; cursor:pointer' title='CLICK: Help on "
+                + exname + "' onclick='javascript:tile_info_help_redirect(VUT_EXTRA, "+ex+")' class='black_shadow tt'>(<u><b>"
+                + exname+"</b></u>)</span>")) {
+
+        message = message.replace("("+exname+")</b>", "(<span style='color:#80f0ff; cursor:pointer' title='CLICK: Help on "
+                + exname + "' onclick='javascript:tile_info_help_redirect(VUT_EXTRA, "+ex+")' class='black_shadow tt'><u><b>"
+                + exname+"</b></u></span>)");
+      }
+    }
+  }
+  // Make helptext for unit types
+  for (ut in unit_types) {
+    let utname = unit_types[ut]['name'];
+    console.log(ut+"(ut). "+utname);
+
+    if (message.includes("<b>"+utname+"</b>")
+        || message.includes("("+utname+")")) {
+
+      console.log("  message includes")
+
+      if (message != message.replace("<b>"+utname+"</b>", "<span style='color:#faeb9a; cursor:pointer' title='CLICK: Help on "
+      + utname + "' onclick='javascript:tile_info_help_redirect(VUT_UTYPE, "+ut+")' class='black_shadow tt'><u><b>"
+      + utname+"</b></u></span>")) {
+
+        message = message.replace("<b>"+utname+"</b>", "<span style='color:#faeb9a; cursor:pointer' title='CLICK: Help on "
+                + utname + "' onclick='javascript:tile_info_help_redirect(VUT_UTYPE, "+ut+")' class='black_shadow tt'><u><b>"
+                + utname+"</b></u></span>");
+      }
+      if (message != message.replaceAll("("+utname+")", "(<span style='color:#faeb9a; cursor:pointer' title='CLICK: Help on "
+      + utname + "' onclick='javascript:tile_info_help_redirect(VUT_UTYPE, "+ut+")' class='black_shadow tt'><u><b>"
+      + utname+"</b></u></span>)")) {
+
+        message = message.replaceAll("("+utname+")", "(<span style='color:#faeb9a; cursor:pointer' title='CLICK: Help on "
+                + utname + "' onclick='javascript:tile_info_help_redirect(VUT_UTYPE, "+ut+")' class='black_shadow tt'><u><b>"
+                + utname+"</b></u></span>)");
+      }
+    }
+  }
+
   // Terrain alteration info:
   if (ttype) {
     // Calculate defense bonus
     var has_river = "";
     var db = parseFloat(1) + parseFloat(ttype['defense_bonus'])/100;
     if (message.includes("River</b>")
-       || message.includes("River/")
-       || message.includes("/River") ) {  // these exact strings ensure no other text gives false positive
-      has_river = " (<span style='color:#5d97ed;' class='black_shadow'><b>River</b></span>)";
+        || message.includes("River/")
+        || message.includes("/River") ) {  // these exact strings ensure no other text gives false positive
+      has_river = " (<span style='color:#5d97ed; cursor:pointer' title='CLICK: Help on River' onclick='javascript:tile_info_help_redirect(VUT_EXTRA, EXTRA_RIVER);' class='black_shadow tt'><u><b>River</b></u></span>)";
       if (client_rules_flag[CRF_MP2_C]) db += 0.5;  // additive bonus as in for example real civ2, mp2c
       else db *= (1+extras[EXTRA_RIVER]['defense_bonus']/100);
       db = Math.round((db + Number.EPSILON) * 100) / 100;
     }
-    added_text += "<span class='black_shadow' style='color:rgb("
+    added_text += "<br><br><span class='black_shadow tt' title='CLICK: Help on "+ttype['name']+"' onclick='javascript:tile_info_help_redirect(VUT_TERRAIN, "+ttype.id+");' style='cursor:pointer;color:rgb("
                + ttype['color_red']+","+ttype['color_green']+","+ttype['color_blue']
-               +  ")'><br><br><b>" + ttype['name'] + "</b>"+has_river+"<br></span>";
+               +  ")'><u><b>" + ttype['name'] + "</b></u></span>"+has_river+"<br>";
 
     added_text += "Defense Bonus: <b>" + db + "&times;</b> &nbsp;&nbsp;&nbsp; Movement Cost: <b>"
     + (server_settings.move_cost_in_frags.val ? move_points_text(ttype['movement_cost']) : ttype['movement_cost'])+ "</b><br>"
@@ -308,10 +396,24 @@ function improve_tile_info_dialog(message)
     var A_val = (parseFloat(my_str)<0.1) ? my_str.toFixed(2) : my_str.toFixed(1);
     var D_val = (parseFloat(their_str)<0.1) ? their_str.toFixed(2) : their_str.toFixed(1);
 
+    let myutname = unit_types[units[my_uid]['type']]['name'];
+    let my_unit = "<span style='color:#faeb9a; cursor:pointer' title='CLICK: Help on "
+                + myutname + "' onclick='javascript:tile_info_help_redirect(VUT_UTYPE, "+units[my_uid]['type']+")' class='black_shadow tt'><u><b>"
+                + myutname + "</b></u></span>";
+    let theirutname = unit_types[sunits[0]['type']]['name'];
+    let their_unit = "<span style='color:#faeb9a; cursor:pointer' title='CLICK: Help on "
+                + theirutname + "' onclick='javascript:tile_info_help_redirect(VUT_UTYPE, "+sunits[0]['type']+")' class='black_shadow tt'><u><b>"
+                + theirutname+"</b></u></span>";
     added_text += "<b>Combat odds:</b><span style='font-size:75%'> (*before base or unit-type bonus)</span><br>";
-    added_text += "A:<b>"+A_val+"</b>  HP:<b>"+my_hp+"</b>  FP:<b>"+my_fp+"</b>  ("+unit_types[units[my_uid]['type']]['name']+")<br>";
+
+    //added_text += "A:<b>"+A_val+"</b>  HP:<b>"+my_hp+"</b>  FP:<b>"+my_fp+"</b>  ("+unit_types[units[my_uid]['type']]['name']+")<br>";
+    added_text += "A:<b>"+A_val+"</b>  HP:<b>"+my_hp+"</b>  FP:<b>"+my_fp+"</b>  ("+my_unit+")<br>";
+
     added_text += "D:<b>"+D_val+"</b>  HP:<b>"+their_hp+"</b>  FP:<b>"+their_fp+"</b>  ";
-    added_text += "("+unit_types[sunits[0]['type']]['name']+")<br>";
+
+    //added_text += "("+unit_types[sunits[0]['type']]['name']+")<br>";
+    added_text += "("+their_unit+")<br>";
+
     added_text += $("#att_win").html();
     added_text += "\n<div id='click_calc' title='Base and special unit bonuses not included (e.g., Fort, Pikemen vs. Chariot)' "
                +  "style='cursor:pointer;' onclick='improve_tile_info_warcalc_click()'>"

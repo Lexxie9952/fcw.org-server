@@ -605,7 +605,7 @@ function handle_info_text_message(packet)
         lines[i] = split_txt[1]
                  + "<span onclick='$(\"#generic_dialog\").parent().children().remove(); nation_table_select_player("
                  + pplayer['playerno']
-                 + ");' class='nation_link' title='Select this player in the Nations Tab'>"
+                 + ");' class='nation_link tt' title='Select this player in the Nations Tab'>"
                  + split_txt[2]
                  + "</span>"
                  + split_txt[3]
