@@ -4311,8 +4311,8 @@ function update_city_screen()
     //console.log("MODE: Widescreen")
     city_list_html = "<table class='tablesorter-dark' id='city_table' style='border=0px;border-spacing=0;padding=0;'>"
         + "<thead id='city_table_head'><tr>"
-        + "<th style='text-align:right;'>Name"+updown_sort_arrows+"</th><th style='text-align:right;'>Size"+updown_sort_arrows+"</th>"+city_list_citizen_html
-        + "<th style='text-align:right;' title='Text: Current state. Color: Next turn state'>State<img class='v' src='data:image/gif;base64,R0lGODlhFQAJAIAAAP///////yH5BAEAAAEALAAAAAAVAAkAAAIXjI+AywnaYnhUMoqt3gZXPmVg94yJVQAAOw=='></img> </th>"
+        + "<th style='text-align:right;' title='Click to sort'>Name"+updown_sort_arrows+"</th><th style='text-align:right;' title='Click to sort'>Size"+updown_sort_arrows+"</th>"+city_list_citizen_html
+        + "<th style='text-align:right;' title='Mood this turn.\nGreen: celebrates next turn\nWhite: &nbsp;peace next turn\nRed: &nbsp;&nbsp;&nbsp;&thinsp;lawless next turn'>Mood"+updown_sort_arrows+"&nbsp;&thinsp;&hairsp;</th>"
         + "<th id='food' title='Food surplus' class='food_text' style='text-align:right;padding-right:0px'><img style='margin-right:-6px; margin-top:-3px;' class='v' src='/images/wheat.png'></th>"
         + "<th title='Production surplus (shields)' class='prod_text' style='text-align:right;padding-right:0px'> <img class='v' src='/images/shield14x18.png'></th>"
         + "<th title='Trade' class='trade_text' style='text-align:right;padding-right:0px;'><img class='v' src='/images/trade.png'></th>"
@@ -4321,10 +4321,10 @@ function update_city_screen()
         + "<th title='Gold' class='gold_text' style='text-align:right;padding-right:0px;'><img class='v' src='/images/gold.png'></th>"
         + "<th title='Luxury' class='lux_text' style='text-align:right;padding-right:0px'><img class='v' src='/images/luxury2.png'></th>"
         + "<th title='Science (bulbs)' class='sci_text' style='text-align:right'><img class='v' src='/images/sci.png'></th>"
-        + "<th style='text-align:right;'>Grows In"+updown_sort_arrows+"</th><th style='text-align:right;'>Granary"
-              +updown_sort_arrows+"</th><th style='text-align:right;' title='Click to change'>Producing"+updown_sort_arrows+"</th>"
+        + "<th style='text-align:right' title='Time to grow, at current food income'>Grows In"+updown_sort_arrows+"</th><th style='text-align:right' title='Food storage / Needed to grow'>Food"
+              +updown_sort_arrows+"</th><th style='text-align:right;' title='Click item to change city production'>Producing"+updown_sort_arrows+"</th>"
         + "<th style='text-align:right;' title='Turns to finish &nbsp;&nbsp; Prod completed/needed'>Turns"+updown_sort_arrows
-              +"&nbsp; Progress</th><th style='text-align:right;' title='Click to buy'>Cost"+updown_sort_arrows+"</th>"
+              +"&nbsp; Progress</th><th style='text-align:right;' title='Cost in gold\nClick to buy'>Cost"+updown_sort_arrows+"</th>"
         + "<th style='text-align:left;'><input type='checkbox' class='css-checkbox' id='master_checkbox' title='CLICK:  Toggle all cities\n\nSHIFT-CLICK:  Toggle highlighted cities' name='cbAll' value='false' onclick='toggle_city_row_selections(event);'>"
         + "<label title='CLICK:  Toggle all cities\n\nSHIFT-CLICK:  Toggle highlighted cities' for='master_checkbox' name='master_checkbox_lbl' class='css-label dark-check-white'></label></th>"
         + "</tr></thead><tbody class='alternate-row-color'>";
@@ -4335,7 +4335,7 @@ function update_city_screen()
     city_list_html = "<table class='tablesorter-dark' id='city_table' style='border=0px;border-spacing=0;padding=0;'>"
     + "<thead id='city_table_head'><tr>"
     + "<th style='text-align:right;'>Name"+"</th><th style='text-align:center;'>Pop"+"</th>"+city_list_citizen_html
-    + "<th style='text-align:center;' title='Text: Current state. Color: Next turn state'>Mood</th>"
+    + "<th style='text-align:center;' title='Current mood\nGreen: celebrates next turn\nWhite: peace next turn\nRed: lawless next turn'>Mood</th>"
     + "<th id='food' title='Food surplus' class='food_text' style='text-align:right;padding-right:0px'><img style='margin-right:-6px; margin-top:-3px;' class='v' src='/images/wheat.png'></th>"
     + "<th title='Production surplus (shields)' class='prod_text' style='text-align:right;padding-right:0px'> <img class='v' src='/images/shield14x18.png'></th>"
     + "<th title='Trade' class='trade_text' style='text-align:right;padding-right:0px;'><img class='v' src='/images/trade.png'></th>"
@@ -4728,16 +4728,16 @@ function update_city_screen()
 
   //$('#city_list_citizen_unhappy').css("padding-right", "20px");
   $('#city_list_citizen_unhappy').tooltip({
-    content: "Unhappy + angry citizens", position: { my:"center bottom", at: "center top+10"},
-    show: { delay:200, effect:"none", duration: 0 }, hide: {delay:120, effect:"none", duration: 0}
+    content: "Unhappy + angry citizens", tooltipClass:"tt_slim", position: { my:"center bottom", at: "center top"},
+    show: { delay:460, effect:"none", duration: 0 }, hide: {delay:20, effect:"none", duration: 0}
   });
   $('#city_list_citizen_content').tooltip({
-    content: "Content citizens", position: { my:"center bottom", at: "center top+10"},
-    show: { delay:200, effect:"none", duration: 0 }, hide: {delay:120, effect:"none", duration: 0}
+    content: "Content citizens", tooltipClass:"tt_slim", position: { my:"center bottom", at: "center top"},
+    show: { delay:460, effect:"none", duration: 0 }, hide: {delay:20, effect:"none", duration: 0}
   });
   $('#city_list_citizen_happy').tooltip({
-    content: "Happy citizens", position: { my:"center bottom", at: "center top+10"},
-    show: { delay:200, effect:"none", duration: 0 }, hide: {delay:120, effect:"none", duration: 0}
+    content: "Happy citizens", tooltipClass:"tt_slim", position: { my:"center bottom", at: "center top"},
+    show: { delay:460, effect:"none", duration: 0 }, hide: {delay:20, effect:"none", duration: 0}
   });
 
   if (count == 0) {
@@ -4807,13 +4807,25 @@ function update_city_screen()
       active_superpanel_cityid = -1; // deactive refresh mode.
   }
 
+  // default tooltip style for things not overridden immediately below
+  $(".cities_row").tooltip({
+    tooltipClass:"tt_slim",show: { delay:460, effect:"none", duration: 0 }, hide: {delay:50, effect:"none", duration: 0}
+  });
+  // sprite of current production target
   $(".prod_img").tooltip({
-    show: { delay:460, effect:"none", duration: 0 }, hide: {delay:50, effect:"none", duration: 0}
+    tooltipClass:"tt_slim", show: { delay:460, effect:"none", duration: 0 }, hide: {delay:50, effect:"none", duration: 0}
   });
   $(".empire_tooltip").tooltip({
     show: { delay:460, effect:"none", duration: 0 }, hide: {delay:50, effect:"none", duration: 0}
   });
-  $(".cities_row").tooltip({
+  // little icons such as gold, flask, wheat, etc.
+  $('img.v').tooltip({
+    tooltipClass:"tt_slim", position: { my:"center bottom", at: "center top"},
+    show: { delay:460, effect:"none", duration: 0 }, hide: {delay:50, effect:"none", duration: 0}
+  });
+  // top header row helptext
+  $('.tablesorter-header-inner').tooltip({
+    tooltipClass:"tt_slim", position: { my:"center bottom", at: "center top"},
     show: { delay:460, effect:"none", duration: 0 }, hide: {delay:50, effect:"none", duration: 0}
   });
 }
