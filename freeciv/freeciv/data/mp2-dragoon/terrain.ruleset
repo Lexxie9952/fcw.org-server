@@ -1222,9 +1222,9 @@ To irrigate you must have a water source on a cardinally adjacent tile. Water\
 Irrigating a suitable tile causes it to produce extra food each turn. Most\
  tiles yield +1 extra food. A desert river that does not already benefit from\
  an oasis will yield +2. A city on a desert river can yield +3 but only when it is\
- manually and actually irrigated by a real unit. \n\n\
+ manually and actually irrigated by a real unit. \
 "), _("\
-Irrigating a tile with a mine or oil well will destroy the mine or well. \n\
+Irrigating a tile with a mine or oil well will destroy the mine or well. \
 "), _("\
 City center tiles get a terrain irrigation bonus automatically, \
 if there is no conflicting mine or oil well on the tile. However, \
@@ -1544,7 +1544,7 @@ Since the dawn of time, concealed terrain was used for Hideouts, to evade aggres
  each turn unoccupied, a Hideout has a 15% chance of being lost, unless built on the ruins\
  of a city. Hideouts can’t co-exist with other base types. Units in a Hideout do not undergo\
  stack death. The hot-key to make a hideout is shift-H. The only way to know if a tile has\
- a Hideout is to have a Land unit inside.\n\
+ a Hideout is to have a Land unit inside. \
 "), _("
 Be careful! An abandoned Hideout can be used against you!\
 ")
@@ -1680,7 +1680,7 @@ A Fort is first required on a tile before building a Fortress. A Settler inside 
  tile to found a city.\n\n\
 Forts make great outposts for border security: they establish vision one tile out on all adjacent tiles,\
  and 2 tiles out in all cardinal directions--even when unoccupied. They do not claim national territory,\
- however.\n\n\
+ however. \
 "), _("
 Be careful—an unmanned Fort can be claimed by a foreign unit.\
 ")
@@ -1725,7 +1725,7 @@ Against most land attackers, Fortresses give a defense bonus of 2x. However, aga
  Helicopters, the bonus is only 1.67x. Fortresses provide no bonus against Armor II.\
  Diplomatic units get a 25% defense bonus in diplomatic fights.\n\n\
 A Land unit remaining in a Fortress for a whole turn without moving recovers an additional +25%\
- of its hit points.\n\n\
+ of its hit points. \
 "), _("\
 Units in a Fortress die one at a time instead of the entire stack being lost.\
 ")
@@ -2013,7 +2013,7 @@ Quays are RestrictedInfra. Only allied units can use them to cross rivers,\
 "), _("Moves needed to cross a river to a tile on the other side:\n\
 6/3 moves: No infrastructure. (2.00 MP) \n\
 4/3 moves: Quay connected to roads. (1.33 MP) \n\
-2⁄3 moves: Bridge connected to roads. (0.66 MP) \n\
+2⁄3 moves: Bridge connected to roads. (0.66 MP) \
 ")
 
 [extra_city_quay] ; distinct quay extra goes on cities to enable conditional logic

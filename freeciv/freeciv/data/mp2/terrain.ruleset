@@ -951,7 +951,7 @@ identifier  = "i"
 food        = 1
 shield      = 1
 trade       = 4
-# glacier 
+# glacier
 
 [resource_silk]
 extra       = "Silk"
@@ -1130,9 +1130,9 @@ flags          = "IrrigationSource"
 helptext       = _("\
 Irrigating a suitable tile causes it to produce extra food each turn. Most\
  tiles yield +1 extra food. A desert river that does not already benefit\
- from an oasis will yield +2, or +3 if it is a city on a desert river.\
+ from an oasis will yield +2, or +3 if it is a city on a desert river. \n\\
 "), _("\
-Irrigating a tile with a mine or oil well will destroy it.\
+Irrigating a tile with a mine or oil well will destroy it. \n\\
 "), _("\
 City center tiles get their terrain irrigation bonus automatically, \
 if there is no conflicting mine or oil well on the tile; however, \
@@ -1372,18 +1372,18 @@ native_to      = "Land", "LandAirSea", "LandNoKill", "Helicopter", "Balloon", "A
 hidden_by      = "Fortress", "Naval Base"
 flags          = "NativeTile", "NoStackDeath"  ;, "Refuel"
 ;NOTE: effect_fortress_regen should give 25% of 20HP to helicopter, +1hp for being stationary
-;thus a fortress should give +6hp -2hp for not being in refuel spot or +4hp/turn. Healing 67% 
-;as fast as an airbase. MEANWHILE, removing the refuel flag allows us to make Forts native 
-;to AirProtect so that they cannot prevent attacks on forts. This is debatable issue of 
-;Fort with no Killstack but not Airprotected vs no fort, Killstack and Airprotect, but 
-;many times fighters over forts have come up as a dynamic. 
+;thus a fortress should give +6hp -2hp for not being in refuel spot or +4hp/turn. Healing 67%
+;as fast as an airbase. MEANWHILE, removing the refuel flag allows us to make Forts native
+;to AirProtect so that they cannot prevent attacks on forts. This is debatable issue of
+;Fort with no Killstack but not Airprotected vs no fort, Killstack and Airprotect, but
+;many times fighters over forts have come up as a dynamic.
 helptext       = _("\
 Forts are rapidly built fortifications which give Land units +33% defense\
  against Land and Sea units. Defending units are lost one at a time instead\
  of the entire stack dying. A fort is necessary to start building a fortress.\
 "), _("
 TIP: Forts make great outposts for keeping watch on your borders. Be careful--\
-an unmanned Fort can be claimed by a foreign unit.\ 
+an unmanned Fort can be claimed by a foreign unit.\
 ")
 
 [extra_fortress]
@@ -1507,12 +1507,12 @@ defense_bonus  = 33
 native_to      = "Trireme", "RiverShip", "Sea", "Submarine", "Balloon"
 flags          = "NativeTile", "NoStackDeath", "Refuel"
 helptext       = _("\
-Naval bases are coastal Fortresses with ocean access. They allow ships to enter and\ 
+Naval bases are coastal Fortresses with ocean access. They allow ships to enter and\
  receive a 1.33x bonus from superior fortifications and defensive position. Naval\
  Bases are built into Fortresses--all other units get the benefits of a Fortress.\
 "), _("
 NOTE: Naval bases are the only location where ships can be sure to avoid stack death without\
- suffering a defense disadvantage.\ 
+ suffering a defense disadvantage.\
 ")
 
 [extra_ruins]
@@ -1625,8 +1625,8 @@ rmact_gfx_alt  = "-"
 reqs           =
     { "type", "name", "range", "present", "quiet"
       "Tech", "Superconductors", "Player", TRUE, FALSE
-;      "Extra", "Railroad", "Local", TRUE, FALSE           
-      "UnitFlag", "CanRoad", "Local", TRUE, FALSE        
+;      "Extra", "Railroad", "Local", TRUE, FALSE
+      "UnitFlag", "CanRoad", "Local", TRUE, FALSE
 ;      "UnitClass", "Sea", "Local", FALSE, TRUE
 ;      "TerrainClass", "Land", "Local", TRUE, FALSE
     }

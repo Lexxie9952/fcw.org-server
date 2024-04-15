@@ -1166,9 +1166,9 @@ flags          = "IrrigationSource"
 helptext       = _("\
 Irrigating a suitable tile causes it to produce extra food each turn. Most\
  tiles yield +1 extra food. A desert river that does not already benefit\
- from an oasis will yield +2, or +3 if it is a city on a desert river.\
+ from an oasis will yield +2, or +3 if it is a city on a desert river. \n\
 "), _("\
-Irrigating a tile with a mine or oil well will destroy it.\
+Irrigating a tile with a mine or oil well will destroy it. \n\\
 "), _("\
 City center tiles get their terrain irrigation bonus automatically, \
 if there is no conflicting mine or oil well on the tile; however, \
