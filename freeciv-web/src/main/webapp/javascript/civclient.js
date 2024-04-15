@@ -539,9 +539,10 @@ function closing_dialog_message() {
 }
 
 /**************************************************************************
- Shows a generic message dialog.
+ Shows a generic message dialog. 'text_friendly' sets a darker plain
+ background to improve legibility for longer textual pop-ups.
 **************************************************************************/
-function show_dialog_message(title, message)
+function show_dialog_message(title, message, text_friendly)
 {
   if (title=="Tile Information" || title=="Tile Info")
     message = improve_tile_info_dialog(message);
@@ -596,6 +597,10 @@ function show_dialog_message(title, message)
   // dialog_message_close_task = setTimeout(close_dialog_message, 38000);
 
   $('#generic_dialog').css("max-height", "450px");
+  if (text_friendly) {
+    $('#generic_dialog').css("background-image", "url(/images/bg-med-dark-text.jpg");
+    $('#generic_dialog').css("line-height", "21px");
+  }
 }
 
 /**************************************************************************
