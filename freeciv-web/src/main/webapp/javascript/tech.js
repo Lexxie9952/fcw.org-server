@@ -1073,6 +1073,9 @@ function show_tech_info_dialog(event, tech_name, unit_type_id, improvement_id)
     } else if (improvement_id != null) {
       kind = VUT_IMPROVEMENT;
       value = improvement_id;
+    } else if (tech_name != null) {
+      kind = VUT_ADVANCE;
+      value = tech_id_by_name(tech_name);
     }
     if (kind > -1 && value > -1) {
       remove_active_dialog("#tech_dialog");
