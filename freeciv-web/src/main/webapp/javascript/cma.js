@@ -51,7 +51,7 @@ var global_governor_message = "";     // for intercepting and displaying CMA mes
 
 
 const gov_help =
-"<b>BASICS:</b><br>City Governors help you manage cities. When city population changes, they arrange citizens to work the tiles "
+"<big><b class='unit_desc'>BASICS:</b></big><br>City Governors help you manage cities. When city population changes, they arrange citizens to work the tiles "
 +" that best achieve the goals of the On-Screen Settings. Governors can also change citizens to specialists and prevent disorder."
 +" Saving the On-Screen Settings is how you hire a Governor to achieve certain output goals. There are two kinds"
 +" of sliders: (<b>1</b>) <b>Minimum Surplus</b> sliders set the minimum floor to achieve. For example, {Food=3} tells the Governor to gather"
@@ -63,7 +63,7 @@ const gov_help =
 +" national Luxury rate. You can less forcefully tune celebration with the Happy Factor slider.<br><b>NOTE:</b> In cities with"
 +" overlapping tiles, it's best to avoid competing with your Governor: manage both cities manually, or give both a Governor.<br><br>"
 +" <b>SLIDER TIP:</b> For fine-tuning, click a slider and use LEFT- and RIGHT- ARROW keys.<br><br>"
-+" <b>ADVANCED:</b><br><b>I. <u>TILE REFRESH</u>.</b> The Governor only re-arranges tiles when population changes or a foreign military unit occupies"
++"<big><b class='unit_desc'>ADVANCED:</b></big><br><b>I. <u>TILE REFRESH</u>.</b> The Governor only re-arranges tiles when population changes or a foreign military unit occupies"
 +" a worked tile. The City Governor Tab can help you optimally refresh the tile arrangement"
 +" at other important times, such as: (<b>1</b>) New tile improvements"
 +" finished, such as Irrigation. (<b>2</b>) A new Building changes output bonuses. (<b>3</b>) Pollution. (<b>4</b>) Migration of wild animals. "
@@ -131,8 +131,8 @@ function show_city_governor_tab()
     $('#btn_refresh_cma').tooltip({ position: { my:"left bottom", at: "left top-4"}, show: { delay:200, effect:"none", duration: 0 }, hide: {delay:120, effect:"none", duration: 0} });
     $('#btn_cma_help').tooltip({ position: { my:"right bottom", at: "right top-4"}, show: { delay:200, effect:"none", duration: 0 }, hide: {delay:120, effect:"none", duration: 0} });
 
-    $('#btn_set_cma').tooltip({ position: { my:"right top", at: "right bottom-4"}, show: { delay:200, effect:"none", duration: 0 }, hide: {delay:120, effect:"none", duration: 0} });
-    $('#btn_apply_cma').tooltip({ position: { my:"right top", at: "right bottom-4"}, show: { delay:200, effect:"none", duration: 0 }, hide: {delay:120, effect:"none", duration: 0} });
+    $('#btn_set_cma').tooltip({ position: { my:"left top", at: "left bottom-4"}, show: { delay:200, effect:"none", duration: 0 }, hide: {delay:120, effect:"none", duration: 0} });
+    $('#btn_apply_cma').tooltip({ position: { my:"left top", at: "left bottom-4"}, show: { delay:200, effect:"none", duration: 0 }, hide: {delay:120, effect:"none", duration: 0} });
     $('#btn_copy_cma').tooltip({ position: { my:"center top", at: "center bottom-4"}, show: { delay:200, effect:"none", duration: 0 }, hide: {delay:120, effect:"none", duration: 0} });
     $('#btn_paste_cma').tooltip({ position: { my:"center top", at: "center bottom-4"}, show: { delay:200, effect:"none", duration: 0 }, hide: {delay:120, effect:"none", duration: 0} });
     $('#btn_cma_setall').tooltip({ position: { my:"center top", at: "center bottom-4"}, show: { delay:200, effect:"none", duration: 0 }, hide: {delay:120, effect:"none", duration: 0} });
@@ -503,7 +503,7 @@ function cma_paste_to_city_id(city_id, apply_once)
 **************************************************************************/
 function show_governor_help()
 {
-  show_dialog_message("Help",gov_help);
+  show_dialog_message("Help",gov_help,true);
 }
 /**************************************************************************
   Buys (or attempts to buy) every production item in every selected city.
