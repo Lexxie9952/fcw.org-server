@@ -268,33 +268,39 @@ function send_player_change_government(govt_id)
 **************************************************************************/
 function government_max_rate(govt_id)
 {
+  let bonus = 0;
+
+  if (client_rules_flag[CRF_MP2_E]
+    && player_has_wonder(client.conn.playing.playerno, improvement_id_by_name(B_CODE_OF_HAMMURABI))) {
+      bonus = 5;
+  }
   var govt = governments[govt_id]['name'];
   if (govt == "Anarchy") {
     return 100;
   } else if (govt == "Despotism") {
-    return 60;
+    return 60 + bonus;
   } else if (govt == "Monarchy") {
     if (client_rules_flag[CRF_MP2_E]
         && player_has_wonder(client.conn.playing.playerno, improvement_id_by_name(B_MAGNA_CARTA))) {
-      return 75;  // MP2E onward gets 75% max rate for Magna Carta
+      return 75 + bonus;  // MP2E onward gets 75% max rate for Magna Carta
     }
-    else return 70;
+    else return 70 + bonus;
   } else if (govt == "Communism") {
-    return 80;
+    return 80 + bonus;
   } else if (govt == "Republic") {
-    return 80;
+    return 80 + bonus;
   } else if (govt == "Democracy") {
-    return 100;
+    return 100 + bonus;
   } else if (govt == "Fundamentalism") {
-    return 80;
+    return 80 + bonus;
   } else if (govt == "Tribalism") {
-    return 60;
+    return 60 + bonus;
   } else if (govt == "Federation") {
-    return 90;
+    return 90 + bonus;
   } else if (govt == "Nationalism") {
-    return 90;
+    return 90 + bonus;
   } else if (govt == "Theocracy") {
-    return 80;
+    return 80 + bonus;
   } else {
     // this should not happen
     return 100;
