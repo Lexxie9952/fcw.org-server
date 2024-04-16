@@ -234,6 +234,9 @@ function update_game_info_pregame()
   }
 
   $("#pregame_game_info").html(game_info_html);
+  // Tooltips for SETUP, Load, Nation, Start buttons
+  $("#pregame_buttons button").tooltip({ show: { delay:300, effect:"none", duration: 0 },
+                     hide: {delay:20, effect:"none", duration: 0} });
 
   /* Update pregame_message_area's height. */
   setup_window_size();
