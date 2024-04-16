@@ -102,7 +102,9 @@ var regen_help_tab = true;
 var quick_help_in_progress = false;
 
 /****************************************************************************
- determined if this is a touch enabled device, such as iPhone, iPad.
+ Handles onclick() linking for quick-help redirect to help tab items.
+ Send a uid of -1, i.e. (kind, -1) to just open up the generic menu
+ for the category.
 ****************************************************************************/
 function help_redirect(vut_type, uid) {
   set_default_mapview_inactive();
@@ -111,42 +113,42 @@ function help_redirect(vut_type, uid) {
 
   switch (vut_type) {
     case VUT_ADVANCE:
-      $('#ui-id-7').trigger("click");  // docs tab
+      $('#ui-id-7').trigger("click");  // help tab
       setTimeout(function() {
         $("#qhelp_tech_"+uid+"").click();
       }, 1);
       return;
 
     case VUT_GOVERNMENT:
-      $('#ui-id-7').trigger("click");  // docs tab
+      $('#ui-id-7').trigger("click");  // help tab
       setTimeout(function() {
         $("#qhelp_gov_"+uid+"").click();
       }, 1);
       return;
 
     case VUT_IMPROVEMENT:
-      $('#ui-id-7').trigger("click");  // docs tab
+      $('#ui-id-7').trigger("click");  // help tab
       setTimeout(function() {
         $("#qhelp_impr_"+uid+"").click();
       }, 1);
       return;
 
     case VUT_TERRAIN:
-      $('#ui-id-7').trigger("click");  // docs tab
+      $('#ui-id-7').trigger("click");  // help tab
       setTimeout(function() {
         $("#qhelp_terr_"+uid+"").click();
       }, 1);
       return;
 
     case VUT_EXTRA:
-      $('#ui-id-7').trigger("click");  // docs tab
+      $('#ui-id-7').trigger("click");  // help tab
       setTimeout(function() {
         $("#qhelp_extr_"+uid+"").click();
       }, 1);
       return;
 
     case VUT_UTYPE:
-      $('#ui-id-7').trigger("click");  // docs tab
+      $('#ui-id-7').trigger("click");  // help tab
       setTimeout(function() {
         $("#qhelp_utype_"+uid+"").click();
       }, 1);

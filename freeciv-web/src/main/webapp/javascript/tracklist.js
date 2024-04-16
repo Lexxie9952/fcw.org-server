@@ -764,7 +764,7 @@ var tracklist = [
 {filepath: "2/InTheGardenOfSouls.CeremonyOfPassage.Vas",conditions: [[{"priority":"priority"}],
                                                                      [{"civ":"asian"},{"tech":"Currency"},{"!tech":"Trade"},{"!tech":"Construction"}]],f:"m4a",creds: "" },
 {filepath: "2/Hiraeth.TimePasses.LisaGerrard,DavidKuckhermann",conditions: [[{"priority":"priority"}],
-                                                                            [{"tech":"Mysticism"},{"!tech":"Astronomy"},{"!tech":"Philsophy"},{"!turn>":63}]],f:"m4a",creds: "" },
+                                                                            [{"tech":"Mysticism"},{"!tech":"Astronomy"},{"!tech":"Philosophy"},{"!turn>":63}]],f:"m4a",creds: "" },
 {filepath: "2/WaterAtlas.NightPathandSnowfall.MaxAnanyev",conditions: [[{"priority":"priority"}],
                                                                        [{"civ":"asian"},{"tech":"Mysticism"},{"!tech":"Philosophy"},{"!tech":"Astronomy"}]],f:"m4a",creds: "" },
 //3
