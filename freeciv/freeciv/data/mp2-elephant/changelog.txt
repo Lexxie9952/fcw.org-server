@@ -302,4 +302,4 @@ Slight damper on building lots of ancient wonders at inappropriate times when th
          give slight balance correction for usability of foot soldiers
          perhaps slightly reduce the ability to use multislots to pile invincible stacks of 200 mech.inf
 119. Electricity requires Steam Engine as second req to keep proper continuity on upgrade path from Ironclads. Since Magnetism is req for Steam Engine it loses that req.
-120.
+120. Code of Hammurabi allows max.rate of 65%

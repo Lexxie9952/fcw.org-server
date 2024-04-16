@@ -5832,6 +5832,13 @@ reqs	=
     { "type", "name", "range"
       "Building", "Code of Hammurabi", "City"
     }
+[effect_hammurabi_max_rates]   ; Adds +5 to above.
+type    = "Max_Rates"
+value   = 5          ; 60+5 = 65
+reqs	=
+    { "type", "name",     "range"
+      "Building", "Code of Hammurabi", "Player"
+    }
 ;************************************************************************ Colossus
 [effect_colossus_tile_trade]
 type    = "Output_Inc_Tile"
