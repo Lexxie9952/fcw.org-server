@@ -247,7 +247,7 @@ static struct dem_row {
   {'N', N_("<td><img class='v' src='/images/e/peasants.png'></td> <td>Population</td>"),       get_population,   population_to_text,  TRUE }, */
   {'A', N_("<td><img title='{Domestic tiles} ✕ 1000km²' class='v' src='/images/e/earth.png'></td> <td>Territorial Area</td>"),                                 get_landarea,     area_to_text,        TRUE },
   {'S', N_("<td><img title='{Domestic land tiles utilized by units OR cities} ✕ 1000km²' class='v' src='/images/e/settlers.png'></td> <td>Settled Area</td>"), get_settledarea,  area_to_text,        TRUE },
-  {'N', N_("<td><img title='Population/Land Area' class='v' src='/images/e/peasants.png'></td> <td>Pop. Density</td>"),                                        get_pop_density,  pop_density_to_text, TRUE },
+  {'N', N_("<td><img title='Population ÷ (Land Area)' class='v' src='/images/e/peasants.png'></td> <td>Pop. Density</td>"),                                        get_pop_density,  pop_density_to_text, TRUE },
   {'R', N_("<td><img title='Science generated last turn' class='v' src='/images/e/science.png'></td> <td>Research Speed</td>"),                                get_research,     science_to_text,     TRUE },
   {'L', N_("<td><img title='Percent of population in cities with Library' class='v' src='/images/e/library.png'></td> <td>Literacy</td>"),                     get_literacy,     percent_to_text,     TRUE },
   {'P', N_("<td><img title='Shields generated last turn' class='v' src='/images/e/shield.png'></td> <td>Production</td>"),                                     get_production,   production_to_text,  TRUE },
