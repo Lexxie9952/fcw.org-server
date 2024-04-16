@@ -1932,6 +1932,7 @@ function handle_page_msg(packet)
 
     if (packet['parts']==0) { // 0==no Great Wonders: must show a report dialog because no further parts arriving
       show_dialog_message(page_msg['headline'], page_msg['message']);
+      server_report_dialog_css();
       page_msg = {}; /* Clear the message. */
     }
     else page_msg['message']+="<br><b><u>Great Wonders</u></b><br>"
@@ -1959,7 +1960,7 @@ function handle_wonders_report()
     if (wonders[w] > 0 && improvements[w].genus==1)  { // 1 is the genus code for small wonder
       var color_marker = "<span style='text-shadow: 1px 1px #000'>";
       if (!client_is_observer() && player_has_wonder(client.conn.playing.playerno,w)) {
-        color_marker = "<span style='color: rgb(128,192,255); text-shadow: 1px 1px #000'>";
+        color_marker = "<span style='color: #db9c7d; text-shadow: 1px 1px #000'>";
       }
       appended_message += "<tr style='cursor:default' title='"+html_safe(improvements[w].helptext)+"'>"
         + "<td>" + color_marker + improvements[w].name+"</span></td><td><b>"+wonders[w] + "</b></td></tr>";
@@ -1969,9 +1970,22 @@ function handle_wonders_report()
 
   return appended_message;
 }
-
 /**************************************************************************
-  Page_msg part handler.
+  For Demographics, Top 5 cities, Wonders of World, etc., style the
+  dialog with more legible background and better tooltips.
+**************************************************************************/
+function server_report_dialog_css() {
+  /* Legible background */
+  $("#generic_dialog").css("background-image","url(/images/bg-text.jpg)")
+
+  /* Tooltips */
+  $("#generic_dialog table tbody tr td").tooltip({ tooltipClass: "tt_slim",
+    show: { delay:0, effect:"none", duration: 0 }, hide: {delay:0, effect:"none", duration: 0} });
+  $("#generic_dialog").parent().css("overflow","visible"); // prevent overflow clipping of tooltip
+}
+/**************************************************************************
+  Page_msg part handler. Handles pop-up reports from server that come in
+  parts such as Demographics report.
 **************************************************************************/
 function handle_page_msg_part(packet)
 {
@@ -1989,6 +2003,7 @@ function handle_page_msg_part(packet)
     page_msg['message'] = page_msg['message'].replace(regxp, "<br>\n");
 
     show_dialog_message(page_msg['headline'], page_msg['message']);
+    server_report_dialog_css();
 
     /* Clear the message. */
     page_msg = {};
