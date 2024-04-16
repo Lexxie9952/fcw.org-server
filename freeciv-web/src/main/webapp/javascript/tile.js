@@ -241,6 +241,43 @@ function improve_tile_info_dialog(message)
     }
   }
 
+  // Make help links to all improvements reported on a city center tile (wonders and defense improvements basically)
+  for (im in improvements) {
+    let imname = improvements[im]['name'];
+    if (imname.length < 2) continue;
+
+    if (message.includes("<b>"+imname)
+        || message.includes(", "+imname+", ")
+        || message.includes("and "+imname+"</b>")) {
+
+      if (message != message.replace("<b>"+imname, "<span style='color:#ffe080; cursor:pointer' title='CLICK: Help on "
+                                                                    // <b>&hairsp;Fortifications can't be confused for <b>Fort anymore:
+            + imname + "' onclick='javascript:tile_info_help_redirect(VUT_IMPROVEMENT, "+im+")' class='black_shadow tt'><u><b>&hairsp;"
+            + imname + "</u></span>")) {
+
+         message = message.replace("<b>"+imname, "<span style='color:#ffe080; cursor:pointer' title='CLICK: Help on "
+                    + imname + "' onclick='javascript:tile_info_help_redirect(VUT_IMPROVEMENT, "+im+")' class='black_shadow tt'><u><b>&hairsp;"
+                    + imname+"</u></span>");
+      }
+      else if (message != message.replace(", "+imname+", ", "<span style='color:#ffe080; cursor:pointer' title='CLICK: Help on "
+            + imname + "' onclick='javascript:tile_info_help_redirect(VUT_IMPROVEMENT, "+im+")' class='black_shadow tt'>, <u>&hairsp;"
+            + imname + "</u></span>, ")) {
+
+          message = message.replace(", "+imname+", ", "<span style='color:#ffe080; cursor:pointer' title='CLICK: Help on "
+                    + imname + "' onclick='javascript:tile_info_help_redirect(VUT_IMPROVEMENT, "+im+")' class='black_shadow tt'>, <u>&hairsp;"
+                    + imname+"</u></span>, ");
+      }
+      else if (message != message.replace("and "+imname+"</b>", "and <span style='color:#ffe080; cursor:pointer' title='CLICK: Help on "
+            + imname + "' onclick='javascript:tile_info_help_redirect(VUT_IMPROVEMENT, "+im+")' class='black_shadow tt'><u>&hairsp;"
+            + imname + "</b></u></span>")) {
+
+          message = message.replace("and "+imname+"</b>", "and <span style='color:#ffe080; cursor:pointer' title='CLICK: Help on "
+                    + imname + "' onclick='javascript:tile_info_help_redirect(VUT_IMPROVEMENT, "+im+")' class='black_shadow tt'><u>&hairsp;"
+                    + imname+"</b></u></span>");
+      }
+    }
+  }
+
   // Make help links to all extras on the tile:
   for (ex in extras) {
     let exname = extras[ex]['name'];
@@ -251,8 +288,7 @@ function improve_tile_info_dialog(message)
     if (message.includes("<b>"+exname)
         || message.includes(exname+"/")
         || message.includes("/"+exname)
-        || message.includes("("+exname+")</b>")
-      ) {
+        || message.includes("("+exname+")</b>")) {
 
       //console.log("  message includes");
 
@@ -286,7 +322,7 @@ function improve_tile_info_dialog(message)
 
         message = message.replace("("+exname+")</b>", "(<span style='color:#80f0ff; cursor:pointer' title='CLICK: Help on "
                 + exname + "' onclick='javascript:tile_info_help_redirect(VUT_EXTRA, "+ex+")' class='black_shadow tt'><u><b>"
-                + exname+"</b></u></span>)");
+                + exname+"</b></u></span>)</b>");
       }
     }
   }

@@ -605,9 +605,10 @@ function show_dialog_message(title, message, text_friendly)
     $('#generic_dialog').css("background-image", "url(/images/bg-med-dark-text.jpg");
     $('#generic_dialog').css("line-height", "21px");
     if (is_tile_info) {
+      $("#generic_dialog").parent().css("overflow", "visible");
       $('.tt').tooltip({
-        tooltipClass:"tt_slim", position: { my:"left bottom", at: "left top-9"},
-        show: { delay:460, effect:"none", duration: 0 }, hide: {delay:50, effect:"none", duration: 0}
+        tooltipClass:"tt_sm_side", position: { my:"right bottom", at: "right+40 top-5"},
+        show: { delay:460, effect:"none", duration: 0 }, hide: {delay:0, effect:"none", duration: 0}
       });
     }
   }
