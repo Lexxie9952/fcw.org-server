@@ -1006,12 +1006,18 @@ function show_tech_gained_dialog(tech_gained_id)
   $("#tech_dialog").dialog('open');
   dialog_register("#tech_dialog");
   $("#game_text_input").blur();
+  /* Tooltip */
+  $("#tech_dialog").parent().css("overflow","visible"); // prevent clipping
+  /* testing revealed this code did nothing, subbed with last line below
   $("#tech_advance_helptext").tooltip({
-    disabled: false,
-    show: { delay:350, effect:"none", duration: 0 }, hide: {delay:220, effect:"none", duration: 220}
-   });
+    disabled: false, tooltipClass: "tt_slim",
+    show: { delay:350, effect:"none", duration: 0 }, hide: {delay:20, effect:"none", duration: 0}
+   }); */
   $(".specific_tech").tooltip({ disabled: false });
-
+  $(".specific_tech span").tooltip({
+    tooltipClass: "tt_slim",
+    show: { delay:300, effect:"none", duration: 0 }, hide: {delay:20, effect:"none", duration: 0}
+   });
 }
 
 /**************************************************************************
