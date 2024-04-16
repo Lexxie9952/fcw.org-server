@@ -79,6 +79,7 @@ extern "C" {
 #define MAX_LEN_ENUM     64
 
 /* Line breaks after this number of characters; be carefull and use only 70 */
+/* FCW may just want to turn this off or set to a huge val */
 #define LINE_BREAK 70
 
 /* symbol to flag missing numbers for better debugging */

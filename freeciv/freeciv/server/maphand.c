@@ -2989,7 +2989,8 @@ static const char *popup_info_text(struct tile *ptile, struct player *pplayer,
   }
 
 done:
-  astr_break_lines(&str, LINE_BREAK);
+  /* This is where all the !@#$% linebreaks get added using second param: */
+  astr_break_lines(&str, LINE_BREAK*50/*FCW is in HTML and wraps itself*/);
   return astr_str(&str);
 }
 
