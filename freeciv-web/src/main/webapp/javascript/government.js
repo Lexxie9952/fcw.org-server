@@ -394,6 +394,7 @@ function show_climate_dialog(rtype)
   else if (game_info['nuclearwinter'] > game_info['coolinglevel'] *.5)
       message += "Scientists are concerned that fallout impact is too close to Climate Tolerance levels.<br>"
 
+  message += "<br><i style='font-size:90%; color=#888;'>Hover over data for explanations."
   remove_active_dialog("#dialog");
   $("<div id='dialog'></div>").appendTo("div#game_page");
 
@@ -412,6 +413,14 @@ function show_climate_dialog(rtype)
 
   $("#dialog").dialog('open');
   dialog_register("#dialog");
+  $("#dialog").parent().css("overflow","visible"); // required to not clip tooltips
+  $("#dialog").css("background-image","url(/images/bg-med-dark-text.jpg");
+
+  $("#dialog span").tooltip({ tooltipClass: "tt_slim",
+    show: { delay:100, effect:"none", duration: 0},
+    hide: { delay:0,   effect:"none", duration: 0}
+  });
+
 }
 
 /************************************************

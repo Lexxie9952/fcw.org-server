@@ -185,7 +185,9 @@ function show_help()
       select: function( event, ui ) {handle_help_menu_select(ui); }
     });
 
-    if (!quick_help_in_progress) show_help_intro();
+    if (quick_help_in_progress == false) {
+      show_help_intro();
+    }
     regen_help_tab = false;
   }
 

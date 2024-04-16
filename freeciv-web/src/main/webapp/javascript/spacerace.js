@@ -65,7 +65,7 @@ function show_spaceship_dialog()
 
   if (game_info['victory_conditions'] == 0) message = "Spaceship victory disabled.<br>";
 
-  message += "<br>For help, see the Space Race page in the manual.<br>";
+  message += "<br><div>For help, see the Help tab section for <span style='color:#7df; cursor:pointer;' onclick='javascript:goto_spacerace_help();'>Space Race<span></div><br>";
 
   remove_active_dialog("#dialog");
   $("<div id='dialog'></div>").appendTo("div#game_page");
@@ -90,9 +90,17 @@ function show_spaceship_dialog()
 
   $("#dialog").dialog('open');
   dialog_register("#dialog");
-
+  $("#dialog").css("background-image","url(/images/bg-dark50.png");
   if (spaceship['sship_state'] != SSHIP_STARTED || spaceship['success_rate'] == 0) $(".ui-dialog-buttonpane button:contains('Launch')").button("disable");
-
+}
+// Called when clicking link for space race help in spaceship dialog:
+function goto_spacerace_help()
+{
+  remove_active_dialog("#dialog"); // Remove space race dialog first
+  quick_help_in_progress = true;
+  $('#ui-id-7').trigger("click");  // Goto help tab
+  // Timeout 0ms might help line above to finish processing first
+  setTimeout(function() {$('#help_space_race').trigger("click");}, 0);
 }
 
 /**************************************************************************
@@ -103,7 +111,6 @@ function launch_spaceship()
   var test_packet = {"pid" : packet_spaceship_launch};
   var myJSONText = JSON.stringify(test_packet);
   send_request(myJSONText);
-
 }
 
 /**************************************************************************
