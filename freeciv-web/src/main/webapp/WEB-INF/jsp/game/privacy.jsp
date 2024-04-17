@@ -36,8 +36,9 @@
     text-shadow: 1px 1px #000;/* !important;*/
 	}
   h1,h2,h3,h4,h5,h6 {
-		font-family: 'HelveticaBlack', 'Freeciv', 'Segoe UI';
+		font-family: 'Helvetica', 'Freeciv', 'Segoe UI';
 		text-shadow: 1px 1px #222;
+        font-weight:700;
 	}
   body {
 		color: #ccc;
