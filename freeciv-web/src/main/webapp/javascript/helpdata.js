@@ -657,15 +657,19 @@ function generate_help_text(key)
     $("#help_menu").hide();
     flx_tab = "0.55";
     pane_class += "_mobile";
+    regen_help_tab = true;
   }
 
   var rulesetdir = ruledir_from_ruleset_name(ruleset_control['name'], "");
   var msg = "";
+  if (is_small_screen()) {
+    msg = "<i style='font-size:90%'>Tap <img style='height:20px' src='/images/help_tab_icon_m.png' onclick='javascript:show_help();'> for a new help-search. </i><br>"
+  }
   const hr = "<hr style='border-top: 1px solid #000'>";
 
   if (key.indexOf("help_gen_terrain") != -1) {
     var terrain = terrains[parseInt(key.replace("help_gen_terrain_", ""))];
-    msg = "<h1>" + terrain['name'] + "</h1>"
+    msg += "<h1>" + terrain['name'] + "</h1>"
       + "<img src='/images/terrain/"+terrain['name'].toLowerCase().replace(" ","")+".png'><br><br>"
       + "<div class='"+pane_class+"'>"
       + cleaned_text(terrain['helptext'])
@@ -794,7 +798,7 @@ function generate_help_text(key)
     msg += "</div>";
   } else if (key.indexOf("help_gen_improvements") != -1 || key.indexOf("help_gen_wonders") != -1) {
     var improvement = improvements[parseInt(key.replace("help_gen_wonders_", "").replace("help_gen_improvements_", ""))];
-    msg = "<h1>" + improvement['name'] + "</h1>"+"<div class='"+pane_class+"'>"
+    msg += "<h1>" + improvement['name'] + "</h1>"+"<div class='"+pane_class+"'>"
 	    + render_sprite(get_improvement_image_sprite(improvement)) + "<br><br>"
 	    + "<div class='helptext_pane'>"+cleaned_helptext(improvement['helptext'])+"</div>"
             + "<b><br><br>Cost: <span class='help_stats'>" + improvement['build_cost'] + "</span>"
@@ -825,7 +829,7 @@ function generate_help_text(key)
     var span_end = "</span>";
     var div_end = "</span></div>"
 
-    msg = "<h1 style='margin-top:0px;font-size:190%'>" + punit_type['name'] + "</h1>";
+    msg += "<h1 style='margin-top:0px;font-size:190%'>" + punit_type['name'] + "</h1>";
     msg += "<div style='margin-bottom:10px;margin-top:-10px'>"+render_sprite(get_unit_type_image_sprite(punit_type))+"</div>";
     //msg += "<br>";
     msg += "<div id='manual_non_helptext_facts' style='max-width:"+max_help_pane_width+"px;'>";
@@ -1017,7 +1021,7 @@ function generate_help_text(key)
     msg += "<div id='datastore' hidden='true'></div>";
   } else if (key.indexOf("help_gen_techs") != -1) {
     var tech = techs[parseInt(key.replace("help_gen_techs_", ""))];
-    msg = "<h1>" + tech['name'] + "</h1>" + "<div class='"+pane_class+"'><b>"
+    msg += "<h1>" + tech['name'] + "</h1>" + "<div class='"+pane_class+"'><b>"
 	    + render_sprite(get_technology_image_sprite(tech)) + "<br>"
 	    + get_advances_text(tech['id']);
     msg += "<br><br>";
@@ -1031,7 +1035,7 @@ function generate_help_text(key)
                                                 ""))];
     var gov_img = "<img src='/images/e/techs/" + pgov['name'].toLowerCase() + ".png'>";
 
-    msg = "<h1>" + gov_img + " " + pgov['name'] + "</h1>"+"<div class='"+pane_class+"'>";
+    msg += "<h1>" + gov_img + " " + pgov['name'] + "</h1>"+"<div class='"+pane_class+"'>";
     msg += "<div id='helptext'><p>" + cleaned_text(pgov['helptext']) + "</p></div></div>";
 
     msg += wiki_on_item_button(pgov['name']);
@@ -1047,7 +1051,7 @@ function generate_help_text(key)
     var div_end = "</span></div>"
 
     // NAME
-    msg = "<h1 style='margin-top:0px;font-size:190%'>" + pextra['rule_name'] + "</h1>";
+    msg += "<h1 style='margin-top:0px;font-size:190%'>" + pextra['rule_name'] + "</h1>";
 
     // SPRITE: it's tricky because of bases and hideouts!
     let extra_tag = tileset_extra_tag_robust(pextra);
