@@ -827,12 +827,12 @@ function fill_unit_sprite_array(punit, num_stacked)
   unit_offset = get_unit_anim_offset(punit);
 
   /* NOTE: Yes we call it twice. Explanation: formerly this was called twice anyway,
-  once above, then one more time inside get_unit_nation_flag_sprite(). The second call
+  once above, then one more time inside get_unit_nation_flag_sprite. The second call
   inside get_unit_nation_flag_sprite effectively halved our animation frames for a GOTO,
   which was good because browser animations can't achieve the FPS of native client.
   HOWEVER, the result was jiggly because the shield was always one frame ahead of the
   unit. Now we call it twice at the start and both the unit and send the offset to the
-  get_unit_nation_flag_sprite function. Result: the shield are now always on the same
+  get_unit_nation_flag_sprite function. Result: the shields are now always on the same
   animation frame, skipping every other frame together (instead of skipping every other
   but the shields always +1 frame ahead of the unit.) TODO: performance could be
   increased by finding a way to call the above function only once and having it increment

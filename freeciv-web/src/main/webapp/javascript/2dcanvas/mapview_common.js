@@ -688,11 +688,11 @@ function update_map_canvas_check()
 {
   if (/*mapview_active==false ||*/ freeze) return;  // (freeze currently used for tax sliders)
   var time = new Date().getTime() - last_redraw_time;
-  if (time > MAPVIEW_REFRESH_INTERVAL && renderer == RENDERER_2DCANVAS) {
+  if (time > MAPVIEW_REFRESH_INTERVAL /*&& renderer == RENDERER_2DCANVAS*/) {
     update_map_canvas_full();
   }
   try {
-    if (renderer == RENDERER_2DCANVAS && window.requestAnimationFrame != null) requestAnimationFrame(update_map_canvas_check);
+    if (/*renderer == RENDERER_2DCANVAS &&*/ window.requestAnimationFrame != null) requestAnimationFrame(update_map_canvas_check);
   } catch (e) {
     if (e.name == 'NS_ERROR_NOT_AVAILABLE') {
       setTimeout(update_map_canvas_check, 100);

@@ -237,11 +237,11 @@ function init_sprites()
     }
   } else {
     // already loaded
-    if (renderer == RENDERER_WEBGL) {
-      webgl_preload();
-    } else {
+    //if (renderer == RENDERER_WEBGL) {
+    //  webgl_preload();
+    //} else {
       $.unblockUI();
-    }
+    //}
   }
 }
 
@@ -317,7 +317,8 @@ function mapview_window_resized ()
 
   if (active_city != null || !resize_enabled) return;
   setup_window_size();
-  if (renderer == RENDERER_2DCANVAS) update_map_canvas_full();
+//if (renderer == RENDERER_2DCANVAS)
+    update_map_canvas_full();
 }
 
 /**************************************************************************
@@ -982,10 +983,10 @@ function set_default_mapview_active()
   if (show_compass) $("#compass").show();
   else $("#compass").hide();
 
-  if (renderer == RENDERER_2DCANVAS) {
-    mapview_canvas_ctx = mapview_canvas.getContext("2d");
-    mapview_canvas_ctx.font = canvas_text_font;
-  }
+  //if (renderer == RENDERER_2DCANVAS) {
+  mapview_canvas_ctx = mapview_canvas.getContext("2d");
+  mapview_canvas_ctx.font = canvas_text_font;
+  //}
 
   var active_tab = $('#tabs').tabs('option', 'active');
   if (active_tab == TAB_CITIES) { // cities dialog is active

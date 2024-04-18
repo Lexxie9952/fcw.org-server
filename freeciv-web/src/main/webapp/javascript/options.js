@@ -477,6 +477,7 @@ function init_options_dialog()
    //----------------------------------------------------------------^^USER OPTIONS^^
    $('#graphic_theme').change();
 
+  /*
   if (!is_longturn()) {
     if (renderer == RENDERER_WEBGL) {
         $("#switch_renderer_button").html("Use 2D HTML5 graphics");
@@ -492,12 +493,13 @@ function init_options_dialog()
         $("#renderer_help").html("3D WebGL not supported.")
     }
   }
+  */
 
   $("#title_setting_div").hide();
 
   if (is_longturn()) {
     $("#update_model_button").hide();
-    $("#switch_renderer_button").hide();
+    //$("#switch_renderer_button").hide(); RENDERER_WEBGL
     $("#renderer_help").hide();
     $("#save_button").hide();
     $("#surrender_button").hide();
