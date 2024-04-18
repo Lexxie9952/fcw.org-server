@@ -752,8 +752,8 @@ Random randomValue=new Random();
 
 		<%@include file="/WEB-INF/jsp/fragments/footer.jsp"%>
 	</div>
-
-  <script src="//cdn.webglstats.com/stat.js" defer async></script>
+<!--
+  <script src="//cdn.webglstats.com/stat.js" defer async></script>-->
 </body>
 <script src="/static/javascript/jdenticon.min.js">
 </script>

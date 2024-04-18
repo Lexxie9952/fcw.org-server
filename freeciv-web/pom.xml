@@ -374,7 +374,7 @@ Rerun the sync-js-hand.js script.
 									<include>libs/*.js</include>
 									<include>2dcanvas/*.js</include>
 									<include>2dcanvas/tilespec-constants.js</include>
-									<include>webgl/*.js</include>
+									<!-- <include>webgl/*.js</include> -->
 								</includes>
 								<excludes>
 									<exclude>webclient.js</exclude>
@@ -388,6 +388,7 @@ Rerun the sync-js-hand.js script.
 								<goal>minify</goal>
 							</goals>
 						</execution>
+						<!--
 						<execution>
 							<id>webgl-minify</id>
 							<configuration>
@@ -406,6 +407,7 @@ Rerun the sync-js-hand.js script.
 								<goal>minify</goal>
 							</goals>
 						</execution>
+						-->
 
 						<execution>
 							<id>index-minify</id>

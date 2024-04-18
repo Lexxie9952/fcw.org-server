@@ -41,18 +41,20 @@ var fcwDebug=<%= fcwDebug %>;
 </script>
 <script type="text/javascript" src="/javascript/libs/jquery.min.js?ts=${initParam.buildTimeStamp}"></script>
 
+<!--
 <script type="text/javascript" src="/javascript/webgl/libs/three.min.js??ts=${initParam.buildTimeStamp}"></script>
-
+-->
 <script src="https://accounts.google.com/gsi/client"></script>
 
 <script type="text/javascript" src="/javascript/webclient.min.js?ts=${initParam.buildTimeStamp}"></script>
 
 <script type="text/javascript" src="/music/audio.min.js"></script>
 
+<!--
 <c:if test="${not empty param.webgl_debug}" >
   <script> var gliEmbedDebug = true; </script> <script src="/javascript/webgl/libs/webgl-inspector/core/embed.js"></script>
 </c:if>
-
+-->
 <link rel="shortcut icon" href="/images/freeciv-shortcut-icon.png" />
 <link rel="apple-touch-icon" href="/static/images/freeciv-splash.png" />
 
@@ -86,6 +88,7 @@ var fcwDebug=<%= fcwDebug %>;
 <% } %>
 </body>
 
+<!--
 <script id="terrain_fragment_shh" type="x-shader/x-fragment">
   <jsp:include page="/javascript/webgl/shaders/terrain_fragment_shader.glsl" flush="false"/>
 </script>
@@ -101,6 +104,6 @@ var fcwDebug=<%= fcwDebug %>;
 <script id="labels_vertex_shh" type="x-shader/x-vertex">
   <jsp:include page="/javascript/webgl/shaders/labels_vertex_shader.glsl" flush="false"/>
 </script>
-
+-->
 
 </html>
