@@ -300,9 +300,11 @@
     </div>
   </td>
   <td>
+    <!--
     <div style="margin-top:15px" class="main_menu_buttons">
       <button style="display:none" id="switch_renderer_button" type="button" class="button setting_button" onClick="switch_renderer();"></button>
     </div>
+    -->
   </td>
 </tr>
 </table>
