@@ -92,7 +92,12 @@
         <label for="show_compass" name="show_compass_lbl" class="css-label dark-check-cyan"><font color="#b0f4ff">Show compass</font></label>
     </div>
   </td>
-  <td></td>
+  <td>
+    <div title="Shows HiRes sprites where possible: currently only unit-nation-shields and small minority of sprites" class="main_menu_buttons">
+      <input type='checkbox' class="css-checkbox" name='browser_zoom' id='browser_zoom'>
+      <label for="browser_zoom" name="show_browser_zoom_lbl" class="css-label dark-check-cyan"><font color="#b0f4ff">High resolution sprites</font></label>
+    </div>
+  </td>
 </tr>
 
 <tr class="options_row">

@@ -297,7 +297,11 @@ function init_cache_sprites()
     newCtx.drawImage(tileset_images[i], x, y,
                        w, h, 0, 0, w, h);
     sprites[tile_tag] = newCanvas;
-
+    /* On HiRes screens we can get better shield resolution due to zooming
+       extracting real extra pixels instead of expanding pixelated blocks: */
+    if (tile_tag.startsWith("f.shld_lg")) {
+      sprites[tile_tag]['scale'] = 15/19; // render 19x19 as a 15x15
+    }
   }
 
   sprites_init = true;

@@ -41,6 +41,7 @@ misc_files = [
   "colors.tilespec",
   "buildings-large.spec",
 #  "overlays.spec",
+  "shields-large.spec",
   "shields.spec",
   "small.spec",
   "governments.spec",

@@ -1237,10 +1237,14 @@ function get_unit_nation_flag_sprite(punit, unit_offset)
   // function calling this already got this info; this also fixed
   // jiggly movement since making the two get_unit_anim_offset calls
   // returned different values for the same frame!
-
-  return {"key" : "f.shield." + nation['graphic_str'],
+  const key = browser_zoom ? "f.shld_lg." + nation['graphic_str']
+                                  : "f.shield." + nation['graphic_str'];
+  return {"key" : key,
           "offset_x" : unit_flag_offset_x + unit_offset['x'],
-          "offset_y" : - unit_flag_offset_y + unit_offset['y']};
+          "offset_y" : - unit_flag_offset_y + unit_offset['y'],
+          "scale": sprites[key]['scale']}; /* support for HiRes sprites:
+          see get_unit_nation_flag_sprite() and init_cache_sprites() for
+          examples on how we flag/instruct the program for HiRes sprites */
 }
 /**********************************************************************
   ...returns the shield (not the flag) in html usable form
@@ -1251,10 +1255,14 @@ function get_html_nation_shield_sprite(nation)
   var sprite = {"type":null,"sprite":get_sprite_from_tag(tag)};
   var shield_sprite = sprite['sprite'];
 
+  /* if HiRes or zoom level is causing sprite expansion, use 19x19 shield compressed to 15x15
+     instead of expanding 14x14 shield out to greater dimensions */
+  const scale = browser_zoom ? 0.7894736842105263 : 1.0;
+
     return "<span class='v' title='"+nation['adjective']+"' style='cursor:help;"
       + "background: transparent url("
       + shield_sprite['image-src']
-      + ");transform: scale(1.0); background-position:-" + shield_sprite['tileset-x'] + "px -" + (shield_sprite['tileset-y'])
+      + ");transform: scale("+scale+"); background-position:-" + shield_sprite['tileset-x'] + "px -" + (shield_sprite['tileset-y'])
       + "px;  width: " + (shield_sprite['width']) + "px;height: " + (shield_sprite['height']) + "px;"
       + " content-align: left;"
       + "vertical-align:top; float:left;'>"

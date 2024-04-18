@@ -463,6 +463,14 @@ function init_options_dialog()
       simpleStorage.set('reconfig_metakey', reconfig_metakey);
     });
 
+    /* "browser_zoom" - if we know browser is zoomed should we be magnifying lowres
+       pixelated sprites, or start from a higher res. base sprite? The latter.   */
+    $('#browser_zoom').prop('checked', browser_zoom);
+    $('#browser_zoom').change(function() {
+      browser_zoom = this.checked;
+      simpleStorage.set('browser_zoom', show_compass);
+    });
+
    // Graphic Theme
    graphic_theme_path = simpleStorage.get('grtheme');
    if (!graphic_theme_path) graphic_theme_path = "themes/greek/";
