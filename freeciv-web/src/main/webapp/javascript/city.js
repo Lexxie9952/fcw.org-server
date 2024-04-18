@@ -172,7 +172,7 @@ function remove_city(pcity_id)
   var update = client.conn.playing.playerno && city_owner(pcity).playerno == client.conn.playing.playerno;
   var ptile = city_tile(cities[pcity_id]);
   delete cities[pcity_id];
-  if (renderer == RENDERER_WEBGL) update_city_position(ptile);
+  //if (renderer == RENDERER_WEBGL) update_city_position(ptile);
 
   if (update) {
     city_screen_updater.update();

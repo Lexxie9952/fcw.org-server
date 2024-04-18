@@ -61,6 +61,7 @@ function init_overview()
   $("#game_overview_panel").dialog({
 			bgiframe: true,
 			modal: false,
+      position: {my: 'left bottom', at: 'left bottom', of: window, within: $("#tabs-map")},
 			appendTo: '#tabs-map',
 			resizable: false,
 			closeOnEscape: false,
@@ -208,19 +209,20 @@ function generate_overview_hash(cols, rows) {
     }
   }
 
-  if (renderer == RENDERER_2DCANVAS) {
+  //if (renderer == RENDERER_2DCANVAS) {
     var r = base_canvas_to_map_pos(0, 0);
     if (r != null) {
       hash += r['map_x'];
       hash += r['map_y'];
     }
-  } else {
-    var ptile = webgl_canvas_pos_to_tile($(window).width() / 6, $(window).height() / 6);
-    if (ptile != null) {
-      hash += ptile['x'];
-      hash += ptile['y'];
-    }
-  }
+  //}
+  //else {        // RENDERER_WEBGL
+  //  var ptile = webgl_canvas_pos_to_tile($(window).width() / 6, $(window).height() / 6);
+  //  if (ptile != null) {
+  //    hash += ptile['x'];
+  //    hash += ptile['y'];
+  //  }
+  //}
 
   return hash;
 }
@@ -234,7 +236,7 @@ function render_viewrect()
 
   var path = [];
 
-  if (renderer == RENDERER_2DCANVAS && mapview['gui_x0'] != 0 && mapview['gui_y0'] != 0) {
+  if (/*renderer == RENDERER_2DCANVAS &&*/ mapview['gui_x0'] != 0 && mapview['gui_y0'] != 0) {
     var point = base_canvas_to_map_pos(0, 0);
     path.push([point.map_x, point.map_y]);
     point = base_canvas_to_map_pos(mapview['width'], 0);
@@ -243,24 +245,34 @@ function render_viewrect()
     path.push([point.map_x, point.map_y]);
     point = base_canvas_to_map_pos(0, mapview['height']);
     path.push([point.map_x, point.map_y]);
-  } else {
+  }
+  else {
+    //if (renderer = RENDERER_2DCANVAS)
+    // Needed by RENDER_2DCANVAS if (mpaview['gui_x0'] != true) :
+    return;
+
+    /* RENDERER_WEBGL
     var w = $(window).width();
     var h = $(window).height();
 
     var ptile = webgl_canvas_pos_to_tile(w / 6, h / 6);
     if (ptile == null) return;
     path.push([ptile.x, ptile.y]);
+
     var ptile = webgl_canvas_pos_to_tile(5 * w / 6, h / 6);
     if (ptile == null) return;
     path.push([ptile.x, ptile.y]);
+
     var ptile = webgl_canvas_pos_to_tile(5 * w / 6, h - height_offset);
     if (ptile == null) return;
     path.push([ptile.x, ptile.y]);
+
     var ptile = webgl_canvas_pos_to_tile(w / 6, h - height_offset);
     if (ptile == null) return;
     path.push([ptile.x, ptile.y]);
-
+    */
   }
+
   var viewrect_canvas = document.getElementById('overview_viewrect');
   if (viewrect_canvas == null) return;
 

@@ -58,10 +58,9 @@ function set_client_state(newstate)
       /* remove context menu from pregame. */
       $(".context-menu-root").remove();
 
-      if (renderer == RENDERER_WEBGL) {
-        init_webgl_mapview();
-
-      }
+      //if (renderer == RENDERER_WEBGL) {
+      //  init_webgl_mapview();
+      //}
 
       if (observing || $.getUrlVar('action') == "multi" || is_longturn() || game_loaded) {
         center_on_any_city();
@@ -96,7 +95,7 @@ function setup_window_size ()
   var new_mapview_width = winWidth - width_offset;
   var new_mapview_height = winHeight - height_offset;
 
-  if (renderer == RENDERER_2DCANVAS) {
+  //if (renderer == RENDERER_2DCANVAS) {
     mapview_canvas.width = new_mapview_width;
     mapview_canvas.height = new_mapview_height;
     buffer_canvas.width = Math.floor(new_mapview_width * 1.5);
@@ -109,7 +108,7 @@ function setup_window_size ()
 
     mapview_canvas_ctx.font = canvas_text_font;
     buffer_canvas_ctx.font = canvas_text_font;
-  }
+  //}
 
   $("#pregame_message_area").height( new_mapview_height - 105
                                         - $("#pregame_game_info").outerHeight());
@@ -408,11 +407,12 @@ function update_metamessage_on_gamestart()
 
   if ($.getUrlVar('action') == "new" || $.getUrlVar('action') == "earthload"
       || $.getUrlVar('scenario') == "true") {
-    if (renderer == RENDERER_2DCANVAS) {
+    /*if (renderer == RENDERER_2DCANVAS) {
       $.post("/freeciv_time_played_stats?type=single2d").fail(function() {});
     } else {
       $.post("/freeciv_time_played_stats?type=single3d").fail(function() {});
-    }
+    }*/
+    $.post("/freeciv_time_played_stats?type=single2d").fail(function() {});
   }
   if ($.getUrlVar('action') == "multi" && client.conn.playing != null
       && client.conn.playing['pid'] == players[0]['pid'] && !is_longturn()) {

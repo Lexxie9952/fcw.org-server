@@ -108,17 +108,23 @@ function clear_goto_tiles()
       }
     }
   } */
-  if (renderer == RENDERER_2DCANVAS) {
+
+/*  second way, also if we have 2D and 3D renderers:
+    if (renderer == RENDERER_2DCANVAS) {
     const num_tiles = map['xsize'] * map['ysize'];
     goto_dirs = Array(num_tiles).fill(null);
-  } else {
+  } else {    // RENDERER_WEBGL
     if (scene != null && goto_lines != null) {
       for (var i = 0; i < goto_lines.length; i++) {
         scene.remove(goto_lines[i]);
       }
       goto_lines = [];
     }
-  }
+  } */
+  // The new third way, all the above is replaced:
+  const num_tiles = map['xsize'] * map['ysize'];
+  goto_dirs = Array(num_tiles).fill(null);
+
   legal_goto_path = null;
 }
 /**************************************************************************
@@ -430,7 +436,9 @@ function update_goto_path(goto_packet)
     2. Skip over "invalid dirs" in the path: i.e., refueling layovers.
     3. Record goto_dirs so mapview can draw a lines for each tile. */
   var refuel = 0;
-  if (renderer == RENDERER_2DCANVAS) {
+    /*if (renderer == RENDERER_WEBGL) {
+      webgl_render_goto_line(ptile, goto_packet['dir']);
+    } else {*/
     goto_way_points[ptile.index] = movesleft ? 0 : SOURCE_WAYPOINT; // no moves_left on src_tile = turn boundary
     var old_tile=null;
     var old_turn_boundary = false;
@@ -470,9 +478,7 @@ function update_goto_path(goto_packet)
       goto_from_tile[ptile.index] = old_tile.index;
       if (ptile && turn_boundary) goto_way_points[ptile.index] |= SOURCE_WAYPOINT;
     }
-  } else {
-    webgl_render_goto_line(ptile, goto_packet['dir']);
-  }
+  //}
 /* </end code block does 3 things> */
 
   goto_request_map[goto_packet['unit_id'] + "," + goaltile['x'] + "," + goaltile['y']] = goto_packet
@@ -536,8 +542,11 @@ function check_request_goto_path()
   var do_rally_check = !do_goto_check && rally_active && do_new_check;
 
   if (do_goto_check || do_rally_check) {
-    ptile = (renderer == RENDERER_2DCANVAS) ? canvas_pos_to_tile(mouse_x, mouse_y)
-                                            : webgl_canvas_pos_to_tile(mouse_x, mouse_y);
+    /*ptile = (renderer == RENDERER_2DCANVAS) ? canvas_pos_to_tile(mouse_x, mouse_y)
+                                              : webgl_canvas_pos_to_tile(mouse_x, mouse_y); */
+
+    ptile = canvas_pos_to_tile(mouse_x, mouse_y);
+
     if (ptile != null) {
       if (ptile['tile'] != prev_goto_tile) {
         clear_goto_tiles();

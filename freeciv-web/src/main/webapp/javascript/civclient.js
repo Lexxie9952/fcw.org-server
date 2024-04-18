@@ -169,11 +169,13 @@ function civclient_init()
     return;
   }
 
+  /*
   if ($.getUrlVar('renderer') == "webgl") {
     renderer = RENDERER_WEBGL;
   }
   if (renderer == RENDERER_2DCANVAS) init_mapview();
-  if (renderer == RENDERER_WEBGL) init_webgl_renderer();
+  if (renderer == RENDERER_WEBGL) init_webgl_renderer(); */
+  init_mapview();
 
   game_init();
   $('#tabs').tabs({ heightStyle: "fill" });
@@ -186,11 +188,12 @@ function civclient_init()
   statusTimerId = setInterval(update_game_status_panel, 6000);
 
   if (overviewTimerId == -1) {
-    if (renderer == RENDERER_WEBGL) {
+    /*if (renderer == RENDERER_WEBGL) {
       OVERVIEW_REFRESH = 12000;
     } else {
       OVERVIEW_REFRESH = 6000;
-    }
+    }*/
+    OVERVIEW_REFRESH = 6000;
     overviewTimerId = setInterval(redraw_overview, OVERVIEW_REFRESH);
   }
 
@@ -907,9 +910,9 @@ function show_debug_info()
   }
   console.log("Network PING average (client): " + (sum / debug_client_speed_list.length) + " ms.  (Max: " + max +"ms.)");
 
-  if (renderer == RENDERER_WEBGL) {
+  /*if (renderer == RENDERER_WEBGL) {
     console.log(maprenderer.info);
-  }
+  }*/
 
 }
 
@@ -1011,7 +1014,7 @@ function is_loaded_game()
 
 /****************************************************************************
  Change between 2D isometric and 3D WebGL renderer.
-****************************************************************************/
+
 function switch_renderer()
 {
   if (is_longturn()){
@@ -1103,4 +1106,4 @@ function switch_renderer()
 
     }
 }
-
+****************************************************************************/

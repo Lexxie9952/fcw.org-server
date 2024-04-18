@@ -343,9 +343,9 @@ function handle_server_join_reply(packet)
     }
 
     if (autostart) {
-      if (renderer == RENDERER_WEBGL) {
+      /*if (renderer == RENDERER_WEBGL) {
         $.blockUI({ message: '<h2>Generating terrain map model...</h2>' });
-      }
+      }*/
       if (loadTimerId == -1) {
         wait_for_text("You are logged in as", pregame_start_game);
       } else {
@@ -427,13 +427,13 @@ function handle_tile_info(packet)
 {
   if (tiles != null) {
     packet['extras'] = new BitVector(packet['extras']);
-
+/*
     if (renderer == RENDERER_WEBGL) {
       var old_tile = $.extend({}, tiles[packet['tile']]);
       webgl_update_tile_known(tiles[packet['tile']], packet);
       update_tile_extras($.extend(old_tile, packet));
     }
-
+*/
     tiles[packet['tile']] = $.extend(tiles[packet['tile']], packet);
   }
 }
@@ -803,11 +803,11 @@ function handle_web_city_info_addition(packet)
   if (worklist_dialog_active && active_city != null) {
     city_worklist_dialog(active_city);
   }
-
+/*
   if (renderer == RENDERER_WEBGL) {
     update_city_position(index_to_tile(packet['tile']));
   }
-
+*/
   /* Update active tabs affected by this info */
   ui_update_bulbs_info = true;
   var active_tab = $("#tabs").tabs("option", "active");
@@ -834,11 +834,11 @@ function handle_city_short_info(packet)
   } else {
     cities[packet['id']] = $.extend(cities[packet['id']], packet);
   }
-
+/*
   if (renderer == RENDERER_WEBGL) {
     update_city_position(index_to_tile(packet['tile']));
   }
-
+*/
   /* Update active tabs affected by this info */
   ui_update_bulbs_info = true;
   var active_tab = $("#tabs").tabs("option", "active");
@@ -972,12 +972,12 @@ function handle_map_info(packet)
   /* TODO: init_client_goto();*/
 
   mapdeco_init();
-
+/*
   if (renderer == RENDERER_WEBGL) {
     mapview_model_width = Math.floor(MAPVIEW_ASPECT_FACTOR * map['xsize']);
     mapview_model_height = Math.floor(MAPVIEW_ASPECT_FACTOR * map['ysize']);
   }
-
+*/
 }
 
 /* 100% complete */
@@ -1330,11 +1330,12 @@ function handle_nuke_tile_info(packet)
 {
   var ptile = index_to_tile(packet['tile']);
 
-  if (renderer == RENDERER_WEBGL) {
+  /*if (renderer == RENDERER_WEBGL) {
     render_nuclear_explosion(ptile);
   } else {
     ptile['nuke'] = 60;
-  }
+  }*/
+  ptile['nuke'] = 60;
 
   play_sound('nuclear_distant.ogg');
 
@@ -1438,11 +1439,11 @@ function handle_unit_remove(packet)
 
   clear_tile_unit(punit);
   client_remove_unit(punit);
-
+/*
   if (renderer == RENDERER_WEBGL) {
     update_unit_position(index_to_tile(punit['tile']));
   }
-
+*/
 }
 
 /* 100% complete */
@@ -1623,10 +1624,12 @@ function handle_unit_packet_common(packet_unit)
       }
     }
   }
+  /*
   if (renderer == RENDERER_WEBGL) {
     if (punit != null) update_unit_position(old_tile);
     update_unit_position(index_to_tile(units[packet_unit['id']]['tile']));
   }
+  */
 
   /* TODO: update various dialogs and mapview. */
 }
@@ -1640,11 +1643,11 @@ function handle_unit_combat_info(packet)
   var tile_x = tiles[attacker['tile']]['x'];
   var tile_y = tiles[attacker['tile']]['y'];
 
-  if (renderer == RENDERER_WEBGL) {
+  /*if (renderer == RENDERER_WEBGL) {
     if (attacker_hp == 0) animate_explosion_on_tile(attacker['tile'], 0, false);
     if (defender_hp == 0) animate_explosion_on_tile(defender['tile'], 0, false);
       // TO DO: WEBGL is missing out on all this below, which we should put in after it's final
-  } else {
+  } else*/ {
 
       // Might be null/false if observer
       var pplayer = null;
@@ -1976,7 +1979,22 @@ function handle_wonders_report()
 **************************************************************************/
 function server_report_dialog_css() {
   /* Legible background */
-  $("#generic_dialog").css("background-image","url(/images/bg-text.jpg)")
+  $("#generic_dialog").css("background-image","url(/images/bg-text.jpg)");
+
+  //console.log("caption "+page_msg['caption']+" event "+page_msg['event']+" headline "+page_msg['headline']);
+  let is_history = (page_msg['caption']=="Historian Publishes!");
+  let title_len = page_msg['headline'].length;
+  if (is_history) {
+    if (title_len > 65) { // arbitrary "too long" length for headliner
+      if (title_len < 74)       // 73
+        $("#generic_dialog").parent().children().first().children().css("font-size", "20px");
+      else if (title_len < 79)  // 78
+        $("#generic_dialog").parent().children().first().children().css("font-size", "19px");
+      else                      // 86
+        $("#generic_dialog").parent().children().first().children().css("font-size", "17.5px");
+    }
+    return;
+  } // no tooltips and especially no overflow in titlebar for history reports!
 
   /* Tooltips */
   $("#generic_dialog table tbody tr td").tooltip({ tooltipClass: "tt_slim",

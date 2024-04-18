@@ -122,11 +122,12 @@ function control_init()
   urgent_focus_queue = [];
 
   touch_device = is_touch_device();
-  if (renderer == RENDERER_2DCANVAS) {
+  /*if (renderer == RENDERER_2DCANVAS) {
     mapctrl_init_2d();
-  } else {
+  } else {  // RENDERER_WEBGL
     init_webgl_mapctrl();
-  }
+  }*/
+  mapctrl_init_2d();
 
   $(document).keydown(global_keyboard_listener);
   $(window).resize(mapview_window_resized);
@@ -205,7 +206,8 @@ function control_init()
   }, false);
 
   var context_options = {
-        selector: (renderer == RENDERER_2DCANVAS) ? '#canvas' : '#canvas_div' ,
+//    selector: (renderer == RENDERER_2DCANVAS) ? '#canvas' : '#canvas_div' ,
+      selector: '#canvas',
 	    zIndex: 5000,
         autoHide: true,
         callback: function(key, options) {
@@ -229,14 +231,13 @@ function control_init()
   if (!touch_device) {
     context_options['position'] = function(opt, x, y){
                                                 if (touch_device) return;
-                                                //if (renderer == RENDERER_2DCANVAS) var new_top = mouse_y + $("#canvas_div").offset().top;
-                                                if (renderer == RENDERER_2DCANVAS) {
-                                                  var new_top = mouse_y + $("#canvas").offset().top-52;
-                                                  opt.$menu.css({top: new_top , left: mouse_x+16});
-                                                } else {
-                                                  var new_top = mouse_y + $("#canvas_div").offset().top-52;
-                                                  opt.$menu.css({top: new_top , left: mouse_x+16});
-                                                }
+                                                //if (renderer == RENDERER_2DCANVAS) {
+                                                var new_top = mouse_y + $("#canvas").offset().top-52;
+                                                opt.$menu.css({top: new_top , left: mouse_x+16});
+                                                //} else {
+                                                //  var new_top = mouse_y + $("#canvas_div").offset().top-52;
+                                                //  opt.$menu.css({top: new_top , left: mouse_x+16});
+                                                //}
                                               };
   } else {
     context_options['position'] = function(opt, x, y){
@@ -424,7 +425,7 @@ function mouse_moved_cb(e)
       mouse_y = e.clientY;
     }
   }
-  if (renderer == RENDERER_2DCANVAS && active_city == null && mapview_canvas != null
+  if (/*renderer == RENDERER_2DCANVAS &&*/ active_city == null && mapview_canvas != null
       && $("#canvas").length) {
     mouse_x = mouse_x - $("#canvas").offset().left;
     mouse_y = mouse_y - $("#canvas").offset().top;
@@ -440,7 +441,8 @@ function mouse_moved_cb(e)
       touch_start_y = mouse_y;
       update_mouse_cursor();
     }
-  } else if (renderer == RENDERER_WEBGL && active_city == null && $("#canvas_div").length) {
+  }
+  /* else if (renderer == RENDERER_WEBGL && active_city == null && $("#canvas_div").length) {
     mouse_x = mouse_x - $("#canvas_div").offset().left;
     mouse_y = mouse_y - $("#canvas_div").offset().top;
 
@@ -456,7 +458,8 @@ function mouse_moved_cb(e)
       touch_start_y = mouse_y;
       update_mouse_cursor();
     }
-  } else if (active_city != null && city_canvas != null
+  } */
+  else if (active_city != null && city_canvas != null
              && $("#city_canvas").length) {
     mouse_x = mouse_x - $("#city_canvas").offset().left;
     mouse_y = mouse_y - $("#city_canvas").offset().top;
@@ -495,11 +498,12 @@ function update_mouse_cursor()
 
   //console.log("update_mouse_cursor() mmm:1 g_a:0, came_from_context_menu:"+came_from_context_menu);
   var ptile;
-  if (renderer == RENDERER_2DCANVAS) {
+  /*if (renderer == RENDERER_2DCANVAS) {
     ptile = canvas_pos_to_tile(mouse_x, mouse_y);
   } else {
     ptile = webgl_canvas_pos_to_tile(mouse_x, mouse_y);
-  }
+  }*/
+  ptile = canvas_pos_to_tile(mouse_x, mouse_y);
 
 
   if (ptile == null) return; /* TO DO: this is the only way this function returns without forcing real_mouse_move_mode=false, presumably because
@@ -1397,7 +1401,7 @@ function advance_focus_inactive_units()
     current_focus = []; /* Reset focus units. */
     unit_may_have_lost_focus();
     waiting_units_list = []; /* Reset waiting units list */
-    if (renderer == RENDERER_WEBGL) webgl_clear_unit_focus();
+    //if (renderer == RENDERER_WEBGL) webgl_clear_unit_focus();
     update_game_unit_panel();
     $("#game_unit_orders_default").hide();
   }
@@ -2553,7 +2557,7 @@ function set_unit_focus(punit)
   } else {
     current_focus[0] = punit;
     action_selection_next_in_focus(IDENTITY_NUMBER_ZERO);
-    if (renderer == RENDERER_WEBGL) update_unit_position(index_to_tile(punit['tile']));
+    //if (renderer == RENDERER_WEBGL) update_unit_position(index_to_tile(punit['tile']));
   }
 
   if (punit) warcalc_set_default_vals(punit);
@@ -2590,7 +2594,7 @@ function click_unit_in_panel(e, punit)
     // though doing the exact same thing as single-click, shift-click was losing the other units in the panel, so
     // try to emulate everything else it does, as a test to get those units displayed in the panel even though
     // not in focus:
-    if (renderer == RENDERER_WEBGL) update_unit_position ( index_to_tile(punit['tile']));
+    //if (renderer == RENDERER_WEBGL) update_unit_position ( index_to_tile(punit['tile']));
     auto_center_on_focus_unit();
 
     update_game_unit_panel(); //previously only doing this but it lost unselected units in the panel
@@ -2616,13 +2620,13 @@ function set_unit_focus_and_redraw(punit)
   if (punit == null) {
     current_focus = [];
     unit_may_have_lost_focus();
-    if (renderer == RENDERER_WEBGL) webgl_clear_unit_focus();
+    //if (renderer == RENDERER_WEBGL) webgl_clear_unit_focus();
   } else {
     current_focus[0] = punit;
     unit_may_have_lost_focus();
     action_selection_next_in_focus(IDENTITY_NUMBER_ZERO);
     warcalc_set_default_vals(punit); // warcalc default vals as last clicked units
-    if (renderer == RENDERER_WEBGL) update_unit_position(index_to_tile(punit['tile']));
+    //if (renderer == RENDERER_WEBGL) update_unit_position(index_to_tile(punit['tile']));
   }
 
   //shift-spacebar to return to last location:
@@ -2695,7 +2699,7 @@ function auto_center_on_focus_unit()
 
   if (ptile != null && auto_center_on_unit) {
     center_tile_mapcanvas(ptile);
-    update_unit_position(ptile);
+    //update_unit_position(ptile); RENDERER_WEBGL
   }
 }
 
@@ -3048,42 +3052,44 @@ function do_map_click(ptile, qtype, first_time_called)
     if (goto_active /*&& !touch_device*/) { //(allow clicking same tile when giving a Nuke order.)
       deactivate_goto(false);
     }
-    if (renderer == RENDERER_2DCANVAS) {
-      if (!mouse_click_mod_key['shiftKey']) { // normal left-click
-        /* CONDITIONS FOR SHOWING A CONTEXT MENU:
-           1.Automatic context menu when clicking unit, if 'unit_click_menu' user PREF is on.
-           2.If unit in a city, always show context menu, so that there is a way to get past
-             the selected unit and select "show city" in the contextmenu.
-           3.If user_click_menu==false, unit has to be clicked TWICE for context menu. We know
-             it's clicked twice by looking at last_unit_clicked.
-           4.If city tile clicked only milliseconds after issuing a GOTO there, the click was
-             part of double-tap-GOTO. No contextmenu if this is inside the 'cooldown' period */
-        if (!should_ask_server_for_actions(current_focus[0])
-            && (pcity || unit_click_menu || last_unit_clicked == current_focus[0]['id'])) {
-          if (pcity) {
-            if (city_click_goto_cooldown(ptile))
-              $("#canvas").contextMenu();
-          }
-          else $("#canvas").contextMenu();
+    //if (renderer == RENDERER_2DCANVAS) {
+    if (!mouse_click_mod_key['shiftKey']) { // normal left-click
+      /* CONDITIONS FOR SHOWING A CONTEXT MENU:
+          1.Automatic context menu when clicking unit, if 'unit_click_menu' user PREF is on.
+          2.If unit in a city, always show context menu, so that there is a way to get past
+            the selected unit and select "show city" in the contextmenu.
+          3.If user_click_menu==false, unit has to be clicked TWICE for context menu. We know
+            it's clicked twice by looking at last_unit_clicked.
+          4.If city tile clicked only milliseconds after issuing a GOTO there, the click was
+            part of double-tap-GOTO. No contextmenu if this is inside the 'cooldown' period */
+      if (!should_ask_server_for_actions(current_focus[0])
+          && (pcity || unit_click_menu || last_unit_clicked == current_focus[0]['id'])) {
+        if (pcity) {
+          if (city_click_goto_cooldown(ptile))
+            $("#canvas").contextMenu();
+        }
+        else $("#canvas").contextMenu();
 
-          if (touch_device || !touch_device) { // We may differentiate behaviour for touch_device later
-            // -2 is transition state for refresh, needed to allow clicking unit again to get rid of the context_menu
-            last_unit_clicked = -2;
-            // this flag indicates the next click will do nothing but destroy context_menu:
-            came_from_context_menu = true;
-          }
+        if (touch_device || !touch_device) { // We may differentiate behaviour for touch_device later
+          // -2 is transition state for refresh, needed to allow clicking unit again to get rid of the context_menu
+          last_unit_clicked = -2;
+          // this flag indicates the next click will do nothing but destroy context_menu:
+          came_from_context_menu = true;
         }
       }
-    } else if (!mouse_click_mod_key['shiftKey'] && unit_click_menu
+    }
+  //}    // (end if renderer == RENDERER_2DCANVAS) {
+    /* RENDERER_WEBGL
+    else if (!mouse_click_mod_key['shiftKey'] && unit_click_menu
                && !should_ask_server_for_actions(current_focus[0])) {
-      // 3D handling of above. TO DO: test/integrate same 2D functionality above for 3D if appropriate
+      // 3D handling of above. TO DO: test/integrate same 2D functionality above for 3D if appropriate RENDERER_WEBGL
       if (pcity) {
         if (city_click_goto_cooldown(ptile))
           $("#canvas_div").contextMenu();
       }
       else $("#canvas_div").contextMenu();
-    }
-    if (!mouse_click_mod_key['shiftKey']) {
+    } // endif: RENDERER_WEBGL */
+    if (!mouse_click_mod_key['shiftKey']) { // with RENDERER_WEBGL removed, this if can be merged into if above
       // Record the clicked unit to enable seeing if a unit is clicked twice.
       // 3 STATES: -1:Fresh, unit_id:last unit clicked is stored, -2:last unit was already clicked twice
       last_unit_clicked = (last_unit_clicked == -2) ? -1 : current_focus[0]['id'];
@@ -3470,11 +3476,12 @@ function do_map_click(ptile, qtype, first_time_called)
           set_unit_focus_and_redraw(sunits[0]);
           if (city_click_goto_cooldown(ptile) && !should_ask_server_for_actions(sunits[0])) {
             // don't show contextmenu if in the cooldown period for a double tap GOTO
-            if (renderer == RENDERER_2DCANVAS) {
+            /*if (renderer == RENDERER_2DCANVAS) {
               $("#canvas").contextMenu();
             } else { //3D handling can potentially be made different later
               $("#canvas_div").contextMenu();
-            }
+            }*/
+            $("#canvas").contextMenu();
           }
           return; // move the commented-out return from below up here
         } else if (!goto_active) { //if GOTO active then the click is a move command, not a show city command
@@ -3648,7 +3655,8 @@ function global_keyboard_listener(ev)
   }
   civclient_handle_key(keyboard_key, ev.keyCode, ev['ctrlKey'], ev['altKey'], ev['shiftKey'], ev);
 
-  if (renderer == RENDERER_2DCANVAS) $("#canvas").contextMenu('hide');
+  //if (renderer == RENDERER_2DCANVAS)
+  $("#canvas").contextMenu('hide');
 }
 
 /**************************************************************************
@@ -4335,11 +4343,12 @@ function map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
       came_from_context_menu = false;
       /* Abort any context menu blocking. */
       context_menu_active = true;
-      if (renderer == RENDERER_2DCANVAS) {
+      /*if (renderer == RENDERER_2DCANVAS) {
         $("#canvas").contextMenu(true);
       } else {
         $("#canvas_div").contextMenu(true);
-      }
+      }*/
+      $("#canvas").contextMenu(true);
 
       /* Abort target tile selection. */
       paradrop_active = false;
@@ -4360,7 +4369,7 @@ function map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
 
         current_focus = [];
         unit_may_have_lost_focus();
-        if (renderer == RENDERER_WEBGL) webgl_clear_unit_focus();
+        //if (renderer == RENDERER_WEBGL) webgl_clear_unit_focus();
         clear_all_modes();
         $("#canvas_div").css("cursor", "default");
         goto_request_map = {};
@@ -7787,12 +7796,12 @@ function request_rally_path(city_id, dst_x, dst_y)
 **************************************************************************/
 function center_tile_mapcanvas(ptile)
 {
-  if (renderer == RENDERER_2DCANVAS) {
+  /*if (renderer == RENDERER_2DCANVAS) {
     center_tile_mapcanvas_2d(ptile);
   } else {
     center_tile_mapcanvas_3d(ptile);
-  }
-
+  }*/
+  center_tile_mapcanvas_2d(ptile);
 }
 
 /**************************************************************************
@@ -7802,11 +7811,12 @@ function popit()
 {
   var ptile;
 
-  if (renderer == RENDERER_2DCANVAS) {
+  /*if (renderer == RENDERER_2DCANVAS) {
     ptile = canvas_pos_to_tile(mouse_x, mouse_y);
   } else {
     ptile = webgl_canvas_pos_to_tile(mouse_x, mouse_y);
-  }
+  }*/
+  ptile = canvas_pos_to_tile(mouse_x, mouse_y);
 
   if (ptile == null) return;
 
