@@ -223,9 +223,11 @@ const is_small_screen = () => {
 **************************************************************************/
 function init_sprites()
 {
-  $.blockUI({ message: "<h1 style='text-align:center'><font color='#ccc'>Loading...</font>"
-	  + "<br><center><img src='/images/loading.gif'></center></h1>",
-      color: default_dialog_text_color });
+  $.blockUI({ message: "<h1 style='text-align:center;color:#ccc'>"
+    + "Loading..."
+	  + "<br><img src='/images/loading.gif'><br>"
+    + "<font id='load_progress' size='1'>"+loaded_images+"/"+tileset_image_count
+    + " complete"+"</font></h1>" });
 
   if (loaded_images != tileset_image_count) {
     for (var i = 0; i < tileset_image_count; i++) {
@@ -251,17 +253,19 @@ function init_sprites()
 function preload_check()
 {
   loaded_images += 1;
+  $("#load_progress").html(""+loaded_images+"/"+tileset_image_count+" complete")
 
   if (loaded_images == tileset_image_count) {
     init_cache_sprites();
 
-    if (renderer == RENDERER_WEBGL) {
-      webgl_preload();
-    } else {
+    //if (renderer == RENDERER_WEBGL) {
+    //  webgl_preload();
+    //} else {
       $.unblockUI();
-    }
-
+      wait(200);
+    //}
   }
+
 }
 
 /**************************************************************************

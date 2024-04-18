@@ -96,7 +96,7 @@ function network_init()
 ****************************************************************************/
 function websocket_init()
 {
-  $.blockUI({ message: "<h1 style='text-align:center'>Connecting...</h1>"});
+  $.blockUI({ message: "<h1 style='text-align:center;color:#ccc'>Connecting...</h1>"});
   var proxyport = 1000 + parseFloat(civserverport);
   var ws_protocol = ('https:' == window.location.protocol) ? "wss://" : "ws://";
   var port = window.location.port ? (':' + window.location.port) : '';
