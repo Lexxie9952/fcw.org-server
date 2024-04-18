@@ -1579,6 +1579,9 @@ table.vet_level tr:nth-child(9) td {
 .ui-dialog .ui-dialog-title {
   font-size: 140%;
 }
+.ui-dialog .ui-dialog-buttonpane {
+  margin-top: 0px !important; /* remove little mismatch strip between dialog and lower button pane */
+}
 
 .overview_dialog .ui-dialog-titlebar, .unit_dialog .ui-dialog-titlebar, .chatbox_dialog .ui-dialog-titlebar  {
   padding-bottom: 1px;
