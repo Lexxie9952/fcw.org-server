@@ -736,7 +736,7 @@ Random randomValue=new Random();
 					<div class="panel-freeciv">
 						<h4><fmt:message key="index-credits"/></h4>
 						<ul>
-							<li>Lexxie L. <i class="fa fa-github"></i>  <a href="https://github.com/Lexxie9952/">@lexxie9952</a></li>
+							<li>Epiphany<i class="fa fa-github"></i>  <a href="https://discord.gg/Zj8UQSN">@epiphany_1</a></li>
 							<li>Marko Lindqvist <i class="fa fa-github"></i>  <a href="https://github.com/cazfi">@cazfi</a></li>
 							<li>Sveinung Kvilhaugsvik <i class="fa fa-github"></i>  <a href="https://github.com/kvilhaugsvik">@kvilhaugsvik</a></li>
 							<li>Andreas R&oslash;sdal <i class="fa fa-githubO"></i>  <a href="https://github.com/andreasrosdal/">@andreasrosdal</a></li>
