@@ -2778,6 +2778,8 @@ bool unit_transport_unload(struct unit *pcargo)
     fc_assert(same_pos(unit_tile(pcargo), unit_tile(ptrans)));
     /* It is an error if 'pcargo' can not be removed from the 'ptrans'. */
     success = unit_list_remove(ptrans->transporting, pcargo);
+    /* Don't leave unit sentried after deboarding. */
+    set_unit_activity(pcargo, ACTIVITY_IDLE);
     fc_assert(success);
   }
 
