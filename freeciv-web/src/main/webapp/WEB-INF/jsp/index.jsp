@@ -693,7 +693,7 @@ Random randomValue=new Random();
 					<h4><b><i><fmt:message key="index-press-pc-gamer-title"/></i></b></h4>
 					<i><fmt:message key="index-press-pc-gamer-content"/></i>
 					<br>
-					<a href="http://www.pcgamer.com/freeciv-available-in-html5-browsers-worldwide-productivity-plummets/" target="new"><img style="display: block; float: right;" src="images/pcgamer.gif" alt="PC Gamer"></a>
+					<a href="http://www.pcgamer.com/freeciv-available-in-html5-browsers-worldwide-productivity-plummets/" target="new"><img style="display: block; float: right;" src="images/static/pcgamer.gif" alt="PC Gamer"></a>
 					<br>
 				</div>
 			</div>
