@@ -20,7 +20,7 @@
 <meta name="description" content="Play Freeciv online! Freeciv is an empire-building strategy game starting at the dawn of time. Can you survive to dominate a modern world?">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta property="og:image" content="/static/images/frontpage-jumbotron-alt.png" />
+<meta property="og:image" content="/static/images/frontpage-jumbotron.png" />
 
 <script type="text/javascript" src="/javascript/libs/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
