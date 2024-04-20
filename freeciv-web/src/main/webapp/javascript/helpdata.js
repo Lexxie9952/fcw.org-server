@@ -162,7 +162,6 @@ function help_redirect(vut_type, uid) {
 function show_help()
 {
   $("#tabs-hel").show();
-  // never used: $("#help_footer").hide();$("#help_footer").remove();
   if (regen_help_tab) {   // i.e. if first time coming into page:
     $("#help_menu").remove();
     $("#help_info_page").remove();
@@ -197,10 +196,8 @@ function show_help()
   $("#tabs-hel").css("height", $(window).height() - 60);
 
   if (is_small_screen()) {
-    $("#help_info_page").css("max-width", $(window).width()-165);
+    $("#help_info_page").css("max-width", $(window).width()-151);
     $("#help_info_page").css({"margin":"0px","padding":"0px","font-size":"90%"});
-    // never used: $("#help_footer").remove();
-    // never used: $("#help_footer").hide();
   }
   else { /* large screen */
                           /* old code */
@@ -243,7 +240,6 @@ function show_help()
     $("#help_info_page").css("margin-left", (""+submenu_margin_space+"px"))
     max_help_pane_width = win_width - submenu_margin_space - helpmenu_margin_space - horiz_pad_space;
     $("#help_info_page").css("max-width", MIN(max_help_pane_width, MAX_ALLOWED_HELP_WIDTH));
-    // never used: $("#help_footer").show();
   }
 }
 
@@ -349,14 +345,16 @@ function generate_help_menu(key)
       if (tech_id == 0) continue;
       let lookup_id = "qhelp_tech_" + tech_id;
       $("<li id='"+lookup_id+"' data-helptag='" + key + "_" + tech['id'] + "'>"
-          + tech['name'] + "&nbsp;</li>").appendTo("#help_technology_ul");
+          + "<div class='hmi_wrapper'><span class='hmi_text'>"
+          + tech['name'] + "&nbsp;</li></span></div>").appendTo("#help_technology_ul");
     }
   } else if (key == "help_gen_governments") {
     for (var gov_id in governments) {
       var pgov = governments[gov_id];
       let lookup_id = "qhelp_gov_" + gov_id;
       $("<li id='"+lookup_id+"' data-helptag='" + key + "_" + pgov['id'] + "'>"
-          + pgov['name'] + "</li>").appendTo("#help_government_ul");
+          + "<div class='hmi_wrapper'><span class='hmi_text'>"
+          + pgov['name'] + "</li></span></div>").appendTo("#help_government_ul");
     }
   } else if (key == "help_gen_extras") {
 
@@ -567,11 +565,6 @@ function handle_help_menu_select( ui )
   var selected_tag = $(ui.item).data("helptag");
   if (selected_tag.indexOf("help_gen") != -1) {
     generate_help_text(selected_tag);
-  } else if (selected_tag == "help_copying") {
-    $.get( "/docs/LICENSE.txt", function( data ) {
-      $("#help_info_page").html("<h1>Freeciv-Web License</h1>" + data.replace(/\n/g, "<br>"));
-    });
-    clear_sidebar();
   } else if (selected_tag == "help_controls") {
     $.get( "/docs/controls.txt", function( data ) {
       $("#help_info_page").html(data.replace(/\n/g, ""));
@@ -581,7 +574,6 @@ function handle_help_menu_select( ui )
     var msg = "<h1>" + helpdata_tag_to_title(selected_tag) + "</h1>" + helpdata[selected_tag]['text'];
     $("#help_info_page").html(msg);
   }
-
   $("#help_info_page").focus();
 }
 

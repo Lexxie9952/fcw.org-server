@@ -1270,21 +1270,12 @@ input[type='number'] {
   color: rgb(226, 226, 226);
   border: 2px solid #2b3857 !important;
 }
-#help_menu, #help_terrain_ul, #help_extras_ul, #help_city_improvements_ul,
-#help_wonders_of_the_world_ul, #help_units_ul, #help_government_ul,
-#help_technology_ul {
-  background-image: url('/images/bg-med-dark.jpg') !important;
-  overflow-x: hidden;
-}
-#help_technology_ul {
-  max-height: 82%;
-}
 
 /* Spacing of individual text entries in e.g., in HELP >> UNITS */
 #help_menu .ui-menu-item {
   padding: 0em 0.3em 0px 0em;
   white-space: nowrap;
-  color: #807c7f;
+  color: #bfbfbf;
   font-size: 1.15em;
 }
 /* mini-sprites in upper-left help menu categories */
@@ -1348,16 +1339,33 @@ input[type='number'] {
   transform:scale(54%);
 }
 .help_submenu {
-  max-height:  86%;
+  max-height: 95%;
   overflow: auto;
   min-width: auto;
-  background-image: url('/images/bg-dark.jpg');
-  /*color: rgb(226, 226, 226);  NOW USING --default_text_color */
+  background: #344264;
+  /*background-image: url('/images/bg-med-dark-text.jpg');*/
   scrollbar-width: unset;
   /*overflow: hidden !important; */
   /* scrollbar-color: */
-  border: 2px solid #2b3857 !important;
+  border: 2px solid #575f72 !important;
+  text-shadow: 1px 1px #432;
 }
+.help_submenu li {
+  color: #bfbfbf;
+}
+
+#help_menu, #help_terrain_ul, #help_extras_ul, #help_units_ul, #help_government_ul,
+#help_technology_ul {
+  overflow-x: hidden;
+}
+#help_extras_ul, #help_city_improvements_ul, #help_wonders_of_the_world_ul,
+#help_units_ul, #help_technology_ul {
+  bottom: 5px;   /* set (max) bottom of dropdown relative to bottom of screen */
+}
+#help_technology_ul {  /* prevent jquery from mispositioning tech dropdown */
+  top: unset !important;
+}
+
 /* helptext pane for for all items except units */
 .helptext_pane {
   max-width: 784px;
