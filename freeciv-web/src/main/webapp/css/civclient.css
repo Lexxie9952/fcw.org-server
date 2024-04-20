@@ -2285,6 +2285,7 @@ li.tech-both00::before { /*  we both have the tech and neither has blueprints */
 /* Theme dependent classes, grouped by same background property ************/
 
 /* FAROESE */
+/*
 .faroese1 {
   background: url("/images/themes/faroese/bg.jpg") repeat scroll 0 0 #222222;
 }
@@ -2307,7 +2308,7 @@ li.tech-both00::before { /*  we both have the tech and neither has blueprints */
   background: #444444 url(/images/freeciv-web-logo2.png);
 }
 
-/* GREEK */
+/* GREEK
 .greek1 {
   background: url("/images/themes/greek/bg.jpg") repeat scroll 0 0 #222222;
 }
@@ -2333,7 +2334,7 @@ li.tech-both00::before { /*  we both have the tech and neither has blueprints */
 .ui-widget:not(.ui-button,.ui-dialog,.ui-tabs-anchor, #game_chatbox_panel, #game_message_area) {
   background: url('/images/bg-dark.jpg');
   color: var(--default_text_color);
-}
+} */
 /* city governor sliders */
 .cma_slider {
   margin-left:10px;
