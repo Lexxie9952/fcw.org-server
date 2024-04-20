@@ -44,9 +44,9 @@ echo -e "${WHITE}---------------------------------------------------------------
 echo -e "${LGREEN}Deleting${LBLUE} ${TOMCATDIR}/webapps/freeciv-web/music" && \
  rm -f -r "${TOMCATDIR}/webapps/freeciv-web/music"
 
-echo -e "${WHITE}------------------------------------------------------------------------${LGREY}"
+echo -e "${WHITE}------------------------------------------------------------------------"
 echo -e "${LGREEN}Preparing${LGREY} to build Freeciv-Web in${LBLUE} ${TOMCATDIR}/webapps/freeciv-web/"
-echo -e "${WHITE}------------------------------------------------------------------------${LGREY}"
+echo -e "${WHITE}------------------------------------------------------------------------"
 
 # Creating build.txt info file
 REVTMP="$(git rev-parse HEAD 2>/dev/null)"
@@ -68,9 +68,12 @@ echo " "
 echo "Copying target/freeciv-web.war to ${TOMCATDIR}/webapps" && \
   cp target/freeciv-web.war "${TOMCATDIR}/webapps/"
 
-echo -e "${WHITE}------------------------------------------------------------------------${LGREY}"
+echo -e "${WHITE}------------------------------------------------------------------------"
 echo -e "${LGREEN}BUILD COMPLETE"
-echo -e "${WHITE}------------------------------------------------------------------------${LGREY}"
+echo -e "${WHITE}------------------------------------------------------------------------"
+echo -e "${WHITE}NOTE: ${LGREY}for superior performance,"
+echo -e "${LCYAN}    Imageoptim ${CYAN}freeciv-web/target/freeciv-web/tileset"
+echo -e "${LGREY}      copy to: ${CYAN}/var/lib/tomcat8/webapps/freeciv-web/tileset"
 echo -e "${PINK}Don't forget to run ${LCYAN}buildmusic.sh ${PINK}"
 
 # let user know when it's finished
