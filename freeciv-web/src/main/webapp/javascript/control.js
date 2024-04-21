@@ -1946,6 +1946,9 @@ function update_unit_order_commands()
       } else if (terrain_name == 'Forest') {
           unit_actions["mine"] = {name: "make Swamp (M)"};
           if (show_order_buttons==2) $("#order_make_swamp").show();  //not frequently used button
+      } else if (terrain_name == "Arctic" && !tile_has_extra(ptile, EXTRA_OIL_WELL) && tech_known('Refining')) {
+        $("#order_oil_well").show();
+        unit_actions["mine"] =  {name: "Oil Well (M)"};
       }
 
       if (tile_has_extra(ptile, EXTRA_FALLOUT)) {
