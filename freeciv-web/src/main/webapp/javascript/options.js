@@ -84,14 +84,15 @@ const CRF_LAST                     = 43;
 var graphic_theme_path;
 
 /** Defaults for options normally on command line **/
-var default_user_name = "";
-var default_server_host = "localhost";
-//var  default_server_port = DEFAULT_SOCK_PORT;
+/* Couldn't find them used anywhere so commented out for now */
+//var default_user_name = "";
+//var default_server_host = "localhost";
+//var default_server_port = DEFAULT_SOCK_PORT;
 //var default_metaserver = META_URL;
-var default_theme_name = "human";
-var default_tileset_name = "";
-var default_sound_set_name = "stdsounds";
-var default_sound_plugin_name = "";
+//var default_theme_name = "human";
+//var default_tileset_name = "";
+//var default_sound_set_name = "stdsounds";
+//var default_sound_plugin_name = "";
 
 var sounds_enabled = true;
 var unit_click_menu = true;  // whether to show context menu on left-clicking a unit
