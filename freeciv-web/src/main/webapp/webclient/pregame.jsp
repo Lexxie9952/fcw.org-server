@@ -7,7 +7,7 @@
       <button id="pregame_settings_button" title="Select newer game versions, change map, number of players, other settings." type="button" class="button"><i class="fa fa-cogs" aria-hidden="true"></i> SETUP</button>
       <button id="load_game_button" title="Load a saved game" type="button" class="button"><i class="fa fa-file-o" aria-hidden="true"></i> Load</button>
       <button id="pick_nation_button" title="Pick your nation" type="button" class="button"><i class="fa fa-flag" aria-hidden="true"></i> Nation</button>
-      <button id="start_game_button" title="Starting the game confirms consent Site Rules" type="button" class="button"><i class="fa fa-check-circle-o" aria-hidden="true"></i><b> Start</b></button>
+      <button id="start_game_button" title="Starting the game confirms consent to Site Rules" type="button" class="button"><i class="fa fa-check-circle-o" aria-hidden="true"></i><b> Start</b></button>
     </div>
   </div>
 
