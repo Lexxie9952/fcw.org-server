@@ -254,14 +254,6 @@ function seconds_to_human_time(input_seconds) {
 }
 
 /**************************************************************************
- Returns the supported file format for the tileset.
-**************************************************************************/
-function get_tileset_file_extention()
-{
-    return ".png";
-}
-
-/**************************************************************************
  For the purposes of looking for server words in a string that mean it
  should be handled differently.
 **************************************************************************/

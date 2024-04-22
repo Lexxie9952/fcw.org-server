@@ -647,7 +647,7 @@ function select_nation(new_nation_id)
 
   if (!pnation['customized']) {
     $("#select_nation_flag").html("<img style='nation_flag_choice' src='/images/flags/"
-                + pnation['graphic_str'] + "-web" + get_tileset_file_extention() + "'>");
+                + pnation['graphic_str'] + "-web" + fullsize_flag_extension + "'>");
   }
 
   if (chosen_nation != new_nation_id && $("#nation_" + new_nation_id).length > 0) {

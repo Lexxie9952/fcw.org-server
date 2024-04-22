@@ -1777,7 +1777,7 @@ function unit_get_flag_image(punit, height)
   var image_element = "";
 
   if (!nations[players[punit['owner']]['nation']]['customized'] ) {
-    civ_flag_url += "/images/flags/" + tag + "-web" + get_tileset_file_extention();
+    civ_flag_url += "/images/flags/" + tag + "-web" + fullsize_flag_extension;
 
     image_element = "<img "
                   + "class='v' "  // vertical align center

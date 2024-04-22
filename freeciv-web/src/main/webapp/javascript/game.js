@@ -141,7 +141,7 @@ function update_game_status_panel() {
 
       var civ_flag = "";
       if (!pnation['customized']) {
-        civ_flag += "<img class='lowered_gov' style='background-color:transparent;margin-top:-3px;margin-right:3px;' src='/images/flags/" + tag + "-web" + get_tileset_file_extention() + "' width='42'>";
+        civ_flag += "<img class='lowered_gov' style='background-color:transparent;margin-top:-3px;margin-right:3px;' src='/images/flags/" + tag + "-web" + fullsize_flag_extension + "' width='42'>";
         status_html += "<span>"+civ_flag+"</span>";
       }
     }

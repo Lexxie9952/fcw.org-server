@@ -670,7 +670,7 @@ function meeting_template_data(embassy_meeting, giver, taker)
   var nation = nations[giver['nation']];
 
   if (!nation['customized']) {
-    data.flag = nation['graphic_str'] + "-web" + get_tileset_file_extention();
+    data.flag = nation['graphic_str'] + "-web" + fullsize_flag_extension;
   }
 
   data.adjective = nation['adjective'];

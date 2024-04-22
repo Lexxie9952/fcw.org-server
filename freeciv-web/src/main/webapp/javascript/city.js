@@ -593,7 +593,7 @@ function show_city_dialog(pcity)
           var civ_flag_url = "";
 
           if (!nations[players[punit['owner']]['nation']]['customized'] ) {
-            civ_flag_url += "/images/flags/" + tag + "-web" + get_tileset_file_extention();
+            civ_flag_url += "/images/flags/" + tag + "-web" + fullsize_flag_extension();
 
               // flag
               present_units_html = present_units_html +
@@ -2868,7 +2868,7 @@ function show_city_traderoutes()
     tcity = cities[tcity_id];
     if (tcity == null) continue;
     var city_flag_tag = nations[players[tcity['owner']]['nation']]['graphic_str'];
-    var city_flag_url = "/images/flags/" + city_flag_tag + "-web" + get_tileset_file_extention();
+    var city_flag_url = "/images/flags/" + city_flag_tag + "-web" + fullsize_flag_extension;
     var city_flag = "<div title='Leader: "+players[tcity['owner']].name
                       + "' style='background: transparent url(" + city_flag_url
                       + "); background-size:contain; width:21px; height:14px; float:left; '></div>";

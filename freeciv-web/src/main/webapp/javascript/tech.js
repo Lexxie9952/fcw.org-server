@@ -892,7 +892,7 @@ function get_tech_infobox_html(tech_id)
   var width = tileset[tag][2];
   var height = tileset[tag][3];
   var i = tileset[tag][4];
-  var image_src = "/tileset/freeciv-web-tileset-" + tileset_name + "-" + i + get_tileset_file_extention() + "?ts=" + ts;
+  var image_src = "/tileset/freeciv-web-tileset-" + tileset_name + "-" + i + tileset_extension + "?ts=" + ts;
   if (is_small_screen()) {
     infobox_html += "<div class='specific_tech' style='transform: scale(1.0);' onclick='send_player_research(" + tech_id + ")'>"
           +  ptech['name']
