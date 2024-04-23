@@ -700,7 +700,7 @@ function get_advances_text(tech_id)
 {
   const num = (value) => value === null ? 'null' : value;
   const tech_span = (name, unit_id, impr_id, title) =>
-    `<span ${title ? `title='${title}'` : ''}`
+    `<span class='helplink' ${title ? `title='${title}'` : ''}`
     + ` onclick='show_tech_info_dialog(event, "${name}", ${num(unit_id)}, ${num(impr_id)})'>${name}</span>`;
 
   const is_valid_and_required = (next_tech_id) =>
@@ -788,6 +788,10 @@ function send_player_tech_goal(tech_id)
   }
   var packet = {"pid" : packet_player_tech_goal, "tech" : tech_id};
   send_request(JSON.stringify(packet));
+
+  // Add courtesy message to console that disappears after 45s:
+  add_client_message("<small id='delete_me'>Research goal set to <i>"+techs[tech_id]['name']+".</i>");
+  setTimeout(function(){$("#delete_me").remove()},45000);
 }
 
 /****************************************************************************
@@ -1006,6 +1010,10 @@ function show_tech_gained_dialog(tech_gained_id)
   $("#tech_dialog").dialog('open');
   dialog_register("#tech_dialog");
   $("#game_text_input").blur();
+  $("#tech_dialog").parent().css("background","#475250 url(/images/bg-text.jpg)"); // prevent clipping
+  $("#tech_dialog").parent().css("overflow","visible"); // prevent clipping
+
+
   /* Tooltip */
   $("#tech_dialog").parent().css("overflow","visible"); // prevent clipping
   /* testing revealed this code did nothing, subbed with last line below
