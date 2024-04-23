@@ -252,7 +252,7 @@ function update_game_status_panel() {
   document.title = page_title;
 
   $("#game_status_panel_top").tooltip({
-    show: { delay:460, effect:"none", duration: 0 }, hide: {delay:50, effect:"none", duration: 0}
+    show: { delay:420, effect:"fade", duration: 0 }, hide: {delay:0, effect:"none", duration: 0}
   });
 }
 
