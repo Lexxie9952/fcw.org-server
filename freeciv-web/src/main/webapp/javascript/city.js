@@ -1643,8 +1643,8 @@ function generate_production_list(pcity)
                                   + (punit_type['firepower']>1 ? "F<b style='font-family:Helvetica'>"+punit_type['firepower']+"</b> " : "")
                                   + "H<b style='font-family:Helvetica'>"+punit_type['hp']+"</b> "
                                   + "M<b style='font-family:Helvetica'>"
-                                  + move_points_text((parseInt(punit_type['move_rate'])+move_bonus), true)+""
-                                    + (punit_type['fuel'] ? "</b><sub>"+punit_type['fuel']+"</sub>" : "</b>")
+                                  + move_points_text((parseInt(punit_type['move_rate'])+move_bonus), true, true)+""
+                                    + (punit_type['fuel'] ? "</b><sub>f"+punit_type['fuel']+"</sub>" : "</b>")
                                   + (punit_type['transport_capacity'] ? " C<b style='font-family:Helvetica'>"+punit_type['transport_capacity']+"</b>" : "")+"",
                           "sprite": get_unit_type_image_sprite(punit_type)});
     }

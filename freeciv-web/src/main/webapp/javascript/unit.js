@@ -859,32 +859,50 @@ function move_points_text(moves, make_fraction, small)
 
   // optional unicode slash to make fraction symbol
   var div_symbol = make_fraction ? "&#x2044;" : "/"
-  var spacer = make_fraction ? "&#8203;" : " ";
+  var spacer = make_fraction ? "&#8201;" : " ";
   var numerator,denominator;
 
+  /* Handle moves which contain a fraction */
   if ((moves % SINGLE_MOVE) != 0) {
-    // change 3/6 to 1/2, 3/9 to 1/3, etc:
+    /* REDUCE FRACTION:               (change 3/9 to 1/3, etc) */
     numerator = Math.floor(moves % SINGLE_MOVE);
     denominator = SINGLE_MOVE;
-
     var simplified_fraction = fraction_reduce(numerator, denominator);
     numerator = simplified_fraction.numerator;
     denominator = simplified_fraction.denominator;
     if (denominator == 1) { // 10079/10080 moves comes back as "1/1"
       moves = numerator * SINGLE_MOVE;
-      numerator = 0;
-    }
+      numerator = 0; // flags that we have a whole number now
+    } // </end REDUCE FRACTION>
 
+    // RESULT is greater than 1:
     if (Math.floor(moves / SINGLE_MOVE) > 0 && numerator>0) {
-      result = "" + Math.floor(moves / SINGLE_MOVE)
-               + spacer + (small?"<small>":"") + numerator
-               + div_symbol + denominator+ (small?"</small>":"");
-    } else if (numerator>0) {
-      result = numerator + div_symbol + denominator;
-    } else {
+      result = "" + Math.floor(moves / SINGLE_MOVE) + spacer; // whole number component
+      if (small) result += "<small><sup>" // caller wants fraction in small font
+      result += numerator;
+      if (small) result += "</sup>" // caller wants fraction in small font
+      result += div_symbol;
+      if (small) result += "<sub>" // caller wants fraction in small font
+      result += denominator;
+      if (small) result += "</sub></small>"
+    }
+    // 0 > RESULT < 1
+    else if (numerator>0) {
+      if (small) result += "<small><sup>" // caller wants fraction in small font
+      result += numerator
+      if (small) result += "</sup>" // caller wants fraction in small font
+      result += div_symbol
+      if (small) result += "<sub>" // caller wants fraction in small font
+      result += denominator;
+      if (small) result += "</sub></small>"
+    }
+    // RESULT is a WHOLE NUMBER (due to rounding):
+    else {
       result = Math.floor(moves / SINGLE_MOVE);
     }
-  } else {
+  }
+  // RESULT is a WHOLE NUMBER:
+  else {
     result = Math.floor(moves / SINGLE_MOVE);
   }
 
