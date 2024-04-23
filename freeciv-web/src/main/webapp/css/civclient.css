@@ -1201,6 +1201,7 @@ input[type='number'] {
 .tech_infobox_image {
   float: left;
   margin: 4px;
+  border: 1px solid #000;
 }
 
 #wiki_image {
