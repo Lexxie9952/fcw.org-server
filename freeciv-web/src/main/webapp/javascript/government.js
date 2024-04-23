@@ -156,7 +156,7 @@ function update_govt_dialog()
     else {
       $("#govt_id_" + govt['id']).button({label: label_html});
       $("#govt_id_" + govt['id']).tooltip({
-        show: { delay:460, effect:"none", duration: 0 }, hide: {delay:50, effect:"none", duration: 0}
+        show: { delay:460, effect:"none", duration: 0 }, hide: {delay:0, effect:"none", duration: 0}
       });
     }
   }

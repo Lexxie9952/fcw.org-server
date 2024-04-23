@@ -1052,7 +1052,7 @@ function popup_action_selection(actor_unit, action_probabilities,
   $(id).parent().css("overflow", "visible");
   if (focus_button) $("#"+focus_button).focus(); // default focus to attack button
   $(".tt").tooltip({ tooltipClass: "tt_sm_side", position: { my:"left top", at: "right+5 top"},
-    show: { delay:700, effect:"none", duration: 0 }, hide: {delay:70, effect:"none", duration: 0} });
+    show: { delay:700, effect:"none", duration: 0 }, hide: {delay:0, effect:"none", duration: 0} });
 }
 
 /**************************************************************************
@@ -1583,7 +1583,7 @@ function select_tgt_unit(actor_unit, target_tile, potential_tgt_units)
   dialog_register(id, actor_unit['id']);
   $(id).parent().css("overflow","visible");
   // Tooltip for target buttons
-  $(".tt").tooltip({ tooltipClass: "tt_slim", show: { delay:350, effect:"none", duration: 0 }, hide: {delay:120, effect:"none", duration: 0} });
+  $(".tt").tooltip({ tooltipClass: "tt_slim", show: { delay:350, effect:"none", duration: 0 }, hide: {delay:0, effect:"none", duration: 0} });
 }
 
 /**************************************************************************
@@ -1985,7 +1985,7 @@ function select_last_action()
   $(id).dialog('widget').position({my:"center top", at:"center top", of:window})
 
   dialog_register(id);
-  $(".tt").tooltip({ tooltipClass: "tt_slim", show: { delay:1100, effect:"none", duration: 0 }, hide: {delay:2, effect:"none", duration: 0} });
+  $(".tt").tooltip({ tooltipClass: "tt_slim", show: { delay:1100, effect:"none", duration: 0 }, hide: {delay:0, effect:"none", duration: 0} });
   $(id).parent().css("overflow","visible");
 }
 
