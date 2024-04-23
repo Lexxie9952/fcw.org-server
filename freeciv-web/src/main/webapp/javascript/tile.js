@@ -288,11 +288,21 @@ function improve_tile_info_dialog(message)
     if (message.includes("<b>"+exname)
         || message.includes(exname+"/")
         || message.includes("/"+exname)
-        || message.includes("("+exname+")</b>")) {
+        || message.includes("("+exname+")</b>")
+        || message.includes("Activity: <b>"+exname+"</b>")
+      ) {
 
       //console.log("  message includes");
 
-      if (message != message.replace("<b>"+exname, "<span style='color:#80f0ff; cursor:pointer' title='CLICK: Help on "
+      if (message != message.replace("Activity: <b>"+exname+"</b>", "<span style='color:#80f0ff; cursor:pointer' title='CLICK: Help on "
+                + exname + "' onclick='javascript:tile_info_help_redirect(VUT_EXTRA, "+ex+")' class='black_shadow tt'>Activity: <u><b>"
+                + exname+"</b></u></span>")) {
+
+          message = message.replace("Activity: <b>"+exname+"</b>", "<span style='color:#80f0ff; cursor:pointer' title='CLICK: Help on "
+                          + exname + "' onclick='javascript:tile_info_help_redirect(VUT_EXTRA, "+ex+")' class='black_shadow tt'>Activity: <u><b>"
+                          + exname+"</b></u></span>");
+      }
+      else if (message != message.replace("<b>"+exname, "<span style='color:#80f0ff; cursor:pointer' title='CLICK: Help on "
                 + exname + "' onclick='javascript:tile_info_help_redirect(VUT_EXTRA, "+ex+")' class='black_shadow tt'><u><b>"
                 + exname+"</b></u></span>")) {
 
