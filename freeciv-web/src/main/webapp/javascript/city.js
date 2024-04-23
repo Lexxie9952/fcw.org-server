@@ -593,7 +593,7 @@ function show_city_dialog(pcity)
           var civ_flag_url = "";
 
           if (!nations[players[punit['owner']]['nation']]['customized'] ) {
-            civ_flag_url += "/images/flags/" + tag + "-web" + fullsize_flag_extension();
+            civ_flag_url += "/images/flags/" + tag + "-web" + fullsize_flag_extension;
 
               // flag
               present_units_html = present_units_html +
