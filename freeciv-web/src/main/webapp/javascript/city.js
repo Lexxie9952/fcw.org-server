@@ -470,7 +470,7 @@ function show_city_dialog(pcity)
   + browser.metaKey+"-CLICK: See the help manual for " + prod_name +".' "
   +" onclick='city_prod_tab(event);'>"+prod_string+"</span>");
   $("#city_production_overview").tooltip({
-    show: { delay:200, effect:"none", duration: 0 }, hide: {delay:120, effect:"none", duration: 0}
+    show: { delay:200, effect:"none", duration: 0 }, hide: {delay:0, effect:"none", duration: 0}
   });
   turns_to_complete = get_city_production_time(pcity);
 
@@ -514,10 +514,10 @@ function show_city_dialog(pcity)
      }
      $("#city_airlift_capacity").html(city_airlift_capacity_html);
      $("#airlift_send_capacity").tooltip({
-        show: { delay:200, effect:"none", duration: 0 }, hide: {delay:120, effect:"none", duration: 0}
+        show: { delay:200, effect:"none", duration: 0 }, hide: {delay:0, effect:"none", duration: 0}
      });
      $("#airlift_receive_capacity").tooltip({
-        show: { delay:200, effect:"none", duration: 0 }, hide: {delay:120, effect:"none", duration: 0}
+        show: { delay:200, effect:"none", duration: 0 }, hide: {delay:0, effect:"none", duration: 0}
      });
   }
 
@@ -561,7 +561,7 @@ function show_city_dialog(pcity)
   }
   $("#city_improvements_list").html(improvements_html);
   $(".buildings_present").tooltip({
-    show: { delay:460, effect:"none", duration: 0 }, hide: {delay:50, effect:"none", duration: 0}
+    show: { delay:460, effect:"none", duration: 0 }, hide: {delay:0, effect:"none", duration: 0}
   });
 
   var punits = tile_units(city_tile(pcity));
@@ -674,10 +674,10 @@ function show_city_dialog(pcity)
     $("#city_supported_units_list").css({"margin-top":"-10px","padding-top":"20px"});
   }
   $(".game_unit_list_item").tooltip({
-    show: { delay:200, effect:"none", duration: 0 }, hide: {delay:120, effect:"none", duration: 0}
+    show: { delay:200, effect:"none", duration: 0 }, hide: {delay:0, effect:"none", duration: 0}
   });
   $(".buildings_present").tooltip({
-    show: { delay:200, effect:"none", duration: 0 }, hide: {delay:120, effect:"none", duration: 0}
+    show: { delay:200, effect:"none", duration: 0 }, hide: {delay:0, effect:"none", duration: 0}
   });
 
   if ('prod' in pcity && 'surplus' in pcity) {
@@ -757,7 +757,7 @@ function show_city_dialog(pcity)
                        + "onclick='city_cancel_rally_point("+pcity['id']+");'>"
       $("#city_rally").html(rally_span+"&#x1F3AF; "+rally_type+" Rally Point: {"+coords+"}</span>");
       $("#city_rally").tooltip({
-        show: { delay:200, effect:"none", duration: 0 }, hide: {delay:120, effect:"none", duration: 0}
+        show: { delay:200, effect:"none", duration: 0 }, hide: {delay:0, effect:"none", duration: 0}
       });
 
     } else $("#city_rally_row").hide();
@@ -825,7 +825,7 @@ function show_city_dialog(pcity)
 
   $('.city_dialog_rapture_citizen').tooltip({
     position: { my:"center bottom", at: "center top-4"},
-    show: { delay:200, effect:"none", duration: 0 }, hide: {delay:120, effect:"none", duration: 0}
+    show: { delay:200, effect:"none", duration: 0 }, hide: {delay:0, effect:"none", duration: 0}
   });
 
   var city_surplus_colour = "#d7d4cf"; // default non-negative non-positive value (i.e. zero)
@@ -915,7 +915,7 @@ function show_city_dialog(pcity)
     + get_city_state(pcity)+"</span></div>");
   $('#rapture_status').tooltip({
     tooltipClass: "wider-tooltip" , position: { my:"center bottom", at: "center top-3"},
-    show: { delay:200, effect:"none", duration: 0 }, hide: {delay:120, effect:"none", duration: 0}
+    show: { delay:200, effect:"none", duration: 0 }, hide: {delay:0, effect:"none", duration: 0}
   });
 
   /* Fix the citzen panel overlaps the "citizen amounts" panel for bigger cities with 5 city_radius_sq
@@ -2818,7 +2818,7 @@ function show_city_happy_tab()
   happy_tab_html += "</tbody></table>"
   $("#city_happy_tab").html(happy_tab_html);
   $(".happy_cause_help").tooltip({
-    show: { delay:200, effect:"none", duration: 0 }, hide: {delay:120, effect:"none", duration: 0}
+    show: { delay:200, effect:"none", duration: 0 }, hide: {delay:0, effect:"none", duration: 0}
   });
 
 }
@@ -3063,14 +3063,14 @@ function city_worklist_dialog(pcity)
 
   $('#worklist_dialog_headline').tooltip({
     tooltipClass: "wider_tooltip", position: { my:"right top", at: "right bottom"},
-    show: { delay:200, effect:"none", duration: 0 }, hide: {delay:120, effect:"none", duration: 0}
+    show: { delay:200, effect:"none", duration: 0 }, hide: {delay:0, effect:"none", duration: 0}
   });
 
   $(".prod_choice_list_item").tooltip({
-    show: { delay:460, effect:"none", duration: 0 }, hide: {delay:50, effect:"none", duration: 0}
+    show: { delay:460, effect:"none", duration: 0 }, hide: {delay:0, effect:"none", duration: 0}
   });
   $(".production_list_item_sub").tooltip({
-    show: { delay:460, effect:"none", duration: 0 }, hide: {delay:50, effect:"none", duration: 0}
+    show: { delay:460, effect:"none", duration: 0 }, hide: {delay:0, effect:"none", duration: 0}
   });
 
   /* prod buttons removed
@@ -3128,7 +3128,7 @@ function city_worklist_dialog(pcity)
   update_worklist_actions();
 
   $("#worklist_control").children().tooltip({
-    show: { delay:200, effect:"none", duration: 0 }, hide: {delay:120, effect:"none", duration: 0}
+    show: { delay:200, effect:"none", duration: 0 }, hide: {delay:0, effect:"none", duration: 0}
   });
 
   city_adjust_prodlist_sizes_to_screen();
@@ -3208,10 +3208,10 @@ function populate_worklist_production_choices(pcity)
   $("#worklist_production_choices").html(production_html);
   $("#worklist_production_choices .production_list_item_sub").tooltip({
     // longer delay to avoid too much hover noise while perusing list
-    show: { delay:460, effect:"none", duration: 0 }, hide: {delay:50, effect:"none", duration: 0}
+    show: { delay:460, effect:"none", duration: 0 }, hide: {delay:0, effect:"none", duration: 0}
   });
   $("#worklist_production_choices .prod_choice_info").tooltip({
-    show: { delay:460, effect:"none", duration: 0 }, hide: {delay:50, effect:"none", duration: 0}
+    show: { delay:460, effect:"none", duration: 0 }, hide: {delay:0, effect:"none", duration: 0}
   });
 
   if (!touch_device) {
@@ -3369,7 +3369,7 @@ function populate_worklist_production_choices(pcity)
     //$("#info_city_prod").prop('title', city_prod_help);
     $('#info_city_prod').tooltip({
       tooltipClass: "monospace_tooltip", position: { my:"left+20 top+2", at: "left bottom+6"},
-      show: { delay:200, effect:"none", duration: 0 }, hide: {delay:120, effect:"none", duration: 0}
+      show: { delay:200, effect:"none", duration: 0 }, hide: {delay:0, effect:"none", duration: 0}
     });
   }
 
@@ -4066,7 +4066,7 @@ function show_city_improvement_pane(city_id)
   $(".cip").width(mag_factor*64); // improvement images are 64px wide
   $(".cip").height(mag_factor*48); // improvement images are 64px wide
   $(".cip").tooltip({
-    show: { delay:460, effect:"none", duration: 0 }, hide: {delay:50, effect:"none", duration: 0}
+    show: { delay:460, effect:"none", duration: 0 }, hide: {delay:0, effect:"none", duration: 0}
   });
 }
 /**************************************************************************
@@ -4713,7 +4713,7 @@ function update_city_screen()
   } else $('#cities_title').css({"font-size":"100%"});
   $('#cities_title').html(title_text);
   $("#cities_title").tooltip({
-    show: { delay:460, effect:"none", duration: 0 }, hide: {delay:50, effect:"none", duration: 0}
+    show: { delay:460, effect:"none", duration: 0 }, hide: {delay:0, effect:"none", duration: 0}
   });
 
 
@@ -4729,15 +4729,15 @@ function update_city_screen()
   //$('#city_list_citizen_unhappy').css("padding-right", "20px");
   $('#city_list_citizen_unhappy').tooltip({
     content: "Unhappy + angry citizens", tooltipClass:"tt_slim", position: { my:"center bottom", at: "center top"},
-    show: { delay:460, effect:"none", duration: 0 }, hide: {delay:20, effect:"none", duration: 0}
+    show: { delay:460, effect:"none", duration: 0 }, hide: {delay:0, effect:"none", duration: 0}
   });
   $('#city_list_citizen_content').tooltip({
     content: "Content citizens", tooltipClass:"tt_slim", position: { my:"center bottom", at: "center top"},
-    show: { delay:460, effect:"none", duration: 0 }, hide: {delay:20, effect:"none", duration: 0}
+    show: { delay:460, effect:"none", duration: 0 }, hide: {delay:0, effect:"none", duration: 0}
   });
   $('#city_list_citizen_happy').tooltip({
     content: "Happy citizens", tooltipClass:"tt_slim", position: { my:"center bottom", at: "center top"},
-    show: { delay:460, effect:"none", duration: 0 }, hide: {delay:20, effect:"none", duration: 0}
+    show: { delay:460, effect:"none", duration: 0 }, hide: {delay:0, effect:"none", duration: 0}
   });
 
   if (count == 0) {
@@ -4809,24 +4809,24 @@ function update_city_screen()
 
   // default tooltip style for things not overridden immediately below
   $(".cities_row").tooltip({
-    tooltipClass:"tt_slim",show: { delay:460, effect:"none", duration: 0 }, hide: {delay:50, effect:"none", duration: 0}
+    tooltipClass:"tt_slim",show: { delay:460, effect:"none", duration: 0 }, hide: {delay:0, effect:"none", duration: 0}
   });
   // sprite of current production target
   $(".prod_img").tooltip({
-    tooltipClass:"tt_slim", show: { delay:460, effect:"none", duration: 0 }, hide: {delay:50, effect:"none", duration: 0}
+    tooltipClass:"tt_slim", show: { delay:460, effect:"none", duration: 0 }, hide: {delay:0, effect:"none", duration: 0}
   });
   $(".empire_tooltip").tooltip({
-    show: { delay:460, effect:"none", duration: 0 }, hide: {delay:50, effect:"none", duration: 0}
+    show: { delay:460, effect:"none", duration: 0 }, hide: {delay:0, effect:"none", duration: 0}
   });
   // little icons such as gold, flask, wheat, etc.
   $('img.v').tooltip({
     tooltipClass:"tt_slim", position: { my:"center bottom", at: "center top"},
-    show: { delay:460, effect:"none", duration: 0 }, hide: {delay:50, effect:"none", duration: 0}
+    show: { delay:460, effect:"none", duration: 0 }, hide: {delay:0, effect:"none", duration: 0}
   });
   // top header row helptext
   $('.tablesorter-header-inner').tooltip({
     tooltipClass:"tt_slim", position: { my:"center bottom", at: "center top"},
-    show: { delay:460, effect:"none", duration: 0 }, hide: {delay:50, effect:"none", duration: 0}
+    show: { delay:460, effect:"none", duration: 0 }, hide: {delay:0, effect:"none", duration: 0}
   });
 }
 

@@ -1024,7 +1024,7 @@ function show_tech_gained_dialog(tech_gained_id)
   $(".specific_tech").tooltip({ disabled: false });
   $(".specific_tech span").tooltip({
     tooltipClass: "tt_slim",
-    show: { delay:300, effect:"none", duration: 0 }, hide: {delay:20, effect:"none", duration: 0}
+    show: { delay:300, effect:"none", duration: 0 }, hide: {delay:0, effect:"none", duration: 0}
    });
 }
 

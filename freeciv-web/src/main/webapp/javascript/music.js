@@ -744,23 +744,23 @@ function audio_add_skip_button() {
 
   $('#audio_skip').tooltip({
     tooltipClass: "wider-tooltip" , position: { my:"center bottom", at: "center top-3"},
-    show: { delay:200, effect:"none", duration: 0 }, hide: {delay:120, effect:"none", duration: 0}
+    show: { delay:230, effect:"none", duration: 0 }, hide: {delay:0, effect:"none", duration: 0}
   });
   $('#audio_ban').tooltip({
     tooltipClass: "wider-tooltip" , position: { my:"center bottom", at: "center top-3"},
-    show: { delay:200, effect:"none", duration: 0 }, hide: {delay:120, effect:"none", duration: 0}
+    show: { delay:230, effect:"none", duration: 0 }, hide: {delay:0, effect:"none", duration: 0}
   });
   $('#select_music_modality').tooltip({
     tooltipClass: "wider-tooltip" , position: { my:"center bottom", at: "center top-3"},
-    show: { delay:200, effect:"none", duration: 0 }, hide: {delay:120, effect:"none", duration: 0}
+    show: { delay:230, effect:"none", duration: 0 }, hide: {delay:0, effect:"none", duration: 0}
   });
   $('.play').tooltip({
     tooltipClass: "wider-tooltip" , position: { my:"left bottom", at: "left-90 bottom-40"},
-    show: { delay:200, effect:"none", duration: 0 }, hide: {delay:120, effect:"none", duration: 0}
+    show: { delay:230, effect:"none", duration: 0 }, hide: {delay:0, effect:"none", duration: 0}
   });
   $('.pause').tooltip({
     tooltipClass: "wider-tooltip" , position: { my:"left bottom", at: "left-90 bottom-40"},
-    show: { delay:200, effect:"none", duration: 0 }, hide: {delay:120, effect:"none", duration: 0}
+    show: { delay:230, effect:"none", duration: 0 }, hide: {delay:0, effect:"none", duration: 0}
   });
   $(".play").attr("title", "Pause this track.")
   $(".pause").attr("title", "Play this track.")

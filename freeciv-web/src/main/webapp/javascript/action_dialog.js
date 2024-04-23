@@ -1835,9 +1835,9 @@ function select_tgt_extra(actor_unit, target_unit,
   dialog_register(id, actor_unit['id']);
   $(id).parent().css("overflow", "visible"); // prevent clipping of tooltips
   $(".ttop").tooltip({ tooltipClass: "tt_sm_side", position: { my:"left top", at: "right+5 top"},
-    show: { delay:700, effect:"none", duration: 0 }, hide: {delay:70, effect:"none", duration: 0} });
+    show: { delay:700, effect:"none", duration: 0 }, hide: {delay:0, effect:"none", duration: 0} });
   $(".tbot").tooltip({ tooltipClass: "tt_sm_side", position: { my:"left bottom", at: "right+5 bottom"},
-    show: { delay:700, effect:"none", duration: 0 }, hide: {delay:70, effect:"none", duration: 0} });
+    show: { delay:700, effect:"none", duration: 0 }, hide: {delay:0, effect:"none", duration: 0} });
 }
 
 /**************************************************************************

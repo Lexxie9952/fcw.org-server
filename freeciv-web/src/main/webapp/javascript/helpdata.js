@@ -1131,7 +1131,7 @@ function generate_help_text(key)
   $("#help_info_page").html(msg);
   // Tooltip all elements above that were classed with .tt
   $(".tt").tooltip({ show: { delay:200, effect:"none", duration: 0 },
-                             hide: {delay:120, effect:"none", duration: 0} });
+                             hide: {delay:0, effect:"none", duration: 0} });
 
 
   /* Freeciv has code that generates certain help texts based on the

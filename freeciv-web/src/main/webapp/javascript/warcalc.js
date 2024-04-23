@@ -435,11 +435,11 @@ function warcalc_set_tooltips()
   //  show: { delay:360, effect:"none", duration: 0 }, hide: {delay:50, effect:"none", duration: 0}
   //});
   $(".tt").tooltip({ tooltipClass: "tt_slim", show: { delay:360, effect:"none", duration: 0 },
-                      hide: {delay:50, effect:"none", duration: 0} });
+                      hide: {delay:0, effect:"none", duration: 0} });
 
   $(".wcttmsg").tooltip({open: function (event, ui) {ui.tooltip.css("max-width", "400px");}});
   $(".wcttmsg").tooltip({
-    show: { delay:80, effect:"none", duration: 0 }, hide: {delay:10, effect:"none", duration: 0}
+    show: { delay:80, effect:"none", duration: 0 }, hide: {delay:0, effect:"none", duration: 0}
   });
   $(".wcttmsg").css("cursor","help");
   const bl = "* ";    // bullet

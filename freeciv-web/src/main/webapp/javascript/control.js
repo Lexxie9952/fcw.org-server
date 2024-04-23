@@ -135,7 +135,7 @@ function control_init()
 
   $("#turn_done_button").click(send_end_turn);
   if (!touch_device) $("#turn_done_button").tooltip({
-    show: { delay:200, effect:"none", duration: 0 }, hide: {delay:0, effect:"none", duration: 0}
+    show: { delay:230, effect:"none", duration: 0 }, hide: {delay:0, effect:"none", duration: 0}
   });
 
   $("#freeciv_logo").click(function(event) {
@@ -317,7 +317,7 @@ function control_init()
 
   if (!touch_device) {
     $("#game_unit_orders_default").tooltip({
-      show: { delay:200, effect:"none", duration: 0 }, hide: {delay:100, effect:"none", duration: 0}
+      show: { delay:230, effect:"none", duration: 0 }, hide: {delay:0, effect:"none", duration: 0}
     });
   }
 
@@ -4962,7 +4962,7 @@ function send_end_turn()
 
   $("#turn_done_button").button( "option", "disabled", true);
   if (!touch_device) $("#turn_done_button").tooltip({ disabled: true,
-    show: { delay:200, effect:"none", duration: 0 }, hide: {delay:0, effect:"none", duration: 0}
+    show: { delay:230, effect:"none", duration: 0 }, hide: {delay:0, effect:"none", duration: 0}
   });
   var packet = {"pid" : packet_player_phase_done, "turn" : game_info['turn']};
   send_request(JSON.stringify(packet));
@@ -5181,7 +5181,7 @@ function key_unit_load(scoop_units)
       dialog_register(id);
       $(id).parent().css("overflow", "visible"); // prevents tooltip clipping
       $(".tt").tooltip({ tooltipClass: "tt_slim", show: { delay:300, effect:"none", duration: 0 },
-                                 hide: {delay:120, effect:"none", duration: 0} });
+                                 hide: {delay:0, effect:"none", duration: 0} });
     }
     // otherwise, only one transporter candidate, load automatically with no GUI input from user:
     // Only one legal transport, no need to do pop-up to choose which one:

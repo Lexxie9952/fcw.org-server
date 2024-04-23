@@ -595,7 +595,7 @@ function show_dialog_message(title, message, text_friendly)
 
   if (title=="Tile Information")
       $("#calc_tip").tooltip({
-        show: { delay:150, effect:"none", duration: 0 }, hide: {delay:120, effect:"none", duration: 0}
+        show: { delay:150, effect:"none", duration: 0 }, hide: {delay:0, effect:"none", duration: 0}
       });
 
   // Automatically close dialog after 38 seconds, because sometimes the dialog can't be closed manually.

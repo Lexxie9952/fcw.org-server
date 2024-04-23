@@ -235,15 +235,15 @@ function init_options_dialog()
   });
 
   $(".setting_button").tooltip({
-    show: { delay:200, effect:"none", duration: 0 }, hide: {delay:120, effect:"none", duration: 0}
+    show: { delay:230, effect:"none", duration: 0 }, hide: {delay:0, effect:"none", duration: 0}
   });
   $('.main_menu_buttons').tooltip({
     tooltipClass: "wider-tooltip" , position: { my:"center bottom", at: "center top-3"},
-    show: { delay:600, effect:"none", duration: 0 }, hide: {delay:220, effect:"none", duration: 0}
+    show: { delay:600, effect:"none", duration: 0 }, hide: {delay:0, effect:"none", duration: 0}
   });
   $('.play').tooltip({
     tooltipClass: "wider-tooltip" , position: { my:"left bottom", at: "left-90 bottom-40"},
-    show: { delay:200, effect:"none", duration: 0 }, hide: {delay:120, effect:"none", duration: 0}
+    show: { delay:230, effect:"none", duration: 0 }, hide: {delay:0, effect:"none", duration: 0}
   });
 
   // USER OPTIONS ------------------------------------------------------------------
@@ -519,7 +519,7 @@ function init_options_dialog()
     $("#timeout_setting_div").show(); // doesn't do anything yet, but one day we can change metamessage here.
 
   $("#tabs_opt").tooltip({
-    show: { delay:460, effect:"none", duration: 0 }, hide: {delay:50, effect:"none", duration: 0}
+    show: { delay:460, effect:"none", duration: 0 }, hide: {delay:0, effect:"none", duration: 0}
   });
 }
 
