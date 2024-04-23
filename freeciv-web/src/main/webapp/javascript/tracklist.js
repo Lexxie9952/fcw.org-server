@@ -1429,7 +1429,7 @@ var tracklist = [
 {filepath: "2/NiNoKuniTheMovieOST.AttheTavern.JoeHisaishi",conditions: [[{"tech":"Feudalism"},{"tech":"Bridge Building"},{"tech":"Chivalry"},{"!tech":"Steam Engine"},{"!tech":"Metallurgy"}]],f:"m4a",creds: "" },
 {filepath: "2/NorthlandersI.Varangian.IvanDuch",conditions: [[{"tech":"Warrior Code"},{"tech":"Currency"},{"tech":"Map Making"},{"!tech":"Invention"}]],f:"m4a",creds: "" },
 {filepath: "2/NoTimeToDieOST.FinalAscent.HZ",conditions: [[{"tech":"Philosophy"},{"!tech":"Radio"},{"!tech":"Mechanization"}],[{"tech":"Space Flight"}]],f:"m4a",creds: "" },
-{filepath: "4/Oblivion.JacksDream.M83,AnthonyGonzalez,JosephTrapanese",conditions: [[{"tech":"Steel"},{"!tech":"Radio"},{"!tech":"Mobile Warefare"}],[{"turn>":118}]],f:"m4a",creds: "" },
+{filepath: "4/Oblivion.JacksDream.M83,AnthonyGonzalez,JosephTrapanese",conditions: [[{"tech":"Steel"},{"!tech":"Radio"},{"!tech":"Mobile Warfare"}],[{"turn>":118}]],f:"m4a",creds: "" },
 {filepath: "4/Oblivion.RavenRock.M83,AnthonyGonzalez,JosephTrapanese",conditions: [[{"tech":"Industrialization"},{"!tech":"Robotics"},{"!tech":"Rocketry"}],
                                                                                    [{"tech":"Electricity"},{"!tech":"Robotics"},{"!tech":"Rocketry"}],[{"turn>":125}]],f:"mp3",creds: "" },
 {filepath: "4/Oblivion.StarWaves.M83,AnthonyGonzalez,JosephTrapanese",conditions: [[{"tech":"Industrialization"},{"!tech":"Robotics"},{"!tech":"Rocketry"}],
