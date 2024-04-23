@@ -147,31 +147,31 @@ function empire_unit_homecity_screen(wide_screen,narrow_screen,small_screen,
 
   // Set up panel functions for National Units
 
-  var panel_html = "<input id='show_hp' type='checkbox' class='css-checkbox' title='Show hit points' name='chHP' value='false' onclick='toggle_empire_show_hitpoints();'>"
+  var panel_html = "<input id='show_hp' type='checkbox' class='css-checkbox tt' title='Show hit points' name='chHP' value='false' onclick='toggle_empire_show_hitpoints();'>"
   + "<label for='show_hp' name='show_hp_lbl' class='css-label dark-check-red'>HP</label>&ensp;"
-  + "<input id='show_mp' type='checkbox' class='css-checkbox' title='Show movement points' name='chMP' value='false' onclick='toggle_empire_show_movepoints();'>"
+  + "<input id='show_mp' type='checkbox' class='css-checkbox tt' title='Show movement points' name='chMP' value='false' onclick='toggle_empire_show_movepoints();'>"
   + "<label for='show_mp' name='show_mp_lbl' class='css-label dark-check-green'>Moves</label>";
   //var panel_html = "<input type='checkbox' id='show_hp' title='Show hit points' name='cbHP' value='false' onclick='toggle_empire_show_hitpoints();'>HP"
   //                + "<input type='checkbox' id='show_mp' title='Show movement points' name='cbMP' value='false' onclick='toggle_empire_show_movepoints();'>Moves";
-  panel_html += "&nbsp;&nbsp;<button id='button_sorthp' type='button' class='button ui-button ui-corner-all ui-widget' onclick='empire_sort_hp();'"
+  panel_html += "&nbsp;&nbsp;<button id='button_sorthp' type='button' class='button ui-button ui-corner-all ui-widget tt' onclick='empire_sort_hp();'"
               + "title='Sort units rows by Hitpoints' style='padding:5px; margin-bottom:2px;'>&#x2943HP</button>";
-  panel_html += "<button id='button_sortmp' type='button' class='button ui-button ui-corner-all ui-widget' onclick='empire_sort_mp();'"
+  panel_html += "<button id='button_sortmp' type='button' class='button ui-button ui-corner-all ui-widget tt' onclick='empire_sort_mp();'"
   + "title='Sort unit rows by Moves Left' style='padding:5px; margin-bottom:2px;'>&#x2943Moves</button>";
-  panel_html += "<button id='button_sortvet' type='button' class='button ui-button ui-corner-all ui-widget' onclick='empire_sort_vet();'"
+  panel_html += "<button id='button_sortvet' type='button' class='button ui-button ui-corner-all ui-widget tt' onclick='empire_sort_vet();'"
   + "title='Sort unit rows by Vet level' style='padding:5px; margin-bottom:2px;'>&#x2943Vet</button>";
   panel_html += "&nbsp;&nbsp;&nbsp;&nbsp; show upkeep: &nbsp;"
                   + "<input type='checkbox' class='css-checkbox' id='show_food' name='cbFU' value='false' onclick='toggle_empire_show_upkeep(\"food\");'>"
-                  + "<label for='show_food' name='show_food_lbl' title='Show units with food upkeep' class='css-label dark-check-green'>Food</label>&ensp;"
+                  + "<label for='show_food' name='show_food_lbl' title='Show units with food upkeep' class='css-label dark-check-green tt'>Food</label>&ensp;"
                   + "<input type='checkbox' class='css-checkbox' id='show_gold' name='cbGU' value='false' onclick='toggle_empire_show_upkeep(\"gold\");'>"
-                  + "<label for='show_gold' name='show_gold_lbl' title='Show units with gold upkeep' class='css-label dark-check-orange'>Gold</label>&ensp;"
+                  + "<label for='show_gold' name='show_gold_lbl' title='Show units with gold upkeep' class='css-label dark-check-orange tt'>Gold</label>&ensp;"
                   + "<input type='checkbox' class='css-checkbox' id='show_shield' name='cbSU' value='false' onclick='toggle_empire_show_upkeep(\"shields\");'>"
-                  + "<label for='show_shield' name='show_shield_lbl' title='Show units with shield upkeep' class='css-label dark-check-red'>Shield</label>&ensp;";
+                  + "<label for='show_shield' name='show_shield_lbl' title='Show units with shield upkeep' class='css-label dark-check-red tt'>Shield</label>&ensp;";
   panel_html += "<input type='checkbox' class='css-checkbox' id='show_free' name='cbFR' value='false' onclick='toggle_empire_show_upkeep(\"free\");'>"
-                  + "<label for='show_free' name='show_free_lbl' title='Show units with upkeep cost who are receiving free bonus upkeep' class='css-label dark-check-white'>Free</label>&ensp;";
+                  + "<label for='show_free' name='show_free_lbl' title='Show units with upkeep cost who are receiving free bonus upkeep' class='css-label dark-check-white tt'>Free</label>&ensp;";
   panel_html += "<input type='checkbox' class='css-checkbox' id='show_zero' name='cbZR' value='false' onclick='toggle_empire_show_upkeep(\"zero\");'>"
-                  + "<label for='show_zero' name='show_zero_lbl' title='Show unit types who never pay upkeep' class='css-label dark-check-cyan'>Zero</label>";
+                  + "<label for='show_zero' name='show_zero_lbl' title='Show unit types who never pay upkeep' class='css-label dark-check-cyan tt'>Zero</label>";
   panel_html += "<span style='margin-left: 90px;'>&nbsp;</span>"; // spacer
-  panel_html += "<button id='button_hpy_rpt' type='button' class='button ui-button ui-corner-all ui-widget' onclick='empire_do_unit_unhappy_report();'"
+  panel_html += "<button id='button_hpy_rpt' type='button' class='button ui-button ui-corner-all ui-widget tt' onclick='empire_do_unit_unhappy_report();'"
   + "title='Show report on all aggressive units in the empire which anger citizens. (Hotkey: CTRL-U)' style='padding:5px; margin-bottom:2px;'>&#x270A;&#x1F3FD; National Units Impact Report &#x270A;&#x1F3FD;</button>";
 
   $("#empire_mode_panel").html(panel_html);
@@ -439,7 +439,10 @@ function empire_unit_homecity_screen(wide_screen,narrow_screen,small_screen,
 
   $("#empire_table").tablesorter({theme:"dark", sortList: sortList});
   $(".prod_img").tooltip({
-    show: { delay:460, effect:"none", duration: 0 }, hide: {delay:50, effect:"none", duration: 0}
+    show: { delay:460, effect:"fade", duration: 0 }, hide: {delay:0, effect:"none", duration: 0}
+  });
+  $(".tt").tooltip({
+    show: { delay:380, effect:"fade", duration: 0 }, hide: {delay:0, effect:"none", duration: 0}
   });
   if (tiny_screen) {
   }
@@ -469,17 +472,17 @@ function empire_unitcity_screen(wide_screen,narrow_screen,small_screen,
   //$("#empire_static").css({"height":"100%", "width":"100%"})
 
   // Set up panel functions for National Units
-  var panel_html = "<input id='show_hp' type='checkbox' class='css-checkbox' title='Show hit points' name='chHP' value='false' onclick='toggle_empire_show_hitpoints();'>"
+  var panel_html = "<input id='show_hp' type='checkbox' class='css-checkbox tt' title='Show hit points' name='chHP' value='false' onclick='toggle_empire_show_hitpoints();'>"
                  + "<label for='show_hp' name='show_hp_lbl' class='css-label dark-check-red'>HP</label>&ensp;"
-                 + "<input id='show_mp' type='checkbox' class='css-checkbox' title='Show movement points' name='chMP' value='false' onclick='toggle_empire_show_movepoints();'>"
+                 + "<input id='show_mp' type='checkbox' class='css-checkbox tt' title='Show movement points' name='chMP' value='false' onclick='toggle_empire_show_movepoints();'>"
                  + "<label for='show_mp' name='show_mp_lbl' class='css-label dark-check-green'>Moves</label>";
   //var panel_html = "<input type='checkbox' id='show_hp' title='Show hit points' name='cbHP' value='false' onclick='toggle_empire_show_hitpoints();'>HP"
   //               + "<input type='checkbox' id='show_mp' title='Show movement points' name='cbMP' value='false' onclick='toggle_empire_show_movepoints();'>Moves";
-  panel_html += "&nbsp;&nbsp;<button id='button_sorthp' type='button' class='button ui-button ui-corner-all ui-widget' onclick='empire_sort_hp();'"
+  panel_html += "&nbsp;&nbsp;<button id='button_sorthp' type='button' class='button ui-button ui-corner-all ui-widget tt' onclick='empire_sort_hp();'"
               + "title='Sort units rows by Hitpoints' style='padding:5px; margin-bottom:2px;'>&#x2943HP</button>";
-  panel_html += "<button id='button_sortmp' type='button' class='button ui-button ui-corner-all ui-widget' onclick='empire_sort_mp();'"
+  panel_html += "<button id='button_sortmp' type='button' class='button ui-button ui-corner-all ui-widget tt' onclick='empire_sort_mp();'"
   + "title='Sort unit rows by Moves Left' style='padding:5px; margin-bottom:2px;'>&#x2943Moves</button>";
-  panel_html += "<button id='button_sortvet' type='button' class='button ui-button ui-corner-all ui-widget' onclick='empire_sort_vet();'"
+  panel_html += "<button id='button_sortvet' type='button' class='button ui-button ui-corner-all ui-widget tt' onclick='empire_sort_vet();'"
   + "title='Sort unit rows by Vet level' style='padding:5px; margin-bottom:2px;'>&#x2943Vet</button>";
   $("#empire_mode_panel").html(panel_html);
   $("#show_hp").prop("checked", empire_show_hitpoints);
@@ -693,7 +696,10 @@ function empire_unitcity_screen(wide_screen,narrow_screen,small_screen,
 
   $("#empire_table").tablesorter({theme:"dark", sortList: sortList});
   $(".prod_img").tooltip({
-    show: { delay:460, effect:"none", duration: 0 }, hide: {delay:50, effect:"none", duration: 0}
+    show: { delay:460, effect:"fade", duration: 0 }, hide: {delay:0, effect:"none", duration: 0}
+  });
+  $(".tt").tooltip({
+    show: { delay:380, effect:"fade", duration: 0 }, hide: {delay:0, effect:"none", duration: 0}
   });
   if (tiny_screen) {
   }
@@ -923,7 +929,7 @@ function empire_econ_improvements_screen(wide_screen,narrow_screen,small_screen,
   }
   $("#empire_table").tablesorter({theme:"dark", sortList: sortList});
   $(".empire_tooltip").tooltip({
-    show: { delay:460, effect:"none", duration: 0 }, hide: {delay:50, effect:"none", duration: 0}
+    show: { delay:460, effect:"none", duration: 0 }, hide: {delay:0, effect:"none", duration: 0}
   });
   if (tiny_screen) {
   }
@@ -1113,7 +1119,7 @@ function empire_econ_upkeep_screen(wide_screen,narrow_screen,small_screen,
   }
   $("#empire_table").tablesorter({theme:"dark", sortList: sortList});
   $(".empire_tooltip").tooltip({
-    show: { delay:460, effect:"none", duration: 0 }, hide: {delay:50, effect:"none", duration: 0}
+    show: { delay:460, effect:"none", duration: 0 }, hide: {delay:0, effect:"none", duration: 0}
   });
   if (tiny_screen) {
   }
@@ -1398,7 +1404,7 @@ function empire_econ_worklists_screen(wide_screen,narrow_screen,small_screen,
   }
   $("#empire_table").tablesorter({theme:"dark", sortList: sortList});
   $(".empire_tooltip").tooltip({
-    show: { delay:460, effect:"none", duration: 0 }, hide: {delay:50, effect:"none", duration: 0}
+    show: { delay:460, effect:"none", duration: 0 }, hide: {delay:0, effect:"none", duration: 0}
   });
   if (tiny_screen) {
   }
@@ -1883,18 +1889,18 @@ function empire_unittype_screen(wide_screen,narrow_screen,small_screen,
   if (small_screen) $("#empire_title").hide();
   else $("#empire_title").show();
 
-  var panel_html = "<input id='show_hp' type='checkbox' class='css-checkbox' title='Show hit points' name='chHP' value='false' onclick='toggle_empire_show_hitpoints();'>"
+  var panel_html = "<input id='show_hp' type='checkbox' class='css-checkbox tt' title='Show hit points' name='chHP' value='false' onclick='toggle_empire_show_hitpoints();'>"
   + "<label for='show_hp' name='show_hp_lbl' class='css-label dark-check-red'>HP</label>&ensp;"
-  + "<input id='show_mp' type='checkbox' class='css-checkbox' title='Show movement points' name='chMP' value='false' onclick='toggle_empire_show_movepoints();'>"
+  + "<input id='show_mp' type='checkbox' class='css-checkbox tt' title='Show movement points' name='chMP' value='false' onclick='toggle_empire_show_movepoints();'>"
   + "<label for='show_mp' name='show_mp_lbl' class='css-label dark-check-green'>Moves</label>";
   // Set up panel functions for National Units
   //var panel_html = "<input type='checkbox' id='show_hp' title='Show hit points' name='cbHP' value='false' onclick='toggle_empire_show_hitpoints();'>HP"
   //               + "<input type='checkbox' id='show_mp' title='Show movement points' name='cbMP' value='false' onclick='toggle_empire_show_movepoints();'>Moves";
-  panel_html += "&nbsp;&nbsp;<button id='button_sorthp' type='button' class='button ui-button ui-corner-all ui-widget' onclick='empire_sort_hp();'"
+  panel_html += "&nbsp;&nbsp;<button id='button_sorthp' type='button' class='button ui-button ui-corner-all ui-widget tt' onclick='empire_sort_hp();'"
               + "title='Sort units rows by Hitpoints' style='padding:5px; margin-bottom:2px;'>&#x2943HP</button>";
-  panel_html += "<button id='button_sortmp' type='button' class='button ui-button ui-corner-all ui-widget' onclick='empire_sort_mp();'"
+  panel_html += "<button id='button_sortmp' type='button' class='button ui-button ui-corner-all ui-widget tt' onclick='empire_sort_mp();'"
   + "title='Sort unit rows by Moves Left' style='padding:5px; margin-bottom:2px;'>&#x2943Moves</button>";
-  panel_html += "<button id='button_sortvet' type='button' class='button ui-button ui-corner-all ui-widget' onclick='empire_sort_vet();'"
+  panel_html += "<button id='button_sortvet' type='button' class='button ui-button ui-corner-all ui-widget tt' onclick='empire_sort_vet();'"
   + "title='Sort unit rows by Vet level' style='padding:5px; margin-bottom:2px;'>&#x2943Vet</button>";
   $("#empire_mode_panel").html(panel_html);
   $("#show_hp").prop("checked", empire_show_hitpoints);
@@ -2068,9 +2074,11 @@ function empire_unittype_screen(wide_screen,narrow_screen,small_screen,
   $("#empire_table").tablesorter({theme:"dark", sortList: sortList});
 
   $(".prod_img").tooltip({
-    show: { delay:460, effect:"none", duration: 0 }, hide: {delay:50, effect:"none", duration: 0}
+    show: { delay:460, effect:"none", duration: 0 }, hide: {delay:0, effect:"none", duration: 0}
   });
-
+  $(".tt").tooltip({
+    show: { delay:380, effect:"fade", duration: 0 }, hide: {delay:0, effect:"none", duration: 0}
+  });
   if (tiny_screen) {
   }
   else if (redux_screen) {
