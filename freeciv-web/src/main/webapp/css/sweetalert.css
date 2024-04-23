@@ -256,7 +256,7 @@ body.stop-scrolling {
         -webkit-border-radius: 2px;
         border-radius: 2px;
         margin-left: -2px;
-        background-color: #F8BB86; }
+        background-color: #F00; }
       .sweet-alert .sa-icon.sa-warning .sa-dot {
         position: absolute;
         width: 7px;
@@ -266,7 +266,7 @@ body.stop-scrolling {
         margin-left: -3px;
         left: 50%;
         bottom: 10px;
-        background-color: #F8BB86; }
+        background-color: #F00; }
     .sweet-alert .sa-icon.sa-info {
       border-color: #C9DAE1; }
       .sweet-alert .sa-icon.sa-info::before {
