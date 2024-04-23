@@ -43,7 +43,7 @@ var border_flag_offsets = {
   7: {"x": 42, "y": 34},  // southeast
 }
 
-const tileset_extension = ".png";
+const tileset_extension = ".webp";
 const fullsize_flag_extension = ".png";
 
 const CITY_WALLS = 1,
@@ -2188,10 +2188,10 @@ function get_improvement_image_sprite(pimprovement)
   var i = tileset[tag][4];
   return {"tag": tag,
             "image-src" : "/tileset/freeciv-web-tileset-" + tileset_name + "-" + i + tileset_extension + "?ts=" + ts,
-            "tileset-x" : tileset_x,
-            "tileset-y" : tileset_y,
+            "tileset-x" : tileset_x+.25,
+            "tileset-y" : tileset_y+.5,
             "width" : width,
-            "height" : height
+            "height" : height-1.75
             };
 }
 
