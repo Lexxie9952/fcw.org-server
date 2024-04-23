@@ -223,12 +223,19 @@ const is_small_screen = () => {
 **************************************************************************/
 function init_sprites()
 {
-  $.blockUI({ message: "<h1 style='text-align:center;color:#ccc'>"
-    + "Loading..."
-	  + "<br><img src='/images/loading.gif'><br>"
-    + "<font id='load_progress' size='1'>"+loaded_images+"/"+tileset_image_count
-    + " complete"+"</font></h1>" });
+  $.blockUI({
+      css: {},
 
+      message: "<h1 style='text-align:center;color:#ccc'>Loading..."
+      + "<br><img src='/images/loading.gif'><br>"
+      + "<font id='load_progress' size='1'>"+loaded_images+"/"+tileset_image_count
+      + " complete"+"</font></h1>",
+
+      onBlock:  function() {
+        $(".blockPage").children().css("padding", "0px");
+        //$(".blockPage").addClass("block_ui_class"); // civclient.js already sets css defaults
+      }
+  });
   if (loaded_images != tileset_image_count) {
     for (var i = 0; i < tileset_image_count; i++) {
       var tileset_image = new Image();
@@ -237,13 +244,9 @@ function init_sprites()
                           + tileset_name + '-' + i + tileset_extension + '?ts=' + ts;
       tileset_images[i] = tileset_image;
     }
-  } else {
-    // already loaded
-    //if (renderer == RENDERER_WEBGL) {
-    //  webgl_preload();
-    //} else {
+  }
+  else {
       $.unblockUI();
-    //}
   }
 }
 

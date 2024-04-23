@@ -5,6 +5,14 @@ body {
 	background-color: #000000;
 }
 
+.blockPage, .block_ui_class {
+  border-radius: 65px !important;
+  border: 5px solid #222120 !important;
+  background: rgb(92,85,69) url(/images/bg-text.jpg) repeat scroll 0 0 !important;
+  background-size: 480px !important;
+  padding: 0px !important;
+  background-color: rgb(92,85,69) !important;
+}
 
 #pregame_page {
   padding: 10px;

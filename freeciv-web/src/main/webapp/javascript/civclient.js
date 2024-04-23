@@ -116,7 +116,13 @@ function civclient_init()
   define_autonomous_html_element_tags();
   get_css_default_properties();
 
-  $.blockUI.defaults['css']['backgroundColor'] = "#222";
+  // Also see .blockPage in pregame.css:
+  $.blockUI.defaults['css']['padding'] = "0px !important";
+  $.blockUI.defaults['css']['background'] = "rgb(92,85,69) url(/images/bg-text.jpg) repeat scroll 0 0 !important";
+  $.blockUI.defaults['css']['border-radius'] = "65px";
+  $.blockUI.defaults['css']['border'] = "5px solid #222120 !important;";
+  $.blockUI.defaults['css']['background-size'] = "480px";
+  $.blockUI.defaults['css']['backgroundColor'] = "rgb(92,85,69)";
   $.blockUI.defaults['css']['color'] = default_dialog_text_color;
   $.blockUI.defaults['theme'] = true;
 

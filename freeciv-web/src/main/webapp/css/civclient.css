@@ -2406,7 +2406,7 @@ li.tech-both00::before { /*  we both have the tech and neither has blueprints */
   margin-bottom: 13px;
 }
 
-.ui-dialog:not(#game_message_area, #game_chatbox_panel) {
+.ui-dialog:not(#game_message_area, #game_chatbox_panel, .blockPage) {
   color: var(--default_text_color);
   font-family:Helvetica;
   background: rgb(97,90,71) url('/images/bg.jpg');
