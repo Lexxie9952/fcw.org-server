@@ -8,19 +8,21 @@ body {
 
 #pregame_page {
   padding: 10px;
-  background: url("/images/bg-med-dark.jpg") repeat scroll 0 0 ;
+  background: rgb(35,39,71) url("/images/bg-med-dark.jpg") repeat scroll 0 0 ;
+  background-size: 480px;
   width: 97%;
   float:left;
 }
 
 
 #pregame_options {
- /* background: #cb842e url("/images/ui-widget-header.png") 50% 100% repeat-x;*/
-  background: #cb842e url("/images/bg-med-light.cyn.jpg") 50% 100% repeat-x;
+  background: rgb(72,92,127) url("/images/bg-med-light.cyn.jpg") 50% 50% repeat-x;
+  background-size: 480px;
   width: 99%;
   min-height: 30px;
   padding: 10px;
   float: left;
+  border-bottom: 3px solid #485c7f;
 }
 
 #pregame_player_list {
@@ -32,12 +34,13 @@ body {
 .pregame_player_name {
   padding: 3px;
   margin: 0px;
-  background: #0d0825 url(/images/bg-dark.jpg);
+  background: rgb(19,32,64);
   color: __default_text_color;
   float: left;
   min-height: 32px;
   width: 85%;
-  border: 1px solid #335;
+  border: 1px solid #485c7f;
+  border-top: 0.5px;
 }
 
 .pregame_player_ready {
@@ -51,7 +54,8 @@ body {
 }
 
 #pregame_game_info:not(:empty) {
-  background: #111111 url(/images/bg-med-dark.jpg);
+  background: rgb(35,39,71) url(/images/bg-med-dark.jpg);
+  background-size: 480px;
   color: #000000;
   max-height: 15%;
   width: 78%;
@@ -62,13 +66,14 @@ body {
 }
 
 #pregame_message_area {
-  background: #111111 url(/images/bg-dark.jpg);
-  color: #000000;
+  background: rgb(19,32,64) url(/images/bg-dark-text.jpg);
+  background-size: 480px;
   width: 78%;
   overflow: auto;
   float: left;
   padding: 5px 5px;
-  border: 3px solid #335;
+  border: 15px solid #485c7f;
+  border-top: 0px;
   list-style-type: none;
   margin: 0px;
 }
@@ -156,7 +161,7 @@ body {
 
 #nation_autocomplete_box {
   width: 210px;
-  background:  #111111 url(/images/bg-dark.jpg);
+  background: rgb(19,32,64) url(/images/bg-dark-text.jpg);
   border:1px solid #000000;
   color: white;
 
@@ -190,11 +195,12 @@ body {
 }
 
 #selectable .ui-selecting {
-  background: #228822;
+  background: #278170;
+  color: #eee;
 }
 
 #selectable .ui-selected {
-  background: #117711;
+  background: #278170;
   color: white;
 }
 
@@ -208,7 +214,7 @@ body {
 }
 
 #selectable li {
-  margin: 3px;
+  margin-bottom: 0px;
   padding: 0.4em;
   cursor: pointer;
 }

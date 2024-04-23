@@ -235,8 +235,8 @@ function update_game_info_pregame()
 
   $("#pregame_game_info").html(game_info_html);
   // Tooltips for SETUP, Load, Nation, Start buttons
-  $("#pregame_buttons button").tooltip({ show: { delay:300, effect:"none", duration: 0 },
-                     hide: {delay:20, effect:"none", duration: 0} });
+  $("#pregame_buttons button").tooltip({ show: { delay:310, effect:"fade", duration: 0 },
+                     hide: {delay:0, effect:"none", duration: 0} });
 
   /* Update pregame_message_area's height. */
   setup_window_size();
@@ -308,7 +308,7 @@ function update_player_info_pregame_real()
 
     }
     $(".pregame_player_name").tooltip({
-      show: { delay:200, effect:"none", duration: 0 }, hide: {delay:120, effect:"none", duration: 0}
+      show: { delay:260, effect:"fade", duration: 0 }, hide: {delay:0, effect:"none", duration: 0}
     });
 
     var pregame_context_items = {
@@ -802,7 +802,7 @@ function pregame_settings()
       "     <li><a href='#pregame_settings_tabs-2'>Other</a></li>" +
       "   </ul>"
       + "<div id='pregame_settings_tabs-1'><table id='settings_table'> "
-      + "<tr title='Ruleset version'><td>Ruleset:</td>"
+      + "<tr title='Game version'><td style='cursor:help'>Ruleset:</td>"
       + "<td><select name='ruleset' id='ruleset'>"
       + "<option value='mp2-elephant'>MP 2.5 (under development)</option>"
       + "<option value='mp2-dragoon'>Dragoon MP 2.4</option>"
@@ -817,18 +817,18 @@ function pregame_settings()
       + "<option value='civ2'>Civilisation II</option>"
       + "<option value='civ1'>Civilisation I</option>"
       + "</select><a id='ruleset_description'></a></td></tr>"
-      + "<tr title='Set metaserver info line'><td>Game title:</td>" +
+      + "<tr title='Set metaserver info line'><td style='cursor:help'>Game title:</td>" +
     "<td><input type='text' name='metamessage' id='metamessage' size='28' maxlength='42'></td></tr>" +
-    "<tr title='Enables music'><td>Music:</td>" +
+    "<tr><td>Music:</td>" +
           "<td><input type='checkbox' name='music_setting' id='music_setting'>Play Music</td></tr>" +
-    "<tr class='not_pbem' title='Total number of players (including AI players)'><td>Number of Players (including AI):</td>" +
+    "<tr class='not_pbem' title='Total number of players (including AI players)'><td style='cursor:help'>Number of Players (including AI):</td>" +
     "<td><input type='number' name='aifill' id='aifill' size='4' length='3' min='0' max='32' step='1'></td></tr>" +
     "<tr><td>Timeout:</td><td><input type='number' name='timeout' id='timeout' size='4' length='3' min='30' max='3600' step='1'></td></tr>" +
-          "<tr class='not_pbem' title='Creates a private game where players need to know this password in order to join.'><td>Password for private game:</td>" +
+          "<tr class='not_pbem' title='Players need to know this password to join the private game.'><td style='cursor:help'>Password for private game:</td>" +
     "<td><input type='text' name='password' id='password' size='10' length='10'></td></tr>" +
-    "<tr title='Map size (in thousands of tiles)'><td>Map size:</td>" +
+    "<tr title='Map size (in thousands of tiles)'><td style='cursor:help'>Map size:</td>" +
     "<td><input type='number' name='mapsize' id='mapsize' size='4' length='3' min='1' max='10' step='1'></td></tr>" +
-    "<tr class='not_pbem' title='This setting sets the skill-level of the AI players'><td>AI skill level:</td>" +
+    "<tr class='not_pbem'><td>AI skill level:</td>" +
     "<td><select name='skill_level' id='skill_level'>" +
         "<option value='1'>Handicapped</option>" +
         "<option value='2'>Novice</option>" +
@@ -837,7 +837,7 @@ function pregame_settings()
         "<option value='5'>Hard</option>" +
         "<option value='6'>Cheating</option>" +
     "</select></td></tr>"+
-    "<tr class='not_pbem' title='This setting sets the world general tempeture, changing the types of tiles.'><td>Temperature</td>" +
+    "<tr class='not_pbem' title='Temperature changes planetary terrain'><td style='cursor:help'>Temperature</td>" +
     "<td><select name='temperature' id='temperature'>" +
         "<option value='100'>Very Hot</option>" +
         "<option value='70'>Hot</option>" +
@@ -845,37 +845,37 @@ function pregame_settings()
         "<option value='30'>Cold</option>" +
         "<option value='0'>Very Cold</option>" +
     "</select></td></tr>"+
-    "<tr title='Number of initial techs per player'><td>Tech level:</td>" +
+    "<tr title='Number of initial techs per player'><td style='cursor:help'>Tech level:</td>" +
     "<td><input type='number' name='techlevel' id='techlevel' size='3' length='3' min='0' max='100' step='10'></td></tr>" +
-    "<tr title='This setting gives the approximate percentage of the map that will be made into land.'><td>Landmass:</td>" +
+    "<tr title='Percentage of the map that is land'><td style='cursor:help'>Land mass:</td>" +
     "<td><input type='number' name='landmass' id='landmass' size='3' length='3' min='15' max='85' step='10'></td></tr>" +
-    "<tr title='Amount of special resource squares'><td>Specials:</td>" +
+    "<tr title='Frequency of resources (0-1000)'><td style='cursor:help'>Resources:</td>" +
     "<td><input type='number' name='specials' id='specials' size='4' length='4' min='0' max='1000' step='50'></td></tr>" +
-    "<tr title='Minimum distance between cities'><td>City mindist :</td>" +
+    "<tr title='Minimum distance between cities'><td style='cursor:help'>City mindist :</td>" +
     "<td><input type='number' name='citymindist' id='citymindist' size='4' length='4' min='1' max='9' step='1'></td></tr>" +
-          "<tr title='The game will end at the end of the given turn.'><td>End turn:</td>" +
+          "<tr title='The game will end at the end of the given turn.'><td style='cursor:help'>End turn:</td>" +
     "<td><input type='number' name='endturn' id='endturn' size='4' length='4' min='0' max='32767' step='1'></td></tr>" +
     "<tr class='not_pbem' title='Enables score graphs for all players, showing score, population, techs and more."+
-          " This will lead to information leakage about other players.'><td>Score graphs</td>" +
+          " This will lead to information leakage about other players.'><td style='cursor:help'>Score graphs</td>" +
           "<td><input type='checkbox' name='scorelog_setting' id='scorelog_setting' checked>Enable score graphs</td></tr>" +
       "<tr id='killstack_area'><td id='killstack_label'></td>" +
           "<td><input type='checkbox' id='killstack_setting'>Enable killstack</td></tr>" +
       "<tr id='selct_multiple_units_area'><td id='select_multiple_units_label'></td>" +
           "<td><input type='checkbox' id='select_multiple_units_setting'>Right-click selects units</td></tr>" +
-    "<tr title='Method used to generate map'><td>Map generator:</td>" +
+    "<tr title='Map generator algorithm'><td style='cursor:help'>Map generator:</td>" +
     "<td><select name='generator' id='generator'>" +
-          "<option value='RANDOM'>Fully random height</option>" +
-          "<option value='FRACTAL'>Pseudo-fractal height</option>" +
-          "<option value='ISLAND'>Island-based</option>" +
-          "<option value='FAIR'>Fair islands</option>" +
-          "<option value='FRACTURE'>Fracture map</option>" +
+          "<option value='RANDOM'>Default Random</option>" +
+          "<option value='FRACTAL'>Fractal</option>" +
+          "<option value='ISLAND'>Islands</option>" +
+          "<option value='FAIR'>Fair Islands</option>" +
+          "<option value='FRACTURE'>Fracture</option>" +
     "</select></td></tr>"
     + "</table><br>"+
     "<span id='settings_info'><i>Games can be customized in many more ways. " +
-          "Type /help in the command line for more info.</i></span></div>" +
+          "Type <b>/help</b> in the command line for more info.</i></span></div>" +
       "<div id='pregame_settings_tabs-2'>" +
       "<table id='settings_table'>" +
-        "<tr title='Font on map'><td>Font on map:</td>" +
+        "<tr><td>Font on map:</td>" +
       "<td><input type='text' name='mapview_font' id='mapview_font' size='28' maxlength='42' value='16px Candara, sans serif'></td></tr>" +
       "<tr id='speech_enabled'><td id='speech_label'></td>" +
         "<td><input type='checkbox' id='speech_setting'>Enable speech audio messages</td></tr>" +
@@ -1219,7 +1219,7 @@ function pregame_settings()
   }
 
   $("#settings_table").tooltip({
-    show: { delay:200, effect:"none", duration: 0 }, hide: {delay:120, effect:"none", duration: 0}
+    show: { delay:380, effect:"fade", duration: 0 }, hide: {delay:0, effect:"none", duration: 0}
   });
 
   if (is_touch_device() || is_small_screen()) {
@@ -1376,11 +1376,27 @@ function show_intro_dialog(title, message) {
     $(".ui-dialog-buttonset button").last().button("disable");
   }
 
+  /* mobile / portrait mode has trouble fitting the CLI panel after aesthetic borders were added */
+  if ($(window).width() < $(window).height()) {
+    var portrait_mode = true;
+    $("#pregame_message_area").css("border-width", "1px");
+    $("#pregame_options").css("max-height", "50px");
+  }
   if (is_small_screen()) {
     /* some fixes for pregame screen on small devices.*/
     $("#freeciv_logo").remove();
     $("#pregame_message_area").css("width", "73%");
+    $("#pregame_message_area").css("border-width", "1px");
+    $(".tt").tooltip({
+      show: { delay:380, effect:"fade", duration: 0 }, hide: {delay:0, effect:"none", duration: 0}
+    });
     $("#observe_button").remove();
+    if (portrait_mode) {
+      $("#pick_nation_button").html("<b style='font-size:130%; height:18px; margin-top:-5px; margin-bottom:5px; padding:0px; display:block;'>&#127466;&#127482;</b><b style='font-size:80%'> NATION</b>");
+    }
+  }
+  /* Flag icon creates autolayout issues in some orientations and resolutions but not others */
+  if ($("#pick_nation_button").height() > $("#start_game_button").height()) {
   }
 
   $("#dialog").dialog('open');
