@@ -105,6 +105,7 @@ button {
   border-radius: 7px !important;
   background: var(--default_button_background);
   background-image: url(/images/bg-light.jpg);
+  background-size: 480px;
   box-shadow: 7px 7px 14px #1f2626, -7px -7px 14px rgba(28, 28, 28, 0.333) !important;
 
   margin: 10px auto 5px !important;
@@ -113,6 +114,7 @@ button:hover {
   border-radius: 8px !important;
   background: #aaaaaa !important;
   background-image: url(/images/bg-med-light.jpg);
+  background-size: 480px;
   box-shadow: inset 7px 7px 9px #464646, inset -7px -7px 9px #bfbfbf !important;
 
   margin: 11px auto 4px !important;
@@ -121,6 +123,7 @@ button:active {
   border-radius: 9px !important;
   background: #aaaaaa !important;
   background-image: url(/images/bg-med-light.jpg);
+  background-size: 480px;
   box-shadow: inset 7px 7px 9px #262626, inset -7px -7px 9px #dfdfdf !important;
   margin: 12px auto 3px !important;
 }
@@ -128,6 +131,7 @@ button:active {
 .ui-button.ui-button-icon-only:not(#turn_done_button) {
   border: 1px solid;
   background: url('/images/bg-med-light.jpg');
+  background-size: 480px;
   margin-right: 4px;
 }
 /* fixes position of dialog-close button */
@@ -159,7 +163,8 @@ button:active {
   border-color: #000 !important;
   box-shadow: "3px 3px 6px #000b" !important;
   font-family: Helvetica;
-  background: url('/images/bg-med-dark.jpg') #000 !important;
+  background: url('/images/bg-med-dark.jpg') rgb(35,39,71) !important;
+  background-size: 480px;
 }
 .menu-button-activator .ui-selected {
   color: #fff !important;
@@ -175,7 +180,10 @@ button:active {
 /**************************************************************************** swal SWEETALERT */
 
 .sweet-alert {
-  background: #000 url(/images/bg.jpg)
+  background: rgb(97,90,71) url("/images/bg.jpg") repeat;
+  background-size: 480px;
+  border: 5px solid #222120;
+  border-radius: 30px;
 }
 
 /************************************************/
@@ -419,11 +427,17 @@ input[type='number'] {
 
 .blue_clickable {
   color: #3498DB;
-  text-decoration:underline;
+  text-decoration: underline dotted;
 }
 .active_link {
   color: rgb(28, 203, 233);
-  text-decoration:underline;
+  text-decoration: underline dotted;
+}
+.helplink {
+  color: #c2a898;
+  text-decoration: underline;
+  text-decoration: underline dotted;
+  font-style: italic;
 }
 
 /* used for "/" to contrast with numbers which they divide */
@@ -687,6 +701,8 @@ input[type='number'] {
   max-height: 100%;
   overflow: auto;
   border-color: #432;
+  background-size: 480px;
+  background-repeat: repeat;
 }
 
 #dialog {
@@ -701,6 +717,7 @@ input[type='number'] {
   overflow: auto;
   width: 100%;
   background-image: url('/images/bg-dark.jpg');
+  background-size: 480px;
 } /* theme classes 3 */
 /* Other players' research tab */
 .others_technologies {
@@ -709,6 +726,7 @@ input[type='number'] {
   overflow: auto;
   width: 100%;
   background-image: url('/images/bg-light.jpg');
+  background-size: 480px
 } /* theme classes 3 */
 
 
@@ -720,7 +738,8 @@ input[type='number'] {
   padding: 4px;
   margin: 2px;
   margin-left: 0px;
-  background: url("/images/bg-dark.jpg") repeat scroll 0 0 ;
+  background: rgb(19,32,64) url("/images/bg-dark.jpg") repeat scroll 0 0 ;
+  background-size: 480px;
   color: rgb(226, 226, 226);
   font-family: Helvetica;
 }
@@ -794,7 +813,8 @@ input[type='number'] {
 }
 /*!*/
 .ui-widget-content {
-  background: url("/images/bg.jpg") repeat scroll 50% 50%;
+  background: rgb(97,90,71) url('/images/bg.jpg') repeat scroll 50% 50%;
+  background-size: 480px;
   /*text-shadow: 1px 1px 2px black;*/
 } /* theme classes 4 */
 
@@ -820,7 +840,9 @@ input[type='number'] {
   float: left;
   height: 105px;
   overflow: auto;
-  background:  url("/images/bg-med-light.jpg") repeat scroll 0 0 ;
+  /*  background: rgb(156,156,144) url("/images/bg-med-light.jpg") repeat scroll 0 0 ;  textured sandstone
+  background-size: 240px; */
+  background: rgb(156,156,144) repeat scroll 0 0 ;  /* clean look */
   color: var(--contrast_text_color) !important;
   border: 1px solid #444444;
   padding: 6px;
@@ -833,7 +855,9 @@ input[type='number'] {
   float: left;
   height: 105px;
   overflow: auto;
-  background:  url("/images/bg-med-light.jpg") repeat scroll 0 0 ;
+/*  background: rgb(156,156,144) url("/images/bg-med-light.jpg") repeat scroll 0 0 ;  textured sandstone
+  background-size: 240px;  */
+  background: rgb(156,156,144) repeat scroll 0 0 ;  /* clean look */
   color: var(--contrast_text_color) !important;
   border: 1px solid #444444;
   padding: 6px;
@@ -854,7 +878,7 @@ input[type='number'] {
   font-size: 90%;
   font-weight: bold;
   color: #ddd;
-  background-color: #111;
+  background: #21201f url("/images/ui-widget-header.png") 50% 50% repeat-x;
   padding: 4px;
   margin: -7px -6px 7px -6px;
 }
@@ -897,7 +921,9 @@ input[type='number'] {
 }
 
 .ui-widget-header {
-  background: #9e8669 url("/images/ui-widget-header.png") 50% 50% repeat-x;
+  background: #21201f url("/images/ui-widget-header.png") -50% 55% repeat-x;
+  background-size: 900px;
+  border-radius: 7px 7px 0px 0px;
 } /* theme classes 5 */
 .ui-dialog .ui-dialog-title {
   float: none;
@@ -907,6 +933,7 @@ input[type='number'] {
 
 #tabs {
   background-image: url("/images/bg-dark.jpg");
+  background-size: 480px;
   padding: 0px;
   margin: 0px;
   border: none;
@@ -917,7 +944,8 @@ input[type='number'] {
   font-size: 0.98em;
   overflow: hidden;
   /*background: rgb(73, 60, 47) url("/images/ui-widget-header.png") 50% 50% repeat-x;*/
-  background: rgb(62, 81, 115) url("/images/bg-med-light.cyn.jpg") 50% 50% repeat-x;
+  background: rgb(72,92,127) url("/images/bg-med-light.cyn.jpg") 50% 50% repeat-x;
+  background-size:240px;
   border-color: #1c2e3b;
   color: var(--default_text_color);
   padding: 0em .2em 0;
@@ -954,7 +982,8 @@ input[type='number'] {
 
 .tablesorter-dark {
   font: 115% sans-serif;
-  background: url("/images/bg-dark.jpg") repeat scroll 0 0 ;
+  background: rgb(19,32,64) url("/images/bg-dark.jpg") repeat scroll 0 0 ;
+  background-size: 480px;
   color: rgb(223, 223, 223);
 } /* theme classes 2 */
 
@@ -986,8 +1015,12 @@ input[type='number'] {
 .tab_emulator_button {
   border-radius: 8px 8px 0px 0px !important;
   margin-right: -5px !important;
-  background-image: url(/images/bg-med-light.cyn.jpg);
-  color: #ded9d7 !important;
+  /*
+  background: rgb(72,92,127);
+  background-image: url(/images/bg-med-light.cyn.jpg);*/
+  background: rgb(72,92,127) url(/images/bg-med-light.cyn.jpg);
+  background-size:120px !important;
+  color: var(--default-text-color) !important;
   border: 1px solid #39617d;
 }
 .tab_emulator_button:hover {
@@ -995,24 +1028,25 @@ input[type='number'] {
   border: 1px solid #457ba2;
   margin-right: -5px !important;
   color: #090e27 !important;
-  background-image: url(/images/bg-med-light.cyn.jpg) !important;
+  /*
+  background: rgb(72,92,127);
+  background-image: url(/images/bg-med-light.cyn.jpg) !important;*/
+  background: rgb(72,92,127) url(/images/bg-med-light.cyn.jpg) !important;
+  background-size:120px !important;
 }
-/* didn't do anything
+/* didn't do anything? */
 .tab_emulator_button:active {
-  border-radius: 8px 8px 0px 0px !important;
-  margin-right: -5px !important;
-  background-image: url(/images/bg-med-light.jpg) !important;
-  background-color: none !important;
- color: #0ff;
-  background: none !important;
-}*/
+  background-size: 120px !important;
+}
 .tab_emulator_button:focus {
   border-radius: 8px 8px 0px 0px !important;
   margin-right: -5px !important;
+  /*
   background-image: url(/images/bg-med-light.jpg) !important;
-  background-color: none !important;
+  background-color: none !important; */
   color: #090e27 !important;
-  background: url(/images/bg-med-light.jpg) !important;
+  background: rgb(156,156,144) url(/images/bg-med-light.jpg) !important;
+  background-size:120px !important;
   border: 1px solid #366e95;
 }
 
@@ -1043,6 +1077,7 @@ input[type='number'] {
 .act_sel_dialog .ui-dialog-content {
   text-align: center;
   min-width: 250px;
+  background: rgb(90,83,67);
   background-image: url(/images/bg-text.jpg);
 }
 
@@ -1154,13 +1189,13 @@ input[type='number'] {
 
 .specific_tech {
   float: left;
-  background-color: rgba(2,2,2,0.6);
-  color: white;
-  border: 1px solid white;
+  background: #3c332c;
+  background-size:480px;
+  border: 1px solid #947d65;
+  border-radius: 6px;
   padding: 3px;
   margin: 4px;
   cursor: pointer;
-
 }
 
 .tech_infobox_image {
@@ -1179,8 +1214,10 @@ input[type='number'] {
   float: left;
   padding-left: 15px;
   padding-right: 15px;
-  background-image: url(/images/bg-med-dark-text.jpg);
+  background: rgb(13,22,46);
+  /*background-image: url(/images/bg-charcoal.jpg);*/
   border: 2px solid #2b3857;
+  border-top: 0px solid rgb(19,32,64);
   max-height:98% !important;
   overflow-y:auto !important;  /* makes the help entry on items scrollable instead of the whole page scrolling off the screen */
   overflow-x:hidden;  /* prevents horiz. scrollbar that shows dead space. show_help() automatically prevents too small a size for clipping */
@@ -1266,6 +1303,7 @@ input[type='number'] {
 /* Left-hand side pop-out menus in HELP tab */
 #help_menu {
   float: left;
+  background: rgb(35,39,71);
   background-image: url('/images/bg-med-dark.jpg') !important;
   color: rgb(226, 226, 226);
   border: 2px solid #2b3857 !important;
@@ -1437,6 +1475,7 @@ input[type='number'] {
 */
 #tabs-hel.manual_doc {
   background-image: url('/images/bg-dark.jpg');
+  background-size: 480px;
   color: #807e88;
 }
 #tabs-hel.manual_doc h1 {
@@ -1510,7 +1549,8 @@ table.vet_level tr:nth-child(9) td {
 
 #worklist_left {
   float: left;
-  width: 45%
+  width: 45%;
+/*  margin-left: -4px;*/
 }
 
 #worklist_right {
@@ -1557,7 +1597,9 @@ table.vet_level tr:nth-child(9) td {
   font-family: Helvetica;
   font-weight: 500;
   text-shadow: 1px 1px #5554;
+  background: rgb(156,156,144);
   background-image: url(/images/bg-med-light.jpg);
+  background-size: 480px;
 }
 
 #worklist_dialog_headline {
@@ -1963,7 +2005,9 @@ body:not(.mobile) .ui-dialog.unit_dialog {
 }
 
 .cities_row {
+  background: rgb(19,32,64);
   background-image: url(/images/bg-dark-text.jpg);
+  background-size:480px;
   cursor:pointer;
 }
 
@@ -2008,7 +2052,8 @@ body:not(.mobile) .ui-dialog.unit_dialog {
 }
 
 .inteldlg_tabs {
-  background: url("/images/bg-dark.jpg") repeat scroll 0 0 ;
+  background: rgb(19,32,64) url("/images/bg-dark.jpg") repeat scroll 0 0 ;
+  background-size: 480px;
   margin: 0.5em 0em;
   color: #dbd5d0;
 }
@@ -2026,7 +2071,8 @@ body:not(.mobile) .ui-dialog.unit_dialog {
 }
 
 #intel_tabs {
-  background: url("/images/bg-dark.jpg") repeat scroll 0 0 ;
+  background: rgb(19,32,64) url("/images/bg-dark.jpg") repeat scroll 0 0 ;
+  background-size: 480px;
   color: #dbd5d0;
 }
 
@@ -2199,7 +2245,8 @@ li.tech-both00::before { /*  we both have the tech and neither has blueprints */
 
 /* Diplomacy dialog. */
 .diplomacy_messages {
-  background: url("/images/bg-dark.jpg") repeat scroll 0 0 ;
+  background: rgb(19,32,64) url("/images/bg-dark.jpg") repeat scroll 0 0 ;
+  background-size: 480px;
   min-height: 120px;
   max-height: 200px;
   overflow: auto;
@@ -2361,7 +2408,8 @@ li.tech-both00::before { /*  we both have the tech and neither has blueprints */
 .ui-dialog:not(#game_message_area, #game_chatbox_panel) {
   color: var(--default_text_color);
   font-family:Helvetica;
-  background: url('/images/bg.jpg');
+  background: rgb(97,90,71) url('/images/bg.jpg');
+  background-size: 510px !important;
   border: #432 !important;
 }
 
@@ -2410,20 +2458,26 @@ body div.ui-tooltip {
 
 .ui-tabs-anchor {
   font-family: "Helvetica";
-  background: url('/images/bg-med-dark.jpg');
+  /*
+  background: rgb(72,92,127) url('/images/bg-med-light.cyn.jpg');
+  background-size: 480px;*/
   color: var(--default_text_color) !important;
   border-color: #000;
   border-radius: 5px 5px 0 0;
   font-weight: 500;
 }
 .ui-tabs-anchor:hover {
-  background: url('/images/bg-med-light.cyn.jpg') #000;
+  /*
+  background: rgb(19,32,64) url('/images/bg-dark.jpg');
+  background-size: 480px;*/
+  background: rgb(72,92,127) !important;
   color: #000 !important;
   border-radius: 5px 5px 0 0;
 }
 /* while pushed */
 .ui-tabs-anchor:active {
-  background: url('/images/bg-light.jpg') #000;
+  background: url('/images/bg-light.jpg') #bbb;
+  background-size:480px;
   color: rgb(117, 47, 0) !important;
   border-radius: 5px 5px 0 0;
 }
@@ -2450,7 +2504,8 @@ body div.ui-tooltip {
 a:focus { outline: thin dotted; border:none;}
 .ui-tabs-active .ui-tabs-anchor {
   top: -1px;
-  background: url('/images/bg-med-light.cyn.jpg') #000 !important;
+  background: rgb(19,32,64) url('/images/bg-dark.jpg') !important;
+  background-size: 480px;
   color:#fff0ed !important;
   border: none !important;
   text-shadow: 0.5px 0.5px black;
@@ -2575,7 +2630,10 @@ input[type="email" i], #email {
 /*  margin: 3px;
   padding: .4em; */
   cursor: pointer;
-  background: #0000003b;
+  /* background: #0000003b; */
+  background: #1e3143;
+  margin-bottom: 0px;
+  border: 1px solid #25434c;
 }
 
 /*  These get put in chatbox classes, meaning we can define colours, fonts, indent, collapsing, all kinds of stuff
@@ -2916,8 +2974,9 @@ input[type="email" i], #email {
 #city_right_panel {
   float: right;
   width: 55%;
-  background: url("/images/bg.jpg") repeat scroll 0 0 #222222;
-  height: 533px;
+  background: rgb(97,90,71) url("/images/bg.jpg") repeat scroll 0 0 #222222;
+  background-size: 480px;
+height: 533px;
 } /* theme classes 1 */
 
 #city_improvements_panel {
@@ -2940,10 +2999,24 @@ input[type="email" i], #email {
 }
 #city_production_tab,
 #city_governor_tab,
+#city_settings_tab,
 #city_happy_tab,
 #city_traderoutes_tab,
 #city_overview_tab {
-  background: url("/images/bg-dark.jpg");
+  background: rgb(19,32,64) url("/images/bg-dark.jpg");
+  background-size: 480px;
+  margin: -4px;
+  margin-bottom: 18px;
+  border-radius: 5px;
+}
+#city_production-tab {
+  margin-right: -3px;  /* compromise fit of scrollbar a little better */
+}
+#city_tabs-h, #city_tabs-g {  /* for some reason these parent tabs of #city_happy_tab and #city_governor_tab also need margin-bottom set to exact same as above ⚠️ */
+  margin-bottom: 18px;
+}
+#city_governor_tab, #city_happy_tab { /* keeps background consistent as these tabs might not have full height */
+  height: 100%;
 }
 
 #city_current_worklist {
@@ -2951,7 +3024,9 @@ input[type="email" i], #email {
   float: left;
   overflow: auto;
   /* background-color: rgba(40,40,40,0.4); */
-  background-image: url("/images/bg-med-light.jpg");
+  background: rgb(156,156,144);
+  background-image:  url("/images/bg-med-light.jpg");
+  background-size: 480px;
   color: var(--contrast_text_color) !important;
   border: 1px solid black;
   border-radius: 4px;
@@ -2975,6 +3050,7 @@ input[type="email" i], #email {
 #city_worklist_exchange_btn,
 #city_worklist_remove_btn {
   background-image: url("/images/bg-med-light.jpg");
+  background-size:480px;
   color: #333;
 }
 
@@ -2986,6 +3062,7 @@ input[type="email" i], #email {
   margin-left: -5px;
   margin-right: -5px;
   margin-bottom: -5px;
+  border-radius: 0px;
 }
 #city_tabs_panel > li {
   margin-left: 0px;
@@ -3001,6 +3078,11 @@ input[type="email" i], #email {
   height: 23px !important;
   width: 23px !important;
   background-image: url('/images/slider_prod.png'); /* default grey */
+}
+#btn_cma_help {
+  float:right;
+  margin-top:-30px !important;
+  margin-right:0px !important;
 }
 
 
