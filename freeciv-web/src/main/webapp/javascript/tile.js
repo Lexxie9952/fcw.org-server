@@ -241,6 +241,12 @@ function improve_tile_info_dialog(message)
     }
   }
 
+  /* Parsing through every improvement and extra and unit_type on the tile in a systematic way to catch and replace them with help
+     links is tricky because some contain each others' names. And it's not compute efficient either. But this system in this careful
+     delicate order seems to work. What we should do, however, is have the server send a code like ~ex[45] for extra 45; this unfortunately
+     makes compatibility with native clients even more difficult to do later, but we can't send this huge chunk of html over the server
+     already preprocessed, it breaks because of message length and is bad for bandwidth as well. */
+
   // Make help links to all improvements reported on a city center tile (wonders and defense improvements basically)
   for (im in improvements) {
     let imname = improvements[im]['name'];
@@ -285,36 +291,36 @@ function improve_tile_info_dialog(message)
     if (exname == ex) continue;      // key = extras[key], redundant extras keyed by extra_name, skip
     //console.log(ex+"(ex). "+exname);
 
-    if (message.includes("<b>"+exname)
+    if (message.includes("Infrastructure: <b>"+exname)
         || message.includes(exname+"/")
         || message.includes("/"+exname)
         || message.includes("("+exname+")</b>")
-        || message.includes("Activity: <b>"+exname+"</b>")
+        || message.includes("Activity: <b>"+exname+"(")
       ) {
 
       //console.log("  message includes");
 
-      if (message != message.replace("Activity: <b>"+exname+"</b>", "<span style='color:#80f0ff; cursor:pointer' title='CLICK: Help on "
-                + exname + "' onclick='javascript:tile_info_help_redirect(VUT_EXTRA, "+ex+")' class='black_shadow tt'>Activity: <u><b>"
-                + exname+"</b></u></span>")) {
+      if (message != message.replace("Activity: <b>"+exname+"(", "Activity: <span style='color:#80f0ff; cursor:pointer' title='CLICK: Help on "
+                + exname + "' onclick='javascript:tile_info_help_redirect(VUT_EXTRA, "+ex+")' class='black_shadow tt'><u><b>"
+                + exname+"</u></span>(")) {
 
-          message = message.replace("Activity: <b>"+exname+"</b>", "<span style='color:#80f0ff; cursor:pointer' title='CLICK: Help on "
-                          + exname + "' onclick='javascript:tile_info_help_redirect(VUT_EXTRA, "+ex+")' class='black_shadow tt'>Activity: <u><b>"
-                          + exname+"</b></u></span>");
+          message = message.replace("Activity: <b>"+exname+"(", "Activity: <span style='color:#80f0ff; cursor:pointer' title='CLICK: Help on "
+                          + exname + "' onclick='javascript:tile_info_help_redirect(VUT_EXTRA, "+ex+")' class='black_shadow tt'><u><b>"
+                          + exname+"</u></span>(");
       }
-      else if (message != message.replace("<b>"+exname, "<span style='color:#80f0ff; cursor:pointer' title='CLICK: Help on "
+      else if (message != message.replace("Infrastructure: <b>"+exname, "Infrastructure: <span style='color:#80f0ff; cursor:pointer' title='CLICK: Help on "
                 + exname + "' onclick='javascript:tile_info_help_redirect(VUT_EXTRA, "+ex+")' class='black_shadow tt'><u><b>"
                 + exname+"</b></u></span>")) {
 
-          message = message.replace("<b>"+exname, "<span style='color:#80f0ff; cursor:pointer' title='CLICK: Help on "
-                          + exname + "' onclick='javascript:tile_info_help_redirect(VUT_EXTRA, "+ex+")' class='black_shadow tt'><u><b>"
-                          + exname+"</b></u></span>");
+                message = message.replace("Infrastructure: <b>"+exname, "Infrastructure: <span style='color:#80f0ff; cursor:pointer' title='CLICK: Help on "
+                + exname + "' onclick='javascript:tile_info_help_redirect(VUT_EXTRA, "+ex+")' class='black_shadow tt'><u><b>"
+                + exname+"</b></u></span>");
       }
       else if (message != message.replace(exname+"/", "<span style='color:#80f0ff; cursor:pointer' title='CLICK: Help on "
-          + exname + "' onclick='javascript:tile_info_help_redirect(VUT_EXTRA, "+ex+")' class='black_shadow tt'><u><b>"
-          + exname+"</b></u></span>/") ) {
+                + exname + "' onclick='javascript:tile_info_help_redirect(VUT_EXTRA, "+ex+")' class='black_shadow tt'><u><b>"
+                + exname+"</b></u></span>/") ) {
 
-        message = message.replace(exname+"/", "<span style='color:#80f0ff; cursor:pointer' title='CLICK: Help on "
+                message = message.replace(exname+"/", "<span style='color:#80f0ff; cursor:pointer' title='CLICK: Help on "
                 + exname + "' onclick='javascript:tile_info_help_redirect(VUT_EXTRA, "+ex+")' class='black_shadow tt'><u><b>"
                 + exname+"</b></u></span>/")
       }
