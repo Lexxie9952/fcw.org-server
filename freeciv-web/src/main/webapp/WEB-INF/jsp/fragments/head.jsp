@@ -63,7 +63,8 @@
 		padding-top: 60px;
 		padding-bottom: 20px;
 		color: #ccc;
-  	background-image: url('/images/bg-dark.jpg');
+	  	background-image: url('/images/bg-dark.jpg');
+		background-size: 480px;
 	}
 	a {
     text-shadow: 1px 1px #000 !important;
@@ -143,8 +144,8 @@
 	 * The bootstrap theme we use adds some transparency, this ensure it is removed.
 	 */
 	.navbar-inverse {
-		background-color: #2220;
-		background: url(/images/bg-med-dark.jpg);
+		background: rgb(35,39,71) url(/images/bg-med-dark.jpg);
+		background-size: 480px;
 	}
 	/*
 	 * Ensure that the logo fits within the navbar.

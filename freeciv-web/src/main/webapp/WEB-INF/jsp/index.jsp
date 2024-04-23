@@ -44,15 +44,17 @@
 	}
 	#game-launcher .game-type {
 		width: 100%;
-		background: url('/images/bg-med-dark.jpg');
+		background: rgb(35,39,71) url('/images/bg-med-dark.jpg');
+		background-size: 480px;
+		background-repeat: repeat;
 		display: inline-table;
 		top: 0;
-    border-radius: 20px 20px 20px 20px;
+    	border-radius: 20px 20px 20px 20px;
 	}
 	#game-launcher .game-type:not(:last-child) {
 		margin-right: 40px;
 		border: solid 2px #BBA;
-    border-radius: 20px 20px 20px 20px;
+    	border-radius: 20px 20px 20px 20px;
 		border-bottom: 1 !important;
 		color :#c0bbb5;
 	}
@@ -63,7 +65,8 @@
 		padding: 15px;
 		margin-bottom: 0px;
 		background-image: url('/images/bg-med-light.jpg');
-		background-repeat: repeat;
+		background: rgb(156,156,144)
+		background-size: 480px;
 		border: 1px solid #bbb;
 		border-radius: 19px 19px 4px 4px;
 		border-bottom: 0;
@@ -96,7 +99,8 @@
 		text-shadow: 1px 1px #091a38 !important;
 		color: #39f5;
 		border-radius: 13px;
-		background-image: url(/images/bg-med-light.jpg);
+		background-image:  url('/images/bg-med-light.jpg');
+		background-size: 480px;
 		background: #c3ffff71;
 		box-shadow: 7px 7px 14px #1f2626, -7px -7px 14px #9bb5;
 		font-family: 'Helvetica';
@@ -147,7 +151,7 @@
 		text-shadow: 1px 1px #777;
 		}
 		.dropdown-menu {
-		background-image: url('/images/bg-med-dark.jpg');
+			background: rgb(35,39,71) url('/images/bg-med-dark.jpg');
 			border-radius: 5px;
 			border: 2x solid #000e;
 		}
@@ -168,11 +172,16 @@
 		}
 		.navbar-inverse {
 			background-color: #2220;
-			background: url(/images/bg-med-dark.jpg);
+			background: rgb(35,39,71) url('/images/bg-med-dark-text.jpg');
+			background-size: 480px;
+			background-repeat: repeat;
 		}
 		body {
 			color: #ccc;
-		background-image: url('/images/bg-dark.jpg');
+			background: rgb(19,32,64);
+			background-image:  url('/images/bg-dark.jpg');
+			background-size: 480px;
+			background-repeat: repeat;
 		}
 		.container {
 			background: none !important;
