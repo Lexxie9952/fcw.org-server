@@ -87,7 +87,7 @@ The current and complete list of Freeciv-web controls can be found here:<br>
 
 <tr><td><img src="/images/orders/pillage.png"></td><td><span class="vctr"> Pillage</td><td><span class="hotkey">shift-P</span></span></td></tr>
 
-<tr><td><img src="/images/orders/patrol.png"></td><td><span class="vctr"> Pillage</td><td><span class="hotkey">ctrl-P (+SHIFT delay to next turn)</span></span></td></tr>
+<tr><td><img src="/images/orders/patrol.png"></td><td><span class="vctr"> Patrol</td><td><span class="hotkey">ctrl-P (+SHIFT delay to next turn)</span></span></td></tr>
 
 <tr><td><img src="/images/orders/quay.png"></td><td><span class="vctr"> Build Quay</td><td><span class="hotkey">q</span></span></td></tr>
 
