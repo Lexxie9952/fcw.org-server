@@ -391,7 +391,7 @@ function console_filter_dialog()
 
   $(id).dialog('open');
   $(id).parent().css("zIndex", 1051); // force placement over other windows.
-  $(id).css("background","url(/images/bg-dark50.png)");
+  $(id).css("background","url(/images/bg-charcoal.jpg)");
   $(id).next().css("text-align", "center");
   $(id).dialog('widget').position({my:"left top", at:"left center", of:window})
 

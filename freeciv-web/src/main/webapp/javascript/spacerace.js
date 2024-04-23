@@ -90,7 +90,7 @@ function show_spaceship_dialog()
 
   $("#dialog").dialog('open');
   dialog_register("#dialog");
-  $("#dialog").css("background-image","url(/images/bg-dark50.png");
+  $("#dialog").css("background-image","url(/images/bg-charcoal.jpg");
   if (spaceship['sship_state'] != SSHIP_STARTED || spaceship['success_rate'] == 0) $(".ui-dialog-buttonpane button:contains('Launch')").button("disable");
 }
 // Called when clicking link for space race help in spaceship dialog:

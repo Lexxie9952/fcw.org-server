@@ -42,7 +42,7 @@
 	}
   body {
 		color: #ccc;
-  	background-image: url('/images/bg-dark50.png');
+  	background-image: url('/images/bg-charcoal.jpg');
 	}
 	.container {
 		background: none !important;
@@ -199,7 +199,6 @@
     font-family: Segoe;
     src: url('/fonts/seg.ttf');
   }
-	}
 
 </style>
 
