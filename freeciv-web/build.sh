@@ -71,9 +71,9 @@ echo "Copying target/freeciv-web.war to ${TOMCATDIR}/webapps" && \
 echo -e "${WHITE}------------------------------------------------------------------------"
 echo -e "${LGREEN}BUILD COMPLETE"
 echo -e "${WHITE}------------------------------------------------------------------------"
-echo -e "${WHITE}NOTE: ${LGREY}for superior performance,"
-echo -e "${LCYAN}    Imageoptim ${CYAN}freeciv-web/target/freeciv-web/tileset"
-echo -e "${LGREY}      copy to: ${CYAN}/var/lib/tomcat8/webapps/freeciv-web/tileset"
+echo -e "${WHITE}NOTE${LGREY}: tilespec.js set to use .webp for tileset files. If these files"
+echo -e "weren't already in ${CYAN}src/derived/freeciv-web/tileset${LGREY}, transfer .webp"
+echo -e "files into ${CYAN}/var/lib/tomcat8/webapps/freeciv-web/tileset${LGREY} now."
 echo -e "${PINK}Don't forget to run ${LCYAN}buildmusic.sh ${PINK}"
 
 # let user know when it's finished
