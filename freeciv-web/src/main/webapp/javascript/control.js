@@ -180,19 +180,22 @@ function control_init()
   });
 
   $("#load_game_button").click(function(event) {
+      document.activeElement.blur(); // remove tooltip after click
       show_load_game_dialog();
   });
 
   $("#pick_nation_button").click(function(event) {
+    document.activeElement.blur();  // remove tooltip after click
     pick_nation(null);
   });
 
   $("#pregame_settings_button").click(function(event) {
+    document.activeElement.blur(); // remove tooltip after click
     pregame_settings();
   });
 
   $("#tech_canvas").mousedown(function(event) {
-     tech_mapview_mouse_click(event);
+    tech_mapview_mouse_click(event);
    });
 
   /* disable text-selection, as this gives wrong mouse cursor
