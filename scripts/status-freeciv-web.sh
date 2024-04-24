@@ -126,7 +126,7 @@ checkWebSocket "WebSocket through nginx" "http://localhost/civsocket/7002"
 checkPID "freeciv-web (spawned by publite2)" "freeciv-web"
 
 checkWebURL "webclient.min.js generation" "http://localhost/javascript/webclient.min.js" --head
-checkWebURL "tileset generation" "http://localhost/tileset/freeciv-web-tileset-amplio2-0.png" --head
+checkWebURL "tileset generation" "http://localhost/tileset/freeciv-web-tileset-amplio2-0.webp" --head
 
 printf "\n--------------------------------\n";
 echo "Check of Freeciv-web is done!"
