@@ -279,6 +279,10 @@ function update_player_info_pregame_real()
     }
     $("#pregame_player_list").html(player_html);
 
+    $("#pregame_player_list").click(function(event) {
+      document.activeElement.blur();  // remove tooltip after click
+    });
+
     /* show player ready state in pregame dialog */
     for (id in players) {
       var player = players[id];
@@ -297,11 +301,11 @@ function update_player_info_pregame_real()
       }
       if (player['is_ready'] == true) {
         $("#pregame_plr_"+id).addClass("pregame_player_ready");
-        $("#pregame_plr_"+id).attr("title", "Player ready" + nation_text);
+        $("#pregame_plr_"+id).attr("title", "Player ready\nRIGHT-CLICK: more options" + nation_text);
       } else if (player['name'].indexOf("AI") == -1) {
-          $("#pregame_plr_"+id).attr("title", "Player not ready" + nation_text);
+          $("#pregame_plr_"+id).attr("title", "Player not ready\nRIGHT-CLICK: more options" + nation_text);
       } else {
-          $("#pregame_plr_"+id).attr("title", "AI Player (random nation)");
+          $("#pregame_plr_"+id).attr("title", "AI Player (random nation)\nRIGHT-CLICK: more options");
       }
       $("#pregame_plr_"+id).attr("name", player['name']);
       $("#pregame_plr_"+id).attr("playerid", player['playerno']);
@@ -315,7 +319,7 @@ function update_player_info_pregame_real()
             "pick_nation": {name: "Pick nation"},
             "observe_player": {name: "Observe this player"},
             "take_player": {name: "Take this player"},
-            "aitoggle_player": {name: "Aitoggle player"},
+            "aitoggle_player": {name: "Toggle Human/AI"},
             "sep1": "---------",
             "novice": {name: "Novice"},
             "easy": {name: "Easy"},
@@ -333,7 +337,8 @@ function update_player_info_pregame_real()
       $("#pregame_player_list").contextMenu({
         selector: '.pregame_player_name',
         callback: function(key, options) {
-            var name = $(this).attr('name');
+          document.activeElement.blur();  // remove tooltip after click
+          var name = $(this).attr('name');
             if (name != null && name.indexOf(" ") != -1) name = name.split(" ")[0];
             var playerid = parseInt($(this).attr('playerid'));
             if (key == "take_player") {
@@ -368,7 +373,6 @@ function update_player_info_pregame_real()
   }
   update_player_info_pregame_queued = false;
 }
-
 
 /****************************************************************************
   Draw a nation from a list of playable nations in an ongoing longturn game.
@@ -495,12 +499,12 @@ function pick_nation(player_id)
                + "<div id='nation_legend'></div><div id='select_nation_flag'></div>";
 
 
-  var buttons = { "1" : { id: "play", text:"Play this nation!", click: function() { if (chosen_nation != -1) {
+  var buttons = { "1" : { id: "play", text:"DONE", click: function() { if (chosen_nation != -1) {
                                                                                         $("#pick_nation_dialog").dialog('close');
                                                                                         if (!is_ongoing_longturn()) submit_nation_choice();
                                                                                         else submit_nation_choice_ongoing_longturn(); }
                                                                                   } },
-                  "2" : { id: "customize", text:"Customize this nation", click: function() {show_customize_nation_dialog(player_id);} }
+                  "2" : { id: "customize", text:"Customize nation", click: function() {show_customize_nation_dialog(player_id);} }
                 }
 
   if (is_ongoing_longturn()) {
