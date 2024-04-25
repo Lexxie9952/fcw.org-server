@@ -1004,13 +1004,13 @@ input[type='number'] {
 .govbutton {
   width: 190px;
 }
-
+/*
 .setting_button {
-/*  width: 140px;
+    width: 140px;
     left blank, let the layout auto-fit: working better
-*/
-}
 
+}
+*/
 /* makes a button appear as a tab */
 .tab_emulator_button {
   border-radius: 8px 8px 0px 0px !important;
@@ -1225,7 +1225,7 @@ input[type='number'] {
   scrollbar-width: unset;
 }
 #help_info_page p {
-  line-spacing: 1.27em;
+  line-height: 1.27em;
 }
 #help_info_page h1 {
   color: #dfdfdf;
