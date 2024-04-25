@@ -65,7 +65,7 @@
 		padding: 15px;
 		margin-bottom: 0px;
 		background-image: url('/images/bg-med-light.jpg');
-		background: rgb(156,156,144)
+		background: rgb(156,156,144);
 		background-size: 480px;
 		border: 1px solid #bbb;
 		border-radius: 19px 19px 4px 4px;
