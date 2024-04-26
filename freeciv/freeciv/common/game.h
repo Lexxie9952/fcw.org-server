@@ -332,9 +332,25 @@ struct civ_game {
   } callbacks;
 };
 
-bool is_server(void);
+#ifdef FREECIV_WEB
+  extern const bool am_i_server;
+  #define is_server() TRUE
+#elif
+  extern bool am_i_server;
+  #define is_server() is_server_executing()
+#endif
+
+/**********************************************************************//**
+  Is the program type server?
+**************************************************************************/
+static inline bool is_server_executing(void)
+{
+  return am_i_server;
+}
+
 void i_am_server(void);
 void i_am_client(void);
+
 static inline void i_am_tool(void)
 {
   i_am_server(); /* No difference between a tool and server at the moment */

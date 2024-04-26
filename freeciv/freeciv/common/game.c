@@ -57,24 +57,27 @@
 struct civ_game game;
 struct world wld;
 
-bool am_i_server = FALSE;
+/*⬇ <begin: MACRO SECTION TO OPTIMIZE is_server() calls> **********************************⬇**
+   The macros here and in game.c make it so that: ifdef FREECIV_WEB, then all is_server() calls
+   get replaced with a hard-coded TRUE, causing compiler to eliminate the calls completely.
+   (This may increase performance because is_server() is hit hard during deep recursion.)
+   ifndef FREECIV, then the macros emulate commit 29d89e9eb9e4c8d19e5ca9d9e5baa38df3be368b ***/
+#ifdef FREECIV_WEB
+  const bool am_i_server = TRUE;
+#elif
+  bool am_i_server = FALSE;
+#endif
 
 static void game_defaults(bool keep_ruleset_value);
-
-/**********************************************************************//**
-  Is program type server?
-**************************************************************************/
-bool is_server(void)
-{
-  return am_i_server;
-}
 
 /**********************************************************************//**
   Set program type to server.
 **************************************************************************/
 void i_am_server(void)
 {
+#ifndef FREECIV_WEB
   am_i_server = TRUE;
+#endif
 }
 
 /**********************************************************************//**
@@ -82,8 +85,11 @@ void i_am_server(void)
 **************************************************************************/
 void i_am_client(void)
 {
+#ifndef FREECIV_WEB
   am_i_server = FALSE;
+#endif
 }
+/*⬆︎ </end: MACRO SECTION TO OPTIMIZE is_server() calls> ************(*********************⬆︎**/
 
 /**********************************************************************//**
   Count the # of thousand citizen in a civilisation.
