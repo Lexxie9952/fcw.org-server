@@ -1285,6 +1285,11 @@ static void write_init_script(char *script_filename)
 
   interpret_tilde(real_filename, sizeof(real_filename), script_filename);
 
+// Suppress vscode error if it can't access virtual machine's filepath outside of the main folders for the code
+#ifndef VERSION_STRING
+  #define VERSION_STRING "3.0.92-dev"
+#endif
+
   if (is_reg_file_for_access(real_filename, TRUE)
       && (script_file = fc_fopen(real_filename, "w"))) {
     fprintf(script_file,
