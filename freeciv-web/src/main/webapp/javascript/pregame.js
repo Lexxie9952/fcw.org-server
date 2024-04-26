@@ -39,8 +39,9 @@ var browser = {
   "metaKey": "&#8862;", // defaults as unicode 4-paned window symbol for windows key
   "metaKeySymbol": "&#8862;",   // read-only (backup) version of prop. above
   "metaKeyText": "WIN",
-  "firstOrPrivateSession": false, // whether local storage from previous sessions recalled
-  //on as-needed basis for cases needing different handling:
+  "firstOrPrivateSession": false, // whether local storage from previous sessions has been successfully retrieved
+
+  // We identify specific browsers only as needed for cases requiring special handling:
   "opera": false,  // opera mis-locates the turn done button
   "ie": false,     // internet explorer is garbage, disallow
   "firefox": false // firefox hijacks alt-shift and ctrl-shift clicking
