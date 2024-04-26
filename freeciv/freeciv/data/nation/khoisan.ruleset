@@ -14,15 +14,15 @@ legend=_("Khoisan speakers are typically divided between the Khoikhoi,\
 
 leaders = {
 "name", 			"sex"
-"!U", 				"Male"
+"Uu", 				"Male"
 "Krotoa", 			"Male"
-"╪Toma", 			"Male"
-"/Gawamūma /Ōnōb", 		"Male"
+"Toma", 			"Male"
+"Gawamūma Ōnōb", 		"Male"
 "Tsamgao", 			"Male"
-"╪Gao", 			"Male"
-"/Ti!kay", 			"Male"
+"Gao", 			"Male"
+"Ti-kay", 			"Male"
 "Adam Kok III", 		"Male"
-"Manasse ǃNoreseb Gamab", 	"Male"
+"Manasse Noreseb Gamab", 	"Male"
 "DaSo", 			"Female"
 }
 
@@ -36,34 +36,34 @@ init_units=""
 civilwar_nations = "namibian", "xhosa"
 
 cities =
-"//Hui !Gaeb",
+"Hui !Gaeb",
 "Khorixas",
 "Gam",
 "Hoachanas",
 "Seeis",
-"ǀAiǁGams",
-"!Hoaxa !nâs",
+"AiǁGams",
+"Hoaxa !nâs",
 "Keitsa",
 "Cho/ana",
 "Khumsa",
-"!No!Go",
+"No!Go",
 "Nama",
-"//Gon//Gana",
+"Gon Gana",
 "Kai Kai",
 "Dom!Na",
 "Khownwa",
-"╪Go╪Gowe",
+"Go Gowe",
 "Nam Tchoha",
-"//No!Gau",
+"No!Gau",
 "Kautsa",
 "Gura",
 "Khumsa",
 "Gautscha",
 "Khaxutsus",
 "Tsumkwe",
-"//Khara hais",
-"!Huni //hāb",
+"Khara hais",
+"Huni //hāb",
 "Huri ╪oaxa",
 "Gūdaos",
 "Kai mûs",
-"!Gariep"
+"Gariep"
