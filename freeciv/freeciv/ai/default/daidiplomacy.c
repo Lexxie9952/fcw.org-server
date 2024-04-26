@@ -39,6 +39,7 @@
 #include "spaceship.h"
 #include "tech.h"
 #include "unitlist.h"
+#include "featured_text.h"
 
 /* server */
 #include "citytools.h"
