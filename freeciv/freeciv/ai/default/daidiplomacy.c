@@ -1319,8 +1319,9 @@ static void dai_go_to_war(struct ai_type *ait, struct player *pplayer,
     adip->countdown = -10;
     break;
   case DAI_WR_BEHAVIOUR:
-    dai_diplo_chat(pplayer, target, _("I have tolerated your vicious antics "
-                   "long enough! To war!"));
+    dai_diplo_chat(pplayer, target,
+                   fc_rand(2) ? _("I have tolerated your vicious antics long enough! To war!")
+                              : _("Your disrespect of our people will soon be reciprocated."));
     adip->countdown = -20;
     break;
   case DAI_WR_NONE:
