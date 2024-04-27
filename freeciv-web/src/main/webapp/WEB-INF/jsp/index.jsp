@@ -23,7 +23,7 @@
 	.input-group .form-control:first-child {
     border-bottom-right-radius: 0;
     border-top-right-radius: 0;
-    background: #000;
+    /*background: #000;*/
     color: #ccc;
     border-color: #444;
 		border-radius: 6px 0px 0px 6px;
@@ -44,7 +44,7 @@
 	}
 	#game-launcher .game-type {
 		width: 100%;
-		background: rgb(35,39,71) url('/images/bg-med-dark.jpg');
+		background: rgb(35,39,71) url('/images/bg-med-dark-text.jpg');
 		background-size: 480px;
 		background-repeat: repeat;
 		display: inline-table;
@@ -102,7 +102,7 @@
 		background-image:  url('/images/bg-med-light.jpg');
 		background-size: 480px;
 		background: #c3ffff71;
-		box-shadow: 7px 7px 14px #1f2626, -7px -7px 14px #9bb5;
+		box-shadow: 7px 7px 14px #1f2626, -2.5px -2.5px 5px #9bb5;
 		font-family: 'Helvetica';
 		letter-spacing: 0.3px;
 		}
@@ -132,47 +132,59 @@
 			padding: 2px;
 		}
 		.videoWrapper {
-		position: relative;
-		padding-bottom: 56.25%; /* 16:9 */
-		padding-top: 25px;
-		height: 0;
+			position: relative;
+			padding-bottom: 56.25%; /* 16:9 */
+			padding-top: 25px;
+			height: 0;
 		}
 
 		.videoWrapper iframe {
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
 		}
 		.jumbotron {
-		padding-bottom: 0px;
-		background: #0000 !important;
-		text-shadow: 1px 1px #777;
+			padding-bottom: 0px;
+			background: #0000 !important;
+			text-shadow: 1px 1px #777;
+		}
+		.dropdown-toggle {
+			background: #232747 !important;
+		}
+		.dropdown-toggle.open,.dropdown-toggle:hover, .dropdown-toggle.active  {
+			background: #2f3560 !important;
 		}
 		.dropdown-menu {
-			background: rgb(35,39,71) url('/images/bg-med-dark.jpg');
+			background: #232747; /* url('/images/bg-med-dark.jpg'); */
+			background-image: none;
 			border-radius: 5px;
 			border: 2x solid #000e;
 		}
 		.dropdown-menu .divider {
-				height: 1px;
-				margin: 5px 0;
-				border: 1px solid #000;
-				background-color: #000;
+			height: 1px;
+			margin: 5px 0;
+			border: 1px solid rgb(66, 65, 94) !important;
 		}
 		.dropdown-menu>li>a {
-				display: block;
-				padding: 3px 20px;
-				clear: both;
-				font-weight: normal;
-				line-height: 1.42857143;
-				color: #ccc;
-				white-space: nowrap;
+			background-image: none;
+			background: #232747 !important; /* url('/images/bg-med-dark.jpg'); */
+			display: block;
+			padding: 3px 20px;
+			clear: both;
+			font-weight: normal;
+			line-height: 1.42857143;
+			color: #9d9d9d !important;
+			white-space: nowrap;
+			font-size: 110%;
+		}
+		.dropdown-menu>li>a:hover {
+			color: #fff !important;
+			background: #2f3560 !important;
 		}
 		.navbar-inverse {
-			background-color: #2220;
-			background: rgb(35,39,71) url('/images/bg-med-dark-text.jpg');
+			background: #232747;
 			background-size: 480px;
 			background-repeat: repeat;
 		}
@@ -191,7 +203,8 @@
 			color: #ccc;
 		}
 		.panel-freeciv {
-			background-color: #ccc1;
+			background: #232747;
+			background-image: none;
 		}
 		h1,h2,h3,h4,h5,h6 {
 			font-family: 'Helvetica', 'Freeciv', 'Segoe UI';
@@ -506,7 +519,7 @@ Random randomValue=new Random();
 			</div>
 			<form method="POST" id="zcampaignOptinForm" action="https://maillist-manage.eu/weboptin.zc" target="_zcSignup">
 				<div id="errorMsgDiv"></div>
-				<div class="SIGNUP_FLD" style="margin: 0 auto;width:80%; text-align:center">
+				<div class="SIGNUP_FLD" style="margin: 0 auto;width:80%; text-align:center; color:#555">
 					<input type="text" style="display: block; margin : 0 auto;" placeholder="Email" changeitem="SIGNUP_FORM_FIELD" name="CONTACT_EMAIL" id="EMBED_FORM_EMAIL_LABEL">
 				</div>
 				<div style="margin: 0 auto;width:80%; text-align:center">
@@ -698,11 +711,11 @@ Random randomValue=new Random();
 		<div class="row">
 			<div class="col-md-12">
 				<h2><fmt:message key="index-press"/></h2>
-				<div class="well">
+				<div class="panel-freeciv" style="margin-top: -0.87%;">
 					<h4><b><i><fmt:message key="index-press-pc-gamer-title"/></i></b></h4>
 					<i><fmt:message key="index-press-pc-gamer-content"/></i>
 					<br>
-					<a href="http://www.pcgamer.com/freeciv-available-in-html5-browsers-worldwide-productivity-plummets/" target="new"><img style="display: block; float: right;" src="images/static/pcgamer.gif" alt="PC Gamer"></a>
+					<a href="http://www.pcgamer.com/freeciv-available-in-html5-browsers-worldwide-productivity-plummets/" target="new"><img style="display: block; float: right;" src="/static/images/pcgamer.gif" alt="PC Gamer"></a>
 					<br>
 				</div>
 			</div>
@@ -711,7 +724,7 @@ Random randomValue=new Random();
 		<c:if test="${default_lang}">
 			<div class="row">
 				<div class="col-md-12">
-					<h2><fmt:message key="index-developers"/></h2>
+					<h2 style="margin-bottom: -3px;"><fmt:message key="index-developers"/></h2>
 				</div>
 			</div>
 			<div class="row">

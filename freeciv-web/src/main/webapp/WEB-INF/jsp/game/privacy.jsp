@@ -28,10 +28,11 @@
     border-color: #444;
     text-shadow: 1px 1px #888;
 	}
-  .navbar-inverse {
-		background-color: #2220;
-		background: url(/images/bg-med-dark.jpg);
-	}
+    .navbar-inverse {
+			background: #232747;
+			background-size: 480px;
+			background-repeat: repeat;
+    }
 	a {
     text-shadow: 1px 1px #000;/* !important;*/
 	}

@@ -39,8 +39,9 @@
 				white-space: nowrap;
 		}
 		.navbar-inverse {
-			background-color: #2220;
-			background: url(/images/bg-med-dark.jpg);
+			background: #232747;
+			background-size: 480px;
+			background-repeat: repeat;
 		}
 		h1,h2,h3,h4,h5,h6 {
 			font-family: 'Helvetica', 'Freeciv', 'Segoe UI';

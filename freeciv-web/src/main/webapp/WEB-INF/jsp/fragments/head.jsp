@@ -144,8 +144,9 @@
 	 * The bootstrap theme we use adds some transparency, this ensure it is removed.
 	 */
 	.navbar-inverse {
-		background: rgb(35,39,71) url(/images/bg-med-dark.jpg);
-		background-size: 480px;
+			background: #232747;
+			background-size: 480px;
+			background-repeat: repeat;
 	}
 	/*
 	 * Ensure that the logo fits within the navbar.
