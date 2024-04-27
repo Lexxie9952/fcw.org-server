@@ -72,7 +72,7 @@ echo -e "${WHITE}---------------------------------------------------------------
 echo -e "${LGREEN}BUILD COMPLETE"
 echo -e "${WHITE}------------------------------------------------------------------------"
 echo -e "${WHITE}NOTE${LGREY}: tilespec.js set to use .webp for tileset files. If these files"
-echo -e "weren't already in ${CYAN}src/derived/freeciv-web/tileset${LGREY}, transfer .webp"
+echo -e "weren't already in ${CYAN}src/derived/webapp/tileset${LGREY}, transfer .webp"
 echo -e "files into ${CYAN}/var/lib/tomcat8/webapps/freeciv-web/tileset${LGREY} now."
 echo -e "${PINK}Don't forget to run ${LCYAN}buildmusic.sh ${PINK}"
 
