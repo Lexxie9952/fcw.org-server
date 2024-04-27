@@ -711,7 +711,7 @@ Random randomValue=new Random();
 		<div class="row">
 			<div class="col-md-12">
 				<h2><fmt:message key="index-press"/></h2>
-				<div class="panel-freeciv" style="margin-top: -0.87%;">
+				<div class="panel-freeciv" style="margin-top: -0.87%; font-family: Times, serif">
 					<h4><b><i><fmt:message key="index-press-pc-gamer-title"/></i></b></h4>
 					<i><fmt:message key="index-press-pc-gamer-content"/></i>
 					<br>

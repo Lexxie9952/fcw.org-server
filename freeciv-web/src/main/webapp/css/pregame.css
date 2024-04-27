@@ -74,7 +74,7 @@ body {
 }
 
 #pregame_message_area {
-  background: rgb(19,32,64) url(/images/bg-dark-text.jpg);
+  background: #172541; /* rgb(19,32,64) url(/images/bg-dark-text.jpg);*/
   background-size: 480px;
   width: 78%;
   overflow: auto;
