@@ -498,15 +498,6 @@ function create_diplomacy_dialog(counterpart, template) {
     $(".diplomacy_messages").css("font-size", "100%");
   }
 
-  var nation = nations[pplayer['nation']];
-  if (nation['customized']) {
-    meeting_paint_custom_flag(nation, document.getElementById('flag_self_' + counterpart_id));
-  }
-  nation = nations[counterpart['nation']];
-  if (nation['customized']) {
-    meeting_paint_custom_flag(nation, document.getElementById('flag_counterpart_' + counterpart_id));
-  }
-
   create_clauses_menu($('#hierarchy_self_' + counterpart_id));
   create_clauses_menu($('#hierarchy_counterpart_' + counterpart_id));
 
@@ -588,6 +579,7 @@ function diplomacy_dialog_key_listener(ev)
 }
 /************************************************************************ */
 
+/* Nonfunctional
 function meeting_paint_custom_flag(nation, flag_canvas)
 {
   var tag = "f." + nation['graphic_str'];
@@ -595,7 +587,7 @@ function meeting_paint_custom_flag(nation, flag_canvas)
   flag_canvas_ctx.scale(1.5, 1.5);
   flag_canvas_ctx.drawImage(sprites[tag], 0, 0);
 }
-
+*/
 function create_clauses_menu(content) {
   content.css({'position': 'relative', 'color': default_dialog_text_color});
   var children = content.children();
@@ -669,10 +661,7 @@ function meeting_template_data(embassy_meeting, giver, taker)
   var data = {};
   var nation = nations[giver['nation']];
 
-  if (!nation['customized']) {
-    data.flag = nation['graphic_str'] + "-web" + fullsize_flag_extension;
-  }
-
+  data.flag = nation['graphic_str'] + "-web" + fullsize_flag_extension;
   data.adjective = nation['adjective'];
   data.name = giver['name'];
   data.pid = giver['playerno'];

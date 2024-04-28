@@ -381,7 +381,7 @@ function update_player_info_pregame_real()
   that opens up the possibility of a double nation bug (Player1 joins and
   chooses Israel. Player2 joins, chooses to "draw" and takes over an AI Israel.)
 ****************************************************************************/
-function draw_random_nation_ongoing_longturn(player_nations)
+function pick_random_nation_ongoing_longturn(player_nations)
 {
     var available_nations = [];
     for (nation_id in nations) {
@@ -390,6 +390,15 @@ function draw_random_nation_ongoing_longturn(player_nations)
     chosen_nation = parseInt(available_nations[Math.floor(Math.random() * available_nations.length)]['id']);
     $("#pick_nation_dialog").dialog( "close" );
     submit_nation_choice_ongoing_longturn();
+}
+function pick_random_nation(player_nations) {
+  var available_nations = [];
+  for (nation_id in nations) {
+      if (nations[nation_id]['is_playable'] && !(nation_id in player_nations)) available_nations.push({'id' : nation_id, 'nation' : nations[nation_id]});
+  }
+  chosen_nation = parseInt(available_nations[Math.floor(Math.random() * available_nations.length)]['id']);
+  $("#pick_nation_dialog").dialog( "close" );
+  submit_nation_choice();
 }
 
 /****************************************************************************
@@ -444,15 +453,17 @@ function pick_nation(player_id)
   var pplayer = players[player_id];
   var player_nations = {};
 
-  if (pplayer == null && !is_ongoing_longturn()) {
-    if (DEBUG_PICK_NATION) console.log("Unable to pick nation because pplayer==null && !is_ongoing_longturn()");
+  const is_longturn = is_ongoing_longturn();
+
+  if (pplayer == null && !is_longturn) {
+    if (DEBUG_PICK_NATION) console.log("Unable to pick nation because pplayer==null && and not ongoing longturn game.");
     return;
   }
   choosing_player = player_id;
 
-  var player_name = !is_ongoing_longturn() ? pplayer['name'] : simpleStorage.get("username", "");
+  var player_name = !is_longturn ? pplayer['name'] : simpleStorage.get("username", "");
 
-  if (is_ongoing_longturn()) {
+  if (is_longturn) {
     /* If player took an idler they can't change the nation of it: */
     var idle_cutoff = can_take_idler_turns();
     if (pplayer && pplayer['nturns_idle'] !== undefined && pplayer['nturns_idle'] >= idle_cutoff) {
@@ -487,7 +498,7 @@ function pick_nation(player_id)
 
   for (var nation_id in nations) {
     var pnation = nations[nation_id];
-    if (pnation['is_playable'] && (!is_ongoing_longturn() || !(nation_id in player_nations))) {
+    if (pnation['is_playable'] && (!is_longturn || !(nation_id in player_nations))) {
       nations_html += "<div class='nation_pickme_line' onclick='select_nation(" + nation_id + ");'>"
              + "<div id='nation_" + nation_id + "' class='nation_choice'>"
              + "<canvas id='pick_flag_" + nation_id + "' width='30' height='20' class='pick_nation_flags'></canvas>"
@@ -500,17 +511,24 @@ function pick_nation(player_id)
                + "<div id='nation_legend'></div><div id='select_nation_flag'></div>";
 
 
-  var buttons = { "1" : { id: "play", text:"DONE", click: function() { if (chosen_nation != -1) {
-                                                                                        $("#pick_nation_dialog").dialog('close');
-                                                                                        if (!is_ongoing_longturn()) submit_nation_choice();
-                                                                                        else submit_nation_choice_ongoing_longturn(); }
-                                                                                  } },
-                  "2" : { id: "customize", text:"Customize nation", click: function() {show_customize_nation_dialog(player_id);} }
-                }
-
-  if (is_ongoing_longturn()) {
-    buttons["3"] = { id: "random", text: "Pick a random nation", click: function() { draw_random_nation_ongoing_longturn(player_nations); } }
-  }
+  var buttons = { "1" : { id: "random", text: "Pick random",
+                          click: function() {
+                              if (is_longturn) pick_random_nation_ongoing_longturn(player_nations);
+                              else pick_random_nation(player_nations);
+                            }
+                          },
+                  "2" : { id: "play", text:"DONE",
+                          click: function() {
+                              if (chosen_nation != -1) {
+                                $("#pick_nation_dialog").dialog('close');
+                                if (is_longturn) submit_nation_choice_ongoing_longturn();
+                                else submit_nation_choice();
+                              }
+                            }
+                          }
+                  /* This feature appears to be broken. Oh well, it was of questionable value anyway
+                  "3" : { id: "customize", text:"Custom Flag", click: function() {show_customize_nation_dialog(player_id);} }*/
+                };
 
   $("#pick_nation_dialog").html(nations_html);
   $("#pick_nation_dialog").attr("title", "What Nation Will " + player_name + " Be Ruler Of?");
@@ -538,7 +556,7 @@ function pick_nation(player_id)
     $("#nation_list").width("80%");
   }
 
-  if (is_ongoing_longturn()) {
+  if (is_longturn) {
     $(".ui-dialog-titlebar-close").css("display", "none");
     $(".ui-dialog-buttonpane").css("width","100%");
     /* Removing the paddings, because I wasn't able to find the default width of the pane (width of 100% + the paddings
@@ -566,7 +584,7 @@ function pick_nation(player_id)
 
   for (var nation_id in nations) {
     var pnation = nations[nation_id];
-    if (pnation['is_playable'] && (!is_ongoing_longturn() || !(nation_id in player_nations))) {
+    if (pnation['is_playable'] && (!is_longturn || !(nation_id in player_nations))) {
       var flag_canvas = document.getElementById('pick_flag_' + nation_id);
       var flag_canvas_ctx = flag_canvas.getContext("2d");
       var tag = "f." + pnation['graphic_str'];
@@ -650,10 +668,8 @@ function select_nation(new_nation_id)
   $("#nation_" + chosen_nation).css("background-color", "transparent");
   $("#nation_choice").html("Chosen nation: " + pnation['adjective']);
 
-  if (!pnation['customized']) {
-    $("#select_nation_flag").html("<img style='nation_flag_choice' src='/images/flags/"
-                + pnation['graphic_str'] + "-web" + fullsize_flag_extension + "'>");
-  }
+  $("#select_nation_flag").html("<img style='nation_flag_choice' src='/images/flags/"
+              + pnation['graphic_str'] + "-web" + fullsize_flag_extension + "'>");
 
   if (chosen_nation != new_nation_id && $("#nation_" + new_nation_id).length > 0) {
     $("#nation_" + new_nation_id).get(0).scrollIntoView();
@@ -1827,125 +1843,11 @@ function create_new_freeciv_user_account_request(action_type)
 }
 
 /**************************************************************************
-  Customize nation: choose nation name and upload new flag.
-**************************************************************************/
-function show_customize_nation_dialog(player_id) {
-  if (chosen_nation == -1 || client.conn['player_num'] == null
-      || choosing_player == null || choosing_player < 0) return;
-
-  var pnation = nations[chosen_nation];
-
-  // reset dialog page.
-  $("#dialog").remove();
-  $("<div id='dialog'></div>").appendTo("div#game_page");
-
-  var message = "<br>New nation name: <input id='new_nation_adjective' type='text' size='30' value='" + pnation['adjective'] + "'><br><br>"
-       + "Upload new flag: <input type='file' id='newFlagFileInput'><br><br>"
-       + "For best results scale the image to 30 x 20 pixels before uploading. <br><br>"
-       + "(Note: the customized nation and flag will only be active during the current game session and will not be visible to other players.)";
-
-  $("#dialog").html(message);
-  $("#dialog").attr("title", "Customize nation: " + pnation['adjective']);
-  $("#dialog").dialog({
-      bgiframe: true,
-      modal: true,
-      width: is_small_screen() ? "90%" : "50%",
-      buttons:
-      {
-                "Cancel" : function() {
-                  $("#dialog").dialog('close');
-                  pick_nation(player_id);
-        },
-        "OK" : function() {
-            handle_customized_nation(player_id);
-        }
-      }
-    });
-
-  $("#dialog").dialog('open');
-}
-
-/**************************************************************************
-  Customize nation: choose nation name and upload new flag.
-**************************************************************************/
-function handle_customized_nation(player_id)
-{
-  var new_nation_name = $("#new_nation_adjective").val();
-  nations[chosen_nation]['adjective'] = new_nation_name;
-
-  var fileInput = document.getElementById('newFlagFileInput');
-  var file = fileInput.files[0];
-
-  if (file == null) {
-    swal("Please upload a image file!");
-    setSwalTheme();
-    return;
-  }
-
-  if (!(window.FileReader)) {
-    swal("Uploading files not supported");
-    setSwalTheme();
-    return;
-  }
-
-  var extension = file.name.substring(file.name.lastIndexOf('.'));
-  console.log("New flag: " + file.type + " with extention " + extension);
-
-  if (extension == '.png' || extension == '.bmp' || extension == '.jpg' || extension == '.jpeg' || extension == '.JPG') {
-    var reader = new FileReader();
-    reader.onload = function(e) {
-      handle_new_flag(reader.result, player_id);
-    };
-    reader.readAsDataURL(file);
-  } else {
-    $.unblockUI();
-    swal("Image file " + file.name + "  not supported: " + file.type);
-    setSwalTheme();
-  }
-
-}
-
-/**************************************************************************
-  Update flag sprites based on user uploaded flags.
-**************************************************************************/
-function handle_new_flag(image_data, player_id) {
-  var pnation = nations[chosen_nation];
-  var flag_tag = "f." + pnation['graphic_str'];
-  var shield_tag = "f.shield." + pnation['graphic_str'];
-
-  var new_flag_canvas = document.createElement('canvas');
-  new_flag_canvas.width = sprites[flag_tag].width;
-  new_flag_canvas.height = sprites[flag_tag].height;
-  sprites[flag_tag] = new_flag_canvas;
-  var ctx_flag = new_flag_canvas.getContext("2d");
-
-  var new_shield_canvas = document.createElement('canvas');
-  new_shield_canvas.width = sprites[shield_tag].width;
-  new_shield_canvas.height = sprites[shield_tag].height;
-  sprites[shield_tag] = new_shield_canvas;
-  var ctx_shield = new_shield_canvas.getContext("2d");
-
-  var img = new Image();
-  img.onload = function() {
-      ctx_flag.drawImage(img, 0, 0, this.width, this.height, 0, 0, new_flag_canvas.width, new_flag_canvas.height);
-      ctx_shield.drawImage(img, 0, 0, this.width, this.height, 0, 0, new_shield_canvas.width, new_shield_canvas.height);
-
-      $("#dialog").dialog('close');
-      pick_nation(player_id);
-  };
-  img.src = image_data;
-
-  nations[chosen_nation]['customized'] = true;
-
-}
-
-/**************************************************************************
   Recaptcha callback.
 **************************************************************************/
 function onloadCallback() {
   // recaptcha is ready and loaded.
 }
-
 
 /**************************************************************************
  Reset the password for the user.
@@ -2025,3 +1927,119 @@ function forgot_pbem_password()
   }
 
 }
+
+/* Nonfunctional code for custom flag sprite that didn't work */
+
+/**************************************************************************
+  Customize nation: choose nation name and upload new flag.
+**************************************************************************
+function show_customize_nation_dialog(player_id) {
+  if (chosen_nation == -1 || client.conn['player_num'] == null
+      || choosing_player == null || choosing_player < 0) return;
+
+  var pnation = nations[chosen_nation];
+
+  // reset dialog page.
+  $("#dialog").remove();
+  $("<div id='dialog'></div>").appendTo("div#game_page");
+
+  var message = "<br>New nation name: <input id='new_nation_adjective' type='text' size='30' value='" + pnation['adjective'] + "'><br><br>"
+       + "Upload new flag: <input type='file' id='newFlagFileInput'><br><br>"
+       + "For best results scale the image to 30 x 20 pixels before uploading. <br><br>"
+       + "(Note: the customized nation and flag will only be active during the current game session and will not be visible to other players.)";
+
+  $("#dialog").html(message);
+  $("#dialog").attr("title", "Customize nation: " + pnation['adjective']);
+  $("#dialog").dialog({
+      bgiframe: true,
+      modal: true,
+      width: is_small_screen() ? "90%" : "50%",
+      buttons:
+      {
+                "Cancel" : function() {
+                  $("#dialog").dialog('close');
+                  pick_nation(player_id);
+        },
+        "OK" : function() {
+            handle_customized_nation(player_id);
+        }
+      }
+    });
+
+  $("#dialog").dialog('open');
+}
+
+/**************************************************************************
+  Customize nation: choose nation name and upload new flag.
+**************************************************************************
+function handle_customized_nation(player_id)
+{
+  var new_nation_name = $("#new_nation_adjective").val();
+  nations[chosen_nation]['adjective'] = new_nation_name;
+
+  var fileInput = document.getElementById('newFlagFileInput');
+  var file = fileInput.files[0];
+
+  if (file == null) {
+    swal("Please upload a image file!");
+    setSwalTheme();
+    return;
+  }
+
+  if (!(window.FileReader)) {
+    swal("Uploading files not supported");
+    setSwalTheme();
+    return;
+  }
+
+  var extension = file.name.substring(file.name.lastIndexOf('.'));
+  console.log("New flag: " + file.type + " with extention " + extension);
+
+  if (extension == '.png' || extension == '.bmp' || extension == '.jpg' || extension == '.jpeg' || extension == '.JPG') {
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      handle_new_flag(reader.result, player_id);
+    };
+    reader.readAsDataURL(file);
+  } else {
+    $.unblockUI();
+    swal("Image file " + file.name + "  not supported: " + file.type);
+    setSwalTheme();
+  }
+
+}
+
+/**************************************************************************
+  Update flag sprites based on user uploaded flags.
+**************************************************************************
+function handle_new_flag(image_data, player_id) {
+  var pnation = nations[chosen_nation];
+  var flag_tag = "f." + pnation['graphic_str'];
+  var shield_tag = "f.shield." + pnation['graphic_str'];
+
+  var new_flag_canvas = document.createElement('canvas');
+  new_flag_canvas.width = sprites[flag_tag].width;
+  new_flag_canvas.height = sprites[flag_tag].height;
+  sprites[flag_tag] = new_flag_canvas;
+  var ctx_flag = new_flag_canvas.getContext("2d");
+
+  var new_shield_canvas = document.createElement('canvas');
+  new_shield_canvas.width = sprites[shield_tag].width;
+  new_shield_canvas.height = sprites[shield_tag].height;
+  sprites[shield_tag] = new_shield_canvas;
+  var ctx_shield = new_shield_canvas.getContext("2d");
+
+  var img = new Image();
+  img.onload = function() {
+      ctx_flag.drawImage(img, 0, 0, this.width, this.height, 0, 0, new_flag_canvas.width, new_flag_canvas.height);
+      ctx_shield.drawImage(img, 0, 0, this.width, this.height, 0, 0, new_shield_canvas.width, new_shield_canvas.height);
+
+      $("#dialog").dialog('close');
+      pick_nation(player_id);
+  };
+  img.src = image_data;
+
+  nations[chosen_nation]['customized'] = true;
+
+}
+*/

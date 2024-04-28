@@ -590,30 +590,26 @@ function show_city_dialog(pcity)
         else {
           var tag = nations[players[punit['owner']]['nation']]['graphic_str']
 
-          var civ_flag_url = "";
+          var civ_flag_url = "/images/flags/" + tag + "-web" + fullsize_flag_extension;
 
-          if (!nations[players[punit['owner']]['nation']]['customized'] ) {
-            civ_flag_url += "/images/flags/" + tag + "-web" + fullsize_flag_extension;
+            // flag
+            present_units_html = present_units_html +
+            "<div class='game_unit_list_item' title='" + nations[players[punit['owner']]['nation']]['adjective']
+                + "' style='cursor:pointer; background: transparent url("
+                + civ_flag_url
+                + "); background-size:contain; background-repeat:no-repeat; width:22px; height:14px; float:left; ' "
+                + "onclick='city_dialog_activate_unit(event, units[" + punit['id'] + "]);'"
+                +"></div>";
 
-              // flag
-              present_units_html = present_units_html +
-              "<div class='game_unit_list_item' title='" + nations[players[punit['owner']]['nation']]['adjective']
-                  + "' style='cursor:pointer; background: transparent url("
-                  + civ_flag_url
-                  + "); background-size:contain; background-repeat:no-repeat; width:22px; height:14px; float:left; ' "
-                  + "onclick='city_dialog_activate_unit(event, units[" + punit['id'] + "]);'"
-                  +"></div>";
-
-              // unit
-              present_units_html = present_units_html +
-              "<div class='game_unit_list_item' title='" + html_safe(get_unit_city_info(punit))
-                  + "' style='cursor:pointer; background: transparent url("
-                  + sprite['image-src'] +
-                  ");background-position:-" + sprite['tileset-x'] + "px -" + sprite['tileset-y']
-                  + "px;  width: " + sprite['width'] + "px;height: " + sprite['height'] + "px;float:left; margin-left:-21px; martin-top:-14px;'"
-                  + " onclick='city_dialog_activate_unit(event, units[" + punit['id'] + "]);'"
-                  +"></div>";
-          }
+            // unit
+            present_units_html = present_units_html +
+            "<div class='game_unit_list_item' title='" + html_safe(get_unit_city_info(punit))
+                + "' style='cursor:pointer; background: transparent url("
+                + sprite['image-src'] +
+                ");background-position:-" + sprite['tileset-x'] + "px -" + sprite['tileset-y']
+                + "px;  width: " + sprite['width'] + "px;height: " + sprite['height'] + "px;float:left; margin-left:-21px; martin-top:-14px;'"
+                + " onclick='city_dialog_activate_unit(event, units[" + punit['id'] + "]);'"
+                +"></div>";
         }
         present_units_html = present_units_html
                            + get_html_vet_sprite(punit)

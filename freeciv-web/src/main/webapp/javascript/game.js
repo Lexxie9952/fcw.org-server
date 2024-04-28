@@ -139,11 +139,8 @@ function update_game_status_panel() {
       var pnation = nations[pplayer['nation']];
       var tag = pnation ? pnation['graphic_str'] : null;
 
-      var civ_flag = "";
-      if (!pnation['customized']) {
-        civ_flag += "<img class='lowered_gov' style='background-color:transparent;margin-top:-3px;margin-right:3px;' src='/images/flags/" + tag + "-web" + fullsize_flag_extension + "' width='42'>";
-        status_html += "<span>"+civ_flag+"</span>";
-      }
+      var civ_flag = "<img class='lowered_gov' style='background-color:transparent;margin-top:-3px;margin-right:3px;' src='/images/flags/" + tag + "-web" + fullsize_flag_extension + "' width='42'>";
+      status_html += "<span>"+civ_flag+"</span>";
     }
 
     if (!is_small_screen()) status_html += "<span style='cursor:default;'><b>" + nations[pplayer['nation']]['adjective'] + "</b></span> &nbsp;";
