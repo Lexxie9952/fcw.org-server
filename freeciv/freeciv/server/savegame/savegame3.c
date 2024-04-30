@@ -2440,6 +2440,12 @@ static void sg_save_scenario(struct savedata *saving)
 
   /* Check status and return if not OK (sg_success != TRUE). */
   sg_check_ret();
+// Needed as VS CODE intellisense can't including fc_config.h for some reason
+#ifndef MAJOR_VERSION
+  #define MAJOR_VERSION 3
+  #define MINOR_VERSION 0
+  #define PATCH_VERSION 92
+#endif
 
   game_version = MAJOR_VERSION * 1000000 + MINOR_VERSION * 10000 + PATCH_VERSION * 100;
 #ifdef EMERGENCY_VERSION
