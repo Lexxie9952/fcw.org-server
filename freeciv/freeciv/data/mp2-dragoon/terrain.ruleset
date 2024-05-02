@@ -1098,7 +1098,7 @@ ui_name_base_other = _("?gui_type:Make Tile Claim/Hideout")
 ;                           "Disappear", or "Enter"
 ; infracost               = Number of infrapoints it costs to place this
 ;                           extra. 0 means extra cannot be placed. Default is 1
-; graphic                 = tag specifying preferred graphic
+; graphic                 = tag specifying preferred graphic, use "-" for no graphic.
 ; graphic_alt             = tag for alternate graphic if preferred graphic is
 ;                           not present. Can use eg "-" for no alternate
 ;                           graphic
@@ -1492,8 +1492,8 @@ name           = _("")      ; null name is to prevent awareness of it.
 category       = "Infra"
 causes         = "Base"
 rmcauses       = "Pillage", "Disappear"
-graphic        = "None"
-graphic_alt    = "None"
+graphic        = "-"
+graphic_alt    = "-"
 activity_gfx   = "unit.hideout"
 act_gfx_alt    = "unit.buoy"
 act_gfx_alt2   = "-"
@@ -1555,8 +1555,8 @@ name           = _("​") ; has a zero-width space in it to make it invisible bu
 category       = "Infra"
 causes         = "Base"
 rmcauses       = "Disappear"
-graphic        = "None"
-graphic_alt    = "None"
+graphic        = "-"
+graphic_alt    = "-"
 activity_gfx   = "unit.deepdive"
 act_gfx_alt    = "unit.hideout"
 act_gfx_alt2   = "-"
