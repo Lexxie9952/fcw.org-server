@@ -779,8 +779,9 @@ Reveal_Map
 
 Revolution_Unhappiness
     If value is greater than zero, it tells how many turns citizens
-    will tolerate city disorder before government falls. If value is
-    zero, government never falls.
+    tolerate city disorder before government falls with upon city
+    achieving (Revolution_Unhappiness+1) turns of disorder.
+    If value is zero, government never falls.
 
 Shield2Gold_Factor
     Factor in percent for the conversion of unit shield upkeep to gold upkeep.
