@@ -57,24 +57,24 @@ and can now be built with veteran levels.
    B. Big Land units are native to rivers again. This implies certain differences and has certain reasons:
    ** New PassiveMovement cost of 1/8 effectively makes all units, including motor, get the same
          "virtual boat speed" now.
-   ** this means motor units could now enter a mountain with a river.
+   ** motor units still can't enter a mountain with a river due to new extra type "Mountain River" not native to them.
    ** Allows Big Land to incur the restrictinfra hard entry/exit penalty for crossing rivers
    ** Allows coding the server so only units native-to-road-type get hard entry/exit, thus
         allowing trenches and similar to only affect native classes and some TerrainSpeed classes can ignore them.
 5. For simplicity, Canals are same as rivers regarding movement. i.,e., if canals are so great that battleships can use them,
    why do we assume land types can't get on boats like they can for rivers? i.e., Canals are PassiveMovement, 1/8 mp,
-   and have same hard-entry hard-exit rules as well. (A Canal is now effectively a river in every way except +1 trade.)
+   and have same hard-entry hard-exit rules as well. (A Canal is now effectively a river in every way except +1 trade and +0.50 defense.)
 6. Increased vision of castle
 7. New base watchtower, allows vision
 8. Trains are actually active agents on passive road-type, so their +1 move bonus for electricity and combuston remains, as an active
    move bonus giving +5 and +5 tiles range, respectvely
 9. New road type Highway uses 1/6 move instead of 1/3; gives a range of 12 for foot, 24 for mounted, 36 for motorized
 10. Smaller boats (Boats and Triremes) get more moves and also get +2 move points for moving faster on rivers, if they start their turn on a river.
-      this now makes Boats move at 8, same speed as unit using river without boat. This should enhance rivers as a key logistical aspect of
+      this now makes Boats move at 8 on a river, same speed as unit using river without boat. This should enhance rivers as a key logistical aspect of
       early civilization, like they should be.
 11. Like wagon and trawler, everyone can see a Boat's cargo.
 12. Patriarch can gain vet levels like other diplomat types.
-13. Most first techs reduced in price to 15. HBR 24. Warrior Code: 18. Easier Bronze Age, more risk rushing out because missing out on things,
+13. Most first techs reduced in price to 15. HBR 24. Warrior Code: 18. Easier Bronze Age, more risk gov-rushing because missing out on things,
     more availability for early wonder choices and/or less penalty for pursuing them instead of new-gov-rush.
 14. Mausoleum 170 - cheaper is another civil wonder bonus of it.
 15. Carriers price reduce, 150. Carry 12.
@@ -84,7 +84,7 @@ and can now be built with veteran levels.
          a. Sea tactics can be deepened. Former lack of sea tactics from 2x movemement + igZOC replaced with interesting depth.
          b. Nations can protect their rivers better by imposing ZOC along them.
          c. Conversely, ships on rivers can enforce prevention of land unit crossings.
-17. "Russian Doll" rule, wagons and trucks can't board transports while they're carring their own cargo.
+17. "Russian Doll" rule, wagons and trucks can't board transports while they're carring their own cargo. (applied to MP2D also)
 18. Cruise Missiles aren't field units. This penalty goes back to an earlier simpler less realistic game. At this point in MP2 evolution,
    making a CM a field unit causing unhappiness in every Aegis Cruiser carrying it, it's like Cannons getting extra unhappiness for each
    cannonball they carry.
@@ -95,18 +95,18 @@ and can now be built with veteran levels.
    moves of taking an Atom Bomb across the world in 14 trucks to blow up a target.
    (this is also partly implemented in MP2D but not in as much detail.)
    tbh after the server version of Sept28 is running everywhere this should be backported to MP2D also, because consistency is simplicity,
-   and less changelog shit to read and differentiate also, less different version behaviours to remeember is what i mean.
+   and less changelog verbosity to read also, less different version behaviours to rememember
 21. Machine Tools changed to Mass Production as req for Advanced Flight (removes redundant req)
 22. New unit Light Carrier
 23. (all rulesets, clarify again) Vigil Mechanics changed, will always attack if 5/6 odds
 24. (all rulesets, clarify), Vigil Mechanics changed, units won't leave Vigil after doing it.
-25. Magnum Turret Bombards take 1 move not 1 6/10... allows 3 bombards on invaders which is bettere than weak 2,
-   or if 2 given saves moves for an attack!  Need to change docs for its SUA too.
+25. Magnum Turret Bombards take 1 move not 1 6/10... allows 3 bombards on invaders which is better than weak 2,
+    or if 2 given saves moves for an attack!  Need to change docs for its SUA too.
 26. Space.2 tech doubled in cost to 2460.
 27. Howitzers go from 4mp to 3 1/3mp. On blank terrain they can travel the same number of tiles (just attack at 1/3 on the final move).
-    On roads they travel 10 tiles instead of 12. On rivers, 7 instead of 12.
+    On roads they travel 10 tiles instead of 12. On rivers, 8 instead of 12.
     On highways they travel 20 tiles (which is higher than the 12 on roads of MP2D)
-    On rails and maglev they travel 28 and 70 just like every other unit.
+    On rails and maglev they travel 28 and 70 just like every other unit (was 36, infinity)
     REASONS: the 2x movement boost of Howitzer over Artillery was always problematic. These weapons are powerhouses which should
     require, as in real life, some tactical premeditations and preparatory movements to set up, rather than rushing down roads and
     rails and slamming into whatever city or stack is there. Nevertheless, on MP2E highways they move farther than MP2D roads,
@@ -132,9 +132,9 @@ and can now be built with veteran levels.
          Reason: IgTer units already enjoy substantial move bonus from no terrain penalties
 35. FootSoldiers get improved promotion odds: 50 33 20 goes 85 50 33, basically bumping all odds up one level.
 36. FootSoldiers who didn't receive discounts in MP2C get ~10% discount. Musket:27, Riflemen:35, Partisan: 40, Alpine:45,
-    Marines:50, Ground Troops:35, Paratroopers:50. Zealots which were 25 in MP2D receive discount also and are back to 20.
+    Marines:53, Ground Troops:35, Paratroopers:50, Fanatics: 25. Zealots which were 25 in MP2D receive discount also and are back to 20.
 36A. Destroy City requires 3 units (2 support units) to do.
-37. Modern FootSoldiers (Paratrooper, Ground Troops, get A8)
+37. Modern FootSoldiers (Paratrooper, Ground Troops, get A8) Fanatics get A6.5
 38. Mech.Inf can carry one Foot Soldier or AAA.
 39. AWACS cost adjust: 125, was 140. Vision radius moderate increase. Attrition rate and other flight reconnaissance options disincentivized the cost.
 40. Each new aviation tech upgrades Airplane range by +1 move (was +2). 6 techs started making it almost a cheap AWACS.
@@ -158,27 +158,34 @@ and can now be built with veteran levels.
       0% Bombs. (The move-point of Bomb-types is simply to allow it to be dropped in an attack, which it can always do.)
       0% Marines. (Keeps original movement abilities intact)
       0% AAA.     (AAA needs full moves to vigil, and we allow it to stay in vigil while transported.)
-      50% Foot Soldiers - 50% accounts reflects flexibility of such units to go in/out quickly from transports and also was an opportunity
+      50% Foot Soldiers - 50% reflects flexibility of such units to go in/out quickly from transports and also was an opportunity
                           to give further balance to the ongoing project to punish Foot Soldiers less for their loss of mobility in 2x rulesets.
-      50% Aircraft, Missiles - The high speed and "internal fuel" of these units is not meant to be 100% depleted and hampered by the
-                                "slower speed" steps taken by the carriers. e.g., one Fighter (20mp) offloads from a
-                                a carrier (10mp) before it moves 5 tiles, and another stays on and then takes off. The Fighter who offloaded
-                                first could strike at a range of 20 while the other at a range of 5 + 10 = 15. Introducing an extra
-                                level of "micromanagement" to offload aircraft and missiles you might intend to use, before moving
-                                a Carrier, and then if deciding not to use them, landing them back again on the carrier. The 50%
-                                passenger move cost penalty here just keeps the ratios clean to reduce this extra level of micromanagement.
-                                move points
+      50% ** Aircraft, Missiles - Has to be this way to avoid micromanagement ridiculousness. Imagine  one Fighter (20mp) offloads from a
+                                a carrier (10mp) before it moves 10 tiles, and another stays on. At 100% physics, the Fighter who stayed
+                                on is out of moves, whereas the Fighter which took off can fly back to the Carrier and still have 10
+                                moves left. This means the 'obligatory smart thing to do' is never move loaded Carriers but to unload
+                                all Planes and fly them to reland, a micromanagement nightmare. Therefore a MIN(50%,1mp) rule is implemented.
+                                the LESSER of 1mp or 50% of the move-depletion-% of the transporter, is charged to the Aircraft and Missiles.
+                                The 50% passenger move cost penalty here keeps the ratios clean to reduce this extra level of micromanagement,
+                                whereas the max-ceiling of 1mp passenger-cost ensures under no conditions is it logistically superior to micromanage
+                                the pre-offloading of the planes before moving the Carrier, AEGIS, Mobile SAM, etc.
       75% land military non-foot; 50% + won't subtract if <= 3 moves left (aircraft, preserves vigil)
 
       *** In no case does a faster unit on a slower transport expend more than 1mp on the cargo, just to avoid the needlessness of
       micromanaging deboard/board to avoid losing more than 1 move per tile by staying on the transporter.
-
-43. Spy Plane and Bombers (except Dive Bomber) are BadCityDefender. This adjusts the fact some have strong
+43. Spy Plane and Bombers (except Dive Bomber) are BadCityDefender, the same as ships. This adjusts the fact some have strong
     defensive capabilities in the air but are poor defenders to scramble for city defense.
-44. Transport swapping rules greatly simplifed because of Passenger_Move_Cost.
+44. Transport swapping rules greatly simplified because of Passenger_Move_Cost.
     a. Bombs can swap transports in cities and airbases.
     b. Missiles can swap transports in cities and any no-stack-death base.
-    b. Every other unit, IF transported, can swap.
+    c. Every other unit, IF transported, can swap.
+    d. The original rule was to prevent double move exploits. Now that passengers lose move points being transported, this is no
+       longer necessary. They lose 1/3mp boarding then lose moves being transported, and eventually have no moves left to swap
+       transports at sea, exactly in those cases where it would be exploitative. In some cases where 1/3+50% passenger cost allows
+       a slightly non-physically-real manoeuvre, keep in mind that it's STILL more restricted than all past Civ rulesets AND by
+       the time they reach the end of their double-move journey they'll be out of moves anyway; or in other words, two turns
+       to make an attack after a double move or i.e., not a double move anymore as happening at the same time on the second
+       turn as would have happened in legacy rules if no double move had been made, but two moves in two turns were made.
 45. Missiles have special rules. A missile launched this turn has strict options. It may:
  (1) Strike a target, or
  (2) Board transport in any city or no-stack-death "base"
@@ -212,7 +219,7 @@ Missiles boarding and transport swapping must be done in friendly city or base. 
     Especially for future communists, those who avoid Theology, and those in a situation of using entertainers over national luxury
     because needing more micro-control for some cities to rapture and not others.
 59. Knights get an extra hitpoint, giving this late A4 D2 unit a little more distinction over much earlier units who have A4 or D2.
-60. Scout II upgrades scout, gains light attacks, pillage, evasion/escape.
+60. Scout II upgrades scout, gains light attacks, pillage, evasion/escape. Somewhat between Scout and Partisan but closer to a Scout.
 61. Boarding rules fixed to disallow boarding onto a LandRoad that's already cargo of another transporter.
 62. Hut revealing map area goes from 7 tile radius to 8 tile radius.
 GAME SPEED/PACE:
@@ -231,7 +238,7 @@ i.e., 6 in 5 (swamp), 5 in 4 (mine), 4 in 3 (angkor wat swamp drain) goes to:
    Pilgrims, Migrant, Workers II, Engineers, Trawler
    Train, Truck, Airplane, Cargo Plane, Cargo Ship, Balloon
    Diplomat, Spy
-70. Fighter types may always vigil in a city or airbase, if they have half their moves or more.
+70. Fighter types may always vigil in a city, Carrier, or airbase, if they have half their moves or more.
 71. Vigil range extended for fighter types:
    Fighter:          5 (was 2)
    Escort Fighter:   8 (was 3)
@@ -241,7 +248,7 @@ i.e., 6 in 5 (swamp), 5 in 4 (mine), 4 in 3 (angkor wat swamp drain) goes to:
    Stealth Fighter:  12 (was 4)
 72. For aircraft, Airbase healing increased to 20% for simplicity: same as a Fortress for Land units. (NEEDS A NOTE IN BASES.MP2E)
     (helicopters, 25%, same as MP2D, no change.)
-73. MP2E also gets (forgottenly undocumented) changed to MP2D that airbases heal air units at the same rate as fortresses heal land units.
+73. MP2E also gets (forgottenly undocumented) changes to MP2D that airbases heal air units at the same rate as fortresses heal land units.
 74. AAA can vigil in a city or base if they have their full move points left.
 75. Battleships gain "NeverBlocked" flag to join CM, Marines, and Arm2 -- was needed something similar on the seas.
 76. Secondary tech costs increased. Combu.2 610>>1200, Flight.2 750>>900, Radio.2 820>>900
@@ -253,7 +260,7 @@ i.e., 6 in 5 (swamp), 5 in 4 (mine), 4 in 3 (angkor wat swamp drain) goes to:
 82. Goods and Freight can use railroads because they are passive movement. They can't use Maglev because of their large cargo space requirements.
     This lessens some micromanagement pains and makes good sense too.
 83. (also recent change to MP2D) - AEGIS and MSAM lose ability to defend their single tile from a successful nuclear detonation. Tile protection in a successful detonation is reserved for the Bunker base type.
-84. (also recent change to MP2D) - AEGIS and MSAM instead get a 50% and 33% chance respectively to use their anti-aircraft capabilites to prevent aircraft-delivered nuclear bombs on adjacent tiles from detonating. AEGIS bad city defender applies to this.
+84. (also recent change to MP2D) - AEGIS and MSAM instead get a 50% and 33% chance respectively to use their anti-aircraft capabilites to prevent aircraft-delivered nuclear bombs on adjacent tiles from detonating. AEGIS bad city defender applies to this: i.e., doesn't work in a city.
 85. (also recent change to MP2D) - Anti-Ballistic Missiles can intercept all nuclear-type missiles in a 5x5-minus corners area of effect, preventing their detonation. They have a 29% chance of doing so, or in other words, each two ABMs in
     radius, reduces the chance by 50%. (1 missile: 29%), 2 missiles: 50%, 4 missiles: 25%, 6 missiles: 12.5%, etc.
 86. Added NukeSurvivalPct effects, regulating suvival odds for city pop, units in city, units on map, nukes in city, and nukes on map. See HELP>UNITS>Atom Bomb for more info
@@ -264,7 +271,7 @@ i.e., 6 in 5 (swamp), 5 in 4 (mine), 4 in 3 (angkor wat swamp drain) goes to:
    Paratroopers long had a special OP-exploitableness that no one used just because they were too weak. Adding more micromanagement for paradropping is not desirable but there was no other choice if the game was to be balanced and the unit
       finally become viable. Air defenses now have proper ability to prevent transport planes from easily paradropping in their interior, if deployed properly.
    As a courtesy for playability and lack of micromanagement, Paratroopers CAN paradrop within a 5 tile range, considered a quick and easy paradrop on more readily available planes than a dedicated military class Cargo Plane.
-89. Discovery of Combined Arms gives a free Cargo Transport in the capital.
+89. Discovery of Combined Arms gives a free Cargo Plane in the capital.
 90. Combined Arms no longer requires computers but is demoted one tier; gets a third req mechanization instead. Reason: allow more advanced troops and capabilities. Before, by the time this tech was available, it was not as appealing as other available techs, and thus became much less relevant. In addition, this helps buff Project Infantry another step and makes necessity for Mech.Inf slightly less.
 91. palace gives a multislot in early times
 92. Hydrogen bomb cost increase to 200 (was 190).
@@ -302,4 +309,4 @@ Slight damper on building lots of ancient wonders at inappropriate times when th
          give slight balance correction for usability of foot soldiers
          perhaps slightly reduce the ability to use multislots to pile invincible stacks of 200 mech.inf
 119. Electricity requires Steam Engine as second req to keep proper continuity on upgrade path from Ironclads. Since Magnetism is req for Steam Engine it loses that req.
-120. Code of Hammurabi allows max.rate of 65%
+120. Code of Hammurabi allows max. tax rate of 65% -half between despotism and monarchy, as advertised.
