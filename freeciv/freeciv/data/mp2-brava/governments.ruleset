@@ -214,7 +214,7 @@ Under Democracy, citizens govern directly by voting on issues.\
  offers the most potential for unhappiness.  There is no corruption\
  during Democracy, but citizens become very upset during\
  wars.\
-Democracy revolts to Anarchy if any city remains in disorder for two turns.\
+Democracy revolts to Anarchy if any city remains in disorder more than two turns.\
  Cities and units belonging to Democracy cannot be incited or bribed.\
 "), _("\
 2 citizens are made unhappy by each aggressive unit.\n\
