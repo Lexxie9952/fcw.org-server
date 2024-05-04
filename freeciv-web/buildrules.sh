@@ -1,7 +1,7 @@
 #!/bin/bash
 # builds Freeciv-web, copies the war file to Tomcat and builds the selected rulesets.
 
-RULESETS=(civ2civ3 civ1 civ2 mp2 sandbox webperimental experimental alien classic classicplus multiplayer mpplus mp2-ag mp2-brava mp2-caravel mp2-dragoon mp2-elephant)
+RULESETS=(civ2civ3 civ1 civ2 sandbox experimental alien classic classicplus multiplayer mpplus mp2-ag mp2-brava mp2-caravel mp2-dragoon mp2-elephant)
 TOPDIR="$( cd ../"$( dirname "${BASH_SOURCE[0]}" )" > /dev/null && pwd )"
 
 printf "\n**********************************************************************\n"
@@ -11,13 +11,13 @@ printf "**********************************************************************\n
 printf "\nUpdating rulesets...\n"
    for r in ${RULESETS[@]}; do
       echo "Copying $r"
-      bash ../scripts/copy-ruleset.sh $r      
+      bash ../scripts/copy-ruleset.sh $r
    done
 
 printf "\nRe-generating manuals\n"
    cd src/derived/webapp/man
    for r in ${RULESETS[@]}; do
-      echo "Generating help manual for *********************************************** $r"    
+      echo "Generating help manual for *********************************************** $r"
        ${HOME}/freeciv/bin/freeciv-manual -r $r
    done
 
