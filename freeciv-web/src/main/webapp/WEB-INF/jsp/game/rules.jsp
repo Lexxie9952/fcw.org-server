@@ -221,6 +221,7 @@
     <b>8.</b> GM may make settings corrections and fairness adjustments in the early game.<br>
     <b>9.</b> Multiple players in the same household are not allowed without prior GM approval.<br>
     <b>10.</b> When the game ends, screenshots and story lines should be shared among players.<br>
+    <br><b><a href="https://freecivweb.fandom.com/wiki/Gamemaster_Guide" target="_blank">Gamemaster Guide</a></b> and disclosure to players of GM rules.<br>
     <br>
   </div>
   <h2><span style="color:#fff">Rules</span></h2>
