@@ -101,7 +101,8 @@ function set_alternate_turns()
   send_message("/set aifill 1");
   send_message("/set civilwarsize 1000");
   send_message("/set barbarians disabled");
-  send_message("/set contactturns=0");
+  //Use reulset default contactturns, e.g., default Classic+ needs its own setting here for ceasefires.
+  //send_message("/set contactturns=0");
 }
 
 /****************************************************************************
