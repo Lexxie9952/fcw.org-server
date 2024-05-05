@@ -361,7 +361,7 @@ var tracklist = [
 {filepath: "middle/Steppes",conditions: [[{"turn>":45},{"!tech":"Gunpowder"}],[{"tech":"Feudalism"},{"!tech":"Gunpowder"}],[{"tech":"Philosophy"},{"!tech":"Gunpowder"}]],creds: "" },
 {filepath: "middle/Worldes",conditions: [[{"turn>":45},{"!tech":"Gunpowder"}],[{"tech":"Feudalism"},{"!tech":"Gunpowder"}],[{"tech":"Philosophy"},{"!tech":"Gunpowder"}]],creds: "" },
 {filepath: "middle/HeveneQuene",conditions: [[{"turn>":45},{"!tech":"Gunpowder"}],[{"tech":"Feudalism"},{"!tech":"Gunpowder"}],[{"tech":"Philosophy"},{"!tech":"Gunpowder"}]],creds: "" },
-{filepath: "middle/Bryd",conditions: [[{"turn>":45},{"!tech":"Gunpowder"}],[{"tech":"Feudalism"},{"!tech":"Gunpowder"}],[{"tech":"Philosophy"},{"!tech":"Gunpowder"}]],creds: "" },
+{filepath: "middle/Bryd",conditions: [[{"tech":"Feudalism"},{"!tech":"Gunpowder"}],[{"tech":"Philosophy"},{"!tech":"Gunpowder"}]],creds: "" },
 {filepath: "middle/Wyst",conditions: [[{"turn>":45},{"!tech":"Gunpowder"}],[{"tech":"Feudalism"},{"!tech":"Gunpowder"}],[{"tech":"Philosophy"},{"!tech":"Gunpowder"}]],creds: "" },
 {filepath: "middle/Soys",conditions: [[{"turn>":45},{"!tech":"Gunpowder"}],[{"tech":"Feudalism"},{"!tech":"Gunpowder"}],[{"tech":"Philosophy"},{"!tech":"Gunpowder"}]],creds: "" },
 {filepath: "middle/Aravot",conditions: [[{"turn>":45},{"!tech":"Gunpowder"}],[{"tech":"Feudalism"},{"!tech":"Gunpowder"}],[{"tech":"Philosophy"},{"!tech":"Gunpowder"}]],creds: "" },

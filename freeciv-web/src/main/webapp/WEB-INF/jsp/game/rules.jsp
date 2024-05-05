@@ -210,7 +210,7 @@
 
 <div class="container">
     <h1>Rules Summary</h1>
-    <div style="font-size:110%">
+    <div style="font-size:110%"><h4><u><b>Longturn Games</b></u></h4>
     <b>1.</b> Idle players may lose their nation.<br>
     <b>2.</b> Victory conditions may be set by the Gamemaster (<b>GM</b>) at the start of the game.<br>
     <b>3.</b> <a href="https://freeciv.fandom.com/wiki/Delegation" target="_blank">Delegation</a> should be short and infrequent. Use it only as needed for game integrity*<br>
@@ -224,8 +224,8 @@
     <br><b><a href="https://freecivweb.fandom.com/wiki/Gamemaster_Guide" target="_blank">Gamemaster Guide</a></b> and disclosure to players of GM rules.<br>
     <br>
   </div>
-  <h2><span style="color:#fff">Rules</span></h2>
-  <div style="font-size:100%">
+  <h2><span>Rules</span></h2>
+  <div style="font-size:100%"><h4><u><b>Longturn Games</b></u></h4>
     <b>1. Idle players may lose their nation</b> after 2 idle turns on <b>Turns 1-5</b>, &nbsp; <b>Turn 6:</b> idle 3 turns &nbsp;
     <b>T20:</b> idle 4,  &nbsp; <b>T25:</b> idle 5, &nbsp; <b>T30:</b> idle 6, &nbsp; <b>T35:</b> idle 7<br><br>
     <b>2.</b> At game start, GM may customize the victory conditions documented in the ruleset and the <u>game settings</u>.<br><br>
@@ -242,7 +242,7 @@
     &bull; Long-term <a href="https://freeciv.fandom.com/wiki/Delegation" target="_blank">delegations</a> can be approved by the Gamemaster (GM).<br>
     &bull; Complaints may be made to the GM. GM judgments may be contextual, flexible. GM judgments are final.<br><br>
     <b>4. No <a href="https://freecivweb.fandom.com/wiki/RTS" target="_blank">RTS</a>, when <a href="https://freecivweb.fandom.com/wiki/RTS#NO_RTS_Requests">requested</a>.</b> <i><small>Real-time strategy ("<a href="https://freecivweb.fandom.com/wiki/RTS" target="_blank">RTS</a>") is simultaneous military moves taken by both players in the same theatre of battle.</small></i><br>
-    &bull; In general (with exceptions*) players should be allowed to take their turns in peace without ("<a href="https://freecivweb.fandom.com/wiki/RTS" target="_blank">RTS</a>.<br>
+    &bull; In general (with exceptions*) players should be allowed to take their turns in peace without <a href="https://freecivweb.fandom.com/wiki/RTS" target="_blank">RTS</a>.<br>
     &bull; It is encouraged to be sensitive to this even when a player hasn't made a <a href="https://freecivweb.fandom.com/wiki/RTS#NO_RTS_Requests">No RTS Request</a>.<br>
     &bull; In the case of a <a href="https://freecivweb.fandom.com/wiki/RTS#NO_RTS_Requests">No RTS Request</a>, the request should be obeyed unless under one of the exceptions.<br>
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; * &nbsp;Units on an automated GOTO action that are delayed by UWT, are not RTS.<br>
@@ -327,7 +327,7 @@
   5. FCW is a safe space, free from public or private promoting, recruiting, or poaching to other sites. Ask admin permission.<br><br>
   6. FCW is not the appropriate forum for comparison or politicking for or against servers or sites.<br><br>
   7. All constructive ideas and contributions are welcome.<br>
-  &bull; Politicking against the site or its members can be freely done in locations other than FCW.<br><br>
+  &bull; Politicking against the site or its members can be done in locations other than FCW, so long as the <a href="https://www.freecivweb.org/privacy" target="_blank">Privacy Policy</a> protecting its members is not violated.<br><br>
   8. Religious and political discussions are encouraged in locations other than FCW. Such discussions may be deleted from FCW.<br><br>
   9. <b>Grievances, accusations, or appeals in private.</b><br>
   &bull; Humans have suspicions, sometimes false accusations, some even have slander or reputational injury as their motive. To protect against a
