@@ -732,10 +732,10 @@ reqs	=
 type	= "Trade_Revenue_Bonus"
 value	= 2000
 reqs	=
-    { "type", "name", "range", "present"
+    { "type",     "name",   "range",      "present"
       "Building", "Palace", "City",       TRUE
       "Building", "Palace", "Traderoute", TRUE
-      "Tech",     "Banking", "World",     FALSE
+      "Tech",     "Banking","World",      FALSE
     }
 ;------------------------------------------------------------------------
 
