@@ -1241,6 +1241,21 @@ static void package_player_info(struct player *plr,
   enum plr_info_level info_level;
   enum plr_info_level highest_team_level;
   struct government *pgov = NULL;
+  /* FCW client (currently) can't check if player_has_embassy_from_effect().
+     Use a function pointer to replace player_has_real_embassy() in the
+     real_embassy[] array sent to players, with player_has_embassy() instead.
+     EFT_HAVE_EMBASSIES then works on client-side. Side effect: it becomes illegal
+     for an EFT_HAVE_EMBASSIES player to make real embassies with others (in
+     anticipation of losing EFT_HAVE_EMBASSIES from a conquest/obsolescence.) But the pro > the con. */
+  /* TODO: This is a hack. The real solution is to have an effects.js function that returns
+     a boolean value by evaluation of the player fulfilling EFT_HAVE_EMBASSIES. */
+  const bool(*has_embassy)(const struct player *pplayer,
+                           const struct player *aplayer) =
+              #ifdef FREECIV_WEB
+                player_has_embassy;
+              #else
+                player_has_real_embassy;
+              #endif
 
   if (receiver) {
     info_level = player_info_level(plr, receiver);
@@ -1322,13 +1337,13 @@ static void package_player_info(struct player *plr,
     memset(&packet->real_embassy, 0, sizeof(packet->real_embassy));
     players_iterate(pother) {
       packet->real_embassy[player_index(pother)] =
-        player_has_real_embassy(plr, pother);
+        has_embassy(plr, pother);
     } players_iterate_end;
     packet->gives_shared_vision = plr->gives_shared_vision;
   } else {
     packet->target_government = packet->government;
     memset(&packet->real_embassy, 0, sizeof(packet->real_embassy));
-    if (receiver && player_has_real_embassy(plr, receiver)) {
+    if (receiver && has_embassy(plr, receiver)) {
       packet->real_embassy[player_index(receiver)] = TRUE;
     }
 
