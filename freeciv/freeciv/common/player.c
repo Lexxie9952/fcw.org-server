@@ -1149,19 +1149,23 @@ bool can_player_see_city_internals(const struct player *pplayer,
   A city's external features are visible to its owner, to players that
   currently sees the tile it is located at and to players that has it as
   a trade partner.
+
+  NB: For performance, changed 30 Apr 2024 to check tile_is_seen first
+      and to be an inline function. (May be heavily called during
+      GOTO and ZOC calculations.)
 ***********************************************************************/
-bool player_can_see_city_externals(const struct player *pow_player,
+inline bool player_can_see_city_externals(const struct player *pow_player,
                                    const struct city *target_city) {
   fc_assert_ret_val(target_city, FALSE);
   fc_assert_ret_val(pow_player, FALSE);
 
-  if (can_player_see_city_internals(pow_player, target_city)) {
-    /* City internals includes city externals. */
+  if (tile_is_seen(city_tile(target_city), pow_player)) {
+    /* The tile is being observed. */
     return TRUE;
   }
 
-  if (tile_is_seen(city_tile(target_city), pow_player)) {
-    /* The tile is being observed. */
+  if (can_player_see_city_internals(pow_player, target_city)) {
+    /* City internals includes city externals. */
     return TRUE;
   }
 
