@@ -1,5 +1,8 @@
 #!/bin/bash
 # Checks status of various Freeciv-web processes
+GREEN='\033[0;32m'; LGREEN='\033[1;32m'; LGREY='\033[0;37m'; DGREY='\033[1;30m'; WHITE='\033[1;37m'
+BLUE='\033[0;34m'; LBLUE='\033[1;34m'; BROWN='\033[0;33m'; YELLOW='\033[1;33m'; RED='\033[0;31m'
+PINK='\033[1;31m'; PURPLE='\033[0;35m'; MAGENTA='\033[1;35m'; CYAN='\033[0;36m'; LCYAN='\033[1;36m'
 
 alias curl='stdbuf -i0 -o0 -e0 curl'
 verbose=false
@@ -93,9 +96,9 @@ checkStatus () { # description, err_msg, <function and args...>
 
   printf "%-50s " "Checking ${description}"
   if "$@" > "${logfile}" 2>&1; then
-    printf "OK!\n"
+    echo -e "${LGREEN}OK${LGREY}"
   else
-    printf "Down\n"
+    echo -e "${RED}Down${LGREY}"
     if [[ "${verbose}" = true ]]; then
       [[ -n "${err_msg}" ]] && echo "  ${err_msg}"
       cat "${logfile}" | sed 's/^/  /'; echo
