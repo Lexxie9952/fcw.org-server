@@ -42,19 +42,55 @@ Freeciv-Web consists of these components:
 
 Running Freeciv-web on your computer
 ------------------------------------
-For computers with x86 architecture, the recommended and probably easiest way is
-to use Vagrant on VirtualBox.
+You have three choices for virtualizing a FCW server:
+* 1. Multipass
+Since FCW was set up under Ubuntu, the recommended and probably easiest way is
+to use Multipass, an Ubuntu VM released from Canonical (makers of Ubuntu), which
+is available for Linux, macOS, and Windows. This VM seems to have superior
+performance.
+
+* 2. Vagrant on Virtual Box
+An older method that has been successful, is to use Vagrant on VirtualBox.
 [FCW Install Docs on Wiki](https://freecivweb.fandom.com/wiki/Freeciv-web_FCW_Install)
+_You must install and set up Python 3.7 from the CLI inside your Ubuntu VM, if you use this method._
+
+* 3. Docker
+While Docker is possible, the container setup has not been maintained and will
+likely require fiddling on your part. It's recommended if you want to do Docker,
+to first try one of the above methods so you can see how the working VM is set up,
+then configure the Docker likewise. If you do this, please contact us so we can
+make adjustments and document a Docker setup.
 
 Whatever the method you choose, you'll have to check out Freeciv-web to a
 directory on your computer, by installing [Git](http://git-scm.com/) and
 running this command:
  ```bash
-  git clone https://github.com/Lexxie9952/fcw.org-server.git
+  git clone https://github.com/Lexxie9952/fcw.org-server.git -branch dev
  ```
-_NOTE: In Dec.2023, the ``dev`` branch is the active one, not the ``master``
-branch. Your ``git clone`` statement should be changed to reflect that._ This
-is subject to change later. ``git clone https://github.com/Lexxie9952/fcw.org-server.git -b dev``
+_NOTE 1_: As of Dec.2023, the ``dev`` branch is the active one, not the ``master``
+branch. The ``git clone`` statement above reflects that state. This is planned for
+change later; in which case, don't use the ``-branch dev`` argument.
+
+ _NOTE 2_: Do not use a ``--depth 1`` argument in your ``git clone`` as this
+ may create difficulties in setting up certificates and some other things.
+
+* Steps for installing Multipass, Vagrant, and Docker can be found below.
+Then come back here for FINAL STEPS:
+
+* FINAL STEPS:
+FCW uses sprite sheets for its graphics. These get built into .png files.
+However, as of May.2024, FCW is configured to use .webp files due to saving
+1M in bandwidth during game loading. You have two options:
+1. Let your build will fail at first. After this happens, you will want to:
+Go to ``~/freeciv-web/freeciv-web/target/freeciv-web/tileset`` and convert
+the .png files to .webp.
+OR
+2. Edit ``~/freeciv-web/freeciv-web/src/main/webapp/javascript/2dcanvas/tilespec.js``
+and change the line
+```const tileset_extension = ".png";```
+to:
+```const tileset_extension = ".webp";```
+and run a ``./build.sh`` in ``~/freeciv-web/freeciv-web``
 
 You may also want to change some parameters before installing, although
 it's not needed in most cases. If you have special requirements, have a look
@@ -69,16 +105,15 @@ or if you want to use alternatives such as VMWare or Parallels, you will need
 to reconfigure your ~/Vagrantfile to link to an iso that's an arm64 version
 of the linux distro that will be used. There are some more notes in
  ~/VagrantfileMac for those looking into this.
-2. For Mac arm64 M-chips, successful installations have been achieved using
+2. For Mac arm64 M-chips, successful installations are much easier using
 Multipass for the virtual machine. The [Multipass.md](Multipass.md) document contains
 info on setup steps for this. Instead of using ``localhost`` for the url
 to such a VM, you will use the IP address of that VM as found by doing a ```multipass list```
-command from Terminal.
+command from a Terminal outside the VM (i.e. inside macOS).
 
 #### :warning: Notice for Windows users
 
-1. Please keep in mind that the files are to be used in a Unix-like system
-(some Ubuntu version with the provided Vagrant file).
+1. Please keep in mind that the files are to be used in a Linux system
 Line endings for text files are different in Windows, and some editors
 "correct" them, making the files unusable in the VM. If using VS Code
 for your editor (recommended), you can click in the lower right to change
@@ -86,7 +121,7 @@ your end-of-line terminations; and also be sure to look up system-wide
 configuration of this throughout VS Code.
 2. There's some provision to recode the main configuration files when
 installing, but not afterwards. If you touch shared files after installation,
-please use an editor that respects Unix line-endings or transforms them with a
+please use an editor that respects standard line-endings or transforms them with a
 utility like dos2unix after saving them (e.g., VS Code configured to LF).
 
 ### Running Freeciv-web with Vagrant on VirtualBox
@@ -94,7 +129,6 @@ utility like dos2unix after saving them (e.g., VS Code configured to LF).
 Freeciv-web can be setup using Vagrant on VirtualBox to quickly create a
 local developer image running Freeciv-web on latest Ubuntu on your host
 operating system such as Windows, macOS (* see above), or Linux.
-This is the recommended way to build Freeciv-web on your computer.
 
 1. Install VirtualBox: https://www.virtualbox.org/ - Install manually on Windows, and with the following command on Linux:
  ```bash
@@ -142,7 +176,7 @@ Install this software if you are not running Freeciv-web with Vagrant:
 
 - Java 8 JDK - http://www.oracle.com/technetwork/java/javase/downloads/
 
-- Python 3.6 - http://www.python.org/
+- Python 3.7 - http://www.python.org/
 
 - Pillow v2.3.0 (PIL fork) - http://pillow.readthedocs.org/
   (required for freeciv-img-extract)
@@ -224,9 +258,9 @@ If you want to contibute to Freeciv-web, please visit our Discord at https://dis
 Contributors to Freeciv-web
 ---------------------------
 Lexxie9952 [@lexxie9952](https://discordapp.com/users/Lexxie9952)
-Andreas Røsdal  [@andreasrosdal](https://github.com/andreasrosdal)
 Marko Lindqvist [@cazfi](https://github.com/cazfi)
 Sveinung Kvilhaugsvik [@kvilhaugsvik](https://github.com/kvilhaugsvik)
+Andreas Røsdal  [@andreasrosdal](https://github.com/andreasrosdal)
 Máximo Castañeda [@lonemadmax](https://github.com/lonemadmax)
 Gerik Bonaert [@adaxi](https://github.com/adaxi)
 ...others...
