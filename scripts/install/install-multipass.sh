@@ -160,8 +160,8 @@ sync_js() {
 build_freeciv_web() {
   pushd "${base_dir}/freeciv-web" || exit 1
   chmod +x *.sh
-  ./build-rules.sh || exit 1
-  ./clean-rules.sh || exit 1
+  ./buildrules.sh || exit 1
+  ./cleanrules.sh || exit 1
   ./build.sh -B || exit 1
   popd || exit 1
 
