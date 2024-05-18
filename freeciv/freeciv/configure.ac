@@ -1644,7 +1644,6 @@ fi
 #	  data/trident/Makefile
 #	  data/isophex/Makefile
 #	  data/isotrident/Makefile
-#	  data/mp2/Makefile
 # 	  data/mp2-ag/Makefile
 # 	  data/mp2-brava/Makefile
 # 	  data/mp2-caravel/Makefile
