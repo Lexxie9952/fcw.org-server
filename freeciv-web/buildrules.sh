@@ -22,5 +22,5 @@ printf "\nRe-generating manuals\n"
    done
 
 printf "\n\n****** REMINDER: ************************************************************\n"
-printf "(1) ./clean-rules.sh is required to fix custom .html files that were overwritten.\n"
+printf "(1) ./cleanrules.sh is required to fix custom .html files that were overwritten.\n"
 printf "(2) run ./build.sh to refresh and activate the new manuals.\n"
