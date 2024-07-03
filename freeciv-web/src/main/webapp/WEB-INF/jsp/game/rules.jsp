@@ -264,8 +264,8 @@
     <b>7. Turn timer is typically extended in the late game</b> of longturn games. (25 hours, 35h, 37h, or 47h).<br>
     &bull;  This meets the needs of players who have successfully grown large nations. <br>
     &bull;  Turn length extension will be decided by the GM after the first active player makes a public request. Generally,<br>
-    &bull; &bull; After Turn 60, a 25h extension would be acceptable.<br>
-    &bull; &bull; After turn 100, an extension to 35h or 37h turns is common practice.<br>
+    &bull; &bull; After Turn 60, a 25h extension is acceptable and usually automatically applied.<br>
+    &bull; &bull; After turn 100, an extension to 35h is common practice and usually automatically applied.<br>
     &bull; &bull; 47h turns could judiciously be decided for very late game, very large nation(s), or any other conditions that help game integrity.<br>
     &bull; A minority of players may need longer turns and be given them, in order that ALL players have time to play correctly.<br><br>
     <b>8.</b> For obvious settings errors, a Gamemaster (GM) can fix any such settings before T10 provided they do not affect any player and provided the GM fully announces such changes, giving at least 1 turn notice before making the change. Exception: announcing creates an exploit, in which case the GM may elect not to give notice (but must inform those members of the admin council who are non-players in the game.) In the first 7 turns, the GM can make adjustments to players' starting conditions if and only if it <b>improves</b> an imbalance in fair starting conditions.<br><br>
