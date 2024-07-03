@@ -193,9 +193,16 @@ function tech_researched_handler(tech, player, how)
         -- This works fine for direct upgrade:  local success = u:upgrade(0)
         -- local success = u:transform(u:can_upgrade(), 0);   << this is supposed to work but maybe doesn't, but we don't need it.
         -- The below is used because we don't want a free upgrade to Engineers, only to first obsoleted_by type which is Workers II:
+        local pre_gold = player:gold()
         local success = u:transform(u.utype.obsoleted_by, 0)
         if success then
+           local lost_gold = pre_gold - player:gold()
             notify.event(player, u.tile, E.UNIT_UPGRADED, ("[`gift`] Workers <font color=#9090ff>upgraded for free.</font>"))
+          -- This is a hack to ensure the upgrade is free. In some cases like having Explosives already, it wasn't free.
+            if lost_gold > 0 then
+              --DEBUG: notify.event(player, u.tile, E.UNIT_UPGRADED, ("[`gift`] %i <font color=#9090ff>gold compensated.</font>"), lost_gold)
+              edit.change_gold(player, lost_gold)
+            end
         end
       end
     end
