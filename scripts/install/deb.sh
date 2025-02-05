@@ -69,8 +69,8 @@ if ! apt-cache -qq show openjdk-11-jdk-headless > /dev/null; then
   sudo ${APT_GET} update
 fi
 
-if [ "$DEB_NO_TOMCAT" != "Y" ] && apt-cache -qq show tomcat8 > /dev/null; then
-  dependencies="${dependencies} tomcat8 tomcat8-admin"
+if [ "$DEB_NO_TOMCAT" != "Y" ] && apt-cache -qq show tomcat9 > /dev/null; then
+  dependencies="${dependencies} tomcat9 tomcat9-admin"
   INSTALLED_TOMCAT=Y
 else
   INSTALLED_TOMCAT=N
@@ -79,7 +79,7 @@ fi
 # Install lua-5.4, if available. Otherwise it will be built from the copy
 # included with the server.
 if apt-cache -qq show liblua5.4-dev &> /dev/null; then
-  dependencies="${dependencies} liblua5.4-dev"
+  dependencies="${dependencies} liblua5.3-dev"
 fi
 
 if [ "${FCW_INSTALL_MODE}" = TEST ]; then
@@ -104,15 +104,15 @@ for n in java javac; do
 done
 
 if [ "${INSTALLED_TOMCAT}" = N ]; then
-  ext_install_tomcat8
+  ext_install_tomcat9
 fi
 
 TMPINSTDIR=$(mktemp -d)
 
 echo "==== Installing Node.js ===="
 cd "${TMPINSTDIR}"
-curl -LOsS 'https://deb.nodesource.com/setup_14.x'
-sudo bash setup_14.x
+curl -LOsS 'https://deb.nodesource.com/setup_20.x'
+sudo bash setup_20.x
 sudo ${APT_GET} install --no-install-recommends nodejs
 # Populate ~/.config with current user
 npm help > /dev/null
