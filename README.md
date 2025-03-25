@@ -1,5 +1,6 @@
 THE FREECIV-WEB PROJECT
 -----------------------
+# NOTE: As of March 2025, Freeciv-Web has moved! We are now located at [Freecivweb.com](https://www.freecivweb.com)
 
 [![Build Status](https://github.com/Lexxie9952/fcw.org-server/workflows/continuous%20integration/badge.svg)](https://github.com/Lexxie9952/fcw.org-server/actions?query=workflow%3A%22continuous+integration%22)
 [![Code Quality: Javascript](https://img.shields.io/lgtm/grade/javascript/g/freeciv/freeciv-web.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/freeciv/freeciv-web/context:javascript)
