@@ -1370,7 +1370,7 @@ void log_civ_score_init(void)
   }
 
   fc_snprintf(game.server.scorefile, 100, 
-              "/var/lib/tomcat8/webapps/data/scorelogs/score-%d.log",
+              "/var/lib/tomcat9/webapps/data/scorelogs/score-%d.log",
               srvarg.port);
 
   score_log = fc_calloc(1, sizeof(*score_log));
