@@ -598,7 +598,7 @@ int city_unit_slots_available(const struct city *pcity);
 bool city_can_use_specialist(const struct city *pcity,
 			     Specialist_type_id type);
 bool city_has_building(const struct city *pcity,
-		       const struct impr_type *pimprove);
+                       const struct impr_type *pimprove);
 bool is_capital(const struct city *pcity);
 bool is_gov_center(const struct city *pcity);
 bool city_got_defense_effect(const struct city *pcity,
