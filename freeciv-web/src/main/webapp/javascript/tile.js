@@ -197,15 +197,21 @@ function improve_tile_info_dialog(message)
       added_text += "<span class='highlight_irrigation'>Irrigate:<b>" + Math.ceil(ttype['irrigation_time']/wt)+"</b></span>"
       if (ttype['irrigation_food_incr']) added_text+= " (+"+ttype['irrigation_food_incr']+")";
     }
-    if (ttype['irrigation_result'] && ttype['irrigation_result'] != tindex && ttype['irrigation_result'] != tinvalid) 
-      added_text+="&#10145;"+terrains[ttype['irrigation_result']]['name']
+    if (ttype['cultivate_time'] && ttype['irrigation_result']
+        && ttype['irrigation_result'] != tindex && ttype['irrigation_result'] != tinvalid) {
+      added_text += "&nbsp;&nbsp; <span class='highlight_cultivate'>Cultivate:<b>" + Math.ceil(ttype['cultivate_time']/wt)+"</b></span>"
+      added_text += "&#10145;" + terrains[ttype['irrigation_result']]['name']
+    }
 
     if (ttype['mining_time']) {
       added_text += "&nbsp;&nbsp; <span class='highlight_mining'>Mine:<b>" + Math.ceil(ttype['mining_time']/wt)+"</b></span>";
       if (ttype['mining_shield_incr']) added_text+= " (+"+ttype['mining_shield_incr']+")";
     }
-    if (ttype['mining_result'] && ttype['mining_result'] != tindex && ttype['mining_result'] != tinvalid)
-      added_text+="&#10145;"+terrains[ttype['mining_result']]['name']
+    if (ttype['plant_time'] && ttype['mining_result']
+        && ttype['mining_result'] != tindex && ttype['mining_result'] != tinvalid) {
+      added_text += "&nbsp;&nbsp; <span class='highlight_plant'>Plant:<b>" + Math.ceil(ttype['plant_time']/wt)+"</b></span>"
+      added_text += "&#10145;" + terrains[ttype['mining_result']]['name']
+    }
 
     if (ttype['transform_time'])
       added_text += "&nbsp;&nbsp; <span class='highlight_transforming'>Transform:<b>" + Math.ceil(ttype['transform_time']/wt)+"</b></span>";

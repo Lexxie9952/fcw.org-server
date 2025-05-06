@@ -442,11 +442,26 @@ int tile_activity_time(enum unit_activity activity, const struct tile *ptile,
   case ACTIVITY_TRANSFORM:
     return pterrain->transform_time * ACTIVITY_FACTOR;
   case ACTIVITY_CULTIVATE:
-    return pterrain->irrigation_time * ACTIVITY_FACTOR;
+    return pterrain->cultivate_time * ACTIVITY_FACTOR;
   case ACTIVITY_PLANT:
-    return pterrain->mining_time * ACTIVITY_FACTOR;
+    return pterrain->plant_time * ACTIVITY_FACTOR;
   case ACTIVITY_IRRIGATE:
+    /* freeciv-web workaround for still supporting targetless irrigate and
+     * mine, despite having cultivate_time and plant_time separated.
+     * Remove when targetless irrigate and mine disallowed. */
+    if (tgt == NULL
+        && pterrain->irrigation_result != pterrain && pterrain->irrigation_result != NULL) {
+      return pterrain->cultivate_time * ACTIVITY_FACTOR;
+    } else {
+      return terrain_extra_build_time(pterrain, activity, tgt) * ACTIVITY_FACTOR;
+    }
   case ACTIVITY_MINE:
+    if (tgt == NULL
+        && pterrain->mining_result != pterrain && pterrain->mining_result != NULL) {
+      return pterrain->plant_time * ACTIVITY_FACTOR;
+    } else {
+      return terrain_extra_build_time(pterrain, activity, tgt) * ACTIVITY_FACTOR;
+    }
   case ACTIVITY_BASE:
   case ACTIVITY_GEN_ROAD:
     return terrain_extra_build_time(pterrain, activity, tgt) * ACTIVITY_FACTOR;
