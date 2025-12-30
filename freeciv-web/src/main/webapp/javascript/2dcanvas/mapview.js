@@ -972,6 +972,7 @@ function set_default_mapview_inactive()
 
   if (overview_active) $("#game_overview_panel").parent().hide();
   if (unitpanel_active) $("#game_unit_panel").parent().hide();
+  if (chalkboard_panel_active) $("#game_chalkboard_panel").parent().hide();
   if (chatbox_active) {
     $("#game_chatbox_panel").parent().hide();
     $(".mobile_chatbox_dialog").hide();
@@ -1015,6 +1016,12 @@ function set_default_mapview_active()
 
   if (unitpanel_active) {
     update_game_unit_panel();
+  }
+
+  if (user_marking_mode && show_chalkboard_panel) {
+    chalkboard_panel_show();
+  } else {
+    chalkboard_panel_hide();
   }
 
   if (chatbox_active) {

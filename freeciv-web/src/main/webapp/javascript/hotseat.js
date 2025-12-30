@@ -217,6 +217,7 @@ function show_hotseat_new_phase()
   setTimeout(function() {
     $('#game_unit_panel').parent().hide();
   }, 1000);
+  if (chalkboard_panel_active) $("#game_chalkboard_panel").parent().hide();
   if (chatbox_active) $("#game_chatbox_panel").parent().hide();
   $("#game_page").hide();
   keyboard_input = false;

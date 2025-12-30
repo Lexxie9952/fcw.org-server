@@ -96,6 +96,9 @@ var show_citybar = true;
 var context_menu_active = true;
 var has_movesleft_warning_been_shown = false;
 var game_unit_panel_state = null;
+var chalkboard_panel_active = false;
+var chalkboard_panel_state = null;
+var chalkboard_panel_initialized = false;
 var chand_baori = false;   // flag for if diagonal irrigation allowed when can_irrigate() is called
 
 var chat_send_to = -1;
@@ -3141,6 +3144,7 @@ function chalkboard_cycle_layer(direction)
   if (layer && layer['name']) {
     add_client_message("Chalkboard layer: <b>" + layer['name'] + "</b>.");
   }
+  chalkboard_panel_refresh();
 }
 
 function chalkboard_create_layer()
@@ -3159,6 +3163,173 @@ function chalkboard_create_layer()
   chalkboard_persist();
 
   add_client_message("Chalkboard layer created: <b>" + layerName + "</b>.");
+  chalkboard_panel_refresh();
+}
+
+function chalkboard_set_active_layer(layerId)
+{
+  var chalkboard = chalkboard_ensure_initialized();
+  if (!chalkboard) return;
+  if (!chalkboard['layers'] || !chalkboard['layers'][layerId]) return;
+  chalkboard['activeLayerId'] = layerId;
+  chalkboard_persist();
+  chalkboard_panel_refresh();
+}
+
+function chalkboard_rename_active_layer()
+{
+  var chalkboard = chalkboard_ensure_initialized();
+  if (!chalkboard) return;
+  var layer = chalkboard_get_active_layer(chalkboard);
+  if (!layer) return;
+
+  var current_name = layer['name'] || chalkboard['activeLayerId'];
+  var new_name = prompt("Rename chalkboard layer:", current_name);
+  if (new_name == null) return;
+  new_name = new_name.trim();
+  if (!new_name.length) return;
+  layer['name'] = new_name;
+  chalkboard_persist();
+  chalkboard_panel_refresh();
+}
+
+function chalkboard_delete_active_layer()
+{
+  var chalkboard = chalkboard_ensure_initialized();
+  if (!chalkboard) return;
+  var order = chalkboard['layerOrder'];
+  if (!order || order.length <= 1) {
+    add_client_message("Chalkboard needs at least one layer.");
+    return;
+  }
+
+  var layer = chalkboard_get_active_layer(chalkboard);
+  var layer_name = layer && layer['name'] ? layer['name'] : chalkboard['activeLayerId'];
+  if (!confirm("Delete chalkboard layer '" + layer_name + "'?")) return;
+
+  var activeId = chalkboard['activeLayerId'];
+  var index = order.indexOf(activeId);
+  if (index >= 0) order.splice(index, 1);
+  delete chalkboard['layers'][activeId];
+
+  var nextIndex = Math.max(0, index - 1);
+  chalkboard['activeLayerId'] = order[nextIndex] || order[0];
+  chalkboard_persist();
+  chalkboard_panel_refresh();
+}
+
+function chalkboard_panel_refresh()
+{
+  if (!chalkboard_panel_initialized) return;
+  var chalkboard = chalkboard_ensure_initialized();
+  if (!chalkboard) return;
+
+  var order = chalkboard['layerOrder'] || [];
+  var html = "";
+  for (var i = 0; i < order.length; i++) {
+    var layerId = order[i];
+    var layer = chalkboard['layers'][layerId];
+    if (!layer) continue;
+    var active = (layerId === chalkboard['activeLayerId']);
+    var layerName = layer['name'] || layerId;
+    html += "<div class='chalkboard_layer_item" + (active ? " active" : "") + "' data-layer-id='" + layerId + "'>"
+         + "<span class='chalkboard_layer_badge'>" + (active ? ">" : "") + "</span>"
+         + "<span class='chalkboard_layer_name'>" + html_safe(layerName) + "</span>"
+         + "</div>";
+  }
+  $("#chalkboard_layer_list").html(html);
+}
+
+function chalkboard_panel_remove_focus()
+{
+  if (!chalkboard_panel_initialized) return;
+  var active = document.activeElement;
+  if (active && $("#game_chalkboard_panel").find(active).length) {
+    active.blur();
+  }
+}
+
+function chalkboard_panel_show()
+{
+  if (!show_chalkboard_panel) return;
+  if (!chalkboard_panel_initialized) init_chalkboard_panel();
+  if (!chalkboard_panel_initialized) return;
+  $("#game_chalkboard_panel").parent().show();
+  chalkboard_panel_refresh();
+  if (chalkboard_panel_state == "minimized") $("#game_chalkboard_panel").dialogExtend("minimize");
+  chalkboard_panel_remove_focus();
+}
+
+function chalkboard_panel_hide()
+{
+  if (!chalkboard_panel_initialized) return;
+  $("#game_chalkboard_panel").parent().hide();
+}
+
+function init_chalkboard_panel()
+{
+  if (observing || chalkboard_panel_initialized) return;
+  chalkboard_panel_initialized = true;
+  chalkboard_panel_active = true;
+
+  $("#game_chalkboard_panel").attr("title", "Chalkboard");
+  $("#game_chalkboard_panel").dialog({
+      bgiframe: true,
+      modal: false,
+      width: "220px",
+      height: "auto",
+      resizable: false,
+      closeOnEscape: false,
+      dialogClass: "chalkboard_dialog no-close",
+      position: {my: "right top", at: "right top+28", of: window, within: $("#tabs-map")},
+      appendTo: "#tabs-map",
+      close: function(event, ui) { chalkboard_panel_active = false; }
+    }).dialogExtend({
+      "minimizable": true,
+      "closable": false,
+      "minimize": function(evt, dlg){
+        chalkboard_panel_state = $("#game_chalkboard_panel").dialogExtend("state");
+        $(".chalkboard_dialog").css({"height":"8","width":70});
+        unobstruct_minimized_dialog_container();
+      },
+      "restore": function(evt, dlg){
+        chalkboard_panel_state = $("#game_chalkboard_panel").dialogExtend("state");
+        $(".chalkboard_dialog").css({"height":"auto","width":"220"});
+        $(".chalkboard_dialog").position({my: "right top", at: "right top+28", of: window, within: $("#tabs-map")});
+      },
+      "icons": {
+        "minimize": "ui-icon-circle-minus",
+        "restore": "ui-icon-bullet"
+      }
+    });
+
+  $("#game_chalkboard_panel").dialog("open");
+  $("#game_chalkboard_panel").parent().css("overflow", "hidden");
+  if (chalkboard_panel_state == "minimized") $("#game_chalkboard_panel").dialogExtend("minimize");
+
+  $("#game_chalkboard_panel").parent().children().not("#game_chalkboard_panel").children().get(0).innerHTML
+    = "<img src='/images/e/bookopen.png' height='16px'>";
+
+  $("#chalkboard_layer_new").off("click").on("click", function() {
+    chalkboard_create_layer();
+  });
+  $("#chalkboard_layer_rename").off("click").on("click", function() {
+    chalkboard_rename_active_layer();
+  });
+  $("#chalkboard_layer_delete").off("click").on("click", function() {
+    chalkboard_delete_active_layer();
+  });
+  $("#chalkboard_layer_list").off("click", ".chalkboard_layer_item")
+    .on("click", ".chalkboard_layer_item", function() {
+      var layerId = $(this).data("layer-id");
+      if (layerId) chalkboard_set_active_layer(layerId);
+    });
+
+  chalkboard_panel_refresh();
+  chalkboard_panel_remove_focus();
+  if (!user_marking_mode || !show_chalkboard_panel) {
+    chalkboard_panel_hide();
+  }
 }
 
 function chalkboard_clear_active_layer()
@@ -3823,7 +3994,7 @@ function do_map_click(ptile, qtype, first_time_called)
 **************************************************************************/
 function find_active_dialog()
 {
-  const permanent_widgets = ["game_overview_panel", "game_unit_panel", "game_chatbox_panel"];
+  const permanent_widgets = ["game_overview_panel", "game_unit_panel", "game_chatbox_panel", "game_chalkboard_panel"];
   const dialogs = $(".ui-dialog");
   for (var i = 0; i < dialogs.length; i++) {
     const dialog = $(dialogs[i]);
@@ -4321,6 +4492,7 @@ function map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
               // Please see note in handle_game_uid() for how we should refactor this.
               handle_game_uid();
               chalkboard_ensure_initialized();
+              chalkboard_panel_show();
               if (chalkboard_description) {
                 add_client_message("<span class='e_small chalkboard_note'>Chalkboard is ON.  Alt-X to toggle.</span>");
               } else {
@@ -4328,6 +4500,7 @@ function map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
               }
             }
             else {
+              chalkboard_panel_hide();
               if (chalkboard_description) {
                 add_client_message("<span class='e_small chalkboard_note'>Chalkboard is OFF.</span>");
                 chalkboard_description = false;

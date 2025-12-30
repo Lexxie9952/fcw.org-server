@@ -105,6 +105,7 @@ var show_empire_tab = false;
 var show_warcalc = false;
 var show_unit_movepct = false; // show move-point bar on map units
 var show_compass = true; // show compass on map
+var show_chalkboard_panel = true; // show chalkboard layers panel when in chalkboard mode
 var hp_bar_offset = 0;    // if mp bar is shown, offset to bump up hp bar
 var focuslock = false;    // whether map centers and locks always on focused unit
 
@@ -283,10 +284,10 @@ function init_options_dialog()
   });
   // AUTOEXPLORE HOTKEY 'X' ENABLED
   $('#enable_autoexplore').prop('checked', enable_autoexplore);
-  $('#enable_autoexplore').change(function() {
-    enable_autoexplore = this.checked;
-    simpleStorage.set('explorekey', enable_autoexplore);
-  });
+   $('#enable_autoexplore').change(function() {
+     enable_autoexplore = this.checked;
+     simpleStorage.set('explorekey', enable_autoexplore);
+   });
   // UNIT CLICK GIVES CONTEXT MENU
   $('#unit_click_menu').prop('checked', unit_click_menu);
   $('#unit_click_menu').change(function() {
@@ -362,6 +363,14 @@ function init_options_dialog()
    $('#scroll_narrow_x').change(function() {
      scroll_narrow_x = this.checked;
      simpleStorage.set('xScroll', scroll_narrow_x);
+   });
+   // SHOW CHALKBOARD LAYERS PANEL
+   $('#show_chalkboard_panel').prop('checked', show_chalkboard_panel);
+   $('#show_chalkboard_panel').change(function() {
+     show_chalkboard_panel = this.checked;
+     simpleStorage.set('chalkboardPanel', show_chalkboard_panel);
+     if (show_chalkboard_panel && user_marking_mode) chalkboard_panel_show();
+     else chalkboard_panel_hide();
    });
     // BORDER FLAGS
     $('#fill_borders').prop('checked', draw_border_flags);
@@ -603,5 +612,3 @@ background-image: url('/images/bg.jpg');
   background: url("/images/bg-dark.jpg") repeat scroll 0 0 ;
 
 */
-
-

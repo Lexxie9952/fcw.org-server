@@ -1644,6 +1644,16 @@ table.vet_level tr:nth-child(9) td {
   overflow: hidden;
   border-color: #432;
 }
+.chalkboard_dialog .ui-dialog-titlebar {
+  padding-bottom: 1px;
+  padding-left: 4px;
+  padding-top: 0px;
+  font-size: 11px;
+  margin-top: -5px;
+  height: 15px;
+  overflow: hidden;
+  border-color: #432;
+}
 .overview_dialog {
   padding: 4px 2px;
   border-radius: 7px 7px 3px 3px;
@@ -1998,6 +2008,76 @@ body:not(.mobile) .ui-dialog.unit_dialog {
 #game_unit_panel {
   margin-left: -8px;
   /* padding: 0px replaces line above if not mobile */
+}
+
+#game_chalkboard_panel {
+  padding: 6px 6px 4px 6px;
+  min-width: 200px;
+}
+
+#chalkboard_panel_controls {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+
+.chalkboard_panel_button {
+  font-size: 11px;
+  padding: 2px 8px;
+  background: linear-gradient(#dedede, #bfbfbf);
+  border: 1px solid #8c8c8c;
+  color: #1f1f1f;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
+  cursor: pointer;
+}
+
+.chalkboard_panel_button:hover {
+  background: linear-gradient(#efefef, #cfcfcf);
+}
+
+.chalkboard_panel_button:focus {
+  outline: 1px solid rgba(180, 220, 255, 0.9);
+  outline-offset: 1px;
+}
+
+#chalkboard_layer_list {
+  max-height: 230px;
+  overflow-y: auto;
+}
+
+.chalkboard_layer_item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 6px;
+  margin-bottom: 4px;
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+  font-size: 12px;
+  color: #e8e6e0;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.6);
+}
+
+.chalkboard_layer_item:hover {
+  background: rgba(40, 40, 40, 0.6);
+}
+
+.chalkboard_layer_item.active {
+  background: rgba(90, 130, 170, 0.6);
+  border-color: rgba(160, 210, 255, 0.7);
+  color: #f7fbff;
+}
+
+.chalkboard_layer_badge {
+  color: #b7d7ff;
+  font-weight: bold;
+  min-width: 10px;
+  text-align: center;
+}
+
+.chalkboard_layer_name {
+  flex: 1;
 }
 
 #city_table {
