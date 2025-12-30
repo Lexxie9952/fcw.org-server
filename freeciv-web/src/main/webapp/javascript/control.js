@@ -99,6 +99,7 @@ var game_unit_panel_state = null;
 var chalkboard_panel_active = false;
 var chalkboard_panel_state = null;
 var chalkboard_panel_initialized = false;
+var chalkboard_editing_layer_id = null;
 var chand_baori = false;   // flag for if diagonal irrigation allowed when can_irrigate() is called
 
 var chat_send_to = -1;
@@ -3180,17 +3181,7 @@ function chalkboard_rename_active_layer()
 {
   var chalkboard = chalkboard_ensure_initialized();
   if (!chalkboard) return;
-  var layer = chalkboard_get_active_layer(chalkboard);
-  if (!layer) return;
-
-  var current_name = layer['name'] || chalkboard['activeLayerId'];
-  var new_name = prompt("Rename chalkboard layer:", current_name);
-  if (new_name == null) return;
-  new_name = new_name.trim();
-  if (!new_name.length) return;
-  layer['name'] = new_name;
-  chalkboard_persist();
-  chalkboard_panel_refresh();
+  chalkboard_begin_inline_rename(chalkboard['activeLayerId']);
 }
 
 function chalkboard_delete_active_layer()
@@ -3232,12 +3223,61 @@ function chalkboard_panel_refresh()
     if (!layer) continue;
     var active = (layerId === chalkboard['activeLayerId']);
     var layerName = layer['name'] || layerId;
+    var isEditing = (chalkboard_editing_layer_id === layerId);
     html += "<div class='chalkboard_layer_item" + (active ? " active" : "") + "' data-layer-id='" + layerId + "'>"
-         + "<span class='chalkboard_layer_badge'>" + (active ? ">" : "") + "</span>"
-         + "<span class='chalkboard_layer_name'>" + html_safe(layerName) + "</span>"
-         + "</div>";
+         + "<span class='chalkboard_layer_badge'>" + (active ? ">" : "") + "</span>";
+    if (isEditing) {
+      html += "<input class='chalkboard_layer_input' data-layer-id='" + layerId + "' value='" + html_safe(layerName) + "'>";
+    } else {
+      html += "<span class='chalkboard_layer_name'>" + html_safe(layerName) + "</span>";
+    }
+    html += "</div>";
   }
   $("#chalkboard_layer_list").html(html);
+  chalkboard_focus_inline_input();
+}
+
+function chalkboard_begin_inline_rename(layerId)
+{
+  if (!layerId) return;
+  chalkboard_editing_layer_id = layerId;
+  chalkboard_panel_refresh();
+}
+
+function chalkboard_focus_inline_input()
+{
+  if (!chalkboard_editing_layer_id) return;
+  var input = $("#chalkboard_layer_list .chalkboard_layer_input[data-layer-id='" + chalkboard_editing_layer_id + "']");
+  if (!input.length) return;
+  input.focus();
+  if (input[0] && input[0].select) input[0].select();
+}
+
+function chalkboard_finish_inline_rename(commit)
+{
+  if (!chalkboard_editing_layer_id) return;
+  var layerId = chalkboard_editing_layer_id;
+  chalkboard_editing_layer_id = null;
+  if (!commit) {
+    chalkboard_panel_refresh();
+    return;
+  }
+
+  var chalkboard = chalkboard_ensure_initialized();
+  if (!chalkboard || !chalkboard['layers'] || !chalkboard['layers'][layerId]) {
+    chalkboard_panel_refresh();
+    return;
+  }
+  var input = $("#chalkboard_layer_list .chalkboard_layer_input[data-layer-id='" + layerId + "']");
+  var newName = input.length ? input.val() : "";
+  if (newName != null) {
+    newName = newName.trim();
+    if (newName.length > 0) {
+      chalkboard['layers'][layerId]['name'] = newName;
+      chalkboard_persist();
+    }
+  }
+  chalkboard_panel_refresh();
 }
 
 function chalkboard_panel_remove_focus()
@@ -3319,10 +3359,40 @@ function init_chalkboard_panel()
   $("#chalkboard_layer_delete").off("click").on("click", function() {
     chalkboard_delete_active_layer();
   });
-  $("#chalkboard_layer_list").off("click", ".chalkboard_layer_item")
-    .on("click", ".chalkboard_layer_item", function() {
+  $("#chalkboard_layer_list")
+    .off("click", ".chalkboard_layer_item")
+    .on("click", ".chalkboard_layer_item", function(ev) {
+      if ($(ev.target).hasClass("chalkboard_layer_input")) return;
       var layerId = $(this).data("layer-id");
-      if (layerId) chalkboard_set_active_layer(layerId);
+      if (!layerId) return;
+      var chalkboard = chalkboard_ensure_initialized();
+      if (!chalkboard) return;
+      var isActive = (chalkboard['activeLayerId'] === layerId);
+      if (isActive && !chalkboard_editing_layer_id) {
+        chalkboard_begin_inline_rename(layerId);
+        return;
+      }
+      chalkboard_set_active_layer(layerId);
+    })
+    .off("dblclick", ".chalkboard_layer_item")
+    .on("dblclick", ".chalkboard_layer_item", function(ev) {
+      ev.preventDefault();
+      var layerId = $(this).data("layer-id");
+      if (layerId) chalkboard_begin_inline_rename(layerId);
+    })
+    .off("keydown", ".chalkboard_layer_input")
+    .on("keydown", ".chalkboard_layer_input", function(ev) {
+      if (ev.keyCode == 13) { // Enter
+        ev.preventDefault();
+        chalkboard_finish_inline_rename(true);
+      } else if (ev.keyCode == 27) { // Escape
+        ev.preventDefault();
+        chalkboard_finish_inline_rename(false);
+      }
+    })
+    .off("blur", ".chalkboard_layer_input")
+    .on("blur", ".chalkboard_layer_input", function() {
+      chalkboard_finish_inline_rename(true);
     });
 
   chalkboard_panel_refresh();
@@ -4027,6 +4097,12 @@ function global_keyboard_listener(ev)
   if (TAB_MAP === $("#tabs").tabs("option", "active")) {
     // The Map tab is active
     if (find_active_dialog() == null) {
+      if (user_marking_mode && show_chalkboard_panel && chalkboard_panel_initialized && !chalkboard_editing_layer_id
+          && ev.keyCode == 113) { // F2
+        ev.preventDefault(); // override possible browser shortcut
+        chalkboard_rename_active_layer();
+        return;
+      }
       map_handle_key(keyboard_key, ev.keyCode, ev['ctrlKey'], ev['altKey'], ev['shiftKey'], ev);
     }
   }

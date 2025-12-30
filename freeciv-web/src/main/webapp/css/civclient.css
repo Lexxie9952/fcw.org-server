@@ -2057,6 +2057,7 @@ body:not(.mobile) .ui-dialog.unit_dialog {
   font-size: 12px;
   color: #e8e6e0;
   text-shadow: 0 1px 0 rgba(0, 0, 0, 0.6);
+  min-height: 22px;
 }
 
 .chalkboard_layer_item:hover {
@@ -2078,6 +2079,19 @@ body:not(.mobile) .ui-dialog.unit_dialog {
 
 .chalkboard_layer_name {
   flex: 1;
+  line-height: 16px;
+}
+
+.chalkboard_layer_input {
+  flex: 1;
+  font-size: 12px;
+  padding: 0 4px;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  color: #f7fbff;
+  text-shadow: none;
+  height: 16px;
+  box-sizing: border-box;
 }
 
 #city_table {
