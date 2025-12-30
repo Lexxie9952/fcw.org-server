@@ -71,10 +71,30 @@ var anim_swords_instead = {};  // bools for whether to show swords instead of ex
 var show_tile_marker_instead = {}; // bools for whether to show a tile marker indicator instead of combat animation.
 
 const USER_MARK_1     = 1
-const USER_MARK_2     = 2;
+const USER_MARK_2     = 2; 
 const USER_MARK_3     = 3;
 const USER_MARK_4     = 4;
 const USER_MARKS = ["","grid.usermark","grid.userarea","user.attention","grid.userspot"];
+
+function chalkboard_get_tile_mark(tileIndex)
+{
+  if (!myGameVars || !myGameVars['chalkboard']) return null;
+  var chalkboard = myGameVars['chalkboard'];
+  if (!chalkboard['layers'] || !chalkboard['activeLayerId']) return null;
+  var layer = chalkboard['layers'][chalkboard['activeLayerId']];
+  if (!layer || !layer['tiles']) return null;
+  return layer['tiles'][tileIndex];
+}
+
+function chalkboard_get_mark_style(mark)
+{
+  if (!mark) return null;
+  if (typeof mark === 'object') {
+    if (mark['style']) return mark['style'];
+    if (mark['mark']) return mark['mark'];
+  }
+  return mark;
+}
 
 /* Items on the mapview are drawn in layers.  Each entry below represents
  * one layer.  The names are basically arbitrary and just correspond to
@@ -558,9 +578,10 @@ function fill_sprite_array(layer, ptile, pedge, pcorner, punit, pcity, citymode)
       }
       // User markup sprite
       if (!user_marking_mode || !ptile) break;
-      const tkey = "cPlan"+ptile['index'];  // key/val for user mark-up tiles
-      if (myGameVars[tkey]) {
-        sprite_array.push(get_user_mark_sprite(myGameVars[tkey]));
+      const mark = chalkboard_get_tile_mark(ptile['index']);
+      const mark_style = chalkboard_get_mark_style(mark);
+      if (mark_style) {
+        sprite_array.push(get_user_mark_sprite(mark_style));
       }
       break;
 
