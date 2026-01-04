@@ -231,8 +231,14 @@ The current and complete list of Freeciv-web controls can be found here:<br>
 <tr><td><span class="hotkey">shift-W</span></td><td> Show city tile production on map</td></tr>
 <tr><td><span class="hotkey">alt-W</span></td><td> War calculator</td></tr>
 <tr><td><span class="hotkey">alt-X</span></td><td> Toggle Chalkboard (private map notes, marking mode) </td></tr>
-<tr><td>&emsp;</td><td><span class="hotkey">Click &emsp;Shift-Click &emsp;Ctrl-Click &emsp;Alt-Click&emsp;</span> {Make user notes on the chalkboard-map}</td></tr>
-<tr><td><span class="hotkey">DEL</span></td><td> Erase Chalkboard</td></tr>
+<tr><td>&emsp;</td><td><span class="hotkey">Click &emsp;Shift-Click &emsp;Ctrl-Click &emsp;Alt-Click&emsp;</span> {Make user notes on the chalkboard-map (when Chalkboard is ON)}</td></tr>
+<tr><td><span class="hotkey">alt-[</span></td><td> Chalkboard: previous layer</td></tr>
+<tr><td><span class="hotkey">alt-]</span></td><td> Chalkboard: next layer</td></tr>
+<tr><td><span class="hotkey">alt-shift-[</span></td><td> Chalkboard: create new layer</td></tr>
+<tr><td><span class="hotkey">alt-shift-]</span></td><td> Chalkboard: create new layer</td></tr>
+<tr><td><span class="hotkey">alt-backspace</span></td><td> Chalkboard: clear active layer</td></tr>
+<tr><td><span class="hotkey">F2</span></td><td> Chalkboard: rename active layer (when layers panel is visible)</td></tr>
+<tr><td><span class="hotkey">DEL</span></td><td> Chalkboard: erase all layers</td></tr>
 <tr><td><span class="hotkey">shift-Return</span></td><td> Turn done</td></tr>
 <tr><td><span class="hotkey">&apos;</span></td><td>Focus on chat input area. (Restores if minimized)</td></tr>
 <tr><td><span class="hotkey">&lt;</span></td><td>Return focus to last focused unit (also numpad-5)</td></tr>
