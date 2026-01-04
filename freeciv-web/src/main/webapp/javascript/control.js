@@ -3019,6 +3019,17 @@ function chalkboard_init_default()
   };
 }
 
+function chalkboard_make_mark(style)
+{
+  if (style == null) return null;
+  if (typeof style === "number") return style;
+  if (typeof style === "string") {
+    var parsed = parseInt(style, 10);
+    if (!isNaN(parsed)) return parsed;
+  }
+  return style;
+}
+
 function chalkboard_persist()
 {
   if (!Game_UID) return;
@@ -3090,7 +3101,7 @@ function chalkboard_migrate_legacy(chalkboard)
     if (tileIndex.length === 0) continue;
     var mark = myGameVars[key];
     if (mark) {
-      layer['tiles'][tileIndex] = {"type": "mark", "style": mark};
+      layer['tiles'][tileIndex] = chalkboard_make_mark(mark);
       migrated = true;
     }
     delete myGameVars[key];
@@ -3120,7 +3131,7 @@ function chalkboard_set_tile_mark(tileIndex, mark)
   if (!layer['tiles']) layer['tiles'] = {};
 
   if (mark) {
-    layer['tiles'][tileIndex] = {"type": "mark", "style": mark};
+    layer['tiles'][tileIndex] = chalkboard_make_mark(mark);
   } else {
     delete layer['tiles'][tileIndex];
   }
@@ -3475,7 +3486,7 @@ function do_map_click(ptile, qtype, first_time_called)
           usermark = USER_MARK_1;
     }
     if (usermark) {
-      active_layer['tiles'][ptile['index']] = {"type": "mark", "style": usermark};
+      active_layer['tiles'][ptile['index']] = chalkboard_make_mark(usermark);
     } else {
       delete active_layer['tiles'][ptile['index']]; // don't keep records of tiles for unplanned cities
     }

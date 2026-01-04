@@ -88,12 +88,23 @@ function chalkboard_get_tile_mark(tileIndex)
 
 function chalkboard_get_mark_style(mark)
 {
-  if (!mark) return null;
-  if (typeof mark === 'object') {
-    if (mark['style']) return mark['style'];
-    if (mark['mark']) return mark['mark'];
+  if (mark == null) return null;
+  if (typeof mark === 'number') return mark;
+  if (typeof mark === 'string') {
+    var parsed = parseInt(mark, 10);
+    if (!isNaN(parsed)) return parsed;
+    return null;
   }
-  return mark;
+  if (Array.isArray(mark)) {
+    if (mark.length < 2) return null;
+    if (mark[0] === 0) return mark[1];
+    return null;
+  }
+  if (typeof mark === 'object') {
+    if (mark['style'] != null) return mark['style'];
+    if (mark['mark'] != null) return mark['mark'];
+  }
+  return null;
 }
 
 /* Items on the mapview are drawn in layers.  Each entry below represents
