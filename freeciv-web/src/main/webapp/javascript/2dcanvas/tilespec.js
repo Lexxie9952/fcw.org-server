@@ -70,8 +70,8 @@ var explosion_anim_map = {};
 var anim_swords_instead = {};  // bools for whether to show swords instead of explosion.
 var show_tile_marker_instead = {}; // bools for whether to show a tile marker indicator instead of combat animation.
 
-const USER_MARK_1     = 1
-const USER_MARK_2     = 2; 
+const USER_MARK_1     = 1;
+const USER_MARK_2     = 2;
 const USER_MARK_3     = 3;
 const USER_MARK_4     = 4;
 const USER_MARKS = ["","grid.usermark","grid.userarea","user.attention","grid.userspot"];

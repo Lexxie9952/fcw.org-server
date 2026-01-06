@@ -284,10 +284,10 @@ function init_options_dialog()
   });
   // AUTOEXPLORE HOTKEY 'X' ENABLED
   $('#enable_autoexplore').prop('checked', enable_autoexplore);
-   $('#enable_autoexplore').change(function() {
-     enable_autoexplore = this.checked;
-     simpleStorage.set('explorekey', enable_autoexplore);
-   });
+  $('#enable_autoexplore').change(function() {
+    enable_autoexplore = this.checked;
+    simpleStorage.set('explorekey', enable_autoexplore);
+  });
   // UNIT CLICK GIVES CONTEXT MENU
   $('#unit_click_menu').prop('checked', unit_click_menu);
   $('#unit_click_menu').change(function() {
