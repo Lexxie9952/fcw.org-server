@@ -234,8 +234,18 @@
     <div title="Set Help-click to ALT-SHIFT-Click (for users who can't Win-Click or CMD-Click)" class="main_menu_buttons">
       <input type='checkbox' class="css-checkbox" name='reconfig_metakey' id='reconfig_metakey' checked>
       <label for="reconfig_metakey" name="reconfig_metakey_lbl" class="css-label dark-check-green"><font id="metakeytext" color="#e8f8e0">ALT-SHIFT-Click = Help-click</font></label>
-  </div>
+    </div>
   </td>
+</tr>
+
+<tr class="options_row">
+  <td>
+    <div title="Show chalkboard layers panel when chalkboard mode is on" class="main_menu_buttons">
+        <input type='checkbox' class="css-checkbox" name='show_chalkboard_panel' id='show_chalkboard_panel' checked>
+        <label for="show_chalkboard_panel" name="show_chalkboard_panel_lbl" class="css-label dark-check-green"><font color="#e8f8e0">Chalkboard layers panel</font></label>
+    </div>
+  </td>
+  <td></td>
 </tr>
 
 <tr class="options_row">
@@ -328,4 +338,3 @@
 </div>
 
 </center>
-

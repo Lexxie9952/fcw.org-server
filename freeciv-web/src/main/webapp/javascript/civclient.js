@@ -287,6 +287,11 @@ function civclient_init()
     $("#compass").show();
   } else $("#compass").hide();
 
+  show_chalkboard_panel = simpleStorage.get('chalkboardPanel');
+  if (show_chalkboard_panel == null || show_chalkboard_panel == true) {
+    show_chalkboard_panel = true;
+  } else show_chalkboard_panel = false;
+
   // Saved user re-positioning of the chatbox dialog:
   var tmp = simpleStorage.get('chatDlg');
   if (tmp != null)  {// don't overwrite object keys if not yet stored

@@ -88,12 +88,18 @@ var SELECT_APPEND = 3;
 
 var intro_click_description = true;
 var chalkboard_description = true;
+const CHALKBOARD_VERSION = 1;
+const CHALKBOARD_DEFAULT_LAYER_ID = "layer-1";
 var resize_enabled = true;
 var waiting_units_list = [];
 var show_citybar = true;
 var context_menu_active = true;
 var has_movesleft_warning_been_shown = false;
 var game_unit_panel_state = null;
+var chalkboard_panel_active = false;
+var chalkboard_panel_state = null;
+var chalkboard_panel_initialized = false;
+var chalkboard_editing_layer_id = null;
 var chand_baori = false;   // flag for if diagonal irrigation allowed when can_irrigate() is called
 
 var chat_send_to = -1;
@@ -2993,6 +2999,444 @@ function worked_tile_click(ptile)
 }
 
 /**************************************************************************
+  Chalkboard helpers
+**************************************************************************/
+function chalkboard_new_layer(name)
+{
+  return {"name": name, "visible": true, "tiles": {}, "shapes": []};
+}
+
+function chalkboard_init_default()
+{
+  return {
+    "version": CHALKBOARD_VERSION,
+    "activeLayerId": CHALKBOARD_DEFAULT_LAYER_ID,
+    "layerOrder": [CHALKBOARD_DEFAULT_LAYER_ID],
+    "nextLayerId": 2,
+    "layers": {
+      [CHALKBOARD_DEFAULT_LAYER_ID]: chalkboard_new_layer("Layer 1")
+    }
+  };
+}
+
+function chalkboard_make_mark(style)
+{
+  if (style == null) return null;
+  if (typeof style === "number") return style;
+  if (typeof style === "string") {
+    var parsed = parseInt(style, 10);
+    if (!isNaN(parsed)) return parsed;
+  }
+  return style;
+}
+
+function chalkboard_persist()
+{
+  if (!Game_UID) return;
+  simpleStorage.set(Game_UID, myGameVars);
+}
+
+function chalkboard_ensure_initialized()
+{
+  if (!myGameVars) return null;
+
+  var changed = false;
+  if (!myGameVars['chalkboard']) {
+    myGameVars['chalkboard'] = chalkboard_init_default();
+    changed = true;
+  }
+
+  var chalkboard = myGameVars['chalkboard'];
+  if (!chalkboard['version']) {
+    chalkboard['version'] = CHALKBOARD_VERSION;
+    changed = true;
+  }
+  if (!Array.isArray(chalkboard['layerOrder']) || chalkboard['layerOrder'].length === 0) {
+    chalkboard['layerOrder'] = [CHALKBOARD_DEFAULT_LAYER_ID];
+    changed = true;
+  }
+  if (!chalkboard['layers']) {
+    chalkboard['layers'] = {};
+    changed = true;
+  }
+  if (!chalkboard['layers'][CHALKBOARD_DEFAULT_LAYER_ID]) {
+    chalkboard['layers'][CHALKBOARD_DEFAULT_LAYER_ID] = chalkboard_new_layer("Layer 1");
+    changed = true;
+  }
+  if (!chalkboard['activeLayerId'] || !chalkboard['layers'][chalkboard['activeLayerId']]) {
+    chalkboard['activeLayerId'] = chalkboard['layerOrder'][0];
+    changed = true;
+  }
+  if (!chalkboard['nextLayerId']) {
+    chalkboard['nextLayerId'] = chalkboard['layerOrder'].length + 1;
+    changed = true;
+  }
+
+  if (chalkboard_migrate_legacy(chalkboard)) {
+    changed = true;
+  }
+
+  if (changed) chalkboard_persist();
+  return chalkboard;
+}
+
+function chalkboard_migrate_legacy(chalkboard)
+{
+  if (chalkboard['legacyMigrated']) return false;
+
+  var changed = false;
+  var layer = chalkboard['layers'][chalkboard['activeLayerId']];
+  if (!layer) {
+    layer = chalkboard['layers'][CHALKBOARD_DEFAULT_LAYER_ID];
+  }
+  if (!layer['tiles']) layer['tiles'] = {};
+
+  var migrated = false;
+  for (var key in myGameVars) {
+    if (!Object.prototype.hasOwnProperty.call(myGameVars, key)) continue;
+    if (key === 'chalkboard') continue;
+    if (key.indexOf("cPlan") !== 0) continue;
+
+    var tileIndex = key.substring(5);
+    if (tileIndex.length === 0) continue;
+    var mark = myGameVars[key];
+    if (mark) {
+      layer['tiles'][tileIndex] = chalkboard_make_mark(mark);
+      migrated = true;
+    }
+    delete myGameVars[key];
+  }
+
+  chalkboard['legacyMigrated'] = true;
+  changed = true;
+  return migrated || changed;
+}
+
+function chalkboard_get_active_layer(chalkboard)
+{
+  if (!chalkboard) return null;
+  var layer = chalkboard['layers'][chalkboard['activeLayerId']];
+  if (layer) return layer;
+  var firstId = chalkboard['layerOrder'][0];
+  chalkboard['activeLayerId'] = firstId;
+  return chalkboard['layers'][firstId];
+}
+
+function chalkboard_set_tile_mark(tileIndex, mark)
+{
+  var chalkboard = chalkboard_ensure_initialized();
+  if (!chalkboard) return;
+  var layer = chalkboard_get_active_layer(chalkboard);
+  if (!layer) return;
+  if (!layer['tiles']) layer['tiles'] = {};
+
+  if (mark) {
+    layer['tiles'][tileIndex] = chalkboard_make_mark(mark);
+  } else {
+    delete layer['tiles'][tileIndex];
+  }
+  chalkboard_persist();
+}
+
+function chalkboard_cycle_layer(direction)
+{
+  var chalkboard = chalkboard_ensure_initialized();
+  if (!chalkboard) return;
+
+  var order = chalkboard['layerOrder'];
+  if (!order || order.length === 0) return;
+
+  var currentIndex = order.indexOf(chalkboard['activeLayerId']);
+  if (currentIndex === -1) currentIndex = 0;
+  var nextIndex = (currentIndex + direction + order.length) % order.length;
+  chalkboard['activeLayerId'] = order[nextIndex];
+  chalkboard_persist();
+
+  var layer = chalkboard['layers'][order[nextIndex]];
+  if (layer && layer['name']) {
+    add_client_message("Chalkboard layer: <b>" + layer['name'] + "</b>.");
+  }
+  chalkboard_panel_refresh();
+}
+
+function chalkboard_create_layer()
+{
+  var chalkboard = chalkboard_ensure_initialized();
+  if (!chalkboard) return;
+
+  var layerNumber = chalkboard['nextLayerId'] || (chalkboard['layerOrder'].length + 1);
+  var layerId = "layer-" + layerNumber;
+  chalkboard['nextLayerId'] = layerNumber + 1;
+
+  var layerName = "Layer " + layerNumber;
+  chalkboard['layers'][layerId] = chalkboard_new_layer(layerName);
+  chalkboard['layerOrder'].push(layerId);
+  chalkboard['activeLayerId'] = layerId;
+  chalkboard_persist();
+
+  add_client_message("Chalkboard layer created: <b>" + layerName + "</b>.");
+  chalkboard_panel_refresh();
+}
+
+function chalkboard_set_active_layer(layerId)
+{
+  var chalkboard = chalkboard_ensure_initialized();
+  if (!chalkboard) return;
+  if (!chalkboard['layers'] || !chalkboard['layers'][layerId]) return;
+  chalkboard['activeLayerId'] = layerId;
+  chalkboard_persist();
+  chalkboard_panel_refresh();
+}
+
+function chalkboard_rename_active_layer()
+{
+  var chalkboard = chalkboard_ensure_initialized();
+  if (!chalkboard) return;
+  chalkboard_begin_inline_rename(chalkboard['activeLayerId']);
+}
+
+function chalkboard_delete_active_layer()
+{
+  var chalkboard = chalkboard_ensure_initialized();
+  if (!chalkboard) return;
+  var order = chalkboard['layerOrder'];
+  if (!order || order.length <= 1) {
+    add_client_message("Chalkboard needs at least one layer.");
+    return;
+  }
+
+  var layer = chalkboard_get_active_layer(chalkboard);
+  var layer_name = layer && layer['name'] ? layer['name'] : chalkboard['activeLayerId'];
+  if (!confirm("Delete chalkboard layer '" + layer_name + "'?")) return;
+
+  var activeId = chalkboard['activeLayerId'];
+  var index = order.indexOf(activeId);
+  if (index >= 0) order.splice(index, 1);
+  delete chalkboard['layers'][activeId];
+
+  var nextIndex = Math.max(0, index - 1);
+  chalkboard['activeLayerId'] = order[nextIndex] || order[0];
+  chalkboard_persist();
+  chalkboard_panel_refresh();
+}
+
+function chalkboard_panel_refresh()
+{
+  if (!chalkboard_panel_initialized) return;
+  var chalkboard = chalkboard_ensure_initialized();
+  if (!chalkboard) return;
+
+  var order = chalkboard['layerOrder'] || [];
+  var html = "";
+  for (var i = 0; i < order.length; i++) {
+    var layerId = order[i];
+    var layer = chalkboard['layers'][layerId];
+    if (!layer) continue;
+    var active = (layerId === chalkboard['activeLayerId']);
+    var layerName = layer['name'] || layerId;
+    var isEditing = (chalkboard_editing_layer_id === layerId);
+    html += "<div class='chalkboard_layer_item" + (active ? " active" : "") + "' data-layer-id='" + layerId + "'>"
+         + "<span class='chalkboard_layer_badge'>" + (active ? ">" : "") + "</span>";
+    if (isEditing) {
+      html += "<input class='chalkboard_layer_input' data-layer-id='" + layerId + "' value='" + html_safe(layerName) + "'>";
+    } else {
+      html += "<span class='chalkboard_layer_name'>" + html_safe(layerName) + "</span>";
+    }
+    html += "</div>";
+  }
+  $("#chalkboard_layer_list").html(html);
+  chalkboard_focus_inline_input();
+}
+
+function chalkboard_begin_inline_rename(layerId)
+{
+  if (!layerId) return;
+  chalkboard_editing_layer_id = layerId;
+  chalkboard_panel_refresh();
+}
+
+function chalkboard_focus_inline_input()
+{
+  if (!chalkboard_editing_layer_id) return;
+  var input = $("#chalkboard_layer_list .chalkboard_layer_input[data-layer-id='" + chalkboard_editing_layer_id + "']");
+  if (!input.length) return;
+  input.focus();
+  if (input[0] && input[0].select) input[0].select();
+}
+
+function chalkboard_finish_inline_rename(commit)
+{
+  if (!chalkboard_editing_layer_id) return;
+  var layerId = chalkboard_editing_layer_id;
+  chalkboard_editing_layer_id = null;
+  if (!commit) {
+    chalkboard_panel_refresh();
+    return;
+  }
+
+  var chalkboard = chalkboard_ensure_initialized();
+  if (!chalkboard || !chalkboard['layers'] || !chalkboard['layers'][layerId]) {
+    chalkboard_panel_refresh();
+    return;
+  }
+  var input = $("#chalkboard_layer_list .chalkboard_layer_input[data-layer-id='" + layerId + "']");
+  var newName = input.length ? input.val() : "";
+  if (newName != null) {
+    newName = newName.trim();
+    if (newName.length > 0) {
+      chalkboard['layers'][layerId]['name'] = newName;
+      chalkboard_persist();
+    }
+  }
+  chalkboard_panel_refresh();
+}
+
+function chalkboard_panel_remove_focus()
+{
+  if (!chalkboard_panel_initialized) return;
+  var active = document.activeElement;
+  if (active && $("#game_chalkboard_panel").find(active).length) {
+    active.blur();
+  }
+}
+
+function chalkboard_panel_show()
+{
+  if (!show_chalkboard_panel) return;
+  if (!chalkboard_panel_initialized) init_chalkboard_panel();
+  if (!chalkboard_panel_initialized) return;
+  $("#game_chalkboard_panel").parent().show();
+  chalkboard_panel_refresh();
+  if (chalkboard_panel_state == "minimized") $("#game_chalkboard_panel").dialogExtend("minimize");
+  chalkboard_panel_remove_focus();
+}
+
+function chalkboard_panel_hide()
+{
+  if (!chalkboard_panel_initialized) return;
+  $("#game_chalkboard_panel").parent().hide();
+}
+
+function init_chalkboard_panel()
+{
+  if (observing || chalkboard_panel_initialized) return;
+  chalkboard_panel_initialized = true;
+  chalkboard_panel_active = true;
+
+  $("#game_chalkboard_panel").attr("title", "Chalkboard");
+  $("#game_chalkboard_panel").dialog({
+      bgiframe: true,
+      modal: false,
+      width: "220px",
+      height: "auto",
+      resizable: false,
+      closeOnEscape: false,
+      dialogClass: "chalkboard_dialog no-close",
+      position: {my: "right top", at: "right top+28", of: window, within: $("#tabs-map")},
+      appendTo: "#tabs-map",
+      close: function(event, ui) { chalkboard_panel_active = false; }
+    }).dialogExtend({
+      "minimizable": true,
+      "closable": false,
+      "minimize": function(evt, dlg){
+        chalkboard_panel_state = $("#game_chalkboard_panel").dialogExtend("state");
+        $(".chalkboard_dialog").css({"height":"8","width":70});
+        unobstruct_minimized_dialog_container();
+      },
+      "restore": function(evt, dlg){
+        chalkboard_panel_state = $("#game_chalkboard_panel").dialogExtend("state");
+        $(".chalkboard_dialog").css({"height":"auto","width":"220"});
+        $(".chalkboard_dialog").position({my: "right top", at: "right top+28", of: window, within: $("#tabs-map")});
+      },
+      "icons": {
+        "minimize": "ui-icon-circle-minus",
+        "restore": "ui-icon-bullet"
+      }
+    });
+
+  $("#game_chalkboard_panel").dialog("open");
+  $("#game_chalkboard_panel").parent().css("overflow", "hidden");
+  if (chalkboard_panel_state == "minimized") $("#game_chalkboard_panel").dialogExtend("minimize");
+
+  $("#game_chalkboard_panel").parent().children().not("#game_chalkboard_panel").children().get(0).innerHTML
+    = "<img src='/images/e/bookopen.png' height='16px'>";
+
+  $("#chalkboard_layer_new").off("click").on("click", function() {
+    chalkboard_create_layer();
+  });
+  $("#chalkboard_layer_rename").off("click").on("click", function() {
+    chalkboard_rename_active_layer();
+  });
+  $("#chalkboard_layer_delete").off("click").on("click", function() {
+    chalkboard_delete_active_layer();
+  });
+  $("#chalkboard_layer_list")
+    .off("click", ".chalkboard_layer_item")
+    .on("click", ".chalkboard_layer_item", function(ev) {
+      if ($(ev.target).hasClass("chalkboard_layer_input")) return;
+      var layerId = $(this).data("layer-id");
+      if (!layerId) return;
+      var chalkboard = chalkboard_ensure_initialized();
+      if (!chalkboard) return;
+      var isActive = (chalkboard['activeLayerId'] === layerId);
+      if (isActive && !chalkboard_editing_layer_id) {
+        chalkboard_begin_inline_rename(layerId);
+        return;
+      }
+      chalkboard_set_active_layer(layerId);
+    })
+    .off("dblclick", ".chalkboard_layer_item")
+    .on("dblclick", ".chalkboard_layer_item", function(ev) {
+      ev.preventDefault();
+      var layerId = $(this).data("layer-id");
+      if (layerId) chalkboard_begin_inline_rename(layerId);
+    })
+    .off("keydown", ".chalkboard_layer_input")
+    .on("keydown", ".chalkboard_layer_input", function(ev) {
+      if (ev.keyCode == 13) { // Enter
+        ev.preventDefault();
+        chalkboard_finish_inline_rename(true);
+      } else if (ev.keyCode == 27) { // Escape
+        ev.preventDefault();
+        chalkboard_finish_inline_rename(false);
+      }
+    })
+    .off("blur", ".chalkboard_layer_input")
+    .on("blur", ".chalkboard_layer_input", function() {
+      chalkboard_finish_inline_rename(true);
+    });
+
+  chalkboard_panel_refresh();
+  chalkboard_panel_remove_focus();
+  if (!user_marking_mode || !show_chalkboard_panel) {
+    chalkboard_panel_hide();
+  }
+}
+
+function chalkboard_clear_active_layer()
+{
+  var chalkboard = chalkboard_ensure_initialized();
+  if (!chalkboard) return;
+  var layer = chalkboard_get_active_layer(chalkboard);
+  if (!layer) return;
+  layer['tiles'] = {};
+  chalkboard_persist();
+  add_client_message("Chalkboard layer cleared.");
+}
+
+function chalkboard_clear_all_layers()
+{
+  var chalkboard = chalkboard_ensure_initialized();
+  if (!chalkboard) return;
+  for (var layerId in chalkboard['layers']) {
+    if (!Object.prototype.hasOwnProperty.call(chalkboard['layers'], layerId)) continue;
+    chalkboard['layers'][layerId]['tiles'] = {};
+  }
+  chalkboard_persist();
+  add_client_message("Chalkboard erased.");
+}
+
+/**************************************************************************
   Handles everything when the user clicked a tile
 **************************************************************************/
 function do_map_click(ptile, qtype, first_time_called)
@@ -3023,8 +3467,13 @@ function do_map_click(ptile, qtype, first_time_called)
   if (user_marking_mode) {
     if (!ptile) return;
     var usermark = null;
-    const tkey = "cPlan"+ptile['index'];
-    if (myGameVars[tkey]) {
+    var chalkboard = chalkboard_ensure_initialized();
+    if (!chalkboard) return;
+    var active_layer = chalkboard_get_active_layer(chalkboard);
+    if (!active_layer) return;
+    if (!active_layer['tiles']) active_layer['tiles'] = {};
+    var existing_mark = active_layer['tiles'][ptile['index']];
+    if (existing_mark) {
       usermark = null;  // toggle it off
     } else {
         if (mouse_click_mod_key['shiftKey'])
@@ -3036,9 +3485,12 @@ function do_map_click(ptile, qtype, first_time_called)
         else
           usermark = USER_MARK_1;
     }
-    if (usermark)  myGameVars[tkey] = usermark;
-    else delete myGameVars[tkey]; // don't keep records of tiles for unplanned cities
-    simpleStorage.set(Game_UID, myGameVars); // save persistent for this game only
+    if (usermark) {
+      active_layer['tiles'][ptile['index']] = chalkboard_make_mark(usermark);
+    } else {
+      delete active_layer['tiles'][ptile['index']]; // don't keep records of tiles for unplanned cities
+    }
+    chalkboard_persist(); // save persistent for this game only
     return;
   }
 
@@ -3623,7 +4075,7 @@ function do_map_click(ptile, qtype, first_time_called)
 **************************************************************************/
 function find_active_dialog()
 {
-  const permanent_widgets = ["game_overview_panel", "game_unit_panel", "game_chatbox_panel"];
+  const permanent_widgets = ["game_overview_panel", "game_unit_panel", "game_chatbox_panel", "game_chalkboard_panel"];
   const dialogs = $(".ui-dialog");
   for (var i = 0; i < dialogs.length; i++) {
     const dialog = $(dialogs[i]);
@@ -3656,6 +4108,12 @@ function global_keyboard_listener(ev)
   if (TAB_MAP === $("#tabs").tabs("option", "active")) {
     // The Map tab is active
     if (find_active_dialog() == null) {
+      if (user_marking_mode && show_chalkboard_panel && chalkboard_panel_initialized && !chalkboard_editing_layer_id
+          && ev.keyCode == 113) { // F2
+        ev.preventDefault(); // override possible browser shortcut
+        chalkboard_rename_active_layer();
+        return;
+      }
       map_handle_key(keyboard_key, ev.keyCode, ev['ctrlKey'], ev['altKey'], ev['shiftKey'], ev);
     }
   }
@@ -4120,6 +4578,8 @@ function map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
               // Non-ideally, we create the Game_UID every time we go into chalkboard mode.
               // Please see note in handle_game_uid() for how we should refactor this.
               handle_game_uid();
+              chalkboard_ensure_initialized();
+              chalkboard_panel_show();
               if (chalkboard_description) {
                 add_client_message("<span class='e_small chalkboard_note'>Chalkboard is ON.  Alt-X to toggle.</span>");
               } else {
@@ -4127,6 +4587,7 @@ function map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
               }
             }
             else {
+              chalkboard_panel_hide();
               if (chalkboard_description) {
                 add_client_message("<span class='e_small chalkboard_note'>Chalkboard is OFF.</span>");
                 chalkboard_description = false;
@@ -4243,6 +4704,12 @@ function map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
     */
   }
   switch (key_code) {
+    case 8: // Backspace
+      if (user_marking_mode && alt && !ctrl && !shift) {
+        the_event.preventDefault(); // override possible browser shortcut
+        chalkboard_clear_active_layer();
+      }
+      break;
     case 9:   // Tab key = save goto path up to tile shown, start a new path segment after it.
       the_event.preventDefault();
       // Don't try to create waypoint unless our path processing has validated path legality:
@@ -4253,9 +4720,25 @@ function map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
 
     case 46: // DEL key
       if (user_marking_mode) { // Reset chalkboard
-        myGameVars = {};
-        simpleStorage.set(Game_UID, myGameVars);
-        add_client_message("Chalkboard erased.");
+        chalkboard_clear_all_layers();
+      }
+      break;
+    case 219: // [
+      if (alt && !ctrl) {
+        the_event.preventDefault(); // override possible browser shortcut
+        if (user_marking_mode) {
+          if (shift) chalkboard_create_layer();
+          else chalkboard_cycle_layer(-1);
+        }
+      }
+      break;
+    case 221: // ]
+      if (alt && !ctrl) {
+        the_event.preventDefault(); // override possible browser shortcut
+        if (user_marking_mode) {
+          if (shift) chalkboard_create_layer();
+          else chalkboard_cycle_layer(1);
+        }
       }
       break;
     case 35: //1

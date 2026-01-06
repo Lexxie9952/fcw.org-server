@@ -50,5 +50,14 @@
 	    </div>
     </div>
 
+    <%-- Chalkboard layers panel --%>
+    <div id="game_chalkboard_panel">
+      <div id="chalkboard_panel_controls">
+        <button id="chalkboard_layer_new" class="chalkboard_panel_button" type="button">New</button>
+        <button id="chalkboard_layer_rename" class="chalkboard_panel_button" type="button">Rename</button>
+        <button id="chalkboard_layer_delete" class="chalkboard_panel_button" type="button">Delete</button>
+      </div>
+      <div id="chalkboard_layer_list"></div>
+    </div>
 
   </div>
